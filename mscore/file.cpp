@@ -1452,7 +1452,8 @@ void MuseScore::printFile()
 
       LayoutMode layoutMode = cs->layoutMode();
       if (layoutMode != LayoutMode::PAGE) {
-            cs->setLayoutMode(LayoutMode::PAGE);
+            cs->startCmd();
+            cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
             cs->doLayout();
             }
 
@@ -1486,10 +1487,8 @@ void MuseScore::printFile()
                   }
             }
       p.end();
-      if (layoutMode != cs->layoutMode()) {
-            cs->setLayoutMode(layoutMode);
-            cs->doLayout();
-            }
+      if (layoutMode != cs->layoutMode())
+            cs->endCmd(true);       // rollback
       }
 
 //---------------------------------------------------------
@@ -1693,6 +1692,8 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
       QString fn(path);
       if (!fn.endsWith(suffix))
             fn += suffix;
+
+      LayoutMode layoutMode = cs->layoutMode();
       if (ext == "mscx" || ext == "mscz") {
             // save as mscore *.msc[xz] file
             QFileInfo fi(fn);
@@ -1737,14 +1738,29 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             }
       else if (ext == "pdf") {
             // save as pdf file *.pdf
+            if (layoutMode != LayoutMode::PAGE) {
+                  cs->startCmd();
+                  cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                  cs->doLayout();
+                  }
             rv = savePdf(cs, fn);
             }
       else if (ext == "png") {
             // save as png file *.png
+            if (layoutMode != LayoutMode::PAGE) {
+                  cs->startCmd();
+                  cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                  cs->doLayout();
+                  }
             rv = savePng(cs, fn);
             }
       else if (ext == "svg") {
             // save as svg file *.svg
+            if (layoutMode != LayoutMode::PAGE) {
+                  cs->startCmd();
+                  cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                  cs->doLayout();
+                  }
             rv = saveSvg(cs, fn);
             }
 #ifdef HAS_AUDIOFILE
@@ -1771,6 +1787,8 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             }
       if (!rv && !MScore::noGui)
             QMessageBox::critical(this, tr("MuseScore:"), tr("Cannot write into %1").arg(fn));
+      if (layoutMode != cs->layoutMode())
+            cs->endCmd(true);       // rollback
       return rv;
       }
 
