@@ -198,7 +198,7 @@ Note::Note(const Note& n, bool link)
    : Element(n)
       {
       if (link)
-            linkTo((Note*)&n);      // HACK!
+            score()->undo(new Link(this, const_cast<Note*>(&n)));
       _subchannel        = n._subchannel;
       _line              = n._line;
       _fret              = n._fret;
@@ -233,7 +233,7 @@ Note::Note(const Note& n, bool link)
             Element* ce = e->clone();
             add(ce);
             if (link)
-                  ce->linkTo(e);
+                  score()->undo(new Link(ce, const_cast<Element*>(e)));
             }
 
       _playEvents = n._playEvents;

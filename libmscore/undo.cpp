@@ -451,15 +451,15 @@ void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
 
 void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int tpc1, int tpc2)
       {
-            const LinkedElements* l = note->links();
-            if (l) {
-                  for (ScoreElement* e : *l) {
-                        Note* n = static_cast<Note*>(e);
-                        undo()->push(new ChangeFretting(n, pitch, string, fret, tpc1, tpc2));
-                        }
+      const LinkedElements* l = note->links();
+      if (l) {
+            for (ScoreElement* e : *l) {
+                  Note* n = static_cast<Note*>(e);
+                  undo()->push(new ChangeFretting(n, pitch, string, fret, tpc1, tpc2));
                   }
-            else
-                  undo()->push(new ChangeFretting(note, pitch, string, fret, tpc1, tpc2));
+            }
+      else
+            undo()->push(new ChangeFretting(note, pitch, string, fret, tpc1, tpc2));
       }
 
 //---------------------------------------------------------
@@ -3515,31 +3515,16 @@ void ChangeNoteEvent::flip()
       }
 
 //---------------------------------------------------------
-//   Unlink
+//   LinkUnlink
 //---------------------------------------------------------
 
-Unlink::Unlink(ScoreElement* _e) : e(_e)
-      {
-      Q_ASSERT(e->links());
-      }
-
-//---------------------------------------------------------
-//   Unlink::undo
-//    (link)
-//---------------------------------------------------------
-
-void Unlink::undo()
+void LinkUnlink::doLink()
       {
       e->linkTo(le);
       le = nullptr;
       }
 
-//---------------------------------------------------------
-//   Unlink::redo
-//    (unlink)
-//---------------------------------------------------------
-
-void Unlink::redo()
+void LinkUnlink::doUnlink()
       {
       Q_ASSERT(le == nullptr);
       const LinkedElements* l = e->links();
@@ -3549,63 +3534,13 @@ void Unlink::redo()
                   break;
                   }
             }
-//      Q_ASSERT(le);
       e->unlink();
       }
 
-//---------------------------------------------------------
-//   Link::redo
-//---------------------------------------------------------
-
-void Link::redo()
-      {
-      e1->linkTo(e2);
-      }
-
-//---------------------------------------------------------
-//   Link::redo
-//---------------------------------------------------------
-
-void Link::undo()
-      {
-      e2->unlink();
-      }
-
-//---------------------------------------------------------
-//   LinkStaff::redo
-//---------------------------------------------------------
-
-void LinkStaff::redo()
-      {
-      s1->linkTo(s2);
-      }
-
-//---------------------------------------------------------
-//   LinkStaff::undo
-//---------------------------------------------------------
-
-void LinkStaff::undo()
-      {
-      s1->unlink(s2);
-      }
-
-//---------------------------------------------------------
-//   UnlinkStaff::redo
-//---------------------------------------------------------
-
-void UnlinkStaff::redo()
-      {
-      s1->unlink(s2);
-      }
-
-//---------------------------------------------------------
-//   UnlinkStaff::undo
-//---------------------------------------------------------
-
-void UnlinkStaff::undo()
-      {
-      s1->linkTo(s2);
-      }
+void LinkStaff::redo()   { s1->linkTo(s2); }
+void LinkStaff::undo()   { s1->unlink(s2); }
+void UnlinkStaff::redo() { s1->unlink(s2); }
+void UnlinkStaff::undo() { s1->linkTo(s2); }
 
 //---------------------------------------------------------
 //   ChangeStartEndSpanner::flip

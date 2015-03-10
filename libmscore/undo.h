@@ -1294,17 +1294,31 @@ class ChangeNoteEvent : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   LinkUnlink
+//---------------------------------------------------------
+
+class LinkUnlink : public UndoCommand {
+      ScoreElement* e;
+      ScoreElement* le;
+
+   protected:
+      void doLink();
+      void doUnlink();
+
+   public:
+      LinkUnlink(ScoreElement* _e, ScoreElement* _le) : e(_e), le(_le) {}
+      };
+
+//---------------------------------------------------------
 //   Unlink
 //---------------------------------------------------------
 
-class Unlink : public UndoCommand {
-      ScoreElement* e;
-      ScoreElement* le = 0;
+class Unlink : public LinkUnlink {
 
    public:
-      Unlink(ScoreElement* _e);
-      virtual void undo();
-      virtual void redo();
+      Unlink(ScoreElement* e) : LinkUnlink(e, nullptr) {};
+      virtual void undo() override { doLink();   }
+      virtual void redo() override { doUnlink(); }
       UNDO_NAME("Unlink")
       };
 
@@ -1312,14 +1326,11 @@ class Unlink : public UndoCommand {
 //   Link
 //---------------------------------------------------------
 
-class Link : public UndoCommand {
-      Element* e1;
-      Element* e2;
-
+class Link : public LinkUnlink {
    public:
-      Link(Element* _e1, Element* _e2) : e1(_e1), e2(_e2) {}
-      virtual void undo();
-      virtual void redo();
+      Link(ScoreElement* e, ScoreElement* le) : LinkUnlink(e, le) {}
+      virtual void undo() override { doUnlink(); }
+      virtual void redo() override { doLink();   }
       UNDO_NAME("Link")
       };
 
