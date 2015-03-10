@@ -26,7 +26,7 @@ import FileIO 1.0
 MuseScore {
     menuPath: "Plugins.ABC Import"
     version: "2.0"
-    description: qsTr("This plugin imports et converts ABC text from a file or the clipboard.")
+    description: qsTr("This plugin imports ABC text from a file or the clipboard. Internet connection is required.")
     pluginType: "dialog"
 
     id:window
