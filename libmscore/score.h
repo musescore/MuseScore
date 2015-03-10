@@ -1002,6 +1002,7 @@ class Score : public QObject {
       void addSpanner(Spanner*);
       void cmdAddSpanner(Spanner* e, const QPointF& pos);
       void checkSpanner(int startTick, int lastTick);
+      const std::set<Spanner*>unmanagedSpanners() { return _unmanagedSpanner; }
       void addUnmanagedSpanner(Spanner*);
       void removeUnmanagedSpanner(Spanner*);
 

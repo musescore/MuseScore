@@ -275,13 +275,85 @@ void Spanner::remove(Element* e)
       }
 
 //---------------------------------------------------------
+//   removeUnmanaged
+//
+//    Remove the Spanner and its segments from objects which may know about them
+//
+//    This method and the following are used for spanners which are contained within compound elements
+//    which manage their parts themselves without using the standard management supplied by Score;
+//    Example can be the LyricsLine within a Lyrics element or the FiguredBassLine within a FiguredBass
+//    (not implemented yet).
+//---------------------------------------------------------
+
+void Spanner::removeUnmanaged()
+      {
+      for (SpannerSegment* ss : spannerSegments())
+            if (ss->system()) {
+//                  ss->system()->remove(ss);
+                  ss->setSystem(nullptr);
+                  }
+      score()->removeUnmanagedSpanner(this);
+      }
+
+//---------------------------------------------------------
+//   undoInserTimeUnmanaged
+//---------------------------------------------------------
+
+void Spanner::undoInsertTimeUnmanaged(int fromTick, int len)
+      {
+      int   newTick1    = tick();
+      int   newTick2    = tick2();
+
+      // check spanner start and end point
+      if (len > 0) {                // adding time
+            if (tick() > fromTick)        // start after insertion point: shift start to right
+                  newTick1 += len;
+            if (tick2() > fromTick)       // end after insertion point: shift end to right
+                  newTick2 += len;
+            }
+      if (len < 0) {                // removing time
+            int toTick = fromTick - len;
+            if (tick() > fromTick) {      // start after beginning of removed time
+                  if (tick() < toTick) {  // start within removed time: bring start at removing point
+                        if (parent()) {
+                              parent()->remove(this);
+                              return;
+                              }
+                        else
+                              newTick1 = fromTick;
+                        }
+                  else                    // start after removed time: shift start to left
+                        newTick1 += len;
+                  }
+            if (tick2() > fromTick) {     // end after start of removed time
+                  if (tick2() < toTick)   // end within removed time: bring end at removing point
+                        newTick2 = fromTick;
+                  else                    // end after removed time: shift end to left
+                        newTick2 += len;
+                  }
+            }
+
+      // update properties as required
+      if (newTick2 <= newTick1) {               // if no longer any span: remove it
+            if (parent())
+                  parent()->remove(this);
+            }
+      else {                                    // if either TICKS or TICK did change, update property
+            if (newTick2-newTick1 != tick2()- tick())
+                  setProperty(P_ID::SPANNER_TICKS, newTick2-newTick1);
+            if (newTick1 != tick())
+                  setProperty(P_ID::SPANNER_TICK, newTick1);
+            }
+      }
+
+//---------------------------------------------------------
 //   scanElements
 //    used in palettes
 //---------------------------------------------------------
 
 void Spanner::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      Q_UNUSED(all)
+      Q_UNUSED(all);
       for (SpannerSegment* seg : segments)
             seg->scanElements(data, func, true);
       }
