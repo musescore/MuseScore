@@ -132,6 +132,8 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
             const QStringRef& tag(e.name());
             if (tag == "tuplet") {
                   count = e.attribute("count").toInt();
+                  tripartite = e.attribute("tripartite", "false") == "true";
+                  isProlonging = e.attribute("prolong", "false") == "true";
                   e.readNext();
                   }
             else

@@ -361,6 +361,41 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
       }
 
 //---------------------------------------------------------
+//   TupletFractionCap
+//---------------------------------------------------------
+
+Fraction TupletFractionCap(int tupletCount, bool tuplettrp, bool tupletprol)
+      {
+      int dd = 0;
+      int nn = 0;
+      qreal exponent = 0;
+      qreal count = tupletCount;
+      Fraction f(3,2);
+      if ((count > 0) && (count <= 15)) {
+            if (tuplettrp)
+                  exponent = qFloor(qLn(count/3.0)/qLn(2.0));
+            else
+                  exponent = qFloor(qLn(count)/qLn(2.0));
+            }
+      else {
+            qDebug("Unknown tuplet, count = %d",tupletCount);
+            return f;
+            }
+      if (tupletprol)
+            exponent += 1.0;
+      if (exponent < 0.0)
+            exponent = 0.0;
+      nn = tupletCount;
+      dd =  static_cast<int>(qPow(2.0, exponent));
+      if (tuplettrp)
+            dd = dd * 3;
+      qDebug("Tuplet Fraction: %d / %d",nn,dd);
+      f.setNumerator(nn);
+      f.setDenominator(dd);
+      return f;
+      }
+
+//---------------------------------------------------------
 //   findChordRests -- find begin and end ChordRest for BasicDrawObj o
 //   return true on success (both begin and end found)
 //---------------------------------------------------------
@@ -401,8 +436,10 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
             if (foundcr1) {
                   --n;   // found the object corresponding to cr1, count down to find the second one
                   ticks = d->ticks();
-                  if (d->count)
-                        ticks = ticks*2/(d->count);     // ADJUST for tuplets different from triplets
+                  if (d->count) {
+                        Fraction f = TupletFractionCap(d->count, d->tripartite, d->isProlonging);
+                        ticks = ticks*f.denominator()/f.numerator();
+                        }
                   if (nobj->type() == CapellaNoteObjectType::REST) {
                         RestObj* ro = static_cast<RestObj*>(nobj);
                         if (ro->fullMeasures) {
@@ -479,6 +516,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
 
       Tuplet* tuplet = 0;
       int tupletCount = 0;
+      bool tuplettrp = false;
+      bool tupletprol = false;
       int nTuplet = 0;
       int tupletTick = 0;
 
@@ -500,14 +539,12 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         if (o->count) {
                               if (tuplet == 0) {
                                     tupletCount = o->count;
+                                    tuplettrp   = o->tripartite;
+                                    tupletprol  = o->isProlonging;
                                     nTuplet     = 0;
                                     tupletTick  = tick;
                                     tuplet      = new Tuplet(score);
-                                    Fraction f(3,2);
-                                    if (tupletCount == 3)
-                                          f = Fraction(3,2);
-                                    else
-                                          qDebug("Capella: unknown tuplet");
+                                    Fraction f  = TupletFractionCap(tupletCount,tuplettrp,tupletprol);
                                     tuplet->setRatio(f);
                                     tuplet->setBaseLen(d); // TODO check if necessary (the MusicXML importer doesn't do this)
                                     tuplet->setTrack(track);
@@ -585,14 +622,12 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         if (o->count) {
                               if (tuplet == 0) {
                                     tupletCount = o->count;
+                                    tuplettrp   = o->tripartite;
+                                    tupletprol  = o->isProlonging;
                                     nTuplet     = 0;
                                     tupletTick  = tick;
                                     tuplet      = new Tuplet(score);
-                                    Fraction f(3,2);
-                                    if (tupletCount == 3)
-                                          f = Fraction(3,2);
-                                    else
-                                          qDebug("Capella: unknown tuplet");
+                                    Fraction f  = TupletFractionCap(tupletCount,tuplettrp,tupletprol);
                                     tuplet->setRatio(f);
                                     tuplet->setBaseLen(d); // TODO check if necessary (the MusicXML importer doesn't do this)
                                     tuplet->setTrack(track);
@@ -1005,10 +1040,11 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               break;
                         }
                   }
-            // TODO: tick is wrong wg. tuplets (rounding errors) ADJUST for tuplets different from triplets
             int ticks = d->ticks();
-            if (d->count)
-                  ticks = ticks*2/(d->count);
+            if (d->count) {
+                  Fraction f = TupletFractionCap(d->count, d->tripartite, d->isProlonging);
+                  ticks = ticks*f.denominator()/f.numerator();
+                  }
             if (no->type() == CapellaNoteObjectType::REST) {
                   RestObj* o = static_cast<RestObj*>(no);
                   if (o->fullMeasures) {
