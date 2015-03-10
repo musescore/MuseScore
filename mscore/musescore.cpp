@@ -636,7 +636,7 @@ MuseScore::MuseScore()
 
       for (auto i : {
             "", "file-save", "file-save-as", "file-save-a-copy",
-            "file-save-selection", "file-save-online", "file-export", "file-part-export",
+            "file-save-selection", "file-save-online", "file-export", "file-part-export", "file-import-pdf",
             "", "file-close", "", "parts", "album" }) {
             if (!*i)
                   _fileMenu->addSeparator();
@@ -3988,6 +3988,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             exportFile();
       else if (cmd == "file-part-export")
             exportParts();
+      else if (cmd == "file-import-pdf")
+            openExternalLink("https://musescore.com/import");
       else if (cmd == "file-close")
             closeScore(cs);
       else if (cmd == "file-save-as")

@@ -126,6 +126,15 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
+         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT
+            | STATE_LYRICS_EDIT | STATE_PLAY,
+         "file-import-pdf",
+         QT_TRANSLATE_NOOP("action","Import PDF..."),
+         QT_TRANSLATE_NOOP("action","Import PDF"),
+         QT_TRANSLATE_NOOP("action","Import a PDF file with an experimental service on musescore.com")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
          "file-close",
          QT_TRANSLATE_NOOP("action","Close"),
