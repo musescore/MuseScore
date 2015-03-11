@@ -54,7 +54,7 @@ enum class PlayEventType : char    {
 //   @P lyrics      array[Ms::Lyrics]  the list of lyrics (read only)
 //   @P graceNotes  array[Ms::Chord]   the list of grace note chords (read only)
 //   @P stem        Ms::Stem           the stem of the chord if any (read only)
-//   @P hook        Ms::Hook           the hoow of the chord if any (read only)
+//   @P hook        Ms::Hook           the hook of the chord if any (read only)
 //---------------------------------------------------------
 
 class Chord : public ChordRest {
