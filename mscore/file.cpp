@@ -2661,10 +2661,18 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
       //QTextStream qts(stdout, QIODevice::WriteOnly);
 
 
+      qts << "TITLE " << score->title().trimmed() << endl;
+      qts << "SUBTITLE " << score->subtitle().trimmed() << endl;
+      qts << "COMPOSER " << score->composer().trimmed() << endl;
+
       score->setPrinting(true);
 
       foreach( Part * part, score->parts()) {
-         qts << "I " << part->instr()->trackName() << endl;
+         QString iname = part->instr()->trackName().trimmed();
+
+         qDebug("ILEN %i",iname.length());
+         if (iname.length()>0)
+            qts << "I " << iname << endl;
       }
       
       foreach( Page* page, score->pages() )
