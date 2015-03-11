@@ -3487,6 +3487,7 @@ void Score::layoutPage(const PageContext& pC, qreal d)
 
       // allow room for lyrics (and/or spacer) on last visible staff of last system
       // these are not included in system height or in previous margin calculations
+      // TODO: why *not* include this space in system height?
       System* lastSystem = page->systems()->last();
       int lastStaff = nstaves() - 1;
       if (!lastSystem->isVbox()) {
@@ -3498,7 +3499,13 @@ void Score::layoutPage(const PageContext& pC, qreal d)
                         }
                   }
             if (lastVisible >= 0) {
-                  qreal extra = pC.sr.extraDistance(lastVisible);
+                  // allow lyrics to extend into the "music bottom margin" (as opposed to page margin)
+                  // on the assumption that this is consistent with its main purpose
+                  // the extra distance includes the "lyrics bottom margin"
+                  // we could strip this off too, but then the lyrics might crowd the page margin too much
+                  // TODO: consider another style parameter here
+                  qreal allowableMargin = d;    // + styleP(StyleIdx::lyricsMinBottomDistance);
+                  qreal extra = qMax(pC.sr.extraDistance(lastVisible) - allowableMargin, 0.0);
                   // for last staff of system, this distance has not been accounted for at all
                   // for interior staves (with last staves hidden), this is only partially accounted for
                   if (lastVisible == lastStaff)
