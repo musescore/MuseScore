@@ -610,6 +610,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
             for (int srcTrack = sTrack; srcTrack < eTrack; ++srcTrack) {
                   TupletMap tupletMap;    // tuplets cannot cross measure boundaries
                   int dstTrack = dstStaffIdx * VOICES + (srcTrack - sTrack);
+                  Tremolo* tremolo = 0;
                   for (Segment* seg = m->first(); seg; seg = seg->next()) {
                         Element* oe = seg->element(srcTrack);
                         if (oe == 0 || oe->generated())
@@ -715,6 +716,29 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                                       qDebug("cloneStave: cannot find spanner start note");
                                                       }
                                                 }
+                                          }
+                                    // two note tremolo
+                                    if (och->tremolo() && och->tremolo()->twoNotes()) {
+                                          if (och == och->tremolo()->chord1()) {
+                                                if (tremolo)
+                                                      qDebug("unconnected two note tremolo");
+                                                tremolo = static_cast<Tremolo*>(och->tremolo()->linkedClone());
+                                                tremolo->setScore(nch->score());
+                                                tremolo->setParent(nch);
+                                                tremolo->setTrack(nch->track());
+                                                tremolo->setChords(nch, 0);
+                                                nch->setTremolo(tremolo);
+                                                }
+                                          else if (och == och->tremolo()->chord2()) {
+                                                if (!tremolo)
+                                                      qDebug("first note for two note tremolo missing");
+                                                else {
+                                                      tremolo->setChords(tremolo->chord1(), nch);
+                                                      nch->setTremolo(tremolo);
+                                                      }
+                                                }
+                                          else
+                                                qDebug("inconsistent two note tremolo");
                                           }
                                     }
                               }
