@@ -2651,6 +2651,14 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
 
       QString svgname = "";
 
+
+      score->repeatList()->unwind();
+      if (score->repeatList()->size()>1) {
+         QMessageBox::critical(0, QObject::tr("SVC export Failed"),
+            QObject::tr("Score contains repeats. Please linearize!"));
+         return false;
+      }
+
       //if (!metafile.open(QIODevice::WriteOnly))
       //      return false;
 
@@ -2777,7 +2785,7 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
                   }
 
                   last_pos = world.m31()/(w*mag);
-                  qts << "B " << world.m31()/(w*mag) << endl;
+                  qts << "B " << world.m31()/(w*mag) << ',' << ((Measure*)e)->ticks() << endl;
                   end_pos = (world.m31() + mag*e->bbox().width())/(w*mag);
                }
                else if (e->type() == Element::Type::TIMESIG) {
@@ -2817,12 +2825,19 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
          }
 
          if (measure!=NULL) ticksFromBeg+=measure->ticks();
-         qDebug("Total ticks: %i",ticksFromBeg);
+         qDebug("Total ticks: %i. End time: %f",ticksFromBeg,score->tempomap()->tick2time(ticksFromBeg));
+         qts << "AT " << score->tempomap()->tick2time(0) << ',' << score->tempomap()->tick2time(ticksFromBeg)<< endl;
          qts << "TT " << ticksFromBeg << endl;
 
          uz.addFile(fi.baseName()+".meta",metabuf.data());
-
          score->setPrinting(false);
+
+         QString midiname(fi.baseName()+".mid");
+         saveMidi(score,midiname);
+         QFile file(midiname);
+         file.open(QIODevice::ReadOnly);
+         uz.addFile(midiname,&file);
+         file.remove();
 
          uz.close();
          return true;
