@@ -2479,7 +2479,9 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                               }
                         }
 
-                  undo(new InsertMeasure(m, im));
+                  m->setNext(im);
+                  m->setPrev(im ? im->prev() : score->last());
+                  undo(new InsertMeasures(m, m));
 
                   //
                   // move clef, time, key signatrues
@@ -2521,7 +2523,9 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                         if (rmb->type() == Element::Type::TBOX)
                               static_cast<TBox*>(mb)->text()->linkTo(static_cast<TBox*>(rmb)->text());
                         }
-                  undo(new InsertMeasure(mb, im));
+                  mb->setNext(im);
+                  mb->setPrev(im ? im->prev() : score->last());
+                  undo(new InsertMeasures(mb, mb));
                   }
             }
       undoInsertTime(tick, ticks);

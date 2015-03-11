@@ -49,7 +49,9 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
                   break;
             }
       m->setLen(f);
-      undo(new InsertMeasure(m, m2->next()));
+      m->setNext(m2->next());
+      m->setPrev(m2->next() ? m2->next()->prev() : last());
+      undo(new InsertMeasures(m, m));
 
       range.write(this, m1->tick());
 

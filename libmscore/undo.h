@@ -255,21 +255,6 @@ class RemoveMStaff : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   InsertMeasure
-//---------------------------------------------------------
-
-class InsertMeasure : public UndoCommand {
-      MeasureBase* measure;
-      MeasureBase* pos;
-
-   public:
-      InsertMeasure(MeasureBase* nm, MeasureBase* p) : measure(nm), pos(p) {}
-      virtual void undo();
-      virtual void redo();
-      UNDO_NAME("InsertMeasure")
-      };
-
-//---------------------------------------------------------
 //   InsertStaves
 //---------------------------------------------------------
 
@@ -867,15 +852,15 @@ class ChangeMStaffProperties : public UndoCommand {
 //---------------------------------------------------------
 
 class InsertRemoveMeasures : public UndoCommand {
-      Measure* fm;
-      Measure* lm;
+      MeasureBase* fm;
+      MeasureBase* lm;
 
    protected:
       void removeMeasures();
       void insertMeasures();
 
    public:
-      InsertRemoveMeasures(Measure* _fm, Measure* _lm) : fm(_fm), lm(_lm) {}
+      InsertRemoveMeasures(MeasureBase* _fm, MeasureBase* _lm) : fm(_fm), lm(_lm) {}
       virtual void undo() = 0;
       virtual void redo() = 0;
       };
@@ -887,7 +872,7 @@ class InsertRemoveMeasures : public UndoCommand {
 class RemoveMeasures : public InsertRemoveMeasures {
 
    public:
-      RemoveMeasures(Measure* m1, Measure* m2) : InsertRemoveMeasures(m1, m2) {}
+      RemoveMeasures(MeasureBase* m1, MeasureBase* m2) : InsertRemoveMeasures(m1, m2) {}
       virtual void undo() { insertMeasures(); }
       virtual void redo() { removeMeasures(); }
       UNDO_NAME("RemoveMeasures")
@@ -900,7 +885,7 @@ class RemoveMeasures : public InsertRemoveMeasures {
 class InsertMeasures : public InsertRemoveMeasures {
 
    public:
-      InsertMeasures(Measure* m1, Measure* m2) : InsertRemoveMeasures(m1, m2) {}
+      InsertMeasures(MeasureBase* m1, MeasureBase* m2) : InsertRemoveMeasures(m1, m2) {}
       virtual void redo() { insertMeasures(); }
       virtual void undo() { removeMeasures(); }
       UNDO_NAME("InsertMeasures")
