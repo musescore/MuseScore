@@ -13,11 +13,14 @@
 #include <QtTest/QtTest>
 #include "mtest/testutils.h"
 #include "libmscore/chord.h"
+#include "libmscore/excerpt.h"
 #include "libmscore/glissando.h"
 #include "libmscore/measure.h"
+#include "libmscore/part.h"
+#include "libmscore/staff.h"
 #include "libmscore/score.h"
 //#include "libmscore/system.h"
-//#include "libmscore/undo.h"
+#include "libmscore/undo.h"
 
 #define DIR QString("libmscore/spanners/")
 
@@ -36,6 +39,10 @@ class TestSpanners : public QObject, public MTest
       void spanners01();            // adding glissandos in several contexts
       void spanners02();            // loading back existing cross-staff glissando from lower to higher staff
       void spanners03();            // adding glissandos from/to grace notes
+      void spanners04();            // linking a staff to a staff containing a glissando
+      void spanners05();            // creating part from an existing staff containing a glissando
+      void spanners06();            // add a glissando to a staff with a linked staff
+      void spanners07();            // add a glissando to a satff with an excerpt attached
       };
 
 //---------------------------------------------------------
@@ -235,6 +242,135 @@ void TestSpanners::spanners03()
       note->drop(dropData);
 
       QVERIFY(saveCompareScore(score, "glissando-graces01.mscx", DIR + "glissando-graces01-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///  spanners04
+///   Linking a staff to an existing staff containing a glissando
+//---------------------------------------------------------
+
+void TestSpanners::spanners04()
+      {
+
+      Score* score = readScore(DIR + "glissando-cloning01.mscx");
+      QVERIFY(score);
+      score->doLayout();
+
+      // add a linked staff to the existing staff
+      // (copied and adapted from void MuseScore::editInstrList() in mscore/instrdialog.cpp)
+      Staff* oldStaff   = score->staff(0);
+      Staff* newStaff   = new Staff(score);
+      newStaff->setPart(oldStaff->part());
+      newStaff->initFromStaffType(oldStaff->staffType());
+      newStaff->setDefaultClefType(ClefTypeList(ClefType::G));
+
+      KeySigEvent ke;
+      ke.setKey(Key::C);
+      newStaff->setKey(0, ke);
+
+      score->undoInsertStaff(newStaff, 1, false);
+      cloneStaff(oldStaff, newStaff);
+
+      QVERIFY(saveCompareScore(score, "glissando-cloning01.mscx", DIR + "glissando-cloning01-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///  spanners05
+///   Creating part from an existing staff containing a glissando
+//---------------------------------------------------------
+
+void TestSpanners::spanners05()
+      {
+
+      Score* score = readScore(DIR + "glissando-cloning02.mscx");
+      QVERIFY(score);
+      score->doLayout();
+
+      // create parts
+      // (copied and adapted from void TestParts::createParts() in mtest/libmscore/parts/tst_parts.cpp)
+      QList<Part*> parts;
+      parts.append(score->parts().at(0));
+      Score* nscore = new Score(score);
+
+      Excerpt ex(score);
+      ex.setPartScore(nscore);
+      ex.setTitle(parts.front()->longName());
+      ex.setParts(parts);
+      ::createExcerpt(&ex);
+      QVERIFY(nscore);
+
+      nscore->setName(parts.front()->partName());
+      score->undo(new AddExcerpt(nscore));
+
+      QVERIFY(saveCompareScore(score, "glissando-cloning02.mscx", DIR + "glissando-cloning02-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///  spanners06
+///   Drop a glissando on a staff with a linked staff
+//---------------------------------------------------------
+
+void TestSpanners::spanners06()
+      {
+      DropData    dropData;
+      Glissando*  gliss;
+
+      Score* score = readScore(DIR + "glissando-cloning03.mscx");
+      QVERIFY(score);
+      score->doLayout();
+
+      // DROP A GLISSANDO ON FIRST NOTE
+      Measure*    msr   = score->firstMeasure();
+      QVERIFY(msr);
+      Segment*    seg   = msr->findSegment(Segment::Type::ChordRest, 0);
+      QVERIFY(seg);
+      Chord*      chord = static_cast<Chord*>(seg->element(0));
+      QVERIFY(chord && chord->type() == Element::Type::CHORD);
+      Note*       note  = chord->upNote();
+      QVERIFY(note);
+      // drop a glissando on note
+      gliss             = new Glissando(score);
+      dropData.pos      = note->pagePos();
+      dropData.element  = gliss;
+      note->drop(dropData);
+
+      QVERIFY(saveCompareScore(score, "glissando-cloning03.mscx", DIR + "glissando-cloning03-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///  spanners07
+///   Drop a glissando on a staff with an excerpt
+//---------------------------------------------------------
+
+void TestSpanners::spanners07()
+      {
+      DropData    dropData;
+      Glissando*  gliss;
+
+      Score* score = readScore(DIR + "glissando-cloning04.mscx");
+      QVERIFY(score);
+      score->doLayout();
+
+      // DROP A GLISSANDO ON FIRST NOTE
+      Measure*    msr   = score->firstMeasure();
+      QVERIFY(msr);
+      Segment*    seg   = msr->findSegment(Segment::Type::ChordRest, 0);
+      QVERIFY(seg);
+      Chord*      chord = static_cast<Chord*>(seg->element(0));
+      QVERIFY(chord && chord->type() == Element::Type::CHORD);
+      Note*       note  = chord->upNote();
+      QVERIFY(note);
+      // drop a glissando on note
+      gliss             = new Glissando(score);
+      dropData.pos      = note->pagePos();
+      dropData.element  = gliss;
+      note->drop(dropData);
+
+      QVERIFY(saveCompareScore(score, "glissando-cloning04.mscx", DIR + "glissando-cloning04-ref.mscx"));
       delete score;
       }
 
