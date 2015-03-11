@@ -2539,7 +2539,7 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
                         // add rest to this staff and to all the staves linked to it
                         Rest* rest = new Rest(_root, TDuration(TDuration::DurationType::V_MEASURE));
                         Fraction timeStretch(_root->staff(staffIdx)->timeStretch(tick));
-                        rest->setDuration(static_cast<Measure*>(omb)->len() / timeStretch);
+                        rest->setDuration(static_cast<Measure*>(omb)->len() * timeStretch);
                         rest->setTrack(track);
                         undoAddCR(rest, static_cast<Measure*>(omb), tick);
                         }
