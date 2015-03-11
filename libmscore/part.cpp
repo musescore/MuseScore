@@ -31,10 +31,10 @@ namespace Ms {
 //---------------------------------------------------------
 
 Part::Part(Score* s)
+   : ScoreElement(s)
       {
-      _score = s;
       _show  = true;
-      setInstrument(Instrument(), 0);     // default instrument
+      _instrList.setInstrument(new Instrument, -1);   // default instrument
       }
 
 //---------------------------------------------------------
@@ -44,8 +44,7 @@ Part::Part(Score* s)
 void Part::initFromInstrTemplate(const InstrumentTemplate* t)
       {
       _partName = t->trackName;
-      Instrument instr = Instrument::fromTemplate(t);
-      setInstrument(instr, 0);
+      setInstrument(Instrument::fromTemplate(t));
       }
 
 //---------------------------------------------------------
@@ -72,12 +71,15 @@ void Part::read(XmlReader& e)
                   _staves.push_back(staff);
                   staff->read(e);
                   }
-            else if (tag == "Instrument")
-                  instr(0)->read(e);
+            else if (tag == "Instrument") {
+                  Instrument* instr = new Instrument;
+                  instr->read(e);
+                  setInstrument(instr, -1);
+                  }
             else if (tag == "name")
-                  instr(0)->setLongName(e.readElementText());
+                  instr()->setLongName(e.readElementText());
             else if (tag == "shortName")
-                  instr(0)->setShortName(e.readElementText());
+                  instr()->setShortName(e.readElementText());
             else if (tag == "trackName")
                   _partName = e.readElementText();
             else if (tag == "show")
@@ -86,7 +88,7 @@ void Part::read(XmlReader& e)
                   e.unknown();
             }
       if (_partName.isEmpty())
-            _partName = instr(0)->trackName();
+            _partName = instr()->trackName();
       }
 
 //---------------------------------------------------------
@@ -101,7 +103,7 @@ void Part::write(Xml& xml) const
       if (!_show)
             xml.tag("show", _show);
       xml.tag("trackName", _partName);
-      instr(0)->write(xml);
+      instr()->write(xml);
       xml.etag();
       }
 
@@ -176,56 +178,110 @@ void Part::removeStaff(Staff* staff)
 
 void Part::setMidiProgram(int program, int bank)
       {
-      Channel c = instr(0)->channel(0);
-      c.program = program;
-      c.bank    = bank;
-      c.updateInitList();
-      instr(0)->setChannel(0, c);
+      Channel* c = instr()->channel(0);
+      c->program = program;
+      c->bank    = bank;
+      c->updateInitList();
+//      instr()->setChannel(0, c);
       }
+
+//---------------------------------------------------------
+//   volume
+//---------------------------------------------------------
 
 int Part::volume() const
       {
-      return instr(0)->channel(0).volume;
+      return instr()->channel(0)->volume;
       }
+
+//---------------------------------------------------------
+//   setVolume
+//---------------------------------------------------------
 
 void Part::setVolume(int volume)
       {
-      instr(0)->channel(0).volume = volume;
+      instr()->channel(0)->volume = volume;
       }
 
+//---------------------------------------------------------
+//   mute
+//---------------------------------------------------------
+
 bool Part::mute() const
-{
-      return instr(0)->channel(0).mute;
-}
+      {
+      return instr()->channel(0)->mute;
+      }
+
+//---------------------------------------------------------
+//   setMute
+//---------------------------------------------------------
 
 void Part::setMute(bool mute)
-{
-      instr(0)->channel(0).mute = mute;
-}
+      {
+      instr()->channel(0)->mute = mute;
+      }
+
+//---------------------------------------------------------
+//   reverb
+//---------------------------------------------------------
 
 int Part::reverb() const
       {
-      return instr(0)->channel(0).reverb;
+      return instr()->channel(0)->reverb;
       }
+
+//---------------------------------------------------------
+//   setReverb
+//---------------------------------------------------------
+
+void Part::setReverb(int val)
+      {
+      instr()->channel(0)->reverb = val;
+      }
+
+//---------------------------------------------------------
+//   chorus
+//---------------------------------------------------------
 
 int Part::chorus() const
       {
-      return instr(0)->channel(0).chorus;
+      return instr()->channel(0)->chorus;
       }
+
+//---------------------------------------------------------
+//   setChorus
+//---------------------------------------------------------
+
+void Part::setChorus(int val)
+      {
+      instr()->channel(0)->chorus = val;
+      }
+
+//---------------------------------------------------------
+//   pan
+//---------------------------------------------------------
 
 int Part::pan() const
       {
-      return instr(0)->channel(0).pan;
+      return instr()->channel(0)->pan;
       }
+
+//---------------------------------------------------------
+//   setPan
+//---------------------------------------------------------
 
 void Part::setPan(int pan)
       {
-      instr(0)->channel(0).pan = pan;
+      instr()->channel(0)->pan = pan;
       }
+
+//---------------------------------------------------------
+//   midiProgram
+//---------------------------------------------------------
 
 int Part::midiProgram() const
       {
-      return instr(0)->channel(0).program;
+      return instr()->channel(0)->program;
       }
 
 //---------------------------------------------------------
@@ -234,7 +290,7 @@ int Part::midiProgram() const
 
 int Part::midiChannel() const
       {
-      return score()->midiChannel(instr(0)->channel(0).channel);
+      return score()->midiChannel(instr()->channel(0)->channel);
       }
 
 //---------------------------------------------------------
@@ -243,7 +299,7 @@ int Part::midiChannel() const
 
 int Part::midiPort() const
       {
-      return score()->midiPort(instr(0)->channel(0).channel);
+      return score()->midiPort(instr()->channel(0)->channel);
       }
 
 //---------------------------------------------------------
@@ -253,15 +309,25 @@ int Part::midiPort() const
 
 void Part::setMidiChannel(int) const
       {
+      // TODO
       }
 
 //---------------------------------------------------------
 //   setInstrument
 //---------------------------------------------------------
 
-void Part::setInstrument(const Instrument& i, int tick)
+void Part::setInstrument(Instrument* i, int tick)
       {
       _instrList.setInstrument(i, tick);
+      }
+
+void Part::setInstrument(const Instrument&& i, int tick)
+      {
+      _instrList.setInstrument(new Instrument(i), tick);
+      }
+void Part::setInstrument(const Instrument& i, int tick)
+      {
+      _instrList.setInstrument(new Instrument(i), tick);
       }
 
 //---------------------------------------------------------
@@ -270,7 +336,13 @@ void Part::setInstrument(const Instrument& i, int tick)
 
 void Part::removeInstrument(int tick)
       {
-      _instrList.erase(tick);
+      auto i = _instrList.find(tick);
+      if (i == _instrList.end()) {
+            qDebug("Part::removeInstrument: not found at tick %d", tick);
+            return;
+            }
+//      delete i->second;
+      _instrList.erase(i);
       }
 
 //---------------------------------------------------------
@@ -279,7 +351,7 @@ void Part::removeInstrument(int tick)
 
 Instrument* Part::instr(int tick)
       {
-      return &_instrList.instrument(tick);
+      return _instrList.instrument(tick);
       }
 
 //---------------------------------------------------------
@@ -288,7 +360,7 @@ Instrument* Part::instr(int tick)
 
 const Instrument* Part::instr(int tick) const
       {
-      return &_instrList.instrument(tick);
+      return _instrList.instrument(tick);
       }
 
 //---------------------------------------------------------
@@ -335,7 +407,7 @@ QString Part::shortName(int tick) const
 
 void Part::setLongName(const QString& s)
       {
-      instr(0)->setLongName(s);
+      instr()->setLongName(s);
       }
 
 //---------------------------------------------------------
@@ -344,38 +416,75 @@ void Part::setLongName(const QString& s)
 
 void Part::setShortName(const QString& s)
       {
-      instr(0)->setShortName(s);
+      instr()->setShortName(s);
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Part::getProperty(int id) const
+QVariant Part::getProperty(P_ID id) const
       {
-      if (id)
-            return QVariant();
-      else
-            return QVariant(_show);
+      switch (id) {
+            case P_ID::VISIBLE:
+                  return QVariant(_show);
+            case P_ID::USE_DRUMSET:
+                  return instr()->useDrumset();
+            case P_ID::PART_VOLUME:
+                  return volume();
+            case P_ID::PART_MUTE:
+                  return mute();
+            case P_ID::PART_PAN:
+                  return pan();
+            case P_ID::PART_REVERB:
+                  return reverb();
+            case P_ID::PART_CHORUS:
+                  return chorus();
+            default:
+                  return QVariant();
+            }
       }
 
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
-void Part::setProperty(int id, const QVariant& property)
+bool Part::setProperty(P_ID id, const QVariant& property)
       {
-      if (id)
-            qDebug("Part::setProperty: unknown id %d", id);
-      else
-            setShow(property.toBool());
-            for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
-                  m->setDirty();
-                  if (m->mmRest())
-                        m->mmRest()->setDirty();
+      switch (id) {
+            case P_ID::VISIBLE:
+                  setShow(property.toBool());
+                  for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
+                        m->setDirty();
+                        if (m->mmRest())
+                              m->mmRest()->setDirty();
+                        break;
+                        }
+                  break;
+            case P_ID::USE_DRUMSET:
+                  instr()->setUseDrumset(property.toBool());
+                  break;
+            case P_ID::PART_VOLUME:
+                  setVolume(property.toInt());
+                  break;
+            case P_ID::PART_MUTE:
+                  setMute(property.toBool());
+                  break;
+            case P_ID::PART_PAN:
+                  setPan(property.toInt());
+                  break;
+            case P_ID::PART_REVERB:
+                  setReverb(property.toInt());
+                  break;
+            case P_ID::PART_CHORUS:
+                  setChorus(property.toInt());
+                  break;
+            default:
+                  qDebug("Part::setProperty: unknown id %d", int(id));
                   break;
             }
       score()->setLayoutAll(true);
+      return true;
       }
 
 //---------------------------------------------------------

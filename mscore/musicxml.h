@@ -34,27 +34,28 @@
 
 namespace Ms {
 
+class Beam;
+class Chord;
+class ChordRest;
+class FiguredBass;
+class Glissando;
+class Hairpin;
+class Harmony;
 class Instrument;
+class Lyrics;
 class Measure;
-class Tuplet;
-class Tie;
-class Slur;
-class Part;
-class Score;
 class Note;
 class Ottava;
-class Trill;
+class Part;
 class Pedal;
-class Volta;
-class TextLine;
-class Chord;
-class Harmony;
-class Hairpin;
+class Score;
+class Slur;
 class Spanner;
-class Lyrics;
-class ChordRest;
-class Beam;
-class FiguredBass;
+class TextLine;
+class Tie;
+class Trill;
+class Tuplet;
+class Volta;
 enum class StaffTypes : char;
 
 //---------------------------------------------------------
@@ -182,6 +183,7 @@ class MusicXml {
       Ottava* ottavas[MAX_NUMBER_LEVEL];        ///< Current ottavas
       Hairpin* hairpins[MAX_NUMBER_LEVEL];      ///< Current hairpins
       Trill* trills[MAX_NUMBER_LEVEL];          ///< Current trills
+	  Glissando* glissandi[MAX_NUMBER_LEVEL][2];   ///< Current slides ([0]) / glissandi ([1])
 
       Tie* tie;
       Volta* lastVolta;
@@ -209,10 +211,10 @@ class MusicXml {
       Harmony* harmony;                          ///< Current harmony
       Chord* tremStart;                          ///< Starting chord for current tremolo
       FiguredBass* figBass;                      ///< Current figured bass element (to attach to next note)
-      bool figBassExtend;                        ///< Current figured bass extend
+      QVector<FiguredBass*> figBassList;         ///< List of figured bass elements under a single note
       Beam::Mode beamMode;                       ///< Current beam mode
-      QString glissandoText;                     ///< Glissando text at glissando start
-      QString glissandoColor;                    ///< Glissando color at glissando start
+//      QString glissandoText;                     ///< Glissando text at glissando start
+//      QString glissandoColor;                    ///< Glissando color at glissando start
 
       int pageWidth;                             ///< Page width read from defaults
       int pageHeight;                            ///< Page height read from defaults

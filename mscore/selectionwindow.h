@@ -4,6 +4,13 @@
 namespace Ms {
 class Score;
 
+class SelectionListWidget : public QListWidget {
+      Q_OBJECT
+      virtual void focusInEvent(QFocusEvent*) override;
+public:
+      SelectionListWidget(QWidget* parent = 0);
+      };
+
 
 class SelectionWindow : public QDockWidget {
       Q_OBJECT

@@ -26,7 +26,6 @@ EffectGui* NoEffect::gui()
       if (!_gui) {
             _gui = new NoEffectGui(this);
             _gui->setGeometry(0, 0, 644, 79);
-            _gui->show();
             }
       return _gui;
       }

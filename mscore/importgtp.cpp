@@ -53,6 +53,7 @@
 #include "libmscore/hairpin.h"
 #include "libmscore/ottava.h"
 #include "libmscore/notedot.h"
+#include "libmscore/stafftext.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -550,28 +551,43 @@ void GuitarPro::readLyrics()
 
 void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx)
       {
-      // shift slide
-      if (slide == SHIFT_SLIDE) {
+      // shift / legato slide
+      if (slide == SHIFT_SLIDE || slide == LEGATO_SLIDE) {
             Glissando* s = new Glissando(score);
-            s->setText("");
+/*            s->setText("");
             s->setGlissandoType(Glissando::Type::STRAIGHT);
-            cr->add(s);
-            }
-      // legato slide
-      else if (slide == LEGATO_SLIDE) {
+            cr->add(s); */
+            s->setAnchor(Spanner::Anchor::NOTE);
             Segment* prevSeg = cr->segment()->prev1(Segment::Type::ChordRest);
-                  Element* e = prevSeg->element(staffIdx);
-                  if (e) {
-                        if (e->type() == Element::Type::CHORD) {
-                              ChordRest* prevCr = static_cast<ChordRest*>(e);
-                              createSlur(true, staffIdx, prevCr);
-                              }
+            Element* prevElem = prevSeg->element(staffIdx);
+            if (prevElem) {
+                  if (prevElem->type() == Element::Type::CHORD) {
+                        Chord* prevChord = static_cast<Chord*>(prevElem);
+                        /** TODO we should not just take the top note here
+                        * but the /correct/ note need to check whether GP
+                        * supports multi-note gliss. I think it can in modern
+                        * versions */
+                        s->setStartElement(prevChord->upNote());
+                        s->setTick(prevSeg->tick());
+                        s->setTrack(staffIdx);
+                        s->setParent(prevChord->upNote());
+                        s->setText("");
+                        s->setGlissandoType(Glissando::Type::STRAIGHT);
+                        if (slide == LEGATO_SLIDE)
+                              createSlur(true, staffIdx, prevChord);
                         }
-            createSlur(false, staffIdx, cr);
-            Glissando* s = new Glissando(score);
-            s->setText("");
-            s->setGlissandoType(Glissando::Type::STRAIGHT);
-            cr->add(s);
+                  }
+
+            Chord* chord = (Chord*) cr;
+            /* TODO again here, we should not just set the up note but the
+             * /correct/ note need to check whether GP supports
+             * multi-note gliss. I think it can in modern versions */
+            s->setEndElement(chord->upNote());
+            s->setTick2(chord->segment()->tick());
+            s->setTrack2(staffIdx);
+            score->addElement(s);
+            if (slide == LEGATO_SLIDE)
+                  createSlur(false, staffIdx, cr);
             }
       // slide out downwards (fall)
       else if (slide == SLIDE_OUT_DOWN) {
@@ -700,7 +716,8 @@ void GuitarPro::createMeasures()
       {
       int tick = 0;
       Fraction ts;
-      for (int i = 0; i < measures; ++i) {
+//      for (int i = 0; i < measures; ++i) {
+      for (int i = 0; i < bars.size(); ++i) {   // ?? (ws)
             Fraction nts = bars[i].timesig;
             Measure* m = new Measure(score);
             m->setTick(tick);
@@ -891,13 +908,14 @@ void GuitarPro1::read(QFile* fp)
                   tuplets[staffIdx] = 0;
 
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
+                  Fraction measureLen = 0;
+                  int track = staffIdx * VOICES;
                   int tick  = measure->tick();
                   int beats = readInt();
                   for (int beat = 0; beat < beats; ++beat) {
 //                        int pause = 0;
                         uchar beatBits = readUChar();
                         bool dotted = beatBits & BEAT_DOTTED;
-                        int track = staffIdx * VOICES;
                         if (beatBits & BEAT_PAUSE)
                               /*pause =*/ readUChar();
                         int len = readChar();
@@ -982,6 +1000,10 @@ void GuitarPro1::read(QFile* fp)
                               }
                         restsForEmptyBeats(segment, measure, cr, l, track, tick);
                         tick += cr->actualTicks();
+                        measureLen += cr->actualFraction();
+                        }
+                  if (measureLen < measure->len()) {
+                        score->setRest(tick, track, measure->len() - measureLen, false, nullptr, false);
                         }
                   }
             if (bar == 1 && !mixChange)
@@ -1278,7 +1300,6 @@ void GuitarPro2::read(QFile* fp)
             Instrument* instr = part->instr();
             instr->setStringData(stringData);
             part->setPartName(name);
-            instr->setTranspose(Interval(capo));
             part->setLongName(name);
 
             //
@@ -1289,7 +1310,8 @@ void GuitarPro2::read(QFile* fp)
             ClefType clefId = ClefType::G;
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
-                  instr->setUseDrumset(DrumsetKind::GUITAR_PRO);
+                  // instr->setUseDrumset(DrumsetKind::GUITAR_PRO);
+                  instr->setDrumset(gpDrumset);
                   staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
@@ -1303,21 +1325,31 @@ void GuitarPro2::read(QFile* fp)
             Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
             segment->add(clef);
 
-            Channel& ch = instr->channel(0);
+            if (capo > 0) {
+                  Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                  StaffText* st = new StaffText(score);
+                  st->setTextStyleType(TextStyleType::STAFF);
+                  st->setText(QString("Capo. fret ") + QString::number(capo));
+                  st->setParent(s);
+                  st->setTrack(i * VOICES);
+                  measure->add(st);
+            }
+
+            Channel* ch = instr->channel(0);
             if (midiChannel == int(StaffTypes::PERC_DEFAULT)) {
-                  ch.program = 0;
-                  ch.bank    = 128;
+                  ch->program = 0;
+                  ch->bank    = 128;
                   }
             else {
-                  ch.program = patch;
-                  ch.bank    = 0;
+                  ch->program = patch;
+                  ch->bank    = 0;
                   }
-            ch.volume  = channelDefaults[midiChannel].volume;
-            ch.pan     = channelDefaults[midiChannel].pan;
-            ch.chorus  = channelDefaults[midiChannel].chorus;
-            ch.reverb  = channelDefaults[midiChannel].reverb;
+            ch->volume  = channelDefaults[midiChannel].volume;
+            ch->pan     = channelDefaults[midiChannel].pan;
+            ch->chorus  = channelDefaults[midiChannel].chorus;
+            ch->reverb  = channelDefaults[midiChannel].reverb;
             // missing: phase, tremolo
-            ch.updateInitList();
+            ch->updateInitList();
             }
 
       previousTempo = tempo;
@@ -1339,6 +1371,7 @@ void GuitarPro2::read(QFile* fp)
                   tuplets[staffIdx] = 0;
 
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
+                  Fraction measureLen = 0;
                   int track = staffIdx * VOICES;
                   int tick  = measure->tick();
                   int beats = readInt();
@@ -1431,6 +1464,10 @@ void GuitarPro2::read(QFile* fp)
                               }
                         restsForEmptyBeats(segment, measure, cr, l, track, tick);
                         tick += cr->actualTicks();
+                        measureLen += cr->actualFraction();
+                        }
+                  if (measureLen < measure->len()) {
+                        score->setRest(tick, track, measure->len() - measureLen, false, nullptr, false);
                         }
                   }
             if (bar == 1 && !mixChange)
@@ -1538,7 +1575,7 @@ void GuitarPro1::readNote(int string, Note* note)
                         fret = 0;
                   gn->setFret(fret);
                   gn->setString(string);
-                  int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(string, fret);
+                  int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(string, fret, nullptr, 0);
                   gn->setPitch(grace_pitch);
                   gn->setTpcFromPitch();
 
@@ -1628,7 +1665,7 @@ void GuitarPro1::readNote(int string, Note* note)
       // dead note represented as high numbers - fix to zero
       if (fretNumber > 99 || fretNumber == -1)
             fretNumber = 0;
-      int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
+      int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber, nullptr, 0);
 
       /* it's possible to specifiy extraordinarily high pitches by
       specifying fret numbers that don't exist. This is an issue that
@@ -1884,7 +1921,6 @@ void GuitarPro3::read(QFile* fp)
             instr->setStringData(stringData);
             part->setPartName(name);
             part->setLongName(name);
-            instr->setTranspose(Interval(capo));
 
             //
             // determine clef
@@ -1894,7 +1930,8 @@ void GuitarPro3::read(QFile* fp)
             ClefType clefId = ClefType::G;
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
-                  instr->setUseDrumset(DrumsetKind::GUITAR_PRO);
+                  // instr->setUseDrumset(DrumsetKind::GUITAR_PRO);
+                  instr->setDrumset(gpDrumset);
                   staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
@@ -1908,21 +1945,31 @@ void GuitarPro3::read(QFile* fp)
             Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
             segment->add(clef);
 
-            Channel& ch = instr->channel(0);
+            if (capo > 0) {
+                  Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                  StaffText* st = new StaffText(score);
+                  st->setTextStyleType(TextStyleType::STAFF);
+                  st->setText(QString("Capo. fret ") + QString::number(capo));
+                  st->setParent(s);
+                  st->setTrack(i * VOICES);
+                  measure->add(st);
+            }
+
+            Channel* ch = instr->channel(0);
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
-                  ch.program = 0;
-                  ch.bank    = 128;
+                  ch->program = 0;
+                  ch->bank    = 128;
                   }
             else {
-                  ch.program = patch;
-                  ch.bank    = 0;
+                  ch->program = patch;
+                  ch->bank    = 0;
                   }
-            ch.volume  = channelDefaults[midiChannel].volume;
-            ch.pan     = channelDefaults[midiChannel].pan;
-            ch.chorus  = channelDefaults[midiChannel].chorus;
-            ch.reverb  = channelDefaults[midiChannel].reverb;
+            ch->volume  = channelDefaults[midiChannel].volume;
+            ch->pan     = channelDefaults[midiChannel].pan;
+            ch->chorus  = channelDefaults[midiChannel].chorus;
+            ch->reverb  = channelDefaults[midiChannel].reverb;
             // missing: phase, tremolo
-            ch.updateInitList();
+            ch->updateInitList();
             }
 
       previousTempo = tempo;
@@ -1944,6 +1991,7 @@ void GuitarPro3::read(QFile* fp)
                   tuplets[staffIdx] = 0;
 
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
+                  Fraction measureLen = 0;
                   int track = staffIdx * VOICES;
                   int tick  = measure->tick();
                   int beats = readInt();
@@ -2042,8 +2090,10 @@ void GuitarPro3::read(QFile* fp)
 
                         cr->setDuration(l);
 
-                        if (cr->type() == Element::Type::REST && l == measure->len())
+                        if (cr->type() == Element::Type::REST && l >= measure->len()) {
                               cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                              cr->setDuration(measure->len());
+                              }
                         else
                               cr->setDurationType(d);
 
@@ -2077,6 +2127,10 @@ void GuitarPro3::read(QFile* fp)
 
                         restsForEmptyBeats(segment, measure, cr, l, track, tick);
                         tick += cr->actualTicks();
+                        measureLen += cr->actualFraction();
+                        }
+                  if (measureLen < measure->len()) {
+                        score->setRest(tick, track, measure->len() - measureLen, false, nullptr, false);
                         }
                   }
             if (bar == 1 && !mixChange)
@@ -2336,6 +2390,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                   StaffType st = *StaffType::preset(StaffTypes::TAB_DEFAULT);
                   st.setSlashStyle(true);
                   s1->setStaffType(&st);
+                  s1->setLines(staff->part()->instr()->stringData()->strings());
                   cloneStaff(s,s1);
                   p->staves()->front()->addBracket(BracketItem(BracketType::NORMAL, 2));
                   }
@@ -2351,7 +2406,8 @@ Score::FileError importGTP(Score* score, const QString& name)
             if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
                   Staff* staff2 = pscore->staff(1);
                   staff2->setStaffType(StaffType::preset(StaffTypes::TAB_DEFAULT));
-                  }
+                  staff2->setLines(staff->part()->instr()->stringData()->strings());
+            }
 
             //
             // create excerpt title
@@ -2371,10 +2427,9 @@ Score::FileError importGTP(Score* score, const QString& name)
             //
             // layout score
             //
-            pscore->setPlaylistDirty(true);
+            pscore->setPlaylistDirty();
             pscore->rebuildMidiMapping();
             pscore->updateChannel();
-            pscore->updateNotes();
 
             pscore->setLayoutAll(true);
             pscore->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);

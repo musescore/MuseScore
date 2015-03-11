@@ -39,8 +39,6 @@ class Slider : public AbstractSlider {
 
       Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
       Q_PROPERTY(QSize sliderSize READ sliderSize WRITE setSliderSize)
-      Q_PROPERTY(double dclickValue1 READ dclickValue1 WRITE setDclickValue1)
-      Q_PROPERTY(double dclickValue2 READ dclickValue2 WRITE setDclickValue2)
 
       Qt::Orientation orient;
       QSize _sliderSize;
@@ -48,8 +46,6 @@ class Slider : public AbstractSlider {
       QPoint startDrag;
       bool dragMode;
       int dragppos;
-      double _dclickValue1;
-      double _dclickValue2;
 
       virtual void mouseReleaseEvent(QMouseEvent*);
       virtual void mouseMoveEvent(QMouseEvent*);
@@ -60,7 +56,6 @@ class Slider : public AbstractSlider {
    protected:
       QPainterPath* points;
       virtual void mousePressEvent(QMouseEvent*);
-      virtual void mouseDoubleClickEvent(QMouseEvent*);
 
    signals:
       void sliderPressed(int);
@@ -79,10 +74,6 @@ class Slider : public AbstractSlider {
 
       virtual void setInvertedAppearance(bool val);
       virtual QSize sizeHint() const;
-      double dclickValue1() const      { return _dclickValue1; }
-      double dclickValue2() const      { return _dclickValue2; }
-      void setDclickValue1(double val) { _dclickValue1 = val;  }
-      void setDclickValue2(double val) { _dclickValue2 = val;  }
       };
 }
 

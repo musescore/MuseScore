@@ -32,6 +32,17 @@ LayoutBreak::LayoutBreak(Score* score)
       setFlag(ElementFlag::HAS_TAG, true);
       }
 
+LayoutBreak::LayoutBreak(const LayoutBreak& lb)
+   : Element(lb)
+      {
+      _layoutBreakType = lb._layoutBreakType;
+      lw = lb.lw;
+      _pause = lb._pause;
+      _startWithLongNames  = lb._startWithLongNames;
+      _startWithMeasureOne = lb._startWithMeasureOne;
+      layout0();
+      }
+
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
@@ -231,6 +242,7 @@ bool LayoutBreak::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::PAUSE:
                   setPause(v.toDouble());
+                  score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))

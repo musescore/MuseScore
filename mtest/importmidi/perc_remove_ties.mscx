@@ -42,13 +42,15 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <StaffType group="pitched">
+        <StaffType group="percussion">
+          <name>perc5Line</name>
+          <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Percussion, Drum Set</trackName>
+      <trackName>Drumset, Drum Set</trackName>
       <Instrument>
-        <longName pos="0">Percussion, Drum Set</longName>
+        <longName pos="0">Drumset, Drum Set</longName>
         <shortName pos="0">Drs.</shortName>
         <trackName>Drumset</trackName>
         <instrumentId>drum.group.set</instrumentId>
@@ -372,7 +374,7 @@
         <tick>0</tick>
         <Chord>
           <track>1</track>
-          <durationType>half</durationType>
+          <durationType>quarter</durationType>
           <StemDirection>down</StemDirection>
           <Note>
             <track>1</track>
@@ -382,9 +384,13 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Rest>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
         <Chord>
           <track>1</track>
-          <durationType>half</durationType>
+          <durationType>quarter</durationType>
           <StemDirection>down</StemDirection>
           <Note>
             <track>1</track>
@@ -394,6 +400,10 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Rest>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
         </Measure>
       <Measure number="2">
         <Chord>
@@ -491,7 +501,7 @@
         <tick>1920</tick>
         <Chord>
           <track>1</track>
-          <durationType>half</durationType>
+          <durationType>quarter</durationType>
           <StemDirection>down</StemDirection>
           <Note>
             <track>1</track>
@@ -501,9 +511,13 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Rest>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
         <Chord>
           <track>1</track>
-          <durationType>half</durationType>
+          <durationType>quarter</durationType>
           <StemDirection>down</StemDirection>
           <Note>
             <track>1</track>
@@ -513,6 +527,10 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Rest>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
         </Measure>
       <Measure number="3">
         <Chord>
@@ -610,7 +628,7 @@
         <tick>3840</tick>
         <Chord>
           <track>1</track>
-          <durationType>half</durationType>
+          <durationType>quarter</durationType>
           <StemDirection>down</StemDirection>
           <Note>
             <track>1</track>
@@ -620,9 +638,13 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Rest>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
         <Chord>
           <track>1</track>
-          <durationType>half</durationType>
+          <durationType>quarter</durationType>
           <StemDirection>down</StemDirection>
           <Note>
             <track>1</track>
@@ -632,6 +654,10 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Rest>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
         </Measure>
       <Measure number="4">
         <Chord>
@@ -729,7 +755,7 @@
         <tick>5760</tick>
         <Chord>
           <track>1</track>
-          <durationType>half</durationType>
+          <durationType>quarter</durationType>
           <StemDirection>down</StemDirection>
           <Note>
             <track>1</track>
@@ -739,9 +765,13 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Rest>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
         <Chord>
           <track>1</track>
-          <durationType>half</durationType>
+          <durationType>quarter</durationType>
           <StemDirection>down</StemDirection>
           <Note>
             <track>1</track>
@@ -751,6 +781,10 @@
             <veloType>user</veloType>
             </Note>
           </Chord>
+        <Rest>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
         </Measure>
       </Staff>
     </Score>

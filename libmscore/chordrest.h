@@ -79,10 +79,11 @@ class ChordRest : public DurationElement {
       ~ChordRest();
 
       virtual Element::Type type() const = 0;
-      virtual Element* drop(const DropData&);
+
+      virtual Element* drop(const DropData&) override;
       virtual void undoUnlink() override;
 
-      virtual Segment* segment() const           { return (Segment*)parent(); }
+      virtual Segment* segment() const  { return (Segment*)parent(); }
       virtual Measure* measure() const = 0;
 
       virtual void writeProperties(Xml& xml) const;
@@ -124,13 +125,14 @@ class ChordRest : public DurationElement {
 
       void layoutArticulations();
 
-      const TDuration& durationType() const     { return _crossMeasure == CrossMeasure::FIRST ?
+      const TDuration durationType() const      { return _crossMeasure == CrossMeasure::FIRST ?
                                                       _crossMeasureTDur : _durationType;        }
-      const TDuration& actualDurationType() const   { return _durationType; }
+
+      const TDuration actualDurationType() const   { return _durationType; }
       void setDurationType(TDuration::DurationType t);
       void setDurationType(const QString& s);
       void setDurationType(int ticks);
-      void setDurationType(const TDuration& v);
+      void setDurationType(TDuration v);
       void setDots(int n)                       { _durationType.setDots(n); }
       int dots() const        { return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.dots()
                                     : (_crossMeasure == CrossMeasure::SECOND ? 0 : _durationType.dots()); }
@@ -155,9 +157,9 @@ class ChordRest : public DurationElement {
       void setCrossMeasure(CrossMeasure val)       { _crossMeasure = val;  }
       virtual void crossMeasureSetup(bool /*on*/)   { }
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
       bool isGrace() const;
       bool isGraceBefore() const;
       bool isGraceAfter() const;

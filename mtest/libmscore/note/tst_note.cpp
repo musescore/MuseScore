@@ -413,7 +413,9 @@ void TestNote::tpcTranspose()
       score->upDown(false, UpDownMode::CHROMATIC);
       score->endCmd();
 
+      score->startCmd();
       score->cmdConcertPitchChanged(true, true);
+      score->endCmd();
 
       QVERIFY(saveCompareScore(score, "tpc-transpose-test.mscx", DIR + "tpc-transpose-ref.mscx"));
 

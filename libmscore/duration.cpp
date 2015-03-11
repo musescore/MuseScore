@@ -16,6 +16,7 @@
 #include "undo.h"
 #include "staff.h"
 #include "xml.h"
+#include "property.h"
 
 namespace Ms {
 
@@ -129,6 +130,39 @@ void DurationElement::writeTuplet(Xml& xml)
             tuplet()->setId(xml.tupletId++);
             tuplet()->write(xml);
             }
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant DurationElement::getProperty(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::DURATION:
+                  return QVariant::fromValue(_duration);
+            default:
+                  return Element::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool DurationElement::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            case P_ID::DURATION: {
+                  Fraction f(v.value<Fraction>());
+                  setDuration(f);
+                  score()->setLayoutAll(true);
+                  }
+                  break;
+            default:
+                  return Element::setProperty(propertyId, v);
+            }
+      return true;
       }
 
 }

@@ -87,14 +87,8 @@ DrumTools::DrumTools(QWidget* parent)
 void DrumTools::updateDrumset()
       {
       drumPalette->clear();
-      if (drumset == 0)
+      if (!drumset)
             return;
-      int drumInstruments = 0;
-      for (int pitch = 0; pitch < 128; ++pitch) {
-            if (drumset->isValid(pitch))
-                  ++drumInstruments;
-            }
-      int i = 0;
       double _spatium = gscore->spatium();
       for (int pitch = 0; pitch < 128; ++pitch) {
             if (!drumset->isValid(pitch))
@@ -133,8 +127,7 @@ void DrumTools::updateDrumset()
             QString shortcut;
             if (sc)
                   shortcut = QChar(sc);
-            drumPalette->append(chord, qApp->translate("drumset", drumset->name(pitch).toUtf8().constData()), shortcut);
-            ++i;
+            drumPalette->append(chord, qApp->translate("drumset", drumset->name(pitch).toLatin1().data()), shortcut);
             }
       }
 
@@ -142,7 +135,7 @@ void DrumTools::updateDrumset()
 //   setDrumset
 //---------------------------------------------------------
 
-void DrumTools::setDrumset(Score* s, Staff* st, Drumset* ds)
+void DrumTools::setDrumset(Score* s, Staff* st, const Drumset* ds)
       {
       if (s == _score && staff == st && drumset == ds)
             return;
@@ -159,7 +152,10 @@ void DrumTools::setDrumset(Score* s, Staff* st, Drumset* ds)
 void DrumTools::editDrumset()
       {
       EditDrumset eds(drumset, this);
-      eds.exec();
+      if (eds.exec()) {
+            staff->part()->instr()->setDrumset(eds.drumset());
+            mscore->updateDrumTools();
+            }
       }
 
 //---------------------------------------------------------
@@ -174,7 +170,7 @@ void DrumTools::drumNoteSelected(int val)
             Note* note       = ch->downNote();
             int ticks        = MScore::defaultPlayDuration;
             int pitch        = note->pitch();
-            seq->startNote(staff->part()->instr()->channel(0).channel, pitch, 80, ticks, 0.0);
+            seq->startNote(staff->part()->instr()->channel(0)->channel, pitch, 80, ticks, 0.0);
 
             int track = (_score->inputState().track() / VOICES) * VOICES + element->track();
             _score->inputState().setTrack(track);

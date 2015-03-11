@@ -30,6 +30,7 @@
 #include "image.h"
 #include "repeat.h"
 #include "chord.h"
+#include "tremolo.h"
 
 namespace Ms {
 
@@ -187,10 +188,43 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                                 }
                                           graceNotes.clear();
                                           }
+                                    // delete pending ties, they are not selected when copy
+                                    if ((tick - dstTick) + cr->actualTicks() >= tickLen) {
+                                          if (cr->type() == Element::Type::CHORD) {
+                                                Chord* c = static_cast<Chord*>(cr);
+                                                for (Note* note: c->notes()) {
+                                                      Tie* tie = note->tieFor();
+                                                      if (tie) {
+                                                            note->setTieFor(0);
+                                                            delete tie;
+                                                            }
+                                                      }
+                                                }
+                                          }
                                     //shorten last cr to fit in the space made by makeGap
                                     if ((tick - dstTick) + cr->actualTicks() > tickLen) {
                                           int newLength = tickLen - (tick - dstTick);
-                                          cr->setDuration(newLength);
+                                          // check previous CR on same track, if it has tremolo, delete the tremolo
+                                          // we don't want a tremolo and two different chord durations
+                                          if (cr->type() == Element::Type::CHORD) {
+                                                Segment* s = tick2leftSegment(tick - 1);
+                                                if (s) {
+                                                      ChordRest* crt = static_cast<ChordRest*>(s->element(cr->track()));
+                                                      if (!crt)
+                                                            crt = s->nextChordRest(cr->track(), true);
+                                                      if (crt && crt->type() == Element::Type::CHORD) {
+                                                            Chord* chrt = static_cast<Chord*>(crt);
+                                                            Tremolo* tr = chrt->tremolo();
+                                                            if (tr) {
+                                                                  tr->setChords(chrt, static_cast<Chord*>(cr));
+                                                                  chrt->remove(tr);
+                                                                  delete tr;
+                                                                  }
+                                                            }
+                                                      }
+                                                }
+                                          // set shorten duration
+                                          cr->setDuration(Fraction::fromTicks(newLength));
                                           cr->setDurationType(newLength);
                                           }
                                     pasteChordRest(cr, tick, e.transpose());
@@ -230,25 +264,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                     }
                               e.readNext();
                               }
-/* unused: Lyrics are now part of <Chord>
- * and parenting lyrics to segment is wrong anyway!
-                        else if (tag == "Lyrics") {
-                              Lyrics* lyrics = new Lyrics(this);
-                              lyrics->setTrack(e.track());
-                              lyrics->read(e);
-                              lyrics->setTrack(e.track());
-                              int tick = e.tick();
-                              Segment* segment = tick2segment(tick);
-                              if (segment) {
-                                    lyrics->setParent(segment);
-                                    undoAddElement(lyrics);
-                                    }
-                              else {
-                                    delete lyrics;
-                                    qDebug("no segment found for lyrics");
-                                    }
-                              }
-*/
                         else if (tag == "Harmony") {
                               Harmony* harmony = new Harmony(this);
                               harmony->setTrack(e.track());
@@ -295,18 +310,19 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                            || tag == "FiguredBass"
                            ) {
                               Element* el = Element::name2Element(tag, this);
-                              el->setTrack(e.track());             // a valid track might be necessary for el->read() to work
+                              el->setTrack(e.track());      // a valid track might be necessary for el->read() to work
+                              el->read(e);
 
                               int tick = e.tick();
                               Measure* m = tick2measure(tick);
                               Segment* seg = m->undoGetSegment(Segment::Type::ChordRest, tick);
                               el->setParent(seg);
-                              el->read(e);
 
                               // be sure to paste the element in the destination track;
                               // setting track needs to be repeated, as it might have been overwritten by el->read()
                               el->setTrack(e.track());
-                              undoAddElement(el);
+
+                              undoChangeElement(seg->element(e.track()), el);
                               }
                         else if (tag == "Clef") {
                               Clef* clef = new Clef(this);
@@ -318,7 +334,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                     m = m->prevMeasure();
                               Segment* segment = m->undoGetSegment(Segment::Type::Clef, tick);
                               clef->setParent(segment);
-                              undoAddElement(clef);
+                              undoChangeElement(segment->element(e.track()), clef);
                               }
                         else if (tag == "Breath") {
                               Breath* breath = new Breath(this);
@@ -328,7 +344,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               Measure* m = tick2measure(tick);
                               Segment* segment = m->undoGetSegment(Segment::Type::Breath, tick);
                               breath->setParent(segment);
-                              undoAddElement(breath);
+                              undoChangeElement(segment->element(e.track()), breath);
                               }
                         else if (tag == "Beam") {
                               Beam* beam = new Beam(this);
@@ -362,10 +378,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
             }
       foreach (Score* s, scoreList())     // for all parts
             s->connectTies();
-
-      // when pasting between different staff types (pitched->tablature)
-      // fret/line has to be calculated:
-      updateNotes();
 
       if (pasted) {                       //select only if we pasted something
             Segment* s1 = tick2segment(dstTick);
@@ -408,7 +420,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
 
 void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose)
       {
-// qDebug("pasteChordRest %s at %d", cr->name(), tick);
+// qDebug("pasteChordRest %s at %d, len %d/%d", cr->name(), tick, cr->duration().numerator(), cr->duration().denominator() );
       if (cr->type() == Element::Type::CHORD)
             transposeChord(static_cast<Chord*>(cr), srcTranspose);
 
@@ -416,9 +428,22 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
       if (!measure)
             return;
 
+      // we can paste a measure rest as such only at start of measure
+      // and only if the lengths of the rest and measure match
+      // otherwise, we need to convert to duration rest(s)
+      // and potentially split the rest up (eg, 5/4 => whole + quarter)
+      bool convertMeasureRest;
+      if (cr->type() == Element::Type::REST
+          && cr->durationType().type() == TDuration::DurationType::V_MEASURE
+          && (tick != measure->tick() || cr->duration() != measure->len())) {
+            convertMeasureRest = true;
+            }
+      else
+            convertMeasureRest = false;
+
       int measureEnd = measure->endTick();
       bool isGrace = (cr->type() == Element::Type::CHORD) && (((Chord*)cr)->noteType() != NoteType::NORMAL);
-      if (!isGrace && (tick + cr->actualTicks() > measureEnd)) {
+      if (!isGrace && (tick + cr->actualTicks() > measureEnd || convertMeasureRest)) {
             if (cr->type() == Element::Type::CHORD) {
                   // split Chord
                   Chord* c = static_cast<Chord*>(cr);
@@ -682,7 +707,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                           }
                                     else
                                           // by default, assign to FiguredBass element the duration of the chord it refers to
-                                          ticks = static_cast<ChordRest*>(currSegm->element(destTrack))->durationTicks();
+                                          ticks = static_cast<ChordRest*>(currSegm->element(destTrack))->duration().ticks();
                                     // in both cases, look for an existing f.b. element in segment and remove it, if found
                                     FiguredBass* oldFB = nullptr;
                                     foreach (Element* a, currSegm->annotations()) {
@@ -867,8 +892,8 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
             delete image;
             }
       else {
-            qDebug("cannot paste selState %d staffList %hhd",
-               _selection.state(), ms->hasFormat(mimeStaffListFormat));
+            qDebug("cannot paste selState %hhd staffList %s",
+               _selection.state(), (ms->hasFormat(mimeStaffListFormat))? "true" : "false");
             foreach(const QString& s, ms->formats())
                   qDebug("  format %s", qPrintable(s));
             }

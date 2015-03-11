@@ -419,7 +419,7 @@ void Segment::checkElement(Element* el, int track)
 
 void Segment::add(Element* el)
       {
-      // qDebug("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->name());
+//      qDebug("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->name());
       el->setParent(this);
 
       int track = el->track();
@@ -497,8 +497,24 @@ void Segment::add(Element* el)
             case Element::Type::CHORD:
             case Element::Type::REST:
                   Q_ASSERT(_segmentType == Type::ChordRest);
-                  if (track % VOICES)
-                        measure()->mstaff(track / VOICES)->hasVoices = true;
+                  if (track % VOICES) {
+                        bool v;
+                        if (el->type() == Element::Type::CHORD) {
+                              v = false;
+                              // consider chord visible if any note is visible
+                              Chord* c = static_cast<Chord*>(el);
+                              for (Note* n : c->notes()) {
+                                    if (n->visible()) {
+                                          v = true;
+                                          break;
+                                          }
+                                    }
+                              }
+                        else
+                              v = el->visible();
+                        if (v)
+                              measure()->mstaff(track / VOICES)->hasVoices = true;
+                        }
 
                   // fall through
 
@@ -602,9 +618,15 @@ void Segment::remove(Element* el)
                   // fall through
 
             case Element::Type::BAR_LINE:
-            case Element::Type::BREATH:
             case Element::Type::AMBITUS:
                   _elist[track] = 0;
+                  break;
+
+            case Element::Type::BREATH:
+                  _elist[track] = 0;
+                  score()->setPause(tick(), 0);
+                  score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
+                  score()->setLayoutAll(true);
                   break;
 
             default:
@@ -1068,14 +1090,14 @@ Element* Segment::lastElement(int staff)
 //   Use firstElement, or lastElement instead of this
 //---------------------------------------------------------
 
- Element* Segment::getElement(int staff)
+Element* Segment::getElement(int staff)
       {
-      if (this->segmentType() == Segment::Type::ChordRest) {
-            return this->firstElement(staff);
+      if (segmentType() == Segment::Type::ChordRest) {
+            return firstElement(staff);
             }
-      else if (this->segmentType() == Segment::Type::EndBarLine        ||
-               this->segmentType() == Segment::Type::BarLine           ||
-               this->segmentType() == Segment::Type::StartRepeatBarLine) {
+      else if (segmentType() == Segment::Type::EndBarLine        ||
+               segmentType() == Segment::Type::BarLine           ||
+               segmentType() == Segment::Type::StartRepeatBarLine) {
             for (int i = staff; i >= 0; i--) {
                   if (!this->element(i*VOICES)) {
                         continue;
@@ -1092,98 +1114,104 @@ Element* Segment::lastElement(int staff)
       return 0;
       }
 
- //--------------------------------------------------------
- //   firstInNextSegments
- //   Searches for the next segment that has elements on the
- //   active staff and returns its first element
- //
- //   Uses firstElement so it also returns a barline if it
- //   spans into the active staff
- //--------------------------------------------------------
+//--------------------------------------------------------
+//   firstInNextSegments
+//   Searches for the next segment that has elements on the
+//   active staff and returns its first element
+//
+//   Uses firstElement so it also returns a barline if it
+//   spans into the active staff
+//--------------------------------------------------------
 
- Element* Segment::firstInNextSegments(int activeStaff)
-       {
-       Element* re = 0;
-       Segment* seg = this;
-       while (!re) {
-             seg = seg->next1MM(Segment::Type::All);
-             if (!seg) //end of staff, or score
-                   break;
+Element* Segment::firstInNextSegments(int activeStaff)
+      {
+      Element* re = 0;
+      Segment* seg = this;
+      while (!re) {
+            seg = seg->next1MM(Segment::Type::All);
+            if (!seg) //end of staff, or score
+                  break;
 
-             re = seg->firstElement(activeStaff);
-             }
+            re = seg->firstElement(activeStaff);
+            }
 
-       if (re)
-             return re;
+      if (re)
+            return re;
 
-       if (!seg) { //end of staff
-             seg = score()->firstSegment();
-             return seg->element( (activeStaff + 1) * VOICES );
-             }
+      if (!seg) { //end of staff
+            seg = score()->firstSegment();
+            return seg->element( (activeStaff + 1) * VOICES );
+            }
 
-       return 0;
-       }
+      return 0;
+      }
 
+//--------------------------------------------------------
+//   firstInNextSegments
+//   Searches for the previous segment that has elements on
+//   the active staff and returns its last element
+//
+//   Uses lastElement so it also returns a barline if it
+//   spans into the active staff
+//--------------------------------------------------------
 
- //--------------------------------------------------------
- //   firstInNextSegments
- //   Searches for the previous segment that has elements on
- //   the active staff and returns its last element
- //
- //   Uses lastElement so it also returns a barline if it
- //   spans into the active staff
- //--------------------------------------------------------
+Element* Segment::lastInPrevSegments(int activeStaff)
+      {
+      Element* re = 0;
+      Segment* seg = this;
 
- Element* Segment::lastInPrevSegments(int activeStaff)
-       {
-       Element* re = 0;
-       Segment* seg = this;
+      while (!re) {
+            seg = seg->prev1MM(Segment::Type::All);
+            if (!seg) //end of staff, or score
+                  break;
 
-       while (!re) {
-             seg = seg->prev1MM(Segment::Type::All);
-             if (!seg) //end of staff, or score
-                   break;
+            re = seg->lastElement(activeStaff);
+            }
 
-             re = seg->lastElement(activeStaff);
-             }
+      if (re)
+            return re;
 
-       if (re)
-             return re;
+      if (!seg) { //end of staff
+            if (activeStaff -1 < 0) //end of score
+                  return 0;
 
-       if (!seg) { //end of staff
-             if (activeStaff -1 < 0) //end of score
-                   return 0;
+            re = 0;
+            seg = score()->lastSegment();
+            while (true) {
+                  if (seg->segmentType() == Segment::Type::EndBarLine)
+                        score()->inputState().setTrack( (activeStaff -1) * VOICES ); //correction
 
-             re = 0;
-             seg = score()->lastSegment();
-             while (true) {
-                   if (seg->segmentType() == Segment::Type::EndBarLine)
-                         score()->inputState().setTrack( (activeStaff -1) * VOICES ); //correction
+                  if ((re = seg->lastElement(activeStaff -1)) != 0)
+                        return re;
 
-                   if ((re = seg->lastElement(activeStaff -1)) != 0)
-                         return re;
+                  seg = seg->prev1(Segment::Type::All);
+                  }
+            }
 
-                   seg = seg->prev1(Segment::Type::All);
-                   }
-             }
+      return 0;
+      }
 
-       return 0;
-       }
+//---------------------------------------------------------
+//   accessibleExtraInfo
+//---------------------------------------------------------
 
 QString Segment::accessibleExtraInfo()
       {
       QString rez = "";
       if (!this->annotations().empty()) {
-            rez = rez + tr("Annotations: ");
+            QString temp = "";
             foreach (Element* a, this->annotations()) {
+                  if (!score()->selectionFilter().canSelect(a)) continue;
                   switch(a->type()) {
                         case Element::Type::DYNAMIC:
                               //they are added in the chordrest, because they are for only one staff
                                break;
                         default:
-                               rez = rez + " " + a->accessibleInfo();
+                               temp = temp + " " + a->accessibleInfo();
                         }
                   }
+            if(!temp.isEmpty())
+                  rez = rez + tr("Annotations:") + temp;
             }
 
       QString startSpanners = "";
@@ -1193,6 +1221,7 @@ QString Segment::accessibleExtraInfo()
       for (std::vector< ::Interval<Spanner*> >::iterator i = spanners.begin(); i < spanners.end(); i++) {
             ::Interval<Spanner*> interval = *i;
             Spanner* s = interval.value;
+            if (!score()->selectionFilter().canSelect(s)) continue;
             if (this->segmentType() == Segment::Type::EndBarLine       ||
                this->segmentType() == Segment::Type::BarLine           ||
                this->segmentType() == Segment::Type::StartRepeatBarLine) {
@@ -1225,9 +1254,9 @@ QString Segment::accessibleExtraInfo()
       return rez + " " + startSpanners + " " + endSpanners;
       }
 
- //--------------------------------------------------------
- //   qmlAnnotations
- //--------------------------------------------------------
+//--------------------------------------------------------
+//   qmlAnnotations
+//--------------------------------------------------------
 
 QQmlListProperty<Ms::Element> Segment::qmlAnnotations()
       {

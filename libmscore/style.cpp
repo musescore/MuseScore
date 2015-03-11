@@ -136,7 +136,7 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::smallClefMag,                StyleType("smallClefMag",            StyleValueType::DOUBLE) },
       { StyleIdx::genClef,                     StyleType("genClef",                 StyleValueType::BOOL) },           // create clef for all systems, not only for first
       { StyleIdx::genKeysig,                   StyleType("genKeysig",               StyleValueType::BOOL) },         // create key signature for all systems
-      { StyleIdx::genTimesig,                  StyleType("genTimesig",              StyleValueType::BOOL) },
+//      { StyleIdx::genTimesig,                  StyleType("genTimesig",              StyleValueType::BOOL) },
       { StyleIdx::genCourtesyTimesig,          StyleType("genCourtesyTimesig",      StyleValueType::BOOL) },
       { StyleIdx::genCourtesyKeysig,           StyleType("genCourtesyKeysig",       StyleValueType::BOOL) },
       { StyleIdx::genCourtesyClef,             StyleType("genCourtesyClef",         StyleValueType::BOOL) },
@@ -168,8 +168,6 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::ArpeggioNoteDistance,        StyleType("ArpeggioNoteDistance",    StyleValueType::SPATIUM) },
       { StyleIdx::ArpeggioLineWidth,           StyleType("ArpeggioLineWidth",       StyleValueType::SPATIUM) },
       { StyleIdx::ArpeggioHookLen,             StyleType("ArpeggioHookLen",         StyleValueType::SPATIUM) },
-      { StyleIdx::FixMeasureNumbers,           StyleType("FixMeasureNumbers",       StyleValueType::INT) },
-      { StyleIdx::FixMeasureWidth,             StyleType("FixMeasureWidth",         StyleValueType::BOOL) },
       { StyleIdx::SlurEndWidth,                StyleType("slurEndWidth",            StyleValueType::SPATIUM) },
       { StyleIdx::SlurMidWidth,                StyleType("slurMidWidth",            StyleValueType::SPATIUM) },
       { StyleIdx::SlurDottedWidth,             StyleType("slurDottedWidth",         StyleValueType::SPATIUM) },
@@ -224,7 +222,8 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::tupletNoteRightDistance,     StyleType("tupletNoteRightDistance", StyleValueType::SPATIUM) },
       { StyleIdx::barreLineWidth,              StyleType("barreLineWidth",          StyleValueType::DOUBLE)  },
       { StyleIdx::fretMag,                     StyleType("fretMag",                 StyleValueType::DOUBLE)  },
-      { StyleIdx::scaleBarlines,               StyleType("scaleBarlines",           StyleValueType::BOOL)    }
+      { StyleIdx::scaleBarlines,               StyleType("scaleBarlines",           StyleValueType::BOOL)    },
+      { StyleIdx::barGraceDistance,            StyleType("barGraceDistance",        StyleValueType::SPATIUM) }
       };
 
 class StyleTypes {
@@ -356,6 +355,8 @@ void initStyle(MStyle* s)
 
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Ottava"),            ff, 12, false, true, false,
          AlignmentFlags::LEFT | AlignmentFlags::VCENTER, QPointF(), OffsetType::SPATIUM, true));
+      s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Pedal"),             ff, 12, false, false, false,
+         AlignmentFlags::LEFT | AlignmentFlags::BASELINE, QPointF(0.0, 0.15), OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Bend"),              ff, 8, false, false, false,
          AlignmentFlags::CENTER | AlignmentFlags::BOTTOM, QPointF(), OffsetType::SPATIUM, true));
       s->addTextStyle(TextStyle(QT_TRANSLATE_NOOP ("TextStyle", "Header"),            ff, 8, false, false, false,
@@ -485,7 +486,7 @@ StyleData::StyleData()
             { StyleIdx::smallClefMag,                QVariant(0.8) },
             { StyleIdx::genClef,                     QVariant(true) },
             { StyleIdx::genKeysig,                   QVariant(true) },
-            { StyleIdx::genTimesig,                  QVariant(true) },
+//            { StyleIdx::genTimesig,                  QVariant(true) },
             { StyleIdx::genCourtesyTimesig,          QVariant(true) },
             { StyleIdx::genCourtesyKeysig,           QVariant(true) },
             { StyleIdx::genCourtesyClef,             QVariant(true) },
@@ -517,8 +518,6 @@ StyleData::StyleData()
             { StyleIdx::ArpeggioNoteDistance,        QVariant(.5) },
             { StyleIdx::ArpeggioLineWidth,           QVariant(.18) },
             { StyleIdx::ArpeggioHookLen,             QVariant(.8) },
-            { StyleIdx::FixMeasureNumbers,           QVariant(0) },
-            { StyleIdx::FixMeasureWidth,             QVariant(false) },
             { StyleIdx::SlurEndWidth,                QVariant(.07) },
             { StyleIdx::SlurMidWidth,                QVariant(.15) },
             { StyleIdx::SlurDottedWidth,             QVariant(.1) },
@@ -573,7 +572,8 @@ StyleData::StyleData()
             { StyleIdx::tupletNoteRightDistance,     QVariant(0.0) },
             { StyleIdx::barreLineWidth,              QVariant(1.0) },
             { StyleIdx::fretMag,                     QVariant(1.0) },
-            { StyleIdx::scaleBarlines,               QVariant(true) }
+            { StyleIdx::scaleBarlines,               QVariant(true) },
+            { StyleIdx::barGraceDistance,            QVariant(.6) },
             };
       for (unsigned i = 0; i < sizeof(values2)/sizeof(*values2); ++i)
             _values[int(values2[i].idx)] = values2[i].val;
@@ -1044,7 +1044,7 @@ void StyleData::load(XmlReader& e)
                   _customChordList = true;
                   chordListTag = true;
                   }
-            else if (tag == "pageFillLimit")   // obsolete
+            else if (tag == "pageFillLimit" || tag == "genTimesig" || tag == "FixMeasureNumbers" || tag == "FixMeasureWidth")   // obsolete
                   e.skipCurrentElement();
             else if (tag == "systemDistance")  // obsolete
                   set(StyleIdx::minSystemDistance, QVariant(e.readDouble()));

@@ -37,7 +37,6 @@ class NoteDot : public Element {
       virtual qreal mag() const;
 
       virtual void draw(QPainter*) const override;
-      virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void layout() override;
 

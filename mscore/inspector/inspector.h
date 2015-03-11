@@ -16,6 +16,7 @@
 
 #include "inspectorBase.h"
 #include "ui_inspector_element.h"
+#include "ui_inspector_break.h"
 #include "ui_inspector_vbox.h"
 #include "ui_inspector_hbox.h"
 #include "ui_inspector_articulation.h"
@@ -34,8 +35,8 @@
 #include "ui_inspector_tempotext.h"
 #include "ui_inspector_dynamic.h"
 #include "ui_inspector_slur.h"
-#include "ui_inspector_text.h"
 #include "ui_inspector_empty.h"
+#include "ui_inspector_text.h"
 
 namespace Ms {
 
@@ -61,6 +62,18 @@ class InspectorElement : public InspectorBase {
 
    public:
       InspectorElement(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorBreak
+//---------------------------------------------------------
+
+class InspectorBreak : public InspectorBase {
+      Q_OBJECT
+      Ui::InspectorBreak b;
+
+   public:
+      InspectorBreak(QWidget* parent);
       };
 
 //---------------------------------------------------------
@@ -130,7 +143,7 @@ class InspectorRest : public InspectorBase {
 
    public:
       InspectorRest(QWidget* parent);
-      virtual void setElement();
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
@@ -148,7 +161,7 @@ class InspectorClef : public InspectorBase {
       Clef* otherClef;        // the courtesy clef for a main clef or viceversa
                               // used to keep in sync ShowCourtesy setting of both clefs
    protected slots:
-      virtual void valueChanged(int idx);
+      virtual void valueChanged(int idx) override;
 
    public:
       InspectorClef(QWidget* parent);
@@ -216,21 +229,6 @@ class InspectorAccidental : public InspectorBase {
       };
 
 //---------------------------------------------------------
-//   InspectorText
-//---------------------------------------------------------
-
-class InspectorText : public InspectorBase {
-      Q_OBJECT
-
-      UiInspectorElement e;
-      Ui::InspectorText t;
-
-   public:
-      InspectorText(QWidget* parent);
-      virtual void setElement() override;
-      };
-
-//---------------------------------------------------------
 //   InspectorTempoText
 //---------------------------------------------------------
 
@@ -244,7 +242,7 @@ class InspectorTempoText : public InspectorBase {
    public:
       InspectorTempoText(QWidget* parent);
       virtual void setElement() override;
-      virtual void postInit();
+      virtual void postInit() override;
       };
 
 //---------------------------------------------------------
@@ -340,7 +338,7 @@ class InspectorEmpty : public InspectorBase {
 
    public:
       InspectorEmpty(QWidget* parent);
-      virtual QSize sizeHint() const;
+      virtual QSize sizeHint() const override;
       };
 
 } // namespace Ms

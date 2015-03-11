@@ -63,7 +63,6 @@
       <smallClefMag>0.81</smallClefMag>
       <genClef>0</genClef>
       <genKeysig>0</genKeysig>
-      <genTimesig>0</genTimesig>
       <genCourtesyTimesig>0</genCourtesyTimesig>
       <genCourtesyKeysig>0</genCourtesyKeysig>
       <useStandardNoteNames>0</useStandardNoteNames>
@@ -81,8 +80,6 @@
       <ArpeggioNoteDistance>0.7</ArpeggioNoteDistance>
       <ArpeggioLineWidth>0.19</ArpeggioLineWidth>
       <ArpeggioHookLen>0.9</ArpeggioHookLen>
-      <FixMeasureNumbers>4</FixMeasureNumbers>
-      <FixMeasureWidth>1</FixMeasureWidth>
       <evenFooterL>$P</evenFooterL>
       <oddFooterR>$P</oddFooterR>
       <voltaY>-2</voltaY>

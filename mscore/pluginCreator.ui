@@ -164,7 +164,7 @@
   </action>
   <action name="actionQuit">
    <property name="text">
-    <string>Quit</string>
+    <string>Close Plugin Creator</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>

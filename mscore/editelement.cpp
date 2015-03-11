@@ -111,12 +111,13 @@ void ScoreView::endEdit()
             figuredBassEndEdit();
       else if (editObject->isText()) {
             Text* text = static_cast<Text*>(editObject);
-            if (text->isEmpty())
+            // remove text if empty
+            // dont do this for TBOX
+            if (text->isEmpty() && text->parent() && text->parent()->type() != Element::Type::TBOX)
                   _score->undoRemoveElement(text);
             }
 
       _score->endCmd();
-      mscore->endCmd();
 
       if (dragElement && (dragElement != editObject)) {
             curElement = dragElement;
@@ -127,6 +128,7 @@ void ScoreView::endEdit()
 
       editObject = nullptr;
       grips      = 0;
+      curGrip    = Grip::NO_GRIP;
       }
 
 //---------------------------------------------------------

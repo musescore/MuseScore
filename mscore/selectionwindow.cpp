@@ -3,14 +3,14 @@
 #include "libmscore/score.h"
 #include "libmscore/select.h"
 #include "palettebox.h"
-
+#include "scoreaccessibility.h"
 namespace Ms {
 
 static const char* labels[] = {
-      QT_TRANSLATE_NOOP("selectionfilter", "1st Voice"),
-      QT_TRANSLATE_NOOP("selectionfilter", "2nd Voice"),
-      QT_TRANSLATE_NOOP("selectionfilter", "3rd Voice"),
-      QT_TRANSLATE_NOOP("selectionfilter", "4th Voice"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Voice 1"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Voice 2"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Voice 3"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Voice 4"),
       QT_TRANSLATE_NOOP("selectionfilter", "Dynamics"),
       QT_TRANSLATE_NOOP("selectionfilter", "Fingering"),
       QT_TRANSLATE_NOOP("selectionfilter", "Lyrics"),
@@ -25,12 +25,34 @@ static const char* labels[] = {
       QT_TRANSLATE_NOOP("selectionfilter", "Arpeggios"),
       QT_TRANSLATE_NOOP("selectionfilter", "Glissandi"),
       QT_TRANSLATE_NOOP("selectionfilter", "Fretboard Diagrams"),
-      QT_TRANSLATE_NOOP("selectionfilter", "Breathmarks"),
+      QT_TRANSLATE_NOOP("selectionfilter", "Breath Marks"),
       QT_TRANSLATE_NOOP("selectionfilter", "Tremolo"),
       QT_TRANSLATE_NOOP("selectionfilter", "Grace Notes")
       };
 
 const int numLabels = sizeof(labels)/sizeof(labels[0]);
+
+SelectionListWidget::SelectionListWidget(QWidget *parent) : QListWidget(parent)
+      {
+      setAccessibleName(tr("Selection filter"));
+      setAccessibleDescription(tr("Use Tab and Backtab to move through the check boxes"));
+      setFrameShape(QFrame::NoFrame);
+      setSelectionMode(QAbstractItemView::SingleSelection);
+      setFocusPolicy(Qt::TabFocus);
+      setTabKeyNavigation(true);
+
+      for (int row = 0; row < numLabels; row++) {
+            QListWidgetItem *listItem = new QListWidgetItem(qApp->translate("selectionfilter", labels[row]),this);
+            listItem->setData(Qt::UserRole, QVariant(1 << row));
+            listItem->setData(Qt::AccessibleTextRole, qApp->translate("selectionfilter", labels[row]));
+            listItem->setCheckState(Qt::Unchecked);
+            addItem(listItem);
+            }
+      }
+void SelectionListWidget::focusInEvent(QFocusEvent* e) {
+      setCurrentRow(0);
+      QListWidget::focusInEvent(e);
+      }
 
 SelectionWindow::SelectionWindow(QWidget *parent, Score* score) :
       QDockWidget(tr("Selection"),parent)
@@ -39,19 +61,10 @@ SelectionWindow::SelectionWindow(QWidget *parent, Score* score) :
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
       _score = score;
 
-      _listWidget = new QListWidget;
+      _listWidget = new SelectionListWidget;
       setWidget(_listWidget);
-      _listWidget->setFrameShape(QFrame::NoFrame);
-            _listWidget->setSelectionMode(QAbstractItemView::NoSelection);
 
-      for (int row = 0; row < numLabels; row++) {
-            QListWidgetItem *listItem = new QListWidgetItem(qApp->translate("selectionfilter", labels[row]),_listWidget);
-            listItem->setData(Qt::UserRole, QVariant(1 << row));
-            listItem->setCheckState(Qt::Unchecked);
-            _listWidget->addItem(listItem);
-            }
       updateFilteredElements();
-
       connect(_listWidget, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(changeCheckbox(QListWidgetItem*)));
       }
 
@@ -90,6 +103,7 @@ void SelectionWindow::changeCheckbox(QListWidgetItem* item)
       updateFilteredElements();
       _score->setUpdateAll();
       _score->end();
+      ScoreAccessibility::instance()->updateAccessibilityInfo();
       }
 
 //---------------------------------------------------------

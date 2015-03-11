@@ -45,9 +45,9 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Grand Piano</trackName>
+      <trackName>Piano</trackName>
       <Instrument>
-        <longName pos="0">Grand Piano</longName>
+        <longName pos="0">Piano</longName>
         <shortName pos="0">Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
@@ -101,8 +101,34 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Rest>
-          <durationType>measure</durationType>
-          <duration z="3" n="4"/>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>16th</durationType>
+          </Rest>
+        <Rest>
+          <durationType>32nd</durationType>
+          </Rest>
+        <Rest>
+          <durationType>64th</durationType>
+          </Rest>
+        <Chord>
+          <durationType>128th</durationType>
+          <Note>
+            <pitch>81</pitch>
+            <tpc>17</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Rest>
+          <durationType>128th</durationType>
+          </Rest>
+        <Rest>
+          <durationType>eighth</durationType>
           </Rest>
         </Measure>
       <Measure number="2">

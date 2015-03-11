@@ -33,6 +33,7 @@ static const qreal superScriptOffset = -0.5;       // of x-height
 static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
 
 TextCursor Text::_cursor;
+QString Text::preEdit;
 QString Text::oldText;
 
 //---------------------------------------------------------
@@ -46,6 +47,7 @@ bool CharFormat::operator==(const CharFormat& cf) const
       if (cf.bold() != bold()
          || cf.italic() != italic()
          || cf.underline() != underline()
+         || cf.preedit() != preedit()
          || cf.valign() != valign()
          || cf.fontSize() != fontSize())
             return false;
@@ -76,7 +78,30 @@ void TextCursor::initFromStyle(const TextStyle& s)
       _format.setBold(s.bold());
       _format.setItalic(s.italic());
       _format.setUnderline(s.underline());
+      _format.setPreedit(false);
       _format.setValign(VerticalAlignment::AlignNormal);
+      }
+
+//---------------------------------------------------------
+//   columns
+//---------------------------------------------------------
+
+int TextCursor::columns() const
+      {
+      return _text->textBlock(_line).columns();
+      }
+
+//---------------------------------------------------------
+//   currentCharacter
+//---------------------------------------------------------
+
+QChar Text::currentCharacter() const
+      {
+      const TextBlock& t = _layout[_cursor.line()];
+      QString s = t.text(_cursor.column(), _cursor.column());
+      if (s.isEmpty())
+            return QChar();
+      return s[0];
       }
 
 //---------------------------------------------------------
@@ -192,7 +217,7 @@ QFont TextFragment::font(const Text* t) const
       if (t->textStyle().sizeIsSpatiumDependent())
             m *= t->spatium() / ( SPATIUM20 * MScore::DPI);
 
-      font.setUnderline(format.underline());
+      font.setUnderline(format.underline() || format.preedit());
       if (format.type() == CharFormatType::TEXT) {
             font.setFamily(format.fontFamily());
             font.setBold(format.bold());
@@ -302,7 +327,8 @@ void TextBlock::layout(Text* t)
 
                   _bbox |= r.translated(f.pos);
                   x += w;
-                  _lineSpacing = _lineSpacing == 0 || fm.lineSpacing() == 0 ? qMax(_lineSpacing, fm.lineSpacing()) : qMin(_lineSpacing, fm.lineSpacing());
+                  // _lineSpacing = (_lineSpacing == 0 || fm.lineSpacing() == 0) ? qMax(_lineSpacing, fm.lineSpacing()) : qMin(_lineSpacing, fm.lineSpacing());
+                  _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
                   }
             }
       qreal rx;
@@ -776,7 +802,10 @@ TextBlock TextBlock::split(int column)
                   ++col;
                   }
             }
-      tl._text.append(TextFragment(""));  //??
+      TextFragment tf("");
+      if (_text.size() > 0)
+            tf.format = _text.last().format;
+      tl._text.append(tf);
       return tl;
       }
 
@@ -959,24 +988,16 @@ QRectF Text::cursorRect() const
       const TextBlock& tline = curLine();
       const TextFragment* fragment = tline.fragment(_cursor.column());
 
-      qreal ascent;
+      QFont font;
       if (fragment) {
-            QFont font = fragment->font(this);
-            if (font.family() == score()->scoreFont()->font().family()) {
-                  QFontMetricsF fm = QFontMetricsF(_textStyle.fontPx(spatium()));
-                  ascent = fm.ascent();
-                  }
-            else {
-                  QFontMetricsF fm = QFontMetrics(font);
-                  ascent = fm.ascent();
-                  }
+            font = fragment->font(this);
+            if (font.family() == score()->scoreFont()->font().family())
+                  font = _textStyle.fontPx(spatium());
             }
-      else {
-            QFontMetricsF fm = QFontMetricsF(_textStyle.fontPx(spatium()));
-            ascent = fm.ascent();
-            }
+      else
+            font = _textStyle.fontPx(spatium());
 
-      ascent *= 0.7;
+      qreal ascent = QFontMetricsF(font).ascent() * .7;
       qreal h = ascent;       // lineSpacing();
       qreal x = tline.xpos(_cursor.column(), this);
       qreal y = tline.y();
@@ -1159,7 +1180,7 @@ void Text::createLayout()
 
 //---------------------------------------------------------
 //   sameLayout
-//   Undates the text, but keeps the same postition and textStyle
+//   Updates the text, but keeps the same postition and textStyle
 //---------------------------------------------------------
 
 void Text::sameLayout()
@@ -1478,6 +1499,7 @@ QString Text::plainText(bool noSym) const
 void Text::startEdit(MuseScoreView*, const QPointF& pt)
       {
       setEditMode(true);
+      _cursor.setText(this);
       _cursor.setLine(0);
       _cursor.setColumn(0);
       _cursor.clearSelection();
@@ -1510,7 +1532,7 @@ void Text::endEdit()
             // the code to special case transposition relies on the fact
             // that we are setting all linked elements to same text here
 
-            for (Element* e : linkList()) {
+            for (ScoreElement* e : linkList()) {
                   // this line was added in https://github.com/musescore/MuseScore/commit/dcf963b3d6140fa550c08af18d9fb6f6e59733a3
                   // it replaced the commented-out call to undoPushProperty in startEdit() above
                   // the two calls do the same thing, but by doing it here, we can avoid the need if the text hasn't changed
@@ -1633,6 +1655,8 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                         CharFormat* charFmt = _cursor.format();         // take current format
                         _layout.insert(line + 1, curLine().split(_cursor.column()));
                         _layout[line].setEol(true);
+                        if (_layout.last() != _layout[line+1])
+                              _layout[line+1].setEol(true);
 
                         _cursor.setLine(line+1);
                         _cursor.setColumn(0);
@@ -1659,13 +1683,13 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                         break;
 
                   case Qt::Key_Left:
-                        if (!movePosition(ctrlPressed ? QTextCursor::StartOfLine : QTextCursor::Left, mm) && type() == Element::Type::LYRICS)
+                        if (!movePosition(ctrlPressed ? QTextCursor::WordLeft : QTextCursor::Left, mm) && type() == Element::Type::LYRICS)
                               return false;
                         s.clear();
                         break;
 
                   case Qt::Key_Right:
-                        if (!movePosition(ctrlPressed ? QTextCursor::EndOfLine : QTextCursor::Right, mm) && type() == Element::Type::LYRICS)
+                        if (!movePosition(ctrlPressed ? QTextCursor::NextWord : QTextCursor::Right, mm) && type() == Element::Type::LYRICS)
                               return false;
                         s.clear();
                         break;
@@ -1855,6 +1879,8 @@ bool Text::deletePreviousChar()
             for (const TextFragment& f : l1.fragments())
                   l2.fragments().append(f);
             _layout.removeAt(_cursor.line());
+            if (_layout.last() == l2)
+                  l2.setEol(false);
             _cursor.setLine(_cursor.line()-1);
             }
       else {
@@ -1878,6 +1904,8 @@ bool Text::deleteChar()
                   for (const TextFragment& f : l2.fragments())
                         l1.fragments().append(f);
                   _layout.removeAt(_cursor.line() + 1);
+                  if (_layout.last() == l1)
+                        l1.setEol(false);
                   return true;
                   }
             return false;
@@ -1950,6 +1978,31 @@ bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mod
                   case QTextCursor::EndOfLine:
                         _cursor.setColumn(curLine().columns());
                         break;
+
+                  case QTextCursor::WordLeft:
+                        if (_cursor.column() > 0) {
+                              _cursor.setColumn(_cursor.column()-1);
+                              while (_cursor.column() > 0 && currentCharacter().isSpace())
+                                    _cursor.setColumn(_cursor.column()-1);
+                              while (_cursor.column() > 0 && !currentCharacter().isSpace())
+                                    _cursor.setColumn(_cursor.column()-1);
+                              if (currentCharacter().isSpace())
+                                    _cursor.setColumn(_cursor.column()+1);
+                              }
+                        break;
+
+                  case QTextCursor::NextWord: {
+                        int cols =  _cursor.columns();
+                        if (_cursor.column() < cols) {
+                              _cursor.setColumn(_cursor.column() + 1);
+                              while (_cursor.column() < cols && !currentCharacter().isSpace())
+                                    _cursor.setColumn(_cursor.column()+1);
+                              while (_cursor.column() < cols && currentCharacter().isSpace())
+                                    _cursor.setColumn(_cursor.column()+1);
+                              }
+                        }
+                        break;
+
                   default:
                         qDebug("Text::movePosition: not implemented");
                         return false;
@@ -1958,6 +2011,7 @@ bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mod
       if (mode == QTextCursor::MoveAnchor)
             _cursor.clearSelection();
       updateCursorFormat(&_cursor);
+      score()->addRefresh(canvasBoundingRect());
       return true;
       }
 
@@ -1984,6 +2038,7 @@ bool Text::setCursor(const QPointF& p, QTextCursor::MoveMode mode)
             _cursor.clearSelection();
       if (_cursor.hasSelection())
             QApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
+      updateCursorFormat(&_cursor);
       return true;
       }
 
@@ -2014,15 +2069,17 @@ QString Text::selectedText() const
             if (row >= r1 && row <= r2) {
                   if (row == r1 && r1 == r2)
                         s += t.text(c1, c2 - c1);
-                  else if (row == r1)
+                  else if (row == r1) {
                         s += t.text(c1, -1);
+                        s += "\n";
+                        }
                   else if (row == r2)
                         s += t.text(0, c2);
-                  else
+                  else {
                         s += t.text(0, -1);
+                        s += "\n";
+                        }
                   }
-            if (row != rows - 1)
-                  s += "\n";
             }
       return s;
       }
@@ -2067,13 +2124,14 @@ void Text::deleteSelectedText()
             const TextBlock& l2 = _layout[r2];
             for (const TextFragment& f : l2.fragments())
                   l1.fragments().append(f);
-
             _layout.removeAt(r2);
             QMutableListIterator<TextBlock> i(_layout);
             while (i.hasNext()) {
                   if (toDelete.contains(i.next()))
                         i.remove();
                   }
+            if (_layout.last() == l1)
+                  l1.setEol(false);
             }
       _cursor.setLine(r1);
       _cursor.setColumn(c1);
@@ -2771,6 +2829,10 @@ QString Text::accessibleInfo()
       return  QString("%1: %2").arg(rez).arg(s);
       }
 
+//---------------------------------------------------------
+//   subtype
+//---------------------------------------------------------
+
 int Text::subtype() const
       {
       switch (textStyleType()) {
@@ -2784,6 +2846,10 @@ int Text::subtype() const
             default: return -1;
             }
       }
+
+//---------------------------------------------------------
+//   subtypeName
+//---------------------------------------------------------
 
 QString Text::subtypeName() const
       {
@@ -2908,5 +2974,51 @@ bool Text::validateText(QString& s)
       return false;
       }
 
+//---------------------------------------------------------
+//   inputTransition
+//---------------------------------------------------------
+
+void Text::inputTransition(QInputMethodEvent* ie)
+      {
+      // remove preedit string
+      int n = preEdit.size();
+      while (n--)
+            deletePreviousChar();
+
+      qDebug("Text::inputTransition <%s><%s> len %d start %d, preEdit size %d",
+         qPrintable(ie->commitString()),
+         qPrintable(ie->preeditString()),
+         ie->replacementLength(), ie->replacementStart(), preEdit.size());
+
+      if (!ie->commitString().isEmpty()) {
+            _cursor.format()->setPreedit(false);
+            editInsertText(ie->commitString());
+            preEdit.clear();
+            }
+      else  {
+            preEdit = ie->preeditString();
+            if (!preEdit.isEmpty()) {
+#if 0
+                  for (auto a : ie->attributes()) {
+                        switch(a.type) {
+                              case QInputMethodEvent::TextFormat:
+                                    {
+                                    printf("attribute TextFormat: %d-%d\n", a.start, a.length);
+                                    QTextFormat tf = a.value.value<QTextFormat>();
+                                    }
+                                    break;
+                              case QInputMethodEvent::Cursor:
+                                    printf("attribute Cursor at %d\n", a.start);
+                                    break;
+                              default:
+                                    printf("attribute %d\n", a.type);
+                              }
+                        }
+#endif
+                  _cursor.format()->setPreedit(true);
+                  editInsertText(preEdit);
+                  }
+            }
+      }
 }
 

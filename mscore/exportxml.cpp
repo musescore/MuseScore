@@ -96,6 +96,7 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 #include "libmscore/fret.h"
 #include "libmscore/tie.h"
+#include "libmscore/undo.h"
 #include "musicxmlfonthandler.h"
 
 namespace Ms {
@@ -243,14 +244,14 @@ public:
 //---------------------------------------------------------
 
 class GlissandoHandler {
-      const Chord* glissChrd[MAX_NUMBER_LEVEL];
-      const Chord* slideChrd[MAX_NUMBER_LEVEL];
-      int findChord(const Chord* c, int st) const;
+      const Note* glissNote[MAX_NUMBER_LEVEL];
+      const Note* slideNote[MAX_NUMBER_LEVEL];
+      int findNote(const Note* note, int type) const;
 
 public:
       GlissandoHandler();
-      void doGlissandoStart(Chord* chord, Notations& notations, Xml& xml);
-      void doGlissandoStop(Chord* chord, Notations& notations, Xml& xml);
+      void doGlissandoStart(Glissando* gliss, Notations& notations, Xml& xml);
+      void doGlissandoStop(Glissando* gliss, Notations& notations, Xml& xml);
       };
 
 //---------------------------------------------------------
@@ -282,7 +283,7 @@ class ExportMusicXml {
       int findBracket(const TextLine* tl) const;
       int findOttava(const Ottava* tl) const;
       int findTrill(const Trill* tl) const;
-      void chord(Chord* chord, int staff, const QList<Lyrics*>* ll, DrumsetKind useDrumset);
+      void chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bool useDrumset);
       void rest(Rest* chord, int staff);
       void clef(int staff, ClefType clef);
       void timesig(TimeSig* tsig);
@@ -570,9 +571,7 @@ void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
                   }
             }
       // surch for slurs to grace notes after
-      QList<Chord*> graceNotesAfter;
-      chord->getGraceNotesAfter(&graceNotesAfter);
-      for (Chord* g : graceNotesAfter) {
+      for (Chord* g : chord->graceNotesAfter()) {
             foreach(Element* el, g->el()){
                   if (el->type() == Element::Type::SLUR){
                         const Slur* s = static_cast<const Slur*>(el);
@@ -637,25 +636,25 @@ static void glissando(const Glissando* gli, int number, bool start, Notations& n
 GlissandoHandler::GlissandoHandler()
       {
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-            glissChrd[i] = 0;
-            slideChrd[i] = 0;
+            glissNote[i] = 0;
+            slideNote[i] = 0;
             }
       }
 
 //---------------------------------------------------------
-//   findChord -- get index of chord in chord table for subtype st
+//   findNote -- get index of Note in note table for subtype type
 //   return -1 if not found
 //---------------------------------------------------------
 
-int GlissandoHandler::findChord(const Chord* c, int st) const
+int GlissandoHandler::findNote(const Note* note, int type) const
       {
-      if (st != 0 && st != 1) {
-            qDebug("GlissandoHandler::findChord: unknown glissando subtype %d", st);
+      if (type != 0 && type != 1) {
+            qDebug("GlissandoHandler::findNote: unknown glissando subtype %d", type);
             return -1;
             }
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-            if (st == 0 && slideChrd[i] == c) return i;
-            if (st == 1 && glissChrd[i] == c) return i;
+            if (type == 0 && slideNote[i] == note) return i;
+            if (type == 1 && glissNote[i] == note) return i;
             }
       return -1;
       }
@@ -664,27 +663,28 @@ int GlissandoHandler::findChord(const Chord* c, int st) const
 //   doGlissandoStart
 //---------------------------------------------------------
 
-void GlissandoHandler::doGlissandoStart(Chord* chord, Notations& notations, Xml& xml)
+void GlissandoHandler::doGlissandoStart(Glissando* gliss, Notations& notations, Xml& xml)
       {
-      Glissando::Type st = chord->glissando()->glissandoType();
-      if (st != Glissando::Type::STRAIGHT && st != Glissando::Type::WAVY) {
-            qDebug("doGlissandoStart: unknown glissando subtype %hhd", st);
+      Glissando::Type type = gliss->glissandoType();
+      if (type != Glissando::Type::STRAIGHT && type != Glissando::Type::WAVY) {
+            qDebug("doGlissandoStart: unknown glissando subtype %hhd", type);
             return;
             }
+      Note* note = static_cast<Note*>(gliss->startElement());
       // check if on chord list
-      int i = findChord(chord, int(st));
+      int i = findNote(note, int(type));
       if (i >= 0) {
             // print error and remove from list
-            qDebug("doGlissandoStart: chord %p already on list", chord);
-            if (st == Glissando::Type::STRAIGHT) slideChrd[i] = 0;
-            if (st == Glissando::Type::WAVY) glissChrd[i] = 0;
+            qDebug("doGlissandoStart: note for glissando/slide %p already on list", gliss);
+            if (type == Glissando::Type::STRAIGHT)      slideNote[i] = 0;
+            if (type == Glissando::Type::WAVY)          glissNote[i] = 0;
             }
       // find free slot to store it
-      i = findChord(0, int(st));
+      i = findNote(0, int(type));
       if (i >= 0) {
-            if (st == Glissando::Type::STRAIGHT) slideChrd[i] = chord;
-            if (st == Glissando::Type::WAVY) glissChrd[i] = chord;
-            glissando(chord->glissando(), i + 1, true, notations, xml);
+            if (type == Glissando::Type::STRAIGHT)      slideNote[i] = note;
+            if (type == Glissando::Type::WAVY)          glissNote[i] = note;
+            glissando(gliss, i + 1, true, notations, xml);
             }
       else
             qDebug("doGlissandoStart: no free slot");
@@ -694,26 +694,27 @@ void GlissandoHandler::doGlissandoStart(Chord* chord, Notations& notations, Xml&
 //   doGlissandoStop
 //---------------------------------------------------------
 
-void GlissandoHandler::doGlissandoStop(Chord* chord, Notations& notations, Xml& xml)
+void GlissandoHandler::doGlissandoStop(Glissando* gliss, Notations& notations, Xml& xml)
       {
-      Glissando::Type st = chord->glissando()->glissandoType();
-      if (st != Glissando::Type::STRAIGHT && st != Glissando::Type::WAVY) {
-            qDebug("doGlissandoStart: unknown glissando subtype %hhd", st);
+      Glissando::Type type = gliss->glissandoType();
+      if (type != Glissando::Type::STRAIGHT && type != Glissando::Type::WAVY) {
+            qDebug("doGlissandoStart: unknown glissando subtype %hhd", type);
             return;
             }
+      Note* note = static_cast<Note*>(gliss->startElement());
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-            if (st == Glissando::Type::STRAIGHT && slideChrd[i] == chord) {
-                  slideChrd[i] = 0;
-                  glissando(chord->glissando(), i + 1, false, notations, xml);
+            if (type == Glissando::Type::STRAIGHT && slideNote[i] == note) {
+                  slideNote[i] = 0;
+                  glissando(gliss, i + 1, false, notations, xml);
                   return;
                   }
-            if (st == Glissando::Type::WAVY && glissChrd[i] == chord) {
-                  glissChrd[i] = 0;
-                  glissando(chord->glissando(), i + 1, false, notations, xml);
+            if (type == Glissando::Type::WAVY && glissNote[i] == note) {
+                  glissNote[i] = 0;
+                  glissando(gliss, i + 1, false, notations, xml);
                   return;
                   }
             }
-      qDebug("doGlissandoStop: glissando chord %p not found", chord);
+      qDebug("doGlissandoStop: glissando note %p not found", note);
       }
 
 //---------------------------------------------------------
@@ -1117,7 +1118,7 @@ void ExportMusicXml::credits(Xml& xml)
 
       // write the credits
       if (measure) {
-            foreach(const Element* element, *measure->el()) {
+            foreach(const Element* element, measure->el()) {
                   if (element->type() == Element::Type::TEXT) {
                         const Text* text = (const Text*)element;
                         const double ph = getTenthsFromDots(parentHeight(text));
@@ -1569,6 +1570,8 @@ void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool 
       else {
             // traditional key signature
             xml.tag("fifths", static_cast<int>(kse.key()));
+            if (kse.custom())
+                  xml.tag("mode", "none");
             }
 
       xml.etag();
@@ -1625,7 +1628,7 @@ static void tupletStartStop(ChordRest* cr, Notations& notations, Xml& xml)
             xml.tagE("tuplet type=\"stop\"");
             }
       }
-      
+
 //---------------------------------------------------------
 //   findTrill -- get index of trill in trill table
 //   return -1 if not found
@@ -1685,12 +1688,9 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
 
 static Breath* hasBreathMark(Chord* ch)
       {
-      Segment* s = ch->segment();
-      s = s->next1();
-      Breath* b = 0;
-      if (s->segmentType() == Segment::Type::Breath)
-            b = static_cast<Breath*>(s->element(ch->track()));
-      return b;
+      int tick = ch->tick() + ch->actualTicks();
+      Segment* s = ch->measure()->findSegment(Segment::Type::Breath, tick);
+      return s ? static_cast<Breath*>(s->element(ch->track())) : 0;
       }
 
 //---------------------------------------------------------
@@ -2132,7 +2132,7 @@ static void arpeggiate(Arpeggio* arp, bool front, bool back, Xml& xml, Notations
       }
 
 // find the next chord in the same track
-
+/* NO LONGER NEEDED
 static Chord* nextChord(Chord* ch)
       {
       Segment* s = ch->segment();
@@ -2153,7 +2153,7 @@ static Chord* nextChord(Chord* ch)
             }
       return c;
       }
-
+*/
 //---------------------------------------------------------
 //   determineTupletNormalTicks
 //---------------------------------------------------------
@@ -2226,7 +2226,7 @@ static void writeBeam(Xml& xml, ChordRest* cr, Beam* b)
                   xml.tag(QString("beam number=\"%1\"").arg(i), s);
             }
       }
-      
+
 //---------------------------------------------------------
 //   instrId
 //---------------------------------------------------------
@@ -2246,7 +2246,7 @@ static QString instrId(int partNr, int instrNr)
  For a single-staff part, \a staff equals zero, suppressing the <staff> element.
  */
 
-void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, DrumsetKind useDrumset)
+void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bool useDrumset)
       {
       Part* part = chord->score()->staff(chord->track() / VOICES)->part();
       int partNr = _score->parts().indexOf(part);
@@ -2317,15 +2317,15 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
                   tabpitch2xml(note->pitch(), note->tpc(), step, alter, octave);
             }
             else {
-                  if (useDrumset == DrumsetKind::NONE) {
+                  if (!useDrumset) {
                         pitch2xml(note, step, alter, octave);
                   }
                   else {
                         unpitch2xml(note, step, octave);
                   }
             }
-            xml.stag(useDrumset != DrumsetKind::NONE ? "unpitched" : "pitch");
-            xml.tag(useDrumset != DrumsetKind::NONE ? "display-step" : "step", step);
+            xml.stag(useDrumset ? "unpitched" : "pitch");
+            xml.tag(useDrumset  ? "display-step" : "step", step);
             // Check for microtonal accidentals and overwrite "alter" tag
             Accidental* acc = note->accidental();
             double alter2 = 0.0;
@@ -2343,7 +2343,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
             if (!alter && alter2)
                   xml.tag("alter", alter2);
             // TODO what if both alter and alter2 are present? For Example: playing with transposing instruments
-            xml.tag(useDrumset != DrumsetKind::NONE ? "display-octave" : "octave", octave);
+            xml.tag(useDrumset ? "display-octave" : "octave", octave);
             xml.etag();
 
             // duration
@@ -2356,7 +2356,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
                   xml.tagE("tie type=\"start\"");
 
             // instrument for multi-instrument or unpitched parts
-            if (useDrumset == DrumsetKind::NONE) {
+            if (!useDrumset) {
                   if (instrMap.size() > 1 && instNr >= 0)
                         xml.tagE(QString("instrument %1").arg(instrId(partNr + 1, instNr + 1)));
                   }
@@ -2570,14 +2570,22 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, Dr
             if (chord->arpeggio()) {
                   arpeggiate(chord->arpeggio(), note == nl.front(), note == nl.back(), xml, notations);
                   }
-            // write glissando (only for last note)
+            for (Spanner* spanner : note->spannerFor())
+                  if (spanner->type() == Element::Type::GLISSANDO) {
+                        gh.doGlissandoStart(static_cast<Glissando*>(spanner), notations, xml);
+                  }
+            for (Spanner* spanner : note->spannerBack())
+                  if (spanner->type() == Element::Type::GLISSANDO) {
+                        gh.doGlissandoStop(static_cast<Glissando*>(spanner), notations, xml);
+                  }
+/*            // write glissando (only for last note)
             Chord* ch = nextChord(chord);
             if ((note == nl.back()) && ch && ch->glissando()) {
                   gh.doGlissandoStart(ch, notations, xml);
                   }
             if (chord->glissando()) {
                   gh.doGlissandoStop(chord, notations, xml);
-                  }
+                  } */
             notations.etag(xml);
             // write lyrics (only for first note)
             if ((note == nl.front()) && ll)
@@ -3126,7 +3134,7 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       xml.etag();
       directionETag(xml, staff);
       }
-      
+
 //---------------------------------------------------------
 //   findHairpin -- get index of hairpin in hairpin table
 //   return -1 if not found
@@ -3147,7 +3155,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
       {
       directionTag(xml, attr, hp);
       xml.stag("direction-type");
-            
+
       int n = findHairpin(hp);
       if (n >= 0)
             hairpins[n] = 0;
@@ -3179,7 +3187,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
       xml.etag();
       directionETag(xml, staff);
       }
-      
+
 //---------------------------------------------------------
 //   findOttava -- get index of ottava in ottava table
 //   return -1 if not found
@@ -3203,7 +3211,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
       Ottava::Type st = ot->ottavaType();
       directionTag(xml, attr, ot);
       xml.stag("direction-type");
-            
+
       int n = findOttava(ot);
       if (n >= 0)
             ottavas[n] = 0;
@@ -3642,7 +3650,7 @@ static int findTrackForAnnotations(int track, Segment* seg)
 static void repeatAtMeasureStart(Xml& xml, Attributes& attr, Measure* m, int strack, int etrack, int track)
       {
       // loop over all segments
-      for (Element* e : *m->el()) {
+      for (Element* e : m->el()) {
             int wtrack = -1; // track to write jump
             if (strack <= e->track() && e->track() < etrack)
                   wtrack = findTrackForAnnotations(e->track(), m->first(Segment::Type::ChordRest));
@@ -3685,7 +3693,7 @@ static void repeatAtMeasureStart(Xml& xml, Attributes& attr, Measure* m, int str
 
 static void repeatAtMeasureStop(Xml& xml, Measure* m, int strack, int etrack, int track)
       {
-      for (Element* e : *m->el()) {
+      for (Element* e : m->el()) {
             int wtrack = -1; // track to write jump
             if (strack <= e->track() && e->track() < etrack)
                   wtrack = findTrackForAnnotations(e->track(), m->first(Segment::Type::ChordRest));
@@ -3863,7 +3871,7 @@ static void annotations(ExportMusicXml* exp, Xml&, int strack, int etrack, int t
 //  figuredBass
 //---------------------------------------------------------
 
-static void figuredBass(Xml& xml, int strack, int etrack, int track, const ChordRest* cr, FigBassMap& fbMap)
+static void figuredBass(Xml& xml, int strack, int etrack, int track, const ChordRest* cr, FigBassMap& fbMap, int divisions)
       {
       Segment* seg = cr->segment();
       if (seg->segmentType() == Segment::Type::ChordRest) {
@@ -3887,8 +3895,20 @@ static void figuredBass(Xml& xml, int strack, int etrack, int track, const Chord
                                     }
                               else
                                     fbMap.remove(strack);
-                              fb->writeMusicXML(xml, true, extend);
-                              // there can only be one FB, if one was found
+                              int crEndTick = cr->tick() + cr->actualTicks();
+                              int fbEndTick = fb->segment()->tick() + fb->ticks();
+                              bool writeDuration = fb->ticks() < cr->actualTicks();
+                              fb->writeMusicXML(xml, true, crEndTick, fbEndTick, writeDuration, divisions);
+
+                              // Check for changing figures under a single note (each figure stored in a separate segment)
+                              for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL; segNext = segNext->next()) {
+                                    foreach (Element* annot, segNext->annotations()) {
+                                          if (annot->type() == Element::Type::FIGURED_BASS && annot->track() == track) {
+                                                const FiguredBass* fb = static_cast<const FiguredBass*>(annot);
+                                                fb->writeMusicXML(xml, true, 0, 0, true, divisions);
+                                                }
+                                          }
+                                    }
                               // no extend can be pending
                               return;
                               }
@@ -3897,13 +3917,14 @@ static void figuredBass(Xml& xml, int strack, int etrack, int track, const Chord
             // check for extend pending
             if (fbMap.contains(strack)) {
                   const FiguredBass* fb = fbMap.value(strack);
-                  int endTick = fb->segment()->tick() + fb->ticks();
-                  if (cr->tick() < endTick) {
+                  int crEndTick = cr->tick() + cr->actualTicks();
+                  int fbEndTick = fb->segment()->tick() + fb->ticks();
+                  bool writeDuration = fb->ticks() < cr->actualTicks();
+                  if (cr->tick() < fbEndTick) {
                         //qDebug("figuredbass() at tick %d extend only", cr->tick());
-                        // write figured bass element with extend only
-                        fb->writeMusicXML(xml, false, true);
+                        fb->writeMusicXML(xml, false, crEndTick, fbEndTick, writeDuration, divisions);
                         }
-                  if (endTick <= cr->tick() + cr->actualTicks()) {
+                  if (fbEndTick <= crEndTick) {
                         //qDebug("figuredbass() at tick %d extend done", cr->tick() + cr->actualTicks());
                         fbMap.remove(strack);
                         }
@@ -4043,7 +4064,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
                         }
                   }
             }
-            
+
       //ClefType ct = rest->staff()->clef(rest->tick());
 
       // write the key signatues
@@ -4163,7 +4184,7 @@ static int findPartGroupNumber(int* partGroupEnd)
       qDebug("no free part group number");
       return MAX_PART_GROUPS;
       }
-      
+
 //---------------------------------------------------------
 //  scoreInstrument
 //---------------------------------------------------------
@@ -4183,19 +4204,19 @@ static void midiInstrument(Xml& xml, const int partNr, const int instrNr,
                            const Instrument* instr, const Score* score, const int unpitched = 0)
       {
       xml.stag(QString("midi-instrument %1").arg(instrId(partNr, instrNr)));
-      int midiChannel = score->midiChannel(instr->channel(0).channel);
+      int midiChannel = score->midiChannel(instr->channel(0)->channel);
       if (midiChannel >= 0 && midiChannel < 16)
             xml.tag("midi-channel", midiChannel + 1);
-      int midiProgram = instr->channel(0).program;
+      int midiProgram = instr->channel(0)->program;
       if (midiProgram >= 0 && midiProgram < 128)
             xml.tag("midi-program", midiProgram + 1);
       if (unpitched > 0)
             xml.tag("midi-unpitched", unpitched);
-      xml.tag("volume", (instr->channel(0).volume / 127.0) * 100);  //percent
-      xml.tag("pan", int(((instr->channel(0).pan - 63.5) / 63.5) * 90)); //-90 hard left, +90 hard right
+      xml.tag("volume", (instr->channel(0)->volume / 127.0) * 100);  //percent
+      xml.tag("pan", int(((instr->channel(0)->pan - 63.5) / 63.5) * 90)); //-90 hard left, +90 hard right
       xml.etag();
       }
-      
+
 //---------------------------------------------------------
 //  initInstrMap
 //---------------------------------------------------------
@@ -4209,9 +4230,29 @@ static void initInstrMap(MxmlInstrumentMap& im, const InstrumentList* il, const 
       {
       im.clear();
       for (auto i = il->begin(); i != il->end(); ++i) {
-            const Instrument* pinstr = &(i->second);
+            const Instrument* pinstr = i->second;
             if (!im.contains(pinstr))
                   im.insert(pinstr, im.size());
+            }
+      }
+
+//---------------------------------------------------------
+//  initReverseInstrMap
+//---------------------------------------------------------
+
+typedef QMap<int, const Instrument*> MxmlReverseInstrumentMap;
+
+/**
+ Initialize the number t Instrument* map for a Part
+ Used to iterate in sequence over instrument numbers for a multi-instrument part
+ */
+
+static void initReverseInstrMap(MxmlReverseInstrumentMap& rim, const MxmlInstrumentMap& im)
+      {
+      rim.clear();
+      foreach (const Instrument* i, im.keys()) {
+            int instNr = im.value(i);
+            rim.insert(instNr, i);
             }
       }
 
@@ -4225,15 +4266,15 @@ static void initInstrMap(MxmlInstrumentMap& im, const InstrumentList* il, const 
 
 void ExportMusicXml::write(QIODevice* dev)
       {
-
       // must export in transposed pitch to prevent
       // losing the transposition information
       // if necessary, switch concert pitch mode off
       // before export and restore it after export
       bool concertPitch = score()->styleB(StyleIdx::concertPitch);
       if (concertPitch) {
-            score()->cmdConcertPitchChanged(false, false);
-            score()->doLayout();
+            score()->startCmd();
+            score()->undo(new ChangeConcertPitch(score(), false));
+            score()->doLayout();    // this is only allowed in a cmd context to not corrupt the undo/redo stack
             }
 
       calcDivisions();
@@ -4325,8 +4366,8 @@ void ExportMusicXml::write(QIODevice* dev)
             if (!part->shortName().isEmpty())
                   xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()));
 
-            if (part->instr()->useDrumset() != DrumsetKind::NONE) {
-                  Drumset* drumset = part->instr()->drumset();
+            if (part->instr()->useDrumset()) {
+                  const Drumset* drumset = part->instr()->drumset();
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
                         if (di.notehead != NoteHead::Group::HEAD_INVALID)
@@ -4341,14 +4382,13 @@ void ExportMusicXml::write(QIODevice* dev)
                         }
                   }
             else {
-                  foreach (const Instrument* i, instrMap.keys()) {
-                        int instNr = instrMap.value(i);
-                        scoreInstrument(xml, idx + 1, instNr + 1, MScoreTextToMXML::toPlainText(i->trackName()));
-                        }
-                  foreach (const Instrument* i, instrMap.keys()) {
-                        int instNr = instrMap.value(i);
+                  MxmlReverseInstrumentMap rim;
+                  initReverseInstrMap(rim, instrMap);
+                  foreach(int instNr, rim.keys())
+                        scoreInstrument(xml, idx + 1, instNr + 1, MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()));
+                  foreach(int instNr, rim.keys()) {
                         xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 1)).arg(part->midiPort() + 1), "");
-                        midiInstrument(xml, idx + 1, instNr + 1, i, _score);
+                        midiInstrument(xml, idx + 1, instNr + 1, rim.value(instNr), _score);
                         }
                   }
 
@@ -4385,7 +4425,7 @@ void ExportMusicXml::write(QIODevice* dev)
             int irregularMeasureNo = 1; // number of next irregular measure
             int pickupMeasureNo = 1;    // number of next pickup measure
 
-            FigBassMap fbMap;           // pending figure base extends
+            FigBassMap fbMap;           // pending figured bass extends
 
             for (MeasureBase* mb = _score->measures()->first(); mb; mb = mb->next()) {
                   if (mb->type() != Element::Type::MEASURE)
@@ -4679,12 +4719,9 @@ void ExportMusicXml::write(QIODevice* dev)
                                     continue;
 
                               // generate backup or forward to the start time of the element
-                              // but not for breath, which has the same start time as the
-                              // previous note, while tick is already at the end of that note
                               if (tick != seg->tick()) {
                                     attr.doAttr(xml, false);
-                                    if (el->type() != Element::Type::BREATH)
-                                          moveToTick(seg->tick());
+                                    moveToTick(seg->tick());
                                     }
 
                               // handle annotations and spanners (directions attached to this note or rest)
@@ -4703,7 +4740,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                                       }
                                                 }
                                           }
-                                    figuredBass(xml, strack, etrack, st, static_cast<const ChordRest*>(el), fbMap);
+                                    figuredBass(xml, strack, etrack, st, static_cast<const ChordRest*>(el), fbMap, div);
                                     spannerStart(this, strack, etrack, st, sstaff, seg);
                                     }
 
@@ -4746,15 +4783,11 @@ void ExportMusicXml::write(QIODevice* dev)
                                           const QList<Lyrics*>* ll = &c->lyricsList();
                                    // ise grace after
                                           if(c){
-                                                QList<Chord*> graceNotesBefore;
-                                                c->getGraceNotesBefore(&graceNotesBefore);
-                                                for (Chord* g : graceNotesBefore) {
+                                                for (Chord* g : c->graceNotesBefore()) {
                                                       chord(g, sstaff, ll, part->instr()->useDrumset());
                                                       }
                                                 chord(c, sstaff, ll, part->instr()->useDrumset());
-                                                QList<Chord*> graceNotesAfter;
-                                                 c->getGraceNotesAfter(&graceNotesAfter);
-                                                 for (Chord* g : graceNotesAfter) {
+                                                 for (Chord* g : c->graceNotesAfter()) {
                                                        chord(g, sstaff, ll, part->instr()->useDrumset());
                                                        }
                                                 }
@@ -4812,8 +4845,7 @@ void ExportMusicXml::write(QIODevice* dev)
 
       if (concertPitch) {
             // restore concert pitch
-            score()->cmdConcertPitchChanged(true, false);
-            score()->doLayout();
+            score()->endCmd(true);        // rollback
             }
       }
 

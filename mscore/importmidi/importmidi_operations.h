@@ -132,8 +132,9 @@ struct Opers
       TrackOp<int> channel = TrackOp<int>(int());
       TrackOp<std::string> staffName = TrackOp<std::string>(std::string());       // will be converted to unicode later
       TrackOp<QString> midiInstrName = TrackOp<QString>(QString());
-      TrackOp<std::vector<InstrumentTemplate *> > msInstrList
-            = TrackOp<std::vector<InstrumentTemplate *> >(std::vector<InstrumentTemplate *>());
+      TrackOp<std::vector<const InstrumentTemplate *> > msInstrList
+                        = TrackOp<std::vector<const InstrumentTemplate *> >(
+                                              std::vector<const InstrumentTemplate *>());
       TrackOp<bool> isDrumTrack = TrackOp<bool>(false);
 
                   // operations for all tracks
@@ -141,6 +142,7 @@ struct Opers
       Op<bool> searchPickupMeasure = Op<bool>(true);
       Op<bool> measureCount2xLess = Op<bool>(false);
       Op<bool> showTempoText = Op<bool>(true);
+      Op<bool> showChordNames = Op<bool>(true);
       Op<TimeSigNumerator> timeSigNumerator = Op<TimeSigNumerator>(TimeSigNumerator::_4);
       Op<TimeSigDenominator> timeSigDenominator = Op<TimeSigDenominator>(TimeSigDenominator::_4);
 
@@ -195,6 +197,7 @@ struct FileData
                   // QList of lyric tracks - there can be multiple lyric tracks,
                   // lyric track count != MIDI track count in general
       QList<std::multimap<ReducedFraction, std::string>> lyricTracks;
+      std::multimap<ReducedFraction, QString> chordNames;
       HumanBeatData humanBeatData;
       };
 

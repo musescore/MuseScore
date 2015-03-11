@@ -21,6 +21,7 @@ namespace Ms {
 
 class MuseScoreView;
 struct SymCode;
+class Text;
 
 enum class CharFormatType : char { TEXT, SYMBOL };
 enum class VerticalAlignment : char { AlignNormal, AlignSuperScript, AlignSubScript };
@@ -35,6 +36,7 @@ class CharFormat {
       bool _bold                { false };
       bool _italic              { false };
       bool _underline           { false };
+      bool _preedit             { false };
       VerticalAlignment _valign { VerticalAlignment::AlignNormal };
       qreal _fontSize           { 12.0  };
       QString _fontFamily;
@@ -46,7 +48,8 @@ class CharFormat {
       bool bold() const                      { return _bold;        }
       bool italic() const                    { return _italic;      }
       bool underline() const                 { return _underline;   }
-      VerticalAlignment valign() const       { return _valign;   }
+      bool preedit() const                   { return _preedit;     }
+      VerticalAlignment valign() const       { return _valign;      }
       qreal fontSize() const                 { return _fontSize;    }
       QString fontFamily() const             { return _fontFamily;  }
 
@@ -54,6 +57,7 @@ class CharFormat {
       void setBold(bool val)                 { _bold        = val;  }
       void setItalic(bool val)               { _italic      = val;  }
       void setUnderline(bool val)            { _underline   = val;  }
+      void setPreedit(bool val)              { _preedit     = val;  }
       void setValign(VerticalAlignment val)  { _valign      = val;  }
       void setFontSize(qreal val)            { _fontSize    = val;  }
       void setFontFamily(const QString& val) { _fontFamily  = val;  }
@@ -68,6 +72,7 @@ class CharFormat {
 //---------------------------------------------------------
 
 class TextCursor {
+      Text*      _text;
       CharFormat _format;
       int _line          { 0 };
       int _column        { 0 };
@@ -91,6 +96,8 @@ class TextCursor {
       void setColumn(int val)       { _column = val; }
       void setSelectLine(int val)   { _selectLine = val; }
       void setSelectColumn(int val) { _selectColumn = val; }
+      void setText(Text* t)         { _text = t; }
+      int columns() const;
       void initFromStyle(const TextStyle& s);
       };
 
@@ -140,6 +147,7 @@ class TextBlock {
    public:
       TextBlock() {}
       bool operator ==(const TextBlock& x)         { return _text == x._text; }
+      bool operator !=(const TextBlock& x)         { return _text != x._text; }
       void draw(QPainter*, const Text*) const;
       void layout(Text*);
       const QList<TextFragment>& fragments() const { return _text; }
@@ -180,6 +188,7 @@ class Text : public Element {
 
       QString _text;
       static QString oldText;      // used to remember original text in edit mode
+      static QString preEdit;
       QList<TextBlock> _layout;
       TextStyleType _styleIndex;
 
@@ -202,6 +211,7 @@ class Text : public Element {
       void changeSelectionFormat(FormatId id, QVariant val);
       void setEditMode(bool val)              { _editMode = val;  }
       void editInsertText(const QString&);
+      QChar currentCharacter() const;
 
    protected:
       QColor textColor() const;
@@ -209,6 +219,7 @@ class Text : public Element {
       void layoutFrame();
       void layoutEdit();
       void createLayout();
+      const TextBlock& textBlock(int line) { return _layout[line]; }
 
    public:
       Text(Score* = 0);
@@ -316,6 +327,9 @@ class Text : public Element {
       static bool validateText(QString& s);
       bool inHexState() const { return hexState >= 0; }
       void endHexState();
+      void inputTransition(QInputMethodEvent*);
+
+      friend class TextCursor;
       };
 
 

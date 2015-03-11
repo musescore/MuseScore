@@ -46,6 +46,7 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
+      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QAction* a = getAction("instruments");
       connect(a, SIGNAL(triggered()), SLOT(reject()));
       addAction(a);
@@ -199,7 +200,7 @@ void MuseScore::editInstrList()
             }
       rootScore->inputState().setTrack(-1);
 
-      // keep the keylist of the first staff to apply it to new ones
+      // keep the keylist of the first pitched staff to apply it to new ones
       KeyList tmpKeymap;
       Staff* firstStaff = nullptr;
       for (Staff* s : rootScore->staves()) {
@@ -210,9 +211,11 @@ void MuseScore::editInstrList()
                   break;
                   }
             }
-      //normalize the keyevent to concert pitch if necessary
+      Key normalizedC = Key::C;
+      // normalize the keyevents to concert pitch if necessary
       if (firstStaff && !rootScore->styleB(StyleIdx::concertPitch) && firstStaff->part()->instr()->transpose().chromatic ) {
             int interval = firstStaff->part()->instr()->transpose().chromatic;
+            normalizedC = transposeKey(normalizedC, interval);
             for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
                   int tick = i->first;
                   Key oKey = i->second.key();
@@ -222,7 +225,7 @@ void MuseScore::editInstrList()
       // create initial keyevent for transposing instrument if necessary
       auto i = tmpKeymap.begin();
       if (i == tmpKeymap.end() || i->first != 0)
-            tmpKeymap[0].setKey(Key::C);
+            tmpKeymap[0].setKey(normalizedC);
 
       //
       // process modified partitur list
@@ -290,9 +293,8 @@ void MuseScore::editInstrList()
                   }
             else {
                   part = pli->part;
-                  if (part->show() != pli->visible()) {
-                        part->score()->undo()->push(new ChangePartProperty(part, 0, pli->visible()));
-                        }
+                  if (part->show() != pli->visible())
+                        part->undoChangeProperty(P_ID::VISIBLE, pli->visible());
                   for (int cidx = 0; pli->child(cidx); ++cidx) {
                         StaffListItem* sli = static_cast<StaffListItem*>(pli->child(cidx));
                         if (sli->op() == ListItemOp::I_DELETE) {
@@ -354,18 +356,10 @@ void MuseScore::editInstrList()
                               // check changes in staff type
                               Staff* staff = sli->staff();
                               const StaffType* stfType = sli->staffType();
-                              // before changing staff type, check if notes need to be updated
-                              // (true if changing into or away from TAB)
-                              StaffGroup ng = stfType->group();         // new staff group
-                              StaffGroup og = staff->staffGroup();      // old staff group
-                              bool updateNeeded = (ng == StaffGroup::TAB) != (og == StaffGroup::TAB);
 
                               // use selected staff type
                               if (stfType->name() != staff->staffType()->name())
                                     rootScore->undo(new ChangeStaffType(staff, *stfType));
-
-                              if (updateNeeded)
-                                    rootScore->cmdUpdateNotes();
                               }
                         else {
                               ++staffIdx;
@@ -441,8 +435,7 @@ void MuseScore::editInstrList()
             rootScore->undo(new RemoveExcerpt(s));
 
       rootScore->setLayoutAll(true);
-      rootScore->cmdUpdateNotes();  // do it before global layout or layout of chords will not
-      rootScore->endCmd();          // find notes in right positions for stems, ledger lines, etc
+      rootScore->endCmd();
       rootScore->rebuildMidiMapping();
       seq->initInstruments();
       }

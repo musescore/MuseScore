@@ -12,9 +12,9 @@
 #=============================================================================
 
 subdirs(
-      album barline beam chordsymbol clef clef_courtesy compat concertpitch copypaste
+      album barline beam breath chordsymbol clef clef_courtesy compat concertpitch copypaste
       copypastesymbollist dynamic element hairpin instrumentchange join keysig layout parts measure midi
-      note plugins repeat selectionfilter selectionrangedelete split splitstaff timesig tools transpose tuplet text
+      note plugins repeat selectionfilter selectionrangedelete spanners split splitstaff timesig tools transpose tuplet text
       )
 
 install(FILES

@@ -67,7 +67,7 @@ class XmlReader : public XmlStreamReader {
       XmlReader(QIODevice* d, const QString& s = QString()) : XmlStreamReader(d), docName(s) {}
       XmlReader(const QString& d, const QString& s = QString()) : XmlStreamReader(d), docName(s) {}
 
-      void unknown() const;
+      void unknown();
 
       // attribute helper routines:
       QString attribute(const char* s) const { return attributes().value(s).toString(); }
@@ -121,7 +121,7 @@ class XmlReader : public XmlStreamReader {
       int spannerId(const Spanner*);      // returns spanner id, allocates new one if none exists
 
       void addSpannerValues(const SpannerValues& sv) { _spannerValues.append(sv); }
-      const SpannerValues* spannerValues(int id);
+      const SpannerValues* spannerValues(int id) const;
       QList<StaffType>& staffType() { return _staffTypes; }
       Interval transpose() const { return _transpose; }
       void setTransposeChromatic(int v) { _transpose.chromatic = v; }

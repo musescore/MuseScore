@@ -607,9 +607,9 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
                         }
                   }
 
-            part->instr()->channel(0).bank = 128;
+            part->instr()->channel(0)->bank = 128;
             part->setMidiProgram(0);
-            part->instr()->setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
+            part->instr()->setDrumset(smDrumset);
             part->instr()->setDrumset(drumset);
             }
       }
@@ -1351,7 +1351,7 @@ bool isRestDefaultLine(OVE::Note* rest, OVE::NoteType noteType) {
 
 Drumset* getDrumset(Score* score, int part) {
       Part* p = score->parts().at(part);
-      return p->instr()->drumset();
+      return const_cast<Drumset*>(p->instr()->drumset());   //TODO: remove cast
       }
 
 void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track){
@@ -1750,11 +1750,12 @@ void OveToMScore::convertArticulation(
             case OVE::ArticulationType::Pause :{
                   Breath* b = new Breath(score_);
                   b->setTrack(track);
-                  Segment* seg = measure->getSegment(Segment::Type::Breath, absTick);
+                  Segment* seg = measure->getSegment(Segment::Type::Breath, absTick + cr ? cr->actualTicks() : 0);
                   seg->add(b);
                   break;
                   }
             case OVE::ArticulationType::Grand_Pause :{
+                  // TODO?
                   break;
                   }
             case OVE::ArticulationType::Up_Bow :{

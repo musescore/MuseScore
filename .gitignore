@@ -24,4 +24,5 @@ mscore/revision.h
 .DS_Store
 CMakeLists.txt.user.*
 vtest/html
+thirdparty/mupdf-qt
 

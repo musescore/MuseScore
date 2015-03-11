@@ -161,6 +161,7 @@ static QString createDefaultFileName(QString fn)
 static bool readScoreError(const QString& name, Score::FileError error, bool ask)
       {
       QString msg = QObject::tr("Cannot read file %1:\n").arg(name);
+      QString detailedMsg;
       bool canIgnore = false;
       switch(error) {
             case Score::FileError::FILE_NO_ERROR:
@@ -188,6 +189,11 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
             case Score::FileError::FILE_NOT_FOUND:
                   msg = QObject::tr("File not found %1").arg(name);
                   break;
+            case Score::FileError::FILE_CORRUPTED:
+                  msg = QObject::tr("File corrupted %1").arg(name);
+                  detailedMsg = MScore::lastError;
+                  canIgnore = true;
+                  break;
             case Score::FileError::FILE_ERROR:
             case Score::FileError::FILE_OPEN_ERROR:
             default:
@@ -195,7 +201,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
                   break;
             }
       int rv = false;
-      if (converterMode) {
+      if (converterMode || pluginMode) {
             fprintf(stderr, "%s\n", qPrintable(msg));
             return rv;
             }
@@ -203,6 +209,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
             QMessageBox msgBox;
             msgBox.setWindowTitle(QObject::tr("MuseScore: Load Error"));
             msgBox.setText(msg);
+            msgBox.setDetailedText(detailedMsg);
             msgBox.setTextFormat(Qt::RichText);
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setStandardButtons(
@@ -223,7 +230,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
 
 bool MuseScore::checkDirty(Score* s)
       {
-      if (s->dirty()) {
+      if (s->dirty() || s->created()) {
             QMessageBox::StandardButton n = QMessageBox::warning(this, tr("MuseScore"),
                tr("Save changes to the score \"%1\"\n"
                "before closing?").arg(s->name()),
@@ -318,9 +325,12 @@ Score* MuseScore::readScore(const QString& name)
       Score* score = new Score(MScore::baseStyle());  // start with built-in style
       setMidiReopenInProgress(name);
       Score::FileError rv = Ms::readScore(score, name, false);
-      if (rv == Score::FileError::FILE_TOO_OLD || rv == Score::FileError::FILE_TOO_NEW) {
-            if (readScoreError(name, rv, true))
+      if (rv == Score::FileError::FILE_TOO_OLD || rv == Score::FileError::FILE_TOO_NEW || rv == Score::FileError::FILE_CORRUPTED) {
+            if (readScoreError(name, rv, true)) {
+                  delete score;
+                  score = new Score(MScore::baseStyle());
                   rv = Ms::readScore(score, name, true);
+                  }
             else {
                   delete score;
                   return 0;
@@ -403,14 +413,13 @@ bool MuseScore::saveFile(Score* score)
                   return false;
                   }
             addRecentScore(score);
-            score->setCreated(false);
             writeSessionFile(false);
             }
       else if (!score->saveFile()) {
             QMessageBox::critical(mscore, tr("MuseScore: Save File"), MScore::lastError);
             return false;
             }
-
+      score->setCreated(false);
       setWindowTitle("MuseScore: " + score->name());
       int idx = scoreList.indexOf(score);
       tab1->setTabText(idx, score->name());
@@ -462,7 +471,7 @@ void MuseScore::updateNewWizard()
       if (newWizard != 0)
             newWizard = new NewWizard(this);
       }
-    
+
 //---------------------------------------------------------
 //   newFile
 //    create new score
@@ -486,72 +495,54 @@ void MuseScore::newFile()
       if (pickupMeasure)
             measures += 1;
 
-      Score* score = new Score(MScore::defaultStyle());
+      Score* score;
       QString tp = newWizard->templatePath();
 
+      QList<Excerpt*> excerpts;
       if (!newWizard->emptyScore()) {
-            Score::FileError rv = Ms::readScore(score, tp, false);
+            Score* tscore = new Score(MScore::defaultStyle());
+            Score::FileError rv = Ms::readScore(tscore, tp, false);
             if (rv != Score::FileError::FILE_NO_ERROR) {
                   readScoreError(newWizard->templatePath(), rv, false);
-                  delete score;
+                  delete tscore;
                   return;
                   }
+            score = new Score(tscore->style());
+            // create instruments from template
+            for (Part* tpart : tscore->parts()) {
+                  Part* part = new Part(score);
+                  part->setInstrument(tpart->instr());
+                  part->setPartName(tpart->partName());
 
-            int tmeasures = 0;
-            for (Measure* mb = score->firstMeasure(); mb; mb = mb->nextMeasure()) {
-                  if (mb->type() == Element::Type::MEASURE)
-                        ++tmeasures;
-                  }
-
-            //
-            // remove all notes & rests
-            //
-            score->deselectAll();
-            if (score->firstMeasure()) {
-                  for (Segment* s = score->firstMeasure()->first(); s;) {
-                        Segment* ns = s->next1();
-                        if (s->segmentType() == Segment::Type::ChordRest && s->tick() == 0) {
-                              int tracks = s->elist().size();
-                              for (int track = 0; track < tracks; ++track) {
-                                    delete s->element(track);
-                                    s->setElement(track, 0);
-                                    }
+                  for (Staff* tstaff : *tpart->staves()) {
+                        Staff* staff = new Staff(score);
+                        staff->setPart(part);
+                        staff->init(tstaff);
+                        if (tstaff->linkedStaves() && !part->staves()->isEmpty()) {
+                              Staff* linkedStaff = part->staves()->back();
+                              staff->linkTo(linkedStaff);
                               }
-                        else if (
-                           (s->segmentType() == Segment::Type::ChordRest)
-                           || (s->segmentType() == Segment::Type::KeySig)
-                           || (s->segmentType() == Segment::Type::Breath)
-                           ) {
-                              s->measure()->remove(s);
-                              delete s;
-                              }
-                        s = ns;
+                        part->insertStaff(staff, -1);
+                        score->staves().append(staff);
                         }
+                  score->appendPart(part);
                   }
-            foreach (Excerpt* excerpt, score->excerpts()) {
-                  Score* exScore =  excerpt->partScore();
-                  if (exScore->firstMeasure()) {
-                        for (Segment* s = exScore->firstMeasure()->first(); s;) {
-                              Segment* ns = s->next1();
-                              if (s->segmentType() == Segment::Type::ChordRest && s->tick() == 0) {
-                                    int tracks = s->elist().size();
-                                    for (int track = 0; track < tracks; ++track) {
-                                          delete s->element(track);
-                                          s->setElement(track, 0);
-                                          }
-                                    }
-                              s->measure()->remove(s);
-                              if (s->measure()->segments()->size() == 0){
-                                    exScore->measures()->remove(s->measure(), s->measure());
-                                    delete s->measure();
-                                    }
-                              delete s;
-                              s = ns;
-                              }
+            for (Excerpt* ex : tscore->excerpts()) {
+                  Excerpt* x = new Excerpt(score);
+                  x->setTitle(ex->title());
+                  for (Part* p : ex->parts()) {
+                        int pidx = tscore->parts().indexOf(p);
+                        if (pidx == -1)
+                              qDebug("newFile: part not found");
+                        else
+                              x->parts().append(score->parts()[pidx]);
                         }
+                  excerpts.append(x);
                   }
+            delete tscore;
             }
       else {
+            score = new Score(MScore::defaultStyle());
             newWizard->createInstruments(score);
             }
       score->setCreated(true);
@@ -564,142 +555,96 @@ void MuseScore::newFile()
             }
       if (!newWizard->title().isEmpty())
             score->fileInfo()->setFile(newWizard->title());
-      Measure* pm = score->firstMeasure();
 
-      Measure* nm = 0;
+      score->sigmap()->add(0, timesig);
+
+      int firstMeasureTicks = pickupMeasure ? Fraction(pickupTimesigZ, pickupTimesigN).ticks() : timesig.ticks();
+
       for (int i = 0; i < measures; ++i) {
-            if (pm) {
-                  nm  = pm;
-                  pm = pm->nextMeasure();
-                  }
-            else {
-                  nm = new Measure(score);
-                  score->measures()->add(nm);
-                  }
-            nm->setTimesig(timesig);
-            nm->setLen(timesig);
-            if (pickupMeasure) {
-                  if (i == 0) {
-                        nm->setIrregular(true);        // dont count pickup measure
-                        nm->setLen(Fraction(pickupTimesigZ, pickupTimesigN));
+            int tick = firstMeasureTicks + timesig.ticks() * (i - 1);
+            if (i == 0)
+                  tick = 0;
+            QList<Rest*> puRests;
+            for (Score* _score : score->scoreList()) {
+                  Rest* rest = 0;
+                  Measure* measure = new Measure(_score);
+                  measure->setTimesig(timesig);
+                  measure->setLen(timesig);
+                  measure->setTick(tick);
+
+                  if (pickupMeasure && tick == 0) {
+                        measure->setIrregular(true);        // dont count pickup measure
+                        measure->setLen(Fraction(pickupTimesigZ, pickupTimesigN));
                         }
-                  /*else if (i == (measures - 1)) {
-                        // last measure is shorter
-                        m->setLen(timesig - Fraction(pickupTimesigZ, pickupTimesigN));
-                        }*/
-                  }
-            nm->setEndBarLineType(i == (measures - 1) ? BarLineType::END : BarLineType::NORMAL, i != (measures - 1));
-            }
-      //delete unused measures if any
-      if (nm->nextMeasure())
-            score->undoRemoveMeasures(nm->nextMeasure(), score->lastMeasure());
+                  _score->measures()->add(measure);
 
-      int tick = 0;
-      for (MeasureBase* mb = score->measures()->first(); mb; mb = mb->next()) {
-            mb->setTick(tick);
-            if (mb->type() != Element::Type::MEASURE)
-                  continue;
-            Measure* measure = static_cast<Measure*>(mb);
-            int ticks = measure->ticks();
-
-            QList<int> sl = score->uniqueStaves();
-
-            for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-                  Staff* staff = score->staff(staffIdx);
-                  if (tick == 0) {
-                        TimeSig* ts = new TimeSig(score);
-                        ts->setTrack(staffIdx * VOICES);
-                        ts->setSig(timesig, timesigType);
-                        Segment* s = measure->getSegment(ts, 0);
-                        s->add(ts);
-                        Part* part = staff->part();
-                        if (part->instr()->useDrumset() == DrumsetKind::NONE) {
-                              //
-                              // transpose key
-                              //
-                              KeySigEvent nKey = ks;
-                              if (part->instr()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
-                                    int diff = -part->instr()->transpose().chromatic;
-                                    nKey.setKey(transposeKey(nKey.key(), diff));
-                                    }
-                              // do not create empty, invisible keysig
-                              if (nKey.custom() || nKey.key() != Key::C) {
-                                    staff->setKey(0, nKey);
-                                    KeySig* keysig = new KeySig(score);
-                                    keysig->setTrack(staffIdx * VOICES);
-                                    keysig->setKeySigEvent(nKey);
-                                    Segment* s = measure->getSegment(keysig, 0);
-                                    s->add(keysig);
+                  for (Staff* staff : _score->staves()) {
+                        int staffIdx = staff->idx();
+                        if (tick == 0) {
+                              TimeSig* ts = new TimeSig(_score);
+                              ts->setTrack(staffIdx * VOICES);
+                              ts->setSig(timesig, timesigType);
+                              Measure* m = _score->firstMeasure();
+                              Segment* s = m->getSegment(ts, 0);
+                              s->add(ts);
+                              Part* part = staff->part();
+                              if (!part->instr()->useDrumset()) {
+                                    //
+                                    // transpose key
+                                    //
+                                    KeySigEvent nKey = ks;
+                                    if (!nKey.custom() && part->instr()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
+                                          int diff = -part->instr()->transpose().chromatic;
+                                          nKey.setKey(transposeKey(nKey.key(), diff));
+                                          }
+                                    // do not create empty, invisible keysig
+                                    if (nKey.custom() || nKey.key() != Key::C) {
+                                          staff->setKey(0, nKey);
+                                          KeySig* keysig = new KeySig(score);
+                                          keysig->setTrack(staffIdx * VOICES);
+                                          keysig->setKeySigEvent(nKey);
+                                          Segment* s = measure->getSegment(keysig, 0);
+                                          s->add(keysig);
+                                          }
                                     }
                               }
-                        }
-                  if (staff->primaryStaff()) {
                         if (measure->timesig() != measure->len()) {
                               QList<TDuration> dList = toDurationList(measure->len(), false);
                               if (!dList.isEmpty()) {
-                                    int tick = measure->tick();
+                                    int ltick = tick;
+                                    int k = 0;
                                     foreach (TDuration d, dList) {
-                                          Rest* rest = 0;
-                                          for (Staff* s : staff->staffList()) {
-                                                if (rest)
-                                                      rest = static_cast<Rest*>(rest->linkedClone());
-                                                else
-                                                      rest = new Rest(score, d);
-                                                rest->setDuration(d.fraction());
-                                                rest->setTrack(s->idx() * VOICES);
-                                                Segment* seg = measure->getSegment(rest, tick);
-                                                seg->add(rest);
+                                          if (k < puRests.count() && staff->linkedStaves())
+                                                rest = static_cast<Rest*>(puRests[k]->linkedClone());
+                                          else {
+                                                rest = new Rest(score, d);
+                                                puRests.append(rest);
                                                 }
-                                          tick += rest->actualTicks();
+                                          rest->setScore(_score);
+                                          rest->setDuration(d.fraction());
+                                          rest->setTrack(staffIdx * VOICES);
+                                          Segment* seg = measure->getSegment(rest, ltick);
+                                          seg->add(rest);
+                                          ltick += rest->actualTicks();
+                                          k++;
                                           }
                                     }
                               }
                         else {
-                              Rest* rest = 0;
-                              for (Staff* s : staff->staffList()) {
-                                    if (rest)
-                                          rest = static_cast<Rest*>(rest->linkedClone());
-                                    else
-                                          rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
-                                    rest->setDuration(measure->len());
-                                    rest->setTrack(s->idx() * VOICES);
-                                    Segment* seg = measure->getSegment(rest, tick);
-                                    seg->add(rest);
-                                    }
-                              }
-                        }
-                  }
-            tick += ticks;
-            }
-      score->fixTicks();
-#if 0
-      //
-      // ceate linked staves
-      //
-      QMap<Score*, QList<int>> scoremap;
-      foreach (Staff* staff, score->staves()) {
-            if (!staff->linkedStaves())
-                  continue;
-            foreach(Staff* lstaff, staff->linkedStaves()->staves()) {
-                  if (staff != lstaff) {
-                        if (staff->score() == lstaff->score())
-                              cloneStaff(staff, lstaff);
-                        else {
-                              //keep reference of staves in parts to clone them later
-                              QList<int> srcStaves = scoremap.value(lstaff->score());
-                              srcStaves.append(staff->score()->staffIdx(staff));
-                              scoremap.insert(lstaff->score(), srcStaves);
+                              if (rest && staff->linkedStaves())
+                                    rest = static_cast<Rest*>(rest->linkedClone());
+                              else
+                                    rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
+                              rest->setScore(_score);
+                              rest->setDuration(measure->len());
+                              rest->setTrack(staffIdx * VOICES);
+                              Segment* seg = measure->getSegment(rest, tick);
+                              seg->add(rest);
                               }
                         }
                   }
             }
-       // clone staves for excerpts
-       auto it = scoremap.constBegin();
-       while (it != scoremap.constEnd()) {
-            cloneStaves(score, it.key(), it.value());
-            ++it;
-            }
-#endif
+      score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
 
       //
       // select first rest
@@ -777,6 +722,16 @@ void MuseScore::newFile()
       score->rebuildMidiMapping();
       score->doLayout();
       setCurrentScoreView(appendScore(score));
+
+      for (Excerpt* x : excerpts) {
+            Score* xs = new Score(score);
+            xs->setName(x->title());
+            xs->style()->set(StyleIdx::createMultiMeasureRests, true);
+            x->setPartScore(xs);
+            score->excerpts().append(x);
+            createExcerpt(x);
+            score->setExcerptsChanged(true);
+            }
       }
 
 //---------------------------------------------------------
@@ -1479,6 +1434,8 @@ void MuseScore::printFile()
 
       printerDev.setCreator("MuseScore Version: " VERSION);
       printerDev.setFullPage(true);
+      if (!printerDev.setPageMargins(QMarginsF()))
+            qDebug("unable to clear printer margins");
       printerDev.setColorMode(QPrinter::Color);
       printerDev.setDocName(cs->name());
       printerDev.setDoubleSidedPrinting(pf->twosided());
@@ -1500,7 +1457,8 @@ void MuseScore::printFile()
 
       LayoutMode layoutMode = cs->layoutMode();
       if (layoutMode != LayoutMode::PAGE) {
-            cs->setLayoutMode(LayoutMode::PAGE);
+            cs->startCmd();
+            cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
             cs->doLayout();
             }
 
@@ -1534,10 +1492,8 @@ void MuseScore::printFile()
                   }
             }
       p.end();
-      if (layoutMode != cs->layoutMode()) {
-            cs->setLayoutMode(layoutMode);
-            cs->doLayout();
-            }
+      if (layoutMode != cs->layoutMode())
+            cs->endCmd(true);       // rollback
       }
 
 //---------------------------------------------------------
@@ -1545,7 +1501,7 @@ void MuseScore::printFile()
 //    return true on success
 //---------------------------------------------------------
 
-bool MuseScore::exportFile()
+void MuseScore::exportFile()
       {
       QStringList fl;
       fl.append(tr("SVG Collection (*.svc)"));
@@ -1594,17 +1550,15 @@ bool MuseScore::exportFile()
       QString filter = fl.join(";;");
       QString fn = getSaveScoreName(saveDialogTitle, name, filter);
       if (fn.isEmpty())
-            return false;
+            return;
 
       QFileInfo fi(fn);
       lastSaveCopyDirectory = fi.absolutePath();
 
-      QString ext = fi.suffix();
-      if (ext.isEmpty()) {
-            QMessageBox::critical(this, tr("MuseScore: Save As"), tr("cannot determine file type"));
-            return false;
-            }
-      return saveAs(cs, true, fn, ext);
+      if (fi.suffix().isEmpty())
+            QMessageBox::critical(this, tr("MuseScore: Export"), tr("Cannot determine file type"));
+      else
+            saveAs(cs, true, fn, fi.suffix());
       }
 
 //---------------------------------------------------------
@@ -1663,7 +1617,7 @@ bool MuseScore::exportParts()
 
       QString ext = fi.suffix();
       if (ext.isEmpty()) {
-            QMessageBox::critical(this, tr("MuseScore: Export Parts"), tr("cannot determine file type"));
+            QMessageBox::critical(this, tr("MuseScore: Export Parts"), tr("Cannot determine file type"));
             return false;
             }
 
@@ -1745,6 +1699,8 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
       QString fn(path);
       if (!fn.endsWith(suffix))
             fn += suffix;
+
+      LayoutMode layoutMode = cs->layoutMode();
       if (ext == "mscx" || ext == "mscz") {
             // save as mscore *.msc[xz] file
             QFileInfo fi(fn);
@@ -1789,14 +1745,29 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             }
       else if (ext == "pdf") {
             // save as pdf file *.pdf
+            if (layoutMode != LayoutMode::PAGE) {
+                  cs->startCmd();
+                  cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                  cs->doLayout();
+                  }
             rv = savePdf(cs, fn);
             }
       else if (ext == "png") {
             // save as png file *.png
+            if (layoutMode != LayoutMode::PAGE) {
+                  cs->startCmd();
+                  cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                  cs->doLayout();
+                  }
             rv = savePng(cs, fn);
             }
       else if (ext == "svg") {
             // save as svg file *.svg
+            if (layoutMode != LayoutMode::PAGE) {
+                  cs->startCmd();
+                  cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                  cs->doLayout();
+                  }
             rv = saveSvg(cs, fn);
             }
       else if (ext == "svc") {
@@ -1824,11 +1795,18 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             // save positions of measures
             rv = savePositions(cs, fn, false);
             }
+      else if (ext == "mlog") {
+            rv = cs->sanityCheck(fn);
+            }
       else {
             qDebug("Internal error: unsupported extension <%s>",
                qPrintable(ext));
             return false;
             }
+      if (!rv && !MScore::noGui)
+            QMessageBox::critical(this, tr("MuseScore:"), tr("Cannot write into %1").arg(fn));
+      if (layoutMode != cs->layoutMode())
+            cs->endCmd(true);       // rollback
       return rv;
       }
 
@@ -1860,13 +1838,18 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
 
       printerDev.setCreator("MuseScore Version: " VERSION);
       printerDev.setFullPage(true);
+      if (!printerDev.setPageMargins(QMarginsF()))
+            qDebug("unable to clear printer margins");
       printerDev.setColorMode(QPrinter::Color);
       printerDev.setDocName(cs->name());
       printerDev.setDoubleSidedPrinting(pf->twosided());
       printerDev.setOutputFormat(QPrinter::PdfFormat);
 
       printerDev.setOutputFileName(saveName);
-      QPainter p(&printerDev);
+
+      QPainter p;
+      if (!p.begin(&printerDev))
+            return false;
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
       double mag = printerDev.logicalDpiX() / MScore::DPI;
@@ -1911,13 +1894,19 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
 
       printerDev.setCreator("MuseScore Version: " VERSION);
       printerDev.setFullPage(true);
+      if (!printerDev.setPageMargins(QMarginsF()))
+            qDebug("unable to clear printer margins");
       printerDev.setColorMode(QPrinter::Color);
       printerDev.setDocName(firstScore->name());
       printerDev.setDoubleSidedPrinting(pf->twosided());
       printerDev.setOutputFormat(QPrinter::PdfFormat);
 
       printerDev.setOutputFileName(saveName);
-      QPainter p(&printerDev);
+
+      QPainter p;
+      if (!p.begin(&printerDev))
+            return false;
+
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
       double mag = printerDev.logicalDpiX() / MScore::DPI;
@@ -1973,8 +1962,8 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
 void importSoundfont(QString name)
       {
       QFileInfo info(name);
-      int ret = QMessageBox::question(0, QWidget::tr("Install Soundfont"),
-            QWidget::tr("Do you want to install the soundfont %1?").arg(info.fileName()),
+      int ret = QMessageBox::question(0, QWidget::tr("Install SoundFont"),
+            QWidget::tr("Do you want to install the SoundFont %1?").arg(info.fileName()),
              QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
       if (ret == QMessageBox::Yes) {
             QStringList pl = preferences.sfPath.split(";");
@@ -1998,7 +1987,7 @@ void importSoundfont(QString name)
                         }
                   QFile orig(name);
                   if (orig.copy(destFilePath)) {
-                        QMessageBox::information(0, QWidget::tr("Soundfont installed"), QWidget::tr("Soundfont installed. Please go to View > Synthesizer to add it and View > Mixer to choose an instrument sound."));
+                        QMessageBox::information(0, QWidget::tr("SoundFont installed"), QWidget::tr("SoundFont installed. Please go to View > Synthesizer to add it and View > Mixer to choose an instrument sound."));
                         }
                   }
             }
@@ -2018,6 +2007,8 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
 
       if (suffix == "mscz" || suffix == "mscx") {
             Score::FileError rv = score->loadMsc(name, ignoreVersionError);
+            if (score && score->fileInfo()->path().startsWith(":/"))
+                  score->setCreated(true);
             if (rv != Score::FileError::FILE_NO_ERROR)
                   return rv;
             }
@@ -2088,15 +2079,17 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
 
       score->setLayoutAll(true);
       for (Score* s : score->scoreList()) {
-            s->setPlaylistDirty(true);
+            s->setPlaylistDirty();
             s->rebuildMidiMapping();
             s->updateChannel();
-            s->updateNotes();
             s->setSoloMute();
             s->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
             }
       score->setSaved(false);
       score->update();
+      if (!ignoreVersionError && !MScore::noGui)
+            if (!score->sanityCheck())
+                  return Score::FileError::FILE_CORRUPTED;
       return Score::FileError::FILE_NO_ERROR;
       }
 
@@ -2156,12 +2149,12 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
       else
             mscore->lastSaveDirectory = fi.absolutePath();
 
-      QString ext = fi.suffix();
-      if (ext.isEmpty()) {
-            if(!MScore::noGui) QMessageBox::critical(mscore, tr("MuseScore: Save As"), tr("cannot determine file type"));
+      if (fi.suffix().isEmpty()) {
+            if (!MScore::noGui)
+                  QMessageBox::critical(mscore, tr("MuseScore: Save As"), tr("Cannot determine file type"));
             return false;
             }
-      return saveAs(cs, saveCopy, fn, ext);
+      return saveAs(cs, saveCopy, fn, fi.suffix());
       }
 
 //---------------------------------------------------------
@@ -2198,7 +2191,7 @@ bool MuseScore::saveSelection(Score* cs)
 
       QString ext = fi.suffix();
       if (ext.isEmpty()) {
-            QMessageBox::critical(mscore, tr("MuseScore: Save Selection"), tr("cannot determine file type"));
+            QMessageBox::critical(mscore, tr("MuseScore: Save Selection"), tr("Cannot determine file type"));
             return false;
             }
       bool rv = true;
@@ -2611,7 +2604,7 @@ void note_row(QTextStream * qts, int tick, float pos, QSet<Note *> * notes, QSet
    QSetIterator<Note *> i(*ongoing);
    while (i.hasNext()) {
       Note * cur = i.next();
-      int end = cur->chord()->tick() + cur->chord()->durationTicks();
+      int end = cur->chord()->tick() + cur->chord()->actualTicks();
       if (end<=tick) ongoing->remove(cur);
       else (*qts) << ' ' << cur->pitch();
    }
@@ -2874,7 +2867,7 @@ bool MuseScore::newLinearized(Score* old_score)
       //old_score->deselectAll(); 
       // Figure out repeat structure and traverse it
       old_score->repeatList()->unwind();
-      old_score->setPlaylistDirty(true);
+      old_score->setPlaylistDirty();
 
       bool copy=false;
       foreach (const RepeatSegment* rs, *(old_score->repeatList()) ) {
@@ -2933,7 +2926,7 @@ bool MuseScore::newLinearized(Score* old_score)
             m->setRepeatCount(0);
          }
          // Remove coda/fine labels and jumps
-         for (auto e : *m->el())
+         for (auto e : m->el())
             if (e->type() == Element::Type::MARKER || 
                e->type() == Element::Type::JUMP) {
                //qDebug("JUMP? %s",qPrintable(e->userName()));

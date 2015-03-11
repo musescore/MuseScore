@@ -360,7 +360,7 @@ void Seq::stopWait()
       QWaitCondition sleep;
       int idx = 0;
       while (state != Transport::STOP) {
-            qDebug("State %d", state);
+            qDebug("State %d", (int)state);
             mutex.lock();
             sleep.wait(&mutex, 100);
             mutex.unlock();
@@ -500,8 +500,8 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
 
             if (note) {
                   Instrument* instr = note->staff()->part()->instr(note->chord()->tick());
-                  const Channel& a = instr->channel(note->subchannel());
-                  mute = a.mute || a.soloMute;
+                  const Channel* a = instr->channel(note->subchannel());
+                  mute = a->mute || a->soloMute;
                   }
             else
                   mute = false;
@@ -758,7 +758,7 @@ void Seq::process(unsigned n, float* buffer)
                   }
             else if (state != driverState)
                   qDebug("Seq: state transition %d -> %d ?",
-                     state, driverState);
+                     (int)state, (int)driverState);
             }
 
       memset(buffer, 0, sizeof(float) * n * 2); // assume two channels
@@ -1386,7 +1386,7 @@ void Seq::putEvent(const NPlayEvent& event, unsigned framePos)
             return;
       int channel = event.channel();
       if (channel >= cs->midiMapping()->size()) {
-            qDebug("bad channel value");
+            qDebug("bad channel value %d >= %d", channel, cs->midiMapping()->size());
             return;
             }
       int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti);

@@ -165,6 +165,8 @@ class TestImportMidi : public QObject, public MTest
       void chordBigError() { noTempoText("chord_big_error"); }
       void chordLegato() { noTempoText("chord_legato"); }
       void chordCollect() { noTempoText("chord_collect"); }
+            // very short note - don't remove note but show it with min allowed duration (1/128)
+      void chordVeryShort() { dontSimplify("chord_1_tick_long"); }
 
       // test tuplet recognition functions
       void findChordInBar();
@@ -357,6 +359,13 @@ class TestImportMidi : public QObject, public MTest
       // percussion
       void percDrums() { noTempoText("perc_drums"); }
       void percRemoveTies() { noTempoText("perc_remove_ties"); }
+      void percNoGrandStaff() { noTempoText("perc_no_grand_staff"); }
+      void percTriplet() { noTempoText("perc_triplet"); }
+      void percRespectBeat() { noTempoText("perc_respect_beat"); }
+      void percTupletVoice() { noTempoText("perc_tuplet_voice"); }
+      void percTupletSimplify() { noTempoText("perc_tuplet_simplify"); }
+      void percTupletSimplify2() { noTempoText("perc_tuplet_simplify2"); }
+      void percShortNotes() { noTempoText("perc_short_notes"); }
 
       // clef changes along the score
       void clefTied() { dontSimplify("clef_tied"); }
@@ -388,9 +397,6 @@ class TestImportMidi : public QObject, public MTest
       void instrumentChannels() { mf("instrument_channels"); }
       void instrument3StaffOrgan() { mf("instrument_3staff_organ"); }
       void instrumentClef() { noTempoText("instrument_clef"); }
-
-      // very short note - need clean up (remove note) but show empty track
-      void emptyTrack() { noTempoText("empty_track"); }
 
       // gui - tracks model
       void testGuiTracksModel();
@@ -1169,7 +1175,8 @@ void TestImportMidi::testGuiTracksModel()
                   opers.data()->trackCount,
                   midiFileFullPath,
                   !opers.data()->humanBeatData.beatSet.empty(),
-                  opers.data()->hasTempoText);
+                  opers.data()->hasTempoText,
+                  !opers.data()->chordNames.empty());
 
       QVERIFY(model.trackCount() == 1);
 

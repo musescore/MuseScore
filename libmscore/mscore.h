@@ -15,8 +15,8 @@
 
 namespace Ms {
 
-#define MSC_VERSION     "2.04"
-static const int MSCVERSION = 204;
+#define MSC_VERSION     "2.06"
+static const int MSCVERSION = 206;
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -50,7 +50,8 @@ static const int MSCVERSION = 204;
 //    2.02  save instrumentId, note slashes
 //    2.03  save Box topGap, bottomGap in spatium units
 //    2.04  added hideSystemBarLine flag to Staff
-
+//    2.05  breath segment changed to use tick of following chord rather than preceding chord
+//    2.06  Glissando moved from final chord to start note
 
 
 class MStyle;
@@ -300,6 +301,7 @@ enum class TextStyleType : char {
       TEXTLINE,
       GLISSANDO,
       OTTAVA,
+      PEDAL,
       BENCH,
       HEADER,
       FOOTER,
@@ -352,7 +354,6 @@ class MScore : public QObject {
    public:
       enum class Direction  : char { AUTO, UP, DOWN };
       enum class DirectionH : char { AUTO, LEFT, RIGHT };
-
       static void init();
 
       static MStyle* defaultStyle();
@@ -406,6 +407,7 @@ class MScore : public QObject {
 #ifdef SCRIPT_INTERFACE
       static QQmlEngine* qml();
 #endif
+      virtual void endCmd() { };
       };
 
 //---------------------------------------------------------

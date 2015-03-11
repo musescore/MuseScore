@@ -61,7 +61,7 @@
       <Instrument>
         <longName pos="0">Percussions</longName>
         <trackName></trackName>
-        <useDrumset>2</useDrumset>
+        <useDrumset>1</useDrumset>
         <Drum pitch="27">
           <head>0</head>
           <line>3</line>
@@ -1289,7 +1289,10 @@
             <string>0</string>
             </Note>
           </Chord>
-        <tick>57600</tick>
+        <Rest>
+          <lid>157</lid>
+          <durationType>half</durationType>
+          </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
@@ -1348,7 +1351,7 @@
         <Instrument>
           <longName pos="0">Percussions</longName>
           <trackName></trackName>
-          <useDrumset>2</useDrumset>
+          <useDrumset>1</useDrumset>
           <Drum pitch="27">
             <head>0</head>
             <line>3</line>
@@ -2580,7 +2583,10 @@
               <string>0</string>
               </Note>
             </Chord>
-          <tick>57600</tick>
+          <Rest>
+            <lid>157</lid>
+            <durationType>half</durationType>
+            </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>

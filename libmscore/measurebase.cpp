@@ -55,6 +55,27 @@ MeasureBase::MeasureBase(const MeasureBase& m)
       }
 
 //---------------------------------------------------------
+//   clearElements
+//---------------------------------------------------------
+
+void MeasureBase::clearElements()
+      {
+      qDeleteAll(_el);
+      _el.clear();
+      }
+
+//---------------------------------------------------------
+//   takeElements
+//---------------------------------------------------------
+
+ElementList MeasureBase::takeElements()
+      {
+      ElementList l = _el;
+      _el.clear();
+      return l;
+      }
+
+//---------------------------------------------------------
 //   setScore
 //---------------------------------------------------------
 
@@ -83,7 +104,7 @@ MeasureBase::~MeasureBase()
 
 void MeasureBase::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      if (type() == Element::Type::MEASURE) {
+      if (isMeasure()) {
             foreach(Element* e, _el) {
                   if (score()->tagIsValid(e->tag())) {
                         if (e->staffIdx() >= score()->staves().size())
@@ -104,11 +125,8 @@ void MeasureBase::scanElements(void* data, void (*func)(void*, Element*), bool a
 
 //---------------------------------------------------------
 //   add
+///   Add new Element \a el to MeasureBase
 //---------------------------------------------------------
-
-/**
- Add new Element \a el to MeasureBase
-*/
 
 void MeasureBase::add(Element* e)
       {
@@ -141,11 +159,8 @@ void MeasureBase::add(Element* e)
 
 //---------------------------------------------------------
 //   remove
+///   Remove Element \a el from MeasureBase.
 //---------------------------------------------------------
-
-/**
- Remove Element \a el from MeasureBase.
-*/
 
 void MeasureBase::remove(Element* el)
       {
@@ -160,13 +175,16 @@ void MeasureBase::remove(Element* el)
                         break;
                   case LayoutBreak::Type::SECTION:
                         _sectionBreak = 0;
-                        score()->tempomap()->setPause(endTick(), 0);
+                        score()->setPause(endTick(), 0);
+                        score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
                         score()->setLayoutAll(true);
                         break;
                   }
             }
-      if (!_el.remove(el))
+      if (!_el.remove(el)) {
             qDebug("MeasureBase(%p)::remove(%s,%p) not found", this, el->name(), el);
+            abort();
+            }
       }
 
 //---------------------------------------------------------
@@ -249,34 +267,6 @@ Measure* MeasureBase::prevMeasureMM() const
 qreal MeasureBase::pause() const
       {
       return _sectionBreak ? _sectionBreak->pause() : 0.0;
-      }
-
-//---------------------------------------------------------
-//   layout0
-//---------------------------------------------------------
-
-void MeasureBase::layout0()
-      {
-      _pageBreak = false;
-      _lineBreak = false;
-      _sectionBreak = 0;
-
-      foreach (Element* element, _el) {
-            if (!score()->tagIsValid(element->tag()) || (element->type() != Element::Type::LAYOUT_BREAK))
-                  continue;
-            LayoutBreak* e = static_cast<LayoutBreak*>(element);
-            switch (e->layoutBreakType()) {
-                  case LayoutBreak::Type::PAGE:
-                        _pageBreak = true;
-                        break;
-                  case LayoutBreak::Type::LINE:
-                        _lineBreak = true;
-                        break;
-                  case LayoutBreak::Type::SECTION:
-                        _sectionBreak = e;
-                        break;
-                  }
-            }
       }
 
 //---------------------------------------------------------
@@ -368,7 +358,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
             }
       else {
             // remove line break
-            foreach(Element* e, *el()) {
+            foreach(Element* e, el()) {
                   if (e->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() ==type) {
                         _score->undoRemoveElement(e);
                         break;

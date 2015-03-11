@@ -46,9 +46,9 @@
           </StaffType>
         <defaultClef>F8vb</defaultClef>
         </Staff>
-      <trackName>Fingered Bass</trackName>
+      <trackName>Electric Bass</trackName>
       <Instrument>
-        <longName pos="0">Fingered Bass</longName>
+        <longName pos="0">Electric Bass</longName>
         <shortName pos="0">El. B.</shortName>
         <trackName>Electric Bass</trackName>
         <minPitchP>28</minPitchP>

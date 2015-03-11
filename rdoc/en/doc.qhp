@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QtHelpProject version="1.0">
+    <namespace>musescore.com.musescore.2.0</namespace>
+    <virtualFolder>doc</virtualFolder>
+    <customFilter name="en">
+        <filterAttribute>MuseScore</filterAttribute>
+    </customFilter>
+
+    <filterSection>
+        <filterAttribute>MuseScore</filterAttribute>
+        <toc>
+            <section title="My Application Manual" ref="index.html">
+                <section title="Chapter 1" ref="doc.html#chapter1"/>
+                <section title="Chapter 2" ref="doc.html#chapter2"/>
+                <section title="Chapter 3" ref="doc.html#chapter3"/>
+            </section>
+        </toc>
+        <keywords>
+            <keyword id="manual"            ref="doc.html"/>
+            <keyword id="bar"               ref="doc.html#bar"/>
+            <keyword id="MuseScore::foobar" ref="doc.html#foobar"/>
+            <keyword id="note"              ref="note.html"/>
+        </keywords>
+        <files>
+            <file>doc.html</file>
+            <file>note.html</file>
+        </files>
+    </filterSection>
+
+</QtHelpProject>

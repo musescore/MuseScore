@@ -41,7 +41,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Fret Diagram</string>
+      <string>Fretboard Diagram</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -91,7 +91,7 @@
         <string>Reset Type value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>

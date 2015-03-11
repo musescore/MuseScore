@@ -29,6 +29,7 @@
 #include "instrtemplate.h"
 #include "barline.h"
 #include "ottava.h"
+#include "harmony.h"
 
 namespace Ms {
 
@@ -158,8 +159,8 @@ QString Staff::partName() const
 //---------------------------------------------------------
 
 Staff::Staff(Score* s)
+  : ScoreElement(s)
       {
-      _score     = s;
       _barLineTo = (lines() - 1) * 2;
       }
 
@@ -209,6 +210,44 @@ ClefType Staff::clef(int tick) const
       return score()->styleB(StyleIdx::concertPitch) ? c._concertClef : c._transposingClef;
       }
 
+#ifndef NDEBUG
+//---------------------------------------------------------
+//   dumpClef
+//---------------------------------------------------------
+
+void Staff::dumpClefs(const char* title) const
+      {
+      qDebug("dump clefs (%zd): %s", clefs.size(), title);
+      for (auto& i : clefs) {
+            qDebug("  %d: %d %d", i.first, int(i.second._concertClef), int(i.second._transposingClef));
+            }
+      }
+
+//---------------------------------------------------------
+//   dumpKeys
+//---------------------------------------------------------
+
+void Staff::dumpKeys(const char* title) const
+      {
+      qDebug("dump keys (%zd): %s", _keys.size(), title);
+      for (auto& i : _keys) {
+            qDebug("  %d: %d", i.first, int(i.second.key()));
+            }
+      }
+
+//---------------------------------------------------------
+//   dumpTimeSigs
+//---------------------------------------------------------
+
+void Staff::dumpTimeSigs(const char* title) const
+      {
+      qDebug("dump timesig size (%zd) staffIdx %d: %s", timesigs.size(), idx(), title);
+      for (auto& i : timesigs) {
+            qDebug("  %d: %d/%d", i.first, i.second->sig().numerator(), i.second->sig().denominator());
+            }
+      }
+#endif
+
 //---------------------------------------------------------
 //   setClef
 //---------------------------------------------------------
@@ -225,6 +264,7 @@ void Staff::setClef(Clef* clef)
                   }
             }
       clefs.setClef(clef->segment()->tick(), clef->clefTypeList());
+//      dumpClefs("setClef");
       }
 
 //---------------------------------------------------------
@@ -244,12 +284,15 @@ void Staff::removeClef(Clef* clef)
             }
       clefs.erase(clef->segment()->tick());
       for (Segment* s = clef->segment()->prev(); s && s->tick() == tick; s = s->prev()) {
-            if (s->segmentType() == Segment::Type::Clef && s->element(clef->track())) {
+            if (s->segmentType() == Segment::Type::Clef
+               && s->element(clef->track())
+               && !s->element(clef->track())->generated()) {
                   // a previous clef at the same tick position gets valid
                   clefs.setClef(tick, static_cast<Clef*>(s->element(clef->track()))->clefTypeList());
                   break;
                   }
             }
+//      dumpClefs("removeClef");
       }
 
 //---------------------------------------------------------
@@ -301,6 +344,7 @@ void Staff::addTimeSig(TimeSig* timesig)
       {
       if (timesig->segment()->segmentType() == Segment::Type::TimeSig)
             timesigs[timesig->segment()->tick()] = timesig;
+//      dumpTimeSigs("after addTimeSig");
       }
 
 //---------------------------------------------------------
@@ -311,6 +355,7 @@ void Staff::removeTimeSig(TimeSig* timesig)
       {
       if (timesig->segment()->segmentType() == Segment::Type::TimeSig)
             timesigs.erase(timesig->segment()->tick());
+//      dumpTimeSigs("after removeTimeSig");
       }
 
 //---------------------------------------------------------
@@ -340,6 +385,7 @@ KeySigEvent Staff::keySigEvent(int tick) const
 void Staff::setKey(int tick, KeySigEvent k)
       {
       _keys.setKey(tick, k);
+//    dumpKeys("setKey");
       }
 
 //---------------------------------------------------------
@@ -349,6 +395,7 @@ void Staff::setKey(int tick, KeySigEvent k)
 void Staff::removeKey(int tick)
       {
       _keys.erase(tick);
+//    dumpKeys("removeKey");
       }
 
 //---------------------------------------------------------
@@ -405,7 +452,7 @@ void Staff::write(Xml& xml) const
 
       // for copy/paste we need to know the actual transposition
       if (xml.clipboardmode) {
-            Interval v = part()->instr(0)->transpose();
+            Interval v = part()->instr()->transpose();
             if (v.diatonic)
                   xml.tag("transposeDiatonic", v.diatonic);
             if (v.chromatic)
@@ -459,10 +506,9 @@ void Staff::write(Xml& xml) const
             }
       if (_userDist != 0.0)
             xml.tag("distOffset", _userDist / spatium());
-      if (_userMag != 1.0)
-            xml.tag("mag", _userMag);
-      if (color() != Qt::black)
-            xml.tag("color", color());
+
+      writeProperty(xml, P_ID::MAG);
+      writeProperty(xml, P_ID::COLOR);
       xml.etag();
       }
 
@@ -840,8 +886,28 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
 
       setStaffType(pst);
       setDefaultClefType(t->clefType(cidx));
-//      if (pst->group() == ArticulationShowIn::PITCHED_STAFF)         // if PITCHED (in other staff groups num of lines is determined by style)
-//            setLines(t->staffLines[cidx]);      // use number of lines from instr. template
+      }
+
+//---------------------------------------------------------
+//   init
+//---------------------------------------------------------
+
+void Staff::init(const Staff* s)
+      {
+      setStaffType(s->staffType());
+      setDefaultClefType(s->defaultClefType());
+      setSmall(s->small());
+      _brackets          = s->_brackets;
+      _barLineSpan       = s->_barLineSpan;
+      _barLineFrom       = s->_barLineFrom;
+      _barLineTo         = s->_barLineTo;
+      _invisible         = s->_invisible;
+      _neverHide         = s->_neverHide;
+      _showIfEmpty       = s->_showIfEmpty;
+      _hideSystemBarLine = s->_hideSystemBarLine;
+      _color             = s->_color;
+      _userDist          = s->_userDist;
+      _userMag           = s->_userMag;
       }
 
 //---------------------------------------------------------
@@ -933,39 +999,35 @@ void Staff::undoSetColor(const QColor& /*val*/)
 
 void Staff::insertTime(int tick, int len)
       {
-      // when inserting measures directly in front of a key change,
-      // using lower_bound() (for tick != 0) means the key change at that point is moved later
-      // so the measures being inserted get the old key signature
-      // if we wish to make this work like clefs (see below),
-      // we would need to move the key signature from this measure to the first inserted measure
-      // but either way, at the begining of the staff, we need to keep the original key,
-      // so we use upper_bound() in that case, and the initial key signature is moved in insertMeasure()
+      if (len == 0)
+            return;
+
+      // move all keys and clefs >= tick
+
+      if (len < 0) {
+            // remove entries between tickpos >= tick and tickpos < (tick+len)
+            _keys.erase(_keys.lower_bound(tick), _keys.lower_bound(tick-len));
+            clefs.erase(clefs.lower_bound(tick), clefs.lower_bound(tick-len));
+            }
 
       KeyList kl2;
-      for (auto i = tick ? _keys.lower_bound(tick) : _keys.upper_bound(tick); i != _keys.end();) {
+      for (auto i = _keys.lower_bound(tick); i != _keys.end();) {
             KeySigEvent kse = i->second;
-            int k   = i->first;
+            int tick = i->first;
             _keys.erase(i++);
-            kl2[k + len] = kse;
+            kl2[tick + len] = kse;
             }
       _keys.insert(kl2.begin(), kl2.end());
 
-      // when inserting measures directly in front of a clef change,
-      // using upper_bound() means the clef change remains in its original location
-      // so the measures being inserted get the new clef
-      // this make sense because the clef change technically happens at the end of the previous measure
-      // if we wish to make this work like key signatures (see above),
-      // we would need to move the clef from the previous measure to the last inserted measure
-      // and be sure to continue to handle the initial clef well
-
       ClefList cl2;
-      for (auto i = clefs.upper_bound(tick); i != clefs.end();) {
+      for (auto i = clefs.lower_bound(tick); i != clefs.end();) {
             ClefTypeList ctl = i->second;
-            int key = i->first;
+            int tick = i->first;
             clefs.erase(i++);
-            cl2.setClef(key + len, ctl);
+            cl2.setClef(tick + len, ctl);
             }
       clefs.insert(cl2.begin(), cl2.end());
+      updateOttava();
       }
 
 //---------------------------------------------------------
@@ -1010,5 +1072,97 @@ bool Staff::isTop() const
       return _part->staves()->front() == this;
       }
 
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Staff::getProperty(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::MAG:
+                  return userMag();
+            case P_ID::COLOR:
+                  return color();
+            case P_ID::SMALL:
+                  return small();
+            default:
+                  qDebug("Staff::setProperty: unhandled id");
+                  return QVariant();
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Staff::setProperty(P_ID id, const QVariant& v)
+      {
+      switch (id) {
+            case P_ID::MAG: {
+                  double oldVal = mag();
+                  setUserMag(v.toDouble());
+                  scaleChanged(oldVal, mag());
+                  }
+                  break;
+            case P_ID::COLOR:
+                  setColor(v.value<QColor>());
+                  break;
+            case P_ID::SMALL: {
+                  double oldVal = mag();
+                  setSmall(v.toBool());
+                  scaleChanged(oldVal, mag());
+                  }
+                  break;
+            default:
+                  qDebug("Staff::setProperty: unhandled id");
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Staff::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::MAG:
+                  return 1.0;
+            case P_ID::COLOR:
+                  return QColor(Qt::black);
+            case P_ID::SMALL:
+                  return false;
+            default:
+                  return QVariant();
+            }
+      }
+
+//---------------------------------------------------------
+//   scaleChanged
+//---------------------------------------------------------
+
+void Staff::scaleChanged(double oldVal, double newVal)
+      {
+      int staffIdx = idx();
+      int startTrack = staffIdx * VOICES;
+      int endTrack = startTrack + VOICES;
+      for (Segment* s = score()->firstSegment(); s; s = s->next1()) {
+            for (Element* e : s->annotations())
+                  e->localSpatiumChanged(oldVal, newVal);
+            for (int track = startTrack; track < endTrack; ++track) {
+                  if (s->element(track))
+                        s->element(track)->localSpatiumChanged(oldVal, newVal);
+                  }
+            }
+      for (auto i : score()->spanner()) {
+            Spanner* spanner = i.second;
+            if (spanner->staffIdx() == staffIdx) {
+                  for (auto k : spanner->spannerSegments())
+                        k->localSpatiumChanged(oldVal, newVal);
+                  }
+            }
+      }
 }
 

@@ -14,9 +14,9 @@
 #define __ELEMENT_H__
 
 #include "mscore.h"
-#include "property.h"
 #include "spatium.h"
 #include "fraction.h"
+#include "scoreElement.h"
 
 class QPainter;
 
@@ -31,6 +31,7 @@ namespace Ms {
 class Xml;
 class Measure;
 class Staff;
+class Part;
 class Score;
 class Sym;
 class MuseScoreView;
@@ -88,20 +89,6 @@ class Space {
       void setRw(qreal m)          { _rw = m; }
       void max(const Space& s);
       Space& operator+=(const Space&);
-      };
-
-//---------------------------------------------------------
-//   LinkedElements
-//---------------------------------------------------------
-
-class LinkedElements : public QList<Element*> {
-      int _lid;         // unique id for every linked list
-
-   public:
-      LinkedElements(Score*);
-      LinkedElements(Score*, int id);
-      void setLid(Score*, int val);
-      int lid() const   { return _lid;    }
       };
 
 //---------------------------------------------------------
@@ -166,7 +153,7 @@ struct ElementName {
 //    @P bbox       QRectF                  Bounding box relative to pos and userOff, read only
 //-------------------------------------------------------------------
 
-class Element : public QObject {
+class Element : public QObject, public ScoreElement {
       Q_OBJECT
       Q_ENUMS(Type)
       Q_ENUMS(Placement)
@@ -185,7 +172,6 @@ class Element : public QObject {
       Q_PROPERTY(QPointF                  userOff     READ scriptUserOff WRITE scriptSetUserOff)
       Q_PROPERTY(bool                     visible     READ visible      WRITE setVisible)
 
-      LinkedElements* _links = 0;
       Element* _parent       = 0;
 
       bool _generated;            ///< automatically generated Element
@@ -223,7 +209,6 @@ class Element : public QObject {
             TIMESIG,
             REST,
             BREATH,
-            GLISSANDO,
 
             REPEAT_MEASURE,
             IMAGE,
@@ -256,6 +241,7 @@ class Element : public QObject {
             VOLTA_SEGMENT,
             PEDAL_SEGMENT,
             LYRICSLINE_SEGMENT,
+            GLISSANDO_SEGMENT,
             LAYOUT_BREAK,
             SPACER,
             STAFF_STATE,
@@ -278,6 +264,7 @@ class Element : public QObject {
             TEXTLINE,
             NOTELINE,
             LYRICSLINE,
+            GLISSANDO,
             SEGMENT,
             SYSTEM,
             COMPOUND,
@@ -287,7 +274,6 @@ class Element : public QObject {
             ELEMENT_LIST,
             STAFF_LIST,
             MEASURE_LIST,
-            LAYOUT,
             HBOX,
             VBOX,
             TBOX,
@@ -320,8 +306,8 @@ class Element : public QObject {
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
    protected:
-      Score* _score;
       QPointF _startDragPosition;   ///< used during drag
+
    public:
       Element(Score* s = 0);
       Element(const Element&);
@@ -329,16 +315,7 @@ class Element : public QObject {
       Element &operator=(const Element&) = delete;
       Q_INVOKABLE virtual Ms::Element* clone() const = 0;
       virtual Element* linkedClone();
-      QList<Element*> linkList() const;
 
-      void linkTo(Element*);
-      void unlink();
-      virtual void undoUnlink();
-      int lid() const                         { return _links ? _links->lid() : 0; }
-      const LinkedElements* links() const     { return _links;      }
-      void setLinks(LinkedElements* le)       { _links = le;        }
-      Score* score() const                    { return _score;      }
-      virtual void setScore(Score* s)         { _score = s;         }
       Element* parent() const                 { return _parent;     }
       void setParent(Element* e)              { _parent = e;        }
       Element* findMeasure();
@@ -415,13 +392,17 @@ class Element : public QObject {
 
       virtual Element::Type type() const = 0;
       virtual int subtype() const   { return -1; }  // for select gui
-      bool isChordRest() const;
-      bool isDurationElement() const;
+
+      bool isRest() const      { return type() == Element::Type::REST; }
+      bool isChord() const     { return type() == Element::Type::CHORD; }
+      bool isMeasure() const   { return type() == Element::Type::MEASURE; }
+      bool isChordRest() const { return type() == Element::Type::REST || type() == Element::Type::CHORD || type() == Element::Type::REPEAT_MEASURE; }
+
+      bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
       bool isSLine() const;
 
       virtual void draw(QPainter*) const {}
 
-      void writeProperty(Xml& xml, P_ID id) const;
       virtual void writeProperties(Xml& xml) const;
       virtual bool readProperties(XmlReader&);
 
@@ -455,6 +436,7 @@ class Element : public QObject {
       int voice() const                       { return _track & 3;         }
       void setVoice(int v)                    { _track = (_track / VOICES) + v; }
       Staff* staff() const;
+      Part* part() const;
 
       virtual void add(Element*);
       virtual void remove(Element*);
@@ -462,6 +444,7 @@ class Element : public QObject {
 
       virtual void layout() {}
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
+      virtual void localSpatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
 
       // debug functions
       virtual void dump() const;
@@ -562,18 +545,9 @@ class Element : public QObject {
       uint tag() const                 { return _tag;                      }
       void setTag(uint val)            { _tag = val;                       }
 
-      virtual QVariant getProperty(P_ID) const;
-      virtual bool setProperty(P_ID, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
-      virtual void resetProperty(P_ID id)          {
-            QVariant v = propertyDefault(id);
-            if (v.isValid())
-                  setProperty(id, v);
-            }
-      virtual PropertyStyle propertyStyle(P_ID) const { return PropertyStyle::NOSTYLE; }
-
-      void undoChangeProperty(P_ID, const QVariant&);
-      void undoPushProperty(P_ID);
+      virtual QVariant getProperty(P_ID) const override;
+      virtual bool setProperty(P_ID, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
       virtual void styleChanged() {}
 
@@ -602,6 +576,8 @@ class Element : public QObject {
                                                                          //  if the screen-reader needs a special string (see note for example)
       virtual QString accessibleExtraInfo() { return QString();        } //< used to return info that will be appended to accessibleInfo
                                                                          // and passed only to the screen-reader
+
+      virtual bool isUserModified() const;
       };
 
 //---------------------------------------------------------

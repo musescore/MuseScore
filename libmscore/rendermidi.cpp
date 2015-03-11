@@ -344,15 +344,13 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   Staff* staff = chord->staff();
                   int velocity = staff->velocities().velo(seg->tick());
                   Instrument* instr = chord->staff()->part()->instr(tick);
-                  int channel = instr->channel(chord->upNote()->subchannel()).channel;
+                  int channel = instr->channel(chord->upNote()->subchannel())->channel;
 
                   foreach (Articulation* a, chord->articulations()) {
                         instr->updateVelocity(&velocity,channel, a->subtypeName());
                   }
 
-                  QList<Chord*> gnb;
-                  chord->getGraceNotesBefore(&gnb);
-                  for (Chord* c : gnb) {
+                  for (Chord* c : chord->graceNotesBefore()) {
                         for (const Note* note : c->notes())
                               collectNote(events, channel, note, velocity, tickOffset);
                         }
@@ -440,7 +438,7 @@ void Score::updateRepeatList(bool expandRepeats)
             repeatList()->unwind();
       if (MScore::debugMode)
             repeatList()->dump();
-      setPlaylistDirty(true);
+      setPlaylistDirty();
       }
 
 //---------------------------------------------------------
@@ -640,7 +638,7 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                         continue;
 
                   int idx = s->staff()->channel(s->tick(), 0);
-                  int channel = s->staff()->part()->instr(s->tick())->channel(idx).channel;
+                  int channel = s->staff()->part()->instr(s->tick())->channel(idx)->channel;
                   channelPedalEvents.insert({channel, std::vector<std::pair<int, bool>>()});
                   std::vector<std::pair<int, bool>> pedalEventList = channelPedalEvents.at(channel);
                   std::pair<int, bool> lastEvent;
@@ -793,7 +791,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                   int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
                   if (t == 0) // avoid crash on very short tremolo
                         t = 1;
-                  int n = chord->durationTicks() / t;
+                  int n = chord->duration().ticks() / t;
                   int l = 1000 / n;
                   for (int k = 0; k < notes; ++k) {
                         NoteEventList* events = &(ell)[k];
@@ -923,15 +921,15 @@ void Score::createPlayEvents(Chord* chord)
             instr->updateGateTime(&gateTime, 0, "");
             }
 
-      QList<Chord*> gnb;
-      int n = chord->getGraceNotesBefore(&gnb);
+      QList<Chord*> gnb = chord->graceNotesBefore();
+      int n = gnb.size();
       int ontime = 0;
       if (n) {
             //
             //  render grace notes:
             //  simplified implementation:
             //  - grace notes start on the beat of the main note
-            //  - duration: appoggiatura: 0.5  * duration of main note
+            //  - duration: appoggiatura: 0.5  * duration of main note (2/3 for dotted notes, 4/7 for double-dotted)
             //              acciacatura: min of 0.5 * duration or 65ms fixed (independent of duration or tempo)
             //  - for appoggiaturas, the duration is divided by the number of grace notes
             //  - the grace note duration as notated does not matter
@@ -944,6 +942,12 @@ void Score::createPlayEvents(Chord* chord)
                   // number of milliseconds per second, also unit for ontime
                   qreal chordTimeMS = (chord->actualTicks() / ticksPerSecond) * 1000;
                   ontime = qMin(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
+                  }
+            else if (chord->dots() == 1) {
+                  ontime = 667;
+                  }
+            else if (chord->dots() == 2) {
+                  ontime = 571;
                   }
             else {
                   ontime = 500;

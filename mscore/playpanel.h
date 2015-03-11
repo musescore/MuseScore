@@ -22,7 +22,7 @@
 #define __PLAYPANEL_H__
 
 #include "ui_playpanel.h"
-
+#include "enableplayforwidget.h"
 namespace Ms {
 
 class Score;
@@ -36,10 +36,14 @@ class PlayPanel : public QWidget, private Ui::PlayPanelBase {
       int cachedTickPosition;
       int cachedTimePosition;
       bool tempoSliderIsPressed;
+      EnablePlayForWidget* enablePlay;
 
       Score* cs;
       virtual void closeEvent(QCloseEvent*);
       virtual void hideEvent (QHideEvent* event);
+      virtual void showEvent(QShowEvent *);
+      virtual bool eventFilter(QObject *, QEvent *);
+      virtual void keyPressEvent(QKeyEvent*) override;
       void updateTimeLabel(int sec);
       void updatePosLabel(int utick);
 

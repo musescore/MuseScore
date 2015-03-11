@@ -281,7 +281,7 @@ void DrumrollEditor::selectionChanged()
 
 void DrumrollEditor::changeSelection(SelState)
       {
-//      gv->scene()->blockSignals(true);
+      gv->scene()->blockSignals(true);
       gv->scene()->clearSelection();
       QList<QGraphicsItem*> il = gv->scene()->items();
       foreach(QGraphicsItem* item, il) {
@@ -289,7 +289,7 @@ void DrumrollEditor::changeSelection(SelState)
             if (note)
                   item->setSelected(note->selected());
             }
-//      gv->scene()->blockSignals(false);
+      gv->scene()->blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -366,7 +366,7 @@ void DrumrollEditor::velocityChanged(int val)
 
 void DrumrollEditor::keyPressed(int pitch)
       {
-      seq->startNote(staff->part()->instr()->channel(0).channel, pitch, 80, 0, 0.0);
+      seq->startNote(staff->part()->instr()->channel(0)->channel, pitch, 80, 0, 0.0);
       }
 
 //---------------------------------------------------------
@@ -424,7 +424,6 @@ void DrumrollEditor::cmd(QAction* a)
             }
 
       gv->setStaff(staff, locator);
-      score()->endCmd();
       }
 }
 

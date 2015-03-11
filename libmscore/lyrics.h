@@ -52,9 +52,25 @@ class Lyrics : public Text {
       // MELISMA FIRST UNDERSCORE:
       // used as_ticks value to mark a melisma for which only the first chord has been spanned so far
       // and to give the user a visible feedback that the undercore has been actually entered;
-      // it will be cleared to 0 by LyricsLine::layout(), so that it will not be carried over
-      // if the melisma is not extended beyond a signle chord
+      // it should be cleared to 0 at some point, so that it will not be carried over
+      // if the melisma is not extended beyond a single chord, but no suitable place to do this
+      // has been identified yet.
       static const int  TEMP_MELISMA_TICKS      = 1;
+
+      // metrics for dashes and melisma; all in sp. units:
+      static constexpr qreal  MELISMA_DEFAULT_LINE_THICKNESS      = 0.10;     // for melisma line only;
+      static constexpr qreal  MELISMA_DEFAULT_PAD                 = 0.10;     // the empty space before a melisma line
+      static constexpr qreal  LYRICS_DASH_DEFAULT_STEP            = 16.0;     // the max. distance between dashes
+      static constexpr qreal  LYRICS_DASH_DEFAULT_PAD             = 0.05;     // the min. empty space before and after a dash
+      static constexpr qreal  LYRICS_DASH_MIN_LENGTH              = 0.25;     // below this length, the dash is skipped
+      static constexpr qreal  LYRICS_WORD_MIN_DISTANCE            = 0.33;     // min. distance between lyrics from different words
+      // These values are used when USE_FONT_DASH_METRIC is not defined
+#if !defined(USE_FONT_DASH_METRIC)
+      static constexpr qreal  LYRICS_DASH_DEFAULT_LENGTH          = 0.80;     // in sp. units
+      static constexpr qreal  LYRICS_DASH_DEFAULT_LINE_THICKNESS  = 0.15;     // in sp. units
+      static constexpr qreal  LYRICS_DASH_Y_POS_RATIO             = 0.25;     // the fraction of lyrics font tot. height to
+                                                                              // raise the dashes above text base line;
+#endif                                                                        // this usually raises at about 2/3 of x-height
 
    private:
       int _ticks;             ///< if > 0 then draw an underline to tick() + _ticks
@@ -142,10 +158,11 @@ class LyricsLine : public SLine {
       virtual Element::Type type() const override     { return Element::Type::LYRICSLINE; }
       virtual void layout() override;
       virtual LineSegment* createLineSegment() override;
+      virtual void removeUnmanaged() override;
 
       Lyrics*     lyrics() const                      { return (Lyrics*)parent();   }
       Lyrics*     nextLyrics() const                  { return _nextLyrics;         }
-      void        unchain();
+      virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       };
 
 //---------------------------------------------------------

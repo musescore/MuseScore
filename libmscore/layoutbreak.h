@@ -53,6 +53,7 @@ class LayoutBreak : public Element {
 
    public:
       LayoutBreak(Score* = 0);
+      LayoutBreak(const LayoutBreak&);
       virtual LayoutBreak* clone() const override { return new LayoutBreak(*this); }
 
       virtual Element::Type type() const override { return Element::Type::LAYOUT_BREAK; }

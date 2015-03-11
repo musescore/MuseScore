@@ -35,6 +35,7 @@ echo       %1/../../share/locale/instruments_ja.ts \
 echo       %1/../../share/locale/instruments_ka.ts \
 echo       %1/../../share/locale/instruments_ko.ts \
 echo       %1/../../share/locale/instruments_lt.ts \
+echo       %1/../../share/locale/instruments_lv.ts \
 echo       %1/../../share/locale/instruments_mn_MN.ts \
 echo       %1/../../share/locale/instruments_nl.ts \
 echo       %1/../../share/locale/instruments_nb.ts \

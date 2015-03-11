@@ -735,7 +735,7 @@ void Harmony::endEdit()
       Text::endEdit();
       layout();
       if (links()) {
-            foreach(Element* e, *links()) {
+            foreach(ScoreElement* e, *links()) {
                   if (e == this)
                         continue;
                   Harmony* h = static_cast<Harmony*>(e);
@@ -1458,6 +1458,16 @@ void Harmony::render(const TextStyle* st)
 void Harmony::spatiumChanged(qreal oldValue, qreal newValue)
       {
       Text::spatiumChanged(oldValue, newValue);
+      render();
+      }
+
+//---------------------------------------------------------
+//   localSpatiumChanged
+//---------------------------------------------------------
+
+void Harmony::localSpatiumChanged(qreal oldValue, qreal newValue)
+      {
+      Text::localSpatiumChanged(oldValue, newValue);
       render();
       }
 

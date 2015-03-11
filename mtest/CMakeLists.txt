@@ -23,7 +23,7 @@ if (OMR)
 set(OMR_SRC ${PROJECT_SOURCE_DIR}/omr/importpdf.cpp)
 endif (OMR)
 
-QT4_ADD_RESOURCES(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
+QT5_ADD_RESOURCES(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-MScore.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Gootville.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Bravura.qrc
@@ -36,14 +36,8 @@ add_library (testResources STATIC
       ${qrc_files}
       )
 
-QT4_WRAP_CPP (mtestMocs
-#      ${PROJECT_SOURCE_DIR}/mscore/musescore.h
-      ${PROJECT_SOURCE_DIR}/mscore/qmlplugin.h
-      )
-
 add_library(
       testutils STATIC
-      ${mtestMocs}
       testutils.cpp
       ${PROJECT_SOURCE_DIR}/libmscore/mcursor.cpp
       ${PROJECT_SOURCE_DIR}/mscore/album.cpp
@@ -79,6 +73,8 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_key.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_tempo.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_model.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_instrument.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_chordname.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp

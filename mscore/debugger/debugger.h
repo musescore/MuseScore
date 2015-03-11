@@ -54,6 +54,7 @@
 #include "ui_harmony.h"
 #include "ui_spanner.h"
 #include "ui_system.h"
+#include "ui_timesig.h"
 
 #include "globals.h"
 #include "libmscore/element.h"
@@ -220,7 +221,7 @@ class ChordDebug : public ShowElementBase {
       void stemSlashClicked();
       void arpeggioClicked();
       void tremoloClicked();
-      void glissandoClicked();
+//      void glissandoClicked();
 
    public:
       ChordDebug();
@@ -281,18 +282,6 @@ class RestView : public ShowElementBase {
 
    public:
       RestView();
-      virtual void setElement(Element*);
-      };
-
-//---------------------------------------------------------
-//   ShowTimesigWidget
-//---------------------------------------------------------
-
-class ShowTimesigWidget : public ShowElementBase {
-      Q_OBJECT;
-
-   public:
-      ShowTimesigWidget();
       virtual void setElement(Element*);
       };
 
@@ -756,6 +745,20 @@ class SystemView : public ShowElementBase {
 
    public:
       SystemView();
+      virtual void setElement(Element*);
+      };
+
+//---------------------------------------------------------
+//   TimeSigView
+//---------------------------------------------------------
+
+class TimeSigView : public ShowElementBase {
+      Q_OBJECT;
+
+      Ui::TimeSig tb;
+
+   public:
+      TimeSigView();
       virtual void setElement(Element*);
       };
 

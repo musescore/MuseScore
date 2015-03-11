@@ -168,7 +168,8 @@ int FiguredBassItem::parsePrefixSuffix(QString& str, bool bPrefix)
                         else
                               return -1;              // but no other combination is acceptable
                         }
-                  *dest = Modifier::FLAT;
+                  else
+                        *dest = Modifier::FLAT;
                   break;
             case 'h':
                   if(*dest != Modifier::NONE)           // cannot combine with any other accidental
@@ -182,7 +183,8 @@ int FiguredBassItem::parsePrefixSuffix(QString& str, bool bPrefix)
                         else
                               return -1;              // but no other combination is acceptable
                         }
-                  *dest = Modifier::SHARP;
+                  else
+                        *dest = Modifier::SHARP;
                   break;
             case '+':
                   // accept '+' as both a prefix and a suffix for harmony notation
@@ -775,8 +777,6 @@ void FiguredBassItem::undoSetParenth5(Parenthesis par)
 //   Convert MusicXML prefix/suffix to Modifier
 //---------------------------------------------------------
 
-// TODO add missing non-accidental types
-
 FiguredBassItem::Modifier FiguredBassItem::MusicXML2Modifier(const QString prefix) const
       {
       if (prefix == "sharp")
@@ -791,6 +791,10 @@ FiguredBassItem::Modifier FiguredBassItem::MusicXML2Modifier(const QString prefi
             return Modifier::DOUBLEFLAT;
       else if (prefix == "sharp-sharp")
             return Modifier::DOUBLESHARP;
+      else if (prefix == "cross")
+            return Modifier::CROSS;
+      else if (prefix == "backslash")
+            return Modifier::BACKSLASH;
       else if (prefix == "slash")
             return Modifier::SLASH;
       else
@@ -801,8 +805,6 @@ FiguredBassItem::Modifier FiguredBassItem::MusicXML2Modifier(const QString prefi
 //   Convert Modifier to MusicXML prefix/suffix
 //---------------------------------------------------------
 
-// TODO add missing non-accidental types
-
 QString FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) const
       {
       switch (prefix) {
@@ -812,8 +814,8 @@ QString FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) con
             case Modifier::NATURAL:     return "natural";
             case Modifier::SHARP:       return "sharp";
             case Modifier::DOUBLESHARP: return "double-sharp";
-            case Modifier::CROSS:       return ""; // TODO TBD
-            case Modifier::BACKSLASH:   return ""; // TODO TBD
+            case Modifier::CROSS:       return "cross";
+            case Modifier::BACKSLASH:   return "backslash";
             case Modifier::SLASH:       return "slash";
             case Modifier::NUMOF:       return ""; // prevent gcc "‘FBINumOfAccid’ not handled in switch" warning
             }
@@ -829,14 +831,12 @@ QString FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) con
 //---------------------------------------------------------
 
 #if 0
-void FiguredBassItem::readMusicXML(XmlReader& e, bool paren, bool& extend)
+void FiguredBassItem::readMusicXML(XmlReader& e, bool paren)
       {
       // read the <figure> node de
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "extend")
-                  extend = true;
-            else if (tag == "figure-number") {
+            if (tag == "figure-number") {
                   // MusicXML spec states figure-number is a number
                   // MuseScore can only handle single digit
                   int iVal = e.readInt();
@@ -872,12 +872,25 @@ void FiguredBassItem::readMusicXML(XmlReader& e, bool paren, bool& extend)
 
 //---------------------------------------------------------
 //   Write MusicXML
+//
+// Writes the portion within the <figure> tag.
+//
+// NOTE: Both MuseScore and MusicXML provide two ways of altering the (temporal) length of a
+// figured bass object: extension lines and duration. The convention is that an EXTENSION is
+// used if the figure lasts LONGER than the note (i.e., it "extends" to the following notes),
+// whereas DURATION is used if the figure lasts SHORTER than the note (e.g., when notating a
+// figure change under a note). However, MuseScore does not restrict durations in this way,
+// allowing them to act as extensions themselves. As a result, a few more branches are
+// required in the decision tree to handle everything correctly.
 //---------------------------------------------------------
 
-void FiguredBassItem::writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const
+void FiguredBassItem::writeMusicXML(Xml& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const
       {
       xml.stag("figure");
-      if (doFigure) {
+
+      // The first figure of each group is the "original" figure. Practically, it is one inserted manually
+      // by the user, rather than automatically by the "duration" extend method.
+      if (isOriginalFigure) {
             QString strPrefix = Modifier2MusicXML(_prefix);
             if (strPrefix != "")
                   xml.tag("prefix", strPrefix);
@@ -886,9 +899,30 @@ void FiguredBassItem::writeMusicXML(Xml& xml, bool doFigure, bool doExtend) cons
             QString strSuffix = Modifier2MusicXML(_suffix);
             if (strSuffix != "")
                   xml.tag("suffix", strSuffix);
+
+            // Check if the figure ends before or at the same time as the current note. Otherwise, the figure
+            // extends to the next note, and so carries an extension type "start" by definition.
+            if (fbEndTick <= crEndTick) {
+                  if (_contLine == ContLine::SIMPLE)
+                        xml.tagE("extend type=\"stop\" ");
+                  else if (_contLine == ContLine::EXTENDED) {
+                        bool hasFigure = (strPrefix != "" || _digit != FBIDigitNone || strSuffix != "");
+                        if (hasFigure)
+                              xml.tagE("extend type=\"start\" ");
+                        else
+                              xml.tagE("extend type=\"continue\" ");
+                        }
+                  }
+            else
+                  xml.tagE("extend type=\"start\" ");
             }
-      if (doExtend) {
-            xml.tagE("extend");
+      // If the figure is not "original", it must have been created using the "duration" feature of figured bass.
+      // In other words, the original figure belongs to a previous note rather than the current note.
+      else {
+            if (crEndTick < fbEndTick)
+                  xml.tagE("extend type=\"continue\" ");
+            else
+                  xml.tagE("extend type=\"stop\" ");
             }
       xml.etag();
       }
@@ -931,7 +965,9 @@ FiguredBass::FiguredBass(const FiguredBass& fb)
       {
       setOnNote(fb.onNote());
       setTicks(fb.ticks());
-      items = fb.items;
+      for (auto i : fb.items)       // deep copy is needed
+            items.push_back(new FiguredBassItem(*i));
+//      items = fb.items;
       }
 
 FiguredBass::~FiguredBass()
@@ -1344,7 +1380,7 @@ FiguredBassItem * FiguredBass::addItem()
 //   STATIC FUNCTION
 //    adding a new FiguredBass to a Segment;
 //    the main purpose of this function is to ensure that ONLY ONE F.b. element exists for each Segment/staff;
-//    it either re-uses an existing FiguredBass or creates a new one if none if found;
+//    it either re-uses an existing FiguredBass or creates a new one if none is found;
 //    returns the FiguredBass and sets pNew to true if it has been newly created.
 //
 //    Sets an initial duration of the element up to the next ChordRest of the same staff.
@@ -1608,13 +1644,11 @@ bool FiguredBass::fontData(int nIdx, QString * pFamily, QString * pDisplayName,
 // as the required context is not present in the items DOM tree.
 // Exception: if a <duration> element is present, tick can be set.
 // Return true if valid, non-empty figure(s) are found
-// Set extend to true if extend elements were found
 //---------------------------------------------------------
 
 #if 0
-bool FiguredBass::readMusicXML(XmlReader& e, int divisions, bool& extend)
+bool FiguredBass::readMusicXML(XmlReader& e, int divisions)
       {
-      extend = false;
       bool parentheses = e.attribute("parentheses") == "yes";
       QString normalizedText;
       int idx = 0;
@@ -1634,13 +1668,10 @@ bool FiguredBass::readMusicXML(XmlReader& e, int divisions, bool& extend)
                                qPrintable(val));
                   }
             else if (tag == "figure") {
-                  bool figureExtend = false;
                   FiguredBassItem * pItem = new FiguredBassItem(score(), idx++);
                   pItem->setTrack(track());
                   pItem->setParent(this);
-                  pItem->readMusicXML(e, parentheses, figureExtend);
-                  if (figureExtend)
-                        extend = true;
+                  pItem->readMusicXML(e, parentheses);
                   items.append(*pItem);
                   // add item normalized text
                   if (!normalizedText.isEmpty())
@@ -1676,17 +1707,17 @@ bool FiguredBass::hasParentheses() const
 //   Write MusicXML
 //---------------------------------------------------------
 
-void FiguredBass::writeMusicXML(Xml& xml, bool doFigure, bool doExtend) const
+void FiguredBass::writeMusicXML(Xml& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const
       {
-      if (doFigure || doExtend) {
-            QString stag = "figured-bass";
-            if (hasParentheses())
-                  stag += " parentheses=\"yes\"";
-            xml.stag(stag);
-            for(FiguredBassItem* item : items)
-                  item->writeMusicXML(xml, doFigure, doExtend);
-            xml.etag();
-            }
+      QString stag = "figured-bass";
+      if (hasParentheses())
+            stag += " parentheses=\"yes\"";
+      xml.stag(stag);
+      for(FiguredBassItem* item : items)
+            item->writeMusicXML(xml, isOriginalFigure, crEndTick, fbEndTick);
+      if (writeDuration)
+            xml.tag("duration", ticks() / divisions);
+      xml.etag();
       }
 
 //---------------------------------------------------------

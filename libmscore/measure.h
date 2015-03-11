@@ -155,7 +155,7 @@ class Measure : public MeasureBase {
 
       void push_back(Segment* e);
       void push_front(Segment* e);
-      void layoutCR0(ChordRest* cr, qreal m);
+      void layoutCR0(ChordRest* cr, qreal m, AccidentalState*);
 
    public:
       Measure(Score* = 0);
@@ -242,7 +242,7 @@ class Measure : public MeasureBase {
       void insertStaves(int s, int e);
 
       qreal tick2pos(int) const;
-      Segment* tick2segment(int) const;
+      Segment* tick2segment(int tick, Segment::Type st = Segment::Type::ChordRest) const;
 
       void sortStaves(QList<int>& dst);
 
@@ -302,8 +302,6 @@ class Measure : public MeasureBase {
       bool isEmpty() const;
       bool isOnlyRests(int track) const;
 
-      void updateNotes(int staffIdx);
-      void cmdUpdateNotes(int staffIdx);
 
       void layoutStage1();
       int playbackCount() const      { return _playbackCount; }

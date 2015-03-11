@@ -37,6 +37,10 @@ LoginDialog::LoginDialog(LoginManager* loginManager)
  : QDialog(0)
       {
       setupUi(this);
+      setStyleSheet("QLineEdit { "
+            "padding: 8px 8px;"
+      "}");
+
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       connect(buttonBox,   SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
       _loginManager = loginManager;

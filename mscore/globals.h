@@ -30,6 +30,7 @@ extern bool noMidi;           ///< Dont use midi; cmd line option.
 extern bool midiInputTrace;   ///< debug option: dump midi input
 extern bool midiOutputTrace;  ///< debug option: dump midi output
 extern bool converterMode;
+extern bool pluginMode;
 extern double converterDpi;
 extern double guiScaling;
 extern int trimMargin;

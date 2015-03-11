@@ -30,7 +30,7 @@ class Hook;
 class Arpeggio;
 class Tremolo;
 class Chord;
-class Glissando;
+//class Glissando;
 class Stem;
 class Chord;
 class StemSlash;
@@ -78,7 +78,7 @@ class Chord : public ChordRest {
 
       Arpeggio*           _arpeggio;
       Tremolo*            _tremolo;
-      Glissando*          _glissando;
+      bool                _endsGlissando;///< true if this chord is the ending point of a glissando (nneeded for layout)
       ElementList         _el;           ///< chordline, slur
       QList<Chord*>       _graceNotes;
       int                 _graceIndex;   ///< if this is a grace note, index in parent list
@@ -146,15 +146,19 @@ class Chord : public ChordRest {
       Arpeggio* arpeggio() const             { return _arpeggio;  }
       Tremolo* tremolo() const               { return _tremolo;   }
       void setTremolo(Tremolo* t)            { _tremolo = t;      }
-      Glissando* glissando() const           { return _glissando; }
+//      Glissando* glissando() const           { return _glissando; }
+      bool endsGlissando() const             { return _endsGlissando; }
+      void setEndsGlissando (bool val)       { _endsGlissando = val; }
       StemSlash* stemSlash() const           { return _stemSlash; }
       bool slash();
       void setSlash(bool flag, bool stemless);
 
       const QList<Chord*>& graceNotes() const { return _graceNotes; }
       QList<Chord*>& graceNotes()             { return _graceNotes; }
-      int getGraceNotesBefore(QList<Chord*>*);
-      int getGraceNotesAfter(QList<Chord*>*);
+
+      QList<Chord*> graceNotesBefore() const;
+      QList<Chord*> graceNotesAfter() const;
+
       int graceIndex() const                        { return _graceIndex; }
       void setGraceIndex(int val)                   { _graceIndex = val;  }
 
@@ -172,7 +176,6 @@ class Chord : public ChordRest {
       Note* selectedNote() const;
       virtual void layout();
       void layout2();
-      void updateNotes(AccidentalState*);
       void cmdUpdateNotes(AccidentalState*);
 
       NoteType noteType() const       { return _noteType; }

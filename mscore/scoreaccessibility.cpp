@@ -7,8 +7,13 @@
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "inspector/inspector.h"
+#include "selectionwindow.h"
+#include "playpanel.h"
+#include "synthcontrol.h"
+#include "mixer.h"
 
 namespace Ms{
+
 AccessibleScoreView::AccessibleScoreView(ScoreView* scView) : QAccessibleWidget(scView){
       s = scView;
       }
@@ -179,7 +184,13 @@ void ScoreAccessibility::updateAccessibilityInfo()
       //when this method is called
       if ( (qApp->focusWidget() != w) &&
            !mscore->inspector()->isAncestorOf(qApp->focusWidget()) &&
+           !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(qApp->focusWidget())) &&
+           !(mscore->getSelectionWindow() && mscore->getSelectionWindow()->isAncestorOf(qApp->focusWidget())) &&
+           !(mscore->getPlayPanel() && mscore->getPlayPanel()->isAncestorOf(qApp->focusWidget())) &&
+           !(mscore->getSynthControl() && mscore->getSynthControl()->isAncestorOf(qApp->focusWidget())) &&
+           !(mscore->getMixer() && mscore->getMixer()->isAncestorOf(qApp->focusWidget())) &&
            !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(qApp->focusWidget())) ) {
+            mscore->activateWindow();
             w->setFocus();
             }
       QObject* obj = static_cast<QObject*>(w);
@@ -193,9 +204,9 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
             return std::pair<int, float>(0, 0);
             }
 
-      int bar;
-      int beat;
-      int ticks;
+      int bar = 0;
+      int beat = 0;
+      int ticks = 0;
       TimeSigMap* tsm = e->score()->sigmap();
       Element* p = e;
       while(p && p->type() != Element::Type::SEGMENT && p->type() != Element::Type::MEASURE)

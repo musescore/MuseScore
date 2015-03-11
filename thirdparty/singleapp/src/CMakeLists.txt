@@ -20,16 +20,10 @@
 
 include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
-QT4_WRAP_CPP (mocs
-      qtsingleapplication.h
-      qtlocalpeer.h
-      )
-
 add_library (
   qtsingleapp STATIC
   ${PROJECT_BINARY_DIR}/all.h
   ${PCH}
-  ${mocs}
   qtsingleapplication.cpp
   qtlocalpeer.cpp
   )

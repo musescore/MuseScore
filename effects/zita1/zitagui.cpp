@@ -25,7 +25,6 @@ EffectGui* ZitaReverb::gui()
       if (!_gui) {
             _gui = new ZitaEffectGui(this);
             _gui->setGeometry(0, 0, 644, 79);
-            _gui->show();
             }
       return _gui;
       }

@@ -131,9 +131,9 @@ bool MP3Exporter::loadLibrary(AskUser askuser)
       if (!validLibraryLoaded()) {
             qDebug("(Maybe) ask user for library");
             int ret = QMessageBox::question(0, qApp->translate("MP3Exporter", "Save as MP3"),
-                  qApp->translate("MP3Exporter", "MuseScore does not export MP3 files directly, but instead uses \n"
-                   "the freely available LAME library.  You must obtain %1 \n"
-                   "separately, and then locate the file for MuseScore.\n"
+                  qApp->translate("MP3Exporter", "MuseScore does not export MP3 files directly, but instead uses "
+                   "the freely available LAME library.  You must obtain %1 "
+                   "separately (for details check the handbook), and then locate the file for MuseScore.\n"
                    "You only need to do this once.\n\n"
                    "Would you like to locate %2 now?").arg(getLibraryName()).arg(getLibraryName()),
                    QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
@@ -711,19 +711,21 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       for (int pass = 0; pass < 2; ++pass) {
             EventMap::const_iterator playPos;
             playPos = events.cbegin();
+            synti->allSoundsOff(-1);
+
             //
             // init instruments
             //
             foreach(Part* part, score->parts()) {
                   InstrumentList* il = part->instrList();
                   for(auto i = il->begin(); i!= il->end(); i++) {
-                        foreach(const Channel& a, i->second.channel()) {
-                              a.updateInitList();
-                              foreach(MidiCoreEvent e, a.init) {
+                        foreach(const Channel* a, i->second->channel()) {
+                              a->updateInitList();
+                              foreach(MidiCoreEvent e, a->init) {
                                     if (e.type() == ME_INVALID)
                                           continue;
-                                    e.setChannel(a.channel);
-                                    int syntiIdx= synti->index(score->midiMapping(a.channel)->articulation->synti);
+                                    e.setChannel(a->channel);
+                                    int syntiIdx= synti->index(score->midiMapping(a->channel)->articulation->synti);
                                     synti->play(e, syntiIdx);
                                     }
                               }
@@ -734,6 +736,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
             for (;;) {
                   unsigned frames = FRAMES;
+                  float max = 0;
                   //
                   // collect events for one segment
                   //
@@ -785,6 +788,8 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
                   if (pass == 1) {
                         for (int i = 0; i < FRAMES; ++i) {
+                              max = qMax(max, qAbs(bufferL[i]));
+                              max = qMax(max, qAbs(bufferR[i]));
                               bufferL[i] *= gain;
                               bufferR[i] *= gain;
                               }
@@ -808,13 +813,16 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                         }
                   else {
                         for (int i = 0; i < FRAMES; ++i) {
+                              max = qMax(max, qAbs(bufferL[i]));
+                              max = qMax(max, qAbs(bufferR[i]));
                               peak = qMax(peak, qAbs(bufferL[i]));
                               peak = qMax(peak, qAbs(bufferR[i]));
                               }
                         }
                   playTime = endTime;
                   pBar->setValue((pass * et + playTime) / 2);
-                  if (playTime >= et)
+                  // create sound until the sound decays
+                  if (playTime >= et && max * peak < 0.000001)
                         break;
                   }
             if (pass == 0 && peak == 0.0) {

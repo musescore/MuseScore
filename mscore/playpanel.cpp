@@ -51,6 +51,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       move(settings.value("playPanel/pos", QPoint(DEFAULT_POS_X, DEFAULT_POS_Y)).toPoint());
 
       setScore(0);
+
       playButton->setDefaultAction(getAction("play"));
       rewindButton->setDefaultAction(getAction("rewind"));
       countInButton->setDefaultAction(getAction("countin"));
@@ -58,9 +59,11 @@ PlayPanel::PlayPanel(QWidget* parent)
       loopButton->setDefaultAction(getAction("loop"));
       loopInButton->setDefaultAction(getAction("loop-in"));
       loopOutButton->setDefaultAction(getAction("loop-out"));
+      enablePlay = new EnablePlayForWidget(this);
 
       tempoSlider->setDclickValue1(100.0);
       tempoSlider->setDclickValue2(100.0);
+      tempoSlider->setUseActualValue(true);
 
       connect(volumeSlider, SIGNAL(valueChanged(double,int)), SLOT(volumeChanged(double,int)));
       connect(posSlider,    SIGNAL(sliderMoved(int)),         SLOT(setPos(int)));
@@ -138,6 +141,37 @@ void PlayPanel::hideEvent(QHideEvent* ev)
       }
 
 //---------------------------------------------------------
+//   showEvent
+//---------------------------------------------------------
+
+void PlayPanel::showEvent(QShowEvent* e)
+      {
+      enablePlay->showEvent(e);
+      QWidget::showEvent(e);
+      activateWindow();
+      setFocus();
+      }
+
+//---------------------------------------------------------
+//   eventFilter
+//---------------------------------------------------------
+
+bool PlayPanel::eventFilter(QObject* obj, QEvent* e)
+      {
+      if (enablePlay->eventFilter(obj, e))
+            return true;
+      return QWidget::eventFilter(obj, e);
+      }
+
+void PlayPanel::keyPressEvent(QKeyEvent* ev) {
+      if (ev->key() == Qt::Key_Escape && ev->modifiers() == Qt::NoModifier) {
+            close();
+            return;
+            }
+      QWidget::keyPressEvent(ev);
+      }
+
+//---------------------------------------------------------
 //   setScore
 //---------------------------------------------------------
 
@@ -158,7 +192,7 @@ void PlayPanel::setScore(Score* s)
             heartBeat(tick, tick, 0);
             }
       else {
-            setTempo(120.0);
+            setTempo(2.0);
             setRelTempo(1.0);
             setEndpos(0);
             heartBeat(0, 0, 0);

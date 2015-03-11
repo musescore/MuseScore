@@ -100,7 +100,7 @@ void Score::write(Xml& xml, bool selectionOnly)
                               startCmd();
                               unhide = true;
                               }
-                        undo(new ChangePartProperty(part, 0, true));
+                        part->undoChangeProperty(P_ID::VISIBLE, true);
                         hiddenParts.append(part);
                         }
                   }
@@ -175,9 +175,6 @@ void Score::write(Xml& xml, bool selectionOnly)
             xml.etag();
             }
 
-      foreach(const Part* part, _parts)
-            part->write(xml);
-
       xml.curTrack = 0;
       int staffStart;
       int staffEnd;
@@ -188,9 +185,6 @@ void Score::write(Xml& xml, bool selectionOnly)
             staffStart   = _selection.staffStart();
             staffEnd     = _selection.staffEnd();
             measureStart = _selection.startSegment()->measure();
-            // include title frames:
-            while (measureStart->prev() && !measureStart->prev()->sectionBreak())
-                  measureStart = measureStart->prev();
             if (_selection.endSegment())
                   measureEnd   = _selection.endSegment()->measure()->next();
             else
@@ -203,10 +197,16 @@ void Score::write(Xml& xml, bool selectionOnly)
             measureEnd   = 0;
             }
 
+      foreach(const Part* part, _parts) {
+            if (!selectionOnly || ((staffIdx(part) >= staffStart) && (staffEnd >= staffIdx(part) + part->nstaves())))
+                  part->write(xml);
+            }
+
+      xml.curTrack = 0;
       xml.trackDiff = -staffStart * VOICES;
       if (measureStart) {
             for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
-                  xml.stag(QString("Staff id=\"%1\"").arg(staffIdx + 1));
+                  xml.stag(QString("Staff id=\"%1\"").arg(staffIdx + 1 - staffStart));
                   xml.curTick  = measureStart->tick();
                   xml.tickDiff = xml.curTick;
                   xml.curTrack = staffIdx * VOICES;
@@ -359,7 +359,6 @@ bool Score::saveFile()
                   return false;
                   }
             undo()->setClean();
-            setDirty(false);
             info.refresh();
             update();
             return true;
@@ -438,7 +437,6 @@ bool Score::saveFile()
          | QFile::ReadGroup | QFile::ReadOther);
 
       undo()->setClean();
-      setDirty(false);
       setSaved(true);
       info.refresh();
       update();
@@ -1176,7 +1174,21 @@ bool Score::read(XmlReader& e)
             int n = nstaves();
             if (idx + barLineSpan > n) {
                   qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);
-                  st->setBarLineSpan(n - idx);
+                  // span until last staff
+                  barLineSpan = n - idx;
+                  st->setBarLineSpan(barLineSpan);
+                  }
+            else if (idx == 0 && barLineSpan == 0) {
+                  qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);
+                  // span from the first staff until the start of the next span
+                  barLineSpan = 1;
+                  for (int i = 1; i < n; ++i) {
+                        if (staff(i)->barLineSpan() == 0)
+                              ++barLineSpan;
+                        else
+                              break;
+                        }
+                  st->setBarLineSpan(barLineSpan);
                   }
             // check spanFrom
             if(st->barLineFrom() < MIN_BARLINE_SPAN_FROMTO)
@@ -1209,7 +1221,6 @@ bool Score::read(XmlReader& e)
       fixTicks();
       rebuildMidiMapping();
       updateChannel();
-//      updateNotes();          // only for parts needed?
       createPlayEvents();
       setExcerptsChanged(false);
       return true;

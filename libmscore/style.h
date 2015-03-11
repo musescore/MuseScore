@@ -260,7 +260,7 @@ enum class StyleIdx : unsigned char {
       smallClefMag,
       genClef,
       genKeysig,
-      genTimesig,
+//      genTimesig,
       genCourtesyTimesig,
       genCourtesyKeysig,
       genCourtesyClef,
@@ -295,8 +295,6 @@ enum class StyleIdx : unsigned char {
       ArpeggioNoteDistance,
       ArpeggioLineWidth,
       ArpeggioHookLen,
-      FixMeasureNumbers,
-      FixMeasureWidth,
 
       SlurEndWidth,
       SlurMidWidth,
@@ -363,6 +361,7 @@ enum class StyleIdx : unsigned char {
       barreLineWidth,
       fretMag,
       scaleBarlines,
+      barGraceDistance,
 
 
       STYLES

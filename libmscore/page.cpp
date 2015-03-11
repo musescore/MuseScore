@@ -83,7 +83,7 @@ const PaperSize* getPaperSize(const QString& name)
                   return &paperSizes[i];
             }
       qDebug("unknown paper size");
-      return &paperSizes[(sizeof paperSizes/sizeof(PaperSize)) - 2];
+      return &paperSizes[0];
       }
 
 //---------------------------------------------------------
@@ -119,7 +119,7 @@ const PaperSize* getPaperSize(const qreal wi, const qreal hi)
             }
       qDebug("unknown paper size for %f x %f", wi, hi);
       //return custom
-      return &paperSizes[(sizeof paperSizes/sizeof(PaperSize)) - 2];
+      return &paperSizes[0];
       }
 
 //---------------------------------------------------------
@@ -422,7 +422,7 @@ void PageFormat::read(XmlReader& e, Score* score)
             _size.transpose();
       qreal w1 = _size.width() - _oddLeftMargin - _oddRightMargin;
       qreal w2 = _size.width() - _evenLeftMargin - _evenRightMargin;
-      _printableWidth = qMax(w1, w2);     // silently adjust right margins
+      _printableWidth = qMin(w1, w2);     // silently adjust right margins
       }
 
 //---------------------------------------------------------
@@ -541,16 +541,20 @@ QString Page::replaceTextMacros(const QString& s) const
                         case 'N': // on page 1 only if there are multiple pages
                               if ( (_score->npages() + _score->pageNumberOffset()) > 1 ) // FALLTHROUGH
                         case 'P': // on all pages
-                              d += QString("%1").arg(_no + 1 + _score->pageNumberOffset());
+                              {
+                              int no = _no + 1 + _score->pageNumberOffset();
+                              if (no > 0 )
+                                    d += QString("%1").arg(no);
+                              }
                               break;
                         case 'n':
                               d += QString("%1").arg(_score->npages() + _score->pageNumberOffset());
                               break;
                         case 'f':
-                              d += _score->rootScore()->name();
+                              d += _score->rootScore()->name().toHtmlEscaped();
                               break;
                         case 'F':
-                              d += _score->rootScore()->fileInfo()->absoluteFilePath();
+                              d += _score->rootScore()->fileInfo()->absoluteFilePath().toHtmlEscaped();
                               break;
                         case 'd':
                               d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
@@ -579,7 +583,7 @@ QString Page::replaceTextMacros(const QString& s) const
                         case 'C': // only on first page
                               if (!_no) // FALLTHROUGH
                         case 'c':
-                              d += _score->metaTag("copyright");
+                              d += _score->metaTag("copyright").toHtmlEscaped();
                               break;
                         case '$':
                               d += '$';
@@ -594,7 +598,7 @@ QString Page::replaceTextMacros(const QString& s) const
                                     tag += s[k];
                                     }
                               if (k != n) {       // found ':' ?
-                                    d += _score->metaTag(tag);
+                                    d += _score->metaTag(tag).toHtmlEscaped();
                                     i = k-1;
                                     }
                               }

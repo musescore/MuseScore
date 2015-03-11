@@ -36,7 +36,7 @@ class InstrumentTemplate;
 //   @P startTrack int      (read only)
 //---------------------------------------------------------
 
-class Part : public QObject {
+class Part : public QObject, public ScoreElement {
       Q_OBJECT
 
       Q_PROPERTY(QString partName READ partName WRITE setPartName)
@@ -49,8 +49,6 @@ class Part : public QObject {
       Q_PROPERTY(int startTrack READ startTrack)
       Q_PROPERTY(int midiProgram READ midiProgram)
       Q_PROPERTY(QString instrumentId READ instrumentId)
-
-      Score* _score;
 
       QString _partName;           ///< used in tracklist (mixer)
       InstrumentList _instrList;
@@ -77,16 +75,16 @@ class Part : public QObject {
       int startTrack() const;
       int endTrack() const;
 
-      QString longName(int tick = 0) const;
-      QString shortName(int tick = 0) const;
-      QString instrumentName(int tick = 0) const;
-      QString instrumentId(int tick = 0) const;
+      QString longName(int tick = -1) const;
+      QString shortName(int tick = -1) const;
+      QString instrumentName(int tick = -1) const;
+      QString instrumentId(int tick = -1) const;
 
-      const QList<StaffName>& longNames(int tick = 0) const  { return instr(tick)->longNames();  }
-      const QList<StaffName>& shortNames(int tick = 0) const { return instr(tick)->shortNames(); }
+      const QList<StaffName>& longNames(int tick = -1) const  { return instr(tick)->longNames();  }
+      const QList<StaffName>& shortNames(int tick = -1) const { return instr(tick)->shortNames(); }
 
-      void setLongNames(QList<StaffName>& s, int tick = 0);
-      void setShortNames(QList<StaffName>& s, int tick = 0);
+      void setLongNames(QList<StaffName>& s, int tick = -1);
+      void setShortNames(QList<StaffName>& s, int tick = -1);
 
       void setLongName(const QString& s);
       void setShortName(const QString& s);
@@ -99,7 +97,9 @@ class Part : public QObject {
       void setMute(bool mute);
 
       int reverb() const;
+      void setReverb(int);
       int chorus() const;
+      void setChorus(int);
       int pan() const;
       void setPan(int pan);
       int midiProgram() const;
@@ -113,21 +113,21 @@ class Part : public QObject {
       void removeStaff(Staff*);
       bool show() const                        { return _show;  }
       void setShow(bool val)                   { _show = val;   }
-      Score* score() const                     { return _score; }
 
-      Instrument* instr(int tick = 0);
-      const Instrument* instr(int tick = 0) const;
-      void setInstrument(const Instrument&, int tick = 0);
+      Instrument* instr(int tick = -1);
+      const Instrument* instr(int tick = -1) const;
+      void setInstrument(Instrument*, int tick = -1);       // transfer ownership
+      void setInstrument(const Instrument&&, int tick = -1);
+      void setInstrument(const Instrument&, int tick = -1);
       void removeInstrument(int tick);
 
       QString partName() const                 { return _partName; }
       void setPartName(const QString& s)       { _partName = s; }
       InstrumentList* instrList()              { return &_instrList;       }
 
-      QVariant getProperty(int id) const;
-      void setProperty(int id, const QVariant& property);
+      QVariant getProperty(P_ID) const override;
+      bool setProperty(P_ID, const QVariant&) override;
       };
-
 
 }     // namespace Ms
 #endif

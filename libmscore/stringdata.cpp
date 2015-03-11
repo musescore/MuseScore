@@ -13,7 +13,9 @@
 #include "stringdata.h"
 #include "chord.h"
 #include "note.h"
+#include "part.h"
 #include "score.h"
+#include "staff.h"
 #include "undo.h"
 
 namespace Ms {
@@ -87,7 +89,7 @@ void StringData::write(Xml& xml) const
 //   convertPitch
 //   Finds string and fret for a note.
 //
-//   Fills *string and *fret with suitable values for pitch
+//   Fills *string and *fret with suitable values for pitch at given tick of given staff,
 //   using the highest possible string.
 //   If note cannot be fretted, uses fret 0 on nearest string and returns false
 //
@@ -96,11 +98,193 @@ void StringData::write(Xml& xml) const
 //          from highest (0) to lowest (strings()-1)
 //---------------------------------------------------------
 
-bool StringData::convertPitch(int pitch, int* string, int* fret) const
+bool StringData::convertPitch(int pitch, Staff* staff, int tick, int* string, int* fret) const
+      {
+      return convertPitch(pitch, pitchOffsetAt(staff, tick), string, fret);
+      }
+
+//---------------------------------------------------------
+//   getPitch
+//    Returns the pitch corresponding to the string / fret combination
+//    at given tick of given staff.
+//    Returns INVALID_PITCH if not possible
+//    Note: frets above max fret are accepted.
+//---------------------------------------------------------
+
+int StringData::getPitch(int string, int fret, Staff* staff, int tick) const
+      {
+      return getPitch(string, fret, pitchOffsetAt(staff, tick));
+      }
+
+//---------------------------------------------------------
+//   fret
+//    Returns the fret corresponding to the pitch / string combination
+//    at given tick of given staff.
+//    Returns FRET_NONE if not possible
+//---------------------------------------------------------
+
+int StringData::fret(int pitch, int string, Staff* staff, int tick) const
+      {
+      return fret(pitch, string, pitchOffsetAt(staff, tick));
+      }
+
+//---------------------------------------------------------
+//   fretChords
+//    Assigns fretting to all the notes of each chord in the same segment of chord
+//    re-using existing fretting wherever possible
+//
+//    Minimizes fret conflicts (multiple notes on the same string)
+//    but marks as fretConflict notes which cannot be fretted
+//    (outside tablature range) or which cannot be assigned
+//    a separate string
+//---------------------------------------------------------
+
+void StringData::fretChords(Chord * chord) const
+      {
+      int   nFret, minFret, maxFret, nNewFret, nTempFret;
+      int   nString, nNewString, nTempString;
+
+      if(bFretting)
+            return;
+      bFretting = true;
+
+      // we need to keep track of string allocation
+      int bUsed[strings()];                    // initially all strings are available
+      for(nString=0; nString<strings(); nString++)
+            bUsed[nString] = 0;
+      // we also need the notes sorted in order of string (from highest to lowest) and then pitch
+      QMap<int, Note *> sortedNotes;
+      int   count = 0;
+      // store staff pitch offset at this tick, to speed up actual note pitch calculations
+      // (ottavas not implemented yet)
+      int transp = chord->staff() ? chord->staff()->part()->instr()->transpose().chromatic : 0;
+      int pitchOffset = /*chord->staff()->pitchOffset(chord->segment()->tick())*/ - transp;
+      // if chord parent is not a segment, the chord is special (usually a grace chord):
+      // fret it by itself, ignoring the segment
+      if (chord->parent()->type() != Element::Type::SEGMENT)
+            sortChordNotes(sortedNotes, chord, pitchOffset, &count);
+      else {
+            // scan each chord of seg from same staff as 'chord', inserting each of its notes in sortedNotes
+            Segment* seg = chord->segment();
+            int trk;
+            int trkFrom = (chord->track() / VOICES) * VOICES;
+            int trkTo   = trkFrom + VOICES;
+            for(trk = trkFrom; trk < trkTo; ++trk) {
+                  Element* ch = seg->elist().at(trk);
+                  if (ch && ch->type() == Element::Type::CHORD)
+                        sortChordNotes(sortedNotes, static_cast<Chord*>(ch), pitchOffset, &count);
+                  }
+            }
+      // determine used range of frets
+      minFret = INT32_MAX;
+      maxFret = INT32_MIN;
+      foreach(Note* note, sortedNotes) {
+            if (note->string() != STRING_NONE)
+                  bUsed[note->string()]++;
+            if (note->fret() != FRET_NONE && note->fret() < minFret)
+                  minFret = note->fret();
+            if (note->fret() != FRET_NONE && note->fret() > maxFret)
+                  maxFret = note->fret();
+      }
+
+      // scan chord notes from highest, matching with strings from the highest
+      foreach(Note * note, sortedNotes) {
+            nString     = nNewString    = note->string();
+            nFret       = nNewFret      = note->fret();
+            note->setFretConflict(false);       // assume no conflicts on this note
+            // if no fretting (any invalid fretting has been erased by sortChordNotes() )
+            if (nString == STRING_NONE /*|| nFret == FRET_NONE || getPitch(nString, nFret) != note->pitch()*/) {
+                  // get a new fretting
+                  if (!convertPitch(note->pitch(), pitchOffset, &nNewString, &nNewFret) ) {
+                        // no way to fit this note in this tab:
+                        // mark as fretting conflict
+                        note->setFretConflict(true);
+                        // store fretting change without affecting chord context
+                        if (nFret != nNewFret)
+                              note->score()->undoChangeProperty(note, P_ID::FRET, nNewFret);
+                        if (nString != nNewString)
+                              note->score()->undoChangeProperty(note, P_ID::STRING, nNewString);
+                        continue;
+                        }
+                  // note can be fretted: use string
+                  else {
+                        bUsed[nNewString]++;
+                        }
+                  }
+
+            // if the note string (either original or newly assigned) is also used by another note
+            if (bUsed[nNewString] > 1) {
+                  // attempt to find a suitable string, from topmost
+                  for (nTempString=0; nTempString < strings(); nTempString++) {
+                        if (bUsed[nTempString] < 1
+                                    && (nTempFret=fret(note->pitch(), nTempString, pitchOffset)) != FRET_NONE) {
+                              bUsed[nNewString]--;    // free previous string
+                              bUsed[nTempString]++;   // and occupy new string
+                              nNewFret   = nTempFret;
+                              nNewString = nTempString;
+                              break;
+                              }
+                        }
+                  }
+
+            // TODO : try to optimize used fret range, avoiding eccessively open positions
+
+            // if fretting did change, store as a fret change
+            if (nFret != nNewFret)
+                  note->score()->undoChangeProperty(note, P_ID::FRET, nNewFret);
+            if (nString != nNewString)
+                  note->score()->undoChangeProperty(note, P_ID::STRING, nNewString);
+            }
+
+      // check for any remaining fret conflict
+      foreach(Note * note, sortedNotes)
+            if (bUsed[note->string()] > 1)
+                  note->setFretConflict(true);
+
+      bFretting = false;
+      }
+
+//********************
+// STATIC METHODS
+//********************
+
+//---------------------------------------------------------
+//   pitchOffsetAt
+//   Computes the pitch offset relevant for string data calculation at the given point.
+//
+//   For string data calculations, pitch offset may depend on transposition, capos and, possibly, ottavas.
+//---------------------------------------------------------
+
+int StringData::pitchOffsetAt(Staff* staff, int /*tick*/)
+      {
+      int transp = staff ? staff->part()->instr()->transpose().chromatic : 0;
+      return (/*staff->pitchOffset(tick)*/ - transp);
+      }
+
+//********************
+// PRIVATE METHODS
+//********************
+
+//---------------------------------------------------------
+//   convertPitch
+//   Finds string and fret for a note.
+//
+//   Fills *string and *fret with suitable values for pitch / pitchOffset,
+//   using the highest possible string.
+//   If note cannot be fretted, uses fret 0 on nearest string and returns false
+//
+//    Note: Strings are stored internally from lowest (0) to highest (strings()-1),
+//          but the returned *string value references strings in reversed, 'visual', order:
+//          from highest (0) to lowest (strings()-1)
+//---------------------------------------------------------
+
+bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret) const
       {
       int strings = stringTable.size();
       if (strings < 1)
             return false;
+
+      pitch += pitchOffset;
 
       // if above max fret on highest string, fret on first string, but return failure
       if(pitch > stringTable.at(strings-1).pitch + _frets) {
@@ -131,25 +315,27 @@ bool StringData::convertPitch(int pitch, int* string, int* fret) const
 
 //---------------------------------------------------------
 //   getPitch
-//   Returns the pitch corresponding to the string / fret combination
+//    Returns the pitch corresponding to the string / fret / pitchOffset combination.
+//    Returns INVALID_PITCH if not possible
+//    Note: frets above max fret are accepted.
 //---------------------------------------------------------
 
-int StringData::getPitch(int string, int fret) const
+int StringData::getPitch(int string, int fret, int pitchOffset) const
       {
       int strings = stringTable.size();
-      if (strings < 1)
+      if (string < 0 || string >= strings)
             return INVALID_PITCH;
       instrString strg = stringTable.at(strings - string - 1);
-      return strg.pitch + (strg.open ? 0 : fret);
+      return strg.pitch - pitchOffset + (strg.open ? 0 : fret);
       }
 
 //---------------------------------------------------------
 //   fret
-//    Returns the fret corresponding to the pitch / string combination
-//    returns -1 if not possible
+//    Returns the fret corresponding to the pitch / string / pitchOffset combination.
+//    returns FRET_NONE if not possible
 //---------------------------------------------------------
 
-int StringData::fret(int pitch, int string) const
+int StringData::fret(int pitch, int string, int pitchOffset) const
       {
       int strings = stringTable.size();
       if (strings < 1)                          // no strings at all!
@@ -157,122 +343,14 @@ int StringData::fret(int pitch, int string) const
 
       if (string < 0 || string >= strings)      // no such a string
             return FRET_NONE;
+
+      pitch += pitchOffset;
+
       int fret = pitch - stringTable[strings - string - 1].pitch;
       // fret number is invalid or string cannot be fretted
       if (fret < 0 || fret >= _frets || (fret > 0 && stringTable[strings - string - 1].open))
             return FRET_NONE;
       return fret;
-      }
-
-//---------------------------------------------------------
-//   fretChords
-//    Assigns fretting to all the notes of each chord in the same segment of chord
-//    re-using existing fretting wherever possible
-//
-//    Minimizes fret conflicts (multiple notes on the same string)
-//    but marks as fretConflict notes which cannot be fretted
-//    (outside tablature range) or which cannot be assigned
-//    a separate string
-//---------------------------------------------------------
-
-void StringData::fretChords(Chord * chord) const
-      {
-      int   nFret, minFret, maxFret, nNewFret, nTempFret;
-      int   nString, nNewString, nTempString;
-
-      if(bFretting)
-            return;
-      bFretting = true;
-
-      // we need to keep track of string allocation
-      int bUsed[strings()];                    // initially all strings are available
-      for(nString=0; nString<strings(); nString++)
-            bUsed[nString] = 0;
-      // we also need the notes sorted in order of string (from highest to lowest) and then pitch
-      QMap<int, Note *> sortedNotes;
-      int   count = 0;
-      // if chord parent is not a segment, the chord is special (usually a grace chord):
-      // fret it by itself, ignoring the segment
-      if (chord->parent()->type() != Element::Type::SEGMENT)
-            sortChordNotes(sortedNotes, chord, &count);
-      else {
-            // scan each chord of seg from same staff as 'chord', inserting each of its notes in sortedNotes
-            Segment* seg = chord->segment();
-            int trk;
-            int trkFrom = (chord->track() / VOICES) * VOICES;
-            int trkTo   = trkFrom + VOICES;
-            for(trk = trkFrom; trk < trkTo; ++trk) {
-                  Element* ch = seg->elist().at(trk);
-                  if (ch && ch->type() == Element::Type::CHORD)
-                        sortChordNotes(sortedNotes, static_cast<Chord*>(ch), &count);
-                  }
-            }
-      // determine used range of frets
-      minFret = INT32_MAX;
-      maxFret = INT32_MIN;
-      foreach(Note* note, sortedNotes) {
-            if (note->string() != STRING_NONE)
-                  bUsed[note->string()]++;
-            if (note->fret() != FRET_NONE && note->fret() < minFret)
-                  minFret = note->fret();
-            if (note->fret() != FRET_NONE && note->fret() > maxFret)
-                  maxFret = note->fret();
-      }
-
-      // scan chord notes from highest, matching with strings from the highest
-      foreach(Note * note, sortedNotes) {
-            nString     = nNewString    = note->string();
-            nFret       = nNewFret      = note->fret();
-            note->setFretConflict(false);       // assume no conflicts on this note
-            // if no fretting (any invalid fretting has been erased by sortChordNotes() )
-            if (nString == STRING_NONE /*|| nFret == FRET_NONE || getPitch(nString, nFret) != note->pitch()*/) {
-                  // get a new fretting
-                  if (!convertPitch(note->pitch(), &nNewString, &nNewFret) ) {
-                        // no way to fit this note in this tab:
-                        // mark as fretting conflict
-                        note->setFretConflict(true);
-                        // store fretting change without affecting chord context
-                        if (nFret != nNewFret)
-                              note->score()->undoChangeProperty(note, P_ID::FRET, nNewFret);
-                        if (nString != nNewString)
-                              note->score()->undoChangeProperty(note, P_ID::STRING, nNewString);
-                        continue;
-                        }
-                  // note can be fretted: use string
-                  else {
-                        bUsed[nNewString]++;
-                        }
-                  }
-
-            // if the note string (either original or newly assigned) is also used by another note
-            if (bUsed[nNewString] > 1) {
-                  // attempt to find a suitable string, from topmost
-                  for (nTempString=0; nTempString < strings(); nTempString++) {
-                        if (bUsed[nTempString] < 1 && (nTempFret=fret(note->pitch(), nTempString)) != FRET_NONE) {
-                              bUsed[nNewString]--;    // free previous string
-                              bUsed[nTempString]++;   // and occupy new string
-                              nNewFret   = nTempFret;
-                              nNewString = nTempString;
-                              break;
-                              }
-                        }
-                  }
-
-            // TODO : try to optimize used fret range, avoiding eccessively open positions
-
-            // if fretting did change, store as a fret change
-            if (nFret != nNewFret)
-                  note->score()->undoChangeProperty(note, P_ID::FRET, nNewFret);
-            if (nString != nNewString)
-                  note->score()->undoChangeProperty(note, P_ID::STRING, nNewString);
-            }
-
-      // check for any remaining fret conflict
-      foreach(Note * note, sortedNotes)
-            if (bUsed[note->string()] > 1)
-                  note->setFretConflict(true);
-
-      bFretting = false;
       }
 
 //---------------------------------------------------------
@@ -286,7 +364,7 @@ void StringData::fretChords(Chord * chord) const
 //    Notes without a string assigned yet, are sorted according to the lowest string which can accommodate them.
 //---------------------------------------------------------
 
-void StringData::sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord *chord, int* count) const
+void StringData::sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord *chord, int pitchOffset, int* count) const
 {
       int   key, string, fret;
 
@@ -296,13 +374,13 @@ void StringData::sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord *cho
             // if note not fretted yet or current fretting no longer valid,
             // use most convenient string as key
             if (string <= STRING_NONE || fret <= FRET_NONE
-                        || getPitch(string, fret) != note->pitch()) {
+                        || getPitch(string, fret, pitchOffset) != note->pitch()) {
                   note->setString(STRING_NONE);
                   note->setFret(FRET_NONE);
-                  convertPitch(note->pitch(), &string, &fret);
+                  convertPitch(note->pitch(), pitchOffset, &string, &fret);
                   }
             key = string * 100000;
-            key += -note->pitch() * 100 + *count;     // disambiguate notes of equal pitch
+            key += -(note->pitch()+pitchOffset) * 100 + *count;     // disambiguate notes of equal pitch
             sortedNotes.insert(key, note);
             (*count)++;
             }

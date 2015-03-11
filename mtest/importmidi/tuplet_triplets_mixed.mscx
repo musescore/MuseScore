@@ -52,9 +52,9 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Grand Piano</trackName>
+      <trackName>Piano</trackName>
       <Instrument>
-        <longName pos="0">Grand Piano</longName>
+        <longName pos="0">Piano</longName>
         <shortName pos="0">Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>

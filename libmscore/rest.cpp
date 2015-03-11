@@ -440,7 +440,56 @@ int Rest::computeLineOffset()
       {
       int lineOffset = 0;
       int lines = staff() ? staff()->lines() : 5;
-      if (segment() && measure() && measure()->mstaff(staffIdx())->hasVoices) {
+      Segment* s = segment();
+      bool offsetVoices = s && measure() && measure()->mstaff(staffIdx())->hasVoices;
+      if (offsetVoices && voice() == 0) {
+            // do not offset voice 1 rest if there exists a matching invisible rest in voice 2;
+            Element* e = s->element(track() + 1);
+            if (e && e->type() == Element::Type::REST && !e->visible()) {
+                  Rest* r = static_cast<Rest*>(e);
+                  if (r->globalDuration() == globalDuration()) {
+                        offsetVoices = false;
+                        }
+                  }
+            }
+#if 0
+      if (offsetVoices && staff()->mergeMatchingRests())
+            // automatically merge matching rests in voices 1 & 2 if nothing in any other voice
+            // this is not always the right thing to do do, but is useful in choral music
+            // and perhaps could be made enabled via a staff property
+            // so choral staves can be treated differently than others
+            bool matchFound = false;
+            bool nothingElse = true;
+            int baseTrack = staffIdx() * VOICES;
+            for (int v = 0; v < VOICES; ++v) {
+                  if (v == voice())
+                        continue;
+                  Element* e = s->element(baseTrack + v);
+                  if (v <= 1) {
+                        // try to find match in other voice (1 or 2)
+                        if (e && e->type() == Element::Type::REST) {
+                              Rest* r = static_cast<Rest*>(e);
+                              if (r->globalDuration() == globalDuration()) {
+                                    matchFound = true;
+                                    continue;
+                                    }
+                              }
+                        // no match found; no sense looking for anything else
+                        break;
+                        }
+                  else {
+                        // if anything in another voice, do not merge
+                        if (e) {
+                              nothingElse = false;
+                              break;
+                              }
+                        }
+                  }
+            if (matchFound && nothingElse)
+                  offsetVoices = false;
+            }
+#endif
+      if (offsetVoices) {
             // move rests in a multi voice context
             bool up = (voice() == 0) || (voice() == 2);       // TODO: use style values
             switch(durationType().type()) {
@@ -771,6 +820,27 @@ void Rest::read(XmlReader& e)
             else
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Rest::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            case P_ID::USER_OFF:
+                  score()->addRefresh(canvasBoundingRect());
+                  setUserOff(v.toPointF());
+                  layout();
+                  score()->addRefresh(canvasBoundingRect());
+                  if (beam())
+                        score()->setLayoutAll(true);
+                  break;
+            default:
+                  return ChordRest::setProperty(propertyId, v);
+            }
+      return true;
       }
 
 }

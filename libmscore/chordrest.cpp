@@ -346,24 +346,34 @@ bool ChordRest::readProperties(XmlReader& e)
             if (id == 0)
                   id = e.intAttribute("number");                  // obsolete
             Spanner* spanner = e.findSpanner(id);
-            if (!spanner)
-                  qDebug("ChordRest::read(): Slur id %d not found", id);
+            QString atype(e.attribute("type"));
+
+            if (!spanner) {
+                  if (atype == "stop") {
+                        SpannerValues sv;
+                        sv.spannerId = id;
+                        sv.track2    = e.track();
+                        sv.tick2     = e.tick();
+                        e.addSpannerValues(sv);
+                        }
+                  else if (atype == "start")
+                        qDebug("spanner: start without spanner");
+                  }
             else {
-                  QString atype(e.attribute("type"));
                   if (atype == "start") {
+                        if (spanner->ticks() > 0 && spanner->tick() == -1) // stop has been read first
+                              spanner->setTicks(spanner->ticks() - e.tick() - 1);
                         spanner->setTick(e.tick());
-                        if (spanner->ticks() > 0) // stop has been read first, ticks is tick2 - (-1)
-                        	spanner->setTick2(spanner->ticks() - 1);
                         spanner->setTrack(track());
                         if (spanner->type() == Element::Type::SLUR)
                               spanner->setStartElement(this);
                         if (e.pasteMode()) {
-                              for (Element* e : spanner->linkList()) {
+                              for (ScoreElement* e : spanner->linkList()) {
                                     if (e == spanner)
                                           continue;
                                     Spanner* ls = static_cast<Spanner*>(e);
                                     ls->setTick(spanner->tick());
-                                    for (Element* ee : linkList()) {
+                                    for (ScoreElement* ee : linkList()) {
                                           ChordRest* cr = static_cast<ChordRest*>(ee);
                                           if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack(cr->track());
@@ -384,12 +394,12 @@ bool ChordRest::readProperties(XmlReader& e)
                         if (start)
                               spanner->setTrack(start->track());
                         if (e.pasteMode()) {
-                              for (Element* e : spanner->linkList()) {
+                              for (ScoreElement* e : spanner->linkList()) {
                                     if (e == spanner)
                                           continue;
                                     Spanner* ls = static_cast<Spanner*>(e);
                                     ls->setTick2(spanner->tick2());
-                                    for (Element* ee : linkList()) {
+                                    for (ScoreElement* ee : linkList()) {
                                           ChordRest* cr = static_cast<ChordRest*>(ee);
                                           if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack2(cr->track());
@@ -767,17 +777,27 @@ void ChordRest::layoutArticulations()
 
 Element* ChordRest::drop(const DropData& data)
       {
-      Element* e = data.element;
-      Measure* m  = measure();
+      Element* e       = data.element;
+      Measure* m       = measure();
+      bool fromPalette = (e->track() == -1);
       switch (e->type()) {
             case Element::Type::BREATH:
                   {
                   Breath* b = static_cast<Breath*>(e);
-                  b->setTrack(staffIdx() * VOICES);
+                  int track = staffIdx() * VOICES;
+                  b->setTrack(track);
+
+                  // find start tick of next note in staff
+#if 0
+                  int bt = tick() + actualTicks();    // this could make sense if we allowed breath marks in voice > 1
+#else
+                  Segment* next = segment()->nextCR(track);
+                  int bt = next ? next->tick() : score()->lastSegment()->tick();
+#endif
 
                   // TODO: insert automatically in all staves?
 
-                  Segment* seg = m->undoGetSegment(Segment::Type::Breath, tick());
+                  Segment* seg = m->undoGetSegment(Segment::Type::Breath, bt);
                   b->setParent(seg);
                   score()->undoAddElement(b);
                   }
@@ -817,9 +837,12 @@ Element* ChordRest::drop(const DropData& data)
             case Element::Type::TEMPO_TEXT:
                   {
                   TempoText* tt = static_cast<TempoText*>(e);
+                  tt->setTrack(0);
                   tt->setParent(segment());
                   TextStyleType st = tt->textStyleType();
-                  tt->setTextStyleType(st);
+                  //tt->setTextStyleType(st);
+                  if (st >= TextStyleType::DEFAULT && fromPalette)
+                        tt->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
                   score()->undoAddElement(tt);
                   }
                   return e;
@@ -829,7 +852,9 @@ Element* ChordRest::drop(const DropData& data)
                   Dynamic* d = static_cast<Dynamic*>(e);
                   d->setTrack(track());
                   TextStyleType st = d->textStyleType();
-                  d->setTextStyleType(st);
+                  //d->setTextStyleType(st);
+                  if (st >= TextStyleType::DEFAULT && fromPalette)
+                        d->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
                   d->setParent(segment());
                   score()->undoAddElement(d);
                   }
@@ -862,16 +887,27 @@ Element* ChordRest::drop(const DropData& data)
             case Element::Type::STAFF_TEXT:
             case Element::Type::STAFF_STATE:
             case Element::Type::INSTRUMENT_CHANGE:
+                  if (e->type() == Element::Type::INSTRUMENT_CHANGE
+                     && staff()->part()->instrList()->find(tick()) != staff()->part()->instrList()->end()) {
+                        qDebug()<<"InstrumentChange already exists at tick = "<<tick();
+                        delete e;
+                        return 0;
+                        }
+                  // fall through
             case Element::Type::REHEARSAL_MARK:
                   e->setParent(segment());
                   e->setTrack((track() / VOICES) * VOICES);
                   {
-                  Text* f = static_cast<Text*>(e);
-                  TextStyleType st = f->textStyleType();
-                  if (st >= TextStyleType::DEFAULT)
-                        f->setTextStyleType(st);
+                  Text* t = static_cast<Text*>(e);
+                  TextStyleType st = t->textStyleType();
+                  // for palette items, we want to use current score text style settings
+                  // except where the source element had explicitly overridden these via text properties
+                  // palette text style will be relative to baseStyle, so rebase this to score
+                  //f->setTextStyleType(st);
+                  if (st >= TextStyleType::DEFAULT && fromPalette)
+                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
                   if (e->type() == Element::Type::REHEARSAL_MARK)
-                        f->setText(score()->createRehearsalMarkText(static_cast<RehearsalMark*>(e)));
+                        t->setText(score()->createRehearsalMarkText(static_cast<RehearsalMark*>(e)));
                   }
                   score()->undoAddElement(e);
                   return e;
@@ -963,16 +999,20 @@ void ChordRest::setDurationType(int ticks)
       _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
-void ChordRest::setDurationType(const TDuration& v)
+void ChordRest::setDurationType(TDuration v)
       {
       _durationType = v;
       _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
+//---------------------------------------------------------
+//   durationUserName
+//---------------------------------------------------------
+
 QString ChordRest::durationUserName()
       {
       QString tupletType = "";
-      if(tuplet()) {
+      if (tuplet()) {
               switch (tuplet()->ratio().numerator()) {
                   case 2:
                         tupletType = tr("Duplet");
@@ -1170,6 +1210,7 @@ QVariant ChordRest::getProperty(P_ID propertyId) const
             case P_ID::SMALL:      return QVariant(small());
             case P_ID::BEAM_MODE:  return int(beamMode());
             case P_ID::STAFF_MOVE: return staffMove();
+            case P_ID::DURATION_TYPE: return QVariant::fromValue(actualDurationType());
             default:               return DurationElement::getProperty(propertyId);
             }
       }
@@ -1184,7 +1225,15 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::SMALL:      setSmall(v.toBool()); break;
             case P_ID::BEAM_MODE:  setBeamMode(Beam::Mode(v.toInt())); break;
             case P_ID::STAFF_MOVE: setStaffMove(v.toInt()); break;
-            default:               return DurationElement::setProperty(propertyId, v);
+            case P_ID::VISIBLE:
+                  setVisible(v.toBool());
+                  measure()->checkMultiVoices(staffIdx());
+                  break;
+            case P_ID::DURATION_TYPE:
+                  setDurationType(v.value<TDuration>());
+                  break;
+            default:
+                  return DurationElement::setProperty(propertyId, v);
             }
       score()->setLayoutAll(true);
       return true;
@@ -1296,17 +1345,21 @@ Element* ChordRest::prevElement()
 QString ChordRest::accessibleExtraInfo()
       {
       QString rez = "";
-      foreach (Articulation* a, articulations())
+      foreach (Articulation* a, articulations()) {
+            if (!score()->selectionFilter().canSelect(a)) continue;
             rez = QString("%1 %2").arg(rez).arg(a->screenReaderInfo());
+            }
 
       foreach (Element* l, lyricsList()) {
             if (!l)
                   continue;
+            if (!score()->selectionFilter().canSelect(l)) continue;
             rez = QString("%1 %2").arg(rez).arg(l->screenReaderInfo());
             }
 
       if (segment()) {
             foreach (Element* e, segment()->annotations()) {
+                  if (!score()->selectionFilter().canSelect(e)) continue;
                   if (e->staffIdx() == staffIdx() )
                         rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
@@ -1316,6 +1369,7 @@ QString ChordRest::accessibleExtraInfo()
             for (auto i = spanners.begin(); i < spanners.end(); i++) {
                   const ::Interval<Spanner*> interval = *i;
                   Spanner* s = interval.value;
+                  if (!score()->selectionFilter().canSelect(s)) continue;
                   if (s->type() == Element::Type::VOLTA || //voltas are added for barlines
                       s->type() == Element::Type::TIE    ) //ties are added in notes
                         continue;

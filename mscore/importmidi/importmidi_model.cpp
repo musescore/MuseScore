@@ -21,7 +21,6 @@ class TracksModel::Column
       virtual int width() const { return -1; }
       virtual bool isEditable(int /*trackIndex*/) const { return true; }
       virtual bool isForAllTracksOnly() const { return false; }
-      virtual QVariant textColor(int /*trackIndex*/) const { return QVariant(); }
 
    protected:
       MidiOperations::Opers &_opers;
@@ -45,7 +44,8 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         int trackCount,
                         const QString &midiFile,
                         bool hasHumanBeats,
-                        bool hasTempoText)
+                        bool hasTempoText,
+                        bool hasChordNames)
       {
       beginResetModel();
       _trackOpers = opers;
@@ -181,23 +181,6 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
                         for (const InstrumentTemplate *instr: trackInstrList)
                               list.append(instrName(instr));
                         return list;
-                        }
-                  QVariant textColor(int trackIndex) const override
-                        {
-                        const auto &trackInstrList = _opers.msInstrList.value(trackIndex);
-                        if (trackInstrList.empty())
-                              return QVariant();         // default color
-                        const int instrIndex = _opers.msInstrIndex.value(trackIndex);
-                              // if the last instrument is empty - notes of each instrument
-                              // are out of corresponding "amateur" pitch range
-                              // (see suitable instruments search code in importmidi.cpp)
-                        const bool isValid = (trackInstrList.back() != nullptr);
-                        const bool isLastIndex = (instrIndex == (int)trackInstrList.size() - 1);
-                              // if the current instrument does not fit in pitch range
-                              // and insrument index is not last in the list
-                              // (which is empty instrument "-")
-                              // then show the "invalid" instrument in red
-                        return (!isValid && !isLastIndex) ? QBrush(Qt::red) : QVariant();
                         }
 
                private:
@@ -683,6 +666,27 @@ void TracksModel::reset(const MidiOperations::Opers &opers,
             }
 
       //-----------------------------------------------------------------------
+      if (hasChordNames) {
+            struct ShowChordNames : Column {
+                  ShowChordNames(MidiOperations::Opers &opers) : Column(opers)
+                        {
+                        }
+                  QString headerName() const override { return QCoreApplication::translate(
+                                          "MIDI import operations", "Show\nchord symbols"); }
+                  bool isForAllTracksOnly() const override { return true; }
+                  QVariant value(int /*trackIndex*/) const override
+                        {
+                        return _opers.showChordNames.value();
+                        }
+                  void setValue(const QVariant &value, int /*trackIndex*/) override
+                        {
+                        _opers.showChordNames.setValue(value.toBool());
+                        }
+                  };
+            _columns.push_back(std::unique_ptr<Column>(new ShowChordNames(_trackOpers)));
+            }
+
+      //-----------------------------------------------------------------------
       struct PickupBar : Column {
             PickupBar(MidiOperations::Opers &opers) : Column(opers)
                   {
@@ -905,12 +909,6 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                               }
                         }
                   break;
-            case Qt::ForegroundRole:
-                  if (_columns[index.column()]->isVisible(trackIndex)) {
-                        const QVariant color = _columns[index.column()]->textColor(trackIndex);
-                        if (color.type() == QVariant::Brush)
-                              return color;
-                        }
             case Qt::SizeHintRole:
                   return QSize(_columns[index.column()]->width(), -1);
                   break;

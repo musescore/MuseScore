@@ -30,6 +30,7 @@ void MuseScore::showStartcenter(bool val)
             startcenter->addAction(a);
             startcenter->readSettings(settings);
             connect(startcenter, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
+            connect(startcenter, SIGNAL(rejected()), a, SLOT(toggle()));
             }
       startcenter->setVisible(val);
       }
@@ -42,19 +43,23 @@ Startcenter::Startcenter()
  : QDialog(0)
       {
       setupUi(this);
-      setBackgroundRole(QPalette::Window);
+      setBackgroundRole(QPalette::Base);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setWindowModality(Qt::ApplicationModal);
       connect(recentPage,  &ScoreBrowser::scoreActivated, this, &Startcenter::loadScore);
-      connect(openScore, SIGNAL(linkActivated(QString)), this, SLOT(openScoreClicked(QString)));
+      connect(openScore, SIGNAL(clicked()), this, SLOT(openScoreClicked()));
+      connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+      setStyleSheet(QString("QPushButton { background-color: %1 }").arg(openScore->palette().color(QPalette::Base).name()));
 
       //init webview
       MyWebView* _webView = new MyWebView(this);
-      _webView->setUrl(QUrl("http://connect2.musescore.com/"));
+      _webView->setUrl(QUrl("https://connect2.musescore.com/"));
       horizontalLayout->addWidget(_webView);
+
       if (enableExperimental)
             QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
-      recentPage->setBoldTitle(true);
+      QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, false);
+      recentPage->setBoldTitle(false);
       updateRecentScores();
       }
 
@@ -64,7 +69,7 @@ Startcenter::Startcenter()
 
 Startcenter::~Startcenter() {
       delete _webView;
-}
+      }
 
 //---------------------------------------------------------
 //   loadScore
@@ -107,17 +112,21 @@ void Startcenter::closeEvent(QCloseEvent*)
 void Startcenter::updateRecentScores()
       {
       QFileInfoList fil = mscore->recentScores();
+      if (fil.size() == 0) {
+            QFileInfo gettingStartedScore(":/data/Getting_Started.mscz");
+            fil.prepend(gettingStartedScore);
+            }
       QFileInfo newScore(":/data/Create_New_Score.mscz");
       fil.prepend(newScore);
       recentPage->setScores(fil);
-      recentPage->selectLast();
+      recentPage->selectFirst();
       }
 
 //---------------------------------------------------------
 //   openScoreClicked
 //---------------------------------------------------------
 
-void Startcenter::openScoreClicked(const QString & /*link*/)
+void Startcenter::openScoreClicked()
       {
       close();
       getAction("file-open")->trigger();
@@ -142,7 +151,7 @@ void Startcenter::writeSettings(QSettings& settings)
 void Startcenter::readSettings(QSettings& settings)
       {
       settings.beginGroup("Startcenter");
-      resize(settings.value("size", QSize(740, 500)).toSize());
+      resize(settings.value("size", QSize(670, 520)).toSize());
       move(settings.value("pos", QPoint(200, 100)).toPoint());
       settings.endGroup();
       }
@@ -151,7 +160,7 @@ void Startcenter::readSettings(QSettings& settings)
 //   MyNetworkAccessManager
 //---------------------------------------------------------
 
-QNetworkReply * MyNetworkAccessManager::createRequest(Operation op,
+QNetworkReply* MyNetworkAccessManager::createRequest(Operation op,
                                           const QNetworkRequest & req,
                                           QIODevice * outgoingData)
       {
@@ -169,7 +178,7 @@ MyWebView::MyWebView(QWidget *parent):
    QWebView(parent)
       {
       page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-      QNetworkAccessManager *networkManager = new MyNetworkAccessManager(this);
+      QNetworkAccessManager* networkManager = new MyNetworkAccessManager(this);
 #ifndef QT_NO_OPENSSL
       connect(networkManager,SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),this, SLOT(ignoreSSLErrors(QNetworkReply*,QList<QSslError>)));
 #endif
@@ -193,14 +202,6 @@ MyWebView::MyWebView(QWidget *parent):
 
       page()->currentFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
       page()->currentFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAsNeeded);
-
-       _loadingSpinner = new QtWaitingSpinner(this);
-      _loadingSpinner->setVisible(true);
-      _loadingSpinner->start();
-      QVBoxLayout* layout = new QVBoxLayout(this);
-      layout->addWidget(_loadingSpinner);
-      layout->setAlignment ( _loadingSpinner, Qt::AlignCenter);
-      setLayout(layout);
       }
 
 //---------------------------------------------------------
@@ -232,21 +233,8 @@ void MyWebView::ignoreSSLErrors(QNetworkReply *reply, QList<QSslError> sslErrors
 void MyWebView::stopBusy(bool val)
       {
       if (!val) {
-            setHtml(QString("<html><head>"
-                  "<link rel=\"stylesheet\" href=\"data/webview.css\" type=\"text/css\" /></head>"
-            "<body>"
-            "<div id=\"content\">"
-            "<div id=\"middle\">"
-            "  <div class=\"title\" align=\"center\"><h2>%1</h2></div>"
-            "  <ul><li>%2</li></ul>"
-            "</div></div>"
-            "</body></html>")
-            .arg(tr("Could not<br /> connect"))
-            .arg(tr("To connect with the community, <br /> you need to have internet <br /> connection enabled")),
-            QUrl("qrc:/"));
+            setVisible(false);
             }
-      _loadingSpinner->stop();
-      _loadingSpinner->setVisible(false);
       setCursor(Qt::ArrowCursor);
       }
 
@@ -291,7 +279,7 @@ void MyWebView::addToJavascript()
 
 QSize MyWebView::sizeHint() const
       {
-      return QSize(300 * guiScaling, 600 * guiScaling);
+      return QSize(200 * guiScaling, 600 * guiScaling);
       }
 
 //---------------------------------------------------------
@@ -306,9 +294,17 @@ QSize MyWebView::sizeHint() const
 CookieJar::CookieJar(QString path, QObject *parent)
     : QNetworkCookieJar(parent)
       {
-      file = path;
-      QFile cookieFile(this->file);
+      _file = path;
+      load();
+      }
 
+//---------------------------------------------------------
+//   save
+//---------------------------------------------------------
+
+void CookieJar::load()
+      {
+      QFile cookieFile(_file);
       if (cookieFile.exists() && cookieFile.open(QIODevice::ReadOnly)) {
             QList<QNetworkCookie> list;
             QByteArray line;
@@ -320,35 +316,49 @@ CookieJar::CookieJar(QString path, QObject *parent)
             }
       else {
             if (MScore::debugMode)
-                  qDebug() << "Can't open "<< this->file << " to read cookies";
+                  qDebug() << "Can't open "<<  _file << " to read cookies";
             }
       }
 
 //---------------------------------------------------------
-//   ~CookieJar
+//   setCookiesFromUrl
 //---------------------------------------------------------
 
-CookieJar::~CookieJar()
+bool CookieJar::setCookiesFromUrl(const QList<QNetworkCookie>& cookieList, const QUrl& url)
       {
-      QList <QNetworkCookie> cookieList;
-      cookieList = allCookies();
+      bool res = QNetworkCookieJar::setCookiesFromUrl(cookieList, url);
+      save();
+      return res;
+      }
 
-      QFile file(this->file);
+//---------------------------------------------------------
+//   save
+//---------------------------------------------------------
 
+void CookieJar::save()
+      {
+      QList <QNetworkCookie> cookieList = allCookies();
+      QDateTime now = QDateTime::currentDateTime();
+      for (int i = cookieList.count() - 1; i >= 0; --i) {
+            if (cookieList.at(i).isSessionCookie() || cookieList.at(i).expirationDate() < now)
+                  cookieList.removeAt(i);
+            }
+
+      QFile file(_file);
       if(!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             if (MScore::debugMode)
-                  qDebug() << "Can't open "<< this->file << " to save cookies";
+                  qDebug() << "Can't open "<< _file << " to save cookies";
             return;
             }
 
       QTextStream out(&file);
       for(int i = 0 ; i < cookieList.size() ; i++) {
-                //get cookie data
-                QNetworkCookie cookie = cookieList.at(i);
-                if (!cookie.isSessionCookie()) {
-                      QByteArray line =  cookieList.at(i).toRawForm(QNetworkCookie::Full);
-                      out << line << "\n";
-                      }
+            //get cookie data
+            QNetworkCookie cookie = cookieList.at(i);
+            if (!cookie.isSessionCookie()) {
+                  QByteArray line =  cookie.toRawForm(QNetworkCookie::Full);
+                  out << line << "\n";
+                  }
             }
       file.close();
       }

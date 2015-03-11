@@ -21,7 +21,7 @@
 #include "mscore/preferences.h"
 #include "libmscore/page.h"
 #include "synthesizer/msynthesizer.h"
-#include "mscore/musescoreCore.h"
+#include "libmscore/musescoreCore.h"
 #include "mscore/shortcut.h"
 #include "mscore/importmidi/importmidi_operations.h"
 #include "libmscore/xml.h"
@@ -55,12 +55,12 @@ QString revision;
 bool enableTestMode;
 
 Score* score;
-MuseScoreCore* mscoreCore;
 MasterSynthesizer* synti;
 QString dataPath;
 QIcon* icons[0];
-//Shortcut Shortcut::_sc[1] = { Shortcut() };
 QString mscoreGlobalShare;
+
+// MuseScoreCore* MuseScoreCore::mscoreCore;
 
 //---------------------------------------------------------
 //   Preferences
@@ -162,9 +162,6 @@ Score* MTest::readCreatedScore(const QString& name)
             delete score;
             return 0;
             }
-      score->updateNotes();
-      for (Excerpt* e : score->excerpts())
-            e->partScore()->updateNotes();
       return score;
       }
 
@@ -323,6 +320,7 @@ void MTest::initMTest()
 
       synti  = new MasterSynthesizer();
       mscore = new MScore;
+      new MuseScoreCore;
       mscore->init();
       preferences.shortestNote = MScore::division / 4; // midi quantization: 1/16
 

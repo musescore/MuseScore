@@ -36,7 +36,7 @@ namespace Ms {
 //    return next Chord or Rest
 //---------------------------------------------------------
 
-ChordRest* nextChordRest(ChordRest* cr)
+ChordRest* nextChordRest(ChordRest* cr, bool skipGrace)
       {
       if (!cr)
             return 0;
@@ -48,26 +48,27 @@ ChordRest* nextChordRest(ChordRest* cr)
             Chord* c  = static_cast<Chord*>(cr);
             Chord* pc = static_cast<Chord*>(cr->parent());
 
-            if (cr->isGraceBefore()) {
-                  QList<Chord*> graceNotesBefore;
-                  pc->getGraceNotesBefore(&graceNotesBefore);
-                  auto i = std::find(graceNotesBefore.begin(), graceNotesBefore.end(), c);
-                  if (i == graceNotesBefore.end())
+            if (skipGrace) {
+                  cr = static_cast<ChordRest*>(cr->parent());
+                  }
+            else if (cr->isGraceBefore()) {
+                  QList<Chord*> cl = pc->graceNotesBefore();
+                  auto i = std::find(cl.begin(), cl.end(), c);
+                  if (i == cl.end())
                         return 0;   // unable to find self?
                   ++i;
-                  if (i != graceNotesBefore.end())
+                  if (i != cl.end())
                         return *i;
                   // if this was last grace note before, return parent
                   return pc;
                   }
             else {
-                  QList<Chord*> graceNotesAfter;
-                  pc->getGraceNotesAfter(&graceNotesAfter);
-                  auto i = std::find(graceNotesAfter.begin(), graceNotesAfter.end(), c);
-                  if (i == graceNotesAfter.end())
+                  QList<Chord*> cl = pc->graceNotesAfter();
+                  auto i = std::find(cl.begin(), cl.end(), c);
+                  if (i == cl.end())
                         return 0;   // unable to find self?
                   ++i;
-                  if (i != graceNotesAfter.end())
+                  if (i != cl.end())
                         return *i;
                   // if this was last grace note after, fall through to find next main note
                   cr = pc;
@@ -76,13 +77,12 @@ ChordRest* nextChordRest(ChordRest* cr)
       else {
             //
             // cr is not a grace note
-            if (cr->type() == Element::Type::CHORD) {
+            if (cr->type() == Element::Type::CHORD && !skipGrace) {
                   Chord* c = static_cast<Chord*>(cr);
                   if (!c->graceNotes().empty()) {
-                        QList<Chord*> graceNotesAfter;
-                        c->getGraceNotesAfter(&graceNotesAfter);
-                        if (!graceNotesAfter.isEmpty())
-                              return graceNotesAfter.first();
+                        QList<Chord*> cl = c->graceNotesAfter();
+                        if (!cl.isEmpty())
+                              return cl.first();
                         }
                   }
             }
@@ -93,13 +93,12 @@ ChordRest* nextChordRest(ChordRest* cr)
       for (Segment* seg = cr->segment()->next1MM(st); seg; seg = seg->next1MM(st)) {
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
             if (e) {
-                  if (e->type() == Element::Type::CHORD) {
+                  if (e->type() == Element::Type::CHORD && !skipGrace) {
                         Chord* c = static_cast<Chord*>(e);
                         if (!c->graceNotes().empty()) {
-                              QList<Chord*> graceNotesBefore;
-                              c->getGraceNotesBefore(&graceNotesBefore);
-                              if (!graceNotesBefore.isEmpty())
-                                    return graceNotesBefore.first();
+                              QList<Chord*> cl = c->graceNotesBefore();
+                              if (!cl.isEmpty())
+                                    return cl.first();
                               }
                         }
                   return e;
@@ -112,9 +111,10 @@ ChordRest* nextChordRest(ChordRest* cr)
 //---------------------------------------------------------
 //   prevChordRest
 //    return previous Chord or Rest
+//    if grace is true, include grace notes
 //---------------------------------------------------------
 
-ChordRest* prevChordRest(ChordRest* cr)
+ChordRest* prevChordRest(ChordRest* cr, bool skipGrace)
       {
       if (!cr)
             return 0;
@@ -126,24 +126,25 @@ ChordRest* prevChordRest(ChordRest* cr)
             Chord* c  = static_cast<Chord*>(cr);
             Chord* pc = static_cast<Chord*>(cr->parent());
 
-            if (cr->isGraceBefore()) {
-                  QList<Chord*> graceNotesBefore;
-                  pc->getGraceNotesBefore(&graceNotesBefore);
-                  auto i = std::find(graceNotesBefore.begin(), graceNotesBefore.end(), c);
-                  if (i == graceNotesBefore.end())
+            if (skipGrace) {
+                  cr = static_cast<ChordRest*>(cr->parent());
+                  }
+            else if (cr->isGraceBefore()) {
+                  QList<Chord*> cl = pc->graceNotesBefore();
+                  auto i = std::find(cl.begin(), cl.end(), c);
+                  if (i == cl.end())
                         return 0;   // unable to find self?
-                  if (i != graceNotesBefore.begin())
+                  if (i != cl.begin())
                         return *--i;
                   // if this was first grace note before, fall through to find previous main note
                   cr = pc;
                   }
             else {
-                  QList<Chord*> graceNotesAfter;
-                  pc->getGraceNotesAfter(&graceNotesAfter);
-                  auto i = std::find(graceNotesAfter.begin(), graceNotesAfter.end(), c);
-                  if (i == graceNotesAfter.end())
+                  QList<Chord*> cl = pc->graceNotesAfter();
+                  auto i = std::find(cl.begin(), cl.end(), c);
+                  if (i == cl.end())
                         return 0;   // unable to find self?
-                  if (i != graceNotesAfter.begin())
+                  if (i != cl.begin())
                         return *--i;
                   // if this was first grace note after, return parent
                   return pc;
@@ -152,14 +153,11 @@ ChordRest* prevChordRest(ChordRest* cr)
       else {
             //
             // cr is not a grace note
-            if (cr->type() == Element::Type::CHORD) {
+            if (cr->type() == Element::Type::CHORD && !skipGrace) {
                   Chord* c = static_cast<Chord*>(cr);
-                  if (!c->graceNotes().empty()) {
-                        QList<Chord*> graceNotesBefore;
-                        c->getGraceNotesBefore(&graceNotesBefore);
-                        if (!graceNotesBefore.isEmpty())
-                              return graceNotesBefore.last();
-                        }
+                  QList<Chord*> cl = c->graceNotesBefore();
+                  if (!cl.isEmpty())
+                        return cl.last();
                   }
             }
 
@@ -168,14 +166,10 @@ ChordRest* prevChordRest(ChordRest* cr)
       for (Segment* seg = cr->segment()->prev1MM(st); seg; seg = seg->prev1MM(st)) {
             ChordRest* e = static_cast<ChordRest*>(seg->element(track));
             if (e) {
-                  if (e->type() == Element::Type::CHORD) {
-                        Chord* c = static_cast<Chord*>(e);
-                        if (!c->graceNotes().empty()) {
-                              QList<Chord*> graceNotesAfter;
-                              c->getGraceNotesAfter(&graceNotesAfter);
-                              if (!graceNotesAfter.isEmpty())
-                                    return graceNotesAfter.last();
-                              }
+                  if (e->type() == Element::Type::CHORD && !skipGrace) {
+                        QList<Chord*> cl = static_cast<Chord*>(e)->graceNotesAfter();
+                        if (!cl.isEmpty())
+                              return cl.last();
                         }
                   return e;
                   }

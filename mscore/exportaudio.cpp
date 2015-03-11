@@ -90,6 +90,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
       for (int pass = 0; pass < 2; ++pass) {
             EventMap::const_iterator playPos;
             playPos = events.cbegin();
+            synti->allSoundsOff(-1);
 
             //
             // init instruments
@@ -97,13 +98,13 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             foreach(Part* part, score->parts()) {
                   InstrumentList* il = part->instrList();
                   for(auto i = il->begin(); i!= il->end(); i++) {
-                        foreach(const Channel& a, i->second.channel()) {
-                              a.updateInitList();
-                              foreach(MidiCoreEvent e, a.init) {
+                        foreach(const Channel* a, i->second->channel()) {
+                              a->updateInitList();
+                              foreach(MidiCoreEvent e, a->init) {
                                     if (e.type() == ME_INVALID)
                                           continue;
-                                    e.setChannel(a.channel);
-                                    int syntiIdx= synti->index(score->midiMapping(a.channel)->articulation->synti);
+                                    e.setChannel(a->channel);
+                                    int syntiIdx= synti->index(score->midiMapping(a->channel)->articulation->synti);
                                     synti->play(e, syntiIdx);
                                     }
                               }
@@ -119,6 +120,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
                   //
                   // collect events for one segment
                   //
+                  float max = 0.0;
                   memset(buffer, 0, sizeof(float) * FRAMES * 2);
                   int endTime = playTime + frames;
                   float* p = buffer;
@@ -148,18 +150,22 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
                         playTime += frames;
                         }
                   if (pass == 1) {
-                        for (unsigned i = 0; i < FRAMES * 2; ++i)
+                        for (unsigned i = 0; i < FRAMES * 2; ++i) {
+                              max = qMax(max, qAbs(buffer[i]));
                               buffer[i] *= gain;
+                              }
                         sf_writef_float(sf, buffer, FRAMES);
                         }
                   else {
-                        for (unsigned i = 0; i < FRAMES * 2; ++i)
+                        for (unsigned i = 0; i < FRAMES * 2; ++i) {
+                              max = qMax(max, qAbs(buffer[i]));
                               peak = qMax(peak, qAbs(buffer[i]));
+                              }
                         }
                   playTime = endTime;
                   pBar->setValue((pass * et + playTime) / 2);
-
-                  if (playTime >= et)
+                  // create sound until the sound decays
+                  if (playTime >= et && max*peak < 0.000001)
                         break;
                   }
             if (pass == 0 && peak == 0.0) {

@@ -83,8 +83,8 @@ class Hairpin : public SLine {
       PropertyStyle lineWidthStyle;
 
       Spatium _hairpinHeight;
-      PropertyStyle hairpinHeightStyle;
       Spatium _hairpinContHeight;
+      PropertyStyle hairpinHeightStyle;
       PropertyStyle hairpinContHeightStyle;
 
       static Spatium editHairpinHeight;

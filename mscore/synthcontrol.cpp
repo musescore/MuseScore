@@ -91,6 +91,7 @@ SynthControl::SynthControl(QWidget* parent)
       recallButton->setEnabled(false);
       changeTuningButton->setEnabled(false);
 
+      enablePlay = new EnablePlayForWidget(this);
       connect(effectA,      SIGNAL(currentIndexChanged(int)), SLOT(effectAChanged(int)));
       connect(effectB,      SIGNAL(currentIndexChanged(int)), SLOT(effectBChanged(int)));
       connect(gain,         SIGNAL(valueChanged(double,int)), SLOT(gainChanged(double,int)));
@@ -121,6 +122,37 @@ void SynthControl::closeEvent(QCloseEvent* ev)
       {
       emit closed(false);
       QWidget::closeEvent(ev);
+      }
+
+//---------------------------------------------------------
+//   showEvent
+//---------------------------------------------------------
+
+void SynthControl::showEvent(QShowEvent* e)
+      {
+      enablePlay->showEvent(e);
+      QWidget::showEvent(e);
+      activateWindow();
+      setFocus();
+      }
+
+//---------------------------------------------------------
+//   eventFilter
+//---------------------------------------------------------
+
+bool SynthControl::eventFilter(QObject* obj, QEvent* e)
+      {
+      if(enablePlay->eventFilter(obj, e))
+            return true;
+      return QWidget::eventFilter(obj, e);
+      }
+
+void SynthControl::keyPressEvent(QKeyEvent* ev) {
+      if (ev->key() == Qt::Key_Escape && ev->modifiers() == Qt::NoModifier) {
+            close();
+            return;
+            }
+      QWidget::keyPressEvent(ev);
       }
 
 //---------------------------------------------------------
@@ -252,7 +284,6 @@ void SynthControl::saveButtonClicked()
       _score->startCmd();
       _score->undo()->push(new ChangeSynthesizerState(_score, synti->state()));
       _score->endCmd();
-      mscore->endCmd();
 
       loadButton->setEnabled(false);
       saveButton->setEnabled(false);

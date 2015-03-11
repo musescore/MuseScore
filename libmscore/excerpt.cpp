@@ -119,7 +119,7 @@ void createExcerpt(Excerpt* excerpt)
 
       foreach (Part* part, parts) {
             Part* p = new Part(score);
-            p->setInstrument(*part->instr(), 0);
+            p->setInstrument(*part->instr());
 
             foreach (Staff* staff, *part->staves()) {
                   Staff* s = new Staff(score);
@@ -155,7 +155,7 @@ void createExcerpt(Excerpt* excerpt)
       if (!partLabel.isEmpty()) {
             Text* txt = new Text(score);
             txt->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT);
-            txt->setText(partLabel);
+            txt->setPlainText(partLabel);
             txt->setTrack(0);
             measure->add(txt);
             score->setMetaTag("partName", partLabel);
@@ -199,13 +199,12 @@ void createExcerpt(Excerpt* excerpt)
                               }
                         }
                   }
-            score->updateNotes();
             }
 
       //
       // layout score
       //
-      score->setPlaylistDirty(true);
+      score->setPlaylistDirty();
       score->rebuildMidiMapping();
       score->updateChannel();
 
@@ -233,7 +232,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
 
             ns->setStartElement(0);
             ns->setEndElement(0);
-            for (Element* e : *cr1->links()) {
+            for (ScoreElement* e : *cr1->links()) {
                   ChordRest* cr = static_cast<ChordRest*>(e);
                   if (cr == cr1)
                         continue;
@@ -242,7 +241,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
                         break;
                         }
                   }
-            for (Element* e : *cr2->links()) {
+            for (ScoreElement* e : *cr2->links()) {
                   ChordRest* cr = static_cast<ChordRest*>(e);
                   if (cr == cr2)
                         continue;
@@ -327,8 +326,13 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   nmb = new HBox(score);
             else if (mb->type() == Element::Type::VBOX)
                   nmb = new VBox(score);
-            else if (mb->type() == Element::Type::TBOX)
+            else if (mb->type() == Element::Type::TBOX) {
                   nmb = new TBox(score);
+                  Text* text = static_cast<TBox*>(mb)->text();
+                  Element* ne = text->linkedClone();
+                  ne->setScore(score);
+                  nmb->add(ne);
+                  }
             else if (mb->type() == Element::Type::MEASURE) {
                   Measure* m  = static_cast<Measure*>(mb);
                   Measure* nm = new Measure(score);
@@ -437,7 +441,21 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                                             tie->setEndNote(nn);
                                                             }
                                                       else {
-                                                            qDebug("cloneStave: cannot find tie");
+                                                            qDebug("cloneStaves: cannot find tie");
+                                                            }
+                                                      }
+                                                // add back spanners (going back from end to start spanner element
+                                                // makes sure the 'other' spanner anchor element is already set up)
+                                                // 'on' is the old spanner end note and 'nn' is the new spanner end note
+                                                for (Spanner* oldSp : on->spannerBack()) {
+                                                      Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
+                                                      if (newStart != nullptr) {
+                                                            Spanner* newSp = static_cast<Spanner*>(oldSp->linkedClone());
+                                                            newSp->setNoteSpan(newStart, nn);
+                                                            score->addElement(newSp);
+                                                            }
+                                                      else {
+                                                            qDebug("cloneStaves: cannot find spanner start note");
                                                             }
                                                       }
                                                 }
@@ -474,7 +492,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   }
 
             nmb->linkTo(mb);
-            foreach (Element* e, *mb->el()) {
+            foreach (Element* e, mb->el()) {
                   if (e->type() == Element::Type::LAYOUT_BREAK) {
                         LayoutBreak::Type st = static_cast<LayoutBreak*>(e)->layoutBreakType();
                         if (st == LayoutBreak::Type::PAGE || st == LayoutBreak::Type::LINE)
@@ -518,6 +536,18 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
             if (srcStaff->primaryStaff()) {
                   int span = srcStaff->barLineSpan();
                   int sIdx = srcStaff->idx();
+                  if (dstStaffIdx == 0 && span == 0) {
+                        // this is first staff of new score,
+                        // but it was somewhere within a barline span in the old score
+                        // so, find beginning of span
+                        for (int i = 0; i <= sIdx; ++i) {
+                              span = oscore->staff(i)->barLineSpan();
+                              if (i + span > sIdx) {
+                                    sIdx = i;
+                                    break;
+                                    }
+                              }
+                        }
                   int eIdx = sIdx + span;
                   for (int staffIdx = sIdx; staffIdx < eIdx; ++staffIdx) {
                         if (!map.contains(staffIdx))
@@ -671,6 +701,20 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                                       qDebug("cloneStave: cannot find tie");
                                                       }
                                                 }
+                                          // add back spanners (going back from end to start spanner element
+                                          // makes sure the 'other' spanner anchor element is already set up)
+                                          // 'on' is the old spanner end note and 'nn' is the new spanner end note
+                                          for (Spanner* oldSp : on->spannerBack()) {
+                                                Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
+                                                if (newStart != nullptr) {
+                                                      Spanner* newSp = static_cast<Spanner*>(oldSp->linkedClone());
+                                                      newSp->setNoteSpan(newStart, nn);
+                                                      score->addElement(newSp);
+                                                      }
+                                                else {
+                                                      qDebug("cloneStave: cannot find spanner start note");
+                                                      }
+                                                }
                                           }
                                     }
                               }
@@ -708,12 +752,15 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
       Measure* m1   = oscore->tick2measure(stick);
       Measure* m2   = oscore->tick2measure(etick);
 
+      if (m2->tick() < etick) // end of score
+            m2 = 0;
+
       TieMap tieMap;
 
       int srcStaffIdx = oscore->staffIdx(srcStaff);
       int dstStaffIdx = score->staffIdx(dstStaff);
 
-      for (Measure* m = m1; m != m2; m = m->nextMeasure()) {
+      for (Measure* m = m1; m && (m != m2); m = m->nextMeasure()) {
             Measure* nm = score->tick2measure(m->tick());
             int sTrack = srcStaffIdx * VOICES;
             int eTrack = sTrack + VOICES;

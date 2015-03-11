@@ -103,6 +103,30 @@ ReducedFraction maxNoteLen(const std::pair<const ReducedFraction, MidiChord> &ch
       return maxOffTime - chord.first;
       }
 
+void removeOverlappingNotes(QList<MidiNote> &notes)
+      {
+      QLinkedList<MidiNote> tempNotes;
+      for (const auto &note: notes)
+            tempNotes.append(note);
+
+      for (auto noteIt1 = tempNotes.begin(); noteIt1 != tempNotes.end(); ++noteIt1) {
+            for (auto noteIt2 = std::next(noteIt1); noteIt2 != tempNotes.end(); ) {
+                  if (noteIt2->pitch == noteIt1->pitch) {
+                                    // overlapping notes found
+                        if (noteIt2->offTime > noteIt1->offTime)      // set max len before erase
+                              noteIt1->offTime = noteIt2->offTime;
+                        noteIt2 = tempNotes.erase(noteIt2);
+                        qDebug("Midi import: removeOverlappingNotes: note was removed");
+                        continue;
+                        }
+                  ++noteIt2;
+                  }
+            }
+      notes.clear();
+      for (const auto &note: tempNotes)
+            notes.append(note);
+      }
+
 // remove overlapping notes with the same pitch
 
 void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
@@ -117,8 +141,10 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                         "or non-tuplet chord/note is inside tuplet before overlaps remove");
 
             for (auto i1 = chords.begin(); i1 != chords.end(); ) {
-                  auto &chord1 = i1->second;
                   const auto &onTime1 = i1->first;
+                  auto &chord1 = i1->second;
+                  removeOverlappingNotes(chord1.notes);
+
                   for (auto note1It = chord1.notes.begin(); note1It != chord1.notes.end(); ) {
                         auto &note1 = *note1It;
 
@@ -132,13 +158,8 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                               for (auto &note2: chord2.notes) {
                                     if (note2.pitch != note1.pitch)
                                           continue;
-
-                                    qDebug("Midi import: overlapping events: %d+%d %d+%d",
-                                           onTime1.ticks(), note1.offTime.ticks(),
-                                           onTime2.ticks(), note2.offTime.ticks());
-
+                                                // overlapping notes found
                                     note1.offTime = onTime2;
-
                                     if (!note1.isInTuplet && chord2.isInTuplet) {
                                           if (note1.offTime > chord2.tuplet->second.onTime) {
                                                 note1.isInTuplet = true;
@@ -155,6 +176,7 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
                               }
                         if (note1.offTime - onTime1 < MChord::minAllowedDuration()) {
                               note1It = chord1.notes.erase(note1It);
+                              qDebug("Midi import: removeOverlappingNotes: note was removed");
                               continue;
                               }
                         ++note1It;

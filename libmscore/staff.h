@@ -25,6 +25,7 @@
 #include "keylist.h"
 #include "stafftype.h"
 #include "groups.h"
+#include "scoreElement.h"
 
 namespace Ms {
 
@@ -93,10 +94,9 @@ struct SwingParameters {
 ///    Global staff data not directly related to drawing.
 //---------------------------------------------------------
 
-class Staff : public QObject {
+class Staff : public QObject, public ScoreElement {
       Q_OBJECT
 
-      Score* _score ;
       Part* _part       { 0 };
 
       ClefList clefs;
@@ -127,11 +127,14 @@ class Staff : public QObject {
       VeloList _velocities;         ///< cached value
       PitchList _pitchOffsets;      ///< cached value
 
+      void scaleChanged(double oldValue, double newValue);
+
    public:
       Staff(Score* = 0);
       ~Staff();
       void init(const InstrumentTemplate*, const StaffType *staffType, int);
       void initFromStaffType(const StaffType* staffType);
+      void init(const Staff*);
 
       bool isTop() const;
       QString partName() const;
@@ -200,7 +203,6 @@ class Staff : public QObject {
       void setBarLineSpan(int val)   { _barLineSpan = val;  }
       void setBarLineFrom(int val)   { _barLineFrom = val;  }
       void setBarLineTo(int val);
-      Score* score() const           { return _score;       }
       qreal mag() const;
       qreal height() const;
       qreal spatium() const;
@@ -244,6 +246,20 @@ class Staff : public QObject {
       void setColor(const QColor& val)    { _color = val;    }
       void undoSetColor(const QColor& val);
       void insertTime(int tick, int len);
+
+      virtual QVariant getProperty(P_ID) const override;
+      virtual bool setProperty(P_ID, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
+
+#ifndef NDEBUG
+      void dumpClefs(const char* title) const;
+      void dumpKeys(const char* title) const;
+      void dumpTimeSigs(const char*) const;
+#else
+      void dumpClefs(const char*) const {}
+      void dumpKeys(const char*) const {}
+      void dumpTimeSigs(const char*) const {}
+#endif
       };
 
 }     // namespace Ms

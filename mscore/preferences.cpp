@@ -104,6 +104,7 @@ void Preferences::init()
 
       enableMidiInput    = true;
       playNotes          = true;
+      playChordOnAddNote = true;
 
       showNavigator      = false;
       showPlayPanel      = false;
@@ -171,7 +172,7 @@ void Preferences::init()
 
       mag                     = 1.0;
 
-      checkUpdateStartup      = 0;
+      checkUpdateStartup      = true;
 
       followSong              = true;
       importCharsetOve        = "GBK";
@@ -199,7 +200,6 @@ void Preferences::init()
       myTemplatesPath = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("templates_directory",  "Templates"))).absoluteFilePath();
       myPluginsPath   = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("plugins_directory",    "Plugins"))).absoluteFilePath();
       sfPath          = QString("%1;%2").arg(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("sound")).absoluteFilePath()).arg(QFileInfo(QString("%2/%3").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absoluteFilePath());
-      sfzPath         = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("sfz_files_directory",  "SFZ"))).absoluteFilePath();
 
       MScore::setNudgeStep(.1);         // cursor key (default 0.1)
       MScore::setNudgeStep10(1.0);      // Ctrl + cursor key (default 1.0)
@@ -246,6 +246,7 @@ void Preferences::write()
       s.setValue("defaultColor",       MScore::defaultColor);
       s.setValue("enableMidiInput",    enableMidiInput);
       s.setValue("playNotes",          playNotes);
+      s.setValue("playChordOnAddNote", playChordOnAddNote);
 
       s.setValue("showNavigator",      showNavigator);
       s.setValue("showPlayPanel",      showPlayPanel);
@@ -333,7 +334,6 @@ void Preferences::write()
       s.setValue("myTemplatesPath", myTemplatesPath);
       s.setValue("myPluginsPath", myPluginsPath);
       s.setValue("sfPath",  sfPath);
-      s.setValue("sfzPath", sfzPath);
 
       s.setValue("hraster", MScore::hRaster());
       s.setValue("vraster", MScore::vRaster());
@@ -395,6 +395,7 @@ void Preferences::read()
 
       enableMidiInput         = s.value("enableMidiInput", enableMidiInput).toBool();
       playNotes               = s.value("playNotes", playNotes).toBool();
+      playChordOnAddNote      = s.value("playChordOnAddNote", playChordOnAddNote).toBool();
 
       showNavigator            = s.value("showNavigator", showNavigator).toBool();
       showSplashScreen         = s.value("showSplashScreen", showSplashScreen).toBool();
@@ -471,8 +472,7 @@ void Preferences::read()
       myImagesPath     = s.value("myImagesPath",     myImagesPath).toString();
       myTemplatesPath  = s.value("myTemplatesPath",  myTemplatesPath).toString();
       myPluginsPath    = s.value("myPluginsPath",    myPluginsPath).toString();
-      sfPath           = s.value("sfPath",  sfPath).toString();
-      sfzPath          = s.value("sfzPath", sfzPath).toString();
+      sfPath           = s.value("sfPath",           sfPath).toString();
 
       //Create directories if they are missing
       QDir dir;
@@ -481,12 +481,8 @@ void Preferences::read()
       dir.mkpath(myImagesPath);
       dir.mkpath(myTemplatesPath);
       dir.mkpath(myPluginsPath);
-      foreach (QString path, sfPath.split(";")) {
+      foreach (QString path, sfPath.split(";"))
             dir.mkpath(path);
-            }
-      foreach (QString path, sfzPath.split(";")) {
-            dir.mkpath(path);
-            }
 
       MScore::setHRaster(s.value("hraster", MScore::hRaster()).toInt());
       MScore::setVRaster(s.value("vraster", MScore::vRaster()).toInt());
@@ -496,9 +492,7 @@ void Preferences::read()
 
       workspace          = s.value("workspace", workspace).toString();
 
-      checkUpdateStartup = s.value("checkUpdateStartup", checkUpdateStartup).toInt();
-      if (checkUpdateStartup == 0)
-            checkUpdateStartup = UpdateChecker::defaultPeriod();
+      checkUpdateStartup = s.value("checkUpdateStartup", checkUpdateStartup).toBool();
 
       QString ss(s.value("sessionStart", "score").toString());
       if (ss == "last")
@@ -572,7 +566,6 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       myTemplatesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       myPluginsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       mySoundfontsButton->setIcon(*icons[int(Icons::edit_ICON)]);
-      mySfzButton->setIcon(*icons[int(Icons::edit_ICON)]);
       myImagesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
       bgWallpaperSelect->setIcon(*icons[int(Icons::fileOpen_ICON)]);
@@ -622,8 +615,6 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
 
       connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
-      connect(mySfzButton, SIGNAL(clicked()), SLOT(changeSfzPaths()));
-
       connect(updateTranslation, SIGNAL(clicked()), SLOT(updateTranslationClicked()));
 
       connect(defaultStyleButton,     SIGNAL(clicked()), SLOT(selectDefaultStyle()));
@@ -801,17 +792,10 @@ void PreferenceDialog::updateValues()
 
       enableMidiInput->setChecked(prefs.enableMidiInput);
       playNotes->setChecked(prefs.playNotes);
+      playChordOnAddNote->setChecked(prefs.playChordOnAddNote);
 
       //Update
-      checkUpdateStartup->clear();
-      int curPeriodIdx = 0;
-
-      for(unsigned i = 0; i < sizeof(updatePeriods)/sizeof(*updatePeriods); ++i) {
-            checkUpdateStartup->addItem(qApp->translate("preferences", updatePeriods[i].text), i);
-            if (updatePeriods[i].time == prefs.checkUpdateStartup)
-                  curPeriodIdx = i;
-            }
-      checkUpdateStartup->setCurrentIndex(curPeriodIdx);
+      checkUpdateStartup->setChecked(prefs.checkUpdateStartup);
 
       navigatorShow->setChecked(prefs.showNavigator);
       playPanelShow->setChecked(prefs.showPlayPanel);
@@ -985,7 +969,6 @@ void PreferenceDialog::updateValues()
       myTemplates->setText(prefs.myTemplatesPath);
       myPlugins->setText(prefs.myPluginsPath);
       sfPath->setText(prefs.sfPath);
-      sfzPath->setText(prefs.sfzPath);
 
       idx = 0;
       int n = sizeof(exportAudioSampleRates)/sizeof(*exportAudioSampleRates);
@@ -1272,6 +1255,7 @@ void PreferenceDialog::apply()
       prefs.fgUseColor     = fgColorButton->isChecked();
       prefs.enableMidiInput = enableMidiInput->isChecked();
       prefs.playNotes      = playNotes->isChecked();
+      prefs.playChordOnAddNote = playChordOnAddNote->isChecked();
 
       prefs.showNavigator      = navigatorShow->isChecked();
       prefs.showPlayPanel      = playPanelShow->isChecked();
@@ -1365,7 +1349,6 @@ void PreferenceDialog::apply()
       prefs.myTemplatesPath    = myTemplates->text();
       prefs.myPluginsPath      = myPlugins->text();
       prefs.sfPath             = sfPath->text();
-      prefs.sfzPath            = sfzPath->text();
 
       int idx = exportAudioSampleRate->currentIndex();
       prefs.exportAudioSampleRate = exportAudioSampleRates[idx];
@@ -1409,9 +1392,7 @@ void PreferenceDialog::apply()
       prefs.language = l;
 
       //update
-      int periodIndex = checkUpdateStartup->currentIndex();
-      int t = updatePeriods[periodIndex].time;
-      prefs.checkUpdateStartup = t;
+      prefs.checkUpdateStartup = checkUpdateStartup->isChecked();
 
       prefs.mag         = scale->value()/100.0;
 
@@ -1672,23 +1653,10 @@ void PreferenceDialog::selectImagesDirectory()
 void PreferenceDialog::changeSoundfontPaths()
       {
       PathListDialog pld(this);
-      pld.setWindowTitle(tr("Soundfont Folders"));
+      pld.setWindowTitle(tr("SoundFont Folders"));
       pld.setPath(sfPath->text());
       if(pld.exec())
             sfPath->setText(pld.path());
-      }
-
-//---------------------------------------------------------
-//   changeSfzPaths
-//---------------------------------------------------------
-
-void PreferenceDialog::changeSfzPaths()
-      {
-      PathListDialog pld(this);
-      pld.setWindowTitle(tr("SFZ Folders"));
-      pld.setPath(sfzPath->text());
-      if(pld.exec())
-            sfzPath->setText(pld.path());
       }
 
 //---------------------------------------------------------

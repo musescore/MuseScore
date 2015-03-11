@@ -1,0 +1,8 @@
+Version 2.103 Remove Burst Noise preset which was overloading FluidSynth
+Version 2.102 Fix name problem for Bass & Lead
+Version 2.101 Fix typo in Accordion def
+Version 2.10   Raise level of drumkits
+Version 2.9     Panning fix to Clarinet
+Version 2.8     Fix Goblin Synth patch crashing FluidSynth in Windows
+Version 2.7     Fix missing drum in some drum kits
+Version 2.6     Beta release of mono soundfont

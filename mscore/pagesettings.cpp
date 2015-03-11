@@ -347,7 +347,6 @@ void PageSettings::applyToAllParts()
       {
       for (Excerpt* e : cs->rootScore()->excerpts())
             applyToScore(e->partScore());
-      mscore->endCmd();
       }
 
 //---------------------------------------------------------

@@ -284,7 +284,7 @@ void ScoreView::editKey(QKeyEvent* ev)
       ed.view    = this;
       ed.hRaster = mscore->hRaster();
       ed.vRaster = mscore->vRaster();
-      if (curGrip != Grip::NO_GRIP)
+      if (curGrip != Grip::NO_GRIP && int(curGrip) < grips)
             ed.pos = grip[int(curGrip)].center() + delta;
       editObject->editDrag(ed);
       updateGrips();
@@ -317,8 +317,21 @@ void MuseScore::updateInputState(Score* score)
             }
 
       getAction("pad-rest")->setChecked(is.rest());
+      getAction("pad-dot")->setEnabled(true);
+      getAction("pad-dotdot")->setEnabled(true);
       getAction("pad-dot")->setChecked(is.duration().dots() == 1);
       getAction("pad-dotdot")->setChecked(is.duration().dots() == 2);
+      switch (is.duration().type()) {
+            case TDuration::DurationType::V_128TH:
+                  getAction("pad-dot")->setChecked(false);
+                  getAction("pad-dot")->setEnabled(false);
+            case TDuration::DurationType::V_64TH:
+                  getAction("pad-dotdot")->setChecked(false);
+                  getAction("pad-dotdot")->setEnabled(false);
+                  break;
+            default:
+                  break;
+            }
 
       getAction("note-longa")->setChecked(is.duration()  == TDuration::DurationType::V_LONG);
       getAction("note-breve")->setChecked(is.duration()  == TDuration::DurationType::V_BREVE);

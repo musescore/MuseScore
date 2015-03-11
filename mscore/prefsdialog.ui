@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>880</width>
-    <height>592</height>
+    <width>712</width>
+    <height>538</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -293,7 +293,7 @@
        <item row="2" column="0" rowspan="3">
         <widget class="QGroupBox" name="groupBox_6">
          <property name="title">
-          <string>Paths</string>
+          <string>Folders</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -317,10 +317,20 @@
           <property name="verticalSpacing">
            <number>0</number>
           </property>
-          <item row="6" column="0">
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="myScores">
+            <property name="accessibleName">
+             <string>Score folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to score folder.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
            <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>Image folder:</string>
+             <string>Images:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -333,7 +343,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_86">
             <property name="text">
-             <string>Score folder:</string>
+             <string>Scores:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -346,7 +356,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_88">
             <property name="text">
-             <string>Style folder:</string>
+             <string>Styles:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -369,7 +379,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Template folder:</string>
+             <string>Templates:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -411,20 +421,10 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="myScores">
-            <property name="accessibleName">
-             <string>Score folder</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Insert path to score folder.</string>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="0">
            <widget class="QLabel" name="label_89">
             <property name="text">
-             <string>Plugin folder:</string>
+             <string>Plugins:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -454,6 +454,16 @@
             </property>
            </widget>
           </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="sfPath">
+            <property name="accessibleName">
+             <string>SoundFont folders</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to SoundFont folders</string>
+            </property>
+           </widget>
+          </item>
           <item row="3" column="2">
            <widget class="QToolButton" name="myPluginsButton">
             <property name="focusPolicy">
@@ -473,7 +483,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>Soundfont folders:</string>
+             <string>SoundFonts:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -483,17 +493,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
-           <widget class="QLineEdit" name="sfPath">
-            <property name="accessibleName">
-             <string>Soundfont folders</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Insert path to soundfont folders</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
+          <item row="5" column="1">
            <widget class="QLineEdit" name="myImages">
             <property name="accessibleName">
              <string>Image folder</string>
@@ -519,30 +519,7 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="1">
-           <widget class="QLineEdit" name="sfzPath">
-            <property name="accessibleName">
-             <string>SFZ folders</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Insert path to SFZ folders</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_19">
-            <property name="text">
-             <string>SFZ folders:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="indent">
-             <number>5</number>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="2">
+          <item row="5" column="2">
            <widget class="QToolButton" name="myImagesButton">
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
@@ -564,26 +541,10 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="accessibleName">
-             <string>Soundfont folders</string>
+             <string>SoundFont folders</string>
             </property>
             <property name="accessibleDescription">
-             <string>Opens a dialog for configuring the soundfont folders</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="2">
-           <widget class="QToolButton" name="mySfzButton">
-            <property name="focusPolicy">
-             <enum>Qt::StrongFocus</enum>
-            </property>
-            <property name="accessibleName">
-             <string>SFZ folders</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Opens a dialog for configuring the SFZ folders</string>
+             <string>Opens a dialog for configuring the SoundFont folders</string>
             </property>
             <property name="text">
              <string/>
@@ -1158,16 +1119,16 @@
      </widget>
      <widget class="QWidget" name="tabNoteEntry">
       <property name="accessibleName">
-       <string>Note Entry Tab</string>
+       <string>Note Input Tab</string>
       </property>
       <attribute name="title">
-       <string>Note Entry</string>
+       <string>Note Input</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QGroupBox" name="groupBox_13">
          <property name="title">
-          <string>Note Entry</string>
+          <string>Note Input</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
@@ -1181,73 +1142,77 @@
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QCheckBox" name="playNotes">
-              <property name="accessibleName">
-               <string>Play notes when editing</string>
-              </property>
-              <property name="text">
-               <string>Play notes when editing</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_37">
-              <property name="text">
-               <string>Default duration:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="defaultPlayDuration">
-              <property name="accessibleName">
-               <string>Default duration</string>
-              </property>
-              <property name="suffix">
-               <string>ms</string>
-              </property>
-              <property name="minimum">
-               <number>20</number>
-              </property>
-              <property name="maximum">
-               <number>2000</number>
-              </property>
-              <property name="singleStep">
-               <number>100</number>
-              </property>
-              <property name="value">
-               <number>300</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
+           <widget class="QGroupBox" name="playNotes">
+            <property name="mouseTracking">
+             <bool>true</bool>
+            </property>
+            <property name="accessibleName">
+             <string>Play notes when editing</string>
+            </property>
+            <property name="title">
+             <string>Play notes when editing</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_37">
+               <property name="text">
+                <string>Default duration:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="defaultPlayDuration">
+               <property name="accessibleName">
+                <string>Default duration</string>
+               </property>
+               <property name="suffix">
+                <string>ms</string>
+               </property>
+               <property name="minimum">
+                <number>20</number>
+               </property>
+               <property name="maximum">
+                <number>2000</number>
+               </property>
+               <property name="singleStep">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>300</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="playChordOnAddNote">
+               <property name="accessibleName">
+                <string>Play whole chord when adding note</string>
+               </property>
+               <property name="text">
+                <string>Play whole chord when adding note</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="warnPitchRange">
@@ -1330,7 +1295,7 @@
              <string>Rewind is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1346,7 +1311,7 @@
              <string>Rewind record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1369,7 +1334,7 @@
              <string>Is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1385,7 +1350,7 @@
              <string>Toggle play record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1431,7 +1396,7 @@
              <string>Whole note is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1444,7 +1409,7 @@
              <string>Half note is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1457,7 +1422,7 @@
              <string>Whole note record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1470,7 +1435,7 @@
              <string>Half note record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1513,7 +1478,7 @@
              <string>Rest is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1526,7 +1491,7 @@
              <string>Quarter note is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1539,7 +1504,7 @@
              <string>Quarter note record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1552,7 +1517,7 @@
              <string>Eighth note is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1565,7 +1530,7 @@
              <string>Eighth note record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1605,7 +1570,7 @@
              <string>Augmentation dot is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1618,7 +1583,7 @@
              <string>Augmentation dot record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1631,7 +1596,7 @@
              <string>Double augmentation dot is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1644,7 +1609,7 @@
              <string>Double augmentation dot record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1657,7 +1622,7 @@
              <string>Tie is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1670,7 +1635,7 @@
              <string>Tie record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1683,7 +1648,7 @@
              <string>Rest record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1758,7 +1723,7 @@
              <string>Play is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1774,7 +1739,7 @@
              <string>Stop is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1790,7 +1755,7 @@
              <string>Play record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1806,14 +1771,14 @@
              <string>Stop record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="label_52">
             <property name="text">
-             <string>Note entry</string>
+             <string>Note input</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1829,10 +1794,10 @@
              <string>Is active</string>
             </property>
             <property name="accessibleName">
-             <string>Note entry is active</string>
+             <string>Note input is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1845,10 +1810,10 @@
              <string>Record</string>
             </property>
             <property name="accessibleName">
-             <string>Note entry record</string>
+             <string>Note input record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1871,7 +1836,7 @@
              <string>16th note is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1884,7 +1849,7 @@
              <string>16th note record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1897,7 +1862,7 @@
              <string>32nd note is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1910,7 +1875,7 @@
              <string>32nd note record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1943,7 +1908,7 @@
              <string>64th note is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1956,7 +1921,7 @@
              <string>64th note record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1969,7 +1934,7 @@
              <string>Undo is active</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -1982,7 +1947,7 @@
              <string>Undo record</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string notr="true">...</string>
             </property>
            </widget>
           </item>
@@ -3449,25 +3414,8 @@
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>Check for new versions of MuseScore on startup:</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QComboBox" name="checkUpdateStartup">
-              <property name="accessibleName">
-               <string>Check for new versions of MuseScore on startup</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>Choose interval</string>
-              </property>
-             </widget>
-            </item>
             <item>
              <spacer name="horizontalSpacer_5">
               <property name="orientation">
@@ -3495,6 +3443,13 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="checkUpdateStartup">
+            <property name="text">
+             <string>Check for new version of MuseScore</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -3546,8 +3501,6 @@
   <tabstop>myPluginsButton</tabstop>
   <tabstop>sfPath</tabstop>
   <tabstop>mySoundfontsButton</tabstop>
-  <tabstop>sfzPath</tabstop>
-  <tabstop>mySfzButton</tabstop>
   <tabstop>myImages</tabstop>
   <tabstop>myImagesButton</tabstop>
   <tabstop>language</tabstop>
@@ -3560,8 +3513,6 @@
   <tabstop>autoSaveTime</tabstop>
   <tabstop>oscServer</tabstop>
   <tabstop>oscPort</tabstop>
-  <tabstop>resetToDefault</tabstop>
-  <tabstop>buttonBox</tabstop>
   <tabstop>bgColorButton</tabstop>
   <tabstop>bgWallpaperButton</tabstop>
   <tabstop>bgColorLabel</tabstop>
@@ -3572,11 +3523,10 @@
   <tabstop>fgColorLabel</tabstop>
   <tabstop>fgWallpaper</tabstop>
   <tabstop>fgWallpaperSelect</tabstop>
-  <tabstop>drawAntialiased</tabstop>
-  <tabstop>proximity</tabstop>
   <tabstop>enableMidiInput</tabstop>
   <tabstop>playNotes</tabstop>
   <tabstop>defaultPlayDuration</tabstop>
+  <tabstop>playChordOnAddNote</tabstop>
   <tabstop>warnPitchRange</tabstop>
   <tabstop>rcGroup</tabstop>
   <tabstop>rewindActive</tabstop>
@@ -3661,7 +3611,10 @@
   <tabstop>clearShortcut</tabstop>
   <tabstop>defineShortcut</tabstop>
   <tabstop>printShortcuts</tabstop>
-  <tabstop>checkUpdateStartup</tabstop>
+  <tabstop>resetToDefault</tabstop>
+  <tabstop>buttonBox</tabstop>
+  <tabstop>drawAntialiased</tabstop>
+  <tabstop>proximity</tabstop>
  </tabstops>
  <resources/>
  <connections/>

@@ -124,7 +124,7 @@ static const StyleVal2 style114[] = {
       { StyleIdx::smallClefMag,                 QVariant(qreal(0.8)) },
       { StyleIdx::genClef,                      QVariant(true) },
       { StyleIdx::genKeysig,                    QVariant(true) },
-      { StyleIdx::genTimesig,                   QVariant(true) },
+//      { StyleIdx::genTimesig,                   QVariant(true) },
       { StyleIdx::genCourtesyTimesig,           QVariant(true) },
       { StyleIdx::genCourtesyKeysig,            QVariant(true) },
       { StyleIdx::useStandardNoteNames,         QVariant(true) },
@@ -148,8 +148,6 @@ static const StyleVal2 style114[] = {
       { StyleIdx::ArpeggioNoteDistance,         QVariant(.5) },
       { StyleIdx::ArpeggioLineWidth,            QVariant(.18) },
       { StyleIdx::ArpeggioHookLen,              QVariant(.8) },
-      { StyleIdx::FixMeasureNumbers,            QVariant(0) },
-      { StyleIdx::FixMeasureWidth,              QVariant(false) },
       { StyleIdx::keySigNaturals,               QVariant(int(KeySigNatural::BEFORE)) },
       { StyleIdx::tupletMaxSlope,               QVariant(qreal(0.5)) },
       { StyleIdx::tupletOufOfStaff,             QVariant(false) },
@@ -233,13 +231,13 @@ void Part::read114(XmlReader& e)
                   staff->read114(e);
                   }
             else if (tag == "Instrument") {
-                  Instrument* instrument = instr(0);
+                  Instrument* instrument = instr();
                   instrument->read(e);
                   // add string data from MIDI program number, if possible
                   if (instrument->stringData()->strings() == 0
                               && instrument->channel().count() > 0
                               && instrument->drumset() == nullptr) {
-                        int program = instrument->channel(0).program;
+                        int program = instrument->channel(0)->program;
                         if (program >= 24 && program <= 30)       // guitars
                               instrument->setStringData(StringData(19, 6, g_guitarStrings));
                         else if ( (program >= 32 && program <= 39) || program == 43)      // bass / double-bass
@@ -251,7 +249,7 @@ void Part::read114(XmlReader& e)
                         else if (program == 42)                   // cello and other bass string instr.
                               instrument->setStringData(StringData(24, 4, g_celloStrings));
                         }
-                  Drumset* d = instr(0)->drumset();
+                  Drumset* d = const_cast<Drumset*>(instr()->drumset());
                   Staff*   st = staff(0);
                   if (d && st && st->lines() != 5) {
                         int n = 0;
@@ -264,13 +262,13 @@ void Part::read114(XmlReader& e)
             else if (tag == "name") {
                   Text* t = new Text(score());
                   t->read(e);
-                  instr(0)->setLongName(t->text());
+                  instr()->setLongName(t->text());
                   delete t;
                   }
             else if (tag == "shortName") {
                   Text* t = new Text(score());
                   t->read(e);
-                  instr(0)->setShortName(t->text());
+                  instr()->setShortName(t->text());
                   delete t;
                   }
             else if (tag == "trackName")
@@ -281,9 +279,9 @@ void Part::read114(XmlReader& e)
                   e.unknown();
             }
       if (_partName.isEmpty())
-            _partName = instr(0)->trackName();
+            _partName = instr()->trackName();
 
-      if (instr(0)->useDrumset() != DrumsetKind::NONE) {
+      if (instr()->useDrumset()) {
             foreach(Staff* staff, _staves) {
                   int lines = staff->lines();
                   int bf    = staff->barLineFrom();
@@ -306,7 +304,7 @@ void Part::read114(XmlReader& e)
       articulations.append(MidiArticulation("staccato", "", 100, 50));
       articulations.append(MidiArticulation("tenuto", "", 100, 100));
       articulations.append(MidiArticulation("sforzato", "", 120, 100));
-      instr(0)->setArticulation(articulations);
+      instr()->setArticulation(articulations);
       }
 
 //---------------------------------------------------------
@@ -779,7 +777,6 @@ Score::FileError Score::read114(XmlReader& e)
       fixTicks();
       rebuildMidiMapping();
       updateChannel();
-      updateNotes();    // only for parts needed?
 
       // treat reading a 1.2 file as import
       // on save warn if old file will be overwritten

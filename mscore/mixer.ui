@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>456</width>
-    <height>106</height>
+    <width>534</width>
+    <height>143</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -15,6 +15,9 @@
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::ClickFocus</enum>
   </property>
   <property name="windowTitle">
    <string/>
@@ -70,6 +73,9 @@
         <property name="toolTip">
          <string>Part name</string>
         </property>
+        <property name="accessibleName">
+         <string>Part Name</string>
+        </property>
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -84,7 +90,7 @@
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <widget class="Awl::Knob" name="volume" native="true">
+         <widget class="Awl::Knob" name="volume">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
             <horstretch>0</horstretch>
@@ -103,35 +109,44 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
           <property name="toolTip">
            <string>Volume</string>
+          </property>
+          <property name="accessibleName">
+           <string>Volume</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Use arrows to modify</string>
           </property>
           <property name="invertedAppearance" stdset="0">
            <bool>false</bool>
           </property>
-          <property name="scaleWidth" stdset="0">
+          <property name="scaleWidth">
            <number>5</number>
           </property>
-          <property name="scaleValueColor" stdset="0">
+          <property name="scaleValueColor">
            <color>
             <red>238</red>
             <green>80</green>
             <blue>54</blue>
            </color>
           </property>
-          <property name="maxValue" stdset="0">
+          <property name="maxValue">
            <double>127.000000000000000</double>
           </property>
-          <property name="lineStep" stdset="0">
+          <property name="lineStep">
            <double>1.000000000000000</double>
           </property>
-          <property name="pageStep" stdset="0">
+          <property name="pageStep">
            <double>10.000000000000000</double>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="Awl::MidiPanKnob" name="pan" native="true">
+         <widget class="Awl::MidiPanKnob" name="pan">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
             <horstretch>0</horstretch>
@@ -150,8 +165,17 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
           <property name="toolTip">
            <string>Panorama position</string>
+          </property>
+          <property name="accessibleName">
+           <string>Panorama position</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Use arrows to modify</string>
           </property>
           <property name="scaleWidth" stdset="0">
            <number>5</number>
@@ -159,7 +183,7 @@
          </widget>
         </item>
         <item row="0" column="2">
-         <widget class="Awl::Knob" name="reverb" native="true">
+         <widget class="Awl::Knob" name="reverb">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
             <horstretch>0</horstretch>
@@ -178,25 +202,34 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
           <property name="toolTip">
            <string>Reverb</string>
+          </property>
+          <property name="accessibleName">
+           <string>Reverb</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Use arrows to modify</string>
           </property>
           <property name="scaleWidth" stdset="0">
            <number>5</number>
           </property>
-          <property name="maxValue" stdset="0">
+          <property name="maxValue">
            <double>127.000000000000000</double>
           </property>
-          <property name="lineStep" stdset="0">
+          <property name="lineStep">
            <double>1.000000000000000</double>
           </property>
-          <property name="pageStep" stdset="0">
+          <property name="pageStep">
            <double>10.000000000000000</double>
           </property>
          </widget>
         </item>
         <item row="0" column="3">
-         <widget class="Awl::Knob" name="chorus" native="true">
+         <widget class="Awl::Knob" name="chorus">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
             <horstretch>0</horstretch>
@@ -215,19 +248,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
           <property name="toolTip">
            <string>Chorus</string>
+          </property>
+          <property name="accessibleName">
+           <string>Chorus</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Use arrows to modify</string>
           </property>
           <property name="scaleWidth" stdset="0">
            <number>5</number>
           </property>
-          <property name="maxValue" stdset="0">
+          <property name="maxValue">
            <double>127.000000000000000</double>
           </property>
-          <property name="lineStep" stdset="0">
+          <property name="lineStep">
            <double>1.000000000000000</double>
           </property>
-          <property name="pageStep" stdset="0">
+          <property name="pageStep">
            <double>10.000000000000000</double>
           </property>
          </widget>
@@ -353,6 +395,9 @@
         </property>
         <item>
          <widget class="QCheckBox" name="mute">
+          <property name="accessibleName">
+           <string>Mute</string>
+          </property>
           <property name="text">
            <string>Mute</string>
           </property>
@@ -360,18 +405,18 @@
         </item>
         <item>
          <widget class="QCheckBox" name="solo">
+          <property name="accessibleName">
+           <string>Solo</string>
+          </property>
           <property name="text">
            <string>Solo</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="drumset">
+         <widget class="QCheckBox" name="drumset">
           <property name="text">
            <string>Drumset</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>
@@ -413,6 +458,9 @@
           <property name="toolTip">
            <string>MIDI sound</string>
           </property>
+          <property name="accessibleName">
+           <string>Sound</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -424,16 +472,26 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Awl::Knob</class>
-   <extends>QWidget</extends>
-   <header>awl/knob.h</header>
-  </customwidget>
-  <customwidget>
    <class>Awl::MidiPanKnob</class>
    <extends>Awl::Knob</extends>
    <header>awl/midipanknob.h</header>
   </customwidget>
+  <customwidget>
+   <class>Awl::Knob</class>
+   <extends>QWidget</extends>
+   <header>awl/knob.h</header>
+  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>partName</tabstop>
+  <tabstop>mute</tabstop>
+  <tabstop>solo</tabstop>
+  <tabstop>patch</tabstop>
+  <tabstop>volume</tabstop>
+  <tabstop>pan</tabstop>
+  <tabstop>reverb</tabstop>
+  <tabstop>chorus</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

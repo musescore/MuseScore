@@ -22,6 +22,7 @@ class Spanner;
 class System;
 class Chord;
 class ChordRest;
+class Note;
 
 //---------------------------------------------------------
 //   SpannerSegmentType
@@ -85,6 +86,7 @@ class SpannerSegment : public Element {
       virtual Element* prevElement() override;
       virtual bool isSpannerSegment() const override { return true; }
       virtual QString accessibleInfo() override;
+      virtual void styleChanged() override;
       };
 
 //----------------------------------------------------------------------------------
@@ -155,6 +157,8 @@ class Spanner : public Element {
       virtual void startEdit(MuseScoreView*, const QPointF&) override;
       virtual void endEdit() override;
       bool removeSpannerBack();
+      virtual void removeUnmanaged();
+      virtual void undoInsertTimeUnmanaged(int tick, int len);
       virtual void setYoff(qreal) {}    // used in musicxml import
 
       QVariant getProperty(P_ID propertyId) const;
@@ -163,6 +167,9 @@ class Spanner : public Element {
 
       void computeStartElement();
       void computeEndElement();
+      static Note* endElementFromSpanner(Spanner* sp, Element* newStart);
+      static Note* startElementFromSpanner(Spanner* sp, Element* newEnd);
+      void setNoteSpan(Note* startNote, Note* endNote);
 
       Element* startElement() const    { return _startElement; }
       Element* endElement() const      { return _endElement;   }

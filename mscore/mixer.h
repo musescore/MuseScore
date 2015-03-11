@@ -23,7 +23,7 @@
 
 #include "ui_mixer.h"
 #include "libmscore/instrument.h"
-
+#include "enableplayforwidget.h"
 namespace Ms {
 
 class Score;
@@ -48,6 +48,7 @@ class PartEdit : public QWidget, public Ui::PartEditBase {
       void chorusChanged(double);
       void muteChanged(bool);
       void soloToggled(bool);
+      void drumsetToggled(bool);
 
    public slots:
 
@@ -69,8 +70,12 @@ class Mixer : public QScrollArea
       Score*       cs;
       QScrollArea* sa;
       QVBoxLayout* vb;
+      EnablePlayForWidget* enablePlay;
 
       virtual void closeEvent(QCloseEvent*);
+      virtual void showEvent(QShowEvent*) override;
+      virtual bool eventFilter(QObject*, QEvent*) override;
+      virtual void keyPressEvent(QKeyEvent*) override;
 
    private slots:
       void updateSolo(bool);

@@ -76,7 +76,7 @@ namespace Ms {
 
 void ScoreView::genPropertyMenu1(Element* e, QMenu* popup)
       {
-      if (!e->generated() || e->type() == Element::Type::BAR_LINE) {
+      if ((!e->generated() || e->type() == Element::Type::BAR_LINE) && enableExperimental){
             if (e->flag(ElementFlag::HAS_TAG)) {
                   popup->addSeparator();
 
@@ -101,7 +101,7 @@ void ScoreView::genPropertyMenu1(Element* e, QMenu* popup)
 
 void ScoreView::genPropertyMenuText(Element* e, QMenu* popup)
       {
-      if (e->flag(ElementFlag::HAS_TAG)) {
+      if (e->flag(ElementFlag::HAS_TAG) && enableExperimental) {
             popup->addSeparator();
 
             QMenu* menuLayer = new QMenu(tr("Layer"));
@@ -199,8 +199,8 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             // if the clef is not generated (= not courtesy) add the specific menu item
             if (!e->generated() && clef->measure() != score()->firstMeasure()) {
                   QAction* a = popup->addAction(static_cast<Clef*>(e)->showCourtesy()
-                     ? tr("Hide courtesy clef")
-                     : tr("Show courtesy clef") );
+                     ? tr("Hide Courtesy Clef")
+                     : tr("Show Courtesy Clef") );
                         a->setData("clef-courtesy");
                   }
             }
@@ -320,7 +320,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             Bend* bend = static_cast<Bend*>(e);
             BendProperties bp(bend, 0);
             if (bp.exec()) {
-                  for (Element* b : bend->linkList())
+                  for (ScoreElement* b : bend->linkList())
                         b->score()->undo(new ChangeBend(static_cast<Bend*>(b), bp.points()));
                   }
             }
@@ -416,30 +416,26 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       if (cmd == "ts-courtesy") {
             TimeSig* ts = static_cast<TimeSig*>(e);
-            score()->undo(new ChangeTimesig(static_cast<TimeSig*>(e), !ts->showCourtesySig(), ts->sig(),
-                  ts->stretch(), ts->numeratorString(), ts->denominatorString(), ts->timeSigType()));
+            ts->undoChangeProperty(P_ID::SHOW_COURTESY, !ts->showCourtesySig());
             }
       else if (cmd == "ts-props") {
             TimeSig* ts = static_cast<TimeSig*>(e);
-            TimeSig r(*ts);
-            TimeSigProperties vp(&r);
-            int rv = vp.exec();
-            if (rv) {
-                  bool stretchChanged = r.stretch() != ts->stretch();
-                  if (r.numeratorString() != ts->numeratorString()
-                     || r.denominatorString() != ts->denominatorString()
-                     || r.sig() != ts->sig()
-                     || stretchChanged
-                     || !(r.groups() == ts->groups())
-                     || r.timeSigType() != ts->timeSigType()) {
-                        score()->undo(new ChangeTimesig(ts, r.showCourtesySig(), r.sig(), r.stretch(),
-                           r.numeratorString(), r.denominatorString(), r.timeSigType()));
-                        if (stretchChanged)
-                              score()->timesigStretchChanged(ts, ts->measure(), ts->staffIdx());
-                        if (!(r.groups() == ts->groups()))
-                              ts->undoSetGroups(r.groups());
+            TimeSig* r = new TimeSig(*ts);
+            TimeSigProperties tsp(r);
+
+            if (tsp.exec()) {
+                  ts->undoChangeProperty(P_ID::SHOW_COURTESY,      r->showCourtesySig());
+                  ts->undoChangeProperty(P_ID::NUMERATOR_STRING,   r->numeratorString());
+                  ts->undoChangeProperty(P_ID::DENOMINATOR_STRING, r->denominatorString());
+                  ts->undoChangeProperty(P_ID::TIMESIG_TYPE,       int(r->timeSigType()));
+                  ts->undoChangeProperty(P_ID::GROUPS,        QVariant::fromValue<Groups>(r->groups()));
+
+                  if (r->sig() != ts->sig()) {
+                        score()->cmdAddTimeSig(ts->measure(), ts->staffIdx(), r, true);
+                        r = 0;
                         }
                   }
+            delete r;
             }
       else if (cmd == "smallNote")
             score()->undoChangeProperty(e, P_ID::SMALL, !static_cast<Note*>(e)->small());
@@ -449,7 +445,15 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       else if (cmd == "st-props") {
             StaffTextProperties rp(static_cast<StaffText*>(e));
-            rp.exec();
+            if (rp.exec()) {
+                  Score* score = e->score();
+                  StaffText* nt = rp.staffText()->clone();
+                  nt->setScore(score);
+                  score->undoChangeElement(e, nt);
+                  score->updateChannel();
+                  score->updateSwing();
+                  score->setPlaylistDirty();
+                  }
             }
       else if (cmd == "text-style") {
             Text* t = static_cast<Text*>(e);
@@ -543,7 +547,8 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             int rv = fp.exec();
             nFret->layout();
             if (rv) {
-                  for (Element* e : fd->linkList()) {
+                  for (ScoreElement* ee : fd->linkList()) {
+                        Element* e = static_cast<Element*>(ee);
                         FretDiagram* f = static_cast<FretDiagram*>(nFret->clone());
                         f->setScore(e->score());
                         f->setTrack(e->track());

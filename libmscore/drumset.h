@@ -58,12 +58,13 @@ class Drumset {
       const QString& name(int pitch) const      { return _drum[pitch].name;           }
       int shortcut(int pitch) const             { return _drum[pitch].shortcut;       }
 
-      void save(Xml&);
+      void save(Xml&) const;
       void load(XmlReader&);
       void clear();
-      int nextPitch(int);
-      int prevPitch(int);
+      int nextPitch(int) const;
+      int prevPitch(int) const;
       DrumInstrument& drum(int i) { return _drum[i]; }
+      const DrumInstrument& drum(int i) const { return _drum[i]; }
       };
 
 extern Drumset* smDrumset;

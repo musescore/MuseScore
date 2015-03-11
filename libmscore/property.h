@@ -27,9 +27,6 @@ enum class PropertyStyle : char {
 
 //------------------------------------------------------------------------
 //   Element Properties
-//    accessible through
-//    virtual QVariant Element::getProperty(int propertyId)
-//    virtual void Element::setProperty(int propertyId, const QVariant&)
 //------------------------------------------------------------------------
 
 enum class P_ID : unsigned char {
@@ -169,6 +166,7 @@ enum class P_ID : unsigned char {
       TIME_STRETCH,
       TIMESIG,
       TIMESIG_GLOBAL,
+      TIMESIG_STRETCH,
       TIMESIG_TYPE,
       SPANNER_TICK,
       SPANNER_TICKS,
@@ -210,6 +208,15 @@ enum class P_ID : unsigned char {
       SYSTEM_INITIAL_BARLINE_TYPE,
 
       MAG,
+      USE_DRUMSET,
+      PART_VOLUME,
+      PART_MUTE,
+      PART_PAN,
+      PART_REVERB,
+      PART_CHORUS,
+
+      DURATION,
+      DURATION_TYPE,
 
       END
       };
@@ -231,6 +238,7 @@ enum class P_TYPE : char {
       COLOR,
       DIRECTION,      // enum class MScore::Direction
       DIRECTION_H,    // enum class MScore::DirectionH
+      TDURATION,
       LAYOUT_BREAK,
       VALUE_TYPE,
       BEAM_MODE,

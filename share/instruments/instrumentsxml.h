@@ -58,9 +58,9 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "A Di."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "E Dizi"),
 //: E Dizi
 QT_TRANSLATE_NOOP("InstrumentsXML", "E Di."),
-QT_TRANSLATE_NOOP("InstrumentsXML", "Fife"),
-//: Fife
-QT_TRANSLATE_NOOP("InstrumentsXML", "Fife"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Fife"),
+//: B♭ Fife
+QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Fife"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Flageolet"),
 //: Flageolet
 QT_TRANSLATE_NOOP("InstrumentsXML", "Fla."),
@@ -597,6 +597,10 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ A. Hn."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Baritone Horn"),
 //: Baritone Horn
 QT_TRANSLATE_NOOP("InstrumentsXML", "Bar. Hn."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Baritone Horn"),
+//: Baritone Horn
+QT_TRANSLATE_NOOP("InstrumentsXML", "Bar. Hn."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Baritone Horn (Treble Clef)"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Posthorn"),
 //: Posthorn
 QT_TRANSLATE_NOOP("InstrumentsXML", "Psthn."),
@@ -741,6 +745,10 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Spt."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Trombone"),
 //: Trombone
 QT_TRANSLATE_NOOP("InstrumentsXML", "Trb."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Trombone"),
+//: Trombone
+QT_TRANSLATE_NOOP("InstrumentsXML", "Trb."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Trombone (Treble Clef)"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Soprano Trombone"),
 //: Soprano Trombone
 QT_TRANSLATE_NOOP("InstrumentsXML", "S. Trb."),
@@ -762,6 +770,10 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Cim."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Euphonium"),
 //: Euphonium
 QT_TRANSLATE_NOOP("InstrumentsXML", "Eu."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Euphonium"),
+//: Euphonium
+QT_TRANSLATE_NOOP("InstrumentsXML", "Eu."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Euphonium (Treble Clef)"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tuba"),
 //: Tuba
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tu."),
@@ -771,12 +783,20 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "F Tu."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Tuba"),
 //: E♭ Tuba
 QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Tu."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Tuba"),
+//: E♭ Tuba
+QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Tu."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Tuba (Treble Clef)"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "C Tuba"),
 //: C Tuba
 QT_TRANSLATE_NOOP("InstrumentsXML", "C Tu."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Tuba"),
 //: B♭ Tuba
 QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Tu."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Tuba"),
+//: B♭ Tuba
+QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Tu."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Tuba (Treble Clef)"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Bass Tuba in F"),
 //: Bass Tuba in F
 QT_TRANSLATE_NOOP("InstrumentsXML", "Ba. Tu. F"),
@@ -1301,13 +1321,14 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Plucked Strings"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Banjo"),
 //: Banjo
 QT_TRANSLATE_NOOP("InstrumentsXML", "Bj."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Banjo [Tablature]"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tenor Banjo"),
 //: Tenor Banjo
 QT_TRANSLATE_NOOP("InstrumentsXML", "T. Bj."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Balalaika"),
 //: Balalaika
 QT_TRANSLATE_NOOP("InstrumentsXML", "Bal."),
-QT_TRANSLATE_NOOP("InstrumentsXML", " Balalaika"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Balalaika"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Piccolo Balalaika"),
 //: Piccolo Balalaika
 QT_TRANSLATE_NOOP("InstrumentsXML", "Pic. Bal."),
@@ -1414,6 +1435,7 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Thb."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Mandolin"),
 //: Mandolin
 QT_TRANSLATE_NOOP("InstrumentsXML", "Mdn."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Mandolin [Tablature]"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Mandola"),
 //: Mandola
 QT_TRANSLATE_NOOP("InstrumentsXML", "Mda."),
@@ -1464,6 +1486,9 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "5-str. Electric Bass"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "El. B."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "5-str. Electric Bass [Tablature]"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Strings"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Erhu"),
+//: Erhu
+QT_TRANSLATE_NOOP("InstrumentsXML", "Eh."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "String Section"),
 //: String Section
 QT_TRANSLATE_NOOP("InstrumentsXML", "Str."),

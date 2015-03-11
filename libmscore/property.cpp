@@ -171,6 +171,7 @@ static const PropertyData propertyList[] = {
       { P_ID::TIME_STRETCH,        false, 0,               P_TYPE::REAL     },
       { P_ID::TIMESIG,             false, 0,               P_TYPE::FRACTION },
       { P_ID::TIMESIG_GLOBAL,      false, 0,               P_TYPE::FRACTION },
+      { P_ID::TIMESIG_STRETCH,     false, 0,               P_TYPE::FRACTION },
       { P_ID::TIMESIG_TYPE,        true,  0,               P_TYPE::INT },
       { P_ID::SPANNER_TICK,        true,  "tick",          P_TYPE::INT      },
       { P_ID::SPANNER_TICKS,       true,  "ticks",           P_TYPE::INT      },
@@ -212,6 +213,15 @@ static const PropertyData propertyList[] = {
 
       { P_ID::SYSTEM_INITIAL_BARLINE_TYPE, false, "sysInitBarLineType", P_TYPE::INT },
       { P_ID::MAG,                 false, "mag",                   P_TYPE::REAL },
+      { P_ID::USE_DRUMSET,         false, "useDrumset",            P_TYPE::BOOL },
+      { P_ID::PART_VOLUME,         false, "volume",                P_TYPE::INT },
+      { P_ID::PART_MUTE,           false, "mute",                  P_TYPE::BOOL },
+      { P_ID::PART_PAN,            false, "pan",                   P_TYPE::INT },
+      { P_ID::PART_REVERB,         false, "reverb",                P_TYPE::INT },
+      { P_ID::PART_CHORUS,         false, "chorus",                P_TYPE::INT },
+
+      { P_ID::DURATION,            false, 0,                       P_TYPE::FRACTION },
+      { P_ID::DURATION_TYPE,       false, 0,                       P_TYPE::TDURATION },
 
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };
@@ -330,6 +340,7 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   return QVariant::fromValue(g);
                   }
             case P_TYPE::POINT_MM:              // not supported
+            case P_TYPE::TDURATION:
             case P_TYPE::SIZE_MM:
             case P_TYPE::SYMID:
             case P_TYPE::TEXT_STYLE:

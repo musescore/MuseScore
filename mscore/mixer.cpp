@@ -46,6 +46,7 @@ PartEdit::PartEdit(QWidget* parent)
       connect(reverb,   SIGNAL(valueChanged(double,int)), SLOT(reverbChanged(double)));
       connect(mute,     SIGNAL(toggled(bool)),            SLOT(muteChanged(bool)));
       connect(solo,     SIGNAL(toggled(bool)),            SLOT(soloToggled(bool)));
+      connect(drumset,  SIGNAL(toggled(bool)),            SLOT(drumsetToggled(bool)));
       }
 
 //---------------------------------------------------------
@@ -54,6 +55,7 @@ PartEdit::PartEdit(QWidget* parent)
 
 void PartEdit::setPart(Part* p, Channel* a)
       {
+      Channel dummy;
       channel = a;
       part    = p;
       QString s = part->partName();
@@ -63,9 +65,17 @@ void PartEdit::setPart(Part* p, Channel* a)
       mute->setChecked(a->mute);
       solo->setChecked(a->solo);
       volume->setValue(a->volume);
+      volume->setDclickValue1(dummy.volume);
+      volume->setDclickValue2(dummy.volume);
       reverb->setValue(a->reverb);
+      reverb->setDclickValue1(dummy.reverb);
+      reverb->setDclickValue2(dummy.reverb);
       chorus->setValue(a->chorus);
+      chorus->setDclickValue1(dummy.chorus);
+      chorus->setDclickValue2(dummy.chorus);
       pan->setValue(a->pan);
+      pan->setDclickValue1(0);
+      pan->setDclickValue2(0);
       for (int i = 0; i < patch->count(); ++i) {
             MidiPatch* p = (MidiPatch*)patch->itemData(i, Qt::UserRole).value<void*>();
             if (a->synti == p->synti && a->program == p->prog && a->bank == p->bank) {
@@ -73,7 +83,9 @@ void PartEdit::setPart(Part* p, Channel* a)
                   break;
                   }
             }
-      drumset->setVisible((p->instr()->useDrumset() != DrumsetKind::NONE));
+      drumset->blockSignals(true);
+      drumset->setChecked(p->instr()->useDrumset());
+      drumset->blockSignals(false);
       }
 
 //---------------------------------------------------------
@@ -95,6 +107,7 @@ Mixer::Mixer(QWidget* parent)
       area->setLayout(vb);
       setWidget(area);
 
+      enablePlay = new EnablePlayForWidget(this);
       if (!useFactorySettings) {
             QSettings settings;
             settings.beginGroup("Mixer");
@@ -113,6 +126,38 @@ void Mixer::closeEvent(QCloseEvent* ev)
       emit closed(false);
       QWidget::closeEvent(ev);
       }
+
+//---------------------------------------------------------
+//   showEvent
+//---------------------------------------------------------
+
+void Mixer::showEvent(QShowEvent* e)
+      {
+      enablePlay->showEvent(e);
+      QScrollArea::showEvent(e);
+      activateWindow();
+      setFocus();
+      }
+
+//---------------------------------------------------------
+//   eventFilter
+//---------------------------------------------------------
+
+bool Mixer::eventFilter(QObject* obj, QEvent* e)
+      {
+      if (enablePlay->eventFilter(obj, e))
+            return true;
+      return QScrollArea::eventFilter(obj, e);
+      }
+
+void Mixer::keyPressEvent(QKeyEvent* ev) {
+      if (ev->key() == Qt::Key_Escape && ev->modifiers() == Qt::NoModifier) {
+            close();
+            return;
+            }
+      QWidget::keyPressEvent(ev);
+      }
+
 
 //---------------------------------------------------------
 //   updateAll
@@ -142,9 +187,13 @@ void Mixer::updateAll(Score* score)
       patchListChanged();
       }
 
+//---------------------------------------------------------
+//   partEdit
+//---------------------------------------------------------
+
 PartEdit* Mixer::partEdit(int index)
       {
-      if(index < vb->count()) {
+      if (index < vb->count()) {
             QWidgetItem* wi = (QWidgetItem*)(vb->itemAt(index));
             return (PartEdit*) wi->widget();
             }
@@ -166,7 +215,7 @@ void Mixer::patchListChanged()
       foreach (const MidiMapping& m, *mm) {
             QWidgetItem* wi  = (QWidgetItem*)(vb->itemAt(idx));
             PartEdit* pe     = (PartEdit*)(wi->widget());
-            bool drum = (m.part->instr()->useDrumset() != DrumsetKind::NONE);
+            bool drum        = m.part->instr()->useDrumset();
             pe->patch->clear();
             foreach(const MidiPatch* p, pl) {
                   if (p->drum == drum)
@@ -212,10 +261,11 @@ void PartEdit::patchChanged(int n)
       Score* score = part->score();
       if (score) {
             score->startCmd();
-            score->undo(new ChangePatch(channel, p));
+            score->undo(new ChangePatch(score, channel, p));
+            score->setLayoutAll(true);
             score->endCmd();
-            mscore->endCmd();
             }
+      channel->updateInitList();
       }
 
 //---------------------------------------------------------
@@ -227,6 +277,7 @@ void PartEdit::volChanged(double val)
       int iv = lrint(val);
       seq->setController(channel->channel, CTRL_VOLUME, iv);
       channel->volume = iv;
+      channel->updateInitList();
       }
 
 //---------------------------------------------------------
@@ -238,6 +289,7 @@ void PartEdit::panChanged(double val)
       int iv = lrint(val);
       seq->setController(channel->channel, CTRL_PANPOT, iv);
       channel->pan = iv;
+      channel->updateInitList();
       }
 
 //---------------------------------------------------------
@@ -249,6 +301,7 @@ void PartEdit::reverbChanged(double val)
       int iv = lrint(val);
       seq->setController(channel->channel, CTRL_REVERB_SEND, iv);
       channel->reverb = iv;
+      channel->updateInitList();
       }
 
 //---------------------------------------------------------
@@ -260,6 +313,7 @@ void PartEdit::chorusChanged(double val)
       int iv = lrint(val);
       seq->setController(channel->channel, CTRL_CHORUS_SEND, iv);
       channel->chorus = iv;
+      channel->updateInitList();
       }
 
 //---------------------------------------------------------
@@ -283,9 +337,8 @@ void PartEdit::soloToggled(bool val)
       channel->soloMute = !val;
       if (val) {
             mute->setChecked(false);
-            foreach(Part* part, part->score()->parts()) {
-                  for (int i = 0; i < part->instr()->channel().size(); ++i) {
-                        Channel* a = &part->instr()->channel(i);
+            for (Part* p : part->score()->parts()) {
+                  for (Channel* a : p->instr()->channel()) {
                         a->soloMute = (channel != a && !a->solo);
                         a->solo     = (channel == a || a->solo);
                         if (a->soloMute)
@@ -296,26 +349,55 @@ void PartEdit::soloToggled(bool val)
             }
       else { //do nothing except if it's the last solo to be switched off
             bool found = false;
-            foreach(Part* part, part->score()->parts()) {
-                  for (int i = 0; i < part->instr()->channel().size(); ++i) {
-                        Channel* a = &part->instr()->channel(i);
-                        if(a->solo){
+            for (Part* p : part->score()->parts()) {
+                  for (Channel* a : p->instr()->channel()) {
+                        if (a->solo){
                             found = true;
                             break;
                             }
                         }
                   }
             if (!found){
-                foreach(Part* part, part->score()->parts()) {
-                  for (int i = 0; i < part->instr()->channel().size(); ++i) {
-                        Channel* a = &part->instr()->channel(i);
-                        a->soloMute = false;
-                        a->solo     = false;
+                  foreach(Part* p, part->score()->parts()) {
+                        for (Channel* a : p->instr()->channel()) {
+                              a->soloMute = false;
+                              a->solo     = false;
+                              }
                         }
-                  }
                   emit soloChanged(false);
-                }
+                  }
             }
+      }
+
+//---------------------------------------------------------
+//   drumsetToggled
+//---------------------------------------------------------
+
+void PartEdit::drumsetToggled(bool val)
+      {
+      if (part == 0)
+            return;
+
+      Score* score = part->score();
+      score->startCmd();
+
+      part->undoChangeProperty(P_ID::USE_DRUMSET, val);
+      patch->clear();
+      const QList<MidiPatch*> pl = synti->getPatchInfo();
+      for (const MidiPatch* p : pl) {
+            if (p->drum == val)
+                  patch->addItem(p->name, QVariant::fromValue<void*>((void*)p));
+            }
+
+      // switch to first instrument
+      const MidiPatch* p = (MidiPatch*)patch->itemData(0, Qt::UserRole).value<void*>();
+      if (p == 0) {
+            qDebug("PartEdit::patchChanged: no patch");
+            return;
+            }
+      score->undo(new ChangePatch(score, channel, p));
+      score->setLayoutAll(true);
+      score->endCmd();
       }
 
 //---------------------------------------------------------
@@ -324,7 +406,7 @@ void PartEdit::soloToggled(bool val)
 
 void Mixer::updateSolo(bool val)
       {
-      for(int i = 0; i <vb->count(); i++ ){
+      for (int i = 0; i < vb->count(); i++ ){
             QWidgetItem* wi = (QWidgetItem*)(vb->itemAt(i));
             PartEdit* pe    = (PartEdit*)(wi->widget());
             pe->mute->setEnabled(!val);

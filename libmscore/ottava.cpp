@@ -171,14 +171,9 @@ Ottava::Ottava(Score* s)
    : TextLine(s)
       {
       _numbersOnly        = score()->styleB(StyleIdx::ottavaNumbersOnly);
-      numbersOnlyStyle    = PropertyStyle::STYLED;
-      beginTextStyle      = PropertyStyle::STYLED;
-      continueTextStyle   = PropertyStyle::STYLED;
       setOttavaType(Type::OTTAVA_8VA);
       setLineWidth(score()->styleS(StyleIdx::ottavaLineWidth));
-      lineWidthStyle = PropertyStyle::STYLED;
       setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::ottavaLineStyle)));
-      lineStyleStyle = PropertyStyle::STYLED;
       setFlag(ElementFlag::ON_STAFF, true);
       }
 
@@ -230,7 +225,7 @@ void Ottava::endEdit()
             Staff* s = staff();
             s->updateOttava();
             score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
-            score()->setPlaylistDirty(true);
+            score()->setPlaylistDirty();
             }
       TextLine::endEdit();
       }
@@ -427,10 +422,8 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
             case P_ID::END_TEXT:
                   return QString("");
 
-            case P_ID::BEGIN_TEXT_STYLE:
-            case P_ID::CONTINUE_TEXT_STYLE:
-            case P_ID::END_TEXT_STYLE:
-                  return QVariant::fromValue(score()->textStyle(TextStyleType::OTTAVA));
+            case P_ID::TEXT_STYLE_TYPE:
+                  return int(TextStyleType::OTTAVA);
 
             case P_ID::END_HOOK:
                   return true;

@@ -84,11 +84,11 @@ class TimeSig : public Element {
       bool operator==(const TimeSig&) const;
 
       virtual qreal mag() const override;
-      void draw(QPainter*) const;
-      void write(Xml& xml) const;
-      void read(XmlReader&);
-      void layout();
-      Space space() const;
+      virtual void draw(QPainter*) const override;
+      virtual void write(Xml& xml) const override;
+      virtual void read(XmlReader&) override;
+      virtual void layout() override;
+      virtual Space space() const override;
 
       Fraction sig() const               { return _sig; }
       void setSig(const Fraction& f, TimeSigType st = TimeSigType::NORMAL);
@@ -102,7 +102,7 @@ class TimeSig : public Element {
       int denominatorStretch() const     { return _stretch.denominator(); }
 
       bool acceptDrop(const DropData&) const override;
-      Element* drop(const DropData&);
+      virtual Element* drop(const DropData&) override;
 
       Segment* segment() const           { return (Segment*)parent(); }
       Measure* measure() const           { return (Measure*)parent()->parent(); }
@@ -123,13 +123,14 @@ class TimeSig : public Element {
 
       void setFrom(const TimeSig*);
 
-      QVariant getProperty(P_ID propertyId) const;
-      bool setProperty(P_ID propertyId, const QVariant&);
-      QVariant propertyDefault(P_ID id) const;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
 
       bool hasCustomText() const { return customText; }
 
-      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
+      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+      virtual void localSpatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
       void setNeedLayout(bool nl) { _needLayout = nl; }
 
@@ -139,6 +140,8 @@ class TimeSig : public Element {
 
       Fraction globalSig() const           { return (_sig * _stretch).reduced();  }
       void setGlobalSig(const Fraction& f) { _stretch = (_sig / f).reduced(); }
+
+      bool isLocal() const                 { return _stretch != Fraction(1,1); }
 
       virtual Element* nextElement();
       virtual Element* prevElement();

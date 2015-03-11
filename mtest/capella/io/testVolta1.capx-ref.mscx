@@ -79,19 +79,27 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
-        <Text>
-          <pos x="14.2045" y="-8.52273"/>
-          <style></style>
+        <StaffText>
+          <pos x="25" y="-13"/>
+          <halign>center</halign>
+          <valign>baseline</valign>
+          <xoffset>0</xoffset>
+          <yoffset>2</yoffset>
+          <family>Arial</family>
           <size>24</size>
           <bold>1</bold>
           <text>Volta 1</text>
-          </Text>
-        <Text>
-          <pos x="14.2045" y="-5.68182"/>
-          <style></style>
+          </StaffText>
+        <StaffText>
+          <pos x="25" y="-8"/>
+          <halign>center</halign>
+          <valign>baseline</valign>
+          <xoffset>0</xoffset>
+          <yoffset>2</yoffset>
+          <family>Arial</family>
           <bold>1</bold>
           <text>MuseScore testfile</text>
-          </Text>
+          </StaffText>
         <Chord>
           <durationType>whole</durationType>
           <Note>
@@ -105,7 +113,6 @@
         <Volta id="2">
           <endHook>1</endHook>
           <beginText>
-            <style>Volta</style>
             <text>1.</text>
             </beginText>
           <endings>1</endings>
@@ -122,7 +129,6 @@
         <endSpanner id="2"/>
         <Volta id="3">
           <beginText>
-            <style>Volta</style>
             <text>2.</text>
             </beginText>
           <endings>2</endings>
@@ -140,12 +146,16 @@
           <subtype>line</subtype>
           <pause>3</pause>
           </LayoutBreak>
-        <Text>
-          <pos x="2.84091" y="-3.40909"/>
-          <style></style>
+        <StaffText>
+          <pos x="5" y="-4"/>
+          <halign>center</halign>
+          <valign>baseline</valign>
+          <xoffset>0</xoffset>
+          <yoffset>2</yoffset>
+          <family>Arial</family>
           <bold>1</bold>
           <text>Leon Vinken</text>
-          </Text>
+          </StaffText>
         <endSpanner id="3"/>
         <Chord>
           <durationType>whole</durationType>

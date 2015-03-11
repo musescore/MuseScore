@@ -14,7 +14,6 @@
 #define __STARTCENTER_H__
 
 #include "ui_startcenter.h"
-#include "thirdparty/qtwaitingspinner/QtWaitingSpinner.h"
 
 namespace Ms {
 
@@ -42,7 +41,6 @@ class MyNetworkAccessManager: public QNetworkAccessManager
 class MyWebView: public QWebView
       {
       Q_OBJECT
-      QtWaitingSpinner* _loadingSpinner;
 
    public slots:
       void link(const QUrl& url);
@@ -69,11 +67,15 @@ class CookieJar : public QNetworkCookieJar
       Q_OBJECT
 
     public:
-      CookieJar(QString path, QObject *parent = 0);  //load cookie
-      ~CookieJar();  //save cookies
+      CookieJar(QString path, QObject* parent = 0);  //load cookie
+
+      void load();
+      void save();
+
+      bool setCookiesFromUrl(const QList<QNetworkCookie>& cookieList, const QUrl& url);
 
     private:
-      QString file; // where to save cookies
+      QString _file; // where to save cookies
       };
 
 //---------------------------------------------------------
@@ -89,7 +91,7 @@ class Startcenter : public QDialog, public Ui::Startcenter
    private slots:
       void loadScore(QString);
       void newScore();
-      void openScoreClicked(const QString &);
+      void openScoreClicked();
 
    signals:
       void closed(bool);

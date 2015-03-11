@@ -90,6 +90,7 @@ struct Preferences {
       QColor dropColor;
       bool enableMidiInput;
       bool playNotes;         // play notes on click
+      bool playChordOnAddNote;
       bool showNavigator;
       bool showPlayPanel;
       bool showStatusBar;
@@ -140,7 +141,7 @@ struct Preferences {
       double mag;
 
       //update
-      int checkUpdateStartup;
+      bool checkUpdateStartup;
 
       bool followSong;
       QString importCharsetOve;
@@ -163,7 +164,6 @@ struct Preferences {
       QString myPluginsPath;
 
       QString sfPath;
-      QString sfzPath;
 
       bool nativeDialogs;
 

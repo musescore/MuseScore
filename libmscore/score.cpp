@@ -68,6 +68,8 @@
 #include "cursor.h"
 #include "sym.h"
 #include "rehearsalmark.h"
+#include "breath.h"
+#include "instrchange.h"
 
 namespace Ms {
 
@@ -231,7 +233,7 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
       if (nb->type() == Element::Type::HBOX || nb->type() == Element::Type::VBOX
          || nb->type() == Element::Type::TBOX || nb->type() == Element::Type::FBOX)
             nb->setSystem(ob->system());
-      foreach(Element* e, *nb->el())
+      foreach(Element* e, nb->el())
             e->setParent(nb);
       }
 
@@ -293,6 +295,7 @@ void Score::init()
       layoutFlags             = 0;
       _undoRedo               = false;
       _playNote               = false;
+      _playChord              = false;
       _excerptsChanged        = false;
       _instrumentsChanged     = false;
       _selectionChanged       = false;
@@ -306,9 +309,8 @@ void Score::init()
       _showVBox               = true;
 
       _printing               = false;
-      _playlistDirty          = false;
-      _autosaveDirty          = false;
-      _dirty                  = false;
+      _playlistDirty          = true;
+      _autosaveDirty          = true;
       _saved                  = false;
       _pos[int(POS::CURRENT)] = 0;
       _pos[int(POS::LEFT)]    = 0;
@@ -360,7 +362,6 @@ Score::Score(const MStyle* s)
 //    _links
 //    _staffTypes
 //    _metaTags
-//    _dirty
 //
 
 Score::Score(Score* parent)
@@ -501,7 +502,7 @@ void Score::fixTicks()
                   //
                   //  implement section break rest
                   //
-                  if (m->sectionBreak())
+                  if (m->sectionBreak() && m->pause() != 0.0)
                         setPause(m->tick() + m->ticks(), m->pause());
 
                   //
@@ -509,8 +510,20 @@ void Score::fixTicks()
                   //
 
                   for (Segment* s = m->first(); s; s = s->next()) {
-                        if (s->segmentType() == Segment::Type::Breath)
-                              setPause(s->tick(), .1);
+                        if (s->segmentType() == Segment::Type::Breath) {
+                              qreal length = 0.0;
+                              int tick = s->tick();
+                              // find longest pause
+                              for (int i = 0, n = ntracks(); i < n; ++i) {
+                                    Element* e = s->element(i);
+                                    if (e && e->type() == Element::Type::BREATH) {
+                                          Breath* b = static_cast<Breath*>(e);
+                                          length = qMax(length, b->pause());
+                                          }
+                                    }
+                              if (length != 0.0)
+                                    setPause(tick, length);
+                              }
                         else if (s->segmentType() == Segment::Type::TimeSig) {
                               for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                                     TimeSig* ts = static_cast<TimeSig*>(s->element(staffIdx * VOICES));
@@ -720,29 +733,12 @@ void Score::setShowPageborders(bool v)
       }
 
 //---------------------------------------------------------
-//   setDirty
-//---------------------------------------------------------
-
-void Score::setDirty(bool val)
-      {
-      Score* s = rootScore();
-      if (s->dirty() != val) {
-            s->_dirty = val;
-            s->_playlistDirty = true;
-            }
-      if (s->dirty()) {
-            s->_playlistDirty = true;
-            s->_autosaveDirty = true;
-            }
-      }
-
-//---------------------------------------------------------
 //   dirty
 //---------------------------------------------------------
 
 bool Score::dirty() const
       {
-      return rootScore()->_dirty;
+      return !undo()->isClean();
       }
 
 //---------------------------------------------------------
@@ -896,40 +892,41 @@ void Score::appendPart(Part* p)
 void Score::rebuildMidiMapping()
       {
       _midiMapping.clear();
-      int port    = 0;
-      int channel = 0;
-      int idx     = 0;
-      int maxport = 0;
-      foreach(Part* part, _parts) {
+      int port        = 0;
+      int midiChannel = 0;
+      int idx         = 0;
+      int maxport     = 0;
+      for (Part* part : _parts) {
             InstrumentList* il = part->instrList();
             for (auto i = il->begin(); i != il->end(); ++i) {
-                  DrumsetKind drum = i->second.useDrumset();
-                  for (int k = 0; k < i->second.channel().size(); ++k) {
-                        Channel* a = &(i->second.channel(k));
+                  Instrument* instr = i->second;
+                  bool drum         = instr->useDrumset();
+
+                  for (Channel* channel : instr->channel()) {
                         MidiMapping mm;
                         if (port > maxport)
                               maxport = port;
-                        if (drum != DrumsetKind::NONE) {
+                        if (drum) {
                               mm.port    = port;
                               mm.channel = 9;
                               }
                         else {
                               mm.port    = port;
-                              mm.channel = channel;
-                              if (channel == 15) {
-                                    channel = 0;
+                              mm.channel = midiChannel;
+                              if (midiChannel == 15) {
+                                    midiChannel = 0;
                                     ++port;
                                     }
                               else {
-                                    ++channel;
-                                    if (channel == 9)
-                                          ++channel;
+                                    ++midiChannel;
+                                    if (midiChannel == 9)   // skip drum channel
+                                          ++midiChannel;
                                     }
                               }
                         mm.part         = part;
-                        mm.articulation = a;
+                        mm.articulation = channel;
                         _midiMapping.append(mm);
-                        a->channel = idx;
+                        channel->channel = idx;
                         ++idx;
                         }
                   }
@@ -1347,13 +1344,11 @@ Measure* Score::getCreateMeasure(int tick)
 
 void Score::addElement(Element* element)
       {
-#if 0
       if (MScore::debugMode) {
             qDebug("   Score(%p)::addElement %p(%s) parent %p(%s)",
                this, element, element->name(), element->parent(),
                element->parent() ? element->parent()->name() : "");
             }
-#endif
 
       if (element->parent() && element->parent()->type() == Element::Type::SEGMENT)
             static_cast<Segment*>(element->parent())->measure()->setDirty();
@@ -1433,21 +1428,21 @@ void Score::addElement(Element* element)
                   }
                   break;
 
-            case Element::Type::INSTRUMENT_CHANGE:
+            case Element::Type::INSTRUMENT_CHANGE: {
+                  InstrumentChange* ic = static_cast<InstrumentChange*>(element);
+                  ic->part()->setInstrument(ic->instrument(), ic->segment()->tick());
                   rebuildMidiMapping();
                   _instrumentsChanged = true;
+                  }
                   break;
 
             case Element::Type::CHORD:
-                  createPlayEvents(static_cast<Chord*>(element));
+                  setPlaylistDirty();
+                  // create playlist does not work here bc. tremolos may not be complete
+                  // createPlayEvents(static_cast<Chord*>(element));
                   break;
 
-            case Element::Type::NOTE: {
-                  Note* note = static_cast<Note*>(element);
-                  note->chord()->segment()->measure()->cmdUpdateNotes(element->staffIdx());
-                  }
-                  // fall through
-
+            case Element::Type::NOTE:
             case Element::Type::TREMOLO:
             case Element::Type::ARTICULATION:
             case Element::Type::ARPEGGIO:
@@ -1456,6 +1451,13 @@ void Score::addElement(Element* element)
                   if (cr->type() == Element::Type::CHORD)
                          createPlayEvents(static_cast<Chord*>(cr));
                   }
+                  break;
+            case Element::Type::BREATH:
+                  addLayoutFlags(LayoutFlag::FIX_TICKS);
+                  break;
+            case Element::Type::LAYOUT_BREAK:
+                  if (static_cast<LayoutBreak*>(element)->layoutBreakType() == LayoutBreak::Type::SECTION)
+                        addLayoutFlags(LayoutFlag::FIX_TICKS);
                   break;
             default:
                   break;
@@ -1576,9 +1578,12 @@ void Score::removeElement(Element* element)
                   tempomap()->delTempo(tick);
                   }
                   break;
-            case Element::Type::INSTRUMENT_CHANGE:
+            case Element::Type::INSTRUMENT_CHANGE: {
+                  InstrumentChange* ic = static_cast<InstrumentChange*>(element);
+                  ic->part()->removeInstrument(ic->segment()->tick());
                   rebuildMidiMapping();
                   _instrumentsChanged = true;
+                  }
                   break;
 
             case Element::Type::TREMOLO:
@@ -1675,9 +1680,11 @@ Measure* Score::lastMeasure() const
 Measure* Score::lastMeasureMM() const
       {
       Measure* m = lastMeasure();
-      Measure* m1 = const_cast<Measure*>(m->mmRest1());
-      if (m1)
-           return m1;
+      if (m && styleB(StyleIdx::createMultiMeasureRests)) {
+            Measure* m1 = const_cast<Measure*>(m->mmRest1());
+            if (m1)
+                  return m1;
+            }
       return m;
       }
 
@@ -1811,7 +1818,7 @@ Text* Score::getText(TextStyleType subtype)
       {
       MeasureBase* m = first();
       if (m && m->type() == Element::Type::VBOX) {
-            foreach(Element* e, *m->el()) {
+            foreach(Element* e, m->el()) {
                   if (e->type() == Element::Type::TEXT && static_cast<Text*>(e)->textStyleType() == subtype)
                         return static_cast<Text*>(e);
                   }
@@ -1958,53 +1965,6 @@ void Score::removeExcerpt(Score* score)
       }
 
 //---------------------------------------------------------
-//   updateNotes
-///   recompute note lines and accidental
-///   not undoable add/remove
-//---------------------------------------------------------
-
-void Score::updateNotes()
-      {
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
-                  m->updateNotes(staffIdx);
-            }
-      }
-
-//---------------------------------------------------------
-//   cmdUpdateNotes
-///   recompute note lines and accidental
-///   undoable add/remove
-//---------------------------------------------------------
-
-void Score::cmdUpdateNotes()
-      {
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx)
-                  m->cmdUpdateNotes(staffIdx);
-            }
-      }
-
-//---------------------------------------------------------
-//   cmdUpdateAccidentals
-///   update accidentals upto next keySig change
-//---------------------------------------------------------
-
-void Score::cmdUpdateAccidentals(Measure* beginMeasure, int staffIdx)
-      {
-      for (Measure* m = beginMeasure; m; m = m->nextMeasureMM()) {
-            m->cmdUpdateNotes(staffIdx);
-            if (m == beginMeasure)
-                  continue;
-            for (Segment* s = m->first(Segment::Type::KeySig); s; s = s->next(Segment::Type::KeySig)) {
-                  KeySig* ks = static_cast<KeySig*>(s->element(staffIdx * VOICES));
-                  if (ks && (!ks->generated()))
-                        return;
-                  }
-            }
-      }
-
-//---------------------------------------------------------
 //   clone
 //---------------------------------------------------------
 
@@ -2025,7 +1985,6 @@ Score* Score::clone()
       Score* score = new Score(style());
       score->read1(r, true);
 
-      score->updateNotes();
       score->addLayoutFlags(LayoutFlag::FIX_TICKS | LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
       score->scanElements(0, elementAdjustReadPos);  //??
@@ -2039,7 +1998,6 @@ Score* Score::clone()
 void Score::setSynthesizerState(const SynthesizerState& s)
       {
       // TODO: make undoable
-      _dirty = true;
       _synthesizerState = s;
       }
 
@@ -2099,6 +2057,10 @@ bool Score::appendScore(Score* score)
             lastMeasure->undoSetBreak(true, LayoutBreak::Type::SECTION);
             }
 
+      // match concert pitch states
+      if (styleB(StyleIdx::concertPitch) != score->styleB(StyleIdx::concertPitch))
+            score->cmdConcertPitchChanged(styleB(StyleIdx::concertPitch), true);
+
       // clone the measures
       MeasureBaseList* ml = &score->_measures;
       for (MeasureBase* mb = ml->first(); mb; mb = mb->next()) {
@@ -2114,12 +2076,30 @@ bool Score::appendScore(Score* score)
             }
       fixTicks();
 
+      // adjust key signatures
       for (Staff* st : score->staves()) {
-            for (auto k : *(st->keyList())) {
+            int staffIdx = score->staffIdx(st);
+            Staff* joinedStaff = staff(staffIdx);
+            // special case for initial "C" key signature - these have no explicit element
+            Measure* m = tick2measure(tickLen);
+            Segment* seg = m->getSegment(Segment::Type::KeySig, tickLen);
+            if (!seg->element(staffIdx * VOICES)) {
+                  // no need to create new initial "C" key sig
+                  // if staff already ends in that key
+                  if (joinedStaff->key(tickLen - 1) == Key::C)
+                        continue;
+                  Key key = Key::C;
+                  KeySig* ks = new KeySig(this);
+                  ks->setTrack(staffIdx * VOICES);
+                  ks->setKey(key);
+                  ks->setParent(seg);
+                  addElement(ks);
+                  }
+            // other key signatures (initial other than "C", non-initial)
+           for (auto k : *(st->keyList())) {
                   int tick = k.first;
                   KeySigEvent key = k.second;
-                  int staffIdx = score->staffIdx(st);
-                  staff(staffIdx)->setKey(tick + tickLen, key);
+                  joinedStaff->setKey(tick + tickLen, key);
                   }
             }
 
@@ -2167,7 +2147,9 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       Part*  p  = s->part();
       Staff* ns = new Staff(this);
       ns->setPart(p);
-      undoInsertStaff(ns, staffIdx+1, false);
+      // convert staffIdx from score-relative to part-relative
+      int staffIdxPart = staffIdx - p->staff(0)->idx();
+      undoInsertStaff(ns, staffIdxPart + 1, false);
 
       Clef* clef = new Clef(this);
       clef->setClefType(ClefType::F);
@@ -2565,7 +2547,6 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                         }
                   }
             }
-      cmdUpdateNotes();
       }
 
 //---------------------------------------------------------
@@ -2618,13 +2599,13 @@ void Score::padToggle(Pad n)
                   _is.setRest(!_is.rest());
                   break;
             case Pad::DOT:
-                  if (_is.duration().dots() == 1)
+                  if ((_is.duration().dots() == 1) || (_is.duration() == TDuration::DurationType::V_128TH))
                         _is.setDots(0);
                   else
                         _is.setDots(1);
                   break;
             case Pad::DOTDOT:
-                  if (_is.duration().dots() == 2)
+                  if ((_is.duration().dots() == 2) || (_is.duration() == TDuration::DurationType::V_64TH) || (_is.duration() == TDuration::DurationType::V_128TH))
                         _is.setDots(0);
                   else
                         _is.setDots(2);
@@ -2917,7 +2898,8 @@ void Score::selectRange(Element* e, int staffIdx)
 
       _selection.setActiveTrack(activeTrack);
 
-      if (_selection.startSegment())
+      // doing this in note entry mode can clear selection
+      if (_selection.startSegment() && !noteEntryMode())
             setPlayPos(_selection.startSegment()->tick());
 
       _selection.updateSelectedElements();
@@ -3446,10 +3428,8 @@ bool Score::isSpannerStartEnd(int tick, int track) const
 
 void Score::insertTime(int tick, int len)
       {
-      for (Score* score : scoreList()) {
-            for (Staff* staff : score->staves())
-                  staff->insertTime(tick, len);
-            }
+      for (Staff* staff : staves())
+            staff->insertTime(tick, len);
       }
 
 //---------------------------------------------------------
@@ -3542,6 +3522,7 @@ ChordRest* Score::findCR(int tick, int track) const
 //---------------------------------------------------------
 //   findCRinStaff
 //    find chord/rest <= tick in staff
+//    prefer shortest duration (so it does not overlap next chordrest segment)
 //---------------------------------------------------------
 
 ChordRest* Score::findCRinStaff(int tick, int track) const
@@ -3562,11 +3543,14 @@ ChordRest* Score::findCRinStaff(int tick, int track) const
       for (Segment* ns = s; ; ns = ns->next(Segment::Type::ChordRest)) {
             if (ns == 0 || ns->tick() > tick)
                   break;
+            // found a segment; now find shortest chordrest on this staff (if any)
+            ChordRest* shortestCR = 0;
             for (int t = strack; t < etrack; ++t) {
-                  if (ns->element(t)) {
+                  ChordRest* cr = static_cast<ChordRest*>(ns->element(t));
+                  if (cr && (!shortestCR || cr->actualTicks() < shortestCR->actualTicks())) {
+                        shortestCR = cr;
                         s = ns;
                         actualTrack = t;
-                        break;
                         }
                   }
             }
@@ -3867,6 +3851,162 @@ QString Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* cur
                   // use number sequence
                   n = previousText.toInt() + 1;
                   return QString("%1").arg(n);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   changeVoice
+//    moves selected notes into specified voice if possible
+//---------------------------------------------------------
+
+void Score::changeVoice(int voice)
+      {
+      startCmd();
+      QList<Element*> el;
+      foreach(Element* e, selection().elements()) {
+            if (e->type() == Element::Type::NOTE) {
+                  Note* note   = static_cast<Note*>(e);
+                  Chord* chord = note->chord();
+
+                  // TODO - handle ties; for now we skip tied notes
+                  if (note->tieFor() || note->tieBack())
+                        continue;
+
+                  if (chord->voice() != voice) {
+                        Segment* s       = chord->segment();
+                        Measure* m       = s->measure();
+                        int notes        = chord->notes().size();
+                        int dstTrack     = chord->staffIdx() * VOICES + voice;
+                        ChordRest* dstCR = static_cast<ChordRest*>(s->element(dstTrack));
+                        Chord* dstChord  = nullptr;
+
+                        // set up destination chord
+
+                        if (dstCR && dstCR->type() == Element::Type::CHORD && dstCR->globalDuration() == chord->globalDuration()) {
+                              // existing chord in destination with correct duration;
+                              //   can simply move note in
+                              dstChord = static_cast<Chord*>(dstCR);
+                              }
+
+                        else if (dstCR && dstCR->type() == Element::Type::REST && dstCR->globalDuration() == chord->globalDuration()) {
+                              // existing rest in destination with correct duration;
+                              //   replace with chord, then move note in
+                              //   this case allows for tuplets, unlike the more general case below
+                              dstChord = new Chord(this);
+                              dstChord->setTrack(dstTrack);
+                              dstChord->setDurationType(chord->durationType());
+                              dstChord->setDuration(chord->duration());
+                              dstChord->setTuplet(dstCR->tuplet());
+                              dstChord->setParent(s);
+                              undoRemoveElement(dstCR);
+                              }
+
+                        else if (!chord->tuplet()) {
+                              // rests or gap in destination
+                              //   insert new chord if the rests / gap are long enough
+                              //   then move note in
+                              ChordRest* pcr = nullptr;
+                              ChordRest* ncr = nullptr;
+                              for (Segment* s2 = m->first(Segment::Type::ChordRest); s2; s2 = s2->next()) {
+                                    ChordRest* cr2 = static_cast<ChordRest*>(s2->element(dstTrack));
+                                    if (!cr2 || cr2->type() == Element::Type::REST)
+                                          continue;
+                                    if (s2->tick() < s->tick()) {
+                                          pcr = cr2;
+                                          continue;
+                                          }
+                                    else if (s2->tick() >= s->tick()) {
+                                          ncr = cr2;
+                                          break;
+                                          }
+                                    }
+                              int gapStart = pcr ? pcr->tick() + pcr->actualTicks() : m->tick();
+                              int gapEnd = ncr ? ncr->tick() : m->tick() + m->ticks();
+                              if (gapStart <= s->tick() && gapEnd >= s->tick() + chord->actualTicks()) {
+                                    // big enough gap found
+                                    dstChord = new Chord(this);
+                                    dstChord->setTrack(dstTrack);
+                                    dstChord->setDurationType(chord->durationType());
+                                    dstChord->setDuration(chord->duration());
+                                    dstChord->setParent(s);
+                                    // makeGapVoice will not back-fill an empty voice
+                                    if (voice && !dstCR)
+                                          expandVoice(s, /*m->first(Segment::Type::ChordRest,*/ dstTrack);
+                                    makeGapVoice(s, dstTrack, chord->actualFraction(), s->tick());
+                                    }
+                              }
+
+                        // move note to destination chord
+                        if (dstChord) {
+                              // create & add new note
+                              Note* newNote = new Note(*note);
+                              newNote->setSelected(false);
+                              newNote->setParent(dstChord);
+                              undoAddElement(newNote);
+                              el.append(newNote);
+                              // add new chord if one was created
+                              if (dstChord != dstCR)
+                                    undoAddCR(dstChord, m, s->tick());
+                              // remove original note
+                              if (notes > 1) {
+                                    undoRemoveElement(note);
+                                    }
+                              else if (notes == 1) {
+                                    // create rest to leave behind
+                                    Rest* r = new Rest(this);
+                                    r->setTrack(chord->track());
+                                    r->setDurationType(chord->durationType());
+                                    r->setDuration(chord->duration());
+                                    r->setTuplet(chord->tuplet());
+                                    r->setParent(s);
+                                    // remove chord, replace with rest
+                                    undoRemoveElement(chord);
+                                    undoAddCR(r, m, s->tick());
+                                    }
+                              }
+                        }
+                  }
+            }
+
+      if (!el.isEmpty())
+            selection().clear();
+      foreach(Element* e, el)
+            select(e, SelectType::ADD, -1);
+      setLayoutAll(true);
+      endCmd();
+      }
+
+//---------------------------------------------------------
+//   cropPage - crop a single page score to the content
+///    margins will be applied on the 4 sides
+//---------------------------------------------------------
+
+void Score::cropPage(qreal margins)
+      {
+      if (npages() == 1) {
+            Page* page = pages()[0];
+            if (page) {
+                  QRectF ttbox = page->tbbox();
+
+                  PageFormat* curFormat = pageFormat();
+                  PageFormat f;
+                  f.copy(*curFormat);
+
+                  qreal margin = margins / INCH;
+                  f.setSize(QSizeF((ttbox.width() / MScore::DPI) + 2 * margin, (ttbox.height()/ MScore::DPI) + 2 * margin));
+
+                  qreal offset = curFormat->oddLeftMargin() - ttbox.x() / MScore::DPI;
+                  if (offset < 0)
+                        offset = 0.0;
+                  f.setOddLeftMargin(margin + offset);
+                  f.setEvenLeftMargin(margin + offset);
+                  f.setOddBottomMargin(margin);
+                  f.setOddTopMargin(margin);
+                  f.setEvenBottomMargin(margin);
+                  f.setEvenTopMargin(margin);
+
+                  undoChangePageFormat(&f, spatium(), pageNumberOffset());
                   }
             }
       }

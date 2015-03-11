@@ -215,6 +215,15 @@ QString SpannerSegment::accessibleInfo()
       }
 
 //---------------------------------------------------------
+//   styleChanged
+//---------------------------------------------------------
+
+void SpannerSegment::styleChanged()
+      {
+      _spanner->styleChanged();
+      }
+
+//---------------------------------------------------------
 //   Spanner
 //---------------------------------------------------------
 
@@ -266,13 +275,85 @@ void Spanner::remove(Element* e)
       }
 
 //---------------------------------------------------------
+//   removeUnmanaged
+//
+//    Remove the Spanner and its segments from objects which may know about them
+//
+//    This method and the following are used for spanners which are contained within compound elements
+//    which manage their parts themselves without using the standard management supplied by Score;
+//    Example can be the LyricsLine within a Lyrics element or the FiguredBassLine within a FiguredBass
+//    (not implemented yet).
+//---------------------------------------------------------
+
+void Spanner::removeUnmanaged()
+      {
+      for (SpannerSegment* ss : spannerSegments())
+            if (ss->system()) {
+//                  ss->system()->remove(ss);
+                  ss->setSystem(nullptr);
+                  }
+      score()->removeUnmanagedSpanner(this);
+      }
+
+//---------------------------------------------------------
+//   undoInserTimeUnmanaged
+//---------------------------------------------------------
+
+void Spanner::undoInsertTimeUnmanaged(int fromTick, int len)
+      {
+      int   newTick1    = tick();
+      int   newTick2    = tick2();
+
+      // check spanner start and end point
+      if (len > 0) {                // adding time
+            if (tick() > fromTick)        // start after insertion point: shift start to right
+                  newTick1 += len;
+            if (tick2() > fromTick)       // end after insertion point: shift end to right
+                  newTick2 += len;
+            }
+      if (len < 0) {                // removing time
+            int toTick = fromTick - len;
+            if (tick() > fromTick) {      // start after beginning of removed time
+                  if (tick() < toTick) {  // start within removed time: bring start at removing point
+                        if (parent()) {
+                              parent()->remove(this);
+                              return;
+                              }
+                        else
+                              newTick1 = fromTick;
+                        }
+                  else                    // start after removed time: shift start to left
+                        newTick1 += len;
+                  }
+            if (tick2() > fromTick) {     // end after start of removed time
+                  if (tick2() < toTick)   // end within removed time: bring end at removing point
+                        newTick2 = fromTick;
+                  else                    // end after removed time: shift end to left
+                        newTick2 += len;
+                  }
+            }
+
+      // update properties as required
+      if (newTick2 <= newTick1) {               // if no longer any span: remove it
+            if (parent())
+                  parent()->remove(this);
+            }
+      else {                                    // if either TICKS or TICK did change, update property
+            if (newTick2-newTick1 != tick2()- tick())
+                  setProperty(P_ID::SPANNER_TICKS, newTick2-newTick1);
+            if (newTick1 != tick())
+                  setProperty(P_ID::SPANNER_TICK, newTick1);
+            }
+      }
+
+//---------------------------------------------------------
 //   scanElements
 //    used in palettes
 //---------------------------------------------------------
 
 void Spanner::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      Q_UNUSED(all)
+      Q_UNUSED(all);
       for (SpannerSegment* seg : segments)
             seg->scanElements(data, func, true);
       }
@@ -317,7 +398,8 @@ void Spanner::endEdit()
             score()->undoPropertyChanged(this, P_ID::SPANNER_TICK, editTick);
             rebuild = true;
             }
-      if (editTick2 != tick2()) {
+      // ticks may also change by moving initial anchor, without moving ending anchor
+      if (editTick2 != tick2() || editTick2 - editTick != tick2() - tick()) {
             score()->undoPropertyChanged(this, P_ID::SPANNER_TICKS, editTick2 - editTick);
             rebuild = true;
             }
@@ -445,8 +527,18 @@ void Spanner::computeStartElement()
 void Spanner::computeEndElement()
       {
       switch (_anchor) {
-            case Anchor::SEGMENT:
+            case Anchor::SEGMENT: {
                   _endElement = score()->findCRinStaff(tick2() - 1, track2());
+                  if (!_endElement) {
+                        qDebug("%s no end element for tick %d", name(), tick2());
+                        return;
+                        }
+                  int nticks = endCR()->tick() + endCR()->actualTicks() - _tick;
+                  if (_ticks != nticks) {
+                        qDebug("%s ticks changed, %d -> %d", name(), _ticks, nticks);
+                        setTicks(nticks);
+                        }
+                  }
                   break;
 
             case Anchor::MEASURE:
@@ -461,6 +553,93 @@ void Spanner::computeEndElement()
             case Anchor::NOTE:
                   break;
             }
+      }
+
+//---------------------------------------------------------
+//   startElementFromSpanner
+//
+//    Given a Spanner and an end element, determines a start element suitable for the end
+//    element of a new Spanner, so that it is 'parallel' to the old one.
+//    Can be used while cloning a linked Spanner, to update the cloned spanner start and end elements
+//    (Spanner(const Spanner&) copies start and end elements from the original to the copy).
+//    NOTES:      Only spanners with Anchor::NOTE are currently supported.
+//                Going back from end to start ensures the 'other' anchor of this is already set up
+//                      (for instance, while cloning staves)
+//---------------------------------------------------------
+
+Note* Spanner::startElementFromSpanner(Spanner* sp, Element* newEnd)
+      {
+      if (sp->anchor() != Anchor::NOTE)
+            return nullptr;
+
+      Note*  oldStart   = static_cast<Note*>(sp->startElement());
+      Note*  oldEnd     = static_cast<Note*>(sp->endElement());
+      Note*  newStart   = nullptr;
+      Score* score      = newEnd->score();
+      // determine the track where to expect the 'parallel' start element
+      int   newTrack    = newEnd->track() + (oldEnd->track() - oldStart->track());
+      // look in notes linked to oldStart for a note with the
+      // same score as new score and appropriate track
+      for (ScoreElement* newEl : oldStart->linkList())
+            if (static_cast<Note*>(newEl)->score() == score
+                        && static_cast<Note*>(newEl)->track() == newTrack) {
+                  newStart = static_cast<Note*>(newEl);
+                  break;
+            }
+      return newStart;
+      }
+
+//---------------------------------------------------------
+//   endElementFromSpanner
+//
+//    Given a Spanner and a start element, determines an end element suitable for the start
+//    element of a new Spanner, so that it is 'parallel' to the old one.
+//    Can be used while cloning a linked Spanner, to update the cloned spanner start and end elements
+//    (Spanner(const Spanner&) copies start and end elements from the original to the copy).
+//    NOTES:      Only spanners with Anchor::NOTE are currently supported.
+//---------------------------------------------------------
+
+Note* Spanner::endElementFromSpanner(Spanner* sp, Element* newStart)
+      {
+      if (sp->anchor() != Anchor::NOTE)
+            return nullptr;
+
+      Note*  oldStart   = static_cast<Note*>(sp->startElement());
+      Note*  oldEnd     = static_cast<Note*>(sp->endElement());
+      Note*  newEnd     = nullptr;
+      Score* score      = newStart->score();
+      // determine the track where to expect the 'parallel' start element
+      int   newTrack    = newStart->track() + (oldEnd->track() - oldStart->track());
+      // look in notes linked to oldEnd for a note with the
+      // same score as new score and appropriate track
+      for (ScoreElement* newEl : oldEnd->linkList())
+            if (static_cast<Note*>(newEl)->score() == score
+                        && static_cast<Note*>(newEl)->track() == newTrack) {
+                  newEnd = static_cast<Note*>(newEl);
+                  break;
+            }
+      return newEnd;
+      }
+
+//---------------------------------------------------------
+//   setNoteSpan
+//
+//    Sets up all the variables congruent with given start and end note anchors.
+//---------------------------------------------------------
+
+void  Spanner::setNoteSpan(Note* startNote, Note* endNote)
+      {
+      if (_anchor != Anchor::NOTE)
+            return;
+
+      setScore(startNote->score());
+      setParent(startNote);
+      setStartElement(startNote);
+      setEndElement(endNote);
+      setTick(startNote->chord()->tick());
+      setTick2(endNote->chord()->tick());
+      setTrack(startNote->track());
+      setTrack2(endNote->track());
       }
 
 //---------------------------------------------------------

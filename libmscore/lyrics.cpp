@@ -20,19 +20,7 @@
 
 namespace Ms {
 
-// all in sp. units:
-static const qreal      MELISMA_DEFAULT_LINE_THICKNESS      = 0.10;     // for melisma line only;
-static const qreal      MELISMA_DEFAULT_PAD                 = 0.10;     // the empty space before a melisma line
-static const qreal      LYRICS_DASH_DEFAULT_STEP            = 16.0;     // the max. distance between dashes
-static const qreal      LYRICS_DASH_DEFAULT_PAD             = 0.05;     // the min. empty space before and after a dash
-static const qreal      LYRICS_DASH_MIN_LENGTH              = 0.25;     // below this length, the dash is skipped
-// These values are used when USE_FONT_DASH_METRIC is not defined in lyrics.h
-static const qreal      LYRICS_DASH_DEFAULT_LENGHT          = 0.80;     // in sp. units
-static const qreal      LYRICS_DASH_DEFAULT_LINE_THICKNESS  = 0.15;     // in sp. units
-static const qreal      LYRICS_DASH_Y_POS_RATIO             = 0.25;     // the fraction of lyrics font tot. height to
-                                                                        // raise the dashes above text base line;
-                                                                        // this usually raises at about 2/3 of x-height
-// sone useful values:
+// some useful values:
 static const qreal      HALF                                = 0.5;
 static const qreal      TWICE                               = 2.0;
 
@@ -97,7 +85,7 @@ Lyrics::Lyrics(const Lyrics& l)
 Lyrics::~Lyrics()
       {
       if (_separator != nullptr) {
-            _separator->unchain();
+            _separator->removeUnmanaged();
             delete _separator;
             }
       }
@@ -212,9 +200,16 @@ void Lyrics::add(Element* el)
 void Lyrics::remove(Element* el)
       {
       if (el->type() == Element::Type::LYRICSLINE) {
-            _separator->unchain();
-            delete _separator;
-            _separator = nullptr;
+            // only if separator still exists and is the right one
+            if (_separator != nullptr && el == _separator) {
+                  // Lyrics::remove() and LyricsLine::removeUnmanaged() call each other;
+                  // be sure each finds a clean context
+                  LyricsLine* separ = _separator;
+                  _separator = nullptr;
+                  separ->setParent(nullptr);
+                  separ->removeUnmanaged();
+                  delete separ;
+                  }
             }
       else
             qDebug("Lyrics::remove: unknown element %s", el->name());
@@ -310,46 +305,63 @@ void Lyrics::layout1()
       // TODO: provide a way to disable this
       //
       bool hasNumber = false; // _verseNumber;
-      qreal adjust = 0.0;
+      qreal centerAdjust = 0.0;
+      qreal leftAdjust = 0.0;
       QString s = plainText(true);
       // find:
       // 1) string of numbers and non-word characters at start of syllable
       // 2) at least one other character (indicating start of actual lyric)
-      QRegularExpression leadingPattern("(^[\\d\\W]+)([^\\d\\W]+)");
-      QRegularExpressionMatch leadingMatch = leadingPattern.match(s);
-      if (leadingMatch.hasMatch()) {
-            // leading string
-            QString s1 = leadingMatch.captured(1);
+      // 3) string of non-word characters at end of syllable
+      //QRegularExpression leadingPattern("(^[\\d\\W]+)([^\\d\\W]+)");
+      QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)");
+      QRegularExpressionMatch punctuationMatch = punctuationPattern.match(s);
+      if (punctuationMatch.hasMatch()) {
+            // leading and trailing punctuation
+            QString lp = punctuationMatch.captured(1);
+            QString tp = punctuationMatch.captured(3);
             // actual lyric
-            //QString s2 = leadingMatch.captured(2);
+            //QString actualLyric = punctuationMatch.captured(2);
             Text leading(*this);
-            leading.setPlainText(s1);
+            leading.setPlainText(lp);
             leading.layout1();
-            adjust = leading.width();
-            if (!s1.isEmpty() && s1[0].isDigit())
+            Text trailing(*this);
+            trailing.setPlainText(tp);
+            trailing.layout1();
+            leftAdjust = leading.width();
+            centerAdjust = leading.width() - trailing.width();
+            if (!lp.isEmpty() && lp[0].isDigit())
                   hasNumber = true;
             }
 
-      if (textStyle().align() & AlignmentFlags::HCENTER) {
+      Align ta = textStyle().align();
+      if (ta & AlignmentFlags::HCENTER) {
             //
             // center under notehead, not origin
             // however, lyrics that are melismas or have verse numbers will be forced to left alignment
             // TODO: provide a way to disable the automatic left alignment
             //
+#if 0
+            // using this value below forces left-aligned lyrics to align with left edge of whole notes
+            // but that means they won't align with left-aligned lyrics on quarter notes
             qreal maxWidth;
             if (cr->type() == Element::Type::CHORD)
                   maxWidth = static_cast<Chord*>(cr)->maxHeadWidth();
             else
                   maxWidth = cr->width();       // TODO: exclude ledger line for multivoice rest?
+#endif
             qreal nominalWidth = symWidth(SymId::noteheadBlack);
             if (!isMelisma() && !hasNumber)     // center under notehead
-                  x +=  nominalWidth * .5 - cr->x() - adjust * 0.5;
+                  x += nominalWidth * .5 - cr->x() - centerAdjust * 0.5;
             else                                // force left alignment
-                  x += (width() + nominalWidth - maxWidth) * .5 - cr->x() - adjust;
+#if 1
+                  x += width() * .5 - cr->x() - leftAdjust;
+#else
+                  x += (width() + nominalWidth - maxWidth) * .5 - cr->x() - leftAdjust;
+#endif
             }
-      else {
+      else if (!(ta & AlignmentFlags::RIGHT)) {
             // even for left aligned syllables, ignore leading verse numbers and/or punctuation
-            x -= adjust;
+            x -= leftAdjust;
             }
 
       rxpos() += x;
@@ -390,7 +402,7 @@ void Lyrics::layout1()
             }
       else
             if (_separator != nullptr) {
-                  _separator->unchain();
+                  _separator->removeUnmanaged();
                   delete _separator;
                   _separator = nullptr;
                   }
@@ -414,6 +426,7 @@ void Lyrics::paste(MuseScoreView* scoreview)
 
       QStringList hyph = sl[0].split("-");
       bool minus = false;
+      bool underscore = false;
       if(hyph.length() > 1) {
             insertText(hyph[0]);
             hyph.removeFirst();
@@ -425,6 +438,26 @@ void Lyrics::paste(MuseScoreView* scoreview)
             sl.removeFirst();
             sl.removeFirst();
             minus = true;
+            }
+      else if (sl[0].startsWith("_")) {
+            sl[0].remove(0, 1);
+            if (sl[0].isEmpty())
+                  sl.removeFirst();
+            underscore = true;
+            }
+      else if (sl[0].contains("_")) {
+            int p = sl[0].indexOf("_");
+            insertText(sl[0].left(p));
+            sl[0] = sl[0].mid(p + 1);
+            if (sl[0].isEmpty())
+                  sl.removeFirst();
+            underscore = true;
+            }
+      else if (sl.length() > 1 && sl[1] == "_") {
+            insertText(sl[0]);
+            sl.removeFirst();
+            sl.removeFirst();
+            underscore = true;
             }
       else {
             insertText(sl[0]);
@@ -439,6 +472,8 @@ void Lyrics::paste(MuseScoreView* scoreview)
       QApplication::clipboard()->setText(txt, mode);
       if (minus)
             scoreview->lyricsMinus();
+      else if (underscore)
+            scoreview->lyricsUnderscore();
       else
             scoreview->lyricsTab(false, false, true);
       }
@@ -516,7 +551,7 @@ void Lyrics::endEdit()
 void Lyrics::removeFromScore()
       {
       if (_separator) {
-            _separator->unchain();
+            _separator->removeUnmanaged();
             delete _separator;
             _separator = nullptr;
             }
@@ -586,7 +621,7 @@ LyricsLine::LyricsLine(Score* s)
 
       setGenerated(true);           // no need to save it, as it can be re-generated
       setDiagonal(false);
-      setLineWidth(Spatium(LYRICS_DASH_DEFAULT_LINE_THICKNESS));
+      setLineWidth(Spatium(Lyrics::LYRICS_DASH_DEFAULT_LINE_THICKNESS));
       setAnchor(Spanner::Anchor::SEGMENT);
       _nextLyrics = nullptr;
       }
@@ -605,7 +640,7 @@ void LyricsLine::layout()
       {
       bool tempMelismaTicks = (lyrics()->ticks() == Lyrics::TEMP_MELISMA_TICKS);
       if (lyrics()->ticks() > 0) {              // melisma
-            setLineWidth(Spatium(MELISMA_DEFAULT_LINE_THICKNESS));
+            setLineWidth(Spatium(Lyrics::MELISMA_DEFAULT_LINE_THICKNESS));
             // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
             if (tempMelismaTicks)
                   lyrics()->setTicks(0);
@@ -701,17 +736,42 @@ LineSegment* LyricsLine::createLineSegment()
       }
 
 //---------------------------------------------------------
-//   unchain
-//
-//    Remove the LyricsLine and its segments from objects which may know about them
+//   removeUnmanaged
+//    same as Spanner::removeUnmanaged(), but in addition, remove from hosting Lyrics
 //---------------------------------------------------------
 
-void LyricsLine::unchain()
+void LyricsLine::removeUnmanaged()
       {
-      for (SpannerSegment* ss : spannerSegments())
-            if (ss->system())
-                  ss->system()->remove(ss);
-      score()->removeUnmanagedSpanner(this);
+      Spanner::removeUnmanaged();
+      if (lyrics())
+            lyrics()->remove(this);
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool LyricsLine::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch(propertyId) {
+            case P_ID::SPANNER_TICKS:
+                  {
+                  // if parent lyrics has a melisma, change its length too
+                  if (parent() && parent()->type() == Element::Type::LYRICS
+                              && static_cast<Lyrics*>(parent())->ticks() > 0) {
+                        int newTicks   = static_cast<Lyrics*>(parent())->ticks() + v.toInt() - ticks();
+                        score()->undoChangeProperty(parent(), P_ID::LYRIC_TICKS, newTicks);
+                        }
+                  setTicks(v.toInt());
+                  }
+                  break;
+            default:
+                  if (!SLine::setProperty(propertyId, v))
+                        return false;
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
       }
 
 //=========================================================
@@ -759,7 +819,7 @@ void LyricsLineSegment::layout()
                   qreal sysXp       = sys->pagePos().x();
                   qreal offsetX     = lyrXp - sysXp + lyrX - pos().x() - pos2().x();
                   //                    syst.rel. X pos.   | as a delta from current end pos.
-                  offsetX           -= LYRICS_DASH_DEFAULT_PAD * sp;    // add ending padding
+                  offsetX           -= Lyrics::LYRICS_DASH_DEFAULT_PAD * sp;    // add ending padding
                   rxpos2()          += offsetX;
                   }
             }
@@ -774,7 +834,7 @@ void LyricsLineSegment::layout()
             qreal offsetX     = lyrXp - sysXp + lyrX + lyrW - pos().x();
             //               syst.rel. X pos. | lyr.advance | as a delta from current pos.
             // add initial padding
-            offsetX           += (isEndMelisma ? MELISMA_DEFAULT_PAD : LYRICS_DASH_DEFAULT_PAD) * sp;
+            offsetX           += (isEndMelisma ? Lyrics::MELISMA_DEFAULT_PAD : Lyrics::LYRICS_DASH_DEFAULT_PAD) * sp;
             rxpos()           += offsetX;
             rxpos2()          -= offsetX;
             }
@@ -808,11 +868,11 @@ void LyricsLineSegment::layout()
             rypos()     += lyr->dashY();
             _dashLength = lyr->dashLength();
 #else
-            rypos()     -= lyr->bbox().height() * LYRICS_DASH_Y_POS_RATIO;    // set conventional dash Y pos
-            _dashLength = LYRICS_DASH_DEFAULT_LENGHT * sp;                    // and dash length
+            rypos()     -= lyr->bbox().height() * Lyrics::LYRICS_DASH_Y_POS_RATIO;    // set conventional dash Y pos
+            _dashLength = Lyrics::LYRICS_DASH_DEFAULT_LENGTH * sp;                    // and dash length
 #endif
             qreal len         = pos2().x();
-            qreal minDashLen  = LYRICS_DASH_MIN_LENGTH * sp;
+            qreal minDashLen  = Lyrics::LYRICS_DASH_MIN_LENGTH * sp;
             if (len < minDashLen) {                                           // if no room for a dash
                   if (endOfSystem) {                                          //   if at end of system
                         rxpos2()          = minDashLen;                       //     draw minimal dash
@@ -822,13 +882,13 @@ void LyricsLineSegment::layout()
                   else                                                        //   if within system
                         _numOfDashes = 0;                                     //     draw no dash
                   }
-            else if (len < (LYRICS_DASH_DEFAULT_STEP * TWICE * sp)) {         // if no room for two dashes
+            else if (len < (Lyrics::LYRICS_DASH_DEFAULT_STEP * TWICE * sp)) { // if no room for two dashes
                   _numOfDashes = 1;                                           //    draw one dash
                   if (_dashLength > len)                                      // if no room for a full dash
                         _dashLength = len;                                    //    shorten it
                   }
             else
-                  _numOfDashes = len / (LYRICS_DASH_DEFAULT_STEP * sp);       // draw several dashes
+                  _numOfDashes = len / (Lyrics::LYRICS_DASH_DEFAULT_STEP * sp);// draw several dashes
             }
 
       // set bounding box

@@ -113,7 +113,6 @@ static const ElementName elementNames[] = {
       ElementName("TimeSig",              QT_TRANSLATE_NOOP("elementName", "Time Signature")),
       ElementName("Rest",                 QT_TRANSLATE_NOOP("elementName", "Rest")),
       ElementName("Breath",               QT_TRANSLATE_NOOP("elementName", "Breath")),
-      ElementName("Glissando",            QT_TRANSLATE_NOOP("elementName", "Glissando")),
       ElementName("RepeatMeasure",        QT_TRANSLATE_NOOP("elementName", "Repeat Measure")),
       ElementName("Image",                QT_TRANSLATE_NOOP("elementName", "Image")),
       ElementName("Tie",                  QT_TRANSLATE_NOOP("elementName", "Tie")),
@@ -144,6 +143,7 @@ static const ElementName elementNames[] = {
       ElementName("VoltaSegment",         QT_TRANSLATE_NOOP("elementName", "Volta Segment")),
       ElementName("PedalSegment",         QT_TRANSLATE_NOOP("elementName", "Pedal Segment")),
       ElementName("LyricsLineSegment",    QT_TRANSLATE_NOOP("elementName", "Melisma Line Segment")),
+      ElementName("GlissandoSegment",     QT_TRANSLATE_NOOP("elementName", "Glissando Segment")),
       ElementName("LayoutBreak",          QT_TRANSLATE_NOOP("elementName", "Layout Break")),
       ElementName("Spacer",               QT_TRANSLATE_NOOP("elementName", "Spacer")),
       ElementName("StaffState",           QT_TRANSLATE_NOOP("elementName", "Staff State")),
@@ -166,6 +166,7 @@ static const ElementName elementNames[] = {
       ElementName("TextLine",             QT_TRANSLATE_NOOP("elementName", "Text Line")),
       ElementName("NoteLine",             QT_TRANSLATE_NOOP("elementName", "Note Line")),
       ElementName("LyricsLine",           QT_TRANSLATE_NOOP("elementName", "Melisma Line")),
+      ElementName("Glissando",            QT_TRANSLATE_NOOP("elementName", "Glissando")),
       ElementName("Segment",              QT_TRANSLATE_NOOP("elementName", "Segment")),
       ElementName("System",               QT_TRANSLATE_NOOP("elementName", "System")),
       ElementName("Compound",             QT_TRANSLATE_NOOP("elementName", "Compound")),
@@ -175,7 +176,6 @@ static const ElementName elementNames[] = {
       ElementName("ElementList",          QT_TRANSLATE_NOOP("elementName", "Element List")),
       ElementName("StaffList",            QT_TRANSLATE_NOOP("elementName", "Staff List")),
       ElementName("MeasureList",          QT_TRANSLATE_NOOP("elementName", "Measure List")),
-      ElementName("Layout",               QT_TRANSLATE_NOOP("elementName", "Layout")),
       ElementName("HBox",                 QT_TRANSLATE_NOOP("elementName", "Horizontal Frame")),
       ElementName("VBox",                 QT_TRANSLATE_NOOP("elementName", "Vertical Frame")),
       ElementName("TBox",                 QT_TRANSLATE_NOOP("elementName", "Text Frame")),
@@ -198,31 +198,6 @@ DropData::DropData()
       }
 
 //---------------------------------------------------------
-//   LinkedElements
-//---------------------------------------------------------
-
-LinkedElements::LinkedElements(Score* score)
-      {
-      _lid = score->linkId(); // create new unique id
-      }
-
-LinkedElements::LinkedElements(Score* score, int id)
-      {
-      _lid = id;
-      score->linkId(id);      // remember used id
-      }
-
-//---------------------------------------------------------
-//   setLid
-//---------------------------------------------------------
-
-void LinkedElements::setLid(Score* score, int id)
-      {
-      _lid = id;
-      score->linkId(id);
-      }
-
-//---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
 
@@ -230,6 +205,16 @@ void Element::spatiumChanged(qreal oldValue, qreal newValue)
       {
       _userOff *= (newValue / oldValue);
       _readPos *= (newValue / oldValue);
+      }
+
+//---------------------------------------------------------
+//   localSpatiumChanged
+//    the scale of a staff changed
+//---------------------------------------------------------
+
+void Element::localSpatiumChanged(qreal oldValue, qreal newValue)
+      {
+      _userOff *= (newValue / oldValue);
       }
 
 //---------------------------------------------------------
@@ -300,7 +285,7 @@ Element::~Element()
 //---------------------------------------------------------
 
 Element::Element(Score* s) :
-   QObject(0)
+   QObject(0), ScoreElement(s)
       {
       _selected      = false;
       _generated     = false;
@@ -311,12 +296,11 @@ Element::Element(Score* s) :
       _color         = MScore::defaultColor;
       _mag           = 1.0;
       _tag           = 1;
-      _score         = s;
       itemDiscovered = false;
       }
 
 Element::Element(const Element& e)
-   : QObject(0)
+   : QObject(0), ScoreElement(e)
       {
       _parent     = e._parent;
       _selected   = e._selected;
@@ -330,66 +314,9 @@ Element::Element(const Element& e)
       _pos        = e._pos;
       _userOff    = e._userOff;
       _readPos    = e._readPos;
-      _score      = e._score;
       _bbox       = e._bbox;
       _tag        = e._tag;
       itemDiscovered = false;
-      }
-
-//---------------------------------------------------------
-//   linkTo
-//---------------------------------------------------------
-
-void Element::linkTo(Element* element)
-      {
-      Q_ASSERT(element != this);
-      if (!_links) {
-            if (element->links()) {
-                  _links = element->_links;
-                  Q_ASSERT(_links->contains(element));
-                  }
-            else {
-                  _links = new LinkedElements(score());
-                  _links->append(element);
-                  element->_links = _links;
-                  }
-            Q_ASSERT(!_links->contains(this));
-            _links->append(this);
-            }
-      else {
-            _links->append(element);
-            element->_links = _links;
-            }
-      }
-
-//---------------------------------------------------------
-//   unlink
-//---------------------------------------------------------
-
-void Element::unlink()
-      {
-      if (_links) {
-            Q_ASSERT(_links->contains(this));
-            _links->removeOne(this);
-
-            // if link list is empty, remove list
-            if (_links->size() <= 1) {
-                  if (!_links->empty())         // abnormal case: only "this" is in list
-                        _links->front()->_links = 0;
-                  delete _links;
-                  }
-            _links = 0;
-            }
-      }
-
-//---------------------------------------------------------
-//   undoUnlink
-//---------------------------------------------------------
-
-void Element::undoUnlink()
-      {
-      if (_links)
-            _score->undo(new Unlink(this));
       }
 
 //---------------------------------------------------------
@@ -401,20 +328,6 @@ Element* Element::linkedClone()
       Element* e = clone();
       score()->undo(new Link(this, e));
       return e;
-      }
-
-//---------------------------------------------------------
-//   linkList
-//---------------------------------------------------------
-
-QList<Element*> Element::linkList() const
-      {
-      QList<Element*> el;
-      if (links())
-            el.append(*links());
-      else
-            el.append((Element*)this);
-      return el;
       }
 
 //---------------------------------------------------------
@@ -469,6 +382,16 @@ Staff* Element::staff() const
             return 0;
 
       return score()->staff(staffIdx());
+      }
+
+//---------------------------------------------------------
+//   part
+//---------------------------------------------------------
+
+Part* Element::part() const
+      {
+      Staff* s = staff();
+      return s ? s->part() : 0;
       }
 
 //---------------------------------------------------------
@@ -695,7 +618,8 @@ void Element::writeProperties(Xml& xml) const
       if (_links && (_links->size() > 1) && !xml.clipboardmode)
             xml.tag("lid", _links->lid());
       if (!userOff().isNull()) {
-            if (type() == Element::Type::VOLTA_SEGMENT || isChordRest())
+            if (type() == Element::Type::VOLTA_SEGMENT
+                        || type() == Element::Type::GLISSANDO_SEGMENT || isChordRest())
                   xml.tag("offset", userOff() / spatium());
             else
                   xml.tag("pos", pos() / score()->spatium());
@@ -713,10 +637,8 @@ void Element::writeProperties(Xml& xml) const
                         }
                   }
             }
-      if (color() != Qt::black)
-            xml.tag("color", color());
-      if (!visible())
-            xml.tag("visible", visible());
+      writeProperty(xml, P_ID::COLOR);
+      writeProperty(xml, P_ID::VISIBLE);
       writeProperty(xml, P_ID::PLACEMENT);
       }
 
@@ -749,7 +671,8 @@ bool Element::readProperties(XmlReader& e)
                   }
 #ifndef NDEBUG
             else {
-                  foreach(Element* ee, *_links) {
+                  foreach(ScoreElement* eee, *_links) {
+                        Element* ee = static_cast<Element*>(eee);
                         if (ee->type() != type()) {
                               qFatal("link %s(%d) type mismatch %s linked to %s",
                                  ee->name(), id, ee->name(), name());
@@ -804,15 +727,6 @@ bool Element::readProperties(XmlReader& e)
       else
             return false;
       return true;
-      }
-
-//---------------------------------------------------------
-//   writeProperty
-//---------------------------------------------------------
-
-void Element::writeProperty(Xml& xml, P_ID id) const
-      {
-      xml.tag(id, getProperty(id), propertyDefault(id));
       }
 
 //---------------------------------------------------------
@@ -1393,6 +1307,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::AMBITUS:           return new Ambitus(score);
 
             case Element::Type::TEXTLINE_SEGMENT:    // return new TextLineSegment(score);
+            case Element::Type::GLISSANDO_SEGMENT:
 
             case Element::Type::SLUR_SEGMENT:
             case Element::Type::STEM_SLASH:
@@ -1421,7 +1336,6 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::ELEMENT_LIST:
             case Element::Type::STAFF_LIST:
             case Element::Type::MEASURE_LIST:
-            case Element::Type::LAYOUT:
             case Element::Type::MAXTYPE:
             case Element::Type::INVALID:  break;
             }
@@ -1561,6 +1475,7 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   setSelected(v.toBool());
                   break;
             case P_ID::USER_OFF:
+                  score()->addRefresh(canvasBoundingRect());
                   _userOff = v.toPointF();
                   break;
             case P_ID::PLACEMENT:
@@ -1599,43 +1514,6 @@ QVariant Element::propertyDefault(P_ID id) const
                   break;
             }
       return QVariant();
-      }
-
-//---------------------------------------------------------
-//   undoChangeProperty
-//---------------------------------------------------------
-
-void Element::undoChangeProperty(P_ID id, const QVariant& val)
-      {
-      score()->undoChangeProperty(this, id, val);
-      }
-
-//---------------------------------------------------------
-//   undoPushProperty
-//---------------------------------------------------------
-
-void Element::undoPushProperty(P_ID id)
-      {
-      QVariant val = getProperty(id);
-      score()->undo()->push1(new ChangeProperty(this, id, val));
-      }
-
-//---------------------------------------------------------
-//   isChordRest
-//---------------------------------------------------------
-
-bool Element::isChordRest() const
-      {
-      return type() == Element::Type::REST || type() == Element::Type::CHORD || type() == Element::Type::REPEAT_MEASURE;
-      }
-
-//---------------------------------------------------------
-//   isDurationElement
-//---------------------------------------------------------
-
-bool Element::isDurationElement() const
-      {
-      return isChordRest() || (type() == Element::Type::TUPLET);
       }
 
 //---------------------------------------------------------
@@ -1693,7 +1571,6 @@ bool Element::isPrintable() const
             case Element::Type::STAFF_LIST:
             case Element::Type::MEASURE_LIST:
             case Element::Type::SELECTION:
-            case Element::Type::LAYOUT:
                   return false;
             default:
                   return true;
@@ -2038,4 +1915,16 @@ bool Element::prevGrip(Grip* grip) const
       *grip = Grip(i);
       return true;
       }
+
+//---------------------------------------------------------
+//   isUserModified
+//    Check if this element was modified by user and
+//    therefore must be saved.
+//---------------------------------------------------------
+
+bool Element::isUserModified() const
+      {
+      return !visible() || !userOff().isNull() || (color() != MScore::defaultColor);
+      }
+
 }

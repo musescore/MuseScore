@@ -27,7 +27,7 @@ class DrumSet;
 //   drumset
 //---------------------------------------------------------
 
-Drumset* InputState::drumset() const
+const Drumset* InputState::drumset() const
       {
       if (_segment == 0 || _track == -1)
             return 0;
@@ -97,7 +97,7 @@ void InputState::update(Element* e)
             }
       if (e->type() == Element::Type::NOTE || e->type() == Element::Type::REST) {
             const Instrument* instr = e->staff()->part()->instr();
-            if (instr->useDrumset() != DrumsetKind::NONE) {
+            if (instr->useDrumset()) {
                   if (e->type() == Element::Type::NOTE)
                         setDrumNote(static_cast<Note*>(e)->pitch());
                   else

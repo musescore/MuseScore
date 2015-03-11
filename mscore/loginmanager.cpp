@@ -100,7 +100,7 @@ bool LoginManager::load()
 void LoginManager::onAuthorizedRequestDone()
       {
       if (_oauthManager->lastError() == KQOAuthManager::NetworkError)
-            QMessageBox::critical(0, tr("Network error"), tr("Please check your internet connection"));
+            QMessageBox::critical(0, tr("Network error"), tr("Please check your Internet connection"));
       else if (_oauthManager->lastError() == KQOAuthManager::ContentOperationNotPermittedError)
             QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.<br/> <a href=\"%1\">Please upgrade first</a>.").arg("http://musescore.org"));
       }
@@ -204,12 +204,15 @@ void LoginManager::onAccessTokenRequestReady(QByteArray ba)
                      else if (code == "USER_NOT_ACTIVATED") {
                            message = tr("Your account has not been activated yet. Please check your mailbox to activate your account or <a href=\"%1\">request a new activation email</a>.").arg("https://musescore.com/user/resendregistrationpassword");
                            }
+                     else if (code == "USER_TIMESTAMP_EXPIRED") {
+                           message = tr("The local time on your device is not set right. Please check it and adjust. It's advised to set the time/timezone to automatic. If you still can't log in, <a href=\"%1\">contact us</a>.").arg("https://musescore.com/contact?category=Login%20problems");
+                           }
                      }
                  }
                  emit loginError(message);
             }
       else if (_oauthManager->lastError() == KQOAuthManager::NetworkError) {
-            QMessageBox::critical(0, tr("Network error"), tr("Please check your internet connection"));
+            QMessageBox::critical(0, tr("Network error"), tr("Please check your Internet connection"));
             }
       else if (_oauthManager->lastError() == KQOAuthManager::ContentOperationNotPermittedError) {
             QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.<br/> <a href=\"%1\">Please upgrade first</a>.").arg("http://musescore.org"));
@@ -313,10 +316,11 @@ void LoginManager::onGetScoreRequestReady(QByteArray ba)
                   QString sharing = score.value("sharing").toString();
                   QString license = score.value("license").toString();
                   QString tags = score.value("tags").toString();
+                  QString url = score.value("custom_url").toString();
                   if (user.value("uid") != QJsonValue::Undefined) {
                         int uid = user.value("uid").toString().toInt();
                         if (uid == _uid)
-                              emit getScoreSuccess(title, description, (sharing == "private"), license, tags);
+                              emit getScoreSuccess(title, description, (sharing == "private"), license, tags, url);
                         else
                               emit getScoreError("");
                         }

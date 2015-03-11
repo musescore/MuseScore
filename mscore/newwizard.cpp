@@ -272,7 +272,8 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
       
       QDir myTemplatesDir(preferences.myTemplatesPath);
       fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
-      
+
+      templateFileBrowser->setShowCustomCategory(true);
       templateFileBrowser->setScores(fil);
       templateFileBrowser->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
 
@@ -367,6 +368,7 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
       _tempo->setAccessibleName(tr("Beats per minute"));
       _tempo->setRange(20.0, 400.0);
       _tempo->setValue(100.0);
+      _tempo->setDecimals(1);
       QHBoxLayout* l2 = new QHBoxLayout;
       l2->addWidget(bpm);
       l2->addWidget(_tempo);

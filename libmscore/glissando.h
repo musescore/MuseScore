@@ -14,10 +14,40 @@
 #define __GLISSANDO_H__
 
 #include "element.h"
+#include "line.h"
 
 namespace Ms {
 
+// the amount of white space to leave before a system-initial chord with glissando
+static const qreal      GLISS_STARTOFSYSTEM_WIDTH = 4;      // in sp
+
+class Glissando;
 class Note;
+
+//---------------------------------------------------------
+//   @@ GlissandoSegment
+//---------------------------------------------------------
+
+class GlissandoSegment : public LineSegment {
+      Q_OBJECT
+
+   protected:
+      // make glissando segment non-editable, until proper support is added for
+      // anchor selection
+      virtual bool isEditable() const override              { return false; }
+
+   public:
+      GlissandoSegment(Score* s) : LineSegment(s)           {}
+      Glissando* glissando() const                          { return (Glissando*)spanner(); }
+      virtual Element::Type type() const override           { return Element::Type::GLISSANDO_SEGMENT; }
+      virtual GlissandoSegment* clone() const override      { return new GlissandoSegment(*this); }
+      virtual void draw(QPainter*) const override;
+      virtual void layout() override;
+
+      virtual QVariant getProperty(P_ID id) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
+      };
 
 //---------------------------------------------------------
 //   @@ Glissando
@@ -26,7 +56,7 @@ class Note;
 //   @P showText       bool
 //---------------------------------------------------------
 
-class Glissando : public Element {
+class Glissando : public SLine {
       Q_OBJECT
 
       Q_PROPERTY(Ms::Glissando::Type glissandoType READ glissandoType  WRITE undoSetGlissandoType)
@@ -41,36 +71,48 @@ class Glissando : public Element {
 
    private:
       Type _glissandoType;
-      QLineF line;
       QString _text;
       bool _showText;
+
+   protected:
+      // make glissando non-editable, until proper support is added for anchor selection
+      // (in some occasions, trying to edit a single-segment glissando, redirects into
+      // editing the whole glissando)
+      virtual bool isEditable() const override              { return false; }
 
    public:
       Glissando(Score* s);
       Glissando(const Glissando&);
 
+      static Note* guessInitialNote(Chord* chord);
+      static Note* guessFinalNote(Chord* chord);
+
+      // overriden inherited methods
       virtual Glissando* clone() const override       { return new Glissando(*this); }
       virtual Element::Type type() const override     { return Element::Type::GLISSANDO; }
-      Type glissandoType() const             { return _glissandoType; }
-      void setGlissandoType(Type v)          { _glissandoType = v;    }
+      virtual LineSegment* createLineSegment() override;
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual Space space() const override;
-
-      virtual void draw(QPainter*) const override;
+//      virtual void draw(QPainter*) const override;
       virtual void layout() override;
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
 
-      void setSize(const QSizeF&);        // used for palette
+      // Glissando specific methods
+      Type glissandoType() const          { return _glissandoType;}
+      void setGlissandoType(Type v)       { _glissandoType = v;   }
+      QString text() const                { return _text;         }
+      void setText(const QString& t)      { _text = t;            }
+      bool showText() const               { return _showText;     }
+      void setShowText(bool v)            { _showText = v;        }
 
-      QString text() const           { return _text;     }
-      void setText(const QString& t) { _text = t;        }
-      bool showText() const          { return _showText; }
-      void setShowText(bool v)       { _showText = v;    }
+//      void setSize(const QSizeF&);        // was used for palette; no longer used?
 
       void undoSetGlissandoType(Type);
       void undoSetText(const QString&);
       void undoSetShowText(bool);
 
+      // property methods
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;

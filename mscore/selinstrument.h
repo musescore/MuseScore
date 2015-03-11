@@ -48,7 +48,7 @@ class SelectInstrument : public QDialog, private Ui::SelectInstrument {
       void filterInstrumentsByGenre(QTreeWidget *, QString);
 
    public:
-      SelectInstrument(const Instrument&, QWidget* parent = 0);
+      SelectInstrument(const Instrument*, QWidget* parent = 0);
       const InstrumentTemplate* instrTemplate() const;
       };
 

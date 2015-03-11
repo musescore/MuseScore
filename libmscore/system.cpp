@@ -188,14 +188,14 @@ void System::layout(qreal xo1)
                               b->setParent(this);
                               b->setTrack(track);
                               b->setLevel(i);
-                              b->setBracketType(s->bracket(i));
-                              b->setSpan(s->bracketSpan(i));
                               score()->undoAddElement(b);
                               }
                         else
                               _brackets.append(b);
                         b->setFirstStaff(firstStaff);
                         b->setLastStaff(lastStaff);
+                        b->setBracketType(s->bracket(i));
+                        b->setSpan(s->bracketSpan(i));
                         bracketWidth[i] = qMax(bracketWidth[i], b->width());
                         }
                   }
@@ -226,6 +226,7 @@ void System::layout(qreal xo1)
                   _leftMargin += bracketWidth[i] + bd;
             }
 
+      int nVisible = 0;
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             SysStaff* s  = _staves[staffIdx];
             Staff* staff = score()->staff(staffIdx);
@@ -233,6 +234,7 @@ void System::layout(qreal xo1)
                   s->setbbox(QRectF());
                   continue;
                   }
+            ++nVisible;
             qreal staffMag = staff->mag();
             qreal h;
             if (staff->lines() == 1)
@@ -243,7 +245,7 @@ void System::layout(qreal xo1)
             s->bbox().setRect(_leftMargin + xo1, 0.0, 0.0, h);
             }
 
-      if ((nstaves > 1 && score()->styleB(StyleIdx::startBarlineMultiple)) || (nstaves <= 1 && score()->styleB(StyleIdx::startBarlineSingle))) {
+      if ((nVisible > 1 && score()->styleB(StyleIdx::startBarlineMultiple)) || (nVisible <= 1 && score()->styleB(StyleIdx::startBarlineSingle))) {
             if (_barLine == 0) {
                   BarLine* bl = new BarLine(score());
                   bl->setParent(this);
@@ -658,6 +660,7 @@ void System::add(Element* el)
             case Element::Type::SLUR_SEGMENT:
             case Element::Type::PEDAL_SEGMENT:
             case Element::Type::LYRICSLINE_SEGMENT:
+            case Element::Type::GLISSANDO_SEGMENT:
                   {
                   SpannerSegment* ss = static_cast<SpannerSegment*>(el);
 #ifndef NDEBUG
@@ -715,6 +718,7 @@ void System::remove(Element* el)
             case Element::Type::SLUR_SEGMENT:
             case Element::Type::PEDAL_SEGMENT:
             case Element::Type::LYRICSLINE_SEGMENT:
+            case Element::Type::GLISSANDO_SEGMENT:
                   if (!_spannerSegments.removeOne(static_cast<SpannerSegment*>(el))) {
                         qDebug("System::remove: %p(%s) not found, score %p", el, el->name(), score());
                         Q_ASSERT(score() == el->score());

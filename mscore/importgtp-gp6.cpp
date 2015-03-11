@@ -389,40 +389,23 @@ void GuitarPro6::readTracks(QDomNode* track)
                         part->setPartName(currentNode.toElement().text());
                   else if (nodeName == "Instrument") {
                         QString ref = currentNode.attributes().namedItem("ref").toAttr().value();
-                        Instrument* instr = new Instrument;
                         // use an array as a map instead?
-                        if (!ref.compare("e-gtr6")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("electric-guitar"));
-                              part->setInstrument(*instr, 0);
-                              }
-                        else if (!ref.compare("tnr-s")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("voice"));
-                              part->setInstrument(*instr, 0);
-                              }
-                        else if (!ref.compare("s-gtr6")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("guitar-steel"));
-                              part->setInstrument(*instr, 0);
-                              }
-                        else if (!ref.compare("snt-lead-ss")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("poly-synth"));
-                              part->setInstrument(*instr, 0);
-                              }
-                        else if (!ref.compare("f-bass5")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("bass-guitar"));
-                              part->setInstrument(*instr, 0);
-                              }
-                        else if (!ref.compare("snt-bass-ss")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("metallic-synth"));
-                              part->setInstrument(*instr, 0);
-                              }
-                        else if (!ref.compare("mrcs")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("maracas"));
-                              part->setInstrument(*instr, 0);
-                             }
-                        else if (!ref.compare("drmkt")) {
-                              *instr = instr->fromTemplate(Ms::searchTemplate("drumset"));
-                              part->setInstrument(*instr, 0);
-                              }
+                        if (!ref.compare("e-gtr6"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("electric-guitar")));
+                        else if (!ref.compare("tnr-s"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("voice")));
+                        else if (!ref.compare("s-gtr6"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("guitar-steel")));
+                        else if (!ref.compare("snt-lead-ss"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("poly-synth")));
+                        else if (!ref.compare("f-bass5"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("bass-guitar")));
+                        else if (!ref.compare("snt-bass-ss"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("metallic-synth")));
+                        else if (!ref.compare("mrcs"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("maracas")));
+                        else if (!ref.compare("drmkt"))
+                              part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("drumset")));
                         }
                   else if (nodeName == "Properties") {
                         QDomNode currentProperty = currentNode.firstChild();
@@ -534,6 +517,12 @@ int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
       QString bars = masterBar.lastChildElement("Bars").toElement().text();
       //work out the number of measures (add 1 as couning from 0, and divide by number of parts)
       int numMeasures = (bars.split(" ").last().toInt() + 1) / score->parts().length();
+
+      if (numMeasures > bars.size()) {
+            qDebug("GuitarPro6:findNumMeasures: bars %d < numMeasures %d\n", bars.size(), numMeasures);
+            // HACK (ws)
+            numMeasures = bars.size();
+            }
       return numMeasures;
       }
 
@@ -912,7 +901,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             else if (!value.compare("1.8"))
                                                                   harmonicFret += 40;
                                                             harmonicNote->setFret(harmonicFret);
-                                                            harmonicNote->setPitch(staff->part()->instr()->stringData()->getPitch(musescoreString, harmonicFret));
+                                                            harmonicNote->setPitch(staff->part()->instr()->stringData()->getPitch(musescoreString, harmonicFret, nullptr, 0));
                                                             harmonicNote->setTpcFromPitch();
                                                             if (harmonicText.compare("Natural")) {
                                                                   harmonicNote->setFret(fretNum.toInt());
@@ -932,7 +921,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       Staff* staff = note->staff();
                                                       int fretNumber = fretNum.toInt();
                                                       int musescoreString = staff->part()->instr()->stringData()->strings() - 1 - stringNum.toInt();
-                                                      auto pitch = staff->part()->instr()->stringData()->getPitch(musescoreString, fretNumber);
+                                                      auto pitch = staff->part()->instr()->stringData()->getPitch(musescoreString, fretNumber, nullptr, 0);
                                                       note->setFret(fretNumber);
                                                       // we need to turn this string number for GP to the the correct string number for musescore
                                                       note->setString(musescoreString);
@@ -1381,8 +1370,10 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               tuplet->add(cr);
                         TDuration d(l);
                         cr->setDuration(l);
-                        if (cr->type() == Element::Type::REST && l == measure->len())
+                        if (cr->type() == Element::Type::REST && l >= measure->len()) {
                               cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                              cr->setDuration(measure->len());
+                              }
                         else
                               cr->setDurationType(d);
                         if(!segment->cr(track))
@@ -1492,8 +1483,10 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                   cr->setTrack(staffIdx * VOICES + voiceNum);
                   TDuration d(l);
                   cr->setDuration(l);
-                  if (cr->type() == Element::Type::REST && l == measure->len())
+                  if (cr->type() == Element::Type::REST && l >= measure->len()) {
                         cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                        cr->setDuration(measure->len());
+                        }
                   else
                         cr->setDurationType(d);
 

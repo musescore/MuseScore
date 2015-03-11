@@ -207,6 +207,9 @@ QVariant Pedal::propertyDefault(P_ID propertyId) const
             case P_ID::LINE_STYLE:
                   return int(score()->styleI(StyleIdx::pedalLineStyle));
 
+            case P_ID::TEXT_STYLE_TYPE:
+                  return int(TextStyleType::PEDAL);
+
             default:
                   return TextLine::propertyDefault(propertyId);
             }

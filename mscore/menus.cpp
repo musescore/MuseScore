@@ -228,7 +228,7 @@ Palette* MuseScore::newDynamicsPalette(bool basic, bool master)
 //   newKeySigPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newKeySigPalette()
+Palette* MuseScore::newKeySigPalette(bool basic)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Key Signatures"));
@@ -249,6 +249,15 @@ Palette* MuseScore::newKeySigPalette()
       KeySig* k = new KeySig(gscore);
       k->setKey(Key::C);
       sp->append(k, qApp->translate("MuseScore", keyNames[14]));
+
+      if (!basic) {
+            // atonal key signature
+            KeySigEvent nke;
+            nke.setCustom(true);
+            KeySig* nk = new KeySig(gscore);
+            nk->setKeySigEvent(nke);
+            sp->append(nk, qApp->translate("MuseScore", keyNames[15]));
+            }
       return sp;
       }
 
@@ -310,10 +319,11 @@ Palette* MuseScore::newBarLinePalette(bool basic)
       sp->setGrid(42, 38);
 
       // bar line styles
-      for (unsigned i = 0; i < sizeof(barLineTable)/sizeof(*barLineTable); ++i) {
+      for (unsigned i = 0; i < BarLine::barLineTableSize(); ++i) {
             BarLine* b  = new BarLine(gscore);
-            b->setBarLineType(barLineTable[i].type);
-            sp->append(b, barLineTable[i].name);
+            BarLineTableItem bti = BarLine::barLineTableItem(i);
+            b->setBarLineType(bti.type);
+            sp->append(b, qApp->translate("Palette", bti.name));
             }
 
       if (!basic) {
@@ -332,7 +342,7 @@ Palette* MuseScore::newBarLinePalette(bool basic)
                   b->setBarLineType(BarLineType::NORMAL);
                   b->setSpanFrom(span[i].from);
                   b->setSpanTo(span[i].to);
-                  sp->append(b, span[i].name);
+                  sp->append(b, qApp->translate("Palette", span[i].name));
                   }
             }
       return sp;
@@ -345,7 +355,7 @@ Palette* MuseScore::newBarLinePalette(bool basic)
 Palette* MuseScore::newRepeatsPalette()
       {
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Repeats"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Repeats && Jumps"));
       sp->setMag(0.65);
       sp->setGrid(84, 28);
       sp->setDrawGrid(true);
@@ -493,7 +503,7 @@ Palette* MuseScore::newNoteHeadsPalette()
                   sym = Note::noteHead(0, NoteHead::Group(i), NoteHead::Type::HEAD_BREVIS);
             NoteHead* nh = new NoteHead(gscore);
             nh->setSym(sym);
-            sp->append(nh, Sym::id2userName(sym));
+            sp->append(nh, qApp->translate("noteheadnames", NoteHead::groupToGroupName(NoteHead::Group(i))));
             }
       Icon* ik = new Icon(gscore);
       ik->setIconType(IconType::BRACKETS);
@@ -599,10 +609,13 @@ Palette* MuseScore::newBreathPalette()
                   continue;
             Breath* a = new Breath(gscore);
             a->setBreathType(i);
-            if (i < 2)
+            if (i < 2) {
                   sp->append(a, tr("Breath"));
-            else
+                  }
+            else {
                   sp->append(a, tr("Caesura"));
+                  a->setPause(2.0);
+                  }
             }
       return sp;
       }
@@ -855,8 +868,8 @@ Palette* MuseScore::newLinesPalette(bool basic)
             pedal = new Pedal(gscore);
             pedal->setLen(w);
             pedal->setBeginText("<sym>keyboardPedalPed</sym>");
-            sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
             pedal->setEndHook(true);
+            sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
             }
 
       pedal = new Pedal(gscore);
@@ -961,7 +974,10 @@ Palette* MuseScore::newTempoPalette()
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
             TempoText* tt = new TempoText(gscore);
             tt->setFollowText(true);
-            tt->setTrack(0);
+            // leave track at default (-1) to make it possible
+            // for drop() to tell that this came from palette
+            // (it will then be set to 0 there)
+            //tt->setTrack(0);
             tt->setTempo(tp[i].f);
             tt->setText(tp[i].pattern);
             sp->append(tt, tr("Tempo text"), QString(), 1.5);
@@ -998,7 +1014,6 @@ Palette* MuseScore::newTextPalette()
       sp->append(st, tr("Swing"));
 
       RehearsalMark* rhm = new RehearsalMark(gscore);
-      rhm->setTrack(0);
       rhm->setText("B1");
       sp->append(rhm, tr("Rehearsal mark"));
 
@@ -1118,7 +1133,7 @@ void MuseScore::setAdvancedPalette()
       //-----------------------------------
 
       Palette* sp = new Palette;
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Symbols"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Fretboard Diagrams"));
       sp->setGrid(42, 45);
       sp->setDrawGrid(true);
 
@@ -1154,7 +1169,7 @@ void MuseScore::setBasicPalette()
       paletteBox->clear();
       paletteBox->addPalette(newGraceNotePalette(true));
       paletteBox->addPalette(newClefsPalette(true));
-      paletteBox->addPalette(newKeySigPalette());
+      paletteBox->addPalette(newKeySigPalette(true));
       paletteBox->addPalette(newTimePalette());
       paletteBox->addPalette(newBarLinePalette(true));
       paletteBox->addPalette(newLinesPalette(true));
@@ -1183,8 +1198,6 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       {
       QMenu* popup = new QMenu(tr("&Add"), parent);
       popup->setObjectName("Add");
-
-      popup->addAction(getAction("instruments"));
 
       QMenu* measures = popup->addMenu(tr("&Measures"));
       measures->addAction(getAction("insert-measure"));

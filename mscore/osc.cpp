@@ -249,7 +249,6 @@ void MuseScore::oscColorNote(QVariantList list)
                                     cs->startCmd();
                                     cs->undo(new ChangeProperty(note, P_ID::COLOR, noteColor));
                                     cs->endCmd();
-                                    cs->end();
                                     return;
                                     }
                               }

@@ -41,19 +41,43 @@ int  BarLine::_origSpan, BarLine::_origSpanFrom, BarLine::_origSpanTo;
 //---------------------------------------------------------
 
 static const char* barLineNames[] = {
-      QT_TRANSLATE_NOOP("barline", "normal"),
-      QT_TRANSLATE_NOOP("barline", "double"),
-      QT_TRANSLATE_NOOP("barline", "start-repeat"),
-      QT_TRANSLATE_NOOP("barline", "end-repeat"),
-      QT_TRANSLATE_NOOP("barline", "dashed"),
-      QT_TRANSLATE_NOOP("barline", "end"),
-      QT_TRANSLATE_NOOP("barline", "end-start-repeat"),
-      QT_TRANSLATE_NOOP("barline", "dotted")
+      "normal",
+      "double",
+      "start-repeat",
+      "end-repeat",
+      "dashed",
+      "end",
+      "end-start-repeat",
+      "dotted"
       };
 
-unsigned int barLineTableSize()
+static const BarLineTableItem barLineTable[] {
+        { BarLineType::NORMAL,           QT_TRANSLATE_NOOP("Palette", "Normal barline") },
+        { BarLineType::BROKEN,           QT_TRANSLATE_NOOP("Palette", "Dashed barline") },
+        { BarLineType::DOTTED,           QT_TRANSLATE_NOOP("Palette", "Dotted barline") },
+        { BarLineType::END,              QT_TRANSLATE_NOOP("Palette", "End bar barline") },
+        { BarLineType::DOUBLE,           QT_TRANSLATE_NOOP("Palette", "Double barline") },
+        { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start repeat") },
+        { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End repeat") },
+        { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-start repeat") },
+      };
+
+//---------------------------------------------------------
+//   barLineTableSize
+//---------------------------------------------------------
+
+unsigned int BarLine::barLineTableSize()
       {
       return sizeof(barLineTable)/sizeof(*barLineTable);
+      }
+
+//---------------------------------------------------------
+//   barLineTableItem
+//---------------------------------------------------------
+
+BarLineTableItem BarLine::barLineTableItem(int i)
+      {
+      return barLineTable[i];
       }
 
 //---------------------------------------------------------
@@ -61,15 +85,6 @@ unsigned int barLineTableSize()
 //---------------------------------------------------------
 
 QString BarLine::userTypeName(BarLineType t)
-      {
-      return qApp->translate("barline", barLineNames[int(t)]);
-      }
-
-//---------------------------------------------------------
-//   userTypeName2
-//---------------------------------------------------------
-
-QString BarLine::userTypeName2(BarLineType t)
       {
       for (const auto& i : barLineTable) {
            if (i.type == t)
@@ -950,7 +965,7 @@ void BarLine::layout()
 
       // bar lines not hidden
       else {
-            qreal dw = layoutWidth(score(), barLineType(), magS());
+            qreal dw = layoutWidth(score(), barLineType(), mag());
             QRectF r(0.0, y1, dw, y2-y1);
 
             if (score()->styleB(StyleIdx::repeatBarTips)) {
@@ -1336,7 +1351,7 @@ Element* BarLine::prevElement()
 
 QString BarLine::accessibleInfo()
       {
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(BarLine::userTypeName2(this->barLineType()));
+      return QString("%1: %2").arg(Element::accessibleInfo()).arg(BarLine::userTypeName(this->barLineType()));
       }
 
 //---------------------------------------------------------
@@ -1349,10 +1364,13 @@ QString BarLine::accessibleExtraInfo()
             Segment* seg = static_cast<Segment*>(parent());
             QString rez = "";
 
-            foreach (Element* e, *el())
+            foreach (Element* e, *el()) {
+                  if (!score()->selectionFilter().canSelect(e)) continue;
                   rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+                  }
 
             foreach (Element* e, seg->annotations()) {
+                  if (!score()->selectionFilter().canSelect(e)) continue;
                   if (e->track() == track())
                         rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
@@ -1360,7 +1378,8 @@ QString BarLine::accessibleExtraInfo()
 
             if (m) {
                   //jumps
-                  foreach (Element* e, *m->el()) {
+                  foreach (Element* e, m->el()) {
+                        if (!score()->selectionFilter().canSelect(e)) continue;
                         if (e->type() == Element::Type::JUMP)
                               rez= QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                         if (e->type() == Element::Type::MARKER) {
@@ -1373,7 +1392,8 @@ QString BarLine::accessibleExtraInfo()
                   //markers
                   Measure* nextM = m->nextMeasureMM();
                   if (nextM) {
-                        foreach (Element* e, *nextM->el()) {
+                        foreach (Element* e, nextM->el()) {
+                              if (!score()->selectionFilter().canSelect(e)) continue;
                               if (e->type() == Element::Type::MARKER)
                                     if (static_cast<Marker*>(e)->markerType() == Marker::Type::FINE)
                                           continue; //added above^
@@ -1388,6 +1408,7 @@ QString BarLine::accessibleExtraInfo()
             for (auto i = spanners.begin(); i < spanners.end(); i++) {
                   ::Interval<Spanner*> interval = *i;
                   Spanner* s = interval.value;
+                  if (!score()->selectionFilter().canSelect(s)) continue;
                   if (s->type() == Element::Type::VOLTA) {
                         if (s->tick() == tick)
                               rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());

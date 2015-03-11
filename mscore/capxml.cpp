@@ -132,6 +132,8 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
             const QStringRef& tag(e.name());
             if (tag == "tuplet") {
                   count = e.attribute("count").toInt();
+                  tripartite = e.attribute("tripartite", "false") == "true";
+                  isProlonging = e.attribute("prolong", "false") == "true";
                   e.readNext();
                   }
             else
@@ -256,6 +258,25 @@ void ChordObj::readCapxStem(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   ChordObj::readCapxArticulation -- read <articulation> element
+//---------------------------------------------------------
+
+void ChordObj::readCapxArticulation(XmlReader& e)
+      {
+      QString art = e.attribute("type");
+      if      (art == "staccato")        articulation = 1;
+      else if (art == "tenuto")          articulation = 2;
+      else if (art == "staccato tenuto") articulation = 3;
+      else if (art == "staccatissimo")   articulation = 4;
+      else if (art == "normalAccent")    articulation = 5;
+      else if (art == "strongAccent")    articulation = 6;
+      else if (art == "weakBeat")        articulation = 7;
+      else if (art == "strongBeat")      articulation = 8;
+      else                               articulation = 0;
+      e.readNext();
+      }
+
+//---------------------------------------------------------
 //   ChordObj::readCapx -- capx equivalent of ChordObj::read
 //---------------------------------------------------------
 
@@ -289,8 +310,7 @@ void ChordObj::readCapx(XmlReader& e)
                   e.skipCurrentElement();
                   }
             else if (tag == "articulation") {
-                  qDebug("ChordObj::readCapx: found articulation (skipping)");
-                  e.skipCurrentElement();
+                  readCapxArticulation(e);
                   }
             else if (tag == "lyric") {
                   readCapxLyrics(e);
@@ -437,7 +457,12 @@ void SimpleTextObj::readCapx(XmlReader& e)
       {
       double x = e.doubleAttribute("x");
       double y = e.doubleAttribute("y");
-      QString align = e.attribute("align", "left");
+      QString stralign = e.attribute("align", "left");
+      align = 0;
+      if (stralign == "center")
+            align = 1;
+      else if (stralign == "right")
+            align = 2;
       relPos = QPointF(x, y);
       relPos *= 32.0;
       // qDebug("x %g y %g align %s", x, y, qPrintable(align));
@@ -490,6 +515,37 @@ void VoltaObj::readCapx(XmlReader& e)
       qDebug("VoltaObj::read firstNumber %d lastNumber %d", firstNumber, lastNumber);
       qDebug("VoltaObj::read x0 %d x1 %d y %d bLeft %d bRight %d bDotted %d allNumbers %d from %d to %d",
              x0, x1, y, bLeft, bRight, bDotted, allNumbers, from, to);
+      e.readNext();
+      }
+
+//---------------------------------------------------------
+//   TrillObj::readCapx -- capx equivalent of TrillObj::read
+//---------------------------------------------------------
+
+void TrillObj::readCapx(XmlReader& e)
+      {
+      double x0d  = e.doubleAttribute("x1", 0.0);
+      double x1d  = e.doubleAttribute("x2", 0.0);
+      double yd   = e.doubleAttribute("y", 0.0);
+      trillSign   = e.attribute("tr", "true") == "true";
+      x0 = (int)round(x0d * 32.0);
+      x1 = (int)round(x1d * 32.0);
+      y  = (int)round(yd * 32.0);
+      // color       -> skipped
+      qDebug("TrillObj::read x0 %d x1 %d y %d trillSign %d", x0, x1, y, trillSign);
+      e.readNext();
+      }
+
+//---------------------------------------------------------
+//   WedgeObj::readCapx -- capx equivalent of WedgeObj::read
+//---------------------------------------------------------
+
+void WedgeObj::readCapx(XmlReader& e)
+      {
+      // TODO: read LineObj properties
+      decresc          = e.attribute("decrescendo", "false") == "true";
+      double dheight   = e.doubleAttribute("span", 1.0);
+      height = (int)round(dheight * 32.0);
       e.readNext();
       }
 
@@ -561,8 +617,10 @@ QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
                               e.skipCurrentElement();
                               }
                         else if (tag == "wedge") {
-                              qDebug("readCapxDrawObjectArray: found wedge (skipping)");
-                              e.skipCurrentElement();
+                              WedgeObj* o = new WedgeObj(this);
+                              bdo = o; // save o to handle the "basic" tag (which sometimes follows)
+                              o->readCapx(e);
+                              ol.append(o);
                               }
                         else if (tag == "notelines") {
                               qDebug("readCapxDrawObjectArray: found notelines (skipping)");
@@ -575,8 +633,10 @@ QList<BasicDrawObj*> Capella::readCapxDrawObjectArray(XmlReader& e)
                               ol.append(o);
                               }
                         else if (tag == "trill") {
-                              qDebug("readCapxDrawObjectArray: found trill (skipping)");
-                              e.skipCurrentElement();
+                              TrillObj* o = new TrillObj(this);
+                              bdo = o; // save o to handle the "basic" tag (which sometimes follows)
+                              o->readCapx(e);
+                              ol.append(o);
                               }
                         else if (tag == "transposable") {
                               qDebug("readCapxDrawObjectArray: found transposable (skipping)");

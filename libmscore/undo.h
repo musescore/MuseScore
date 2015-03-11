@@ -37,6 +37,7 @@
 #include "stafftype.h"
 #include "cleflist.h"
 #include "note.h"
+#include "drumset.h"
 
 namespace Ms {
 
@@ -546,34 +547,6 @@ class ChangeInstrumentLong : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeChordRestLen
-//---------------------------------------------------------
-
-class ChangeChordRestLen : public UndoCommand {
-      ChordRest* cr;
-      TDuration d;
-      void flip();
-
-   public:
-      ChangeChordRestLen(ChordRest*, const TDuration& d);
-      UNDO_NAME("ChangeChordRestLen")
-      };
-
-//---------------------------------------------------------
-//   ChangeChordRestDuration
-//---------------------------------------------------------
-
-class ChangeChordRestDuration : public UndoCommand {
-      ChordRest* cr;
-      Fraction f;
-      void flip();
-
-   public:
-      ChangeChordRestDuration(ChordRest*, const Fraction& f);
-      UNDO_NAME("ChangeChordRestDuration")
-      };
-
-//---------------------------------------------------------
 //   MoveElement
 //---------------------------------------------------------
 
@@ -600,6 +573,20 @@ class ChangeBracketSpan : public UndoCommand {
    public:
       ChangeBracketSpan(Staff*, int column, int span);
       UNDO_NAME("ChangeBracketSpan")
+      };
+
+//---------------------------------------------------------
+//   ChangeBracketType
+//---------------------------------------------------------
+
+class ChangeBracketType : public UndoCommand {
+      Bracket* bracket;
+      BracketType type;
+      void flip();
+
+   public:
+      ChangeBracketType(Bracket*, BracketType type);
+      UNDO_NAME("ChangeBracketType")
       };
 
 //---------------------------------------------------------
@@ -659,12 +646,12 @@ class ChangeConcertPitch : public UndoCommand {
 class EditText : public UndoCommand {
       Text* text;
       QString oldText;
-      int undoLevel;
+      //int undoLevel;
 
       void undoRedo();
 
    public:
-      EditText(Text* t, const QString& ot, int l) : text(t), oldText(ot), undoLevel(l) {}
+      EditText(Text* t, const QString& ot, int /*l*/) : text(t), oldText(ot)/*, undoLevel(l)*/ {}
       virtual void undo();
       virtual void redo();
       UNDO_NAME("EditText")
@@ -675,14 +662,15 @@ class EditText : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangePatch : public UndoCommand {
+      Score* score;
       Channel* channel;
       MidiPatch patch;
 
       void flip();
 
    public:
-      ChangePatch(Channel* c, const MidiPatch* pt)
-         : channel(c), patch(*pt) {}
+      ChangePatch(Score* s, Channel* c, const MidiPatch* pt)
+         : score(s), channel(c), patch(*pt) {}
       UNDO_NAME("ChangePitch")
       };
 
@@ -712,21 +700,17 @@ class ChangePageFormat : public UndoCommand {
 
 class ChangeStaff : public UndoCommand {
       Staff* staff;
-      bool   small;
       bool   invisible;
       qreal  userDist;
-      QColor color;
       bool   neverHide;
       bool   showIfEmpty;
       bool   hideSystemBarLine;
-      qreal  mag;
-
 
       void flip();
 
    public:
-      ChangeStaff(Staff*, bool small, bool invisible, qreal userDist, QColor _color, bool _neverHide,
-         bool _showIfEmpty, qreal _mag, bool hide);
+      ChangeStaff(Staff*, bool invisible, qreal userDist, bool _neverHide,
+         bool _showIfEmpty, bool hide);
       UNDO_NAME("ChangeStaff")
       };
 
@@ -751,33 +735,15 @@ class ChangeStaffType : public UndoCommand {
 
 class ChangePart : public UndoCommand {
       Part* part;
-      Instrument instrument;
+      Instrument* instrument;
       QString partName;
 
       void flip();
 
    public:
-      ChangePart(Part*, const Instrument&, const QString& name);
+      ChangePart(Part*, Instrument*, const QString& name);
       UNDO_NAME("ChangePart")
       };
-
-//---------------------------------------------------------
-//   ChangePartProperty
-//---------------------------------------------------------
-
-class ChangePartProperty : public UndoCommand {
-      Part* part;
-      int id;
-      QVariant property;
-
-      void flip();
-
-   public:
-      ChangePartProperty(Part* e, int i, const QVariant& v)
-         : part(e), id(i), property(v) {}
-      UNDO_NAME("ChangePartProperty")
-      };
-
 
 //---------------------------------------------------------
 //   ChangeTextStyle
@@ -897,38 +863,33 @@ class ChangeMStaffProperties : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeTimesig
+//   InsertRemoveMeasures
 //---------------------------------------------------------
 
-class ChangeTimesig : public UndoCommand {
-      TimeSig* timesig;
-      bool showCourtesy;
-      Fraction sig;
-      Fraction stretch;
-      TimeSigType subtype;
-      QString numeratorString;
-      QString denominatorString;
+class InsertRemoveMeasures : public UndoCommand {
+      Measure* fm;
+      Measure* lm;
 
-      void flip();
+   protected:
+      void removeMeasures();
+      void insertMeasures();
 
    public:
-      ChangeTimesig(TimeSig* _timesig, bool sc, const Fraction&,
-         const Fraction&, QString, QString, TimeSigType subtype);
-      UNDO_NAME("ChangeTimesig")
+      InsertRemoveMeasures(Measure* _fm, Measure* _lm) : fm(_fm), lm(_lm) {}
+      virtual void undo() = 0;
+      virtual void redo() = 0;
       };
 
 //---------------------------------------------------------
 //   RemoveMeasures
 //---------------------------------------------------------
 
-class RemoveMeasures : public UndoCommand {
-      Measure* fm;
-      Measure* lm;
+class RemoveMeasures : public InsertRemoveMeasures {
 
    public:
-      RemoveMeasures(Measure*, Measure*);
-      virtual void undo();
-      virtual void redo();
+      RemoveMeasures(Measure* m1, Measure* m2) : InsertRemoveMeasures(m1, m2) {}
+      virtual void undo() { insertMeasures(); }
+      virtual void redo() { removeMeasures(); }
       UNDO_NAME("RemoveMeasures")
       };
 
@@ -936,14 +897,12 @@ class RemoveMeasures : public UndoCommand {
 //   InsertMeasures
 //---------------------------------------------------------
 
-class InsertMeasures : public UndoCommand {
-      Measure* fm;
-      Measure* lm;
+class InsertMeasures : public InsertRemoveMeasures {
 
    public:
-      InsertMeasures(Measure* m1, Measure* m2) : fm(m1), lm(m2) {}
-      virtual void undo();
-      virtual void redo();
+      InsertMeasures(Measure* m1, Measure* m2) : InsertRemoveMeasures(m1, m2) {}
+      virtual void redo() { insertMeasures(); }
+      virtual void undo() { removeMeasures(); }
       UNDO_NAME("InsertMeasures")
       };
 
@@ -1043,28 +1002,29 @@ class ChangeTremoloBar : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeNoteEvents : public UndoCommand {
-      Chord* chord;
+      //Chord* chord;
       QList<NoteEvent*> events;
 
       void flip();
 
    public:
-      ChangeNoteEvents(Chord* n, const QList<NoteEvent*>& l) : chord(n), events(l) {}
+      ChangeNoteEvents(Chord* /*n*/, const QList<NoteEvent*>& l) : /*chord(n),*/ events(l) {}
       UNDO_NAME("ChangeNoteEvents")
       };
 
 //---------------------------------------------------------
 //   ChangeInstrument
+//    change instrument in an InstrumentChange element
 //---------------------------------------------------------
 
 class ChangeInstrument : public UndoCommand {
       InstrumentChange* is;
-      Instrument instrument;
+      Instrument* instrument;
 
       void flip();
 
    public:
-      ChangeInstrument(InstrumentChange* _is, const Instrument& i) : is(_is), instrument(i) {}
+      ChangeInstrument(InstrumentChange* _is, Instrument* i) : is(_is), instrument(i) {}
       UNDO_NAME("ChangeInstrument")
       };
 
@@ -1153,7 +1113,7 @@ class ChangeStaffUserDist : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeProperty : public UndoCommand {
-      Element* element;
+      ScoreElement* element;
       P_ID id;
       QVariant property;
       PropertyStyle propertyStyle;
@@ -1161,7 +1121,7 @@ class ChangeProperty : public UndoCommand {
       void flip();
 
    public:
-      ChangeProperty(Element* e, P_ID i, const QVariant& v, PropertyStyle ps = PropertyStyle::NOSTYLE)
+      ChangeProperty(ScoreElement* e, P_ID i, const QVariant& v, PropertyStyle ps = PropertyStyle::NOSTYLE)
          : element(e), id(i), property(v), propertyStyle(ps) {}
       P_ID getId() const  { return id; }
       UNDO_NAME("ChangeProperty")
@@ -1334,17 +1294,31 @@ class ChangeNoteEvent : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   LinkUnlink
+//---------------------------------------------------------
+
+class LinkUnlink : public UndoCommand {
+      ScoreElement* e;
+      ScoreElement* le;
+
+   protected:
+      void doLink();
+      void doUnlink();
+
+   public:
+      LinkUnlink(ScoreElement* _e, ScoreElement* _le) : e(_e), le(_le) {}
+      };
+
+//---------------------------------------------------------
 //   Unlink
 //---------------------------------------------------------
 
-class Unlink : public UndoCommand {
-      Element* e;
-      Element* le = 0;
+class Unlink : public LinkUnlink {
 
    public:
-      Unlink(Element* _e);
-      virtual void undo();
-      virtual void redo();
+      Unlink(ScoreElement* e) : LinkUnlink(e, nullptr) {};
+      virtual void undo() override { doLink();   }
+      virtual void redo() override { doUnlink(); }
       UNDO_NAME("Unlink")
       };
 
@@ -1352,14 +1326,11 @@ class Unlink : public UndoCommand {
 //   Link
 //---------------------------------------------------------
 
-class Link : public UndoCommand {
-      Element* e1;
-      Element* e2;
-
+class Link : public LinkUnlink {
    public:
-      Link(Element* _e1, Element* _e2) : e1(_e1), e2(_e2) {}
-      virtual void undo();
-      virtual void redo();
+      Link(ScoreElement* e, ScoreElement* le) : LinkUnlink(e, le) {}
+      virtual void undo() override { doUnlink(); }
+      virtual void redo() override { doLink();   }
       UNDO_NAME("Link")
       };
 
@@ -1439,6 +1410,20 @@ class ChangeMetaTags : public UndoCommand {
       UNDO_NAME("ChangeMetaTags")
       };
 
+//---------------------------------------------------------
+//   ChangeDrumset
+//---------------------------------------------------------
+
+class ChangeDrumset : public UndoCommand {
+      Instrument* instrument;
+      Drumset drumset;
+
+      void flip();
+
+   public:
+      ChangeDrumset(Instrument* i, const Drumset* d) : instrument(i), drumset(*d) {}
+      UNDO_NAME("ChangeDrumset")
+      };
 
 }     // namespace Ms
 #endif

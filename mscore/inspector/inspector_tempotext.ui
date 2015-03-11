@@ -63,9 +63,6 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
      <property name="leftMargin">
       <number>0</number>
      </property>
@@ -78,6 +75,9 @@
      <property name="bottomMargin">
       <number>0</number>
      </property>
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <item row="0" column="2">
       <widget class="QToolButton" name="resetFollowText">
        <property name="toolTip">
@@ -87,7 +87,7 @@
         <string>Reset Follow text value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -107,7 +107,7 @@
         <string>Reset Tempo value</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -133,7 +133,7 @@
         <string>BPM</string>
        </property>
        <property name="decimals">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="minimum">
         <double>5.000000000000000</double>

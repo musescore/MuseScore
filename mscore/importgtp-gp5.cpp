@@ -48,6 +48,7 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/fingering.h"
 #include "libmscore/notedot.h"
+#include "libmscore/stafftext.h"
 #include "preferences.h"
 
 
@@ -238,8 +239,10 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   }
 
             cr->setDuration(l);
-            if (cr->type() == Element::Type::REST && (pause == 0 || l == measure->len()))
+            if (cr->type() == Element::Type::REST && (pause == 0 || l >= measure->len())) {
                   cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                  cr->setDuration(measure->len());
+                  }
             else
                   cr->setDurationType(d);
 
@@ -298,10 +301,17 @@ qDebug("  3beat read 0x%02x", rrr);
 void GuitarPro5::readMeasure(Measure* measure, int staffIdx, Tuplet** tuplets, bool mixChange)
       {
       for (int voice = 0; voice < 2; ++voice) {
+            Fraction measureLen = 0;
             int tick = measure->tick();
             int beats = readInt();
-            for (int beat = 0; beat < beats; ++beat)
-                  tick += readBeat(tick, voice, measure, staffIdx, tuplets, mixChange);
+            for (int beat = 0; beat < beats; ++beat) {
+                  int ticks = readBeat(tick, voice, measure, staffIdx, tuplets, mixChange);
+                  tick += ticks;
+                  measureLen += Fraction::fromTicks(ticks);
+                  }
+            if (measureLen < measure->len()) {
+                  score->setRest(tick, staffIdx * VOICES + voice, measure->len() - measureLen, false, nullptr, false);
+                  }
             }
       }
 
@@ -407,7 +417,6 @@ void GuitarPro5::readTracks()
             instr->setStringData(stringData);
             part->setPartName(name);
             part->setLongName(name);
-            instr->setTranspose(Interval(capo));
 
             //
             // determine clef
@@ -416,7 +425,8 @@ void GuitarPro5::readTracks()
             ClefType clefId = ClefType::G;
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                   clefId = ClefType::PERC;
-                  instr->setUseDrumset(DrumsetKind::GUITAR_PRO);
+                  // instr->setUseDrumset(DrumsetKind::GUITAR_PRO);
+                  instr->setDrumset(gpDrumset);
                   staff->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else if (patch >= 24 && patch < 32)
@@ -430,22 +440,33 @@ void GuitarPro5::readTracks()
             Segment* segment = measure->getSegment(Segment::Type::Clef, 0);
             segment->add(clef);
 
-            Channel& ch = instr->channel(0);
+            if (capo > 0) {
+                  Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
+                  StaffText* st = new StaffText(score);
+                  st->setTextStyleType(TextStyleType::STAFF);
+                  st->setText(QString("Capo. fret ") + QString::number(capo));
+                  st->setParent(s);
+                  st->setTrack(i * VOICES);
+                  measure->add(st);
+            }
+
+
+            Channel* ch = instr->channel(0);
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
-                  ch.program = 0;
-                  ch.bank    = 128;
+                  ch->program = 0;
+                  ch->bank    = 128;
                   }
             else {
-                  ch.program = patch;
-                  ch.bank    = 0;
+                  ch->program = patch;
+                  ch->bank    = 0;
                   }
-            ch.volume  = channelDefaults[midiChannel].volume;
-            ch.pan     = channelDefaults[midiChannel].pan;
-            ch.chorus  = channelDefaults[midiChannel].chorus;
-            ch.reverb  = channelDefaults[midiChannel].reverb;
+            ch->volume  = channelDefaults[midiChannel].volume;
+            ch->pan     = channelDefaults[midiChannel].pan;
+            ch->chorus  = channelDefaults[midiChannel].chorus;
+            ch->reverb  = channelDefaults[midiChannel].reverb;
             //qDebug("default2: %d", channelDefaults[i].reverb);
             // missing: phase, tremolo
-            ch.updateInitList();
+            ch->updateInitList();
             }
       skip(version == 500 ? 2 : 1);
       }
@@ -631,7 +652,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
                   }
             gn->setFret(fret);
             gn->setString(note->string());
-            int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(note->string(), fret);
+            int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(note->string(), fret, nullptr, 0);
             gn->setPitch(grace_pitch);
             gn->setTpcFromPitch();
 
@@ -863,7 +884,7 @@ bool GuitarPro5::readNote(int string, Note* note)
             note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
-      int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber);
+      int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber, nullptr, 0);
       note->setFret(fretNumber);
       note->setString(string);
       note->setPitch(pitch);

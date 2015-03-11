@@ -24,6 +24,10 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7)
 
 cmake_policy(SET CMP0003 NEW)
 
+if(POLICY CMP0053)
+      cmake_policy(SET CMP0053 OLD)
+endif(POLICY CMP0053)
+
 if(POLICY CMP0045)
       cmake_policy(SET CMP0045 OLD)
 endif(POLICY CMP0045)
@@ -45,7 +49,9 @@ include (GetCompilerVersion)
 include (CreatePrecompiledHeader)
 
 # for debugging the make system uncomment next line:
-# set(CMAKE_VERBOSE_MAKEFILE ON)
+#set(CMAKE_VERBOSE_MAKEFILE ON)
+
+set (CMAKE_AUTOMOC TRUE)
 
 set(MSCORE_UNSTABLE  TRUE)          # mark as unstable
 
@@ -158,6 +164,7 @@ SET(QT_USE_QTDESIGNER    TRUE)
 SET(QT_USE_QTWEBKIT      TRUE)
 SET(QT_USE_QTXMLPATTERNS TRUE)
 SET(QT_USE_QTDECLARATIVE TRUE)
+SET(QT_USE_QTHELP        TRUE)
 
 #find_package(Qt5 COMPONENTS Widgets Xml Svg Network Designer WebKit Declarative)
 
@@ -382,7 +389,7 @@ ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 subdirs(
       mscore  awl bww2mxml share midi audiofile fluid mstyle libmscore synthesizer
       effects thirdparty/rtf2html thirdparty/diff thirdparty/beatroot
-      thirdparty/xmlstream thirdparty/qzip thirdparty/kQOAuth thirdparty/qtwaitingspinner
+      thirdparty/xmlstream thirdparty/qzip thirdparty/kQOAuth
       )
 if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 #with xcode, we need to have all the targets in the same project
@@ -391,6 +398,7 @@ else(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
 endif(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
+add_subdirectory(rdoc EXCLUDE_FROM_ALL)
 add_subdirectory(miditools EXCLUDE_FROM_ALL)
 add_subdirectory(fonttools EXCLUDE_FROM_ALL)
 add_subdirectory(manual)

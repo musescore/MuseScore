@@ -21,12 +21,10 @@
         <tpc>16</tpc>
         </Note>
       </Chord>
-    <tick>480</tick>
     <Breath>
       <subtype>0</subtype>
       <track>0</track>
       </Breath>
-    <tick>960</tick>
     <Chord>
       <track>0</track>
       <durationType>quarter</durationType>
@@ -45,7 +43,6 @@
         <tpc>13</tpc>
         </Note>
       </Chord>
-    <tick>1440</tick>
     <Breath>
       <subtype>0</subtype>
       <track>0</track>

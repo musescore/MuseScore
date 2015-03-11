@@ -463,13 +463,14 @@ void TimeSig::undoSetGroups(const Groups& g)
 
 QVariant TimeSig::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SHOW_COURTESY:      return int(showCourtesySig());
             case P_ID::NUMERATOR_STRING:   return numeratorString();
             case P_ID::DENOMINATOR_STRING: return denominatorString();
             case P_ID::GROUPS:             return QVariant::fromValue(groups());
             case P_ID::TIMESIG:            return QVariant::fromValue(_sig);
             case P_ID::TIMESIG_GLOBAL:     return QVariant::fromValue(globalSig());
+            case P_ID::TIMESIG_STRETCH:    return QVariant::fromValue(stretch());
             case P_ID::TIMESIG_TYPE: return QVariant::fromValue(int(_timeSigType));
             default:
                   return Element::getProperty(propertyId);
@@ -482,7 +483,7 @@ QVariant TimeSig::getProperty(P_ID propertyId) const
 
 bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SHOW_COURTESY:
                   if (generated())
                         return false;
@@ -502,6 +503,9 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::TIMESIG_GLOBAL:
                   setGlobalSig(v.value<Fraction>());
+                  break;
+            case P_ID::TIMESIG_STRETCH:
+                  setStretch(v.value<Fraction>());
                   break;
             case P_ID::TIMESIG_TYPE:
                   _timeSigType = (TimeSigType)(v.toInt());
@@ -540,6 +544,11 @@ QVariant TimeSig::propertyDefault(P_ID id) const
 //---------------------------------------------------------
 
 void TimeSig::spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)
+      {
+      _needLayout = true;
+      }
+
+void TimeSig::localSpatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)
       {
       _needLayout = true;
       }

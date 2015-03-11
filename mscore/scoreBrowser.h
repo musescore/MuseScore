@@ -27,9 +27,9 @@ class ScoreItem;
 class ScoreListWidget : public QListWidget
       {
       Q_OBJECT
-      int CELLW           { 112   };
-      int CELLH           { 224   };
-      int SPACE           { 4    };
+      int CELLW           { 140   };
+      int CELLH           { 228   };
+      int SPACE           { 10    };
 
       virtual QSize sizeHint() const override;
 
@@ -37,6 +37,7 @@ class ScoreListWidget : public QListWidget
       ScoreListWidget(QWidget* parent = 0) : QListWidget(parent) {}
       int cellWidth() const { return CELLW; }
       int cellHeight() const { return CELLH; }
+      int space() const { return SPACE; }
       QSize cellSize() const { return QSize(CELLW, CELLH); }
       };
 
@@ -52,7 +53,8 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
       bool _stripNumbers  { false };
       bool _showPreview   { false };      // no preview: - no selection
                                           //             - single click action
-      bool _boldTitle     { false }; // score title are displayed in bold
+      bool _boldTitle     { false };      // score title are displayed in bold
+      bool _showCustomCategory  { false };// show a custom category for files
 
       ScoreListWidget* createScoreList();
       ScoreItem* genScoreItem(const QFileInfo&, ScoreListWidget*);
@@ -73,6 +75,7 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
       void selectFirst();
       void selectLast();
       void setBoldTitle(bool bold) { _boldTitle = bold; }
+      void setShowCustomCategory(bool showCustomCategory) { _showCustomCategory = showCustomCategory; }
       };
 }
 

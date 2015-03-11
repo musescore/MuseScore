@@ -121,7 +121,7 @@ InstrumentTemplate::InstrumentTemplate()
       maxPitchP          = 127;
       staffGroup         = StaffGroup::STANDARD;
       staffTypePreset    = 0;
-      useDrumset         = DrumsetKind::NONE;
+      useDrumset         = false;
       drumset            = 0;
       extended           = false;
 
@@ -273,7 +273,7 @@ void InstrumentTemplate::write(Xml& xml) const
             xml.tag("transposeDiatonic", transpose.diatonic);
       if (transpose.chromatic)
             xml.tag("transposeChromatic", transpose.chromatic);
-      if (useDrumset != DrumsetKind::NONE)
+      if (useDrumset)
             xml.tag("drumset", int(useDrumset));
       if (drumset)
             drumset->save(xml);
@@ -420,7 +420,7 @@ void InstrumentTemplate::read(XmlReader& e)
             else if (tag == "StringData")
                   stringData.read(e);
             else if (tag == "drumset")
-                  useDrumset = DrumsetKind(e.readInt());
+                  useDrumset = e.readInt();
             else if (tag == "Drum") {
                   // if we see one of this tags, a custom drumset will
                   // be created
@@ -520,7 +520,7 @@ void InstrumentTemplate::read(XmlReader& e)
             a.pan          = 64; // actually 63.5 for center
             channel.append(a);
             }
-      if (useDrumset != DrumsetKind::NONE) {
+      if (useDrumset) {
             if (channel[0].bank == 0)
                   channel[0].bank = 128;
             channel[0].updateInitList();
@@ -628,7 +628,7 @@ bool saveInstrumentTemplates1(const QString& instrTemplates)
 bool loadInstrumentTemplates(const QString& instrTemplates)
       {
       QFile qf(instrTemplates);
-      if (!qf.open(QIODevice::ReadOnly)) {
+      if (!qf.open(QIODevice::Text | QIODevice::ReadOnly)) {
             qDebug("cannot load instrument templates at <%s>", qPrintable(instrTemplates));
             return false;
             }

@@ -160,10 +160,10 @@ class MeasureBaseList {
 //---------------------------------------------------------
 
 struct MidiMapping {
-      char port;
-      char channel;
       Part* part;
       Channel* articulation;
+      char port;
+      char channel;
       };
 
 //---------------------------------------------------------
@@ -283,6 +283,7 @@ class Score : public QObject {
             FILE_NO_ROOTFILE,
             FILE_TOO_OLD,
             FILE_TOO_NEW,
+            FILE_CORRUPTED,
             FILE_USER_ABORT,
             FILE_IGNORE_ERROR
             };
@@ -309,6 +310,7 @@ class Score : public QObject {
       MeasureBaseList _measures;          // here are the notes
       SpannerMap _spanner;
       std::set<Spanner*> _unmanagedSpanner;
+
       //
       // generated objects during layout:
       //
@@ -349,6 +351,7 @@ class Score : public QObject {
 
       bool _undoRedo;         ///< true if in processing a undo/redo
       bool _playNote;         ///< play selected note after command
+      bool _playChord;        ///< play whole chord for the selected note
 
       bool _excerptsChanged;
       bool _instrumentsChanged;
@@ -364,7 +367,7 @@ class Score : public QObject {
       bool _printing;   ///< True if we are drawing to a printer
       bool _playlistDirty;
       bool _autosaveDirty;
-      bool _dirty;      ///< Score data was modified.
+//      bool _dirty;      ///< Score data was modified.
       bool _saved;      ///< True if project was already saved; only on first
                         ///< save a backup file will be created, subsequent
                         ///< saves will not overwrite the backup file.
@@ -451,8 +454,9 @@ class Score : public QObject {
 
       void checkSlurs();
       void checkScore();
-      bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&);
-      bool rewriteMeasures(Measure* fm, const Fraction& ns);
+
+      bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, int staffIdx);
+      bool rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx);
       void updateVelo();
       void swingAdjustParams(Chord*, int&, int&, int, int);
       bool isSubdivided(ChordRest*, int);
@@ -486,7 +490,7 @@ class Score : public QObject {
       ~Score();
 
       Score* clone();
-      void setDirty(bool val);
+//      void setDirty(bool val);
 
       void rebuildBspTree();
       bool noStaves() const         { return _staves.empty(); }
@@ -555,6 +559,7 @@ class Score : public QObject {
       void undoInsertStaff(Staff* staff, int idx, bool createRests=true);
       void undoChangeInvisible(Element*, bool);
       void undoChangeBracketSpan(Staff* staff, int column, int span);
+      void undoChangeBracketType(Bracket* bracket, BracketType type);
       void undoChangeTuning(Note*, qreal);
       void undoChangePageFormat(PageFormat*);
       void undoChangePageFormat(PageFormat*, qreal spatium, int);
@@ -562,8 +567,9 @@ class Score : public QObject {
       void undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent);
       void undoChangeClef(Staff* ostaff, Segment*, ClefType st);
       void undoChangeBarLine(Measure* m, BarLineType);
-      void undoChangeProperty(Element*, P_ID, const QVariant&, PropertyStyle ps = PropertyStyle::NOSTYLE);
+      void undoChangeProperty(ScoreElement*, P_ID, const QVariant&, PropertyStyle ps = PropertyStyle::NOSTYLE);
       void undoPropertyChanged(Element*, P_ID, const QVariant& v);
+      void undoPropertyChanged(ScoreElement*, P_ID, const QVariant& v);
       UndoStack* undo() const;
       void undo(UndoCommand* cmd) const;
       void undoRemoveMeasures(Measure*, Measure*);
@@ -690,7 +696,7 @@ class Score : public QObject {
       bool addArticulation(Element*, Articulation* atr);
 
       void cmd(const QAction*);
-      int fileDivision(int t) const { return (t * MScore::division + _fileDivision/2) / _fileDivision; }
+      int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision/2) / _fileDivision; }
       bool saveFile();
 
       QFileInfo* fileInfo()          { return &info; }
@@ -710,8 +716,8 @@ class Score : public QObject {
       void setPrinting(bool val)     { _printing = val;      }
       void setAutosaveDirty(bool v)  { _autosaveDirty = v;    }
       bool autosaveDirty() const     { return _autosaveDirty; }
-      bool playlistDirty()            { return _playlistDirty; }
-      void setPlaylistDirty(bool val) { _playlistDirty = val; }
+      bool playlistDirty()           { return _playlistDirty; }
+      void setPlaylistDirty()        { _playlistDirty = true; }
 
       void spell();
       void spell(int startStaff, int endStaff, Segment* startSegment, Segment* endSegment);
@@ -922,14 +928,10 @@ class Score : public QObject {
       Q_INVOKABLE QString metaTag(const QString& s) const;
       Q_INVOKABLE void setMetaTag(const QString& tag, const QString& val);
 
-      void updateNotes();
-      void cmdUpdateNotes();
-      void cmdUpdateAccidentals(Measure* m, int staffIdx);
       QMap<int, LinkedElements*>& links();
       void layoutFingering(Fingering*);
       void cmdSplitMeasure(ChordRest*);
       void cmdJoinMeasure(Measure*, Measure*);
-      void timesigStretchChanged(TimeSig* ts, Measure* fm, int staffIdx);
       int pageNumberOffset() const          { return _pageNumberOffset; }
       void setPageNumberOffset(int v)       { _pageNumberOffset = v; }
 
@@ -952,6 +954,8 @@ class Score : public QObject {
       const QList<MuseScoreView*>& getViewer() const { return viewer;       }
       bool playNote() const                 { return _playNote; }
       void setPlayNote(bool v)              { _playNote = v;    }
+      bool playChord() const                { return _playChord; }
+      void setPlayChord(bool v)             { _playChord = v;    }
       bool excerptsChanged() const          { return _excerptsChanged; }
       void setExcerptsChanged(bool val)     { _excerptsChanged = val; }
       bool instrumentsChanged() const       { return _instrumentsChanged; }
@@ -998,6 +1002,7 @@ class Score : public QObject {
       void addSpanner(Spanner*);
       void cmdAddSpanner(Spanner* e, const QPointF& pos);
       void checkSpanner(int startTick, int lastTick);
+      const std::set<Spanner*>unmanagedSpanners() { return _unmanagedSpanner; }
       void addUnmanagedSpanner(Spanner*);
       void removeUnmanagedSpanner(Spanner*);
 
@@ -1051,6 +1056,12 @@ class Score : public QObject {
       QImage createThumbnail();
       QString createRehearsalMarkText(RehearsalMark* current) const;
       QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
+
+      Q_INVOKABLE void cropPage(qreal margins);
+      bool sanityCheck(const QString& name = nullptr);
+
+      bool checkKeys();
+      bool checkClefs();
 
       friend class ChangeSynthesizerState;
       friend class Chord;

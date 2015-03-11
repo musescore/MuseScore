@@ -319,7 +319,7 @@ QString MusicXmlPart::toString() const
 
 MxmlReaderFirstPass::MxmlReaderFirstPass()
       {
-      qDebug("MxmlReaderFirstPass::MxmlReaderFirstPass()");
+      // nothing
       }
 
 
@@ -616,6 +616,7 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                                     Fraction t = loc_tick.reduced();
                                     QString prevInstrId = parts[partNr]._instrList.instrument(t);
                                     bool mustInsert = instrId != prevInstrId;
+                                    /*
                                     qDebug("tick %s (%d) staff %d voice '%s' previnst[%s]='%s' instrument '%s' insert %d",
                                            qPrintable(loc_tick.print()),
                                            loc_tick.ticks(),
@@ -626,6 +627,7 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                                            qPrintable(instrId),
                                            mustInsert
                                            );
+                                     */
                                     if (mustInsert)
                                           parts[partNr]._instrList.setInstrument(instrId, t);
                                     // Bug fix for Cubase 6.5.5 which generates <staff>2</staff> in a single staff part
@@ -716,13 +718,12 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
       if (il.size() > 0) {
             auto pFirstInstr = il.begin();
             QString firstInstr = (*pFirstInstr).second;
-            qDebug("move '%s' to tick 0", qPrintable(firstInstr));
             il.erase(pFirstInstr);
             il.setInstrument(firstInstr, Fraction(0, 1));
             }
 
       // debug: print results
-      /**/
+      /*
       qDebug("initVoiceMapperAndMapVoices: new part");
       for (auto it = parts[partNr].voicelist.constBegin(); it != parts[partNr].voicelist.constEnd(); ++it) {
             qDebug("voiceMapperStats: voice %s staff data %s",
@@ -732,7 +733,7 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
             Fraction f = (*it).first;
             qDebug("instrument map: tick %s (%d) instr '%s'", qPrintable(f.print()), f.ticks(), qPrintable((*it).second));
             }
-       /**/
+       */
       }
 
 
@@ -860,7 +861,7 @@ void MxmlReaderFirstPass::parsePartList(QDomElement e)
 
 void MxmlReaderFirstPass::parseFile()
       {
-      qDebug("MxmlReaderFirstPass::parseFile() begin");
+      //qDebug("MxmlReaderFirstPass::parseFile() begin");
       QTime t;
       t.start();
       // get the root element
@@ -868,13 +869,13 @@ void MxmlReaderFirstPass::parseFile()
 
       // read the score
       int partNr = 0; // part number while reading parts
-      qDebug("part list");
+      //qDebug("part list");
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "part") {
                   QString partName = e.attribute("id");
                   parsePart(e, partName, partNr);
                   ++partNr;
-                  qDebug("part %d id '%s'", partNr, qPrintable(partName));
+                  //qDebug("part %d id '%s'", partNr, qPrintable(partName));
                   }
             else if (e.tagName() == "part-list") {
                   parsePartList(e);
@@ -891,8 +892,8 @@ void MxmlReaderFirstPass::parseFile()
             }
        */
 
-      qDebug("Parsing time elapsed: %d ms", t.elapsed());
-      qDebug("MxmlReaderFirstPass::parseFile() end");
+      //qDebug("Parsing time elapsed: %d ms", t.elapsed());
+      //qDebug("MxmlReaderFirstPass::parseFile() end");
       }
 
 //---------------------------------------------------------
@@ -919,7 +920,7 @@ void MusicXmlInstrList::setInstrument(const QString instr, const Fraction f)
       // TODO determine how to handle multiple instrument changes at the same time
       // current implementation keeps the first one
       if (!insert({f, instr}).second)
-            qDebug("MusicXmlInstrList::setInstrument(instr '%s', tick %s (%d)) element already exists",
+            qDebug("MusicXmlInstrList::setInstrument instr '%s', tick %s (%d): element already exists",
                    qPrintable(instr), qPrintable(f.print()), f.ticks());
             //(*this)[f] = instr;
       }

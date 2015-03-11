@@ -75,7 +75,8 @@ enum {
       META_EOT             = 0x2f,  // end of track
       META_TEMPO           = 0x51,
       META_TIME_SIGNATURE  = 0x58,
-      META_KEY_SIGNATURE   = 0x59
+      META_KEY_SIGNATURE   = 0x59,
+      META_SPECIFIC        = 0x7F   // sequencer specific
       };
 
 //---------------------------------------------------------

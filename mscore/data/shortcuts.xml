@@ -218,7 +218,7 @@
     </SC>
   <SC>
     <key>add-staccato</key>
-    <seq>Shift+.</seq>
+    <seq>Shift+S</seq>
     </SC>
   <SC>
     <key>add-tenuto</key>
@@ -579,18 +579,6 @@
   <SC>
     <key>play</key>
     <seq>Space</seq>
-    </SC>
-  <SC>
-    <key>loop</key>
-    <seq>Shift+L</seq>
-    </SC>
-  <SC>
-    <key>loop-in</key>
-    <seq>Shift+I</seq>
-    </SC>
-  <SC>
-    <key>loop-out</key>
-    <seq>Shift+O</seq>
     </SC>
   <SC>
     <key>play-prev-chord</key>
@@ -982,6 +970,14 @@
   <SC>
     <key>text-b</key>
     <seq>Ctrl+b</seq>
+    </SC>
+  <SC>
+    <key>text-word-left</key>
+    <seq>Ctrl+Left</seq>
+    </SC>
+  <SC>
+    <key>text-word-right</key>
+    <seq>Ctrl+Right</seq>
     </SC>
   <SC>
     <key>text-i</key>

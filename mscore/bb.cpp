@@ -212,7 +212,7 @@ bool BBFile::read(const QString& name)
                   beat += a[idx++];
             else {
                   int root = val % 18;
-                  int bass = (root - 1 + val / 18) % 12 + 1;
+                  int bass = (root - 1 + val / 18) % 18 + 1;
                   if (root == bass)
                         bass = 0;
                   int ibeat = beat * (timesigZ() / timesigN());
@@ -478,7 +478,8 @@ Score::FileError importBB(Score* score, const QString& name)
       //---------------------------------------------------
 
       static const int table[] = {
-            14, 9, 16, 11, 18, 13, 8, 15, 10, 17, 12, 19
+          //C  Db, D,  Eb,  E, F, Gb, G,  Ab, A,  Bb, B,  C#, D#, F#  G#  A#
+            14, 9, 16, 11, 18, 13, 8, 15, 10, 17, 12, 19, 21, 23, 20, 22, 24
             };
       foreach(const BBChord& c, bb.chords()) {
             int tick = c.beat * MScore::division;
@@ -552,8 +553,8 @@ Score::FileError importBB(Score* score, const QString& name)
 int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int track)
       {
       Staff* cstaff          = score->staff(track/VOICES);
-      Drumset* drumset       = cstaff->part()->instr()->drumset();
-      DrumsetKind useDrumset = cstaff->part()->instr()->useDrumset();
+      const Drumset* drumset = cstaff->part()->instr()->drumset();
+      bool useDrumset        = cstaff->part()->instr()->useDrumset();
       int tick               = notes->at(0)->mc.ontime();
 
       //
@@ -593,7 +594,7 @@ int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int
                   note->setTrack(track);
                   chord->add(note);
 
-                  if (useDrumset != DrumsetKind::NONE) {
+                  if (useDrumset) {
                         if (!drumset->isValid(mn.pitch())) {
                               qDebug("unmapped drum note 0x%02x %d", mn.pitch(), mn.pitch());
                               }

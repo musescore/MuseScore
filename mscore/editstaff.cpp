@@ -102,6 +102,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       connect(showClef,             SIGNAL(clicked()),            SLOT(showClefChanged()));
       connect(showTimesig,          SIGNAL(clicked()),            SLOT(showTimeSigChanged()));
       connect(showBarlines,         SIGNAL(clicked()),            SLOT(showBarlinesChanged()));
+      addAction(getAction("local-help"));  // why is this needed?
       }
 
 //---------------------------------------------------------
@@ -251,41 +252,37 @@ void EditStaff::apply()
       instrument.setMinPitchP(_minPitchP);
       instrument.setMaxPitchP(_maxPitchP);
 
-//      Text text(0);
       instrument.setShortName(sn);
       instrument.setLongName(ln);
 
-      bool s         = small->isChecked();
       bool inv       = invisible->isChecked();
       qreal userDist = spinExtraDistance->value();
-      QColor col     = color->color();
       bool nhide     = neverHide->isChecked();
       bool ifEmpty   = showIfEmpty->isChecked();
       bool hideSystemBL = hideSystemBarLine->isChecked();
-      qreal scale    = mag->value() / 100.0;
 
       QString newPartName = partName->text().simplified();
       if (!(instrument == *part->instr()) || part->partName() != newPartName) {
             Interval v1 = instrument.transpose();
             Interval v2 = part->instr()->transpose();
 
-            score->undo(new ChangePart(part, instrument, newPartName));
+            score->undo(new ChangePart(part, new Instrument(instrument), newPartName));
             emit instrumentChanged();
 
             if (v1 != v2)
                   score->transpositionChanged(part, v2);
             }
+      orgStaff->undoChangeProperty(P_ID::MAG, mag->value() / 100.0);
+      orgStaff->undoChangeProperty(P_ID::COLOR, color->color());
+      orgStaff->undoChangeProperty(P_ID::SMALL, small->isChecked());
 
-      if (s != orgStaff->small()
-         || inv != orgStaff->invisible()
+      if (inv != orgStaff->invisible()
          || userDist != orgStaff->userDist()
-         || col != orgStaff->color()
          || nhide != orgStaff->neverHide()
          || ifEmpty != orgStaff->showIfEmpty()
-         || scale != orgStaff->userMag()
          || hideSystemBL != orgStaff->hideSystemBarLine()
          ) {
-            score->undo(new ChangeStaff(orgStaff, s, inv, userDist * score->spatium(), col, nhide, ifEmpty, scale, hideSystemBL));
+            score->undo(new ChangeStaff(orgStaff, inv, userDist * score->spatium(), nhide, ifEmpty, hideSystemBL));
             }
 
       if ( !(*orgStaff->staffType() == *staff->staffType()) ) {
@@ -380,7 +377,7 @@ void EditStaff::showBarlinesChanged()
 
 void EditStaff::showInstrumentDialog()
       {
-      SelectInstrument si(instrument, this);
+      SelectInstrument si(&instrument, this);
       si.setWindowModality(Qt::WindowModal);
       if (si.exec()) {
             instrument = Instrument::fromTemplate(si.instrTemplate());
@@ -478,6 +475,5 @@ void EditStaff::showStaffTypeDialog()
             updateStaffType();
             }
       }
-
 }
 

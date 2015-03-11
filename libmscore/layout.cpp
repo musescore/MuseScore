@@ -10,47 +10,47 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "page.h"
-#include "sig.h"
-#include "key.h"
-#include "clef.h"
-#include "score.h"
-#include "segment.h"
-#include "text.h"
-#include "staff.h"
-#include "style.h"
-#include "timesig.h"
-#include "chord.h"
-#include "note.h"
-#include "slur.h"
-#include "tie.h"
-#include "keysig.h"
-#include "barline.h"
-#include "repeat.h"
-#include "box.h"
-#include "system.h"
-#include "part.h"
-#include "utils.h"
-#include "measure.h"
-#include "volta.h"
-#include "beam.h"
-#include "tuplet.h"
-#include "sym.h"
-#include "fingering.h"
-#include "stem.h"
-#include "layoutbreak.h"
-#include "mscore.h"
-#include "beam.h"
 #include "accidental.h"
-#include "undo.h"
+#include "barline.h"
+#include "beam.h"
+#include "box.h"
+#include "chord.h"
+#include "clef.h"
+#include "element.h"
+#include "fingering.h"
+#include "glissando.h"
+#include "harmony.h"
+#include "key.h"
+#include "keysig.h"
+#include "layoutbreak.h"
 #include "layout.h"
 #include "lyrics.h"
-#include "harmony.h"
-#include "ottava.h"
-#include "notedot.h"
-#include "element.h"
-#include "tremolo.h"
 #include "marker.h"
+#include "measure.h"
+#include "mscore.h"
+#include "notedot.h"
+#include "note.h"
+#include "ottava.h"
+#include "page.h"
+#include "part.h"
+#include "repeat.h"
+#include "score.h"
+#include "segment.h"
+#include "sig.h"
+#include "slur.h"
+#include "staff.h"
+#include "stem.h"
+#include "style.h"
+#include "sym.h"
+#include "system.h"
+#include "text.h"
+#include "tie.h"
+#include "timesig.h"
+#include "tremolo.h"
+#include "tuplet.h"
+#include "undo.h"
+#include "utils.h"
+#include "volta.h"
 
 namespace Ms {
 
@@ -82,7 +82,7 @@ ChordRest* Score::searchNote(int tick, int track) const
       {
       ChordRest* ipe = 0;
       Segment::Type st = Segment::Type::ChordRest;
-      for (Segment* segment = firstSegment(st); segment; segment = segment->next(st)) {
+      for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
             ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
             if (!cr)
                   continue;
@@ -119,15 +119,23 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       qreal maxUpMag = 0.0;
       qreal maxDownMag = 0.0;
 
-      // dots can affect layout of notes as well as vice versa
+      // dots and hooks can affect layout of notes as well as vice versa
       int upDots = 0;
       int downDots = 0;
+      bool upHooks = false;
+      bool downHooks = false;
+      // also check for grace notes
+      bool upGrace = false;
+      bool downGrace = false;
 
       for (int track = startTrack; track < endTrack; ++track) {
             Element* e = segment->element(track);
             if (e && (e->type() == Element::Type::CHORD)) {
                   Chord* chord = static_cast<Chord*>(e);
+                  bool hasGraceBefore = false;
                   for (Chord* c : chord->graceNotes()) {
+                        if (c->isGraceBefore())
+                              hasGraceBefore = true;
                         // layout grace note noteheads
                         layoutChords2(c->notes(), c->up());
                         // layout grace note chords
@@ -138,12 +146,20 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         upStemNotes.append(chord->notes());
                         upDots = qMax(upDots, chord->dots());
                         maxUpMag = qMax(maxUpMag, chord->mag());
+                        if (!upHooks)
+                              upHooks = chord->hook();
+                        if (hasGraceBefore)
+                              upGrace = true;
                         }
                   else {
                         ++downVoices;
                         downStemNotes.append(chord->notes());
                         downDots = qMax(downDots, chord->dots());
                         maxDownMag = qMax(maxDownMag, chord->mag());
+                        if (!downHooks)
+                              downHooks = chord->hook();
+                        if (hasGraceBefore)
+                              downGrace = true;
                         }
                   }
             }
@@ -185,7 +201,6 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       qreal dotAdjustThreshold      = 0.0;      // if it exceeds this amount
 
       // centering adjustments for whole note, breve, and small chords
-      qreal headDiff;
       qreal centerUp          = 0.0;      // offset to apply in order to center upstem chords
       qreal oversizeUp        = 0.0;      // adjustment to oversized upstem chord needed if laid out to the right
       qreal centerDown        = 0.0;      // offset to apply in order to center downstem chords
@@ -200,20 +215,38 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
       // unless you change to left alignment as described in the comments below
       qreal centerThreshold   = 0.01 * sp;
 
-      headDiff = maxUpWidth - nominalWidth;
+      // amount by which actual width exceeds nominal, adjusted for staff mag() only
+      qreal headDiff = maxUpWidth - nominalWidth;
+      // amount by which actual width exceeds nominal, adjusted for staff & chord/note mag()
+      qreal headDiff2 = maxUpWidth - nominalWidth * (maxUpMag / staff->mag());
       if (headDiff > centerThreshold) {
             // larger than nominal
-            centerUp = headDiff * 0.5;
-            // to left align rather than center, change the above to
-            //centerUp = headDiff;
-            maxUpWidth = nominalWidth + centerUp;
-            oversizeUp = headDiff;
+            centerUp = headDiff * -0.5;
+            // maxUpWidth is true width, but we no longer will care about that
+            // instead, we care only about portion to right of origin
+            maxUpWidth += centerUp;
+            // to left align rather than center, delete both of the above
+            if (headDiff2 > centerThreshold) {
+                  // if max notehead is wider than nominal with chord/note mag() applied
+                  // then noteheads extend to left of origin
+                  // because stemPosX() is based on nominal width
+                  // so we need to correct for that too
+                  centerUp += headDiff2;
+                  oversizeUp = headDiff2;
+                  }
             }
       else if (-headDiff > centerThreshold) {
             // smaller than nominal
-            centerUp = headDiff * -0.5;
+            centerUp = -headDiff * 0.5;
+            if (headDiff2 > centerThreshold) {
+                  // max notehead is wider than nominal with chord/note mag() applied
+                  // perform same adjustment as above
+                  centerUp += headDiff2;
+                  oversizeUp = headDiff2;
+                  }
             centerAdjustDown = centerUp;
             }
+
       headDiff = maxDownWidth - nominalWidth;
       if (headDiff > centerThreshold) {
             // larger than nominal
@@ -224,7 +257,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             }
       else if (-headDiff > centerThreshold) {
             // smaller than nominal
-            centerDown = headDiff * -0.5;
+            centerDown = -headDiff * 0.5;
             centerAdjustUp = centerDown;
             }
 
@@ -379,17 +412,22 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                     }
                               }
                         }
-                  else if (conflictUnison && separation == 0)
+                  else if (conflictUnison && separation == 0 && (!downGrace || upGrace))
                         downOffset = maxUpWidth + 0.3 * sp;
                   else if (conflictUnison)
                         upOffset = maxDownWidth + 0.3 * sp;
                   else if (conflictSecondUpHigher)
                         upOffset = maxDownWidth + 0.2 * sp;
+                  else if ((downHooks && !upHooks) && !(upDots && !downDots))
+                        downOffset = maxUpWidth + 0.3 * sp;
                   else if (conflictSecondDownHigher) {
                         if (downDots && !upDots)
                               downOffset = maxUpWidth + 0.3 * sp;
-                        else
+                        else {
                               upOffset = maxDownWidth - 0.2 * sp;
+                              if (downHooks)
+                                    upOffset += 0.3 * sp;
+                              }
                         }
                   else {
                         // no direct conflict, so parts can overlap (downstem on left)
@@ -402,6 +440,12 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         else
                               downDots = 0; // no need to adjust for dots in this case
                         upOffset = qMax(clearLeft, clearRight);
+                        if (downHooks) {
+                              // we will need more space to avoid collision with hook
+                              // but we won't need as much dot adjustment
+                              upOffset = qMax(upOffset, maxDownWidth + 0.1 * sp);
+                              dotAdjustThreshold = maxUpWidth - 0.3 * sp;
+                              }
                         // if downstem chord is small, don't center
                         // and we might not need as much dot adjustment either
                         if (centerDown > 0.0) {
@@ -788,11 +832,6 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
             bool _up     = chord->up();
             qreal stemX  = chord->stemPosX();   // stem position for nominal notehead, but allowing for mag
 
-            // for small upstem chords, set stem to minimum of actual and nominal head width
-            // this allows the chord alignment code in layoutChords() to function correctly
-            if (_up && chord->small())
-                  stemX = qMin(noteHeadWidth(), hw);
-
             qreal overlapMirror;
             if (chord->stem()) {
                   qreal stemWidth = chord->stem()->lineWidth();
@@ -1090,11 +1129,8 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
       ChordRest* a1    = 0;      // start of (potential) beam
       Beam* beam       = 0;      // current beam
       Beam::Mode bm = Beam::Mode::AUTO;
-      QList<Chord*> graceNotes;
-      if (after)
-            mainNote->getGraceNotesAfter(&graceNotes);
-      else
-            mainNote->getGraceNotesBefore(&graceNotes);
+      QList<Chord*> graceNotes = after ? mainNote->graceNotesAfter() : mainNote->graceNotesBefore();
+
       foreach (ChordRest* cr, graceNotes) {
             bm = Groups::endBeam(cr);
             if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == Beam::Mode::NONE)) {
@@ -1341,9 +1377,8 @@ void Score::layoutStage3()
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             if (!staff(staffIdx)->show())
                   continue;
-            for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st)) {
+            for (Segment* segment = firstSegment(st); segment; segment = segment->next1(st))
                   layoutChords1(segment, staffIdx);
-                  }
             }
       }
 
@@ -1364,38 +1399,6 @@ void Score::doLayout()
             // abort();
             // return;
             }
-
-      _scoreFont = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
-      _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / (MScore::DPI * SPATIUM20));
-
-      if (layoutFlags & LayoutFlag::FIX_TICKS)
-            fixTicks();
-      if (layoutFlags & LayoutFlag::FIX_PITCH_VELO)
-            updateVelo();
-      if (layoutFlags & LayoutFlag::PLAY_EVENTS)
-            createPlayEvents();
-
-      int measureNo = 0;
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            Measure* measure = static_cast<Measure*>(m);
-            measureNo += measure->noOffset();
-            measure->setNo(measureNo);
-            if (measure->sectionBreak() && measure->sectionBreak()->startWithMeasureOne())
-                  measureNo = 0;
-            else if (measure->irregular())      // dont count measure
-                  ;
-            else
-                  ++measureNo;
-            measure->setBreakMMRest(false);
-            }
-
-      for (MeasureBase* m = first(); m; m = m->next())      // set layout break
-            m->layout0();
-
-      layoutFlags = 0;
-
-      int nstaves = _staves.size();
-
       if (_staves.isEmpty() || first() == 0) {
             // score is empty
             // qDeleteAll(_pages);
@@ -1411,8 +1414,52 @@ void Score::doLayout()
             return;
             }
 
-      for (Measure* m = firstMeasure(); m; m = m->nextMeasure())
-            m->layoutStage1();
+      _scoreFont = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
+      _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / (MScore::DPI * SPATIUM20));
+
+      if (layoutFlags & LayoutFlag::FIX_TICKS)
+            fixTicks();
+      if (layoutFlags & LayoutFlag::FIX_PITCH_VELO)
+            updateVelo();
+      if (layoutFlags & LayoutFlag::PLAY_EVENTS)
+            createPlayEvents();
+      layoutFlags = 0;
+
+      int measureNo = 0;
+      int nstaves = _staves.size();
+      for (MeasureBase* m = first(); m; m = m->next()) {      // set layout break
+            m->setPageBreak(false);
+            m->setLineBreak(false);
+            m->setSectionBreak(0);
+
+            for (Element* e : m->el()) {
+                  if (!tagIsValid(e->tag()) || (e->type() != Element::Type::LAYOUT_BREAK))
+                        continue;
+                  LayoutBreak* lb = static_cast<LayoutBreak*>(e);
+                  switch (lb->layoutBreakType()) {
+                        case LayoutBreak::Type::PAGE:
+                              m->setPageBreak(true);
+                              break;
+                        case LayoutBreak::Type::LINE:
+                              m->setLineBreak(true);
+                              break;
+                        case LayoutBreak::Type::SECTION:
+                              m->setSectionBreak(lb);
+                              break;
+                        }
+                  }
+            if (m->type() == Element::Type::MEASURE) {
+                  Measure* measure = static_cast<Measure*>(m);
+                  measureNo += measure->noOffset();
+                  measure->setNo(measureNo);
+                  if (measure->sectionBreak() && measure->sectionBreak()->startWithMeasureOne())
+                        measureNo = 0;
+                  else if (!measure->irregular())      // dont count measure
+                        ++measureNo;
+                  measure->layoutStage1();
+                  }
+            }
+
       if (styleB(StyleIdx::createMultiMeasureRests))
             createMMRests();
 
@@ -1590,8 +1637,8 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             KeySigEvent keyIdx = staff->keySigEvent(tick);
 
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                  // search only up to the first ChordRest
-                  if (seg->segmentType() == Segment::Type::ChordRest)
+                  // search only up to the first ChordRest/StartRepeatBarLine
+                  if (seg->segmentType() & (Segment::Type::ChordRest | Segment::Type::StartRepeatBarLine))
                         break;
                   Element* el = seg->element(strack);
                   if (!el)
@@ -1629,7 +1676,11 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             else if (keysig && !(keysig->keySigEvent() == keyIdx))
                   undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy()));
 
-            bool needClef = isFirstSystem || styleB(StyleIdx::genClef);
+            bool needClef = isFirstSystem
+               || styleB(StyleIdx::genClef)
+                  // real clef change?:
+               || staff->clef(m->tick()) != staff->clef(m->tick()-1);
+
             if (needClef) {
                   if (!clef) {
                         //
@@ -1640,12 +1691,26 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         clef->setSmall(false);
                         clef->setGenerated(true);
 
-                        Segment* s = m->undoGetSegment(Segment::Type::Clef, tick);
+                        Segment* ns = m->findSegment(Segment::Type::Clef, tick);
+                        Segment* s;
+                        if (ns && !ns->element(clef->track())) {
+                              s = ns;
+                              ns = 0;
+                              }
+                        else {
+                              s  = new Segment(m, Segment::Type::Clef, tick);
+                              undoAddElement(s);
+                              }
                         clef->setParent(s);
+
+                        // if there is already a clef at the same tick position,
+                        // then this is the real clef change and we have to
+                        // show the previous clef type at tick-1
+
+                        ClefTypeList clefType = staff->clefType(ns ? tick - 1 : tick);
                         clef->layout();
-                        clef->setClefType(staff->clefType(tick));  // set before add !
+                        clef->setClefType(clefType);  // set before add !
                         undo(new AddElement(clef));
-                        // undoAddElement(clef);
                         }
                   else if (clef->generated()) {
                         ClefTypeList cl = staff->clefType(tick);
@@ -1741,7 +1806,7 @@ static bool breakMultiMeasureRest(Measure* m)
             }
 
       // break for marker in this measure
-      for (Element* e : *m->el()) {
+      for (Element* e : m->el()) {
             if (e->type() == Element::Type::MARKER) {
                   Marker* mark = static_cast<Marker*>(e);
                   if (!(mark->textStyle().align() & AlignmentFlags::RIGHT))
@@ -1752,7 +1817,7 @@ static bool breakMultiMeasureRest(Measure* m)
       // break for marker & jump in previous measure
       Measure* pm = m->prevMeasure();
       if (pm) {
-            for (Element* e : *pm->el()) {
+            for (Element* e : pm->el()) {
                   if (e->type() == Element::Type::JUMP) {
                         return true;
                         }
@@ -1854,19 +1919,30 @@ void Score::createMMRests()
                   else
                         t = lm->endBarLineType();
                   mmr->setEndBarLineType(t, false, lm->endBarLineVisible(), lm->endBarLineColor());
-
                   mmr->setRepeatFlags(m->repeatFlags() | lm->repeatFlags());
 
-                  qDeleteAll(*mmr->el());
-                  mmr->el()->clear();
+                  ElementList oldList = mmr->takeElements();
+                  ElementList newList = lm->el();
 
-                  for (Element* e : *m->el()) {
+                  for (Element* e : m->el()) {
                         if (e->type() == Element::Type::MARKER)
+                              newList.append(e);
+                        }
+                  for (Element* e : newList) {
+                        bool found = false;
+                        for (Element* ee : oldList) {
+                              if (ee->type() == e->type()) {
+                                    mmr->add(ee);
+                                    oldList.removeOne(ee);
+                                    found = true;
+                                    break;
+                                    }
+                              }
+                        if (!found)
                               mmr->add(e->clone());
                         }
-
-                  for (Element* e : *lm->el())
-                        mmr->add(e->clone());
+                  for (Element* e : oldList)
+                        delete e;
 
                   Segment* s = mmr->undoGetSegment(Segment::Type::ChordRest, m->tick());
                   for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
@@ -2013,9 +2089,6 @@ void Score::createMMRests()
                   m->setMMRestCount(0);
                   }
             }
-/* Update Notes After creating mmRest Because on load, mmRest->next() was not set
-on first pass in updateNotes() and break occur */
-            updateNotes();
       }
 
 //---------------------------------------------------------
@@ -2150,7 +2223,9 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                               case LayoutMode::LINE:
                               case LayoutMode::PAGE:
                               case LayoutMode::SYSTEM:
-                                    continueFlag = !(curMeasure->lineBreak() || curMeasure->pageBreak());
+                                    continueFlag = !(curMeasure->lineBreak()
+                                                     || curMeasure->sectionBreak()
+                                                     || curMeasure->pageBreak());
                                     break;
                               }
                         }
@@ -2205,6 +2280,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
 
             if (!empty && (minWidth + ww > systemWidth)) {
                   curMeasure->setSystem(oldSystem);
+                  continueFlag = false;
                   break;
                   }
             if (curMeasure->type() == Element::Type::MEASURE)
@@ -2218,25 +2294,24 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
             else
                   nt = curMeasure->nextMeasureMM() ? curMeasure->nextMeasureMM()->type() : Element::Type::INVALID;
 
-            int n = styleI(StyleIdx::FixMeasureNumbers);
             bool pbreak;
             switch (_layoutMode) {
                   case LayoutMode::PAGE:
                   case LayoutMode::SYSTEM:
-                        pbreak = curMeasure->pageBreak() || curMeasure->lineBreak();
+                        pbreak = curMeasure->pageBreak() || curMeasure->lineBreak() || curMeasure->sectionBreak();
                         break;
                   case LayoutMode::FLOAT:
                   case LayoutMode::LINE:
                         pbreak = false;
                         break;
                   }
-            if ((n && system->measures().size() >= n)
-               || continueFlag
+            if (continueFlag
                || pbreak
                || (nt == Element::Type::VBOX || nt == Element::Type::TBOX || nt == Element::Type::FBOX)
                ) {
                   if (_layoutMode != LayoutMode::SYSTEM)
                         system->setPageBreak(curMeasure->pageBreak());
+                  minWidth += ww;
                   curMeasure = nextMeasure;
                   break;
                   }
@@ -2404,7 +2479,9 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
                               case LayoutMode::LINE:
                               case LayoutMode::PAGE:
                               case LayoutMode::SYSTEM:
-                                    continueFlag = !(curMeasure->lineBreak() || curMeasure->pageBreak());
+                                    continueFlag = !(curMeasure->lineBreak()
+                                                    || curMeasure->sectionBreak()
+                                                    || curMeasure->pageBreak());
                                     break;
                               }
                         }
@@ -2429,20 +2506,18 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
 
             system->measures().append(curMeasure);
             Element::Type nt = curMeasure->next() ? curMeasure->next()->type() : Element::Type::INVALID;
-            int n = styleI(StyleIdx::FixMeasureNumbers);
             bool pbreak;
             switch (_layoutMode) {
                   case LayoutMode::PAGE:
                   case LayoutMode::SYSTEM:
-                        pbreak = curMeasure->pageBreak() || curMeasure->lineBreak();
+                        pbreak = curMeasure->pageBreak() || curMeasure->lineBreak() || curMeasure->sectionBreak();
                         break;
                   case LayoutMode::FLOAT:
                   case LayoutMode::LINE:
                         pbreak = false;
                         break;
                   }
-            if ((n && system->measures().size() >= n)
-               || continueFlag || pbreak || (nt == Element::Type::VBOX || nt == Element::Type::TBOX || nt == Element::Type::FBOX)) {
+            if (continueFlag || pbreak || (nt == Element::Type::VBOX || nt == Element::Type::TBOX || nt == Element::Type::FBOX)) {
                   if (_layoutMode != LayoutMode::SYSTEM)
                         system->setPageBreak(curMeasure->pageBreak());
                   curMeasure = nextMeasure;
@@ -2511,9 +2586,13 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                                     clef->setSmall(small);
                                     m->setDirty();
                                     }
+#if 0
                               //
                               // if measure is not the first in the system, the clef at
                               // measure start has to be moved to the end of the previous measure
+                              // TODO: DEBUG - is this code needed?
+                              // clefs should now be placed in correct measure when adding them (cmdInsertClef)
+                              // and it is good to support clefs at beginning of measures, for use in cues
                               //
                               if (s->firstMeasure() != m && seg->tick() == m->tick()) {
                                     undoRemoveElement(el);
@@ -2525,6 +2604,7 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                                     m->setDirty();
                                     pm->setDirty();
                                     }
+#endif
                               }
                         }
                   }
@@ -2563,25 +2643,45 @@ void Score::connectTies(bool silent)
                   if (c == 0 || c->type() != Element::Type::CHORD)
                         continue;
                   for (Note* n : c->notes()) {
+                        // connect a tie without end note
                         Tie* tie = n->tieFor();
-                        if (!tie || tie->endNote())
-                              continue;
-                        Note* nnote;
-                        if (_mscVersion <= 114)
-                              nnote = searchTieNote114(n);
-                        else
-                              nnote = searchTieNote(n);
-                        if (nnote == 0) {
-                              if (!silent) {
-                                    qDebug("next note at %d track %d for tie not found (version %d)", s->tick(), i, _mscVersion);
-                                    delete tie;
-                                    n->setTieFor(0);
+                        if (tie && !tie->endNote()) {
+                              Note* nnote;
+                              if (_mscVersion <= 114)
+                                    nnote = searchTieNote114(n);
+                              else
+                                    nnote = searchTieNote(n);
+                              if (nnote == 0) {
+                                    if (!silent) {
+                                          qDebug("next note at %d track %d for tie not found (version %d)", s->tick(), i, _mscVersion);
+                                          delete tie;
+                                          n->setTieFor(0);
+                                          }
+                                    }
+                              else {
+                                    tie->setEndNote(nnote);
+                                    nnote->setTieBack(tie);
                                     }
                               }
-                        else {
-                              tie->setEndNote(nnote);
-                              nnote->setTieBack(tie);
-                              }
+                        // connect a glissando without initial note (old glissando format)
+                        for (Spanner* spanner : n->spannerBack())
+                              if (spanner->type() == Element::Type::GLISSANDO
+                                          && spanner->startElement() == nullptr) {
+                                    Note* initialNote = Glissando::guessInitialNote(n->chord());
+                                    n->removeSpannerBack(spanner);
+                                    if (initialNote != nullptr) {
+                                          spanner->setStartElement(initialNote);
+                                          spanner->setEndElement(n);
+                                          spanner->setTick(initialNote->chord()->tick());
+                                          spanner->setTick2(n->chord()->tick());
+                                          spanner->setTrack(n->track());
+                                          spanner->setTrack2(n->track());
+                                          spanner->setParent(initialNote);
+                                          initialNote->add(spanner);
+                                          }
+                                    else
+                                          delete spanner;
+                                    }
                         }
                   // connect two note tremolos
                   Tremolo* tremolo = c->tremolo();
@@ -2920,13 +3020,8 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               }
                         mb->setPos(pos);
                         Measure* m    = static_cast<Measure*>(mb);
-                        if (styleB(StyleIdx::FixMeasureWidth)) {
-                              ww = rowWidth / system->measures().size();
-                              }
-                        else {
-                              qreal weight = m->ticks() * m->userStretch();
-                              ww           = m->minWidth2() + rest * weight;
-                              }
+                        qreal weight = m->ticks() * m->userStretch();
+                        ww           = m->minWidth2() + rest * weight;
                         m->layout(ww);
                         }
                   else if (mb->type() == Element::Type::HBOX) {
@@ -3176,6 +3271,14 @@ struct SystemRow {
                   }
             return v;
             }
+      qreal extraDistance(int i) const {
+            qreal v = 0.0;
+            foreach(System* s, systems) {
+                  foreach(MeasureBase* mb, s->measures())
+                        v = qMax(mb->distanceDown(i), v);
+                  }
+            return v;
+            }
       void clear() {
             systems.clear();
             }
@@ -3264,7 +3367,7 @@ PAGEDBG("  system %d", i);
                   bmargin  = vbox->bottomGap();
                   tmargin  = vbox->topGap();
                   if (pC.lastSystem) {
-                       if (pC.lastSystem->isVbox())
+                        if (pC.lastSystem->isVbox())
                               tmargin += pC.lastSystem->vbox()->bottomGap();
                         else
                               tmargin += systemFrameDistance;
@@ -3380,6 +3483,29 @@ void Score::layoutPage(const PageContext& pC, qreal d)
                         }
                   }
             return;
+            }
+
+      // allow room for lyrics (and/or spacer) on last visible staff of last system
+      // these are not included in system height or in previous margin calculations
+      System* lastSystem = page->systems()->last();
+      int lastStaff = nstaves() - 1;
+      if (!lastSystem->isVbox()) {
+            int lastVisible = -1;
+            for (int i = lastStaff; i >= 0; --i) {
+                  if (staff(i)->show() && lastSystem->staff(i)->show()) {
+                        lastVisible = i;
+                        break;
+                        }
+                  }
+            if (lastVisible >= 0) {
+                  qreal extra = pC.sr.extraDistance(lastVisible);
+                  // for last staff of system, this distance has not been accounted for at all
+                  // for interior staves (with last staves hidden), this is only partially accounted for
+                  if (lastVisible == lastStaff)
+                        restHeight -= extra;
+                  else
+                        restHeight -= qMin(extra, styleP(StyleIdx::staffDistance));
+                  }
             }
 
       const qreal maxStretch = styleP(StyleIdx::maxSystemDistance) - styleP(StyleIdx::minSystemDistance);
@@ -3649,7 +3775,7 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                                     qreal noteX = 0.0;
                                     if (cr->type() == Element::Type::CHORD) {
                                           Chord* c = static_cast<Chord*>(cr);
-                                          if (c->getGraceNotesBefore(0))
+                                          if (c->graceNotesBefore().size())
                                                 grace = true;
                                           else {
                                                 for (Note* note : c->notes()) {
@@ -3672,7 +3798,7 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                                           sp = qMax(bad, bnd - diff);
                                           }
                                     else if (grace)
-                                          sp = styleS(StyleIdx::barAccidentalDistance).val() * _spatium;
+                                          sp = styleS(StyleIdx::barGraceDistance).val() * _spatium;
                                     else
                                           sp = bnd;
                                     if (pt & Segment::Type::TimeSig)
@@ -3697,8 +3823,8 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
 
                               if (firstMeasureInSystem && cr->type() == Element::Type::CHORD && cr->tick() == cr->measure()->tick()) {
                                     Chord* c = static_cast<Chord*>(cr);
-                                    if (c->glissando()) {
-                                          minDistance = qMax(minDistance, _spatium * 2);
+                                    if (c->endsGlissando()) {
+                                          minDistance = qMax(minDistance, _spatium * GLISS_STARTOFSYSTEM_WIDTH);
                                           }
                                     else {
                                           for (Note* note : c->notes()) {
@@ -3740,13 +3866,6 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                                           QRectF b(l->bbox().translated(l->pos()));
                                           llw = qMax(llw, -(b.left()+lx+cx));
                                           rrw = qMax(rrw, b.right()+rx+cx);
-                                          // hyphen will be drawn using actual (perhaps minimum) note distance
-                                          // but since we are adding padding in System::layoutLyrics(),
-                                          // make enough room for that here
-                                          // (TODO: make padding amount a style setting)
-                                          Lyrics::Syllabic ls = l->syllabic();
-                                          if (ls == Lyrics::Syllabic::BEGIN || ls == Lyrics::Syllabic::MIDDLE)
-                                                rrw += 0.2 * _spatium;
                                           }
                                     }
                               }

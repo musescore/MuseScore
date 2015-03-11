@@ -10,7 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "instrument_p.h"
+#include "instrument.h"
 #include "xml.h"
 #include "drumset.h"
 #include "articulation.h"
@@ -79,22 +79,21 @@ bool MidiArticulation::operator==(const MidiArticulation& i) const
 //   Instrument
 //---------------------------------------------------------
 
-InstrumentData::InstrumentData()
+Instrument::Instrument()
       {
-      Channel a;
-      a.name  = "normal";
+      Channel* a = new Channel;
+      a->name  = "normal";
       _channel.append(a);
 
       _minPitchA   = 0;
       _maxPitchA   = 127;
       _minPitchP   = 0;
       _maxPitchP   = 127;
-      _useDrumset  = DrumsetKind::NONE;
+      _useDrumset  = false;
       _drumset     = 0;
       }
 
-InstrumentData::InstrumentData(const InstrumentData& i)
-   : QSharedData(i)
+Instrument::Instrument(const Instrument& i)
       {
       _longNames    = i._longNames;
       _shortNames   = i._shortNames;
@@ -105,23 +104,52 @@ InstrumentData::InstrumentData(const InstrumentData& i)
       _maxPitchP    = i._maxPitchP;
       _transpose    = i._transpose;
       _instrumentId = i._instrumentId;
-      _useDrumset   = i._useDrumset;
       _stringData   = i._stringData;
       _drumset      = 0;
       setDrumset(i._drumset);
+      _useDrumset   = i._useDrumset;
       _stringData   = i._stringData;
       _midiActions  = i._midiActions;
       _articulation = i._articulation;
-      _channel      = i._channel;
+      for (Channel* c : i._channel)
+            _channel.append(new Channel(*c));
+      _clefType     = i._clefType;
+      }
+
+void Instrument::operator=(const Instrument& i)
+      {
+      qDeleteAll(_channel);
+      _channel.clear();
+      delete _drumset;
+
+      _longNames    = i._longNames;
+      _shortNames   = i._shortNames;
+      _trackName    = i._trackName;
+      _minPitchA    = i._minPitchA;
+      _maxPitchA    = i._maxPitchA;
+      _minPitchP    = i._minPitchP;
+      _maxPitchP    = i._maxPitchP;
+      _transpose    = i._transpose;
+      _instrumentId = i._instrumentId;
+      _stringData   = i._stringData;
+      _drumset      = 0;
+      setDrumset(i._drumset);
+      _useDrumset   = i._useDrumset;
+      _stringData   = i._stringData;
+      _midiActions  = i._midiActions;
+      _articulation = i._articulation;
+      for (Channel* c : i._channel)
+            _channel.append(new Channel(*c));
       _clefType     = i._clefType;
       }
 
 //---------------------------------------------------------
-//   ~InstrumentData
+//   ~Instrument
 //---------------------------------------------------------
 
-InstrumentData::~InstrumentData()
+Instrument::~Instrument()
       {
+      qDeleteAll(_channel);
       delete _drumset;
       }
 
@@ -150,10 +178,10 @@ void StaffName::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   InstrumentData::write
+//   Instrument::write
 //---------------------------------------------------------
 
-void InstrumentData::write(Xml& xml) const
+void Instrument::write(Xml& xml) const
       {
       xml.stag("Instrument");
       foreach(const StaffName& doc, _longNames)
@@ -176,8 +204,8 @@ void InstrumentData::write(Xml& xml) const
             xml.tag("transposeChromatic", _transpose.chromatic);
       if (!_instrumentId.isEmpty())
             xml.tag("instrumentId", _instrumentId);
-      if (_useDrumset != DrumsetKind::NONE) {
-            xml.tag("useDrumset", int(_useDrumset));
+      if (_useDrumset) {
+            xml.tag("useDrumset", _useDrumset);
             _drumset->save(xml);
             }
       for (int i = 0; i < _clefType.size(); ++i) {
@@ -211,16 +239,16 @@ void InstrumentData::write(Xml& xml) const
             a.write(xml, "MidiAction");
       foreach(const MidiArticulation& a, _articulation)
             a.write(xml);
-      foreach(const Channel& a, _channel)
-            a.write(xml);
+      for (const Channel* a : _channel)
+            a->write(xml);
       xml.etag();
       }
 
 //---------------------------------------------------------
-//   InstrumentData::read
+//   Instrument::read
 //---------------------------------------------------------
 
-void InstrumentData::read(XmlReader& e)
+void Instrument::read(XmlReader& e)
       {
       int program = -1;
       int bank    = 0;
@@ -230,7 +258,7 @@ void InstrumentData::read(XmlReader& e)
       int pan     = 60;
       bool customDrumset = false;
 
-      _channel.clear();
+      _channel.clear();       // remove default channel
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
@@ -271,24 +299,22 @@ void InstrumentData::read(XmlReader& e)
             else if (tag == "instrumentId")
                   _instrumentId = e.readElementText();
             else if (tag == "useDrumset") {
-                  int drumset = e.readInt();
-                  if (!drumset)
-                        _useDrumset = DrumsetKind::NONE;
-                  else  {
-                        _useDrumset = DrumsetKind::DEFAULT_DRUMS;
-                         _drumset = new Drumset(*smDrumset);
+                  _useDrumset = e.readInt();
+                  if (_useDrumset) {
+                        delete _drumset;
+                        _drumset = new Drumset(*smDrumset);
                         }
                   }
             else if (tag == "Drum") {
                   // if we see on of this tags, a custom drumset will
                   // be created
-                  if (_drumset == 0)
+                  if (!_drumset)
                         _drumset = new Drumset(*smDrumset);
                   if (!customDrumset) {
-                        _drumset->clear();
+                        const_cast<Drumset*>(_drumset)->clear();
                         customDrumset = true;
                         }
-                  _drumset->load(e);
+                  const_cast<Drumset*>(_drumset)->load(e);
                   }
             // support tag "Tablature" for a while for compatibility with existent 2.0 scores
             else if (tag == "Tablature" || tag == "StringData")
@@ -304,8 +330,8 @@ void InstrumentData::read(XmlReader& e)
                   _articulation.append(a);
                   }
             else if (tag == "Channel" || tag == "channel") {
-                  Channel a;
-                  a.read(e);
+                  Channel* a = new Channel;
+                  a->read(e);
                   _channel.append(a);
                   }
             else if (tag == "clef") {           // sets both transposing and concert clef
@@ -341,20 +367,20 @@ void InstrumentData::read(XmlReader& e)
                   e.unknown();
             }
       if (_channel.isEmpty()) {      // for backward compatibility
-            Channel a;
-            a.chorus  = chorus;
-            a.reverb  = reverb;
-            a.name    = "normal";
-            a.program = program;
-            a.bank    = bank;
-            a.volume  = volume;
-            a.pan     = pan;
+            Channel* a = new Channel;
+            a->chorus  = chorus;
+            a->reverb  = reverb;
+            a->name    = "normal";
+            a->program = program;
+            a->bank    = bank;
+            a->volume  = volume;
+            a->pan     = pan;
             _channel.append(a);
             }
-      if (_useDrumset != DrumsetKind::NONE) {
-            if (_channel[0].bank == 0)
-                  _channel[0].bank = 128;
-            _channel[0].updateInitList();
+      if (_useDrumset) {
+            if (_channel[0]->bank == 0)
+                  _channel[0]->bank = 128;
+            _channel[0]->updateInitList();
             }
       }
 
@@ -362,11 +388,11 @@ void InstrumentData::read(XmlReader& e)
 //   action
 //---------------------------------------------------------
 
-NamedEventList* InstrumentData::midiAction(const QString& s, int channelIdx) const
+NamedEventList* Instrument::midiAction(const QString& s, int channelIdx) const
       {
       // first look in channel list
 
-      foreach(const NamedEventList& a, _channel[channelIdx].midiActions) {
+      foreach(const NamedEventList& a, _channel[channelIdx]->midiActions) {
             if (s == a.name)
                   return const_cast<NamedEventList*>(&a);
             }
@@ -562,13 +588,13 @@ void Channel::updateInitList() const
 //   channelIdx
 //---------------------------------------------------------
 
-int InstrumentData::channelIdx(const QString& s) const
+int Instrument::channelIdx(const QString& s) const
       {
       int idx = 0;
-      foreach(const Channel& a, _channel) {
-            if (a.name.isEmpty() && s == "normal")
+      for (const Channel* a : _channel) {
+            if (a->name.isEmpty() && s == "normal")
                   return idx;
-            if (s == a.name)
+            if (s == a->name)
                   return idx;
             ++idx;
             }
@@ -624,7 +650,7 @@ void MidiArticulation::read(XmlReader& e)
 //   updateVelocity
 //---------------------------------------------------------
 
-void InstrumentData::updateVelocity(int* velocity, int /*channelIdx*/, const QString& name)
+void Instrument::updateVelocity(int* velocity, int /*channelIdx*/, const QString& name)
       {
       foreach(const MidiArticulation& a, _articulation) {
             if (a.name == name) {
@@ -638,7 +664,7 @@ void InstrumentData::updateVelocity(int* velocity, int /*channelIdx*/, const QSt
 //   updateGateTime
 //---------------------------------------------------------
 
-void InstrumentData::updateGateTime(int* gateTime, int /*channelIdx*/, const QString& name)
+void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const QString& name)
       {
       foreach(const MidiArticulation& a, _articulation) {
             if (a.name == name) {
@@ -652,7 +678,7 @@ void InstrumentData::updateGateTime(int* gateTime, int /*channelIdx*/, const QSt
 //   operator==
 //---------------------------------------------------------
 
-bool InstrumentData::operator==(const InstrumentData& i) const
+bool Instrument::operator==(const Instrument& i) const
       {
       int n = _longNames.size();
       if (i._longNames.size() != n)
@@ -696,41 +722,35 @@ bool StaffName::operator==(const StaffName& i) const
 //   setUseDrumset
 //---------------------------------------------------------
 
-void InstrumentData::setUseDrumset(DrumsetKind val)
+void Instrument::setUseDrumset(bool val)
       {
       _useDrumset = val;
-      if (val != DrumsetKind::NONE && _drumset == 0) {
-            switch (val) {
-                  case DrumsetKind::DEFAULT_DRUMS:
-                        _drumset = new Drumset(*smDrumset);
-                        break;
-                  case DrumsetKind::GUITAR_PRO:
-                        _drumset = new Drumset(*gpDrumset);
-                        break;
-                  default:
-                        break;
-                  }
-            }
+      if (val && !_drumset)
+            _drumset = new Drumset(*smDrumset);
       }
 
 //---------------------------------------------------------
 //   setDrumset
 //---------------------------------------------------------
 
-void InstrumentData::setDrumset(Drumset* ds)
+void Instrument::setDrumset(const Drumset* ds)
       {
       delete _drumset;
-      if (ds)
+      if (ds) {
+            _useDrumset = true;
             _drumset = new Drumset(*ds);
-      else
+            }
+      else {
+            _useDrumset = false;
             _drumset = 0;
+            }
       }
 
 //---------------------------------------------------------
 //   setLongName
 //---------------------------------------------------------
 
-void InstrumentData::setLongName(const QString& f)
+void Instrument::setLongName(const QString& f)
       {
       _longNames.clear();
       if (f.length() > 0)
@@ -741,7 +761,7 @@ void InstrumentData::setLongName(const QString& f)
 //   setShortName
 //---------------------------------------------------------
 
-void InstrumentData::setShortName(const QString& f)
+void Instrument::setShortName(const QString& f)
       {
       _shortNames.clear();
       if (f.length() > 0)
@@ -752,7 +772,7 @@ void InstrumentData::setShortName(const QString& f)
 //   addLongName
 //---------------------------------------------------------
 
-void InstrumentData::addLongName(const StaffName& f)
+void Instrument::addLongName(const StaffName& f)
       {
       _longNames.append(f);
       }
@@ -761,7 +781,7 @@ void InstrumentData::addLongName(const StaffName& f)
 //   addShortName
 //---------------------------------------------------------
 
-void InstrumentData::addShortName(const StaffName& f)
+void Instrument::addShortName(const StaffName& f)
       {
       _shortNames.append(f);
       }
@@ -770,7 +790,7 @@ void InstrumentData::addShortName(const StaffName& f)
 //   clefType
 //---------------------------------------------------------
 
-ClefTypeList InstrumentData::clefType(int staffIdx) const
+ClefTypeList Instrument::clefType(int staffIdx) const
       {
       if (staffIdx >= _clefType.size()) {
             if (_clefType.isEmpty())
@@ -784,102 +804,11 @@ ClefTypeList InstrumentData::clefType(int staffIdx) const
 //   setClefType
 //---------------------------------------------------------
 
-void InstrumentData::setClefType(int staffIdx, const ClefTypeList& c)
+void Instrument::setClefType(int staffIdx, const ClefTypeList& c)
       {
       while (_clefType.size() <= staffIdx)
             _clefType.append(ClefTypeList());
       _clefType[staffIdx] = c;
-      }
-
-//---------------------------------------------------------
-//   Instrument
-//---------------------------------------------------------
-
-Instrument::Instrument()
-      {
-      d = new InstrumentData;
-      }
-
-Instrument::Instrument(const Instrument& s)
-   : d(s.d)
-      {
-      }
-
-Instrument::~Instrument()
-      {
-      }
-
-//---------------------------------------------------------
-//   operator=
-//---------------------------------------------------------
-
-Instrument& Instrument::operator=(const Instrument& s)
-      {
-      d = s.d;
-      return *this;
-      }
-
-//---------------------------------------------------------
-//   operator==
-//---------------------------------------------------------
-
-bool Instrument::operator==(const Instrument& s) const
-      {
-      return d->operator==(*s.d);
-      }
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Instrument::read(XmlReader& e)
-      {
-      d->read(e);
-      }
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Instrument::write(Xml& xml) const
-      {
-      d->write(xml);
-      }
-
-//---------------------------------------------------------
-//   midiAction
-//---------------------------------------------------------
-
-NamedEventList* Instrument::midiAction(const QString& s, int channel) const
-      {
-      return d->midiAction(s, channel);
-      }
-
-//---------------------------------------------------------
-//   channelIdx
-//---------------------------------------------------------
-
-int Instrument::channelIdx(const QString& s) const
-      {
-      return d->channelIdx(s);
-      }
-
-//---------------------------------------------------------
-//   updateVelocity
-//---------------------------------------------------------
-
-void Instrument::updateVelocity(int* velocity, int channel, const QString& name)
-      {
-      d->updateVelocity(velocity, channel, name);
-      }
-
-//---------------------------------------------------------
-//   updateGateTime
-//---------------------------------------------------------
-
-void Instrument::updateGateTime(int* gateTime, int channel, const QString& name)
-      {
-      d->updateGateTime(gateTime, channel, name);
       }
 
 //---------------------------------------------------------
@@ -888,7 +817,7 @@ void Instrument::updateGateTime(int* gateTime, int channel, const QString& name)
 
 int Instrument::minPitchP() const
       {
-      return d->_minPitchP;
+      return _minPitchP;
       }
 
 //---------------------------------------------------------
@@ -897,7 +826,7 @@ int Instrument::minPitchP() const
 
 int Instrument::maxPitchP() const
       {
-      return d->_maxPitchP;
+      return _maxPitchP;
       }
 
 //---------------------------------------------------------
@@ -906,7 +835,7 @@ int Instrument::maxPitchP() const
 
 int Instrument::minPitchA() const
       {
-      return d->_minPitchA;
+      return _minPitchA;
       }
 
 //---------------------------------------------------------
@@ -915,61 +844,7 @@ int Instrument::minPitchA() const
 
 int Instrument::maxPitchA() const
       {
-      return d->_maxPitchA;
-      }
-
-//---------------------------------------------------------
-//   setMinPitchP
-//---------------------------------------------------------
-
-void Instrument::setMinPitchP(int v)
-      {
-      d->setMinPitchP(v);
-      }
-
-//---------------------------------------------------------
-//   setMaxPitchP
-//---------------------------------------------------------
-
-void Instrument::setMaxPitchP(int v)
-      {
-      d->setMaxPitchP(v);
-      }
-
-//---------------------------------------------------------
-//   setMinPitchA
-//---------------------------------------------------------
-
-void Instrument::setMinPitchA(int v)
-      {
-      d->setMinPitchA(v);
-      }
-
-//---------------------------------------------------------
-//   setMaxPitchA
-//---------------------------------------------------------
-
-void Instrument::setMaxPitchA(int v)
-      {
-      d->setMaxPitchA(v);
-      }
-
-//---------------------------------------------------------
-//   transpose
-//---------------------------------------------------------
-
-Interval Instrument::transpose() const
-      {
-      return d->transpose();
-      }
-
-//---------------------------------------------------------
-//   setTranspose
-//---------------------------------------------------------
-
-void Instrument::setTranspose(const Interval& v)
-      {
-      d->setTranspose(v);
+      return _maxPitchA;
       }
 
 //---------------------------------------------------------
@@ -978,200 +853,20 @@ void Instrument::setTranspose(const Interval& v)
 
 QString Instrument::instrumentId() const
       {
-      return d->_instrumentId;
-      }
-
-//---------------------------------------------------------
-//   setInstrumentId
-//---------------------------------------------------------
-
-void Instrument::setInstrumentId(const QString &instrumentId)
-      {
-      d->setInstrumentId(instrumentId);
-      }
-
-//---------------------------------------------------------
-//   setDrumset
-//---------------------------------------------------------
-
-void Instrument::setDrumset(Drumset* ds)
-      {
-      d->setDrumset(ds);
-      }
-
-//---------------------------------------------------------
-//   drumset
-//---------------------------------------------------------
-
-Drumset* Instrument::drumset() const
-      {
-      return d->drumset();
-      }
-
-//---------------------------------------------------------
-//   useDrumset
-//---------------------------------------------------------
-
-DrumsetKind Instrument::useDrumset() const
-      {
-      return d->useDrumset();
-      }
-
-//---------------------------------------------------------
-//   setUseDrumset
-//---------------------------------------------------------
-
-void Instrument::setUseDrumset(DrumsetKind val)
-      {
-      d->setUseDrumset(val);
-      }
-
-//---------------------------------------------------------
-//   setAmateurPitchRange
-//---------------------------------------------------------
-
-void Instrument::setAmateurPitchRange(int a, int b)
-      {
-      d->setAmateurPitchRange(a, b);
-      }
-
-//---------------------------------------------------------
-//   setProfessionalPitchRange
-//---------------------------------------------------------
-
-void Instrument::setProfessionalPitchRange(int a, int b)
-      {
-      d->setProfessionalPitchRange(a, b);
-      }
-
-//---------------------------------------------------------
-//   channel
-//---------------------------------------------------------
-
-Channel& Instrument::channel(int idx)
-      {
-      return d->channel(idx);
-      }
-
-//---------------------------------------------------------
-//   channel
-//---------------------------------------------------------
-
-const Channel& Instrument::channel(int idx) const
-      {
-      return d->channel(idx);
-      }
-
-//---------------------------------------------------------
-//   midiActions
-//---------------------------------------------------------
-
-const QList<NamedEventList>& Instrument::midiActions() const
-      {
-      return d->midiActions();
-      }
-
-//---------------------------------------------------------
-//   articulation
-//---------------------------------------------------------
-
-const QList<MidiArticulation>& Instrument::articulation() const
-      {
-      return d->articulation();
-      }
-
-//---------------------------------------------------------
-//   channel
-//---------------------------------------------------------
-
-const QList<Channel>& Instrument::channel() const
-      {
-      return d->channel();
-      }
-
-//---------------------------------------------------------
-//   setMidiActions
-//---------------------------------------------------------
-
-void Instrument::setMidiActions(const QList<NamedEventList>& l)
-      {
-      d->setMidiActions(l);
-      }
-
-//---------------------------------------------------------
-//   setArticulation
-//---------------------------------------------------------
-
-void Instrument::setArticulation(const QList<MidiArticulation>& l)
-      {
-      d->setArticulation(l);
-      }
-
-//---------------------------------------------------------
-//   setChannel
-//---------------------------------------------------------
-
-void Instrument::setChannel(const QList<Channel>& l)
-      {
-      d->setChannel(l);
-      }
-
-//---------------------------------------------------------
-//   setChannel
-//---------------------------------------------------------
-
-void Instrument::setChannel(int i, const Channel& c)
-      {
-      d->setChannel(i, c);
-      }
-
-//---------------------------------------------------------
-//   clefType
-//---------------------------------------------------------
-
-ClefTypeList Instrument::clefType(int staffIdx) const
-      {
-      return d->clefType(staffIdx);
-      }
-
-//---------------------------------------------------------
-//   setClefType
-//---------------------------------------------------------
-
-void Instrument::setClefType(int staffIdx, const ClefTypeList& cl)
-      {
-      d->setClefType(staffIdx, cl);
-      }
-
-//---------------------------------------------------------
-//   tablature
-//---------------------------------------------------------
-
-const StringData* Instrument::stringData() const
-      {
-      return d->stringData();
-      }
-
-//---------------------------------------------------------
-//   setTablature
-//---------------------------------------------------------
-
-void Instrument::setStringData(const StringData& t)
-      {
-      d->setStringData(t);
+      return _instrumentId;
       }
 
 //---------------------------------------------------------
 //   instrument
 //---------------------------------------------------------
 
-const Instrument& InstrumentList::instrument(int tick) const
+const Instrument* InstrumentList::instrument(int tick) const
       {
       if (empty())
-            return defaultInstrument;
+            return &defaultInstrument;
       auto i = upper_bound(tick);
       if (i == begin())
-            return defaultInstrument;
+            return &defaultInstrument;
       --i;
       return i->second;
       }
@@ -1180,13 +875,13 @@ const Instrument& InstrumentList::instrument(int tick) const
 //   instrument
 //---------------------------------------------------------
 
-Instrument& InstrumentList::instrument(int tick)
+Instrument* InstrumentList::instrument(int tick)
       {
       if (empty())
-            return defaultInstrument;
+            return &defaultInstrument;
       auto i = upper_bound(tick);
       if (i == begin())
-            return defaultInstrument;
+            return &defaultInstrument;
       --i;
       return i->second;
       }
@@ -1195,7 +890,7 @@ Instrument& InstrumentList::instrument(int tick)
 //   setInstrument
 //---------------------------------------------------------
 
-void InstrumentList::setInstrument(const Instrument& instr, int tick)
+void InstrumentList::setInstrument(Instrument* instr, int tick)
       {
       if (!insert({tick, instr}).second)
             (*this)[tick] = instr;
@@ -1207,7 +902,7 @@ void InstrumentList::setInstrument(const Instrument& instr, int tick)
 
 const QList<StaffName>& Instrument::longNames() const
       {
-      return d->_longNames;
+      return _longNames;
       }
 
 //---------------------------------------------------------
@@ -1216,7 +911,7 @@ const QList<StaffName>& Instrument::longNames() const
 
 const QList<StaffName>& Instrument::shortNames() const
       {
-      return d->_shortNames;
+      return _shortNames;
       }
 
 //---------------------------------------------------------
@@ -1225,43 +920,7 @@ const QList<StaffName>& Instrument::shortNames() const
 
 QList<StaffName>& Instrument::longNames()
       {
-      return d->_longNames;
-      }
-
-//---------------------------------------------------------
-//   setLongName
-//---------------------------------------------------------
-
-void Instrument::setLongName(const QString& f)
-      {
-      d->setLongName(f);
-      }
-
-//---------------------------------------------------------
-//   addLongName
-//---------------------------------------------------------
-
-void Instrument::addLongName(const StaffName& f)
-      {
-      d->addLongName(f);
-      }
-
-//---------------------------------------------------------
-//   addShortName
-//---------------------------------------------------------
-
-void Instrument::addShortName(const StaffName& f)
-      {
-      d->addShortName(f);
-      }
-
-//---------------------------------------------------------
-//   setShortName
-//---------------------------------------------------------
-
-void Instrument::setShortName(const QString& f)
-      {
-      d->setShortName(f);
+      return _longNames;
       }
 
 //---------------------------------------------------------
@@ -1270,7 +929,7 @@ void Instrument::setShortName(const QString& f)
 
 QList<StaffName>& Instrument::shortNames()
       {
-      return d->_shortNames;
+      return _shortNames;
       }
 
 //---------------------------------------------------------
@@ -1279,12 +938,12 @@ QList<StaffName>& Instrument::shortNames()
 
 QString Instrument::trackName() const
       {
-      return d->_trackName;
+      return _trackName;
       }
 
 void Instrument::setTrackName(const QString& s)
       {
-      d->_trackName = s;
+      _trackName = s;
       }
 
 //---------------------------------------------------------
@@ -1303,17 +962,18 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       instr.setTrackName(t->trackName);
       instr.setTranspose(t->transpose);
       instr.setInstrumentId(t->musicXMLid);
-      if (t->useDrumset != DrumsetKind::NONE) {
-            instr.setUseDrumset(DrumsetKind::DEFAULT_DRUMS);
-            instr.setDrumset(new Drumset(*((t->drumset) ? t->drumset : smDrumset)));
-            }
+      if (t->useDrumset)
+            instr.setDrumset(t->drumset ? t->drumset : smDrumset);
       for (int i = 0; i < t->nstaves(); ++i)
             instr.setClefType(i, t->clefTypes[i]);
       instr.setMidiActions(t->midiActions);
       instr.setArticulation(t->articulation);
-      instr.setChannel(t->channel);
+      instr._channel.clear();
+      for (const Channel& c : t->channel)
+            instr._channel.append(new Channel(c));
       instr.setStringData(t->stringData);
       return instr;
       }
+
 }
 

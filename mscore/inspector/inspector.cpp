@@ -27,6 +27,7 @@
 #include "inspectorNote.h"
 #include "inspectorAmbitus.h"
 #include "inspectorFret.h"
+#include "inspectorText.h"
 #include "musescore.h"
 #include "scoreview.h"
 
@@ -223,6 +224,7 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorMarker(this);
                               break;
                         case Element::Type::GLISSANDO:
+                        case Element::Type::GLISSANDO_SEGMENT:
                               ie = new InspectorGlissando(this);
                               break;
                         case Element::Type::TEMPO_TEXT:
@@ -236,6 +238,9 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         case Element::Type::FRET_DIAGRAM:
                               ie = new InspectorFret(this);
+                              break;
+                        case Element::Type::LAYOUT_BREAK:
+                              ie = new InspectorBreak(this);
                               break;
                         default:
                               if (_element->isText())
@@ -313,6 +318,21 @@ InspectorElement::InspectorElement(QWidget* parent)
             { P_ID::VISIBLE,  0, 0, b.visible,    b.resetVisible },
             { P_ID::USER_OFF, 0, 0, b.offsetX,    b.resetX       },
             { P_ID::USER_OFF, 1, 0, b.offsetY,    b.resetY       }
+            };
+
+      mapSignals();
+      }
+
+//---------------------------------------------------------
+//   InspectorBreak
+//---------------------------------------------------------
+
+InspectorBreak::InspectorBreak(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      b.setupUi(addWidget());
+
+      iList = {         // currently empty
             };
 
       mapSignals();
@@ -650,47 +670,6 @@ void InspectorClef::valueChanged(int idx)
       }
 
 //---------------------------------------------------------
-//   InspectorText
-//---------------------------------------------------------
-
-InspectorText::InspectorText(QWidget* parent)
-   : InspectorBase(parent)
-      {
-      e.setupUi(addWidget());
-      t.setupUi(addWidget());
-
-      iList = {
-            { P_ID::COLOR,              0, 0, e.color,    e.resetColor    },
-            { P_ID::VISIBLE,            0, 0, e.visible,  e.resetVisible  },
-            { P_ID::USER_OFF,           0, 0, e.offsetX,  e.resetX        },
-            { P_ID::USER_OFF,           1, 0, e.offsetY,  e.resetY        },
-            { P_ID::TEXT_STYLE_TYPE,    0, 0, t.style,    t.resetStyle    }
-            };
-      mapSignals();
-      }
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
-
-void InspectorText::setElement()
-      {
-      Element* e = inspector->element();
-      Score* score = e->score();
-
-      t.style->blockSignals(true);
-      t.style->clear();
-      const QList<TextStyle>& ts = score->style()->textStyles();
-      int n = ts.size();
-      for (int i = 0; i < n; ++i) {
-            if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
-                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toLatin1().data()), i);
-            }
-      t.style->blockSignals(false);
-      InspectorBase::setElement();
-      }
-
-//---------------------------------------------------------
 //   InspectorTempoText
 //---------------------------------------------------------
 
@@ -860,7 +839,7 @@ InspectorBarLine::InspectorBarLine(QWidget* parent)
       for (const char* name : builtinSpanNames)
             b.spanType->addItem(qApp->translate("inspector", name));
       for (BarLineType t : types)
-            b.type->addItem(BarLine::userTypeName2(t), int(t));
+            b.type->addItem(BarLine::userTypeName(t), int(t));
 
       iList = {
             { P_ID::COLOR,             0, 0, e.color,    e.resetColor    },

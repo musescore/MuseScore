@@ -26,6 +26,7 @@
 
 namespace Ms {
 
+
 //---------------------------------------------------------
 // initChannelCombo
 //---------------------------------------------------------
@@ -34,11 +35,11 @@ static void initChannelCombo(QComboBox* cb, StaffText* st)
       {
       Part* part = st->staff()->part();
       int tick = static_cast<Segment*>(st->parent())->tick();
-      foreach(const Channel& a, part->instr(tick)->channel()) {
-            if (a.name.isEmpty() || a.name == "normal")
+      foreach(const Channel* a, part->instr(tick)->channel()) {
+            if (a->name.isEmpty() || a->name == "normal")
                   cb->addItem(QObject::tr("normal"));
             else
-                  cb->addItem(a.name);
+                  cb->addItem(a->name);
             }
       }
 
@@ -46,7 +47,7 @@ static void initChannelCombo(QComboBox* cb, StaffText* st)
 //   StaffTextProperties
 //---------------------------------------------------------
 
-StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
+StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
@@ -55,7 +56,7 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
       else
             setWindowTitle(tr("MuseScore: Staff Text Properties"));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      staffText = st;
+      _staffText = static_cast<StaffText*>(st->clone());
 
 #ifndef AEOLUS
 	tabWidget->removeTab(2);
@@ -91,18 +92,18 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
       //---------------------------------------------------
 
       for (int i = 0; i < 4; ++i)
-            initChannelCombo(channelCombo[i], st);
+            initChannelCombo(channelCombo[i], _staffText);
 
-      Part* part = st->staff()->part();
+      Part* part = _staffText->staff()->part();
       int tick = static_cast<Segment*>(st->parent())->tick();
       int n = part->instr(tick)->channel().size();
       int rows = 0;
       for (int voice = 0; voice < VOICES; ++voice) {
-            if (st->channelName(voice).isEmpty())
+            if (_staffText->channelName(voice).isEmpty())
                   continue;
             for (int i = 0; i < n; ++i) {
-                  const Channel& a = part->instr(tick)->channel(i);
-                  if (a.name != st->channelName(voice))
+                  const Channel* a = part->instr(tick)->channel(i);
+                  if (a->name != _staffText->channelName(voice))
                         continue;
                   int row = 0;
                   for (row = 0; row < rows; ++row) {
@@ -127,22 +128,22 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
                   }
             }
 
-      if (staffText->swing()) {
+      if (_staffText->swing()) {
             setSwingBox->setChecked(true);
-            if (st->swingParameters()->swingUnit == MScore::division/2) {
+            if (_staffText->swingParameters()->swingUnit == MScore::division/2) {
                   swingBox->setEnabled(true);
                   swingEighth->setChecked(true);
-                  swingBox->setValue(st->swingParameters()->swingRatio);
+                  swingBox->setValue(_staffText->swingParameters()->swingRatio);
                   }
-            else if (st->swingParameters()->swingUnit == MScore::division/4) {
+            else if (_staffText->swingParameters()->swingUnit == MScore::division/4) {
                   swingBox->setEnabled(true);
                   swingSixteenth->setChecked(true);
-                  swingBox->setValue(st->swingParameters()->swingRatio);
+                  swingBox->setValue(_staffText->swingParameters()->swingRatio);
                   }
-            else if (st->swingParameters()->swingUnit == 0) {
+            else if (_staffText->swingParameters()->swingUnit == 0) {
                  swingBox->setEnabled(false);
                  SwingOff->setChecked(true);
-                 swingBox->setValue(st->swingParameters()->swingRatio);
+                 swingBox->setValue(_staffText->swingParameters()->swingRatio);
                  }
             }
 
@@ -157,14 +158,14 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
 
       QTreeWidgetItem* selectedItem = 0;
       for (int i = 0; i < n; ++i) {
-            const Channel& a = part->instr(tick)->channel(i);
+            const Channel* a = part->instr(tick)->channel(i);
             QTreeWidgetItem* item = new QTreeWidgetItem(channelList);
             item->setData(0, Qt::UserRole, i);
-            if (a.name.isEmpty() || a.name == "normal")
+            if (a->name.isEmpty() || a->name == "normal")
                   item->setText(0, tr("normal"));
             else
-                  item->setText(0, a.name);
-            item->setText(1, a.descr);
+                  item->setText(0, a->name);
+            item->setText(1, a->descr);
             if (i == 0)
                   selectedItem = item;
             }
@@ -177,7 +178,7 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
       //    setup aeolus stops
       //---------------------------------------------------
 
-      changeStops->setChecked(staffText->setAeolusStops());
+      changeStops->setChecked(_staffText->setAeolusStops());
 
       for (int i = 0; i < 4; ++i) {
             for (int k = 0; k < 16; ++k)
@@ -249,6 +250,15 @@ StaffTextProperties::StaffTextProperties(StaffText* st, QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   StaffTextProperties
+//---------------------------------------------------------
+
+StaffTextProperties::~StaffTextProperties()
+      {
+      delete _staffText;
+      }
+
+//---------------------------------------------------------
 //   setSwingParameters
 //---------------------------------------------------------
 
@@ -274,16 +284,16 @@ void StaffTextProperties::tabChanged(int tab)
             for (int i = 0; i < 4; ++i) {
                   for (int k = 0; k < 16; ++k) {
                         if (stops[i][k])
-                              stops[i][k]->setChecked(staffText->getAeolusStop(i, k));
+                              stops[i][k]->setChecked(_staffText->getAeolusStop(i, k));
                         }
                   }
             }
       if (curTabIndex == 2) {
-            staffText->setSetAeolusStops(changeStops->isChecked());
+            _staffText->setSetAeolusStops(changeStops->isChecked());
             for (int i = 0; i < 4; ++i) {
                   for (int k = 0; k < 16; ++k) {
                         if (stops[i][k])
-                              staffText->setAeolusStop(i, k, stops[i][k]->isChecked());
+                              _staffText->setAeolusStop(i, k, stops[i][k]->isChecked());
                         }
                   }
             }
@@ -311,7 +321,7 @@ void StaffTextProperties::voiceButtonClicked(int val)
 
 void StaffTextProperties::saveChannel(int channel)
       {
-      QList<ChannelActions>* ca = staffText->channelActions();
+      QList<ChannelActions>* ca = _staffText->channelActions();
       int n = ca->size();
       for (int i = 0; i < n; ++i) {
             ChannelActions* a = &(*ca)[i];
@@ -324,7 +334,6 @@ void StaffTextProperties::saveChannel(int channel)
       ChannelActions a;
       a.channel = channel;
 
-//      QList<QTreeWidgetItem*> items = actionList->selectedItems();
       for (int i = 0; i < actionList->topLevelItemCount(); ++i) {
             QTreeWidgetItem* item = actionList->topLevelItem(i);
             if (item->isSelected())
@@ -345,12 +354,12 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
             return;
 
       actionList->clear();
-      Part* part = staffText->staff()->part();
+      Part* part = _staffText->staff()->part();
 
       int channelIdx      = item->data(0, Qt::UserRole).toInt();
-      int tick = static_cast<Segment*>(staffText->parent())->tick();
-      Channel& channel    = part->instr(tick)->channel(channelIdx);
-      QString channelName = channel.name;
+      int tick = static_cast<Segment*>(_staffText->parent())->tick();
+      Channel* channel    = part->instr(tick)->channel(channelIdx);
+      QString channelName = channel->name;
 
       foreach(const NamedEventList& e, part->instr(tick)->midiActions()) {
             QTreeWidgetItem* item = new QTreeWidgetItem(actionList);
@@ -360,7 +369,7 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
                   item->setText(0, e.name);
             item->setText(1, e.descr);
             }
-      foreach(const NamedEventList& e, channel.midiActions) {
+      foreach(const NamedEventList& e, channel->midiActions) {
             QTreeWidgetItem* item = new QTreeWidgetItem(actionList);
             if (e.name.isEmpty() || e.name == "normal")
                   item->setText(0, tr("normal"));
@@ -368,7 +377,7 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
                   item->setText(0, e.name);
             item->setText(1, e.descr);
             }
-      foreach(const ChannelActions& ca, *staffText->channelActions()) {
+      foreach(const ChannelActions& ca, *_staffText->channelActions()) {
             if (ca.channel == channelIdx) {
                   foreach(QString s, ca.midiActionNames) {
                         QList<QTreeWidgetItem*> items = actionList->findItems(s, Qt::MatchExactly);
@@ -388,14 +397,14 @@ void StaffTextProperties::saveValues()
       //
       // save channel switches
       //
-      Part* part = staffText->staff()->part();
+      Part* part = _staffText->staff()->part();
       for (int voice = 0; voice < VOICES; ++voice) {
-            staffText->setChannelName(voice, QString());
+            _staffText->setChannelName(voice, QString());
             for (int row = 0; row < VOICES; ++row) {
                   if (vb[voice][row]->isChecked()) {
                         int idx     = channelCombo[row]->currentIndex();
-                        int instrId = static_cast<Segment*>(staffText->parent())->tick();
-                        staffText->setChannelName(voice, part->instr(instrId)->channel()[idx].name);
+                        int instrId = static_cast<Segment*>(_staffText->parent())->tick();
+                        _staffText->setChannelName(voice, part->instr(instrId)->channel()[idx]->name);
                         break;
                         }
                   }
@@ -408,33 +417,30 @@ void StaffTextProperties::saveValues()
       //
       // save Aeolus stops
       //
-      staffText->setSetAeolusStops(changeStops->isChecked());
+      _staffText->setSetAeolusStops(changeStops->isChecked());
       if (changeStops->isChecked()) {
             for (int i = 0; i < 4; ++i) {
                   for (int k = 0; k < 16; ++k) {
                         if (stops[i][k])
-                              staffText->setAeolusStop(i, k, stops[i][k]->isChecked());
+                              _staffText->setAeolusStop(i, k, stops[i][k]->isChecked());
                         }
                   }
             }
       if (setSwingBox->isChecked()) {
-            staffText->setSwing(true);
+            _staffText->setSwing(true);
             if (SwingOff->isChecked()) {
-                  staffText->setSwingParameters(0, swingBox->value());
+                  _staffText->setSwingParameters(0, swingBox->value());
                   swingBox->setEnabled(false);
                   }
             else if (swingEighth->isChecked()) {
-                  staffText->setSwingParameters(MScore::division/2, swingBox->value());
+                  _staffText->setSwingParameters(MScore::division/2, swingBox->value());
                   swingBox->setEnabled(true);
                   }
             else if (swingSixteenth->isChecked()) {
-                  staffText->setSwingParameters(MScore::division/4, swingBox->value());
+                  _staffText->setSwingParameters(MScore::division/4, swingBox->value());
                   swingBox->setEnabled(true);
                   }
             }
-      staffText->score()->updateChannel();
-      staffText->score()->updateSwing();
-      staffText->score()->setPlaylistDirty(true);
       }
 }
 

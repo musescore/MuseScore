@@ -171,14 +171,14 @@ Fraction XmlReader::readFraction()
 //    unknown tag read
 //---------------------------------------------------------
 
-void XmlReader::unknown() const
+void XmlReader::unknown()
       {
       if (XmlStreamReader::error())
             qDebug("StreamReaderError: %s", qPrintable(errorString()));
-      qFatal("%s: xml read error at line %lld col %lld: %s",
+      qDebug("%s: xml read error at line %lld col %lld: %s",
          qPrintable(docName), lineNumber(), columnNumber(),
          name().toUtf8().data());
-      // skipCurrentElement();
+      skipCurrentElement();
       }
 
 //---------------------------------------------------------
@@ -674,6 +674,7 @@ QString XmlReader::readXml()
 
 //---------------------------------------------------------
 //   writeXml
+//    string s is already escaped (& -> "&amp;")
 //---------------------------------------------------------
 
 void Xml::writeXml(const QString& name, QString s)
@@ -694,7 +695,7 @@ void Xml::writeXml(const QString& name, QString s)
 //   spannerValues
 //---------------------------------------------------------
 
-const SpannerValues* XmlReader::spannerValues(int id)
+const SpannerValues* XmlReader::spannerValues(int id) const
       {
       for (const SpannerValues& v : _spannerValues) {
             if (v.spannerId == id)

@@ -364,7 +364,7 @@ bool SelectionFilter::canSelect(const Element* e) const
           return isFiltered(SelectionFilterType::OTHER_TEXT);
       if (e->isSLine()) // NoteLine, Volta
           return isFiltered(SelectionFilterType::OTHER_LINE);
-      if (e->type() == Element::Type::TREMOLO && static_cast<const Tremolo*>(e)->twoNotes() == false)
+      if (e->type() == Element::Type::TREMOLO && !static_cast<const Tremolo*>(e)->twoNotes())
           return isFiltered(SelectionFilterType::TREMOLO);
       if (e->type() == Element::Type::CHORD && static_cast<const Chord*>(e)->isGrace())
           return isFiltered(SelectionFilterType::GRACE_NOTE);
@@ -403,11 +403,11 @@ void Selection::appendFiltered(Element* e)
 
 void Selection::appendChord(Chord* chord)
       {
-      if (chord->beam()) _el.append(chord->beam());
+      if (chord->beam() && !_el.contains(chord->beam())) _el.append(chord->beam());
       if (chord->stem()) _el.append(chord->stem());
       if (chord->hook()) _el.append(chord->hook());
       if (chord->arpeggio()) appendFiltered(chord->arpeggio());
-      if (chord->glissando()) appendFiltered(chord->glissando());
+//      if (chord->glissando()) appendFiltered(chord->glissando());
       if (chord->stemSlash()) _el.append(chord->stemSlash());
       if (chord->tremolo()) appendFiltered(chord->tremolo());
       foreach(Note* note, chord->notes()) {
@@ -969,8 +969,8 @@ QList<Note*> Selection::noteList(int selTrack) const
 
 //---------------------------------------------------------
 //   checkStart
-//     return false if element is NOT a tuplet or is start of a tuplet
-//     return true  if element is part of a tuplet, but not the start
+//     return false if element is NOT a tuplet or is start of a tuplet/tremolo
+//     return true  if element is part of a tuplet/tremolo, but not the start
 //---------------------------------------------------------
 
 static bool checkStart(Element* e)
@@ -978,15 +978,27 @@ static bool checkStart(Element* e)
       if (e == 0 || !e->isChordRest())
             return false;
       ChordRest* cr = static_cast<ChordRest*>(e);
-      if (!cr->tuplet())
-            return false;
-      Tuplet* tuplet = cr->tuplet();
-      while (tuplet) {
-            if (tuplet->elements().front() == e)
-                  return false;
-            tuplet = tuplet->tuplet();
+      bool rv = false;
+      if (cr->tuplet()) {
+            rv = true;
+            Tuplet* tuplet = cr->tuplet();
+            while (tuplet) {
+                  if (tuplet->elements().front() == e) {
+                        rv = false;
+                        break;
+                        }
+                  tuplet = tuplet->tuplet();
+                  }
             }
-      return true;
+      else if (e->type() == Element::Type::CHORD) {
+            rv = false;
+            Chord* chord = static_cast<Chord*>(e);
+            if (chord->tremolo() && chord->tremolo()->twoNotes())
+                  rv = chord->tremolo()->chord2() == chord;
+            }
+      else
+            rv = false;
+      return rv;
       }
 
 //---------------------------------------------------------
@@ -1000,20 +1012,33 @@ static bool checkEnd(Element* e)
       if (e == 0 || !e->isChordRest())
             return false;
       ChordRest* cr = static_cast<ChordRest*>(e);
-      if (!cr->tuplet())
-            return false;
-      Tuplet* tuplet = cr->tuplet();
-      while (tuplet) {
-            if (tuplet->elements().back() == e)
-                  return false;
-            tuplet = tuplet->tuplet();
+      bool rv = false;
+      if (cr->tuplet()) {
+            rv = true;
+            Tuplet* tuplet = cr->tuplet();
+            while (tuplet) {
+                  if (tuplet->elements().back() == e) {
+                        rv = false;
+                        break;
+                        }
+                  tuplet = tuplet->tuplet();
+                  }
             }
-      return true;
+      else if (e->type() == Element::Type::CHORD) {
+            rv = false;
+            Chord* chord = static_cast<Chord*>(e);
+            if (chord->tremolo() && chord->tremolo()->twoNotes())
+                  rv = chord->tremolo()->chord1() == chord;
+            }
+      else
+            rv = false;
+      return rv;
       }
 
 //---------------------------------------------------------
 //   canCopy
 //    return false if range selection intersects a tuplet
+//    or a tremolo
 //---------------------------------------------------------
 
 bool Selection::canCopy() const
@@ -1032,6 +1057,7 @@ bool Selection::canCopy() const
 
                   // find last segment in the selection.
                   // Note that _endSegment is the first segment after the selection
+
                   Segment *endSegmentSelection = _startSegment;
                   while (endSegmentSelection->nextCR(track) &&
                         (endSegmentSelection->nextCR(track)->tick() < _endSegment->tick()))
@@ -1102,10 +1128,8 @@ QList<Note*> Selection::uniqueNotes(int track) const
       {
       QList<Note*> l;
 
-      for (Note* note : noteList(track)) {
-            while (note->tieBack())
-                  note = note->tieBack()->startNote();
-            for (; note; note = note->tieFor() ? note->tieFor()->endNote() : 0) {
+      for (Note* nn : noteList(track)) {
+            for (Note* note : nn->tiedNotes()) {
                   bool alreadyThere = false;
                   for (Note* n : l) {
                         if ((n->links() && n->links()->contains(note)) || n == note) {

@@ -192,9 +192,8 @@
         <Rest>
           <lid>23</lid>
           <durationType>measure</durationType>
-          <duration z="1" n="4"/>
+          <duration z="4" n="4"/>
           </Rest>
-        <tick>3840</tick>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
@@ -414,9 +413,8 @@
           <Rest>
             <lid>23</lid>
             <durationType>measure</durationType>
-            <duration z="1" n="4"/>
+            <duration z="4" n="4"/>
             </Rest>
-          <tick>3840</tick>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
@@ -519,9 +517,8 @@
           <Rest>
             <lid>23</lid>
             <durationType>measure</durationType>
-            <duration z="1" n="4"/>
+            <duration z="4" n="4"/>
             </Rest>
-          <tick>3840</tick>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>

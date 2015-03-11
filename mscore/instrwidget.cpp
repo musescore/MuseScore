@@ -107,24 +107,24 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       // or a memory leak may result
 
       bool canUseTabs = false; // assume only normal staves are applicable
-      DrumsetKind canUsePerc = DrumsetKind::NONE;
+      bool canUsePerc = false;
       PartListItem* part = static_cast<PartListItem*>(QTreeWidgetItem::parent());
 
       // PartListItem has different members filled out if used in New Score Wizard
       // or in Instruments Wizard
       if (part) {
             const StringData* stringData = part->it ? &(part->it->stringData) :
-                        ( (part->part && part->part->instr(0)) ? part->part->instr(0)->stringData() : 0);
+                        ( (part->part && part->part->instr()) ? part->part->instr()->stringData() : 0);
             canUseTabs = stringData && stringData->strings() > 0;
             canUsePerc = part->it ? part->it->useDrumset :
-                        ( (part->part && part->part->instr(0)) ? part->part->instr(0)->useDrumset() : DrumsetKind::NONE);
+                        ( (part->part && part->part->instr()) ? part->part->instr()->useDrumset() : false);
             }
       _staffTypeCombo = new QComboBox();
       _staffTypeCombo->setAutoFillBackground(true);
       int idx = 0;
       for (const StaffType& st : StaffType::presets()) {
-            if ( (st.group() == StaffGroup::STANDARD && (canUsePerc == DrumsetKind::NONE))    // percussion excludes standard
-                        || (st.group() == StaffGroup::PERCUSSION && (canUsePerc != DrumsetKind::NONE))
+            if ( (st.group() == StaffGroup::STANDARD && (!canUsePerc))    // percussion excludes standard
+                        || (st.group() == StaffGroup::PERCUSSION && canUsePerc)
                         || (st.group() == StaffGroup::TAB && canUseTabs)) {
                   _staffTypeCombo->addItem(st.name(), idx);
                   }
@@ -621,16 +621,33 @@ void InstrumentsWidget::on_removeButton_clicked()
                         }
                   }
             static_cast<PartListItem*>(parent)->updateClefs();
+            partiturList->setItemSelected(parent, true);
             }
       else {
+            int idx = partiturList->indexOfTopLevelItem(item);
             if (((PartListItem*)item)->op == ListItemOp::ADD)
                   delete item;
             else {
                   ((PartListItem*)item)->op = ListItemOp::I_DELETE;
                   item->setHidden(true);
                   }
+            // select an item, do not consider hidden ones
+            int plusIdx = 0;
+            QTreeWidgetItem* nextParent = partiturList->topLevelItem(idx + plusIdx);
+            while (nextParent && nextParent->isHidden()) {
+                  plusIdx++;
+                  nextParent = partiturList->topLevelItem(idx + plusIdx);
+                  }
+            if(!nextParent) { // could find after, check before
+                  plusIdx = 1;
+                  nextParent = partiturList->topLevelItem(idx - plusIdx);
+                  while (nextParent && nextParent->isHidden()) {
+                       plusIdx++;
+                       nextParent = partiturList->topLevelItem(idx - plusIdx);
+                  }
+                  }
+            partiturList->setItemSelected(nextParent, true);
             }
-      partiturList->clearSelection();
       }
 
 //---------------------------------------------------------
@@ -658,7 +675,14 @@ void InstrumentsWidget::on_upButton_clicked()
                   int staffIdx[numOfStaffListItems];
                   for (int itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
                         staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
-                  partiturList->insertTopLevelItem(idx-1, item);
+                  // do not consider hidden ones
+                  int minusIdx = 1;
+                  QTreeWidgetItem* prevParent = partiturList->topLevelItem(idx - minusIdx);
+                  while (prevParent && prevParent->isHidden()) {
+                       minusIdx++;
+                       prevParent = partiturList->topLevelItem(idx - minusIdx);
+                  }
+                  partiturList->insertTopLevelItem(idx - minusIdx, item);
                   // after-re-insertion, recreate each combo and set its index
                   for (int itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx) {
                         StaffListItem* staffItem = static_cast<StaffListItem*>(item->child(itemIdx));
@@ -679,7 +703,7 @@ void InstrumentsWidget::on_upButton_clicked()
                   // Qt looses the QComboBox set into StaffListItem when it is re-inserted into the tree:
                   // get currently selected staff type and re-insert
                   int staffTypeIdx = item->staffTypeIdx();
-                  parent->insertChild(idx-1, item);
+                  parent->insertChild(idx - 1, item);
                   // after item has been inserted into the tree, create a new QComboBox and set its index
                   item->initStaffTypeCombo(true);
                   item->setStaffType(staffTypeIdx);
@@ -735,7 +759,14 @@ void InstrumentsWidget::on_downButton_clicked()
                   int itemIdx;
                   for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
                         staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
-                  partiturList->insertTopLevelItem(idx+1, item);
+                  // do not consider hidden ones
+                  int plusIdx = 1;
+                  QTreeWidgetItem* nextParent = partiturList->topLevelItem(idx + plusIdx);
+                  while (nextParent && nextParent->isHidden()) {
+                       plusIdx++;
+                       nextParent = partiturList->topLevelItem(idx + plusIdx);
+                  }
+                  partiturList->insertTopLevelItem(idx + plusIdx, item);
                   // after-re-insertion, recreate each combo and set its index
                   for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx) {
                         StaffListItem* staffItem = static_cast<StaffListItem*>(item->child(itemIdx));
@@ -818,7 +849,7 @@ StaffListItem* InstrumentsWidget::on_belowButton_clicked()
       if (pli->it)
             clefType = pli->it->clefType(ridx);
       else
-            clefType = pli->part->instr(0)->clefType(ridx);
+            clefType = pli->part->instr()->clefType(ridx);
       nsli->setDefaultClefType(clefType);
       pli->updateClefs();
 

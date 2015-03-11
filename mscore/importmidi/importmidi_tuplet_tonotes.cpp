@@ -21,7 +21,7 @@ void addElementToTuplet(int voice,
                         DurationElement *el,
                         std::multimap<ReducedFraction, TupletData> &tuplets)
       {
-      const auto foundTuplets = findTupletsForTimeRange(voice, onTime, len, tuplets);
+      const auto foundTuplets = findTupletsForTimeRange(voice, onTime, len, tuplets, true);
 
 #ifdef QT_DEBUG
       if (foundTuplets.size() > 1) {
