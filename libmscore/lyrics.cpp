@@ -84,10 +84,8 @@ Lyrics::Lyrics(const Lyrics& l)
 
 Lyrics::~Lyrics()
       {
-      if (_separator != nullptr) {
-            _separator->removeUnmanaged();
-            delete _separator;
-            }
+      if (_separator != nullptr)
+            remove(_separator);
       }
 
 //---------------------------------------------------------
