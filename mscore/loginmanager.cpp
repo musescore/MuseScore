@@ -103,6 +103,10 @@ void LoginManager::onAuthorizedRequestDone()
             QMessageBox::critical(0, tr("Network error"), tr("Please check your Internet connection"));
       else if (_oauthManager->lastError() == KQOAuthManager::ContentOperationNotPermittedError)
             QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.<br/> <a href=\"%1\">Please upgrade first</a>.").arg("http://musescore.org"));
+      else if (_oauthManager->lastError() == KQOAuthManager::RequestUnauthorized){
+            logout();
+            mscore->showLoginDialog();
+            }
       }
 
 /*------- TRY LOGIN ROUTINES ----------------------------*/
@@ -142,6 +146,7 @@ void LoginManager::onTryLoginError(const QString& error)
       disconnect(this, SIGNAL(getUserSuccess()), this, SLOT(onTryLoginSuccess()));
       disconnect(this, SIGNAL(getUserError(QString)), this, SLOT(onTryLoginError(QString)));
       connect(this, SIGNAL(loginSuccess()), this, SLOT(tryLogin()));
+      logout();
       mscore->showLoginDialog();
       }
 /*------- END - TRY LOGIN ROUTINES ----------------------------*/

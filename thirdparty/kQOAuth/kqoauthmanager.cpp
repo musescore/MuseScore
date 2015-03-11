@@ -586,13 +586,6 @@ void KQOAuthManager::onRequestReplyReceived() {
     foreach (QNetworkCookie cookie , c)
             qDebug() << cookie.name() << cookie.value();*/
 
-    // Just don't do anything if we didn't get anything useful.
-    if(networkReply.isEmpty()) {
-        reply->deleteLater();
-        return;
-    }
-    QMultiMap<QString, QString> responseTokens;
-
     // We need to emit the signal even if we got an error.
     if (d->error != KQOAuthManager::NoError) {
         reply->deleteLater();
@@ -600,6 +593,13 @@ void KQOAuthManager::onRequestReplyReceived() {
         //d->emitTokens();
         return;
     }
+
+    // Just don't do anything if we didn't get anything useful.
+    if(networkReply.isEmpty()) {
+        reply->deleteLater();
+        return;
+    }
+    QMultiMap<QString, QString> responseTokens;
 
     responseTokens = d->createTokensFromResponse(networkReply);
     d->opaqueRequest->clearRequest();
@@ -670,8 +670,6 @@ void KQOAuthManager::onAuthorizedRequestReplyReceived() {
         d->r->requestTimerStop();
         d->currentRequestType = d->r->requestType();
     }
-
-
 
     // Just don't do anything if we didn't get anything useful.
     if(networkReply.isEmpty()) {
