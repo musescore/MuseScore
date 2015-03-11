@@ -53,6 +53,8 @@ enum class PlayEventType : char    {
 //   @P notes       array[Ms::Note]    the list of notes (read only)
 //   @P lyrics      array[Ms::Lyrics]  the list of lyrics (read only)
 //   @P graceNotes  array[Ms::Chord]   the list of grace note chords (read only)
+//   @P stem        Ms::Stem           the stem of the chord if any (read only)
+//   @P hook        Ms::Hook           the hoow of the chord if any (read only)
 //---------------------------------------------------------
 
 class Chord : public ChordRest {
@@ -68,6 +70,8 @@ class Chord : public ChordRest {
       Q_PROPERTY(QQmlListProperty<Ms::Note> notes READ qmlNotes)
       Q_PROPERTY(QQmlListProperty<Ms::Lyrics> lyrics READ qmlLyrics)
       Q_PROPERTY(QQmlListProperty<Ms::Chord> graceNotes READ qmlGraceNotes)
+      Q_PROPERTY(Ms::Hook* hook              READ hook)
+      Q_PROPERTY(Ms::Stem* stem              READ stem)
 
       QList<Note*>         _notes;       // sorted to decreasing line step
       LedgerLine*          _ledgerLines; // single linked list
