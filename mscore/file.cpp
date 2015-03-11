@@ -2652,6 +2652,10 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
          return false;
       }
 
+      qreal rel_tempo = score->tempomap()->relTempo();
+
+      score->tempomap()->setRelTempo(1.0);
+
       //if (!metafile.open(QIODevice::WriteOnly))
       //      return false;
 
@@ -2661,16 +2665,14 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
       //QTextStream qts(stdout, QIODevice::WriteOnly);
 
 
-      qts << "TITLE " << score->title().trimmed() << endl;
-      qts << "SUBTITLE " << score->subtitle().trimmed() << endl;
-      qts << "COMPOSER " << score->composer().trimmed() << endl;
+      qts << "#TITLE " << score->title().trimmed() << endl;
+      qts << "#SUBTITLE " << score->subtitle().trimmed() << endl;
+      qts << "#COMPOSER " << score->composer().trimmed() << endl;
 
       score->setPrinting(true);
 
       foreach( Part * part, score->parts()) {
          QString iname = part->instr()->trackName().trimmed();
-
-         qDebug("ILEN %i",iname.length());
          if (iname.length()>0)
             qts << "I " << iname << endl;
       }
@@ -2833,14 +2835,17 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
          uz.addFile(fi.baseName()+".meta",metabuf.data());
          score->setPrinting(false);
 
+         // Add midifile
          QString midiname(fi.baseName()+".mid");
          saveMidi(score,midiname);
          QFile file(midiname);
          file.open(QIODevice::ReadOnly);
          uz.addFile(midiname,&file);
+         uz.close();
          file.remove();
 
-         uz.close();
+         score->tempomap()->setRelTempo(rel_tempo);
+
          return true;
       }
 
