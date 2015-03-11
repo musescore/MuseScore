@@ -1139,6 +1139,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
                         timesig->setTrack(staffIdx * VOICES);
                         timesig->setParent(ts);
                         timesig->setSig(ots->sig(), ots->timeSigType());
+                        timesig->setNeedLayout(true);
                         score()->undoAddElement(timesig);
                         }
                   }
