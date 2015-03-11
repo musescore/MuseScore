@@ -1851,29 +1851,6 @@ void RemoveMStaff::redo()
       }
 
 //---------------------------------------------------------
-//   InsertMeasure
-//---------------------------------------------------------
-
-void InsertMeasure::undo()
-      {
-      Score* score = measure->score();
-      score->measures()->remove(measure);
-      score->insertTime(measure->tick(), -measure->ticks());
-      score->fixTicks();
-      score->setLayoutAll(true);
-      }
-
-void InsertMeasure::redo()
-      {
-      Score* score = measure->score();
-      score->addMeasure(measure, pos);
-      if (pos)
-            score->insertTime(pos->tick(), measure->ticks());
-      score->fixTicks();
-      score->setLayoutAll(true);
-      }
-
-//---------------------------------------------------------
 //   SortStaves
 //---------------------------------------------------------
 
@@ -2971,19 +2948,15 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
                         continue;
                   for (Note* n : c->notes()) {
                         Tie* t = n->tieBack();
-                        if (t) {
-                              if (t->startNote()->chord()->tick() < m1->tick()) {
-                                    t->setEndNote(0);
-                                    n->setTieBack(0);
-                                    }
-                              }
+                        if (t && (t->startNote()->chord()->tick() < m1->tick()))
+                              undoRemoveElement(t);
+                        t = n->tieFor();
+                        if (t && (t->endNote()->chord()->tick() >= m2->endTick()))
+                              undoRemoveElement(t);
                         }
                   }
             }
       undo(new RemoveMeasures(m1, m2));
-
-//      int ticks = tick2 - tick1;
-//      undoInsertTime(m1->tick(), -ticks);
       }
 
 //---------------------------------------------------------
@@ -2995,33 +2968,40 @@ void InsertRemoveMeasures::insertMeasures()
       Score* score = fm->score();
       QList<Clef*> clefs;
       QList<KeySig*> keys;
-      for (Segment* s = fm->first(); s != lm->last(); s = s->next1()) {
-            if (!(s->segmentType() & (Segment::Type::Clef | Segment::Type::KeySig)))
-                  continue;
-            for (int track = 0; track < score->ntracks(); track += VOICES) {
-                  Element* e = s->element(track);
-                  if (!e || e->generated())
+      if (fm->type() == Element::Type::MEASURE) {
+            score->setPlaylistDirty();
+            for (Segment* s = static_cast<Measure*>(fm)->first(); s != static_cast<Measure*>(lm)->last(); s = s->next1()) {
+                  if (!(s->segmentType() & (Segment::Type::Clef | Segment::Type::KeySig)))
                         continue;
-                  if (e->type() == Element::Type::CLEF)
-                        clefs.append(static_cast<Clef*>(e));
-                  else if (e->type() == Element::Type::KEYSIG)
-                        keys.append(static_cast<KeySig*>(e));
+                  for (int track = 0; track < score->ntracks(); track += VOICES) {
+                        Element* e = s->element(track);
+                        if (!e || e->generated())
+                              continue;
+                        if (e->type() == Element::Type::CLEF)
+                              clefs.append(static_cast<Clef*>(e));
+                        else if (e->type() == Element::Type::KEYSIG)
+                              keys.append(static_cast<KeySig*>(e));
+                        }
                   }
             }
       score->measures()->insert(fm, lm);
-      score->fixTicks();
-      score->insertTime(fm->tick(), lm->endTick() - fm->tick());
-      for (Clef* clef : clefs)
-            clef->staff()->setClef(clef);
-      for (KeySig* key : keys)
-            key->staff()->setKey(key->segment()->tick(), key->keySigEvent());
+
+      if (fm->type() == Element::Type::MEASURE) {
+            score->fixTicks();
+            score->insertTime(fm->tick(), lm->endTick() - fm->tick());
+            for (Clef* clef : clefs)
+                  clef->staff()->setClef(clef);
+            for (KeySig* key : keys)
+                  key->staff()->setKey(key->segment()->tick(), key->keySigEvent());
+            }
+
       score->setLayoutAll(true);
 
       //
       // connect ties
       //
 
-      if (!fm->prevMeasure())
+      if (fm->type() != Element::Type::MEASURE || !fm->prevMeasure())
             return;
       Measure* m = fm->prevMeasure();
       for (Segment* seg = m->first(); seg; seg = seg->next()) {
@@ -3057,13 +3037,16 @@ void InsertRemoveMeasures::removeMeasures()
       int tick2 = lm->endTick();
       score->measures()->remove(fm, lm);
       score->fixTicks();
-      score->insertTime(tick1, -(tick2 - tick1));
-      score->setLayoutAll(true);
-      for (Spanner* sp : score->unmanagedSpanners())
-            if ( (sp->tick() >= tick1 && sp->tick() < tick2)
-                        || (sp->tick2() >= tick1 && sp->tick2() < tick2) )
-                  sp->removeUnmanaged();
-      score->connectTies(true);   // ??
+      if (fm->type() == Element::Type::MEASURE) {
+            score->setPlaylistDirty();
+            score->insertTime(tick1, -(tick2 - tick1));
+            score->setLayoutAll(true);
+            for (Spanner* sp : score->unmanagedSpanners())
+                  if ( (sp->tick() >= tick1 && sp->tick() < tick2)
+                              || (sp->tick2() >= tick1 && sp->tick2() < tick2) )
+                        sp->removeUnmanaged();
+            score->connectTies(true);   // ??
+            }
       }
 
 //---------------------------------------------------------
