@@ -1622,10 +1622,11 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
       int tick = m->tick();
       int i    = 0;
       foreach (Staff* staff, _staves) {
-            if (!m->system()->staff(i)->show()) {
-                  ++i;
-                  continue;
-                  }
+            // At this time we don't know which staff is visible or not...
+            //if (!m->system()->staff(i)->show()) {
+            //      ++i;
+            //      continue;
+            //      }
 
             KeySig* keysig = 0;
             Clef*   clef   = 0;
