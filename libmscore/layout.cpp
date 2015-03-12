@@ -1623,10 +1623,12 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
       int i    = 0;
       foreach (Staff* staff, _staves) {
             // At this time we don't know which staff is visible or not...
-            //if (!m->system()->staff(i)->show()) {
-            //      ++i;
-            //      continue;
-            //      }
+            // but let's not create the key/clef if there were no visible before this layout
+            // sometimes we will be right, other time it will take another layout to be right...
+            if (!m->system()->staff(i)->show()) {
+                  ++i;
+                  continue;
+                  }
 
             KeySig* keysig = 0;
             Clef*   clef   = 0;
