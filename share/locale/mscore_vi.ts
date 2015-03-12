@@ -7,7 +7,7 @@
     </message>
     <message>
         <source>Copy revision number</source>
-        <translation>Phiên bản</translation>
+        <translation>Sao lại phiên bản</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -17,9 +17,17 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; for new versions and more information.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Support MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;your donation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2014 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { khoảng trắng: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; cho phiên bản mới và các thông tin khác.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Hỗ trợ MuseScore bằng cách &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;đóng góp của bạn&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;bản quyền &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2015 của Werner Schweer và những người khác. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Công bố dưới giấy phép công khai GNU &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -37,50 +45,57 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;supported by many applications. MusicXML is copyright © MakeMusic, Inc.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All rights reserved. For more information, see: &lt;a href=&quot;http://www.musicxml.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;MusicXML.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { Khoảng trắng: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;MusicXML là một định dạng tệp dùng để trao đổi các bản nhạc kỹ thuật số,&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;đã được hỗ trợ cho nhiều ứng dụng. Bản quyền của MusicXML © MakeMusic, Inc.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All rights reserved. Để biết thêm thông tin chi tiết, vui lòng xem: &lt;a href=&quot;http://www.musicxml.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;MusicXML.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>The MusicXML Public License:</source>
-        <translation type="unfinished"/>
+        <translation>Giấy phép công khai MusicXML</translation>
     </message>
 </context>
 <context>
     <name>AeolusGui</name>
     <message>
         <source>Azimuth</source>
-        <translation type="unfinished"/>
+        <translation>Góc phương vị</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"/>
+        <translation>Bề rộng</translation>
     </message>
     <message>
         <source>Reflect</source>
-        <translation type="unfinished"/>
+        <translation>Phản ánh</translation>
     </message>
     <message>
         <source>Reverb</source>
-        <translation>Reverb</translation>
+        <translation>Hồi âm</translation>
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"/>
+        <translation>Độ trễ</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Nhịp độ</translation>
+        <translation>Thời gian</translation>
     </message>
     <message>
         <source>Direct</source>
-        <translation type="unfinished"/>
+        <translation>Điều khiển</translation>
     </message>
     <message>
         <source>III</source>
-        <translation type="unfinished"/>
+        <translation>III</translation>
     </message>
     <message>
         <source>II</source>
-        <translation type="unfinished"/>
+        <translation>II</translation>
     </message>
     <message>
         <source>I</source>
@@ -88,26 +103,26 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>P</source>
-        <translation type="unfinished"/>
+        <translation>P</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation type="unfinished"/>
+        <translation>Vị trí</translation>
     </message>
 </context>
 <context>
     <name>AlbumManager</name>
     <message>
         <source>MuseScore: Album Manager</source>
-        <translation>MuseScore: Quản lí album</translation>
+        <translation>MuseScore: Quản lý album</translation>
     </message>
     <message>
         <source>Add Score</source>
-        <translation>Thêm điểm</translation>
+        <translation>Thêm bản nhạc</translation>
     </message>
     <message>
         <source>Remove Score</source>
-        <translation>Gỡ điểm</translation>
+        <translation>Loại bỏ bản nhạc</translation>
     </message>
     <message>
         <source>Down</source>
@@ -119,7 +134,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>New</source>
-        <translation>Tạo</translation>
+        <translation>Tạo mới</translation>
     </message>
     <message>
         <source>Load</source>
@@ -131,50 +146,50 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Join Scores</source>
-        <translation type="unfinished"/>
+        <translation>Nối các bản nhạc</translation>
     </message>
     <message>
         <source>Album name:</source>
-        <translation type="unfinished"/>
+        <translation>Tên album</translation>
     </message>
     <message>
         <source>Move current score down in list</source>
-        <translation type="unfinished"/>
+        <translation>Chuyển bản nhạc trong danh sách hiện tại xuống dưới</translation>
     </message>
     <message>
         <source>Move current score up in list</source>
-        <translation type="unfinished"/>
+        <translation>Chuyển bản nhạc trong danh sách hiện tại lên trên</translation>
     </message>
     <message>
         <source>Album name</source>
-        <translation type="unfinished"/>
+        <translation>Tên album</translation>
     </message>
     <message>
         <source>Remove current score</source>
-        <translation type="unfinished"/>
+        <translation>Loại bỏ bản nhạc hiện tại</translation>
     </message>
     <message>
         <source>Create new album</source>
-        <translation type="unfinished"/>
+        <translation>Tạo album mới</translation>
     </message>
     <message>
         <source>Load an existing album</source>
-        <translation type="unfinished"/>
+        <translation>Mở một album hiện có</translation>
     </message>
 </context>
 <context>
     <name>ArticulationProperties</name>
     <message>
         <source>MuseScore: Articulations Properties</source>
-        <translation>MuseScore: Đặc tính của phụ âm...</translation>
+        <translation>MuseScore: Đặc tính của phụ âm</translation>
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"/>
+        <translation>Hiện ra</translation>
     </message>
     <message>
         <source>Direction:</source>
-        <translation type="unfinished"/>
+        <translation>Điều khiển</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -190,119 +205,126 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Anchor:</source>
-        <translation>Anchor:</translation>
+        <translation>Móc kết</translation>
     </message>
     <message>
         <source>Channel</source>
-        <translation>Channel</translation>
+        <translation>Kênh</translation>
     </message>
     <message>
         <source>MIDI Action</source>
-        <translation>Midi Action</translation>
+        <translation>Mệnh lệnh cho MIDI</translation>
     </message>
     <message>
         <source>Above Staff</source>
-        <translation type="unfinished"/>
+        <translation>Phía trên khuông nhạc</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation type="unfinished"/>
+        <translation>Phía dưới khuông nhạc</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation type="unfinished"/>
+        <translation>Tự động đặt hợp âm</translation>
     </message>
     <message>
         <source>Above Chord</source>
-        <translation type="unfinished"/>
+        <translation>Phía trên hợp âm</translation>
     </message>
     <message>
         <source>Below Chord</source>
-        <translation type="unfinished"/>
+        <translation>Phía dưới hợp âm</translation>
     </message>
 </context>
 <context>
     <name>Awl::ColorLabel</name>
     <message>
         <source>MuseScore: Select Color</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Chọn màu</translation>
     </message>
 </context>
 <context>
     <name>BarLineBase</name>
     <message>
         <source>custom subtype</source>
-        <translation type="unfinished"/>
+        <translation>Đặt kiểu phụ</translation>
     </message>
     <message>
         <source>custom span</source>
-        <translation type="unfinished"/>
+        <translation>Đặt khoảng cách</translation>
     </message>
 </context>
 <context>
     <name>BendDialog</name>
     <message>
         <source>MuseScore: Bend Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Đặc tính của bend</translation>
     </message>
     <message>
         <source>Bend type:</source>
-        <translation type="unfinished"/>
+        <translation>Kiểu bend:</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
-        <translation type="unfinished"/>
+        <translation>Bấm để thêm hoặc bớt một vài chỗ</translation>
     </message>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"/>
+        <translation>Nhéo</translation>
     </message>
     <message>
         <source>Bend/Release</source>
-        <translation type="unfinished"/>
+        <translation>Nhéo/Nhả</translation>
     </message>
     <message>
         <source>Bend/Release/Bend</source>
-        <translation type="unfinished"/>
+        <translation>Nhéo/nhả/Nhéo</translation>
     </message>
     <message>
         <source>Prebend</source>
-        <translation type="unfinished"/>
+        <translation>Nhéo xuống</translation>
     </message>
     <message>
         <source>Prebend/Release</source>
-        <translation type="unfinished"/>
+        <translation>Nhéo xuống/Nhả</translation>
     </message>
 </context>
 <context>
     <name>BreaksDialog</name>
     <message>
         <source>MuseScore: Add/Remove Line Breaks</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Thêm/Bớt các dòng ngắt</translation>
     </message>
     <message>
         <source>Break lines every</source>
-        <translation type="unfinished"/>
+        <translation>Ngắt ra mỗi dòng</translation>
     </message>
     <message>
         <source>Number of measures</source>
-        <translation type="unfinished"/>
+        <translation>Số lượng ô nhịp</translation>
     </message>
     <message>
         <source>measures</source>
-        <translation type="unfinished"/>
+        <translation>Ô nhịp</translation>
     </message>
     <message>
         <source>Add line breaks at end of each system</source>
-        <translation type="unfinished"/>
+        <translation>Thêm dòng ngắt tại cuối mỗi dòng nhạc</translation>
     </message>
     <message>
         <source>Remove current line breaks</source>
-        <translation type="unfinished"/>
+        <translation>Loại bỏ dòng ngắt hiện tại</translation>
     </message>
     <message>
         <source>Break lines every X measures</source>
-        <translation type="unfinished"/>
+        <translation>Ngắt ra mỗi dòng X ô nhịp</translation>
+    </message>
+</context>
+<context>
+    <name>ChordBase</name>
+    <message>
+        <source>Glissando end</source>
+        <translation>Vuốt kết</translation>
     </message>
 </context>
 <context>
@@ -313,15 +335,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tab 1</source>
-        <translation type="unfinished"/>
+        <translation>Thẻ 1</translation>
     </message>
     <message>
         <source>Tab 2</source>
-        <translation type="unfinished"/>
+        <translation>Thẻ 2</translation>
     </message>
     <message>
         <source>Save As</source>
-        <translation>Lưu trữ dưới tên</translation>
+        <translation>Lưu trữ dưới dạng</translation>
     </message>
     <message>
         <source>Load</source>
@@ -329,65 +351,65 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>ID</source>
-        <translation type="unfinished"/>
+        <translation>ID</translation>
     </message>
 </context>
 <context>
     <name>EditDrumset</name>
     <message>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation>Bình thường</translation>
     </message>
     <message>
         <source>Cross</source>
-        <translation type="unfinished"/>
+        <translation>Nối</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation type="unfinished"/>
+        <translation>Hình thoi</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation>Triangle</translation>
+        <translation>Tam giác</translation>
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"/>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Slash</source>
-        <translation type="unfinished"/>
+        <translation>Vết gạch</translation>
     </message>
     <message>
         <source>XCircle</source>
-        <translation type="unfinished"/>
+        <translation>Vòng tròn X</translation>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Si</translation>
     </message>
 </context>
 <context>
     <name>EditDrumsetBase</name>
     <message>
         <source>MuseScore: Edit Drumset</source>
-        <translation>MuseScore: Điều chỉnh Drumset</translation>
+        <translation>MuseScore: Soạn trống</translation>
     </message>
     <message>
         <source>Name:</source>
@@ -399,15 +421,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Save</source>
-        <translation>Lưu</translation>
+        <translation>Lưu trữ</translation>
     </message>
     <message>
         <source>No.</source>
-        <translation type="unfinished"/>
+        <translation>Số</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation>Note</translation>
+        <translation>Nốt nhạc</translation>
     </message>
     <message>
         <source>Shortcut</source>
@@ -483,7 +505,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staff line:</source>
-        <translation>Đường kẻ của khuông nhạc:</translation>
+        <translation>Dòng kẻ khuông nhạc</translation>
     </message>
     <message>
         <source>Stem direction:</source>
@@ -491,7 +513,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Default voice:</source>
-        <translation>Tiếng định sẵn:</translation>
+        <translation>Âm mặc định</translation>
     </message>
     <message>
         <source>Note head:</source>
@@ -522,74 +544,74 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Pitch:</source>
-        <translation>Âm độ:</translation>
+        <translation>Cao độ:</translation>
     </message>
     <message>
         <source>Transpose:</source>
-        <translation type="unfinished"/>
+        <translation>Dịch giọng:</translation>
     </message>
     <message>
         <source>Staves:</source>
-        <translation type="unfinished"/>
+        <translation>Khuông nhạc:</translation>
     </message>
     <message>
         <source>Short name:</source>
-        <translation type="unfinished"/>
+        <translation>Tên viết tắt:</translation>
     </message>
     <message>
         <source>MIDI program:</source>
-        <translation type="unfinished"/>
+        <translation>Trình MIDI:</translation>
     </message>
 </context>
 <context>
     <name>EditPitchBase</name>
     <message>
         <source>Note Selection</source>
-        <translation type="unfinished"/>
+        <translation>Nốt được chọn</translation>
     </message>
     <message>
         <source>Select Note:</source>
-        <translation>Chọn ghi chú:</translation>
+        <translation>Chọn nốt nhạc:</translation>
     </message>
     <message>
         <source>Octave 8</source>
-        <translation type="unfinished"/>
+        <translation>Quãng 8 thứ 8</translation>
     </message>
     <message>
         <source>Octave 7</source>
-        <translation type="unfinished"/>
+        <translation>Quãng 8 thứ 7</translation>
     </message>
     <message>
         <source>Octave 6</source>
-        <translation type="unfinished"/>
+        <translation>Quãng 8 thứ 6</translation>
     </message>
     <message>
         <source>Octave 5</source>
-        <translation type="unfinished"/>
+        <translation>Quãng 8 thứ 5</translation>
     </message>
     <message>
         <source>Octave 4</source>
-        <translation type="unfinished"/>
+        <translation>Quãng 8 thứ 4</translation>
     </message>
     <message>
         <source>Octave 3</source>
-        <translation type="unfinished"/>
+        <translation>Quãng 8 thứ 3</translation>
     </message>
     <message>
         <source>Octave 2</source>
-        <translation type="unfinished"/>
+        <translation>Quãng 8 thứ 2</translation>
     </message>
     <message>
         <source>Octave 1</source>
-        <translation type="unfinished"/>
+        <translation>Quãng 8 thứ 1</translation>
     </message>
     <message>
         <source>Octave 0</source>
-        <translation type="unfinished"/>
+        <translation>Quãng tám 0</translation>
     </message>
     <message>
         <source>Octave -1</source>
-        <translation type="unfinished"/>
+        <translation>Quãng tám -1</translation>
     </message>
     <message>
         <source>C</source>
@@ -621,510 +643,514 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>C 8</source>
-        <translation type="unfinished"/>
+        <translation>C 8</translation>
     </message>
     <message>
         <source>D 8</source>
-        <translation type="unfinished"/>
+        <translation>D 8</translation>
     </message>
     <message>
         <source>E 8</source>
-        <translation type="unfinished"/>
+        <translation>E 8</translation>
     </message>
     <message>
         <source>F 8</source>
-        <translation type="unfinished"/>
+        <translation>F 8</translation>
     </message>
     <message>
         <source>G 8</source>
-        <translation type="unfinished"/>
+        <translation>G 8</translation>
     </message>
     <message>
         <source>A 8</source>
-        <translation type="unfinished"/>
+        <translation>A 8</translation>
     </message>
     <message>
         <source>B 8</source>
-        <translation type="unfinished"/>
+        <translation>B 8</translation>
     </message>
     <message>
         <source>C 7</source>
-        <translation type="unfinished"/>
+        <translation>C 7</translation>
     </message>
     <message>
         <source>D 7</source>
-        <translation type="unfinished"/>
+        <translation>D 7</translation>
     </message>
     <message>
         <source>E 7</source>
-        <translation type="unfinished"/>
+        <translation>E 7</translation>
     </message>
     <message>
         <source>F 7</source>
-        <translation type="unfinished"/>
+        <translation>F 7</translation>
     </message>
     <message>
         <source>G 7</source>
-        <translation type="unfinished"/>
+        <translation>G 7</translation>
     </message>
     <message>
         <source>A 7</source>
-        <translation type="unfinished"/>
+        <translation>A 7</translation>
     </message>
     <message>
         <source>B 7</source>
-        <translation type="unfinished"/>
+        <translation>B 7</translation>
     </message>
     <message>
         <source>C 6</source>
-        <translation type="unfinished"/>
+        <translation>C 6</translation>
     </message>
     <message>
         <source>D 6</source>
-        <translation type="unfinished"/>
+        <translation>D 6</translation>
     </message>
     <message>
         <source>E 6</source>
-        <translation type="unfinished"/>
+        <translation>E 6</translation>
     </message>
     <message>
         <source>F 6</source>
-        <translation type="unfinished"/>
+        <translation>F 6</translation>
     </message>
     <message>
         <source>G 6</source>
-        <translation type="unfinished"/>
+        <translation>G 6</translation>
     </message>
     <message>
         <source>A 6</source>
-        <translation type="unfinished"/>
+        <translation>A 6</translation>
     </message>
     <message>
         <source>B 6</source>
-        <translation type="unfinished"/>
+        <translation>B 6</translation>
     </message>
     <message>
         <source>C 5</source>
-        <translation type="unfinished"/>
+        <translation>C 5</translation>
     </message>
     <message>
         <source>D 5</source>
-        <translation type="unfinished"/>
+        <translation>D 5</translation>
     </message>
     <message>
         <source>E 5</source>
-        <translation type="unfinished"/>
+        <translation>E 5</translation>
     </message>
     <message>
         <source>F 5</source>
-        <translation type="unfinished"/>
+        <translation>F 5</translation>
     </message>
     <message>
         <source>G 5</source>
-        <translation type="unfinished"/>
+        <translation>G 5</translation>
     </message>
     <message>
         <source>A 5</source>
-        <translation type="unfinished"/>
+        <translation>A 5</translation>
     </message>
     <message>
         <source>B 5</source>
-        <translation type="unfinished"/>
+        <translation>B 5</translation>
     </message>
     <message>
         <source>C 4</source>
-        <translation type="unfinished"/>
+        <translation>C 4</translation>
     </message>
     <message>
         <source>D 4</source>
-        <translation type="unfinished"/>
+        <translation>D 4</translation>
     </message>
     <message>
         <source>E 4</source>
-        <translation type="unfinished"/>
+        <translation>E 4</translation>
     </message>
     <message>
         <source>F 4</source>
-        <translation type="unfinished"/>
+        <translation>F 4</translation>
     </message>
     <message>
         <source>G 4</source>
-        <translation type="unfinished"/>
+        <translation>G 4</translation>
     </message>
     <message>
         <source>A 4</source>
-        <translation type="unfinished"/>
+        <translation>A 4</translation>
     </message>
     <message>
         <source>B 4</source>
-        <translation type="unfinished"/>
+        <translation>B 4</translation>
     </message>
     <message>
         <source>C 3</source>
-        <translation type="unfinished"/>
+        <translation>C 3</translation>
     </message>
     <message>
         <source>D 3</source>
-        <translation type="unfinished"/>
+        <translation>D 3</translation>
     </message>
     <message>
         <source>E 3</source>
-        <translation type="unfinished"/>
+        <translation>E 3</translation>
     </message>
     <message>
         <source>F 3</source>
-        <translation type="unfinished"/>
+        <translation>F 3</translation>
     </message>
     <message>
         <source>G 3</source>
-        <translation type="unfinished"/>
+        <translation>G 3</translation>
     </message>
     <message>
         <source>A 3</source>
-        <translation type="unfinished"/>
+        <translation>A 3</translation>
     </message>
     <message>
         <source>B 3</source>
-        <translation type="unfinished"/>
+        <translation>B 3</translation>
     </message>
     <message>
         <source>C 2</source>
-        <translation type="unfinished"/>
+        <translation>C 2</translation>
     </message>
     <message>
         <source>D 2</source>
-        <translation type="unfinished"/>
+        <translation>D 2</translation>
     </message>
     <message>
         <source>E 2</source>
-        <translation type="unfinished"/>
+        <translation>E 2</translation>
     </message>
     <message>
         <source>F 2</source>
-        <translation type="unfinished"/>
+        <translation>F 2</translation>
     </message>
     <message>
         <source>G 2</source>
-        <translation type="unfinished"/>
+        <translation>G 2</translation>
     </message>
     <message>
         <source>A 2</source>
-        <translation type="unfinished"/>
+        <translation>A 2</translation>
     </message>
     <message>
         <source>B 2</source>
-        <translation type="unfinished"/>
+        <translation>B 2</translation>
     </message>
     <message>
         <source>C 1</source>
-        <translation type="unfinished"/>
+        <translation>C 1</translation>
     </message>
     <message>
         <source>D 1</source>
-        <translation type="unfinished"/>
+        <translation>D 1</translation>
     </message>
     <message>
         <source>E 1</source>
-        <translation type="unfinished"/>
+        <translation>E 1</translation>
     </message>
     <message>
         <source>F 1</source>
-        <translation type="unfinished"/>
+        <translation>F 1</translation>
     </message>
     <message>
         <source>G 1</source>
-        <translation type="unfinished"/>
+        <translation>G 1</translation>
     </message>
     <message>
         <source>A 1</source>
-        <translation type="unfinished"/>
+        <translation>A 1</translation>
     </message>
     <message>
         <source>B 1</source>
-        <translation type="unfinished"/>
+        <translation>B 1</translation>
     </message>
     <message>
         <source>C 0</source>
-        <translation type="unfinished"/>
+        <translation>C 0</translation>
     </message>
     <message>
         <source>D 0</source>
-        <translation type="unfinished"/>
+        <translation>D 0</translation>
     </message>
     <message>
         <source>E 0</source>
-        <translation type="unfinished"/>
+        <translation>E 0</translation>
     </message>
     <message>
         <source>F 0</source>
-        <translation type="unfinished"/>
+        <translation>F 0</translation>
     </message>
     <message>
         <source>G 0</source>
-        <translation type="unfinished"/>
+        <translation>G 0</translation>
     </message>
     <message>
         <source>A 0</source>
-        <translation type="unfinished"/>
+        <translation>A 0</translation>
     </message>
     <message>
         <source>B 0</source>
-        <translation type="unfinished"/>
+        <translation>B 0</translation>
     </message>
     <message>
         <source>C -1</source>
-        <translation type="unfinished"/>
+        <translation>C -1</translation>
     </message>
     <message>
         <source>D -1</source>
-        <translation type="unfinished"/>
+        <translation>D -1</translation>
     </message>
     <message>
         <source>E -1</source>
-        <translation type="unfinished"/>
+        <translation>E -1</translation>
     </message>
     <message>
         <source>F -1</source>
-        <translation type="unfinished"/>
+        <translation>F -1</translation>
     </message>
     <message>
         <source>G -1</source>
-        <translation type="unfinished"/>
+        <translation>G -1</translation>
     </message>
     <message>
         <source>A -1</source>
-        <translation type="unfinished"/>
+        <translation>A -1</translation>
     </message>
     <message>
         <source>B -1</source>
-        <translation type="unfinished"/>
+        <translation>B -1</translation>
     </message>
     <message>
         <source>C♯</source>
-        <translation type="unfinished"/>
+        <translation>C♯</translation>
     </message>
     <message>
         <source>E♭</source>
-        <translation type="unfinished"/>
+        <translation>E♭</translation>
     </message>
     <message>
         <source>F♯</source>
-        <translation type="unfinished"/>
+        <translation>F♯</translation>
     </message>
     <message>
         <source>A♭</source>
-        <translation type="unfinished"/>
+        <translation>A♭</translation>
     </message>
     <message>
         <source>B♭</source>
-        <translation>B</translation>
+        <translation>B♭</translation>
     </message>
     <message>
         <source>C♯ 8</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 8</translation>
     </message>
     <message>
         <source>E♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 8</translation>
     </message>
     <message>
         <source>F♯ 8</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 8</translation>
     </message>
     <message>
         <source>A♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 8</translation>
     </message>
     <message>
         <source>B♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 8</translation>
     </message>
     <message>
         <source>C♯ 7</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 7</translation>
     </message>
     <message>
         <source>E♭ 7</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 7</translation>
     </message>
     <message>
         <source>F♯ 7</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 7</translation>
     </message>
     <message>
         <source>A♭ 7</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 7</translation>
     </message>
     <message>
         <source>B♭ 7</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 7</translation>
     </message>
     <message>
         <source>C♯ 6</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 6</translation>
     </message>
     <message>
         <source>E♭ 6</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 6</translation>
     </message>
     <message>
         <source>F♯ 6</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 6</translation>
     </message>
     <message>
         <source>A♭ 6</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 6</translation>
     </message>
     <message>
         <source>B♭ 6</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 6</translation>
     </message>
     <message>
         <source>C♯ 5</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 5</translation>
     </message>
     <message>
         <source>E♭ 5</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 5</translation>
     </message>
     <message>
         <source>F♯ 5</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 5</translation>
     </message>
     <message>
         <source>A♭ 5</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 5</translation>
     </message>
     <message>
         <source>B♭ 5</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 5</translation>
     </message>
     <message>
         <source>C♯ 4</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 4</translation>
     </message>
     <message>
         <source>E♭ 4</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 4</translation>
     </message>
     <message>
         <source>F♯ 4</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 4</translation>
     </message>
     <message>
         <source>A♭ 4</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 4</translation>
     </message>
     <message>
         <source>B♭ 4</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 4</translation>
     </message>
     <message>
         <source>C♯ 3</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 3</translation>
     </message>
     <message>
         <source>E♭ 3</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 3</translation>
     </message>
     <message>
         <source>F♯ 3</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 3</translation>
     </message>
     <message>
         <source>A♭ 3</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 3</translation>
     </message>
     <message>
         <source>B♭ 3</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 3</translation>
     </message>
     <message>
         <source>C♯ 2</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 2</translation>
     </message>
     <message>
         <source>E♭ 2</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 2</translation>
     </message>
     <message>
         <source>F♯ 2</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 2</translation>
     </message>
     <message>
         <source>A♭ 2</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 2</translation>
     </message>
     <message>
         <source>B♭ 2</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 2</translation>
     </message>
     <message>
         <source>C♯ 1</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 1</translation>
     </message>
     <message>
         <source>E♭ 1</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 1</translation>
     </message>
     <message>
         <source>F♯ 1</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 1</translation>
     </message>
     <message>
         <source>A♭ 1</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 1</translation>
     </message>
     <message>
         <source>B♭ 1</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 1</translation>
     </message>
     <message>
         <source>C♯ 0</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 0</translation>
     </message>
     <message>
         <source>E♭ 0</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 0</translation>
     </message>
     <message>
         <source>F♯ 0</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 0</translation>
     </message>
     <message>
         <source>A♭ 0</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 0</translation>
     </message>
     <message>
         <source>B♭ 0</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 0</translation>
     </message>
     <message>
         <source>C♯ -1</source>
-        <translation type="unfinished"/>
+        <translation>C♯ -1</translation>
     </message>
     <message>
         <source>E♭ -1</source>
-        <translation type="unfinished"/>
+        <translation>E♭ -1</translation>
     </message>
     <message>
         <source>F♯ -1</source>
-        <translation type="unfinished"/>
+        <translation>F♯ -1</translation>
     </message>
     <message>
         <source>A♭ -1</source>
-        <translation type="unfinished"/>
+        <translation>A♭ -1</translation>
     </message>
     <message>
         <source>B♭ -1</source>
-        <translation type="unfinished"/>
+        <translation>B♭ -1</translation>
+    </message>
+    <message>
+        <source>»C</source>
+        <translation>»C</translation>
     </message>
 </context>
 <context>
     <name>EditRaster</name>
     <message>
         <source>1 / </source>
-        <translation type="unfinished"/>
+        <translation>1 / </translation>
     </message>
     <message>
         <source>sp</source>
@@ -1132,30 +1158,30 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>MuseScore: Edit Grid</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: điều chỉnh đường kẻ ô</translation>
     </message>
     <message>
         <source>Edit Grid</source>
-        <translation type="unfinished"/>
+        <translation>Điều chỉnh đường kẻ ô</translation>
     </message>
     <message>
         <source>Horizontal grid:</source>
-        <translation type="unfinished"/>
+        <translation>Đường kẻ ngang:</translation>
     </message>
     <message>
         <source>Vertical  grid:</source>
-        <translation type="unfinished"/>
+        <translation>Đường kẻ dọc:</translation>
     </message>
 </context>
 <context>
     <name>EditStaffBase</name>
     <message>
         <source>MuseScore: Edit Staff/Part Properties</source>
-        <translation>MuseScore: Điều chỉnh Staff/Part Properties</translation>
+        <translation>MuseScore: Điều chỉnh khuông nhạc/Đặc tính phân phổ</translation>
     </message>
     <message>
         <source>Part Properties</source>
-        <translation>Đặc tính của Part</translation>
+        <translation>Đặc tính của phân phổ</translation>
     </message>
     <message>
         <source>Change Instrument...</source>
@@ -1166,12 +1192,8 @@ p, li { white-space: pre-wrap; }
         <translation>Nhạc cụ:</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Amateur:</source>
-        <translation>Tài tử:</translation>
+        <translation>Nghiệp dư:</translation>
     </message>
     <message>
         <source>-</source>
@@ -1183,111 +1205,111 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>0 - Perfect Unison</source>
-        <translation type="unfinished"/>
+        <translation>0 - Quãng một đúng</translation>
     </message>
     <message>
         <source>1 - Augmented Unison</source>
-        <translation type="unfinished"/>
+        <translation>1 - Quãng một tăng</translation>
     </message>
     <message>
         <source>0 - Diminished Second</source>
-        <translation type="unfinished"/>
+        <translation>0 - Quãng hai giảm</translation>
     </message>
     <message>
         <source>1 - Minor Second</source>
-        <translation type="unfinished"/>
+        <translation>1 - Quãng hai thứ</translation>
     </message>
     <message>
         <source>2 - Major Second</source>
-        <translation type="unfinished"/>
+        <translation>2 - Quãng hai trưởng</translation>
     </message>
     <message>
         <source>3 - Augmented Second</source>
-        <translation type="unfinished"/>
+        <translation>3 - Quãng hai tăng</translation>
     </message>
     <message>
         <source>2 - Diminished Third</source>
-        <translation type="unfinished"/>
+        <translation>2 - Quãng ba giảm</translation>
     </message>
     <message>
         <source>3 - Minor Third</source>
-        <translation type="unfinished"/>
+        <translation>3 - Quãng ba thứ</translation>
     </message>
     <message>
         <source>4 - Major Third</source>
-        <translation type="unfinished"/>
+        <translation>4 - Quãng ba trưởng</translation>
     </message>
     <message>
         <source>5 - Augmented Third</source>
-        <translation type="unfinished"/>
+        <translation>5 - Quãng ba giảm</translation>
     </message>
     <message>
         <source>4 - Diminished Fourth</source>
-        <translation type="unfinished"/>
+        <translation>4 - Quãng bốn giảm</translation>
     </message>
     <message>
         <source>5 - Perfect Fourth</source>
-        <translation type="unfinished"/>
+        <translation>5 - Quãng bốn đúng</translation>
     </message>
     <message>
         <source>6 - Augmented Fourth</source>
-        <translation type="unfinished"/>
+        <translation>6 - Quãng bốn tăng</translation>
     </message>
     <message>
         <source>6 - Diminished Fifth</source>
-        <translation type="unfinished"/>
+        <translation>6 - Quãng năm giảm</translation>
     </message>
     <message>
         <source>7 - Perfect Fifth</source>
-        <translation type="unfinished"/>
+        <translation>7 - Quãng năm đúng</translation>
     </message>
     <message>
         <source>8 - Augmented Fifth</source>
-        <translation type="unfinished"/>
+        <translation>8 - Quãng năm tăng</translation>
     </message>
     <message>
         <source>7 - Diminished Sixth</source>
-        <translation type="unfinished"/>
+        <translation>7 - Quãng sáu giảm</translation>
     </message>
     <message>
         <source>8 - Minor Sixth</source>
-        <translation type="unfinished"/>
+        <translation>8 - Quãng sáu thứ</translation>
     </message>
     <message>
         <source>9 - Major Sixth</source>
-        <translation type="unfinished"/>
+        <translation>9 - Quãng sáu trưởng</translation>
     </message>
     <message>
         <source>10 - Augmented Sixth</source>
-        <translation type="unfinished"/>
+        <translation>10 - Quãng sáu tăng</translation>
     </message>
     <message>
         <source>9 - Diminished Seventh</source>
-        <translation type="unfinished"/>
+        <translation>9 - Quãng bảy giảm</translation>
     </message>
     <message>
         <source>10 - Minor Seventh</source>
-        <translation type="unfinished"/>
+        <translation>10 - Quãng bảy thứ</translation>
     </message>
     <message>
         <source>11 - Major Seventh</source>
-        <translation type="unfinished"/>
+        <translation>11 - Quãng bảy trưởng</translation>
     </message>
     <message>
         <source>12 - Augmented Seventh</source>
-        <translation type="unfinished"/>
+        <translation>12 - Quãng bảy tăng</translation>
     </message>
     <message>
         <source>11 - Diminished Octave</source>
-        <translation type="unfinished"/>
+        <translation>11 - Quãng tám giảm</translation>
     </message>
     <message>
         <source>12 - Perfect Octave</source>
-        <translation type="unfinished"/>
+        <translation>12 - Quãng tám đúng</translation>
     </message>
     <message>
         <source>Number of strings:</source>
-        <translation type="unfinished"/>
+        <translation>Số lượng của dãy:</translation>
     </message>
     <message>
         <source>Staff Properties</source>
@@ -1295,11 +1317,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Invisible staff lines</source>
-        <translation type="unfinished"/>
+        <translation>Ản dòng kẻ nhạc</translation>
     </message>
     <message>
         <source>Small staff</source>
-        <translation type="unfinished"/>
+        <translation>Khuông nhạc nhỏ</translation>
     </message>
     <message>
         <source>sp</source>
@@ -1307,31 +1329,31 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staff line color:</source>
-        <translation type="unfinished"/>
+        <translation>Màu sắc cho dòng kẻ nhạc:</translation>
     </message>
     <message>
         <source>Part name:</source>
-        <translation type="unfinished"/>
+        <translation>Tên phân phổ:</translation>
     </message>
     <message>
         <source>Long instrument name:</source>
-        <translation>Nguyên tên của nhạc cụ:</translation>
+        <translation>Tên đầy đủ của nhạc cụ:</translation>
     </message>
     <message>
         <source>Short instrument name:</source>
-        <translation>Tên ngắn của nhạc cụ:</translation>
+        <translation>Tên viết tắt của nhạc cụ:</translation>
     </message>
     <message>
         <source>Usable pitch range:</source>
-        <translation type="unfinished"/>
+        <translation>Phạm vi cao độ có thể sử dụng được</translation>
     </message>
     <message>
         <source>Play transposition:</source>
-        <translation type="unfinished"/>
+        <translation>Phát sự dịch giọng:</translation>
     </message>
     <message>
         <source>+ Octave:</source>
-        <translation type="unfinished"/>
+        <translation>+ Quãng tám:</translation>
     </message>
     <message>
         <source>Up</source>
@@ -1343,23 +1365,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Edit String Data...</source>
-        <translation type="unfinished"/>
+        <translation>Điều chỉnh dây đàn...</translation>
     </message>
     <message>
         <source>Show time signature</source>
-        <translation type="unfinished"/>
+        <translation>Hiển thị số chỉ nhịp</translation>
     </message>
     <message>
         <source>Style group:</source>
-        <translation type="unfinished"/>
+        <translation>Kiểu nhóm:</translation>
     </message>
     <message>
         <source>Show barlines</source>
-        <translation type="unfinished"/>
+        <translation>Hiển thị các vạch nhịp</translation>
     </message>
     <message>
         <source>Show clef</source>
-        <translation type="unfinished"/>
+        <translation>Hiển thị Khóa nhạc</translation>
     </message>
     <message>
         <source>Lines:</source>
@@ -1367,23 +1389,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Line distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách đường kẻ:</translation>
     </message>
     <message>
         <source>Extra distance above staff:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách phụ phía trên khuông nhạc</translation>
     </message>
     <message>
         <source>Never hide</source>
-        <translation type="unfinished"/>
+        <translation>Không bao giờ ẩn đi</translation>
     </message>
     <message>
         <source>Do not hide if system is empty</source>
-        <translation type="unfinished"/>
+        <translation>Không ẩn đi nếu trường canh rỗng</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"/>
+        <translation>Thang âm điệu thức</translation>
     </message>
     <message>
         <source>%</source>
@@ -1391,18 +1413,22 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Advanced Style Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Đặc tính phong cách cao cấp...</translation>
+    </message>
+    <message>
+        <source>Hide system barline</source>
+        <translation>Ẩn các vạch nhịp hệ thống</translation>
     </message>
 </context>
 <context>
     <name>EditStaffType</name>
     <message>
         <source>MuseScore: Edit Staff Type</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Điều chỉnh kiểu khuông nhạc</translation>
     </message>
     <message>
         <source>Lines:</source>
-        <translation>Đường kẻ:</translation>
+        <translation>Dòng kẻ:</translation>
     </message>
     <message>
         <source>sp</source>
@@ -1410,7 +1436,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>STANDARD STAFF</source>
-        <translation type="unfinished"/>
+        <translation>Khuông nhạc tiêu chuẩn</translation>
     </message>
     <message>
         <source>Stemless</source>
@@ -1418,11 +1444,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Create a new staff type of current group.</source>
-        <translation type="unfinished"/>
+        <translation>Tạo một khuông nhạc mẫu từ nhóm hiện tại.</translation>
     </message>
     <message>
         <source>Fret Marks</source>
-        <translation type="unfinished"/>
+        <translation>Đánh dấu phím</translation>
     </message>
     <message>
         <source>Font:</source>
@@ -1438,7 +1464,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Marks are:</source>
-        <translation type="unfinished"/>
+        <translation>Đánh dấu là:</translation>
     </message>
     <message>
         <source>Numbers</source>
@@ -1446,15 +1472,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Letters</source>
-        <translation type="unfinished"/>
+        <translation>Chữ cái</translation>
     </message>
     <message>
         <source>Marks are drawn:</source>
-        <translation type="unfinished"/>
+        <translation>Đánh dấu được kéo</translation>
     </message>
     <message>
         <source>Lines are:</source>
-        <translation type="unfinished"/>
+        <translation>Các dòng kẻ là:</translation>
     </message>
     <message>
         <source>Continuous</source>
@@ -1462,39 +1488,39 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Broken</source>
-        <translation type="unfinished"/>
+        <translation>Ngắt ra</translation>
     </message>
     <message>
         <source>Note Values</source>
-        <translation type="unfinished"/>
+        <translation>Trị giá của nốt nhạc</translation>
     </message>
     <message>
         <source>Shown as:</source>
-        <translation type="unfinished"/>
+        <translation>Được hiển thị như:</translation>
     </message>
     <message>
         <source>None</source>
-        <translation>none</translation>
+        <translation>Không</translation>
     </message>
     <message>
         <source>Stems and beams</source>
-        <translation type="unfinished"/>
+        <translation>Thân và cờ của nốt nhạc</translation>
     </message>
     <message>
         <source>Stem style:</source>
-        <translation type="unfinished"/>
+        <translation>Loại thân:</translation>
     </message>
     <message>
         <source>Beside staff</source>
-        <translation type="unfinished"/>
+        <translation>Khuông nhạc ở ngoài</translation>
     </message>
     <message>
         <source>Through staff</source>
-        <translation type="unfinished"/>
+        <translation>Khuông nhạc ở trong</translation>
     </message>
     <message>
         <source>Stem position:</source>
-        <translation type="unfinished"/>
+        <translation>Vị trí thân nốt nhạc:</translation>
     </message>
     <message>
         <source>Above</source>
@@ -1502,133 +1528,153 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Below</source>
-        <translation type="unfinished"/>
+        <translation>Dưới</translation>
     </message>
     <message>
         <source>Half notes:</source>
-        <translation type="unfinished"/>
+        <translation>Nốt trắng:</translation>
     </message>
     <message>
         <source>As short stem</source>
-        <translation type="unfinished"/>
+        <translation>Thân nốt nhạc ngắn như:</translation>
     </message>
     <message>
         <source>As slashed stem</source>
-        <translation type="unfinished"/>
+        <translation>Thân nốt nhạc có gạch như:</translation>
     </message>
     <message>
         <source>Preview</source>
-        <translation>Xem thử trước</translation>
+        <translation>Xem trước</translation>
     </message>
     <message>
         <source>Line distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách đường kẻ:</translation>
     </message>
     <message>
         <source>Show clef</source>
-        <translation type="unfinished"/>
+        <translation>Hiển thị Khóa nhạc</translation>
     </message>
     <message>
         <source>Show time signature</source>
-        <translation type="unfinished"/>
+        <translation>Hiển thị số chỉ nhịp</translation>
     </message>
     <message>
         <source>Show barlines</source>
-        <translation type="unfinished"/>
+        <translation>Hiển thị các vạch nhịp</translation>
     </message>
     <message>
         <source>Vertical offset:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách chiều đứng:</translation>
     </message>
     <message>
         <source>On lines</source>
-        <translation type="unfinished"/>
+        <translation>Thuộc về đường kẻ</translation>
     </message>
     <message>
         <source>Above lines</source>
-        <translation type="unfinished"/>
+        <translation>Phía trên đường kẻ</translation>
     </message>
     <message>
         <source>Note symbols</source>
-        <translation type="unfinished"/>
+        <translation>Ký hiệu nốt nhạc</translation>
     </message>
     <message>
         <source>Upside down</source>
-        <translation type="unfinished"/>
+        <translation>Mặt trên giảm dần</translation>
     </message>
     <message>
         <source>Show rests</source>
-        <translation type="unfinished"/>
+        <translation>Hiển thị các dấu lặng</translation>
     </message>
     <message>
         <source>Add to Templates</source>
-        <translation type="unfinished"/>
+        <translation>Thêm biểu mẫu</translation>
     </message>
     <message>
         <source>Template:</source>
-        <translation type="unfinished"/>
+        <translation>Biểu mẫu:</translation>
     </message>
     <message>
         <source>Show key signature</source>
-        <translation type="unfinished"/>
+        <translation>Hiển thị hóa biểu</translation>
     </message>
     <message>
         <source>Show ledger lines</source>
-        <translation type="unfinished"/>
+        <translation>Hiển thị các dòng kẻ phụ</translation>
     </message>
     <message>
         <source>Show Key signature</source>
-        <translation type="unfinished"/>
+        <translation>Hiển thị hóa biểu</translation>
     </message>
     <message>
         <source>&lt; Reset to Template</source>
-        <translation type="unfinished"/>
+        <translation>Đặt lại biểu mẫu</translation>
+    </message>
+    <message>
+        <source>Repeat:</source>
+        <translation>Nhắc lại:</translation>
+    </message>
+    <message>
+        <source>Never</source>
+        <translation>Không bao giờ</translation>
+    </message>
+    <message>
+        <source>At new system</source>
+        <translation>Tại dòng nhạc mới</translation>
+    </message>
+    <message>
+        <source>At new meas.</source>
+        <translation>Tại ô nhịp mới</translation>
+    </message>
+    <message>
+        <source>Always</source>
+        <translation>Luôn luôn</translation>
     </message>
 </context>
 <context>
     <name>EditStringDataBase</name>
     <message>
         <source>String Data</source>
-        <translation type="unfinished"/>
+        <translation>Dây</translation>
     </message>
     <message>
         <source>Strings Tuning:</source>
-        <translation type="unfinished"/>
+        <translation>Lên dây đàn:</translation>
     </message>
     <message>
         <source>New String...</source>
-        <translation type="unfinished"/>
+        <translation>Dây đàn mới</translation>
     </message>
     <message>
         <source>Edit String...</source>
-        <translation type="unfinished"/>
+        <translation>Chỉnh sửa dây...</translation>
     </message>
     <message>
         <source>Delete String</source>
-        <translation type="unfinished"/>
+        <translation>Loại bỏ dây</translation>
     </message>
     <message>
         <source>Number of frets:</source>
-        <translation type="unfinished"/>
+        <translation>Số các phím đàn:</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation>Mở...</translation>
+        <translation>Mở</translation>
     </message>
     <message>
         <source>Pitch</source>
-        <translation>Âm độ</translation>
+        <translation>Cao độ</translation>
     </message>
 </context>
 <context>
     <name>EditStyleBase</name>
     <message>
         <source>MuseScore: Edit Style</source>
-        <translation>MuseScore: Điều chỉnh Style</translation>
+        <translation>MuseScore: Điều chỉnh kiểu</translation>
     </message>
     <message>
         <source>Score</source>
-        <translation>Bài nhạc</translation>
+        <translation>Tổng phổ</translation>
     </message>
     <message>
         <source>Page</source>
@@ -1636,16 +1682,16 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Header, Footer, Numbers</source>
-        <translation type="unfinished"/>
+        <translation>Đầu trang, chân trang, số thứ tự</translation>
     </message>
     <message>
         <source>System</source>
         <extracomment>a music system, a line of music</extracomment>
-        <translation>Dòng nhạc tổng</translation>
+        <translation>Khuông nhạc</translation>
     </message>
     <message>
         <source>Measure</source>
-        <translation>Khuông nhạc</translation>
+        <translation>Ô nhịp</translation>
     </message>
     <message>
         <source>Barlines</source>
@@ -1669,11 +1715,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Slurs/Ties</source>
-        <translation type="unfinished"/>
+        <translation>Dấu luyến/Dấu nối</translation>
     </message>
     <message>
         <source>Sizes</source>
-        <translation>Cỡ</translation>
+        <translation>Kích cỡ</translation>
     </message>
     <message>
         <source>Hairpins, Volta, Ottava</source>
@@ -1681,11 +1727,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Pedal, Trill</source>
-        <translation type="unfinished"/>
+        <translation>Pedal, Trill</translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"/>
+        <translation>Sơ đồ Bass</translation>
     </message>
     <message>
         <source>Articulations, Ornaments</source>
@@ -1697,7 +1743,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tuplets</source>
-        <translation>Tuplets</translation>
+        <translation>Các dấu liên</translation>
     </message>
     <message>
         <source>Display in concert pitch</source>
@@ -1705,7 +1751,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Minimum width of measure:</source>
-        <translation type="unfinished"/>
+        <translation>Bề rộng tối thiểu của ô nhịp</translation>
     </message>
     <message>
         <source>sp</source>
@@ -1716,23 +1762,23 @@ space unit</extracomment>
     </message>
     <message>
         <source>Minimum number of empty measures:</source>
-        <translation>Số lượng trường canh để trống tối thiểu:</translation>
+        <translation>Số lượng tối thiểu của các ô nhịp rỗng:</translation>
     </message>
     <message>
         <source>Hide empty staves</source>
-        <translation>Giấu đi khuông nhạc trống không</translation>
+        <translation>Ẩn đi các khuông nhạc rỗng</translation>
     </message>
     <message>
         <source>Don&apos;t hide empty staves in first system</source>
-        <translation type="unfinished"/>
+        <translation>Không ẩn các khuông nhạc rỗng đối với dòng nhạc đầu tiên</translation>
     </message>
     <message>
         <source>Display note values across measure bar (EXPERIMENTAL, early music only!)</source>
-        <translation type="unfinished"/>
+        <translation>Hiển thị các giá trị của các nốt nối kết với ô nhịp (Thí nghiệm, chỉ dành cho âm nhạc mới gần đây!)</translation>
     </message>
     <message>
         <source>Music top margin:</source>
-        <translation type="unfinished"/>
+        <translation>Lề trên đầu</translation>
     </message>
     <message>
         <source>Create clef for all systems</source>
@@ -1740,59 +1786,47 @@ space unit</extracomment>
     </message>
     <message>
         <source>Music bottom margin:</source>
-        <translation type="unfinished"/>
+        <translation>Lề bên dưới</translation>
     </message>
     <message>
         <source>Staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách khuông nhạc:</translation>
     </message>
     <message>
         <source>Grand staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách khuông nhạc tổng quát:</translation>
     </message>
     <message>
         <source>Min. system distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách tối thiểu của dòng nhạc:</translation>
     </message>
     <message>
         <source>Lyrics top margin:</source>
-        <translation type="unfinished"/>
+        <translation>Lề trên của lời nhạc:</translation>
     </message>
     <message>
         <source>Lyrics bottom margin:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Vertical-frame upper margin</source>
-        <translation type="unfinished"/>
+        <translation>Lề dưới của lời nhạc</translation>
     </message>
     <message>
         <source>Vertical frame top margin:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Vertical-frame lower margin</source>
-        <translation type="unfinished"/>
+        <translation>Chiều đứng khung lề trên:</translation>
     </message>
     <message>
         <source>Vertical frame bottom margin:</source>
-        <translation type="unfinished"/>
+        <translation>Chiều đứng khung lề dưới:</translation>
     </message>
     <message>
         <source>Create courtesy clefs</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Create time signature for all systems</source>
-        <translation type="unfinished"/>
+        <translation>Tạo phong cách cho các khóa nhạc</translation>
     </message>
     <message>
         <source>Create courtesy time signatures</source>
-        <translation>Tạo ra courtesy của số nhịp</translation>
+        <translation>Tạo ra tác phong của số nhịp</translation>
     </message>
     <message>
         <source>Create key signature for all systems</source>
-        <translation type="unfinished"/>
+        <translation>Tạo hóa biểu cho toàn bộ dòng nhạc</translation>
     </message>
     <message>
         <source>Create courtesy key signatures</source>
@@ -1800,11 +1834,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Lyrics line height:</source>
-        <translation type="unfinished"/>
+        <translation>Bề cao của lời nhạc</translation>
     </message>
     <message>
         <source>Max. system distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách tối đa của dòng nhạc:</translation>
     </message>
     <message>
         <source>Last system fill threshold:</source>
@@ -1828,215 +1862,211 @@ space unit</extracomment>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"/>
+        <translation>Phải</translation>
     </message>
     <message>
         <source>Even</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Bề ngang</translation>
     </message>
     <message>
         <source>Odd</source>
-        <translation type="unfinished"/>
+        <translation>Lẻ</translation>
     </message>
     <message>
         <source>All staves</source>
-        <translation type="unfinished"/>
+        <translation>Toàn bộ khuông nhạc</translation>
     </message>
     <message>
         <source>Every system</source>
-        <translation>mỗi dòng nhạc</translation>
+        <translation>Mỗi dòng nhạc</translation>
     </message>
     <message>
         <source>System bracket distance:</source>
-        <translation>Khoảng cách của dấu ngoặc của dòng nhạc:</translation>
+        <translation>Khoảng cách ngoặc nối của dòng nhạc:</translation>
     </message>
     <message>
         <source>Brace distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách ngoặc ôm:</translation>
     </message>
     <message>
         <source>Spacing (1=tight):</source>
-        <translation type="unfinished"/>
+        <translation>Không gian (1=Khít nhau)</translation>
     </message>
     <message>
         <source>Minimum measure width:</source>
-        <translation type="unfinished"/>
+        <translation>Bề rộng tối thiểu của ô nhịp:</translation>
     </message>
     <message>
         <source>Note to barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách từ nốt nhạc đến vạch nhịp:</translation>
     </message>
     <message>
         <source>Barline to note distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách từ vạch nhịp đến nốt nhạc:</translation>
     </message>
     <message>
         <source>Clef left margin:</source>
-        <translation type="unfinished"/>
+        <translation>Lề trái của khóa nhac:</translation>
     </message>
     <message>
         <source>Minimum note distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách tối thiểu của nốt nhạc:</translation>
     </message>
     <message>
         <source>Key signature left margin:</source>
-        <translation type="unfinished"/>
+        <translation>Lề trái của hóa biểu:</translation>
     </message>
     <message>
         <source>Time signature left margin:</source>
-        <translation type="unfinished"/>
+        <translation>Lề trái của số chỉ nhịp:</translation>
     </message>
     <message>
         <source>Clef/Key right margin:</source>
-        <translation type="unfinished"/>
+        <translation>Lề phải của khóa nhạc/hóa biểu:</translation>
     </message>
     <message>
         <source>Clef to barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách từ khóa nhạc đến vạch nhịp:</translation>
     </message>
     <message>
         <source>Staff line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dày của đường kẻ nhạc:</translation>
     </message>
     <message>
         <source>Barline to accidental distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách từ vạch nhịp đến dấu hóa:</translation>
     </message>
     <message>
         <source>Show repeat bar tips (&quot;winged&quot; repeats)</source>
-        <translation>Show repeat bar tips (&quot;winged&quot; repeats)</translation>
+        <translation>Hiển thị vạch nhịp lặp lại có móc (vạch nhịp &quot;có cánh&quot;)</translation>
     </message>
     <message>
         <source>Barline at start of single staff</source>
-        <translation>Vạch nhịp tại đầu một dòng nhạc</translation>
+        <translation>Vạch nhịp lúc bắt đầu của một khuông nhạc</translation>
     </message>
     <message>
         <source>Barline at start of multiple staves</source>
-        <translation>Vạch nhịp tại đầu nhiều dòng kề nhau</translation>
+        <translation>Vạch nhịp lúc bắt đầu của nhiều khuông nhạc</translation>
     </message>
     <message>
         <source>Barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dày vạch nhịp:</translation>
     </message>
     <message>
         <source>End barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dày của vạch nhịp kết:</translation>
     </message>
     <message>
         <source>End barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách vạch nhịp kết:</translation>
     </message>
     <message>
         <source>Double barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dày vạch nhịp kép:</translation>
     </message>
     <message>
         <source>Double barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách vạch nhịp kép:</translation>
     </message>
     <message>
         <source>Shorten stems</source>
-        <translation type="unfinished"/>
+        <translation>Thu ngắn thân nốt nhạc</translation>
     </message>
     <message>
         <source>Progression:</source>
-        <translation type="unfinished"/>
+        <translation>Tiến hành:</translation>
     </message>
     <message>
         <source>Shortest stem:</source>
-        <translation type="unfinished"/>
+        <translation>Thân nốt nhạc ngắn nhất:</translation>
     </message>
     <message>
         <source>Accidental note distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách dấu hóa của nốt nhạc:</translation>
     </message>
     <message>
         <source>Accidental distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách các dấu hóa:</translation>
     </message>
     <message>
         <source>Note dot distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách chấm dôi:</translation>
     </message>
     <message>
         <source>Dot dot distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách giữa hai chấm dôi:</translation>
     </message>
     <message>
         <source>Ledger line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dày đường kẻ phụ:</translation>
     </message>
     <message>
         <source>Ledger line length:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dài đường kẻ phụ:</translation>
     </message>
     <message>
         <source>Stem thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dày thân nốt nhạc:</translation>
     </message>
     <message>
         <source>Dot size:</source>
-        <translation type="unfinished"/>
+        <translation>Kích cỡ chấm dôi:</translation>
     </message>
     <message>
         <source>Distance to note:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách đến nốt nhạc:</translation>
     </message>
     <message>
         <source>Line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dày đường kẻ:</translation>
     </message>
     <message>
         <source>Hook length:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dài dấu móc:</translation>
     </message>
     <message>
         <source>Beam thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dày cờ nốt nhạc:</translation>
     </message>
     <message>
         <source>Beam distance (in beam thickness units):</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách cờ nốt nhạc (trong độ dày mỗi cờ)</translation>
     </message>
     <message>
         <source>Broken beam minimum length:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dài tối thiểu của cờ nốt nhạc tách ra:</translation>
     </message>
     <message>
         <source>Flatten all beams</source>
-        <translation type="unfinished"/>
+        <translation>Làm phẳng toàn bộ cờ nốt nhạc</translation>
     </message>
     <message>
         <source>Line thickness at end:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dày đường kẻ ở điểm kết:</translation>
     </message>
     <message>
         <source>Line thickness middle:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dày đường kẻ ở giữa:</translation>
     </message>
     <message>
         <source>Dotted line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dày đường kẻ chấm:</translation>
     </message>
     <message>
         <source>Small staff size:</source>
-        <translation type="unfinished"/>
+        <translation>Kích cỡ khuông nhạc nhỏ:</translation>
     </message>
     <message>
         <source>Small note size:</source>
-        <translation type="unfinished"/>
+        <translation>Kích cỡ nốt nhạc nhỏ:</translation>
     </message>
     <message>
         <source>Grace note size:</source>
-        <translation type="unfinished"/>
+        <translation>Kích cỡ nốt hoa mỹ:</translation>
     </message>
     <message>
         <source>Small clef size:</source>
-        <translation type="unfinished"/>
+        <translation>Kích cỡ khóa nhạc nhỏ:</translation>
     </message>
     <message>
         <source>Hairpins</source>
@@ -2048,7 +2078,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Default vertical position:</source>
-        <translation type="unfinished"/>
+        <translation>Vị trí đứng mặc định:</translation>
     </message>
     <message>
         <source>Volta</source>
@@ -2056,7 +2086,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Hook height:</source>
-        <translation type="unfinished"/>
+        <translation>Chiều cao dấu móc:</translation>
     </message>
     <message>
         <source>Line style:</source>
@@ -2068,15 +2098,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Pedal Line</source>
-        <translation type="unfinished"/>
+        <translation>Đường kẻ Pedal</translation>
     </message>
     <message>
         <source>Trill Line</source>
-        <translation type="unfinished"/>
+        <translation>Đường kẻ Trill</translation>
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"/>
+        <translation>Hiện ra</translation>
     </message>
     <message>
         <source>Standard</source>
@@ -2084,35 +2114,35 @@ space unit</extracomment>
     </message>
     <message>
         <source>Jazz</source>
-        <translation type="unfinished"/>
+        <translation>Nhạc Jazz, Phong cách Jazz</translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"/>
+        <translation>Đặt lại</translation>
     </message>
     <message>
         <source>Load chords.xml</source>
-        <translation type="unfinished"/>
+        <translation>Nạp chords.xml</translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished"/>
+        <translation>Cộng Hòa Liên Bang Đức</translation>
     </message>
     <message>
         <source>Solfeggio</source>
-        <translation type="unfinished"/>
+        <translation>Xướng âm</translation>
     </message>
     <message>
         <source>Lower case minor chords</source>
-        <translation type="unfinished"/>
+        <translation>Các hợp âm thứ thấp hơn</translation>
     </message>
     <message>
         <source>Positioning</source>
-        <translation type="unfinished"/>
+        <translation>Vị trí</translation>
     </message>
     <message>
         <source>Minimum chord spacing:</source>
-        <translation type="unfinished"/>
+        <translation>Không gian tối thiểu của hợp âm:</translation>
     </message>
     <message>
         <source>Font:</source>
@@ -2120,7 +2150,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Size:</source>
-        <translation>Cỡ:</translation>
+        <translation>Kích cỡ:</translation>
     </message>
     <message>
         <source>pt</source>
@@ -2128,43 +2158,43 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line height:</source>
-        <translation type="unfinished"/>
+        <translation>Chiều cao đường kẻ:</translation>
     </message>
     <message>
         <source>Vertical position:</source>
-        <translation type="unfinished"/>
+        <translation>Vị trí cao nhất:</translation>
     </message>
     <message>
         <source>from top of staff</source>
-        <translation type="unfinished"/>
+        <translation>từ đầu của khuông nhạc</translation>
     </message>
     <message>
         <source>of font height</source>
-        <translation type="unfinished"/>
+        <translation>Chiều cao của phông chữ</translation>
     </message>
     <message>
         <source>Alignment</source>
-        <translation type="unfinished"/>
+        <translation>Thẳng hàng</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>Đầu</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"/>
+        <translation>Dưới cùng</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Style</translation>
+        <translation>Phong cách/ Thể loại/Kiểu</translation>
     </message>
     <message>
         <source>Modern</source>
-        <translation type="unfinished"/>
+        <translation>Hiện đại</translation>
     </message>
     <message>
         <source>Historic</source>
-        <translation type="unfinished"/>
+        <translation>Lịch sử</translation>
     </message>
     <message>
         <source>sp</source>
@@ -2173,15 +2203,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Articulation distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách phụ âm:</translation>
     </message>
     <message>
         <source>Note head distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách đầu nốt nhạc:</translation>
     </message>
     <message>
         <source>Articulation size:</source>
-        <translation type="unfinished"/>
+        <translation>Kích cỡ phụ âm:</translation>
     </message>
     <message>
         <source>Accidental</source>
@@ -2189,123 +2219,123 @@ space unit</extracomment>
     </message>
     <message>
         <source>Maximum slope:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dốc tối đa:</translation>
     </message>
     <message>
         <source>Vertical distance from stem:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách cao nhất từ thân nốt:</translation>
     </message>
     <message>
         <source>Avoid the staves</source>
-        <translation type="unfinished"/>
+        <translation>Tránh các khuông nhạc ra</translation>
     </message>
     <message>
         <source>Distance before the stem of the first note:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách đằng trước thân nốt của nốt nhạc đầu tiên:</translation>
     </message>
     <message>
         <source>Distance before the head of the first note:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách đằng trước đầu nốt nhạc của nốt nhạc đầu tiên:</translation>
     </message>
     <message>
         <source>Distance after the stem of the last note:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách đằng sau thân nốt nhạc của nốt nhạc cuối cùng:</translation>
     </message>
     <message>
         <source>Distance after the head of the last note:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách đằng sau đầu nốt nhạc của nốt nhạc cuối cùng:</translation>
     </message>
     <message>
         <source>Distance to fretboard diagram:</source>
-        <translation type="unfinished"/>
+        <translation>khoảng cách biểu đồ phím đàn:</translation>
     </message>
     <message>
         <source>Chord Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Ký hiệu các hợp âm</translation>
     </message>
     <message>
         <source>Chord symbols style file:</source>
-        <translation type="unfinished"/>
+        <translation>Tệp ký hiệu hợp âm:</translation>
     </message>
     <message>
         <source>Capo</source>
-        <translation type="unfinished"/>
+        <translation>Capo</translation>
     </message>
     <message>
         <source>Vertical distance from note head:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách cao nhất từ đầu nốt nhạc:</translation>
     </message>
     <message>
         <source>Capo fret position:</source>
-        <translation type="unfinished"/>
+        <translation>Vị trí phím capo</translation>
     </message>
     <message>
         <source>Semitones offset</source>
-        <translation type="unfinished"/>
+        <translation>Bộ đệm nửa cung</translation>
     </message>
     <message>
         <source>Cents offset</source>
-        <translation type="unfinished"/>
+        <translation>Bộ đệm Cents</translation>
     </message>
     <message>
         <source>A, B♭, B, C, C♯, ...</source>
-        <translation type="unfinished"/>
+        <translation>A, B♭, B, C, C♯, ...</translation>
     </message>
     <message>
         <source>Chord Symbols, Fretboard Diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Các ký hiệu hợp âm, Biểu đồ phím đàn</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Biểu đồ phím đàn</translation>
     </message>
     <message>
         <source>Fret offset number font size:</source>
-        <translation type="unfinished"/>
+        <translation>Kích cỡ bộ đệm cho phím đàn:</translation>
     </message>
     <message>
         <source>Position:</source>
-        <translation type="unfinished"/>
+        <translation>Vị trí:</translation>
     </message>
     <message>
         <source>Minimum tie length:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dài tối thiểu của dấu nối:</translation>
     </message>
     <message>
         <source>Interval:</source>
-        <translation type="unfinished"/>
+        <translation>Quãng:</translation>
     </message>
     <message>
         <source>Hide instrument name if there is only 1 instrument</source>
-        <translation type="unfinished"/>
+        <translation>Ẩn tên nhạc cụ nếu chỉ có 1 nhạc cụ</translation>
     </message>
     <message>
         <source>Maximum barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách vạch nhịp tối đa:</translation>
     </message>
     <message>
         <source>Standard TAB clef</source>
-        <translation type="unfinished"/>
+        <translation>Khóa TAB tiêu chuẩn</translation>
     </message>
     <message>
         <source>Serif TAB clef</source>
-        <translation type="unfinished"/>
+        <translation>Khóa TAB nét nhỏ</translation>
     </message>
     <message>
         <source>Swing Settings</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập Swing</translation>
     </message>
     <message>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Tắt</translation>
     </message>
     <message>
         <source>Eighth Note</source>
-        <translation type="unfinished"/>
+        <translation>Nốt đen</translation>
     </message>
     <message>
         <source>Sixteenth Note</source>
-        <translation type="unfinished"/>
+        <translation>Nốt móc kép</translation>
     </message>
     <message>
         <source>%</source>
@@ -2313,71 +2343,63 @@ space unit</extracomment>
     </message>
     <message>
         <source>Musical symbols font:</source>
-        <translation type="unfinished"/>
+        <translation>Phông ký hiệu âm nhạc:</translation>
     </message>
     <message>
         <source>Swing:</source>
-        <translation>Swing</translation>
+        <translation>Swing:</translation>
     </message>
     <message>
         <source>Select swing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Chọn tỉ lệ nhịp điệu:</translation>
     </message>
     <message>
         <source>Musical text font:</source>
-        <translation type="unfinished"/>
+        <translation>Phông chữ âm nhạc:</translation>
     </message>
     <message>
         <source>Emmentaler Text</source>
-        <translation type="unfinished"/>
+        <translation>Chữ cỡ lớn</translation>
     </message>
     <message>
         <source>Bravura Text</source>
-        <translation type="unfinished"/>
+        <translation>Văn bản xuất sắc</translation>
     </message>
     <message>
         <source>Gonville Text</source>
-        <translation type="unfinished"/>
+        <translation>Văn bản Gonville</translation>
     </message>
     <message>
         <source>Show header also on first page</source>
-        <translation type="unfinished"/>
+        <translation>Hiện lề đầu cho trang một</translation>
     </message>
     <message>
         <source>Show footer also on first page</source>
-        <translation type="unfinished"/>
+        <translation>Hiện lề dưới cho trang một</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
     <message>
         <source>Use odd/even page header</source>
-        <translation type="unfinished"/>
+        <translation>Sử dụng số trang chẳn/lẻ trên đầu</translation>
     </message>
     <message>
         <source>Use odd/even page footer</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fixed number of measures/system:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fixed measure width</source>
-        <translation type="unfinished"/>
+        <translation>Sử dụng số trang chẳn/lẻ phía dưới</translation>
     </message>
     <message>
         <source>System bracket thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dày dấu móc khuông nhạc:</translation>
     </message>
     <message>
         <source>Brace thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Độ dày của móc:</translation>
     </message>
     <message>
         <source>Continue height:</source>
-        <translation type="unfinished"/>
+        <translation>Duy trì chiều cao:</translation>
     </message>
     <message>
         <source>Continuous</source>
@@ -2389,27 +2411,27 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>Dấu chấm</translation>
     </message>
     <message>
         <source>Dash-dotted</source>
-        <translation type="unfinished"/>
+        <translation>Gạch-chấm</translation>
     </message>
     <message>
         <source>Dash-dot-dotted</source>
-        <translation type="unfinished"/>
+        <translation>Gạch-chấm-chấm</translation>
     </message>
     <message>
         <source>Numbers only</source>
-        <translation type="unfinished"/>
+        <translation>Chỉ có các số</translation>
     </message>
     <message>
         <source>Header Text</source>
-        <translation type="unfinished"/>
+        <translation>Đề mục đầu trang</translation>
     </message>
     <message>
         <source>Footer Text</source>
-        <translation type="unfinished"/>
+        <translation>Đề mục cuối trang</translation>
     </message>
     <message>
         <source>Measure Numbers</source>
@@ -2417,51 +2439,51 @@ space unit</extracomment>
     </message>
     <message>
         <source>Default TAB Clef</source>
-        <translation type="unfinished"/>
+        <translation>Khóa TAB mặc định</translation>
     </message>
     <message>
         <source>Naturals in Key Signatures</source>
-        <translation type="unfinished"/>
+        <translation>Hóa biểu tự nhiên</translation>
     </message>
     <message>
         <source>Vertical Distance from the Notes</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách cao nhất từ các nốt</translation>
     </message>
     <message>
         <source>Horizontal Distance from the Notes</source>
-        <translation type="unfinished"/>
+        <translation>Khoảng cách rộng từ các nốt</translation>
     </message>
     <message>
         <source>Only for a change to C Maj / A min</source>
-        <translation type="unfinished"/>
+        <translation>Chỉ thay thế cho C trưởng / A Thứ</translation>
     </message>
     <message>
         <source>Create multimeasure rests</source>
-        <translation type="unfinished"/>
+        <translation>Tạo ra dấu lặng nhiều ô nhịp</translation>
     </message>
     <message>
         <source>Multimeasure rest margin:</source>
-        <translation type="unfinished"/>
+        <translation>Giới hạn dấu lặng nhiều ô nhịp:</translation>
     </message>
     <message>
         <source>Before key signature if changing to fewer sharps or flats</source>
-        <translation type="unfinished"/>
+        <translation>Trước hóa biểu nếu có thay đổi về một vài dấu thăng hoặc giáng</translation>
     </message>
     <message>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
-        <translation type="unfinished"/>
+        <translation>Sau hóa biểu nếu thay đổi về một vài dấu thăng hoặc giáng. Trước hóa biểu nếu có thay đổi về một vài dấu thăng hoặc giáng</translation>
     </message>
     <message>
         <source>A, B♭, H, C, C♯, ...</source>
-        <translation type="unfinished"/>
+        <translation>A, B♭, H, C, C♯, ...</translation>
     </message>
     <message>
         <source>A, B, H, C, Cis</source>
-        <translation type="unfinished"/>
+        <translation>A, B, H, C, Cis</translation>
     </message>
     <message>
         <source>Full German</source>
-        <translation type="unfinished"/>
+        <translation>Kiểu Đức đầy đủ</translation>
     </message>
     <message>
         <source>Do, Do♯, Re♭, Re, ...</source>
@@ -2473,30 +2495,54 @@ space unit</extracomment>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished"/>
+        <translation>Kiểu Pháp</translation>
     </message>
     <message>
         <source>Lower case bass notes</source>
-        <translation type="unfinished"/>
+        <translation>Trường hợp nốt bass thấp hơn</translation>
     </message>
     <message>
         <source>All caps note names</source>
-        <translation type="unfinished"/>
+        <translation>In hoa tất cả các tên nốt</translation>
     </message>
     <message>
         <source>Note Spelling</source>
-        <translation type="unfinished"/>
+        <translation>Chính tả nốt</translation>
     </message>
     <message>
         <source>Automatic Capitalization</source>
-        <translation type="unfinished"/>
+        <translation>Tự động in hoa</translation>
+    </message>
+    <message>
+        <source>Vertical frame upper margin</source>
+        <translation>Khung dọc lề trên</translation>
+    </message>
+    <message>
+        <source>Vertical frame lower margin</source>
+        <translation>Khung dọc lề dưới</translation>
+    </message>
+    <message>
+        <source>Scale:</source>
+        <translation>Âm giai:</translation>
+    </message>
+    <message>
+        <source>Barré line thickness:</source>
+        <translation>Độ dày vạch nhịp:</translation>
+    </message>
+    <message>
+        <source>Scale barlines to staff size</source>
+        <translation>Tỉ lệ kích cỡ các vạch nhịp của khuông nhạc</translation>
+    </message>
+    <message>
+        <source>Barline to grace note distance:</source>
+        <translation>Khoảng cách từ vạch nhịp đến nốt hoa mỹ:</translation>
     </message>
 </context>
 <context>
     <name>ExcerptsDialog</name>
     <message>
         <source>MuseScore: Parts</source>
-        <translation>MuseScore: Các bè</translation>
+        <translation>MuseScore: Các phân phổ</translation>
     </message>
     <message>
         <source>Instrument:</source>
@@ -2508,23 +2554,23 @@ space unit</extracomment>
     </message>
     <message>
         <source>New All</source>
-        <translation type="unfinished"/>
+        <translation>Hoàn toàn mới</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Sáng tác bài nhạc mới</translation>
+        <translation>Tạo mới</translation>
     </message>
     <message>
         <source>Part title:</source>
-        <translation type="unfinished"/>
+        <translation>Tên phân phổ:</translation>
     </message>
     <message>
         <source>Edit Part</source>
-        <translation type="unfinished"/>
+        <translation>Điều chỉnh phân phổ</translation>
     </message>
     <message>
         <source>Select Part</source>
-        <translation type="unfinished"/>
+        <translation>Chọn phân phổ</translation>
     </message>
 </context>
 <context>
@@ -2550,27 +2596,31 @@ space unit</extracomment>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <source>Soundfont %1 already loaded</source>
-        <translation type="unfinished"/>
+        <source>Sound Fonts</source>
+        <translation>Sounnd Fonts</translation>
     </message>
     <message>
-        <source>cannot load soundfont %1</source>
-        <translation type="unfinished"/>
+        <source>SoundFont %1 already loaded</source>
+        <translation>SoundFont %1 đã được nạp</translation>
+    </message>
+    <message>
+        <source>Cannot load SoundFont %1</source>
+        <translation>Không thể nạp SoundFont %1</translation>
     </message>
 </context>
 <context>
     <name>FretDiagramProperties</name>
     <message>
         <source>Strings:</source>
-        <translation type="unfinished"/>
+        <translation>Dây:</translation>
     </message>
     <message>
         <source>Frets:</source>
-        <translation type="unfinished"/>
+        <translation>Phím:</translation>
     </message>
     <message>
         <source>MuseScore: Fretboard Diagram Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore đặc tính biểu đồ phím đàn</translation>
     </message>
 </context>
 <context>
@@ -2599,35 +2649,23 @@ space unit</extracomment>
     <name>ImportMidiPanel</name>
     <message>
         <source>Close MIDI import panel</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Đóng bảng nhập MIDI</translation>
     </message>
     <message>
         <source>Move track up</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Up</source>
-        <translation>Lên</translation>
+        <translation>Di chuyển track lên</translation>
     </message>
     <message>
         <source>Move track down</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Down</source>
-        <translation>Xuống</translation>
+        <translation>Di chuyển track xuống</translation>
     </message>
     <message>
         <source>Text charset:</source>
-        <translation type="unfinished"/>
+        <translation>Văn bản charset:</translation>
     </message>
     <message>
         <source>Apply MIDI import operations</source>
-        <translation type="unfinished"/>
+        <translation>Chấp nhận hành động nhập MIDI</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -2635,7 +2673,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cancel not applied MIDI import operations</source>
-        <translation type="unfinished"/>
+        <translation>Hủy bỏ không áp dụng các hoạt động nhập MIDI</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2658,11 +2696,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Insert empty measures</source>
-        <translation type="unfinished"/>
+        <translation>Chèn ô nhịp rỗng</translation>
     </message>
     <message>
         <source>Number of measures to insert:</source>
-        <translation type="unfinished"/>
+        <translation>Số lượng ô nhịp chèn vào:</translation>
     </message>
 </context>
 <context>
@@ -2672,47 +2710,35 @@ space unit</extracomment>
         <translation>Dấu hóa</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Small</source>
         <translation>nhỏ</translation>
     </message>
     <message>
         <source>Accidental Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Kiểm soát dấu hóa</translation>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation type="unfinished"/>
+        <translation>Đặt lại giá trị nhỏ</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
 </context>
 <context>
     <name>InspectorAmbitus</name>
     <message>
-        <source>Part Range</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Head group</source>
-        <translation type="unfinished"/>
+        <translation>Nhóm đầu</translation>
     </message>
     <message>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Bottom note</source>
-        <translation type="unfinished"/>
+        <translation>Nốt phía dưới</translation>
     </message>
     <message>
         <source>C♭♭</source>
@@ -2728,7 +2754,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>C♯</source>
-        <translation type="unfinished"/>
+        <translation>C♯</translation>
     </message>
     <message>
         <source>C♯♯</source>
@@ -2760,7 +2786,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>E♭</source>
-        <translation type="unfinished"/>
+        <translation>E♭</translation>
     </message>
     <message>
         <source>E</source>
@@ -2788,7 +2814,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>F♯</source>
-        <translation type="unfinished"/>
+        <translation>F♯</translation>
     </message>
     <message>
         <source>F♯♯</source>
@@ -2820,7 +2846,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>A♭</source>
-        <translation type="unfinished"/>
+        <translation>Ab</translation>
     </message>
     <message>
         <source>A</source>
@@ -2944,11 +2970,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cross</source>
-        <translation type="unfinished"/>
+        <translation>Nối</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation type="unfinished"/>
+        <translation>Hình thoi</translation>
     </message>
     <message>
         <source>Triangle</source>
@@ -2956,27 +2982,27 @@ space unit</extracomment>
     </message>
     <message>
         <source>Slash</source>
-        <translation type="unfinished"/>
+        <translation>Vết gạch</translation>
     </message>
     <message>
         <source>XCircle</source>
-        <translation type="unfinished"/>
+        <translation>Vòng tròn X</translation>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Đô</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Rê</translation>
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"/>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>Sol</source>
@@ -2984,11 +3010,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Si</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
@@ -3000,7 +3026,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
     <message>
         <source>Reset Line thickness value</source>
@@ -3008,6 +3034,10 @@ space unit</extracomment>
     </message>
     <message>
         <source>[Undefined]</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ambitus</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3027,7 +3057,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation type="unfinished"/>
+        <translation>Tự động đặt hợp âm</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -3042,28 +3072,24 @@ space unit</extracomment>
         <translation>Xuống</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Above Staff</source>
-        <translation type="unfinished"/>
+        <translation>Phía trên khuông nhạc</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation type="unfinished"/>
+        <translation>Phía dưới khuông nhạc</translation>
     </message>
     <message>
         <source>Above Chord</source>
-        <translation type="unfinished"/>
+        <translation>Phía trên hợp âm</translation>
     </message>
     <message>
         <source>Below Chord</source>
-        <translation type="unfinished"/>
+        <translation>Phía dưới hợp âm</translation>
     </message>
     <message>
         <source>Time stretch</source>
-        <translation type="unfinished"/>
+        <translation>Kéo dài thời gian</translation>
     </message>
     <message>
         <source>Articulation Inspector</source>
@@ -3079,7 +3105,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Time stretch value</source>
-        <translation type="unfinished"/>
+        <translation>Đặt lại giá trị thời gian kéo dài</translation>
     </message>
 </context>
 <context>
@@ -3087,10 +3113,6 @@ space unit</extracomment>
     <message>
         <source>Barline</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Style:</source>
@@ -3158,7 +3180,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
 </context>
 <context>
@@ -3189,11 +3211,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Position</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Vị trí</translation>
     </message>
     <message>
         <source>Horizontal</source>
@@ -3233,7 +3251,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"/>
+        <translation>Phải</translation>
     </message>
     <message>
         <source>Grow right</source>
@@ -3261,14 +3279,21 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorBreak</name>
+    <message>
+        <source>Element Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Layout Break</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorChord</name>
     <message>
         <source>Chord</source>
         <translation>Hợp âm</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Stem direction</source>
@@ -3337,7 +3362,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
 </context>
 <context>
@@ -3345,10 +3370,6 @@ space unit</extracomment>
     <message>
         <source>Clef</source>
         <translation>Khóa nhạc</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Show courtesy</source>
@@ -3364,7 +3385,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
 </context>
 <context>
@@ -3378,10 +3399,6 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Velocity</source>
         <translation type="unfinished"/>
     </message>
@@ -3391,7 +3408,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Part</source>
-        <translation type="unfinished"/>
+        <translation>Phân phổ</translation>
     </message>
     <message>
         <source>System</source>
@@ -3411,7 +3428,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
     <message>
         <source>Dynamic range</source>
@@ -3436,10 +3453,6 @@ space unit</extracomment>
     <message>
         <source>Color</source>
         <translation>Màu sắc</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Horizontal offset</source>
@@ -3478,6 +3491,29 @@ space unit</extracomment>
     </message>
     <message>
         <source>Nothing selected</source>
+        <translation>Không chọn gì</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorFret</name>
+    <message>
+        <source>Ottava Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation>Thang âm điệu thức</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Thiết lập lại giá trị</translation>
+    </message>
+    <message>
+        <source>Reset Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fretboard Diagram</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3494,10 +3530,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>Kiểu</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Glissando Inspector</source>
@@ -3568,11 +3600,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Bề rộng, khổ rộng</translation>
     </message>
     <message>
         <source>Horizontal Frame Inspector</source>
@@ -3580,7 +3608,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
     <message>
         <source>Right gap</source>
@@ -3618,16 +3646,12 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Staff</source>
         <translation>Dòng nhạc</translation>
     </message>
     <message>
         <source>Part</source>
-        <translation type="unfinished"/>
+        <translation>Phân phổ</translation>
     </message>
     <message>
         <source>System</source>
@@ -3683,7 +3707,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
     <message>
         <source>Reset Continue height value</source>
@@ -3697,16 +3721,12 @@ space unit</extracomment>
         <translation>Hình ảnh</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Size</source>
         <translation>Kích thước</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"/>
+        <translation>Thang âm điệu thức</translation>
     </message>
     <message>
         <source>Image Inspector</source>
@@ -3722,7 +3742,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"/>
+        <translation>Bề rộng, khổ rộng</translation>
     </message>
     <message>
         <source>Scale Width</source>
@@ -3764,10 +3784,6 @@ space unit</extracomment>
         <translation>Đi trực tiếp tới</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Jump to</source>
         <translation type="unfinished"/>
     </message>
@@ -3803,10 +3819,6 @@ space unit</extracomment>
         <translation>Bộ Khóa</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Show courtesy</source>
         <translation type="unfinished"/>
     </message>
@@ -3820,7 +3832,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
 </context>
 <context>
@@ -3831,7 +3843,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Position</source>
-        <translation type="unfinished"/>
+        <translation>Vị trí</translation>
     </message>
     <message>
         <source>mm</source>
@@ -3855,7 +3867,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"/>
+        <translation>Bề rộng, khổ rộng</translation>
     </message>
     <message>
         <source>Horizontal Position</source>
@@ -3867,10 +3879,6 @@ space unit</extracomment>
     <message>
         <source>Line</source>
         <translation>Line</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3907,7 +3915,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
     <message>
         <source>Line thickness</source>
@@ -3923,15 +3931,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>Dấu chấm</translation>
     </message>
     <message>
         <source>Dash-dotted</source>
-        <translation type="unfinished"/>
+        <translation>Gạch-chấm</translation>
     </message>
     <message>
         <source>Dash-dot-dotted</source>
-        <translation type="unfinished"/>
+        <translation>Gạch-chấm-chấm</translation>
     </message>
     <message>
         <source>Reset Line thickness value</source>
@@ -3951,10 +3959,6 @@ space unit</extracomment>
     <message>
         <source>Marker</source>
         <translation>Marker</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Label</source>
@@ -4010,7 +4014,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"/>
+        <translation>Đặt lại</translation>
     </message>
 </context>
 <context>
@@ -4041,15 +4045,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>Đầu</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Dưới cùng</translation>
     </message>
     <message>
         <source>Whole</source>
@@ -4081,7 +4081,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Head group</source>
-        <translation type="unfinished"/>
+        <translation>Nhóm đầu</translation>
     </message>
     <message>
         <source>Dot position</source>
@@ -4097,7 +4097,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"/>
+        <translation>Phải</translation>
     </message>
     <message>
         <source>Small </source>
@@ -4137,7 +4137,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation type="unfinished"/>
+        <translation>Đặt lại giá trị nhỏ</translation>
     </message>
     <message>
         <source>Reset Tuning value</source>
@@ -4149,7 +4149,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
     <message>
         <source>Reset Dot position value</source>
@@ -4183,10 +4183,6 @@ space unit</extracomment>
         <translation>Kiểu</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Placement</source>
         <translation type="unfinished"/>
     </message>
@@ -4216,7 +4212,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Numbers only</source>
-        <translation type="unfinished"/>
+        <translation>Chỉ có các số</translation>
     </message>
     <message>
         <source>Ottava Inspector</source>
@@ -4232,7 +4228,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
     <message>
         <source>Above</source>
@@ -4240,7 +4236,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Below</source>
-        <translation type="unfinished"/>
+        <translation>Dưới</translation>
     </message>
     <message>
         <source>Reset Numbers only value</source>
@@ -4254,10 +4250,6 @@ space unit</extracomment>
         <translation>Dấu lặng</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Small</source>
         <translation>nhỏ</translation>
     </message>
@@ -4267,11 +4259,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation type="unfinished"/>
+        <translation>Đặt lại giá trị nhỏ</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
 </context>
 <context>
@@ -4284,10 +4276,6 @@ space unit</extracomment>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Trailing space</source>
@@ -4311,15 +4299,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
 </context>
 <context>
     <name>InspectorSlur</name>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
     <message>
         <source>Line type:</source>
         <translation type="unfinished"/>
@@ -4342,7 +4326,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
     <message>
         <source>Continuous</source>
@@ -4350,7 +4334,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>Dấu chấm</translation>
     </message>
     <message>
         <source>Dashed</source>
@@ -4373,10 +4357,6 @@ space unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Spacer Inspector</source>
         <translation type="unfinished"/>
     </message>
@@ -4390,10 +4370,6 @@ space unit</extracomment>
     <message>
         <source>Tempo Marking</source>
         <translation>Nhịp độ</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -4417,7 +4393,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
     <message>
         <source>Reset Follow text value</source>
@@ -4435,10 +4411,6 @@ space unit</extracomment>
         <translation>Style</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Text Inspector</source>
         <translation type="unfinished"/>
     </message>
@@ -4448,6 +4420,10 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
+        <translation>Thiết lập lại giá trị</translation>
+    </message>
+    <message>
+        <source>Reset Text to Style</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -4466,11 +4442,7 @@ space unit</extracomment>
     <name>InspectorTimeSig</name>
     <message>
         <source>Time Signature</source>
-        <translation>Điền vào số nhịp:</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Số chỉ nhịp</translation>
     </message>
     <message>
         <source>Show courtesy</source>
@@ -4478,7 +4450,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Time Signature Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Theo dõi số chỉ nhịp</translation>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
@@ -4486,7 +4458,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
 </context>
 <context>
@@ -4500,10 +4472,6 @@ space unit</extracomment>
         <translation>Kiểu</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Trill Inspector</source>
         <translation type="unfinished"/>
     </message>
@@ -4513,7 +4481,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Trill Line</source>
-        <translation type="unfinished"/>
+        <translation>Đường kẻ Trill</translation>
     </message>
     <message>
         <source>Up Prall</source>
@@ -4533,18 +4501,14 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
 </context>
 <context>
     <name>InspectorTuplet</name>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Dấu liên</translation>
     </message>
     <message>
         <source>Number</source>
@@ -4584,7 +4548,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tuplet Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Kiểm soát liên</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
@@ -4592,7 +4556,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
     <message>
         <source>Reset Number type value</source>
@@ -4618,10 +4582,6 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>mm</source>
         <translation>mm</translation>
     </message>
@@ -4640,7 +4600,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
     <message>
         <source>Right margin</source>
@@ -4699,7 +4659,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Open</source>
-        <translation>Mở...</translation>
+        <translation>Mở</translation>
     </message>
     <message>
         <source>Closed</source>
@@ -4708,10 +4668,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>Kiểu</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Volta Inspector</source>
@@ -4723,7 +4679,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập lại giá trị</translation>
     </message>
 </context>
 <context>
@@ -4738,7 +4694,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Xóa sạch</translation>
+        <translation>Dọn dẹp</translation>
     </message>
     <message>
         <source>Add</source>
@@ -4790,7 +4746,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Instrument Genre Filter</source>
-        <translation type="unfinished"/>
+        <translation>Bộ lọc dòng nhạc cụ</translation>
     </message>
 </context>
 <context>
@@ -4836,7 +4792,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Xóa sạch</translation>
+        <translation>Dọn dẹp</translation>
     </message>
     <message>
         <source>Add</source>
@@ -4884,7 +4840,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Instrument Genre Filter</source>
-        <translation type="unfinished"/>
+        <translation>Bộ lọc dòng nhạc cụ</translation>
     </message>
     <message>
         <source>Instrument list</source>
@@ -4892,11 +4848,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Clear Search box</source>
-        <translation type="unfinished"/>
+        <translation>Dọn dẹp hộp tìm kiếm</translation>
     </message>
     <message>
         <source>Partitur List</source>
-        <translation type="unfinished"/>
+        <translation>Danh sách Partitur</translation>
     </message>
     <message>
         <source>Staff linked to previous</source>
@@ -4911,7 +4867,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Xóa đi</translation>
+        <translation>Dọn dẹp</translation>
     </message>
     <message>
         <source>Add</source>
@@ -4919,7 +4875,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add time signature to palette</source>
-        <translation type="unfinished"/>
+        <translation>Thêm số chỉ nhịp vào bảng</translation>
     </message>
 </context>
 <context>
@@ -5096,16 +5052,12 @@ space unit</extracomment>
         <translation>Bắt đầu</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Above</source>
         <translation>Trên</translation>
     </message>
     <message>
         <source>Below</source>
-        <translation type="unfinished"/>
+        <translation>Dưới</translation>
     </message>
     <message>
         <source>Left</source>
@@ -5219,7 +5171,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Lyrics</source>
-        <translation>Lời bài nhạc</translation>
+        <translation>Lời bản nhạc</translation>
     </message>
     <message>
         <source>2-plets</source>
@@ -5247,7 +5199,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tuplets</source>
-        <translation>Tuplets</translation>
+        <translation>Các dấu liên</translation>
     </message>
     <message>
         <source>2</source>
@@ -5303,12 +5255,13 @@ space unit</extracomment>
     </message>
     <message>
         <source>Time signature</source>
-        <translation type="unfinished"/>
+        <translation>Số chỉ nhịp</translation>
     </message>
     <message>
         <source>2x less
 measure count</source>
-        <translation type="unfinished"/>
+        <translation>Ít hơn 2x
+đếm ô nhịp</translation>
     </message>
     <message>
         <source>Is human
@@ -5347,7 +5300,8 @@ tempo text</source>
     <message>
         <source>Recognize
 pickup measure</source>
-        <translation type="unfinished"/>
+        <translation>Chấp nhận
+ô nhịp lấy đà</translation>
     </message>
     <message>
         <source>Max. quantization</source>
@@ -5355,6 +5309,19 @@ pickup measure</source>
     </message>
     <message>
         <source>Max. voices</source>
+        <translation>Tối đa. các bè</translation>
+    </message>
+    <message>
+        <source>Channel</source>
+        <translation>Kênh</translation>
+    </message>
+    <message>
+        <source>MuseScore instrument</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show
+chord symbols</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -5376,20 +5343,20 @@ pickup measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>MuseScore does not export MP3 files directly, but instead uses 
-the freely available LAME library.  You must obtain %1 
-separately, and then locate the file for MuseScore.
+        <source>MuseScore does not export MP3 files directly, but instead uses the freely available LAME library.  You must obtain %1 separately (for details check the handbook), and then locate the file for MuseScore.
 You only need to do this once.
 
 Would you like to locate %2 now?</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore không xuất trực tiếp tập tin thành MP3, nhưng thay vào đó là việc sử dụng miễn phí thư viện LAME có sẵn. Bạn phải tìm kiếm %1 một cách riêng biệt (để biết thêm chi tiết hãy xem sổ tay hướng dẫn), và sau đó xác định đúng vị trí tập tin cho MuseScore.
+Bạn chỉ cần làm một lần cho điều này.
+Bạn có muốn tím vị trí %2 ngay bây giờ?</translation>
     </message>
 </context>
 <context>
     <name>MasterPalette</name>
     <message>
         <source>MuseScore: Master Palette</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Quản lý công cụ</translation>
     </message>
     <message>
         <source>Grace Notes</source>
@@ -5405,7 +5372,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Time Signatures</source>
-        <translation>Số nhịp</translation>
+        <translation>Số chỉ nhịp</translation>
     </message>
     <message>
         <source>Barlines</source>
@@ -5448,10 +5415,6 @@ Would you like to locate %2 now?</source>
         <translation>Tiếng vê</translation>
     </message>
     <message>
-        <source>Repeats</source>
-        <translation>Lập lại</translation>
-    </message>
-    <message>
         <source>Tempo</source>
         <translation>Nhịp độ</translation>
     </message>
@@ -5465,7 +5428,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Frames &amp; Measures</source>
-        <translation type="unfinished"/>
+        <translation>Khung và ô nhịp</translation>
     </message>
     <message>
         <source>Symbols</source>
@@ -5483,6 +5446,10 @@ Would you like to locate %2 now?</source>
         <source>Bagpipe Embellishments</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Repeats &amp; Jumps</source>
+        <translation>Nhắc lại &amp; nhảy đi</translation>
+    </message>
 </context>
 <context>
     <name>MeasureProperties</name>
@@ -5493,14 +5460,15 @@ Would you like to locate %2 now?</source>
     <message>
         <source>cannot change measure length:
 tuplet would cross measure</source>
-        <translation type="unfinished"/>
+        <translation>Không thể thay đổi chiều dài ô nhịp được:
+dấu liên sẽ bắt chéo với ô nhịp</translation>
     </message>
 </context>
 <context>
     <name>MeasurePropertiesBase</name>
     <message>
         <source>MuseScore: Measure Properties</source>
-        <translation>MuseScore: Đặc tính của Khuông nhạc</translation>
+        <translation>MuseScore: Đặc tính của ô nhịp</translation>
     </message>
     <message>
         <source>Staves</source>
@@ -5508,7 +5476,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>New Row</source>
-        <translation>Dòng mới</translation>
+        <translation>Hàng mới</translation>
     </message>
     <message>
         <source>Staff</source>
@@ -5536,7 +5504,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Measure Duration</source>
-        <translation>Trường độ của Khuông nhạc</translation>
+        <translation>Trường độ của ô nhịp</translation>
     </message>
     <message>
         <source>/</source>
@@ -5576,7 +5544,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Exclude from measure count</source>
-        <translation type="unfinished"/>
+        <translation>Loại trừ ô nhịp từ bộ đếm</translation>
     </message>
     <message>
         <source>Repeat count:</source>
@@ -5588,7 +5556,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Measure number mode:</source>
-        <translation type="unfinished"/>
+        <translation>Hình thức số lượng ô nhịp:</translation>
     </message>
     <message>
         <source>Nominal:</source>
@@ -5600,7 +5568,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Add to measure number:</source>
-        <translation type="unfinished"/>
+        <translation>Thêm số ô nhịp vào:</translation>
     </message>
     <message>
         <source>Do not count</source>
@@ -5620,22 +5588,22 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Go to previous measure</source>
-        <translation type="unfinished"/>
+        <translation>Trở về ô nhịp trước</translation>
     </message>
     <message>
         <source>Go to next measure</source>
-        <translation type="unfinished"/>
+        <translation>Đi tới ô nhịp tiếp theo</translation>
     </message>
     <message>
         <source>Break multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>Tách rời dấu lặng nhiều ô nhịp</translation>
     </message>
 </context>
 <context>
     <name>MeasuresDialogBase</name>
     <message>
         <source>Mscore: Append Measures</source>
-        <translation>Mscore: Nối thêm Khuông nhạc</translation>
+        <translation>Mscore: Nối thêm ô nhịp</translation>
     </message>
     <message>
         <source>OK</source>
@@ -5647,11 +5615,11 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Append empty measures</source>
-        <translation type="unfinished"/>
+        <translation>Nối thêm ô nhịp rỗng</translation>
     </message>
     <message>
         <source>Number of measures to append:</source>
-        <translation>Số lượng trường canh muốn viết thêm vào</translation>
+        <translation>Số lượng ô nhịp muốn viết thêm vào</translation>
     </message>
 </context>
 <context>
@@ -5663,10 +5631,6 @@ tuplet would cross measure</source>
     <message>
         <source>PDF-Scan</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Add Scan</source>
@@ -5700,7 +5664,7 @@ tuplet would cross measure</source>
     <name>MetaEditDialog</name>
     <message>
         <source>MuseScore Version:</source>
-        <translation type="unfinished"/>
+        <translation>Phiên bản MuseScore:</translation>
     </message>
     <message>
         <source>Revision:</source>
@@ -5712,11 +5676,11 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>New</source>
-        <translation>Tạo</translation>
+        <translation>Tạo mới</translation>
     </message>
     <message>
         <source>MuseScore: Score Information</source>
-        <translation type="unfinished"/>
+        <translation>Musescore: Thông tin tổng phổ</translation>
     </message>
 </context>
 <context>
@@ -5761,6 +5725,25 @@ tuplet would cross measure</source>
     </message>
 </context>
 <context>
+    <name>Ms::AccessibleSearchBox</name>
+    <message>
+        <source>Measure</source>
+        <translation>Ô nhịp</translation>
+    </message>
+    <message>
+        <source>Page</source>
+        <translation>Trang</translation>
+    </message>
+    <message>
+        <source>Rehearsal Mark</source>
+        <translation>Rehearsal Mark</translation>
+    </message>
+    <message>
+        <source>Not found </source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Ms::AlbumManager</name>
     <message>
         <source>MuseScore: Add Score</source>
@@ -5772,11 +5755,11 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx)</source>
-        <translation type="unfinished"/>
+        <translation>Tệp MuseScore (*.mscz *.mscx)</translation>
     </message>
     <message>
         <source>MuseScore Album Files (*.album)</source>
-        <translation type="unfinished"/>
+        <translation>Các tệp album MuseScore (*.album)</translation>
     </message>
     <message>
         <source>Error while creating score from album.</source>
@@ -5801,7 +5784,7 @@ tuplet would cross measure</source>
     <name>Ms::BarLine</name>
     <message>
         <source>%1 Start of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 Bắt đầu của %2</translation>
     </message>
     <message>
         <source>%1 End of %2</source>
@@ -5847,19 +5830,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Custom Tuplet</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Double dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Triple dotted</source>
-        <translation type="unfinished"/>
+        <translation>Dấu liên tùy chỉnh</translation>
     </message>
     <message>
         <source>Quintuplet</source>
@@ -5871,10 +5842,22 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>%1 Start of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 Bắt đầu của %2</translation>
     </message>
     <message>
         <source>%1 End of %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dotted %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double dotted %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Triple dotted %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -5889,7 +5872,7 @@ tuplet would cross measure</source>
     <name>Ms::DrumTools</name>
     <message>
         <source>Drum Tools</source>
-        <translation type="unfinished"/>
+        <translation>Dụng cụ trống</translation>
     </message>
     <message>
         <source>Edit Drumset</source>
@@ -5943,11 +5926,11 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>MuseScore: Open File</source>
-        <translation>MuseScore: Mở tài liệu</translation>
+        <translation>MuseScore: Mở tệp</translation>
     </message>
     <message>
         <source>Write File failed: </source>
-        <translation>Write File failed: </translation>
+        <translation>Tệp soạn thảo bị lỗi:</translation>
     </message>
     <message>
         <source>MuseScore: Write Drumset</source>
@@ -5957,6 +5940,15 @@ tuplet would cross measure</source>
         <source>Open File
 %1
 failed: </source>
+        <translation>Mơ tệp
+%1
+lỗi:</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::EditStaff</name>
+    <message>
+        <source>The instrument name is invalid.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -5965,7 +5957,7 @@ failed: </source>
     <message>
         <source>Open</source>
         <comment>string data</comment>
-        <translation>Mở...</translation>
+        <translation>Mở</translation>
     </message>
     <message>
         <source>Pitch</source>
@@ -5985,23 +5977,23 @@ failed: </source>
     </message>
     <message>
         <source>Above Staff</source>
-        <translation type="unfinished"/>
+        <translation>Phía trên khuông nhạc</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation type="unfinished"/>
+        <translation>Phía dưới khuông nhạc</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation type="unfinished"/>
+        <translation>Tự động đặt hợp âm</translation>
     </message>
     <message>
         <source>Above Chord</source>
-        <translation type="unfinished"/>
+        <translation>Phía trên hợp âm</translation>
     </message>
     <message>
         <source>Below Chord</source>
-        <translation type="unfinished"/>
+        <translation>Phía dưới hợp âm</translation>
     </message>
     <message>
         <source>Special symbols in header/footer</source>
@@ -6021,11 +6013,11 @@ failed: </source>
     </message>
     <message>
         <source>file name</source>
-        <translation type="unfinished"/>
+        <translation>Tên tệp</translation>
     </message>
     <message>
         <source>file path+name</source>
-        <translation type="unfinished"/>
+        <translation>Tên đường dẫn+ tên tệp</translation>
     </message>
     <message>
         <source>current date</source>
@@ -6057,11 +6049,11 @@ failed: </source>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Chấp nhận tất cả phân phổ</translation>
     </message>
     <message>
         <source>last modification time</source>
-        <translation type="unfinished"/>
+        <translation>Thay đổi số chỉ nhịp cuối</translation>
     </message>
     <message>
         <source>last modification date</source>
@@ -6078,7 +6070,9 @@ failed: </source>
         <source>Cannot open figured bass description:
 %1
 %2</source>
-        <translation type="unfinished"/>
+        <translation>không thể mở sơ đồ biểu diễn bass
+%1
+%2</translation>
     </message>
 </context>
 <context>
@@ -6100,7 +6094,7 @@ failed: </source>
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"/>
+        <translation>Đặt lại</translation>
     </message>
 </context>
 <context>
@@ -6111,6 +6105,13 @@ failed: </source>
     </message>
     <message>
         <source>flat</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Ms::HelpQuery</name>
+    <message>
+        <source>Search for: </source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6130,6 +6131,21 @@ failed: </source>
     <message>
         <source>Inspector</source>
         <translation>Inspector</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::InspectorGroupElement</name>
+    <message>
+        <source>Select</source>
+        <translation>Chọn</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation>Nốt nhạc</translation>
+    </message>
+    <message>
+        <source>Rests</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -6164,7 +6180,7 @@ failed: </source>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Dấu liên</translation>
     </message>
 </context>
 <context>
@@ -6175,7 +6191,7 @@ failed: </source>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Dấu liên</translation>
     </message>
 </context>
 <context>
@@ -6198,13 +6214,15 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore: Open Instruments File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Mở tệp nhạc cụ</translation>
     </message>
     <message>
         <source>Open Instruments File
 %1
 failed: </source>
-        <translation type="unfinished"/>
+        <translation>Mở tệp nhạc cụ
+%1
+lỗi:</translation>
     </message>
     <message>
         <source>MuseScore Instruments (*.xml)</source>
@@ -6256,7 +6274,7 @@ failed: </source>
     <name>Ms::LayerManager</name>
     <message>
         <source>MuseScore: select layer tag</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Chọn thẻ từng tầng</translation>
     </message>
     <message>
         <source>layer tag</source>
@@ -6289,10 +6307,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Please check your internet connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Unsuccessful login. Please try again.</source>
         <translation type="unfinished"/>
     </message>
@@ -6306,19 +6320,19 @@ failed: </source>
     </message>
     <message>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or &lt;a href=&quot;%1&quot;&gt;request a new activation email&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Tài khoản của bạn không được kích hoạt. Vui lòng kiểm tra hộp thư để kích hoạt tài khoản này hoặc &lt;a href=&quot;%1&quot;&gt;yêu cầu một phần kích hoạt mới vào hộp thư&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Error while getting user info. Please try again</source>
-        <translation type="unfinished"/>
+        <translation>Lỗi khi khai thác thông tin người dùng. Vui lòng thử lại lần nữa</translation>
     </message>
     <message>
         <source>Error while getting user info: %1</source>
-        <translation type="unfinished"/>
+        <translation>Lỗi khi khai thác thông tin người dùng: %1</translation>
     </message>
     <message>
         <source>An error occurred during the file transfer. Please try again</source>
-        <translation type="unfinished"/>
+        <translation>Một mỗi đã xảy ra trong quá trình di chuyển tệp. Vui lòng thử lại</translation>
     </message>
     <message>
         <source>Cannot upload: %1</source>
@@ -6330,6 +6344,14 @@ failed: </source>
     </message>
     <message>
         <source>Your MuseScore version is too old to use this feature.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Please upgrade first&lt;/a&gt;.</source>
+        <translation>Phiên bản MuseScore quá cũ để sử dụng tính năng này.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Vui lòng nâng cấp&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>Please check your Internet connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6351,7 +6373,7 @@ failed: </source>
     <name>Ms::MeasureProperties</name>
     <message>
         <source>MuseScore: Measure Properties for Measure %1</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Đặc tính của ô nhịp %1</translation>
     </message>
     <message>
         <source>visible</source>
@@ -6377,7 +6399,7 @@ failed: </source>
     </message>
     <message>
         <source>New tag name:</source>
-        <translation type="unfinished"/>
+        <translation>Tên thẻ mới:</translation>
     </message>
 </context>
 <context>
@@ -6391,7 +6413,7 @@ failed: </source>
     <name>Ms::MuseScore</name>
     <message>
         <source>Could not open MP3 encoding library!</source>
-        <translation type="unfinished"/>
+        <translation>Không thể mở thư viện mã hóa MP3!</translation>
     </message>
     <message>
         <source>Not a valid or supported MP3 encoding library!</source>
@@ -6403,7 +6425,7 @@ failed: </source>
     </message>
     <message>
         <source>Unable to open target file for writing</source>
-        <translation type="unfinished"/>
+        <translation>Không thể mở tệp cho mục đích soạn thảo</translation>
     </message>
     <message>
         <source>Error %1 returned from MP3 encoder</source>
@@ -6421,35 +6443,35 @@ trước khi đóng thảo trình?</translation>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;</source>
-        <translation type="unfinished"/>
+        <translation>Tệp MuseScore (*.mscz *.mscx);;</translation>
     </message>
     <message>
         <source>MusicXML Files (*.xml *.mxl);;</source>
-        <translation>Tài liệu nhạc MusicXML (*.xml *.mxl);;</translation>
+        <translation>Tệp MusicXML (*.xml *.mxl);;</translation>
     </message>
     <message>
         <source>MIDI Files (*.mid *.midi *.kar);;</source>
-        <translation>Tài liệu nhạc MIDI (*.mid *.midi *.kar);;</translation>
+        <translation>Tập tin MIDI (*.mid *.midi *.kar);;</translation>
     </message>
     <message>
         <source>Muse Data Files (*.md);;</source>
-        <translation>Tài liệu nhạc Muse Data (*.md);;</translation>
+        <translation>Tệp Muse Data (*.md);;</translation>
     </message>
     <message>
         <source>Capella Files (*.cap *.capx);;</source>
-        <translation type="unfinished"/>
+        <translation>Tệp Capella (*.cap *.capx);;</translation>
     </message>
     <message>
         <source>BB Files &lt;experimental&gt; (*.mgu *.MGU *.sgu *.SGU);;</source>
-        <translation>Tài liệu nhạc BB &lt;thử nghiệm&gt; (*.mgu *.MGU *.sgu *.SGU);;</translation>
+        <translation>Tệp BB &lt;experimental&gt; (*.mgu *.MGU *.sgu *.SGU);;</translation>
     </message>
     <message>
         <source>Overture / Score Writer Files &lt;experimental&gt; (*.ove *.scw);;</source>
-        <translation type="unfinished"/>
+        <translation>Tập tin Overture / Score Writer &lt;experimental&gt; (*.ove *.scw);;</translation>
     </message>
     <message>
         <source>Bagpipe Music Writer Files &lt;experimental&gt; (*.bww);;</source>
-        <translation type="unfinished"/>
+        <translation>Tệp Bagpipe Music Writer &lt;experimental&gt; (*.bww);;</translation>
     </message>
     <message>
         <source>MuseScore: Load Score</source>
@@ -6477,11 +6499,11 @@ trước khi đóng thảo trình?</translation>
     </message>
     <message>
         <source>MuseScore Style File (*.mss)</source>
-        <translation>MuseScore Style File (*.mss)</translation>
+        <translation>Tệp MuseScore Style (*.mss)</translation>
     </message>
     <message>
         <source>PDF Scan File (*.pdf);;All (*)</source>
-        <translation type="unfinished"/>
+        <translation>Tệp quét PDF (*.pdf);;Tất cả (*)</translation>
     </message>
     <message>
         <source>Choose PDF Scan</source>
@@ -6493,7 +6515,7 @@ trước khi đóng thảo trình?</translation>
     </message>
     <message>
         <source>Choose Audio File</source>
-        <translation type="unfinished"/>
+        <translation>Chọn tệp âm thanh</translation>
     </message>
     <message>
         <source>MuseScore: Save Image</source>
@@ -6521,7 +6543,7 @@ trước khi đóng thảo trình?</translation>
     </message>
     <message>
         <source>MuseScore Plugin File (*.qml)</source>
-        <translation type="unfinished"/>
+        <translation>Tệp MuseScore plugin (*.qml)</translation>
     </message>
     <message>
         <source>MuseScore: Load Drumset</source>
@@ -6533,11 +6555,11 @@ trước khi đóng thảo trình?</translation>
     </message>
     <message>
         <source>MuseScore Drumset File (*.drm)</source>
-        <translation type="unfinished"/>
+        <translation>Tệp MuseScore Drumset (*drm)</translation>
     </message>
     <message>
         <source>Standard MIDI File (*.mid)</source>
-        <translation>Standard MIDI File (*.mid)</translation>
+        <translation>Tệp Standard MIDI (*.mid)</translation>
     </message>
     <message>
         <source>PDF File (*.pdf)</source>
@@ -6561,23 +6583,19 @@ trước khi đóng thảo trình?</translation>
     </message>
     <message>
         <source>MP3 Audio (*.mp3)</source>
-        <translation>Wave Audio (*.wav)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>MuseScore: Export</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Xuất dữ liệu</translation>
     </message>
     <message>
         <source>MuseScore: Save As</source>
         <translation>MuseScore: Lưu trữ dưới tên</translation>
     </message>
     <message>
-        <source>cannot determine file type</source>
-        <translation>không thể nhận diện loại tài liệu này</translation>
-    </message>
-    <message>
         <source>MuseScore: Export Parts</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Xuất thành các phân phổ</translation>
     </message>
     <message>
         <source>&quot;%1&quot; already exists.
@@ -6603,7 +6621,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>Parts were successfully exported</source>
-        <translation type="unfinished"/>
+        <translation>Các phân phổ đã được xuất ra thành công</translation>
     </message>
     <message>
         <source>MuseScore: Save a Copy</source>
@@ -6611,11 +6629,11 @@ Do you want to replace it?
     </message>
     <message>
         <source>MuseScore: Save Selection</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Lưu phần lựa chọn</translation>
     </message>
     <message>
         <source>MuseScore: Save Selected</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Lưu phần được chọn</translation>
     </message>
     <message>
         <source>Images (*.jpg *.jpeg *.png);;All (*)</source>
@@ -6623,7 +6641,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>Repeat measure sign</source>
-        <translation>Lập lại dấu hiệu của trường canh</translation>
+        <translation>Tín hiệu lặp lại của ô nhịp</translation>
     </message>
     <message>
         <source>Line break</source>
@@ -6711,7 +6729,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>&amp;Measures</source>
-        <translation type="unfinished"/>
+        <translation>&amp;ô nhịp</translation>
     </message>
     <message>
         <source>&amp;Frames</source>
@@ -6728,8 +6746,8 @@ Do you want to replace it?
     <message>
         <source>No measure selected:
 Please select a measure and try again</source>
-        <translation>Chưa có trường canh nào được chọn:
-Vui lòng chọn một trường canh và thử lại lần nữa</translation>
+        <translation>Chưa có ô nhịp nào được chọn:
+Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
     </message>
     <message>
         <source>synthesizer</source>
@@ -6741,35 +6759,31 @@ Vui lòng chọn một trường canh và thử lại lần nữa</translation>
     </message>
     <message>
         <source>File Operations</source>
-        <translation>File Operations</translation>
+        <translation>Quá trình hoạt động của tệp</translation>
     </message>
     <message>
         <source>Transport Tools</source>
-        <translation>Transport Tools</translation>
+        <translation>Công cụ Transport</translation>
     </message>
     <message>
         <source>Page View</source>
-        <translation type="unfinished"/>
+        <translation>Xem theo trang</translation>
     </message>
     <message>
         <source>Continuous View</source>
-        <translation type="unfinished"/>
+        <translation>Xem theo dòng</translation>
     </message>
     <message>
         <source>Concert Pitch</source>
         <translation>Âm phát ra khi chơi bài nhạc</translation>
     </message>
     <message>
-        <source>Note Entry</source>
-        <translation>Điền nốt nhạc:</translation>
-    </message>
-    <message>
         <source>&amp;File</source>
-        <translation>&amp;Bài Nhạc</translation>
+        <translation>&amp;Tệp</translation>
     </message>
     <message>
         <source>Open &amp;Recent</source>
-        <translation>Mở &amp;nhạc vừa dùng</translation>
+        <translation>Mở &amp;Gần đây</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
@@ -6777,11 +6791,11 @@ Vui lòng chọn một trường canh và thử lại lần nữa</translation>
     </message>
     <message>
         <source>&amp;Measure</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ô nhịp</translation>
     </message>
     <message>
         <source>&amp;Voices</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Bè</translation>
     </message>
     <message>
         <source>W&amp;orkspaces</source>
@@ -6789,11 +6803,11 @@ Vui lòng chọn một trường canh và thử lại lần nữa</translation>
     </message>
     <message>
         <source>&amp;Preferences...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Thiết lập...</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Xem</translation>
     </message>
     <message>
         <source>Add N&amp;ote</source>
@@ -6828,51 +6842,7 @@ Vui lòng chọn một trường canh và thử lại lần nữa</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>&amp;About</source>
-        <translation>&amp;Về thảo trình MuseScore</translation>
-    </message>
-    <message>
-        <source>About &amp;Qt</source>
-        <translation>Về thảo trình &amp;Qt</translation>
-    </message>
-    <message>
-        <source>About &amp;MusicXML</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Check for &amp;Update</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>no score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>NOTE entry mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>DRUM entry mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>TAB entry mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>edit mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>text edit mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>lyrics edit mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>play</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -6889,11 +6859,11 @@ Phục hồi lại?</translation>
     </message>
     <message>
         <source>MuseScore: Tuplet Error</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Lỗi dấu liên</translation>
     </message>
     <message>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
-        <translation type="unfinished"/>
+        <translation>Không thể tạo dấu liên với giá trị %1 cho trường độ %2</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -6901,11 +6871,11 @@ Phục hồi lại?</translation>
     </message>
     <message>
         <source>Undo Changes</source>
-        <translation type="unfinished"/>
+        <translation>Hành động hủy bỏ</translation>
     </message>
     <message>
         <source>MuseScore: Read Workspace Name</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: đọc tên không gian làm việc</translation>
     </message>
     <message>
         <source>'%1' does already exist,
@@ -6914,11 +6884,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Ogg Audio File (*.ogg);;All (*)</source>
-        <translation type="unfinished"/>
+        <translation>Tệp âm thanh Ogg (*.ogg);;All(*)</translation>
     </message>
     <message>
         <source>MuseScore: Choose Ogg Audio File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Chọn tệp âm thanh Ogg</translation>
     </message>
     <message>
         <source>FLAC Audio (*.flac)</source>
@@ -6926,7 +6896,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Chord Symbols Style File (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>Tệp ký hiệu hợp âm (*.xml)</translation>
     </message>
     <message>
         <source>MuseScore: Load Chord Symbols Style</source>
@@ -6941,10 +6911,6 @@ please choose a different name:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>chord symbol/figured bass edit mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Report a Bug</source>
         <translation type="unfinished"/>
     </message>
@@ -6955,11 +6921,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Please select one or more measures</source>
-        <translation type="unfinished"/>
+        <translation>Vui lòng chọn một hoặc nhiều ô nhịp</translation>
     </message>
     <message>
         <source>Error Opening LAME library</source>
-        <translation type="unfinished"/>
+        <translation>lỗi thư viện LAME</translation>
     </message>
     <message>
         <source>Encoding Error</source>
@@ -6972,7 +6938,8 @@ please choose a different name:</source>
     <message>
         <source>Error reading language file %s at line %d column %d: %s
 </source>
-        <translation type="unfinished"/>
+        <translation>Lỗi đang xem ngôn ngữ tệp %s tại dòng %d cột %d: %s
+</translation>
     </message>
     <message>
         <source>MuseScore: Warning</source>
@@ -6980,23 +6947,23 @@ please choose a different name:</source>
     </message>
     <message>
         <source>PDF Files &lt;experimental OMR&gt; (*.pdf);;</source>
-        <translation type="unfinished"/>
+        <translation>Tệp PDF &lt;experimental OMR&gt; (*.pdf);;</translation>
     </message>
     <message>
         <source>New...</source>
-        <translation>Sáng tác bài nhạc mới...</translation>
+        <translation>Tạo mới...</translation>
     </message>
     <message>
         <source>Clear Recent Files</source>
-        <translation type="unfinished"/>
+        <translation>Dọn dẹp các tệp mở gần đây</translation>
     </message>
     <message>
         <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation type="unfinished"/>
+        <translation>Hỗ trợ tất cả các tệp (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
     </message>
     <message>
         <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation type="unfinished"/>
+        <translation>Hỗ trợ tất cả các tệp (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
     </message>
     <message>
         <source>Zoom</source>
@@ -7004,19 +6971,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>View Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Screenshot Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>screenshot mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>score locked</source>
-        <translation type="unfinished"/>
+        <translation>Chế độ xem</translation>
     </message>
     <message>
         <source>Swing</source>
@@ -7028,7 +6983,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Time Signatures</source>
-        <translation>Số nhịp</translation>
+        <translation>Só chỉ nhịp</translation>
     </message>
     <message>
         <source>Symbols</source>
@@ -7036,23 +6991,23 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Cannot create tuplet: Note value is too short</source>
-        <translation type="unfinished"/>
+        <translation>Không thể tạo dấu liên: Giá trị nốt quá ngắn</translation>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
-        <translation type="unfinished"/>
+        <translation>Tệp MuseScore (*.mscz)</translation>
     </message>
     <message>
         <source>Uncompressed MuseScore File (*.mscx)</source>
-        <translation type="unfinished"/>
+        <translation>Tệp Uncompresses MuseScore (*.mscx)</translation>
     </message>
     <message>
         <source>MusicXML File (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>Tệp MusicXML (*.xml)</translation>
     </message>
     <message>
         <source>Compressed MusicXML File (*.mxl)</source>
-        <translation type="unfinished"/>
+        <translation>Tệp Compressed MusicXML (*mxl)</translation>
     </message>
     <message>
         <source>Show MIDI import panel</source>
@@ -7100,7 +7055,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Measure:Beat:Tick</source>
-        <translation type="unfinished"/>
+        <translation>Ô nhịp:Nhịp:Phách</translation>
     </message>
     <message>
         <source>Switch layer</source>
@@ -7112,11 +7067,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Workspace name:</source>
-        <translation type="unfinished"/>
+        <translation>Tên không gian làm việc:</translation>
     </message>
     <message>
         <source>Score_and_Parts</source>
-        <translation type="unfinished"/>
+        <translation>Tổng phổ_và_phân phổ</translation>
     </message>
     <message>
         <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</source>
@@ -7144,10 +7099,90 @@ please choose a different name:</source>
     </message>
     <message>
         <source>All Supported Files (*.svg *.jpg *.jpeg *.png);;Scalable Vector Graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</source>
-        <translation type="unfinished"/>
+        <translation>Hỗ trợ tất cả các tệp (*.svg *.jpg *.jpeg *.png);;Scalable Vector Graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
+        <translation>&amp;Công cụ</translation>
+    </message>
+    <message>
+        <source>No score</source>
+        <translation>không có bài nhạc</translation>
+    </message>
+    <message>
+        <source>Edit mode</source>
+        <translation>điều chỉnh thể</translation>
+    </message>
+    <message>
+        <source>Text edit mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Lyrics edit mode</source>
+        <translation>Chế độ điều chỉnh lời bản nhạc</translation>
+    </message>
+    <message>
+        <source>Chord symbol/figured bass edit mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Chơi</translation>
+    </message>
+    <message>
+        <source>Score locked</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&amp;About...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>About &amp;Qt...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>About &amp;MusicXML...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Image Capture</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note Input</source>
+        <translation>Nhập nốt</translation>
+    </message>
+    <message>
+        <source>Note input mode</source>
+        <translation>Chế độ nhập nốt</translation>
+    </message>
+    <message>
+        <source>Drum input mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>TAB input mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Image capture mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cannot determine file type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>MuseScore:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cannot write into %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7174,25 +7209,25 @@ please choose a different name:</source>
     <name>Ms::NewWizard</name>
     <message>
         <source>MuseScore: Create New Score</source>
-        <translation>MuseScore: Tạo Score Mới</translation>
+        <translation>MuseScore: Tạo tổng phổ mới</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage1</name>
     <message>
         <source>Create New Score</source>
-        <translation>Sáng tác bài nhạc mới</translation>
+        <translation>Tạo tổng phổ mới</translation>
     </message>
     <message>
         <source>This wizard creates a new score</source>
-        <translation>Phần này sẽ dẫn dắt bạn từng bước một trong việc tạo ra một bài nhạc mới</translation>
+        <translation>Phần này sẽ dẫn dắt bạn từng bước một trong việc tạo ra một tổng phổ mới</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage2</name>
     <message>
         <source>Create New Score</source>
-        <translation>Sáng tác bài nhạc mới</translation>
+        <translation>Tạo tổng phổ mới</translation>
     </message>
     <message>
         <source>Define a set of instruments. Each instrument is represented by one or more staves</source>
@@ -7203,33 +7238,33 @@ please choose a different name:</source>
     <name>Ms::NewWizardPage3</name>
     <message>
         <source>Create New Score</source>
-        <translation>Sáng tác bài nhạc mới</translation>
+        <translation>Tạo tổng phổ mới</translation>
     </message>
     <message>
         <source>Create Time Signature</source>
-        <translation>Tạo khóa nhịp</translation>
+        <translation>Tạo số chỉ nhịp</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage4</name>
     <message>
         <source>Create New Score</source>
-        <translation>Sáng tác bài nhạc mới</translation>
+        <translation>Tạo tổng phổ mới</translation>
     </message>
     <message>
         <source>Select Template File:</source>
-        <translation>Chọn khuôn mẫu:</translation>
+        <translation>Chọn tệp mẫu:</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage5</name>
     <message>
         <source>Create New Score</source>
-        <translation>Sáng tác bài nhạc mới</translation>
+        <translation>Tạo tổng phổ mới</translation>
     </message>
     <message>
         <source>Select Key Signature and Tempo:</source>
-        <translation type="unfinished"/>
+        <translation>Chọn hóa biểu và nhịp độ:</translation>
     </message>
     <message>
         <source>Key Signature</source>
@@ -7245,6 +7280,13 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Beats per minute</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Ms::NoEffectGui</name>
+    <message>
+        <source>No Plugin</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7280,7 +7322,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>%1 Start of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 Bắt đầu của %2</translation>
     </message>
     <message>
         <source>%1 End of %2</source>
@@ -7310,7 +7352,7 @@ please choose a different name:</source>
     <name>Ms::Palette</name>
     <message>
         <source>Clear</source>
-        <translation>Xóa sạch</translation>
+        <translation>Dọn dẹp</translation>
     </message>
     <message>
         <source>Properties...</source>
@@ -7329,7 +7371,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Select workspace</source>
-        <translation type="unfinished"/>
+        <translation>Chọn không gian làm việc</translation>
     </message>
     <message>
         <source>+</source>
@@ -7337,11 +7379,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Add new workspace</source>
-        <translation type="unfinished"/>
+        <translation>Thêm không gian làm việc mới</translation>
     </message>
     <message>
         <source>new Palette</source>
-        <translation type="unfinished"/>
+        <translation>bảng mới</translation>
     </message>
 </context>
 <context>
@@ -7352,7 +7394,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert New Palette...</source>
-        <translation type="unfinished"/>
+        <translation>Chèn thêm bảng mới...</translation>
     </message>
     <message>
         <source>Move Palette Up</source>
@@ -7394,61 +7436,10 @@ please choose a different name:</source>
     </message>
 </context>
 <context>
-    <name>Ms::PianorollEditor</name>
-    <message>
-        <source>Toolbar 1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wave</source>
-        <translation>Sóng</translation>
-    </message>
-    <message>
-        <source>Show wave display</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Toolbar 2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cursor:</source>
-        <translation>Chuột:</translation>
-    </message>
-    <message>
-        <source>Velocity:</source>
-        <translation>Tốc độ:</translation>
-    </message>
-    <message>
-        <source>Offset</source>
-        <translation>Offset</translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation>Người sử dụng</translation>
-    </message>
-    <message>
-        <source>Pitch:</source>
-        <translation>Âm độ:</translation>
-    </message>
-    <message>
-        <source>OnTime:</source>
-        <translation>OnTime:</translation>
-    </message>
-    <message>
-        <source>Len:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
-        <translation>MuseScore: &lt;%1&gt; Staff: %2</translation>
-    </message>
-</context>
-<context>
     <name>Ms::PluginCreator</name>
     <message>
         <source>File Operations</source>
-        <translation>File Operations</translation>
+        <translation>Quá trình hoạt động của tệp</translation>
     </message>
     <message>
         <source>Edit Operations</source>
@@ -7480,15 +7471,15 @@ Save before closing?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>cannot determine file type</source>
-        <translation>không thể nhận diện loại tài liệu này</translation>
+        <source>Cannot determine file type</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Ms::PreferenceDialog</name>
     <message>
         <source>The language will be changed once you restart MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>Ngôn ngữ sẽ được thay đổi một khi bạn khởi động lại MuseScore</translation>
     </message>
     <message>
         <source>Choose Notepaper</source>
@@ -7504,7 +7495,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>Choose Default Style for Parts</source>
-        <translation type="unfinished"/>
+        <translation>Chọn kiểu mặc định cho các phân phổ</translation>
     </message>
     <message>
         <source>Choose Instrument List</source>
@@ -7516,15 +7507,15 @@ Save before closing?</source>
     </message>
     <message>
         <source>Choose Starting Score</source>
-        <translation>Chọn Starting Score</translation>
+        <translation>Chọn tổng phổ bắt đầu</translation>
     </message>
     <message>
         <source>MuseScore Shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Các phím tắt của MuseScore</translation>
     </message>
     <message>
         <source>Print Shortcuts</source>
-        <translation>In lối tắt</translation>
+        <translation>Các phím tắt để in</translation>
     </message>
     <message>
         <source>Choose Default Style for Imports</source>
@@ -7551,23 +7542,19 @@ Save before closing?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Soundfont Folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>SFZ Folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Action: %1; Shortcut: %2</source>
-        <translation type="unfinished"/>
+        <translation>Dòng lệnh: %1; Phím tắt: %2</translation>
     </message>
     <message>
         <source>No shortcut defined</source>
-        <translation type="unfinished"/>
+        <translation>Không có định nghĩa phím tắt</translation>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;All (*)</source>
+        <translation>Tệp MuseScore (*.mscz *.mscx);;Tất cả (*)</translation>
+    </message>
+    <message>
+        <source>SoundFont Folders</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7603,64 +7590,62 @@ Save before closing?</source>
     </message>
 </context>
 <context>
-    <name>Ms::Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>Ms::Score</name>
     <message>
         <source>The style file is not compatible with this version of MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>Loại tệp không tương thích với phiên bản MuseScore này.</translation>
     </message>
     <message>
         <source>The following file is locked: 
 %1 
 
 Try saving to a different location.</source>
-        <translation>The following file is locked: 
+        <translation>Các tệp sau đây đã bị khóa: 
 %1 
 
-Try saving to a different location.</translation>
+Hãy thử đến một vị trí khác.</translation>
     </message>
     <message>
         <source>Open Temp File
 %1
 failed: %2</source>
-        <translation type="unfinished"/>
+        <translation>Mở tệp mẫu
+%1
+lỗi: %2</translation>
     </message>
     <message>
         <source>MuseScore: Save File failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Lỗi lưu trữ: %1</translation>
     </message>
     <message>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
-        <translation type="unfinished"/>
+        <translation>Đổi tên tệp mẫu &lt;%1&gt; to &lt;%2&gt; lỗi:
+%3</translation>
     </message>
     <message>
         <source>Open File
 %1
 failed: </source>
-        <translation type="unfinished"/>
+        <translation>Mở tệp
+%1
+lỗi:</translation>
     </message>
     <message>
         <source>Open File
 %1
 failed: %2</source>
-        <translation type="unfinished"/>
+        <translation>Mở tệp
+%1
+lỗi: %2</translation>
     </message>
     <message>
         <source>Open Style File
 %1
 failed: %2</source>
-        <translation type="unfinished"/>
+        <translation>Mở loại tệp
+%1
+lỗi: %2</translation>
     </message>
     <message>
         <source>Write Style failed: %1</source>
@@ -7668,18 +7653,26 @@ failed: %2</source>
     </message>
     <message>
         <source>file not found</source>
-        <translation type="unfinished"/>
+        <translation>Tệp không tìm thấy</translation>
     </message>
     <message>
         <source>No selection</source>
-        <translation type="unfinished"/>
+        <translation>Không chọn</translation>
+    </message>
+    <message>
+        <source>Measure %1 Staff %2 incomplete. Expected: %3; Found: %4</source>
+        <translation>Ô nhịp &amp;1 Khuông nhạc %2 không thành công. Chờ đợi: %3; Đã tìm thấy: %4</translation>
+    </message>
+    <message>
+        <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
+        <translation>Ô nhịp %1, khuông nhạc %2, bè %3 quá dài. Chờ đợi: %4; Đã tìm thấy: %5</translation>
     </message>
 </context>
 <context>
     <name>Ms::ScoreAccessibility</name>
     <message>
         <source>No selection</source>
-        <translation type="unfinished"/>
+        <translation>Không chọn</translation>
     </message>
     <message>
         <source>Beat: %1</source>
@@ -7687,23 +7680,23 @@ failed: %2</source>
     </message>
     <message>
         <source>Range Selection</source>
-        <translation type="unfinished"/>
+        <translation>Phạm vi chọn</translation>
     </message>
     <message>
         <source>List Selection</source>
-        <translation type="unfinished"/>
+        <translation>Danh sách lựa chọn</translation>
     </message>
     <message>
         <source>Measure: %1</source>
-        <translation type="unfinished"/>
+        <translation>Ô nhịp: %1</translation>
     </message>
     <message>
         <source>Start Measure: %1; Start Beat: %2</source>
-        <translation type="unfinished"/>
+        <translation>Ô nhịp bắt đầu: %1; Nhịp bắt đầu: %2</translation>
     </message>
     <message>
         <source>End Measure: %1; End Beat: %2</source>
-        <translation type="unfinished"/>
+        <translation>Ô nhịp cuối: %1; Nhịp kết: %2</translation>
     </message>
     <message>
         <source>Staff %1</source>
@@ -7711,21 +7704,28 @@ failed: %2</source>
     </message>
 </context>
 <context>
+    <name>Ms::ScoreBrowser</name>
+    <message>
+        <source>Choose Instruments</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Create New Score</source>
+        <translation>Tạo tổng phổ mới</translation>
+    </message>
+    <message>
+        <source>Custom Templates</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Getting Started</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Ms::ScoreView</name>
     <message>
-        <source>transparent background</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Set Standard Size...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Save As (print mode)...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Save As (screenshot mode)...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -7747,10 +7747,6 @@ failed: %2</source>
     <message>
         <source>MuseScore: Save As</source>
         <translation>MuseScore: Lưu trữ dưới tên</translation>
-    </message>
-    <message>
-        <source>cannot determine file type</source>
-        <translation>không thể nhận diện loại tài liệu này</translation>
     </message>
     <message>
         <source>Layer</source>
@@ -7778,7 +7774,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Time Signature Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Đặc tính số chỉ nhịp...</translation>
     </message>
     <message>
         <source>Line Properties...</source>
@@ -7802,11 +7798,11 @@ failed: %2</source>
     </message>
     <message>
         <source>Measure</source>
-        <translation>Khuông nhạc</translation>
+        <translation>Ô nhịp</translation>
     </message>
     <message>
         <source>Measure Properties...</source>
-        <translation>Measure Properties...</translation>
+        <translation>Đặc tính ô nhịp...</translation>
     </message>
     <message>
         <source>Style...</source>
@@ -7865,22 +7861,6 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Please select the complete tuplet and retry the copy operation</source>
-        <translation>Vui lòng chọn đầy đủ liên ba và thử lại tiến trình sao chép</translation>
-    </message>
-    <message>
-        <source>Please select the complete tuplet and retry the cut operation</source>
-        <translation>Vui lòng chọn đầy đủ liên ba và thử lại tiến trình cắt</translation>
-    </message>
-    <message>
-        <source>no destination to paste</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>cannot paste into tuplet</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -7889,8 +7869,8 @@ first create some staves</source>
     <message>
         <source>No measure selected:
 Please select a measure and try again</source>
-        <translation>Chưa có trường canh nào được chọn:
-Vui lòng chọn một trường canh và thử lại lần nữa</translation>
+        <translation>Chưa có ô nhịp nào được chọn:
+Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
     </message>
     <message>
         <source>Fretboard Diagram Properties...</source>
@@ -7917,24 +7897,12 @@ Vui lòng chọn một trường canh và thử lại lần nữa</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Screenshot Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Hide Courtesy Time Signature</source>
-        <translation type="unfinished"/>
+        <translation>Ẩn tác phong số chỉ nhịp</translation>
     </message>
     <message>
         <source>Show Courtesy Time Signature</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Hide courtesy clef</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Show courtesy clef</source>
-        <translation type="unfinished"/>
+        <translation>Hiện tác phong số chỉ nhịp</translation>
     </message>
     <message>
         <source>Hide Courtesy Key Signature</source>
@@ -7945,41 +7913,106 @@ Vui lòng chọn một trường canh và thử lại lần nữa</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>tuplet cannot cross barlines</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>No chord/rest selected:
 Please select a chord/rest and try again</source>
-        <translation type="unfinished"/>
+        <translation>Không có hợp âm/dấu lặng nào được chọn:
+Vui lòng chọn một hợp âm/dấu lặng và thử lại lần nữa</translation>
     </message>
     <message>
         <source>Cannot split measure here:
 Cannot split tuplet</source>
-        <translation type="unfinished"/>
+        <translation>Không thể tách ô nhịp ở đây:
+Không thể tách chùm 3</translation>
     </message>
     <message>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
-        <translation type="unfinished"/>
+        <translation>Không có ô nhịp nào được chọn:
+Vui lòng chọn một phạm vi của ô nhịp để nối và thử lại lần nữa</translation>
     </message>
     <message>
         <source>Auto-resize to page</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Hide Courtesy Clef</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show Courtesy Clef</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Please select the complete tuplet/tremolo and retry the command</source>
+        <translation>Vui lòng chọn loại chùm/tremolo hoàn chỉnh và thử lại câu lệnh</translation>
+    </message>
+    <message>
+        <source>Image Capture</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save As (Print Mode)...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save As (Screenshot Mode)...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cannot determine file type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>No destination to paste</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cannot paste into tuplet</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tuplet cannot cross barlines</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Transparent background</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Ms::SearchComboBox</name>
+    <message>
+        <source>Search Box</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Type to search. Press Enter to return to score.</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Ms::Segment</name>
     <message>
-        <source>Annotations: </source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Start of </source>
-        <translation type="unfinished"/>
+        <translation>Bắt đầu từ</translation>
     </message>
     <message>
         <source>End of </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Annotations:</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Ms::SelectionListWidget</name>
+    <message>
+        <source>Selection filter</source>
+        <translation>Lựa chọn bộ lọc</translation>
+    </message>
+    <message>
+        <source>Use Tab and Backtab to move through the check boxes</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7987,22 +8020,22 @@ Please select a range of measures to join and try again</source>
     <name>Ms::SelectionWindow</name>
     <message>
         <source>Selection</source>
-        <translation>Selection</translation>
+        <translation>Lựa chọn</translation>
     </message>
 </context>
 <context>
     <name>Ms::ShortcutCaptureDialog</name>
     <message>
         <source>Shortcut conflicts with </source>
-        <translation>Đường tắt này chõi với lại </translation>
+        <translation>Xung đột với phím tắt</translation>
     </message>
     <message>
         <source>Shortcut conflicts with</source>
-        <translation type="unfinished"/>
+        <translation>Xung đột với phím tắt</translation>
     </message>
     <message>
         <source>New shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Phím tắt mới</translation>
     </message>
 </context>
 <context>
@@ -8024,7 +8057,7 @@ Please select a range of measures to join and try again</source>
     <name>Ms::StartDialog</name>
     <message>
         <source>MuseScore Startup Dialog</source>
-        <translation type="unfinished"/>
+        <translation>Khởi động hộp thoại MuseScore</translation>
     </message>
 </context>
 <context>
@@ -8037,19 +8070,19 @@ Please select a range of measures to join and try again</source>
 <context>
     <name>Ms::TempoText</name>
     <message>
-        <source>Dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Double dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Triple dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>note = %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dotted %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double dotted %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Triple dotted %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8121,7 +8154,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Chấp nhận toàn bộ phân phổ</translation>
     </message>
     <message>
         <source>Text style name:</source>
@@ -8132,7 +8165,7 @@ please choose a different name:</source>
     <name>Ms::TextTools</name>
     <message>
         <source>Text Tools</source>
-        <translation>Đồ nghề dùng cho chữ viết</translation>
+        <translation>Công cụ tạo văn bản</translation>
     </message>
     <message>
         <source>Text Edit</source>
@@ -8163,22 +8196,22 @@ please choose a different name:</source>
     <name>Ms::TimeDialog</name>
     <message>
         <source>MuseScore: Time Signatures</source>
-        <translation>MuseScore: Số nhịp</translation>
+        <translation>MuseScore: Số chỉ nhịp</translation>
     </message>
 </context>
 <context>
     <name>Ms::TimeSig</name>
     <message>
         <source>Common time</source>
-        <translation type="unfinished"/>
+        <translation>Common time</translation>
     </message>
     <message>
         <source>Cut time</source>
-        <translation>2/2 alla breve</translation>
+        <translation>Nhịp 2/2</translation>
     </message>
     <message>
         <source>%1/%2 time</source>
-        <translation type="unfinished"/>
+        <translation>%1%2 time</translation>
     </message>
 </context>
 <context>
@@ -8252,6 +8285,22 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;%1&quot;&gt;What does this mean?&lt;/a&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Respect the &lt;a href=&quot;%1&quot;&gt;community guidelines&lt;/a&gt;. Only make your scores accessible to anyone with permission from the right holders.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Use a comma to separate the tags</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>[&lt;a href=&quot;%1&quot;&gt;link&lt;/a&gt;]</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8339,6 +8388,10 @@ please choose a different name:</source>
         <source>C# major, A# minor</source>
         <translation>C# trưởng, A# thứ</translation>
     </message>
+    <message>
+        <source>Open/Atonal</source>
+        <translation>Mở/Atonal</translation>
+    </message>
 </context>
 <context>
     <name>NewWizard</name>
@@ -8352,11 +8405,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Composer:</source>
-        <translation>Nhạc sĩ:</translation>
+        <translation>Nhạc sỹ:</translation>
     </message>
     <message>
         <source>Lyricist:</source>
-        <translation>Thi sĩ:</translation>
+        <translation>Thi sỹ:</translation>
     </message>
     <message>
         <source>Copyright:</source>
@@ -8380,19 +8433,19 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Composer</source>
-        <translation>Nhạc sĩ</translation>
+        <translation>Nhạc sỹ</translation>
     </message>
     <message>
         <source>Insert composer&apos;s name here</source>
-        <translation type="unfinished"/>
+        <translation>Chèn tên composer ở đây</translation>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"/>
+        <translation>Thi sỹ</translation>
     </message>
     <message>
         <source>Insert lyricist&apos;s name here</source>
-        <translation type="unfinished"/>
+        <translation>Chèn tên thi sỹ ở đây</translation>
     </message>
     <message>
         <source>Copyright</source>
@@ -8509,7 +8562,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Preview</source>
-        <translation>Xem thử trước</translation>
+        <translation>Xem trước</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -8533,7 +8586,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Chấp nhận toàn bộ phân phổ</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
@@ -8565,14 +8618,6 @@ please choose a different name:</source>
     <message>
         <source>Barlines</source>
         <translation>Các vạch nhịp</translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation>Normal</translation>
-    </message>
-    <message>
-        <source>Repeats</source>
-        <translation>Lập lại</translation>
     </message>
     <message>
         <source>Breaks &amp;&amp; Spacers</source>
@@ -8676,15 +8721,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Time Signatures</source>
-        <translation>Số nhịp</translation>
+        <translation>Số chỉ nhịp</translation>
     </message>
     <message>
         <source>Staff Changes</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Symbols</source>
-        <translation>Ký hiệu</translation>
     </message>
     <message>
         <source>Arpeggios &amp;&amp; Glissandi</source>
@@ -8696,7 +8737,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Frames &amp;&amp; Measures</source>
-        <translation type="unfinished"/>
+        <translation>Khung &amp;&amp; Ô nhịp</translation>
     </message>
     <message>
         <source>Articulations &amp;&amp; Ornaments</source>
@@ -8708,13 +8749,15 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore: Writing Palette File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Viết một têp bảng</translation>
     </message>
     <message>
         <source>Writing Palette File
 %1
 failed: </source>
-        <translation type="unfinished"/>
+        <translation>Soạn thảo một tệp bảng
+%1
+lỗi:</translation>
     </message>
     <message>
         <source>common symbols</source>
@@ -8722,14 +8765,6 @@ failed: </source>
     </message>
     <message>
         <source>all font symbols</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dashed style</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dotted style</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -8749,11 +8784,27 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>End bar style</source>
+        <source>Repeats &amp;&amp; Jumps</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Double bar style</source>
+        <source>Normal barline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dashed barline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dotted barline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>End bar barline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double barline</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -8767,6 +8818,10 @@ failed: </source>
     <message>
         <source>End-start repeat</source>
         <translation>Chấm Dứt Phần Bắt Đầu Lập Lại</translation>
+    </message>
+    <message>
+        <source>Fretboard Diagrams</source>
+        <translation>Biểu đồ phím đàn</translation>
     </message>
 </context>
 <context>
@@ -8899,11 +8954,11 @@ failed: </source>
     </message>
     <message>
         <source>MIDI sound for part</source>
-        <translation>midi sound for part</translation>
+        <translation>Âm thanh MIDI của phân phổ</translation>
     </message>
     <message>
         <source>Part name</source>
-        <translation type="unfinished"/>
+        <translation>Tên phân phổ</translation>
     </message>
     <message>
         <source>Panorama position</source>
@@ -8911,6 +8966,18 @@ failed: </source>
     </message>
     <message>
         <source>MIDI sound</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Part Name</source>
+        <translation>Tên phân phổ</translation>
+    </message>
+    <message>
+        <source>Use arrows to modify</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sound</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8927,6 +8994,57 @@ failed: </source>
     <message>
         <source>Add</source>
         <translation>Thêm</translation>
+    </message>
+</context>
+<context>
+    <name>PianorollEditor</name>
+    <message>
+        <source>Toolbar 1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wave</source>
+        <translation>Sóng</translation>
+    </message>
+    <message>
+        <source>Show wave display</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toolbar 2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cursor:</source>
+        <translation>Chuột:</translation>
+    </message>
+    <message>
+        <source>Velocity:</source>
+        <translation>Tốc độ:</translation>
+    </message>
+    <message>
+        <source>Offset</source>
+        <translation>Offset</translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation>Người sử dụng</translation>
+    </message>
+    <message>
+        <source>Pitch:</source>
+        <translation>Cao độ</translation>
+    </message>
+    <message>
+        <source>OnTime:</source>
+        <translation>OnTime:</translation>
+    </message>
+    <message>
+        <source>Len:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
+        <translation>MuseScore: &lt;%1&gt; Staff: %2</translation>
     </message>
 </context>
 <context>
@@ -8953,7 +9071,7 @@ failed: </source>
     </message>
     <message>
         <source>Master volume</source>
-        <translation type="unfinished"/>
+        <translation>Âm lượng tổng</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -8975,7 +9093,27 @@ failed: </source>
     </message>
     <message>
         <source>Measure.Beat</source>
-        <translation>measure.phách</translation>
+        <translation>Ô nhịp.Phách</translation>
+    </message>
+    <message>
+        <source>Playback Position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Relative Tempo to 120 beats per minute</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Use up and down arrows to change value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Master Volume</source>
+        <translation>Âm lượng tổng</translation>
+    </message>
+    <message>
+        <source>Relative tempo to 120 beats per minute</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -8990,7 +9128,7 @@ failed: </source>
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished"/>
+        <translation>Tệp</translation>
     </message>
     <message>
         <source>Help</source>
@@ -9002,11 +9140,11 @@ failed: </source>
     </message>
     <message>
         <source>New</source>
-        <translation>Tạo</translation>
+        <translation>Tạo mới</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation>Mở...</translation>
+        <translation>Mở</translation>
     </message>
     <message>
         <source>Save</source>
@@ -9018,15 +9156,11 @@ failed: </source>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Lùi lại 1 bước</translation>
+        <translation>Hủy bỏ</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation>Tiến tới 1 bước</translation>
-    </message>
-    <message>
-        <source>Quit</source>
-        <translation>Thoát</translation>
+        <translation>Hoàn tác</translation>
     </message>
     <message>
         <source>R</source>
@@ -9034,6 +9168,10 @@ failed: </source>
     </message>
     <message>
         <source>Reload current plugin source</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Close Plugin Creator</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -9045,7 +9183,7 @@ failed: </source>
     </message>
     <message>
         <source>Define Shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Định nghĩa phím tắt</translation>
     </message>
     <message>
         <source>Path:</source>
@@ -9063,24 +9201,28 @@ failed: </source>
         <source>Shortcut:</source>
         <translation>Phím tắt:</translation>
     </message>
+    <message>
+        <source>Clear Shortcut</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>PrefsDialogBase</name>
     <message>
         <source>MuseScore: Preferences</source>
-        <translation>MuseScore: Các thiết lập định sẵn</translation>
+        <translation>MuseScore: Thiết lập</translation>
     </message>
     <message>
         <source>MuseScore Preferences</source>
-        <translation>Thiết lập định sẵn cho MuseScore</translation>
+        <translation>Thiết lập MuseScore</translation>
     </message>
     <message>
         <source>Reset All Preferences to Default</source>
-        <translation type="unfinished"/>
+        <translation>Đặt lại các thiết lập về mặc định</translation>
     </message>
     <message>
         <source>General</source>
-        <translation>Tổng quan</translation>
+        <translation>General</translation>
     </message>
     <message>
         <source>Language</source>
@@ -9088,7 +9230,7 @@ failed: </source>
     </message>
     <message>
         <source>Program Start</source>
-        <translation>Khi bắt đầu chạy</translation>
+        <translation>Bắt đầu chương trình</translation>
     </message>
     <message>
         <source>Auto Save</source>
@@ -9115,14 +9257,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Paths</source>
-        <translation>Các đường dẫn</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Canvas</source>
         <translation>Bộ vẽ</translation>
     </message>
@@ -9145,10 +9279,6 @@ failed: </source>
     <message>
         <source>Miscellaneous</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note Entry</source>
-        <translation>Điền nốt nhạc</translation>
     </message>
     <message>
         <source>Enable MIDI input</source>
@@ -9176,7 +9306,7 @@ failed: </source>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Xóa đi</translation>
+        <translation>Dọn dẹp</translation>
     </message>
     <message>
         <source>Score</source>
@@ -9184,15 +9314,15 @@ failed: </source>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>Xem</translation>
     </message>
     <message>
         <source>default scale for new score views</source>
-        <translation type="unfinished"/>
+        <translation>Tỉ lệ xem mặc định cho tổng phổ mới</translation>
     </message>
     <message>
         <source>Default Files</source>
-        <translation type="unfinished"/>
+        <translation>Các tệp mặc định</translation>
     </message>
     <message>
         <source>Style:</source>
@@ -9296,7 +9426,7 @@ failed: </source>
     </message>
     <message>
         <source>Attention: Any changes on this page require a restart of MuseScore.</source>
-        <translation>Chú ý: Bất cứ thay đổi nào trong trang này đều đòi hỏi MuseScore được tắt đi và mở lại.</translation>
+        <translation>Chú ý: Bất cứ thay đổi nào trong trang này đều đòi hỏi MuseScore được khởi động lại.</translation>
     </message>
     <message>
         <source>Import</source>
@@ -9312,7 +9442,7 @@ failed: </source>
     </message>
     <message>
         <source>Use style file:</source>
-        <translation>Dùng style file:</translation>
+        <translation>Sử dụng loại tệp:</translation>
     </message>
     <message>
         <source>Browse...</source>
@@ -9364,7 +9494,7 @@ failed: </source>
     </message>
     <message>
         <source>Export</source>
-        <translation>Chuyển ra khỏi MuseScore</translation>
+        <translation>Xuất dữ liệu</translation>
     </message>
     <message>
         <source>PNG/SVG</source>
@@ -9384,27 +9514,27 @@ failed: </source>
     </message>
     <message>
         <source>Export layout</source>
-        <translation type="unfinished"/>
+        <translation>Sắp xếp xuất bản</translation>
     </message>
     <message>
         <source>Export all system and page breaks</source>
-        <translation type="unfinished"/>
+        <translation>Xuất toàn bộ dòng nhạc và ngắt trang</translation>
     </message>
     <message>
         <source>Export manually added system and page breaks only</source>
-        <translation type="unfinished"/>
+        <translation>Xuất thủ công chỉ tự thêm vào trang và các ngắt trang</translation>
     </message>
     <message>
         <source>Do not export system or page breaks</source>
-        <translation type="unfinished"/>
+        <translation>không được export các dòng nhạc hoặc các dấu ngắt trang</translation>
     </message>
     <message>
         <source>Shortcuts</source>
-        <translation>Phím tắt</translation>
+        <translation>Các phím tắt</translation>
     </message>
     <message>
         <source>Action</source>
-        <translation>Hành động</translation>
+        <translation>Lệnh</translation>
     </message>
     <message>
         <source>Shortcut</source>
@@ -9412,7 +9542,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset Shortcut to Default</source>
-        <translation type="unfinished"/>
+        <translation>Đặt phím tắt về mặc định</translation>
     </message>
     <message>
         <source>Define...</source>
@@ -9432,7 +9562,7 @@ failed: </source>
     </message>
     <message>
         <source>Start empty</source>
-        <translation>bắt đầu từ chỗ không có gì</translation>
+        <translation>Bắt đầu từ chỗ không có gì</translation>
     </message>
     <message>
         <source>Continue last session</source>
@@ -9440,11 +9570,11 @@ failed: </source>
     </message>
     <message>
         <source>Start with new score</source>
-        <translation>bắt đầu với bài nhạc mới</translation>
+        <translation>Bắt đầu với tổng phổ mới</translation>
     </message>
     <message>
         <source>Start with score:</source>
-        <translation>bắt đầu với bài nhạc:</translation>
+        <translation>bắt đầu với tổng phổ:</translation>
     </message>
     <message>
         <source>Show splash screen</source>
@@ -9476,7 +9606,7 @@ failed: </source>
     </message>
     <message>
         <source>Toggle play</source>
-        <translation type="unfinished"/>
+        <translation>Phát ký hiệu nốt chốt</translation>
     </message>
     <message>
         <source>Whole note</source>
@@ -9511,10 +9641,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Note entry</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Instrument list 2:</source>
         <translation type="unfinished"/>
     </message>
@@ -9524,7 +9650,7 @@ failed: </source>
     </message>
     <message>
         <source>Style for part:</source>
-        <translation type="unfinished"/>
+        <translation>Kiểu phân phổ:</translation>
     </message>
     <message>
         <source>ALSA audio</source>
@@ -9540,7 +9666,7 @@ failed: </source>
     </message>
     <message>
         <source>Character Set Used When Importing Binary Files</source>
-        <translation type="unfinished"/>
+        <translation>Bộ ký tự được sử dụng khi nhập các tệp nhị phân</translation>
     </message>
     <message>
         <source>Shortest note:</source>
@@ -9551,40 +9677,12 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Image folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Score folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Style folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Template folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Plugin folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Soundfont folders:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>SFZ folders:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Save every:</source>
         <translation>Lưu trữ mỗi</translation>
     </message>
     <message>
         <source>Proximity for selecting elements:</source>
-        <translation>Proximity for selecting elements</translation>
+        <translation>Yếu tố gần nhất để chọn</translation>
     </message>
     <message>
         <source>Default zoom:</source>
@@ -9592,10 +9690,6 @@ failed: </source>
     </message>
     <message>
         <source>Resolution DPI:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Check for new versions of MuseScore on startup:</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -9613,7 +9707,7 @@ failed: </source>
     </message>
     <message>
         <source>Timebase Master</source>
-        <translation type="unfinished"/>
+        <translation>Tổng thời gian cơ sở</translation>
     </message>
     <message>
         <source>MIDI Input:</source>
@@ -9625,39 +9719,39 @@ failed: </source>
     </message>
     <message>
         <source>Preferences Tab Manager</source>
-        <translation type="unfinished"/>
+        <translation>Thẻ quản lý thiết lập</translation>
     </message>
     <message>
         <source>General Tab</source>
-        <translation type="unfinished"/>
+        <translation>Thẻ General</translation>
     </message>
     <message>
         <source>Select language</source>
-        <translation type="unfinished"/>
+        <translation>Chọn ngôn ngữ</translation>
     </message>
     <message>
         <source>The language will be changed once you restart MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>Ngôn ngữ sẽ được thay đổi một khi bạn khởi động lại MuseScore.</translation>
     </message>
     <message>
         <source>Start with score</source>
-        <translation type="unfinished"/>
+        <translation>Bắt đầu với tổng phổ</translation>
     </message>
     <message>
         <source>Insert path to starting score</source>
-        <translation type="unfinished"/>
+        <translation>Chèn đường dẫn đến tổng phổ bắt đầu</translation>
     </message>
     <message>
         <source>Choose starting score</source>
-        <translation type="unfinished"/>
+        <translation>Chọn tổng phổ bắt đầu</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting the starting score</source>
-        <translation type="unfinished"/>
+        <translation>Mở một hộp thoại tệp để chọn tổng phổ bắt đầu</translation>
     </message>
     <message>
         <source>Select delay (in minutes) between auto saves</source>
-        <translation type="unfinished"/>
+        <translation>Chọn lần nữa (tính bằng phút) trong khoảng thời gian lưu tự động</translation>
     </message>
     <message>
         <source>Port number</source>
@@ -9665,7 +9759,7 @@ failed: </source>
     </message>
     <message>
         <source>Select style</source>
-        <translation type="unfinished"/>
+        <translation>Chọn kiểu dáng</translation>
     </message>
     <message>
         <source>Icon Height</source>
@@ -9689,7 +9783,7 @@ failed: </source>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the score folder</source>
-        <translation type="unfinished"/>
+        <translation>Một thư mục hội thoại để chọn thư mục tổng phổ</translation>
     </message>
     <message>
         <source>Choose style folder</source>
@@ -9697,7 +9791,7 @@ failed: </source>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the style folder</source>
-        <translation type="unfinished"/>
+        <translation>Mở một thư mục hội thoại để chọn thư mục kiểu dáng</translation>
     </message>
     <message>
         <source>Score folder</source>
@@ -9729,15 +9823,7 @@ failed: </source>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the plugin folder</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Soundfont folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Insert path to soundfont folders</source>
-        <translation type="unfinished"/>
+        <translation>mở một thư mục hội thoại để chọn thư mục trình cắm</translation>
     </message>
     <message>
         <source>Image folder</source>
@@ -9753,27 +9839,11 @@ failed: </source>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the template folder</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>SFZ folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Insert path to SFZ folders</source>
-        <translation type="unfinished"/>
+        <translation>Mở một thư mục hội thoại để chọn thư mục mẫu</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the image folder</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Opens a dialog for configuring the soundfont folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Opens a dialog for configuring the SFZ folders</source>
-        <translation type="unfinished"/>
+        <translation>Mở một thư mục hội thoại để chọn thư mục ảnh</translation>
     </message>
     <message>
         <source>Canvas Tab</source>
@@ -9793,23 +9863,23 @@ failed: </source>
     </message>
     <message>
         <source>Insert path to background wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Chèn đường dẫn đến tệp nền</translation>
     </message>
     <message>
         <source>Choose Background wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Chọn tệp nền</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting the wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Mở một hộp thoại tệp để chọn tệp ảnh nền</translation>
     </message>
     <message>
         <source>Select background color</source>
-        <translation type="unfinished"/>
+        <translation>Chọn màu sắc cho nền</translation>
     </message>
     <message>
         <source>Opens a dialog for selecting the background color</source>
-        <translation type="unfinished"/>
+        <translation>Mở một hộp thoại để chọn màu nền</translation>
     </message>
     <message>
         <source>Paper wallpaper path</source>
@@ -9817,19 +9887,19 @@ failed: </source>
     </message>
     <message>
         <source>Insert path to paper wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Chèn đường dẫn đến tệp nền của trang</translation>
     </message>
     <message>
         <source>Choose paper wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Chọn tệp nền của trang</translation>
     </message>
     <message>
         <source>Select paper color</source>
-        <translation type="unfinished"/>
+        <translation>Chọn màu sắc cho trang giấy</translation>
     </message>
     <message>
         <source>Opens a dialog for selecting the paper color</source>
-        <translation type="unfinished"/>
+        <translation>Mở một hộp thoại để chọn màu cho trang</translation>
     </message>
     <message>
         <source>Paper Wallpaper</source>
@@ -9837,10 +9907,6 @@ failed: </source>
     </message>
     <message>
         <source>Paper Color</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note Entry Tab</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -9861,7 +9927,7 @@ failed: </source>
     </message>
     <message>
         <source>Toggle play record</source>
-        <translation type="unfinished"/>
+        <translation>Ghi âm phát ký hiệu chốt</translation>
     </message>
     <message>
         <source>Whole note is active</source>
@@ -9928,14 +9994,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Note entry is active</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry record</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>16th note is active</source>
         <translation type="unfinished"/>
     </message>
@@ -9965,7 +10023,7 @@ failed: </source>
     </message>
     <message>
         <source>Opens a file dialog for selecting a instrument list file</source>
-        <translation type="unfinished"/>
+        <translation>Mở một hộp thoại để chọn một tệp danh sách nhạc cụ</translation>
     </message>
     <message>
         <source>Instrument list 1</source>
@@ -9973,11 +10031,11 @@ failed: </source>
     </message>
     <message>
         <source>Insert path to a instrument list file</source>
-        <translation type="unfinished"/>
+        <translation>Chèn đường dẫn đến một tệp danh sách nhạc cụ</translation>
     </message>
     <message>
         <source>Insert path to style file</source>
-        <translation type="unfinished"/>
+        <translation>Chèn đường dẫn đến tệp kiểu dáng</translation>
     </message>
     <message>
         <source>Choose style</source>
@@ -9985,23 +10043,23 @@ failed: </source>
     </message>
     <message>
         <source>Opens a file dialog for selecting a style file</source>
-        <translation type="unfinished"/>
+        <translation>Mở một hộp thoại để chọn một tệp kiểu dáng</translation>
     </message>
     <message>
         <source>Style for part</source>
-        <translation type="unfinished"/>
+        <translation>Kiểu phân phổ</translation>
     </message>
     <message>
         <source>Insert path to style file for part</source>
-        <translation type="unfinished"/>
+        <translation>Chèn đường dẫn đến tệp kiểu dáng cho phân phổ</translation>
     </message>
     <message>
         <source>Choose style for part</source>
-        <translation type="unfinished"/>
+        <translation>Chọn kiểu phân phổ</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a style file for part</source>
-        <translation type="unfinished"/>
+        <translation>Mở một hộp thoại để chọn một tệp kiểu dáng cho phân phổ</translation>
     </message>
     <message>
         <source>Instrument list 2</source>
@@ -10077,7 +10135,7 @@ failed: </source>
     </message>
     <message>
         <source>Use style file</source>
-        <translation type="unfinished"/>
+        <translation>Sử dụng tệp kiểu dáng</translation>
     </message>
     <message>
         <source>Overture import character set</source>
@@ -10105,7 +10163,7 @@ failed: </source>
     </message>
     <message>
         <source>Export Tab</source>
-        <translation type="unfinished"/>
+        <translation>Xuất thẻ</translation>
     </message>
     <message>
         <source>Resolution DPI</source>
@@ -10117,15 +10175,15 @@ failed: </source>
     </message>
     <message>
         <source>Shortcuts Tab</source>
-        <translation type="unfinished"/>
+        <translation>Thẻ các phím tắt</translation>
     </message>
     <message>
         <source>Shortcuts table</source>
-        <translation type="unfinished"/>
+        <translation>Bảng phím tắt</translation>
     </message>
     <message>
         <source>Reset Shortcut to default</source>
-        <translation type="unfinished"/>
+        <translation>Đặt phím tắt về mặc định</translation>
     </message>
     <message>
         <source>Define</source>
@@ -10133,14 +10191,6 @@ failed: </source>
     </message>
     <message>
         <source>Update Tab</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Check for new versions of MuseScore on startup</source>
-        <translation>Kiểm tra phiên bản mới khi MuseScore khởi động</translation>
-    </message>
-    <message>
-        <source>Choose interval</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -10177,23 +10227,23 @@ failed: </source>
     </message>
     <message>
         <source>Here you can configure shortcuts for actions</source>
-        <translation type="unfinished"/>
+        <translation>Bạn có thể thiết lập các phím tắt cho các lệnh ở đây</translation>
     </message>
     <message>
         <source>Resets the shortcuts to their default assignment</source>
-        <translation type="unfinished"/>
+        <translation>Đặt các phím tắt về mặc định của thảo trình</translation>
     </message>
     <message>
         <source>Clears the shortcut assignment for the selected action</source>
-        <translation type="unfinished"/>
+        <translation>Dọn dẹp phím tắt quy cho lệnh được chọn</translation>
     </message>
     <message>
         <source>Opens a dialog for defining a new shortcut for the selected action</source>
-        <translation type="unfinished"/>
+        <translation>Mở một hộp thoại để định nghĩa một phím tắt mới thay thế cho lệnh được chọn</translation>
     </message>
     <message>
         <source>Print the shortcuts list</source>
-        <translation type="unfinished"/>
+        <translation>In ấn danh sách các phím tắt</translation>
     </message>
     <message>
         <source>Update translations</source>
@@ -10221,7 +10271,7 @@ failed: </source>
     </message>
     <message>
         <source>Default scale for new score views</source>
-        <translation type="unfinished"/>
+        <translation>Tỉ lệ xem mặc định cho tổng phổ</translation>
     </message>
     <message>
         <source>Show play panel</source>
@@ -10229,7 +10279,7 @@ failed: </source>
     </message>
     <message>
         <source>Show navigator</source>
-        <translation type="unfinished"/>
+        <translation>Hiện bộ điều hướng</translation>
     </message>
     <message>
         <source>OSC Remote Control</source>
@@ -10241,19 +10291,87 @@ failed: </source>
     </message>
     <message>
         <source>Show start center</source>
-        <translation type="unfinished"/>
+        <translation>Hiển thị trung tâm vận hành</translation>
     </message>
     <message>
         <source>Undo is active</source>
-        <translation type="unfinished"/>
+        <translation>Lệnh hủy bỏ đang hoạt động</translation>
     </message>
     <message>
         <source>Undo record</source>
-        <translation type="unfinished"/>
+        <translation>Hủy bỏ phần ghi âm</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Lùi lại 1 bước</translation>
+        <translation>Hủy bỏ</translation>
+    </message>
+    <message>
+        <source>Play whole chord when adding note</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>SoundFont folders</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Insert path to SoundFont folders</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Opens a dialog for configuring the SoundFont folders</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note Input Tab</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note Input</source>
+        <translation>Nhập nốt</translation>
+    </message>
+    <message>
+        <source>Note input</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input is active</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input record</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Images:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Scores:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Styles:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Templates:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Plugins:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>SoundFonts:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Check for new version of MuseScore</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -10262,18 +10380,20 @@ failed: </source>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
-        <translation type="unfinished"/>
+        <translation>Không có nốt hoặc lời được chọn
+Vui lòng chọn một nốt hoặc lời và thực hiện lại
+</translation>
     </message>
     <message>
         <source>Please select a single note or slur and retry operation
 </source>
-        <translation>Xin chọn một nốt nhạc hoặc một dấu luyến và thử lại lần nữa
+        <translation>Vui lòng chọn một nốt hoặc một dấu luyến và thử lại thao tác
 </translation>
     </message>
     <message>
         <source>Please select one or more staves and retry operation
 </source>
-        <translation>Xin vui lòng chọn một hoặc nhiều khuông nhạc và làm lại lần nữa
+        <translation>Vui lòng chọn một hoặc nhiều khuông nhạc và làm lại thao tác
 </translation>
     </message>
     <message>
@@ -10284,22 +10404,24 @@ Please select a single note or lyrics and retry operation
         <source>No note or figured bass selected:
 Please select a single note or figured bass and retry.
 </source>
-        <translation type="unfinished"/>
+        <translation>Không có nốt hoặc sơ đồ bass được chọn:
+Vui lòng chọn một nốt hoặc sơ đồ bass và thử lại lần nữa.
+</translation>
     </message>
     <message>
         <source>No note selected:
 Please select a single note and retry operation
 </source>
-        <translation>Không có nốt nhạc nào được chọn lựa:
-Xin vui lòng chọn một nốt nhạc và thử lại lần nữa
+        <translation>Không có nốt nào được chọn:
+Vui lòng chọn một nốt và thử lại lần nữa
 </translation>
     </message>
     <message>
         <source>No note or rest selected:
 Please select a single note or rest and retry operation
 </source>
-        <translation>Không có nốt nhạc hoặc dấu lặng nào được chọn lựa:
-Xin vui lòng chọn một nốt nhạc hoặc một dấu lặng và thử lại lần nữa
+        <translation>Không có nốt hoặc dấu lặng nào được chọn:
+Vui lòng chọn một nốt hoặc một dấu lặng và thử lại thao tác
 </translation>
     </message>
 </context>
@@ -10318,39 +10440,7 @@ Xin vui lòng chọn một nốt nhạc hoặc một dấu lặng và thử lạ
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Tab. 6-str simple</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str common</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str full</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 4-str simple</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 4-str common</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 4-str full</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Tab. ukulele</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str Italian</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str French</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -10358,28 +10448,20 @@ Xin vui lòng chọn một nốt nhạc hoặc một dấu lặng và thử lạ
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Tab. 5-str simple</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 5-str common</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 5-str full</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Cannot open chord description:
 %1
 %2</source>
-        <translation type="unfinished"/>
+        <translation>Không thể mở hợp âm mô tả:
+%1
+%2</translation>
     </message>
     <message>
         <source>Open Chord Description
 %1
 failed: %2</source>
-        <translation type="unfinished"/>
+        <translation>Mở hợp âm mô tả
+%1
+lỗi: %2</translation>
     </message>
     <message>
         <source>Write Chord Description failed: %1</source>
@@ -10389,12 +10471,15 @@ failed: %2</source>
         <source>Cannot open tablature font description:
 %1
 %2</source>
-        <translation type="unfinished"/>
+        <translation>Không thể mở phông tablature mô tả:
+%1
+%2</translation>
     </message>
     <message>
         <source>Cannot read file %1:
 </source>
-        <translation type="unfinished"/>
+        <translation>Không thể đọc được file %1:
+</translation>
     </message>
     <message>
         <source>bad format</source>
@@ -10406,16 +10491,17 @@ failed: %2</source>
     </message>
     <message>
         <source>It was last saved with version 0.9.5 or older.&lt;br&gt;You can convert this score by opening and then saving with MuseScore version 1.x&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Chúng được lưu với phiên bản 0.9.5 hoặc thấp hơn.&lt;br&gt;Bạn có thể chuyển đổi tổng phổ này bằng cách mở ra sau đó lưu lại với phiên bản MuseScore 1.z&lt;/a&gt;</translation>
     </message>
     <message>
         <source>This score was saved using a newer version of MuseScore.&lt;br&gt;
 Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Tổng phổ được lưu sử dụng phiên bản mới của MuseScore.&lt;br&gt;
+Đi đến &lt;a href=&quot;http://musescore.org&quot;&gt;Website MuseScore&lt;/a&gt; để tìm kiếm phiên bản mới nhất.</translation>
     </message>
     <message>
         <source>File not found %1</source>
-        <translation type="unfinished"/>
+        <translation>Không tìm thấy tệp %1</translation>
     </message>
     <message>
         <source>MuseScore: Load Error</source>
@@ -10434,11 +10520,12 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>Can't find rootfile
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Không tìm thấy file gốc
+%1</translation>
     </message>
     <message>
         <source>File &apos;%1&apos; is not a valid MusicXML file</source>
-        <translation type="unfinished"/>
+        <translation>Tệp &apos;%1&apos; không phải là một định dạng MusicXML hợp lệ</translation>
     </message>
     <message>
         <source>Error at line %1 column %2: %3
@@ -10448,12 +10535,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>Could not open MusicXML file
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Không thể mở tệp MusicXML
+%1</translation>
     </message>
     <message>
         <source>Could not open compressed MusicXML file
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Không thể mở tệp compressed MusicXML
+%1</translation>
     </message>
     <message>
         <source>normal</source>
@@ -10461,7 +10550,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"/>
+        <translation>Đặt lại</translation>
     </message>
     <message>
         <source>Long</source>
@@ -10521,7 +10610,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>Measure</source>
-        <translation>Khuông nhạc</translation>
+        <translation>Ô nhịp</translation>
     </message>
     <message>
         <source>Invalid</source>
@@ -10546,10 +10635,59 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>Internal error: Could not open resource musicxml.xsd
 </source>
-        <translation type="unfinished"/>
+        <translation>Lỗi nội bộ: Không thể mở được nguồn musicxml.xsd
+</translation>
     </message>
     <message>
         <source>Tab. balalaika</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 6-str. simple</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 6-str. common</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 6-str. full</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 4-str. simple</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 4-str. common</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 4-str. full</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 5-str. simple</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 5-str. common</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 5-str. full</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 6-str. Italian</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 6-str. French</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File corrupted %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -10561,7 +10699,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Save File</source>
-        <translation>MuseScore: Lưu trữ</translation>
+        <translation>MuseScore: Lưu tệp</translation>
     </message>
     <message>
         <source>Quit</source>
@@ -10613,50 +10751,52 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Open Album failed</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Lỗi mở album</translation>
     </message>
     <message>
         <source>Open Album File
 %1
 failed: </source>
-        <translation type="unfinished"/>
+        <translation>Mở album
+%1
+lỗi:</translation>
     </message>
     <message>
         <source>MuseScore: Open Album File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Mở album</translation>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
-        <translation type="unfinished"/>
+        <translation>Tệp MuseScore (*.mscz)</translation>
     </message>
     <message>
         <source>MuseScore Files (*.album)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Soundfont installed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Install Soundfont</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Do you want to install the soundfont %1?</source>
-        <translation type="unfinished"/>
+        <translation>Các tệp MuseScore (*.album)</translation>
     </message>
     <message>
         <source>Overwrite?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Soundfont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>%1 already exists.
 Do you want to overwrite it?</source>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Install SoundFont</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to install the SoundFont %1?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>SoundFont installed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
+        <translation>Đã cài đặt SoundFont. Vui lòng đi đến Xem &gt; Synthesizer để thêm chúng và Xem &gt; Mixer để chọn một âm sắc nhạc cụ.</translation>
     </message>
 </context>
 <context>
@@ -10674,7 +10814,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Tab 1</source>
-        <translation type="unfinished"/>
+        <translation>Tab 1</translation>
     </message>
     <message>
         <source>Language</source>
@@ -10682,11 +10822,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Filename</source>
-        <translation type="unfinished"/>
+        <translation>Tên tệp</translation>
     </message>
     <message>
         <source>File Size</source>
-        <translation type="unfinished"/>
+        <translation>Cỡ tệp</translation>
     </message>
     <message>
         <source>Install/Update</source>
@@ -10694,14 +10834,18 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Tab 2</source>
-        <translation type="unfinished"/>
+        <translation>Tab 2</translation>
     </message>
 </context>
 <context>
-    <name>ScoreBrowser</name>
+    <name>Rest</name>
     <message>
-        <source>Form</source>
-        <translation>Form</translation>
+        <source>Voice: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -10724,7 +10868,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Nothing selected</source>
-        <translation type="unfinished"/>
+        <translation>Không chọn gì</translation>
     </message>
 </context>
 <context>
@@ -10743,22 +10887,22 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Start new section with long instrument names</source>
-        <translation type="unfinished"/>
+        <translation>Bắt đầu một đoạn mới với tên nhạc cụ đầy đủ</translation>
     </message>
     <message>
         <source>Start new section with measure number one</source>
-        <translation type="unfinished"/>
+        <translation>Bắt đầu một đoạn mới với ô nhịp số một</translation>
     </message>
 </context>
 <context>
     <name>SelectDialog</name>
     <message>
         <source>MuseScore: Select</source>
-        <translation>MuseScore: Chọn lựa</translation>
+        <translation>MuseScore: Chọn</translation>
     </message>
     <message>
         <source>Action</source>
-        <translation>Action</translation>
+        <translation>Lệnh</translation>
     </message>
     <message>
         <source>Select</source>
@@ -10786,30 +10930,30 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Replace selection</source>
-        <translation type="unfinished"/>
+        <translation>Sự lựa chọn thay thế</translation>
     </message>
     <message>
         <source>Add to selection</source>
-        <translation type="unfinished"/>
+        <translation>Thêm sự lựa chọn</translation>
     </message>
     <message>
         <source>Search in selection</source>
-        <translation type="unfinished"/>
+        <translation>Tìm kiếm trong sự lựa chọn</translation>
     </message>
     <message>
         <source>Subtract from selection</source>
-        <translation type="unfinished"/>
+        <translation>Trừ ra từ sự lựa chọn</translation>
     </message>
     <message>
         <source>In selection</source>
-        <translation type="unfinished"/>
+        <translation>Trong sự lựa chọn</translation>
     </message>
 </context>
 <context>
     <name>SelectInstrument</name>
     <message>
         <source>MuseScore: Select Instrument</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Chọn nhạc cụ</translation>
     </message>
     <message>
         <source>0</source>
@@ -10821,7 +10965,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Xóa sạch</translation>
+        <translation>Dọn dẹp</translation>
     </message>
     <message>
         <source>Current instrument:</source>
@@ -10831,7 +10975,7 @@ Do you want to overwrite it?</source>
 <context>
     <name>SfListDialog</name>
     <message>
-        <source>Soundfont Files</source>
+        <source>SoundFont Files</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -10839,14 +10983,14 @@ Do you want to overwrite it?</source>
     <name>SfzListDialog</name>
     <message>
         <source>SFZ Files</source>
-        <translation type="unfinished"/>
+        <translation>Các tệp SFZ</translation>
     </message>
 </context>
 <context>
     <name>ShortcutCaptureDialogBase</name>
     <message>
         <source>Old shortcuts:</source>
-        <translation type="unfinished"/>
+        <translation>Phím tắt cũ:</translation>
     </message>
     <message>
         <source>New shortcut:</source>
@@ -10855,11 +10999,11 @@ Do you want to overwrite it?</source>
     <message>
         <source>Type to set shortcut</source>
         <comment>placeholder text</comment>
-        <translation type="unfinished"/>
+        <translation>Thiết lập kiểu phím tắt</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Xóa sạch</translation>
+        <translation>Dọn dẹp</translation>
     </message>
     <message>
         <source>Add</source>
@@ -10875,30 +11019,30 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Enter Shortcut Sequence</source>
-        <translation type="unfinished"/>
+        <translation>Nhập dãy phím tắt</translation>
     </message>
     <message>
         <source>Press up to four keys to enter shortcut sequence</source>
-        <translation type="unfinished"/>
+        <translation>Nhấn lên bốn phím để nhập các dãy phím tắt</translation>
     </message>
     <message>
         <source>Old shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Phím tắt cũ</translation>
     </message>
     <message>
         <source>New shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Phím tắt mới</translation>
     </message>
     <message>
         <source>Type to set shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập kiểu phím tắt</translation>
     </message>
 </context>
 <context>
     <name>SplitStaff</name>
     <message>
         <source>MuseScore: Edit Staff/Part Properties</source>
-        <translation>MuseScore: Chỉnh sửa đặc tính của Dòng nhạc/ Bè</translation>
+        <translation>MuseScore: Chỉnh sửa khuông nhạc/Đặc tính phân phổ</translation>
     </message>
     <message>
         <source>Split Staff</source>
@@ -10960,7 +11104,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Actions for selected channel:</source>
-        <translation type="unfinished"/>
+        <translation>Lệnh cho kênh được chọn:</translation>
     </message>
     <message>
         <source>Aeolus Stops</source>
@@ -10972,7 +11116,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>III</source>
-        <translation type="unfinished"/>
+        <translation>III</translation>
     </message>
     <message>
         <source>Principal
@@ -11034,7 +11178,7 @@ VI</source>
     </message>
     <message>
         <source>II</source>
-        <translation type="unfinished"/>
+        <translation>II</translation>
     </message>
     <message>
         <source>Harmonic
@@ -11068,7 +11212,7 @@ altera</source>
     </message>
     <message>
         <source>Septime</source>
-        <translation type="unfinished"/>
+        <translation>Septime</translation>
     </message>
     <message>
         <source>None</source>
@@ -11162,7 +11306,7 @@ altera</source>
     </message>
     <message>
         <source>P</source>
-        <translation type="unfinished"/>
+        <translation>P</translation>
     </message>
     <message>
         <source>Subbass
@@ -11203,11 +11347,11 @@ altera</source>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
-        <translation type="unfinished"/>
+        <translation>Chuyển sang một hoặc nhiều bè đến một kênh được chỉ định:</translation>
     </message>
     <message>
         <source>MIDI Action</source>
-        <translation>Midi Action</translation>
+        <translation>Lệnh MIDI</translation>
     </message>
     <message>
         <source>Voice:</source>
@@ -11215,7 +11359,7 @@ altera</source>
     </message>
     <message>
         <source>Swing Settings</source>
-        <translation type="unfinished"/>
+        <translation>Thiết lập Swing</translation>
     </message>
     <message>
         <source>Swing:</source>
@@ -11223,11 +11367,11 @@ altera</source>
     </message>
     <message>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Tắt</translation>
     </message>
     <message>
         <source>Select swing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Chọn tỉ lệ nhịp điệu:</translation>
     </message>
     <message>
         <source>%</source>
@@ -11265,7 +11409,7 @@ altera</source>
     </message>
     <message>
         <source>Create New Score</source>
-        <translation>Sáng tác bài nhạc mới</translation>
+        <translation>Tạo tổng phổ mới</translation>
     </message>
     <message>
         <source>Load Score</source>
@@ -11273,18 +11417,22 @@ altera</source>
     </message>
     <message>
         <source>Startup Dialog</source>
-        <translation type="unfinished"/>
+        <translation>Hộp thoại ban đầu</translation>
     </message>
 </context>
 <context>
     <name>Startcenter</name>
     <message>
         <source>Start Center</source>
+        <translation>Trung tâm vận hành</translation>
+    </message>
+    <message>
+        <source>Open a score...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>&lt;a href=&quot;#&quot;&gt;Open an existing score&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <source>Close</source>
+        <translation>Đóng lại</translation>
     </message>
 </context>
 <context>
@@ -11318,7 +11466,7 @@ altera</source>
     </message>
     <message>
         <source>Master Effects</source>
-        <translation type="unfinished"/>
+        <translation>Các hiệu ứng tổng</translation>
     </message>
     <message>
         <source>Effect B:</source>
@@ -11343,7 +11491,7 @@ altera</source>
     </message>
     <message>
         <source>Master volume</source>
-        <translation type="unfinished"/>
+        <translation>Âm lượng tổng</translation>
     </message>
     <message>
         <source>Set as Default</source>
@@ -11355,7 +11503,7 @@ altera</source>
     </message>
     <message>
         <source>Master tuning:</source>
-        <translation type="unfinished"/>
+        <translation>Điều chỉnh dây:</translation>
     </message>
     <message>
         <source>Save to score</source>
@@ -11364,6 +11512,30 @@ altera</source>
     <message>
         <source>Load from score</source>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Use up and down arrows to modify</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Metronome gain</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Effect A</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Effect B</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Hertz</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Master tuning</source>
+        <translation>Điều chỉnh dây:</translation>
     </message>
 </context>
 <context>
@@ -11459,7 +11631,7 @@ altera</source>
     </message>
     <message>
         <source>Alignment</source>
-        <translation type="unfinished"/>
+        <translation>Thẳng hàng</translation>
     </message>
     <message>
         <source>Reset to Style</source>
@@ -11526,10 +11698,6 @@ altera</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Center text vertical to text baseline</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Center text vertical to reference point</source>
         <translation type="unfinished"/>
     </message>
@@ -11590,6 +11758,10 @@ altera</source>
         <source>Size follows &apos;Staff space&apos; setting</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Align baseline of text to reference point</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TextStyle</name>
@@ -11603,19 +11775,19 @@ altera</source>
     </message>
     <message>
         <source>Composer</source>
-        <translation>Nhạc sĩ</translation>
+        <translation>Nhạc sỹ</translation>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"/>
+        <translation>Thi sỹ</translation>
     </message>
     <message>
         <source>Lyrics Odd Lines</source>
-        <translation type="unfinished"/>
+        <translation>Lời bản nhạc dòng lẻ</translation>
     </message>
     <message>
         <source>Lyrics Even Lines</source>
-        <translation type="unfinished"/>
+        <translation>Lời bản nhạc dòng chẳn</translation>
     </message>
     <message>
         <source>Fingering</source>
@@ -11631,7 +11803,7 @@ altera</source>
     </message>
     <message>
         <source>Instrument Name (Part)</source>
-        <translation type="unfinished"/>
+        <translation>Tên nhạc cụ (Phân phổ)</translation>
     </message>
     <message>
         <source>Dynamics</source>
@@ -11651,7 +11823,7 @@ altera</source>
     </message>
     <message>
         <source>Measure Number</source>
-        <translation>Measure Number</translation>
+        <translation>Số ô nhịp</translation>
     </message>
     <message>
         <source>Translator</source>
@@ -11715,7 +11887,7 @@ altera</source>
     </message>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"/>
+        <translation>Bend: Nhéo cao độ</translation>
     </message>
     <message>
         <source>Header</source>
@@ -11731,7 +11903,7 @@ altera</source>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"/>
+        <translation>Sơ đồ Bass</translation>
     </message>
     <message>
         <source>LH Guitar Fingering</source>
@@ -11739,6 +11911,10 @@ altera</source>
     </message>
     <message>
         <source>RH Guitar Fingering</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pedal</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -11750,7 +11926,7 @@ altera</source>
     </message>
     <message>
         <source>New</source>
-        <translation>Tạo</translation>
+        <translation>Tạo mới</translation>
     </message>
 </context>
 <context>
@@ -11764,7 +11940,7 @@ altera</source>
     <name>TimeDialogBase</name>
     <message>
         <source>Create Time Signature</source>
-        <translation>Tạo khóa nhịp</translation>
+        <translation>Tạo số chỉ nhịp</translation>
     </message>
     <message>
         <source>Value:</source>
@@ -11812,14 +11988,14 @@ altera</source>
     </message>
     <message>
         <source>Add time signature to palette</source>
-        <translation type="unfinished"/>
+        <translation>Thêm số chỉ nhịp vào bảng</translation>
     </message>
 </context>
 <context>
     <name>TimeSigProperties</name>
     <message>
         <source>Time Signature Properties</source>
-        <translation type="unfinished"/>
+        <translation>Đặc tính số chỉ nhịp</translation>
     </message>
     <message>
         <source>/</source>
@@ -11839,7 +12015,7 @@ altera</source>
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"/>
+        <translation>Hiện ra</translation>
     </message>
     <message>
         <source>Other:</source>
@@ -11858,7 +12034,7 @@ altera</source>
     <name>TimesigWizard</name>
     <message>
         <source>Enter Time Signature:</source>
-        <translation>Nhập vào khóa nhịp:</translation>
+        <translation>Nhập vào số chỉ nhịp</translation>
     </message>
     <message>
         <source>/</source>
@@ -11894,7 +12070,7 @@ altera</source>
     </message>
     <message>
         <source>Pickup Measure</source>
-        <translation>Khuông nhạc lấy đà</translation>
+        <translation>Ô nhịp lấy đà</translation>
     </message>
     <message>
         <source>Duration:</source>
@@ -11902,23 +12078,23 @@ altera</source>
     </message>
     <message>
         <source>Enter Number of Measures:</source>
-        <translation>Nhập số khuông nhạc:</translation>
+        <translation>Nhập số lượng ô nhịp:</translation>
     </message>
     <message>
         <source>Measures:</source>
-        <translation>Khuông nhạc:</translation>
+        <translation>Ô nhịp:</translation>
     </message>
     <message>
         <source>Cut time</source>
-        <translation>2/2 alla breve</translation>
+        <translation>Nhịp 2/2</translation>
     </message>
     <message>
         <source>Common time</source>
-        <translation type="unfinished"/>
+        <translation>Common time</translation>
     </message>
     <message>
         <source>Time Signature Wizard</source>
-        <translation type="unfinished"/>
+        <translation>Trình tạo số chỉ nhịp</translation>
     </message>
     <message>
         <source>Beat unit</source>
@@ -11926,27 +12102,27 @@ altera</source>
     </message>
     <message>
         <source>Common Time</source>
-        <translation type="unfinished"/>
+        <translation>Common time</translation>
     </message>
     <message>
         <source>Enter Number of Measures</source>
-        <translation type="unfinished"/>
+        <translation>Nhập số lượng ô nhịp</translation>
     </message>
     <message>
         <source>Measures</source>
-        <translation>Trường canh</translation>
+        <translation>Ô nhịp</translation>
     </message>
     <message>
         <source>Cut Time</source>
-        <translation type="unfinished"/>
+        <translation>Nhip 2/2</translation>
     </message>
     <message>
         <source>Beats in a measure</source>
-        <translation type="unfinished"/>
+        <translation>Số phách trong một ô nhịp</translation>
     </message>
     <message>
         <source>Hint: You can also add or remove measures after creation of the score.</source>
-        <translation type="unfinished"/>
+        <translation>Gợi ý: Bạn cũng có thể thêm hoặc bớt ô nhịp sau khi đã tạo ra tổng phổ.</translation>
     </message>
 </context>
 <context>
@@ -12235,11 +12411,11 @@ altera</source>
     <name>TremoloBarDialog</name>
     <message>
         <source>Bend type:</source>
-        <translation type="unfinished"/>
+        <translation>Loại bend</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
-        <translation type="unfinished"/>
+        <translation>Bấm để thêm hoặc bớt một vài điểm</translation>
     </message>
     <message>
         <source>Dip</source>
@@ -12324,7 +12500,7 @@ altera</source>
     <name>UploadScoreDialog</name>
     <message>
         <source>Score Information</source>
-        <translation type="unfinished"/>
+        <translation>Thông tin tổng phổ</translation>
     </message>
     <message>
         <source>You&apos;re logged in as</source>
@@ -12351,27 +12527,7 @@ altera</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Who can access this score?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Anyone</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Just you</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>License</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://musescore.com/help/license&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;What does this mean?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12379,23 +12535,15 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:italic;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Use a comma to separate the tags&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Respect the &lt;/span&gt;&lt;a href=&quot;http://musescore.com/community-guidelines&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;community guidelines&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;. Only make your scores accessible to anyone with permission from the right holders.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Update the existing score </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Make this score private</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sharing</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -12418,13 +12566,15 @@ p, li { white-space: pre-wrap; }
     <name>Workspace</name>
     <message>
         <source>MuseScore: Writing Workspace File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Soạn thảo tệp không gian làm việc</translation>
     </message>
     <message>
         <source>Writing Workspace File
 %1
 failed: </source>
-        <translation type="unfinished"/>
+        <translation>Soạn thảo một tệp không gian làm việc
+%1
+lỗi:</translation>
     </message>
 </context>
 <context>
@@ -12533,12 +12683,12 @@ failed: </source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <source>Soundfont %1 already loaded</source>
-        <translation type="unfinished"/>
+        <source>SoundFont %1 already loaded</source>
+        <translation>SoundFont %1 đã được nạp</translation>
     </message>
     <message>
-        <source>cannot load soundfont %1</source>
-        <translation type="unfinished"/>
+        <source>Cannot load SoundFont %1</source>
+        <translation>Không thể nạp SoundFont %1</translation>
     </message>
 </context>
 <context>
@@ -12671,68 +12821,48 @@ failed: </source>
         <translation>Mở...</translation>
     </message>
     <message>
-        <source>File open</source>
-        <translation>Mở tập tin</translation>
-    </message>
-    <message>
         <source>Load score from file</source>
-        <translation>Nạp bản nhạc từ tập tin</translation>
+        <translation>Nạp tổng phổ từ tệp</translation>
     </message>
     <message>
         <source>Save</source>
         <translation>Lưu trữ</translation>
     </message>
     <message>
-        <source>File save</source>
-        <translation>Tài liệu lưu trữ</translation>
-    </message>
-    <message>
         <source>Save score to file</source>
-        <translation>Lưu bản nhạc thành tập tin</translation>
+        <translation>Lưu tổng phổ thành tệp tin</translation>
     </message>
     <message>
         <source>Save As...</source>
         <translation>Lưu thành tên...</translation>
     </message>
     <message>
-        <source>File save as</source>
-        <translation>Tài liệu lưu trữ dưới tên</translation>
-    </message>
-    <message>
         <source>Save score under a new file name</source>
-        <translation>Lưu bài nhạc dưới một tên mới</translation>
+        <translation>Lưu tổng phổ dưới một tên tệp mới</translation>
     </message>
     <message>
         <source>Save Selection...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Save Selection</source>
-        <translation type="unfinished"/>
+        <translation>Lưu phần lựa chọn...</translation>
     </message>
     <message>
         <source>Save current selection as new score</source>
-        <translation type="unfinished"/>
+        <translation>Lưu trữ phần lựa chọn hiện tại như tổng phổ mới</translation>
     </message>
     <message>
         <source>Save a Copy...</source>
         <translation>Lưu một bản sao...</translation>
     </message>
     <message>
-        <source>File save a copy</source>
-        <translation>File save a copy</translation>
-    </message>
-    <message>
         <source>Save a copy of the score in addition to the current file</source>
-        <translation>Lưu thêm một bản sao của bài nhạc vào tập tin hiện hiện tại</translation>
+        <translation>Lưu một bản sao của tổng phổ vào tệp hiện tại</translation>
     </message>
     <message>
         <source>Export...</source>
-        <translation type="unfinished"/>
+        <translation>Xuất dữ liệu...</translation>
     </message>
     <message>
         <source>Export score</source>
-        <translation type="unfinished"/>
+        <translation>Xuất tổng phổ</translation>
     </message>
     <message>
         <source>Save a copy of the score in various formats</source>
@@ -12740,23 +12870,15 @@ failed: </source>
     </message>
     <message>
         <source>Export Parts...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Export Parts</source>
-        <translation type="unfinished"/>
+        <translation>Xuất các phân phổ...</translation>
     </message>
     <message>
         <source>Save a copy of the score&apos;s parts in various formats</source>
-        <translation type="unfinished"/>
+        <translation>Lưu một bản sao của các phân phổ thành tỏng phổ với nhiều định dạng</translation>
     </message>
     <message>
         <source>Close</source>
         <translation>Đóng lại</translation>
-    </message>
-    <message>
-        <source>File close</source>
-        <translation>Đóng tập tin</translation>
     </message>
     <message>
         <source>Close current score</source>
@@ -12764,15 +12886,11 @@ failed: </source>
     </message>
     <message>
         <source>New...</source>
-        <translation>Sáng tác bài nhạc mới...</translation>
-    </message>
-    <message>
-        <source>File new</source>
-        <translation>file new</translation>
+        <translation>Tạo mới...</translation>
     </message>
     <message>
         <source>Create new score</source>
-        <translation>Tạo bài nhạc mới</translation>
+        <translation>Tạo tổng phổ mới</translation>
     </message>
     <message>
         <source>Print...</source>
@@ -12788,19 +12906,19 @@ failed: </source>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Lùi lại 1 bước</translation>
+        <translation>Hủy bỏ</translation>
     </message>
     <message>
         <source>Undo last change</source>
-        <translation>Bỏ đi hành động vừa rồi</translation>
+        <translation>Hủy bỏ hành động vừa rồi</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation>Tiến tới 1 bước</translation>
+        <translation>Hoàn tác</translation>
     </message>
     <message>
         <source>Redo last undo</source>
-        <translation>Lấy lại hành động vừa rồi</translation>
+        <translation>Hoàn tác hành động vừa hủy bỏ</translation>
     </message>
     <message>
         <source>Cut</source>
@@ -12825,10 +12943,6 @@ failed: </source>
     <message>
         <source>Note Input</source>
         <translation>Nhập nốt</translation>
-    </message>
-    <message>
-        <source>Note input mode</source>
-        <translation>Chế độ nhập nốt</translation>
     </message>
     <message>
         <source>Unison Above</source>
@@ -13147,15 +13261,7 @@ failed: </source>
         <translation>Dấu staccato</translation>
     </message>
     <message>
-        <source>Add staccato</source>
-        <translation>Thêm dấu staccato</translation>
-    </message>
-    <message>
         <source>Tenuto</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add tenuto</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13163,31 +13269,7 @@ failed: </source>
         <translation>Dấu rung (láy)</translation>
     </message>
     <message>
-        <source>Add trill</source>
-        <translation>Thêm dấu rung (láy)</translation>
-    </message>
-    <message>
         <source>Marcato</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add marcato</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add More Stretch</source>
-        <translation>Add More Stretch</translation>
-    </message>
-    <message>
-        <source>Add more stretch</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add Less Stretch</source>
-        <translation>Add Less Stretch</translation>
-    </message>
-    <message>
-        <source>Add less stretch</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13200,7 +13282,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset beam mode of selected measures</source>
-        <translation>Đưa chế độ nhóm-nốt của khuông nhạc đã chọn về mặc định</translation>
+        <translation>Đưa chế độ nhóm nốt của ô nhịp đã chọn về mặc định</translation>
     </message>
     <message>
         <source>Flip direction</source>
@@ -13212,10 +13294,6 @@ failed: </source>
     </message>
     <message>
         <source>Pitch up or move text or articulation up</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Diatonic up</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13263,16 +13341,8 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Diatonic down</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Diatonic pitch down</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Down octave</source>
-        <translation>Giảm quãng tám</translation>
     </message>
     <message>
         <source>Pitch down octave</source>
@@ -13303,44 +13373,28 @@ failed: </source>
         <translation>Chuyển xuống</translation>
     </message>
     <message>
-        <source>Previous chord</source>
-        <translation>Hợp âm trước đó</translation>
-    </message>
-    <message>
         <source>Go to previous chord or move text left</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Previous measure</source>
-        <translation>Trường canh trước đó</translation>
-    </message>
-    <message>
         <source>Go to previous measure or move text left</source>
-        <translation type="unfinished"/>
+        <translation>Trở về ô nhịp trước hoặc di chuyển văn bản sang trái</translation>
     </message>
     <message>
         <source>Previous staff or voice</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Next chord</source>
-        <translation>Hợp âm kế tiếp</translation>
-    </message>
-    <message>
         <source>Go to next chord or move text right</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next measure</source>
-        <translation>Trường canh tiếp theo</translation>
+        <translation>Đi tới hợp âm tiếp theo hoặc di chuyển văn bản sang phải</translation>
     </message>
     <message>
         <source>Go to next measure or move text right</source>
-        <translation type="unfinished"/>
+        <translation>Đi tới ô nhịp tiếp theo hoặc di chuyển văn bản sang phải</translation>
     </message>
     <message>
         <source>Next staff or voice</source>
-        <translation type="unfinished"/>
+        <translation>khuông nhạc tiếp theo hoặc bè</translation>
     </message>
     <message>
         <source>Add previous chord to selection</source>
@@ -13348,15 +13402,15 @@ failed: </source>
     </message>
     <message>
         <source>Select to beginning of measure</source>
-        <translation>select to beginning of measure</translation>
+        <translation>Chọn ở ô nhịp bắt đầu</translation>
     </message>
     <message>
         <source>Add next chord to selection</source>
-        <translation>thêm hợp âm kế vào lựa chọn này</translation>
+        <translation>Thêm hợp âm bên cạnh sự chọn</translation>
     </message>
     <message>
         <source>Select Section</source>
-        <translation type="unfinished"/>
+        <translation>Chọn một đoạn</translation>
     </message>
     <message>
         <source>Move chord/rest right</source>
@@ -13368,47 +13422,31 @@ failed: </source>
     </message>
     <message>
         <source>Select to end of measure</source>
-        <translation>select to end of measure</translation>
+        <translation>Chọn ở ô nhịp cuối cùng</translation>
     </message>
     <message>
         <source>Select to beginning of line</source>
-        <translation>select to beginning of line</translation>
+        <translation>Chọn ở dòng bắt đầu</translation>
     </message>
     <message>
         <source>Select to end of line</source>
-        <translation>select to end of line</translation>
+        <translation>Chọn ở dòng cuối cùng</translation>
     </message>
     <message>
         <source>Select to beginning of score</source>
-        <translation>select to beginning of score</translation>
+        <translation>Chọn đến đầu tổng phổ</translation>
     </message>
     <message>
         <source>Select to end of score</source>
-        <translation>select to end of score</translation>
+        <translation>Chọn đến cuối tổng phổ</translation>
     </message>
     <message>
         <source>Add staff above to selection</source>
-        <translation>add staff above to selection</translation>
+        <translation>Thêm khuông nhạc ở trên cho đến phần chọn</translation>
     </message>
     <message>
         <source>Add staff below to selection</source>
-        <translation>add staff below to selection</translation>
-    </message>
-    <message>
-        <source>Page: previous</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Page: next</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Page: top</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Page: end</source>
-        <translation type="unfinished"/>
+        <translation>Thêm khuông nhạc ở dưới cho đến phần chọn</translation>
     </message>
     <message>
         <source>Slur</source>
@@ -13460,15 +13498,15 @@ failed: </source>
     </message>
     <message>
         <source>Delete contents of the selected measures</source>
-        <translation>Xóa nội dung của trường canh đã được đánh dấu</translation>
+        <translation>Xóa nội dung của ô nhịp được chọn</translation>
     </message>
     <message>
         <source>Timewise delete</source>
-        <translation type="unfinished"/>
+        <translation>Xóa timewise</translation>
     </message>
     <message>
         <source>Timewise Delete</source>
-        <translation>Timewise Delete</translation>
+        <translation>Xóa timewise</translation>
     </message>
     <message>
         <source>Delete element and duration</source>
@@ -13476,31 +13514,31 @@ failed: </source>
     </message>
     <message>
         <source>Delete Selected Measures</source>
-        <translation>Xóa khuông nhạc được chọn</translation>
+        <translation>Xóa ô nhịp được chọn</translation>
     </message>
     <message>
         <source>Append One Measure</source>
-        <translation type="unfinished"/>
+        <translation>Nối thêm một ô nhịp</translation>
     </message>
     <message>
         <source>Append Measures...</source>
-        <translation>Nối thêm khuông nhạc...</translation>
+        <translation>Nối thêm ô nhịp..</translation>
     </message>
     <message>
         <source>Append measures</source>
-        <translation>Viết thêm trường canh vào</translation>
+        <translation>Nối thêm ô nhịp</translation>
     </message>
     <message>
         <source>Insert One Measure</source>
-        <translation type="unfinished"/>
+        <translation>Chèn một ô nhịp</translation>
     </message>
     <message>
         <source>Insert Measures...</source>
-        <translation>Chêm thêm khuông nhạc...</translation>
+        <translation>Chèn thêm ô nhịp...</translation>
     </message>
     <message>
         <source>Insert measures</source>
-        <translation>Chêm trường canh vào</translation>
+        <translation>Chèn thêm ô nhịp</translation>
     </message>
     <message>
         <source>Insert Horizontal Frame</source>
@@ -13571,15 +13609,7 @@ failed: </source>
         <translation>Longa</translation>
     </message>
     <message>
-        <source>Note duration: longa</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Double whole note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: double whole</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13587,23 +13617,11 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Note duration: whole</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Half note</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Note duration: half</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Quarter note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: quarter</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13651,15 +13669,7 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Note duration: augmentation dot</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Double augmentation dot</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: double augmentation dot</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13667,52 +13677,24 @@ failed: </source>
         <translation>Dấu nối</translation>
     </message>
     <message>
-        <source>Note duration: tie</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Double sharp</source>
         <translation>thăng đôi</translation>
-    </message>
-    <message>
-        <source>Note entry: double sharp</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sharp</source>
         <translation>thăng</translation>
     </message>
     <message>
-        <source>Note entry: sharp</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Natural</source>
         <translation>tự nhiên</translation>
-    </message>
-    <message>
-        <source>Note entry: natural</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Flat</source>
         <translation>Giáng</translation>
     </message>
     <message>
-        <source>Note entry: flat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Double flat</source>
         <translation>giáng đôi</translation>
-    </message>
-    <message>
-        <source>Note entry: double flat</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Acciaccatura</source>
@@ -13783,16 +13765,12 @@ failed: </source>
         <translation>voice 4</translation>
     </message>
     <message>
-        <source>MIDI input</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Enable MIDI input</source>
         <translation>Cho sử dụng midi input</translation>
     </message>
     <message>
         <source>Beam start</source>
-        <translation>beam start</translation>
+        <translation>Chùm bắt đầu</translation>
     </message>
     <message>
         <source>Beam middle</source>
@@ -13852,11 +13830,11 @@ failed: </source>
     </message>
     <message>
         <source>Lyrics</source>
-        <translation>Lời bài nhạc</translation>
+        <translation>Lời bản nhạc</translation>
     </message>
     <message>
         <source>Add lyrics</source>
-        <translation type="unfinished"/>
+        <translation>Thêm lời cho bản nhạc</translation>
     </message>
     <message>
         <source>Tempo Marking...</source>
@@ -13908,19 +13886,19 @@ failed: </source>
     </message>
     <message>
         <source>Composer</source>
-        <translation>Nhạc sĩ</translation>
+        <translation>Nhạc sỹ</translation>
     </message>
     <message>
         <source>Add composer text</source>
-        <translation type="unfinished"/>
+        <translation>Thêm đề mục nhạc sỹ</translation>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"/>
+        <translation>Thi sỹ</translation>
     </message>
     <message>
         <source>Add lyricist text</source>
-        <translation type="unfinished"/>
+        <translation>Thêm đề mục thi sỹ</translation>
     </message>
     <message>
         <source>Rehearsal Mark</source>
@@ -13948,7 +13926,7 @@ failed: </source>
     </message>
     <message>
         <source>Start or stop playback</source>
-        <translation>Chạy hoặc ngừng</translation>
+        <translation>Bắt đầu hoặc dừng phát</translation>
     </message>
     <message>
         <source>Play Previous Chord</source>
@@ -13956,15 +13934,15 @@ failed: </source>
     </message>
     <message>
         <source>Play Previous Measure</source>
-        <translation type="unfinished"/>
+        <translation>Phát ô nhịp trước</translation>
     </message>
     <message>
         <source>Play Next Chord</source>
-        <translation type="unfinished"/>
+        <translation>Phát hợp âm tiếp theo</translation>
     </message>
     <message>
         <source>Play Next Measure</source>
-        <translation type="unfinished"/>
+        <translation>Phát ô nhịp tiếp theo</translation>
     </message>
     <message>
         <source>Player Seek to Begin</source>
@@ -13980,7 +13958,7 @@ failed: </source>
     </message>
     <message>
         <source>Rewind to start position</source>
-        <translation>Quay ngược lại từ đầu</translation>
+        <translation>Tua lại vị trí ban đầu</translation>
     </message>
     <message>
         <source>Player Seek to End</source>
@@ -13992,7 +13970,7 @@ failed: </source>
     </message>
     <message>
         <source>Toggle repeats playback</source>
-        <translation type="unfinished"/>
+        <translation>Lại đi lặp lại ký hiệu chốt</translation>
     </message>
     <message>
         <source>Pan</source>
@@ -14000,7 +13978,7 @@ failed: </source>
     </message>
     <message>
         <source>Toggle pan score</source>
-        <translation type="unfinished"/>
+        <translation>Tổng phổ pan ký hiệu chốt</translation>
     </message>
     <message>
         <source>Pan score during playback</source>
@@ -14088,15 +14066,15 @@ failed: </source>
     </message>
     <message>
         <source>Info...</source>
-        <translation type="unfinished"/>
+        <translation>Thông tin...</translation>
     </message>
     <message>
         <source>Edit score info</source>
-        <translation type="unfinished"/>
+        <translation>Điều chỉnh thông tin tổng phổ</translation>
     </message>
     <message>
         <source>Toggle System Break</source>
-        <translation>Thêm/Bỏ ngắt trên Dòng-nhạc-tổng</translation>
+        <translation>Chuyển đổi hệ thống nghỉ</translation>
     </message>
     <message>
         <source>Toggle Page Break</source>
@@ -14128,7 +14106,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset measure stretch</source>
-        <translation type="unfinished"/>
+        <translation>Đặt lại khoảng cách ô nhịp</translation>
     </message>
     <message>
         <source>Show Invisible</source>
@@ -14148,34 +14126,6 @@ failed: </source>
     </message>
     <message>
         <source>Insert Special Characters...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Insert Special Characters</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Whole rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: whole rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Half rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: half rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quarter rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: quarter rest</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14200,11 +14150,11 @@ failed: </source>
     </message>
     <message>
         <source>General...</source>
-        <translation type="unfinished"/>
+        <translation>General...</translation>
     </message>
     <message>
         <source>Edit general style</source>
-        <translation type="unfinished"/>
+        <translation>Điều chỉnh kiểu dáng tổng quát</translation>
     </message>
     <message>
         <source>Text...</source>
@@ -14228,7 +14178,7 @@ failed: </source>
     </message>
     <message>
         <source>Select all similar elements in same staff</source>
-        <translation>Chọn tất cả đối tượng tương tự trong cùng 1 dòng</translation>
+        <translation>Chọn tất cả đối tượng tương tự trong cùng một dòng</translation>
     </message>
     <message>
         <source>Synthesizer</source>
@@ -14244,7 +14194,7 @@ failed: </source>
     </message>
     <message>
         <source>Repeat selection</source>
-        <translation>Lập đoạn được chọn</translation>
+        <translation>Lặp lại sự lựa chọn</translation>
     </message>
     <message>
         <source>Pan piano roll</source>
@@ -14276,11 +14226,11 @@ failed: </source>
     </message>
     <message>
         <source>Parts...</source>
-        <translation>Parts...</translation>
+        <translation>Phân phổ...</translation>
     </message>
     <message>
         <source>Manage parts</source>
-        <translation type="unfinished"/>
+        <translation>Quản lí phân phổ</translation>
     </message>
     <message>
         <source>Enharmonic up</source>
@@ -14324,15 +14274,11 @@ failed: </source>
     </message>
     <message>
         <source>Split Measure</source>
-        <translation type="unfinished"/>
+        <translation>Tách ô nhịp</translation>
     </message>
     <message>
         <source>Page Settings...</source>
         <translation>Đặc tính của trang</translation>
-    </message>
-    <message>
-        <source>Page Settings</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Album...</source>
@@ -14352,18 +14298,10 @@ failed: </source>
     </message>
     <message>
         <source>Next Score</source>
-        <translation type="unfinished"/>
+        <translation>Tổng phổ tiếp theo</translation>
     </message>
     <message>
         <source>Previous Score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Plugin Creator</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Plugin Manager</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14372,14 +14310,6 @@ failed: </source>
     </message>
     <message>
         <source>Show inspector</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Resource Manager</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Show OMR Panel</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14395,22 +14325,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Loop in</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Set loop In position</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Loop out</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Set loop Out position</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Metronome</source>
         <translation>Máy gõ nhịp</translation>
     </message>
@@ -14423,20 +14337,16 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Count-in</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Toggle count-in playback</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Play count-in at playback start</source>
-        <translation type="unfinished"/>
+        <translation>Phát bộ đếm lúc việc phát bắt đầu</translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"/>
+        <translation>Sơ đồ Bass</translation>
     </message>
     <message>
         <source>Add figured bass</source>
@@ -14452,19 +14362,19 @@ failed: </source>
     </message>
     <message>
         <source>Master Palette...</source>
-        <translation type="unfinished"/>
+        <translation>Quản lý công cụ...</translation>
     </message>
     <message>
         <source>Show master palette</source>
-        <translation type="unfinished"/>
+        <translation>Hiện bảng quản lý công cụ</translation>
     </message>
     <message>
         <source>Toggle View Mode</source>
-        <translation type="unfinished"/>
+        <translation>Chuyển chế độ xem</translation>
     </message>
     <message>
         <source>Next syllable</source>
-        <translation type="unfinished"/>
+        <translation>Âm tiết tiếp theo</translation>
     </message>
     <message>
         <source>Previous syllable</source>
@@ -14483,10 +14393,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Note anchored Textline</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Lock Score</source>
         <translation type="unfinished"/>
     </message>
@@ -14495,51 +14401,7 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Note duration: longa (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Double whole note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: double whole (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Whole note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: whole (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Half note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: half (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quarter note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: quarter (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>16th note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Note duration: 16th (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>32nd note (TAB)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14547,15 +14409,7 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>64th note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Note duration: 64th (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>128th note (TAB)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14579,19 +14433,7 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Note entry: rest (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>String above (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Select string above (TAB only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>String below (TAB)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14679,86 +14521,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Longa advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a longa (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Breve advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a double whole note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Whole note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a whole note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Half note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a half note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quarter note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a quarter note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Eighth note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of an eighth note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>16th note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a 16th note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>32nd note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a 32nd note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>64th note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a 64th note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Previous measure (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next measure (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Insert Fretboard Diagram Frame</source>
         <translation type="unfinished"/>
     </message>
@@ -14788,35 +14550,23 @@ failed: </source>
     </message>
     <message>
         <source>Next beat (Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Phách tiếp theo (ký hiệu hợp âm)</translation>
     </message>
     <message>
         <source>Respell Pitches</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>bold face</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>italic</source>
-        <translation>chữ nghiêng</translation>
-    </message>
-    <message>
-        <source>underline</source>
-        <translation>gạch đít</translation>
-    </message>
-    <message>
         <source>Full Measure Rest</source>
-        <translation type="unfinished"/>
+        <translation>Dấu lặng toàn ô nhịp</translation>
     </message>
     <message>
         <source>Converts the measure to a full measure rest</source>
-        <translation type="unfinished"/>
+        <translation>Chuyển đổi ô nhịp thành dấu lặng toàn ô nhịp</translation>
     </message>
     <message>
         <source>Join Measures</source>
-        <translation type="unfinished"/>
+        <translation>Nối ô nhịp</translation>
     </message>
     <message>
         <source>OMR Panel</source>
@@ -14892,7 +14642,7 @@ failed: </source>
     </message>
     <message>
         <source>Selection Filter</source>
-        <translation type="unfinished"/>
+        <translation>Lựa chọn bộ lọc</translation>
     </message>
     <message>
         <source>Eighth note</source>
@@ -14907,35 +14657,7 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Eighth rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Toggle screenshot mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Eighth note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Previous element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>First element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Go to the first element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Last element</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14952,11 +14674,11 @@ failed: </source>
     </message>
     <message>
         <source>Time Signatures...</source>
-        <translation>Số nhịp...</translation>
+        <translation>Số chỉ nhịp...</translation>
     </message>
     <message>
         <source>Show time signature palette</source>
-        <translation type="unfinished"/>
+        <translation>Hiện số chỉ nhịp trong bảng</translation>
     </message>
     <message>
         <source>Symbols...</source>
@@ -14967,35 +14689,7 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Accessibility: next element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Accessibility: previous element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: eighth</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Grace: eighth after</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: eighth rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: eighth (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add more stretch to selected measures</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add less stretch to selected measures</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -15012,7 +14706,7 @@ failed: </source>
     </message>
     <message>
         <source>Insert one measure</source>
-        <translation type="unfinished"/>
+        <translation>Chèn một ô nhịp</translation>
     </message>
     <message>
         <source>Insert horizontal frame</source>
@@ -15028,18 +14722,14 @@ failed: </source>
     </message>
     <message>
         <source>Part Name</source>
-        <translation>Tên bè</translation>
+        <translation>Tên phân phổ</translation>
     </message>
     <message>
         <source>Add part name</source>
-        <translation type="unfinished"/>
+        <translation>Thêm tên phân phổ</translation>
     </message>
     <message>
         <source>Save Online...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>File save online</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -15048,42 +14738,1030 @@ failed: </source>
     </message>
     <message>
         <source>Explode</source>
-        <translation type="unfinished"/>
+        <translation>Phá bỏ</translation>
     </message>
     <message>
         <source>Explode contents of top selected staff into staves below</source>
-        <translation type="unfinished"/>
+        <translation>Phá bỏ nội dung của đầu khuông nhạc được chọn vào các khuông nhạc bên dưới</translation>
     </message>
     <message>
         <source>Implode</source>
-        <translation type="unfinished"/>
+        <translation>Phá bỏ bên trong</translation>
     </message>
     <message>
         <source>Implode contents of selected staves into top selected staff</source>
-        <translation type="unfinished"/>
+        <translation>Phá bỏ nội dung bên trong các khuông nhạc được chọn vào khuông nhạc đầu</translation>
     </message>
     <message>
         <source>Fill With Slashes</source>
-        <translation type="unfinished"/>
+        <translation>Làm đầy vạch tương tự</translation>
     </message>
     <message>
         <source>Toggle Rhythmic Slash Notation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Add/Remove Line Breaks</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Start Center</source>
-        <translation type="unfinished"/>
+        <translation>Trung tâm vận hành</translation>
     </message>
     <message>
         <source>Toggle create multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>Tạo ra các chốt dấu lặng nhiều ô nhịp</translation>
     </message>
     <message>
         <source>Resequence Rehearsal Marks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Increase Stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Increase stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Increase stretch of selected measures</source>
+        <translation>Tăng khoảng rộng của ô nhịp được chọn</translation>
+    </message>
+    <message>
+        <source>Decrease Stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Decrease stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Decrease stretch of selected measures</source>
+        <translation>Giảm khoảng rộng của ô nhịp được chọn</translation>
+    </message>
+    <message>
+        <source>Plugin Creator...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Plugin Manager...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Resource Manager...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add/Remove Line Breaks...</source>
+        <translation>Thêm/bớt dòng ngắt...</translation>
+    </message>
+    <message>
+        <source>File: Open</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File: Save</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File: Save online</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File: Save as</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save selection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File: Save a copy</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Export parts</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File: Close</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File: New</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Respell pitches</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Flip Direction</source>
+        <translation>Đổi chiều</translation>
+    </message>
+    <message>
+        <source>Diatonic Up</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move Up</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Diatonic Down</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Down Octave</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next Element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Accessibility: Next element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous Element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Accessibility: Previous element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>First Element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Last Element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move Down</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous Chord</source>
+        <translation>Hợp âm trước đó</translation>
+    </message>
+    <message>
+        <source>Previous Measure</source>
+        <translation>Ô nhịp trước đó</translation>
+    </message>
+    <message>
+        <source>Previous Staff or Voice</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next Chord</source>
+        <translation>Hợp âm kế tiếp</translation>
+    </message>
+    <message>
+        <source>Next Measure</source>
+        <translation>Ô nhịp kế tiếp</translation>
+    </message>
+    <message>
+        <source>Next Staff or Voice</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add Previous Chord to Selection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select to Beginning of Measure</source>
+        <translation>Chọn từ ô nhịp đầu tiên</translation>
+    </message>
+    <message>
+        <source>Add Next Chord to Selection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select section</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move Chord/Rest Right</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move Chord/Rest left</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select to Beginning of Line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select to End of Line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select to Beginning of Score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select to End of Score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add Staff Above to Selection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add Staff Below to Selection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Page: Previous</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Page: Next</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Page: Top</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Page: End</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Full measure rest</source>
+        <translation>Dấu lặng toàn ô nhịp</translation>
+    </message>
+    <message>
+        <source>Delete selected measures</source>
+        <translation>Xóa bỏ ô nhịp được chọn</translation>
+    </message>
+    <message>
+        <source>Append one measure</source>
+        <translation>Nối thêm một ô nhịp</translation>
+    </message>
+    <message>
+        <source>Append text frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Insert fretboard diagram frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Append horizontal frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Append vertical frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Longa</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double Whole Note</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Double whole</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Whole Note</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Whole</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Half Note</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Half</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Quarter Note</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Quarter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Eighth Note</source>
+        <translation>Nốt đen</translation>
+    </message>
+    <message>
+        <source>Note duration: Eighth</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>16th Note</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>32nd Note</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>64th Note</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>128th Note</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Increase Active Duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Decrease Active Duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Augmentation Dot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Augmentation dot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double Augmentation Dot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Double augmentation dot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Tie</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double Sharp</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Double sharp</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Sharp</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Natural</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Flat</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double Flat</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Double flat</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Grace: Quarter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Grace: Eighth after</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>MIDI Input</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Beam Start</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Beam Middle</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>No Beam</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Beam 16th Sub</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Beam 32nd Sub</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Auto Beam</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Feathered Beam, Slower</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Feathered Beam, Faster</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play panel</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Selection filter</source>
+        <translation>Lựa chọn bộ lọc</translation>
+    </message>
+    <message>
+        <source>MIDI import panel</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Status bar</source>
+        <translation>Status Bar</translation>
+    </message>
+    <message>
+        <source>Zoom Canvas</source>
+        <translation>Phóng lớn Canvas</translation>
+    </message>
+    <message>
+        <source>Play previous chord</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play previous measure</source>
+        <translation>Phát ô nhịp trước đó</translation>
+    </message>
+    <message>
+        <source>Play next chord</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play next measure</source>
+        <translation>Phát ô nhịp kế tiếp</translation>
+    </message>
+    <message>
+        <source>Player seek to begin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Player seek to end</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play Repeats</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Chọn tất cả</translation>
+    </message>
+    <message>
+        <source>Exchange voice 1-2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Exchange voice 1-3</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Exchange voice 1-4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Exchange voice 2-3</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Exchange voice 2-4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Exchange voice 3-4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Repeat Last Command</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle system break</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle page break</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle section break</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Edit element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show invisible</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show unprintable</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show frames</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show page margins</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Insert special characters</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Whole Rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Whole rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Half Rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Half rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Quarter Rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Quarter rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Eighth Rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Eighth rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Zoom in</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Zoom out</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Mirror Note Head</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double Duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Half Duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Repeat Selection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enharmonic Up</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enharmonic Down</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Create New Revision</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle Image Capture</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle image capture</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show OMR Image</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Full screen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable Snap to Horizontal Grid</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable Snap to Vertical Grid</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Configure Grid</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Piano keyboard</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Split measure</source>
+        <translation>Tách ô nhịp</translation>
+    </message>
+    <message>
+        <source>Join measures</source>
+        <translation>Nối ô nhịp</translation>
+    </message>
+    <message>
+        <source>Page settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Plugin creator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Plugin manager</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Resource manager</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show OMR panel</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Loop In</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Loop Out</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Set loop out position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Count-In</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Transpose up</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Transpose down</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle view mode</source>
+        <translation>Chuyển chế độ xem</translation>
+    </message>
+    <message>
+        <source>Next Syllable</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous Syllable</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle Visibility</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Set Visible</source>
+        <translation>Set Visible</translation>
+    </message>
+    <message>
+        <source>Set Invisible</source>
+        <translation>Set Invisible</translation>
+    </message>
+    <message>
+        <source>Note Anchored Textline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note anchored textline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Lock score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Longa (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double Whole Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Double whole (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Whole Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Whole (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Half Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Half (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Quarter Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Quarter (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Eighth Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Eighth (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>16th Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>32nd Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>64th Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>128th Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Increase Active Duration (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Decrease Active Duration (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Rest (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>String Above (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>String Below (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous Beat (Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next Beat (Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add Brackets to Element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle Create Multimeasure Rest</source>
+        <translation>Tạo các chốt dấu lặng nhiều ô nhịp</translation>
+    </message>
+    <message>
+        <source>Bold Face</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bold face</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Italic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Underline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move Word Left</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move word left</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move Word Right</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move word right</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fill with slashes</source>
+        <translation>Làm đầy vạch tương tự</translation>
+    </message>
+    <message>
+        <source>Toggle rhythmic slash notation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add/remove line breaks</source>
+        <translation>Thêm/bớt dòng ngắt</translation>
+    </message>
+    <message>
+        <source>Resequence rehearsal marks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Start center</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Longa Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a longa (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Breve Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a double whole note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Whole Note Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a whole note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Half Note Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a half note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Quarter Note Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a quarter note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Eighth Note Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of an eighth note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>16th Note Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a 16th note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>32nd Note Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a 32nd note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>64th Note Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a 64th note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous Measure (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous measure (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next Measure (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next measure (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle staccato</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle tenuto</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle trill</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle marcato</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Import PDF...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Import PDF</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Import a PDF file with an experimental service on musescore.com</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Set loop in position</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -15096,14 +15774,21 @@ failed: </source>
     <message>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
-        <translation type="unfinished"/>
+        <translation>Không thể chép lại ô nhịp:
+Chùm 3 sẽ nối với ô nhịp</translation>
+    </message>
+    <message>
+        <source>Cannot change local time signature:
+Measure is not empty</source>
+        <translation>Không thể thay đổi bộ phận số chỉ nhịp:
+Ô nhịp không có chỗ trống</translation>
     </message>
 </context>
 <context>
     <name>articulation</name>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"/>
+        <translation>Bend: Nhéo cao độ</translation>
     </message>
     <message>
         <source>Slide out down</source>
@@ -16049,41 +16734,6 @@ Tuplet would cross measure</source>
     </message>
 </context>
 <context>
-    <name>barline</name>
-    <message>
-        <source>normal</source>
-        <translation>bình thường</translation>
-    </message>
-    <message>
-        <source>double</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>start-repeat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>end-repeat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>dashed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>end</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>end-start-repeat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>dotted</source>
-        <translation>chấm</translation>
-    </message>
-</context>
-<context>
     <name>clefTable</name>
     <message>
         <source>Treble clef</source>
@@ -16246,7 +16896,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Open Hi-Hat</source>
-        <translation type="unfinished"/>
+        <translation>Open Hi-hat</translation>
     </message>
     <message>
         <source>Low-Mid Tom</source>
@@ -16286,7 +16936,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Open Hi Conga</source>
-        <translation type="unfinished"/>
+        <translation>Open Hi Conga</translation>
     </message>
     <message>
         <source>Low Conga</source>
@@ -16350,7 +17000,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Open Cuica</source>
-        <translation type="unfinished"/>
+        <translation>Open Cuica</translation>
     </message>
     <message>
         <source>Mute Triangle</source>
@@ -16358,7 +17008,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Open Triangle</source>
-        <translation type="unfinished"/>
+        <translation>Open Triangle</translation>
     </message>
     <message>
         <source>Shaker</source>
@@ -16374,7 +17024,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Open Surdo</source>
-        <translation type="unfinished"/>
+        <translation>Open Surdo</translation>
     </message>
     <message>
         <source>Ride Cymbal 1</source>
@@ -16595,7 +17245,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Lyrics</source>
-        <translation>Lời bài nhạc</translation>
+        <translation>Lời bản nhạc</translation>
     </message>
     <message>
         <source>Marker</source>
@@ -16619,7 +17269,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"/>
+        <translation>Bend: Nhéo cao độ</translation>
     </message>
     <message>
         <source>Volta</source>
@@ -16686,10 +17336,6 @@ Tuplet would cross measure</source>
         <translation>Element</translation>
     </message>
     <message>
-        <source>Layout</source>
-        <translation>Trình bày</translation>
-    </message>
-    <message>
         <source>Icon</source>
         <translation>Hình biểu tượng</translation>
     </message>
@@ -16723,7 +17369,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Time Signature</source>
-        <translation>Điền vào số nhịp:</translation>
+        <translation>Số chỉ nhịp</translation>
     </message>
     <message>
         <source>Repeat Measure</source>
@@ -16735,7 +17381,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"/>
+        <translation>Sơ đồ Bass</translation>
     </message>
     <message>
         <source>Staff Text</source>
@@ -16867,6 +17513,18 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Tremolo Bar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Melisma Line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Glissando Segment</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Melisma Line Segment</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -17020,7 +17678,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"/>
+        <translation>Đặt lại</translation>
     </message>
     <message>
         <source>Segno variation</source>
@@ -17035,11 +17693,11 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Cross</source>
-        <translation type="unfinished"/>
+        <translation>Nối</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation type="unfinished"/>
+        <translation>Hình thoi</translation>
     </message>
     <message>
         <source>Triangle</source>
@@ -17047,35 +17705,35 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"/>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Slash</source>
-        <translation type="unfinished"/>
+        <translation>Vết gạch</translation>
     </message>
     <message>
         <source>XCircle</source>
-        <translation type="unfinished"/>
+        <translation>Vòng tròn X</translation>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Đô</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Rê</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Si</translation>
     </message>
     <message>
         <source>Sol</source>
@@ -17134,22 +17792,6 @@ Tuplet would cross measure</source>
 <context>
     <name>selectionfilter</name>
     <message>
-        <source>1st Voice</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>2nd Voice</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>3rd Voice</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>4th Voice</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Dynamics</source>
         <translation>Cường độ</translation>
     </message>
@@ -17159,11 +17801,11 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Lyrics</source>
-        <translation>Lời bài nhạc</translation>
+        <translation>Lời bản nhạc</translation>
     </message>
     <message>
         <source>Chord Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Ký hiệu các hợp âm</translation>
     </message>
     <message>
         <source>Other Text</source>
@@ -17179,7 +17821,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"/>
+        <translation>Sơ đồ Bass</translation>
     </message>
     <message>
         <source>Ottava</source>
@@ -17211,17 +17853,26 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
+        <translation>Biểu đồ phím đàn</translation>
+    </message>
+    <message>
+        <source>Breath Marks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Breathmarks</source>
+        <source>Voice 1</source>
         <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sfz_files_directory</name>
     <message>
-        <source>SFZ</source>
+        <source>Voice 2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Voice 3</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Voice 4</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -17236,7 +17887,7 @@ Tuplet would cross measure</source>
     <name>staff group header name</name>
     <message>
         <source>STANDARD STAFF</source>
-        <translation type="unfinished"/>
+        <translation>Khuông nhạc tiêu chuẩn</translation>
     </message>
     <message>
         <source>PERCUSSION STAFF</source>
