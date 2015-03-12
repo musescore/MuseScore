@@ -17,7 +17,7 @@
     <Product Id="$(var.CPACK_WIX_PRODUCT_GUID)"
         Name="$(var.ProdName)"
         Language="1033"
-        Version="$(var.CPACK_PACKAGE_VERSION)"
+        Version="1.97.0"
         Manufacturer="$(var.CPACK_PACKAGE_VENDOR)"
         UpgradeCode="$(var.CPACK_WIX_UPGRADE_GUID)">
 
