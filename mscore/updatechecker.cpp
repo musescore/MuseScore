@@ -138,7 +138,7 @@ void UpdateChecker::check(QString currentVersion, bool m)
 int UpdateChecker::defaultPeriod()
       {
       int result = 24;
-      if(qApp->applicationName() == "MuseScore"){ //avoid nightly cymbals
+      if(qApp->applicationName() == "MuseScore2"){ //avoid nightly cymbals
             if (MuseScore::unstable())
                   result = 24;
             else
