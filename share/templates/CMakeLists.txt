@@ -20,6 +20,7 @@
 
 install(FILES
       drumset_fr.drm
+      orchestral.drm
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates
       )
 install(FILES
