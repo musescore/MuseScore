@@ -319,6 +319,21 @@ void MuseScore::updateInputState(Score* score)
       getAction("pad-rest")->setChecked(is.rest());
       getAction("pad-dot")->setChecked(is.duration().dots() == 1);
       getAction("pad-dotdot")->setChecked(is.duration().dots() == 2);
+      if ((mscore->state() & STATE_NORMAL) | (mscore->state() & STATE_NOTE_ENTRY)) {
+            getAction("pad-dot")->setEnabled(true);
+            getAction("pad-dotdot")->setEnabled(true);
+            }
+      switch (is.duration().type()) {
+            case TDuration::DurationType::V_128TH:
+                  getAction("pad-dot")->setChecked(false);
+                  getAction("pad-dot")->setEnabled(false);
+            case TDuration::DurationType::V_64TH:
+                  getAction("pad-dotdot")->setChecked(false);
+                  getAction("pad-dotdot")->setEnabled(false);
+                  break;
+            default:
+                  break;
+            }
 
       getAction("note-longa")->setChecked(is.duration()  == TDuration::DurationType::V_LONG);
       getAction("note-breve")->setChecked(is.duration()  == TDuration::DurationType::V_BREVE);
