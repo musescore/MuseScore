@@ -371,6 +371,8 @@ void GuitarPro6::readTracks(QDomNode* track)
             Part* part = new Part(score);
             Staff* s = new Staff(score);
             s->setPart(part);
+            part->insertStaff(s, -1);
+            score->staves().push_back(s);
             while (!currentNode.isNull()) {
                   QString nodeName = currentNode.nodeName();
                   if (nodeName == "Name")
@@ -406,6 +408,14 @@ void GuitarPro6::readTracks(QDomNode* track)
                               part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("maracas")));
                         else if (!ref.compare("drmkt"))
                               part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate("drumset")));
+                        if (ref.endsWith("-gs")) { // grand staff
+                              Staff* s2 = new Staff(score);
+                              s2->setPart(part);
+                              part->insertStaff(s2, -1);
+                              score->staves().push_back(s2);
+                              s->addBracket(BracketItem(BracketType::BRACE, 2));
+                              s->setBarLineSpan(2);
+                              }
                         }
                   else if (nodeName == "Properties") {
                         QDomNode currentProperty = currentNode.firstChild();
@@ -442,8 +452,6 @@ void GuitarPro6::readTracks(QDomNode* track)
                   }
 
             // add in a new part
-            part->insertStaff(s, -1);
-            score->staves().push_back(s);
             score->appendPart(part);
             trackCounter++;
             nextTrack = nextTrack.nextSibling();
