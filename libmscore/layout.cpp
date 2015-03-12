@@ -2413,6 +2413,15 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                   if (s->show()) {
                         systemIsEmpty = false;
                         }
+                  if (!s->show()) {
+                        Measure* m = system->firstMeasure();
+                        Segment* kss = m ? m->findSegment(Segment::Type::KeySig, m->tick()) : 0;
+                        if (kss) {
+                              KeySig* ks = static_cast<KeySig*>(kss->element(staff->idx() * VOICES));
+                              if (ks)
+                                    ks->setbbox(QRectF());
+                              }
+                        }
                   }
             else {
                   systemIsEmpty = false;
