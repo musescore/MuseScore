@@ -4,7 +4,7 @@ LONG_NAME=MuseScore
 LONGER_NAME="MuseScore 2"
 
 WORKING_DIRECTORY=applebuild
-BACKGROUND=build/packaging/musescore-dmg-background.png
+BACKGROUND=build/packaging/musescore-dmg-background.tiff
 APP_PATH=applebuild/${APPNAME}.app
  
 VOLNAME=${LONG_NAME}-${VERSION}
@@ -34,7 +34,7 @@ function set_bundle_display_options() {
             set position of item "Applications" to {150,125}
             close
             open
-            set background picture of the icon view options of container window to file "background.png" of folder "Pictures"
+            set background picture of the icon view options of container window to file "background.tiff" of folder "Pictures"
             set the bounds of the container window to {0, 0, 540, 300}
             update without registering applications
             delay 5 -- sync
@@ -120,7 +120,7 @@ mv ${VOLUME}/${APPNAME}.app "${VOLUME}/${LONGER_NAME}.app"
 # copy in background image
 mkdir -p ${VOLUME}/Pictures
 # fixme: path
-cp  ${BACKGROUND} ${VOLUME}/Pictures/background.png
+cp  ${BACKGROUND} ${VOLUME}/Pictures/background.tiff
 
 # symlink applications
 ln -s /Applications/ ${VOLUME}/Applications

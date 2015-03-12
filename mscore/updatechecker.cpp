@@ -114,7 +114,7 @@ void UpdateChecker::check(QString currentVersion, bool m)
 #if defined(Q_OS_MAC)
       os = "mac";
 #endif
-      if(qApp->applicationName() == "MuseScore") { //avoid nightly cymbals
+      if(qApp->applicationName() == "MuseScore2") { //avoid nightly cymbals
             if(MuseScore::unstable())
                   release = "pre";
             else
