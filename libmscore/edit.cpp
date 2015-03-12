@@ -840,6 +840,11 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
                   else {
                         nval.pitch += instr->transpose().chromatic;
                         nval.tpc2 = step2tpc(step % 7, acci);
+                        Interval v = st->part()->instr()->transpose();
+                        if (v.isZero())
+                              nval.tpc1 = nval.tpc2;
+                        else
+                              nval.tpc1 = Ms::transposeTpc(nval.tpc2, v, true);
                         }
                   }
                   break;
