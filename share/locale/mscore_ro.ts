@@ -17,7 +17,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; for new versions and more information.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Support MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;your donation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2014 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -26,7 +26,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Vizitați&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; pentru noi versiuni și mai multe informații.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Susține MuseScore cu &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;donația ta&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2014 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
@@ -63,7 +63,7 @@ p, li { white-space: pre-wrap; }
     <name>AeolusGui</name>
     <message>
         <source>Azimuth</source>
-        <translation type="unfinished"/>
+        <translation>Azimut</translation>
     </message>
     <message>
         <source>Width</source>
@@ -71,11 +71,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Reflect</source>
-        <translation type="unfinished"/>
+        <translation>Reflectă</translation>
     </message>
     <message>
         <source>Reverb</source>
-        <translation>Reverb</translation>
+        <translation>Reverber</translation>
     </message>
     <message>
         <source>Delay</source>
@@ -87,7 +87,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Direct</source>
-        <translation type="unfinished"/>
+        <translation>Direct</translation>
     </message>
     <message>
         <source>III</source>
@@ -103,7 +103,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>P</source>
-        <translation type="unfinished"/>
+        <translation>P</translation>
     </message>
     <message>
         <source>Position</source>
@@ -134,7 +134,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>New</source>
-        <translation>« Adaugă</translation>
+        <translation>Nou</translation>
     </message>
     <message>
         <source>Load</source>
@@ -146,7 +146,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Join Scores</source>
-        <translation type="unfinished"/>
+        <translation>Împreunează partiturile</translation>
     </message>
     <message>
         <source>Album name:</source>
@@ -162,26 +162,26 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Album name</source>
-        <translation type="unfinished"/>
+        <translation>Numele albumului</translation>
     </message>
     <message>
         <source>Remove current score</source>
-        <translation type="unfinished"/>
+        <translation>Elimină actuala partitură</translation>
     </message>
     <message>
         <source>Create new album</source>
-        <translation type="unfinished"/>
+        <translation>Crează un nou album</translation>
     </message>
     <message>
         <source>Load an existing album</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă un album existent</translation>
     </message>
 </context>
 <context>
     <name>ArticulationProperties</name>
     <message>
         <source>MuseScore: Articulations Properties</source>
-        <translation>MuseScore: Proprietățile modului de atac</translation>
+        <translation>MuseScore: Proprietăți Articualţie</translation>
     </message>
     <message>
         <source>Appearance</source>
@@ -189,11 +189,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Direction:</source>
-        <translation type="unfinished"/>
+        <translation>Direcţie:</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation>auto</translation>
+        <translation>Auto</translation>
     </message>
     <message>
         <source>Up</source>
@@ -247,22 +247,22 @@ p, li { white-space: pre-wrap; }
     <name>BarLineBase</name>
     <message>
         <source>custom subtype</source>
-        <translation type="unfinished"/>
+        <translation>subtip personalizat</translation>
     </message>
     <message>
         <source>custom span</source>
-        <translation type="unfinished"/>
+        <translation>întindere personalizată</translation>
     </message>
 </context>
 <context>
     <name>BendDialog</name>
     <message>
         <source>MuseScore: Bend Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Proprietăți Bend</translation>
     </message>
     <message>
         <source>Bend type:</source>
-        <translation type="unfinished"/>
+        <translation>Tip bend:</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
@@ -270,54 +270,61 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"/>
+        <translation>Bend</translation>
     </message>
     <message>
         <source>Bend/Release</source>
-        <translation type="unfinished"/>
+        <translation>Bend/Release</translation>
     </message>
     <message>
         <source>Bend/Release/Bend</source>
-        <translation type="unfinished"/>
+        <translation>Bend/Release/Bend</translation>
     </message>
     <message>
         <source>Prebend</source>
-        <translation type="unfinished"/>
+        <translation>Prebend</translation>
     </message>
     <message>
         <source>Prebend/Release</source>
-        <translation type="unfinished"/>
+        <translation>Prebend/Release</translation>
     </message>
 </context>
 <context>
     <name>BreaksDialog</name>
     <message>
         <source>MuseScore: Add/Remove Line Breaks</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Adăugă/Elimină bara de măsură</translation>
     </message>
     <message>
         <source>Break lines every</source>
-        <translation type="unfinished"/>
+        <translation>Bară de măsură la fiecare</translation>
     </message>
     <message>
         <source>Number of measures</source>
-        <translation type="unfinished"/>
+        <translation>Numărul măsurii</translation>
     </message>
     <message>
         <source>measures</source>
-        <translation type="unfinished"/>
+        <translation>măsuri</translation>
     </message>
     <message>
         <source>Add line breaks at end of each system</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă bară de măsură la fiacare sistem</translation>
     </message>
     <message>
         <source>Remove current line breaks</source>
-        <translation type="unfinished"/>
+        <translation>Elimină actuala bară de măsură</translation>
     </message>
     <message>
         <source>Break lines every X measures</source>
-        <translation type="unfinished"/>
+        <translation>Întrerupe linia la fiecare X măsură</translation>
+    </message>
+</context>
+<context>
+    <name>ChordBase</name>
+    <message>
+        <source>Glissando end</source>
+        <translation>Glissando sfârșit</translation>
     </message>
 </context>
 <context>
@@ -328,11 +335,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tab 1</source>
-        <translation type="unfinished"/>
+        <translation>Tabulator 1</translation>
     </message>
     <message>
         <source>Tab 2</source>
-        <translation type="unfinished"/>
+        <translation>Tabulator 2</translation>
     </message>
     <message>
         <source>Save As</source>
@@ -344,7 +351,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>ID</source>
-        <translation type="unfinished"/>
+        <translation>Identificator</translation>
     </message>
 </context>
 <context>
@@ -355,47 +362,47 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Cross</source>
-        <translation type="unfinished"/>
+        <translation>Cruce</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation type="unfinished"/>
+        <translation>Diamant</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation>Triangular</translation>
+        <translation>Trianglu</translation>
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"/>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Slash</source>
-        <translation type="unfinished"/>
+        <translation>Slash</translation>
     </message>
     <message>
         <source>XCircle</source>
-        <translation type="unfinished"/>
+        <translation>XCerc</translation>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Ti</translation>
     </message>
 </context>
 <context>
@@ -462,7 +469,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Shortcut:</source>
-        <translation>Scurtătura:</translation>
+        <translation>Scurtătură:</translation>
     </message>
     <message>
         <source>A</source>
@@ -510,7 +517,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Note head:</source>
-        <translation>Boabă:</translation>
+        <translation>Capul notei:</translation>
     </message>
 </context>
 <context>
@@ -549,62 +556,62 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Short name:</source>
-        <translation type="unfinished"/>
+        <translation>Nume prescurtat:</translation>
     </message>
     <message>
         <source>MIDI program:</source>
-        <translation type="unfinished"/>
+        <translation>MIDI setări:</translation>
     </message>
 </context>
 <context>
     <name>EditPitchBase</name>
     <message>
         <source>Note Selection</source>
-        <translation type="unfinished"/>
+        <translation>Selcţionare note</translation>
     </message>
     <message>
         <source>Select Note:</source>
-        <translation type="unfinished"/>
+        <translation>Selectează nota:</translation>
     </message>
     <message>
         <source>Octave 8</source>
-        <translation type="unfinished"/>
+        <translation>Octava 8</translation>
     </message>
     <message>
         <source>Octave 7</source>
-        <translation type="unfinished"/>
+        <translation>Octava 7</translation>
     </message>
     <message>
         <source>Octave 6</source>
-        <translation type="unfinished"/>
+        <translation>Octava 6</translation>
     </message>
     <message>
         <source>Octave 5</source>
-        <translation type="unfinished"/>
+        <translation>Octava 5</translation>
     </message>
     <message>
         <source>Octave 4</source>
-        <translation type="unfinished"/>
+        <translation>Octava 4</translation>
     </message>
     <message>
         <source>Octave 3</source>
-        <translation type="unfinished"/>
+        <translation>Octava 3</translation>
     </message>
     <message>
         <source>Octave 2</source>
-        <translation type="unfinished"/>
+        <translation>Octava 2</translation>
     </message>
     <message>
         <source>Octave 1</source>
-        <translation type="unfinished"/>
+        <translation>Octava 1</translation>
     </message>
     <message>
         <source>Octave 0</source>
-        <translation type="unfinished"/>
+        <translation>Octava 0</translation>
     </message>
     <message>
         <source>Octave -1</source>
-        <translation type="unfinished"/>
+        <translation>Octava -1</translation>
     </message>
     <message>
         <source>C</source>
@@ -636,510 +643,514 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>C 8</source>
-        <translation type="unfinished"/>
+        <translation>Do 8</translation>
     </message>
     <message>
         <source>D 8</source>
-        <translation type="unfinished"/>
+        <translation>Re 8</translation>
     </message>
     <message>
         <source>E 8</source>
-        <translation type="unfinished"/>
+        <translation>Mi 8</translation>
     </message>
     <message>
         <source>F 8</source>
-        <translation type="unfinished"/>
+        <translation>Fa 8</translation>
     </message>
     <message>
         <source>G 8</source>
-        <translation type="unfinished"/>
+        <translation>Sol 8</translation>
     </message>
     <message>
         <source>A 8</source>
-        <translation type="unfinished"/>
+        <translation>La 8</translation>
     </message>
     <message>
         <source>B 8</source>
-        <translation type="unfinished"/>
+        <translation>Si 8</translation>
     </message>
     <message>
         <source>C 7</source>
-        <translation type="unfinished"/>
+        <translation>Do 7</translation>
     </message>
     <message>
         <source>D 7</source>
-        <translation type="unfinished"/>
+        <translation>Re 7</translation>
     </message>
     <message>
         <source>E 7</source>
-        <translation type="unfinished"/>
+        <translation>Mi 7</translation>
     </message>
     <message>
         <source>F 7</source>
-        <translation type="unfinished"/>
+        <translation>Fa 7</translation>
     </message>
     <message>
         <source>G 7</source>
-        <translation type="unfinished"/>
+        <translation>Sol 7</translation>
     </message>
     <message>
         <source>A 7</source>
-        <translation type="unfinished"/>
+        <translation>La 7</translation>
     </message>
     <message>
         <source>B 7</source>
-        <translation type="unfinished"/>
+        <translation>Si 7</translation>
     </message>
     <message>
         <source>C 6</source>
-        <translation type="unfinished"/>
+        <translation>Do 6</translation>
     </message>
     <message>
         <source>D 6</source>
-        <translation type="unfinished"/>
+        <translation>Re 6</translation>
     </message>
     <message>
         <source>E 6</source>
-        <translation type="unfinished"/>
+        <translation>Mi 6</translation>
     </message>
     <message>
         <source>F 6</source>
-        <translation type="unfinished"/>
+        <translation>Fa 6</translation>
     </message>
     <message>
         <source>G 6</source>
-        <translation type="unfinished"/>
+        <translation>Sol 6</translation>
     </message>
     <message>
         <source>A 6</source>
-        <translation type="unfinished"/>
+        <translation>La 6</translation>
     </message>
     <message>
         <source>B 6</source>
-        <translation type="unfinished"/>
+        <translation>Si 6</translation>
     </message>
     <message>
         <source>C 5</source>
-        <translation type="unfinished"/>
+        <translation>Do 5</translation>
     </message>
     <message>
         <source>D 5</source>
-        <translation type="unfinished"/>
+        <translation>Re 5</translation>
     </message>
     <message>
         <source>E 5</source>
-        <translation type="unfinished"/>
+        <translation>Mi 5</translation>
     </message>
     <message>
         <source>F 5</source>
-        <translation type="unfinished"/>
+        <translation>Fa 5</translation>
     </message>
     <message>
         <source>G 5</source>
-        <translation type="unfinished"/>
+        <translation>Sol 5</translation>
     </message>
     <message>
         <source>A 5</source>
-        <translation type="unfinished"/>
+        <translation>La 5</translation>
     </message>
     <message>
         <source>B 5</source>
-        <translation type="unfinished"/>
+        <translation>Si 5</translation>
     </message>
     <message>
         <source>C 4</source>
-        <translation type="unfinished"/>
+        <translation>Do 4</translation>
     </message>
     <message>
         <source>D 4</source>
-        <translation type="unfinished"/>
+        <translation>Re 4</translation>
     </message>
     <message>
         <source>E 4</source>
-        <translation type="unfinished"/>
+        <translation>Mi 4</translation>
     </message>
     <message>
         <source>F 4</source>
-        <translation type="unfinished"/>
+        <translation>Fa 4</translation>
     </message>
     <message>
         <source>G 4</source>
-        <translation type="unfinished"/>
+        <translation>Sol 4</translation>
     </message>
     <message>
         <source>A 4</source>
-        <translation type="unfinished"/>
+        <translation>La 4</translation>
     </message>
     <message>
         <source>B 4</source>
-        <translation type="unfinished"/>
+        <translation>Si 4</translation>
     </message>
     <message>
         <source>C 3</source>
-        <translation type="unfinished"/>
+        <translation>Do 3</translation>
     </message>
     <message>
         <source>D 3</source>
-        <translation type="unfinished"/>
+        <translation>Re 3</translation>
     </message>
     <message>
         <source>E 3</source>
-        <translation type="unfinished"/>
+        <translation>Mi 3</translation>
     </message>
     <message>
         <source>F 3</source>
-        <translation type="unfinished"/>
+        <translation>Fa 3</translation>
     </message>
     <message>
         <source>G 3</source>
-        <translation type="unfinished"/>
+        <translation>Sol 3</translation>
     </message>
     <message>
         <source>A 3</source>
-        <translation type="unfinished"/>
+        <translation>La 3</translation>
     </message>
     <message>
         <source>B 3</source>
-        <translation type="unfinished"/>
+        <translation>Si 3</translation>
     </message>
     <message>
         <source>C 2</source>
-        <translation type="unfinished"/>
+        <translation>Do 2</translation>
     </message>
     <message>
         <source>D 2</source>
-        <translation type="unfinished"/>
+        <translation>Re 2</translation>
     </message>
     <message>
         <source>E 2</source>
-        <translation type="unfinished"/>
+        <translation>Mi 2</translation>
     </message>
     <message>
         <source>F 2</source>
-        <translation type="unfinished"/>
+        <translation>Fa 2</translation>
     </message>
     <message>
         <source>G 2</source>
-        <translation type="unfinished"/>
+        <translation>Sol 2</translation>
     </message>
     <message>
         <source>A 2</source>
-        <translation type="unfinished"/>
+        <translation>La 2</translation>
     </message>
     <message>
         <source>B 2</source>
-        <translation type="unfinished"/>
+        <translation>Si 2</translation>
     </message>
     <message>
         <source>C 1</source>
-        <translation type="unfinished"/>
+        <translation>Do 1</translation>
     </message>
     <message>
         <source>D 1</source>
-        <translation type="unfinished"/>
+        <translation>Re 1</translation>
     </message>
     <message>
         <source>E 1</source>
-        <translation type="unfinished"/>
+        <translation>Mi 1</translation>
     </message>
     <message>
         <source>F 1</source>
-        <translation type="unfinished"/>
+        <translation>Fa 1</translation>
     </message>
     <message>
         <source>G 1</source>
-        <translation type="unfinished"/>
+        <translation>Sol 1</translation>
     </message>
     <message>
         <source>A 1</source>
-        <translation type="unfinished"/>
+        <translation>La 1</translation>
     </message>
     <message>
         <source>B 1</source>
-        <translation type="unfinished"/>
+        <translation>Si 1</translation>
     </message>
     <message>
         <source>C 0</source>
-        <translation type="unfinished"/>
+        <translation>Do 0</translation>
     </message>
     <message>
         <source>D 0</source>
-        <translation type="unfinished"/>
+        <translation>Re 0</translation>
     </message>
     <message>
         <source>E 0</source>
-        <translation type="unfinished"/>
+        <translation>Mi 0</translation>
     </message>
     <message>
         <source>F 0</source>
-        <translation type="unfinished"/>
+        <translation>Fa 0</translation>
     </message>
     <message>
         <source>G 0</source>
-        <translation type="unfinished"/>
+        <translation>Sol 0</translation>
     </message>
     <message>
         <source>A 0</source>
-        <translation type="unfinished"/>
+        <translation>La 0</translation>
     </message>
     <message>
         <source>B 0</source>
-        <translation type="unfinished"/>
+        <translation>Si 0</translation>
     </message>
     <message>
         <source>C -1</source>
-        <translation type="unfinished"/>
+        <translation>Do -1</translation>
     </message>
     <message>
         <source>D -1</source>
-        <translation type="unfinished"/>
+        <translation>Re -1</translation>
     </message>
     <message>
         <source>E -1</source>
-        <translation type="unfinished"/>
+        <translation>Mi -1</translation>
     </message>
     <message>
         <source>F -1</source>
-        <translation type="unfinished"/>
+        <translation>Fa -1</translation>
     </message>
     <message>
         <source>G -1</source>
-        <translation type="unfinished"/>
+        <translation>Sol -1</translation>
     </message>
     <message>
         <source>A -1</source>
-        <translation type="unfinished"/>
+        <translation>La -1</translation>
     </message>
     <message>
         <source>B -1</source>
-        <translation type="unfinished"/>
+        <translation>Si -1</translation>
     </message>
     <message>
         <source>C♯</source>
-        <translation type="unfinished"/>
+        <translation>Do♯</translation>
     </message>
     <message>
         <source>E♭</source>
-        <translation type="unfinished"/>
+        <translation>Mi♭</translation>
     </message>
     <message>
         <source>F♯</source>
-        <translation type="unfinished"/>
+        <translation>Fa♯</translation>
     </message>
     <message>
         <source>A♭</source>
-        <translation type="unfinished"/>
+        <translation>La♭</translation>
     </message>
     <message>
         <source>B♭</source>
-        <translation>Si</translation>
+        <translation>Si♭</translation>
     </message>
     <message>
         <source>C♯ 8</source>
-        <translation type="unfinished"/>
+        <translation>Do♯ 8</translation>
     </message>
     <message>
         <source>E♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>Mi♭ 8</translation>
     </message>
     <message>
         <source>F♯ 8</source>
-        <translation type="unfinished"/>
+        <translation>Fa♯ 8</translation>
     </message>
     <message>
         <source>A♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>La♭ 8</translation>
     </message>
     <message>
         <source>B♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>Si♭ 8</translation>
     </message>
     <message>
         <source>C♯ 7</source>
-        <translation type="unfinished"/>
+        <translation>Do♯ 7</translation>
     </message>
     <message>
         <source>E♭ 7</source>
-        <translation type="unfinished"/>
+        <translation>Mi♭ 7</translation>
     </message>
     <message>
         <source>F♯ 7</source>
-        <translation type="unfinished"/>
+        <translation>Fa♯ 7</translation>
     </message>
     <message>
         <source>A♭ 7</source>
-        <translation type="unfinished"/>
+        <translation>La♭ 7</translation>
     </message>
     <message>
         <source>B♭ 7</source>
-        <translation type="unfinished"/>
+        <translation>Si♭ 7</translation>
     </message>
     <message>
         <source>C♯ 6</source>
-        <translation type="unfinished"/>
+        <translation>Do♯ 6</translation>
     </message>
     <message>
         <source>E♭ 6</source>
-        <translation type="unfinished"/>
+        <translation>Mi♭ 6</translation>
     </message>
     <message>
         <source>F♯ 6</source>
-        <translation type="unfinished"/>
+        <translation>Fa♯ 6</translation>
     </message>
     <message>
         <source>A♭ 6</source>
-        <translation type="unfinished"/>
+        <translation>La♭ 6</translation>
     </message>
     <message>
         <source>B♭ 6</source>
-        <translation type="unfinished"/>
+        <translation>Si♭ 6</translation>
     </message>
     <message>
         <source>C♯ 5</source>
-        <translation type="unfinished"/>
+        <translation>Do♯ 5</translation>
     </message>
     <message>
         <source>E♭ 5</source>
-        <translation type="unfinished"/>
+        <translation>Mi♭ 5</translation>
     </message>
     <message>
         <source>F♯ 5</source>
-        <translation type="unfinished"/>
+        <translation>Fa♯ 5</translation>
     </message>
     <message>
         <source>A♭ 5</source>
-        <translation type="unfinished"/>
+        <translation>La♭ 5</translation>
     </message>
     <message>
         <source>B♭ 5</source>
-        <translation type="unfinished"/>
+        <translation>Si♭ 5</translation>
     </message>
     <message>
         <source>C♯ 4</source>
-        <translation type="unfinished"/>
+        <translation>Do♯ 4</translation>
     </message>
     <message>
         <source>E♭ 4</source>
-        <translation type="unfinished"/>
+        <translation>Mi♭ 4</translation>
     </message>
     <message>
         <source>F♯ 4</source>
-        <translation type="unfinished"/>
+        <translation>Fa♯ 4</translation>
     </message>
     <message>
         <source>A♭ 4</source>
-        <translation type="unfinished"/>
+        <translation>La♭ 4</translation>
     </message>
     <message>
         <source>B♭ 4</source>
-        <translation type="unfinished"/>
+        <translation>Si♭ 4</translation>
     </message>
     <message>
         <source>C♯ 3</source>
-        <translation type="unfinished"/>
+        <translation>Do♯ 3</translation>
     </message>
     <message>
         <source>E♭ 3</source>
-        <translation type="unfinished"/>
+        <translation>Mi♭ 3</translation>
     </message>
     <message>
         <source>F♯ 3</source>
-        <translation type="unfinished"/>
+        <translation>Fa♯ 3</translation>
     </message>
     <message>
         <source>A♭ 3</source>
-        <translation type="unfinished"/>
+        <translation>La♭ 3</translation>
     </message>
     <message>
         <source>B♭ 3</source>
-        <translation type="unfinished"/>
+        <translation>Si♭ 3</translation>
     </message>
     <message>
         <source>C♯ 2</source>
-        <translation type="unfinished"/>
+        <translation>Do♯ 2</translation>
     </message>
     <message>
         <source>E♭ 2</source>
-        <translation type="unfinished"/>
+        <translation>Mi♭ 2</translation>
     </message>
     <message>
         <source>F♯ 2</source>
-        <translation type="unfinished"/>
+        <translation>Fa♯ 2</translation>
     </message>
     <message>
         <source>A♭ 2</source>
-        <translation type="unfinished"/>
+        <translation>La♭ 2</translation>
     </message>
     <message>
         <source>B♭ 2</source>
-        <translation type="unfinished"/>
+        <translation>Si♭ 2</translation>
     </message>
     <message>
         <source>C♯ 1</source>
-        <translation type="unfinished"/>
+        <translation>Do♯ 1</translation>
     </message>
     <message>
         <source>E♭ 1</source>
-        <translation type="unfinished"/>
+        <translation>Mi♭ 1</translation>
     </message>
     <message>
         <source>F♯ 1</source>
-        <translation type="unfinished"/>
+        <translation>Fa♯ 1</translation>
     </message>
     <message>
         <source>A♭ 1</source>
-        <translation type="unfinished"/>
+        <translation>La♭ 1</translation>
     </message>
     <message>
         <source>B♭ 1</source>
-        <translation type="unfinished"/>
+        <translation>Si♭ 1</translation>
     </message>
     <message>
         <source>C♯ 0</source>
-        <translation type="unfinished"/>
+        <translation>Do♯ 0</translation>
     </message>
     <message>
         <source>E♭ 0</source>
-        <translation type="unfinished"/>
+        <translation>Mi♭ 0</translation>
     </message>
     <message>
         <source>F♯ 0</source>
-        <translation type="unfinished"/>
+        <translation>Fa♯ 0</translation>
     </message>
     <message>
         <source>A♭ 0</source>
-        <translation type="unfinished"/>
+        <translation>La♭ 0</translation>
     </message>
     <message>
         <source>B♭ 0</source>
-        <translation type="unfinished"/>
+        <translation>Si♭ 0</translation>
     </message>
     <message>
         <source>C♯ -1</source>
-        <translation type="unfinished"/>
+        <translation>Do♯ -1</translation>
     </message>
     <message>
         <source>E♭ -1</source>
-        <translation type="unfinished"/>
+        <translation>Mi♭ -1</translation>
     </message>
     <message>
         <source>F♯ -1</source>
-        <translation type="unfinished"/>
+        <translation>Fa♯ -1</translation>
     </message>
     <message>
         <source>A♭ -1</source>
-        <translation type="unfinished"/>
+        <translation>La♭ -1</translation>
     </message>
     <message>
         <source>B♭ -1</source>
-        <translation type="unfinished"/>
+        <translation>Si♭ -1</translation>
+    </message>
+    <message>
+        <source>»C</source>
+        <translation>»Do</translation>
     </message>
 </context>
 <context>
     <name>EditRaster</name>
     <message>
         <source>1 / </source>
-        <translation type="unfinished"/>
+        <translation>1 /</translation>
     </message>
     <message>
         <source>sp</source>
@@ -1147,19 +1158,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>MuseScore: Edit Grid</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Editare Grilă</translation>
     </message>
     <message>
         <source>Edit Grid</source>
-        <translation type="unfinished"/>
+        <translation>Editare Grilă</translation>
     </message>
     <message>
         <source>Horizontal grid:</source>
-        <translation type="unfinished"/>
+        <translation>Grilă Orizontală</translation>
     </message>
     <message>
         <source>Vertical  grid:</source>
-        <translation type="unfinished"/>
+        <translation>Grilă Verticală</translation>
     </message>
 </context>
 <context>
@@ -1181,10 +1192,6 @@ p, li { white-space: pre-wrap; }
         <translation>Instrument:</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Amateur:</source>
         <translation>Amator:</translation>
     </message>
@@ -1198,111 +1205,111 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>0 - Perfect Unison</source>
-        <translation type="unfinished"/>
+        <translation>0 - Primă perfectă</translation>
     </message>
     <message>
         <source>1 - Augmented Unison</source>
-        <translation type="unfinished"/>
+        <translation>1 - Primă mărită</translation>
     </message>
     <message>
         <source>0 - Diminished Second</source>
-        <translation type="unfinished"/>
+        <translation>0 - Secundă Micşorată</translation>
     </message>
     <message>
         <source>1 - Minor Second</source>
-        <translation type="unfinished"/>
+        <translation>1 - Secundă Mică</translation>
     </message>
     <message>
         <source>2 - Major Second</source>
-        <translation type="unfinished"/>
+        <translation>2 - Secundă Mare</translation>
     </message>
     <message>
         <source>3 - Augmented Second</source>
-        <translation type="unfinished"/>
+        <translation>3 - Secundă Mărită</translation>
     </message>
     <message>
         <source>2 - Diminished Third</source>
-        <translation type="unfinished"/>
+        <translation>2 - Terţă Micşorată</translation>
     </message>
     <message>
         <source>3 - Minor Third</source>
-        <translation type="unfinished"/>
+        <translation>3 - Terţă Mică</translation>
     </message>
     <message>
         <source>4 - Major Third</source>
-        <translation type="unfinished"/>
+        <translation>4 - Terţă Mare</translation>
     </message>
     <message>
         <source>5 - Augmented Third</source>
-        <translation type="unfinished"/>
+        <translation>5 - Terţă Mărită</translation>
     </message>
     <message>
         <source>4 - Diminished Fourth</source>
-        <translation type="unfinished"/>
+        <translation>4 - Cvartă Micşorată</translation>
     </message>
     <message>
         <source>5 - Perfect Fourth</source>
-        <translation type="unfinished"/>
+        <translation>5 - Cvartă Perfectă</translation>
     </message>
     <message>
         <source>6 - Augmented Fourth</source>
-        <translation type="unfinished"/>
+        <translation>6 - Cvartă Mărită</translation>
     </message>
     <message>
         <source>6 - Diminished Fifth</source>
-        <translation type="unfinished"/>
+        <translation>6 - Cvintă Micşorată</translation>
     </message>
     <message>
         <source>7 - Perfect Fifth</source>
-        <translation type="unfinished"/>
+        <translation>7 - Cvintă Perfectă</translation>
     </message>
     <message>
         <source>8 - Augmented Fifth</source>
-        <translation type="unfinished"/>
+        <translation>8 - Cvintă Mărită</translation>
     </message>
     <message>
         <source>7 - Diminished Sixth</source>
-        <translation type="unfinished"/>
+        <translation>7 - Sextă Micşorată</translation>
     </message>
     <message>
         <source>8 - Minor Sixth</source>
-        <translation type="unfinished"/>
+        <translation>8 - Sextă Mică</translation>
     </message>
     <message>
         <source>9 - Major Sixth</source>
-        <translation type="unfinished"/>
+        <translation>9 - Sextă Mare</translation>
     </message>
     <message>
         <source>10 - Augmented Sixth</source>
-        <translation type="unfinished"/>
+        <translation>10 - Sextă Mărită</translation>
     </message>
     <message>
         <source>9 - Diminished Seventh</source>
-        <translation type="unfinished"/>
+        <translation>9 - Septimă Micşorată</translation>
     </message>
     <message>
         <source>10 - Minor Seventh</source>
-        <translation type="unfinished"/>
+        <translation>10 - Septimă Mică</translation>
     </message>
     <message>
         <source>11 - Major Seventh</source>
-        <translation type="unfinished"/>
+        <translation>11 - Septimă Mare</translation>
     </message>
     <message>
         <source>12 - Augmented Seventh</source>
-        <translation type="unfinished"/>
+        <translation>12 - Septimă Mărită</translation>
     </message>
     <message>
         <source>11 - Diminished Octave</source>
-        <translation type="unfinished"/>
+        <translation>11 - Octavă micşorată</translation>
     </message>
     <message>
         <source>12 - Perfect Octave</source>
-        <translation type="unfinished"/>
+        <translation>12 - Octavă perfectă</translation>
     </message>
     <message>
         <source>Number of strings:</source>
-        <translation type="unfinished"/>
+        <translation>Numărul de corzii:</translation>
     </message>
     <message>
         <source>Staff Properties</source>
@@ -1310,11 +1317,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Invisible staff lines</source>
-        <translation type="unfinished"/>
+        <translation>Liniile portativului invizibele</translation>
     </message>
     <message>
         <source>Small staff</source>
-        <translation type="unfinished"/>
+        <translation>Portativ îngust</translation>
     </message>
     <message>
         <source>sp</source>
@@ -1322,15 +1329,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staff line color:</source>
-        <translation type="unfinished"/>
+        <translation>Culoarea liniliilor portativului:</translation>
     </message>
     <message>
         <source>Part name:</source>
-        <translation type="unfinished"/>
+        <translation>Nume știmă:</translation>
     </message>
     <message>
         <source>Long instrument name:</source>
-        <translation>Numele complet:</translation>
+        <translation>Numele complet al instrumentului:</translation>
     </message>
     <message>
         <source>Short instrument name:</source>
@@ -1338,15 +1345,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Usable pitch range:</source>
-        <translation type="unfinished"/>
+        <translation>Registru disponibil:</translation>
     </message>
     <message>
         <source>Play transposition:</source>
-        <translation type="unfinished"/>
+        <translation>Cântă transpoziţia:</translation>
     </message>
     <message>
         <source>+ Octave:</source>
-        <translation type="unfinished"/>
+        <translation>+ Octava:</translation>
     </message>
     <message>
         <source>Up</source>
@@ -1358,23 +1365,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Edit String Data...</source>
-        <translation type="unfinished"/>
+        <translation>Editare Proprietăți Coardă...</translation>
     </message>
     <message>
         <source>Show time signature</source>
-        <translation type="unfinished"/>
+        <translation>Arată măsura</translation>
     </message>
     <message>
         <source>Style group:</source>
-        <translation type="unfinished"/>
+        <translation>Stil group:</translation>
     </message>
     <message>
         <source>Show barlines</source>
-        <translation type="unfinished"/>
+        <translation>Arată bările de măsură</translation>
     </message>
     <message>
         <source>Show clef</source>
-        <translation type="unfinished"/>
+        <translation>Arată cheia</translation>
     </message>
     <message>
         <source>Lines:</source>
@@ -1382,23 +1389,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Line distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanta linie:</translation>
     </message>
     <message>
         <source>Extra distance above staff:</source>
-        <translation type="unfinished"/>
+        <translation>Distanță extra deasupra portativului:</translation>
     </message>
     <message>
         <source>Never hide</source>
-        <translation type="unfinished"/>
+        <translation>Nu ascunde niciodată</translation>
     </message>
     <message>
         <source>Do not hide if system is empty</source>
-        <translation type="unfinished"/>
+        <translation>Nu ascunde dacă lipseşte portativul</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"/>
+        <translation>Scală</translation>
     </message>
     <message>
         <source>%</source>
@@ -1406,14 +1413,18 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Advanced Style Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Proprietăți avansate de stil...</translation>
+    </message>
+    <message>
+        <source>Hide system barline</source>
+        <translation>Ascunde liniile de măsură intre sisteme</translation>
     </message>
 </context>
 <context>
     <name>EditStaffType</name>
     <message>
         <source>MuseScore: Edit Staff Type</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Editare Tip Portativ</translation>
     </message>
     <message>
         <source>Lines:</source>
@@ -1425,7 +1436,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>STANDARD STAFF</source>
-        <translation type="unfinished"/>
+        <translation>Portativ implicit</translation>
     </message>
     <message>
         <source>Stemless</source>
@@ -1433,11 +1444,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Create a new staff type of current group.</source>
-        <translation type="unfinished"/>
+        <translation>Crează un nou tip de portativ din grupul actual.</translation>
     </message>
     <message>
         <source>Fret Marks</source>
-        <translation type="unfinished"/>
+        <translation>Marcaje Taste</translation>
     </message>
     <message>
         <source>Font:</source>
@@ -1453,7 +1464,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Marks are:</source>
-        <translation type="unfinished"/>
+        <translation>Marcajele sunt:</translation>
     </message>
     <message>
         <source>Numbers</source>
@@ -1461,15 +1472,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Letters</source>
-        <translation type="unfinished"/>
+        <translation>Litere</translation>
     </message>
     <message>
         <source>Marks are drawn:</source>
-        <translation type="unfinished"/>
+        <translation>Marcajele sunt desenate:</translation>
     </message>
     <message>
         <source>Lines are:</source>
-        <translation type="unfinished"/>
+        <translation>Linii:</translation>
     </message>
     <message>
         <source>Continuous</source>
@@ -1477,15 +1488,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Broken</source>
-        <translation type="unfinished"/>
+        <translation>Întrerupt</translation>
     </message>
     <message>
         <source>Note Values</source>
-        <translation type="unfinished"/>
+        <translation>Valori de note</translation>
     </message>
     <message>
         <source>Shown as:</source>
-        <translation type="unfinished"/>
+        <translation>Arată ca:</translation>
     </message>
     <message>
         <source>None</source>
@@ -1493,23 +1504,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Stems and beams</source>
-        <translation type="unfinished"/>
+        <translation>Codiţe şi ligaturi</translation>
     </message>
     <message>
         <source>Stem style:</source>
-        <translation type="unfinished"/>
+        <translation>Stilul codiţei:</translation>
     </message>
     <message>
         <source>Beside staff</source>
-        <translation type="unfinished"/>
+        <translation>Înconjoară portativul</translation>
     </message>
     <message>
         <source>Through staff</source>
-        <translation type="unfinished"/>
+        <translation>Prin portativ</translation>
     </message>
     <message>
         <source>Stem position:</source>
-        <translation type="unfinished"/>
+        <translation>Poziţia codiţei:</translation>
     </message>
     <message>
         <source>Above</source>
@@ -1521,15 +1532,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Half notes:</source>
-        <translation type="unfinished"/>
+        <translation>Doimile:</translation>
     </message>
     <message>
         <source>As short stem</source>
-        <translation type="unfinished"/>
+        <translation>Codiţă scurtă</translation>
     </message>
     <message>
         <source>As slashed stem</source>
-        <translation type="unfinished"/>
+        <translation>Cozi legate cu bară</translation>
     </message>
     <message>
         <source>Preview</source>
@@ -1537,47 +1548,47 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Line distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanta linie:</translation>
     </message>
     <message>
         <source>Show clef</source>
-        <translation type="unfinished"/>
+        <translation>Arată cheia</translation>
     </message>
     <message>
         <source>Show time signature</source>
-        <translation type="unfinished"/>
+        <translation>Arată măsura</translation>
     </message>
     <message>
         <source>Show barlines</source>
-        <translation type="unfinished"/>
+        <translation>Arată bările de măsură</translation>
     </message>
     <message>
         <source>Vertical offset:</source>
-        <translation type="unfinished"/>
+        <translation>Distanţă verticală:</translation>
     </message>
     <message>
         <source>On lines</source>
-        <translation type="unfinished"/>
+        <translation>Pe linii</translation>
     </message>
     <message>
         <source>Above lines</source>
-        <translation type="unfinished"/>
+        <translation>Peste linii</translation>
     </message>
     <message>
         <source>Note symbols</source>
-        <translation type="unfinished"/>
+        <translation>Simboluri note</translation>
     </message>
     <message>
         <source>Upside down</source>
-        <translation type="unfinished"/>
+        <translation>Răstoarnă</translation>
     </message>
     <message>
         <source>Show rests</source>
-        <translation type="unfinished"/>
+        <translation>Arată pauze</translation>
     </message>
     <message>
         <source>Add to Templates</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă  la şabloane</translation>
     </message>
     <message>
         <source>Template:</source>
@@ -1585,46 +1596,66 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show key signature</source>
-        <translation type="unfinished"/>
+        <translation>Arată armura</translation>
     </message>
     <message>
         <source>Show ledger lines</source>
-        <translation type="unfinished"/>
+        <translation>Afisează liniile ajutătoare</translation>
     </message>
     <message>
         <source>Show Key signature</source>
-        <translation type="unfinished"/>
+        <translation>Arată armura</translation>
     </message>
     <message>
         <source>&lt; Reset to Template</source>
-        <translation type="unfinished"/>
+        <translation>&lt; Restabilește la Șablon</translation>
+    </message>
+    <message>
+        <source>Repeat:</source>
+        <translation>Repetă:</translation>
+    </message>
+    <message>
+        <source>Never</source>
+        <translation>Niciodată</translation>
+    </message>
+    <message>
+        <source>At new system</source>
+        <translation>La noul sistem</translation>
+    </message>
+    <message>
+        <source>At new meas.</source>
+        <translation>La noile măsuri</translation>
+    </message>
+    <message>
+        <source>Always</source>
+        <translation>Mereu</translation>
     </message>
 </context>
 <context>
     <name>EditStringDataBase</name>
     <message>
         <source>String Data</source>
-        <translation type="unfinished"/>
+        <translation>Proprietăți Coardă</translation>
     </message>
     <message>
         <source>Strings Tuning:</source>
-        <translation type="unfinished"/>
+        <translation>Acordaj coarde:</translation>
     </message>
     <message>
         <source>New String...</source>
-        <translation type="unfinished"/>
+        <translation>Coardă nouă...</translation>
     </message>
     <message>
         <source>Edit String...</source>
-        <translation type="unfinished"/>
+        <translation>Editare coardă...</translation>
     </message>
     <message>
         <source>Delete String</source>
-        <translation type="unfinished"/>
+        <translation>Şterge coardă</translation>
     </message>
     <message>
         <source>Number of frets:</source>
-        <translation type="unfinished"/>
+        <translation>Număr de taste:</translation>
     </message>
     <message>
         <source>Open</source>
@@ -1684,7 +1715,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Slurs/Ties</source>
-        <translation type="unfinished"/>
+        <translation>Legato/Legato de prelungire</translation>
     </message>
     <message>
         <source>Sizes</source>
@@ -1692,19 +1723,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Hairpins, Volta, Ottava</source>
-        <translation type="unfinished"/>
+        <translation>Crescendo/Decrescendo, Volta, Ottava</translation>
     </message>
     <message>
         <source>Pedal, Trill</source>
-        <translation type="unfinished"/>
+        <translation>Pedală, Tril</translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"/>
+        <translation>Bass Cifrat</translation>
     </message>
     <message>
         <source>Articulations, Ornaments</source>
-        <translation>Moduri de atac, ornamente</translation>
+        <translation>Articulaţii, ornamente</translation>
     </message>
     <message>
         <source>Accidentals</source>
@@ -1747,7 +1778,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Music top margin:</source>
-        <translation type="unfinished"/>
+        <translation>Marginea de sus a notelor:</translation>
     </message>
     <message>
         <source>Create clef for all systems</source>
@@ -1755,71 +1786,59 @@ space unit</extracomment>
     </message>
     <message>
         <source>Music bottom margin:</source>
-        <translation type="unfinished"/>
+        <translation>Marginea de jos a notelor:</translation>
     </message>
     <message>
         <source>Staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanța între portative:</translation>
     </message>
     <message>
         <source>Grand staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanţa de la acoladă:</translation>
     </message>
     <message>
         <source>Min. system distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanţa minimă a sistemului:</translation>
     </message>
     <message>
         <source>Lyrics top margin:</source>
-        <translation type="unfinished"/>
+        <translation>Marginea de sus a versurilor:</translation>
     </message>
     <message>
         <source>Lyrics bottom margin:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Vertical-frame upper margin</source>
-        <translation type="unfinished"/>
+        <translation>Marginea de jos a versurilor:</translation>
     </message>
     <message>
         <source>Vertical frame top margin:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Vertical-frame lower margin</source>
-        <translation type="unfinished"/>
+        <translation>Margine de sus pentru cadru veritical:</translation>
     </message>
     <message>
         <source>Vertical frame bottom margin:</source>
-        <translation type="unfinished"/>
+        <translation>Margine de jos pentru cadru veritical:</translation>
     </message>
     <message>
         <source>Create courtesy clefs</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Create time signature for all systems</source>
-        <translation type="unfinished"/>
+        <translation>Crează chei de precauție</translation>
     </message>
     <message>
         <source>Create courtesy time signatures</source>
-        <translation>Arată metrul măsurii și unde este opţional</translation>
+        <translation>Crează metru de precauție</translation>
     </message>
     <message>
         <source>Create key signature for all systems</source>
-        <translation type="unfinished"/>
+        <translation>Arată armura la începutul fiecărui sistem</translation>
     </message>
     <message>
         <source>Create courtesy key signatures</source>
-        <translation>Arată armura și unde este opţional</translation>
+        <translation>Crează armuri  de precauție</translation>
     </message>
     <message>
         <source>Lyrics line height:</source>
-        <translation type="unfinished"/>
+        <translation>Înățimea liniei versurilor:</translation>
     </message>
     <message>
         <source>Max. system distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanţa maximă a sistemului:</translation>
     </message>
     <message>
         <source>Last system fill threshold:</source>
@@ -1847,19 +1866,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Even</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Impar</translation>
     </message>
     <message>
         <source>Odd</source>
-        <translation type="unfinished"/>
+        <translation>Par</translation>
     </message>
     <message>
         <source>All staves</source>
-        <translation type="unfinished"/>
+        <translation>Toate portativele</translation>
     </message>
     <message>
         <source>Every system</source>
@@ -1867,59 +1882,59 @@ space unit</extracomment>
     </message>
     <message>
         <source>System bracket distance:</source>
-        <translation>Distanţa dintre acoladă și sistem:</translation>
+        <translation>Distanţa acoladă pătrată de sistem:</translation>
     </message>
     <message>
         <source>Brace distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanță Acoladă:</translation>
     </message>
     <message>
         <source>Spacing (1=tight):</source>
-        <translation type="unfinished"/>
+        <translation>Spaţiere (1=strâns)</translation>
     </message>
     <message>
         <source>Minimum measure width:</source>
-        <translation type="unfinished"/>
+        <translation>Lățimea minimă a măsurii:</translation>
     </message>
     <message>
         <source>Note to barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanţă între notă şi bara de măsură:</translation>
     </message>
     <message>
         <source>Barline to note distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanță între bara de masură si notă:</translation>
     </message>
     <message>
         <source>Clef left margin:</source>
-        <translation type="unfinished"/>
+        <translation>Margine în stânga cheii:</translation>
     </message>
     <message>
         <source>Minimum note distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanţă minimă între note:</translation>
     </message>
     <message>
         <source>Key signature left margin:</source>
-        <translation type="unfinished"/>
+        <translation>Margine în stânga armurii:</translation>
     </message>
     <message>
         <source>Time signature left margin:</source>
-        <translation type="unfinished"/>
+        <translation>Margine în stânga metrului măsurii:</translation>
     </message>
     <message>
         <source>Clef/Key right margin:</source>
-        <translation type="unfinished"/>
+        <translation>Margine în dreapta cheii/armurii:</translation>
     </message>
     <message>
         <source>Clef to barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanţă între cheie si bara de măsură:</translation>
     </message>
     <message>
         <source>Staff line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Grosimea liniliilor portativului:</translation>
     </message>
     <message>
         <source>Barline to accidental distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanţă între bara de măsură şi alteraţie:</translation>
     </message>
     <message>
         <source>Show repeat bar tips (&quot;winged&quot; repeats)</source>
@@ -1935,87 +1950,87 @@ space unit</extracomment>
     </message>
     <message>
         <source>Barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Grosimea barei de masură:</translation>
     </message>
     <message>
         <source>End barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Grosimea barei de final:</translation>
     </message>
     <message>
         <source>End barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanța linii bară de măsură de final:</translation>
     </message>
     <message>
         <source>Double barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Grosimea barei duble:</translation>
     </message>
     <message>
         <source>Double barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distantă linii bară de măsură dublă:</translation>
     </message>
     <message>
         <source>Shorten stems</source>
-        <translation type="unfinished"/>
+        <translation>Scurtează cozile</translation>
     </message>
     <message>
         <source>Progression:</source>
-        <translation type="unfinished"/>
+        <translation>Progresie:</translation>
     </message>
     <message>
         <source>Shortest stem:</source>
-        <translation type="unfinished"/>
+        <translation>Cea mai scurtă coadă:</translation>
     </message>
     <message>
         <source>Accidental note distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanţă între alteraţie şi notă:</translation>
     </message>
     <message>
         <source>Accidental distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanţă între alteraţii:</translation>
     </message>
     <message>
         <source>Note dot distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanţă între notă şi punct:</translation>
     </message>
     <message>
         <source>Dot dot distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanţă între puncte consecutive:</translation>
     </message>
     <message>
         <source>Ledger line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Grosime linie ajutătoare:</translation>
     </message>
     <message>
         <source>Ledger line length:</source>
-        <translation type="unfinished"/>
+        <translation>Lungime linie ajutătoare:</translation>
     </message>
     <message>
         <source>Stem thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Grosimea cozii:</translation>
     </message>
     <message>
         <source>Dot size:</source>
-        <translation type="unfinished"/>
+        <translation>Dimensiunea punctului:</translation>
     </message>
     <message>
         <source>Distance to note:</source>
-        <translation type="unfinished"/>
+        <translation>Distanţă până la notă:</translation>
     </message>
     <message>
         <source>Line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Grosimea liniei:</translation>
     </message>
     <message>
         <source>Hook length:</source>
-        <translation type="unfinished"/>
+        <translation>Lungime Steag:</translation>
     </message>
     <message>
         <source>Beam thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Grosime ligaturi:</translation>
     </message>
     <message>
         <source>Beam distance (in beam thickness units):</source>
-        <translation type="unfinished"/>
+        <translation>Distanță ligaturi (în unități de ligatură grosime):</translation>
     </message>
     <message>
         <source>Broken beam minimum length:</source>
@@ -2023,35 +2038,35 @@ space unit</extracomment>
     </message>
     <message>
         <source>Flatten all beams</source>
-        <translation type="unfinished"/>
+        <translation>Aplatizează toate ligaturile</translation>
     </message>
     <message>
         <source>Line thickness at end:</source>
-        <translation type="unfinished"/>
+        <translation>Grosime linie la capete:</translation>
     </message>
     <message>
         <source>Line thickness middle:</source>
-        <translation type="unfinished"/>
+        <translation>Grosime linie la mijloc:</translation>
     </message>
     <message>
         <source>Dotted line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Grosime linie punctată:</translation>
     </message>
     <message>
         <source>Small staff size:</source>
-        <translation type="unfinished"/>
+        <translation>Dimensiune portativ mic:</translation>
     </message>
     <message>
         <source>Small note size:</source>
-        <translation type="unfinished"/>
+        <translation>Dimensiune notă mică:</translation>
     </message>
     <message>
         <source>Grace note size:</source>
-        <translation type="unfinished"/>
+        <translation>Dimensiune apogiatură:</translation>
     </message>
     <message>
         <source>Small clef size:</source>
-        <translation type="unfinished"/>
+        <translation>Dimensiune cheie mică:</translation>
     </message>
     <message>
         <source>Hairpins</source>
@@ -2063,7 +2078,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Default vertical position:</source>
-        <translation type="unfinished"/>
+        <translation>Poziție verticală implicită:</translation>
     </message>
     <message>
         <source>Volta</source>
@@ -2071,7 +2086,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Hook height:</source>
-        <translation type="unfinished"/>
+        <translation>Înălțime Steag:</translation>
     </message>
     <message>
         <source>Line style:</source>
@@ -2083,11 +2098,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Pedal Line</source>
-        <translation type="unfinished"/>
+        <translation>Linie de Pedală</translation>
     </message>
     <message>
         <source>Trill Line</source>
-        <translation type="unfinished"/>
+        <translation>Linie Tril</translation>
     </message>
     <message>
         <source>Appearance</source>
@@ -2099,7 +2114,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Jazz</source>
-        <translation type="unfinished"/>
+        <translation>Jazz</translation>
     </message>
     <message>
         <source>Custom</source>
@@ -2107,11 +2122,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Load chords.xml</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă chords.xml</translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished"/>
+        <translation>German</translation>
     </message>
     <message>
         <source>Solfeggio</source>
@@ -2119,7 +2134,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Lower case minor chords</source>
-        <translation type="unfinished"/>
+        <translation>Acorduri minore cu minuscule</translation>
     </message>
     <message>
         <source>Positioning</source>
@@ -2127,7 +2142,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Minimum chord spacing:</source>
-        <translation type="unfinished"/>
+        <translation>Spațiere minimă acorduri:</translation>
     </message>
     <message>
         <source>Font:</source>
@@ -2143,31 +2158,31 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line height:</source>
-        <translation type="unfinished"/>
+        <translation>Înălțime linie:</translation>
     </message>
     <message>
         <source>Vertical position:</source>
-        <translation type="unfinished"/>
+        <translation>Poziție verticală:</translation>
     </message>
     <message>
         <source>from top of staff</source>
-        <translation type="unfinished"/>
+        <translation>de la portativul de sus</translation>
     </message>
     <message>
         <source>of font height</source>
-        <translation type="unfinished"/>
+        <translation>de înățimea fontului</translation>
     </message>
     <message>
         <source>Alignment</source>
-        <translation type="unfinished"/>
+        <translation>Aliniere</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>Sus</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"/>
+        <translation>Jos</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2175,11 +2190,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Modern</source>
-        <translation type="unfinished"/>
+        <translation>Modern</translation>
     </message>
     <message>
         <source>Historic</source>
-        <translation type="unfinished"/>
+        <translation>Istoric</translation>
     </message>
     <message>
         <source>sp</source>
@@ -2188,15 +2203,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Articulation distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanță Articulație:</translation>
     </message>
     <message>
         <source>Note head distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanța între capetele notelor:</translation>
     </message>
     <message>
         <source>Articulation size:</source>
-        <translation type="unfinished"/>
+        <translation>Dimensiune Articulație:</translation>
     </message>
     <message>
         <source>Accidental</source>
@@ -2204,35 +2219,35 @@ space unit</extracomment>
     </message>
     <message>
         <source>Maximum slope:</source>
-        <translation type="unfinished"/>
+        <translation>Panta maximă:</translation>
     </message>
     <message>
         <source>Vertical distance from stem:</source>
-        <translation type="unfinished"/>
+        <translation>Distanță verticală de la coadă:</translation>
     </message>
     <message>
         <source>Avoid the staves</source>
-        <translation type="unfinished"/>
+        <translation>Evită portativele</translation>
     </message>
     <message>
         <source>Distance before the stem of the first note:</source>
-        <translation type="unfinished"/>
+        <translation>Distanța înainte de coada primei note:</translation>
     </message>
     <message>
         <source>Distance before the head of the first note:</source>
-        <translation type="unfinished"/>
+        <translation>Distanța înainte de capul primei note:</translation>
     </message>
     <message>
         <source>Distance after the stem of the last note:</source>
-        <translation type="unfinished"/>
+        <translation>Distanța după coada ultimei note:</translation>
     </message>
     <message>
         <source>Distance after the head of the last note:</source>
-        <translation type="unfinished"/>
+        <translation>Distanța fată de capul ultimei note:</translation>
     </message>
     <message>
         <source>Distance to fretboard diagram:</source>
-        <translation type="unfinished"/>
+        <translation>Distanța până la diagrama de acord:</translation>
     </message>
     <message>
         <source>Chord Symbols</source>
@@ -2240,23 +2255,23 @@ space unit</extracomment>
     </message>
     <message>
         <source>Chord symbols style file:</source>
-        <translation type="unfinished"/>
+        <translation>Fișier stil simboluri acord:</translation>
     </message>
     <message>
         <source>Capo</source>
-        <translation type="unfinished"/>
+        <translation>Capodastru</translation>
     </message>
     <message>
         <source>Vertical distance from note head:</source>
-        <translation type="unfinished"/>
+        <translation>Distanța verticală de la capul notei:</translation>
     </message>
     <message>
         <source>Capo fret position:</source>
-        <translation type="unfinished"/>
+        <translation>Poziție tastă capodastru:</translation>
     </message>
     <message>
         <source>Semitones offset</source>
-        <translation type="unfinished"/>
+        <translation>Deplasament semitornuri</translation>
     </message>
     <message>
         <source>Cents offset</source>
@@ -2264,63 +2279,63 @@ space unit</extracomment>
     </message>
     <message>
         <source>A, B♭, B, C, C♯, ...</source>
-        <translation type="unfinished"/>
+        <translation>A, B♭, B, C, C♯, ...</translation>
     </message>
     <message>
         <source>Chord Symbols, Fretboard Diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Simblouri Acord, Diagrame Acord</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Diagramă de Acord</translation>
     </message>
     <message>
         <source>Fret offset number font size:</source>
-        <translation type="unfinished"/>
+        <translation>Dimensiune font număr deplasament tastă:</translation>
     </message>
     <message>
         <source>Position:</source>
-        <translation type="unfinished"/>
+        <translation>Poziție:</translation>
     </message>
     <message>
         <source>Minimum tie length:</source>
-        <translation type="unfinished"/>
+        <translation>Lungime minimă legato de prelungire:</translation>
     </message>
     <message>
         <source>Interval:</source>
-        <translation type="unfinished"/>
+        <translation>Interval:</translation>
     </message>
     <message>
         <source>Hide instrument name if there is only 1 instrument</source>
-        <translation type="unfinished"/>
+        <translation>Ascunde numele instrumentului dacă este doar 1 instrument</translation>
     </message>
     <message>
         <source>Maximum barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanță bară de măsură maximă:</translation>
     </message>
     <message>
         <source>Standard TAB clef</source>
-        <translation type="unfinished"/>
+        <translation>Cheie de Tabulatură Standard</translation>
     </message>
     <message>
         <source>Serif TAB clef</source>
-        <translation type="unfinished"/>
+        <translation>Cheie de Tabulatură Serif</translation>
     </message>
     <message>
         <source>Swing Settings</source>
-        <translation type="unfinished"/>
+        <translation>Setări Swing</translation>
     </message>
     <message>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Oprit</translation>
     </message>
     <message>
         <source>Eighth Note</source>
-        <translation type="unfinished"/>
+        <translation>Optime</translation>
     </message>
     <message>
         <source>Sixteenth Note</source>
-        <translation type="unfinished"/>
+        <translation>Șaisprezecime</translation>
     </message>
     <message>
         <source>%</source>
@@ -2328,7 +2343,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Musical symbols font:</source>
-        <translation type="unfinished"/>
+        <translation>Font pentru simbolurile muzicale:</translation>
     </message>
     <message>
         <source>Swing:</source>
@@ -2336,63 +2351,55 @@ space unit</extracomment>
     </message>
     <message>
         <source>Select swing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Selecție raport swing:</translation>
     </message>
     <message>
         <source>Musical text font:</source>
-        <translation type="unfinished"/>
+        <translation>Font text muzical:</translation>
     </message>
     <message>
         <source>Emmentaler Text</source>
-        <translation type="unfinished"/>
+        <translation>Emmentaler Text</translation>
     </message>
     <message>
         <source>Bravura Text</source>
-        <translation type="unfinished"/>
+        <translation>Bravura Text</translation>
     </message>
     <message>
         <source>Gonville Text</source>
-        <translation type="unfinished"/>
+        <translation>Gonville Text</translation>
     </message>
     <message>
         <source>Show header also on first page</source>
-        <translation type="unfinished"/>
+        <translation>Afișează antetul și pe prima pagină</translation>
     </message>
     <message>
         <source>Show footer also on first page</source>
-        <translation type="unfinished"/>
+        <translation>Afișează subsolul și pe prima pagină</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
     <message>
         <source>Use odd/even page header</source>
-        <translation type="unfinished"/>
+        <translation>Folosește antet impar/par pentru pagini</translation>
     </message>
     <message>
         <source>Use odd/even page footer</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fixed number of measures/system:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fixed measure width</source>
-        <translation type="unfinished"/>
+        <translation>Folosește antet impar/par pentru pagini </translation>
     </message>
     <message>
         <source>System bracket thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Grosime acoladă pătrată de sistem</translation>
     </message>
     <message>
         <source>Brace thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Grosime Acoladă</translation>
     </message>
     <message>
         <source>Continue height:</source>
-        <translation type="unfinished"/>
+        <translation>Înălțime continuă</translation>
     </message>
     <message>
         <source>Continuous</source>
@@ -2400,31 +2407,31 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dashed</source>
-        <translation>Punctată</translation>
+        <translation>Întreruptă</translation>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>Punctat</translation>
     </message>
     <message>
         <source>Dash-dotted</source>
-        <translation type="unfinished"/>
+        <translation>Întreruptă-punctată</translation>
     </message>
     <message>
         <source>Dash-dot-dotted</source>
-        <translation type="unfinished"/>
+        <translation>Întreruptă-punct-punctată</translation>
     </message>
     <message>
         <source>Numbers only</source>
-        <translation type="unfinished"/>
+        <translation>Doar numere</translation>
     </message>
     <message>
         <source>Header Text</source>
-        <translation type="unfinished"/>
+        <translation>Text Antet</translation>
     </message>
     <message>
         <source>Footer Text</source>
-        <translation type="unfinished"/>
+        <translation>Text Subsol</translation>
     </message>
     <message>
         <source>Measure Numbers</source>
@@ -2432,79 +2439,103 @@ space unit</extracomment>
     </message>
     <message>
         <source>Default TAB Clef</source>
-        <translation type="unfinished"/>
+        <translation>Cheie de Tabulatură Implicită</translation>
     </message>
     <message>
         <source>Naturals in Key Signatures</source>
-        <translation type="unfinished"/>
+        <translation>Becari în Armuri</translation>
     </message>
     <message>
         <source>Vertical Distance from the Notes</source>
-        <translation type="unfinished"/>
+        <translation>Distanța Verticală de la Note </translation>
     </message>
     <message>
         <source>Horizontal Distance from the Notes</source>
-        <translation type="unfinished"/>
+        <translation>Distanța Orizontală de la Note</translation>
     </message>
     <message>
         <source>Only for a change to C Maj / A min</source>
-        <translation type="unfinished"/>
+        <translation>Doar pentru o schimbare la Do Maj / La min</translation>
     </message>
     <message>
         <source>Create multimeasure rests</source>
-        <translation type="unfinished"/>
+        <translation>Crează Pauză de mai multe măsuri</translation>
     </message>
     <message>
         <source>Multimeasure rest margin:</source>
-        <translation type="unfinished"/>
+        <translation>Margine Pauză de mai multe măsuri:</translation>
     </message>
     <message>
         <source>Before key signature if changing to fewer sharps or flats</source>
-        <translation type="unfinished"/>
+        <translation>Înainte de armură dacă schimbarea este către mai puțini diezi sau bemoli</translation>
     </message>
     <message>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
-        <translation type="unfinished"/>
+        <translation>După armură dacă schimbarea este către mai puțini diezi sau bemoli. Înainte dacă se schimbă între diezi și bemoli</translation>
     </message>
     <message>
         <source>A, B♭, H, C, C♯, ...</source>
-        <translation type="unfinished"/>
+        <translation>A, B♭, H, C, C♯, ...</translation>
     </message>
     <message>
         <source>A, B, H, C, Cis</source>
-        <translation type="unfinished"/>
+        <translation>A, B♭, H, C, C♯, ...</translation>
     </message>
     <message>
         <source>Full German</source>
-        <translation type="unfinished"/>
+        <translation>Întreg German</translation>
     </message>
     <message>
         <source>Do, Do♯, Re♭, Re, ...</source>
-        <translation type="unfinished"/>
+        <translation>Do, Do♯, Re♭, Re, ...</translation>
     </message>
     <message>
         <source>Do, Do♯, Ré♭, Ré, ...</source>
-        <translation type="unfinished"/>
+        <translation>Do, Do♯, Ré♭, Ré, ...</translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished"/>
+        <translation>Franceză</translation>
     </message>
     <message>
         <source>Lower case bass notes</source>
-        <translation type="unfinished"/>
+        <translation>Note bass cu minuscule</translation>
     </message>
     <message>
         <source>All caps note names</source>
-        <translation type="unfinished"/>
+        <translation>Nume note numai cu majuscule</translation>
     </message>
     <message>
         <source>Note Spelling</source>
-        <translation type="unfinished"/>
+        <translation>Scriere Note</translation>
     </message>
     <message>
         <source>Automatic Capitalization</source>
-        <translation type="unfinished"/>
+        <translation>Sciere automată cu majuscule</translation>
+    </message>
+    <message>
+        <source>Vertical frame upper margin</source>
+        <translation>Marginea de sus de cadrului vertical</translation>
+    </message>
+    <message>
+        <source>Vertical frame lower margin</source>
+        <translation>Marginea de jos a cadrului vertical</translation>
+    </message>
+    <message>
+        <source>Scale:</source>
+        <translation>Scală:</translation>
+    </message>
+    <message>
+        <source>Barré line thickness:</source>
+        <translation>Grosime linie Barré:</translation>
+    </message>
+    <message>
+        <source>Scale barlines to staff size</source>
+        <translation>Scalează barele de măsură la dimensiunea portativului</translation>
+    </message>
+    <message>
+        <source>Barline to grace note distance:</source>
+        <translation>Distanța între linia de măsură și apogiatură:</translation>
     </message>
 </context>
 <context>
@@ -2531,15 +2562,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Part title:</source>
-        <translation type="unfinished"/>
+        <translation>Titlu știmă:</translation>
     </message>
     <message>
         <source>Edit Part</source>
-        <translation type="unfinished"/>
+        <translation>Editare știmă</translation>
     </message>
     <message>
         <source>Select Part</source>
-        <translation type="unfinished"/>
+        <translation>Selectare știmă</translation>
     </message>
 </context>
 <context>
@@ -2565,27 +2596,31 @@ space unit</extracomment>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <source>Soundfont %1 already loaded</source>
-        <translation>Soundfont %1 deja încărcat</translation>
+        <source>Sound Fonts</source>
+        <translation>Sound Fonts</translation>
     </message>
     <message>
-        <source>cannot load soundfont %1</source>
-        <translation type="unfinished"/>
+        <source>SoundFont %1 already loaded</source>
+        <translation>SoundFont %1 deja încărcat</translation>
+    </message>
+    <message>
+        <source>Cannot load SoundFont %1</source>
+        <translation>Nu se poate încărca SoundFont-ul %1</translation>
     </message>
 </context>
 <context>
     <name>FretDiagramProperties</name>
     <message>
         <source>Strings:</source>
-        <translation type="unfinished"/>
+        <translation>Coarde:</translation>
     </message>
     <message>
         <source>Frets:</source>
-        <translation type="unfinished"/>
+        <translation>Taste:</translation>
     </message>
     <message>
         <source>MuseScore: Fretboard Diagram Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Proprietăți Diagramă de Acord</translation>
     </message>
 </context>
 <context>
@@ -2614,35 +2649,23 @@ space unit</extracomment>
     <name>ImportMidiPanel</name>
     <message>
         <source>Close MIDI import panel</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Închide panoul de import MIDI</translation>
     </message>
     <message>
         <source>Move track up</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Up</source>
-        <translation>Sus</translation>
+        <translation>Mută pista sus</translation>
     </message>
     <message>
         <source>Move track down</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Down</source>
-        <translation>Jos</translation>
+        <translation>Mută pista jos</translation>
     </message>
     <message>
         <source>Text charset:</source>
-        <translation type="unfinished"/>
+        <translation>Set caractere Text:</translation>
     </message>
     <message>
         <source>Apply MIDI import operations</source>
-        <translation type="unfinished"/>
+        <translation>Aplică operațiile de import MIDI</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -2650,7 +2673,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cancel not applied MIDI import operations</source>
-        <translation type="unfinished"/>
+        <translation>Anulează operațiile neaplicate de import MIDI</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2687,55 +2710,43 @@ space unit</extracomment>
         <translation>Alteraţie</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Small</source>
-        <translation>dimensiune mică</translation>
+        <translation>Dimensiune mică</translation>
     </message>
     <message>
         <source>Accidental Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de alteraţie</translation>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoare Dimensiune mică</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
 </context>
 <context>
     <name>InspectorAmbitus</name>
     <message>
-        <source>Part Range</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Head group</source>
-        <translation type="unfinished"/>
+        <translation>Grup cap</translation>
     </message>
     <message>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Bottom note</source>
-        <translation type="unfinished"/>
+        <translation>Nota joasă</translation>
     </message>
     <message>
         <source>C♭♭</source>
-        <translation type="unfinished"/>
+        <translation>Do♭♭</translation>
     </message>
     <message>
         <source>C♭</source>
-        <translation type="unfinished"/>
+        <translation>Do♭</translation>
     </message>
     <message>
         <source>C</source>
@@ -2743,19 +2754,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>C♯</source>
-        <translation type="unfinished"/>
+        <translation>Do♯</translation>
     </message>
     <message>
         <source>C♯♯</source>
-        <translation type="unfinished"/>
+        <translation>Do♯♯</translation>
     </message>
     <message>
         <source>D♭♭</source>
-        <translation type="unfinished"/>
+        <translation>Re♭♭</translation>
     </message>
     <message>
         <source>D♭</source>
-        <translation type="unfinished"/>
+        <translation>Re♭</translation>
     </message>
     <message>
         <source>D</source>
@@ -2763,19 +2774,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>D♯</source>
-        <translation type="unfinished"/>
+        <translation>Re♯</translation>
     </message>
     <message>
         <source>D♯♯</source>
-        <translation type="unfinished"/>
+        <translation>Re♯♯</translation>
     </message>
     <message>
         <source>E♭♭</source>
-        <translation type="unfinished"/>
+        <translation>Mi♭♭</translation>
     </message>
     <message>
         <source>E♭</source>
-        <translation type="unfinished"/>
+        <translation>Mi♭</translation>
     </message>
     <message>
         <source>E</source>
@@ -2783,19 +2794,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>E♯</source>
-        <translation type="unfinished"/>
+        <translation>Mi♯</translation>
     </message>
     <message>
         <source>E♯♯</source>
-        <translation type="unfinished"/>
+        <translation>Mi♯♯</translation>
     </message>
     <message>
         <source>F♭♭</source>
-        <translation type="unfinished"/>
+        <translation>Fa♭♭</translation>
     </message>
     <message>
         <source>F♭</source>
-        <translation type="unfinished"/>
+        <translation>Fa♭</translation>
     </message>
     <message>
         <source>F</source>
@@ -2803,19 +2814,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>F♯</source>
-        <translation type="unfinished"/>
+        <translation>Fa♯</translation>
     </message>
     <message>
         <source>F♯♯</source>
-        <translation type="unfinished"/>
+        <translation>Fa♯♯</translation>
     </message>
     <message>
         <source>G♭♭</source>
-        <translation type="unfinished"/>
+        <translation>Sol♭♭</translation>
     </message>
     <message>
         <source>G♭</source>
-        <translation type="unfinished"/>
+        <translation>Sol♭</translation>
     </message>
     <message>
         <source>G</source>
@@ -2823,19 +2834,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>G♯</source>
-        <translation type="unfinished"/>
+        <translation>Sol♯</translation>
     </message>
     <message>
         <source>G♯♯</source>
-        <translation type="unfinished"/>
+        <translation>Sol♯♯</translation>
     </message>
     <message>
         <source>A♭♭</source>
-        <translation type="unfinished"/>
+        <translation>La♭♭</translation>
     </message>
     <message>
         <source>A♭</source>
-        <translation type="unfinished"/>
+        <translation>La♭</translation>
     </message>
     <message>
         <source>A</source>
@@ -2843,19 +2854,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>A♯</source>
-        <translation type="unfinished"/>
+        <translation>La♯</translation>
     </message>
     <message>
         <source>A♯♯</source>
-        <translation type="unfinished"/>
+        <translation>La♯♯</translation>
     </message>
     <message>
         <source>B♭♭</source>
-        <translation type="unfinished"/>
+        <translation>Si♭♭</translation>
     </message>
     <message>
         <source>B♭</source>
-        <translation>Si</translation>
+        <translation>Si♭</translation>
     </message>
     <message>
         <source>B</source>
@@ -2863,23 +2874,23 @@ space unit</extracomment>
     </message>
     <message>
         <source>B♯</source>
-        <translation type="unfinished"/>
+        <translation>Si♯</translation>
     </message>
     <message>
         <source>B♯♯</source>
-        <translation type="unfinished"/>
+        <translation>Si♯♯</translation>
     </message>
     <message>
         <source>Oct </source>
-        <translation type="unfinished"/>
+        <translation>Oct.</translation>
     </message>
     <message>
         <source>Has line</source>
-        <translation type="unfinished"/>
+        <translation>Are linie</translation>
     </message>
     <message>
         <source>Top note</source>
-        <translation type="unfinished"/>
+        <translation>Nota înaltă</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -2887,71 +2898,71 @@ space unit</extracomment>
     </message>
     <message>
         <source>Whole</source>
-        <translation type="unfinished"/>
+        <translation>Notă întreagă</translation>
     </message>
     <message>
         <source>Half</source>
-        <translation type="unfinished"/>
+        <translation>Doime</translation>
     </message>
     <message>
         <source>Quarter</source>
-        <translation type="unfinished"/>
+        <translation>Pătrime</translation>
     </message>
     <message>
         <source>Breve</source>
-        <translation type="unfinished"/>
+        <translation>Breve</translation>
     </message>
     <message>
         <source>Head type</source>
-        <translation type="unfinished"/>
+        <translation>Tip cap</translation>
     </message>
     <message>
         <source>Update Range</source>
-        <translation type="unfinished"/>
+        <translation>Actualizează intervalul</translation>
     </message>
     <message>
         <source>Direction</source>
-        <translation type="unfinished"/>
+        <translation>Direcție</translation>
     </message>
     <message>
         <source>Upright</source>
-        <translation type="unfinished"/>
+        <translation>Drept</translation>
     </message>
     <message>
         <source>Leaning Left</source>
-        <translation type="unfinished"/>
+        <translation>Înclinare Stânga</translation>
     </message>
     <message>
         <source>Leaning Right</source>
-        <translation type="unfinished"/>
+        <translation>Înclinare Dreapta</translation>
     </message>
     <message>
         <source>Ambitus Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de ambitus</translation>
     </message>
     <message>
         <source>Oct</source>
-        <translation type="unfinished"/>
+        <translation>Oct.</translation>
     </message>
     <message>
         <source>Reset Has line value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Valoree &quot;Are linie&quot;</translation>
     </message>
     <message>
         <source>Reset Head group value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Grup Cap</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Direcția</translation>
     </message>
     <message>
         <source>Update range</source>
-        <translation type="unfinished"/>
+        <translation>Actualizează intervalul</translation>
     </message>
     <message>
         <source>Reset Head type value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Tip cap</translation>
     </message>
     <message>
         <source>Normal</source>
@@ -2959,11 +2970,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cross</source>
-        <translation type="unfinished"/>
+        <translation>Cruce</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation type="unfinished"/>
+        <translation>Diamant</translation>
     </message>
     <message>
         <source>Triangle</source>
@@ -2971,70 +2982,74 @@ space unit</extracomment>
     </message>
     <message>
         <source>Slash</source>
-        <translation type="unfinished"/>
+        <translation>Slash</translation>
     </message>
     <message>
         <source>XCircle</source>
-        <translation type="unfinished"/>
+        <translation>XCerc</translation>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"/>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>Sol</source>
-        <translation type="unfinished"/>
+        <translation>Sol</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Ti</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
-        <translation type="unfinished"/>
+        <translation>Alt. Brevis</translation>
     </message>
     <message>
         <source>Line thickness</source>
-        <translation type="unfinished"/>
+        <translation>Grosimea liniei</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
     <message>
         <source>Reset Line thickness value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Grosimea Liniei</translation>
     </message>
     <message>
         <source>[Undefined]</source>
-        <translation type="unfinished"/>
+        <translation>[Nedefinit]</translation>
+    </message>
+    <message>
+        <source>Ambitus</source>
+        <translation>Ambitus</translation>
     </message>
 </context>
 <context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
-        <translation>Mod de atac</translation>
+        <translation>Articulație</translation>
     </message>
     <message>
         <source>Direction</source>
-        <translation type="unfinished"/>
+        <translation>Direcție</translation>
     </message>
     <message>
         <source>Anchor</source>
@@ -3057,10 +3072,6 @@ space unit</extracomment>
         <translation>Jos</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Above Staff</source>
         <translation>Deasupra portativului</translation>
     </message>
@@ -3078,34 +3089,30 @@ space unit</extracomment>
     </message>
     <message>
         <source>Time stretch</source>
-        <translation type="unfinished"/>
+        <translation>Întindere timp</translation>
     </message>
     <message>
         <source>Articulation Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de Articulație</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Direcția</translation>
     </message>
     <message>
         <source>Reset Anchor value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Valoarea Ancorei</translation>
     </message>
     <message>
         <source>Reset Time stretch value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Întindere Timpului</translation>
     </message>
 </context>
 <context>
     <name>InspectorBarLine</name>
     <message>
         <source>Barline</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Bară de măsură</translation>
     </message>
     <message>
         <source>Style:</source>
@@ -3113,23 +3120,23 @@ space unit</extracomment>
     </message>
     <message>
         <source>Span from:</source>
-        <translation type="unfinished"/>
+        <translation>Întindere de la:</translation>
     </message>
     <message>
         <source>Spanned staves:</source>
-        <translation type="unfinished"/>
+        <translation>Portative acoperite:</translation>
     </message>
     <message>
         <source>Span to:</source>
-        <translation type="unfinished"/>
+        <translation>Întindere până la:</translation>
     </message>
     <message>
         <source>Span preset:</source>
-        <translation type="unfinished"/>
+        <translation>Presetare întindere:</translation>
     </message>
     <message>
         <source>Barline Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de bară de măsură</translation>
     </message>
     <message>
         <source>Type</source>
@@ -3137,43 +3144,43 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Tip</translation>
     </message>
     <message>
         <source>Span from</source>
-        <translation type="unfinished"/>
+        <translation>Întindere de la</translation>
     </message>
     <message>
         <source>Span</source>
-        <translation type="unfinished"/>
+        <translation>Întindere</translation>
     </message>
     <message>
         <source>Span to</source>
-        <translation type="unfinished"/>
+        <translation>Întindere până la</translation>
     </message>
     <message>
         <source>Reset Span value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește întinderea</translation>
     </message>
     <message>
         <source>Reset Span from value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Întinderea de la</translation>
     </message>
     <message>
         <source>Reset Span to value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Întinderea până la</translation>
     </message>
     <message>
         <source>Spantype</source>
-        <translation type="unfinished"/>
+        <translation>Tip întindere</translation>
     </message>
     <message>
         <source>Reset Span type value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește tipul întinderii</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
 </context>
 <context>
@@ -3196,7 +3203,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Direction</source>
-        <translation type="unfinished"/>
+        <translation>Direcție</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3207,40 +3214,36 @@ space unit</extracomment>
         <translation>Poziție</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Horizontal</source>
-        <translation type="unfinished"/>
+        <translation>Orizontal</translation>
     </message>
     <message>
         <source>Beam Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de ligatură</translation>
     </message>
     <message>
         <source>Vertical position offset left</source>
-        <translation type="unfinished"/>
+        <translation>Deplasament poziție verticală stânga</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Direcția</translation>
     </message>
     <message>
         <source>Vertical position offset right</source>
-        <translation type="unfinished"/>
+        <translation>Vertical position offset dreapta</translation>
     </message>
     <message>
         <source>Reset User position value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește poziția dată de utilizator</translation>
     </message>
     <message>
         <source>Reset Local Relayout value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește relayout-ul local</translation>
     </message>
     <message>
         <source>Reset Horizontal value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoare Orizontală</translation>
     </message>
     <message>
         <source>Left</source>
@@ -3252,27 +3255,38 @@ space unit</extracomment>
     </message>
     <message>
         <source>Grow right</source>
-        <translation type="unfinished"/>
+        <translation>Mărește la dreapta</translation>
     </message>
     <message>
         <source>Grow left</source>
-        <translation type="unfinished"/>
+        <translation>Mărește la stânga</translation>
     </message>
     <message>
         <source>Reset Grow right value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește creșterea la dreapta</translation>
     </message>
     <message>
         <source>Reset Grow left value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește creșterea la stânga</translation>
     </message>
     <message>
         <source>Local relayout</source>
-        <translation type="unfinished"/>
+        <translation>Relayout local</translation>
     </message>
     <message>
         <source>User position</source>
-        <translation type="unfinished"/>
+        <translation>Poziție dată de utilizator</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBreak</name>
+    <message>
+        <source>Element Inspector</source>
+        <translation>Inspector de element</translation>
+    </message>
+    <message>
+        <source>Layout Break</source>
+        <translation>Despărțitor de Layout</translation>
     </message>
 </context>
 <context>
@@ -3282,12 +3296,8 @@ space unit</extracomment>
         <translation>Acord</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Stem direction</source>
-        <translation>direcţia cozii</translation>
+        <translation>Direcţia cozii</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -3303,7 +3313,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Vertical offset</source>
-        <translation type="unfinished"/>
+        <translation>Deplasament vertical</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3312,11 +3322,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Horizontal offset</source>
-        <translation type="unfinished"/>
+        <translation>Deplasament orizontal</translation>
     </message>
     <message>
         <source>Small</source>
-        <translation>dimensiune mică</translation>
+        <translation>Dimensiune mică</translation>
     </message>
     <message>
         <source>Stemless</source>
@@ -3324,35 +3334,35 @@ space unit</extracomment>
     </message>
     <message>
         <source>Chord Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de acord</translation>
     </message>
     <message>
         <source>Reset Vertical offset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește deplasamentul vertical</translation>
     </message>
     <message>
         <source>Reset Horizontal offset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește deplasamentul orizontal</translation>
     </message>
     <message>
         <source>Reset Stem direction value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește direcția cozii</translation>
     </message>
     <message>
         <source>Horizontal Offset</source>
-        <translation type="unfinished"/>
+        <translation>Deplasament Orizontal</translation>
     </message>
     <message>
         <source>Reset Small Value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoare Dimensiune mică</translation>
     </message>
     <message>
         <source>Reset Stemless value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoare &quot;fară coadă&quot;</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
 </context>
 <context>
@@ -3362,24 +3372,20 @@ space unit</extracomment>
         <translation>Cheie</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Show courtesy</source>
-        <translation type="unfinished"/>
+        <translation>Afișează precauție</translation>
     </message>
     <message>
         <source>Clef Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de cheie</translation>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește afișarea precauției</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
 </context>
 <context>
@@ -3390,15 +3396,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dynamic Range</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Domeniu Dinamic</translation>
     </message>
     <message>
         <source>Velocity</source>
-        <translation type="unfinished"/>
+        <translation>Forță atac</translation>
     </message>
     <message>
         <source>Staff</source>
@@ -3406,7 +3408,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Part</source>
-        <translation type="unfinished"/>
+        <translation>Știmă</translation>
     </message>
     <message>
         <source>System</source>
@@ -3414,23 +3416,23 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dynamic Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de nuanţă</translation>
     </message>
     <message>
         <source>Reset Velocity value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește forță atac</translation>
     </message>
     <message>
         <source>Reset Dynamic range value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Domeniul Dinamic</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
     <message>
         <source>Dynamic range</source>
-        <translation type="unfinished"/>
+        <translation>Domeniu Dinamic</translation>
     </message>
 </context>
 <context>
@@ -3441,7 +3443,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Vertical offset</source>
-        <translation type="unfinished"/>
+        <translation>Deplasament vertical</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3453,12 +3455,8 @@ space unit</extracomment>
         <translation>Culoare</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Horizontal offset</source>
-        <translation type="unfinished"/>
+        <translation>Deplasament orizontal</translation>
     </message>
     <message>
         <source>Visible</source>
@@ -3466,34 +3464,57 @@ space unit</extracomment>
     </message>
     <message>
         <source>Element Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de element</translation>
     </message>
     <message>
         <source>Reset Horizontal offset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește deplasamentul orizontal</translation>
     </message>
     <message>
         <source>Reset Vertical offset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește deplasament vertical</translation>
     </message>
     <message>
         <source>Reset Visible value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Vizibilitatea</translation>
     </message>
     <message>
         <source>Reset Color value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Culoarea</translation>
     </message>
 </context>
 <context>
     <name>InspectorEmpty</name>
     <message>
         <source>Empty Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector vid</translation>
     </message>
     <message>
         <source>Nothing selected</source>
-        <translation type="unfinished"/>
+        <translation>Nicio selecție</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorFret</name>
+    <message>
+        <source>Ottava Inspector</source>
+        <translation>Inspector de ottava</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation>Scală</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Restabilește valoarea</translation>
+    </message>
+    <message>
+        <source>Reset Type value</source>
+        <translation>Restabilește Tip</translation>
+    </message>
+    <message>
+        <source>Fretboard Diagram</source>
+        <translation>Diagramă de acord</translation>
     </message>
 </context>
 <context>
@@ -3511,20 +3532,16 @@ space unit</extracomment>
         <translation>Tip</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Glissando Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de glissando</translation>
     </message>
     <message>
         <source>Reset Text value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Textul</translation>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Tip</translation>
     </message>
     <message>
         <source>Straight</source>
@@ -3532,11 +3549,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Wavy</source>
-        <translation type="unfinished"/>
+        <translation>Ondulat</translation>
     </message>
     <message>
         <source>Reset Show text value</source>
-        <translation type="unfinished"/>
+        <translation>Restabileste Afișarea textului</translation>
     </message>
     <message>
         <source>Show text</source>
@@ -3547,11 +3564,11 @@ space unit</extracomment>
     <name>InspectorGroupElement</name>
     <message>
         <source>Element Group</source>
-        <translation type="unfinished"/>
+        <translation>Grup Elemente</translation>
     </message>
     <message>
         <source>Set Color</source>
-        <translation type="unfinished"/>
+        <translation>Setează Culoare</translation>
     </message>
     <message>
         <source>Set Visible</source>
@@ -3563,7 +3580,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Element Group Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector Grup Elemente</translation>
     </message>
     <message>
         <source>Color</source>
@@ -3574,7 +3591,7 @@ space unit</extracomment>
     <name>InspectorHBox</name>
     <message>
         <source>Horizontal Frame</source>
-        <translation type="unfinished"/>
+        <translation>Cadru Orizontal</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3586,32 +3603,28 @@ space unit</extracomment>
         <translation>Lățime</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Horizontal Frame Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de cadru orizontal</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
     <message>
         <source>Right gap</source>
-        <translation type="unfinished"/>
+        <translation>Golul din Dreapta</translation>
     </message>
     <message>
         <source>Left gap</source>
-        <translation type="unfinished"/>
+        <translation>Golul din Stânga</translation>
     </message>
     <message>
         <source>Reset Left gap value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Golul din Stânga</translation>
     </message>
     <message>
         <source>Reset Right gap value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Golul din Dreapta</translation>
     </message>
 </context>
 <context>
@@ -3622,7 +3635,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Înâlţime</translation>
     </message>
     <message>
         <source>Type</source>
@@ -3630,11 +3643,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dynamic range</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Domeniu Dinamic</translation>
     </message>
     <message>
         <source>Staff</source>
@@ -3642,7 +3651,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Part</source>
-        <translation type="unfinished"/>
+        <translation>Știmă</translation>
     </message>
     <message>
         <source>System</source>
@@ -3650,11 +3659,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Velocity change</source>
-        <translation type="unfinished"/>
+        <translation>Schimbare forță atac</translation>
     </message>
     <message>
         <source>Continue height</source>
-        <translation type="unfinished"/>
+        <translation>Înălțime continuă</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3662,31 +3671,31 @@ space unit</extracomment>
     </message>
     <message>
         <source>Circled tip</source>
-        <translation type="unfinished"/>
+        <translation>Vârf circular</translation>
     </message>
     <message>
         <source>Hairpin Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de crescendo/decrescendo</translation>
     </message>
     <message>
         <source>Reset Velocity change value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește forță atac</translation>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Tip</translation>
     </message>
     <message>
         <source>Reset Dynamic range value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Domeniul Dinamic</translation>
     </message>
     <message>
         <source>Reset Height value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Înălțimea</translation>
     </message>
     <message>
         <source>Reset Circled tip value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea vârfului circular</translation>
     </message>
     <message>
         <source>Crescendo</source>
@@ -3698,11 +3707,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
     <message>
         <source>Reset Continue height value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoare înălțimii continue</translation>
     </message>
 </context>
 <context>
@@ -3712,28 +3721,24 @@ space unit</extracomment>
         <translation>Imagine</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Size</source>
         <translation>Dimensiune</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"/>
+        <translation>Scală</translation>
     </message>
     <message>
         <source>Image Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de imagine</translation>
     </message>
     <message>
         <source>Scale to frame size</source>
-        <translation type="unfinished"/>
+        <translation>Scalează la dimensiunea cadrului</translation>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Înâlţime</translation>
     </message>
     <message>
         <source>Width</source>
@@ -3741,19 +3746,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Scale Width</source>
-        <translation type="unfinished"/>
+        <translation>Scalează Lățimea</translation>
     </message>
     <message>
         <source>Scale Height</source>
-        <translation type="unfinished"/>
+        <translation>Scalează Înălțimea</translation>
     </message>
     <message>
         <source>Reset Scale to frame size value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește scalarea la dimensiunea cadrului</translation>
     </message>
     <message>
         <source>Reset Lock aspect ratio value</source>
-        <translation type="unfinished"/>
+        <translation>Rebabilește valoarea păstrări proporțiilor </translation>
     </message>
     <message>
         <source>Lock aspect ratio</source>
@@ -3761,54 +3766,50 @@ space unit</extracomment>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation type="unfinished"/>
+        <translation>Distanța între 2 linii într-un portativ standard cu 5 linii</translation>
     </message>
     <message>
         <source>Size in staff space units</source>
-        <translation type="unfinished"/>
+        <translation>Dimensiune în unități spațiu portativ</translation>
     </message>
     <message>
         <source>Reset Size in staff space units value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește dimensiunea în unități spațiu portativ</translation>
     </message>
 </context>
 <context>
     <name>InspectorJump</name>
     <message>
         <source>Jump</source>
-        <translation>Volta</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Directivă</translation>
     </message>
     <message>
         <source>Jump to</source>
-        <translation type="unfinished"/>
+        <translation>Salt la</translation>
     </message>
     <message>
         <source>Play until</source>
-        <translation type="unfinished"/>
+        <translation>Redă până la</translation>
     </message>
     <message>
         <source>Continue at</source>
-        <translation type="unfinished"/>
+        <translation>Continuă la</translation>
     </message>
     <message>
         <source>Jump Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector Directivă</translation>
     </message>
     <message>
         <source>Reset Jump to value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea &quot;Salt la&quot;</translation>
     </message>
     <message>
         <source>Reset Play until value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoare &quot;Redă până la&quot;</translation>
     </message>
     <message>
         <source>Reset Continue at value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valorea &quot;Continuă la&quot;</translation>
     </message>
 </context>
 <context>
@@ -3818,24 +3819,20 @@ space unit</extracomment>
         <translation>Armură</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Show courtesy</source>
-        <translation type="unfinished"/>
+        <translation>Afișează precauție</translation>
     </message>
     <message>
         <source>Key Signature Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de armuri</translation>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește afișarea precauției</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
 </context>
 <context>
@@ -3858,15 +3855,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Lasso Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector Lasou pt. Selecție</translation>
     </message>
     <message>
         <source>Vertical position</source>
-        <translation type="unfinished"/>
+        <translation>Poziție Verticală</translation>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Înâlţime</translation>
     </message>
     <message>
         <source>Width</source>
@@ -3874,7 +3871,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Horizontal Position</source>
-        <translation type="unfinished"/>
+        <translation>Poziție Orizontală</translation>
     </message>
 </context>
 <context>
@@ -3884,49 +3881,45 @@ space unit</extracomment>
         <translation>Linie</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>sp</source>
         <extracomment>Staff space unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
         <source>Line color</source>
-        <translation type="unfinished"/>
+        <translation>Culoare Linie</translation>
     </message>
     <message>
         <source>Line style</source>
-        <translation type="unfinished"/>
+        <translation>Stil Linie</translation>
     </message>
     <message>
         <source>Allow diagonal</source>
-        <translation type="unfinished"/>
+        <translation>Permite diagonală</translation>
     </message>
     <message>
         <source>Line Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector Linie</translation>
     </message>
     <message>
         <source>Reset Line color value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește culoarea liniei</translation>
     </message>
     <message>
         <source>Reset Allow diagonal value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoare Permite diagonală</translation>
     </message>
     <message>
         <source>Reset Line style value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește tipul liniei</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
     <message>
         <source>Line thickness</source>
-        <translation type="unfinished"/>
+        <translation>Grosimea liniei</translation>
     </message>
     <message>
         <source>Continuous</source>
@@ -3938,27 +3931,27 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>Punctat</translation>
     </message>
     <message>
         <source>Dash-dotted</source>
-        <translation type="unfinished"/>
+        <translation>Întreruptă-punctată</translation>
     </message>
     <message>
         <source>Dash-dot-dotted</source>
-        <translation type="unfinished"/>
+        <translation>Întreruptă-punct-punctată</translation>
     </message>
     <message>
         <source>Reset Line thickness value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Grosimea Liniei</translation>
     </message>
     <message>
         <source>Reset Line visible value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Vizibilitatea Liniei</translation>
     </message>
     <message>
         <source>Line visible</source>
-        <translation type="unfinished"/>
+        <translation>Linie vizibilă</translation>
     </message>
 </context>
 <context>
@@ -3968,12 +3961,8 @@ space unit</extracomment>
         <translation>Marker</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Label</source>
-        <translation type="unfinished"/>
+        <translation>Etichetă</translation>
     </message>
     <message>
         <source>Segno</source>
@@ -3993,31 +3982,31 @@ space unit</extracomment>
     </message>
     <message>
         <source>To Coda</source>
-        <translation type="unfinished"/>
+        <translation>To Coda</translation>
     </message>
     <message>
         <source>Marker type</source>
-        <translation type="unfinished"/>
+        <translation>Tip Marker</translation>
     </message>
     <message>
         <source>Marker Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de marker</translation>
     </message>
     <message>
         <source>Reset Marker type value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește tipul Marker-ului</translation>
     </message>
     <message>
         <source>Reset Label value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Eticheta</translation>
     </message>
     <message>
         <source>Marker Type</source>
-        <translation type="unfinished"/>
+        <translation>Tip Marker</translation>
     </message>
     <message>
         <source>Segno variation</source>
-        <translation type="unfinished"/>
+        <translation>Segno variație</translation>
     </message>
     <message>
         <source>Varied coda</source>
@@ -4044,11 +4033,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Velocity</source>
-        <translation type="unfinished"/>
+        <translation>Forță atac</translation>
     </message>
     <message>
         <source>Mirror head</source>
-        <translation type="unfinished"/>
+        <translation>Oglindire cap</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -4056,31 +4045,27 @@ space unit</extracomment>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>Sus</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Jos</translation>
     </message>
     <message>
         <source>Whole</source>
-        <translation type="unfinished"/>
+        <translation>Notă întreagă</translation>
     </message>
     <message>
         <source>Half</source>
-        <translation type="unfinished"/>
+        <translation>Doime</translation>
     </message>
     <message>
         <source>Quarter</source>
-        <translation type="unfinished"/>
+        <translation>Pătrime</translation>
     </message>
     <message>
         <source>Breve</source>
-        <translation type="unfinished"/>
+        <translation>Breve</translation>
     </message>
     <message>
         <source>Offset</source>
@@ -4092,19 +4077,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Head type</source>
-        <translation type="unfinished"/>
+        <translation>Tip cap</translation>
     </message>
     <message>
         <source>Head group</source>
-        <translation type="unfinished"/>
+        <translation>Grup cap</translation>
     </message>
     <message>
         <source>Dot position</source>
-        <translation type="unfinished"/>
+        <translation>Poziția punctului</translation>
     </message>
     <message>
         <source>Velocity type</source>
-        <translation type="unfinished"/>
+        <translation>Tip Forță atac</translation>
     </message>
     <message>
         <source>Left</source>
@@ -4116,59 +4101,59 @@ space unit</extracomment>
     </message>
     <message>
         <source>Small </source>
-        <translation type="unfinished"/>
+        <translation>Dimensiune mică</translation>
     </message>
     <message>
         <source>Note Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de notă</translation>
     </message>
     <message>
         <source>Reset Mirror head value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Oglindire cap</translation>
     </message>
     <message>
         <source>Reset Velocity type value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește tip forță atac</translation>
     </message>
     <message>
         <source>Reset Head type value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilște Tip Cap</translation>
     </message>
     <message>
         <source>Reset Velocity value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește forță atac</translation>
     </message>
     <message>
         <source>Mirror Head</source>
-        <translation type="unfinished"/>
+        <translation>Oglindire Cap</translation>
     </message>
     <message>
         <source>Small</source>
-        <translation>dimensiune mică</translation>
+        <translation>Dimensiune mică</translation>
     </message>
     <message>
         <source>Reset Head group value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Grup Cap</translation>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoare Dimensiune mică</translation>
     </message>
     <message>
         <source>Reset Tuning value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Acordajul</translation>
     </message>
     <message>
         <source>Reset Play value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoare &quot;Redare&quot;</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
     <message>
         <source>Reset Dot position value</source>
-        <translation type="unfinished"/>
+        <translation>Restabișeste poziția punctului</translation>
     </message>
     <message>
         <source>Line</source>
@@ -4176,15 +4161,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Fix to line</source>
-        <translation type="unfinished"/>
+        <translation>Fixează la linie</translation>
     </message>
     <message>
         <source>Reset Fix to line</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea fixării la linie</translation>
     </message>
     <message>
         <source>Reset Line</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Linia</translation>
     </message>
 </context>
 <context>
@@ -4198,12 +4183,8 @@ space unit</extracomment>
         <translation>Tip</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Placement</source>
-        <translation type="unfinished"/>
+        <translation>Plasament</translation>
     </message>
     <message>
         <source>8va</source>
@@ -4223,31 +4204,31 @@ space unit</extracomment>
     </message>
     <message>
         <source>22ma</source>
-        <translation type="unfinished"/>
+        <translation>22ma</translation>
     </message>
     <message>
         <source>22mb</source>
-        <translation type="unfinished"/>
+        <translation>22mb</translation>
     </message>
     <message>
         <source>Numbers only</source>
-        <translation type="unfinished"/>
+        <translation>Doar numere</translation>
     </message>
     <message>
         <source>Ottava Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de ottava</translation>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Tip</translation>
     </message>
     <message>
         <source>Reset Placement value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Plasament</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
     <message>
         <source>Above</source>
@@ -4259,7 +4240,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Numbers only value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoare Doar numere</translation>
     </message>
 </context>
 <context>
@@ -4269,24 +4250,20 @@ space unit</extracomment>
         <translation>Pauză</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Small</source>
         <translation>dimensiune mică</translation>
     </message>
     <message>
         <source>Rest Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de pauză</translation>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoare Dimensiune mică</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
 </context>
 <context>
@@ -4301,63 +4278,55 @@ space unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Trailing space</source>
-        <translation type="unfinished"/>
+        <translation>Spațiul de după</translation>
     </message>
     <message>
         <source>Leading space</source>
-        <translation type="unfinished"/>
+        <translation>Spațiul de dinainte</translation>
     </message>
     <message>
         <source>Segment Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de segment</translation>
     </message>
     <message>
         <source>Reset Leading space value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Spațiul de după</translation>
     </message>
     <message>
         <source>Reset Trailing space value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Spațiul de după</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
 </context>
 <context>
     <name>InspectorSlur</name>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Line type:</source>
-        <translation type="unfinished"/>
+        <translation>Tip Linie:</translation>
     </message>
     <message>
         <source>Slur/Tie</source>
-        <translation type="unfinished"/>
+        <translation>Legato/Legato de prelungire</translation>
     </message>
     <message>
         <source>Slur Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de legato</translation>
     </message>
     <message>
         <source>Reset Line type value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Tipul de linie</translation>
     </message>
     <message>
         <source>Line type</source>
-        <translation type="unfinished"/>
+        <translation>Tip Linie</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
     <message>
         <source>Continuous</source>
@@ -4365,7 +4334,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>Punctat</translation>
     </message>
     <message>
         <source>Dashed</source>
@@ -4380,7 +4349,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Înâlţime</translation>
     </message>
     <message>
         <source>sp</source>
@@ -4388,16 +4357,12 @@ space unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Spacer Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de distanțier</translation>
     </message>
     <message>
         <source>Reset Height value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Înălțimea</translation>
     </message>
 </context>
 <context>
@@ -4407,16 +4372,12 @@ space unit</extracomment>
         <translation>Tempo</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Tempo</source>
         <translation>Tempo</translation>
     </message>
     <message>
         <source>Follow text</source>
-        <translation type="unfinished"/>
+        <translation>Urmărește textul</translation>
     </message>
     <message>
         <source>BPM</source>
@@ -4424,19 +4385,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tempo Marking Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de tempo</translation>
     </message>
     <message>
         <source>Reset Tempo value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoare tempo</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
     <message>
         <source>Reset Follow text value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Urmărirea Textului</translation>
     </message>
 </context>
 <context>
@@ -4450,31 +4411,31 @@ space unit</extracomment>
         <translation>Stil</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Text Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de text</translation>
     </message>
     <message>
         <source>Reset Style value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Stilul</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
+    </message>
+    <message>
+        <source>Reset Text to Style</source>
+        <translation>Restabilește Text la Stil</translation>
     </message>
 </context>
 <context>
     <name>InspectorTextLine</name>
     <message>
         <source>Text Line</source>
-        <translation type="unfinished"/>
+        <translation>Linie Text</translation>
     </message>
     <message>
         <source>Text Line Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de linie de text</translation>
     </message>
 </context>
 <context>
@@ -4484,71 +4445,63 @@ space unit</extracomment>
         <translation>Introduceţi Metrul Măsurii:</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Show courtesy</source>
-        <translation type="unfinished"/>
+        <translation>Afișează precauție</translation>
     </message>
     <message>
         <source>Time Signature Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector Metrul Măsurii</translation>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește afișarea precauției</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
 </context>
 <context>
     <name>InspectorTrill</name>
     <message>
         <source>Trill</source>
-        <translation>tril</translation>
+        <translation>Tril</translation>
     </message>
     <message>
         <source>Type</source>
         <translation>Tip</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Trill Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de tril</translation>
     </message>
     <message>
         <source>Reset Trill type</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește tipul trilului</translation>
     </message>
     <message>
         <source>Trill Line</source>
-        <translation type="unfinished"/>
+        <translation>Linie Tril</translation>
     </message>
     <message>
         <source>Up Prall</source>
-        <translation type="unfinished"/>
+        <translation>Prall Superior</translation>
     </message>
     <message>
         <source>Down Prall</source>
-        <translation type="unfinished"/>
+        <translation>Prall Inferior</translation>
     </message>
     <message>
         <source>Prall Prall</source>
-        <translation type="unfinished"/>
+        <translation>Prall Prall</translation>
     </message>
     <message>
         <source>Wavy Line</source>
-        <translation type="unfinished"/>
+        <translation>Linie ondulată</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
 </context>
 <context>
@@ -4556,10 +4509,6 @@ space unit</extracomment>
     <message>
         <source>Tuplet</source>
         <translation>Diviziune Excepţională</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Number</source>
@@ -4575,7 +4524,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished"/>
+        <translation>Automatic</translation>
     </message>
     <message>
         <source>Bracket</source>
@@ -4583,7 +4532,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Direction</source>
-        <translation type="unfinished"/>
+        <translation>Direcție</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -4599,42 +4548,38 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tuplet Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de diviziune excepțională</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Direcția</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
     <message>
         <source>Reset Number type value</source>
-        <translation type="unfinished"/>
+        <translation>Resbilește tip număr</translation>
     </message>
     <message>
         <source>Reset Bracket type value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Paranteza</translation>
     </message>
     <message>
         <source>Number type</source>
-        <translation type="unfinished"/>
+        <translation>Tip număr</translation>
     </message>
     <message>
         <source>Bracket type</source>
-        <translation type="unfinished"/>
+        <translation>Tip Paranteză</translation>
     </message>
 </context>
 <context>
     <name>InspectorVBox</name>
     <message>
         <source>Vertical Frame</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Cadru vertical</translation>
     </message>
     <message>
         <source>mm</source>
@@ -4647,15 +4592,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Înâlţime</translation>
     </message>
     <message>
         <source>Vertical Frame Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de cadru veritical</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
     <message>
         <source>Right margin</source>
@@ -4663,15 +4608,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Top gap value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Golul de sus</translation>
     </message>
     <message>
         <source>Reset Bottom gap value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Golul de jos</translation>
     </message>
     <message>
         <source>Bottom margin</source>
-        <translation type="unfinished"/>
+        <translation>Margine jos</translation>
     </message>
     <message>
         <source>Left margin</source>
@@ -4679,31 +4624,31 @@ space unit</extracomment>
     </message>
     <message>
         <source>Top gap</source>
-        <translation type="unfinished"/>
+        <translation>Golul de sus</translation>
     </message>
     <message>
         <source>Bottom gap</source>
-        <translation type="unfinished"/>
+        <translation>Golul de jos</translation>
     </message>
     <message>
         <source>Top margin</source>
-        <translation type="unfinished"/>
+        <translation>Magine sus</translation>
     </message>
     <message>
         <source>Reset Left margin value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Marginea din stânga</translation>
     </message>
     <message>
         <source>Reset Right margin value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Marginea din dreapta</translation>
     </message>
     <message>
         <source>Reset Top margin value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea maginii de sus</translation>
     </message>
     <message>
         <source>Reset Bottom margin value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea maginii de jos</translation>
     </message>
 </context>
 <context>
@@ -4718,38 +4663,34 @@ space unit</extracomment>
     </message>
     <message>
         <source>Closed</source>
-        <translation type="unfinished"/>
+        <translation>Închis</translation>
     </message>
     <message>
         <source>Type</source>
         <translation>Tip</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Volta Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Inspector de volta</translation>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Tip</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește valoarea</translation>
     </message>
 </context>
 <context>
     <name>InstrumentWizard</name>
     <message>
         <source>0</source>
-        <translation type="unfinished"/>
+        <translation>0</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Caută</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -4773,11 +4714,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add Staff</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă Portativ</translation>
     </message>
     <message>
         <source>Add Linked Staff</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă Portativ Legat</translation>
     </message>
     <message>
         <source>1</source>
@@ -4793,7 +4734,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Instrument wizard</source>
-        <translation type="unfinished"/>
+        <translation>Dialog Intrumente</translation>
     </message>
     <message>
         <source>Instrument List</source>
@@ -4801,22 +4742,22 @@ space unit</extracomment>
     </message>
     <message>
         <source>Added Instruments</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă instrumente</translation>
     </message>
     <message>
         <source>Instrument Genre Filter</source>
-        <translation type="unfinished"/>
+        <translation>Filtru de Instrumente după Gen</translation>
     </message>
 </context>
 <context>
     <name>InstrumentsDialog</name>
     <message>
         <source>All instruments</source>
-        <translation type="unfinished"/>
+        <translation>Toate instrumentele</translation>
     </message>
     <message>
         <source>MuseScore: Instruments</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Instrumente</translation>
     </message>
     <message>
         <source>Load</source>
@@ -4839,7 +4780,7 @@ space unit</extracomment>
     <name>InstrumentsWidget</name>
     <message>
         <source>MuseScore: Instruments</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Instrumente</translation>
     </message>
     <message>
         <source>Instrument List</source>
@@ -4847,7 +4788,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Caută</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -4871,11 +4812,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add Staff</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă Portativ</translation>
     </message>
     <message>
         <source>Add Linked Staff</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă Portativ Legat</translation>
     </message>
     <message>
         <source>Staves</source>
@@ -4891,31 +4832,31 @@ space unit</extracomment>
     </message>
     <message>
         <source>Linked</source>
-        <translation type="unfinished"/>
+        <translation>Legat</translation>
     </message>
     <message>
         <source>Staff type</source>
-        <translation type="unfinished"/>
+        <translation>Tip portativ</translation>
     </message>
     <message>
         <source>Instrument Genre Filter</source>
-        <translation type="unfinished"/>
+        <translation>Filtru de Instrumente după Gen</translation>
     </message>
     <message>
         <source>Instrument list</source>
-        <translation type="unfinished"/>
+        <translation>Listă de instrumente</translation>
     </message>
     <message>
         <source>Clear Search box</source>
-        <translation type="unfinished"/>
+        <translation>Golește caseta de căutare</translation>
     </message>
     <message>
         <source>Partitur List</source>
-        <translation type="unfinished"/>
+        <translation>Instrumente adăugate</translation>
     </message>
     <message>
         <source>Staff linked to previous</source>
-        <translation type="unfinished"/>
+        <translation>Portativ legat de cel anterior</translation>
     </message>
 </context>
 <context>
@@ -4934,22 +4875,22 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add time signature to palette</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă metrul la paletă</translation>
     </message>
 </context>
 <context>
     <name>LayerManager</name>
     <message>
         <source>MuseScore: Layers</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Straturi</translation>
     </message>
     <message>
         <source>Layer</source>
-        <translation type="unfinished"/>
+        <translation>Strat</translation>
     </message>
     <message>
         <source>Create</source>
-        <translation type="unfinished"/>
+        <translation>Crează</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -4957,15 +4898,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tags</source>
-        <translation type="unfinished"/>
+        <translation>Etichete</translation>
     </message>
     <message>
         <source>Add Tag</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă Etichetă</translation>
     </message>
     <message>
         <source>Delete Tag</source>
-        <translation type="unfinished"/>
+        <translation>Șterge Etichetă</translation>
     </message>
     <message>
         <source>1</source>
@@ -4997,7 +4938,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished"/>
+        <translation>8</translation>
     </message>
     <message>
         <source>9</source>
@@ -5005,15 +4946,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>10</source>
-        <translation type="unfinished"/>
+        <translation>10</translation>
     </message>
     <message>
         <source>11</source>
-        <translation type="unfinished"/>
+        <translation>11</translation>
     </message>
     <message>
         <source>12</source>
-        <translation type="unfinished"/>
+        <translation>12</translation>
     </message>
     <message>
         <source>13</source>
@@ -5021,83 +4962,83 @@ space unit</extracomment>
     </message>
     <message>
         <source>14</source>
-        <translation type="unfinished"/>
+        <translation>14</translation>
     </message>
     <message>
         <source>15</source>
-        <translation type="unfinished"/>
+        <translation>15</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished"/>
+        <translation>16</translation>
     </message>
     <message>
         <source>17</source>
-        <translation type="unfinished"/>
+        <translation>17</translation>
     </message>
     <message>
         <source>18</source>
-        <translation type="unfinished"/>
+        <translation>18</translation>
     </message>
     <message>
         <source>19</source>
-        <translation type="unfinished"/>
+        <translation>19</translation>
     </message>
     <message>
         <source>20</source>
-        <translation type="unfinished"/>
+        <translation>20</translation>
     </message>
     <message>
         <source>21</source>
-        <translation type="unfinished"/>
+        <translation>21</translation>
     </message>
     <message>
         <source>22</source>
-        <translation type="unfinished"/>
+        <translation>22</translation>
     </message>
     <message>
         <source>23</source>
-        <translation type="unfinished"/>
+        <translation>23</translation>
     </message>
     <message>
         <source>24</source>
-        <translation type="unfinished"/>
+        <translation>24</translation>
     </message>
     <message>
         <source>25</source>
-        <translation type="unfinished"/>
+        <translation>25</translation>
     </message>
     <message>
         <source>26</source>
-        <translation type="unfinished"/>
+        <translation>26</translation>
     </message>
     <message>
         <source>27</source>
-        <translation type="unfinished"/>
+        <translation>27</translation>
     </message>
     <message>
         <source>28</source>
-        <translation type="unfinished"/>
+        <translation>28</translation>
     </message>
     <message>
         <source>29</source>
-        <translation type="unfinished"/>
+        <translation>29</translation>
     </message>
     <message>
         <source>30</source>
-        <translation type="unfinished"/>
+        <translation>30</translation>
     </message>
     <message>
         <source>31</source>
-        <translation type="unfinished"/>
+        <translation>31</translation>
     </message>
     <message>
         <source>Tag</source>
-        <translation type="unfinished"/>
+        <translation>Etichetă</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>Descriere</translation>
     </message>
 </context>
 <context>
@@ -5109,10 +5050,6 @@ space unit</extracomment>
     <message>
         <source>Begin</source>
         <translation>Început</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Above</source>
@@ -5136,11 +5073,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>90°</source>
-        <translation type="unfinished"/>
+        <translation>90°</translation>
     </message>
     <message>
         <source>45°</source>
-        <translation type="unfinished"/>
+        <translation>45°</translation>
     </message>
     <message>
         <source>Continue</source>
@@ -5156,7 +5093,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Hook:</source>
-        <translation type="unfinished"/>
+        <translation>Steag:</translation>
     </message>
     <message>
         <source>Text:</source>
@@ -5167,58 +5104,58 @@ space unit</extracomment>
     <name>LoginDialog</name>
     <message>
         <source>Log in to MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Autentificare la MuseScore</translation>
     </message>
     <message>
         <source>Username or email</source>
-        <translation type="unfinished"/>
+        <translation>Nume utilizator sau email</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"/>
+        <translation>Parolă</translation>
     </message>
 </context>
 <context>
     <name>MIDI import operations</name>
     <message>
         <source>Quarter</source>
-        <translation type="unfinished"/>
+        <translation>Pătrime</translation>
     </message>
     <message>
         <source>Eighth</source>
-        <translation type="unfinished"/>
+        <translation>Optime</translation>
     </message>
     <message>
         <source>16th</source>
-        <translation>1/16</translation>
+        <translation>16me</translation>
     </message>
     <message>
         <source>32nd</source>
-        <translation>1/32</translation>
+        <translation>32me</translation>
     </message>
     <message>
         <source>64th</source>
-        <translation type="unfinished"/>
+        <translation>64me</translation>
     </message>
     <message>
         <source>128th</source>
-        <translation type="unfinished"/>
+        <translation>128me</translation>
     </message>
     <message>
         <source>Detect swing</source>
-        <translation type="unfinished"/>
+        <translation>Detectează swing</translation>
     </message>
     <message>
         <source>None (1:1)</source>
-        <translation type="unfinished"/>
+        <translation>Deloc (1:1)</translation>
     </message>
     <message>
         <source>Swing (2:1)</source>
-        <translation type="unfinished"/>
+        <translation>Swing (2:1)</translation>
     </message>
     <message>
         <source>Shuffle (3:1)</source>
-        <translation type="unfinished"/>
+        <translation>Shuffle (3:1)</translation>
     </message>
     <message>
         <source>Import</source>
@@ -5226,11 +5163,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Staff name</source>
-        <translation type="unfinished"/>
+        <translation>Nume portativ</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation type="unfinished"/>
+        <translation>Sunet</translation>
     </message>
     <message>
         <source>Lyrics</source>
@@ -5238,27 +5175,27 @@ space unit</extracomment>
     </message>
     <message>
         <source>2-plets</source>
-        <translation type="unfinished"/>
+        <translation>2-olet</translation>
     </message>
     <message>
         <source>3-plets</source>
-        <translation type="unfinished"/>
+        <translation>3-olet</translation>
     </message>
     <message>
         <source>4-plets</source>
-        <translation type="unfinished"/>
+        <translation>4-olet</translation>
     </message>
     <message>
         <source>5-plets</source>
-        <translation type="unfinished"/>
+        <translation>5-olet</translation>
     </message>
     <message>
         <source>7-plets</source>
-        <translation type="unfinished"/>
+        <translation>7-olet</translation>
     </message>
     <message>
         <source>9-plets</source>
-        <translation type="unfinished"/>
+        <translation>9-olet</translation>
     </message>
     <message>
         <source>Tuplets</source>
@@ -5294,70 +5231,77 @@ space unit</extracomment>
     </message>
     <message>
         <source>12</source>
-        <translation type="unfinished"/>
+        <translation>12</translation>
     </message>
     <message>
         <source>15</source>
-        <translation type="unfinished"/>
+        <translation>15</translation>
     </message>
     <message>
         <source>21</source>
-        <translation type="unfinished"/>
+        <translation>21</translation>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished"/>
+        <translation>8</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished"/>
+        <translation>16</translation>
     </message>
     <message>
         <source>32</source>
-        <translation type="unfinished"/>
+        <translation>32</translation>
     </message>
     <message>
         <source>Time signature</source>
-        <translation type="unfinished"/>
+        <translation>Metrul Măsurii</translation>
     </message>
     <message>
         <source>2x less
 measure count</source>
-        <translation type="unfinished"/>
+        <translation>2x mai mic
+număr de măsuri</translation>
     </message>
     <message>
         <source>Is human
 performance</source>
-        <translation type="unfinished"/>
+        <translation>Este performață
+umană</translation>
     </message>
     <message>
         <source>Split staff</source>
-        <translation type="unfinished"/>
+        <translation>Divizare portativ</translation>
     </message>
     <message>
         <source>Clef
 changes</source>
-        <translation type="unfinished"/>
+        <translation>Schimbări
+de cheie</translation>
     </message>
     <message>
         <source>Simplify
 durations</source>
-        <translation type="unfinished"/>
+        <translation>Simplifică
+duratele</translation>
     </message>
     <message>
         <source>Show
 staccato</source>
-        <translation type="unfinished"/>
+        <translation>Afișază
+staccato</translation>
     </message>
     <message>
         <source>Dotted
 notes</source>
-        <translation type="unfinished"/>
+        <translation>Note
+cu punct</translation>
     </message>
     <message>
         <source>Show
 tempo text</source>
-        <translation type="unfinished"/>
+        <translation>Afișează
+Textul de tempo</translation>
     </message>
     <message>
         <source>Recognize
@@ -5366,45 +5310,60 @@ pickup measure</source>
     </message>
     <message>
         <source>Max. quantization</source>
-        <translation type="unfinished"/>
+        <translation>Max. cuantificare</translation>
     </message>
     <message>
         <source>Max. voices</source>
-        <translation type="unfinished"/>
+        <translation>Max. voci</translation>
+    </message>
+    <message>
+        <source>Channel</source>
+        <translation>Canal</translation>
+    </message>
+    <message>
+        <source>MuseScore instrument</source>
+        <translation>Instrument MuseScore</translation>
+    </message>
+    <message>
+        <source>Show
+chord symbols</source>
+        <translation>Afișează
+simbolurile de acord</translation>
     </message>
 </context>
 <context>
     <name>MIDI import: tracks model</name>
     <message>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>Toate</translation>
     </message>
 </context>
 <context>
     <name>MP3Exporter</name>
     <message>
         <source>Where is %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Unde este %1?</translation>
     </message>
     <message>
         <source>Save as MP3</source>
         <translation>Salvează ca MP3</translation>
     </message>
     <message>
-        <source>MuseScore does not export MP3 files directly, but instead uses 
-the freely available LAME library.  You must obtain %1 
-separately, and then locate the file for MuseScore.
+        <source>MuseScore does not export MP3 files directly, but instead uses the freely available LAME library.  You must obtain %1 separately (for details check the handbook), and then locate the file for MuseScore.
 You only need to do this once.
 
 Would you like to locate %2 now?</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore nu exportă fișiere MP3 în mod direct; folosește o librărie distribuită gratuit LAME. Trebuie să obțineți %1 separat (pentru detalii consultați ghidul de utilizare), și apoi să localizați fișierul pentru MuseScore.
+Trebuie să faceți acest lucru o singură dată.
+
+Doriți să localizați %2 acum?</translation>
     </message>
 </context>
 <context>
     <name>MasterPalette</name>
     <message>
         <source>MuseScore: Master Palette</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Paletă Generală</translation>
     </message>
     <message>
         <source>Grace Notes</source>
@@ -5432,7 +5391,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Breaths &amp; Pauses</source>
-        <translation type="unfinished"/>
+        <translation>Respirații și Pauze</translation>
     </message>
     <message>
         <source>Brackets</source>
@@ -5440,7 +5399,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Articulations &amp; Ornaments</source>
-        <translation type="unfinished"/>
+        <translation>Articulații și Ornamente</translation>
     </message>
     <message>
         <source>Accidentals</source>
@@ -5452,19 +5411,15 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Fingering</source>
-        <translation>Degetaţie</translation>
+        <translation>Digitaţie</translation>
     </message>
     <message>
         <source>Note Heads</source>
-        <translation>Boabe</translation>
+        <translation>Capete Note</translation>
     </message>
     <message>
         <source>Tremolo</source>
         <translation>Tremolo</translation>
-    </message>
-    <message>
-        <source>Repeats</source>
-        <translation>Repetiţii</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -5480,7 +5435,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Frames &amp; Measures</source>
-        <translation type="unfinished"/>
+        <translation>Cadre și Măsuri</translation>
     </message>
     <message>
         <source>Symbols</source>
@@ -5488,15 +5443,19 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Arpeggios &amp; Glissandi</source>
-        <translation type="unfinished"/>
+        <translation>Apegii și Glisando</translation>
     </message>
     <message>
         <source>Breaks &amp; Spacers</source>
-        <translation type="unfinished"/>
+        <translation>Despărțitoare și Distanțiere</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
-        <translation type="unfinished"/>
+        <translation>Ornamente pt. Cimpoi</translation>
+    </message>
+    <message>
+        <source>Repeats &amp; Jumps</source>
+        <translation>Repetiții și Directive</translation>
     </message>
 </context>
 <context>
@@ -5508,7 +5467,8 @@ Would you like to locate %2 now?</source>
     <message>
         <source>cannot change measure length:
 tuplet would cross measure</source>
-        <translation type="unfinished"/>
+        <translation>nu se poate schimba lungimea măsurii:
+diviziunea excepțională ar traversa măsura</translation>
     </message>
 </context>
 <context>
@@ -5571,15 +5531,15 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished"/>
+        <translation>8</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished"/>
+        <translation>16</translation>
     </message>
     <message>
         <source>32</source>
-        <translation type="unfinished"/>
+        <translation>32</translation>
     </message>
     <message>
         <source>64</source>
@@ -5599,11 +5559,11 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Layout stretch:</source>
-        <translation>factor de spaţiere</translation>
+        <translation>Factor de spaţiere</translation>
     </message>
     <message>
         <source>Measure number mode:</source>
-        <translation type="unfinished"/>
+        <translation>Mod numerotare măsură:</translation>
     </message>
     <message>
         <source>Nominal:</source>
@@ -5623,27 +5583,27 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished"/>
+        <translation>Automatic</translation>
     </message>
     <message>
         <source>Always Show</source>
-        <translation type="unfinished"/>
+        <translation>Afișează Mereu</translation>
     </message>
     <message>
         <source>Always Hide</source>
-        <translation type="unfinished"/>
+        <translation>Ascunde Mereu</translation>
     </message>
     <message>
         <source>Go to previous measure</source>
-        <translation type="unfinished"/>
+        <translation>Mergi la măsura precedentă</translation>
     </message>
     <message>
         <source>Go to next measure</source>
-        <translation type="unfinished"/>
+        <translation>Mergi la măsura următoare</translation>
     </message>
     <message>
         <source>Break multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>Sparge Pauza de mai multe măsuri</translation>
     </message>
 </context>
 <context>
@@ -5677,31 +5637,27 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>PDF-Scan</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Scan PDF</translation>
     </message>
     <message>
         <source>Add Scan</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă Scan</translation>
     </message>
     <message>
         <source>Remove Scan</source>
-        <translation type="unfinished"/>
+        <translation>Șterge Scan</translation>
     </message>
     <message>
         <source>Audio</source>
-        <translation type="unfinished"/>
+        <translation>Audio</translation>
     </message>
     <message>
         <source>Add Audio</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă Audio</translation>
     </message>
     <message>
         <source>Remove Audio</source>
-        <translation type="unfinished"/>
+        <translation>Șterge Audio</translation>
     </message>
 </context>
 <context>
@@ -5715,15 +5671,15 @@ tuplet would cross measure</source>
     <name>MetaEditDialog</name>
     <message>
         <source>MuseScore Version:</source>
-        <translation type="unfinished"/>
+        <translation>Versiune MuseScore:</translation>
     </message>
     <message>
         <source>Revision:</source>
-        <translation type="unfinished"/>
+        <translation>Revizie:</translation>
     </message>
     <message>
         <source>API-Level:</source>
-        <translation type="unfinished"/>
+        <translation>API-Level:</translation>
     </message>
     <message>
         <source>New</source>
@@ -5731,26 +5687,26 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>MuseScore: Score Information</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Informații Partitură</translation>
     </message>
 </context>
 <context>
     <name>Ms</name>
     <message>
         <source>Fall</source>
-        <translation type="unfinished"/>
+        <translation>Fall</translation>
     </message>
     <message>
         <source>Doit</source>
-        <translation type="unfinished"/>
+        <translation>Doit</translation>
     </message>
     <message>
         <source>Plop</source>
-        <translation type="unfinished"/>
+        <translation>Plop</translation>
     </message>
     <message>
         <source>Scoop</source>
-        <translation type="unfinished"/>
+        <translation>Scoop</translation>
     </message>
 </context>
 <context>
@@ -5772,37 +5728,56 @@ tuplet would cross measure</source>
     <name>Ms::AccessibleScoreView</name>
     <message>
         <source>Score %1</source>
-        <translation type="unfinished"/>
+        <translation>Partitura %1</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::AccessibleSearchBox</name>
+    <message>
+        <source>Measure</source>
+        <translation>Măsură</translation>
+    </message>
+    <message>
+        <source>Page</source>
+        <translation>Pagină</translation>
+    </message>
+    <message>
+        <source>Rehearsal Mark</source>
+        <translation>Reper</translation>
+    </message>
+    <message>
+        <source>Not found </source>
+        <translation>Negăsit(ă)</translation>
     </message>
 </context>
 <context>
     <name>Ms::AlbumManager</name>
     <message>
         <source>MuseScore: Add Score</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Adaugă partitură</translation>
     </message>
     <message>
         <source>MuseScore: Load Album</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Încărcare Album</translation>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx)</source>
-        <translation type="unfinished"/>
+        <translation>Fișier MuseScore (*.mscz *.mscx)</translation>
     </message>
     <message>
         <source>MuseScore Album Files (*.album)</source>
-        <translation type="unfinished"/>
+        <translation>Fișier Album MuseScore (*.album)</translation>
     </message>
     <message>
         <source>Error while creating score from album.</source>
-        <translation type="unfinished"/>
+        <translation>Eroare la crearea partiturii din album.</translation>
     </message>
 </context>
 <context>
     <name>Ms::Ambitus</name>
     <message>
         <source>%1; Top pitch: %2%3; Bottom pitch: %4%5</source>
-        <translation type="unfinished"/>
+        <translation>%1; Nota înaltă: %2%3; Nota joasă: %4%5</translation>
     </message>
 </context>
 <context>
@@ -5816,11 +5791,11 @@ tuplet would cross measure</source>
     <name>Ms::BarLine</name>
     <message>
         <source>%1 Start of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 Început de %2</translation>
     </message>
     <message>
         <source>%1 End of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 Sfârșit de %2</translation>
     </message>
 </context>
 <context>
@@ -5862,19 +5837,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Custom Tuplet</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Double dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Triple dotted</source>
-        <translation type="unfinished"/>
+        <translation>Diviziune excepțională personalizată</translation>
     </message>
     <message>
         <source>Quintuplet</source>
@@ -5886,29 +5849,41 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>%1 Start of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 Început de %2</translation>
     </message>
     <message>
         <source>%1 End of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 Sfârșit de %2</translation>
+    </message>
+    <message>
+        <source>Dotted %1</source>
+        <translation>%1 cu punct</translation>
+    </message>
+    <message>
+        <source>Double dotted %1</source>
+        <translation>%1 cu dublu punct</translation>
+    </message>
+    <message>
+        <source>Triple dotted %1</source>
+        <translation>%1 cu triplu punct</translation>
     </message>
 </context>
 <context>
     <name>Ms::ChordStyleEditor</name>
     <message>
         <source>MuseScore: Chord Symbols Style Editor</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Editor Stil Simboluri acord</translation>
     </message>
 </context>
 <context>
     <name>Ms::DrumTools</name>
     <message>
         <source>Drum Tools</source>
-        <translation type="unfinished"/>
+        <translation>Unelte Tobă</translation>
     </message>
     <message>
         <source>Edit Drumset</source>
-        <translation type="unfinished"/>
+        <translation>Editare Set Percuție</translation>
     </message>
     <message>
         <source>Drums</source>
@@ -5919,11 +5894,11 @@ tuplet would cross measure</source>
     <name>Ms::DrumrollEditor</name>
     <message>
         <source>Toolbar 1</source>
-        <translation type="unfinished"/>
+        <translation>Bară de unelte 1</translation>
     </message>
     <message>
         <source>Toolbar 3</source>
-        <translation type="unfinished"/>
+        <translation>Bară de unelte 3</translation>
     </message>
     <message>
         <source>Cursor:</source>
@@ -5931,7 +5906,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Velocity:</source>
-        <translation>Forță atac (0-127):</translation>
+        <translation>Forță atac:</translation>
     </message>
     <message>
         <source>offset</source>
@@ -5954,7 +5929,7 @@ tuplet would cross measure</source>
     <name>Ms::EditDrumset</name>
     <message>
         <source>invalid</source>
-        <translation type="unfinished"/>
+        <translation>invalid</translation>
     </message>
     <message>
         <source>MuseScore: Open File</source>
@@ -5972,7 +5947,16 @@ tuplet would cross measure</source>
         <source>Open File
 %1
 failed: </source>
-        <translation type="unfinished"/>
+        <translation>Deschiderea Fișierului
+%1
+a eșuat:</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::EditStaff</name>
+    <message>
+        <source>The instrument name is invalid.</source>
+        <translation>Numele instrumentului este invalid.</translation>
     </message>
 </context>
 <context>
@@ -6020,71 +6004,71 @@ failed: </source>
     </message>
     <message>
         <source>Special symbols in header/footer</source>
-        <translation type="unfinished"/>
+        <translation>Simboluri speciale in antet/subsol</translation>
     </message>
     <message>
         <source>page number, except on first page</source>
-        <translation type="unfinished"/>
+        <translation>numărul paginii, exceptând prima pagină</translation>
     </message>
     <message>
         <source>page number, on all pages</source>
-        <translation type="unfinished"/>
+        <translation>numărul paginii, pe toate paginile</translation>
     </message>
     <message>
         <source>number of pages</source>
-        <translation type="unfinished"/>
+        <translation>număr de pagini</translation>
     </message>
     <message>
         <source>file name</source>
-        <translation type="unfinished"/>
+        <translation>nume fișier</translation>
     </message>
     <message>
         <source>file path+name</source>
-        <translation type="unfinished"/>
+        <translation>cale fișier+nume</translation>
     </message>
     <message>
         <source>current date</source>
-        <translation type="unfinished"/>
+        <translation>data curentă</translation>
     </message>
     <message>
         <source>creation date</source>
-        <translation type="unfinished"/>
+        <translation>data creării</translation>
     </message>
     <message>
         <source>copyright, on first page only</source>
-        <translation type="unfinished"/>
+        <translation>drepturi de autor, numai pe prima pagină</translation>
     </message>
     <message>
         <source>copyright, on all pages</source>
-        <translation type="unfinished"/>
+        <translation>drepturi de autor, pe toate paginile</translation>
     </message>
     <message>
         <source>the $ sign itself</source>
-        <translation type="unfinished"/>
+        <translation>semnul de $ însuși</translation>
     </message>
     <message>
         <source>meta data tag</source>
-        <translation type="unfinished"/>
+        <translation>etichetă meta data</translation>
     </message>
     <message>
         <source>Available tags and their current values:</source>
-        <translation type="unfinished"/>
+        <translation>Etichete disponibile și valorile lor curente:</translation>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Aplică tuturor știmelor</translation>
     </message>
     <message>
         <source>last modification time</source>
-        <translation type="unfinished"/>
+        <translation>data ultimei modificări</translation>
     </message>
     <message>
         <source>last modification date</source>
-        <translation type="unfinished"/>
+        <translation>data ultimei modificări</translation>
     </message>
     <message>
         <source>page number, if there is more than one page</source>
-        <translation type="unfinished"/>
+        <translation>numărul paginii, dacă este mai mult de o pagină</translation>
     </message>
 </context>
 <context>
@@ -6093,14 +6077,16 @@ failed: </source>
         <source>Cannot open figured bass description:
 %1
 %2</source>
-        <translation type="unfinished"/>
+        <translation>Nu s-a putut deschide drescrierea bassului cifrat:
+%1
+%2</translation>
     </message>
 </context>
 <context>
     <name>Ms::Fingering</name>
     <message>
         <source>String number</source>
-        <translation type="unfinished"/>
+        <translation>Număr Coardă</translation>
     </message>
 </context>
 <context>
@@ -6130,6 +6116,13 @@ failed: </source>
     </message>
 </context>
 <context>
+    <name>Ms::HelpQuery</name>
+    <message>
+        <source>Search for: </source>
+        <translation>Caută:</translation>
+    </message>
+</context>
+<context>
     <name>Ms::Inspector</name>
     <message>
         <source>Inspector</source>
@@ -6137,7 +6130,7 @@ failed: </source>
     </message>
     <message>
         <source>Inspector Subwindow</source>
-        <translation type="unfinished"/>
+        <translation>Subfereastră Inspector</translation>
     </message>
 </context>
 <context>
@@ -6148,6 +6141,21 @@ failed: </source>
     </message>
 </context>
 <context>
+    <name>Ms::InspectorGroupElement</name>
+    <message>
+        <source>Select</source>
+        <translation>Selectare</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation>Note</translation>
+    </message>
+    <message>
+        <source>Rests</source>
+        <translation>Pauze</translation>
+    </message>
+</context>
+<context>
     <name>Ms::InspectorNote</name>
     <message>
         <source>Select</source>
@@ -6155,19 +6163,19 @@ failed: </source>
     </message>
     <message>
         <source>Dot1</source>
-        <translation type="unfinished"/>
+        <translation>Punct1</translation>
     </message>
     <message>
         <source>Dot2</source>
-        <translation type="unfinished"/>
+        <translation>Punct2</translation>
     </message>
     <message>
         <source>Dot3</source>
-        <translation type="unfinished"/>
+        <translation>Punct3</translation>
     </message>
     <message>
         <source>Hook</source>
-        <translation>Hook</translation>
+        <translation>Steag</translation>
     </message>
     <message>
         <source>Stem</source>
@@ -6213,17 +6221,19 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore: Open Instruments File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Deschidere fișiser de instrumente</translation>
     </message>
     <message>
         <source>Open Instruments File
 %1
 failed: </source>
-        <translation type="unfinished"/>
+        <translation>Deschiderea Fișierului de Instrumente
+%1
+a eșuat:</translation>
     </message>
     <message>
         <source>MuseScore Instruments (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Instrumente (*.xml)</translation>
     </message>
 </context>
 <context>
@@ -6242,7 +6252,7 @@ failed: </source>
     </message>
     <message>
         <source>Staff type</source>
-        <translation type="unfinished"/>
+        <translation>Tip portativ</translation>
     </message>
     <message>
         <source>Visible</source>
@@ -6250,7 +6260,7 @@ failed: </source>
     </message>
     <message>
         <source>Linked</source>
-        <translation type="unfinished"/>
+        <translation>Legat</translation>
     </message>
 </context>
 <context>
@@ -6264,95 +6274,99 @@ failed: </source>
     <name>Ms::KeySig</name>
     <message>
         <source>%1: Custom</source>
-        <translation type="unfinished"/>
+        <translation>%1: Personalizat</translation>
     </message>
 </context>
 <context>
     <name>Ms::LayerManager</name>
     <message>
         <source>MuseScore: select layer tag</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Selectare etichetă strat</translation>
     </message>
     <message>
         <source>layer tag</source>
-        <translation type="unfinished"/>
+        <translation>etichetă strat</translation>
     </message>
 </context>
 <context>
     <name>Ms::LoginDialog</name>
     <message>
         <source>&lt;a href=&quot;%1&quot;&gt;Create an account&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Crează un cont&lt;/a&gt;</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;%1&quot;&gt;Forgot password?&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Ați uitat parola?&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Login error</source>
-        <translation type="unfinished"/>
+        <translation>Eroare la login</translation>
     </message>
     <message>
         <source>Please fill in your username and password</source>
-        <translation type="unfinished"/>
+        <translation>Completați numele de utilizator și parola</translation>
     </message>
 </context>
 <context>
     <name>Ms::LoginManager</name>
     <message>
         <source>Network error</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Please check your internet connection</source>
-        <translation type="unfinished"/>
+        <translation>Eroare de rețea</translation>
     </message>
     <message>
         <source>Unsuccessful login. Please try again.</source>
-        <translation type="unfinished"/>
+        <translation>Logare nereușită. Vă rugăm, încercați din nou.</translation>
     </message>
     <message>
         <source>Sorry, wrong email address, username or password. Please check again. &lt;a href=&quot;%1&quot;&gt;Have you forgotten your password&lt;/a&gt;?</source>
-        <translation type="unfinished"/>
+        <translation>Ne pare rău, adresă de email, numele de utilizator sau parolă greșite. Vă rugăm, încercați din nou. &lt;a href=&quot;%1&quot;&gt;V-ați uitat parola&lt;/a&gt;?</translation>
     </message>
     <message>
         <source>This account has been blocked.</source>
-        <translation type="unfinished"/>
+        <translation>Acest cont a fost blocat.</translation>
     </message>
     <message>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or &lt;a href=&quot;%1&quot;&gt;request a new activation email&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Contul dumneavoastră nu a fost activat încă. Verificați email-urile primite pentru a vă activa contul &lt;a href=&quot;%1&quot;&gt;solocitați un nou email de activare&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Error while getting user info. Please try again</source>
-        <translation type="unfinished"/>
+        <translation>Eroare la obținerea informațiilor de utilizator. Vă rugăm, încercați din nou</translation>
     </message>
     <message>
         <source>Error while getting user info: %1</source>
-        <translation type="unfinished"/>
+        <translation>Eroare la obținerea informațiilor: %1</translation>
     </message>
     <message>
         <source>An error occurred during the file transfer. Please try again</source>
-        <translation type="unfinished"/>
+        <translation>O eroare a apărut la transferarea fișierului. Vă rugăm încercați din nou</translation>
     </message>
     <message>
         <source>Cannot upload: %1</source>
-        <translation type="unfinished"/>
+        <translation>Nu se poate încărca: %1</translation>
     </message>
     <message>
         <source>Please upgrade</source>
-        <translation type="unfinished"/>
+        <translation>Vă rugăm actualizați</translation>
     </message>
     <message>
         <source>Your MuseScore version is too old to use this feature.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Please upgrade first&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Versiunea dumneavoastră de MuseScore este prea veche pentru această facilitate.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Vă rugăm să actualizați mai întai&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>Please check your Internet connection</source>
+        <translation>Verificați conexiunea la Internet</translation>
+    </message>
+    <message>
+        <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
+        <translation>Ceasul dvs. local nu este setat corect. Vă rugăm să-l verificați si să-l ajustați. Este recomandat să setați timezone-ul automat. Dacă tot nu reușiți să vă logați, , &lt;a href=&quot;%1&quot;&gt;contactați-ne&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
     <name>Ms::MScore</name>
     <message>
         <source>you cannot create an element</source>
-        <translation type="unfinished"/>
+        <translation>nu puteți crea un element</translation>
     </message>
 </context>
 <context>
@@ -6366,7 +6380,7 @@ failed: </source>
     <name>Ms::MeasureProperties</name>
     <message>
         <source>MuseScore: Measure Properties for Measure %1</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Proprietățile Măsurii pt. Măsura %1</translation>
     </message>
     <message>
         <source>visible</source>
@@ -6374,55 +6388,55 @@ failed: </source>
     </message>
     <message>
         <source>stemless</source>
-        <translation type="unfinished"/>
+        <translation>fără cozi</translation>
     </message>
 </context>
 <context>
     <name>Ms::MediaDialog</name>
     <message>
         <source>MuseScore: Additional Media</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Media Adițională</translation>
     </message>
 </context>
 <context>
     <name>Ms::MetaEditDialog</name>
     <message>
         <source>MuseScore: Input Tag Name</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Iintroducere Nume Etichetă</translation>
     </message>
     <message>
         <source>New tag name:</source>
-        <translation type="unfinished"/>
+        <translation>Nume de etichetă nou:</translation>
     </message>
 </context>
 <context>
     <name>Ms::Mixer</name>
     <message>
         <source>MuseScore: Mixer</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Mixer</translation>
     </message>
 </context>
 <context>
     <name>Ms::MuseScore</name>
     <message>
         <source>Could not open MP3 encoding library!</source>
-        <translation type="unfinished"/>
+        <translation>Nu se poate deschide librăria de codificare MP3!</translation>
     </message>
     <message>
         <source>Not a valid or supported MP3 encoding library!</source>
-        <translation type="unfinished"/>
+        <translation>Librărie de encodare MP3 invalidă sau nesuportată! </translation>
     </message>
     <message>
         <source>Unable to initialize MP3 stream</source>
-        <translation type="unfinished"/>
+        <translation>Nu se poate inițializa stream-ul MP3</translation>
     </message>
     <message>
         <source>Unable to open target file for writing</source>
-        <translation type="unfinished"/>
+        <translation>Nu s-a putut deschide fișierul destinație pentru scriere</translation>
     </message>
     <message>
         <source>Error %1 returned from MP3 encoder</source>
-        <translation type="unfinished"/>
+        <translation>Eroare %1 returnată de encoder-ul de MP3</translation>
     </message>
     <message>
         <source>MuseScore</source>
@@ -6436,7 +6450,7 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;</source>
-        <translation type="unfinished"/>
+        <translation>Fișiere MuseScore (*.mscz *.mscx);;</translation>
     </message>
     <message>
         <source>MusicXML Files (*.xml *.mxl);;</source>
@@ -6452,7 +6466,7 @@ before closing?</source>
     </message>
     <message>
         <source>Capella Files (*.cap *.capx);;</source>
-        <translation type="unfinished"/>
+        <translation>Fișiere Capella (*.cap *.capx);;</translation>
     </message>
     <message>
         <source>BB Files &lt;experimental&gt; (*.mgu *.MGU *.sgu *.SGU);;</source>
@@ -6460,11 +6474,11 @@ before closing?</source>
     </message>
     <message>
         <source>Overture / Score Writer Files &lt;experimental&gt; (*.ove *.scw);;</source>
-        <translation type="unfinished"/>
+        <translation>Fișiere Overture / Score Writer &lt;experimental&gt; (*.ove *.scw);;</translation>
     </message>
     <message>
         <source>Bagpipe Music Writer Files &lt;experimental&gt; (*.bww);;</source>
-        <translation type="unfinished"/>
+        <translation>Bagpipe Music Writer Files &lt;experimental&gt; (*.bww);;</translation>
     </message>
     <message>
         <source>MuseScore: Load Score</source>
@@ -6496,15 +6510,15 @@ before closing?</source>
     </message>
     <message>
         <source>PDF Scan File (*.pdf);;All (*)</source>
-        <translation type="unfinished"/>
+        <translation>Fișier Scan PDF (*.pdf);;All (*)</translation>
     </message>
     <message>
         <source>Choose PDF Scan</source>
-        <translation type="unfinished"/>
+        <translation>Alege Scan PDF</translation>
     </message>
     <message>
         <source>MuseScore: Choose PDF Scan</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Alege Scan PDF</translation>
     </message>
     <message>
         <source>Choose Audio File</source>
@@ -6520,23 +6534,23 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore: Save Palette</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Salvează Paletă</translation>
     </message>
     <message>
         <source>MuseScore Palette (*.mpal)</source>
-        <translation type="unfinished"/>
+        <translation>Paletă MuseScore (*.mpal)</translation>
     </message>
     <message>
         <source>MuseScore: Load Plugin</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Încărcare Plugin</translation>
     </message>
     <message>
         <source>MuseScore: Save Plugin</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Salvare Plugin</translation>
     </message>
     <message>
         <source>MuseScore Plugin File (*.qml)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Fișier Plugin (*.qml)</translation>
     </message>
     <message>
         <source>MuseScore: Load Drumset</source>
@@ -6548,7 +6562,7 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore Drumset File (*.drm)</source>
-        <translation type="unfinished"/>
+        <translation>Fișier Set de Percutie MuseScore (*.drm)</translation>
     </message>
     <message>
         <source>Standard MIDI File (*.mid)</source>
@@ -6576,49 +6590,47 @@ before closing?</source>
     </message>
     <message>
         <source>MP3 Audio (*.mp3)</source>
-        <translation>Audio Necomprimat (*.wav)</translation>
+        <translation>MP3 Audio (*.mp3)</translation>
     </message>
     <message>
         <source>MuseScore: Export</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Export</translation>
     </message>
     <message>
         <source>MuseScore: Save As</source>
         <translation>MuseScore: Salvare sub un nume diferit</translation>
     </message>
     <message>
-        <source>cannot determine file type</source>
-        <translation>nu pot determina tipul fișierului</translation>
-    </message>
-    <message>
         <source>MuseScore: Export Parts</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Exportă știme</translation>
     </message>
     <message>
         <source>&quot;%1&quot; already exists.
 Do you want to replace it?
 </source>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot; există deja.
+Doriți să-l înlocuiți?
+</translation>
     </message>
     <message>
         <source>Replace</source>
-        <translation type="unfinished"/>
+        <translation>Înlocuiește</translation>
     </message>
     <message>
         <source>Skip</source>
-        <translation type="unfinished"/>
+        <translation>Sari peste</translation>
     </message>
     <message>
         <source>Replace All</source>
-        <translation type="unfinished"/>
+        <translation>Înlocuiește totul</translation>
     </message>
     <message>
         <source>Skip All</source>
-        <translation type="unfinished"/>
+        <translation>Sari Peste Toate</translation>
     </message>
     <message>
         <source>Parts were successfully exported</source>
-        <translation type="unfinished"/>
+        <translation>Știmele au fost exportate cu succes</translation>
     </message>
     <message>
         <source>MuseScore: Save a Copy</source>
@@ -6626,15 +6638,15 @@ Do you want to replace it?
     </message>
     <message>
         <source>MuseScore: Save Selection</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Salvează Selecția</translation>
     </message>
     <message>
         <source>MuseScore: Save Selected</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Salvează Selecția</translation>
     </message>
     <message>
         <source>Images (*.jpg *.jpeg *.png);;All (*)</source>
-        <translation type="unfinished"/>
+        <translation>Imagini (*.jpg *.jpeg *.png);;Toate (*)</translation>
     </message>
     <message>
         <source>Repeat measure sign</source>
@@ -6650,19 +6662,19 @@ Do you want to replace it?
     </message>
     <message>
         <source>Section break</source>
-        <translation type="unfinished"/>
+        <translation>Despărțitor de Secțiune</translation>
     </message>
     <message>
         <source>Staff spacer down</source>
-        <translation type="unfinished"/>
+        <translation>Distanțier de portativ în jos</translation>
     </message>
     <message>
         <source>Staff spacer up</source>
-        <translation type="unfinished"/>
+        <translation>Distanțier de portativ în sus</translation>
     </message>
     <message>
         <source>Fingering %1</source>
-        <translation>degetul %1</translation>
+        <translation>Degetul %1</translation>
     </message>
     <message>
         <source>String number %1</source>
@@ -6670,15 +6682,15 @@ Do you want to replace it?
     </message>
     <message>
         <source>Bracket</source>
-        <translation>Acoladă</translation>
+        <translation>Acoladă Pătrată</translation>
     </message>
     <message>
         <source>Brace</source>
-        <translation type="unfinished"/>
+        <translation>Acoladă</translation>
     </message>
     <message>
         <source>Square</source>
-        <translation type="unfinished"/>
+        <translation>Paranteză Pătrată</translation>
     </message>
     <message>
         <source>Line</source>
@@ -6710,11 +6722,11 @@ Do you want to replace it?
     </message>
     <message>
         <source>Instrument</source>
-        <translation type="unfinished"/>
+        <translation>Instrument</translation>
     </message>
     <message>
         <source>4/4 common time</source>
-        <translation>4/4 în scriere prescurtată</translation>
+        <translation>4/4 Scriere prescurtată</translation>
     </message>
     <message>
         <source>2/2 alla breve</source>
@@ -6722,23 +6734,23 @@ Do you want to replace it?
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Adaugă</translation>
     </message>
     <message>
         <source>&amp;Measures</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Măsuri</translation>
     </message>
     <message>
         <source>&amp;Frames</source>
-        <translation type="unfinished"/>
+        <translation>Cadre</translation>
     </message>
     <message>
         <source>&amp;Text</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Text</translation>
     </message>
     <message>
         <source>&amp;Lines</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Linii</translation>
     </message>
     <message>
         <source>No measure selected:
@@ -6752,7 +6764,7 @@ vă rugăm selectați o măsură și reluaţi operaţia</translation>
     </message>
     <message>
         <source>audio track</source>
-        <translation type="unfinished"/>
+        <translation>pistă audio</translation>
     </message>
     <message>
         <source>File Operations</source>
@@ -6764,19 +6776,15 @@ vă rugăm selectați o măsură și reluaţi operaţia</translation>
     </message>
     <message>
         <source>Page View</source>
-        <translation type="unfinished"/>
+        <translation>Vizualizare în pagină</translation>
     </message>
     <message>
         <source>Continuous View</source>
-        <translation type="unfinished"/>
+        <translation>Vizualizare continuă</translation>
     </message>
     <message>
         <source>Concert Pitch</source>
         <translation>Înălţimea Reală (acolo unde sună)</translation>
-    </message>
-    <message>
-        <source>Note Entry</source>
-        <translation>Adăugare Note</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -6792,35 +6800,35 @@ vă rugăm selectați o măsură și reluaţi operaţia</translation>
     </message>
     <message>
         <source>&amp;Measure</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Măsură</translation>
     </message>
     <message>
         <source>&amp;Voices</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Voce</translation>
     </message>
     <message>
         <source>W&amp;orkspaces</source>
-        <translation type="unfinished"/>
+        <translation>Spații de lucru</translation>
     </message>
     <message>
         <source>&amp;Preferences...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Preferinţe...</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Vizualizare</translation>
     </message>
     <message>
         <source>Add N&amp;ote</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă N&amp;otă</translation>
     </message>
     <message>
         <source>Add &amp;Interval</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă &amp;Interval</translation>
     </message>
     <message>
         <source>T&amp;uplets</source>
-        <translation type="unfinished"/>
+        <translation>Divizi&amp;uni excepționale</translation>
     </message>
     <message>
         <source>&amp;Layout</source>
@@ -6832,7 +6840,7 @@ vă rugăm selectați o măsură și reluaţi operaţia</translation>
     </message>
     <message>
         <source>&amp;Plugins</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Plugin-uri</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -6840,55 +6848,11 @@ vă rugăm selectați o măsură și reluaţi operaţia</translation>
     </message>
     <message>
         <source>&amp;Online Handbook</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>&amp;About</source>
-        <translation>&amp;Despre MuseScore</translation>
-    </message>
-    <message>
-        <source>About &amp;Qt</source>
-        <translation>Despre &amp;Qt</translation>
-    </message>
-    <message>
-        <source>About &amp;MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>Ghid de utilizare &amp;Online</translation>
     </message>
     <message>
         <source>Check for &amp;Update</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>no score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>NOTE entry mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>DRUM entry mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>TAB entry mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>edit mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>text edit mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>lyrics edit mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>play</source>
-        <translation type="unfinished"/>
+        <translation>Verificare pentru Act&amp;ualizări</translation>
     </message>
     <message>
         <source>The previous session quit unexpectedly.
@@ -6904,11 +6868,11 @@ Restaurez sesiunea?</translation>
     </message>
     <message>
         <source>MuseScore: Tuplet Error</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Eroare Diviziune excepțională</translation>
     </message>
     <message>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
-        <translation type="unfinished"/>
+        <translation>Nu se poate crea diviziune excepțională cu rația %1 pentru durata %2</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -6916,52 +6880,49 @@ Restaurez sesiunea?</translation>
     </message>
     <message>
         <source>Undo Changes</source>
-        <translation type="unfinished"/>
+        <translation>Anulează Schimbările</translation>
     </message>
     <message>
         <source>MuseScore: Read Workspace Name</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Citește Numele Spațiului de Lucru</translation>
     </message>
     <message>
         <source>'%1' does already exist,
 please choose a different name:</source>
-        <translation type="unfinished"/>
+        <translation>&apos;%1&apos; există deja.
+alegeți un nume diferit:</translation>
     </message>
     <message>
         <source>Ogg Audio File (*.ogg);;All (*)</source>
-        <translation type="unfinished"/>
+        <translation>Fișier Audio Ogg (*.ogg);;All (*)</translation>
     </message>
     <message>
         <source>MuseScore: Choose Ogg Audio File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Alegeți fișierul Audio Ogg</translation>
     </message>
     <message>
         <source>FLAC Audio (*.flac)</source>
-        <translation type="unfinished"/>
+        <translation>Flac Audio (*.flac)</translation>
     </message>
     <message>
         <source>Chord Symbols Style File (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>Fișier Stil Simboluri Acord (*.xml)</translation>
     </message>
     <message>
         <source>MuseScore: Load Chord Symbols Style</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Încărcare Stil Simboluri Acord</translation>
     </message>
     <message>
         <source>MuseScore: Save Chord Symbols Style</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Salvare Stil Simboluri Acord</translation>
     </message>
     <message>
         <source>MuseScore: Insert Image</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>chord symbol/figured bass edit mode</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Inserează imagine</translation>
     </message>
     <message>
         <source>Report a Bug</source>
-        <translation type="unfinished"/>
+        <translation>Raportează o problemă</translation>
     </message>
     <message>
         <source>System</source>
@@ -6970,32 +6931,33 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Please select one or more measures</source>
-        <translation type="unfinished"/>
+        <translation>Selectați una sau mai multe măsuri</translation>
     </message>
     <message>
         <source>Error Opening LAME library</source>
-        <translation type="unfinished"/>
+        <translation>Eroare în deschiderea librăriei LAME</translation>
     </message>
     <message>
         <source>Encoding Error</source>
-        <translation type="unfinished"/>
+        <translation>Eroare de encodare</translation>
     </message>
     <message>
         <source>Confirm Replace</source>
-        <translation type="unfinished"/>
+        <translation>Confirmați Înlocuirea</translation>
     </message>
     <message>
         <source>Error reading language file %s at line %d column %d: %s
 </source>
-        <translation type="unfinished"/>
+        <translation>Eroare la citirea fișierului de traducere %s la linia %d coloana %d: %s
+</translation>
     </message>
     <message>
         <source>MuseScore: Warning</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Avertisment</translation>
     </message>
     <message>
         <source>PDF Files &lt;experimental OMR&gt; (*.pdf);;</source>
-        <translation type="unfinished"/>
+        <translation>Fișiere PDF &lt;experimental OMR&gt; (*.pdf);;</translation>
     </message>
     <message>
         <source>New...</source>
@@ -7003,15 +6965,15 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Clear Recent Files</source>
-        <translation type="unfinished"/>
+        <translation>Elimină Fișierele Recente</translation>
     </message>
     <message>
         <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation type="unfinished"/>
+        <translation>Toate fișierele suportate (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
     </message>
     <message>
         <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation type="unfinished"/>
+        <translation>Toate fișierele suportate (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
     </message>
     <message>
         <source>Zoom</source>
@@ -7019,19 +6981,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>View Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Screenshot Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>screenshot mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>score locked</source>
-        <translation type="unfinished"/>
+        <translation>Mod vizualizare</translation>
     </message>
     <message>
         <source>Swing</source>
@@ -7051,99 +7001,99 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Cannot create tuplet: Note value is too short</source>
-        <translation type="unfinished"/>
+        <translation>Nu se poate crea diviziunea excepțională: Durata notei este prea scurtă</translation>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
-        <translation type="unfinished"/>
+        <translation>Fișier MuseScore (*.mscz)</translation>
     </message>
     <message>
         <source>Uncompressed MuseScore File (*.mscx)</source>
-        <translation type="unfinished"/>
+        <translation>Fișier MuseScore Necomprimat (*.mscx)</translation>
     </message>
     <message>
         <source>MusicXML File (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>Fișier MusicXML (*.xml)</translation>
     </message>
     <message>
         <source>Compressed MusicXML File (*.mxl)</source>
-        <translation type="unfinished"/>
+        <translation>Fișier MusicXML Comprimat (*.mxl)</translation>
     </message>
     <message>
         <source>Show MIDI import panel</source>
-        <translation type="unfinished"/>
+        <translation>Afișează panoul de import MIDI</translation>
     </message>
     <message>
         <source>Tempo text</source>
-        <translation type="unfinished"/>
+        <translation>Tempo text</translation>
     </message>
     <message>
         <source>Staff text</source>
-        <translation type="unfinished"/>
+        <translation>Text portativ</translation>
     </message>
     <message>
         <source>System text</source>
-        <translation type="unfinished"/>
+        <translation>Text pt. Sistem</translation>
     </message>
     <message>
         <source>Rehearsal mark</source>
-        <translation type="unfinished"/>
+        <translation>Reper</translation>
     </message>
     <message>
         <source>Instrument change</source>
-        <translation type="unfinished"/>
+        <translation>Schimbare de instrument</translation>
     </message>
     <message>
         <source>Set visible</source>
-        <translation type="unfinished"/>
+        <translation>Vizibil</translation>
     </message>
     <message>
         <source>Set invisible</source>
-        <translation type="unfinished"/>
+        <translation>Invizibil</translation>
     </message>
     <message>
         <source>Change staff type</source>
-        <translation type="unfinished"/>
+        <translation>Schimbați tipul portativului</translation>
     </message>
     <message>
         <source>Change instrument</source>
-        <translation type="unfinished"/>
+        <translation>Schimbă Instrument</translation>
     </message>
     <message>
         <source>Fretboard diagram</source>
-        <translation type="unfinished"/>
+        <translation>Diagramă de acord</translation>
     </message>
     <message>
         <source>Measure:Beat:Tick</source>
-        <translation type="unfinished"/>
+        <translation>Măsură:Bătaie:Tick</translation>
     </message>
     <message>
         <source>Switch layer</source>
-        <translation type="unfinished"/>
+        <translation>Inversează straturi</translation>
     </message>
     <message>
         <source>Switch play mode</source>
-        <translation type="unfinished"/>
+        <translation>Comută modul de redare</translation>
     </message>
     <message>
         <source>Workspace name:</source>
-        <translation type="unfinished"/>
+        <translation>Nume spațiu de lucru</translation>
     </message>
     <message>
         <source>Score_and_Parts</source>
-        <translation type="unfinished"/>
+        <translation>Partitură_și_Știme</translation>
     </message>
     <message>
         <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</source>
-        <translation type="unfinished"/>
+        <translation>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</translation>
     </message>
     <message>
         <source>MuseScore Styles (*.mss)</source>
-        <translation type="unfinished"/>
+        <translation>Stiluri MuseScore (*.mss)</translation>
     </message>
     <message>
         <source>MuseScore Plugin (*.qml)</source>
-        <translation type="unfinished"/>
+        <translation>Plugin MuseScore  (*.qml)</translation>
     </message>
     <message>
         <source>MuseScore Drumset (*.drm)</source>
@@ -7151,38 +7101,118 @@ please choose a different name:</source>
     </message>
     <message>
         <source>RH Guitar Fingering %1</source>
-        <translation type="unfinished"/>
+        <translation>Digitație Chitară Mâna Dreaptă %1</translation>
     </message>
     <message>
         <source>LH Guitar Fingering %1</source>
-        <translation type="unfinished"/>
+        <translation>Digitație Chitară Mâna Stângă %1</translation>
     </message>
     <message>
         <source>All Supported Files (*.svg *.jpg *.jpeg *.png);;Scalable Vector Graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</source>
-        <translation type="unfinished"/>
+        <translation>Toate fișierele suportate (*.svg *.jpg *.jpeg *.png);;Scalable Vector Graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation type="unfinished"/>
+        <translation>Unel&amp;te</translation>
+    </message>
+    <message>
+        <source>No score</source>
+        <translation>Lipsă partitură</translation>
+    </message>
+    <message>
+        <source>Edit mode</source>
+        <translation>mod editare</translation>
+    </message>
+    <message>
+        <source>Text edit mode</source>
+        <translation>Mod editare text</translation>
+    </message>
+    <message>
+        <source>Lyrics edit mode</source>
+        <translation>Mod editare versuri</translation>
+    </message>
+    <message>
+        <source>Chord symbol/figured bass edit mode</source>
+        <translation>Mod editare Simbol Acord/Bass cifrat</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Redare</translation>
+    </message>
+    <message>
+        <source>Score locked</source>
+        <translation>Partitură blocată</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Manual</translation>
+    </message>
+    <message>
+        <source>&amp;About...</source>
+        <translation>De&amp;spre...</translation>
+    </message>
+    <message>
+        <source>About &amp;Qt...</source>
+        <translation>Despre &amp;Qt</translation>
+    </message>
+    <message>
+        <source>About &amp;MusicXML...</source>
+        <translation>Despre &amp;MusicXML</translation>
+    </message>
+    <message>
+        <source>Image Capture</source>
+        <translation>Captură Imagine</translation>
+    </message>
+    <message>
+        <source>Note Input</source>
+        <translation>Introducere note</translation>
+    </message>
+    <message>
+        <source>Note input mode</source>
+        <translation>Modul introducere note</translation>
+    </message>
+    <message>
+        <source>Drum input mode</source>
+        <translation>Mod introducere percuție</translation>
+    </message>
+    <message>
+        <source>TAB input mode</source>
+        <translation>Mod introducere TAB</translation>
+    </message>
+    <message>
+        <source>Image capture mode</source>
+        <translation>Mod Captură Imagine</translation>
+    </message>
+    <message>
+        <source>Cannot determine file type</source>
+        <translation>Nu s-a putut determina tipul fișierului</translation>
+    </message>
+    <message>
+        <source>MuseScore:</source>
+        <translation>MuseScore:</translation>
+    </message>
+    <message>
+        <source>Cannot write into %1</source>
+        <translation>Nu se poate scrie în %1</translation>
     </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
     <message>
         <source>Could not&lt;br /&gt; connect</source>
-        <translation type="unfinished"/>
+        <translation>Nu se poatet&lt;br /&gt; conecta</translation>
     </message>
     <message>
         <source>To connect with the community, &lt;br /&gt; you need to have internet &lt;br /&gt; connection enabled</source>
-        <translation type="unfinished"/>
+        <translation>Pentru a vă conecta cu comunitatea, &lt;br /&gt; trebuie să aveți &lt;br /&gt; conexiune la internet</translation>
     </message>
     <message>
         <source>Retry</source>
-        <translation type="unfinished"/>
+        <translation>Reîncercați</translation>
     </message>
     <message>
         <source>Close this permanently</source>
-        <translation type="unfinished"/>
+        <translation>Închide permanent</translation>
     </message>
 </context>
 <context>
@@ -7211,7 +7241,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Define a set of instruments. Each instrument is represented by one or more staves</source>
-        <translation type="unfinished"/>
+        <translation>Defineşte un set de instrumente. Fiecare instrument este reprezentat de unul sau mai multe portative</translation>
     </message>
 </context>
 <context>
@@ -7244,7 +7274,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Select Key Signature and Tempo:</source>
-        <translation type="unfinished"/>
+        <translation>Selectare Armură și Tempo:</translation>
     </message>
     <message>
         <source>Key Signature</source>
@@ -7264,22 +7294,29 @@ please choose a different name:</source>
     </message>
 </context>
 <context>
+    <name>Ms::NoEffectGui</name>
+    <message>
+        <source>No Plugin</source>
+        <translation>Niciun Plugin</translation>
+    </message>
+</context>
+<context>
     <name>Ms::Note</name>
     <message>
         <source>Appoggiatura</source>
-        <translation>apogiatură</translation>
+        <translation>Apogiatură</translation>
     </message>
     <message>
         <source>Grace note after</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură După</translation>
     </message>
     <message>
         <source>Grace note before</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură Înainte</translation>
     </message>
     <message>
         <source>Invalid note</source>
-        <translation type="unfinished"/>
+        <translation>Notă invalidă</translation>
     </message>
     <message>
         <source>Note</source>
@@ -7287,38 +7324,38 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Voice: %1</source>
-        <translation type="unfinished"/>
+        <translation>Vocea: %1</translation>
     </message>
     <message>
         <source>Acciaccatura</source>
-        <translation>apogiatură scurtă</translation>
+        <translation>Apogiatură scurtă</translation>
     </message>
     <message>
         <source>%1 Start of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 Început de %2</translation>
     </message>
     <message>
         <source>%1 End of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 Sfârșit de %2</translation>
     </message>
     <message>
         <source>%1; Pitch: %2; Duration: %3%4</source>
-        <translation type="unfinished"/>
+        <translation>%1; Înălțime: %2; Durată: %3%4</translation>
     </message>
     <message>
         <source>Beat Slash</source>
-        <translation type="unfinished"/>
+        <translation>Slash Bătaie</translation>
     </message>
     <message>
         <source>Rhythm Slash</source>
-        <translation type="unfinished"/>
+        <translation>Slash Ritm</translation>
     </message>
 </context>
 <context>
     <name>Ms::OmrPanel</name>
     <message>
         <source>OMR Panel</source>
-        <translation type="unfinished"/>
+        <translation>Panou OMR</translation>
     </message>
 </context>
 <context>
@@ -7333,7 +7370,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>More Elements...</source>
-        <translation type="unfinished"/>
+        <translation>Mai multe elemente...</translation>
     </message>
 </context>
 <context>
@@ -7344,7 +7381,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Select workspace</source>
-        <translation type="unfinished"/>
+        <translation>Selecție spațiu de lucru</translation>
     </message>
     <message>
         <source>+</source>
@@ -7352,22 +7389,22 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Add new workspace</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă un nou spațiu de lucru</translation>
     </message>
     <message>
         <source>new Palette</source>
-        <translation type="unfinished"/>
+        <translation>Paletă Nouă</translation>
     </message>
 </context>
 <context>
     <name>Ms::PaletteBoxButton</name>
     <message>
         <source>Palette Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Proprietăți Paletă</translation>
     </message>
     <message>
         <source>Insert New Palette...</source>
-        <translation type="unfinished"/>
+        <translation>Introduceți Paletă Nouă</translation>
     </message>
     <message>
         <source>Move Palette Up</source>
@@ -7383,11 +7420,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Save Palette</source>
-        <translation type="unfinished"/>
+        <translation>Salvează Paletă</translation>
     </message>
     <message>
         <source>Load Palette</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă Paletă</translation>
     </message>
     <message>
         <source>Delete Palette</source>
@@ -7398,65 +7435,14 @@ please choose a different name:</source>
     <name>Ms::PathListDialog</name>
     <message>
         <source>Choose a directory</source>
-        <translation type="unfinished"/>
+        <translation>Alegeți un director</translation>
     </message>
 </context>
 <context>
     <name>Ms::PianoTools</name>
     <message>
         <source>Piano Keyboard</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>Ms::PianorollEditor</name>
-    <message>
-        <source>Toolbar 1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wave</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Show wave display</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Toolbar 2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cursor:</source>
-        <translation>Cursor:</translation>
-    </message>
-    <message>
-        <source>Velocity:</source>
-        <translation>Forță atac (0-127):</translation>
-    </message>
-    <message>
-        <source>Offset</source>
-        <translation>Deplasare</translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation>Specificat de Utilizator (absolut)</translation>
-    </message>
-    <message>
-        <source>Pitch:</source>
-        <translation>Înălţime:</translation>
-    </message>
-    <message>
-        <source>OnTime:</source>
-        <translation>Timpi tari</translation>
-    </message>
-    <message>
-        <source>Len:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
-        <translation>MuseScore: &lt;%1&gt; Portativ: %2</translation>
+        <translation>Claviatură Pian</translation>
     </message>
 </context>
 <context>
@@ -7467,7 +7453,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Edit Operations</source>
-        <translation type="unfinished"/>
+        <translation>Operații Editare</translation>
     </message>
     <message>
         <source>MuseScore</source>
@@ -7475,35 +7461,36 @@ please choose a different name:</source>
     </message>
     <message>
         <source>untitled</source>
-        <translation type="unfinished"/>
+        <translation>fără titlu</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>Manual</translation>
     </message>
     <message>
         <source>MuseScore Plugin Creator</source>
-        <translation type="unfinished"/>
+        <translation>Creator de Plugin MuseScore</translation>
     </message>
     <message>
         <source>Plugin &quot;%1&quot; has changes.
 Save before closing?</source>
-        <translation type="unfinished"/>
+        <translation>Plugin-ul &quot;%1&quot; are modificări.
+Salvați înainte de a închide?</translation>
     </message>
     <message>
         <source>MuseScore: Save Plugin</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Salvare Plugin</translation>
     </message>
     <message>
-        <source>cannot determine file type</source>
-        <translation>nu pot determina tipul fișierului</translation>
+        <source>Cannot determine file type</source>
+        <translation>Nu s-a putut determina tipul fișierului</translation>
     </message>
 </context>
 <context>
     <name>Ms::PreferenceDialog</name>
     <message>
         <source>The language will be changed once you restart MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>Limba va fi modificată după ce reporniți MuseScore.</translation>
     </message>
     <message>
         <source>Choose Notepaper</source>
@@ -7515,11 +7502,11 @@ Save before closing?</source>
     </message>
     <message>
         <source>Choose Default Style</source>
-        <translation type="unfinished"/>
+        <translation>Alegeți Stilul Implicit</translation>
     </message>
     <message>
         <source>Choose Default Style for Parts</source>
-        <translation type="unfinished"/>
+        <translation>Alege Stilul Implicite pentru Știme</translation>
     </message>
     <message>
         <source>Choose Instrument List</source>
@@ -7535,104 +7522,89 @@ Save before closing?</source>
     </message>
     <message>
         <source>MuseScore Shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Scurtături</translation>
     </message>
     <message>
         <source>Print Shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Tipăriți Scurtăturile</translation>
     </message>
     <message>
         <source>Choose Default Style for Imports</source>
-        <translation type="unfinished"/>
+        <translation>Alege Stilul Implicit pentru Importuri</translation>
     </message>
     <message>
         <source>Choose Score Folder</source>
-        <translation type="unfinished"/>
+        <translation>Alege dosarul pentru partituri</translation>
     </message>
     <message>
         <source>Choose Style Folder</source>
-        <translation type="unfinished"/>
+        <translation>Alege Dosarul pentru Stiluri</translation>
     </message>
     <message>
         <source>Choose Template Folder</source>
-        <translation type="unfinished"/>
+        <translation>Alege dosar pentru șabloane</translation>
     </message>
     <message>
         <source>Choose Plugin Folder</source>
-        <translation type="unfinished"/>
+        <translation>Alege Dosarul de Plugin</translation>
     </message>
     <message>
         <source>Choose Image Folder</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Soundfont Folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>SFZ Folders</source>
-        <translation type="unfinished"/>
+        <translation>Alege dosarul pentru imagini</translation>
     </message>
     <message>
         <source>Action: %1; Shortcut: %2</source>
-        <translation type="unfinished"/>
+        <translation>Acțiune: %1; Scurtătură: %2</translation>
     </message>
     <message>
         <source>No shortcut defined</source>
-        <translation type="unfinished"/>
+        <translation>Nicio scurtătură definită</translation>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;All (*)</source>
-        <translation type="unfinished"/>
+        <translation>Fișiere MuseScore (*.mscz *.mscx);;Orice fișier (*)</translation>
+    </message>
+    <message>
+        <source>SoundFont Folders</source>
+        <translation>Foldere pt SoundFont</translation>
     </message>
 </context>
 <context>
     <name>Ms::ResourceManager</name>
     <message>
         <source>Languages</source>
-        <translation type="unfinished"/>
+        <translation>Limbi</translation>
     </message>
     <message>
         <source>%1 KB</source>
-        <translation type="unfinished"/>
+        <translation>%1 KB</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation>Pune la zi</translation>
+        <translation>Actualizare</translation>
     </message>
     <message>
         <source>No update</source>
-        <translation type="unfinished"/>
+        <translation>Nicio Actualizare</translation>
     </message>
     <message>
         <source>Updating</source>
-        <translation type="unfinished"/>
+        <translation>Actualizare</translation>
     </message>
     <message>
         <source>Failed, try again</source>
-        <translation type="unfinished"/>
+        <translation>A eșuat. Încercați din nou</translation>
     </message>
     <message>
         <source>Updated</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>Ms::Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation type="unfinished"/>
+        <translation>Actualizat</translation>
     </message>
 </context>
 <context>
     <name>Ms::Score</name>
     <message>
         <source>The style file is not compatible with this version of MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>Fișierul de stil nu este compatibil cu această versiune de MuseScore.</translation>
     </message>
     <message>
         <source>The following file is locked: 
@@ -7648,77 +7620,94 @@ Try saving to a different location.</source>
         <source>Open Temp File
 %1
 failed: %2</source>
-        <translation type="unfinished"/>
+        <translation>Deschidere Fișier Temporar
+%1
+a eșuat: %2</translation>
     </message>
     <message>
         <source>MuseScore: Save File failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Salvarea Fișierului a eșuat: %1</translation>
     </message>
     <message>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
-        <translation type="unfinished"/>
+        <translation>Redenumirea fișierului temporar &lt;%1&gt; la &lt;%2&gt; a eșuat:
+%3</translation>
     </message>
     <message>
         <source>Open File
 %1
 failed: </source>
-        <translation type="unfinished"/>
+        <translation>Deschiderea Fișierului
+%1
+a eșuat:</translation>
     </message>
     <message>
         <source>Open File
 %1
 failed: %2</source>
-        <translation type="unfinished"/>
+        <translation>Deschiderea Fișierului
+%1
+a eșuat: %2</translation>
     </message>
     <message>
         <source>Open Style File
 %1
 failed: %2</source>
-        <translation type="unfinished"/>
+        <translation>Deschiderea Fișierului de Stil
+%1
+a eșuat: %2</translation>
     </message>
     <message>
         <source>Write Style failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Scrierea Stilul a eșuat: %1</translation>
     </message>
     <message>
         <source>file not found</source>
-        <translation type="unfinished"/>
+        <translation>fișier negăsit</translation>
     </message>
     <message>
         <source>No selection</source>
-        <translation type="unfinished"/>
+        <translation>Nicio selecție</translation>
+    </message>
+    <message>
+        <source>Measure %1 Staff %2 incomplete. Expected: %3; Found: %4</source>
+        <translation>Măsura %1 Portativ %2 incompletă. Așteptat: %3; Găsit: %4</translation>
+    </message>
+    <message>
+        <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
+        <translation>Măsura %1, portativul %2, vocea %3 este prea lungă. Așteptat: %4; Găsit: %5</translation>
     </message>
 </context>
 <context>
     <name>Ms::ScoreAccessibility</name>
     <message>
         <source>No selection</source>
-        <translation type="unfinished"/>
+        <translation>Nicio selecție</translation>
     </message>
     <message>
         <source>Beat: %1</source>
-        <translation type="unfinished"/>
+        <translation>Bătaie: %1</translation>
     </message>
     <message>
         <source>Range Selection</source>
-        <translation type="unfinished"/>
+        <translation>Selecție Continuă</translation>
     </message>
     <message>
         <source>List Selection</source>
-        <translation type="unfinished"/>
+        <translation>Selecție tip Listă</translation>
     </message>
     <message>
         <source>Measure: %1</source>
-        <translation type="unfinished"/>
+        <translation>Măsura: %1</translation>
     </message>
     <message>
         <source>Start Measure: %1; Start Beat: %2</source>
-        <translation type="unfinished"/>
+        <translation>Măsură de Start: %1; Bătaie de Start: %2</translation>
     </message>
     <message>
         <source>End Measure: %1; End Beat: %2</source>
-        <translation type="unfinished"/>
+        <translation>Măsura de Final: %1; Bătaie de Final: %2</translation>
     </message>
     <message>
         <source>Staff %1</source>
@@ -7726,26 +7715,33 @@ failed: %2</source>
     </message>
 </context>
 <context>
+    <name>Ms::ScoreBrowser</name>
+    <message>
+        <source>Choose Instruments</source>
+        <translation>Alegeți Instrumentele</translation>
+    </message>
+    <message>
+        <source>Create New Score</source>
+        <translation>Crează Partitură Nouă</translation>
+    </message>
+    <message>
+        <source>Custom Templates</source>
+        <translation>Șabloane Personalizate</translation>
+    </message>
+    <message>
+        <source>Getting Started</source>
+        <translation>Noțiuni de Bază</translation>
+    </message>
+</context>
+<context>
     <name>Ms::ScoreView</name>
     <message>
-        <source>transparent background</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Set Standard Size...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Save As (print mode)...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Save As (screenshot mode)...</source>
-        <translation type="unfinished"/>
+        <translation>Setați dimensiunea standard</translation>
     </message>
     <message>
         <source>MuseScore: Set Output Resolution</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Setare Rezolție de Ieșire</translation>
     </message>
     <message>
         <source>PNG Bitmap Graphic (*.png)</source>
@@ -7764,12 +7760,8 @@ failed: %2</source>
         <translation>MuseScore: Salvare sub un nume diferit</translation>
     </message>
     <message>
-        <source>cannot determine file type</source>
-        <translation>nu pot determina tipul fișierului</translation>
-    </message>
-    <message>
         <source>Layer</source>
-        <translation type="unfinished"/>
+        <translation>Strat</translation>
     </message>
     <message>
         <source>Text Properties...</source>
@@ -7777,11 +7769,11 @@ failed: %2</source>
     </message>
     <message>
         <source>Articulation Properties...</source>
-        <translation>Proprietăţile modului de atac...</translation>
+        <translation>Proprietăţile Articulație...</translation>
     </message>
     <message>
         <source>Bend Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Proprietăți Bend</translation>
     </message>
     <message>
         <source>Add</source>
@@ -7793,7 +7785,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Time Signature Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Proprietăți pt Metrul Măsurii</translation>
     </message>
     <message>
         <source>Line Properties...</source>
@@ -7805,7 +7797,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Change Instrument Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Schimbare Proprietăți Instrument...</translation>
     </message>
     <message>
         <source>Staff</source>
@@ -7825,15 +7817,15 @@ failed: %2</source>
     </message>
     <message>
         <source>Style...</source>
-        <translation type="unfinished"/>
+        <translation>Stil...</translation>
     </message>
     <message>
         <source>Chord Articulation...</source>
-        <translation type="unfinished"/>
+        <translation>Articulație Acord...</translation>
     </message>
     <message>
         <source>Section Break Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Proprietăți Despărțitor de Secțiune</translation>
     </message>
     <message>
         <source>Change Instrument...</source>
@@ -7853,11 +7845,11 @@ failed: %2</source>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"/>
+        <translation>Ajutor</translation>
     </message>
     <message>
         <source>Debugger</source>
-        <translation type="unfinished"/>
+        <translation>Debugger</translation>
     </message>
     <message>
         <source>Edit Drumset...</source>
@@ -7877,29 +7869,15 @@ failed: %2</source>
     </message>
     <message>
         <source>Object Debugger</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Please select the complete tuplet and retry the copy operation</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Please select the complete tuplet and retry the cut operation</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>no destination to paste</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>cannot paste into tuplet</source>
-        <translation type="unfinished"/>
+        <translation>Debugger Obiect</translation>
     </message>
     <message>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
-        <translation type="unfinished"/>
+        <translation>Nu s-a găsit niciun portativ:
+Vă rugăm folosiți dialogul de instrumente pentru
+a crea mai întâi niște portative</translation>
     </message>
     <message>
         <source>No measure selected:
@@ -7909,93 +7887,146 @@ vă rugăm selectași o măsură și reluaţi operaţia</translation>
     </message>
     <message>
         <source>Fretboard Diagram Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Proprietăți diagramă acord</translation>
     </message>
     <message>
         <source>Set output resolution for PNG/SVG</source>
-        <translation type="unfinished"/>
+        <translation>Setare rezoluție de ieșire pt. PNG/SVG</translation>
     </message>
     <message>
         <source>Tremolo Bar Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Proprietăți Bară de Tremolo</translation>
     </message>
     <message>
         <source>Text Style...</source>
-        <translation type="unfinished"/>
+        <translation>Stil Text...</translation>
     </message>
     <message>
         <source>System Text Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Proprietățile Textului de Sistem</translation>
     </message>
     <message>
         <source>Resolution (%1 DPI)...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Screenshot Mode</source>
-        <translation type="unfinished"/>
+        <translation>Rezoluție (%1 DPI)...</translation>
     </message>
     <message>
         <source>Hide Courtesy Time Signature</source>
-        <translation type="unfinished"/>
+        <translation>Ascunde Metrul de Precauție</translation>
     </message>
     <message>
         <source>Show Courtesy Time Signature</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Hide courtesy clef</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Show courtesy clef</source>
-        <translation type="unfinished"/>
+        <translation>Afișează Metrul de Precauție</translation>
     </message>
     <message>
         <source>Hide Courtesy Key Signature</source>
-        <translation type="unfinished"/>
+        <translation>Ascunde Armura de Precauție</translation>
     </message>
     <message>
         <source>Show Courtesy Key Signature</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>tuplet cannot cross barlines</source>
-        <translation type="unfinished"/>
+        <translation>Afișează Armura de Precauție</translation>
     </message>
     <message>
         <source>No chord/rest selected:
 Please select a chord/rest and try again</source>
-        <translation type="unfinished"/>
+        <translation>Niciun/o acord/pauză selectat/ă:
+Selectați un/o acord/pauză și încercați din nou</translation>
     </message>
     <message>
         <source>Cannot split measure here:
 Cannot split tuplet</source>
-        <translation type="unfinished"/>
+        <translation>Nu se poate sparge măsura aici:
+Nu se poate sparge diviziunea excepțională</translation>
     </message>
     <message>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
-        <translation type="unfinished"/>
+        <translation>Nicio măsura selectată:
+Selectați mai multe măsuri consecutive pt. a le uni și încercați din nou</translation>
     </message>
     <message>
         <source>Auto-resize to page</source>
-        <translation type="unfinished"/>
+        <translation>Auto-redimensionare în pagină</translation>
+    </message>
+    <message>
+        <source>Hide Courtesy Clef</source>
+        <translation>Ascunde Cheia de Precauție</translation>
+    </message>
+    <message>
+        <source>Show Courtesy Clef</source>
+        <translation>Afișează Cheia de Precauție</translation>
+    </message>
+    <message>
+        <source>Please select the complete tuplet/tremolo and retry the command</source>
+        <translation>Selectați diviziunea excepțională/tremolo în întregime și încercați din nou</translation>
+    </message>
+    <message>
+        <source>Image Capture</source>
+        <translation>Captură Imagine</translation>
+    </message>
+    <message>
+        <source>Save As (Print Mode)...</source>
+        <translation>Salvare Ca (Mod Tipărire)</translation>
+    </message>
+    <message>
+        <source>Save As (Screenshot Mode)...</source>
+        <translation>Salvare Ca (Mod Fotografie)</translation>
+    </message>
+    <message>
+        <source>Cannot determine file type</source>
+        <translation>Nu s-a putut determina tipul fișierului</translation>
+    </message>
+    <message>
+        <source>No destination to paste</source>
+        <translation>Nicio destinație pentru lipire</translation>
+    </message>
+    <message>
+        <source>Cannot paste into tuplet</source>
+        <translation>Nu se poate lipi în diviziunea excepțională</translation>
+    </message>
+    <message>
+        <source>Tuplet cannot cross barlines</source>
+        <translation>Diviziunea excepțională nu poate traversa bara de măsură</translation>
+    </message>
+    <message>
+        <source>Transparent background</source>
+        <translation>Fundal transparent</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::SearchComboBox</name>
+    <message>
+        <source>Search Box</source>
+        <translation>Casetă de căutare</translation>
+    </message>
+    <message>
+        <source>Type to search. Press Enter to return to score.</source>
+        <translation>Tastați pentru a căuta. Apăsați Enter pentru întoarcere la partitură.</translation>
     </message>
 </context>
 <context>
     <name>Ms::Segment</name>
     <message>
-        <source>Annotations: </source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Start of </source>
-        <translation type="unfinished"/>
+        <translation>Început de</translation>
     </message>
     <message>
         <source>End of </source>
-        <translation type="unfinished"/>
+        <translation>Sfârșit de:</translation>
+    </message>
+    <message>
+        <source>Annotations:</source>
+        <translation>Anotații:</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::SelectionListWidget</name>
+    <message>
+        <source>Selection filter</source>
+        <translation>Filtru selecție</translation>
+    </message>
+    <message>
+        <source>Use Tab and Backtab to move through the check boxes</source>
+        <translation>Folosiți Tab și BackTab pentru a vă mișca printre casetele cu bifă</translation>
     </message>
 </context>
 <context>
@@ -8013,11 +8044,11 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>Shortcut conflicts with</source>
-        <translation type="unfinished"/>
+        <translation>Scurtătura este în conflict cu </translation>
     </message>
     <message>
         <source>New shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Scurtătură nouă</translation>
     </message>
 </context>
 <context>
@@ -8028,7 +8059,7 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>MuseScore: System Text Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Proprietățile Textului de Sistem</translation>
     </message>
     <message>
         <source>MuseScore: Staff Text Properties</source>
@@ -8039,7 +8070,7 @@ Please select a range of measures to join and try again</source>
     <name>Ms::StartDialog</name>
     <message>
         <source>MuseScore Startup Dialog</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Dialog de Pornire</translation>
     </message>
 </context>
 <context>
@@ -8052,55 +8083,55 @@ Please select a range of measures to join and try again</source>
 <context>
     <name>Ms::TempoText</name>
     <message>
-        <source>Dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Double dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Triple dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>note = %1</source>
-        <translation type="unfinished"/>
+        <translation>notă = %1</translation>
+    </message>
+    <message>
+        <source>Dotted %1</source>
+        <translation>%1 cu punct</translation>
+    </message>
+    <message>
+        <source>Double dotted %1</source>
+        <translation>%1 cu dublu punct</translation>
+    </message>
+    <message>
+        <source>Triple dotted %1</source>
+        <translation>%1 cu triplu punct</translation>
     </message>
 </context>
 <context>
     <name>Ms::TextEditor</name>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"/>
+        <translation>Îngroșat</translation>
     </message>
     <message>
         <source>Italic</source>
-        <translation type="unfinished"/>
+        <translation>Înclinat</translation>
     </message>
     <message>
         <source>Underline</source>
-        <translation type="unfinished"/>
+        <translation>Subliniat</translation>
     </message>
     <message>
         <source>Align left</source>
-        <translation>aliniază la stânga</translation>
+        <translation>Aliniere stânga</translation>
     </message>
     <message>
         <source>Align center</source>
-        <translation type="unfinished"/>
+        <translation>Aliniere centru</translation>
     </message>
     <message>
         <source>Align right</source>
-        <translation type="unfinished"/>
+        <translation>Aliniere dreapta</translation>
     </message>
     <message>
         <source>Subscript</source>
-        <translation type="unfinished"/>
+        <translation>Subscript</translation>
     </message>
     <message>
         <source>Superscript</source>
-        <translation type="unfinished"/>
+        <translation>Superscript</translation>
     </message>
 </context>
 <context>
@@ -8127,20 +8158,21 @@ Please select a range of measures to join and try again</source>
     <name>Ms::TextStyleDialog</name>
     <message>
         <source>MuseScore: Read Style Name</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Citire Nume Stil</translation>
     </message>
     <message>
         <source>'%1' does already exist,
 please choose a different name:</source>
-        <translation type="unfinished"/>
+        <translation>&apos;%1&apos; există deja.
+alegeți un nume diferit:</translation>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Aplică tuturor știmelor</translation>
     </message>
     <message>
         <source>Text style name:</source>
-        <translation type="unfinished"/>
+        <translation>Nume Stil Text:</translation>
     </message>
 </context>
 <context>
@@ -8155,23 +8187,23 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"/>
+        <translation>Îngroșat</translation>
     </message>
     <message>
         <source>Italic</source>
-        <translation type="unfinished"/>
+        <translation>Înclinat</translation>
     </message>
     <message>
         <source>Underline</source>
-        <translation type="unfinished"/>
+        <translation>Subliniat</translation>
     </message>
     <message>
         <source>Subscript</source>
-        <translation type="unfinished"/>
+        <translation>Subscript</translation>
     </message>
     <message>
         <source>Superscript</source>
-        <translation type="unfinished"/>
+        <translation>Superscript</translation>
     </message>
 </context>
 <context>
@@ -8185,7 +8217,7 @@ please choose a different name:</source>
     <name>Ms::TimeSig</name>
     <message>
         <source>Common time</source>
-        <translation type="unfinished"/>
+        <translation>4/4 Scriere prescurtată</translation>
     </message>
     <message>
         <source>Cut time</source>
@@ -8193,7 +8225,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>%1/%2 time</source>
-        <translation type="unfinished"/>
+        <translation>%1/%2</translation>
     </message>
 </context>
 <context>
@@ -8215,77 +8247,93 @@ please choose a different name:</source>
     <name>Ms::UploadScoreDialog</name>
     <message>
         <source>All Rights reserved</source>
-        <translation type="unfinished"/>
+        <translation>Toate Drepturile Rezervate</translation>
     </message>
     <message>
         <source>Creative Commons Attribution</source>
-        <translation type="unfinished"/>
+        <translation>Creative Commons Atribuire</translation>
     </message>
     <message>
         <source>Creative Commons Attribution Share Alike</source>
-        <translation type="unfinished"/>
+        <translation>Creative Commons Atribuire - Distribuire-în-condiţii-identice</translation>
     </message>
     <message>
         <source>Creative Commons Attribution No Derivative Works</source>
-        <translation type="unfinished"/>
+        <translation>Creative Commons Atribuire-FărăModificări </translation>
     </message>
     <message>
         <source>Creative Commons Attribution Noncommercial</source>
-        <translation type="unfinished"/>
+        <translation>Creative Commons Atribuire-NeComercial </translation>
     </message>
     <message>
         <source>Creative Commons Attribution Noncommercial Share Alike</source>
-        <translation type="unfinished"/>
+        <translation>Creative Commons Atribuire-Necomercial-FărăModificări </translation>
     </message>
     <message>
         <source>Creative Commons Attribution Noncommercial Non Derivate Works</source>
-        <translation type="unfinished"/>
+        <translation>Creative Commons Atribuire-Necomercial-FărăModificări </translation>
     </message>
     <message>
         <source>Public Domain</source>
-        <translation type="unfinished"/>
+        <translation>Domeniu Public</translation>
     </message>
     <message>
         <source>Creative Commons Zero</source>
-        <translation type="unfinished"/>
+        <translation>Creative Commons Zero</translation>
     </message>
     <message>
         <source>Missing title</source>
-        <translation type="unfinished"/>
+        <translation>Titlu lipsă</translation>
     </message>
     <message>
         <source>Please provide a title</source>
-        <translation type="unfinished"/>
+        <translation>Vă rugăm furnizați un titlu</translation>
     </message>
     <message>
         <source>Success</source>
-        <translation type="unfinished"/>
+        <translation>Succes</translation>
     </message>
     <message>
         <source>Finished! &lt;a href=&quot;%1&quot;&gt;Go to my score&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Terminat! &lt;a href=&quot;%1&quot;&gt;Mergi la partitura mea&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"/>
+        <translation>Eroare</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;%1&quot;&gt;What does this mean?&lt;/a&gt;</source>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Ce înseamnă aceasta?&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <source>Respect the &lt;a href=&quot;%1&quot;&gt;community guidelines&lt;/a&gt;. Only make your scores accessible to anyone with permission from the right holders.</source>
+        <translation>Respectați &lt;a href=&quot;%1&quot;&gt;normele comunității&lt;/a&gt;. Faceți partiturile accessibile pentru toată lumea numai cu permisiunea titularilor de drept.</translation>
+    </message>
+    <message>
+        <source>Use a comma to separate the tags</source>
+        <translation>Folosește virgula pentru a separa etichetele</translation>
+    </message>
+    <message>
+        <source>[&lt;a href=&quot;%1&quot;&gt;link&lt;/a&gt;]</source>
+        <translation>[&lt;a href=&quot;%1&quot;&gt;link&lt;/a&gt;]</translation>
     </message>
 </context>
 <context>
     <name>Ms::Workspace</name>
     <message>
         <source>Advanced</source>
-        <translation type="unfinished"/>
+        <translation>Avansat</translation>
     </message>
     <message>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>De bază</translation>
     </message>
 </context>
 <context>
     <name>Multi value editor</name>
     <message>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>Toate</translation>
     </message>
     <message>
         <source>OK</source>
@@ -8308,7 +8356,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>F major, D minor</source>
-        <translation type="unfinished"/>
+        <translation>Fa major, Re minor</translation>
     </message>
     <message>
         <source>Cb major, Ab minor</source>
@@ -8354,6 +8402,10 @@ please choose a different name:</source>
         <source>C# major, A# minor</source>
         <translation>Do diez Major, La diez minor</translation>
     </message>
+    <message>
+        <source>Open/Atonal</source>
+        <translation>Deschis/Atonal</translation>
+    </message>
 </context>
 <context>
     <name>NewWizard</name>
@@ -8383,7 +8435,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert title here</source>
-        <translation type="unfinished"/>
+        <translation>Înserați titlu aici</translation>
     </message>
     <message>
         <source>Subtitle</source>
@@ -8391,7 +8443,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert subtitle here</source>
-        <translation type="unfinished"/>
+        <translation>Inserați subtitlu aici</translation>
     </message>
     <message>
         <source>Composer</source>
@@ -8399,15 +8451,15 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert composer&apos;s name here</source>
-        <translation type="unfinished"/>
+        <translation>Inserați numele compozitorului aici</translation>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"/>
+        <translation>Textier</translation>
     </message>
     <message>
         <source>Insert lyricist&apos;s name here</source>
-        <translation type="unfinished"/>
+        <translation>Inserați numele textierului aici</translation>
     </message>
     <message>
         <source>Copyright</source>
@@ -8415,14 +8467,14 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert copyright here</source>
-        <translation type="unfinished"/>
+        <translation>Inserează drepturi de autor aici</translation>
     </message>
 </context>
 <context>
     <name>NoteGroups</name>
     <message>
         <source>Note Groups</source>
-        <translation type="unfinished"/>
+        <translation>Grupuri note</translation>
     </message>
     <message>
         <source>1/16</source>
@@ -8438,7 +8490,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește</translation>
     </message>
 </context>
 <context>
@@ -8449,11 +8501,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Process</source>
-        <translation type="unfinished"/>
+        <translation>Proces</translation>
     </message>
     <message>
         <source>Mark staves</source>
-        <translation type="unfinished"/>
+        <translation>Marchează portativele</translation>
     </message>
     <message>
         <source>Mark slices</source>
@@ -8461,19 +8513,19 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Mark barlines</source>
-        <translation type="unfinished"/>
+        <translation>Marchează barele de măsură</translation>
     </message>
     <message>
         <source>Show lines</source>
-        <translation type="unfinished"/>
+        <translation>Afișează liniile</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation type="unfinished"/>
+        <translation>Distanța între 2 linii într-un portativ standard cu 5 linii</translation>
     </message>
     <message>
         <source>Staff space:</source>
-        <translation type="unfinished"/>
+        <translation>Spațiu portativ:</translation>
     </message>
 </context>
 <context>
@@ -8512,7 +8564,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Printable Area</source>
-        <translation type="unfinished"/>
+        <translation>Suprafața tipăribilă</translation>
     </message>
     <message>
         <source>Odd Page Margins</source>
@@ -8524,7 +8576,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Preview</source>
-        <translation>Verificare</translation>
+        <translation>Previzualizare</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -8544,19 +8596,19 @@ please choose a different name:</source>
     </message>
     <message>
         <source>First page number:</source>
-        <translation type="unfinished"/>
+        <translation>Numărul primei pagini:</translation>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Aplică tuturor știmelor</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation type="unfinished"/>
+        <translation>Distanța între 2 linii într-un portativ standard cu 5 linii</translation>
     </message>
     <message>
         <source>Staff space:</source>
-        <translation type="unfinished"/>
+        <translation>Spațiu portativ:</translation>
     </message>
 </context>
 <context>
@@ -8582,20 +8634,12 @@ please choose a different name:</source>
         <translation>Bare de Măsură</translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation>Normală</translation>
-    </message>
-    <message>
-        <source>Repeats</source>
-        <translation>Repetiţii</translation>
-    </message>
-    <message>
         <source>Breaks &amp;&amp; Spacers</source>
-        <translation type="unfinished"/>
+        <translation>Despărţitoare şi distanţiere</translation>
     </message>
     <message>
         <source>Fingering</source>
-        <translation>Degetaţie</translation>
+        <translation>Digitaţie</translation>
     </message>
     <message>
         <source>Tremolo</source>
@@ -8603,7 +8647,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Note Heads</source>
-        <translation>Boabe</translation>
+        <translation>Capete Note</translation>
     </message>
     <message>
         <source>Brackets</source>
@@ -8611,7 +8655,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Breaths &amp;&amp; Pauses</source>
-        <translation type="unfinished"/>
+        <translation>Respirații și Pauze</translation>
     </message>
     <message>
         <source>Clefs</source>
@@ -8627,7 +8671,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Diminuendo</source>
-        <translation>Diminuendo</translation>
+        <translation>Decrescendo</translation>
     </message>
     <message>
         <source>Prima volta</source>
@@ -8663,11 +8707,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>22ma</source>
-        <translation type="unfinished"/>
+        <translation>22ma</translation>
     </message>
     <message>
         <source>22mb</source>
-        <translation type="unfinished"/>
+        <translation>22mb</translation>
     </message>
     <message>
         <source>Pedal</source>
@@ -8695,81 +8739,87 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Staff Changes</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Symbols</source>
-        <translation>Simboluri</translation>
+        <translation>Schimbări Portativ</translation>
     </message>
     <message>
         <source>Arpeggios &amp;&amp; Glissandi</source>
-        <translation type="unfinished"/>
+        <translation>Arpegii și Glisando</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
-        <translation type="unfinished"/>
+        <translation>Ornamente pt. Cimpoi</translation>
     </message>
     <message>
         <source>Frames &amp;&amp; Measures</source>
-        <translation type="unfinished"/>
+        <translation>Cadre și Măsuri</translation>
     </message>
     <message>
         <source>Articulations &amp;&amp; Ornaments</source>
-        <translation>Moduri de Atac și Ornamente</translation>
+        <translation>Articulații de Atac și Ornamente</translation>
     </message>
     <message>
         <source>Ambitus</source>
-        <translation type="unfinished"/>
+        <translation>Ambitus</translation>
     </message>
     <message>
         <source>MuseScore: Writing Palette File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Scriere Fișier pt. Paletă</translation>
     </message>
     <message>
         <source>Writing Palette File
 %1
 failed: </source>
-        <translation type="unfinished"/>
+        <translation>Scrierea Fișierului pt Paletă
+%1
+a eșuat:</translation>
     </message>
     <message>
         <source>common symbols</source>
-        <translation type="unfinished"/>
+        <translation>simboluri comune</translation>
     </message>
     <message>
         <source>all font symbols</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dashed style</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dotted style</source>
-        <translation type="unfinished"/>
+        <translation>toate simbolurile fontului</translation>
     </message>
     <message>
         <source>Tick 1 span</source>
-        <translation type="unfinished"/>
+        <translation>Întindere Tick 1</translation>
     </message>
     <message>
         <source>Tick 2 span</source>
-        <translation type="unfinished"/>
+        <translation>Întindere Tick 2</translation>
     </message>
     <message>
         <source>Short 1 span</source>
-        <translation type="unfinished"/>
+        <translation>Întindere Scurtă 1</translation>
     </message>
     <message>
         <source>Short 2 span</source>
-        <translation type="unfinished"/>
+        <translation>Întinedere Scurtă 2</translation>
     </message>
     <message>
-        <source>End bar style</source>
-        <translation type="unfinished"/>
+        <source>Repeats &amp;&amp; Jumps</source>
+        <translation>Repetiții și Directive</translation>
     </message>
     <message>
-        <source>Double bar style</source>
-        <translation type="unfinished"/>
+        <source>Normal barline</source>
+        <translation>Normală</translation>
+    </message>
+    <message>
+        <source>Dashed barline</source>
+        <translation>Întreruptă</translation>
+    </message>
+    <message>
+        <source>Dotted barline</source>
+        <translation>Punctată</translation>
+    </message>
+    <message>
+        <source>End bar barline</source>
+        <translation>Bară de final</translation>
+    </message>
+    <message>
+        <source>Double barline</source>
+        <translation>Bară dublă</translation>
     </message>
     <message>
         <source>Start repeat</source>
@@ -8783,12 +8833,16 @@ failed: </source>
         <source>End-start repeat</source>
         <translation>Sfârşit şi Început Repetiţie</translation>
     </message>
+    <message>
+        <source>Fretboard Diagrams</source>
+        <translation>Diagramă de Acord</translation>
+    </message>
 </context>
 <context>
     <name>PaletteCellProperties</name>
     <message>
         <source>Cell Properties</source>
-        <translation type="unfinished"/>
+        <translation>Proprietăți Celulă</translation>
     </message>
     <message>
         <source>Palette Cell Properties</source>
@@ -8804,7 +8858,7 @@ failed: </source>
     </message>
     <message>
         <source>Content offset</source>
-        <translation type="unfinished"/>
+        <translation>Deplasament conținut</translation>
     </message>
     <message>
         <source>Y:</source>
@@ -8816,11 +8870,11 @@ failed: </source>
     </message>
     <message>
         <source>Draw staff</source>
-        <translation type="unfinished"/>
+        <translation>Desenează portativ</translation>
     </message>
     <message>
         <source>Content scale:</source>
-        <translation type="unfinished"/>
+        <translation>Scalare conținut</translation>
     </message>
 </context>
 <context>
@@ -8859,11 +8913,11 @@ failed: </source>
     </message>
     <message>
         <source>Show grid</source>
-        <translation>Arată Caroiaj:</translation>
+        <translation>Arată Grilă:</translation>
     </message>
     <message>
         <source>Show &apos;More Elements...&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Afișează &apos;Mai multe elemente...&apos;</translation>
     </message>
 </context>
 <context>
@@ -8914,19 +8968,31 @@ failed: </source>
     </message>
     <message>
         <source>MIDI sound for part</source>
-        <translation>sunet MIDI pentru Parte</translation>
+        <translation>Sunet MIDI pentru știmă</translation>
     </message>
     <message>
         <source>Part name</source>
-        <translation type="unfinished"/>
+        <translation>Nume știmă</translation>
     </message>
     <message>
         <source>Panorama position</source>
-        <translation type="unfinished"/>
+        <translation>Poziție panoramă</translation>
     </message>
     <message>
         <source>MIDI sound</source>
-        <translation type="unfinished"/>
+        <translation>Sunet MIDI</translation>
+    </message>
+    <message>
+        <source>Part Name</source>
+        <translation>Nume știmă</translation>
+    </message>
+    <message>
+        <source>Use arrows to modify</source>
+        <translation>Folosiți săgețile pentru a modifica</translation>
+    </message>
+    <message>
+        <source>Sound</source>
+        <translation>Sunet</translation>
     </message>
 </context>
 <context>
@@ -8942,6 +9008,57 @@ failed: </source>
     <message>
         <source>Add</source>
         <translation>Adăugare</translation>
+    </message>
+</context>
+<context>
+    <name>PianorollEditor</name>
+    <message>
+        <source>Toolbar 1</source>
+        <translation>Bară de unelte 1</translation>
+    </message>
+    <message>
+        <source>Wave</source>
+        <translation>Wave</translation>
+    </message>
+    <message>
+        <source>Show wave display</source>
+        <translation>Afișază display wave</translation>
+    </message>
+    <message>
+        <source>Toolbar 2</source>
+        <translation>Bară de unelte 2</translation>
+    </message>
+    <message>
+        <source>Cursor:</source>
+        <translation>Cursor:</translation>
+    </message>
+    <message>
+        <source>Velocity:</source>
+        <translation>Forță atac:</translation>
+    </message>
+    <message>
+        <source>Offset</source>
+        <translation>Deplasare</translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation>Specificat de Utilizator (absolut)</translation>
+    </message>
+    <message>
+        <source>Pitch:</source>
+        <translation>Înălţime:</translation>
+    </message>
+    <message>
+        <source>OnTime:</source>
+        <translation>Timpi tari</translation>
+    </message>
+    <message>
+        <source>Len:</source>
+        <translation>Lung:</translation>
+    </message>
+    <message>
+        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
+        <translation>MuseScore: &lt;%1&gt; Portativ: %2</translation>
     </message>
 </context>
 <context>
@@ -8964,11 +9081,11 @@ failed: </source>
     </message>
     <message>
         <source>Relative tempo</source>
-        <translation type="unfinished"/>
+        <translation>Tempo relativ</translation>
     </message>
     <message>
         <source>Master volume</source>
-        <translation type="unfinished"/>
+        <translation>Volum general</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -8977,11 +9094,11 @@ failed: </source>
     </message>
     <message>
         <source>Actual tempo</source>
-        <translation type="unfinished"/>
+        <translation>Tempo Real</translation>
     </message>
     <message>
         <source>120BPM</source>
-        <translation type="unfinished"/>
+        <translation>120BPM</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -8992,24 +9109,44 @@ failed: </source>
         <source>Measure.Beat</source>
         <translation>măsură.timp</translation>
     </message>
+    <message>
+        <source>Playback Position</source>
+        <translation>Poziție Redare</translation>
+    </message>
+    <message>
+        <source>Relative Tempo to 120 beats per minute</source>
+        <translation>Tempo Relativ la 120 bătăi pe minut</translation>
+    </message>
+    <message>
+        <source>Use up and down arrows to change value</source>
+        <translation>Folosiți săgețile sus și jos pentru a modifica</translation>
+    </message>
+    <message>
+        <source>Master Volume</source>
+        <translation>Volum general</translation>
+    </message>
+    <message>
+        <source>Relative tempo to 120 beats per minute</source>
+        <translation>Tempo relativ la 120 bătăi pe minut</translation>
+    </message>
 </context>
 <context>
     <name>PluginCreatorBase</name>
     <message>
         <source>Run</source>
-        <translation type="unfinished"/>
+        <translation>Rulează</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished"/>
+        <translation>Stop</translation>
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished"/>
+        <translation>Fișier</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"/>
+        <translation>Ajutor</translation>
     </message>
     <message>
         <source>Edit</source>
@@ -9029,42 +9166,42 @@ failed: </source>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>Manual</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Înapoi o versiune</translation>
+        <translation>Anulare</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation>Înainte o versiune</translation>
-    </message>
-    <message>
-        <source>Quit</source>
-        <translation>Ieșire</translation>
+        <translation>Refacere</translation>
     </message>
     <message>
         <source>R</source>
-        <translation type="unfinished"/>
+        <translation>R</translation>
     </message>
     <message>
         <source>Reload current plugin source</source>
-        <translation type="unfinished"/>
+        <translation>Reîncarcă sursa plugin-ului curent</translation>
+    </message>
+    <message>
+        <source>Close Plugin Creator</source>
+        <translation>Închide Creatorul de Plugin</translation>
     </message>
 </context>
 <context>
     <name>PluginManager</name>
     <message>
         <source>Plugin Manager</source>
-        <translation type="unfinished"/>
+        <translation>Gestionar Plugin</translation>
     </message>
     <message>
         <source>Define Shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Definiți scurtătură</translation>
     </message>
     <message>
         <source>Path:</source>
-        <translation type="unfinished"/>
+        <translation>Cale pe disc:</translation>
     </message>
     <message>
         <source>Version:</source>
@@ -9077,6 +9214,10 @@ failed: </source>
     <message>
         <source>Shortcut:</source>
         <translation>Scurtătura:</translation>
+    </message>
+    <message>
+        <source>Clear Shortcut</source>
+        <translation>Sterge Scurtătura</translation>
     </message>
 </context>
 <context>
@@ -9091,7 +9232,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset All Preferences to Default</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Toate Preferințele la cele Implicite</translation>
     </message>
     <message>
         <source>General</source>
@@ -9115,7 +9256,7 @@ failed: </source>
     </message>
     <message>
         <source>OSC remote control</source>
-        <translation type="unfinished"/>
+        <translation>Control OSC de la distanță</translation>
     </message>
     <message>
         <source>Style</source>
@@ -9123,19 +9264,11 @@ failed: </source>
     </message>
     <message>
         <source>Icon size:</source>
-        <translation type="unfinished"/>
+        <translation>Dimensiune Iconiță</translation>
     </message>
     <message>
         <source>Animations</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Paths</source>
-        <translation>Căi pe Disc</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
+        <translation>Animații</translation>
     </message>
     <message>
         <source>Canvas</source>
@@ -9155,19 +9288,15 @@ failed: </source>
     </message>
     <message>
         <source>Paper</source>
-        <translation type="unfinished"/>
+        <translation>Hârtie</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note Entry</source>
-        <translation>Adăugare Note</translation>
+        <translation>Diverse</translation>
     </message>
     <message>
         <source>Enable MIDI input</source>
-        <translation>Ascultă după semnale MIDI de intrare</translation>
+        <translation>Permite semnale de intrare MIDI</translation>
     </message>
     <message>
         <source>Play notes when editing</source>
@@ -9183,11 +9312,11 @@ failed: </source>
     </message>
     <message>
         <source>16th note</source>
-        <translation type="unfinished"/>
+        <translation>notă 16me</translation>
     </message>
     <message>
         <source>32nd note</source>
-        <translation type="unfinished"/>
+        <translation>notă 32me</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -9199,15 +9328,15 @@ failed: </source>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>Vizualizare</translation>
     </message>
     <message>
         <source>default scale for new score views</source>
-        <translation type="unfinished"/>
+        <translation>scalare default pt. noile vizualizări de partituri</translation>
     </message>
     <message>
         <source>Default Files</source>
-        <translation type="unfinished"/>
+        <translation>Fișiere Implicite</translation>
     </message>
     <message>
         <source>Style:</source>
@@ -9219,7 +9348,7 @@ failed: </source>
     </message>
     <message>
         <source>Use JACK MIDI</source>
-        <translation type="unfinished"/>
+        <translation>Folosește JAC MIDI</translation>
     </message>
     <message>
         <source>Remember last connection(s)</source>
@@ -9227,15 +9356,15 @@ failed: </source>
     </message>
     <message>
         <source>PulseAudio</source>
-        <translation type="unfinished"/>
+        <translation>PulseAudio</translation>
     </message>
     <message>
         <source>PortAudio</source>
-        <translation type="unfinished"/>
+        <translation>PortAudio</translation>
     </message>
     <message>
         <source>API:</source>
-        <translation type="unfinished"/>
+        <translation>API:</translation>
     </message>
     <message>
         <source>Device:</source>
@@ -9335,47 +9464,47 @@ failed: </source>
     </message>
     <message>
         <source>Overture import character set:</source>
-        <translation type="unfinished"/>
+        <translation>Set caractere import Oveture:</translation>
     </message>
     <message>
         <source>Guitar Pro import character set:</source>
-        <translation type="unfinished"/>
+        <translation>Set de caractere import Guitar Pro</translation>
     </message>
     <message>
         <source>MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML</translation>
     </message>
     <message>
         <source>Import layout</source>
-        <translation type="unfinished"/>
+        <translation>Importă layout</translation>
     </message>
     <message>
         <source>Import system and page breaks</source>
-        <translation type="unfinished"/>
+        <translation>Importă despărțitoarele de sistem și de pagină</translation>
     </message>
     <message>
         <source>MIDI</source>
-        <translation type="unfinished"/>
+        <translation>MIDI</translation>
     </message>
     <message>
         <source>Quarter</source>
-        <translation type="unfinished"/>
+        <translation>Pătrime</translation>
     </message>
     <message>
         <source>Eighth</source>
-        <translation type="unfinished"/>
+        <translation>Optime</translation>
     </message>
     <message>
         <source>16th</source>
-        <translation>1/16</translation>
+        <translation>16me</translation>
     </message>
     <message>
         <source>32nd</source>
-        <translation>1/32</translation>
+        <translation>32me</translation>
     </message>
     <message>
         <source>64th</source>
-        <translation type="unfinished"/>
+        <translation>64me</translation>
     </message>
     <message>
         <source>Export</source>
@@ -9383,11 +9512,11 @@ failed: </source>
     </message>
     <message>
         <source>PNG/SVG</source>
-        <translation type="unfinished"/>
+        <translation>PNG/SVG</translation>
     </message>
     <message>
         <source>Transparent background</source>
-        <translation type="unfinished"/>
+        <translation>Fundal transparent</translation>
     </message>
     <message>
         <source>Expand repeats</source>
@@ -9395,23 +9524,23 @@ failed: </source>
     </message>
     <message>
         <source>Audio</source>
-        <translation type="unfinished"/>
+        <translation>Audio</translation>
     </message>
     <message>
         <source>Export layout</source>
-        <translation type="unfinished"/>
+        <translation>Exportă layout</translation>
     </message>
     <message>
         <source>Export all system and page breaks</source>
-        <translation type="unfinished"/>
+        <translation>Exportă toate despărțitoarele de sistem și de pagină</translation>
     </message>
     <message>
         <source>Export manually added system and page breaks only</source>
-        <translation type="unfinished"/>
+        <translation>Exportă despărțitoarele de sistem și de pagină adăugate manual</translation>
     </message>
     <message>
         <source>Do not export system or page breaks</source>
-        <translation type="unfinished"/>
+        <translation>Nu exporta despărțitoarele de sistem și de pagină</translation>
     </message>
     <message>
         <source>Shortcuts</source>
@@ -9427,7 +9556,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset Shortcut to Default</source>
-        <translation type="unfinished"/>
+        <translation>Restabiliți scurtăturile implicite</translation>
     </message>
     <message>
         <source>Define...</source>
@@ -9439,7 +9568,7 @@ failed: </source>
     </message>
     <message>
         <source>Update</source>
-        <translation>Pune la zi</translation>
+        <translation>Actualizare</translation>
     </message>
     <message>
         <source>Automatic Update Check</source>
@@ -9483,7 +9612,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI remote control</source>
-        <translation type="unfinished"/>
+        <translation>Control de la distanșă MIDI</translation>
     </message>
     <message>
         <source>Rewind</source>
@@ -9491,19 +9620,19 @@ failed: </source>
     </message>
     <message>
         <source>Toggle play</source>
-        <translation type="unfinished"/>
+        <translation>Comută redarea</translation>
     </message>
     <message>
         <source>Whole note</source>
-        <translation type="unfinished"/>
+        <translation>Notă întreagă</translation>
     </message>
     <message>
         <source>Half note</source>
-        <translation type="unfinished"/>
+        <translation>Doime</translation>
     </message>
     <message>
         <source>Quarter note</source>
-        <translation type="unfinished"/>
+        <translation>Pătrime</translation>
     </message>
     <message>
         <source>Rest</source>
@@ -9511,11 +9640,11 @@ failed: </source>
     </message>
     <message>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Punct augmentativ</translation>
     </message>
     <message>
         <source>Tie</source>
-        <translation>Legato</translation>
+        <translation>Legato de prelungire</translation>
     </message>
     <message>
         <source>Play</source>
@@ -9523,27 +9652,23 @@ failed: </source>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry</source>
-        <translation type="unfinished"/>
+        <translation>Stop</translation>
     </message>
     <message>
         <source>Instrument list 2:</source>
-        <translation type="unfinished"/>
+        <translation>Listă de instrumente 2:</translation>
     </message>
     <message>
         <source>Instrument list 1:</source>
-        <translation type="unfinished"/>
+        <translation>Listă de instrumente 1:</translation>
     </message>
     <message>
         <source>Style for part:</source>
-        <translation type="unfinished"/>
+        <translation>Stil pentru știmă:</translation>
     </message>
     <message>
         <source>ALSA audio</source>
-        <translation type="unfinished"/>
+        <translation>ALSA audio</translation>
     </message>
     <message>
         <source>Sample rate:</source>
@@ -9551,47 +9676,19 @@ failed: </source>
     </message>
     <message>
         <source>JACK audio server</source>
-        <translation type="unfinished"/>
+        <translation>Server audio JACK</translation>
     </message>
     <message>
         <source>Character Set Used When Importing Binary Files</source>
-        <translation type="unfinished"/>
+        <translation>Set Caractere Folosit Pt. Importul Fișierelor Binare</translation>
     </message>
     <message>
         <source>Shortest note:</source>
-        <translation type="unfinished"/>
+        <translation>Cea mai scurtă notă:</translation>
     </message>
     <message>
         <source>Double augmentation dot</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Image folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Score folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Style folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Template folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Plugin folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Soundfont folders:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>SFZ folders:</source>
-        <translation type="unfinished"/>
+        <translation>Punct dublu augmentativ</translation>
     </message>
     <message>
         <source>Save every:</source>
@@ -9603,36 +9700,32 @@ failed: </source>
     </message>
     <message>
         <source>Default zoom:</source>
-        <translation type="unfinished"/>
+        <translation>Mărire implicită:</translation>
     </message>
     <message>
         <source>Resolution DPI:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Check for new versions of MuseScore on startup:</source>
-        <translation type="unfinished"/>
+        <translation>Rezoluție DPI:</translation>
     </message>
     <message>
         <source>Port number:</source>
         <extracomment>The UDP port number on which the MuseScore OSC server will listen on</extracomment>
-        <translation type="unfinished"/>
+        <translation>Număr Port:</translation>
     </message>
     <message>
         <source>Use JACK Audio</source>
-        <translation type="unfinished"/>
+        <translation>Folosește JACK Audio</translation>
     </message>
     <message>
         <source>Use JACK Transport</source>
-        <translation type="unfinished"/>
+        <translation>Folosește JACK Transport</translation>
     </message>
     <message>
         <source>Timebase Master</source>
-        <translation type="unfinished"/>
+        <translation>Timebase Master</translation>
     </message>
     <message>
         <source>MIDI Input:</source>
-        <translation type="unfinished"/>
+        <translation>Intrări MIDI</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -9640,19 +9733,19 @@ failed: </source>
     </message>
     <message>
         <source>Preferences Tab Manager</source>
-        <translation type="unfinished"/>
+        <translation>Gestinar File Preferințe</translation>
     </message>
     <message>
         <source>General Tab</source>
-        <translation type="unfinished"/>
+        <translation>Filă Generală</translation>
     </message>
     <message>
         <source>Select language</source>
-        <translation type="unfinished"/>
+        <translation>Alegeți limba:</translation>
     </message>
     <message>
         <source>The language will be changed once you restart MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>Limba va fi modificată după ce reporniți MuseScore.</translation>
     </message>
     <message>
         <source>Start with score</source>
@@ -9660,203 +9753,175 @@ failed: </source>
     </message>
     <message>
         <source>Insert path to starting score</source>
-        <translation type="unfinished"/>
+        <translation>Întroduceți calea către partitura de pornire:</translation>
     </message>
     <message>
         <source>Choose starting score</source>
-        <translation type="unfinished"/>
+        <translation>Alegeți partitura de pornire</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting the starting score</source>
-        <translation type="unfinished"/>
+        <translation>Deschide un dialog pentru a selecta partitura de start</translation>
     </message>
     <message>
         <source>Select delay (in minutes) between auto saves</source>
-        <translation type="unfinished"/>
+        <translation>Selectare interval (în minute) între auto-salvări</translation>
     </message>
     <message>
         <source>Port number</source>
-        <translation type="unfinished"/>
+        <translation>Număr Port</translation>
     </message>
     <message>
         <source>Select style</source>
-        <translation type="unfinished"/>
+        <translation>Selectare Stil</translation>
     </message>
     <message>
         <source>Icon Height</source>
-        <translation type="unfinished"/>
+        <translation>Înălțime Iconiță</translation>
     </message>
     <message>
         <source>Icon Width</source>
-        <translation type="unfinished"/>
+        <translation>Lățime Iconiță</translation>
     </message>
     <message>
         <source>Style folder</source>
-        <translation type="unfinished"/>
+        <translation>Dosar stil</translation>
     </message>
     <message>
         <source>Insert path for style folder</source>
-        <translation type="unfinished"/>
+        <translation>Introduceți calea către dosarul de stiluri</translation>
     </message>
     <message>
         <source>Choose score folder</source>
-        <translation type="unfinished"/>
+        <translation>Alege dosarul de partituri</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the score folder</source>
-        <translation type="unfinished"/>
+        <translation>Deschide un dialog pentru a selecta dosarul de partituri</translation>
     </message>
     <message>
         <source>Choose style folder</source>
-        <translation type="unfinished"/>
+        <translation>Alege dosarul pentru stiluri</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the style folder</source>
-        <translation type="unfinished"/>
+        <translation>Deschide un dialog pentru a selecta un dosar pentru stiluri</translation>
     </message>
     <message>
         <source>Score folder</source>
-        <translation type="unfinished"/>
+        <translation>Dosar partituri</translation>
     </message>
     <message>
         <source>Insert path to score folder.</source>
-        <translation type="unfinished"/>
+        <translation>Introduceți calea către dosarul de partituri</translation>
     </message>
     <message>
         <source>Template folder</source>
-        <translation type="unfinished"/>
+        <translation>Dosar șabloane:</translation>
     </message>
     <message>
         <source>Insert path to Template folder</source>
-        <translation type="unfinished"/>
+        <translation>Introduceți calea către dosarul de șabloane.</translation>
     </message>
     <message>
         <source>Plugin folder</source>
-        <translation type="unfinished"/>
+        <translation>Dosar Plugin:</translation>
     </message>
     <message>
         <source>Insert path to plugin folder</source>
-        <translation type="unfinished"/>
+        <translation>Inserați calea către dosarul de plugin</translation>
     </message>
     <message>
         <source>Choose plugin folder</source>
-        <translation type="unfinished"/>
+        <translation>Alege dosarul de plugin</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the plugin folder</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Soundfont folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Insert path to soundfont folders</source>
-        <translation type="unfinished"/>
+        <translation>Deschide un dialog pentru a selecta un dosar de plugin-uri</translation>
     </message>
     <message>
         <source>Image folder</source>
-        <translation type="unfinished"/>
+        <translation>Dosar imagini</translation>
     </message>
     <message>
         <source>Insert path to image folder</source>
-        <translation type="unfinished"/>
+        <translation>Introduceți calea către dosarul de imagini</translation>
     </message>
     <message>
         <source>Choose template folder</source>
-        <translation type="unfinished"/>
+        <translation>Alege dosarul de șabloane</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the template folder</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>SFZ folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Insert path to SFZ folders</source>
-        <translation type="unfinished"/>
+        <translation>Deschide un dialog pentru a selecta un dosar de șabloane</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the image folder</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Opens a dialog for configuring the soundfont folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Opens a dialog for configuring the SFZ folders</source>
-        <translation type="unfinished"/>
+        <translation>Deschide un dialog pentru a selecta un dosar de imagini</translation>
     </message>
     <message>
         <source>Canvas Tab</source>
-        <translation type="unfinished"/>
+        <translation>File Pânză</translation>
     </message>
     <message>
         <source>Background Wallpaper</source>
-        <translation type="unfinished"/>
+        <translation>Tapet Fundal</translation>
     </message>
     <message>
         <source>Background Color</source>
-        <translation type="unfinished"/>
+        <translation>Culoare fundal</translation>
     </message>
     <message>
         <source>Background wallpaper path</source>
-        <translation type="unfinished"/>
+        <translation>Calea către Tapetul de fundal</translation>
     </message>
     <message>
         <source>Insert path to background wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Inserați calea către fișierul de Tapet de Fundal</translation>
     </message>
     <message>
         <source>Choose Background wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Alegeți Fișierul de Tapet de fundal</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting the wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Deschide un dialog pentru a selecta fișierul de tapet</translation>
     </message>
     <message>
         <source>Select background color</source>
-        <translation type="unfinished"/>
+        <translation>Selectați culoarea de fundal</translation>
     </message>
     <message>
         <source>Opens a dialog for selecting the background color</source>
-        <translation type="unfinished"/>
+        <translation>Deschide un dialog pentru selectarea culorii de fundal</translation>
     </message>
     <message>
         <source>Paper wallpaper path</source>
-        <translation type="unfinished"/>
+        <translation>Cale către Tapetul pt. Hârtie</translation>
     </message>
     <message>
         <source>Insert path to paper wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Inseratți calea către fișierul de tapet pt. hârtie</translation>
     </message>
     <message>
         <source>Choose paper wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Alege fișierul de tapet pt hârtie</translation>
     </message>
     <message>
         <source>Select paper color</source>
-        <translation type="unfinished"/>
+        <translation>Selectare culoare hârtie</translation>
     </message>
     <message>
         <source>Opens a dialog for selecting the paper color</source>
-        <translation type="unfinished"/>
+        <translation>Deschide un dialog pentru selectarea culorii hârtiei</translation>
     </message>
     <message>
         <source>Paper Wallpaper</source>
-        <translation type="unfinished"/>
+        <translation>Tapet hârtie</translation>
     </message>
     <message>
         <source>Paper Color</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note Entry Tab</source>
-        <translation type="unfinished"/>
+        <translation>Culoare hârtie</translation>
     </message>
     <message>
         <source>Enable MIDI Input</source>
@@ -9864,15 +9929,15 @@ failed: </source>
     </message>
     <message>
         <source>Default duration</source>
-        <translation type="unfinished"/>
+        <translation>Durata implicită:</translation>
     </message>
     <message>
         <source>Rewind is active</source>
-        <translation type="unfinished"/>
+        <translation>Derularea este activă</translation>
     </message>
     <message>
         <source>Rewind record</source>
-        <translation type="unfinished"/>
+        <translation>Derularea înregistrează</translation>
     </message>
     <message>
         <source>Toggle play record</source>
@@ -9880,159 +9945,151 @@ failed: </source>
     </message>
     <message>
         <source>Whole note is active</source>
-        <translation type="unfinished"/>
+        <translation>Nota întreagă este activă</translation>
     </message>
     <message>
         <source>Half note is active</source>
-        <translation type="unfinished"/>
+        <translation>Doimea este activă</translation>
     </message>
     <message>
         <source>Whole note record</source>
-        <translation type="unfinished"/>
+        <translation>Nota întreagă înregistrează</translation>
     </message>
     <message>
         <source>Half note record</source>
-        <translation type="unfinished"/>
+        <translation>Doimea înregistrează</translation>
     </message>
     <message>
         <source>Rest is active</source>
-        <translation type="unfinished"/>
+        <translation>Pauza este activă</translation>
     </message>
     <message>
         <source>Augmentation dot is active</source>
-        <translation type="unfinished"/>
+        <translation>Punctul augmentativ este activ</translation>
     </message>
     <message>
         <source>Augmentation dot record</source>
-        <translation type="unfinished"/>
+        <translation>Punctul augmentativ înregistrează</translation>
     </message>
     <message>
         <source>Double augmentation dot is active</source>
-        <translation type="unfinished"/>
+        <translation>Punct dublu augmentativ este activ</translation>
     </message>
     <message>
         <source>Double augmentation dot record</source>
-        <translation type="unfinished"/>
+        <translation>Punct dublu augmentativ înregistrează</translation>
     </message>
     <message>
         <source>Tie is active</source>
-        <translation type="unfinished"/>
+        <translation>Legato de prelungire este activ</translation>
     </message>
     <message>
         <source>Tie record</source>
-        <translation type="unfinished"/>
+        <translation>Legato de prelungire înregistrează</translation>
     </message>
     <message>
         <source>Rest record</source>
-        <translation type="unfinished"/>
+        <translation>Pauza înregistrează</translation>
     </message>
     <message>
         <source>Play is active</source>
-        <translation type="unfinished"/>
+        <translation>Redarea este activă</translation>
     </message>
     <message>
         <source>Stop is active</source>
-        <translation type="unfinished"/>
+        <translation>Stopul este activ</translation>
     </message>
     <message>
         <source>Play record</source>
-        <translation type="unfinished"/>
+        <translation>Redarea înregistrează</translation>
     </message>
     <message>
         <source>Stop record</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry is active</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry record</source>
-        <translation type="unfinished"/>
+        <translation>Stop înregistrează</translation>
     </message>
     <message>
         <source>16th note is active</source>
-        <translation type="unfinished"/>
+        <translation>16mea este activă</translation>
     </message>
     <message>
         <source>16th note record</source>
-        <translation type="unfinished"/>
+        <translation>16mea înregistreză</translation>
     </message>
     <message>
         <source>32nd note is active</source>
-        <translation type="unfinished"/>
+        <translation>32mea este activă</translation>
     </message>
     <message>
         <source>32nd note record</source>
-        <translation type="unfinished"/>
+        <translation>32mea înregistrează</translation>
     </message>
     <message>
         <source>Score Tab</source>
-        <translation type="unfinished"/>
+        <translation>Filă Partitură</translation>
     </message>
     <message>
         <source>Default zoom</source>
-        <translation type="unfinished"/>
+        <translation>Mărire implicită</translation>
     </message>
     <message>
         <source>Choose Instrument list 1</source>
-        <translation type="unfinished"/>
+        <translation>Alege lista de instrumente 1</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a instrument list file</source>
-        <translation type="unfinished"/>
+        <translation>Deschide un dialog pentru a selecta o listă de instrumente</translation>
     </message>
     <message>
         <source>Instrument list 1</source>
-        <translation type="unfinished"/>
+        <translation>Lista de instrumente 1</translation>
     </message>
     <message>
         <source>Insert path to a instrument list file</source>
-        <translation type="unfinished"/>
+        <translation>Introduceți calea către lista de instrumente</translation>
     </message>
     <message>
         <source>Insert path to style file</source>
-        <translation type="unfinished"/>
+        <translation>Introduceți calea către fișierul de stil</translation>
     </message>
     <message>
         <source>Choose style</source>
-        <translation type="unfinished"/>
+        <translation>Alege stil</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a style file</source>
-        <translation type="unfinished"/>
+        <translation>Deschide un dialog pentru a selecta un fișier de stil</translation>
     </message>
     <message>
         <source>Style for part</source>
-        <translation type="unfinished"/>
+        <translation>Stil pentru știmă</translation>
     </message>
     <message>
         <source>Insert path to style file for part</source>
-        <translation type="unfinished"/>
+        <translation>Introduceți calea către fișierul de stil pentru știmă</translation>
     </message>
     <message>
         <source>Choose style for part</source>
-        <translation type="unfinished"/>
+        <translation>Alege stilul pentru știmă</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a style file for part</source>
-        <translation type="unfinished"/>
+        <translation>Deschide un dialog pentru a selecta un fișier de stil pentru știme</translation>
     </message>
     <message>
         <source>Instrument list 2</source>
-        <translation type="unfinished"/>
+        <translation>Lista de instrumente 2</translation>
     </message>
     <message>
         <source>Choose Instrument list 2</source>
-        <translation type="unfinished"/>
+        <translation>Alegeți lista de instrumente 2</translation>
     </message>
     <message>
         <source>I/O Tab</source>
-        <translation type="unfinished"/>
+        <translation>Filă I/O</translation>
     </message>
     <message>
         <source>Port Audio</source>
-        <translation type="unfinished"/>
+        <translation>Port Audio</translation>
     </message>
     <message>
         <source>API</source>
@@ -10068,167 +10125,159 @@ failed: </source>
     </message>
     <message>
         <source>Period Size</source>
-        <translation type="unfinished"/>
+        <translation>Dimensiune Perioadă</translation>
     </message>
     <message>
         <source>Choose period size</source>
-        <translation type="unfinished"/>
+        <translation>Alegeți dimensiunea perioadei</translation>
     </message>
     <message>
         <source>Sample rate</source>
-        <translation type="unfinished"/>
+        <translation>Rată Eşantionare:</translation>
     </message>
     <message>
         <source>Choose sample rate</source>
-        <translation type="unfinished"/>
+        <translation>Alege rata de eșantionare</translation>
     </message>
     <message>
         <source>Import Tab</source>
-        <translation type="unfinished"/>
+        <translation>Filă Import</translation>
     </message>
     <message>
         <source>Build in style</source>
-        <translation type="unfinished"/>
+        <translation>Stilul Implicit</translation>
     </message>
     <message>
         <source>Use style file</source>
-        <translation type="unfinished"/>
+        <translation>Foloseşte fişierul de stil:</translation>
     </message>
     <message>
         <source>Overture import character set</source>
-        <translation type="unfinished"/>
+        <translation>Set caractere import Overture</translation>
     </message>
     <message>
         <source>Choose Overture import character set</source>
-        <translation type="unfinished"/>
+        <translation>Alegeți Set caractere import Overture</translation>
     </message>
     <message>
         <source>Guitar Pro import character set</source>
-        <translation type="unfinished"/>
+        <translation>Set de caractere pt importul Guitar Pro</translation>
     </message>
     <message>
         <source>Choose Guitar Pro import character set</source>
-        <translation type="unfinished"/>
+        <translation>Alege setul de caractere pt importul Guitar Pro</translation>
     </message>
     <message>
         <source>Shortest note</source>
-        <translation type="unfinished"/>
+        <translation>Cea mai scurtă notă</translation>
     </message>
     <message>
         <source>Choose the shortest note value</source>
-        <translation type="unfinished"/>
+        <translation>Alege cea mai scurtă valoare de notă</translation>
     </message>
     <message>
         <source>Export Tab</source>
-        <translation type="unfinished"/>
+        <translation>Filă export</translation>
     </message>
     <message>
         <source>Resolution DPI</source>
-        <translation type="unfinished"/>
+        <translation>Rezoluție DPI</translation>
     </message>
     <message>
         <source>Choose resolution DPI</source>
-        <translation type="unfinished"/>
+        <translation>Alegeți rezoluție DPI</translation>
     </message>
     <message>
         <source>Shortcuts Tab</source>
-        <translation type="unfinished"/>
+        <translation>Filă Scurtături</translation>
     </message>
     <message>
         <source>Shortcuts table</source>
-        <translation type="unfinished"/>
+        <translation>Tabelul de scurtături</translation>
     </message>
     <message>
         <source>Reset Shortcut to default</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește Scurtăturile la cele implicite</translation>
     </message>
     <message>
         <source>Define</source>
-        <translation type="unfinished"/>
+        <translation>Definește</translation>
     </message>
     <message>
         <source>Update Tab</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Check for new versions of MuseScore on startup</source>
-        <translation>Caută automat versiuni noi la pornirea programului</translation>
-    </message>
-    <message>
-        <source>Choose interval</source>
-        <translation type="unfinished"/>
+        <translation>Filă Actualizare</translation>
     </message>
     <message>
         <source>Eighth note</source>
-        <translation type="unfinished"/>
+        <translation>Optime</translation>
     </message>
     <message>
         <source>Quarter note is active</source>
-        <translation type="unfinished"/>
+        <translation>Pătrimea este activă</translation>
     </message>
     <message>
         <source>Quarter note record</source>
-        <translation type="unfinished"/>
+        <translation>Pătrimea înregistrează</translation>
     </message>
     <message>
         <source>Eighth note is active</source>
-        <translation type="unfinished"/>
+        <translation>Optimea este activă</translation>
     </message>
     <message>
         <source>Eighth note record</source>
-        <translation type="unfinished"/>
+        <translation>Optimea înregistrează</translation>
     </message>
     <message>
         <source>64th note</source>
-        <translation type="unfinished"/>
+        <translation>Notă 64me</translation>
     </message>
     <message>
         <source>64th note is active</source>
-        <translation type="unfinished"/>
+        <translation>64mea este activă</translation>
     </message>
     <message>
         <source>64th note record</source>
-        <translation type="unfinished"/>
+        <translation>64mea înregistrează</translation>
     </message>
     <message>
         <source>Here you can configure shortcuts for actions</source>
-        <translation type="unfinished"/>
+        <translation>Aici puteți configura scurtături pentru acțiuni</translation>
     </message>
     <message>
         <source>Resets the shortcuts to their default assignment</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește scurtăturile la valorile implicite</translation>
     </message>
     <message>
         <source>Clears the shortcut assignment for the selected action</source>
-        <translation type="unfinished"/>
+        <translation>Șterge scurtătura atribuită acțiunii selectate</translation>
     </message>
     <message>
         <source>Opens a dialog for defining a new shortcut for the selected action</source>
-        <translation type="unfinished"/>
+        <translation>Deschide un dialog pentru a defini o nouă scurtătură pentru acțiunea selectată</translation>
     </message>
     <message>
         <source>Print the shortcuts list</source>
-        <translation type="unfinished"/>
+        <translation>Tipăriți lista de scurtături</translation>
     </message>
     <message>
         <source>Update translations</source>
-        <translation type="unfinished"/>
+        <translation>Actualizați traducerile</translation>
     </message>
     <message>
         <source>Dark</source>
-        <translation type="unfinished"/>
+        <translation>Întunecat</translation>
     </message>
     <message>
         <source>Light</source>
-        <translation type="unfinished"/>
+        <translation>Luminos</translation>
     </message>
     <message>
         <source>Enable MIDI remote control</source>
-        <translation type="unfinished"/>
+        <translation>Perimite control MIDI de la distanță</translation>
     </message>
     <message>
         <source>Is active</source>
-        <translation type="unfinished"/>
+        <translation>Este activ</translation>
     </message>
     <message>
         <source>Record</source>
@@ -10236,31 +10285,31 @@ failed: </source>
     </message>
     <message>
         <source>Default scale for new score views</source>
-        <translation type="unfinished"/>
+        <translation>Scalare implicită pentru vizualizarile de partituri noi</translation>
     </message>
     <message>
         <source>Show play panel</source>
-        <translation type="unfinished"/>
+        <translation>Afișază Panou de Redare</translation>
     </message>
     <message>
         <source>Show navigator</source>
-        <translation type="unfinished"/>
+        <translation>Afișază Navigator</translation>
     </message>
     <message>
         <source>OSC Remote Control</source>
-        <translation type="unfinished"/>
+        <translation>Control OSC de la Distanță</translation>
     </message>
     <message>
         <source>MIDI Remote Control</source>
-        <translation type="unfinished"/>
+        <translation>Control MIDI de la distanță</translation>
     </message>
     <message>
         <source>Show start center</source>
-        <translation type="unfinished"/>
+        <translation>Afișază Centru de Start</translation>
     </message>
     <message>
         <source>Undo is active</source>
-        <translation type="unfinished"/>
+        <translation>Anularea este activă</translation>
     </message>
     <message>
         <source>Undo record</source>
@@ -10268,7 +10317,75 @@ failed: </source>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Înapoi o versiune</translation>
+        <translation>Anulare</translation>
+    </message>
+    <message>
+        <source>Play whole chord when adding note</source>
+        <translation>Redă întregul acord atunci când se adaugă o notă</translation>
+    </message>
+    <message>
+        <source>SoundFont folders</source>
+        <translation>Dosare SoundFont:</translation>
+    </message>
+    <message>
+        <source>Insert path to SoundFont folders</source>
+        <translation>Introduceți calea către dosarele de SoundFont</translation>
+    </message>
+    <message>
+        <source>Opens a dialog for configuring the SoundFont folders</source>
+        <translation>Deschide un dialog configurarea dosarelor de SoundFont</translation>
+    </message>
+    <message>
+        <source>Note Input Tab</source>
+        <translation>Filă Introducere Note</translation>
+    </message>
+    <message>
+        <source>Note Input</source>
+        <translation>Introducere note</translation>
+    </message>
+    <message>
+        <source>Note input</source>
+        <translation>Introducere note</translation>
+    </message>
+    <message>
+        <source>Note input is active</source>
+        <translation>Introducerea notelor este activă</translation>
+    </message>
+    <message>
+        <source>Note input record</source>
+        <translation>Introducerea notelor înregistrează</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>Dosare</translation>
+    </message>
+    <message>
+        <source>Images:</source>
+        <translation>Imagini&gt;</translation>
+    </message>
+    <message>
+        <source>Scores:</source>
+        <translation>Partituri:</translation>
+    </message>
+    <message>
+        <source>Styles:</source>
+        <translation>Stiluri:</translation>
+    </message>
+    <message>
+        <source>Templates:</source>
+        <translation>Șabloane:</translation>
+    </message>
+    <message>
+        <source>Plugins:</source>
+        <translation>Plugin-uri:</translation>
+    </message>
+    <message>
+        <source>SoundFonts:</source>
+        <translation>SoundFonts:</translation>
+    </message>
+    <message>
+        <source>Check for new version of MuseScore</source>
+        <translation>Verifică automat pentru noi versiuni MuseScore</translation>
     </message>
 </context>
 <context>
@@ -10277,7 +10394,9 @@ failed: </source>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
-        <translation type="unfinished"/>
+        <translation>Nicio notă sau versuri selectate:
+Selectați o singură notă sau versuri și reîncercați operația
+</translation>
     </message>
     <message>
         <source>Please select a single note or slur and retry operation
@@ -10299,7 +10418,9 @@ Please select a single note or lyrics and retry operation
         <source>No note or figured bass selected:
 Please select a single note or figured bass and retry.
 </source>
-        <translation type="unfinished"/>
+        <translation>Nicio notă sau bass cifrat selectat(ă):
+Selectați o notă sau un bass cifrat și reîncercați.
+</translation>
     </message>
     <message>
         <source>No note selected:
@@ -10322,153 +10443,123 @@ Selectaţi o (singură) notă sau pauză și reluaţi operaţia
     <name>QObject</name>
     <message>
         <source>Standard</source>
-        <translation>Normală</translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <source>Perc. 3 lines</source>
-        <translation type="unfinished"/>
+        <translation>Perc. 3 linii</translation>
     </message>
     <message>
         <source>Perc. 5 lines</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str simple</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str common</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str full</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 4-str simple</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 4-str common</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 4-str full</source>
-        <translation type="unfinished"/>
+        <translation>Perc. 5 linie</translation>
     </message>
     <message>
         <source>Tab. ukulele</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str Italian</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str French</source>
-        <translation type="unfinished"/>
+        <translation>Tab. ukulele</translation>
     </message>
     <message>
         <source>Perc. 1 line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 5-str simple</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 5-str common</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 5-str full</source>
-        <translation type="unfinished"/>
+        <translation>Perc. 1 linie</translation>
     </message>
     <message>
         <source>Cannot open chord description:
 %1
 %2</source>
-        <translation type="unfinished"/>
+        <translation>Nu se poate deschde decrierea acordului:
+%1
+%2</translation>
     </message>
     <message>
         <source>Open Chord Description
 %1
 failed: %2</source>
-        <translation type="unfinished"/>
+        <translation>Deschidere Descriere Acord
+%1
+a eșuat: %2</translation>
     </message>
     <message>
         <source>Write Chord Description failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Scrierea Descrierii de Acord a eșuat: %1</translation>
     </message>
     <message>
         <source>Cannot open tablature font description:
 %1
 %2</source>
-        <translation type="unfinished"/>
+        <translation>Nu se poate deschide descrierea de font de tabulatură:
+%1
+%2</translation>
     </message>
     <message>
         <source>Cannot read file %1:
 </source>
-        <translation type="unfinished"/>
+        <translation>Nu se poate citi fișierul %1:
+</translation>
     </message>
     <message>
         <source>bad format</source>
-        <translation type="unfinished"/>
+        <translation>format invalid</translation>
     </message>
     <message>
         <source>unknown type</source>
-        <translation type="unfinished"/>
+        <translation>tip necunoscut</translation>
     </message>
     <message>
         <source>It was last saved with version 0.9.5 or older.&lt;br&gt;You can convert this score by opening and then saving with MuseScore version 1.x&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>A fost salvată folosind versiunea 0.9.5 sau mai veche.&lt;br&gt;Puteți converti această partitură prin deschiderea și salvarea ei folosind MuseScore 1.x&lt;/a&gt;</translation>
     </message>
     <message>
         <source>This score was saved using a newer version of MuseScore.&lt;br&gt;
 Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Această partitură a fost salvata folosind o versiune nouă de MuseScore.&lt;br&gt;
+Vizitați &lt;a href=&quot;http://musescore.org&quot;&gt;website-ul MuseScore &lt;/a&gt; pentru a descărca ultima versiune.</translation>
     </message>
     <message>
         <source>File not found %1</source>
-        <translation type="unfinished"/>
+        <translation>Nu s-a găsit fișierul %1</translation>
     </message>
     <message>
         <source>MuseScore: Load Error</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Eroare de încărcare</translation>
     </message>
     <message>
         <source>Internal error: MusicXML schema is invalid
 </source>
-        <translation type="unfinished"/>
+        <translation>Eroare internă: Schema MusicXML nu este validă
+</translation>
     </message>
     <message>
         <source>Error reading container.xml at line %1 column %2: %3
 </source>
-        <translation type="unfinished"/>
+        <translation>Eroare la citirea container.xml la linia %1 coloana %2: %3
+</translation>
     </message>
     <message>
         <source>Can't find rootfile
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Nu s-a găsit fișierul rădăcină
+%1</translation>
     </message>
     <message>
         <source>File &apos;%1&apos; is not a valid MusicXML file</source>
-        <translation type="unfinished"/>
+        <translation>Fișierul &apos;%1&apos; nu este un fișier valid MusicXML</translation>
     </message>
     <message>
         <source>Error at line %1 column %2: %3
 </source>
-        <translation type="unfinished"/>
+        <translation>Eroare la linia %1 coloana %2: %3
+</translation>
     </message>
     <message>
         <source>Could not open MusicXML file
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Nu s-a putut deschide fișierul MusicXML
+%1</translation>
     </message>
     <message>
         <source>Could not open compressed MusicXML file
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Nu s-a putut deschide fișierul comprimat MusicXML
+%1</translation>
     </message>
     <message>
         <source>normal</source>
@@ -10480,59 +10571,59 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>Long</source>
-        <translation type="unfinished"/>
+        <translation>Lung</translation>
     </message>
     <message>
         <source>Breve</source>
-        <translation type="unfinished"/>
+        <translation>Breve</translation>
     </message>
     <message>
         <source>Whole</source>
-        <translation type="unfinished"/>
+        <translation>Notă întreagă</translation>
     </message>
     <message>
         <source>Half</source>
-        <translation type="unfinished"/>
+        <translation>Doime</translation>
     </message>
     <message>
         <source>Quarter</source>
-        <translation type="unfinished"/>
+        <translation>Pătrime</translation>
     </message>
     <message>
         <source>Eighth</source>
-        <translation type="unfinished"/>
+        <translation>Optime</translation>
     </message>
     <message>
         <source>16th</source>
-        <translation>1/16</translation>
+        <translation>16me</translation>
     </message>
     <message>
         <source>32nd</source>
-        <translation>1/32</translation>
+        <translation>32me</translation>
     </message>
     <message>
         <source>64th</source>
-        <translation type="unfinished"/>
+        <translation>64me</translation>
     </message>
     <message>
         <source>128th</source>
-        <translation type="unfinished"/>
+        <translation>128me</translation>
     </message>
     <message>
         <source>256th</source>
-        <translation type="unfinished"/>
+        <translation>256me</translation>
     </message>
     <message>
         <source>512th</source>
-        <translation type="unfinished"/>
+        <translation>512me</translation>
     </message>
     <message>
         <source>1024th</source>
-        <translation type="unfinished"/>
+        <translation>1024me</translation>
     </message>
     <message>
         <source>Zero</source>
-        <translation type="unfinished"/>
+        <translation>Zero</translation>
     </message>
     <message>
         <source>Measure</source>
@@ -10540,7 +10631,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>Invalid</source>
-        <translation>greșit</translation>
+        <translation>Invalid</translation>
     </message>
     <message>
         <source>double flat</source>
@@ -10561,18 +10652,67 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>Internal error: Could not open resource musicxml.xsd
 </source>
-        <translation type="unfinished"/>
+        <translation>Eroare internă: Nu s-a putut deschide resursa musicxml.xsd
+</translation>
     </message>
     <message>
         <source>Tab. balalaika</source>
-        <translation type="unfinished"/>
+        <translation>Tab. balalaika</translation>
+    </message>
+    <message>
+        <source>Tab. 6-str. simple</source>
+        <translation>Tab. 6-crd. simplă</translation>
+    </message>
+    <message>
+        <source>Tab. 6-str. common</source>
+        <translation>Tab. 6-crd. comună</translation>
+    </message>
+    <message>
+        <source>Tab. 6-str. full</source>
+        <translation>Tab. 6-crd. completă</translation>
+    </message>
+    <message>
+        <source>Tab. 4-str. simple</source>
+        <translation>Tab. 4-crd. simplificată</translation>
+    </message>
+    <message>
+        <source>Tab. 4-str. common</source>
+        <translation>Tab. 4-crd. comună</translation>
+    </message>
+    <message>
+        <source>Tab. 4-str. full</source>
+        <translation>Tab. 4-crd. completă</translation>
+    </message>
+    <message>
+        <source>Tab. 5-str. simple</source>
+        <translation>Tab. 5-crd. simplă</translation>
+    </message>
+    <message>
+        <source>Tab. 5-str. common</source>
+        <translation>Tab. 5-crd. comună</translation>
+    </message>
+    <message>
+        <source>Tab. 5-str. full</source>
+        <translation>Tab. 5-crd. completă</translation>
+    </message>
+    <message>
+        <source>Tab. 6-str. Italian</source>
+        <translation>Tab. 6-crd. Italiană</translation>
+    </message>
+    <message>
+        <source>Tab. 6-str. French</source>
+        <translation>Tab. 6-crd. Franceză</translation>
+    </message>
+    <message>
+        <source>File corrupted %1</source>
+        <translation>Fișier corupt %1</translation>
     </message>
 </context>
 <context>
     <name>QWidget</name>
     <message>
         <source>MuseScore: Save Album into Score</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Salvează Album în Partitură</translation>
     </message>
     <message>
         <source>MuseScore: Save File</source>
@@ -10584,15 +10724,15 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Save Album</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Salvează Album</translation>
     </message>
     <message>
         <source>Write Album failed: </source>
-        <translation type="unfinished"/>
+        <translation>Scrierea Albumului a eșuat:</translation>
     </message>
     <message>
         <source>MuseScore: Write Album</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Scriere Album</translation>
     </message>
     <message>
         <source>Untitled</source>
@@ -10608,7 +10748,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Import Guitar Pro</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Import Guitar Pro</translation>
     </message>
     <message>
         <source>MuseScore: Load MIDI</source>
@@ -10616,62 +10756,65 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Load Style Failed</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Încărcare Stil Eșuată</translation>
     </message>
     <message>
         <source>MuseScore: Load Languages Failed:</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Încărcarea traducerilor a eşuat:</translation>
     </message>
     <message>
         <source>MuseScore: Invalid Command</source>
-        <translation>MuseScore: comanda a fost recunoscută</translation>
+        <translation>MuseScore: Comadă Invalidă</translation>
     </message>
     <message>
         <source>MuseScore: Open Album failed</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Deschidere Album eșuată</translation>
     </message>
     <message>
         <source>Open Album File
 %1
 failed: </source>
-        <translation type="unfinished"/>
+        <translation>Deschiderea Fișierului de Album
+%1
+a eșuat:</translation>
     </message>
     <message>
         <source>MuseScore: Open Album File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Deschidere Fișier Album</translation>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
-        <translation type="unfinished"/>
+        <translation>Fișier MuseScore (*.mscz)</translation>
     </message>
     <message>
         <source>MuseScore Files (*.album)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Soundfont installed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Install Soundfont</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Do you want to install the soundfont %1?</source>
-        <translation type="unfinished"/>
+        <translation>Fișiere MuseScore (*.album)</translation>
     </message>
     <message>
         <source>Overwrite?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Soundfont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
-        <translation type="unfinished"/>
+        <translation>Suprascrieți?</translation>
     </message>
     <message>
         <source>%1 already exists.
 Do you want to overwrite it?</source>
-        <translation type="unfinished"/>
+        <translation>%1 există deja.
+Doriți să-l suprascrieți?</translation>
+    </message>
+    <message>
+        <source>Install SoundFont</source>
+        <translation>Instalează SoundFont</translation>
+    </message>
+    <message>
+        <source>Do you want to install the SoundFont %1?</source>
+        <translation>Doriți să instalați SoundFont-ul %1?</translation>
+    </message>
+    <message>
+        <source>SoundFont installed</source>
+        <translation>SoundFont instalat</translation>
+    </message>
+    <message>
+        <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
+        <translation>SoundFont instalat. Mergeți la Vizualizare &gt; Sintetizator pentru a-l adăuga și la Vizualizare &gt; Mixer pentru a alege un sunet de instrument.</translation>
     </message>
 </context>
 <context>
@@ -10685,11 +10828,11 @@ Do you want to overwrite it?</source>
     <name>Resource</name>
     <message>
         <source>MuseScore Resources</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Resurse</translation>
     </message>
     <message>
         <source>Tab 1</source>
-        <translation type="unfinished"/>
+        <translation>Tabulator 1</translation>
     </message>
     <message>
         <source>Language</source>
@@ -10697,26 +10840,30 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Filename</source>
-        <translation type="unfinished"/>
+        <translation>Nume fișier</translation>
     </message>
     <message>
         <source>File Size</source>
-        <translation type="unfinished"/>
+        <translation>Dimensiune Fișier</translation>
     </message>
     <message>
         <source>Install/Update</source>
-        <translation type="unfinished"/>
+        <translation>Instalare/Actualizare</translation>
     </message>
     <message>
         <source>Tab 2</source>
-        <translation type="unfinished"/>
+        <translation>Tabulator 2</translation>
     </message>
 </context>
 <context>
-    <name>ScoreBrowser</name>
+    <name>Rest</name>
     <message>
-        <source>Form</source>
-        <translation>Formular</translation>
+        <source>Voice: %1</source>
+        <translation>Vocea: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Durată: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10731,7 +10878,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Created: </source>
-        <translation type="unfinished"/>
+        <translation>Creat:</translation>
     </message>
     <message>
         <source>Name:</source>
@@ -10739,30 +10886,30 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Nothing selected</source>
-        <translation type="unfinished"/>
+        <translation>Nicio selecție</translation>
     </message>
 </context>
 <context>
     <name>SectionBreakProperties</name>
     <message>
         <source>MuseScore: Section Break Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Proprietăți Despărțitor de Secțiune</translation>
     </message>
     <message>
         <source>Pause:</source>
-        <translation type="unfinished"/>
+        <translation>Pauză:</translation>
     </message>
     <message>
         <source>sec</source>
-        <translation type="unfinished"/>
+        <translation>sec</translation>
     </message>
     <message>
         <source>Start new section with long instrument names</source>
-        <translation type="unfinished"/>
+        <translation>Începe secțiunea nouă cu numele complet al instrumentului</translation>
     </message>
     <message>
         <source>Start new section with measure number one</source>
-        <translation type="unfinished"/>
+        <translation>Începe o secțiune nouă cu măsura numărul unu</translation>
     </message>
 </context>
 <context>
@@ -10781,58 +10928,58 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Element type:</source>
-        <translation type="unfinished"/>
+        <translation>Tip element:</translation>
     </message>
     <message>
         <source>Same staff</source>
-        <translation type="unfinished"/>
+        <translation>Același portativ</translation>
     </message>
     <message>
         <source>Same voice</source>
-        <translation type="unfinished"/>
+        <translation>Aceeași voce</translation>
     </message>
     <message>
         <source>Same subtype:</source>
-        <translation type="unfinished"/>
+        <translation>Același subtip:</translation>
     </message>
     <message>
         <source>Same system</source>
-        <translation type="unfinished"/>
+        <translation>Același sistem</translation>
     </message>
     <message>
         <source>Replace selection</source>
-        <translation type="unfinished"/>
+        <translation>Înlocuiște selecția</translation>
     </message>
     <message>
         <source>Add to selection</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă la selecţie</translation>
     </message>
     <message>
         <source>Search in selection</source>
-        <translation type="unfinished"/>
+        <translation>Caută în selecție</translation>
     </message>
     <message>
         <source>Subtract from selection</source>
-        <translation type="unfinished"/>
+        <translation>Substrage din selecție</translation>
     </message>
     <message>
         <source>In selection</source>
-        <translation type="unfinished"/>
+        <translation>În selecție</translation>
     </message>
 </context>
 <context>
     <name>SelectInstrument</name>
     <message>
         <source>MuseScore: Select Instrument</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Selectează Instrument</translation>
     </message>
     <message>
         <source>0</source>
-        <translation type="unfinished"/>
+        <translation>0</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Caută</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -10840,28 +10987,28 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Current instrument:</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentul curent:</translation>
     </message>
 </context>
 <context>
     <name>SfListDialog</name>
     <message>
-        <source>Soundfont Files</source>
-        <translation type="unfinished"/>
+        <source>SoundFont Files</source>
+        <translation>Fișiere SoundFont</translation>
     </message>
 </context>
 <context>
     <name>SfzListDialog</name>
     <message>
         <source>SFZ Files</source>
-        <translation type="unfinished"/>
+        <translation>Fișiere SFZ</translation>
     </message>
 </context>
 <context>
     <name>ShortcutCaptureDialogBase</name>
     <message>
         <source>Old shortcuts:</source>
-        <translation type="unfinished"/>
+        <translation>Scurtături vechi:</translation>
     </message>
     <message>
         <source>New shortcut:</source>
@@ -10870,7 +11017,7 @@ Do you want to overwrite it?</source>
     <message>
         <source>Type to set shortcut</source>
         <comment>placeholder text</comment>
-        <translation type="unfinished"/>
+        <translation>Tastați pentru a seta scurtătura</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -10882,7 +11029,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Replace</source>
-        <translation type="unfinished"/>
+        <translation>Înlocuiește</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -10890,30 +11037,30 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Enter Shortcut Sequence</source>
-        <translation type="unfinished"/>
+        <translation>Introduceți Secvența de Taste pt. Scurtătură</translation>
     </message>
     <message>
         <source>Press up to four keys to enter shortcut sequence</source>
-        <translation type="unfinished"/>
+        <translation>Apăsați până la patru taste pt introducerea scurtăturii</translation>
     </message>
     <message>
         <source>Old shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Scurtături vechi</translation>
     </message>
     <message>
         <source>New shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Scurtătură nouă</translation>
     </message>
     <message>
         <source>Type to set shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Tastați pentru a seta scurtătura</translation>
     </message>
 </context>
 <context>
     <name>SplitStaff</name>
     <message>
         <source>MuseScore: Edit Staff/Part Properties</source>
-        <translation>MuseScore: Modificare proprietăţi portativ / Parte</translation>
+        <translation>MuseScore: Modificare proprietăţi portativ / știmă</translation>
     </message>
     <message>
         <source>Split Staff</source>
@@ -10928,7 +11075,7 @@ Do you want to overwrite it?</source>
     <name>Staff type group name</name>
     <message>
         <source>Standard</source>
-        <translation>Normală</translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <source>Percussion</source>
@@ -10943,7 +11090,7 @@ Do you want to overwrite it?</source>
     <name>StaffTextProperties</name>
     <message>
         <source>Change Channel</source>
-        <translation type="unfinished"/>
+        <translation>Schimbă Canal</translation>
     </message>
     <message>
         <source>1</source>
@@ -10963,7 +11110,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Channel:</source>
-        <translation type="unfinished"/>
+        <translation>Canal:</translation>
     </message>
     <message>
         <source>Name</source>
@@ -10971,19 +11118,19 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>Descriere</translation>
     </message>
     <message>
         <source>Actions for selected channel:</source>
-        <translation type="unfinished"/>
+        <translation>Acțiuni pentru canalul selectat:</translation>
     </message>
     <message>
         <source>Aeolus Stops</source>
-        <translation type="unfinished"/>
+        <translation>Stopuri Aeolus</translation>
     </message>
     <message>
         <source>Change Stops:</source>
-        <translation type="unfinished"/>
+        <translation>Schimbă Stopurile.</translation>
     </message>
     <message>
         <source>III</source>
@@ -10992,56 +11139,66 @@ Do you want to overwrite it?</source>
     <message>
         <source>Principal
 8</source>
-        <translation type="unfinished"/>
+        <translation>Principal
+8</translation>
     </message>
     <message>
         <source>Gemshorn
 8</source>
-        <translation type="unfinished"/>
+        <translation>Corn de căprioară
+8</translation>
     </message>
     <message>
         <source>Quinta-
 dena 8</source>
-        <translation type="unfinished"/>
+        <translation>Cvintă
+dena 8</translation>
     </message>
     <message>
         <source>Suabile
 8</source>
-        <translation type="unfinished"/>
+        <translation>Suabile
+8</translation>
     </message>
     <message>
         <source>Rohrflöte
 8</source>
-        <translation type="unfinished"/>
+        <translation>Rohrflöte
+8</translation>
     </message>
     <message>
         <source>Dulzflöte
 4</source>
-        <translation type="unfinished"/>
+        <translation>Dulzflöte
+4</translation>
     </message>
     <message>
         <source>Quintflöte
 2 2/3</source>
-        <translation type="unfinished"/>
+        <translation>Quintflöte
+2 2/3</translation>
     </message>
     <message>
         <source>Super-
 octave 2</source>
-        <translation type="unfinished"/>
+        <translation>Super
+octava 2</translation>
     </message>
     <message>
         <source>Sifflet
 1</source>
-        <translation type="unfinished"/>
+        <translation>Fluier
+1</translation>
     </message>
     <message>
         <source>Cymbel
 VI</source>
-        <translation type="unfinished"/>
+        <translation>Cymbel
+VI</translation>
     </message>
     <message>
         <source>Oboe</source>
-        <translation type="unfinished"/>
+        <translation>Oboi</translation>
     </message>
     <message>
         <source>Tremulant</source>
@@ -11054,36 +11211,42 @@ VI</source>
     <message>
         <source>Harmonic
 Flute 8</source>
-        <translation type="unfinished"/>
+        <translation>Harmonic
+Flute 8</translation>
     </message>
     <message>
         <source>Flauto
 Dolce 4</source>
-        <translation type="unfinished"/>
+        <translation>Flaut
+Dulce 4</translation>
     </message>
     <message>
         <source>Nasard
 2 2/3</source>
-        <translation type="unfinished"/>
+        <translation>Nasard
+2 2/3</translation>
     </message>
     <message>
         <source>Ottavina
 2</source>
-        <translation type="unfinished"/>
+        <translation>Ottavina
+2</translation>
     </message>
     <message>
         <source>Tertia
 1 3/5</source>
-        <translation type="unfinished"/>
+        <translation>Tertia
+1 3/5</translation>
     </message>
     <message>
         <source>Sesqui
 altera</source>
-        <translation type="unfinished"/>
+        <translation>Sesqui
+altera</translation>
     </message>
     <message>
         <source>Septime</source>
-        <translation type="unfinished"/>
+        <translation>Septimă</translation>
     </message>
     <message>
         <source>None</source>
@@ -11091,19 +11254,19 @@ altera</source>
     </message>
     <message>
         <source>Krumhorn</source>
-        <translation type="unfinished"/>
+        <translation>Cromornă</translation>
     </message>
     <message>
         <source>Melodia</source>
-        <translation type="unfinished"/>
+        <translation>Melodia</translation>
     </message>
     <message>
         <source>II+III</source>
-        <translation type="unfinished"/>
+        <translation>II+III</translation>
     </message>
     <message>
         <source>PushButton</source>
-        <translation type="unfinished"/>
+        <translation>Buton Apăsabil</translation>
     </message>
     <message>
         <source>I</source>
@@ -11112,113 +11275,128 @@ altera</source>
     <message>
         <source>Principal
 4</source>
-        <translation type="unfinished"/>
+        <translation>Principal
+4</translation>
     </message>
     <message>
         <source>Octave
 2</source>
-        <translation type="unfinished"/>
+        <translation>Octava
+2</translation>
     </message>
     <message>
         <source>Octave
 1</source>
-        <translation type="unfinished"/>
+        <translation>Octava
+1</translation>
     </message>
     <message>
         <source>Quint
 5 1/3</source>
-        <translation type="unfinished"/>
+        <translation>Cvintă
+5 1/3</translation>
     </message>
     <message>
         <source>Quint
 2 2/3</source>
-        <translation type="unfinished"/>
+        <translation>Cvintă
+2 2/3</translation>
     </message>
     <message>
         <source>Tibia
 8</source>
-        <translation type="unfinished"/>
+        <translation>Tibia
+8</translation>
     </message>
     <message>
         <source>Celesta
 8</source>
-        <translation type="unfinished"/>
+        <translation>Celesta
+8</translation>
     </message>
     <message>
         <source>Flöte
 8</source>
-        <translation type="unfinished"/>
+        <translation>Flöte
+8</translation>
     </message>
     <message>
         <source>Flöte
 4</source>
-        <translation type="unfinished"/>
+        <translation>Flöte
+4</translation>
     </message>
     <message>
         <source>Flöte
 2</source>
-        <translation type="unfinished"/>
+        <translation>Flöte
+2</translation>
     </message>
     <message>
         <source>Mixtur</source>
-        <translation type="unfinished"/>
+        <translation>Mixtur</translation>
     </message>
     <message>
         <source>Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Trumpeta</translation>
     </message>
     <message>
         <source>I+II</source>
-        <translation type="unfinished"/>
+        <translation>I+II</translation>
     </message>
     <message>
         <source>I+III</source>
-        <translation type="unfinished"/>
+        <translation>I+III</translation>
     </message>
     <message>
         <source>P</source>
-        <translation type="unfinished"/>
+        <translation>P</translation>
     </message>
     <message>
         <source>Subbass
 16</source>
-        <translation type="unfinished"/>
+        <translation>Subbass
+16</translation>
     </message>
     <message>
         <source>Principal
 16</source>
-        <translation type="unfinished"/>
+        <translation>Principal
+16</translation>
     </message>
     <message>
         <source>Fagott
 16</source>
-        <translation type="unfinished"/>
+        <translation>Fagot
+16</translation>
     </message>
     <message>
         <source>Trombone
 16</source>
-        <translation type="unfinished"/>
+        <translation>Trombon
+16</translation>
     </message>
     <message>
         <source>Bombarde
 32</source>
-        <translation type="unfinished"/>
+        <translation>Bombarde
+32</translation>
     </message>
     <message>
         <source>P+I</source>
-        <translation type="unfinished"/>
+        <translation>P+I</translation>
     </message>
     <message>
         <source>P+II</source>
-        <translation type="unfinished"/>
+        <translation>P+II</translation>
     </message>
     <message>
         <source>P+III</source>
-        <translation type="unfinished"/>
+        <translation>P+III</translation>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
-        <translation type="unfinished"/>
+        <translation>Mută una sau mai multe voci pe canalul specificat:</translation>
     </message>
     <message>
         <source>MIDI Action</source>
@@ -11230,7 +11408,7 @@ altera</source>
     </message>
     <message>
         <source>Swing Settings</source>
-        <translation type="unfinished"/>
+        <translation>Setări Swing</translation>
     </message>
     <message>
         <source>Swing:</source>
@@ -11238,11 +11416,11 @@ altera</source>
     </message>
     <message>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Oprit</translation>
     </message>
     <message>
         <source>Select swing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Selecție raport swing:</translation>
     </message>
     <message>
         <source>%</source>
@@ -11250,26 +11428,26 @@ altera</source>
     </message>
     <message>
         <source>Eighth note</source>
-        <translation type="unfinished"/>
+        <translation>Notă optime</translation>
     </message>
     <message>
         <source>Sixteenth note</source>
-        <translation type="unfinished"/>
+        <translation>Notă șaisprezecime</translation>
     </message>
 </context>
 <context>
     <name>StaffTypeTemplates</name>
     <message>
         <source>Staff Type Templates</source>
-        <translation type="unfinished"/>
+        <translation>Șabloane Tip Portativ</translation>
     </message>
     <message>
         <source>Save Templates</source>
-        <translation type="unfinished"/>
+        <translation>Salvează șabloanele</translation>
     </message>
     <message>
         <source>Load Templates</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă șabloanele</translation>
     </message>
 </context>
 <context>
@@ -11284,22 +11462,26 @@ altera</source>
     </message>
     <message>
         <source>Load Score</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă Partitură</translation>
     </message>
     <message>
         <source>Startup Dialog</source>
-        <translation type="unfinished"/>
+        <translation>Dialog de Start</translation>
     </message>
 </context>
 <context>
     <name>Startcenter</name>
     <message>
         <source>Start Center</source>
-        <translation type="unfinished"/>
+        <translation>Centru de Start</translation>
     </message>
     <message>
-        <source>&lt;a href=&quot;#&quot;&gt;Open an existing score&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <source>Open a score...</source>
+        <translation>Deschide o partitură...</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Închide</translation>
     </message>
 </context>
 <context>
@@ -11321,11 +11503,11 @@ altera</source>
     </message>
     <message>
         <source>Save to Score</source>
-        <translation type="unfinished"/>
+        <translation>Salvează la Partitură</translation>
     </message>
     <message>
         <source>Load from Score</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă din Partitură</translation>
     </message>
     <message>
         <source>Vol</source>
@@ -11333,15 +11515,15 @@ altera</source>
     </message>
     <message>
         <source>Master Effects</source>
-        <translation type="unfinished"/>
+        <translation>Efecte Generale</translation>
     </message>
     <message>
         <source>Effect B:</source>
-        <translation type="unfinished"/>
+        <translation>Efect B:</translation>
     </message>
     <message>
         <source>Effect A:</source>
-        <translation type="unfinished"/>
+        <translation>Efect A:</translation>
     </message>
     <message>
         <source>Tuning</source>
@@ -11354,50 +11536,74 @@ altera</source>
     </message>
     <message>
         <source>Change Tuning</source>
-        <translation type="unfinished"/>
+        <translation>Schimbă Acordaj</translation>
     </message>
     <message>
         <source>Master volume</source>
-        <translation type="unfinished"/>
+        <translation>Volum general</translation>
     </message>
     <message>
         <source>Set as Default</source>
-        <translation type="unfinished"/>
+        <translation>Setați ca implicit</translation>
     </message>
     <message>
         <source>Load Default</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă-l pe cel Implicit</translation>
     </message>
     <message>
         <source>Master tuning:</source>
-        <translation type="unfinished"/>
+        <translation>Acordaj general:</translation>
     </message>
     <message>
         <source>Save to score</source>
-        <translation type="unfinished"/>
+        <translation>Salvează la Partitură</translation>
     </message>
     <message>
         <source>Load from score</source>
-        <translation type="unfinished"/>
+        <translation>Încarcă din Partitură</translation>
+    </message>
+    <message>
+        <source>Use up and down arrows to modify</source>
+        <translation>Folosiți săgețile sus/jos pentru a modifica</translation>
+    </message>
+    <message>
+        <source>Metronome gain</source>
+        <translation>Gain Metronom</translation>
+    </message>
+    <message>
+        <source>Effect A</source>
+        <translation>Efect A</translation>
+    </message>
+    <message>
+        <source>Effect B</source>
+        <translation>Efect B</translation>
+    </message>
+    <message>
+        <source>Hertz</source>
+        <translation>Hertz</translation>
+    </message>
+    <message>
+        <source>Master tuning</source>
+        <translation>Acordaj general</translation>
     </message>
 </context>
 <context>
     <name>TextPaletteBase</name>
     <message>
         <source>MuseScore: Special Characters</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Caractere speciale</translation>
     </message>
     <message>
         <source>Code Page:</source>
-        <translation type="unfinished"/>
+        <translation>Code Pagină</translation>
     </message>
     <message>
         <source>Common</source>
-        <translation type="unfinished"/>
+        <translation>Comun</translation>
     </message>
     <message>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>Toate</translation>
     </message>
 </context>
 <context>
@@ -11433,12 +11639,12 @@ altera</source>
     <message>
         <source>Horizontal:</source>
         <extracomment>coordinate</extracomment>
-        <translation type="unfinished"/>
+        <translation>Orizontal:</translation>
     </message>
     <message>
         <source>Vertical:</source>
         <extracomment>coordinate</extracomment>
-        <translation type="unfinished"/>
+        <translation>Vertical:</translation>
     </message>
     <message>
         <source>Unit:</source>
@@ -11466,27 +11672,27 @@ altera</source>
     </message>
     <message>
         <source>Foreground color:</source>
-        <translation type="unfinished"/>
+        <translation>Culoare cadru</translation>
     </message>
     <message>
         <source>Background color:</source>
-        <translation type="unfinished"/>
+        <translation>Culoare fundal:</translation>
     </message>
     <message>
         <source>Alignment</source>
-        <translation type="unfinished"/>
+        <translation>Aliniere</translation>
     </message>
     <message>
         <source>Reset to Style</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește la Stil</translation>
     </message>
     <message>
         <source>Text margin:</source>
-        <translation type="unfinished"/>
+        <translation>Margine text:</translation>
     </message>
     <message>
         <source>Border radius:</source>
-        <translation type="unfinished"/>
+        <translation>Rază Bordură:</translation>
     </message>
     <message>
         <source>Font face</source>
@@ -11494,116 +11700,116 @@ altera</source>
     </message>
     <message>
         <source>Font point size</source>
-        <translation type="unfinished"/>
+        <translation>Dimensiune punct font</translation>
     </message>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"/>
+        <translation>Îngroșat</translation>
     </message>
     <message>
         <source>Italic</source>
-        <translation type="unfinished"/>
+        <translation>Înclinat</translation>
     </message>
     <message>
         <source>Underline</source>
-        <translation type="unfinished"/>
+        <translation>Subliniat</translation>
     </message>
     <message>
         <source>Text color</source>
-        <translation type="unfinished"/>
+        <translation>Culoare text</translation>
     </message>
     <message>
         <source>Horizontal offset to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Deplasament orizontal față de punctul de referință</translation>
     </message>
     <message>
         <source>Vertical offset to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Deplasament vertical față de punctul de referință</translation>
     </message>
     <message>
         <source>Offset is absolute</source>
-        <translation type="unfinished"/>
+        <translation>Deplasamentul este absolut</translation>
     </message>
     <message>
         <source>Align left edge of text to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Aliniere margine din stânga a textului la punctul de referință</translation>
     </message>
     <message>
         <source>Center text on reference point</source>
-        <translation type="unfinished"/>
+        <translation>Centrează textul la punctul de referință</translation>
     </message>
     <message>
         <source>Align top edge of text to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Aliniere margine de sus a textului la punctul de referință</translation>
     </message>
     <message>
         <source>Align right edge of text to reference point</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Center text vertical to text baseline</source>
-        <translation type="unfinished"/>
+        <translation>Aliniere margine din dreapta a textului la punctul de referință</translation>
     </message>
     <message>
         <source>Center text vertical to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Centrează textul vertical la punctul de referință</translation>
     </message>
     <message>
         <source>Align bottom edge of text to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Aliniere margine de jos a textului la punctul de referință</translation>
     </message>
     <message>
         <source>Enable text frame</source>
-        <translation type="unfinished"/>
+        <translation>Permite cadru text</translation>
     </message>
     <message>
         <source>Draw circled frame</source>
-        <translation type="unfinished"/>
+        <translation>Desenează cadru rotunjit</translation>
     </message>
     <message>
         <source>Draw boxed frame</source>
-        <translation type="unfinished"/>
+        <translation>Desenează cadru dreptunghiular</translation>
     </message>
     <message>
         <source>Border thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Grosime bordură:</translation>
     </message>
     <message>
         <source>Frame line thickness</source>
-        <translation type="unfinished"/>
+        <translation>Grosime linie cadru</translation>
     </message>
     <message>
         <source>Frame inner margin</source>
-        <translation type="unfinished"/>
+        <translation>Margine interioară cadru</translation>
     </message>
     <message>
         <source>Corner round</source>
-        <translation type="unfinished"/>
+        <translation>Colț rotunjit</translation>
     </message>
     <message>
         <source>Text background color</source>
-        <translation type="unfinished"/>
+        <translation>Culoare fundal text</translation>
     </message>
     <message>
         <source>Frame color</source>
-        <translation type="unfinished"/>
+        <translation>Culoare cadru</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation type="unfinished"/>
+        <translation>Distanța între 2 linii într-un portativ standard cu 5 linii</translation>
     </message>
     <message>
         <source>Offset in staff space units</source>
-        <translation type="unfinished"/>
+        <translation>Deplasament în unități spațiu portativ</translation>
     </message>
     <message>
         <source>Staff space</source>
         <extracomment>spatium unit</extracomment>
-        <translation type="unfinished"/>
+        <translation>Spațiu Partituri</translation>
     </message>
     <message>
         <source>Size follows &apos;Staff space&apos; setting</source>
-        <translation type="unfinished"/>
+        <translation>Dimensiunea urmărește setarea &apos;Spațiu portativ&apos; </translation>
+    </message>
+    <message>
+        <source>Align baseline of text to reference point</source>
+        <translation>Aliniere bază text la punctul de referință</translation>
     </message>
 </context>
 <context>
@@ -11622,31 +11828,31 @@ altera</source>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"/>
+        <translation>Textier</translation>
     </message>
     <message>
         <source>Lyrics Odd Lines</source>
-        <translation type="unfinished"/>
+        <translation>Versuri Linii Impare</translation>
     </message>
     <message>
         <source>Lyrics Even Lines</source>
-        <translation type="unfinished"/>
+        <translation>Versuri Linii Pare</translation>
     </message>
     <message>
         <source>Fingering</source>
-        <translation>Degetaţie</translation>
+        <translation>Digitaţie</translation>
     </message>
     <message>
         <source>Instrument Name (Long)</source>
-        <translation type="unfinished"/>
+        <translation>Nume Instrument (Lung)</translation>
     </message>
     <message>
         <source>Instrument Name (Short)</source>
-        <translation type="unfinished"/>
+        <translation>Nume Instrument (Abreviere)</translation>
     </message>
     <message>
         <source>Instrument Name (Part)</source>
-        <translation type="unfinished"/>
+        <translation>Nume instrument (Știmă)</translation>
     </message>
     <message>
         <source>Dynamics</source>
@@ -11654,7 +11860,7 @@ altera</source>
     </message>
     <message>
         <source>Technique</source>
-        <translation type="unfinished"/>
+        <translation>Tehnică</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -11686,19 +11892,19 @@ altera</source>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Simbol Acord</translation>
     </message>
     <message>
         <source>Rehearsal Mark</source>
-        <translation>Semn de Repetiţie</translation>
+        <translation>Reper</translation>
     </message>
     <message>
         <source>Repeat Text Left</source>
-        <translation type="unfinished"/>
+        <translation>Repetă Text Stânga</translation>
     </message>
     <message>
         <source>Repeat Text Right</source>
-        <translation type="unfinished"/>
+        <translation>Repetă Text Dreapta</translation>
     </message>
     <message>
         <source>Repeat Text</source>
@@ -11714,7 +11920,7 @@ altera</source>
     </message>
     <message>
         <source>Text Line</source>
-        <translation type="unfinished"/>
+        <translation>Linie Text</translation>
     </message>
     <message>
         <source>Glissando</source>
@@ -11730,31 +11936,35 @@ altera</source>
     </message>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"/>
+        <translation>Bend</translation>
     </message>
     <message>
         <source>Header</source>
-        <translation type="unfinished"/>
+        <translation>Antet</translation>
     </message>
     <message>
         <source>Footer</source>
-        <translation type="unfinished"/>
+        <translation>Subsol</translation>
     </message>
     <message>
         <source>Instrument Change</source>
-        <translation type="unfinished"/>
+        <translation>Schimbare de instrument</translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"/>
+        <translation>Bass Cifrat</translation>
     </message>
     <message>
         <source>LH Guitar Fingering</source>
-        <translation type="unfinished"/>
+        <translation>Digitație Chitară Mâna Stângă</translation>
     </message>
     <message>
         <source>RH Guitar Fingering</source>
-        <translation type="unfinished"/>
+        <translation>Digitație Chitară Mâna Dreaptă</translation>
+    </message>
+    <message>
+        <source>Pedal</source>
+        <translation>Pedală</translation>
     </message>
 </context>
 <context>
@@ -11783,7 +11993,7 @@ altera</source>
     </message>
     <message>
         <source>Value:</source>
-        <translation type="unfinished"/>
+        <translation>Valoare:</translation>
     </message>
     <message>
         <source>/</source>
@@ -11803,15 +12013,15 @@ altera</source>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished"/>
+        <translation>8</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished"/>
+        <translation>16</translation>
     </message>
     <message>
         <source>32</source>
-        <translation type="unfinished"/>
+        <translation>32</translation>
     </message>
     <message>
         <source>64</source>
@@ -11827,14 +12037,14 @@ altera</source>
     </message>
     <message>
         <source>Add time signature to palette</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă metru la paletă</translation>
     </message>
 </context>
 <context>
     <name>TimeSigProperties</name>
     <message>
         <source>Time Signature Properties</source>
-        <translation type="unfinished"/>
+        <translation>Proprietăți Metrul Măsurii</translation>
     </message>
     <message>
         <source>/</source>
@@ -11846,11 +12056,11 @@ altera</source>
     </message>
     <message>
         <source>Note Groups</source>
-        <translation type="unfinished"/>
+        <translation>Gropuri Note</translation>
     </message>
     <message>
         <source>Values</source>
-        <translation type="unfinished"/>
+        <translation>Valori</translation>
     </message>
     <message>
         <source>Appearance</source>
@@ -11862,11 +12072,11 @@ altera</source>
     </message>
     <message>
         <source>Global value:</source>
-        <translation type="unfinished"/>
+        <translation>Valoare Globală:</translation>
     </message>
     <message>
         <source>Actual value:</source>
-        <translation type="unfinished"/>
+        <translation>Valoare Reală</translation>
     </message>
 </context>
 <context>
@@ -11893,15 +12103,15 @@ altera</source>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished"/>
+        <translation>8</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished"/>
+        <translation>16</translation>
     </message>
     <message>
         <source>32</source>
-        <translation type="unfinished"/>
+        <translation>32</translation>
     </message>
     <message>
         <source>64</source>
@@ -11913,7 +12123,7 @@ altera</source>
     </message>
     <message>
         <source>Duration:</source>
-        <translation type="unfinished"/>
+        <translation>Durată:</translation>
     </message>
     <message>
         <source>Enter Number of Measures:</source>
@@ -11929,23 +12139,23 @@ altera</source>
     </message>
     <message>
         <source>Common time</source>
-        <translation type="unfinished"/>
+        <translation>4/4 Scriere prescurtată</translation>
     </message>
     <message>
         <source>Time Signature Wizard</source>
-        <translation type="unfinished"/>
+        <translation>Dialog Metrul Măsurii</translation>
     </message>
     <message>
         <source>Beat unit</source>
-        <translation type="unfinished"/>
+        <translation>Unitate Bătaie</translation>
     </message>
     <message>
         <source>Common Time</source>
-        <translation type="unfinished"/>
+        <translation>4/4 Scriere prescurtată</translation>
     </message>
     <message>
         <source>Enter Number of Measures</source>
-        <translation type="unfinished"/>
+        <translation>Introduceți Numărul de Măsuri</translation>
     </message>
     <message>
         <source>Measures</source>
@@ -11953,7 +12163,7 @@ altera</source>
     </message>
     <message>
         <source>Cut Time</source>
-        <translation type="unfinished"/>
+        <translation>2/2 alla breve</translation>
     </message>
     <message>
         <source>Beats in a measure</source>
@@ -11961,7 +12171,7 @@ altera</source>
     </message>
     <message>
         <source>Hint: You can also add or remove measures after creation of the score.</source>
-        <translation type="unfinished"/>
+        <translation>Sugestie: Puteți adăuga sau șterge măsuri și după crearea partiturii.</translation>
     </message>
 </context>
 <context>
@@ -12108,31 +12318,31 @@ altera</source>
     </message>
     <message>
         <source>Second</source>
-        <translation type="unfinished"/>
+        <translation>A doua</translation>
     </message>
     <message>
         <source>Third</source>
-        <translation type="unfinished"/>
+        <translation>A treia</translation>
     </message>
     <message>
         <source>Fourth</source>
-        <translation type="unfinished"/>
+        <translation>A patra</translation>
     </message>
     <message>
         <source>Fifth</source>
-        <translation type="unfinished"/>
+        <translation>A cincea</translation>
     </message>
     <message>
         <source>Sixth</source>
-        <translation type="unfinished"/>
+        <translation>A șasea</translation>
     </message>
     <message>
         <source>Seventh</source>
-        <translation type="unfinished"/>
+        <translation>A șaptea</translation>
     </message>
     <message>
         <source>Keep degree alterations</source>
-        <translation type="unfinished"/>
+        <translation>Păstrează gradul alterațiilor</translation>
     </message>
     <message>
         <source>Options</source>
@@ -12140,117 +12350,117 @@ altera</source>
     </message>
     <message>
         <source>Transpose chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Transpunere simboluri acord</translation>
     </message>
     <message>
         <source>C♭ major / A♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>Do♭ major / La♭ minor</translation>
     </message>
     <message>
         <source>G♭ major / E♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>Sol♭ major / Mi♭ minor</translation>
     </message>
     <message>
         <source>D♭ major / B♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>Re♭ major / Si♭ minor</translation>
     </message>
     <message>
         <source>A♭ major / F minor</source>
-        <translation type="unfinished"/>
+        <translation>La♭ major / Fa minor</translation>
     </message>
     <message>
         <source>E♭ major / C minor</source>
-        <translation type="unfinished"/>
+        <translation>Mi♭ major / Do minor</translation>
     </message>
     <message>
         <source>B♭ major / G minor</source>
-        <translation type="unfinished"/>
+        <translation>Si♭ major / Sol minor</translation>
     </message>
     <message>
         <source>A major / F♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>La major / Fa♯ minor</translation>
     </message>
     <message>
         <source>E major / C♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>Mi major / Do♯ minor</translation>
     </message>
     <message>
         <source>B major / G♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>Si major / Sol♯ minor</translation>
     </message>
     <message>
         <source>F♯ major / D♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>Fa♯ major / Re♯ minor</translation>
     </message>
     <message>
         <source>C♯ major / A♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>Do♯ major / La♯ minor</translation>
     </message>
     <message>
         <source>Single Sharps and Flats Only</source>
-        <translation type="unfinished"/>
+        <translation>Numai Diezi și Bemoli Simpli</translation>
     </message>
     <message>
         <source>Use Double Sharps and Flats</source>
-        <translation type="unfinished"/>
+        <translation>Folosește Bemoli și Deizi Dubli</translation>
     </message>
     <message>
         <source>Transpose Chromatically</source>
-        <translation type="unfinished"/>
+        <translation>Transpune Cromatic</translation>
     </message>
     <message>
         <source>By Key</source>
-        <translation type="unfinished"/>
+        <translation>După Armură</translation>
     </message>
     <message>
         <source>By Interval</source>
-        <translation type="unfinished"/>
+        <translation>După Interval</translation>
     </message>
     <message>
         <source>Transpose Diatonically</source>
-        <translation type="unfinished"/>
+        <translation>Transpune Diatonic</translation>
     </message>
 </context>
 <context>
     <name>Tremolo</name>
     <message>
         <source>Eighth through stem</source>
-        <translation type="unfinished"/>
+        <translation>Optime prin coadă</translation>
     </message>
     <message>
         <source>16th through stem</source>
-        <translation type="unfinished"/>
+        <translation>16me prin coadă</translation>
     </message>
     <message>
         <source>32nd through stem</source>
-        <translation type="unfinished"/>
+        <translation>32me prin coadă</translation>
     </message>
     <message>
         <source>64th through stem</source>
-        <translation type="unfinished"/>
+        <translation>64me prin coadă</translation>
     </message>
     <message>
         <source>Eighth between notes</source>
-        <translation type="unfinished"/>
+        <translation>Optime între note</translation>
     </message>
     <message>
         <source>16th between notes</source>
-        <translation type="unfinished"/>
+        <translation>16me între note</translation>
     </message>
     <message>
         <source>32nd between notes</source>
-        <translation type="unfinished"/>
+        <translation>32me între note</translation>
     </message>
     <message>
         <source>64th between notes</source>
-        <translation type="unfinished"/>
+        <translation>64me între note</translation>
     </message>
 </context>
 <context>
     <name>TremoloBarDialog</name>
     <message>
         <source>Bend type:</source>
-        <translation type="unfinished"/>
+        <translation>Tip Bend:</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
@@ -12258,15 +12468,15 @@ altera</source>
     </message>
     <message>
         <source>Dip</source>
-        <translation type="unfinished"/>
+        <translation>Dip</translation>
     </message>
     <message>
         <source>Dive</source>
-        <translation type="unfinished"/>
+        <translation>Dive</translation>
     </message>
     <message>
         <source>Inverted Dip</source>
-        <translation type="unfinished"/>
+        <translation>Dip Inversat</translation>
     </message>
     <message>
         <source>Return</source>
@@ -12274,15 +12484,15 @@ altera</source>
     </message>
     <message>
         <source>MuseScore: Tremolo Bar Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Proprietăți Bară de Tremolo</translation>
     </message>
     <message>
         <source>Release(Up)</source>
-        <translation type="unfinished"/>
+        <translation>Release(Sus)</translation>
     </message>
     <message>
         <source>Release(Down)</source>
-        <translation type="unfinished"/>
+        <translation>Release(Jos)</translation>
     </message>
 </context>
 <context>
@@ -12316,11 +12526,11 @@ altera</source>
     </message>
     <message>
         <source>Bracket</source>
-        <translation>Acoladă</translation>
+        <translation>Paranteză</translation>
     </message>
     <message>
         <source>Relation:</source>
-        <translation type="unfinished"/>
+        <translation>Raport:</translation>
     </message>
     <message>
         <source>Relation</source>
@@ -12332,30 +12542,30 @@ altera</source>
     </message>
     <message>
         <source>Auto bracket</source>
-        <translation>acoladă (dacă e cazul)</translation>
+        <translation>Paranteză Automată</translation>
     </message>
 </context>
 <context>
     <name>UploadScoreDialog</name>
     <message>
         <source>Score Information</source>
-        <translation type="unfinished"/>
+        <translation>Informații Partitură</translation>
     </message>
     <message>
         <source>You&apos;re logged in as</source>
-        <translation type="unfinished"/>
+        <translation>Sunteți logat ca</translation>
     </message>
     <message>
         <source>USERNAME</source>
-        <translation type="unfinished"/>
+        <translation>NUME UTILIZATOR</translation>
     </message>
     <message>
         <source>Sign out</source>
-        <translation type="unfinished"/>
+        <translation>Delogare</translation>
     </message>
     <message>
         <source>Sign out on exit</source>
-        <translation type="unfinished"/>
+        <translation>Delogare la închidere</translation>
     </message>
     <message>
         <source>Title</source>
@@ -12363,54 +12573,26 @@ altera</source>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Who can access this score?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Anyone</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Just you</source>
-        <translation type="unfinished"/>
+        <translation>Descriere</translation>
     </message>
     <message>
         <source>License</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://musescore.com/help/license&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;What does this mean?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Licență</translation>
     </message>
     <message>
         <source>Tags</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:italic;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Use a comma to separate the tags&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Respect the &lt;/span&gt;&lt;a href=&quot;http://musescore.com/community-guidelines&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;community guidelines&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;. Only make your scores accessible to anyone with permission from the right holders.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Etichete</translation>
     </message>
     <message>
         <source>Update the existing score </source>
+        <translation>Actualizați partitura existentă</translation>
+    </message>
+    <message>
+        <source>Make this score private</source>
+        <translation>Faceți această partitură privată</translation>
+    </message>
+    <message>
+        <source>Sharing</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -12433,24 +12615,26 @@ p, li { white-space: pre-wrap; }
     <name>Workspace</name>
     <message>
         <source>MuseScore: Writing Workspace File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Sciere Fișier Spațiu de Lucru</translation>
     </message>
     <message>
         <source>Writing Workspace File
 %1
 failed: </source>
-        <translation type="unfinished"/>
+        <translation>Scrierea Fișierului Spațiu de Lucru
+%1
+a eșuat:</translation>
     </message>
 </context>
 <context>
     <name>XmlStream</name>
     <message>
         <source>Extra content at end of document.</source>
-        <translation type="unfinished"/>
+        <translation>Conținut extra la finalul documentului.</translation>
     </message>
     <message>
         <source>Invalid entity value.</source>
-        <translation type="unfinished"/>
+        <translation>Valoare entitate invalidă</translation>
     </message>
     <message>
         <source>Invalid XML character.</source>
@@ -12458,43 +12642,43 @@ failed: </source>
     </message>
     <message>
         <source>Sequence &apos;]]&gt;&apos; not allowed in content.</source>
-        <translation type="unfinished"/>
+        <translation>Secvența &apos;]]&gt;&apos; nu este permisă în conținut</translation>
     </message>
     <message>
         <source>Encountered incorrectly encoded content.</source>
-        <translation type="unfinished"/>
+        <translation>Conținut encodat incorect întălnit.</translation>
     </message>
     <message>
         <source>Namespace prefix &apos;%1&apos; not declared</source>
-        <translation type="unfinished"/>
+        <translation>Prefic de Namespace  &apos;%1&apos; nedeclarat</translation>
     </message>
     <message>
         <source>Illegal namespace declaration.</source>
-        <translation type="unfinished"/>
+        <translation>Declarație ilegală de spațiu de lucru.</translation>
     </message>
     <message>
         <source>Attribute redefined.</source>
-        <translation type="unfinished"/>
+        <translation>Atribut redefinit</translation>
     </message>
     <message>
         <source>Unexpected character &apos;%1&apos; in public id literal.</source>
-        <translation type="unfinished"/>
+        <translation>Caracter neașteptat &apos;%1&apos; în id literal public.</translation>
     </message>
     <message>
         <source>Invalid XML version string.</source>
-        <translation type="unfinished"/>
+        <translation>Șir de caractere pt versiunea XML invalid.</translation>
     </message>
     <message>
         <source>Unsupported XML version.</source>
-        <translation type="unfinished"/>
+        <translation>Versiune nesuportată de XML.</translation>
     </message>
     <message>
         <source>The standalone pseudo attribute must appear after the encoding.</source>
-        <translation type="unfinished"/>
+        <translation>Pseudo atributul de sine stătător trebuie să apară după encodare.</translation>
     </message>
     <message>
         <source>%1 is an invalid encoding name.</source>
-        <translation type="unfinished"/>
+        <translation>%1 este un nume de encodare invalid.</translation>
     </message>
     <message>
         <source>Encoding %1 is unsupported</source>
@@ -12502,11 +12686,11 @@ failed: </source>
     </message>
     <message>
         <source>Standalone accepts only yes or no.</source>
-        <translation type="unfinished"/>
+        <translation>De sine stătător acceptă numai da sau nu.</translation>
     </message>
     <message>
         <source>Invalid attribute in XML declaration.</source>
-        <translation type="unfinished"/>
+        <translation>Atribut invalid în declarația XML</translation>
     </message>
     <message>
         <source>Premature end of document.</source>
@@ -12518,19 +12702,19 @@ failed: </source>
     </message>
     <message>
         <source>Expected </source>
-        <translation type="unfinished"/>
+        <translation>Așteptat</translation>
     </message>
     <message>
         <source>, but got &apos;</source>
-        <translation type="unfinished"/>
+        <translation>, dar găsit &apos;</translation>
     </message>
     <message>
         <source>Unexpected &apos;</source>
-        <translation type="unfinished"/>
+        <translation>Neașteptat &apos;</translation>
     </message>
     <message>
         <source>Expected character data.</source>
-        <translation type="unfinished"/>
+        <translation>Se aștepta un caracter de date.</translation>
     </message>
 </context>
 <context>
@@ -12548,12 +12732,12 @@ failed: </source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <source>Soundfont %1 already loaded</source>
-        <translation>Soundfont %1 deja încărcat</translation>
+        <source>SoundFont %1 already loaded</source>
+        <translation>SoundFont %1 deja încărcat</translation>
     </message>
     <message>
-        <source>cannot load soundfont %1</source>
-        <translation type="unfinished"/>
+        <source>Cannot load SoundFont %1</source>
+        <translation>Nu se poate încărca SoundFont-ul %1</translation>
     </message>
 </context>
 <context>
@@ -12564,7 +12748,7 @@ failed: </source>
     </message>
     <message>
         <source>Sharp</source>
-        <translation>diez</translation>
+        <translation>Diez</translation>
     </message>
     <message>
         <source>Flat</source>
@@ -12572,7 +12756,7 @@ failed: </source>
     </message>
     <message>
         <source>Double sharp</source>
-        <translation>dublu diez</translation>
+        <translation>Dublu diez</translation>
     </message>
     <message>
         <source>Double flat</source>
@@ -12584,87 +12768,87 @@ failed: </source>
     </message>
     <message>
         <source>Flat-slash</source>
-        <translation type="unfinished"/>
+        <translation>Bemol-barat</translation>
     </message>
     <message>
         <source>Flat-slash2</source>
-        <translation type="unfinished"/>
+        <translation>Bemol-barat2</translation>
     </message>
     <message>
         <source>Mirrored-flat2</source>
-        <translation type="unfinished"/>
+        <translation>Bemol-oglindit2</translation>
     </message>
     <message>
         <source>Mirrored-flat</source>
-        <translation type="unfinished"/>
+        <translation>Bemol-oglindit</translation>
     </message>
     <message>
         <source>Mirrored-flat-slash</source>
-        <translation type="unfinished"/>
+        <translation>Bemol-barat-oglindit</translation>
     </message>
     <message>
         <source>Flat-flat-slash</source>
-        <translation type="unfinished"/>
+        <translation>Bemol-bemol-barat</translation>
     </message>
     <message>
         <source>Sharp-slash</source>
-        <translation type="unfinished"/>
+        <translation>Diez-barat</translation>
     </message>
     <message>
         <source>Sharp-slash2</source>
-        <translation type="unfinished"/>
+        <translation>Diez-barat2</translation>
     </message>
     <message>
         <source>Sharp-slash3</source>
-        <translation type="unfinished"/>
+        <translation>Diez-barat3</translation>
     </message>
     <message>
         <source>Sharp-slash4</source>
-        <translation type="unfinished"/>
+        <translation>Diez-barat4</translation>
     </message>
     <message>
         <source>Sharp arrow up</source>
-        <translation type="unfinished"/>
+        <translation>Diez + 1/8 ton</translation>
     </message>
     <message>
         <source>Sharp arrow down</source>
-        <translation type="unfinished"/>
+        <translation>Diez - 1/8 ton</translation>
     </message>
     <message>
         <source>Sharp arrow both</source>
-        <translation type="unfinished"/>
+        <translation>Diez cu ambele săgeți</translation>
     </message>
     <message>
         <source>Flat arrow up</source>
-        <translation type="unfinished"/>
+        <translation>Bemol + 1/8 ton</translation>
     </message>
     <message>
         <source>Flat arrow down</source>
-        <translation type="unfinished"/>
+        <translation>Bemol - 1/8 ton</translation>
     </message>
     <message>
         <source>Flat arrow both</source>
-        <translation type="unfinished"/>
+        <translation>Bemol cu ambele săgeți</translation>
     </message>
     <message>
         <source>Natural arrow up</source>
-        <translation type="unfinished"/>
+        <translation>Becar + 1/8 ton</translation>
     </message>
     <message>
         <source>Natural arrow down</source>
-        <translation type="unfinished"/>
+        <translation>Becar - 1/8 ton</translation>
     </message>
     <message>
         <source>Natural arrow both</source>
-        <translation type="unfinished"/>
+        <translation>Becar cu ambele săgeți</translation>
     </message>
     <message>
         <source>Sori</source>
-        <translation type="unfinished"/>
+        <translation>Sori</translation>
     </message>
     <message>
         <source>Koron</source>
-        <translation type="unfinished"/>
+        <translation>Koron</translation>
     </message>
 </context>
 <context>
@@ -12686,20 +12870,12 @@ failed: </source>
         <translation>Deschide...</translation>
     </message>
     <message>
-        <source>File open</source>
-        <translation>Deschide fișier</translation>
-    </message>
-    <message>
         <source>Load score from file</source>
         <translation>Încarcă o partitură dintr-un fișier</translation>
     </message>
     <message>
         <source>Save</source>
         <translation>Salvează</translation>
-    </message>
-    <message>
-        <source>File save</source>
-        <translation>Salvază fișier</translation>
     </message>
     <message>
         <source>Save score to file</source>
@@ -12710,10 +12886,6 @@ failed: </source>
         <translation>Salvează ca...</translation>
     </message>
     <message>
-        <source>File save as</source>
-        <translation>Salvează fișier ca</translation>
-    </message>
-    <message>
         <source>Save score under a new file name</source>
         <translation>Salvează partitura sub un nume nou</translation>
     </message>
@@ -12722,20 +12894,12 @@ failed: </source>
         <translation>Salvează selecția...</translation>
     </message>
     <message>
-        <source>Save Selection</source>
-        <translation>Salvează selecția</translation>
-    </message>
-    <message>
         <source>Save current selection as new score</source>
         <translation>Salvează selecția curentă ca partitură nouă</translation>
     </message>
     <message>
         <source>Save a Copy...</source>
         <translation>Salvează o copie...</translation>
-    </message>
-    <message>
-        <source>File save a copy</source>
-        <translation>File save a copy</translation>
     </message>
     <message>
         <source>Save a copy of the score in addition to the current file</source>
@@ -12755,23 +12919,15 @@ failed: </source>
     </message>
     <message>
         <source>Export Parts...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Export Parts</source>
-        <translation type="unfinished"/>
+        <translation>Exportă Știme...</translation>
     </message>
     <message>
         <source>Save a copy of the score&apos;s parts in various formats</source>
-        <translation type="unfinished"/>
+        <translation>Salvează o copie a știmelor partiturii în diferite formate</translation>
     </message>
     <message>
         <source>Close</source>
         <translation>Închide</translation>
-    </message>
-    <message>
-        <source>File close</source>
-        <translation>Închidere fișier</translation>
     </message>
     <message>
         <source>Close current score</source>
@@ -12780,10 +12936,6 @@ failed: </source>
     <message>
         <source>New...</source>
         <translation>Crează...</translation>
-    </message>
-    <message>
-        <source>File new</source>
-        <translation>Fișier nou</translation>
     </message>
     <message>
         <source>Create new score</source>
@@ -12803,19 +12955,19 @@ failed: </source>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Înapoi o versiune</translation>
+        <translation>Anulare</translation>
     </message>
     <message>
         <source>Undo last change</source>
-        <translation>Înapoi cu o versiune</translation>
+        <translation>Anulează ultima schimbare</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation>Înainte o versiune</translation>
+        <translation>Refacere</translation>
     </message>
     <message>
         <source>Redo last undo</source>
-        <translation>Înainte cu o versiune</translation>
+        <translation>Reface ultima anulare</translation>
     </message>
     <message>
         <source>Cut</source>
@@ -12840,10 +12992,6 @@ failed: </source>
     <message>
         <source>Note Input</source>
         <translation>Introducere note</translation>
-    </message>
-    <message>
-        <source>Note input mode</source>
-        <translation>Modul introducere note</translation>
     </message>
     <message>
         <source>Unison Above</source>
@@ -13095,59 +13243,59 @@ failed: </source>
     </message>
     <message>
         <source>Insert A</source>
-        <translation type="unfinished"/>
+        <translation>Inserează La</translation>
     </message>
     <message>
         <source>Insert note A</source>
-        <translation type="unfinished"/>
+        <translation>Inserează nota La</translation>
     </message>
     <message>
         <source>Insert B</source>
-        <translation type="unfinished"/>
+        <translation>Inserează Si</translation>
     </message>
     <message>
         <source>Insert note B</source>
-        <translation type="unfinished"/>
+        <translation>Inserează nota Si</translation>
     </message>
     <message>
         <source>Insert C</source>
-        <translation type="unfinished"/>
+        <translation>Inserează Do</translation>
     </message>
     <message>
         <source>Insert note C</source>
-        <translation type="unfinished"/>
+        <translation>Inserează nota Do</translation>
     </message>
     <message>
         <source>Insert D</source>
-        <translation type="unfinished"/>
+        <translation>Inserează Re</translation>
     </message>
     <message>
         <source>Insert note D</source>
-        <translation type="unfinished"/>
+        <translation>Inserează nota Re</translation>
     </message>
     <message>
         <source>Insert E</source>
-        <translation type="unfinished"/>
+        <translation>Inserează Mi</translation>
     </message>
     <message>
         <source>Insert note E</source>
-        <translation type="unfinished"/>
+        <translation>Inserează nota Mi</translation>
     </message>
     <message>
         <source>Insert F</source>
-        <translation type="unfinished"/>
+        <translation>Inserează Fa</translation>
     </message>
     <message>
         <source>Insert note F</source>
-        <translation type="unfinished"/>
+        <translation>Inserează nota Fa</translation>
     </message>
     <message>
         <source>Insert G</source>
-        <translation type="unfinished"/>
+        <translation>Inserează Sol</translation>
     </message>
     <message>
         <source>Insert note G</source>
-        <translation type="unfinished"/>
+        <translation>Inserează nota Sol</translation>
     </message>
     <message>
         <source>Rest</source>
@@ -13162,56 +13310,24 @@ failed: </source>
         <translation>Staccato</translation>
     </message>
     <message>
-        <source>Add staccato</source>
-        <translation>Adaugă staccato</translation>
-    </message>
-    <message>
         <source>Tenuto</source>
         <translation>Tenuto</translation>
-    </message>
-    <message>
-        <source>Add tenuto</source>
-        <translation>Adaugă Tenuto</translation>
     </message>
     <message>
         <source>Trill</source>
         <translation>Tril</translation>
     </message>
     <message>
-        <source>Add trill</source>
-        <translation>Adaugă tril</translation>
-    </message>
-    <message>
         <source>Marcato</source>
         <translation>Marcato</translation>
     </message>
     <message>
-        <source>Add marcato</source>
-        <translation>Adaugă marcato</translation>
-    </message>
-    <message>
-        <source>Add More Stretch</source>
-        <translation>Mai mult spaţiu între elemente</translation>
-    </message>
-    <message>
-        <source>Add more stretch</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add Less Stretch</source>
-        <translation>Mai puţin spaţiu între elemente</translation>
-    </message>
-    <message>
-        <source>Add less stretch</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Reset Beam Mode</source>
-        <translation>Restabilește Ligaturile Implicite</translation>
+        <translation>Restabilește Mod Ligaturi</translation>
     </message>
     <message>
         <source>Reset beam mode</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește mod ligaturi</translation>
     </message>
     <message>
         <source>Reset beam mode of selected measures</source>
@@ -13227,15 +13343,11 @@ failed: </source>
     </message>
     <message>
         <source>Pitch up or move text or articulation up</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Diatonic up</source>
-        <translation type="unfinished"/>
+        <translation>Urcă înălțimea notei sau mută textul sau articulația mai sus</translation>
     </message>
     <message>
         <source>Diatonic pitch up</source>
-        <translation type="unfinished"/>
+        <translation>Urcă Înlțimea Diatonic</translation>
     </message>
     <message>
         <source>Up Octave</source>
@@ -13247,7 +13359,7 @@ failed: </source>
     </message>
     <message>
         <source>Pitch up by an octave or move text or articulation up</source>
-        <translation type="unfinished"/>
+        <translation>Urcă înălțimea notei cu o octavă sau mută textul sau articulația mai sus</translation>
     </message>
     <message>
         <source>Up Note in Chord</source>
@@ -13275,19 +13387,11 @@ failed: </source>
     </message>
     <message>
         <source>Pitch down or move text or articulation down</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Diatonic down</source>
-        <translation type="unfinished"/>
+        <translation>Coboară înălțimea notei sau mută textul sau articulația mai jos</translation>
     </message>
     <message>
         <source>Diatonic pitch down</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Down octave</source>
-        <translation>Down octave</translation>
+        <translation>Coboară Înlțimea Diatonic</translation>
     </message>
     <message>
         <source>Pitch down octave</source>
@@ -13295,7 +13399,7 @@ failed: </source>
     </message>
     <message>
         <source>Pitch down by an octave or move text or articulation down</source>
-        <translation type="unfinished"/>
+        <translation>Coboară înălțimea notei cu o octavă sau mută textul sau articulația mai jos</translation>
     </message>
     <message>
         <source>Down Note in Chord</source>
@@ -13318,44 +13422,28 @@ failed: </source>
         <translation>Move down</translation>
     </message>
     <message>
-        <source>Previous chord</source>
-        <translation>Acordul precedent</translation>
-    </message>
-    <message>
         <source>Go to previous chord or move text left</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Previous measure</source>
-        <translation>Măsura precedentă</translation>
+        <translation>Mergi la acordul precedent sau mută textul la stânga</translation>
     </message>
     <message>
         <source>Go to previous measure or move text left</source>
-        <translation type="unfinished"/>
+        <translation>Mergi la măsura precedentă sau mută textul la stânga</translation>
     </message>
     <message>
         <source>Previous staff or voice</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next chord</source>
-        <translation>Acordul următor</translation>
+        <translation>Portativul sau vocea precedentă</translation>
     </message>
     <message>
         <source>Go to next chord or move text right</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next measure</source>
-        <translation>Măsura următoare</translation>
+        <translation>Mergi la acordul următor sau mută textul la dreapta</translation>
     </message>
     <message>
         <source>Go to next measure or move text right</source>
-        <translation type="unfinished"/>
+        <translation>Mergi la măsura următoare sau mută textul la dreapta</translation>
     </message>
     <message>
         <source>Next staff or voice</source>
-        <translation type="unfinished"/>
+        <translation>Portivul sau vocea următoare</translation>
     </message>
     <message>
         <source>Add previous chord to selection</source>
@@ -13375,11 +13463,11 @@ failed: </source>
     </message>
     <message>
         <source>Move chord/rest right</source>
-        <translation type="unfinished"/>
+        <translation>Mută acordul/pauza la dreapta</translation>
     </message>
     <message>
         <source>Move chord/rest left</source>
-        <translation type="unfinished"/>
+        <translation>Mută acordul/pauza la stânga</translation>
     </message>
     <message>
         <source>Select to end of measure</source>
@@ -13410,22 +13498,6 @@ failed: </source>
         <translation>adaugă portativ dedesubtul selecţiei</translation>
     </message>
     <message>
-        <source>Page: previous</source>
-        <translation>Pagină: anterioară</translation>
-    </message>
-    <message>
-        <source>Page: next</source>
-        <translation>Pagină: următoare</translation>
-    </message>
-    <message>
-        <source>Page: top</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Page: end</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Slur</source>
         <translation>Legato</translation>
     </message>
@@ -13451,19 +13523,19 @@ failed: </source>
     </message>
     <message>
         <source>Ottava 8va</source>
-        <translation type="unfinished"/>
+        <translation>Ottava 8va</translation>
     </message>
     <message>
         <source>Add ottava 8va</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă ottava 8va</translation>
     </message>
     <message>
         <source>Ottava 8vb</source>
-        <translation type="unfinished"/>
+        <translation>Ottava 8vb</translation>
     </message>
     <message>
         <source>Add ottava 8vb</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă ottava 8vb</translation>
     </message>
     <message>
         <source>Escape</source>
@@ -13527,7 +13599,7 @@ failed: </source>
     </message>
     <message>
         <source>Append Text Frame</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă Cadru de Text la Final</translation>
     </message>
     <message>
         <source>Insert Vertical Frame</source>
@@ -13586,184 +13658,128 @@ failed: </source>
         <translation>Longa</translation>
     </message>
     <message>
-        <source>Note duration: longa</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Double whole note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: double whole</source>
-        <translation type="unfinished"/>
+        <translation>Notă întreagă dublă (breve)</translation>
     </message>
     <message>
         <source>Whole note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: whole</source>
-        <translation type="unfinished"/>
+        <translation>Notă întreagă</translation>
     </message>
     <message>
         <source>Half note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: half</source>
-        <translation type="unfinished"/>
+        <translation>Doime</translation>
     </message>
     <message>
         <source>Quarter note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: quarter</source>
-        <translation type="unfinished"/>
+        <translation>Pătrime</translation>
     </message>
     <message>
         <source>16th note</source>
-        <translation type="unfinished"/>
+        <translation>notă 16me</translation>
     </message>
     <message>
         <source>Note duration: 16th</source>
-        <translation type="unfinished"/>
+        <translation>Durată Notă: 16me</translation>
     </message>
     <message>
         <source>32nd note</source>
-        <translation type="unfinished"/>
+        <translation>notă 32me</translation>
     </message>
     <message>
         <source>Note duration: 32nd</source>
-        <translation type="unfinished"/>
+        <translation>Durată notă: 32me</translation>
     </message>
     <message>
         <source>64th note</source>
-        <translation type="unfinished"/>
+        <translation>Notă 64me</translation>
     </message>
     <message>
         <source>Note duration: 64th</source>
-        <translation type="unfinished"/>
+        <translation>Durată Notă: 64me</translation>
     </message>
     <message>
         <source>128th note</source>
-        <translation type="unfinished"/>
+        <translation>Notă 128me</translation>
     </message>
     <message>
         <source>Note duration: 128th</source>
-        <translation type="unfinished"/>
+        <translation>Durată Notă: 128me</translation>
     </message>
     <message>
         <source>Increase active duration</source>
-        <translation type="unfinished"/>
+        <translation>Crește Durata Activă</translation>
     </message>
     <message>
         <source>Decrease active duration</source>
-        <translation type="unfinished"/>
+        <translation>Micșorează Durata Activă</translation>
     </message>
     <message>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Punct augmentativ</translation>
     </message>
     <message>
         <source>Double augmentation dot</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: double augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Punct dublu augmentativ</translation>
     </message>
     <message>
         <source>Tie</source>
-        <translation>Legato</translation>
-    </message>
-    <message>
-        <source>Note duration: tie</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: rest</source>
-        <translation type="unfinished"/>
+        <translation>Legato de prelungire</translation>
     </message>
     <message>
         <source>Double sharp</source>
-        <translation>dublu diez</translation>
-    </message>
-    <message>
-        <source>Note entry: double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Dublu diez</translation>
     </message>
     <message>
         <source>Sharp</source>
-        <translation>diez</translation>
-    </message>
-    <message>
-        <source>Note entry: sharp</source>
-        <translation type="unfinished"/>
+        <translation>Diez</translation>
     </message>
     <message>
         <source>Natural</source>
-        <translation>becar</translation>
-    </message>
-    <message>
-        <source>Note entry: natural</source>
-        <translation type="unfinished"/>
+        <translation>Becar</translation>
     </message>
     <message>
         <source>Flat</source>
         <translation>Bemol</translation>
     </message>
     <message>
-        <source>Note entry: flat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Double flat</source>
         <translation>dublu bemol</translation>
     </message>
     <message>
-        <source>Note entry: double flat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Acciaccatura</source>
-        <translation>apogiatură scurtă</translation>
+        <translation>Apogiatură scurtă</translation>
     </message>
     <message>
         <source>Add acciaccatura</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă acciaccatură</translation>
     </message>
     <message>
         <source>Appoggiatura</source>
-        <translation>apogiatură</translation>
+        <translation>Apogiatură</translation>
     </message>
     <message>
         <source>Add appoggiatura</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă apogiatură</translation>
     </message>
     <message>
         <source>Grace: quarter</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură: pătrime</translation>
     </message>
     <message>
         <source>Grace: 16th</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură: 16me</translation>
     </message>
     <message>
         <source>Add 16th grace note</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă apogiatură 16me</translation>
     </message>
     <message>
         <source>Grace: 32nd</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură: 32me</translation>
     </message>
     <message>
         <source>Add 32nd grace note</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă apogiatură 32me</translation>
     </message>
     <message>
         <source>1</source>
@@ -13798,12 +13814,8 @@ failed: </source>
         <translation>vocea 4</translation>
     </message>
     <message>
-        <source>MIDI input</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Enable MIDI input</source>
-        <translation>Ascultă după semnale MIDI de intrare</translation>
+        <translation>Permite semnale de intrare MIDI</translation>
     </message>
     <message>
         <source>Beam start</source>
@@ -13811,27 +13823,27 @@ failed: </source>
     </message>
     <message>
         <source>Beam middle</source>
-        <translation type="unfinished"/>
+        <translation>Mijloc ligatură</translation>
     </message>
     <message>
         <source>No beam</source>
-        <translation>no beam</translation>
+        <translation>Fără ligatură</translation>
     </message>
     <message>
         <source>Beam 32nd sub</source>
-        <translation type="unfinished"/>
+        <translation>Ligaturp 32me sub</translation>
     </message>
     <message>
         <source>Auto beam</source>
-        <translation>ligatură automată</translation>
+        <translation>Ligatură automată</translation>
     </message>
     <message>
         <source>Feathered beam, slower</source>
-        <translation type="unfinished"/>
+        <translation>Ligatură împănată, mai lentă</translation>
     </message>
     <message>
         <source>Feathered beam, faster</source>
-        <translation type="unfinished"/>
+        <translation>Ligatură împănată, mai rapidă</translation>
     </message>
     <message>
         <source>Palette</source>
@@ -13847,7 +13859,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI Import Panel</source>
-        <translation type="unfinished"/>
+        <translation>Panou Import MIDI</translation>
     </message>
     <message>
         <source>Mixer</source>
@@ -13863,7 +13875,7 @@ failed: </source>
     </message>
     <message>
         <source>Zoom canvas</source>
-        <translation type="unfinished"/>
+        <translation>Mareşte Suprafaţa de Lucru</translation>
     </message>
     <message>
         <source>Lyrics</source>
@@ -13871,15 +13883,15 @@ failed: </source>
     </message>
     <message>
         <source>Add lyrics</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă versuri</translation>
     </message>
     <message>
         <source>Tempo Marking...</source>
-        <translation type="unfinished"/>
+        <translation>Marcaj Tempo...</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă marcaj tempo</translation>
     </message>
     <message>
         <source>System Text</source>
@@ -13903,7 +13915,7 @@ failed: </source>
     </message>
     <message>
         <source>Add frame text</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă cadru text</translation>
     </message>
     <message>
         <source>Title</source>
@@ -13931,19 +13943,19 @@ failed: </source>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"/>
+        <translation>Textier</translation>
     </message>
     <message>
         <source>Add lyricist text</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă nume compozitor</translation>
     </message>
     <message>
         <source>Rehearsal Mark</source>
-        <translation>Semn de Repetiţie</translation>
+        <translation>Reper</translation>
     </message>
     <message>
         <source>Add rehearsal mark</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă reper</translation>
     </message>
     <message>
         <source>Picture</source>
@@ -13951,7 +13963,7 @@ failed: </source>
     </message>
     <message>
         <source>Add picture</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă magine</translation>
     </message>
     <message>
         <source>Play</source>
@@ -13967,23 +13979,23 @@ failed: </source>
     </message>
     <message>
         <source>Play Previous Chord</source>
-        <translation type="unfinished"/>
+        <translation>Redă Acordul Precedent</translation>
     </message>
     <message>
         <source>Play Previous Measure</source>
-        <translation type="unfinished"/>
+        <translation>Redă Măsura Precedentă</translation>
     </message>
     <message>
         <source>Play Next Chord</source>
-        <translation type="unfinished"/>
+        <translation>Redă Acordul Următor</translation>
     </message>
     <message>
         <source>Play Next Measure</source>
-        <translation type="unfinished"/>
+        <translation>Redă Măsura Următoare</translation>
     </message>
     <message>
         <source>Player Seek to Begin</source>
-        <translation type="unfinished"/>
+        <translation>Derulează redarea până la final</translation>
     </message>
     <message>
         <source>Rewind</source>
@@ -13991,7 +14003,7 @@ failed: </source>
     </message>
     <message>
         <source>Player rewind</source>
-        <translation>De la început</translation>
+        <translation>Derulează redarea la început</translation>
     </message>
     <message>
         <source>Rewind to start position</source>
@@ -13999,15 +14011,15 @@ failed: </source>
     </message>
     <message>
         <source>Player Seek to End</source>
-        <translation type="unfinished"/>
+        <translation>Derulează redarea la final</translation>
     </message>
     <message>
         <source>Play repeats</source>
-        <translation type="unfinished"/>
+        <translation>Redă repetițiile</translation>
     </message>
     <message>
         <source>Toggle repeats playback</source>
-        <translation type="unfinished"/>
+        <translation>Comută redarea repetițiilor</translation>
     </message>
     <message>
         <source>Pan</source>
@@ -14015,11 +14027,11 @@ failed: </source>
     </message>
     <message>
         <source>Toggle pan score</source>
-        <translation type="unfinished"/>
+        <translation>Comută pan-area partiturii</translation>
     </message>
     <message>
         <source>Pan score during playback</source>
-        <translation type="unfinished"/>
+        <translation>Pan-ează partitura în timpul redării</translation>
     </message>
     <message>
         <source>Load Style...</source>
@@ -14043,7 +14055,7 @@ failed: </source>
     </message>
     <message>
         <source>&amp;Transpose...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Transpune...</translation>
     </message>
     <message>
         <source>Transpose</source>
@@ -14051,19 +14063,19 @@ failed: </source>
     </message>
     <message>
         <source>Treble Clef</source>
-        <translation type="unfinished"/>
+        <translation>Cheia Sol</translation>
     </message>
     <message>
         <source>Add treble clef</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă cheia sol</translation>
     </message>
     <message>
         <source>Bass Clef</source>
-        <translation type="unfinished"/>
+        <translation>Cheia Fa</translation>
     </message>
     <message>
         <source>Add bass clef</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă cheia fa</translation>
     </message>
     <message>
         <source>Exchange Voice 1-2</source>
@@ -14103,23 +14115,23 @@ failed: </source>
     </message>
     <message>
         <source>Info...</source>
-        <translation type="unfinished"/>
+        <translation>Info...</translation>
     </message>
     <message>
         <source>Edit score info</source>
-        <translation type="unfinished"/>
+        <translation>Editează informațiile partiturii</translation>
     </message>
     <message>
         <source>Toggle System Break</source>
-        <translation>Pornește/Oprește Despărţitoarele de Sistem</translation>
+        <translation>Comută Despărţitoarele de Sistem</translation>
     </message>
     <message>
         <source>Toggle Page Break</source>
-        <translation>Pornește/Oprește Despărţitoarele de Pagină</translation>
+        <translation>Comută Despărţitoarele de Pagină</translation>
     </message>
     <message>
         <source>Toggle Section Break</source>
-        <translation type="unfinished"/>
+        <translation>Comută Despărțitoarele de Secțiune</translation>
     </message>
     <message>
         <source>Edit Element</source>
@@ -14127,15 +14139,15 @@ failed: </source>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește</translation>
     </message>
     <message>
         <source>Reset user settings</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește setările de utilizator</translation>
     </message>
     <message>
         <source>Debugger</source>
-        <translation type="unfinished"/>
+        <translation>Debugger</translation>
     </message>
     <message>
         <source>Reset Stretch</source>
@@ -14143,7 +14155,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset measure stretch</source>
-        <translation type="unfinished"/>
+        <translation>Restabilește întinderea mărusii</translation>
     </message>
     <message>
         <source>Show Invisible</source>
@@ -14151,7 +14163,7 @@ failed: </source>
     </message>
     <message>
         <source>Show Unprintable</source>
-        <translation type="unfinished"/>
+        <translation>Afisază elementele netipăribile</translation>
     </message>
     <message>
         <source>Show Frames</source>
@@ -14159,43 +14171,15 @@ failed: </source>
     </message>
     <message>
         <source>Show Page Margins</source>
-        <translation type="unfinished"/>
+        <translation>Afișează Marginile Paginii</translation>
     </message>
     <message>
         <source>Insert Special Characters...</source>
         <translation>Inserează Caractere Speciale...</translation>
     </message>
     <message>
-        <source>Insert Special Characters</source>
-        <translation>Inserează Caractere Speciale</translation>
-    </message>
-    <message>
-        <source>Whole rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: whole rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Half rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: half rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quarter rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: quarter rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Backspace</source>
-        <translation type="unfinished"/>
+        <translation>Backspace</translation>
     </message>
     <message>
         <source>Find</source>
@@ -14211,23 +14195,23 @@ failed: </source>
     </message>
     <message>
         <source>Mirror note head</source>
-        <translation type="unfinished"/>
+        <translation>Oglindire cap notă</translation>
     </message>
     <message>
         <source>General...</source>
-        <translation type="unfinished"/>
+        <translation>General...</translation>
     </message>
     <message>
         <source>Edit general style</source>
-        <translation type="unfinished"/>
+        <translation>Editare stil general</translation>
     </message>
     <message>
         <source>Text...</source>
-        <translation type="unfinished"/>
+        <translation>Text...</translation>
     </message>
     <message>
         <source>Edit text style</source>
-        <translation type="unfinished"/>
+        <translation>Editare stil text</translation>
     </message>
     <message>
         <source>All Similar Elements</source>
@@ -14251,11 +14235,11 @@ failed: </source>
     </message>
     <message>
         <source>Double duration</source>
-        <translation type="unfinished"/>
+        <translation>Dublează durata</translation>
     </message>
     <message>
         <source>Half duration</source>
-        <translation type="unfinished"/>
+        <translation>Înjumătățește durata</translation>
     </message>
     <message>
         <source>Repeat selection</source>
@@ -14279,7 +14263,7 @@ failed: </source>
     </message>
     <message>
         <source>Display documents side by side</source>
-        <translation type="unfinished"/>
+        <translation>Afișează documentele unul lângă altul</translation>
     </message>
     <message>
         <source>Documents Stacked</source>
@@ -14287,7 +14271,7 @@ failed: </source>
     </message>
     <message>
         <source>Display documents stacked</source>
-        <translation type="unfinished"/>
+        <translation>Afișează documentele unul deasupra celuilalt</translation>
     </message>
     <message>
         <source>Parts...</source>
@@ -14295,91 +14279,79 @@ failed: </source>
     </message>
     <message>
         <source>Manage parts</source>
-        <translation type="unfinished"/>
+        <translation>Administrare știme</translation>
     </message>
     <message>
         <source>Enharmonic up</source>
-        <translation type="unfinished"/>
+        <translation>Enarmonic sus</translation>
     </message>
     <message>
         <source>Enharmonic down</source>
-        <translation type="unfinished"/>
+        <translation>Enarmonic jos</translation>
     </message>
     <message>
         <source>Create new revision</source>
-        <translation type="unfinished"/>
+        <translation>Crează revizie nouă</translation>
     </message>
     <message>
         <source>Show OMR image</source>
-        <translation type="unfinished"/>
+        <translation>Afișează imagine OMR</translation>
     </message>
     <message>
         <source>Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Ecran Complet</translation>
     </message>
     <message>
         <source>Re-Pitch Mode</source>
-        <translation type="unfinished"/>
+        <translation>Mod Rescriere Înățimi</translation>
     </message>
     <message>
         <source>Replace pitches without changing rhythms</source>
-        <translation type="unfinished"/>
+        <translation>Înlocuiește înălțimea notelor, fără a schimba ritmurile</translation>
     </message>
     <message>
         <source>Piano Keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Claviatură Pian</translation>
     </message>
     <message>
         <source>Additional Media...</source>
-        <translation type="unfinished"/>
+        <translation>Media Adițională</translation>
     </message>
     <message>
         <source>Show media dialog</source>
-        <translation type="unfinished"/>
+        <translation>Afișează dialog media</translation>
     </message>
     <message>
         <source>Split Measure</source>
-        <translation type="unfinished"/>
+        <translation>Sparge Măsura</translation>
     </message>
     <message>
         <source>Page Settings...</source>
         <translation>Proprietăţile Paginii...</translation>
     </message>
     <message>
-        <source>Page Settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Album...</source>
-        <translation type="unfinished"/>
+        <translation>Album...</translation>
     </message>
     <message>
         <source>Album</source>
-        <translation type="unfinished"/>
+        <translation>Album</translation>
     </message>
     <message>
         <source>Layers...</source>
-        <translation type="unfinished"/>
+        <translation>Straturi...</translation>
     </message>
     <message>
         <source>Layers</source>
-        <translation type="unfinished"/>
+        <translation>Straturi</translation>
     </message>
     <message>
         <source>Next Score</source>
-        <translation type="unfinished"/>
+        <translation>Partitura Următoare</translation>
     </message>
     <message>
         <source>Previous Score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Plugin Creator</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Plugin Manager</source>
-        <translation type="unfinished"/>
+        <translation>Partitura Precedentă</translation>
     </message>
     <message>
         <source>Inspector</source>
@@ -14387,43 +14359,19 @@ failed: </source>
     </message>
     <message>
         <source>Show inspector</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Resource Manager</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Show OMR Panel</source>
-        <translation type="unfinished"/>
+        <translation>Arată inspectorul</translation>
     </message>
     <message>
         <source>Loop</source>
-        <translation type="unfinished"/>
+        <translation>Buclează</translation>
     </message>
     <message>
         <source>Toggle loop playback</source>
-        <translation type="unfinished"/>
+        <translation>Comută buclarea</translation>
     </message>
     <message>
         <source>Loop playback</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Loop in</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Set loop In position</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Loop out</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Set loop Out position</source>
-        <translation type="unfinished"/>
+        <translation>Buclează redarea</translation>
     </message>
     <message>
         <source>Metronome</source>
@@ -14431,531 +14379,339 @@ failed: </source>
     </message>
     <message>
         <source>Toggle metronome playback</source>
-        <translation type="unfinished"/>
+        <translation>Comută redarea metronomului</translation>
     </message>
     <message>
         <source>Play metronome during playback</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Count-in</source>
-        <translation type="unfinished"/>
+        <translation>Metronom în timpul redării</translation>
     </message>
     <message>
         <source>Toggle count-in playback</source>
-        <translation type="unfinished"/>
+        <translation>Comută numărătoare inversă</translation>
     </message>
     <message>
         <source>Play count-in at playback start</source>
-        <translation type="unfinished"/>
+        <translation>Numărătoare inversă înainte de redare</translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"/>
+        <translation>Bass Cifrat</translation>
     </message>
     <message>
         <source>Add figured bass</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă bass cifrat</translation>
     </message>
     <message>
         <source>Transpose Up</source>
-        <translation type="unfinished"/>
+        <translation>Transpune Sus</translation>
     </message>
     <message>
         <source>Transpose Down</source>
-        <translation type="unfinished"/>
+        <translation>Transpune Jos</translation>
     </message>
     <message>
         <source>Master Palette...</source>
-        <translation type="unfinished"/>
+        <translation>Paletă Generală...</translation>
     </message>
     <message>
         <source>Show master palette</source>
-        <translation type="unfinished"/>
+        <translation>Afișează paleta generală</translation>
     </message>
     <message>
         <source>Toggle View Mode</source>
-        <translation type="unfinished"/>
+        <translation>Comutare Mod Vizualizare</translation>
     </message>
     <message>
         <source>Next syllable</source>
-        <translation type="unfinished"/>
+        <translation>Silaba următoare</translation>
     </message>
     <message>
         <source>Previous syllable</source>
-        <translation type="unfinished"/>
+        <translation>Silaba precedentă</translation>
     </message>
     <message>
         <source>Toggle visibility</source>
-        <translation type="unfinished"/>
+        <translation>Comutare vizibilitate</translation>
     </message>
     <message>
         <source>Set visible</source>
-        <translation type="unfinished"/>
+        <translation>Vizibil</translation>
     </message>
     <message>
         <source>Set invisible</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note anchored Textline</source>
-        <translation type="unfinished"/>
+        <translation>Invizibil</translation>
     </message>
     <message>
         <source>Lock Score</source>
-        <translation type="unfinished"/>
+        <translation>Blochează partitura</translation>
     </message>
     <message>
         <source>Longa (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: longa (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Double whole note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: double whole (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Whole note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: whole (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Half note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: half (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quarter note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: quarter (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>16th note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Longa (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 16th (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>32nd note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Durată Notă: 16me (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 32nd (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>64th note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Durată Notă: 32me (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 64th (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>128th note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Durată Notă: 64me (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 128th (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Durată Notă: 128me (TAB)</translation>
     </message>
     <message>
         <source>Increase active duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Crește durata activă (TAB)</translation>
     </message>
     <message>
         <source>Decrease active duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Micșorează durata activă (TAB)</translation>
     </message>
     <message>
         <source>Rest (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Pauză (TAB)</translation>
     </message>
     <message>
         <source>Enter rest (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: rest (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>String above (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Introdu pauză (TAB)</translation>
     </message>
     <message>
         <source>Select string above (TAB only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>String below (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Selectează coarda de deasupra (numai TAB)</translation>
     </message>
     <message>
         <source>Select string below (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Selectează coarda de dedesupt (numai TAB)</translation>
     </message>
     <message>
         <source>Fret 0 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 0 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 0 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 0 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Fret 1 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 1 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 1 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 1 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Fret 2 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 2 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 2 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 2 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Fret 3 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 3 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 3 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 3 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Fret 4 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 4 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 4 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 4 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Fret 5 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 5 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 5 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 5 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Fret 6 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 6 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 6 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 6 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Fret 7 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 7 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 7 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 7 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Fret 8 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 8 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 8 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 8 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Fret 9 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 9 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 9 of current string (TAB only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Longa advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a longa (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Breve advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a double whole note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Whole note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a whole note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Half note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a half note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quarter note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a quarter note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Eighth note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of an eighth note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>16th note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a 16th note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>32nd note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a 32nd note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>64th note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a 64th note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Previous measure (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next measure (F.B./Harm.)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 9 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Insert Fretboard Diagram Frame</source>
-        <translation type="unfinished"/>
+        <translation>Inserare Cadru Diagramă de Acord</translation>
     </message>
     <message>
         <source>Add quarter grace note</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă apogiatură pătrime</translation>
     </message>
     <message>
         <source>Chord Symbols...</source>
-        <translation type="unfinished"/>
+        <translation>Simboluri Acord</translation>
     </message>
     <message>
         <source>Edit chord symbols style</source>
-        <translation type="unfinished"/>
+        <translation>Editare stil simboluri acord</translation>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Simbol Acord</translation>
     </message>
     <message>
         <source>Add chord symbol</source>
-        <translation type="unfinished"/>
+        <translation>Adăugare simbol acord</translation>
     </message>
     <message>
         <source>Previous beat (Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Bătaia Precedentă (Simbol Acord)</translation>
     </message>
     <message>
         <source>Next beat (Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Bătaia Următoare (Simbol Acord)</translation>
     </message>
     <message>
         <source>Respell Pitches</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>bold face</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>italic</source>
-        <translation>cursiv</translation>
-    </message>
-    <message>
-        <source>underline</source>
-        <translation>subliniat</translation>
+        <translation>Rescrie Înălțimile</translation>
     </message>
     <message>
         <source>Full Measure Rest</source>
-        <translation type="unfinished"/>
+        <translation>Pauză de o măsură</translation>
     </message>
     <message>
         <source>Converts the measure to a full measure rest</source>
-        <translation type="unfinished"/>
+        <translation>Convertește măsura la o pauză de o măsură</translation>
     </message>
     <message>
         <source>Join Measures</source>
-        <translation type="unfinished"/>
+        <translation>Unește Măsurile</translation>
     </message>
     <message>
         <source>OMR Panel</source>
-        <translation type="unfinished"/>
+        <translation>Panou OMR</translation>
     </message>
     <message>
         <source>Fret 10 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 10 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 10 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 10 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Fret 11 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 11 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 11 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 11 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Fret 12 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 12 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 12 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 12 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Fret 13 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 13 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 13 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 13 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Fret 14 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Tasta 14 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 14 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă tasta 14 pe coarda curentă (numai pentru tabulatură)</translation>
     </message>
     <message>
         <source>Grace: 16th after</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură: 16me după</translation>
     </message>
     <message>
         <source>Add 16th grace note after</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă apogiatură 16me după</translation>
     </message>
     <message>
         <source>Grace: 32nd after</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură: 32me după</translation>
     </message>
     <message>
         <source>Add 32nd grace note after</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă apogiatură 32me după</translation>
     </message>
     <message>
         <source>All Similar Elements in Range Selection</source>
-        <translation type="unfinished"/>
+        <translation>Toate Elementele Similare din Selecția Continuă</translation>
     </message>
     <message>
         <source>Select all similar elements in the range selection</source>
-        <translation type="unfinished"/>
+        <translation>Selectează toate elementele similare din selecția continuă</translation>
     </message>
     <message>
         <source>Add brackets to element</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă paranteze elementului</translation>
     </message>
     <message>
         <source>Selection Filter</source>
-        <translation type="unfinished"/>
+        <translation>Filtru Selecție</translation>
     </message>
     <message>
         <source>Eighth note</source>
-        <translation type="unfinished"/>
+        <translation>Optime</translation>
     </message>
     <message>
         <source>Add Eighth grace note after</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă apogiatură optime după</translation>
     </message>
     <message>
         <source>Beam 16th sub</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Eighth rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Toggle screenshot mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Eighth note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Previous element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>First element</source>
-        <translation type="unfinished"/>
+        <translation>Ligatură 16me sub</translation>
     </message>
     <message>
         <source>Go to the first element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Last element</source>
-        <translation type="unfinished"/>
+        <translation>Mergi la primul element</translation>
     </message>
     <message>
         <source>Go to the last element</source>
-        <translation type="unfinished"/>
+        <translation>Mergi la ultimul element</translation>
     </message>
     <message>
         <source>Key Signatures...</source>
@@ -14963,7 +14719,7 @@ failed: </source>
     </message>
     <message>
         <source>Show key signature palette</source>
-        <translation type="unfinished"/>
+        <translation>Afiează paleta de armuri</translation>
     </message>
     <message>
         <source>Time Signatures...</source>
@@ -14971,7 +14727,7 @@ failed: </source>
     </message>
     <message>
         <source>Show time signature palette</source>
-        <translation type="unfinished"/>
+        <translation>Afisează paleta de metrii de măsură</translation>
     </message>
     <message>
         <source>Symbols...</source>
@@ -14979,127 +14735,1083 @@ failed: </source>
     </message>
     <message>
         <source>Show symbol palette</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Accessibility: next element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Accessibility: previous element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: eighth</source>
-        <translation type="unfinished"/>
+        <translation>Afisează paleta de simboluri</translation>
     </message>
     <message>
         <source>Grace: eighth after</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: eighth rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: eighth (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add more stretch to selected measures</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add less stretch to selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură: optime după</translation>
     </message>
     <message>
         <source>Enable snap to horizontal grid</source>
-        <translation type="unfinished"/>
+        <translation>Perimită auto lipirea de grila orizontală</translation>
     </message>
     <message>
         <source>Enable snap to vertical grid</source>
-        <translation type="unfinished"/>
+        <translation>Perimită auto lipirea de grila verticală</translation>
     </message>
     <message>
         <source>Configure grid</source>
-        <translation type="unfinished"/>
+        <translation>Configurare grilă</translation>
     </message>
     <message>
         <source>Insert one measure</source>
-        <translation type="unfinished"/>
+        <translation>Inserează o măsură</translation>
     </message>
     <message>
         <source>Insert horizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>Inserează cadru orizontal</translation>
     </message>
     <message>
         <source>Insert text frame</source>
-        <translation type="unfinished"/>
+        <translation>Inserează cadru text</translation>
     </message>
     <message>
         <source>Insert vertical frame</source>
-        <translation type="unfinished"/>
+        <translation>Inserează cadru vertical</translation>
     </message>
     <message>
         <source>Part Name</source>
-        <translation>Nume Parte</translation>
+        <translation>Nume Știmă</translation>
     </message>
     <message>
         <source>Add part name</source>
-        <translation type="unfinished"/>
+        <translation>Adaugă nume știmă</translation>
     </message>
     <message>
         <source>Save Online...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>File save online</source>
-        <translation type="unfinished"/>
+        <translation>Salveaza Online...</translation>
     </message>
     <message>
         <source>Save score on MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Salveaza partitura pe MuseScore.com</translation>
     </message>
     <message>
         <source>Explode</source>
-        <translation type="unfinished"/>
+        <translation>Explodeaza</translation>
     </message>
     <message>
         <source>Explode contents of top selected staff into staves below</source>
-        <translation type="unfinished"/>
+        <translation>Explodați conținutul portativului superior selectat în portativele de dedesupt </translation>
     </message>
     <message>
         <source>Implode</source>
-        <translation type="unfinished"/>
+        <translation>Implodeaza</translation>
     </message>
     <message>
         <source>Implode contents of selected staves into top selected staff</source>
-        <translation type="unfinished"/>
+        <translation>Implodați conținutul portativelor selectate în portativul superior selectat.</translation>
     </message>
     <message>
         <source>Fill With Slashes</source>
-        <translation type="unfinished"/>
+        <translation>Umple cu Slash-uri</translation>
     </message>
     <message>
         <source>Toggle Rhythmic Slash Notation</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add/Remove Line Breaks</source>
-        <translation type="unfinished"/>
+        <translation>Comută Notație Ritmică Slash</translation>
     </message>
     <message>
         <source>Start Center</source>
-        <translation type="unfinished"/>
+        <translation>Centru de Start</translation>
     </message>
     <message>
         <source>Toggle create multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>Comutare creare Pauză de mai multe măsuri</translation>
     </message>
     <message>
         <source>Resequence Rehearsal Marks</source>
+        <translation>Resecvențiază Reperele</translation>
+    </message>
+    <message>
+        <source>Increase Stretch</source>
+        <translation>Crește Întinderea</translation>
+    </message>
+    <message>
+        <source>Increase stretch</source>
+        <translation>Crește întinderea</translation>
+    </message>
+    <message>
+        <source>Increase stretch of selected measures</source>
+        <translation>Crește întinderea măsurior selectate</translation>
+    </message>
+    <message>
+        <source>Decrease Stretch</source>
+        <translation>Micșorează Întinderea</translation>
+    </message>
+    <message>
+        <source>Decrease stretch</source>
+        <translation>Micșorează întinderea</translation>
+    </message>
+    <message>
+        <source>Decrease stretch of selected measures</source>
+        <translation>Micșorează întinderea măsurilor selectate</translation>
+    </message>
+    <message>
+        <source>Plugin Creator...</source>
+        <translation>Creator Plugin...</translation>
+    </message>
+    <message>
+        <source>Plugin Manager...</source>
+        <translation>Gestionar Plugin...</translation>
+    </message>
+    <message>
+        <source>Resource Manager...</source>
+        <translation>Gestionar Resurse...</translation>
+    </message>
+    <message>
+        <source>Add/Remove Line Breaks...</source>
+        <translation>Adaugă/Șterge Despărțitoare de Linie</translation>
+    </message>
+    <message>
+        <source>File: Open</source>
+        <translation>Fișier: Deschide</translation>
+    </message>
+    <message>
+        <source>File: Save</source>
+        <translation>Fișier: Salvează</translation>
+    </message>
+    <message>
+        <source>File: Save online</source>
+        <translation>Fișier: Salvează online</translation>
+    </message>
+    <message>
+        <source>File: Save as</source>
+        <translation>Fișier: Salvează ca</translation>
+    </message>
+    <message>
+        <source>Save selection</source>
+        <translation>Salvează selecția</translation>
+    </message>
+    <message>
+        <source>File: Save a copy</source>
+        <translation>Fișier: Salvează o copie</translation>
+    </message>
+    <message>
+        <source>Export parts</source>
+        <translation>Exportă Știmi</translation>
+    </message>
+    <message>
+        <source>File: Close</source>
+        <translation>Fișier: Închide</translation>
+    </message>
+    <message>
+        <source>File: New</source>
+        <translation>Fișier: Crează</translation>
+    </message>
+    <message>
+        <source>Note input</source>
+        <translation>Introducere note</translation>
+    </message>
+    <message>
+        <source>Respell pitches</source>
+        <translation>Rescrie Înălțimile</translation>
+    </message>
+    <message>
+        <source>Flip Direction</source>
+        <translation>Inversează cozi, legato, etc.</translation>
+    </message>
+    <message>
+        <source>Diatonic Up</source>
+        <translation>Diatonic Sus</translation>
+    </message>
+    <message>
+        <source>Move Up</source>
+        <translation>Mută Sus</translation>
+    </message>
+    <message>
+        <source>Diatonic Down</source>
+        <translation>Diatonic Jos</translation>
+    </message>
+    <message>
+        <source>Down Octave</source>
+        <translation>Octavă Jos</translation>
+    </message>
+    <message>
+        <source>Next Element</source>
+        <translation>Elementul Următor</translation>
+    </message>
+    <message>
+        <source>Accessibility: Next element</source>
+        <translation>Accesibilitate: Element următor</translation>
+    </message>
+    <message>
+        <source>Previous Element</source>
+        <translation>Elementul Precedent</translation>
+    </message>
+    <message>
+        <source>Accessibility: Previous element</source>
+        <translation>Accesibilitate: Elementul precedent</translation>
+    </message>
+    <message>
+        <source>First Element</source>
+        <translation>Primul Element</translation>
+    </message>
+    <message>
+        <source>Last Element</source>
+        <translation>Ultimul Element</translation>
+    </message>
+    <message>
+        <source>Move Down</source>
+        <translation>Mută Jos</translation>
+    </message>
+    <message>
+        <source>Previous Chord</source>
+        <translation>Acordul precedent</translation>
+    </message>
+    <message>
+        <source>Previous Measure</source>
+        <translation>Măsura precedentă</translation>
+    </message>
+    <message>
+        <source>Previous Staff or Voice</source>
+        <translation>Portativul sau Vocea Precedentă</translation>
+    </message>
+    <message>
+        <source>Next Chord</source>
+        <translation>Acordul următor</translation>
+    </message>
+    <message>
+        <source>Next Measure</source>
+        <translation>Măsura următoare</translation>
+    </message>
+    <message>
+        <source>Next Staff or Voice</source>
+        <translation>Portativul sau Vocea Urmatoare</translation>
+    </message>
+    <message>
+        <source>Add Previous Chord to Selection</source>
+        <translation>Adaugă Acordul Precedent la Selecție</translation>
+    </message>
+    <message>
+        <source>Select to Beginning of Measure</source>
+        <translation>Selectează până la Începutul Măsurii</translation>
+    </message>
+    <message>
+        <source>Add Next Chord to Selection</source>
+        <translation>Adaugă Acordul Următor la Selecție</translation>
+    </message>
+    <message>
+        <source>Select section</source>
+        <translation>Selectează secțiunea</translation>
+    </message>
+    <message>
+        <source>Move Chord/Rest Right</source>
+        <translation>Mută Acordul/Pauza la Dreapta</translation>
+    </message>
+    <message>
+        <source>Move Chord/Rest left</source>
+        <translation>Mută Acordul/Pauza la stânga</translation>
+    </message>
+    <message>
+        <source>Select to Beginning of Line</source>
+        <translation>Selectează până la Începutul Liniei</translation>
+    </message>
+    <message>
+        <source>Select to End of Line</source>
+        <translation>Selectează până la Sfârșitul Liniei</translation>
+    </message>
+    <message>
+        <source>Select to Beginning of Score</source>
+        <translation>Selectează până la Începutul Partiturii</translation>
+    </message>
+    <message>
+        <source>Select to End of Score</source>
+        <translation>Selectează până la Sfârșitul Partiturii</translation>
+    </message>
+    <message>
+        <source>Add Staff Above to Selection</source>
+        <translation>Adaugă Portativ Deasupra Selecție</translation>
+    </message>
+    <message>
+        <source>Add Staff Below to Selection</source>
+        <translation>Adaugă Portativ Dedesupt Selecției</translation>
+    </message>
+    <message>
+        <source>Page: Previous</source>
+        <translation>Pagină: Precedentă</translation>
+    </message>
+    <message>
+        <source>Page: Next</source>
+        <translation>Pagină: Urmatoare</translation>
+    </message>
+    <message>
+        <source>Page: Top</source>
+        <translation>Pagină: Început</translation>
+    </message>
+    <message>
+        <source>Page: End</source>
+        <translation>Pagină: Final</translation>
+    </message>
+    <message>
+        <source>Full measure rest</source>
+        <translation>Pauză de o măsură</translation>
+    </message>
+    <message>
+        <source>Delete selected measures</source>
+        <translation>Şterge măsurile selectate</translation>
+    </message>
+    <message>
+        <source>Append one measure</source>
+        <translation>Adaugă o măsură la final</translation>
+    </message>
+    <message>
+        <source>Append text frame</source>
+        <translation>Adaugă un cadru de text la final</translation>
+    </message>
+    <message>
+        <source>Insert fretboard diagram frame</source>
+        <translation>Inserare cadru diagramă de acord</translation>
+    </message>
+    <message>
+        <source>Append horizontal frame</source>
+        <translation>Adaugă cadru orizontal la final</translation>
+    </message>
+    <message>
+        <source>Append vertical frame</source>
+        <translation>Adaugă cadru vertical la final</translation>
+    </message>
+    <message>
+        <source>Note duration: Longa</source>
+        <translation>Durată notă: Longa</translation>
+    </message>
+    <message>
+        <source>Double Whole Note</source>
+        <translation>Notă Întreagă Dublă (Breve)</translation>
+    </message>
+    <message>
+        <source>Note duration: Double whole</source>
+        <translation>Durată Notă: Notă Întreagă Dublă (breve)</translation>
+    </message>
+    <message>
+        <source>Whole Note</source>
+        <translation>Notă Întreagă</translation>
+    </message>
+    <message>
+        <source>Note duration: Whole</source>
+        <translation>Durată notă: Notă întreagă</translation>
+    </message>
+    <message>
+        <source>Half Note</source>
+        <translation>Notă Doime</translation>
+    </message>
+    <message>
+        <source>Note duration: Half</source>
+        <translation>Durată notă: Doime</translation>
+    </message>
+    <message>
+        <source>Quarter Note</source>
+        <translation>Notă Pătrime</translation>
+    </message>
+    <message>
+        <source>Note duration: Quarter</source>
+        <translation>Durată notă: Pătrime</translation>
+    </message>
+    <message>
+        <source>Eighth Note</source>
+        <translation>Optime</translation>
+    </message>
+    <message>
+        <source>Note duration: Eighth</source>
+        <translation>Durată notă: Optime</translation>
+    </message>
+    <message>
+        <source>16th Note</source>
+        <translation>Notă 16me</translation>
+    </message>
+    <message>
+        <source>32nd Note</source>
+        <translation>Notă 32me</translation>
+    </message>
+    <message>
+        <source>64th Note</source>
+        <translation>Notă 64me</translation>
+    </message>
+    <message>
+        <source>128th Note</source>
+        <translation>Notă 128me</translation>
+    </message>
+    <message>
+        <source>Increase Active Duration</source>
+        <translation>Crește Durata Activă</translation>
+    </message>
+    <message>
+        <source>Decrease Active Duration</source>
+        <translation>Micșorează Durata Activă</translation>
+    </message>
+    <message>
+        <source>Augmentation Dot</source>
+        <translation>Punct Augmentativ</translation>
+    </message>
+    <message>
+        <source>Note duration: Augmentation dot</source>
+        <translation>Durată notă: Punct Augmentativ</translation>
+    </message>
+    <message>
+        <source>Double Augmentation Dot</source>
+        <translation>Punct Dublu Augmentativ</translation>
+    </message>
+    <message>
+        <source>Note duration: Double augmentation dot</source>
+        <translation>Durată notă: Punct Dublu Augmentativ</translation>
+    </message>
+    <message>
+        <source>Note duration: Tie</source>
+        <translation>Durată notă: Legato de prelungire</translation>
+    </message>
+    <message>
+        <source>Note input: Rest</source>
+        <translation>Introducere note: Pauză</translation>
+    </message>
+    <message>
+        <source>Double Sharp</source>
+        <translation>Dublu Diez</translation>
+    </message>
+    <message>
+        <source>Note input: Double sharp</source>
+        <translation>Introducere note: Dublu Diez</translation>
+    </message>
+    <message>
+        <source>Note input: Sharp</source>
+        <translation>Introducere note: Diez</translation>
+    </message>
+    <message>
+        <source>Note input: Natural</source>
+        <translation>Introducere note: Becar</translation>
+    </message>
+    <message>
+        <source>Note input: Flat</source>
+        <translation>Introcere note: Bemol</translation>
+    </message>
+    <message>
+        <source>Double Flat</source>
+        <translation>Dublu Bemol</translation>
+    </message>
+    <message>
+        <source>Note input: Double flat</source>
+        <translation>Introducere note: Dublu Bemol</translation>
+    </message>
+    <message>
+        <source>Grace: Quarter</source>
+        <translation>Apogiatură: Pătrime</translation>
+    </message>
+    <message>
+        <source>Grace: Eighth after</source>
+        <translation>Apogiatură: Optime după</translation>
+    </message>
+    <message>
+        <source>MIDI Input</source>
+        <translation>Intrare MIDI</translation>
+    </message>
+    <message>
+        <source>Beam Start</source>
+        <translation>Început Ligatură</translation>
+    </message>
+    <message>
+        <source>Beam Middle</source>
+        <translation>Mijloc Ligatură</translation>
+    </message>
+    <message>
+        <source>No Beam</source>
+        <translation>Fără Ligatură</translation>
+    </message>
+    <message>
+        <source>Beam 16th Sub</source>
+        <translation>Ligatură 16me Sub</translation>
+    </message>
+    <message>
+        <source>Beam 32nd Sub</source>
+        <translation>Ligatură 32me Sub</translation>
+    </message>
+    <message>
+        <source>Auto Beam</source>
+        <translation>Ligaturi automate</translation>
+    </message>
+    <message>
+        <source>Feathered Beam, Slower</source>
+        <translation>Ligatură Împănată, Mai Lentă</translation>
+    </message>
+    <message>
+        <source>Feathered Beam, Faster</source>
+        <translation>Ligatură Împănată, Mai Rapidă</translation>
+    </message>
+    <message>
+        <source>Play panel</source>
+        <translation>Panou Redare</translation>
+    </message>
+    <message>
+        <source>Selection filter</source>
+        <translation>Filtru selecție</translation>
+    </message>
+    <message>
+        <source>MIDI import panel</source>
+        <translation>Panou import MIDI</translation>
+    </message>
+    <message>
+        <source>Status bar</source>
+        <translation>Bară de Stare</translation>
+    </message>
+    <message>
+        <source>Zoom Canvas</source>
+        <translation>Schimbă raportul de afişare</translation>
+    </message>
+    <message>
+        <source>Play previous chord</source>
+        <translation>Redă acordul precedent</translation>
+    </message>
+    <message>
+        <source>Play previous measure</source>
+        <translation>Redă măsura precedentă</translation>
+    </message>
+    <message>
+        <source>Play next chord</source>
+        <translation>Redă acordul următor</translation>
+    </message>
+    <message>
+        <source>Play next measure</source>
+        <translation>Redă măsura următoare</translation>
+    </message>
+    <message>
+        <source>Player seek to begin</source>
+        <translation>Derulează redarea la început</translation>
+    </message>
+    <message>
+        <source>Player seek to end</source>
+        <translation>Derulează redarea până la final</translation>
+    </message>
+    <message>
+        <source>Play Repeats</source>
+        <translation>Redă Repetițiile</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Selectează tot</translation>
+    </message>
+    <message>
+        <source>Exchange voice 1-2</source>
+        <translation>Interschimbă vocile 1-2</translation>
+    </message>
+    <message>
+        <source>Exchange voice 1-3</source>
+        <translation>Interschimbă vocile 1-3</translation>
+    </message>
+    <message>
+        <source>Exchange voice 1-4</source>
+        <translation>Interschimbă vocile 1-4</translation>
+    </message>
+    <message>
+        <source>Exchange voice 2-3</source>
+        <translation>Interschimbă vocile 2-3</translation>
+    </message>
+    <message>
+        <source>Exchange voice 2-4</source>
+        <translation>Interschimbă vocile 2-4</translation>
+    </message>
+    <message>
+        <source>Exchange voice 3-4</source>
+        <translation>Interschimbă vocile 3-4</translation>
+    </message>
+    <message>
+        <source>Repeat Last Command</source>
+        <translation>Repetă Ultima Comandă</translation>
+    </message>
+    <message>
+        <source>Toggle system break</source>
+        <translation>Comută despărțitorul de sistem</translation>
+    </message>
+    <message>
+        <source>Toggle page break</source>
+        <translation>Comută despărțitorul de pagină</translation>
+    </message>
+    <message>
+        <source>Toggle section break</source>
+        <translation>Comută despărțitorul de secțiune</translation>
+    </message>
+    <message>
+        <source>Edit element</source>
+        <translation>Editează elementul</translation>
+    </message>
+    <message>
+        <source>Show invisible</source>
+        <translation>Afisează elementele invizibile</translation>
+    </message>
+    <message>
+        <source>Show unprintable</source>
+        <translation>Afisează elementele netipăribile</translation>
+    </message>
+    <message>
+        <source>Show frames</source>
+        <translation>Afisează cadrele</translation>
+    </message>
+    <message>
+        <source>Show page margins</source>
+        <translation>Afisează marginile paginii</translation>
+    </message>
+    <message>
+        <source>Insert special characters</source>
+        <translation>Inserează caractere speciale</translation>
+    </message>
+    <message>
+        <source>Whole Rest</source>
+        <translation>Pauză de Notă întreagă</translation>
+    </message>
+    <message>
+        <source>Note input: Whole rest</source>
+        <translation>Introducere note: Pauză de notă întreagă</translation>
+    </message>
+    <message>
+        <source>Half Rest</source>
+        <translation>Pauză Doime</translation>
+    </message>
+    <message>
+        <source>Note input: Half rest</source>
+        <translation>Introducere note: Pauză doime</translation>
+    </message>
+    <message>
+        <source>Quarter Rest</source>
+        <translation>Pauză Pătrime</translation>
+    </message>
+    <message>
+        <source>Note input: Quarter rest</source>
+        <translation>Introducere note: Pauză Pătrime</translation>
+    </message>
+    <message>
+        <source>Eighth Rest</source>
+        <translation>Păuză Optime</translation>
+    </message>
+    <message>
+        <source>Note input: Eighth rest</source>
+        <translation>Introducere note: Păuză Optime</translation>
+    </message>
+    <message>
+        <source>Zoom in</source>
+        <translation>Mărește</translation>
+    </message>
+    <message>
+        <source>Zoom out</source>
+        <translation>Micșorează</translation>
+    </message>
+    <message>
+        <source>Mirror Note Head</source>
+        <translation>Oglindire Cap Notă</translation>
+    </message>
+    <message>
+        <source>Double Duration</source>
+        <translation>Dublează Durata</translation>
+    </message>
+    <message>
+        <source>Half Duration</source>
+        <translation>Înjumătățește Durata</translation>
+    </message>
+    <message>
+        <source>Repeat Selection</source>
+        <translation>Repetă Selecția</translation>
+    </message>
+    <message>
+        <source>Enharmonic Up</source>
+        <translation>Enarmonic Sus</translation>
+    </message>
+    <message>
+        <source>Enharmonic Down</source>
+        <translation>Enarmonic Jos</translation>
+    </message>
+    <message>
+        <source>Create New Revision</source>
+        <translation>Crează Revizie Nouă</translation>
+    </message>
+    <message>
+        <source>Toggle Image Capture</source>
+        <translation>Comută Captura Imaginii</translation>
+    </message>
+    <message>
+        <source>Toggle image capture</source>
+        <translation>Comută Captura Imaginii</translation>
+    </message>
+    <message>
+        <source>Show OMR Image</source>
+        <translation>Afișează Imagine OMR</translation>
+    </message>
+    <message>
+        <source>Full screen</source>
+        <translation>Ecran complet</translation>
+    </message>
+    <message>
+        <source>Enable Snap to Horizontal Grid</source>
+        <translation>Perimită Auto Lipirea de Grila Orizontală</translation>
+    </message>
+    <message>
+        <source>Enable Snap to Vertical Grid</source>
+        <translation>Perimită Auto Lipirea de Grila Verticală</translation>
+    </message>
+    <message>
+        <source>Configure Grid</source>
+        <translation>Configurare Grilă</translation>
+    </message>
+    <message>
+        <source>Piano keyboard</source>
+        <translation>Claviatură pian</translation>
+    </message>
+    <message>
+        <source>Split measure</source>
+        <translation>Sparge mărura</translation>
+    </message>
+    <message>
+        <source>Join measures</source>
+        <translation>Unește măsurile</translation>
+    </message>
+    <message>
+        <source>Page settings</source>
+        <translation>Proprietăţile paginii</translation>
+    </message>
+    <message>
+        <source>Next score</source>
+        <translation>Partitura următoare</translation>
+    </message>
+    <message>
+        <source>Previous score</source>
+        <translation>Partitura precedentă</translation>
+    </message>
+    <message>
+        <source>Plugin creator</source>
+        <translation>Creator de plugin-uri</translation>
+    </message>
+    <message>
+        <source>Plugin manager</source>
+        <translation>Gestionar Plugin</translation>
+    </message>
+    <message>
+        <source>Resource manager</source>
+        <translation>Gestionar resurse</translation>
+    </message>
+    <message>
+        <source>Show OMR panel</source>
+        <translation>Afisează panoul OMR</translation>
+    </message>
+    <message>
+        <source>Loop In</source>
+        <translation>Loop In</translation>
+    </message>
+    <message>
+        <source>Loop Out</source>
+        <translation>Loop Out</translation>
+    </message>
+    <message>
+        <source>Set loop out position</source>
+        <translation>Stabilește poziție loop out</translation>
+    </message>
+    <message>
+        <source>Count-In</source>
+        <translation>Numărătoare Inversă</translation>
+    </message>
+    <message>
+        <source>Transpose up</source>
+        <translation>Transpune sus</translation>
+    </message>
+    <message>
+        <source>Transpose down</source>
+        <translation>Transpune jos</translation>
+    </message>
+    <message>
+        <source>Toggle view mode</source>
+        <translation>Comută mod vizualizare</translation>
+    </message>
+    <message>
+        <source>Next Syllable</source>
+        <translation>Silaba Următoare</translation>
+    </message>
+    <message>
+        <source>Previous Syllable</source>
+        <translation>Silaba Precedentă</translation>
+    </message>
+    <message>
+        <source>Toggle Visibility</source>
+        <translation>Comutare Vizibilitate</translation>
+    </message>
+    <message>
+        <source>Set Visible</source>
+        <translation>Vizibil</translation>
+    </message>
+    <message>
+        <source>Set Invisible</source>
+        <translation>Invizibil</translation>
+    </message>
+    <message>
+        <source>Note Anchored Textline</source>
+        <translation>Linie de Text Ancorată de Notă</translation>
+    </message>
+    <message>
+        <source>Note anchored textline</source>
+        <translation>Linie de text ancorată de notă</translation>
+    </message>
+    <message>
+        <source>Lock score</source>
+        <translation>Blochează partitura</translation>
+    </message>
+    <message>
+        <source>Note duration: Longa (TAB)</source>
+        <translation>Dutată notă: Longa (TAB)</translation>
+    </message>
+    <message>
+        <source>Double Whole Note (TAB)</source>
+        <translation>Notă Întreagă Dublă - Breve (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Double whole (TAB)</source>
+        <translation>Durată notă: Notă întreagă dublă - Breve (TAB)</translation>
+    </message>
+    <message>
+        <source>Whole Note (TAB)</source>
+        <translation>Notă Întreagă (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Whole (TAB)</source>
+        <translation>Durată notă: Notă Întreagă (TAB)</translation>
+    </message>
+    <message>
+        <source>Half Note (TAB)</source>
+        <translation>Doime (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Half (TAB)</source>
+        <translation>Durată notă: Doime (TAB)</translation>
+    </message>
+    <message>
+        <source>Quarter Note (TAB)</source>
+        <translation>Notă Pătrime (Tab)</translation>
+    </message>
+    <message>
+        <source>Note duration: Quarter (TAB)</source>
+        <translation>Durată notă: Pătrime (TAB)</translation>
+    </message>
+    <message>
+        <source>Eighth Note (TAB)</source>
+        <translation>Notă Optime (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Eighth (TAB)</source>
+        <translation>Durată notă: Optime (TAB)</translation>
+    </message>
+    <message>
+        <source>16th Note (TAB)</source>
+        <translation>Notă 16me (TAB)</translation>
+    </message>
+    <message>
+        <source>32nd Note (TAB)</source>
+        <translation>Notă 32me (TAB)</translation>
+    </message>
+    <message>
+        <source>64th Note (TAB)</source>
+        <translation>Notă 64me (TAB)</translation>
+    </message>
+    <message>
+        <source>128th Note (TAB)</source>
+        <translation>Notă 128me (TAB)</translation>
+    </message>
+    <message>
+        <source>Increase Active Duration (TAB)</source>
+        <translation>Crește Durata Activă (TAB)</translation>
+    </message>
+    <message>
+        <source>Decrease Active Duration (TAB)</source>
+        <translation>Micșorează Durata Activă (TAB)</translation>
+    </message>
+    <message>
+        <source>Note input: Rest (TAB)</source>
+        <translation>Introducere note: Pauză (TAB)</translation>
+    </message>
+    <message>
+        <source>String Above (TAB)</source>
+        <translation>Coarda de Deasupra (TAB)</translation>
+    </message>
+    <message>
+        <source>String Below (TAB)</source>
+        <translation>Coarda de Dedesupt (TAB)</translation>
+    </message>
+    <message>
+        <source>Previous Beat (Chord Symbol)</source>
+        <translation>Bătaia Precedentă (Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Next Beat (Chord Symbol)</source>
+        <translation>Bătaia Următoare (Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Add Brackets to Element</source>
+        <translation>Adaugă Paranteze Elementului</translation>
+    </message>
+    <message>
+        <source>Toggle Create Multimeasure Rest</source>
+        <translation>Comutare creare Pauză de mai multe măsuri</translation>
+    </message>
+    <message>
+        <source>Bold Face</source>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bold face</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Italic</source>
+        <translation>Înclinat</translation>
+    </message>
+    <message>
+        <source>Underline</source>
+        <translation>Subliniat</translation>
+    </message>
+    <message>
+        <source>Move Word Left</source>
+        <translation>Mută Cuvânt la Stânga</translation>
+    </message>
+    <message>
+        <source>Move word left</source>
+        <translation>Mută cuvânt la stânga</translation>
+    </message>
+    <message>
+        <source>Move Word Right</source>
+        <translation>Mută Cuvânt la Dreapta</translation>
+    </message>
+    <message>
+        <source>Move word right</source>
+        <translation>Mută cuvânt la dreapta</translation>
+    </message>
+    <message>
+        <source>Fill with slashes</source>
+        <translation>Umple cu slash-uri</translation>
+    </message>
+    <message>
+        <source>Toggle rhythmic slash notation</source>
+        <translation>Comută notație ritmică slash</translation>
+    </message>
+    <message>
+        <source>Add/remove line breaks</source>
+        <translation>Adaugă/Șterge despărțitorul de linie</translation>
+    </message>
+    <message>
+        <source>Resequence rehearsal marks</source>
+        <translation>Resecvențiază Reperele</translation>
+    </message>
+    <message>
+        <source>Start center</source>
+        <translation>Centru de Start</translation>
+    </message>
+    <message>
+        <source>Longa Advance (F.B./Chord Symbol)</source>
+        <translation>Avansare Longa (B.C./Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Advance of a longa (Figured bass/Chord symbol only)</source>
+        <translation>Advansare de o Longa (numai pt. Bass Cifrat/Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Breve Advance (F.B./Chord Symbol)</source>
+        <translation>Avansare Breve (B.C./Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Advance of a double whole note (Figured bass/Chord symbol only)</source>
+        <translation>Avansare de o notă întreagă dublă (numai pt. Bass Cifrat/Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Whole Note Advance (F.B./Chord Symbol)</source>
+        <translation>Avansare notă întreagă (B.C./Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Advance of a whole note (Figured bass/Chord symbol only)</source>
+        <translation>Avansare de o notă întreagă (numai pt. Bass Cifrat/Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Half Note Advance (F.B./Chord Symbol)</source>
+        <translation>Avansare Doime (B.C./Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Advance of a half note (Figured bass/Chord symbol only)</source>
+        <translation>Avansare de o doime (numai pt. Bass Cifrat/Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Quarter Note Advance (F.B./Chord Symbol)</source>
+        <translation>Avansare Pătrime (B.C./Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Advance of a quarter note (Figured bass/Chord symbol only)</source>
+        <translation>Avansare de o pătrime (numai pt. Bass Cifrat/Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Eighth Note Advance (F.B./Chord Symbol)</source>
+        <translation>Avansare de o optime (numai pt. Bass Cifrat/Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Advance of an eighth note (Figured bass/Chord symbol only)</source>
+        <translation>Avansare de o optime (numai pt. Bass Cifrat/Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>16th Note Advance (F.B./Chord Symbol)</source>
+        <translation>Avansare 16me (B.C./Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Advance of a 16th note (Figured bass/Chord symbol only)</source>
+        <translation>Avansare de o 16me (numai pt. Bass Cifrat/Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>32nd Note Advance (F.B./Chord Symbol)</source>
+        <translation>Avansare 32me (B.C./Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Advance of a 32nd note (Figured bass/Chord symbol only)</source>
+        <translation>Avansare de o 32me (numai pt. Bass Cifrat/Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>64th Note Advance (F.B./Chord Symbol)</source>
+        <translation>Avansare 64me (B.C./Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Advance of a 64th note (Figured bass/Chord symbol only)</source>
+        <translation>Avansare de o 64me (numai pt. Bass Cifrat/Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Previous Measure (F.B./Chord Symbol)</source>
+        <translation>Măsura Precedentă (B.C./Simbol Acord)</translation>
+    </message>
+    <message>
+        <source>Previous measure (Figured bass/Chord symbol only)</source>
+        <translation>Măsura Precedentă (numai pt. Bass Cifrat/Acord Simbol)</translation>
+    </message>
+    <message>
+        <source>Next Measure (F.B./Chord Symbol)</source>
+        <translation>Măsura Următoare (B.C./Simbol acord)</translation>
+    </message>
+    <message>
+        <source>Next measure (Figured bass/Chord symbol only)</source>
+        <translation>Măsura Următoare (numai pt. Bass Cifrat./Simbol acord)</translation>
+    </message>
+    <message>
+        <source>Toggle staccato</source>
+        <translation>Comută staccato</translation>
+    </message>
+    <message>
+        <source>Toggle tenuto</source>
+        <translation>Comută tenuto</translation>
+    </message>
+    <message>
+        <source>Toggle trill</source>
+        <translation>Comută trill</translation>
+    </message>
+    <message>
+        <source>Toggle marcato</source>
+        <translation>Comută marcato</translation>
+    </message>
+    <message>
+        <source>Import PDF...</source>
+        <translation>Importă PDF...</translation>
+    </message>
+    <message>
+        <source>Import PDF</source>
+        <translation>Importă PDF</translation>
+    </message>
+    <message>
+        <source>Import a PDF file with an experimental service on musescore.com</source>
+        <translation>Importați un fișier PDF cu un serviciu experimental pe musescore.com</translation>
+    </message>
+    <message>
+        <source>Set loop in position</source>
+        <translation>Stabilește poziție loop in</translation>
     </message>
 </context>
 <context>
@@ -15111,58 +15823,65 @@ failed: </source>
     <message>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
-        <translation type="unfinished"/>
+        <translation>Nu se poate rescrie măsura:
+Diviziunea excepțională ar traversa măsura</translation>
+    </message>
+    <message>
+        <source>Cannot change local time signature:
+Measure is not empty</source>
+        <translation>Nu se poate modifica metrul curent:
+Măsura nu este vidă.</translation>
     </message>
 </context>
 <context>
     <name>articulation</name>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"/>
+        <translation>Bend</translation>
     </message>
     <message>
         <source>Slide out down</source>
-        <translation type="unfinished"/>
+        <translation>Slide out jos</translation>
     </message>
     <message>
         <source>Slide out up</source>
-        <translation type="unfinished"/>
+        <translation>Slide out sus</translation>
     </message>
     <message>
         <source>Slide in below</source>
-        <translation type="unfinished"/>
+        <translation>Slide in de jos</translation>
     </message>
     <message>
         <source>Slide in above</source>
-        <translation type="unfinished"/>
+        <translation>Slide in de sus</translation>
     </message>
     <message>
         <source>Fermata</source>
-        <translation type="unfinished"/>
+        <translation>Fermata</translation>
     </message>
     <message>
         <source>Short fermata</source>
-        <translation type="unfinished"/>
+        <translation>Fermata scurtă</translation>
     </message>
     <message>
         <source>Long fermata</source>
-        <translation type="unfinished"/>
+        <translation>Fermata lungă</translation>
     </message>
     <message>
         <source>Very long fermata</source>
-        <translation type="unfinished"/>
+        <translation>Fermata foarte lungă</translation>
     </message>
     <message>
         <source>Sforzato</source>
-        <translation type="unfinished"/>
+        <translation>Sforzato</translation>
     </message>
     <message>
         <source>Staccato</source>
-        <translation>staccato</translation>
+        <translation>Staccato</translation>
     </message>
     <message>
         <source>Staccatissimo</source>
-        <translation type="unfinished"/>
+        <translation>Staccatissimo</translation>
     </message>
     <message>
         <source>Tenuto</source>
@@ -15170,7 +15889,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Portato</source>
-        <translation type="unfinished"/>
+        <translation>Portato</translation>
     </message>
     <message>
         <source>Marcato</source>
@@ -15178,23 +15897,23 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Fade in</source>
-        <translation type="unfinished"/>
+        <translation>Fade in</translation>
     </message>
     <message>
         <source>Fade out</source>
-        <translation type="unfinished"/>
+        <translation>Fade out</translation>
     </message>
     <message>
         <source>Volume swell</source>
-        <translation type="unfinished"/>
+        <translation>Urcare Volum</translation>
     </message>
     <message>
         <source>Wiggle sawtooth</source>
-        <translation type="unfinished"/>
+        <translation>Wiggle sawtooth</translation>
     </message>
     <message>
         <source>Wiggle sawtooth wide</source>
-        <translation type="unfinished"/>
+        <translation>Wiggle sawtooth larg</translation>
     </message>
     <message>
         <source>Wiggle vibrato large faster</source>
@@ -15206,119 +15925,119 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Ouvert</source>
-        <translation type="unfinished"/>
+        <translation>Ouvert</translation>
     </message>
     <message>
         <source>Stopped/Pizzicato left hand</source>
-        <translation type="unfinished"/>
+        <translation>Stopat/Pizzicato mâna stângă</translation>
     </message>
     <message>
         <source>Up bow</source>
-        <translation type="unfinished"/>
+        <translation>Arcuș sus</translation>
     </message>
     <message>
         <source>Down bow</source>
-        <translation type="unfinished"/>
+        <translation>Arcuș jos</translation>
     </message>
     <message>
         <source>Reverse turn</source>
-        <translation type="unfinished"/>
+        <translation>Grupetto Inversat</translation>
     </message>
     <message>
         <source>Turn</source>
-        <translation type="unfinished"/>
+        <translation>Grupetto</translation>
     </message>
     <message>
         <source>Trill</source>
-        <translation>tril</translation>
+        <translation>Tril</translation>
     </message>
     <message>
         <source>Prall</source>
-        <translation type="unfinished"/>
+        <translation>Prall</translation>
     </message>
     <message>
         <source>Mordent</source>
-        <translation type="unfinished"/>
+        <translation>Mordent</translation>
     </message>
     <message>
         <source>Prall prall</source>
-        <translation type="unfinished"/>
+        <translation>Prall prall</translation>
     </message>
     <message>
         <source>Prall mordent</source>
-        <translation type="unfinished"/>
+        <translation>Prall mordent</translation>
     </message>
     <message>
         <source>Up prall</source>
-        <translation type="unfinished"/>
+        <translation>Prall Superior</translation>
     </message>
     <message>
         <source>Down prall</source>
-        <translation type="unfinished"/>
+        <translation>Prall Inferior</translation>
     </message>
     <message>
         <source>Up mordent</source>
-        <translation type="unfinished"/>
+        <translation>Mordent în sus</translation>
     </message>
     <message>
         <source>Down mordent</source>
-        <translation type="unfinished"/>
+        <translation>Mordent în jos</translation>
     </message>
     <message>
         <source>Prall down</source>
-        <translation type="unfinished"/>
+        <translation>Prall în jos</translation>
     </message>
     <message>
         <source>Prall up</source>
-        <translation type="unfinished"/>
+        <translation>Prall în sus</translation>
     </message>
     <message>
         <source>Line prall</source>
-        <translation type="unfinished"/>
+        <translation>Prall linie</translation>
     </message>
     <message>
         <source>Schleifer</source>
-        <translation type="unfinished"/>
+        <translation>Schleifer</translation>
     </message>
     <message>
         <source>Snap pizzicato</source>
-        <translation type="unfinished"/>
+        <translation>Snap pizzicato</translation>
     </message>
     <message>
         <source>Tapping</source>
-        <translation type="unfinished"/>
+        <translation>Tapping</translation>
     </message>
     <message>
         <source>Slapping</source>
-        <translation type="unfinished"/>
+        <translation>Slapping</translation>
     </message>
     <message>
         <source>Popping</source>
-        <translation type="unfinished"/>
+        <translation>Popping</translation>
     </message>
     <message>
         <source>Thumb pos.</source>
-        <translation type="unfinished"/>
+        <translation>Poz. Police</translation>
     </message>
     <message>
         <source>Lute thumb fing.</source>
-        <translation type="unfinished"/>
+        <translation>Lăută dig. police</translation>
     </message>
     <message>
         <source>Lute 1 fing.</source>
-        <translation type="unfinished"/>
+        <translation>Lăută 1 dig.</translation>
     </message>
     <message>
         <source>Lute 2 fing.</source>
-        <translation type="unfinished"/>
+        <translation>Lăută 2 dig.</translation>
     </message>
     <message>
         <source>Lute 3 fing.</source>
-        <translation type="unfinished"/>
+        <translation>Lăută dig. 3</translation>
     </message>
     <message>
         <source>Tremolo bar</source>
-        <translation type="unfinished"/>
+        <translation>Bară de tremolo</translation>
     </message>
 </context>
 <context>
@@ -15424,678 +16143,643 @@ Tuplet would cross measure</source>
     <name>bagpipe</name>
     <message>
         <source>Single grace low G</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură simplă pe Sol de jos</translation>
     </message>
     <message>
         <source>Single grace low A</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură simplă pe La de jos</translation>
     </message>
     <message>
         <source>Single grace B</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură simplă pe Si</translation>
     </message>
     <message>
         <source>Single grace C</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură simplă pe Do</translation>
     </message>
     <message>
         <source>Single grace D</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură simplă pe Re</translation>
     </message>
     <message>
         <source>Single grace E</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură simplă pe Mi</translation>
     </message>
     <message>
         <source>Single grace F</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură simplă pe Fa</translation>
     </message>
     <message>
         <source>Single grace high G</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură simplă pe Sol de sus</translation>
     </message>
     <message>
         <source>Single grace high A</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură simplă pe La de sus</translation>
     </message>
     <message>
         <source>Double grace</source>
-        <translation type="unfinished"/>
+        <translation>Dublă apogiatură</translation>
     </message>
     <message>
         <source>Half doubling on low G</source>
-        <translation type="unfinished"/>
+        <translation>Half doubling pe Sol de jos</translation>
     </message>
     <message>
         <source>Half doubling on low A</source>
-        <translation type="unfinished"/>
+        <translation>Half doubling pe La de jos</translation>
     </message>
     <message>
         <source>Half doubling on B</source>
-        <translation type="unfinished"/>
+        <translation>Half doubling pe Si</translation>
     </message>
     <message>
         <source>Half doubling on C</source>
-        <translation type="unfinished"/>
+        <translation>Half doubling pe Do</translation>
     </message>
     <message>
         <source>Half doubling on D</source>
-        <translation type="unfinished"/>
+        <translation>Half doubling pe Re</translation>
     </message>
     <message>
         <source>Half doubling on E</source>
-        <translation type="unfinished"/>
+        <translation>Half doubling pe Mi</translation>
     </message>
     <message>
         <source>Half doubling on F</source>
-        <translation type="unfinished"/>
+        <translation>Half doubling pe Fa</translation>
     </message>
     <message>
         <source>Doubling on high G</source>
-        <translation type="unfinished"/>
+        <translation>Half doubling pe Sol de sus</translation>
     </message>
     <message>
         <source>Doubling on high A</source>
-        <translation type="unfinished"/>
+        <translation>Half doubling pe La de sus</translation>
     </message>
     <message>
         <source>Half strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Half strike pe La de jos</translation>
     </message>
     <message>
         <source>Half strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Half strike pe Si</translation>
     </message>
     <message>
         <source>Half strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Half strike pe Do</translation>
     </message>
     <message>
         <source>Half strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Half strike pe Re</translation>
     </message>
     <message>
         <source>Half strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Half strike pe Mi</translation>
     </message>
     <message>
         <source>Half strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Half strike pe Fa</translation>
     </message>
     <message>
         <source>Half strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Half strike pe Sol</translation>
     </message>
     <message>
         <source>Grip</source>
-        <translation type="unfinished"/>
+        <translation>Grip</translation>
     </message>
     <message>
         <source>Half D throw</source>
-        <translation type="unfinished"/>
+        <translation>Half Re throw</translation>
     </message>
     <message>
         <source>Doubling on low G</source>
-        <translation type="unfinished"/>
+        <translation>Doubling pe Sol de jos</translation>
     </message>
     <message>
         <source>Doubling on low A</source>
-        <translation type="unfinished"/>
+        <translation>Doubling pe La de jos</translation>
     </message>
     <message>
         <source>Doubling on B</source>
-        <translation type="unfinished"/>
+        <translation>Doubling pe Si</translation>
     </message>
     <message>
         <source>Doubling on C</source>
-        <translation type="unfinished"/>
+        <translation>Doubling pe Do</translation>
     </message>
     <message>
         <source>Doubling on D</source>
-        <translation type="unfinished"/>
+        <translation>Doubling pe Re</translation>
     </message>
     <message>
         <source>Doubling on E</source>
-        <translation type="unfinished"/>
+        <translation>Doubling pe Mi</translation>
     </message>
     <message>
         <source>Doubling on F</source>
-        <translation type="unfinished"/>
+        <translation>Doubling pe Fa</translation>
     </message>
     <message>
         <source>Thumb doubling on low G</source>
-        <translation type="unfinished"/>
+        <translation>Dublare cu policele pe Sol de jos</translation>
     </message>
     <message>
         <source>Thumb doubling on low A</source>
-        <translation type="unfinished"/>
+        <translation>Dublare cu policele pe La de jos</translation>
     </message>
     <message>
         <source>Thumb doubling on B</source>
-        <translation type="unfinished"/>
+        <translation>Dublare cu policele pe Si</translation>
     </message>
     <message>
         <source>Thumb doubling on C</source>
-        <translation type="unfinished"/>
+        <translation>Dublare cu policele pe Do</translation>
     </message>
     <message>
         <source>Thumb doubling on D</source>
-        <translation type="unfinished"/>
+        <translation>Dublare cu policele pe Re</translation>
     </message>
     <message>
         <source>Thumb doubling on E</source>
-        <translation type="unfinished"/>
+        <translation>Dublare cu policele pe Mi</translation>
     </message>
     <message>
         <source>Thumb doubling on F</source>
-        <translation type="unfinished"/>
+        <translation>Dublare cu policele pe Fa</translation>
     </message>
     <message>
         <source>G grace note on low A</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură Sol pe La de jos</translation>
     </message>
     <message>
         <source>G grace note on B</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură Sol pe Si</translation>
     </message>
     <message>
         <source>G grace note on C</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură Sol pe Do</translation>
     </message>
     <message>
         <source>G grace note on D</source>
-        <translation type="unfinished"/>
+        <translation>Apogiaturp Sol pe Re</translation>
     </message>
     <message>
         <source>G grace note on E</source>
-        <translation type="unfinished"/>
+        <translation>Apogiaturp Sol pe Mi</translation>
     </message>
     <message>
         <source>G grace note on F</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură Sol pe Fa</translation>
     </message>
     <message>
         <source>Double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Double strike pe La de jos</translation>
     </message>
     <message>
         <source>Double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Double strike pe Si</translation>
     </message>
     <message>
         <source>Double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Double strike pe Do</translation>
     </message>
     <message>
         <source>Double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Double strike pe Re</translation>
     </message>
     <message>
         <source>Double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Double strike pe Mi</translation>
     </message>
     <message>
         <source>Double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Double strike pe Fa</translation>
     </message>
     <message>
         <source>Double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Double strike pe Sol de sus</translation>
     </message>
     <message>
         <source>Double strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Double strike pe La</translation>
     </message>
     <message>
         <source>Thumb strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Strike cu policele pe La de jos</translation>
     </message>
     <message>
         <source>Thumb strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Strike cu policele pe Si</translation>
     </message>
     <message>
         <source>Thumb strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Strike cu policele pe Do</translation>
     </message>
     <message>
         <source>Thumb strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Strike cu policele pe Re</translation>
     </message>
     <message>
         <source>Thumb strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Strike cu policele pe Mi</translation>
     </message>
     <message>
         <source>Thumb strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Strike cu policele pe Fa</translation>
     </message>
     <message>
         <source>Thumb strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Strike cu policele pe Sol</translation>
     </message>
     <message>
         <source>Birl</source>
-        <translation type="unfinished"/>
+        <translation>Birl</translation>
     </message>
     <message>
         <source>D throw</source>
-        <translation type="unfinished"/>
+        <translation>Re throw</translation>
     </message>
     <message>
         <source>Half heavy D throw</source>
-        <translation type="unfinished"/>
+        <translation>Half heavy Re throw</translation>
     </message>
     <message>
         <source>Taorluath</source>
-        <translation type="unfinished"/>
+        <translation>Taorluath</translation>
     </message>
     <message>
         <source>Bubly</source>
-        <translation type="unfinished"/>
+        <translation>Bubly</translation>
     </message>
     <message>
         <source>Heavy D throw</source>
-        <translation type="unfinished"/>
+        <translation>Heavy Re throw</translation>
     </message>
     <message>
         <source>Half double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Half double strike pe La de jos</translation>
     </message>
     <message>
         <source>Half double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Half double strike pe Si</translation>
     </message>
     <message>
         <source>Half double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Half double strike pe Do</translation>
     </message>
     <message>
         <source>Half double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Half double strike pe Re</translation>
     </message>
     <message>
         <source>Half double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Half double strike pe Mi</translation>
     </message>
     <message>
         <source>Half double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Half double strike pe Fa</translation>
     </message>
     <message>
         <source>Half double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Half double strike pe Sol de sus</translation>
     </message>
     <message>
         <source>Half double strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Half double strike pe La de sus</translation>
     </message>
     <message>
         <source>Half grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>Half grip pe La de jos</translation>
     </message>
     <message>
         <source>Half grip on B</source>
-        <translation type="unfinished"/>
+        <translation>Half grip pe Si</translation>
     </message>
     <message>
         <source>Half grip on C</source>
-        <translation type="unfinished"/>
+        <translation>Half grip pe Do</translation>
     </message>
     <message>
         <source>Half grip on D</source>
-        <translation type="unfinished"/>
+        <translation>Half grip pe Re</translation>
     </message>
     <message>
         <source>Half grip on E</source>
-        <translation type="unfinished"/>
+        <translation>Half grip pe Mi</translation>
     </message>
     <message>
         <source>Half grip on F</source>
-        <translation type="unfinished"/>
+        <translation>Half grip pe Fa</translation>
     </message>
     <message>
         <source>Half grip on high G</source>
-        <translation type="unfinished"/>
+        <translation>Half grip pe Sol de sus</translation>
     </message>
     <message>
         <source>Half grip on high A</source>
-        <translation type="unfinished"/>
+        <translation>Half grip pe La de sus</translation>
     </message>
     <message>
         <source>Half pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>Half pele pe La de jos</translation>
     </message>
     <message>
         <source>Half pele on B</source>
-        <translation type="unfinished"/>
+        <translation>Half pele pe Si</translation>
     </message>
     <message>
         <source>Half pele on C</source>
-        <translation type="unfinished"/>
+        <translation>Half pele pe Do</translation>
     </message>
     <message>
         <source>Half pele on D</source>
-        <translation type="unfinished"/>
+        <translation>Half pele pe Re</translation>
     </message>
     <message>
         <source>Half pele on E</source>
-        <translation type="unfinished"/>
+        <translation>Half pele pe Mi</translation>
     </message>
     <message>
         <source>Half pele on F</source>
-        <translation type="unfinished"/>
+        <translation>Half pele pe Fa</translation>
     </message>
     <message>
         <source>Half pele on high G</source>
-        <translation type="unfinished"/>
+        <translation>Half pele pe Sol de sus</translation>
     </message>
     <message>
         <source>G grace note grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură Sol grip pe La de jos</translation>
     </message>
     <message>
         <source>G grace note grip on B</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură Sol grip pe Si</translation>
     </message>
     <message>
         <source>G grace note grip on C</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură Sol grip pe Do</translation>
     </message>
     <message>
         <source>G grace note grip on D</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură Sol grip pe Re</translation>
     </message>
     <message>
         <source>G grace note grip on E</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură Sol grip pe Mi</translation>
     </message>
     <message>
         <source>G grace note grip on F</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură Sol grip pe Fa</translation>
     </message>
     <message>
         <source>Thumb grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>Grip cu policele pe La de jos</translation>
     </message>
     <message>
         <source>Thumb grip on B</source>
-        <translation type="unfinished"/>
+        <translation>Grip cu policele pe Si</translation>
     </message>
     <message>
         <source>Thumb grip on C</source>
-        <translation type="unfinished"/>
+        <translation>Grip cu policele pe Do</translation>
     </message>
     <message>
         <source>Thumb grip on D</source>
-        <translation type="unfinished"/>
+        <translation>Grip cu policele pe Re</translation>
     </message>
     <message>
         <source>Thumb grip on E</source>
-        <translation type="unfinished"/>
+        <translation>Grip cu policele pe Mi</translation>
     </message>
     <message>
         <source>Thumb grip on F</source>
-        <translation type="unfinished"/>
+        <translation>Grip cu policele pe Fa</translation>
     </message>
     <message>
         <source>Thumb grip on high G</source>
-        <translation type="unfinished"/>
+        <translation>Grip cu policele pe Sol de sus</translation>
     </message>
     <message>
         <source>Pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>Pele pe La de jos</translation>
     </message>
     <message>
         <source>Pele on B</source>
-        <translation type="unfinished"/>
+        <translation>Pele pe Si</translation>
     </message>
     <message>
         <source>Pele on C</source>
-        <translation type="unfinished"/>
+        <translation>Pele pe Do</translation>
     </message>
     <message>
         <source>Pele on D</source>
-        <translation type="unfinished"/>
+        <translation>Pele pe Re</translation>
     </message>
     <message>
         <source>Pele on E</source>
-        <translation type="unfinished"/>
+        <translation>Pele pe Mi</translation>
     </message>
     <message>
         <source>Pele on F</source>
-        <translation type="unfinished"/>
+        <translation>Pele pe Fa</translation>
     </message>
     <message>
         <source>Thumb grace note pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură Sol grip pe La de jos</translation>
     </message>
     <message>
         <source>Thumb grace note pele on B</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură pele cu policele pe Si</translation>
     </message>
     <message>
         <source>Thumb grace note pele on C</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură pele cu policele pe Do</translation>
     </message>
     <message>
         <source>Thumb grace note pele on D</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură pele cu policele pe Re</translation>
     </message>
     <message>
         <source>Thumb grace note pele on E</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură pele cu policele pe Mi</translation>
     </message>
     <message>
         <source>Thumb grace note pele on F</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură pele cu policele pe Fa</translation>
     </message>
     <message>
         <source>Thumb grace note pele on high G</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură pele cu policele pe Sol</translation>
     </message>
     <message>
         <source>G grace note double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură dublu strike Sol pe La de jos</translation>
     </message>
     <message>
         <source>G grace note double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură dublu strike Sol pe Si</translation>
     </message>
     <message>
         <source>G grace note double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură dublu strike Sol pe Do</translation>
     </message>
     <message>
         <source>G grace note double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură dublu strike Sol pe Re</translation>
     </message>
     <message>
         <source>G grace note double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură dublu strike Sol pe Mi</translation>
     </message>
     <message>
         <source>G grace note double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură dublu strike Sol pe Fa</translation>
     </message>
     <message>
         <source>Thumb double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Dublu strike cu policele pe La de jos</translation>
     </message>
     <message>
         <source>Thumb double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Dublu strike cu policele pe Si</translation>
     </message>
     <message>
         <source>Thumb double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Dublu strike cu policele pe Do</translation>
     </message>
     <message>
         <source>Thumb double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Dublu strike cu policele pe Re</translation>
     </message>
     <message>
         <source>Thumb double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Dublu strike cu policele pe Mi</translation>
     </message>
     <message>
         <source>Thumb double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Dublu strike cu policele pe Fa</translation>
     </message>
     <message>
         <source>Thumb double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Dublu strike cu policele pe Sol de sus</translation>
     </message>
     <message>
         <source>Triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Triple strike on La de jos</translation>
     </message>
     <message>
         <source>Triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Triple strike pe Si</translation>
     </message>
     <message>
         <source>Triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Triple strike pe Do</translation>
     </message>
     <message>
         <source>Triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Triple strike pe Re</translation>
     </message>
     <message>
         <source>Triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Triple strike pe Mi</translation>
     </message>
     <message>
         <source>Triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Triple strike pe Fa</translation>
     </message>
     <message>
         <source>Triple strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Triple strike pe Sol de sus</translation>
     </message>
     <message>
         <source>Triple strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Triple strike pe La de sus</translation>
     </message>
     <message>
         <source>Half triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Half triple strike pe La de jos</translation>
     </message>
     <message>
         <source>Half triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Half triple strike pe Si</translation>
     </message>
     <message>
         <source>Half triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Half triple strike pe Do</translation>
     </message>
     <message>
         <source>Half triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Half triple strike pe Re</translation>
     </message>
     <message>
         <source>Half triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Half triple strike pe Mi</translation>
     </message>
     <message>
         <source>Half triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Half triple strike pe Fa</translation>
     </message>
     <message>
         <source>Half triple strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Half triple strike pe Sol de sus</translation>
     </message>
     <message>
         <source>Half triple strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Half triple strike pe La de sus</translation>
     </message>
     <message>
         <source>G grace note triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură dublu strike Sol pe La de jos</translation>
     </message>
     <message>
         <source>G grace note triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură dublu strike Sol pe Si</translation>
     </message>
     <message>
         <source>G grace note triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură dublu strike Sol pe Do</translation>
     </message>
     <message>
         <source>G grace note triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură dublu strike Sol pe Re</translation>
     </message>
     <message>
         <source>G grace note triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură dublu strike Sol pe Mi</translation>
     </message>
     <message>
         <source>G grace note triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Apogiatură dublu strike Sol pe Fa</translation>
     </message>
     <message>
         <source>Thumb triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Triplu strike cu policele pe La de jos</translation>
     </message>
     <message>
         <source>Thumb triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Triplu strike cu policele pe Si</translation>
     </message>
     <message>
         <source>Thumb triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Triplu strike cu policele pe Do</translation>
     </message>
     <message>
         <source>Thumb triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Triplu strike cu policele pe Re</translation>
     </message>
     <message>
         <source>Thumb triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Triplu strike cu policele pe Mi</translation>
     </message>
     <message>
         <source>Thumb triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Triplu strike cu policele pe Sol</translation>
     </message>
     <message>
         <source>Thumb triple strike on high G</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>barline</name>
-    <message>
-        <source>normal</source>
-        <translation>normal</translation>
-    </message>
-    <message>
-        <source>double</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>start-repeat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>end-repeat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>dashed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>end</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>end-start-repeat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>dotted</source>
-        <translation>punctat</translation>
+        <translation>Triplu strike cu policele pe Sol de sus</translation>
     </message>
 </context>
 <context>
@@ -16178,14 +16862,14 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Tablature2</source>
-        <translation type="unfinished"/>
+        <translation>Tabulatură 2</translation>
     </message>
 </context>
 <context>
     <name>drumset</name>
     <message>
         <source>Acoustic Bass Drum</source>
-        <translation>Tobă Mare Acustică (Acoustic Bass Drum)</translation>
+        <translation>Tobă Mare Acustică</translation>
     </message>
     <message>
         <source>Side Stick</source>
@@ -16197,235 +16881,235 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>High Q</source>
-        <translation type="unfinished"/>
+        <translation>High Q</translation>
     </message>
     <message>
         <source>Slap</source>
-        <translation type="unfinished"/>
+        <translation>Slap</translation>
     </message>
     <message>
         <source>Scratch Push</source>
-        <translation type="unfinished"/>
+        <translation>Scratch Push</translation>
     </message>
     <message>
         <source>Scratch Pull</source>
-        <translation type="unfinished"/>
+        <translation>Scratch Pull</translation>
     </message>
     <message>
         <source>Sticks</source>
-        <translation type="unfinished"/>
+        <translation>Sticks</translation>
     </message>
     <message>
         <source>Metronome Click</source>
-        <translation type="unfinished"/>
+        <translation>Metronom Click</translation>
     </message>
     <message>
         <source>Metronome Bell</source>
-        <translation type="unfinished"/>
+        <translation>Metronom Clopot</translation>
     </message>
     <message>
         <source>Bass Drum 1</source>
-        <translation type="unfinished"/>
+        <translation>Tobă Mare 1</translation>
     </message>
     <message>
         <source>Acoustic Snare</source>
-        <translation type="unfinished"/>
+        <translation>Premier Acustic</translation>
     </message>
     <message>
         <source>Hand Clap</source>
-        <translation type="unfinished"/>
+        <translation>Bătaie din palme</translation>
     </message>
     <message>
         <source>Electric Snare</source>
-        <translation type="unfinished"/>
+        <translation>Premier Electric</translation>
     </message>
     <message>
         <source>Low Floor Tom</source>
-        <translation type="unfinished"/>
+        <translation>Cazan Mare</translation>
     </message>
     <message>
         <source>Closed Hi-Hat</source>
-        <translation type="unfinished"/>
+        <translation>Fus Închis</translation>
     </message>
     <message>
         <source>High Floor Tom</source>
-        <translation type="unfinished"/>
+        <translation>Cazan Mic</translation>
     </message>
     <message>
         <source>Pedal Hi-Hat</source>
-        <translation type="unfinished"/>
+        <translation>Pedală Fus</translation>
     </message>
     <message>
         <source>Low Tom</source>
-        <translation type="unfinished"/>
+        <translation>Tom Mare</translation>
     </message>
     <message>
         <source>Open Hi-Hat</source>
-        <translation type="unfinished"/>
+        <translation>Fus Deschis</translation>
     </message>
     <message>
         <source>Low-Mid Tom</source>
-        <translation type="unfinished"/>
+        <translation>Tom Mare-Mediu</translation>
     </message>
     <message>
         <source>Hi-Mid Tom</source>
-        <translation type="unfinished"/>
+        <translation>Tom Mic-Mediu</translation>
     </message>
     <message>
         <source>Crash Cymbal 1</source>
-        <translation type="unfinished"/>
+        <translation>Cinel Crash 1</translation>
     </message>
     <message>
         <source>High Tom</source>
-        <translation type="unfinished"/>
+        <translation>Tom Mic</translation>
     </message>
     <message>
         <source>Ride Bell</source>
-        <translation type="unfinished"/>
+        <translation>Ride Bell</translation>
     </message>
     <message>
         <source>Cowbell</source>
-        <translation type="unfinished"/>
+        <translation>Cowbell</translation>
     </message>
     <message>
         <source>Vibraslap</source>
-        <translation type="unfinished"/>
+        <translation>Vibraslap</translation>
     </message>
     <message>
         <source>Low Bongo</source>
-        <translation type="unfinished"/>
+        <translation>Bongos Grav - Low Conga</translation>
     </message>
     <message>
         <source>Mute Hi Conga</source>
-        <translation type="unfinished"/>
+        <translation>Conga Înalt Mut</translation>
     </message>
     <message>
         <source>Open Hi Conga</source>
-        <translation type="unfinished"/>
+        <translation>Conga Înalt Deschis</translation>
     </message>
     <message>
         <source>Low Conga</source>
-        <translation type="unfinished"/>
+        <translation>Conga Jos</translation>
     </message>
     <message>
         <source>High Timbale</source>
-        <translation type="unfinished"/>
+        <translation>Timbale Înalt</translation>
     </message>
     <message>
         <source>Low Timbale</source>
-        <translation type="unfinished"/>
+        <translation>Timbale Jos</translation>
     </message>
     <message>
         <source>High Agogo</source>
-        <translation type="unfinished"/>
+        <translation>Acogo Înalt</translation>
     </message>
     <message>
         <source>Low Agogo</source>
-        <translation type="unfinished"/>
+        <translation>Agogo Jos</translation>
     </message>
     <message>
         <source>Cabasa</source>
-        <translation type="unfinished"/>
+        <translation>Cabasa</translation>
     </message>
     <message>
         <source>Maracas</source>
-        <translation type="unfinished"/>
+        <translation>Maracas</translation>
     </message>
     <message>
         <source>Short Whistle</source>
-        <translation type="unfinished"/>
+        <translation>Fluier Scurt</translation>
     </message>
     <message>
         <source>Long Whistle</source>
-        <translation type="unfinished"/>
+        <translation>Fluier Lung</translation>
     </message>
     <message>
         <source>Short Guiro</source>
-        <translation type="unfinished"/>
+        <translation>Guiro Scurt</translation>
     </message>
     <message>
         <source>Long Guiro</source>
-        <translation type="unfinished"/>
+        <translation>Guiro Lung</translation>
     </message>
     <message>
         <source>Claves</source>
-        <translation type="unfinished"/>
+        <translation>Claves</translation>
     </message>
     <message>
         <source>Hi Wood Block</source>
-        <translation type="unfinished"/>
+        <translation>Lemn (Wood Blocks) Înalt</translation>
     </message>
     <message>
         <source>Low Wood Block</source>
-        <translation type="unfinished"/>
+        <translation>Lemn (Wood Blocks) Jos</translation>
     </message>
     <message>
         <source>Mute Cuica</source>
-        <translation type="unfinished"/>
+        <translation>Cuica Mută</translation>
     </message>
     <message>
         <source>Open Cuica</source>
-        <translation type="unfinished"/>
+        <translation>Cuica Deschisp</translation>
     </message>
     <message>
         <source>Mute Triangle</source>
-        <translation type="unfinished"/>
+        <translation>Trianglu Mut</translation>
     </message>
     <message>
         <source>Open Triangle</source>
-        <translation type="unfinished"/>
+        <translation>Trianglu Deschis</translation>
     </message>
     <message>
         <source>Shaker</source>
-        <translation type="unfinished"/>
+        <translation>Shaker</translation>
     </message>
     <message>
         <source>Bell Tree</source>
-        <translation type="unfinished"/>
+        <translation>Bell Tree</translation>
     </message>
     <message>
         <source>Mute Surdo</source>
-        <translation type="unfinished"/>
+        <translation>Surdo Mut</translation>
     </message>
     <message>
         <source>Open Surdo</source>
-        <translation type="unfinished"/>
+        <translation>Surdo Deschis</translation>
     </message>
     <message>
         <source>Ride Cymbal 1</source>
-        <translation type="unfinished"/>
+        <translation>Cinel Ride 1</translation>
     </message>
     <message>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Cinel China</translation>
     </message>
     <message>
         <source>Splash Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Cinel Splash</translation>
     </message>
     <message>
         <source>Crash Cymbal 2</source>
-        <translation type="unfinished"/>
+        <translation>Cine Crash 2</translation>
     </message>
     <message>
         <source>Ride Cymbal 2</source>
-        <translation type="unfinished"/>
+        <translation>Cinel Ride 2</translation>
     </message>
     <message>
         <source>Castanets</source>
-        <translation type="unfinished"/>
+        <translation>Castaniete</translation>
     </message>
     <message>
         <source>Square Click</source>
-        <translation type="unfinished"/>
+        <translation>Square Click</translation>
     </message>
     <message>
         <source>Hi Bongo</source>
-        <translation type="unfinished"/>
+        <translation>Bongo Sus</translation>
     </message>
     <message>
         <source>Sleigh Bell</source>
-        <translation type="unfinished"/>
+        <translation>Zurgălăi</translation>
     </message>
 </context>
 <context>
@@ -16444,7 +17128,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Eb</source>
-        <translation type="unfinished"/>
+        <translation>Eb</translation>
     </message>
     <message>
         <source>E</source>
@@ -16464,7 +17148,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Ab</source>
-        <translation type="unfinished"/>
+        <translation>Ab</translation>
     </message>
     <message>
         <source>A</source>
@@ -16495,7 +17179,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Eb</source>
-        <translation type="unfinished"/>
+        <translation>Eb</translation>
     </message>
     <message>
         <source>E</source>
@@ -16515,7 +17199,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Ab</source>
-        <translation type="unfinished"/>
+        <translation>Ab</translation>
     </message>
     <message>
         <source>A</source>
@@ -16534,7 +17218,7 @@ Tuplet would cross measure</source>
     <name>elementName</name>
     <message>
         <source>invalid</source>
-        <translation type="unfinished"/>
+        <translation>invalid</translation>
     </message>
     <message>
         <source>Symbol</source>
@@ -16550,7 +17234,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Bracket</source>
-        <translation>Acoladă</translation>
+        <translation>Acoladă Pătrată</translation>
     </message>
     <message>
         <source>Arpeggio</source>
@@ -16590,11 +17274,11 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Tie</source>
-        <translation>Legato</translation>
+        <translation>Legato de prelungire</translation>
     </message>
     <message>
         <source>Articulation</source>
-        <translation>Mod de atac</translation>
+        <translation>Articulație</translation>
     </message>
     <message>
         <source>Dynamic</source>
@@ -16606,7 +17290,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Hook</source>
-        <translation>Hook</translation>
+        <translation>Steag</translation>
     </message>
     <message>
         <source>Lyrics</source>
@@ -16622,7 +17306,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Fingering</source>
-        <translation>Degetaţie</translation>
+        <translation>Digitaţie</translation>
     </message>
     <message>
         <source>Tuplet</source>
@@ -16634,7 +17318,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"/>
+        <translation>Bend</translation>
     </message>
     <message>
         <source>Volta</source>
@@ -16674,7 +17358,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Trill</source>
-        <translation>tril</translation>
+        <translation>Tril</translation>
     </message>
     <message>
         <source>Segment</source>
@@ -16701,36 +17385,32 @@ Tuplet would cross measure</source>
         <translation>Element</translation>
     </message>
     <message>
-        <source>Layout</source>
-        <translation>Așezare în pagină</translation>
-    </message>
-    <message>
         <source>Icon</source>
         <translation>Simbol grafic</translation>
     </message>
     <message>
         <source>Ossia</source>
-        <translation type="unfinished"/>
+        <translation>Ossia</translation>
     </message>
     <message>
         <source>Instrument Name</source>
-        <translation type="unfinished"/>
+        <translation>Nume Instrument</translation>
     </message>
     <message>
         <source>Slur Segment</source>
-        <translation type="unfinished"/>
+        <translation>Segment Legato</translation>
     </message>
     <message>
         <source>Staff Lines</source>
-        <translation type="unfinished"/>
+        <translation>Linii Portativ</translation>
     </message>
     <message>
         <source>Bar Line</source>
-        <translation type="unfinished"/>
+        <translation>Bară de măsură</translation>
     </message>
     <message>
         <source>Stem Slash</source>
-        <translation type="unfinished"/>
+        <translation>Slash pt Coadă</translation>
     </message>
     <message>
         <source>Key Signature</source>
@@ -16742,15 +17422,15 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Repeat Measure</source>
-        <translation type="unfinished"/>
+        <translation>Repetiție de Măsură</translation>
     </message>
     <message>
         <source>Chord Line</source>
-        <translation type="unfinished"/>
+        <translation>Linie Acord</translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"/>
+        <translation>Bass Cifrat</translation>
     </message>
     <message>
         <source>Staff Text</source>
@@ -16758,27 +17438,27 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Rehearsal Mark</source>
-        <translation>Semn de Repetiţie</translation>
+        <translation>Reper</translation>
     </message>
     <message>
         <source>Instrument Change</source>
-        <translation type="unfinished"/>
+        <translation>Schimbare de instrument</translation>
     </message>
     <message>
         <source>Hairpin Segment</source>
-        <translation type="unfinished"/>
+        <translation>Segment Crescendo/Decrescendo</translation>
     </message>
     <message>
         <source>Ottava Segment</source>
-        <translation type="unfinished"/>
+        <translation>Segment Ottava</translation>
     </message>
     <message>
         <source>Trill Segment</source>
-        <translation type="unfinished"/>
+        <translation>Segment Tril</translation>
     </message>
     <message>
         <source>Text Line Segment</source>
-        <translation type="unfinished"/>
+        <translation>Segment Linie Text</translation>
     </message>
     <message>
         <source>Volta Segment</source>
@@ -16786,31 +17466,31 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Pedal Segment</source>
-        <translation type="unfinished"/>
+        <translation>Segment Pedală</translation>
     </message>
     <message>
         <source>Layout Break</source>
-        <translation type="unfinished"/>
+        <translation>Despărțitor de layout</translation>
     </message>
     <message>
         <source>Staff State</source>
-        <translation type="unfinished"/>
+        <translation>Stare Portativ</translation>
     </message>
     <message>
         <source>Ledger Line</source>
-        <translation type="unfinished"/>
+        <translation>Linie Ajutătoare</translation>
     </message>
     <message>
         <source>Note Head</source>
-        <translation type="unfinished"/>
+        <translation>Cap Notă</translation>
     </message>
     <message>
         <source>Note Dot</source>
-        <translation type="unfinished"/>
+        <translation>Punct</translation>
     </message>
     <message>
         <source>Shadow Note</source>
-        <translation type="unfinished"/>
+        <translation>Notă Shadow</translation>
     </message>
     <message>
         <source>Rubber Band</source>
@@ -16818,11 +17498,11 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Tab Duration Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Symbol Durată Tab</translation>
     </message>
     <message>
         <source>Font Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Symbol Font</translation>
     </message>
     <message>
         <source>Hairpin</source>
@@ -16830,94 +17510,106 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Text Line</source>
-        <translation type="unfinished"/>
+        <translation>Linie Text</translation>
     </message>
     <message>
         <source>Note Line</source>
-        <translation type="unfinished"/>
+        <translation>Linie Notă</translation>
     </message>
     <message>
         <source>Element List</source>
-        <translation type="unfinished"/>
+        <translation>Listă elemente</translation>
     </message>
     <message>
         <source>Staff List</source>
-        <translation type="unfinished"/>
+        <translation>Listă Portative</translation>
     </message>
     <message>
         <source>Measure List</source>
-        <translation type="unfinished"/>
+        <translation>Listă Măsuri</translation>
     </message>
     <message>
         <source>Horizontal Frame</source>
-        <translation type="unfinished"/>
+        <translation>Cadru Orizontal</translation>
     </message>
     <message>
         <source>Vertical Frame</source>
-        <translation type="unfinished"/>
+        <translation>Cadru vertical</translation>
     </message>
     <message>
         <source>Text Frame</source>
-        <translation type="unfinished"/>
+        <translation>Cadru Text</translation>
     </message>
     <message>
         <source>Fretboard Diagram Frame</source>
-        <translation type="unfinished"/>
+        <translation>Cadru Diagramă de Acord</translation>
     </message>
     <message>
         <source>Bagpipe Embellishment</source>
-        <translation type="unfinished"/>
+        <translation>Ornamente pt. Cimpoi</translation>
     </message>
     <message>
         <source>Fretboard Diagram</source>
-        <translation type="unfinished"/>
+        <translation>Diagramă de acord</translation>
     </message>
     <message>
         <source>Ambitus</source>
-        <translation type="unfinished"/>
+        <translation>Ambitus</translation>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Simbol Acord</translation>
     </message>
     <message>
         <source>Tremolo Bar</source>
-        <translation type="unfinished"/>
+        <translation>Bară de tremolo</translation>
+    </message>
+    <message>
+        <source>Melisma Line</source>
+        <translation>Linie Melisima</translation>
+    </message>
+    <message>
+        <source>Glissando Segment</source>
+        <translation>Segment Glissando</translation>
+    </message>
+    <message>
+        <source>Melisma Line Segment</source>
+        <translation>Segment Linie Melisima</translation>
     </message>
 </context>
 <context>
     <name>fotomode</name>
     <message>
         <source>Resize to A</source>
-        <translation type="unfinished"/>
+        <translation>Redimensionează la A</translation>
     </message>
     <message>
         <source>Resize to B</source>
-        <translation type="unfinished"/>
+        <translation>Redimensionează la B</translation>
     </message>
     <message>
         <source>Resize to C</source>
-        <translation type="unfinished"/>
+        <translation>Redimensionează la C</translation>
     </message>
     <message>
         <source>Resize to D</source>
-        <translation type="unfinished"/>
+        <translation>Redimensionează la D</translation>
     </message>
     <message>
         <source>Set size A</source>
-        <translation type="unfinished"/>
+        <translation>Setează dimensiune A</translation>
     </message>
     <message>
         <source>Set size B</source>
-        <translation type="unfinished"/>
+        <translation>Setează dimensiune B</translation>
     </message>
     <message>
         <source>Set size C</source>
-        <translation type="unfinished"/>
+        <translation>Setează dimensiune C</translation>
     </message>
     <message>
         <source>Set size D</source>
-        <translation type="unfinished"/>
+        <translation>Setează dimensiune D</translation>
     </message>
 </context>
 <context>
@@ -16931,27 +17623,27 @@ Tuplet would cross measure</source>
     <name>inspector</name>
     <message>
         <source>Staff default</source>
-        <translation type="unfinished"/>
+        <translation>Portativ Implicit</translation>
     </message>
     <message>
         <source>Tick 1</source>
-        <translation type="unfinished"/>
+        <translation>Tick 1</translation>
     </message>
     <message>
         <source>Tick 2</source>
-        <translation type="unfinished"/>
+        <translation>Tick 2</translation>
     </message>
     <message>
         <source>Short 1</source>
-        <translation type="unfinished"/>
+        <translation>Scurtă 1</translation>
     </message>
     <message>
         <source>Short 2</source>
-        <translation type="unfinished"/>
+        <translation>Scurtă 2</translation>
     </message>
     <message>
         <source>[Custom]</source>
-        <translation type="unfinished"/>
+        <translation>[Personalizat]</translation>
     </message>
 </context>
 <context>
@@ -16970,11 +17662,11 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>D.S. al Coda</source>
-        <translation type="unfinished"/>
+        <translation>D.S. al Coda</translation>
     </message>
     <message>
         <source>D.S. al Fine</source>
-        <translation type="unfinished"/>
+        <translation>D.S. al Fine</translation>
     </message>
     <message>
         <source>D.S.</source>
@@ -16989,7 +17681,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Crescendo</source>
-        <translation>crescendo</translation>
+        <translation>Crescendo</translation>
     </message>
 </context>
 <context>
@@ -17031,7 +17723,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>To Coda</source>
-        <translation type="unfinished"/>
+        <translation>To Coda</translation>
     </message>
     <message>
         <source>Custom</source>
@@ -17039,7 +17731,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Segno variation</source>
-        <translation type="unfinished"/>
+        <translation>Segno variație</translation>
     </message>
 </context>
 <context>
@@ -17050,11 +17742,11 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Cross</source>
-        <translation type="unfinished"/>
+        <translation>Cruce</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation type="unfinished"/>
+        <translation>Diamant</translation>
     </message>
     <message>
         <source>Triangle</source>
@@ -17062,50 +17754,50 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"/>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Slash</source>
-        <translation type="unfinished"/>
+        <translation>Slash</translation>
     </message>
     <message>
         <source>XCircle</source>
-        <translation type="unfinished"/>
+        <translation>XCerc</translation>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Ti</translation>
     </message>
     <message>
         <source>Sol</source>
-        <translation type="unfinished"/>
+        <translation>Sol</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
-        <translation type="unfinished"/>
+        <translation>Alt. Brevis</translation>
     </message>
 </context>
 <context>
     <name>plugins_directory</name>
     <message>
         <source>Plugins</source>
-        <translation type="unfinished"/>
+        <translation>Plugin-uri</translation>
     </message>
 </context>
 <context>
@@ -17116,61 +17808,45 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Every Day</source>
-        <translation type="unfinished"/>
+        <translation>În fiecare zi</translation>
     </message>
     <message>
         <source>Every 3 Days</source>
-        <translation type="unfinished"/>
+        <translation>Odată la 3 zile</translation>
     </message>
     <message>
         <source>Every Week</source>
-        <translation type="unfinished"/>
+        <translation>În fiecare săptămână</translation>
     </message>
     <message>
         <source>Every 2 Weeks</source>
-        <translation type="unfinished"/>
+        <translation>Odată la 2 săptămâni</translation>
     </message>
     <message>
         <source>Every Month</source>
-        <translation type="unfinished"/>
+        <translation>În fiecare lună</translation>
     </message>
     <message>
         <source>Every 2 Months</source>
-        <translation type="unfinished"/>
+        <translation>Odată la 2 luni</translation>
     </message>
 </context>
 <context>
     <name>scores_directory</name>
     <message>
         <source>Scores</source>
-        <translation type="unfinished"/>
+        <translation>Partituri</translation>
     </message>
 </context>
 <context>
     <name>selectionfilter</name>
-    <message>
-        <source>1st Voice</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>2nd Voice</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>3rd Voice</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>4th Voice</source>
-        <translation type="unfinished"/>
-    </message>
     <message>
         <source>Dynamics</source>
         <translation>Dinamică</translation>
     </message>
     <message>
         <source>Fingering</source>
-        <translation>Degetaţie</translation>
+        <translation>Digitaţie</translation>
     </message>
     <message>
         <source>Lyrics</source>
@@ -17186,15 +17862,15 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Articulations</source>
-        <translation type="unfinished"/>
+        <translation>Articulație</translation>
     </message>
     <message>
         <source>Slurs</source>
-        <translation type="unfinished"/>
+        <translation>Legato</translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"/>
+        <translation>Bass Cifrat</translation>
     </message>
     <message>
         <source>Ottava</source>
@@ -17210,7 +17886,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Pedal Lines</source>
-        <translation type="unfinished"/>
+        <translation>Linii Pedală</translation>
     </message>
     <message>
         <source>Other Lines</source>
@@ -17222,22 +17898,31 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Glissandi</source>
-        <translation type="unfinished"/>
+        <translation>Glisando</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Diagrame de acord</translation>
     </message>
     <message>
-        <source>Breathmarks</source>
-        <translation type="unfinished"/>
+        <source>Breath Marks</source>
+        <translation>Marcaje Respirații</translation>
     </message>
-</context>
-<context>
-    <name>sfz_files_directory</name>
     <message>
-        <source>SFZ</source>
-        <translation type="unfinished"/>
+        <source>Voice 1</source>
+        <translation>Vocea 1</translation>
+    </message>
+    <message>
+        <source>Voice 2</source>
+        <translation>Vocea 2</translation>
+    </message>
+    <message>
+        <source>Voice 3</source>
+        <translation>Vocea 3</translation>
+    </message>
+    <message>
+        <source>Voice 4</source>
+        <translation>Vocea 4</translation>
     </message>
 </context>
 <context>
@@ -17251,15 +17936,15 @@ Tuplet would cross measure</source>
     <name>staff group header name</name>
     <message>
         <source>STANDARD STAFF</source>
-        <translation type="unfinished"/>
+        <translation>Portativ implicit</translation>
     </message>
     <message>
         <source>PERCUSSION STAFF</source>
-        <translation type="unfinished"/>
+        <translation>PORTATIV PERCUȚIE</translation>
     </message>
     <message>
         <source>TABLATURE STAFF</source>
-        <translation type="unfinished"/>
+        <translation>PORTATIV TABULATURĂ</translation>
     </message>
 </context>
 <context>
@@ -17284,19 +17969,19 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Upprall line</source>
-        <translation type="unfinished"/>
+        <translation>Upprall linie</translation>
     </message>
     <message>
         <source>Downprall line</source>
-        <translation type="unfinished"/>
+        <translation>Downprall linie</translation>
     </message>
     <message>
         <source>Prallprall line</source>
-        <translation type="unfinished"/>
+        <translation>PrallPrall linie</translation>
     </message>
     <message>
         <source>Wavy line</source>
-        <translation type="unfinished"/>
+        <translation>Linie ondulată</translation>
     </message>
 </context>
 <context>

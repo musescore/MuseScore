@@ -17,7 +17,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; for new versions and more information.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Support MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;your donation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2014 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
@@ -99,7 +99,7 @@ p, li { white-space: pre-wrap; }
     <name>AlbumManager</name>
     <message>
         <source>MuseScore: Album Manager</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Urejanje albuma</translation>
     </message>
     <message>
         <source>Add Score</source>
@@ -225,7 +225,7 @@ p, li { white-space: pre-wrap; }
     <name>Awl::ColorLabel</name>
     <message>
         <source>MuseScore: Select Color</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Izberi barvo</translation>
     </message>
 </context>
 <context>
@@ -290,7 +290,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>measures</source>
-        <translation type="unfinished"/>
+        <translation>Takti</translation>
     </message>
     <message>
         <source>Add line breaks at end of each system</source>
@@ -302,6 +302,13 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Break lines every X measures</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>ChordBase</name>
+    <message>
+        <source>Glissando end</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -348,7 +355,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Triangle</source>
-        <translation type="unfinished"/>
+        <translation>Trikot</translation>
     </message>
     <message>
         <source>Mi</source>
@@ -1119,6 +1126,10 @@ p, li { white-space: pre-wrap; }
         <source>B♭ -1</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>»C</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>EditRaster</name>
@@ -1132,7 +1143,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>MuseScore: Edit Grid</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Uredi mrežo</translation>
     </message>
     <message>
         <source>Edit Grid</source>
@@ -1164,10 +1175,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Instrument:</source>
         <translation>Inštrument:</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Amateur:</source>
@@ -1363,7 +1370,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Lines:</source>
-        <translation type="unfinished"/>
+        <translation>Črte</translation>
     </message>
     <message>
         <source>Line distance:</source>
@@ -1393,6 +1400,10 @@ p, li { white-space: pre-wrap; }
         <source>Advanced Style Properties...</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Hide system barline</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>EditStaffType</name>
@@ -1402,7 +1413,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Lines:</source>
-        <translation type="unfinished"/>
+        <translation>Črte</translation>
     </message>
     <message>
         <source>sp</source>
@@ -1584,6 +1595,26 @@ p, li { white-space: pre-wrap; }
         <source>&lt; Reset to Template</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Repeat:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Never</source>
+        <translation>Nikoli</translation>
+    </message>
+    <message>
+        <source>At new system</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>At new meas.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Always</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>EditStringDataBase</name>
@@ -1657,7 +1688,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Clefs</source>
-        <translation type="unfinished"/>
+        <translation>Ključi</translation>
     </message>
     <message>
         <source>Arpeggios</source>
@@ -1693,15 +1724,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Predznaki</translation>
     </message>
     <message>
         <source>Tuplets</source>
-        <translation type="unfinished"/>
+        <translation>Ritmične posebnosti</translation>
     </message>
     <message>
         <source>Display in concert pitch</source>
-        <translation type="unfinished"/>
+        <translation>Prikaži v koncertni višini</translation>
     </message>
     <message>
         <source>Minimum width of measure:</source>
@@ -1763,15 +1794,7 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Vertical-frame upper margin</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Vertical frame top margin:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Vertical-frame lower margin</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1780,10 +1803,6 @@ space unit</extracomment>
     </message>
     <message>
         <source>Create courtesy clefs</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Create time signature for all systems</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1833,10 +1852,6 @@ space unit</extracomment>
     <message>
         <source>Even</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Odd</source>
@@ -2301,7 +2316,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Eighth Note</source>
-        <translation type="unfinished"/>
+        <translation>Osminka</translation>
     </message>
     <message>
         <source>Sixteenth Note</source>
@@ -2357,14 +2372,6 @@ space unit</extracomment>
     </message>
     <message>
         <source>Use odd/even page footer</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fixed number of measures/system:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fixed measure width</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2491,12 +2498,36 @@ space unit</extracomment>
         <source>Automatic Capitalization</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Vertical frame upper margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Vertical frame lower margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Scale:</source>
+        <translation>Povečava:</translation>
+    </message>
+    <message>
+        <source>Barré line thickness:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Scale barlines to staff size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Barline to grace note distance:</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>ExcerptsDialog</name>
     <message>
         <source>MuseScore: Parts</source>
-        <translation>MuseScore: Deli</translation>
+        <translation>MuseScore: Parti</translation>
     </message>
     <message>
         <source>Instrument:</source>
@@ -2504,7 +2535,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Zbriši</translation>
+        <translation>Izbriši</translation>
     </message>
     <message>
         <source>New All</source>
@@ -2539,7 +2570,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Zbriši</translation>
+        <translation>Izbriši</translation>
     </message>
     <message>
         <source>Add</source>
@@ -2547,14 +2578,18 @@ space unit</extracomment>
     </message>
     <message>
         <source>MuseScore</source>
+        <translation>MuseScore</translation>
+    </message>
+    <message>
+        <source>Sound Fonts</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Soundfont %1 already loaded</source>
+        <source>SoundFont %1 already loaded</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>cannot load soundfont %1</source>
+        <source>Cannot load SoundFont %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -2602,24 +2637,12 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Move track up</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Up</source>
-        <translation>Gor</translation>
-    </message>
-    <message>
         <source>Move track down</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Down</source>
-        <translation>Dol</translation>
     </message>
     <message>
         <source>Text charset:</source>
@@ -2672,10 +2695,6 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Small</source>
         <translation type="unfinished"/>
     </message>
@@ -2695,20 +2714,12 @@ space unit</extracomment>
 <context>
     <name>InspectorAmbitus</name>
     <message>
-        <source>Part Range</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Head group</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>sp</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Bottom note</source>
@@ -2952,7 +2963,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Triangle</source>
-        <translation type="unfinished"/>
+        <translation>Trikot</translation>
     </message>
     <message>
         <source>Slash</source>
@@ -3010,6 +3021,10 @@ space unit</extracomment>
         <source>[Undefined]</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Ambitus</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>InspectorArticulation</name>
@@ -3040,10 +3055,6 @@ space unit</extracomment>
     <message>
         <source>Down</source>
         <translation>Dol</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Above Staff</source>
@@ -3087,10 +3098,6 @@ space unit</extracomment>
     <message>
         <source>Barline</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Style:</source>
@@ -3192,10 +3199,6 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Horizontal</source>
         <translation type="unfinished"/>
     </message>
@@ -3261,14 +3264,21 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorBreak</name>
+    <message>
+        <source>Element Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Layout Break</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorChord</name>
     <message>
         <source>Chord</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Stem direction</source>
@@ -3347,10 +3357,6 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Show courtesy</source>
         <translation type="unfinished"/>
     </message>
@@ -3376,10 +3382,6 @@ space unit</extracomment>
     <message>
         <source>Dynamic Range</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Velocity</source>
@@ -3438,10 +3440,6 @@ space unit</extracomment>
         <translation>Barva</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Horizontal offset</source>
         <translation type="unfinished"/>
     </message>
@@ -3482,6 +3480,29 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorFret</name>
+    <message>
+        <source>Ottava Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fretboard Diagram</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorGlissando</name>
     <message>
         <source>Glissando</source>
@@ -3494,10 +3515,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>Tip</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Glissando Inspector</source>
@@ -3571,10 +3588,6 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Horizontal Frame Inspector</source>
         <translation type="unfinished"/>
     </message>
@@ -3616,10 +3629,6 @@ space unit</extracomment>
     <message>
         <source>Dynamic range</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Staff</source>
@@ -3697,10 +3706,6 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Size</source>
         <translation type="unfinished"/>
     </message>
@@ -3764,10 +3769,6 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Jump to</source>
         <translation type="unfinished"/>
     </message>
@@ -3801,10 +3802,6 @@ space unit</extracomment>
     <message>
         <source>Key Signature</source>
         <translation>Predznaki</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Show courtesy</source>
@@ -3867,10 +3864,6 @@ space unit</extracomment>
     <message>
         <source>Line</source>
         <translation>Črta</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3951,10 +3944,6 @@ space unit</extracomment>
     <message>
         <source>Marker</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Label</source>
@@ -4046,10 +4035,6 @@ space unit</extracomment>
     <message>
         <source>Bottom</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Whole</source>
@@ -4183,10 +4168,6 @@ space unit</extracomment>
         <translation>Tip</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Placement</source>
         <translation type="unfinished"/>
     </message>
@@ -4254,10 +4235,6 @@ space unit</extracomment>
         <translation>Pavza</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Small</source>
         <translation type="unfinished"/>
     </message>
@@ -4286,10 +4263,6 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Trailing space</source>
         <translation type="unfinished"/>
     </message>
@@ -4316,10 +4289,6 @@ space unit</extracomment>
 </context>
 <context>
     <name>InspectorSlur</name>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
     <message>
         <source>Line type:</source>
         <translation type="unfinished"/>
@@ -4373,10 +4342,6 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Spacer Inspector</source>
         <translation type="unfinished"/>
     </message>
@@ -4390,10 +4355,6 @@ space unit</extracomment>
     <message>
         <source>Tempo Marking</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -4435,10 +4396,6 @@ space unit</extracomment>
         <translation>Slog</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Text Inspector</source>
         <translation type="unfinished"/>
     </message>
@@ -4448,6 +4405,10 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Text to Style</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -4467,10 +4428,6 @@ space unit</extracomment>
     <message>
         <source>Time Signature</source>
         <translation>Določi taktovski način:</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Show courtesy</source>
@@ -4498,10 +4455,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>Tip</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Trill Inspector</source>
@@ -4541,10 +4494,6 @@ space unit</extracomment>
     <message>
         <source>Tuplet</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Number</source>
@@ -4616,10 +4565,6 @@ space unit</extracomment>
     <message>
         <source>Vertical Frame</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>mm</source>
@@ -4710,10 +4655,6 @@ space unit</extracomment>
         <translation>Tip</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Volta Inspector</source>
         <translation type="unfinished"/>
     </message>
@@ -4801,7 +4742,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>MuseScore: Instruments</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Glasbila</translation>
     </message>
     <message>
         <source>Load</source>
@@ -4824,7 +4765,7 @@ space unit</extracomment>
     <name>InstrumentsWidget</name>
     <message>
         <source>MuseScore: Instruments</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Glasbila</translation>
     </message>
     <message>
         <source>Instrument List</source>
@@ -4926,7 +4867,7 @@ space unit</extracomment>
     <name>LayerManager</name>
     <message>
         <source>MuseScore: Layers</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Plasti</translation>
     </message>
     <message>
         <source>Layer</source>
@@ -4938,7 +4879,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Zbriši</translation>
+        <translation>Izbriši</translation>
     </message>
     <message>
         <source>Tags</source>
@@ -5096,10 +5037,6 @@ space unit</extracomment>
         <translation>Začetek</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Above</source>
         <translation>Zgoraj</translation>
     </message>
@@ -5152,7 +5089,7 @@ space unit</extracomment>
     <name>LoginDialog</name>
     <message>
         <source>Log in to MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Prijavite v MuseScore</translation>
     </message>
     <message>
         <source>Username or email</source>
@@ -5247,7 +5184,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tuplets</source>
-        <translation type="unfinished"/>
+        <translation>Ritmične posebnosti</translation>
     </message>
     <message>
         <source>2</source>
@@ -5357,6 +5294,19 @@ pickup measure</source>
         <source>Max. voices</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Channel</source>
+        <translation>Kanal</translation>
+    </message>
+    <message>
+        <source>MuseScore instrument</source>
+        <translation>MuseScore glasbila</translation>
+    </message>
+    <message>
+        <source>Show
+chord symbols</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MIDI import: tracks model</name>
@@ -5373,12 +5323,10 @@ pickup measure</source>
     </message>
     <message>
         <source>Save as MP3</source>
-        <translation type="unfinished"/>
+        <translation>Shrani kot MP3</translation>
     </message>
     <message>
-        <source>MuseScore does not export MP3 files directly, but instead uses 
-the freely available LAME library.  You must obtain %1 
-separately, and then locate the file for MuseScore.
+        <source>MuseScore does not export MP3 files directly, but instead uses the freely available LAME library.  You must obtain %1 separately (for details check the handbook), and then locate the file for MuseScore.
 You only need to do this once.
 
 Would you like to locate %2 now?</source>
@@ -5389,23 +5337,23 @@ Would you like to locate %2 now?</source>
     <name>MasterPalette</name>
     <message>
         <source>MuseScore: Master Palette</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Glavna paleta</translation>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation type="unfinished"/>
+        <translation>Okrasne note</translation>
     </message>
     <message>
         <source>Clefs</source>
-        <translation type="unfinished"/>
+        <translation>Ključi</translation>
     </message>
     <message>
         <source>Key Signatures</source>
-        <translation type="unfinished"/>
+        <translation>Tonalitete</translation>
     </message>
     <message>
         <source>Time Signatures</source>
-        <translation type="unfinished"/>
+        <translation>Taktovski načini</translation>
     </message>
     <message>
         <source>Barlines</source>
@@ -5413,43 +5361,39 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Lines</source>
-        <translation type="unfinished"/>
+        <translation>Črte</translation>
     </message>
     <message>
         <source>Breaths &amp; Pauses</source>
-        <translation type="unfinished"/>
+        <translation>Dihi in cezure</translation>
     </message>
     <message>
         <source>Brackets</source>
-        <translation type="unfinished"/>
+        <translation>Prečke sistema</translation>
     </message>
     <message>
         <source>Articulations &amp; Ornaments</source>
-        <translation type="unfinished"/>
+        <translation>Artikulacije in okraski</translation>
     </message>
     <message>
         <source>Accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Predznaki</translation>
     </message>
     <message>
         <source>Dynamics</source>
-        <translation type="unfinished"/>
+        <translation>Dinamika</translation>
     </message>
     <message>
         <source>Fingering</source>
-        <translation type="unfinished"/>
+        <translation>Prstni red</translation>
     </message>
     <message>
         <source>Note Heads</source>
-        <translation type="unfinished"/>
+        <translation>Notne glavice</translation>
     </message>
     <message>
         <source>Tremolo</source>
         <translation>Tremolo</translation>
-    </message>
-    <message>
-        <source>Repeats</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Tempo</source>
@@ -5461,34 +5405,38 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Beam Properties</source>
-        <translation type="unfinished"/>
+        <translation>Prečke vratov</translation>
     </message>
     <message>
         <source>Frames &amp; Measures</source>
-        <translation type="unfinished"/>
+        <translation>Okvirji in takti</translation>
     </message>
     <message>
         <source>Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Simboli</translation>
     </message>
     <message>
         <source>Arpeggios &amp; Glissandi</source>
-        <translation type="unfinished"/>
+        <translation>KotHarfa in ZvočniZdrs</translation>
     </message>
     <message>
         <source>Breaks &amp; Spacers</source>
-        <translation type="unfinished"/>
+        <translation>Prelomi in razmiki</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
-        <translation type="unfinished"/>
+        <translation>Glasbeni okraski</translation>
+    </message>
+    <message>
+        <source>Repeats &amp; Jumps</source>
+        <translation>Ponavljanja</translation>
     </message>
 </context>
 <context>
     <name>MeasureProperties</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>cannot change measure length:
@@ -5665,10 +5613,6 @@ tuplet would cross measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Add Scan</source>
         <translation type="unfinished"/>
     </message>
@@ -5700,7 +5644,7 @@ tuplet would cross measure</source>
     <name>MetaEditDialog</name>
     <message>
         <source>MuseScore Version:</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore različica:</translation>
     </message>
     <message>
         <source>Revision:</source>
@@ -5716,7 +5660,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>MuseScore: Score Information</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Podatki o notnem črtovju</translation>
     </message>
 </context>
 <context>
@@ -5761,22 +5705,41 @@ tuplet would cross measure</source>
     </message>
 </context>
 <context>
+    <name>Ms::AccessibleSearchBox</name>
+    <message>
+        <source>Measure</source>
+        <translation>Takt</translation>
+    </message>
+    <message>
+        <source>Page</source>
+        <translation>Stran</translation>
+    </message>
+    <message>
+        <source>Rehearsal Mark</source>
+        <translation>Vadbene oznake</translation>
+    </message>
+    <message>
+        <source>Not found </source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Ms::AlbumManager</name>
     <message>
         <source>MuseScore: Add Score</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Dodaj notno črtovje</translation>
     </message>
     <message>
         <source>MuseScore: Load Album</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Odpri album</translation>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore datoteke (*.mscz *.mscx)</translation>
     </message>
     <message>
         <source>MuseScore Album Files (*.album)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Album datoteke (*.album)</translation>
     </message>
     <message>
         <source>Error while creating score from album.</source>
@@ -5850,18 +5813,6 @@ tuplet would cross measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Double dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Triple dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Quintuplet</source>
         <translation>Kvintola</translation>
     </message>
@@ -5875,6 +5826,18 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>%1 End of %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dotted %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double dotted %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Triple dotted %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -5943,7 +5906,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>MuseScore: Open File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Odpri datoteko</translation>
     </message>
     <message>
         <source>Write File failed: </source>
@@ -5957,6 +5920,13 @@ tuplet would cross measure</source>
         <source>Open File
 %1
 failed: </source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Ms::EditStaff</name>
+    <message>
+        <source>The instrument name is invalid.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6057,7 +6027,7 @@ failed: </source>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Uporabi za vse parte</translation>
     </message>
     <message>
         <source>last modification time</source>
@@ -6107,10 +6077,17 @@ failed: </source>
     <name>Ms::Harmony</name>
     <message>
         <source>sharp</source>
-        <translation type="unfinished"/>
+        <translation>Višaj</translation>
     </message>
     <message>
         <source>flat</source>
+        <translation>Nižaj</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::HelpQuery</name>
+    <message>
+        <source>Search for: </source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6130,6 +6107,21 @@ failed: </source>
     <message>
         <source>Inspector</source>
         <translation>Struktura dokumenta</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::InspectorGroupElement</name>
+    <message>
+        <source>Select</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation>Note</translation>
+    </message>
+    <message>
+        <source>Rests</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -6182,7 +6174,7 @@ failed: </source>
     <name>Ms::InstrumentsDialog</name>
     <message>
         <source>MuseScore: Save Instrument List</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani seznam glasbil</translation>
     </message>
     <message>
         <source>Write Style failed: </source>
@@ -6190,15 +6182,15 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore: Write Style</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Napiši slog</translation>
     </message>
     <message>
         <source>MuseScore: Load Instrument List</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Odpri  seznam glasbil</translation>
     </message>
     <message>
         <source>MuseScore: Open Instruments File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Odpri datoteko z glasbili</translation>
     </message>
     <message>
         <source>Open Instruments File
@@ -6208,7 +6200,7 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore Instruments (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Glasbila (*.xml)</translation>
     </message>
 </context>
 <context>
@@ -6242,7 +6234,7 @@ failed: </source>
     <name>Ms::KeyEditor</name>
     <message>
         <source>MuseScore: Key Signatures</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Taktovski način</translation>
     </message>
 </context>
 <context>
@@ -6289,10 +6281,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Please check your internet connection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Unsuccessful login. Please try again.</source>
         <translation type="unfinished"/>
     </message>
@@ -6332,6 +6320,14 @@ failed: </source>
         <source>Your MuseScore version is too old to use this feature.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Please upgrade first&lt;/a&gt;.</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Please check your Internet connection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MScore</name>
@@ -6351,7 +6347,7 @@ failed: </source>
     <name>Ms::MeasureProperties</name>
     <message>
         <source>MuseScore: Measure Properties for Measure %1</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Lastnosti takta za takt %1</translation>
     </message>
     <message>
         <source>visible</source>
@@ -6384,7 +6380,7 @@ failed: </source>
     <name>Ms::Mixer</name>
     <message>
         <source>MuseScore: Mixer</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Mešalec</translation>
     </message>
 </context>
 <context>
@@ -6411,7 +6407,7 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Save changes to the score &quot;%1&quot;
@@ -6420,7 +6416,7 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore datoteke (*.mscz *.mscx);;</translation>
     </message>
     <message>
         <source>MusicXML Files (*.xml *.mxl);;</source>
@@ -6452,15 +6448,15 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore: Load Score</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Odpri notno črtovje</translation>
     </message>
     <message>
         <source>MuseScore: Save Score</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani notno črtovje</translation>
     </message>
     <message>
         <source>MuseScore: Save File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani datoteko</translation>
     </message>
     <message>
         <source>Untitled</source>
@@ -6468,15 +6464,15 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore: Load Style</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Odpri slog</translation>
     </message>
     <message>
         <source>MuseScore: Save Style</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani slog</translation>
     </message>
     <message>
         <source>MuseScore Style File (*.mss)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Slog (*.mss)</translation>
     </message>
     <message>
         <source>PDF Scan File (*.pdf);;All (*)</source>
@@ -6496,27 +6492,27 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore: Save Image</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani sliko</translation>
     </message>
     <message>
         <source>MuseScore: Load Palette</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Odpri paleto</translation>
     </message>
     <message>
         <source>MuseScore: Save Palette</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani paleto</translation>
     </message>
     <message>
         <source>MuseScore Palette (*.mpal)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Paleta (*.mpal)</translation>
     </message>
     <message>
         <source>MuseScore: Load Plugin</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Odpri vtičnik</translation>
     </message>
     <message>
         <source>MuseScore: Save Plugin</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani vtičnik</translation>
     </message>
     <message>
         <source>MuseScore Plugin File (*.qml)</source>
@@ -6524,15 +6520,15 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore: Load Drumset</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Odpri tolkala</translation>
     </message>
     <message>
         <source>MuseScore: Save Drumset</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani tolkala</translation>
     </message>
     <message>
         <source>MuseScore Drumset File (*.drm)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore tolkala (*.drm)</translation>
     </message>
     <message>
         <source>Standard MIDI File (*.mid)</source>
@@ -6564,19 +6560,15 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore: Export</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Izvozi</translation>
     </message>
     <message>
         <source>MuseScore: Save As</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>cannot determine file type</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani kot</translation>
     </message>
     <message>
         <source>MuseScore: Export Parts</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Izvozi parte</translation>
     </message>
     <message>
         <source>&quot;%1&quot; already exists.
@@ -6606,15 +6598,15 @@ Do you want to replace it?
     </message>
     <message>
         <source>MuseScore: Save a Copy</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani kopijo</translation>
     </message>
     <message>
         <source>MuseScore: Save Selection</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani izbor</translation>
     </message>
     <message>
         <source>MuseScore: Save Selected</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani izbrano</translation>
     </message>
     <message>
         <source>Images (*.jpg *.jpeg *.png);;All (*)</source>
@@ -6706,23 +6698,23 @@ Do you want to replace it?
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation type="unfinished"/>
+        <translation>D&amp;odaj</translation>
     </message>
     <message>
         <source>&amp;Measures</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Takti</translation>
     </message>
     <message>
         <source>&amp;Frames</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Okvirji</translation>
     </message>
     <message>
         <source>&amp;Text</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Besedilo</translation>
     </message>
     <message>
         <source>&amp;Lines</source>
-        <translation type="unfinished"/>
+        <translation>Č&amp;rte</translation>
     </message>
     <message>
         <source>No measure selected:
@@ -6747,39 +6739,35 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>Page View</source>
-        <translation type="unfinished"/>
+        <translation>Pogled po straneh</translation>
     </message>
     <message>
         <source>Continuous View</source>
-        <translation type="unfinished"/>
+        <translation>Neprekinjen pogled</translation>
     </message>
     <message>
         <source>Concert Pitch</source>
         <translation>Koncertna višina</translation>
     </message>
     <message>
-        <source>Note Entry</source>
-        <translation>Vnos not</translation>
-    </message>
-    <message>
         <source>&amp;File</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Datoteka</translation>
     </message>
     <message>
         <source>Open &amp;Recent</source>
-        <translation type="unfinished"/>
+        <translation>Odpri nedavne</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Uredi</translation>
     </message>
     <message>
         <source>&amp;Measure</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Takt</translation>
     </message>
     <message>
         <source>&amp;Voices</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Glasovi</translation>
     </message>
     <message>
         <source>W&amp;orkspaces</source>
@@ -6787,11 +6775,11 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>&amp;Preferences...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Nastavitve...</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation type="unfinished"/>
+        <translation>Po&amp;gled</translation>
     </message>
     <message>
         <source>Add N&amp;ote</source>
@@ -6807,70 +6795,26 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>&amp;Layout</source>
-        <translation type="unfinished"/>
+        <translation>Pos&amp;tavitev</translation>
     </message>
     <message>
         <source>&amp;Style</source>
-        <translation>Slog</translation>
+        <translation>S&amp;log</translation>
     </message>
     <message>
         <source>&amp;Plugins</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Vtičniki</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Pomoč</translation>
     </message>
     <message>
         <source>&amp;Online Handbook</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>&amp;About</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>About &amp;Qt</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>About &amp;MusicXML</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Check for &amp;Update</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>no score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>NOTE entry mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>DRUM entry mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>TAB entry mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>edit mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>text edit mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>lyrics edit mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>play</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -6893,11 +6837,11 @@ Restore session?</source>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Zbriši</translation>
+        <translation>Izbriši</translation>
     </message>
     <message>
         <source>Undo Changes</source>
-        <translation type="unfinished"/>
+        <translation>Prekliči spremembe</translation>
     </message>
     <message>
         <source>MuseScore: Read Workspace Name</source>
@@ -6914,7 +6858,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore: Choose Ogg Audio File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Izberi Ogg datoteko</translation>
     </message>
     <message>
         <source>FLAC Audio (*.flac)</source>
@@ -6934,11 +6878,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore: Insert Image</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>chord symbol/figured bass edit mode</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Vstavi sliko</translation>
     </message>
     <message>
         <source>Report a Bug</source>
@@ -6972,7 +6912,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore: Warning</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Opozorilo</translation>
     </message>
     <message>
         <source>PDF Files &lt;experimental OMR&gt; (*.pdf);;</source>
@@ -6984,7 +6924,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Clear Recent Files</source>
-        <translation type="unfinished"/>
+        <translation>Izbriši nedavne datoteke</translation>
     </message>
     <message>
         <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
@@ -7003,32 +6943,20 @@ please choose a different name:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Screenshot Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>screenshot mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>score locked</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Swing</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Key Signatures</source>
-        <translation type="unfinished"/>
+        <translation>Tonalitete</translation>
     </message>
     <message>
         <source>Time Signatures</source>
-        <translation type="unfinished"/>
+        <translation>Taktovski načini</translation>
     </message>
     <message>
         <source>Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Simboli</translation>
     </message>
     <message>
         <source>Cannot create tuplet: Note value is too short</source>
@@ -7036,11 +6964,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore datoteka (*.mscz)</translation>
     </message>
     <message>
         <source>Uncompressed MuseScore File (*.mscx)</source>
-        <translation type="unfinished"/>
+        <translation>Nestisnjena MuseScore datoteka  (*.mscx)</translation>
     </message>
     <message>
         <source>MusicXML File (*.xml)</source>
@@ -7112,7 +7040,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Score_and_Parts</source>
-        <translation type="unfinished"/>
+        <translation>Partiture_in_parti</translation>
     </message>
     <message>
         <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</source>
@@ -7120,15 +7048,15 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore Styles (*.mss)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Slogi (*.mss)</translation>
     </message>
     <message>
         <source>MuseScore Plugin (*.qml)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Vtičniki (*.qml)</translation>
     </message>
     <message>
         <source>MuseScore Drumset (*.drm)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore tolkala (*.drm)</translation>
     </message>
     <message>
         <source>RH Guitar Fingering %1</source>
@@ -7144,6 +7072,86 @@ please choose a different name:</source>
     </message>
     <message>
         <source>&amp;Tools</source>
+        <translation>&amp;Orodja</translation>
+    </message>
+    <message>
+        <source>No score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Edit mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Text edit mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Lyrics edit mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chord symbol/figured bass edit mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Zaigraj</translation>
+    </message>
+    <message>
+        <source>Score locked</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>&amp;About...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>About &amp;Qt...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>About &amp;MusicXML...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Image Capture</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note Input</source>
+        <translation>Vnos not</translation>
+    </message>
+    <message>
+        <source>Note input mode</source>
+        <translation>Način za vnos not</translation>
+    </message>
+    <message>
+        <source>Drum input mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>TAB input mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Image capture mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cannot determine file type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>MuseScore:</source>
+        <translation>MuseScore:</translation>
+    </message>
+    <message>
+        <source>Cannot write into %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7170,7 +7178,7 @@ please choose a different name:</source>
     <name>Ms::NewWizard</name>
     <message>
         <source>MuseScore: Create New Score</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Ustvari novo notno črtovje</translation>
     </message>
 </context>
 <context>
@@ -7245,6 +7253,13 @@ please choose a different name:</source>
     </message>
 </context>
 <context>
+    <name>Ms::NoEffectGui</name>
+    <message>
+        <source>No Plugin</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Ms::Note</name>
     <message>
         <source>Appoggiatura</source>
@@ -7268,7 +7283,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Voice: %1</source>
-        <translation type="unfinished"/>
+        <translation>Glas: %1</translation>
     </message>
     <message>
         <source>Acciaccatura</source>
@@ -7321,11 +7336,11 @@ please choose a different name:</source>
     <name>Ms::PaletteBox</name>
     <message>
         <source>Palettes</source>
-        <translation type="unfinished"/>
+        <translation>Palete</translation>
     </message>
     <message>
         <source>Select workspace</source>
-        <translation type="unfinished"/>
+        <translation>Izberi delovni prostor</translation>
     </message>
     <message>
         <source>+</source>
@@ -7372,7 +7387,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Delete Palette</source>
-        <translation type="unfinished"/>
+        <translation>Izbriši paleto</translation>
     </message>
 </context>
 <context>
@@ -7386,58 +7401,7 @@ please choose a different name:</source>
     <name>Ms::PianoTools</name>
     <message>
         <source>Piano Keyboard</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>Ms::PianorollEditor</name>
-    <message>
-        <source>Toolbar 1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wave</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Show wave display</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Toolbar 2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cursor:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Velocity:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Offset</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>User</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Pitch:</source>
-        <translation>Višina</translation>
-    </message>
-    <message>
-        <source>OnTime:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Len:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
-        <translation type="unfinished"/>
+        <translation>Klaviatura</translation>
     </message>
 </context>
 <context>
@@ -7452,7 +7416,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>untitled</source>
@@ -7464,7 +7428,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore Plugin Creator</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Ustvarjalec vtičnika</translation>
     </message>
     <message>
         <source>Plugin &quot;%1&quot; has changes.
@@ -7473,10 +7437,10 @@ Save before closing?</source>
     </message>
     <message>
         <source>MuseScore: Save Plugin</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani vtičnik</translation>
     </message>
     <message>
-        <source>cannot determine file type</source>
+        <source>Cannot determine file type</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7484,7 +7448,7 @@ Save before closing?</source>
     <name>Ms::PreferenceDialog</name>
     <message>
         <source>The language will be changed once you restart MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>Srememba jezika bo vidna po vnovičnem zagonu MuseScore.</translation>
     </message>
     <message>
         <source>Choose Notepaper</source>
@@ -7500,7 +7464,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>Choose Default Style for Parts</source>
-        <translation type="unfinished"/>
+        <translation>Izberi privzeti slog za parte</translation>
     </message>
     <message>
         <source>Choose Instrument List</source>
@@ -7516,7 +7480,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>MuseScore Shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Bližnjice</translation>
     </message>
     <message>
         <source>Print Shortcuts</source>
@@ -7547,14 +7511,6 @@ Save before closing?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Soundfont Folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>SFZ Folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Action: %1; Shortcut: %2</source>
         <translation type="unfinished"/>
     </message>
@@ -7564,6 +7520,10 @@ Save before closing?</source>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;All (*)</source>
+        <translation>MuseScore Datoteke (*.mscz *.mscx);;Vse (*)</translation>
+    </message>
+    <message>
+        <source>SoundFont Folders</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7571,7 +7531,7 @@ Save before closing?</source>
     <name>Ms::ResourceManager</name>
     <message>
         <source>Languages</source>
-        <translation type="unfinished"/>
+        <translation>Jeziki</translation>
     </message>
     <message>
         <source>%1 KB</source>
@@ -7583,11 +7543,11 @@ Save before closing?</source>
     </message>
     <message>
         <source>No update</source>
-        <translation type="unfinished"/>
+        <translation>Ni posodobitev</translation>
     </message>
     <message>
         <source>Updating</source>
-        <translation type="unfinished"/>
+        <translation>Posodabljam</translation>
     </message>
     <message>
         <source>Failed, try again</source>
@@ -7595,25 +7555,14 @@ Save before closing?</source>
     </message>
     <message>
         <source>Updated</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>Ms::Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation type="unfinished"/>
+        <translation>Posodobljeno</translation>
     </message>
 </context>
 <context>
     <name>Ms::Score</name>
     <message>
         <source>The style file is not compatible with this version of MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>Datoteka ni združljiva s to različico MuseScore.</translation>
     </message>
     <message>
         <source>The following file is locked: 
@@ -7630,7 +7579,7 @@ failed: %2</source>
     </message>
     <message>
         <source>MuseScore: Save File failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shranjevanje datoteke ni uspelo: %1</translation>
     </message>
     <message>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
@@ -7665,6 +7614,14 @@ failed: %2</source>
     </message>
     <message>
         <source>No selection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Measure %1 Staff %2 incomplete. Expected: %3; Found: %4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7704,26 +7661,33 @@ failed: %2</source>
     </message>
 </context>
 <context>
-    <name>Ms::ScoreView</name>
+    <name>Ms::ScoreBrowser</name>
     <message>
-        <source>transparent background</source>
+        <source>Choose Instruments</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Create New Score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Custom Templates</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Getting Started</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Ms::ScoreView</name>
     <message>
         <source>Set Standard Size...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Save As (print mode)...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Save As (screenshot mode)...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>MuseScore: Set Output Resolution</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Nastavi ločljivost za izpis</translation>
     </message>
     <message>
         <source>PNG Bitmap Graphic (*.png)</source>
@@ -7739,11 +7703,7 @@ failed: %2</source>
     </message>
     <message>
         <source>MuseScore: Save As</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>cannot determine file type</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani kot</translation>
     </message>
     <message>
         <source>Layer</source>
@@ -7858,22 +7818,6 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Please select the complete tuplet and retry the copy operation</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Please select the complete tuplet and retry the cut operation</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>no destination to paste</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>cannot paste into tuplet</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -7909,10 +7853,6 @@ Please select a measure and try again</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Screenshot Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Hide Courtesy Time Signature</source>
         <translation type="unfinished"/>
     </message>
@@ -7921,23 +7861,11 @@ Please select a measure and try again</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Hide courtesy clef</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Show courtesy clef</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Hide Courtesy Key Signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Show Courtesy Key Signature</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>tuplet cannot cross barlines</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -7959,13 +7887,64 @@ Please select a range of measures to join and try again</source>
         <source>Auto-resize to page</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Hide Courtesy Clef</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show Courtesy Clef</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Please select the complete tuplet/tremolo and retry the command</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Image Capture</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save As (Print Mode)...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save As (Screenshot Mode)...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cannot determine file type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>No destination to paste</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cannot paste into tuplet</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tuplet cannot cross barlines</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Transparent background</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Ms::SearchComboBox</name>
+    <message>
+        <source>Search Box</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Type to search. Press Enter to return to score.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::Segment</name>
-    <message>
-        <source>Annotations: </source>
-        <translation type="unfinished"/>
-    </message>
     <message>
         <source>Start of </source>
         <translation type="unfinished"/>
@@ -7974,12 +7953,27 @@ Please select a range of measures to join and try again</source>
         <source>End of </source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Annotations:</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Ms::SelectionListWidget</name>
+    <message>
+        <source>Selection filter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Use Tab and Backtab to move through the check boxes</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::SelectionWindow</name>
     <message>
         <source>Selection</source>
-        <translation type="unfinished"/>
+        <translation>Izbor</translation>
     </message>
 </context>
 <context>
@@ -8005,7 +7999,7 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>MuseScore: System Text Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Nastavitve sistemskega besedila</translation>
     </message>
     <message>
         <source>MuseScore: Staff Text Properties</source>
@@ -8016,32 +8010,32 @@ Please select a range of measures to join and try again</source>
     <name>Ms::StartDialog</name>
     <message>
         <source>MuseScore Startup Dialog</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore pogovorno okno ob zagonu</translation>
     </message>
 </context>
 <context>
     <name>Ms::SymbolDialog</name>
     <message>
         <source>MuseScore: Symbols</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Simboli</translation>
     </message>
 </context>
 <context>
     <name>Ms::TempoText</name>
     <message>
-        <source>Dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Double dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Triple dotted</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>note = %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dotted %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double dotted %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Triple dotted %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8097,14 +8091,14 @@ Please select a range of measures to join and try again</source>
     <name>Ms::TextProperties</name>
     <message>
         <source>MuseScore: Text Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Nastavitve besedila</translation>
     </message>
 </context>
 <context>
     <name>Ms::TextStyleDialog</name>
     <message>
         <source>MuseScore: Read Style Name</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Preberi ime sloga</translation>
     </message>
     <message>
         <source>'%1' does already exist,
@@ -8113,7 +8107,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Uporabi za vse parte</translation>
     </message>
     <message>
         <source>Text style name:</source>
@@ -8155,7 +8149,7 @@ please choose a different name:</source>
     <name>Ms::TimeDialog</name>
     <message>
         <source>MuseScore: Time Signatures</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Taktovski način</translation>
     </message>
 </context>
 <context>
@@ -8177,15 +8171,15 @@ please choose a different name:</source>
     <name>Ms::UpdateChecker</name>
     <message>
         <source>An update for MuseScore is available: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Na voljo je posodobitev za MuseScore: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Update Available</source>
-        <translation type="unfinished"/>
+        <translation>Posodobitve so na voljo</translation>
     </message>
     <message>
         <source>No Update Available</source>
-        <translation type="unfinished"/>
+        <translation>Ni novih posodobitev</translation>
     </message>
 </context>
 <context>
@@ -8246,16 +8240,32 @@ please choose a different name:</source>
         <source>Error</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>&lt;a href=&quot;%1&quot;&gt;What does this mean?&lt;/a&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Respect the &lt;a href=&quot;%1&quot;&gt;community guidelines&lt;/a&gt;. Only make your scores accessible to anyone with permission from the right holders.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Use a comma to separate the tags</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>[&lt;a href=&quot;%1&quot;&gt;link&lt;/a&gt;]</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::Workspace</name>
     <message>
         <source>Advanced</source>
-        <translation type="unfinished"/>
+        <translation>Izboljšano</translation>
     </message>
     <message>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>Osnovno</translation>
     </message>
 </context>
 <context>
@@ -8329,6 +8339,10 @@ please choose a different name:</source>
     </message>
     <message>
         <source>C# major, A# minor</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open/Atonal</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8442,7 +8456,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Show lines</source>
-        <translation type="unfinished"/>
+        <translation>Prikaži črte</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
@@ -8525,7 +8539,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Uporabi za vse parte</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
@@ -8540,39 +8554,31 @@ please choose a different name:</source>
     <name>Palette</name>
     <message>
         <source>Beam Properties</source>
-        <translation type="unfinished"/>
+        <translation>Prečke vratov</translation>
     </message>
     <message>
         <source>Dynamics</source>
-        <translation type="unfinished"/>
+        <translation>Dinamika</translation>
     </message>
     <message>
         <source>Key Signatures</source>
-        <translation type="unfinished"/>
+        <translation>Tonalitete</translation>
     </message>
     <message>
         <source>Accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Predznaki</translation>
     </message>
     <message>
         <source>Barlines</source>
         <translation>Taktnice</translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Repeats</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Breaks &amp;&amp; Spacers</source>
-        <translation type="unfinished"/>
+        <translation>Prelomi in razmiki</translation>
     </message>
     <message>
         <source>Fingering</source>
-        <translation type="unfinished"/>
+        <translation>Prstni red</translation>
     </message>
     <message>
         <source>Tremolo</source>
@@ -8580,27 +8586,27 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Note Heads</source>
-        <translation type="unfinished"/>
+        <translation>Notne glavice</translation>
     </message>
     <message>
         <source>Brackets</source>
-        <translation type="unfinished"/>
+        <translation>Prečke sistema</translation>
     </message>
     <message>
         <source>Breaths &amp;&amp; Pauses</source>
-        <translation type="unfinished"/>
+        <translation>Dihi in cezure</translation>
     </message>
     <message>
         <source>Clefs</source>
-        <translation type="unfinished"/>
+        <translation>Ključi</translation>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation type="unfinished"/>
+        <translation>Okrasne note</translation>
     </message>
     <message>
         <source>Lines</source>
-        <translation type="unfinished"/>
+        <translation>Črte</translation>
     </message>
     <message>
         <source>Diminuendo</source>
@@ -8668,31 +8674,27 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Time Signatures</source>
-        <translation type="unfinished"/>
+        <translation>Taktovski načini</translation>
     </message>
     <message>
         <source>Staff Changes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Symbols</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Arpeggios &amp;&amp; Glissandi</source>
-        <translation type="unfinished"/>
+        <translation>KotHarfa in ZvočniZdrs</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
-        <translation type="unfinished"/>
+        <translation>Glasbeni okraski</translation>
     </message>
     <message>
         <source>Frames &amp;&amp; Measures</source>
-        <translation type="unfinished"/>
+        <translation>Okvirji in takti</translation>
     </message>
     <message>
         <source>Articulations &amp;&amp; Ornaments</source>
-        <translation type="unfinished"/>
+        <translation>Artikulacije in okraski</translation>
     </message>
     <message>
         <source>Ambitus</source>
@@ -8717,14 +8719,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Dashed style</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dotted style</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Tick 1 span</source>
         <translation type="unfinished"/>
     </message>
@@ -8741,11 +8735,27 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>End bar style</source>
+        <source>Repeats &amp;&amp; Jumps</source>
+        <translation>Ponavljanja</translation>
+    </message>
+    <message>
+        <source>Normal barline</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Double bar style</source>
+        <source>Dashed barline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Dotted barline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>End bar barline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double barline</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -8758,6 +8768,10 @@ failed: </source>
     </message>
     <message>
         <source>End-start repeat</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fretboard Diagrams</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8905,6 +8919,18 @@ failed: </source>
         <source>MIDI sound</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Part Name</source>
+        <translation>Ime parta</translation>
+    </message>
+    <message>
+        <source>Use arrows to modify</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sound</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>PathListDialog</name>
@@ -8914,11 +8940,62 @@ failed: </source>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Zbriši</translation>
+        <translation>Izbriši</translation>
     </message>
     <message>
         <source>Add</source>
         <translation>Dodaj</translation>
+    </message>
+</context>
+<context>
+    <name>PianorollEditor</name>
+    <message>
+        <source>Toolbar 1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Wave</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show wave display</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toolbar 2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cursor:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Velocity:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>User</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pitch:</source>
+        <translation>Višina</translation>
+    </message>
+    <message>
+        <source>OnTime:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Len:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -8969,6 +9046,26 @@ failed: </source>
         <source>Measure.Beat</source>
         <translation>takt.doba</translation>
     </message>
+    <message>
+        <source>Playback Position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Relative Tempo to 120 beats per minute</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Use up and down arrows to change value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Master Volume</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Relative tempo to 120 beats per minute</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>PluginCreatorBase</name>
@@ -9017,15 +9114,15 @@ failed: </source>
         <translation>Uveljavi</translation>
     </message>
     <message>
-        <source>Quit</source>
-        <translation>Zaključi</translation>
-    </message>
-    <message>
         <source>R</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Reload current plugin source</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Close Plugin Creator</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -9054,6 +9151,10 @@ failed: </source>
     <message>
         <source>Shortcut:</source>
         <translation>Bližnjica:</translation>
+    </message>
+    <message>
+        <source>Clear Shortcut</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -9107,14 +9208,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Paths</source>
-        <translation>Poti</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Canvas</source>
         <translation>Platno</translation>
     </message>
@@ -9139,12 +9232,8 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Note Entry</source>
-        <translation>Vnos not</translation>
-    </message>
-    <message>
         <source>Enable MIDI input</source>
-        <translation type="unfinished"/>
+        <translation>Omogoči MIDI</translation>
     </message>
     <message>
         <source>Play notes when editing</source>
@@ -9160,11 +9249,11 @@ failed: </source>
     </message>
     <message>
         <source>16th note</source>
-        <translation type="unfinished"/>
+        <translation>16-tinka</translation>
     </message>
     <message>
         <source>32nd note</source>
-        <translation type="unfinished"/>
+        <translation>32-tinka</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -9220,7 +9309,7 @@ failed: </source>
     </message>
     <message>
         <source>default</source>
-        <translation>privzeto</translation>
+        <translation>Privzeto</translation>
     </message>
     <message>
         <source>192000</source>
@@ -9440,7 +9529,7 @@ failed: </source>
     </message>
     <message>
         <source>Show splash screen</source>
-        <translation>prikaži uvodni zaslon</translation>
+        <translation>Prikaži uvodni zaslon</translation>
     </message>
     <message>
         <source>Disable antialiased drawing</source>
@@ -9472,15 +9561,15 @@ failed: </source>
     </message>
     <message>
         <source>Whole note</source>
-        <translation type="unfinished"/>
+        <translation>Celinka</translation>
     </message>
     <message>
         <source>Half note</source>
-        <translation type="unfinished"/>
+        <translation>Polovinka</translation>
     </message>
     <message>
         <source>Quarter note</source>
-        <translation type="unfinished"/>
+        <translation>Četrtinka</translation>
     </message>
     <message>
         <source>Rest</source>
@@ -9488,11 +9577,11 @@ failed: </source>
     </message>
     <message>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Pika</translation>
     </message>
     <message>
         <source>Tie</source>
-        <translation type="unfinished"/>
+        <translation>Vezaj</translation>
     </message>
     <message>
         <source>Play</source>
@@ -9500,10 +9589,6 @@ failed: </source>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -9540,35 +9625,7 @@ failed: </source>
     </message>
     <message>
         <source>Double augmentation dot</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Image folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Score folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Style folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Template folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Plugin folder:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Soundfont folders:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>SFZ folders:</source>
-        <translation type="unfinished"/>
+        <translation>Dvojna pika</translation>
     </message>
     <message>
         <source>Save every:</source>
@@ -9584,10 +9641,6 @@ failed: </source>
     </message>
     <message>
         <source>Resolution DPI:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Check for new versions of MuseScore on startup:</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -9629,7 +9682,7 @@ failed: </source>
     </message>
     <message>
         <source>The language will be changed once you restart MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>Srememba jezika bo vidna po vnovičnem zagonu MuseScore.</translation>
     </message>
     <message>
         <source>Start with score</source>
@@ -9724,14 +9777,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Soundfont folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Insert path to soundfont folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Image folder</source>
         <translation type="unfinished"/>
     </message>
@@ -9748,23 +9793,7 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>SFZ folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Insert path to SFZ folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Opens a folder dialog for selecting the image folder</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Opens a dialog for configuring the soundfont folders</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Opens a dialog for configuring the SFZ folders</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -9832,12 +9861,8 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Note Entry Tab</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Enable MIDI Input</source>
-        <translation type="unfinished"/>
+        <translation>Omogoči MIDI</translation>
     </message>
     <message>
         <source>Default duration</source>
@@ -9917,14 +9942,6 @@ failed: </source>
     </message>
     <message>
         <source>Stop record</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry is active</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry record</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -10128,16 +10145,8 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Check for new versions of MuseScore on startup</source>
-        <translation>Ob zagonu preveri, če obstaja novejša verzija MuseScore</translation>
-    </message>
-    <message>
-        <source>Choose interval</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Eighth note</source>
-        <translation type="unfinished"/>
+        <translation>Osminka</translation>
     </message>
     <message>
         <source>Quarter note is active</source>
@@ -10157,7 +10166,7 @@ failed: </source>
     </message>
     <message>
         <source>64th note</source>
-        <translation type="unfinished"/>
+        <translation>64-tinka</translation>
     </message>
     <message>
         <source>64th note is active</source>
@@ -10189,7 +10198,7 @@ failed: </source>
     </message>
     <message>
         <source>Update translations</source>
-        <translation type="unfinished"/>
+        <translation>Posodobi prevod</translation>
     </message>
     <message>
         <source>Dark</source>
@@ -10247,6 +10256,74 @@ failed: </source>
         <source>Undo</source>
         <translation>Razveljavi</translation>
     </message>
+    <message>
+        <source>Play whole chord when adding note</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>SoundFont folders</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Insert path to SoundFont folders</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Opens a dialog for configuring the SoundFont folders</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note Input Tab</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note Input</source>
+        <translation>Vnos not</translation>
+    </message>
+    <message>
+        <source>Note input</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input is active</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input record</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Images:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Scores:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Styles:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Templates:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Plugins:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>SoundFonts:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Check for new version of MuseScore</source>
+        <translation>Preveri za MuseScore posodobitvami</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10268,7 +10345,7 @@ Please select a single note or lyrics and retry operation
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>No note or figured bass selected:
@@ -10304,55 +10381,11 @@ Please select a single note or rest and retry operation
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Tab. 6-str simple</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str common</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str full</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 4-str simple</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 4-str common</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 4-str full</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Tab. ukulele</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Tab. 6-str Italian</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str French</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Perc. 1 line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 5-str simple</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 5-str common</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 5-str full</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -10405,7 +10438,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Load Error</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Napaka pri odpiranju</translation>
     </message>
     <message>
         <source>Internal error: MusicXML schema is invalid
@@ -10515,19 +10548,19 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>double flat</source>
-        <translation type="unfinished"/>
+        <translation>Dvojni nižaj</translation>
     </message>
     <message>
         <source>flat</source>
-        <translation type="unfinished"/>
+        <translation>Nižaj</translation>
     </message>
     <message>
         <source>sharp</source>
-        <translation type="unfinished"/>
+        <translation>Višaj</translation>
     </message>
     <message>
         <source>double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Dvojni višaj</translation>
     </message>
     <message>
         <source>Internal error: Could not open resource musicxml.xsd
@@ -10538,16 +10571,64 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>Tab. balalaika</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Tab. 6-str. simple</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 6-str. common</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 6-str. full</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 4-str. simple</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 4-str. common</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 4-str. full</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 5-str. simple</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 5-str. common</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 5-str. full</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 6-str. Italian</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tab. 6-str. French</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File corrupted %1</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
     <message>
         <source>MuseScore: Save Album into Score</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani album v notno črtovje</translation>
     </message>
     <message>
         <source>MuseScore: Save File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani datoteko</translation>
     </message>
     <message>
         <source>Quit</source>
@@ -10555,7 +10636,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Save Album</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Shrani Album</translation>
     </message>
     <message>
         <source>Write Album failed: </source>
@@ -10579,7 +10660,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Import Guitar Pro</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Uvozi Guitar Pro</translation>
     </message>
     <message>
         <source>MuseScore: Load MIDI</source>
@@ -10587,11 +10668,11 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Load Style Failed</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Odpiranje sloga ni uspelo</translation>
     </message>
     <message>
         <source>MuseScore: Load Languages Failed:</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Odpiranje jezika ni uspelo</translation>
     </message>
     <message>
         <source>MuseScore: Invalid Command</source>
@@ -10599,7 +10680,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Open Album failed</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Odpiranje albuma ni uspelo</translation>
     </message>
     <message>
         <source>Open Album File
@@ -10609,39 +10690,39 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore: Open Album File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Odpri album</translation>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore datoteka (*.mscz)</translation>
     </message>
     <message>
         <source>MuseScore Files (*.album)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Soundfont installed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Install Soundfont</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Do you want to install the soundfont %1?</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore datoteke (*.album)</translation>
     </message>
     <message>
         <source>Overwrite?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Soundfont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
+        <source>%1 already exists.
+Do you want to overwrite it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>%1 already exists.
-Do you want to overwrite it?</source>
+        <source>Install SoundFont</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to install the SoundFont %1?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>SoundFont installed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -10656,7 +10737,7 @@ Do you want to overwrite it?</source>
     <name>Resource</name>
     <message>
         <source>MuseScore Resources</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Viri</translation>
     </message>
     <message>
         <source>Tab 1</source>
@@ -10668,15 +10749,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Filename</source>
-        <translation type="unfinished"/>
+        <translation>Ime datoteke</translation>
     </message>
     <message>
         <source>File Size</source>
-        <translation type="unfinished"/>
+        <translation>Velikost datoteke</translation>
     </message>
     <message>
         <source>Install/Update</source>
-        <translation type="unfinished"/>
+        <translation>Namesti/Posodobi</translation>
     </message>
     <message>
         <source>Tab 2</source>
@@ -10684,10 +10765,14 @@ Do you want to overwrite it?</source>
     </message>
 </context>
 <context>
-    <name>ScoreBrowser</name>
+    <name>Rest</name>
     <message>
-        <source>Form</source>
-        <translation>Form</translation>
+        <source>Voice: %1</source>
+        <translation>Glas: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -10795,7 +10880,7 @@ Do you want to overwrite it?</source>
     <name>SelectInstrument</name>
     <message>
         <source>MuseScore: Select Instrument</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Izberi glasbilo</translation>
     </message>
     <message>
         <source>0</source>
@@ -10817,7 +10902,7 @@ Do you want to overwrite it?</source>
 <context>
     <name>SfListDialog</name>
     <message>
-        <source>Soundfont Files</source>
+        <source>SoundFont Files</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -11012,7 +11097,7 @@ VI</source>
     </message>
     <message>
         <source>Oboe</source>
-        <translation type="unfinished"/>
+        <translation>Oboa</translation>
     </message>
     <message>
         <source>Tremulant</source>
@@ -11136,7 +11221,7 @@ altera</source>
     </message>
     <message>
         <source>Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Trobenta</translation>
     </message>
     <message>
         <source>I+II</source>
@@ -11197,7 +11282,7 @@ altera</source>
     </message>
     <message>
         <source>Voice:</source>
-        <translation type="unfinished"/>
+        <translation>Glas:</translation>
     </message>
     <message>
         <source>Swing Settings</source>
@@ -11221,7 +11306,7 @@ altera</source>
     </message>
     <message>
         <source>Eighth note</source>
-        <translation type="unfinished"/>
+        <translation>Osminka</translation>
     </message>
     <message>
         <source>Sixteenth note</source>
@@ -11269,8 +11354,12 @@ altera</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>&lt;a href=&quot;#&quot;&gt;Open an existing score&lt;/a&gt;</source>
+        <source>Open a score...</source>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Zapri</translation>
     </message>
 </context>
 <context>
@@ -11351,12 +11440,36 @@ altera</source>
         <source>Load from score</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Use up and down arrows to modify</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Metronome gain</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Effect A</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Effect B</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Hertz</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Master tuning</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TextPaletteBase</name>
     <message>
         <source>MuseScore: Special Characters</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Posebni znaki</translation>
     </message>
     <message>
         <source>Code Page:</source>
@@ -11481,7 +11594,7 @@ altera</source>
     </message>
     <message>
         <source>Text color</source>
-        <translation type="unfinished"/>
+        <translation>Barva besedila</translation>
     </message>
     <message>
         <source>Horizontal offset to reference point</source>
@@ -11509,10 +11622,6 @@ altera</source>
     </message>
     <message>
         <source>Align right edge of text to reference point</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Center text vertical to text baseline</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -11576,6 +11685,10 @@ altera</source>
         <source>Size follows &apos;Staff space&apos; setting</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Align baseline of text to reference point</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TextStyle</name>
@@ -11605,7 +11718,7 @@ altera</source>
     </message>
     <message>
         <source>Fingering</source>
-        <translation type="unfinished"/>
+        <translation>Prstni red</translation>
     </message>
     <message>
         <source>Instrument Name (Long)</source>
@@ -11621,7 +11734,7 @@ altera</source>
     </message>
     <message>
         <source>Dynamics</source>
-        <translation type="unfinished"/>
+        <translation>Dinamika</translation>
     </message>
     <message>
         <source>Technique</source>
@@ -11725,6 +11838,10 @@ altera</source>
     </message>
     <message>
         <source>RH Guitar Fingering</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pedal</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -11920,7 +12037,7 @@ altera</source>
     </message>
     <message>
         <source>Measures</source>
-        <translation type="unfinished"/>
+        <translation>Takti</translation>
     </message>
     <message>
         <source>Cut Time</source>
@@ -12267,7 +12384,7 @@ altera</source>
     <name>TupletDialog</name>
     <message>
         <source>MuseScore: Create Tuplet</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Ustvari ritmično posebnost</translation>
     </message>
     <message>
         <source>Type</source>
@@ -12337,27 +12454,7 @@ altera</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Who can access this score?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Anyone</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Just you</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>License</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://musescore.com/help/license&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;What does this mean?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12365,23 +12462,15 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:italic;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Use a comma to separate the tags&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Respect the &lt;/span&gt;&lt;a href=&quot;http://musescore.com/community-guidelines&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;community guidelines&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;. Only make your scores accessible to anyone with permission from the right holders.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Update the existing score </source>
+        <translation>Posodobi obstoječo partituro</translation>
+    </message>
+    <message>
+        <source>Make this score private</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Sharing</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -12508,7 +12597,7 @@ failed: </source>
     <name>ZerberusGui</name>
     <message>
         <source>Delete</source>
-        <translation>Zbriši</translation>
+        <translation>Izbriši</translation>
     </message>
     <message>
         <source>Add</source>
@@ -12516,14 +12605,14 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore</source>
+        <translation>MuseScore</translation>
+    </message>
+    <message>
+        <source>SoundFont %1 already loaded</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Soundfont %1 already loaded</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>cannot load soundfont %1</source>
+        <source>Cannot load SoundFont %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -12535,7 +12624,7 @@ failed: </source>
     </message>
     <message>
         <source>Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Višaj</translation>
     </message>
     <message>
         <source>Flat</source>
@@ -12543,15 +12632,15 @@ failed: </source>
     </message>
     <message>
         <source>Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Dvojni višaj</translation>
     </message>
     <message>
         <source>Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Dvojni nižaj</translation>
     </message>
     <message>
         <source>Natural</source>
-        <translation type="unfinished"/>
+        <translation>Razvezaj</translation>
     </message>
     <message>
         <source>Flat-slash</source>
@@ -12657,20 +12746,12 @@ failed: </source>
         <translation>Odpri ...</translation>
     </message>
     <message>
-        <source>File open</source>
-        <translation>Odpri datoteko</translation>
-    </message>
-    <message>
         <source>Load score from file</source>
         <translation>Naloži skladbo iz datoteke</translation>
     </message>
     <message>
         <source>Save</source>
         <translation>Shrani</translation>
-    </message>
-    <message>
-        <source>File save</source>
-        <translation>Shrani v datoteko</translation>
     </message>
     <message>
         <source>Save score to file</source>
@@ -12681,20 +12762,12 @@ failed: </source>
         <translation>Shrani kot ...</translation>
     </message>
     <message>
-        <source>File save as</source>
-        <translation>Shrani datoteko kot</translation>
-    </message>
-    <message>
         <source>Save score under a new file name</source>
         <translation>Shrani skladbo v novo datoteko</translation>
     </message>
     <message>
         <source>Save Selection...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Save Selection</source>
-        <translation type="unfinished"/>
+        <translation>Shrani izbor...</translation>
     </message>
     <message>
         <source>Save current selection as new score</source>
@@ -12705,16 +12778,12 @@ failed: </source>
         <translation>Shrani kopijo ...</translation>
     </message>
     <message>
-        <source>File save a copy</source>
-        <translation>Shrani kopijo</translation>
-    </message>
-    <message>
         <source>Save a copy of the score in addition to the current file</source>
         <translation>Shrani kopijo skladbe poleg trenutne datoteke</translation>
     </message>
     <message>
         <source>Export...</source>
-        <translation type="unfinished"/>
+        <translation>Izvozi...</translation>
     </message>
     <message>
         <source>Export score</source>
@@ -12726,11 +12795,7 @@ failed: </source>
     </message>
     <message>
         <source>Export Parts...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Export Parts</source>
-        <translation type="unfinished"/>
+        <translation>Izvozi parte...</translation>
     </message>
     <message>
         <source>Save a copy of the score&apos;s parts in various formats</source>
@@ -12741,20 +12806,12 @@ failed: </source>
         <translation>Zapri</translation>
     </message>
     <message>
-        <source>File close</source>
-        <translation>Zapri datoteko</translation>
-    </message>
-    <message>
         <source>Close current score</source>
         <translation>Zapri trenutno skladbo</translation>
     </message>
     <message>
         <source>New...</source>
         <translation>Nova skladba ...</translation>
-    </message>
-    <message>
-        <source>File new</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Create new score</source>
@@ -12802,19 +12859,15 @@ failed: </source>
     </message>
     <message>
         <source>Instruments...</source>
-        <translation>Inštrumenti ...</translation>
+        <translation>Glasb&amp;ila...</translation>
     </message>
     <message>
         <source>Show instruments dialog</source>
-        <translation>Prikaži okno z inštrumenti</translation>
+        <translation>Prikaži okno z glasbili</translation>
     </message>
     <message>
         <source>Note Input</source>
         <translation>Vnos not</translation>
-    </message>
-    <message>
-        <source>Note input mode</source>
-        <translation>Način za vnos not</translation>
     </message>
     <message>
         <source>Unison Above</source>
@@ -13133,15 +13186,7 @@ failed: </source>
         <translation>Staccato</translation>
     </message>
     <message>
-        <source>Add staccato</source>
-        <translation>Dodaj staccato</translation>
-    </message>
-    <message>
         <source>Tenuto</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add tenuto</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13149,31 +13194,7 @@ failed: </source>
         <translation>Trilček</translation>
     </message>
     <message>
-        <source>Add trill</source>
-        <translation>Dodaj trilček</translation>
-    </message>
-    <message>
         <source>Marcato</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add marcato</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add More Stretch</source>
-        <translation>Razširi prostor</translation>
-    </message>
-    <message>
-        <source>Add more stretch</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add Less Stretch</source>
-        <translation>Zoži prostor</translation>
-    </message>
-    <message>
-        <source>Add less stretch</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13198,10 +13219,6 @@ failed: </source>
     </message>
     <message>
         <source>Pitch up or move text or articulation up</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Diatonic up</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13249,16 +13266,8 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Diatonic down</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Diatonic pitch down</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Down octave</source>
-        <translation>Dol oktavo</translation>
     </message>
     <message>
         <source>Pitch down octave</source>
@@ -13289,16 +13298,8 @@ failed: </source>
         <translation>Premakni dol</translation>
     </message>
     <message>
-        <source>Previous chord</source>
-        <translation>Prejšnji akord</translation>
-    </message>
-    <message>
         <source>Go to previous chord or move text left</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Previous measure</source>
-        <translation>Prejšnji takt</translation>
     </message>
     <message>
         <source>Go to previous measure or move text left</source>
@@ -13309,16 +13310,8 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Next chord</source>
-        <translation>Naslednji akord</translation>
-    </message>
-    <message>
         <source>Go to next chord or move text right</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next measure</source>
-        <translation>Naslednji takt</translation>
     </message>
     <message>
         <source>Go to next measure or move text right</source>
@@ -13342,7 +13335,7 @@ failed: </source>
     </message>
     <message>
         <source>Select Section</source>
-        <translation type="unfinished"/>
+        <translation>Izberi skupino</translation>
     </message>
     <message>
         <source>Move chord/rest right</source>
@@ -13378,22 +13371,6 @@ failed: </source>
     </message>
     <message>
         <source>Add staff below to selection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Page: previous</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Page: next</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Page: top</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Page: end</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13442,11 +13419,11 @@ failed: </source>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Zbriši</translation>
+        <translation>Izbriši</translation>
     </message>
     <message>
         <source>Delete contents of the selected measures</source>
-        <translation>Zbriši vsebino izbranih taktov</translation>
+        <translation>Izbriši vsebino izbranih taktov</translation>
     </message>
     <message>
         <source>Timewise delete</source>
@@ -13458,11 +13435,11 @@ failed: </source>
     </message>
     <message>
         <source>Delete element and duration</source>
-        <translation>Zbriši element in trajanje</translation>
+        <translation>Izbriši element in trajanje</translation>
     </message>
     <message>
         <source>Delete Selected Measures</source>
-        <translation>Zbriši izbrane takte</translation>
+        <translation>Izbriši izbrane takte</translation>
     </message>
     <message>
         <source>Append One Measure</source>
@@ -13478,7 +13455,7 @@ failed: </source>
     </message>
     <message>
         <source>Insert One Measure</source>
-        <translation type="unfinished"/>
+        <translation>Vstavi en takt</translation>
     </message>
     <message>
         <source>Insert Measures...</source>
@@ -13554,47 +13531,27 @@ failed: </source>
     </message>
     <message>
         <source>Longa</source>
-        <translation>Longa</translation>
-    </message>
-    <message>
-        <source>Note duration: longa</source>
-        <translation type="unfinished"/>
+        <translation>Dolginka</translation>
     </message>
     <message>
         <source>Double whole note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: double whole</source>
-        <translation type="unfinished"/>
+        <translation>Dvojna celinka</translation>
     </message>
     <message>
         <source>Whole note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: whole</source>
-        <translation type="unfinished"/>
+        <translation>Celinka</translation>
     </message>
     <message>
         <source>Half note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: half</source>
-        <translation type="unfinished"/>
+        <translation>Polovinka</translation>
     </message>
     <message>
         <source>Quarter note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: quarter</source>
-        <translation type="unfinished"/>
+        <translation>Četrtinka</translation>
     </message>
     <message>
         <source>16th note</source>
-        <translation type="unfinished"/>
+        <translation>16-tinka</translation>
     </message>
     <message>
         <source>Note duration: 16th</source>
@@ -13602,7 +13559,7 @@ failed: </source>
     </message>
     <message>
         <source>32nd note</source>
-        <translation type="unfinished"/>
+        <translation>32-tinka</translation>
     </message>
     <message>
         <source>Note duration: 32nd</source>
@@ -13610,7 +13567,7 @@ failed: </source>
     </message>
     <message>
         <source>64th note</source>
-        <translation type="unfinished"/>
+        <translation>64-tinka</translation>
     </message>
     <message>
         <source>Note duration: 64th</source>
@@ -13618,7 +13575,7 @@ failed: </source>
     </message>
     <message>
         <source>128th note</source>
-        <translation type="unfinished"/>
+        <translation>128-tinka</translation>
     </message>
     <message>
         <source>Note duration: 128th</source>
@@ -13634,71 +13591,35 @@ failed: </source>
     </message>
     <message>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Pika</translation>
     </message>
     <message>
         <source>Double augmentation dot</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: double augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Dvojna pika</translation>
     </message>
     <message>
         <source>Tie</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: tie</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: rest</source>
-        <translation type="unfinished"/>
+        <translation>Vezaj</translation>
     </message>
     <message>
         <source>Double sharp</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Dvojni višaj</translation>
     </message>
     <message>
         <source>Sharp</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: sharp</source>
-        <translation type="unfinished"/>
+        <translation>Višaj</translation>
     </message>
     <message>
         <source>Natural</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: natural</source>
-        <translation type="unfinished"/>
+        <translation>Razvezaj</translation>
     </message>
     <message>
         <source>Flat</source>
         <translation>Nižaj</translation>
     </message>
     <message>
-        <source>Note entry: flat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Double flat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: double flat</source>
-        <translation type="unfinished"/>
+        <translation>Dvojni nižaj</translation>
     </message>
     <message>
         <source>Acciaccatura</source>
@@ -13742,7 +13663,7 @@ failed: </source>
     </message>
     <message>
         <source>Voice 1</source>
-        <translation type="unfinished"/>
+        <translation>1. glas</translation>
     </message>
     <message>
         <source>2</source>
@@ -13750,7 +13671,7 @@ failed: </source>
     </message>
     <message>
         <source>Voice 2</source>
-        <translation type="unfinished"/>
+        <translation>2. glas</translation>
     </message>
     <message>
         <source>3</source>
@@ -13758,7 +13679,7 @@ failed: </source>
     </message>
     <message>
         <source>Voice 3</source>
-        <translation type="unfinished"/>
+        <translation>3. glas</translation>
     </message>
     <message>
         <source>4</source>
@@ -13766,15 +13687,11 @@ failed: </source>
     </message>
     <message>
         <source>Voice 4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>MIDI input</source>
-        <translation type="unfinished"/>
+        <translation>4. glas</translation>
     </message>
     <message>
         <source>Enable MIDI input</source>
-        <translation type="unfinished"/>
+        <translation>Omogoči MIDI</translation>
     </message>
     <message>
         <source>Beam start</source>
@@ -13866,7 +13783,7 @@ failed: </source>
     </message>
     <message>
         <source>Add staff text</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj napis nad črtovje</translation>
     </message>
     <message>
         <source>Text</source>
@@ -13974,7 +13891,7 @@ failed: </source>
     </message>
     <message>
         <source>Play repeats</source>
-        <translation type="unfinished"/>
+        <translation>Predvajaj ponavljanja</translation>
     </message>
     <message>
         <source>Toggle repeats playback</source>
@@ -13990,7 +13907,7 @@ failed: </source>
     </message>
     <message>
         <source>Pan score during playback</source>
-        <translation type="unfinished"/>
+        <translation>Sledi notnemu zapisu med predvajanjem</translation>
     </message>
     <message>
         <source>Load Style...</source>
@@ -14066,7 +13983,7 @@ failed: </source>
     </message>
     <message>
         <source>Display in concert pitch</source>
-        <translation type="unfinished"/>
+        <translation>Prikaži v koncertni višini</translation>
     </message>
     <message>
         <source>Repeat last command</source>
@@ -14122,7 +14039,7 @@ failed: </source>
     </message>
     <message>
         <source>Show Unprintable</source>
-        <translation type="unfinished"/>
+        <translation>Prikaži nenatisljivo</translation>
     </message>
     <message>
         <source>Show Frames</source>
@@ -14130,38 +14047,10 @@ failed: </source>
     </message>
     <message>
         <source>Show Page Margins</source>
-        <translation type="unfinished"/>
+        <translation>Prikaži robove strani</translation>
     </message>
     <message>
         <source>Insert Special Characters...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Insert Special Characters</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Whole rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: whole rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Half rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: half rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quarter rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: quarter rest</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14170,7 +14059,7 @@ failed: </source>
     </message>
     <message>
         <source>Find</source>
-        <translation type="unfinished"/>
+        <translation>Najdi</translation>
     </message>
     <message>
         <source>Zoom In</source>
@@ -14186,7 +14075,7 @@ failed: </source>
     </message>
     <message>
         <source>General...</source>
-        <translation type="unfinished"/>
+        <translation>Splošno...</translation>
     </message>
     <message>
         <source>Edit general style</source>
@@ -14194,7 +14083,7 @@ failed: </source>
     </message>
     <message>
         <source>Text...</source>
-        <translation type="unfinished"/>
+        <translation>Besedilo...</translation>
     </message>
     <message>
         <source>Edit text style</source>
@@ -14262,7 +14151,7 @@ failed: </source>
     </message>
     <message>
         <source>Parts...</source>
-        <translation type="unfinished"/>
+        <translation>Parti...</translation>
     </message>
     <message>
         <source>Manage parts</source>
@@ -14286,7 +14175,7 @@ failed: </source>
     </message>
     <message>
         <source>Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Celozaslonski način</translation>
     </message>
     <message>
         <source>Re-Pitch Mode</source>
@@ -14298,7 +14187,7 @@ failed: </source>
     </message>
     <message>
         <source>Piano Keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Klaviatura</translation>
     </message>
     <message>
         <source>Additional Media...</source>
@@ -14314,10 +14203,6 @@ failed: </source>
     </message>
     <message>
         <source>Page Settings...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Page Settings</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14345,14 +14230,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Plugin Creator</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Plugin Manager</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Inspector</source>
         <translation>Struktura dokumenta</translation>
     </message>
@@ -14361,40 +14238,16 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Resource Manager</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Show OMR Panel</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Loop</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Toggle loop playback</source>
-        <translation type="unfinished"/>
+        <translation>Ponavljaj predvajanje</translation>
     </message>
     <message>
         <source>Loop playback</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Loop in</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Set loop In position</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Loop out</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Set loop Out position</source>
-        <translation type="unfinished"/>
+        <translation>Ponavljaj predvajanje</translation>
     </message>
     <message>
         <source>Metronome</source>
@@ -14402,15 +14255,11 @@ failed: </source>
     </message>
     <message>
         <source>Toggle metronome playback</source>
-        <translation type="unfinished"/>
+        <translation>Vključi metronom</translation>
     </message>
     <message>
         <source>Play metronome during playback</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Count-in</source>
-        <translation type="unfinished"/>
+        <translation>Vključi metronom</translation>
     </message>
     <message>
         <source>Toggle count-in playback</source>
@@ -14438,11 +14287,11 @@ failed: </source>
     </message>
     <message>
         <source>Master Palette...</source>
-        <translation type="unfinished"/>
+        <translation>Glavna paleta...</translation>
     </message>
     <message>
         <source>Show master palette</source>
-        <translation type="unfinished"/>
+        <translation>Prikaži glavno paleto</translation>
     </message>
     <message>
         <source>Toggle View Mode</source>
@@ -14469,63 +14318,15 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Note anchored Textline</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Lock Score</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Longa (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: longa (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Double whole note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: double whole (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Whole note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: whole (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Half note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: half (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quarter note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: quarter (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>16th note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Dolginka (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 16th (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>32nd note (TAB)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14533,15 +14334,7 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>64th note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Note duration: 64th (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>128th note (TAB)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14565,19 +14358,7 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Note entry: rest (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>String above (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Select string above (TAB only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>String below (TAB)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14665,86 +14446,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Longa advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a longa (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Breve advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a double whole note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Whole note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a whole note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Half note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a half note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quarter note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a quarter note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Eighth note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of an eighth note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>16th note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a 16th note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>32nd note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a 32nd note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>64th note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a 64th note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Previous measure (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next measure (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Insert Fretboard Diagram Frame</source>
         <translation type="unfinished"/>
     </message>
@@ -14778,18 +14479,6 @@ failed: </source>
     </message>
     <message>
         <source>Respell Pitches</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>bold face</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>italic</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>underline</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14878,11 +14567,11 @@ failed: </source>
     </message>
     <message>
         <source>Selection Filter</source>
-        <translation type="unfinished"/>
+        <translation>Prikaži Izbor</translation>
     </message>
     <message>
         <source>Eighth note</source>
-        <translation type="unfinished"/>
+        <translation>Osminka</translation>
     </message>
     <message>
         <source>Add Eighth grace note after</source>
@@ -14893,35 +14582,7 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Eighth rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Toggle screenshot mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Eighth note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Previous element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>First element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Go to the first element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Last element</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14946,42 +14607,14 @@ failed: </source>
     </message>
     <message>
         <source>Symbols...</source>
-        <translation type="unfinished"/>
+        <translation>Simboli...</translation>
     </message>
     <message>
         <source>Show symbol palette</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Accessibility: next element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Accessibility: previous element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: eighth</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Grace: eighth after</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: eighth rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: eighth (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add more stretch to selected measures</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add less stretch to selected measures</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14998,7 +14631,7 @@ failed: </source>
     </message>
     <message>
         <source>Insert one measure</source>
-        <translation type="unfinished"/>
+        <translation>Vstavi en takt</translation>
     </message>
     <message>
         <source>Insert horizontal frame</source>
@@ -15025,12 +14658,8 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>File save online</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Save score on MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Shrani notno črtovje na MuseScore.com</translation>
     </message>
     <message>
         <source>Explode</source>
@@ -15057,10 +14686,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Add/Remove Line Breaks</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Start Center</source>
         <translation type="unfinished"/>
     </message>
@@ -15072,16 +14697,1013 @@ failed: </source>
         <source>Resequence Rehearsal Marks</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Increase Stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Increase stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Increase stretch of selected measures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Decrease Stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Decrease stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Decrease stretch of selected measures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Plugin Creator...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Plugin Manager...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Resource Manager...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add/Remove Line Breaks...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File: Open</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File: Save</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File: Save online</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File: Save as</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save selection</source>
+        <translation>Shrani izbor</translation>
+    </message>
+    <message>
+        <source>File: Save a copy</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Export parts</source>
+        <translation>Izvozi parte</translation>
+    </message>
+    <message>
+        <source>File: Close</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>File: New</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Respell pitches</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Flip Direction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Diatonic Up</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move Up</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Diatonic Down</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Down Octave</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next Element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Accessibility: Next element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous Element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Accessibility: Previous element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>First Element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Last Element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move Down</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous Chord</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous Measure</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous Staff or Voice</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next Chord</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next Measure</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next Staff or Voice</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add Previous Chord to Selection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select to Beginning of Measure</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add Next Chord to Selection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select section</source>
+        <translation>Izberi skupino</translation>
+    </message>
+    <message>
+        <source>Move Chord/Rest Right</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move Chord/Rest left</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select to Beginning of Line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select to End of Line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select to Beginning of Score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select to End of Score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add Staff Above to Selection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add Staff Below to Selection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Page: Previous</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Page: Next</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Page: Top</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Page: End</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Full measure rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Delete selected measures</source>
+        <translation>Izbriši izbrane takte</translation>
+    </message>
+    <message>
+        <source>Append one measure</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Append text frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Insert fretboard diagram frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Append horizontal frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Append vertical frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Longa</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double Whole Note</source>
+        <translation>Dvojna celinka</translation>
+    </message>
+    <message>
+        <source>Note duration: Double whole</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Whole Note</source>
+        <translation>Celinka</translation>
+    </message>
+    <message>
+        <source>Note duration: Whole</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Half Note</source>
+        <translation>Polovinka</translation>
+    </message>
+    <message>
+        <source>Note duration: Half</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Quarter Note</source>
+        <translation>Četrtinka</translation>
+    </message>
+    <message>
+        <source>Note duration: Quarter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Eighth Note</source>
+        <translation>Osminka</translation>
+    </message>
+    <message>
+        <source>Note duration: Eighth</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>16th Note</source>
+        <translation>16-tinka</translation>
+    </message>
+    <message>
+        <source>32nd Note</source>
+        <translation>32-tinka</translation>
+    </message>
+    <message>
+        <source>64th Note</source>
+        <translation>64-tinka</translation>
+    </message>
+    <message>
+        <source>128th Note</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Increase Active Duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Decrease Active Duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Augmentation Dot</source>
+        <translation>Pika</translation>
+    </message>
+    <message>
+        <source>Note duration: Augmentation dot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double Augmentation Dot</source>
+        <translation>Dvojna pika</translation>
+    </message>
+    <message>
+        <source>Note duration: Double augmentation dot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Tie</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double Sharp</source>
+        <translation>Dvojni višaj</translation>
+    </message>
+    <message>
+        <source>Note input: Double sharp</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Sharp</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Natural</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Flat</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double Flat</source>
+        <translation>Dvojni nižaj</translation>
+    </message>
+    <message>
+        <source>Note input: Double flat</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Grace: Quarter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Grace: Eighth after</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>MIDI Input</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Beam Start</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Beam Middle</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>No Beam</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Beam 16th Sub</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Beam 32nd Sub</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Auto Beam</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Feathered Beam, Slower</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Feathered Beam, Faster</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play panel</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Selection filter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>MIDI import panel</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Status bar</source>
+        <translation>Vrstica stanja</translation>
+    </message>
+    <message>
+        <source>Zoom Canvas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play previous chord</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play previous measure</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play next chord</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play next measure</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Player seek to begin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Player seek to end</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play Repeats</source>
+        <translation>Predvajaj ponavljanja</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Exchange voice 1-2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Exchange voice 1-3</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Exchange voice 1-4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Exchange voice 2-3</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Exchange voice 2-4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Exchange voice 3-4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Repeat Last Command</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle system break</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle page break</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle section break</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Edit element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show invisible</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show unprintable</source>
+        <translation>Prikaži nenatisljivo</translation>
+    </message>
+    <message>
+        <source>Show frames</source>
+        <translation>Prikaži okvirje</translation>
+    </message>
+    <message>
+        <source>Show page margins</source>
+        <translation>Prikaži robove strani</translation>
+    </message>
+    <message>
+        <source>Insert special characters</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Whole Rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Whole rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Half Rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Half rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Quarter Rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Quarter rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Eighth Rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Eighth rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Zoom in</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Zoom out</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Mirror Note Head</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double Duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Half Duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Repeat Selection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enharmonic Up</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enharmonic Down</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Create New Revision</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle Image Capture</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle image capture</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show OMR Image</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Full screen</source>
+        <translation>Celozaslonski način</translation>
+    </message>
+    <message>
+        <source>Enable Snap to Horizontal Grid</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Enable Snap to Vertical Grid</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Configure Grid</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Piano keyboard</source>
+        <translation>Klaviatura</translation>
+    </message>
+    <message>
+        <source>Split measure</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Join measures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Page settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Plugin creator</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Plugin manager</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Resource manager</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show OMR panel</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Loop In</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Loop Out</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Set loop out position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Count-In</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Transpose up</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Transpose down</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle view mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next Syllable</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous Syllable</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle Visibility</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Set Visible</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Set Invisible</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note Anchored Textline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note anchored textline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Lock score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Longa (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Double Whole Note (TAB)</source>
+        <translation>Dvojna celinka (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Double whole (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Whole Note (TAB)</source>
+        <translation>Celinka (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Whole (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Half Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Half (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Quarter Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Quarter (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Eighth Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note duration: Eighth (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>16th Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>32nd Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>64th Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>128th Note (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Increase Active Duration (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Decrease Active Duration (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Note input: Rest (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>String Above (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>String Below (TAB)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous Beat (Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next Beat (Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add Brackets to Element</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle Create Multimeasure Rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bold Face</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bold face</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Italic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Underline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move Word Left</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move word left</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move Word Right</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Move word right</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fill with slashes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle rhythmic slash notation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add/remove line breaks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Resequence rehearsal marks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Start center</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Longa Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a longa (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Breve Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a double whole note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Whole Note Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a whole note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Half Note Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a half note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Quarter Note Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a quarter note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Eighth Note Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of an eighth note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>16th Note Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a 16th note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>32nd Note Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a 32nd note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>64th Note Advance (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Advance of a 64th note (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous Measure (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous measure (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next Measure (F.B./Chord Symbol)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Next measure (Figured bass/Chord symbol only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle staccato</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle tenuto</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle trill</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Toggle marcato</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Import PDF...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Import PDF</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Import a PDF file with an experimental service on musescore.com</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Set loop in position</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cannot change local time signature:
+Measure is not empty</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -16035,41 +16657,6 @@ Tuplet would cross measure</source>
     </message>
 </context>
 <context>
-    <name>barline</name>
-    <message>
-        <source>normal</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>double</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>start-repeat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>end-repeat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>dashed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>end</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>end-start-repeat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>dotted</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>clefTable</name>
     <message>
         <source>Treble clef</source>
@@ -16164,7 +16751,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Tambourine</source>
-        <translation type="unfinished"/>
+        <translation>Tamburin</translation>
     </message>
     <message>
         <source>High Q</source>
@@ -16204,7 +16791,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Hand Clap</source>
-        <translation type="unfinished"/>
+        <translation>Plosk</translation>
     </message>
     <message>
         <source>Electric Snare</source>
@@ -16256,7 +16843,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Cowbell</source>
-        <translation type="unfinished"/>
+        <translation>Kravji zvonec</translation>
     </message>
     <message>
         <source>Vibraslap</source>
@@ -16368,7 +16955,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Kitejske činele</translation>
     </message>
     <message>
         <source>Splash Cymbal</source>
@@ -16384,7 +16971,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Castanets</source>
-        <translation type="unfinished"/>
+        <translation>Kastanjete</translation>
     </message>
     <message>
         <source>Square Click</source>
@@ -16561,7 +17148,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Tie</source>
-        <translation type="unfinished"/>
+        <translation>Vezaj</translation>
     </message>
     <message>
         <source>Articulation</source>
@@ -16593,7 +17180,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Fingering</source>
-        <translation type="unfinished"/>
+        <translation>Prstni red</translation>
     </message>
     <message>
         <source>Tuplet</source>
@@ -16625,7 +17212,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Selection</source>
-        <translation type="unfinished"/>
+        <translation>Izbor</translation>
     </message>
     <message>
         <source>Lasso</source>
@@ -16669,10 +17256,6 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Layout</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -16855,6 +17438,18 @@ Tuplet would cross measure</source>
         <source>Tremolo Bar</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Melisma Line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Glissando Segment</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Melisma Line Segment</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>fotomode</name>
@@ -17029,7 +17624,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Triangle</source>
-        <translation type="unfinished"/>
+        <translation>Trikot</translation>
     </message>
     <message>
         <source>Mi</source>
@@ -17120,28 +17715,12 @@ Tuplet would cross measure</source>
 <context>
     <name>selectionfilter</name>
     <message>
-        <source>1st Voice</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>2nd Voice</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>3rd Voice</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>4th Voice</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Dynamics</source>
-        <translation type="unfinished"/>
+        <translation>Dinamika</translation>
     </message>
     <message>
         <source>Fingering</source>
-        <translation type="unfinished"/>
+        <translation>Prstni red</translation>
     </message>
     <message>
         <source>Lyrics</source>
@@ -17177,7 +17756,7 @@ Tuplet would cross measure</source>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation type="unfinished"/>
+        <translation>Okrasne note</translation>
     </message>
     <message>
         <source>Pedal Lines</source>
@@ -17200,15 +17779,24 @@ Tuplet would cross measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Breathmarks</source>
+        <source>Breath Marks</source>
         <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sfz_files_directory</name>
     <message>
-        <source>SFZ</source>
-        <translation type="unfinished"/>
+        <source>Voice 1</source>
+        <translation>1. glas</translation>
+    </message>
+    <message>
+        <source>Voice 2</source>
+        <translation>2. glas</translation>
+    </message>
+    <message>
+        <source>Voice 3</source>
+        <translation>3. glas</translation>
+    </message>
+    <message>
+        <source>Voice 4</source>
+        <translation>4. glas</translation>
     </message>
 </context>
 <context>
