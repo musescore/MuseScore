@@ -1580,9 +1580,10 @@ void Measure::adjustToLen(Fraction nf)
             // if just a single rest
             if (rests == 1 && chords == 0) {
                   // if measure value didn't change, stick to whole measure rest
-                  if (_timesig == nf)
-                        rest->undoChangeProperty(P_ID::DURATION,
-                           QVariant::fromValue<TDuration>(TDuration(TDuration::DurationType::V_MEASURE)));
+                  if (_timesig == nf) {
+                        rest->undoChangeProperty(P_ID::DURATION, QVariant::fromValue<Fraction>(nf));
+                        rest->undoChangeProperty(P_ID::DURATION_TYPE, QVariant::fromValue<TDuration>(TDuration::DurationType::V_MEASURE));
+                        }
                   else {      // if measure value did change, represent with rests actual measure value
                         // convert the measure duration in a list of values (no dots for rests)
                         QList<TDuration> durList = toDurationList(nf, false, 0);
