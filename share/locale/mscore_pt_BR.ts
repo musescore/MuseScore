@@ -5328,7 +5328,8 @@ anacruse</translation>
     <message>
         <source>Show
 chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar
+símbolos de acorde</translation>
     </message>
 </context>
 <context>
@@ -6355,11 +6356,11 @@ falhou:</translation>
     </message>
     <message>
         <source>Please check your Internet connection</source>
-        <translation type="unfinished"/>
+        <translation>Por favor, verifique sua conexão com a internet</translation>
     </message>
     <message>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>A hora local em seu dispositivo não está corretamente configurada. Por favor, verifique e ajuste-a. É recomendado configurar a hora/fuso horário para automático. Se você ainda não pode fazer o log in, &lt;a href=&quot;%1&quot;&gt;contate-nos&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -7177,7 +7178,7 @@ por favor, escolha um nome diferente:</translation>
     </message>
     <message>
         <source>TAB input mode</source>
-        <translation type="unfinished"/>
+        <translation>Modo de entrada de tabulatura</translation>
     </message>
     <message>
         <source>Image capture mode</source>
@@ -7566,7 +7567,7 @@ Salvá-lo antes de fechar?</translation>
     </message>
     <message>
         <source>SoundFont Folders</source>
-        <translation type="unfinished"/>
+        <translation>Pastas de SoundFont</translation>
     </message>
 </context>
 <context>
@@ -10325,15 +10326,15 @@ falhou: </translation>
     </message>
     <message>
         <source>SoundFont folders</source>
-        <translation type="unfinished"/>
+        <translation>Pastas de SoundFont</translation>
     </message>
     <message>
         <source>Insert path to SoundFont folders</source>
-        <translation type="unfinished"/>
+        <translation>Insira o caminho para as pastas de SoundFont</translation>
     </message>
     <message>
         <source>Opens a dialog for configuring the SoundFont folders</source>
-        <translation type="unfinished"/>
+        <translation>Abre um diálogo para configurar as pastas de SoundFont</translation>
     </message>
     <message>
         <source>Note Input Tab</source>
@@ -10357,31 +10358,31 @@ falhou: </translation>
     </message>
     <message>
         <source>Folders</source>
-        <translation type="unfinished"/>
+        <translation>Pastas</translation>
     </message>
     <message>
         <source>Images:</source>
-        <translation type="unfinished"/>
+        <translation>Imagens:</translation>
     </message>
     <message>
         <source>Scores:</source>
-        <translation type="unfinished"/>
+        <translation>Partituras:</translation>
     </message>
     <message>
         <source>Styles:</source>
-        <translation type="unfinished"/>
+        <translation>Estilos:</translation>
     </message>
     <message>
         <source>Templates:</source>
-        <translation type="unfinished"/>
+        <translation>Modelos:</translation>
     </message>
     <message>
         <source>Plugins:</source>
-        <translation type="unfinished"/>
+        <translation>Plugins:</translation>
     </message>
     <message>
         <source>SoundFonts:</source>
-        <translation type="unfinished"/>
+        <translation>SoundFonts:</translation>
     </message>
     <message>
         <source>Check for new version of MuseScore</source>
@@ -10803,19 +10804,19 @@ Deseja sobrescrevê-lo?
     </message>
     <message>
         <source>Install SoundFont</source>
-        <translation type="unfinished"/>
+        <translation>Instalar SoundFont</translation>
     </message>
     <message>
         <source>Do you want to install the SoundFont %1?</source>
-        <translation type="unfinished"/>
+        <translation>Você deseja instalar o SoundFont %1?</translation>
     </message>
     <message>
         <source>SoundFont installed</source>
-        <translation type="unfinished"/>
+        <translation>SoundFont instalado</translation>
     </message>
     <message>
         <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
-        <translation type="unfinished"/>
+        <translation>Soundfont instalado. Por favor vá para Visualizar &gt; Sintetizador para adicioná-la e Visualizar &gt; Mixer para escolher um som de instrumento.</translation>
     </message>
 </context>
 <context>
@@ -10995,7 +10996,7 @@ Deseja sobrescrevê-lo?
     <name>SfListDialog</name>
     <message>
         <source>SoundFont Files</source>
-        <translation type="unfinished"/>
+        <translation>Arquivos de Soundfont</translation>
     </message>
 </context>
 <context>
@@ -11453,7 +11454,7 @@ altera</source>
     </message>
     <message>
         <source>Open a score...</source>
-        <translation type="unfinished"/>
+        <translation>Abrir uma partitura...</translation>
     </message>
     <message>
         <source>Close</source>
@@ -12565,7 +12566,7 @@ altera</source>
     </message>
     <message>
         <source>Make this score private</source>
-        <translation type="unfinished"/>
+        <translation>Tornar esta partitura privada</translation>
     </message>
     <message>
         <source>Sharing</source>
@@ -13799,7 +13800,7 @@ falhou: </translation>
     </message>
     <message>
         <source>Beam middle</source>
-        <translation type="unfinished"/>
+        <translation>Meio da barra de ligação</translation>
     </message>
     <message>
         <source>No beam</source>
@@ -15183,7 +15184,7 @@ falhou: </translation>
     </message>
     <message>
         <source>Beam Middle</source>
-        <translation type="unfinished"/>
+        <translation>Meio da barra de ligação</translation>
     </message>
     <message>
         <source>No Beam</source>

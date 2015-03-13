@@ -786,13 +786,13 @@ Heckelphone-clarinet</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="223"/>
         <source>Great Bass Shawm</source>
-        <translation type="unfinished"/>
+        <translation>Shawn Profund</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="225"/>
         <source>G.B. Sh.</source>
         <extracomment>Great Bass Shawm</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sh, Pfd.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="226"/>

@@ -3018,7 +3018,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Alt. Brevis</source>
-        <translation>alt. brevis</translation>
+        <translation>Alt. brevis</translation>
     </message>
     <message>
         <source>Line thickness</source>
@@ -3297,7 +3297,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Stem direction</source>
-        <translation>Nodehalsens retning</translation>
+        <translation>Nodehalsretning</translation>
     </message>
     <message>
         <source>Auto</source>

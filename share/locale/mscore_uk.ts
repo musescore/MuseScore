@@ -5155,7 +5155,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Shuffle (3:1)</source>
-        <translation type="unfinished"/>
+        <translation>Перемішування(3:1)</translation>
     </message>
     <message>
         <source>Import</source>

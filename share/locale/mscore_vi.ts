@@ -513,7 +513,7 @@ p, li { Khoảng trắng: pre-wrap; }
     </message>
     <message>
         <source>Default voice:</source>
-        <translation>Âm mặc định</translation>
+        <translation>Bè mặc định:</translation>
     </message>
     <message>
         <source>Note head:</source>
@@ -7314,7 +7314,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Voice: %1</source>
-        <translation type="unfinished"/>
+        <translation>Bè: %1</translation>
     </message>
     <message>
         <source>Acciaccatura</source>
@@ -10841,7 +10841,7 @@ Do you want to overwrite it?</source>
     <name>Rest</name>
     <message>
         <source>Voice: %1</source>
-        <translation type="unfinished"/>
+        <translation>Bè: %1</translation>
     </message>
     <message>
         <source>%1; Duration: %2; %3</source>
@@ -10918,7 +10918,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Same voice</source>
-        <translation type="unfinished"/>
+        <translation>Cùng bè</translation>
     </message>
     <message>
         <source>Same subtype:</source>
@@ -11355,7 +11355,7 @@ altera</source>
     </message>
     <message>
         <source>Voice:</source>
-        <translation>Voice:</translation>
+        <translation>Bè:</translation>
     </message>
     <message>
         <source>Swing Settings</source>
@@ -13382,7 +13382,7 @@ lỗi:</translation>
     </message>
     <message>
         <source>Previous staff or voice</source>
-        <translation type="unfinished"/>
+        <translation>Trước khuông nhạc hoặc trước bè</translation>
     </message>
     <message>
         <source>Go to next chord or move text right</source>
@@ -13394,7 +13394,7 @@ lỗi:</translation>
     </message>
     <message>
         <source>Next staff or voice</source>
-        <translation>khuông nhạc tiếp theo hoặc bè</translation>
+        <translation>khuông nhạc tiếp theo hoặc bè tiếp theo</translation>
     </message>
     <message>
         <source>Add previous chord to selection</source>
@@ -13738,7 +13738,7 @@ lỗi:</translation>
     </message>
     <message>
         <source>Voice 1</source>
-        <translation>voice 1</translation>
+        <translation>Bè 1</translation>
     </message>
     <message>
         <source>2</source>
@@ -13746,7 +13746,7 @@ lỗi:</translation>
     </message>
     <message>
         <source>Voice 2</source>
-        <translation>voice 2</translation>
+        <translation>Bè 2</translation>
     </message>
     <message>
         <source>3</source>
@@ -13754,7 +13754,7 @@ lỗi:</translation>
     </message>
     <message>
         <source>Voice 3</source>
-        <translation>voice 3</translation>
+        <translation>Bè 3</translation>
     </message>
     <message>
         <source>4</source>
@@ -13762,7 +13762,7 @@ lỗi:</translation>
     </message>
     <message>
         <source>Voice 4</source>
-        <translation>voice 4</translation>
+        <translation>Bè 4</translation>
     </message>
     <message>
         <source>Enable MIDI input</source>
@@ -14030,27 +14030,27 @@ lỗi:</translation>
     </message>
     <message>
         <source>Exchange Voice 1-2</source>
-        <translation>Đổi Giọng 1-2</translation>
+        <translation>Đổi bè 1-2</translation>
     </message>
     <message>
         <source>Exchange Voice 1-3</source>
-        <translation>Đổi Giọng 1-3</translation>
+        <translation>Đổi bè 1-3</translation>
     </message>
     <message>
         <source>Exchange Voice 1-4</source>
-        <translation>Đổi Giọng 1-4</translation>
+        <translation>Đổi bè 1-4</translation>
     </message>
     <message>
         <source>Exchange Voice 2-3</source>
-        <translation>Đổi Giọng 2-3</translation>
+        <translation>Đổi bè 2-3</translation>
     </message>
     <message>
         <source>Exchange Voice 2-4</source>
-        <translation>Đổi Giọng 2-4</translation>
+        <translation>Đổi bè 2-4</translation>
     </message>
     <message>
         <source>Exchange Voice 3-4</source>
-        <translation>Đổi Giọng 3-4</translation>
+        <translation>Đổi bè 3-4</translation>
     </message>
     <message>
         <source>Concert Pitch</source>
@@ -17861,19 +17861,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Voice 1</source>
-        <translation type="unfinished"/>
+        <translation>Bè 1</translation>
     </message>
     <message>
         <source>Voice 2</source>
-        <translation type="unfinished"/>
+        <translation>Bè 2</translation>
     </message>
     <message>
         <source>Voice 3</source>
-        <translation type="unfinished"/>
+        <translation>Bè 3</translation>
     </message>
     <message>
         <source>Voice 4</source>
-        <translation type="unfinished"/>
+        <translation>Bè 4</translation>
     </message>
 </context>
 <context>

@@ -14858,7 +14858,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Resource Manager...</source>
-        <translation>Gestore delle risorse...</translation>
+        <translation>Gestione delle risorse...</translation>
     </message>
     <message>
         <source>Add/Remove Line Breaks...</source>

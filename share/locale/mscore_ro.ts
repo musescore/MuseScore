@@ -2034,7 +2034,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Broken beam minimum length:</source>
-        <translation type="unfinished"/>
+        <translation>Lungime minimă ligatură parțială:</translation>
     </message>
     <message>
         <source>Flatten all beams</source>
@@ -2275,7 +2275,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cents offset</source>
-        <translation type="unfinished"/>
+        <translation>Deplasament Cents</translation>
     </message>
     <message>
         <source>A, B♭, B, C, C♯, ...</source>
@@ -2554,11 +2554,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>New All</source>
-        <translation type="unfinished"/>
+        <translation>Toate Noi</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>« Adaugă</translation>
+        <translation>Adaugă</translation>
     </message>
     <message>
         <source>Part title:</source>
@@ -5306,7 +5306,8 @@ Textul de tempo</translation>
     <message>
         <source>Recognize
 pickup measure</source>
-        <translation type="unfinished"/>
+        <translation>Recunoaște
+anacruzele</translation>
     </message>
     <message>
         <source>Max. quantization</source>
@@ -5683,7 +5684,7 @@ diviziunea excepțională ar traversa măsura</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>« Adaugă</translation>
+        <translation>Adaugă</translation>
     </message>
     <message>
         <source>MuseScore: Score Information</source>
@@ -8509,7 +8510,7 @@ alegeți un nume diferit:</translation>
     </message>
     <message>
         <source>Mark slices</source>
-        <translation type="unfinished"/>
+        <translation>Marchează bucățile</translation>
     </message>
     <message>
         <source>Mark barlines</source>
@@ -9154,7 +9155,7 @@ a eșuat:</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>« Adaugă</translation>
+        <translation>Adaugă</translation>
     </message>
     <message>
         <source>Open</source>
@@ -9941,7 +9942,7 @@ a eșuat:</translation>
     </message>
     <message>
         <source>Toggle play record</source>
-        <translation type="unfinished"/>
+        <translation>Comută redare înregistrare</translation>
     </message>
     <message>
         <source>Whole note is active</source>
@@ -10313,7 +10314,7 @@ a eșuat:</translation>
     </message>
     <message>
         <source>Undo record</source>
-        <translation type="unfinished"/>
+        <translation>Anulează înregistrarea</translation>
     </message>
     <message>
         <source>Undo</source>
@@ -11492,7 +11493,7 @@ altera</translation>
     </message>
     <message>
         <source>System flag</source>
-        <translation type="unfinished"/>
+        <translation>Flag de sistem</translation>
     </message>
 </context>
 <context>
@@ -11630,7 +11631,7 @@ altera</translation>
     </message>
     <message>
         <source>System flag</source>
-        <translation type="unfinished"/>
+        <translation>Flag de sistem</translation>
     </message>
     <message>
         <source>Offset</source>
@@ -11696,7 +11697,7 @@ altera</translation>
     </message>
     <message>
         <source>Font face</source>
-        <translation type="unfinished"/>
+        <translation>Familie de caractere</translation>
     </message>
     <message>
         <source>Font point size</source>
@@ -11975,7 +11976,7 @@ altera</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>« Adaugă</translation>
+        <translation>Adaugă</translation>
     </message>
 </context>
 <context>
@@ -12480,7 +12481,7 @@ altera</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="unfinished"/>
+        <translation>Întoarcere</translation>
     </message>
     <message>
         <source>MuseScore: Tremolo Bar Properties</source>
@@ -12593,7 +12594,7 @@ altera</translation>
     </message>
     <message>
         <source>Sharing</source>
-        <translation type="unfinished"/>
+        <translation>Setări Confidențialitate</translation>
     </message>
 </context>
 <context>
@@ -13551,7 +13552,7 @@ a eșuat:</translation>
     </message>
     <message>
         <source>Timewise delete</source>
-        <translation type="unfinished"/>
+        <translation>ȘtergereTimp</translation>
     </message>
     <message>
         <source>Timewise Delete</source>
@@ -14247,15 +14248,15 @@ a eșuat:</translation>
     </message>
     <message>
         <source>Pan piano roll</source>
-        <translation type="unfinished"/>
+        <translation>Pan-ează Pianina</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
-        <translation type="unfinished"/>
+        <translation>Comută pan-are Pianină</translation>
     </message>
     <message>
         <source>Pan roll during playback</source>
-        <translation type="unfinished"/>
+        <translation>Pan roll în timpul redării</translation>
     </message>
     <message>
         <source>Documents Side by Side</source>
@@ -15643,11 +15644,11 @@ a eșuat:</translation>
     </message>
     <message>
         <source>Bold Face</source>
-        <translation type="unfinished"/>
+        <translation>Îngroșat</translation>
     </message>
     <message>
         <source>Bold face</source>
-        <translation type="unfinished"/>
+        <translation>Îngroșat</translation>
     </message>
     <message>
         <source>Italic</source>
@@ -15917,11 +15918,11 @@ Măsura nu este vidă.</translation>
     </message>
     <message>
         <source>Wiggle vibrato large faster</source>
-        <translation type="unfinished"/>
+        <translation>Vibrato unduit și larg rapid</translation>
     </message>
     <message>
         <source>Wiggle vibrato large slowest</source>
-        <translation type="unfinished"/>
+        <translation>Vibrato unduit și larg lent</translation>
     </message>
     <message>
         <source>Ouvert</source>
@@ -17494,7 +17495,7 @@ Măsura nu este vidă.</translation>
     </message>
     <message>
         <source>Rubber Band</source>
-        <translation type="unfinished"/>
+        <translation>Elastic de Cauciuc</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>

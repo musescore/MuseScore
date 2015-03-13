@@ -2598,7 +2598,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Sound Fonts</source>
-        <translation type="unfinished"/>
+        <translation>Γραμματοσειρές Ήχου</translation>
     </message>
     <message>
         <source>SoundFont %1 already loaded</source>
