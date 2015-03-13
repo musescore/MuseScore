@@ -468,7 +468,7 @@ void Glissando::computeStartElement()
             }
 
       int         trk   = track();
-      Part*       part  = _endElement->staff()->part();
+      Part*       part  = _endElement->part();
       Segment*    segm  = static_cast<Note*>(_endElement)->chord()->segment();
 
       if (segm != nullptr)
@@ -485,7 +485,7 @@ void Glissando::computeStartElement()
                   // if no chord, look for other chords in the same instrument
                   for (Element* currChord : segm->elist())
                         if (currChord != nullptr && currChord->type() == Element::Type::CHORD
-                                    && static_cast<Chord*>(currChord)->staff()->part() == part) {
+                                    && static_cast<Chord*>(currChord)->part() == part) {
                               _startElement = static_cast<Chord*>(currChord->upNote();
                               _startElement->add(this);
                               return;
@@ -581,7 +581,7 @@ Note* Glissando::guessInitialNote(Chord* chord)
 
       int         chordTrack  = chord->track();
       Segment*    segm        = chord->segment();
-      Part*       part        = chord->staff()->part();
+      Part*       part        = chord->part();
       if (segm != nullptr)
             segm = segm->prev1();
       while (segm) {
@@ -594,7 +594,7 @@ Note* Glissando::guessInitialNote(Chord* chord)
                   else              // if no same track, look for other chords in the same instrument
                         for (Element* currChord : segm->elist())
                               if (currChord != nullptr && currChord->type() == Element::Type::CHORD
-                                          && static_cast<Chord*>(currChord)->staff()->part() == part) {
+                                          && static_cast<Chord*>(currChord)->part() == part) {
                                     target = static_cast<Chord*>(currChord);
                                     break;
                                     }
@@ -670,7 +670,7 @@ Note* Glissando::guessFinalNote(Chord* chord)
       // look for first ChordRest segment after initial note is elapsed
       Segment*    segm        = chord->score()->tick2rightSegment(chord->tick() + chord->actualTicks());
       int         chordTrack  = chord->track();
-      Part*       part        = chord->staff()->part();
+      Part*       part        = chord->part();
       while (segm) {
             // if next segment is a ChordRest segment
             if (segm->segmentType() == Segment::Type::ChordRest) {
@@ -682,7 +682,7 @@ Note* Glissando::guessFinalNote(Chord* chord)
                   else              // if no same track, look for other chords in the same instrument
                         for (Element* currChord : segm->elist())
                               if (currChord != nullptr && currChord->type() == Element::Type::CHORD
-                                          && static_cast<Chord*>(currChord)->staff()->part() == part) {
+                                          && static_cast<Chord*>(currChord)->part() == part) {
                                     target = static_cast<Chord*>(currChord);
                                     break;
                                     }

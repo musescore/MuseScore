@@ -1600,7 +1600,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
 
       StaffGroup staffGroup = staff()->staffType()->group();
       if (staffGroup == StaffGroup::TAB) {
-            const Instrument* instrument = staff()->part()->instr();
+            const Instrument* instrument = part()->instrument();
             for (Chord* ch : graceNotes())
                   instrument->stringData()->fretChords(ch);
             instrument->stringData()->fretChords(this);
@@ -1631,7 +1631,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
                   note->updateAccidental(as);
                   }
             else if (staffGroup == StaffGroup::PERCUSSION) {
-                  const Instrument* instrument = staff()->part()->instr();
+                  const Instrument* instrument = part()->instrument();
                   const Drumset* drumset = instrument->drumset();
                   int pitch = note->pitch();
                   if (drumset) {
@@ -2841,7 +2841,7 @@ void Chord::setSlash(bool flag, bool stemless)
                   n->undoChangeProperty(P_ID::PLAY, true);
                   n->undoChangeProperty(P_ID::VISIBLE, true);
                   if (staff()->isDrumStaff()) {
-                        const Drumset* ds = staff()->part()->instr()->drumset();
+                        const Drumset* ds = part()->instrument()->drumset();
                         int pitch = n->pitch();
                         if (ds && ds->isValid(pitch)) {
                               undoChangeProperty(P_ID::STEM_DIRECTION, static_cast<int>(ds->stemDirection(pitch)));

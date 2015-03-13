@@ -31,7 +31,7 @@ const Drumset* InputState::drumset() const
       {
       if (_segment == 0 || _track == -1)
             return 0;
-      return _segment->score()->staff(_track/VOICES)->part()->instr(_segment->tick())->drumset();
+      return _segment->score()->staff(_track/VOICES)->part()->instrument(_segment->tick())->drumset();
       }
 
 //---------------------------------------------------------
@@ -96,7 +96,7 @@ void InputState::update(Element* e)
             setNoteType(NoteType::NORMAL);
             }
       if (e->type() == Element::Type::NOTE || e->type() == Element::Type::REST) {
-            const Instrument* instr = e->staff()->part()->instr();
+            const Instrument* instr = e->part()->instrument();
             if (instr->useDrumset()) {
                   if (e->type() == Element::Type::NOTE)
                         setDrumNote(static_cast<Note*>(e)->pitch());

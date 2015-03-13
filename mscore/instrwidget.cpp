@@ -114,10 +114,10 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       // or in Instruments Wizard
       if (part) {
             const StringData* stringData = part->it ? &(part->it->stringData) :
-                        ( (part->part && part->part->instr()) ? part->part->instr()->stringData() : 0);
+                        ( (part->part && part->part->instrument()) ? part->part->instrument()->stringData() : 0);
             canUseTabs = stringData && stringData->strings() > 0;
             canUsePerc = part->it ? part->it->useDrumset :
-                        ( (part->part && part->part->instr()) ? part->part->instr()->useDrumset() : false);
+                        ( (part->part && part->part->instrument()) ? part->part->instrument()->useDrumset() : false);
             }
       _staffTypeCombo = new QComboBox();
       _staffTypeCombo->setAutoFillBackground(true);
@@ -849,7 +849,7 @@ StaffListItem* InstrumentsWidget::on_belowButton_clicked()
       if (pli->it)
             clefType = pli->it->clefType(ridx);
       else
-            clefType = pli->part->instr()->clefType(ridx);
+            clefType = pli->part->instrument()->clefType(ridx);
       nsli->setDefaultClefType(clefType);
       pli->updateClefs();
 

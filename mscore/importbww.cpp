@@ -446,7 +446,7 @@ void MsScWriter::header(const QString title, const QString type,
       Ms::Part* part = score->staff(0)->part();
       part->setLongName(instrumentName());
       part->setPartName(instrumentName());
-      part->instr()->setTrackName(instrumentName());
+      part->instrument()->setTrackName(instrumentName());
       part->setMidiProgram(midiProgram() - 1);
       }
 

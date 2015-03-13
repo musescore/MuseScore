@@ -552,10 +552,11 @@ Score::FileError importBB(Score* score, const QString& name)
 
 int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int track)
       {
-      Staff* cstaff          = score->staff(track/VOICES);
-      const Drumset* drumset = cstaff->part()->instr()->drumset();
-      bool useDrumset        = cstaff->part()->instr()->useDrumset();
-      int tick               = notes->at(0)->mc.ontime();
+      Staff* cstaff                = score->staff(track/VOICES);
+      const Instrument* instrument = cstaff->part()->instrument();
+      const Drumset* drumset       = instrument->drumset();
+      bool useDrumset              = instrument->useDrumset();
+      int tick                     = notes->at(0)->mc.ontime();
 
       //
       // look for len of shortest note

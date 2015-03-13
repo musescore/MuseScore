@@ -2416,7 +2416,7 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
                         continue;
                   KeySigEvent oKey = i->second;
                   KeySigEvent nKey = oKey;
-                  int diff = -staff->part()->instr()->transpose().chromatic;
+                  int diff = -staff->part()->instrument()->transpose().chromatic;
                   if (diff != 0 && !styleB(StyleIdx::concertPitch) && !oKey.custom())
                         nKey.setKey(transposeKey(nKey.key(), diff));
                   staff->setKey(tick, nKey);
@@ -2524,7 +2524,7 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
       for (Staff* staff : _staves) {
             if (staff->staffType()->group() == StaffGroup::PERCUSSION)
                   continue;
-            Interval interval = staff->part()->instr()->transpose();
+            Interval interval = staff->part()->instrument()->transpose();
             if (interval.isZero())
                   continue;
             if (!flag)
@@ -3731,7 +3731,7 @@ int Score::keysig()
             if (st->staffType()->group() == StaffGroup::PERCUSSION || st->keySigEvent(0).custom())      // ignore percussion and custom key
                   continue;
             result = key;
-            int diff = st->part()->instr()->transpose().chromatic;
+            int diff = st->part()->instrument()->transpose().chromatic;
             if (!styleB(StyleIdx::concertPitch) && diff)
                   result = transposeKey(key, diff);
             break;

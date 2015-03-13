@@ -736,7 +736,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     pitch = pitchKeyAdjust(l, key) + octave * 12;
                                     }
                               pitch += n.alteration;
-                              pitch += score->staff(staffIdx)->part()->instr()->transpose().chromatic; // assume not in concert pitch
+                              pitch += score->staff(staffIdx)->part()->instrument()->transpose().chromatic; // assume not in concert pitch
                               pitch = limit(pitch, 0, 127);
 
                               chord->add(note);
@@ -1186,7 +1186,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             int values[23] = {-6,-6,-5,-5,-4,-3,-3,-2,-2,-1,-1,0,1,1,2,2,3,4,4,5,5,6,6};
             interval.diatonic = values[(cl->transp % 12) + 11] + (cl->transp / 12) * 7;
             interval.chromatic = cl->transp;
-            s->part()->instr()->setTranspose(interval);
+            s->part()->instrument()->setTranspose(interval);
             score->staves().push_back(s);
             // _parts.push_back(part);
             }

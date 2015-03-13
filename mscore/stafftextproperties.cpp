@@ -35,7 +35,7 @@ static void initChannelCombo(QComboBox* cb, StaffText* st)
       {
       Part* part = st->staff()->part();
       int tick = static_cast<Segment*>(st->parent())->tick();
-      foreach(const Channel* a, part->instr(tick)->channel()) {
+      foreach(const Channel* a, part->instrument(tick)->channel()) {
             if (a->name.isEmpty() || a->name == "normal")
                   cb->addItem(QObject::tr("normal"));
             else
@@ -96,13 +96,13 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
 
       Part* part = _staffText->staff()->part();
       int tick = static_cast<Segment*>(st->parent())->tick();
-      int n = part->instr(tick)->channel().size();
+      int n = part->instrument(tick)->channel().size();
       int rows = 0;
       for (int voice = 0; voice < VOICES; ++voice) {
             if (_staffText->channelName(voice).isEmpty())
                   continue;
             for (int i = 0; i < n; ++i) {
-                  const Channel* a = part->instr(tick)->channel(i);
+                  const Channel* a = part->instrument(tick)->channel(i);
                   if (a->name != _staffText->channelName(voice))
                         continue;
                   int row = 0;
@@ -158,7 +158,7 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
 
       QTreeWidgetItem* selectedItem = 0;
       for (int i = 0; i < n; ++i) {
-            const Channel* a = part->instr(tick)->channel(i);
+            const Channel* a = part->instrument(tick)->channel(i);
             QTreeWidgetItem* item = new QTreeWidgetItem(channelList);
             item->setData(0, Qt::UserRole, i);
             if (a->name.isEmpty() || a->name == "normal")
@@ -358,10 +358,10 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
 
       int channelIdx      = item->data(0, Qt::UserRole).toInt();
       int tick = static_cast<Segment*>(_staffText->parent())->tick();
-      Channel* channel    = part->instr(tick)->channel(channelIdx);
+      Channel* channel    = part->instrument(tick)->channel(channelIdx);
       QString channelName = channel->name;
 
-      foreach(const NamedEventList& e, part->instr(tick)->midiActions()) {
+      foreach(const NamedEventList& e, part->instrument(tick)->midiActions()) {
             QTreeWidgetItem* item = new QTreeWidgetItem(actionList);
             if (e.name.isEmpty() || e.name == "normal")
                   item->setText(0, tr("normal"));
@@ -404,7 +404,7 @@ void StaffTextProperties::saveValues()
                   if (vb[voice][row]->isChecked()) {
                         int idx     = channelCombo[row]->currentIndex();
                         int instrId = static_cast<Segment*>(_staffText->parent())->tick();
-                        _staffText->setChannelName(voice, part->instr(instrId)->channel()[idx]->name);
+                        _staffText->setChannelName(voice, part->instrument(instrId)->channel()[idx]->name);
                         break;
                         }
                   }

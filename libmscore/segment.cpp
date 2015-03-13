@@ -461,7 +461,7 @@ void Segment::add(Element* el)
             case Element::Type::STAFF_STATE:
                   if (static_cast<StaffState*>(el)->staffStateType() == StaffStateType::INSTRUMENT) {
                         StaffState* ss = static_cast<StaffState*>(el);
-                        Part* part = el->staff()->part();
+                        Part* part = el->part();
                         part->setInstrument(ss->instrument(), tick());
                         }
                   _annotations.push_back(el);
@@ -469,7 +469,7 @@ void Segment::add(Element* el)
 
             case Element::Type::INSTRUMENT_CHANGE: {
                   InstrumentChange* is = static_cast<InstrumentChange*>(el);
-                  Part* part = is->staff()->part();
+                  Part* part = is->part();
                   part->setInstrument(is->instrument(), tick());
                   _annotations.push_back(el);
                   break;
@@ -591,7 +591,7 @@ void Segment::remove(Element* el)
 
             case Element::Type::STAFF_STATE:
                   if (static_cast<StaffState*>(el)->staffStateType() == StaffStateType::INSTRUMENT) {
-                        Part* part = el->staff()->part();
+                        Part* part = el->part();
                         part->removeInstrument(tick());
                         }
                   removeAnnotation(el);
@@ -600,7 +600,7 @@ void Segment::remove(Element* el)
             case Element::Type::INSTRUMENT_CHANGE:
                   {
                   InstrumentChange* is = static_cast<InstrumentChange*>(el);
-                  Part* part = is->staff()->part();
+                  Part* part = is->part();
                   part->removeInstrument(tick());
                   }
                   removeAnnotation(el);

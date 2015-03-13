@@ -870,7 +870,7 @@ void GuitarPro1::read(QFile* fp)
             int frets = 32;   // TODO
             StringData stringData(frets, strings, tuning2);
             Part* part = score->staff(i)->part();
-            Instrument* instr = part->instr();
+            Instrument* instr = part->instrument();
             instr->setStringData(stringData);
             }
 
@@ -933,7 +933,7 @@ void GuitarPro1::read(QFile* fp)
                               tuple = readInt();
                         Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
                         if (beatBits & BEAT_CHORD) {
-                              int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+                              int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
                               int header = readUChar();
                               QString name;
                               if ((header & 1) == 0) {
@@ -998,7 +998,7 @@ void GuitarPro1::read(QFile* fp)
                         cr->setDurationType(d);
                         segment->add(cr);
                         Staff* staff = cr->staff();
-                        int numStrings = staff->part()->instr()->stringData()->strings();
+                        int numStrings = staff->part()->instrument()->stringData()->strings();
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
@@ -1306,7 +1306,7 @@ void GuitarPro2::read(QFile* fp)
                   tuning2[strings-k-1] = tuning[k];
             StringData stringData(frets, strings, tuning2);
             Part* part = score->staff(i)->part();
-            Instrument* instr = part->instr();
+            Instrument* instr = part->instrument();
             instr->setStringData(stringData);
             part->setPartName(name);
             part->setLongName(name);
@@ -1396,7 +1396,7 @@ void GuitarPro2::read(QFile* fp)
                               tuple = readInt();
                         Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
                         if (beatBits & BEAT_CHORD) {
-                              int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+                              int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
                               int header = readUChar();
                               QString name;
                               if ((header & 1) == 0) {
@@ -1462,7 +1462,7 @@ void GuitarPro2::read(QFile* fp)
                         cr->setDurationType(d);
                         segment->add(cr);
                         Staff* staff = cr->staff();
-                        int numStrings = staff->part()->instr()->stringData()->strings();
+                        int numStrings = staff->part()->instrument()->stringData()->strings();
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
@@ -1584,7 +1584,7 @@ void GuitarPro1::readNote(int string, Note* note)
                         fret = 0;
                   gn->setFret(fret);
                   gn->setString(string);
-                  int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(string, fret, nullptr, 0);
+                  int grace_pitch = note->staff()->part()->instrument()->stringData()->getPitch(string, fret, nullptr, 0);
                   gn->setPitch(grace_pitch);
                   gn->setTpcFromPitch();
 
@@ -1670,7 +1670,7 @@ void GuitarPro1::readNote(int string, Note* note)
       // dead note represented as high numbers - fix to zero
       if (fretNumber > 99 || fretNumber == -1)
             fretNumber = 0;
-      int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber, nullptr, 0);
+      int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr, 0);
 
       /* it's possible to specifiy extraordinarily high pitches by
       specifying fret numbers that don't exist. This is an issue that
@@ -1922,7 +1922,7 @@ void GuitarPro3::read(QFile* fp)
                   tuning2[strings-k-1] = tuning[k];
             StringData stringData(frets, strings, tuning2);
             Part* part = score->staff(i)->part();
-            Instrument* instr = part->instr();
+            Instrument* instr = part->instrument();
             instr->setStringData(stringData);
             part->setPartName(name);
             part->setLongName(name);
@@ -2018,7 +2018,7 @@ void GuitarPro3::read(QFile* fp)
 
                         Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
                         if (beatBits & BEAT_CHORD) {
-                              int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+                              int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
                               int header = readUChar();
                               QString name;
                               if ((header & 1) == 0) {
@@ -2106,7 +2106,7 @@ void GuitarPro3::read(QFile* fp)
                               segment->add(cr);
 
                         Staff* staff = cr->staff();
-                        int numStrings = staff->part()->instr()->stringData()->strings();
+                        int numStrings = staff->part()->instrument()->stringData()->strings();
                         for (int i = 6; i >= 0; --i) {
                               if (strings & (1 << i) && ((6-i) < numStrings)) {
                                     Note* note = new Note(score);
@@ -2373,7 +2373,7 @@ Score::FileError importGTP(Score* score, const QString& name)
 
             QList<int> stavesMap;
             Part*   p = new Part(pscore);
-            p->setInstrument(*part->instr());
+            p->setInstrument(*part->instrument());
 
             Staff* staff = part->staves()->front();
 
@@ -2390,14 +2390,14 @@ Score::FileError importGTP(Score* score, const QString& name)
             stavesMap.append(score->staffIdx(staff));
             cloneStaves(score, pscore, stavesMap);
 
-            if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
+            if (staff->part()->instrument()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
                   p->setStaves(2);
                   Staff* s1 = p->staff(1);
 
                   StaffType st = *StaffType::preset(StaffTypes::TAB_DEFAULT);
                   st.setSlashStyle(true);
                   s1->setStaffType(&st);
-                  s1->setLines(staff->part()->instr()->stringData()->strings());
+                  s1->setLines(staff->part()->instrument()->stringData()->strings());
                   cloneStaff(s,s1);
                   p->staves()->front()->addBracket(BracketItem(BracketType::NORMAL, 2));
                   }
@@ -2410,10 +2410,10 @@ Score::FileError importGTP(Score* score, const QString& name)
             excerpt->parts().append(part);
             score->excerpts().append(excerpt);
 
-            if (staff->part()->instr()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
+            if (staff->part()->instrument()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
                   Staff* staff2 = pscore->staff(1);
                   staff2->setStaffType(StaffType::preset(StaffTypes::TAB_DEFAULT));
-                  staff2->setLines(staff->part()->instr()->stringData()->strings());
+                  staff2->setLines(staff->part()->instrument()->stringData()->strings());
             }
 
             //
