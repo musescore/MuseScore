@@ -880,9 +880,10 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             // natural harmonic = artificial harmonic?
                                                             if (!harmonicText.compare("Natural"))
                                                                   harmonicNote = note;
-                                                            else
+                                                            else {
                                                                   harmonicNote = new Note(score);
-                                                            chord->add(harmonicNote);
+                                                                  chord->add(harmonicNote);
+                                                                  }
 
                                                             Staff* staff = note->staff();
                                                             int harmonicFret = fretNum.toInt();
