@@ -126,7 +126,7 @@ class Instrument {
       QString _instrumentId;
 
       bool _useDrumset;
-      const Drumset* _drumset;
+      Drumset* _drumset;
       StringData  _stringData;
 
       QList<NamedEventList>   _midiActions;
@@ -160,6 +160,7 @@ class Instrument {
 
       void setDrumset(const Drumset* ds);
       const Drumset* drumset() const                         { return _drumset;    }
+      Drumset* drumset()                                     { return _drumset;    }
       bool useDrumset() const                                { return _useDrumset; }
       void setUseDrumset(bool val);
       void setAmateurPitchRange(int a, int b)                { _minPitchA = a; _maxPitchA = b; }

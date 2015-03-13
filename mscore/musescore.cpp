@@ -2789,7 +2789,7 @@ void MuseScore::play(Element* e) const
             Part* part = c->staff()->part();
             int tick = c->segment() ? c->segment()->tick() : 0;
             seq->seek(tick);
-            Instrument* instr = part->instr(tick);
+            Instrument* instr = part->instrument(tick);
             foreach(Note* n, c->notes()) {
                   const Channel* channel = instr->channel(n->subchannel());
                   seq->startNote(channel->channel, n->ppitch(), 80, n->tuning());
@@ -2807,7 +2807,7 @@ void MuseScore::play(Element* e, int pitch) const
             int tick = note->chord()->tick();
             if (tick < 0)
                   tick = 0;
-            Instrument* instr = note->part()->instr(tick);
+            Instrument* instr = note->part()->instrument(tick);
             const Channel* channel = instr->channel(note->subchannel());
             seq->startNote(channel->channel, pitch, 80, MScore::defaultPlayDuration, note->tuning());
             }
@@ -3818,7 +3818,7 @@ void MuseScore::transpose()
       Staff* staff = cs->staff(startStaffIdx);
       Key key = staff->key(startTick);
       if (!cs->styleB(StyleIdx::concertPitch)) {
-            int diff = staff->part()->instr(startTick)->transpose().chromatic;
+            int diff = staff->part()->instrument(startTick)->transpose().chromatic;
             if (diff)
                   key = transposeKey(key, diff);
             }

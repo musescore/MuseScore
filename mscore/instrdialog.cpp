@@ -213,8 +213,8 @@ void MuseScore::editInstrList()
             }
       Key normalizedC = Key::C;
       // normalize the keyevents to concert pitch if necessary
-      if (firstStaff && !rootScore->styleB(StyleIdx::concertPitch) && firstStaff->part()->instr()->transpose().chromatic ) {
-            int interval = firstStaff->part()->instr()->transpose().chromatic;
+      if (firstStaff && !rootScore->styleB(StyleIdx::concertPitch) && firstStaff->part()->instrument()->transpose().chromatic ) {
+            int interval = firstStaff->part()->instrument()->transpose().chromatic;
             normalizedC = transposeKey(normalizedC, interval);
             for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
                   int tick = i->first;

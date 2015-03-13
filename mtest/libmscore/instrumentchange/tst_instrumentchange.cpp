@@ -107,7 +107,7 @@ void TestInstrumentChange::testChange()
       Measure* m = score->firstMeasure()->nextMeasure();
       Segment* s = m->first(Segment::Type::ChordRest);
       InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
-      Instrument* ni = score->staff(1)->part()->instr();
+      Instrument* ni = score->staff(1)->part()->instrument();
       ic->setInstrument(*ni);
       score->startCmd();
       ic->setText("Instrument Oboe");
@@ -124,7 +124,7 @@ void TestInstrumentChange::testMixer()
       Segment* s = m->first(Segment::Type::ChordRest);
       InstrumentChange* ic = static_cast<InstrumentChange*>(s->annotations()[0]);
       int idx = score->staff(0)->channel(s->tick(), 0);
-      Channel* c = score->staff(0)->part()->instr(s->tick())->channel(idx);
+      Channel* c = score->staff(0)->part()->instrument(s->tick())->channel(idx);
       MidiPatch* mp = new MidiPatch;
       mp->bank = 0;
       mp->drum = false;

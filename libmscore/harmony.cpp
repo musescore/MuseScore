@@ -199,7 +199,7 @@ void Harmony::write(Xml& xml) const
             int rRootTpc = _rootTpc;
             int rBaseTpc = _baseTpc;
             if (staff()) {
-                  const Interval& interval = staff()->part()->instr()->transpose();
+                  const Interval& interval = part()->instrument()->transpose();
                   if (xml.clipboardmode && !score()->styleB(StyleIdx::concertPitch) && interval.chromatic) {
                         rRootTpc = transposeTpc(_rootTpc, interval, true);
                         rBaseTpc = transposeTpc(_baseTpc, interval, true);
@@ -744,8 +744,8 @@ void Harmony::endEdit()
                   // (as a result of Text::endEdit() calling setText() for linked elements)
                   // we may now need to change the TPC's and the text, and re-render
                   if (score()->styleB(StyleIdx::concertPitch) != h->score()->styleB(StyleIdx::concertPitch)) {
-                        Part* partDest = h->staff()->part();
-                        Interval interval = partDest->instr()->transpose();
+                        Part* partDest = h->part();
+                        Interval interval = partDest->instrument()->transpose();
                         if (!interval.isZero()) {
                               if (!h->score()->styleB(StyleIdx::concertPitch))
                                     interval.flip();

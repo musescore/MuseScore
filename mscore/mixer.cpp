@@ -84,7 +84,7 @@ void PartEdit::setPart(Part* p, Channel* a)
                   }
             }
       drumset->blockSignals(true);
-      drumset->setChecked(p->instr()->useDrumset());
+      drumset->setChecked(p->instrument()->useDrumset());
       drumset->blockSignals(false);
       }
 
@@ -215,7 +215,7 @@ void Mixer::patchListChanged()
       foreach (const MidiMapping& m, *mm) {
             QWidgetItem* wi  = (QWidgetItem*)(vb->itemAt(idx));
             PartEdit* pe     = (PartEdit*)(wi->widget());
-            bool drum        = m.part->instr()->useDrumset();
+            bool drum        = m.part->instrument()->useDrumset();
             pe->patch->clear();
             foreach(const MidiPatch* p, pl) {
                   if (p->drum == drum)
@@ -338,7 +338,7 @@ void PartEdit::soloToggled(bool val)
       if (val) {
             mute->setChecked(false);
             for (Part* p : part->score()->parts()) {
-                  for (Channel* a : p->instr()->channel()) {
+                  for (Channel* a : p->instrument()->channel()) {
                         a->soloMute = (channel != a && !a->solo);
                         a->solo     = (channel == a || a->solo);
                         if (a->soloMute)
@@ -350,7 +350,7 @@ void PartEdit::soloToggled(bool val)
       else { //do nothing except if it's the last solo to be switched off
             bool found = false;
             for (Part* p : part->score()->parts()) {
-                  for (Channel* a : p->instr()->channel()) {
+                  for (Channel* a : p->instrument()->channel()) {
                         if (a->solo){
                             found = true;
                             break;
@@ -359,7 +359,7 @@ void PartEdit::soloToggled(bool val)
                   }
             if (!found){
                   foreach(Part* p, part->score()->parts()) {
-                        for (Channel* a : p->instr()->channel()) {
+                        for (Channel* a : p->instrument()->channel()) {
                               a->soloMute = false;
                               a->solo     = false;
                               }

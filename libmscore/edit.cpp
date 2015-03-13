@@ -945,7 +945,7 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
       int staffIdx    = pos.staffIdx;
       Staff* st       = staff(staffIdx);
       ClefType clef   = st->clef(tick);
-      const Instrument* instr = st->part()->instr(s->tick());
+      const Instrument* instr = st->part()->instrument(s->tick());
       NoteVal nval;
       const StringData* stringData = 0;
       StaffType* tab = 0;
@@ -1001,7 +1001,7 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
                   else {
                         nval.pitch += instr->transpose().chromatic;
                         nval.tpc2 = step2tpc(step % 7, acci);
-                        Interval v = st->part()->instr()->transpose();
+                        Interval v = st->part()->instrument()->transpose();
                         if (v.isZero())
                               nval.tpc1 = nval.tpc2;
                         else
@@ -1193,7 +1193,7 @@ void Score::putNote(const Position& p, bool replace)
             return;
 
       const StringData* stringData = 0;
-      const Instrument* instr = st->part()->instr(s->tick());
+      const Instrument* instr = st->part()->instrument(s->tick());
       switch (st->staffType()->group()) {
             case StaffGroup::PERCUSSION: {
                   const Drumset* ds = instr->drumset();
@@ -1294,7 +1294,7 @@ void Score::repitchNote(const Position& p, bool replace)
       if (styleB(StyleIdx::concertPitch))
             nval.tpc1 = step2tpc(step % 7, acci);
       else {
-            nval.pitch += st->part()->instr(s->tick())->transpose().chromatic;
+            nval.pitch += st->part()->instrument(s->tick())->transpose().chromatic;
             nval.tpc2 = step2tpc(step % 7, acci);
             }
 
@@ -1438,7 +1438,7 @@ void Score::cmdAddTie()
                   // this code appears to mostly duplicate searchTieNote()
                   // not clear if it served any additional purpose
                   // it might have before we supported extended ties?
-                  Part* part = chord->staff()->part();
+                  Part* part = chord->part();
                   int strack = part->staves()->front()->idx() * VOICES;
                   int etrack = strack + part->staves()->size() * VOICES;
 
@@ -1625,7 +1625,7 @@ void Score::deleteItem(Element* el)
 
       switch (el->type()) {
             case Element::Type::INSTRUMENT_NAME: {
-                  Part* part = el->staff()->part();
+                  Part* part = el->part();
                   InstrumentName* in = static_cast<InstrumentName*>(el);
                   if (in->instrumentNameType() == InstrumentNameType::LONG)
                         undo(new ChangeInstrumentLong(0, part, QList<StaffName>()));

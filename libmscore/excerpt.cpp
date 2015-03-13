@@ -119,7 +119,7 @@ void createExcerpt(Excerpt* excerpt)
 
       foreach (Part* part, parts) {
             Part* p = new Part(score);
-            p->setInstrument(*part->instr());
+            p->setInstrument(*part->instrument());
 
             foreach (Staff* staff, *part->staves()) {
                   Staff* s = new Staff(score);
@@ -173,7 +173,7 @@ void createExcerpt(Excerpt* excerpt)
             for (Staff* staff : score->staves()) {
                   if (staff->staffType()->group() == StaffGroup::PERCUSSION)
                         continue;
-                  Interval interval = staff->part()->instr()->transpose();
+                  Interval interval = staff->part()->instrument()->transpose();
                   if (interval.isZero())
                         continue;
                   if (oscore->styleB(StyleIdx::concertPitch))

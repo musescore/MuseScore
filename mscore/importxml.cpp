@@ -162,7 +162,7 @@ static void xmlSetPitch(Note* n, char step, int alter, int octave, Ottava* (&ott
       //       n, step, alter, octave);
 
       const Staff* staff = n->score()->staff(track / VOICES);
-      const Instrument* instr = staff->part()->instr();
+      const Instrument* instr = staff->part()->instrument();
       const Interval intval = instr->transpose();
       //qDebug("  staff=%p instr=%p dia=%d chro=%d",
       //       staff, instr, (int) intval.diatonic, (int) intval.chromatic);
@@ -2185,7 +2185,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             part->setMidiProgram(instr.midiProgram);
             part->setPan(instr.midiPan);
             part->setVolume(instr.midiVolume);
-            part->instr()->setTrackName(instr.name);
+            part->instrument()->setTrackName(instr.name);
             }
       else
             qDebug("xmlPart: no instrument found for part '%s'", qPrintable(id));
@@ -2198,9 +2198,9 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                   if (part->staff(j)->lines() == 5 && !part->staff(j)->isDrumStaff())
                         part->staff(j)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
             // set drumset for instrument
-            part->instr()->setDrumset(drumset);
-            part->instr()->channel(0)->bank = 128;
-            part->instr()->channel(0)->updateInitList();
+            part->instrument()->setDrumset(drumset);
+            part->instrument()->channel(0)->bank = 128;
+            part->instrument()->channel(0)->updateInitList();
             }
       else {
             // drumset is not needed
@@ -3705,7 +3705,7 @@ static void xmlStaffDetails(Score* score, int staff, StringData* t, QDomElement 
 
       if (t) {
             readStringData(t, e);
-            Instrument* i = score->staff(staff)->part()->instr();
+            Instrument* i = score->staff(staff)->part()->instrument();
             i->setStringData(*t);
             }
       }
@@ -4005,7 +4005,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         else
                               domError(ee);
                         }
-                  score->staff(staff)->part()->instr()->setTranspose(interval);
+                  score->staff(staff)->part()->instrument()->setTranspose(interval);
                   }
             else if (e.tagName() == "measure-style")
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {

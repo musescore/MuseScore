@@ -711,7 +711,7 @@ Note* searchTieNote(Note* note)
       Note* note2  = 0;
       Chord* chord = note->chord();
       Segment* seg = chord->segment();
-      Part* part   = chord->staff()->part();
+      Part* part   = chord->part();
       int strack   = part->staves()->front()->idx() * VOICES;
       int etrack   = strack + part->staves()->size() * VOICES;
 
@@ -791,7 +791,7 @@ Note* searchTieNote114(Note* note)
       Note* note2  = 0;
       Chord* chord = note->chord();
       Segment* seg = chord->segment();
-      Part* part   = chord->staff()->part();
+      Part* part   = chord->part();
       int strack   = part->staves()->front()->idx() * VOICES;
       int etrack   = strack + part->staves()->size() * VOICES;
 

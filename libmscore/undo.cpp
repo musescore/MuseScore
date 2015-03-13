@@ -484,7 +484,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
             int track    = staffIdx * VOICES;
             KeySig* ks   = static_cast<KeySig*>(s->element(track));
 
-            Interval interval = staff->part()->instr()->transpose();
+            Interval interval = staff->part()->instrument()->transpose();
             KeySigEvent nkey = key;
             bool concertPitch = score->styleB(StyleIdx::concertPitch);
             if (interval.chromatic && !concertPitch && !nkey.custom()) {
@@ -557,7 +557,7 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   // for transposing instruments, differentiate
                   // clef type for concertPitch
                   //
-                  Instrument* i = staff->part()->instr(tick);
+                  Instrument* i = staff->part()->instrument(tick);
                   ClefType cp, tp;
                   if (i->transpose().isZero()) {
                         cp = st;
@@ -1143,8 +1143,8 @@ void Score::undoAddElement(Element* element)
                   if (element->type() == Element::Type::HARMONY && ne != element) {
                         Harmony* h = static_cast<Harmony*>(ne);
                         if (score->styleB(StyleIdx::concertPitch) != element->score()->styleB(StyleIdx::concertPitch)) {
-                              Part* partDest = h->staff()->part();
-                              Interval interval = partDest->instr()->transpose();
+                              Part* partDest = h->part();
+                              Interval interval = partDest->instrument()->transpose();
                               if (!interval.isZero()) {
                                     if (!score->styleB(StyleIdx::concertPitch))
                                           interval.flip();
@@ -1272,7 +1272,7 @@ void Score::undoAddElement(Element* element)
                   nis->setParent(ns1);
                   // ws: instrument should not be changed here
                   if (is->instrument()->channel().isEmpty() || is->instrument()->channel(0)->program == -1)
-                        nis->setInstrument(*staff->part()->instr(s1->tick()));
+                        nis->setInstrument(*staff->part()->instrument(s1->tick()));
                   else if (nis != is)
                         nis->setInstrument(*is->instrument());
                   undo(new AddElement(nis));
@@ -2580,7 +2580,7 @@ ChangePart::ChangePart(Part* _part, Instrument* i, const QString& s)
 
 void ChangePart::flip()
       {
-      Instrument* oi = part->instr();
+      Instrument* oi = part->instrument();
       QString s      = part->partName();
       part->setInstrument(instrument);
       part->setPartName(partName);

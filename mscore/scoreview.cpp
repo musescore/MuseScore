@@ -1107,9 +1107,9 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       a->setText(tr("Staff"));
       a = popup->addAction(tr("Edit Drumset..."));
       a->setData("edit-drumset");
-      a->setEnabled(staff->part()->instr()->drumset() != 0);
+      a->setEnabled(staff->part()->instrument()->drumset() != 0);
 
-      if (staff->part()->instr()->drumset()) {
+      if (staff->part()->instrument()->drumset()) {
             a = popup->addAction(tr("Drumroll Editor..."));
             a->setData("drumroll");
             }
@@ -1159,9 +1159,9 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
                   }
             }
       else if (cmd == "edit-drumset") {
-            EditDrumset drumsetEdit(staff->part()->instr()->drumset(), this);
+            EditDrumset drumsetEdit(staff->part()->instrument()->drumset(), this);
             if (drumsetEdit.exec()) {
-                  _score->undo(new ChangeDrumset(staff->part()->instr(), drumsetEdit.drumset()));
+                  _score->undo(new ChangeDrumset(staff->part()->instrument(), drumsetEdit.drumset()));
                   mscore->updateDrumTools(drumsetEdit.drumset());
                   }
             }
@@ -1614,7 +1614,7 @@ void ScoreView::setShadowNote(const QPointF& p)
       shadowNote->setVisible(true);
       Staff* staff      = score()->staff(pos.staffIdx);
       shadowNote->setMag(staff->mag());
-      const Instrument* instr     = staff->part()->instr();
+      const Instrument* instr     = staff->part()->instrument();
       NoteHead::Group noteheadGroup = NoteHead::Group::HEAD_NORMAL;
       int line                    = pos.line;
       NoteHead::Type noteHead       = is.duration().headType();
@@ -4363,11 +4363,11 @@ void ScoreView::cmdChangeEnharmonic(bool up)
       _score->startCmd();
       for (Note* n : _score->selection().noteList()) {
             Staff* staff = n->staff();
-            if (staff->part()->instr()->useDrumset())
+            if (staff->part()->instrument()->useDrumset())
                   continue;
             if (staff->isTabStaff()) {
                   int string = n->line() + (up ? 1 : -1);
-                  int fret   = staff->part()->instr()->stringData()->fret(n->pitch(), string, staff, n->chord()->tick());
+                  int fret   = staff->part()->instrument()->stringData()->fret(n->pitch(), string, staff, n->chord()->tick());
                   if (fret != -1) {
                         score()->undoChangeProperty(n, P_ID::FRET, fret);
                         score()->undoChangeProperty(n, P_ID::STRING, string);
