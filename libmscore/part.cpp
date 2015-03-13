@@ -505,5 +505,35 @@ int Part::endTrack() const
       return _staves.back()->idx() * VOICES + VOICES;
       }
 
+//---------------------------------------------------------
+//   insertTime
+//---------------------------------------------------------
+
+void Part::insertTime(int tick, int len)
+      {
+      if (len == 0)
+            return;
+
+      // move all instruments
+
+      if (len < 0) {
+            // remove instruments between tickpos >= tick and tickpos < (tick+len)
+            // ownership goes back to class InstrumentChange()
+
+            auto si = _instrList.lower_bound(tick);
+            auto ei = _instrList.lower_bound(tick-len);
+            _instrList.erase(si, ei);
+            }
+
+      InstrumentList il;
+      for (auto i = _instrList.lower_bound(tick); i != _instrList.end();) {
+            Instrument* instrument = i->second;
+            int tick = i->first;
+            _instrList.erase(i++);
+            _instrList[tick + len] = instrument;
+            }
+      _instrList.insert(il.begin(), il.end());
+      }
+
 }
 

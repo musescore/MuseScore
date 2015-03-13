@@ -120,6 +120,7 @@ class Part : public QObject, public ScoreElement {
       void setInstrument(const Instrument&&, int tick = -1);
       void setInstrument(const Instrument&, int tick = -1);
       void removeInstrument(int tick);
+      void insertTime(int tick, int len);
 
       QString partName() const                 { return _partName; }
       void setPartName(const QString& s)       { _partName = s; }

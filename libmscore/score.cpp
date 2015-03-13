@@ -3430,6 +3430,8 @@ void Score::insertTime(int tick, int len)
       {
       for (Staff* staff : staves())
             staff->insertTime(tick, len);
+      for (Part* part : parts())
+            part->insertTime(tick, len);
       }
 
 //---------------------------------------------------------
