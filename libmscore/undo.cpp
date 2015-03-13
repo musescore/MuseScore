@@ -2989,6 +2989,15 @@ void InsertRemoveMeasures::insertMeasures()
       if (fm->type() == Element::Type::MEASURE) {
             score->fixTicks();
             score->insertTime(fm->tick(), lm->endTick() - fm->tick());
+
+            // move ownership of Instrument back to part
+            for (Segment* s = static_cast<Measure*>(fm)->first(); s != static_cast<Measure*>(lm)->last(); s = s->next1()) {
+                  for (Element* e : s->annotations()) {
+                        if (e->type() == Element::Type::INSTRUMENT_CHANGE) {
+                              e->part()->setInstrument(static_cast<InstrumentChange*>(e)->instrument(), s->tick());
+                              }
+                        }
+                  }
             for (Clef* clef : clefs)
                   clef->staff()->setClef(clef);
             for (KeySig* key : keys)
