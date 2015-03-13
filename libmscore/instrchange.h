@@ -46,6 +46,7 @@ class InstrumentChange : public Text  {
       Segment* segment() const                { return (Segment*)parent(); }
 
       virtual QLineF dragAnchor() const override;
+      virtual QRectF drag(EditData*) override;
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
