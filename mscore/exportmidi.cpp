@@ -241,7 +241,7 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
             cs->renderSpanners(&events, staffIdx);
 
             // Pass throught the all instruments in the part
-            const InstrumentList* il = part->instrList();
+            const InstrumentList* il = part->instruments();
             for(auto j = il->begin(); j!= il->end(); j++) {
                   // Pass throught the all channels of the instrument
                   // "normal", "pizzicato", "tremolo" for Strings,

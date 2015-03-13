@@ -716,7 +716,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
             // init instruments
             //
             foreach(Part* part, score->parts()) {
-                  InstrumentList* il = part->instrList();
+                  InstrumentList* il = part->instruments();
                   for(auto i = il->begin(); i!= il->end(); i++) {
                         foreach(const Channel* a, i->second->channel()) {
                               a->updateInitList();
