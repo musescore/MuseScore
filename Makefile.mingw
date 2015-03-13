@@ -20,9 +20,8 @@
 
 
 REVISION  = $(shell type mscore\revision.h)
-#VERSION   = 2.0b-${REVISION}
+VERSION   = 2.0b-${REVISION}
 CPUS = 1
-VERSION   = 2.0rc
 
 release:
 	if not exist build.release\nul mkdir build.release
