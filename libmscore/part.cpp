@@ -77,9 +77,9 @@ void Part::read(XmlReader& e)
                   setInstrument(instr, -1);
                   }
             else if (tag == "name")
-                  instr()->setLongName(e.readElementText());
+                  instrument()->setLongName(e.readElementText());
             else if (tag == "shortName")
-                  instr()->setShortName(e.readElementText());
+                  instrument()->setShortName(e.readElementText());
             else if (tag == "trackName")
                   _partName = e.readElementText();
             else if (tag == "show")
@@ -88,7 +88,7 @@ void Part::read(XmlReader& e)
                   e.unknown();
             }
       if (_partName.isEmpty())
-            _partName = instr()->trackName();
+            _partName = instrument()->trackName();
       }
 
 //---------------------------------------------------------
@@ -103,7 +103,7 @@ void Part::write(Xml& xml) const
       if (!_show)
             xml.tag("show", _show);
       xml.tag("trackName", _partName);
-      instr()->write(xml);
+      instrument()->write(xml);
       xml.etag();
       }
 
@@ -113,12 +113,12 @@ void Part::write(Xml& xml) const
 
 void Part::setLongNames(QList<StaffName>& name, int tick)
       {
-      instr(tick)->longNames() = name;
+      instrument(tick)->longNames() = name;
       }
 
 void Part::setShortNames(QList<StaffName>& name, int tick)
       {
-      instr(tick)->shortNames() = name;
+      instrument(tick)->shortNames() = name;
       }
 
 //---------------------------------------------------------
@@ -178,11 +178,11 @@ void Part::removeStaff(Staff* staff)
 
 void Part::setMidiProgram(int program, int bank)
       {
-      Channel* c = instr()->channel(0);
+      Channel* c = instrument()->channel(0);
       c->program = program;
       c->bank    = bank;
       c->updateInitList();
-//      instr()->setChannel(0, c);
+//      instrument()->setChannel(0, c);
       }
 
 //---------------------------------------------------------
@@ -191,7 +191,7 @@ void Part::setMidiProgram(int program, int bank)
 
 int Part::volume() const
       {
-      return instr()->channel(0)->volume;
+      return instrument()->channel(0)->volume;
       }
 
 //---------------------------------------------------------
@@ -200,7 +200,7 @@ int Part::volume() const
 
 void Part::setVolume(int volume)
       {
-      instr()->channel(0)->volume = volume;
+      instrument()->channel(0)->volume = volume;
       }
 
 //---------------------------------------------------------
@@ -209,7 +209,7 @@ void Part::setVolume(int volume)
 
 bool Part::mute() const
       {
-      return instr()->channel(0)->mute;
+      return instrument()->channel(0)->mute;
       }
 
 //---------------------------------------------------------
@@ -218,7 +218,7 @@ bool Part::mute() const
 
 void Part::setMute(bool mute)
       {
-      instr()->channel(0)->mute = mute;
+      instrument()->channel(0)->mute = mute;
       }
 
 //---------------------------------------------------------
@@ -227,7 +227,7 @@ void Part::setMute(bool mute)
 
 int Part::reverb() const
       {
-      return instr()->channel(0)->reverb;
+      return instrument()->channel(0)->reverb;
       }
 
 //---------------------------------------------------------
@@ -236,7 +236,7 @@ int Part::reverb() const
 
 void Part::setReverb(int val)
       {
-      instr()->channel(0)->reverb = val;
+      instrument()->channel(0)->reverb = val;
       }
 
 //---------------------------------------------------------
@@ -245,7 +245,7 @@ void Part::setReverb(int val)
 
 int Part::chorus() const
       {
-      return instr()->channel(0)->chorus;
+      return instrument()->channel(0)->chorus;
       }
 
 //---------------------------------------------------------
@@ -254,7 +254,7 @@ int Part::chorus() const
 
 void Part::setChorus(int val)
       {
-      instr()->channel(0)->chorus = val;
+      instrument()->channel(0)->chorus = val;
       }
 
 //---------------------------------------------------------
@@ -263,7 +263,7 @@ void Part::setChorus(int val)
 
 int Part::pan() const
       {
-      return instr()->channel(0)->pan;
+      return instrument()->channel(0)->pan;
       }
 
 //---------------------------------------------------------
@@ -272,7 +272,7 @@ int Part::pan() const
 
 void Part::setPan(int pan)
       {
-      instr()->channel(0)->pan = pan;
+      instrument()->channel(0)->pan = pan;
       }
 
 //---------------------------------------------------------
@@ -281,7 +281,7 @@ void Part::setPan(int pan)
 
 int Part::midiProgram() const
       {
-      return instr()->channel(0)->program;
+      return instrument()->channel(0)->program;
       }
 
 //---------------------------------------------------------
@@ -290,7 +290,7 @@ int Part::midiProgram() const
 
 int Part::midiChannel() const
       {
-      return score()->midiChannel(instr()->channel(0)->channel);
+      return score()->midiChannel(instrument()->channel(0)->channel);
       }
 
 //---------------------------------------------------------
@@ -299,7 +299,7 @@ int Part::midiChannel() const
 
 int Part::midiPort() const
       {
-      return score()->midiPort(instr()->channel(0)->channel);
+      return score()->midiPort(instrument()->channel(0)->channel);
       }
 
 //---------------------------------------------------------
@@ -348,7 +348,7 @@ void Part::removeInstrument(int tick)
 //   instr
 //---------------------------------------------------------
 
-Instrument* Part::instr(int tick)
+Instrument* Part::instrument(int tick)
       {
       return _instruments.instrument(tick);
       }
@@ -357,7 +357,7 @@ Instrument* Part::instr(int tick)
 //   instr
 //---------------------------------------------------------
 
-const Instrument* Part::instr(int tick) const
+const Instrument* Part::instrument(int tick) const
       {
       return _instruments.instrument(tick);
       }
@@ -368,7 +368,7 @@ const Instrument* Part::instr(int tick) const
 
 QString Part::instrumentId(int tick) const
       {
-      return instr(tick)->instrumentId();
+      return instrument(tick)->instrumentId();
       }
 
 //---------------------------------------------------------
@@ -387,7 +387,7 @@ QString Part::longName(int tick) const
 
 QString Part::instrumentName(int tick) const
       {
-      return instr(tick)->trackName();
+      return instrument(tick)->trackName();
       }
 
 //---------------------------------------------------------
@@ -406,7 +406,7 @@ QString Part::shortName(int tick) const
 
 void Part::setLongName(const QString& s)
       {
-      instr()->setLongName(s);
+      instrument()->setLongName(s);
       }
 
 //---------------------------------------------------------
@@ -415,7 +415,7 @@ void Part::setLongName(const QString& s)
 
 void Part::setShortName(const QString& s)
       {
-      instr()->setShortName(s);
+      instrument()->setShortName(s);
       }
 
 //---------------------------------------------------------
@@ -428,7 +428,7 @@ QVariant Part::getProperty(P_ID id) const
             case P_ID::VISIBLE:
                   return QVariant(_show);
             case P_ID::USE_DRUMSET:
-                  return instr()->useDrumset();
+                  return instrument()->useDrumset();
             case P_ID::PART_VOLUME:
                   return volume();
             case P_ID::PART_MUTE:
@@ -461,7 +461,7 @@ bool Part::setProperty(P_ID id, const QVariant& property)
                         }
                   break;
             case P_ID::USE_DRUMSET:
-                  instr()->setUseDrumset(property.toBool());
+                  instrument()->setUseDrumset(property.toBool());
                   break;
             case P_ID::PART_VOLUME:
                   setVolume(property.toInt());
@@ -502,36 +502,6 @@ int Part::startTrack() const
 int Part::endTrack() const
       {
       return _staves.back()->idx() * VOICES + VOICES;
-      }
-
-//---------------------------------------------------------
-//   insertTime
-//---------------------------------------------------------
-
-void Part::insertTime(int tick, int len)
-      {
-      if (len == 0)
-            return;
-
-      // move all instruments
-
-      if (len < 0) {
-            // remove instruments between tickpos >= tick and tickpos < (tick+len)
-            // ownership goes back to class InstrumentChange()
-
-            auto si = _instruments.lower_bound(tick);
-            auto ei = _instruments.lower_bound(tick-len);
-            _instruments.erase(si, ei);
-            }
-
-      InstrumentList il;
-      for (auto i = _instruments.lower_bound(tick); i != _instruments.end();) {
-            Instrument* instrument = i->second;
-            int tick = i->first;
-            _instruments.erase(i++);
-            _instruments[tick + len] = instrument;
-            }
-      _instruments.insert(il.begin(), il.end());
       }
 }
 

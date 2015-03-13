@@ -400,7 +400,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
                   if (track.mtrack->drumTrack()) {
                         part->staff(0)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
                         if (!instr) {
-                              part->instr()->setDrumset(smDrumset);
+                              part->instrument()->setDrumset(smDrumset);
                               }
                         }
                   }

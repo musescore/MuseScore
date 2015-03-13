@@ -687,7 +687,7 @@ QByteArray Selection::staffMimeData() const
 
             Staff* staff = score()->staff(staffIdx);
             Part* part = staff->part();
-            Interval interval = part->instr(seg1->tick())->transpose();
+            Interval interval = part->instrument(seg1->tick())->transpose();
             if (interval.chromatic)
                   xml.tag("transposeChromatic", interval.chromatic);
             if (interval.diatonic)

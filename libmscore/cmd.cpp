@@ -404,7 +404,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   npitch        = line2pitch(line, clef, key);
 
                   int ntpc   = pitch2tpc(npitch, key, Prefer::NEAREST);
-                  Interval v = on->staff()->part()->instr()->transpose();
+                  Interval v = on->part()->instrument()->transpose();
                   if (v.isZero())
                         ntpc1 = ntpc2 = ntpc;
                   else {
@@ -1201,14 +1201,14 @@ void Score::upDown(bool up, UpDownMode mode)
             switch (staff->staffType()->group()) {
                   case StaffGroup::PERCUSSION:
                         {
-                        const Drumset* ds = part->instr()->drumset();
+                        const Drumset* ds = part->instrument()->drumset();
                         if (ds)
                               newPitch = up ? ds->prevPitch(pitch) : ds->nextPitch(pitch);
                         }
                         break;
                   case StaffGroup::TAB:
                         {
-                        const StringData* stringData = part->instr()->stringData();
+                        const StringData* stringData = part->instrument()->stringData();
                         switch (mode) {
                               case UpDownMode::OCTAVE:          // move same note to next string, if possible
                                     {
@@ -1341,7 +1341,7 @@ void Score::upDown(bool up, UpDownMode mode)
                         refret = true;
                         }
                   if (refret) {
-                        const StringData* stringData = part->instr()->stringData();
+                        const StringData* stringData = part->instrument()->stringData();
                         stringData->fretChords(oNote->chord());
                         }
                   }
@@ -1415,7 +1415,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
                   // as pitch has changed, calculate new
                   // string & fret
                   //
-                  const StringData* stringData = n->staff()->part()->instr()->stringData();
+                  const StringData* stringData = n->part()->instrument()->stringData();
                   if (stringData)
                         stringData->convertPitch(pitch, st, chord->tick(), &string, &fret);
                   }
@@ -1718,10 +1718,10 @@ bool Score::processMidiInput()
                         p = staff(staffIdx)->part();
                   if (p) {
                         if (!styleB(StyleIdx::concertPitch)) {
-                              ev.pitch += p->instr(selection().tickStart())->transpose().chromatic;
+                              ev.pitch += p->instrument(selection().tickStart())->transpose().chromatic;
                         }
                         MScore::seq->startNote(
-                                          p->instr()->channel(0)->channel,
+                                          p->instrument()->channel(0)->channel,
                                           ev.pitch,
                                           80,
                                           MScore::defaultPlayDuration,
@@ -1739,7 +1739,7 @@ bool Score::processMidiInput()
                   // if transposing, interpret MIDI pitch as representing desired written pitch
                   // set pitch based on corresponding sounding pitch
                   if (!styleB(StyleIdx::concertPitch))
-                        nval.pitch += st->part()->instr(inputState().tick())->transpose().chromatic;
+                        nval.pitch += st->part()->instrument(inputState().tick())->transpose().chromatic;
                   // let addPitch calculate tpc values from pitch
                   //Key key   = st->key(inputState().tick());
                   //nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);

@@ -435,7 +435,7 @@ void GuitarPro6::readTracks(QDomNode* track)
                                           strings++;
                                           }
                                           StringData* stringData = new StringData(frets, strings, tuning);
-                                          Instrument* instr = part->instr();
+                                          Instrument* instr = part->instrument();
                                           instr->setStringData(*stringData);
                                     }
                               else if (!propertyName.compare("DiagramCollection")) {
@@ -888,7 +888,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
 
                                                             Staff* staff = note->staff();
                                                             int harmonicFret = fretNum.toInt();
-                                                            int musescoreString = staff->part()->instr()->stringData()->strings() - 1 - stringNum.toInt();
+                                                            int musescoreString = staff->part()->instrument()->stringData()->strings() - 1 - stringNum.toInt();
                                                             harmonicNote->setString(musescoreString);
                                                             harmonicNote->setFret(harmonicFret); // add the octave for the harmonic
                                                             harmonicNote->setHeadGroup(NoteHead::Group::HEAD_DIAMOND);
@@ -911,7 +911,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             else if (!value.compare("1.8"))
                                                                   harmonicFret += 40;
                                                             harmonicNote->setFret(harmonicFret);
-                                                            harmonicNote->setPitch(staff->part()->instr()->stringData()->getPitch(musescoreString, harmonicFret, nullptr, 0));
+                                                            harmonicNote->setPitch(staff->part()->instrument()->stringData()->getPitch(musescoreString, harmonicFret, nullptr, 0));
                                                             harmonicNote->setTpcFromPitch();
                                                             if (harmonicText.compare("Natural")) {
                                                                   harmonicNote->setFret(fretNum.toInt());
@@ -930,8 +930,8 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                 else if (stringNum != "" && note->headGroup() != NoteHead::Group::HEAD_DIAMOND) {
                                                       Staff* staff = note->staff();
                                                       int fretNumber = fretNum.toInt();
-                                                      int musescoreString = staff->part()->instr()->stringData()->strings() - 1 - stringNum.toInt();
-                                                      auto pitch = staff->part()->instr()->stringData()->getPitch(musescoreString, fretNumber, nullptr, 0);
+                                                      int musescoreString = staff->part()->instrument()->stringData()->strings() - 1 - stringNum.toInt();
+                                                      auto pitch = staff->part()->instrument()->stringData()->getPitch(musescoreString, fretNumber, nullptr, 0);
                                                       note->setFret(fretNumber);
                                                       // we need to turn this string number for GP to the the correct string number for musescore
                                                       note->setString(musescoreString);

@@ -256,7 +256,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                   // calculate interval from "transpose by key"
                   Key oKey = st->key(startTick);
                   if (!styleB(StyleIdx::concertPitch)) {
-                        int diff = st->part()->instr(startTick)->transpose().chromatic;
+                        int diff = st->part()->instrument(startTick)->transpose().chromatic;
                         if (diff)
                               oKey = transposeKey(oKey, diff);
                         }
@@ -633,7 +633,7 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
 
 void Score::transpositionChanged(Part* part, Interval oldV)
       {
-      Interval v = part->instr()->transpose();
+      Interval v = part->instrument()->transpose();
       v.flip();
 
       // transpose keys first

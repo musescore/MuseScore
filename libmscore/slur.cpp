@@ -180,14 +180,14 @@ bool SlurSegment::edit(MuseScoreView* viewer, Grip curGrip, int key, Qt::Keyboar
       else if (key == Qt::Key_Right)
             cr = nextChordRest(e);
       else if (key == Qt::Key_Up) {
-            Part* part     = e->staff()->part();
+            Part* part     = e->part();
             int startTrack = part->startTrack();
             int endTrack   = e->track();
             cr = searchCR(e->segment(), endTrack, startTrack);
             }
       else if (key == Qt::Key_Down) {
             int startTrack = e->track() + 1;
-            Part* part     = e->staff()->part();
+            Part* part     = e->part();
             int endTrack   = part->endTrack();
             cr = searchCR(e->segment(), startTrack, endTrack);
             }

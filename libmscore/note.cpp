@@ -306,7 +306,7 @@ int Note::tpc1default(int p) const
       if (staff() && chord()) {
             key = staff()->key(chord()->tick());
             if (!concertPitch()) {
-                  Interval interval = staff()->part()->instr()->transpose();
+                  Interval interval = part()->instrument()->transpose();
                   if (!interval.isZero()) {
                         interval.flip();
                         key = transposeKey(key, interval);
@@ -326,7 +326,7 @@ int Note::tpc2default(int p) const
       if (staff() && chord()) {
             key = staff()->key(chord()->tick());
             if (concertPitch()) {
-                  Interval interval = staff()->part()->instr()->transpose();
+                  Interval interval = part()->instrument()->transpose();
                   if (!interval.isZero())
                         key = transposeKey(key, interval);
                   }
@@ -341,7 +341,7 @@ int Note::tpc2default(int p) const
 void Note::setTpcFromPitch()
       {
       // works best if note is already added to score, otherwise we can't determine transposition or key
-      Interval v = staff() ? staff()->part()->instr()->transpose() : Interval();
+      Interval v = staff() ? part()->instrument()->transpose() : Interval();
       Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
       // convert key to concert pitch
       if (!concertPitch() && !v.isZero())
@@ -416,7 +416,7 @@ QString Note::tpcUserName(bool explicitAccidental)
 
 int Note::transposeTpc(int tpc)
       {
-      Interval v = staff()->part()->instr()->transpose();
+      Interval v = part()->instrument()->transpose();
       if (v.isZero())
             return tpc;
       if (concertPitch()) {
@@ -741,7 +741,7 @@ void Note::draw(QPainter* painter) const
             //
             if (chord() && chord()->segment() && staff() && !selected()
                && !score()->printing() && MScore::warnPitchRange) {
-                  const Instrument* in = staff()->part()->instr();
+                  const Instrument* in = part()->instrument();
                   int i = ppitch();
                   if (i < in->minPitchP() || i > in->maxPitchP())
                         painter->setPen(Qt::red);
@@ -1152,7 +1152,7 @@ void Note::read(XmlReader& e)
                   _tpc[1] = tpc;
             }
       if (!(tpcIsValid(_tpc[0]) && tpcIsValid(_tpc[1]))) {
-            Interval v = staff() ? staff()->part()->instr()->transpose() : Interval();
+            Interval v = staff() ? part()->instrument()->transpose() : Interval();
             if (tpcIsValid(_tpc[0])) {
                   v.flip();
                   if (v.isZero())
@@ -1194,7 +1194,7 @@ QRectF Note::drag(EditData* data)
 
 int Note::transposition() const
       {
-      return staff() ? staff()->part()->instr()->transpose().chromatic : 0;
+      return staff() ? part()->instrument()->transpose().chromatic : 0;
       }
 
 //---------------------------------------------------------
@@ -1215,7 +1215,7 @@ void Note::endDrag()
             // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
             // determine new string of dragged note (if tablature is upside down, invert _lineOffset)
             // and fret for the same pitch on the new string
-            const StringData* strData = staff->part()->instr()->stringData();
+            const StringData* strData = staff->part()->instrument()->stringData();
             int nString = _string + (staff->staffType()->upsideDown() ? -_lineOffset : _lineOffset);
             int nFret   = strData->fret(_pitch, nString, staff, tick);
             if (nFret < 0)                      // no fret?
@@ -1244,7 +1244,7 @@ void Note::endDrag()
             // determine new pitch of dragged note
             int nPitch = line2pitch(nLine, clef, key);
             if (!concertPitch()) {
-                  Interval interval = staff->part()->instr()->transpose();
+                  Interval interval = staff->part()->instrument()->transpose();
                   nPitch += interval.chromatic;
                   }
             int tpc1 = pitch2tpc(nPitch, key, Prefer::NEAREST);
@@ -2086,8 +2086,8 @@ void Note::updateRelLine(int relLine, bool undoable)
       if (staff() && chord()->staffMove()) {
             // check that destination staff makes sense (might have been deleted)
             int idx = staffIdx() + chord()->staffMove();
-            int minStaff = staff()->part()->startTrack() / VOICES;
-            int maxStaff = staff()->part()->endTrack() / VOICES;
+            int minStaff = part()->startTrack() / VOICES;
+            int maxStaff = part()->endTrack() / VOICES;
             if (idx < minStaff || idx >= maxStaff || score()->staff(idx)->staffGroup() != staff()->staffGroup())
                   chord()->undoChangeProperty(P_ID::STAFF_MOVE, 0);
             }
@@ -2127,7 +2127,7 @@ void Note::setNval(const NoteVal& nval, int tick)
       _tpc[0] = nval.tpc1;
       _tpc[1] = nval.tpc2;
 
-      Interval v = staff()->part()->instr()->transpose();
+      Interval v = part()->instrument()->transpose();
       if (nval.tpc1 == Tpc::TPC_INVALID) {
             if (tick == -1)
                   tick = chord()->tick();
@@ -2480,7 +2480,7 @@ QString Note::accessibleInfo()
       QString duration = chord()->durationUserName();
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
       QString pitchName;
-      const Drumset* drumset = part()->instr()->drumset();
+      const Drumset* drumset = part()->instrument()->drumset();
       if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH)
             pitchName = chord()->noStem() ? tr("Beat Slash") : tr("Rhythm Slash");
       else if (staff()->isDrumStaff() && drumset)
@@ -2499,7 +2499,7 @@ QString Note::screenReaderInfo()
       QString duration = chord()->durationUserName();
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
       QString pitchName;
-      const Drumset* drumset = part()->instr()->drumset();
+      const Drumset* drumset = part()->instrument()->drumset();
       if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH)
             pitchName = chord()->noStem() ? tr("Beat Slash") : tr("Rhythm Slash");
       else if (staff()->isDrumStaff() && drumset)

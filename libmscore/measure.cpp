@@ -318,8 +318,8 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm, AccidentalState* as)
             if (chord->noteType() != NoteType::NORMAL)
                   m *= score()->styleD(StyleIdx::graceNoteMag);
             const Drumset* drumset = 0;
-            if (cr->staff()->part()->instr()->useDrumset())
-                  drumset = cr->staff()->part()->instr()->drumset();
+            if (cr->part()->instrument()->useDrumset())
+                  drumset = cr->part()->instrument()->drumset();
             if (drumset) {
                   for (Note* note : chord->notes()) {
                         int pitch = note->pitch();

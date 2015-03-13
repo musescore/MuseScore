@@ -507,7 +507,7 @@ void MuseScore::newFile()
             // create instruments from template
             for (Part* tpart : tscore->parts()) {
                   Part* part = new Part(score);
-                  part->setInstrument(tpart->instr());
+                  part->setInstrument(tpart->instrument());
                   part->setPartName(tpart->partName());
 
                   for (Staff* tstaff : *tpart->staves()) {
@@ -597,13 +597,13 @@ void MuseScore::newFile()
                               Segment* s = m->getSegment(ts, 0);
                               s->add(ts);
                               Part* part = staff->part();
-                              if (!part->instr()->useDrumset()) {
+                              if (!part->instrument()->useDrumset()) {
                                     //
                                     // transpose key
                                     //
                                     KeySigEvent nKey = ks;
-                                    if (!nKey.custom() && part->instr()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
-                                          int diff = -part->instr()->transpose().chromatic;
+                                    if (!nKey.custom() && part->instrument()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
+                                          int diff = -part->instrument()->transpose().chromatic;
                                           nKey.setKey(transposeKey(nKey.key(), diff));
                                           }
                                     // do not create empty, invisible keysig

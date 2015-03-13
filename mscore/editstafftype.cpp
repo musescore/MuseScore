@@ -52,7 +52,7 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 
       staff     = st;
       staffType = *staff->staffType();
-      Instrument* instr = staff->part()->instr();
+      Instrument* instr = staff->part()->instrument();
 
       // template combo
 

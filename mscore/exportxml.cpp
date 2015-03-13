@@ -1224,7 +1224,7 @@ static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       {
 
       const Staff* st = note->staff();
-      const Instrument* instr = st->part()->instr();
+      const Instrument* instr = st->part()->instrument();
       const Interval intval = instr->transpose();
 
       s      = tpc2stepName(note->tpc());
@@ -2250,12 +2250,12 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
       {
       Part* part = chord->score()->staff(chord->track() / VOICES)->part();
       int partNr = _score->parts().indexOf(part);
-      int instNr = instrMap.value(part->instr(tick), -1);
+      int instNr = instrMap.value(part->instrument(tick), -1);
       /*
       qDebug("chord() %p parent %p isgrace %d #gracenotes %d graceidx %d",
              chord, chord->parent(), chord->isGrace(), chord->graceNotes().size(), chord->graceIndex());
       qDebug("track %d tick %d part %p nr %d instr %p nr %d",
-             chord->track(), chord->tick(), part, partNr, part->instr(tick), instNr);
+             chord->track(), chord->tick(), part, partNr, part->instrument(tick), instNr);
       foreach(Element* e, chord->el())
             qDebug("chord %p el %p", chord, e);
        */
@@ -4374,8 +4374,8 @@ void ExportMusicXml::write(QIODevice* dev)
             if (!part->shortName().isEmpty())
                   xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()));
 
-            if (part->instr()->useDrumset()) {
-                  const Drumset* drumset = part->instr()->drumset();
+            if (part->instrument()->useDrumset()) {
+                  const Drumset* drumset = part->instrument()->drumset();
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
                         if (di.notehead != NoteHead::Group::HEAD_INVALID)
@@ -4386,7 +4386,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
                         if (di.notehead != NoteHead::Group::HEAD_INVALID)
-                              midiInstrument(xml, idx + 1, i + 1, part->instr(), _score, i + 1);
+                              midiInstrument(xml, idx + 1, i + 1, part->instrument(), _score, i + 1);
                         }
                   }
             else {
@@ -4654,7 +4654,7 @@ void ExportMusicXml::write(QIODevice* dev)
 
                   // output attributes with the first actual measure (pickup or regular) only
                   if ((irregularMeasureNo + measureNo + pickupMeasureNo) == 4) {
-                        const Instrument* instrument = part->instr();
+                        const Instrument* instrument = part->instrument();
 
                         // staff details
                         // TODO: decide how to handle linked regular / TAB staff
@@ -4792,11 +4792,11 @@ void ExportMusicXml::write(QIODevice* dev)
                                    // ise grace after
                                           if(c){
                                                 for (Chord* g : c->graceNotesBefore()) {
-                                                      chord(g, sstaff, ll, part->instr()->useDrumset());
+                                                      chord(g, sstaff, ll, part->instrument()->useDrumset());
                                                       }
-                                                chord(c, sstaff, ll, part->instr()->useDrumset());
+                                                chord(c, sstaff, ll, part->instrument()->useDrumset());
                                                  for (Chord* g : c->graceNotesAfter()) {
-                                                       chord(g, sstaff, ll, part->instr()->useDrumset());
+                                                       chord(g, sstaff, ll, part->instrument()->useDrumset());
                                                        }
                                                 }
                                           break;

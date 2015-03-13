@@ -79,8 +79,8 @@ class Part : public QObject, public ScoreElement {
       QString instrumentName(int tick = -1) const;
       QString instrumentId(int tick = -1) const;
 
-      const QList<StaffName>& longNames(int tick = -1) const  { return instr(tick)->longNames();  }
-      const QList<StaffName>& shortNames(int tick = -1) const { return instr(tick)->shortNames(); }
+      const QList<StaffName>& longNames(int tick = -1) const  { return instrument(tick)->longNames();  }
+      const QList<StaffName>& shortNames(int tick = -1) const { return instrument(tick)->shortNames(); }
 
       void setLongNames(QList<StaffName>& s, int tick = -1);
       void setShortNames(QList<StaffName>& s, int tick = -1);
@@ -113,8 +113,8 @@ class Part : public QObject, public ScoreElement {
       bool show() const                        { return _show;  }
       void setShow(bool val)                   { _show = val;   }
 
-      Instrument* instr(int tick = -1);
-      const Instrument* instr(int tick = -1) const;
+      Instrument* instrument(int tick = -1);
+      const Instrument* instrument(int tick = -1) const;
       void setInstrument(Instrument*, int tick = -1);       // transfer ownership
       void setInstrument(const Instrument&&, int tick = -1);
       void setInstrument(const Instrument&, int tick = -1);
