@@ -897,7 +897,7 @@ void Score::rebuildMidiMapping()
       int idx         = 0;
       int maxport     = 0;
       for (Part* part : _parts) {
-            InstrumentList* il = part->instrList();
+            InstrumentList* il = part->instruments();
             for (auto i = il->begin(); i != il->end(); ++i) {
                   Instrument* instr = i->second;
                   bool drum         = instr->useDrumset();
