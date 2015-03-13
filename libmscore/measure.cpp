@@ -3168,7 +3168,7 @@ void Measure::layoutX(qreal stretch)
 #endif
 
             for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-                  if (!score()->staff(staffIdx)->show())
+                  if (!score()->staff(staffIdx)->show() || !system()->staff(staffIdx)->show())
                         continue;
                   qreal minDistance = 0.0;
                   Space space;
