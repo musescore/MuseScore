@@ -927,7 +927,7 @@ MuseScore::MuseScore()
             connect(menuHelp, SIGNAL(aboutToShow()), hw, SLOT(setFocus()));
             }
 #endif
-      menuHelp->addAction(getAction("local-help"));
+      //menuHelp->addAction(getAction("local-help"));
       menuHelp->addAction(tr("&Online Handbook"), this, SLOT(helpBrowser1()));
 
       menuHelp->addSeparator();
@@ -1052,7 +1052,7 @@ void MuseScore::helpBrowser1() const
 
       if (MScore::debugMode)
             qDebug("open online handbook for language <%s>", qPrintable(lang));
-      QString help("http://musescore.org/en/handbook-2.0");
+      QString help = QString("https://musescore.org/redirect/help?tag=handbook&locale=%1").arg(getLocaleISOCode());
       //try to find an exact match
       bool found = false;
       foreach (LanguageItem item, _languages) {
@@ -1079,7 +1079,7 @@ void MuseScore::helpBrowser1() const
             }
 
       //track visits. see: http://www.google.com/support/googleanalytics/bin/answer.py?answer=55578
-      help += QString("?utm_source=software&utm_medium=menu&utm_content=r%1&utm_campaign=MuseScore%2").arg(rev.trimmed()).arg(QString(VERSION));
+      help += QString("&utm_source=desktop&utm_medium=menu&utm_content=%1&utm_campaign=MuseScore%2").arg(rev.trimmed()).arg(QString(VERSION));
       QDesktopServices::openUrl(QUrl(help));
       }
 

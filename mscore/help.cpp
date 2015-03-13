@@ -176,8 +176,9 @@ void MuseScore::showHelp(QString s)
       qDebug("showHelp <%s>", qPrintable(s));
       s = s.toLower();
       if (!s.isEmpty()) {
-            QUrl url(QString("http://musescore.org/redirect/help?tag=%1&locale=%2").arg(s).arg(getLocaleISOCode()));
-            QDesktopServices::openUrl(url);
+            QString help = QString("https://musescore.org/redirect/help?tag=%1&locale=%2").arg(s).arg(getLocaleISOCode());
+            help += QString("&utm_source=desktop&utm_medium=contextual&utm_content=%1&utm_term=%2&utm_campaign=MuseScore%3").arg(rev.trimmed()).arg(s).arg(QString(VERSION));
+            QDesktopServices::openUrl(QUrl(help));
             }
 #if 0
       if (!_helpEngine) {
