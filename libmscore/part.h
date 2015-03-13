@@ -119,11 +119,12 @@ class Part : public QObject, public ScoreElement {
       void setInstrument(const Instrument&&, int tick = -1);
       void setInstrument(const Instrument&, int tick = -1);
       void removeInstrument(int tick);
+      const InstrumentList* instruments() const   { return &_instruments;       }
+
       void insertTime(int tick, int len);
 
       QString partName() const                 { return _partName; }
       void setPartName(const QString& s)       { _partName = s; }
-      InstrumentList* instruments()              { return &_instruments;       }
 
       QVariant getProperty(P_ID) const override;
       bool setProperty(P_ID, const QVariant&) override;
