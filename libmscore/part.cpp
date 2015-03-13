@@ -34,7 +34,7 @@ Part::Part(Score* s)
    : ScoreElement(s)
       {
       _show  = true;
-      _instrList.setInstrument(new Instrument, -1);   // default instrument
+      _instruments.setInstrument(new Instrument, -1);   // default instrument
       }
 
 //---------------------------------------------------------
@@ -318,16 +318,16 @@ void Part::setMidiChannel(int) const
 
 void Part::setInstrument(Instrument* i, int tick)
       {
-      _instrList.setInstrument(i, tick);
+      _instruments.setInstrument(i, tick);
       }
 
 void Part::setInstrument(const Instrument&& i, int tick)
       {
-      _instrList.setInstrument(new Instrument(i), tick);
+      _instruments.setInstrument(new Instrument(i), tick);
       }
 void Part::setInstrument(const Instrument& i, int tick)
       {
-      _instrList.setInstrument(new Instrument(i), tick);
+      _instruments.setInstrument(new Instrument(i), tick);
       }
 
 //---------------------------------------------------------
@@ -336,13 +336,12 @@ void Part::setInstrument(const Instrument& i, int tick)
 
 void Part::removeInstrument(int tick)
       {
-      auto i = _instrList.find(tick);
-      if (i == _instrList.end()) {
+      auto i = _instruments.find(tick);
+      if (i == _instruments.end()) {
             qDebug("Part::removeInstrument: not found at tick %d", tick);
             return;
             }
-//      delete i->second;
-      _instrList.erase(i);
+      _instruments.erase(i);
       }
 
 //---------------------------------------------------------
@@ -351,7 +350,7 @@ void Part::removeInstrument(int tick)
 
 Instrument* Part::instrument(int tick)
       {
-      return _instrList.instrument(tick);
+      return _instruments.instrument(tick);
       }
 
 //---------------------------------------------------------
@@ -360,7 +359,7 @@ Instrument* Part::instrument(int tick)
 
 const Instrument* Part::instrument(int tick) const
       {
-      return _instrList.instrument(tick);
+      return _instruments.instrument(tick);
       }
 
 //---------------------------------------------------------
@@ -520,19 +519,19 @@ void Part::insertTime(int tick, int len)
             // remove instruments between tickpos >= tick and tickpos < (tick+len)
             // ownership goes back to class InstrumentChange()
 
-            auto si = _instrList.lower_bound(tick);
-            auto ei = _instrList.lower_bound(tick-len);
-            _instrList.erase(si, ei);
+            auto si = _instruments.lower_bound(tick);
+            auto ei = _instruments.lower_bound(tick-len);
+            _instruments.erase(si, ei);
             }
 
       InstrumentList il;
-      for (auto i = _instrList.lower_bound(tick); i != _instrList.end();) {
+      for (auto i = _instruments.lower_bound(tick); i != _instruments.end();) {
             Instrument* instrument = i->second;
             int tick = i->first;
-            _instrList.erase(i++);
-            _instrList[tick + len] = instrument;
+            _instruments.erase(i++);
+            _instruments[tick + len] = instrument;
             }
-      _instrList.insert(il.begin(), il.end());
+      _instruments.insert(il.begin(), il.end());
       }
 
 }

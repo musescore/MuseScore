@@ -51,8 +51,7 @@ class Part : public QObject, public ScoreElement {
       Q_PROPERTY(QString instrumentId READ instrumentId)
 
       QString _partName;           ///< used in tracklist (mixer)
-      InstrumentList _instrList;
-
+      InstrumentList _instruments;
       QList<Staff*> _staves;
       QString _id;                  ///< used for MusicXml import
       bool _show;                   ///< show part in partitur if true
@@ -124,7 +123,7 @@ class Part : public QObject, public ScoreElement {
 
       QString partName() const                 { return _partName; }
       void setPartName(const QString& s)       { _partName = s; }
-      InstrumentList* instrList()              { return &_instrList;       }
+      InstrumentList* instruments()              { return &_instruments;       }
 
       QVariant getProperty(P_ID) const override;
       bool setProperty(P_ID, const QVariant&) override;

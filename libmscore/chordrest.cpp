@@ -888,7 +888,7 @@ Element* ChordRest::drop(const DropData& data)
             case Element::Type::STAFF_STATE:
             case Element::Type::INSTRUMENT_CHANGE:
                   if (e->type() == Element::Type::INSTRUMENT_CHANGE
-                     && part()->instrList()->find(tick()) != part()->instrList()->end()) {
+                     && part()->instruments()->find(tick()) != part()->instruments()->end()) {
                         qDebug()<<"InstrumentChange already exists at tick = "<<tick();
                         delete e;
                         return 0;

@@ -4349,7 +4349,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   }
 
             xml.stag(QString("score-part id=\"P%1\"").arg(idx+1));
-            initInstrMap(instrMap, part->instrList(), _score);
+            initInstrMap(instrMap, part->instruments(), _score);
             // by default export the parts long name as part-name
             if (part->longName() != "")
                   xml.tag("part-name", MScoreTextToMXML::toPlainText(part->longName()));
@@ -4419,7 +4419,7 @@ void ExportMusicXml::write(QIODevice* dev)
 
             trillStart.clear();
             trillStop.clear();
-            initInstrMap(instrMap, part->instrList(), _score);
+            initInstrMap(instrMap, part->instruments(), _score);
 
             int measureNo = 1;          // number of next regular measure
             int irregularMeasureNo = 1; // number of next irregular measure
