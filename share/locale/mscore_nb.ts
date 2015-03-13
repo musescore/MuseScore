@@ -12105,7 +12105,7 @@ altera</source>
     </message>
     <message>
         <source>Common Time</source>
-        <translation type="unfinished"/>
+        <translation>C</translation>
     </message>
     <message>
         <source>Enter Number of Measures</source>
