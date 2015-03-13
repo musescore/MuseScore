@@ -18,6 +18,8 @@
 #include "undo.h"
 #include "mscore.h"
 #include "xml.h"
+#include "measure.h"
+#include "system.h"
 
 namespace Ms {
 
@@ -123,5 +125,21 @@ bool InstrumentChange::setProperty(P_ID propertyId, const QVariant& v)
             }
       return true;
       }
+
+//---------------------------------------------------------
+//   dragAnchor
+//---------------------------------------------------------
+
+QLineF InstrumentChange::dragAnchor() const
+      {
+      qreal xp = 0.0;
+      for (Element* e = parent(); e; e = e->parent())
+            xp += e->x();
+      qreal yp = segment()->measure()->system()->staffYpage(staffIdx());
+      QPointF p(xp, yp);
+
+      return QLineF(p, canvasPos());
+      }
+
 }
 
