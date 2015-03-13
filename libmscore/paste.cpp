@@ -223,9 +223,13 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                                             }
                                                       }
                                                 }
-                                          // set shorten duration
-                                          cr->setDuration(Fraction::fromTicks(newLength));
-                                          cr->setDurationType(newLength);
+                                          if (!cr->tuplet()/*|| cr->actualTicks() - newLength > (cr->tuplet()->ratio().numerator() + 1 ) / 2*/) {
+                                                // shorten duration
+                                                // exempt notes in tuplets, since we don't allow copy of partial tuplet anyhow
+                                                // TODO: figure out a reasonable fudge factor to make sure shorten tuplets appropriately if we do ever copy a partial tuplet
+                                                cr->setDuration(Fraction::fromTicks(newLength));
+                                                cr->setDurationType(newLength);
+                                                }
                                           }
                                     pasteChordRest(cr, tick, e.transpose());
                                     }
