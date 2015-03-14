@@ -9,27 +9,27 @@
     </message>
     <message>
         <source>Hide %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Skjul %1</translation>
     </message>
     <message>
         <source>Hide Others</source>
-        <translation type="unfinished"></translation>
+        <translation>Skjul andre</translation>
     </message>
     <message>
         <source>Show All</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis alle</translation>
     </message>
     <message>
         <source>Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>Innstillinger...</translation>
     </message>
     <message>
         <source>Quit %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Avslutt %1</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Om %1</translation>
     </message>
 </context>
 <context>
@@ -98,9 +98,9 @@ have libgstreamer-plugins-base installed.</source>
     </message>
     <message numerus="yes">
         <source>A required codec is missing. You need to install the following codec(s) to play this content: %0</source>
-        <translation>
-            <numerusform>Un codec requis est manquant. Vous devez installer le codec suivant pour jouer le contenu: %0</numerusform>
-            <numerusform>Des codecs requis sont manquants. Vous devez installer les codecs suivants pour jouer le contenu: %0 </numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -737,35 +737,35 @@ to
     </message>
     <message>
         <source>&amp;Red:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Rød:</translation>
     </message>
     <message>
         <source>&amp;Green:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Grønn:</translation>
     </message>
     <message>
         <source>Bl&amp;ue:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Blå:</translation>
     </message>
     <message>
         <source>A&amp;lpha channel:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Gjennomsiktig kanal:</translation>
     </message>
     <message>
         <source>&amp;Basic colors</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Standard farger</translation>
     </message>
     <message>
         <source>&amp;Custom colors</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Egendefinerte farger</translation>
     </message>
     <message>
         <source>&amp;Add to Custom Colors</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Legg til i egendefinerte farger</translation>
     </message>
     <message>
         <source>Select color</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg farge</translation>
     </message>
 </context>
 <context>
@@ -960,7 +960,7 @@ to
     </message>
     <message>
         <source>Help</source>
-        <translation>Brukerveiledning</translation>
+        <translation>Hjelp</translation>
     </message>
     <message>
         <source>Discard</source>
@@ -996,7 +996,7 @@ to
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorer</translation>
     </message>
     <message>
         <source>Restore Defaults</source>
@@ -1089,97 +1089,103 @@ to
     <name>QFileDialog</name>
     <message>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilbake</translation>
     </message>
     <message>
         <source>List View</source>
-        <translation type="unfinished"></translation>
+        <translation>Listevisning</translation>
     </message>
     <message>
         <source>Detail View</source>
-        <translation type="unfinished"></translation>
+        <translation>Detaljvisning</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Åpne</translation>
     </message>
     <message>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Åpne</translation>
     </message>
     <message>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Lagre</translation>
     </message>
     <message>
         <source>&amp;Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Endre navn</translation>
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Slett</translation>
     </message>
     <message>
         <source>Show &amp;hidden files</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis skj&amp;ulte filer</translation>
     </message>
     <message>
         <source>Directories</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapper</translation>
     </message>
     <message>
         <source>All Files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle filer (*)</translation>
     </message>
     <message>
         <source>%1 already exists.
 Do you want to replace it?</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 finnes allerede.
+Vil du erstatte den?</translation>
     </message>
     <message>
         <source>%1
 File not found.
 Please verify the correct file name was given.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1
+Fil ikke funnet.
+Vennligst verifiser at riktig filnavn er gitt.</translation>
     </message>
     <message>
         <source>My Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Min datamaskin</translation>
     </message>
     <message>
         <source>Parent Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Foreldremappe</translation>
     </message>
     <message>
         <source>Files of type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Filer med type:</translation>
     </message>
     <message>
         <source>Directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mappe:</translation>
     </message>
     <message>
         <source>%1
 Directory not found.
 Please verify the correct directory name was given.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1
+Mappe ikke funnet.
+Vennligst verifiser at riktig mappenavn er gitt.</translation>
     </message>
     <message>
         <source>&apos;%1&apos; is write protected.
 Do you want to delete it anyway?</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;%1&apos; er skrivebeskyttet.
+Vil du slette den allikevel?</translation>
     </message>
     <message>
         <source>Are sure you want to delete &apos;%1&apos;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Er du sikker på at du vil slette &apos;%1&apos;?</translation>
     </message>
     <message>
         <source>Could not delete directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunne ikke slette mappe.</translation>
     </message>
     <message>
         <source>Save As</source>
-        <translation type="unfinished"></translation>
+        <translation>Lagre som</translation>
     </message>
     <message>
         <source>Drive</source>
@@ -1187,51 +1193,51 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Fil</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukjent</translation>
     </message>
     <message>
         <source>Find Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Finn mappe</translation>
     </message>
     <message>
         <source>Show </source>
-        <translation type="unfinished"></translation>
+        <translation>Vis</translation>
     </message>
     <message>
         <source>Forward</source>
-        <translation type="unfinished"></translation>
+        <translation>Fremover</translation>
     </message>
     <message>
         <source>New Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Ny mappe</translation>
     </message>
     <message>
         <source>&amp;New Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ny mappe</translation>
     </message>
     <message>
         <source>&amp;Choose</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Velg</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjern</translation>
     </message>
     <message>
         <source>File &amp;name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fil&amp;navn:</translation>
     </message>
     <message>
         <source>Look in:</source>
-        <translation type="unfinished"></translation>
+        <translation>Let i:</translation>
     </message>
     <message>
         <source>Create New Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Opprett ny mappe</translation>
     </message>
 </context>
 <context>
@@ -1912,31 +1918,31 @@ Do you want to delete it anyway?</source>
     <name>QLineEdit</name>
     <message>
         <source>Select All</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg alt</translation>
     </message>
     <message>
         <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Angre</translation>
     </message>
     <message>
         <source>&amp;Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Gjør om</translation>
     </message>
     <message>
         <source>Cu&amp;t</source>
-        <translation type="unfinished"></translation>
+        <translation>Klipp &amp;ut</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kopier</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Lim inn</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Slett</translation>
     </message>
 </context>
 <context>
@@ -3937,11 +3943,11 @@ Please choose a different file name.</source>
     <name>QUndoGroup</name>
     <message>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Angre</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Gjør om</translation>
     </message>
 </context>
 <context>
@@ -3955,11 +3961,11 @@ Please choose a different file name.</source>
     <name>QUndoStack</name>
     <message>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Angre</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Gjør om</translation>
     </message>
 </context>
 <context>
@@ -4305,11 +4311,11 @@ Please choose a different file name.</source>
     <name>QWizard</name>
     <message>
         <source>Go Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Gå tilbake</translation>
     </message>
     <message>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>Fortsett</translation>
     </message>
     <message>
         <source>Commit</source>
@@ -4317,39 +4323,39 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferdig</translation>
     </message>
     <message>
         <source>Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>Avslutt</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hjelp</translation>
     </message>
     <message>
         <source>&lt; &amp;Back</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt; &amp;Tilbake</translation>
     </message>
     <message>
         <source>&amp;Finish</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fullfør</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hjelp</translation>
     </message>
     <message>
         <source>&amp;Next</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Neste</translation>
     </message>
     <message>
         <source>&amp;Next &gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Neste &gt;</translation>
     </message>
 </context>
 <context>
@@ -5234,11 +5240,11 @@ Please choose a different file name.</source>
     <name>VolumeSlider</name>
     <message>
         <source>Muted</source>
-        <translation type="unfinished"></translation>
+        <translation>Dempet</translation>
     </message>
     <message>
         <source>Volume: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Volum: %1%</translation>
     </message>
 </context>
 <context>
