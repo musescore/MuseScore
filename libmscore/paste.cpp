@@ -447,6 +447,10 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
 
       int measureEnd = measure->endTick();
       bool isGrace = (cr->type() == Element::Type::CHORD) && (((Chord*)cr)->noteType() != NoteType::NORMAL);
+      // if note is too long to fit in measure, split it up with a tie across the barline
+      // exclude tuplets from consideration
+      // we have already disallowed a tuplet from crossing the barline, so there is no problem here
+      // but due to rounding, it might appear from actualTicks() that the last note is too long by a couple of ticks
       if (!isGrace && !cr->tuplet() && (tick + cr->actualTicks() > measureEnd || convertMeasureRest)) {
             if (cr->type() == Element::Type::CHORD) {
                   // split Chord
