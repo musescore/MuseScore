@@ -660,10 +660,6 @@ bool GuitarPro5::readNoteEffects(Note* note)
             gc->setTrack(note->chord()->track());
             gc->add(gn);
             gc->setParent(note->chord());
-            note->chord()->add(gc);
-
-            // TODO: Add dynamic. Dynamic now can be added only to a segment, not directly to a grace note
-            addDynamic(gn, dynamic);
 
             TDuration d;
             d.setVal(grace_len);
@@ -673,6 +669,9 @@ bool GuitarPro5::readNoteEffects(Note* note)
             gc->setDuration(d.fraction());
             gc->setNoteType(note_type);
             gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
+            note->chord()->add(gc);
+            addDynamic(gn, dynamic);
+
             if (transition == 0) {
                   // no transition
                   }

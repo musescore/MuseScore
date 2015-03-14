@@ -295,10 +295,6 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                   gc->setTrack(note->chord()->track());
                   gc->add(gn);
                   gc->setParent(note->chord());
-                  note->chord()->add(gc);
-
-                  // TODO: Add dynamic. Dynamic now can be added only to a segment, not directly to a grace note
-                  addDynamic(gn, dynamic);
 
                   TDuration d;
                   d.setVal(grace_len);
@@ -308,6 +304,8 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                   gc->setDuration(d.fraction());
                   gc->setNoteType(NoteType::ACCIACCATURA);
                   gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
+                  note->chord()->add(gc);
+                  addDynamic(gn, dynamic);
 
                   if (transition == 0) {
                         // no transition
