@@ -1124,6 +1124,13 @@ to
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation>保存しない</translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <location filename="" line="326436454"/>
@@ -1179,11 +1186,6 @@ to
         <location filename="" line="326436454"/>
         <source>Reset</source>
         <translation>リセット</translation>
-    </message>
-    <message>
-        <location filename="" line="326436454"/>
-        <source>Don&apos;t Save</source>
-        <translation>保存しない</translation>
     </message>
     <message>
         <location filename="" line="326436454"/>

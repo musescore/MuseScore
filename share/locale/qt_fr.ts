@@ -934,6 +934,13 @@ en
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation>Ne pas enregistrer</translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <source>OK</source>
@@ -966,10 +973,6 @@ en
     <message>
         <source>Help</source>
         <translation>Aide</translation>
-    </message>
-    <message>
-        <source>Don&apos;t Save</source>
-        <translation>Ne pas enregistrer</translation>
     </message>
     <message>
         <source>Discard</source>

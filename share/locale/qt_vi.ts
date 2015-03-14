@@ -892,6 +892,13 @@ to
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation>Đừng lưu trữ</translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <source>OK</source>
@@ -932,11 +939,6 @@ to
         <source>Help</source>
         <translatorcomment></translatorcomment>
         <translation>Giúp đỡ</translation>
-    </message>
-    <message>
-        <source>Don&apos;t Save</source>
-        <translatorcomment></translatorcomment>
-        <translation>Đừng lưu trữ</translation>
     </message>
     <message>
         <source>Discard</source>

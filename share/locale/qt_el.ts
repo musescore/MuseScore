@@ -930,6 +930,13 @@ to
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation>Μην αποθηκεύσεις</translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <source>OK</source>
@@ -962,10 +969,6 @@ to
     <message>
         <source>Help</source>
         <translation type="unfinished">Βοήθεια</translation>
-    </message>
-    <message>
-        <source>Don&apos;t Save</source>
-        <translation type="unfinished">Μην αποθηκεύσεις</translation>
     </message>
     <message>
         <source>Discard</source>

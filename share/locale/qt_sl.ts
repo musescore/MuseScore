@@ -1282,6 +1282,13 @@ v
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation>Ne shrani</translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <location filename="../src/gui/dialogs/qmessagebox.cpp" line="+1872"/>
@@ -1344,11 +1351,6 @@ v
         <location line="+3"/>
         <source>Help</source>
         <translation>Pomoč</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Don&apos;t Save</source>
-        <translation>Ne shrani</translation>
     </message>
     <message>
         <location line="+4"/>
