@@ -432,12 +432,21 @@ void GuitarPro::setTuplet(Tuplet* tuplet, int tuple)
 
 void GuitarPro::addDynamic(Note* note, int d)
       {
+      if (!note->chord()){
+            qDebug() << "addDynamics: No chord associated with this note";
+            return;
+            }
       Dynamic* dyn = new Dynamic(score);
       // guitar pro only allows their users to go from ppp to fff
       QString map_dyn[] = {"f","ppp","pp","p","mp","mf","f","ff","fff"};
       dyn->setDynamicType(map_dyn[d]);
       dyn->setTrack(note->track());
-      note->chord()-> segment()-> add(dyn);
+      if (note->chord()->isGrace()) {
+            Chord* parent = static_cast<Chord*>(note->chord()->parent());
+            parent->segment()->add(dyn);
+            }
+      else
+            note->chord()->segment()->add(dyn);
       }
 
 void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
@@ -1580,13 +1589,7 @@ void GuitarPro1::readNote(int string, Note* note)
                   gn->setTpcFromPitch();
 
                   Chord* gc = new Chord(score);
-                  // gc->setTrack(note->chord()->track());
                   gc->add(gn);
-                  // gc->setParent(note->chord());
-                  note->chord()->add(gc); // sets parent + track
-
-                  // TODO: Add dynamic. Dynamic now can be added only to a segment, not directly to a grace note
-                  addDynamic(gn, dynamic);
 
                   TDuration d;
                   d.setVal(grace_len);
@@ -1596,6 +1599,8 @@ void GuitarPro1::readNote(int string, Note* note)
                   gc->setDuration(d.fraction());
                   gc->setNoteType(NoteType::ACCIACCATURA);
                   gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
+                  note->chord()->add(gc); // sets parent + track
+                  addDynamic(gn, dynamic);
 
                   if (transition == 0) {
                         // no transition
