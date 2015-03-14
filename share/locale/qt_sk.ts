@@ -900,6 +900,13 @@ na
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation>Neuložiť</translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <source>OK</source>
@@ -932,10 +939,6 @@ na
     <message>
         <source>Help</source>
         <translation>Pomocník</translation>
-    </message>
-    <message>
-        <source>Don&apos;t Save</source>
-        <translation>Neuložiť</translation>
     </message>
     <message>
         <source>Discard</source>

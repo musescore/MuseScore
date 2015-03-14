@@ -972,6 +972,13 @@ nepavyksta pervadinti į
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation>Neįrašyti</translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <source>OK</source>
@@ -1004,10 +1011,6 @@ nepavyksta pervadinti į
     <message>
         <source>Help</source>
         <translation>Pagalba</translation>
-    </message>
-    <message>
-        <source>Don&apos;t Save</source>
-        <translation>Neįrašyti</translation>
     </message>
     <message>
         <source>Discard</source>

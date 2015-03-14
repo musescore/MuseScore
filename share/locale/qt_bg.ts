@@ -937,6 +937,13 @@ to
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation>Без запазване</translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <source>OK</source>
@@ -969,10 +976,6 @@ to
     <message>
         <source>Help</source>
         <translation>Помощ</translation>
-    </message>
-    <message>
-        <source>Don&apos;t Save</source>
-        <translation>Без запазване</translation>
     </message>
     <message>
         <source>Discard</source>

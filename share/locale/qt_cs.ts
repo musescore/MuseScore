@@ -1355,6 +1355,13 @@ na
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation>Neukládat</translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <location filename="../src/gui/dialogs/qmessagebox.cpp" line="+1872"/>
@@ -1472,11 +1479,6 @@ na
         <location line="+6"/>
         <source>Yes to &amp;All</source>
         <translation>Ano, &amp;vše</translation>
-    </message>
-    <message>
-        <location line="-10"/>
-        <source>Don&apos;t Save</source>
-        <translation>Neukládat</translation>
     </message>
 </context>
 <context>
