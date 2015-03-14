@@ -980,13 +980,11 @@ static bool checkStart(Element* e)
       ChordRest* cr = static_cast<ChordRest*>(e);
       bool rv = false;
       if (cr->tuplet()) {
-            rv = true;
             Tuplet* tuplet = cr->tuplet();
             while (tuplet) {
-                  if (tuplet->elements().front() == e) {
-                        rv = false;
-                        break;
-                        }
+                  if (tuplet->elements().front() != e)
+                        return true;
+                  e = tuplet;
                   tuplet = tuplet->tuplet();
                   }
             }
@@ -1014,13 +1012,11 @@ static bool checkEnd(Element* e)
       ChordRest* cr = static_cast<ChordRest*>(e);
       bool rv = false;
       if (cr->tuplet()) {
-            rv = true;
             Tuplet* tuplet = cr->tuplet();
             while (tuplet) {
-                  if (tuplet->elements().back() == e) {
-                        rv = false;
-                        break;
-                        }
+                  if (tuplet->elements().back() != e)
+                        return true;
+                  e = tuplet;
                   tuplet = tuplet->tuplet();
                   }
             }
