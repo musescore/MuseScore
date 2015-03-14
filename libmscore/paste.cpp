@@ -159,7 +159,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               Measure* measure = tick2measure(tick);
                               tuplet->setParent(measure);
                               tuplet->setTick(tick);
-                              int ticks = tuplet->duration().ticks();
+                              int ticks = tuplet->actualTicks();
                               int rticks = measure->endTick() - tick;
                               if (rticks < ticks) {
                                     qDebug("tuplet does not fit in measure");
