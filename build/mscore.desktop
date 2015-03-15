@@ -1,6 +1,6 @@
 [Desktop Entry]
 Version=2.0
-Comment=WYSIWYG Music score typesetter
+Comment=Create, play and print sheet music
 Comment[ru]=Визуальный редактор нотных партитур
 Comment[fr]=Gravure de partitions musicales
 Exec=mscore %F
