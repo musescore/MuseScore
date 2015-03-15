@@ -3524,13 +3524,17 @@ void LinkUnlink::doUnlink()
       {
       Q_ASSERT(le == nullptr);
       const LinkedElements* l = e->links();
-      for (ScoreElement* ee : *l) {
-            if (e != ee) {
-                  le = ee;
-                  break;
+      if (l != nullptr) {
+            for (ScoreElement* ee : *l) {
+                  if (e != ee) {
+                        le = ee;
+                        break;
+                        }
                   }
             }
-      e->unlink();
+      else
+            qDebug() << "Nothing to unlink !?";
+      le->unlink();
       }
 
 void LinkStaff::redo()   { s1->linkTo(s2); }
