@@ -2133,6 +2133,8 @@ static bool processNonGui()
                   return mscore->savePng(cs, fn);
             if (fn.endsWith(".svg"))
                   return mscore->saveSvg(cs, fn);
+            if (fn.endsWith("svc"))
+                  return mscore->saveSvgCollection(cs, fn, true);
 #ifdef HAS_AUDIOFILE
             if (fn.endsWith(".wav") || fn.endsWith(".ogg") || fn.endsWith(".flac"))
                   return mscore->saveAudio(cs, fn);

@@ -565,6 +565,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreTab* getTab2() const { return tab2; }
       QList<LanguageItem>& languages() { return _languages; }
 
+      Score * linearize(Score *);
       bool newLinearized(Score*);
 
       QStringList getOpenScoreNames(const QString& filter, const QString& title);
@@ -613,7 +614,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveAudio(Score*, const QString& name);
       bool saveMp3(Score*, const QString& name);
       bool saveSvg(Score*, const QString& name);
-      bool saveSvgCollection(Score*, const QString& name);
+      bool saveSvgCollection(Score*, const QString& name, const bool do_linearize);
       bool savePng(Score*, const QString& name);
 //      bool saveLilypond(Score*, const QString& name);
       bool saveMidi(Score* score, const QString& name);

@@ -1772,7 +1772,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             }
       else if (ext == "svc") {
             // save as svg file *.svg
-            rv = saveSvgCollection(cs, fn);
+            rv = saveSvgCollection(cs, fn, false);
             }
 #if 0
       else if (ext == "ly") {
@@ -2625,7 +2625,7 @@ void note_row(QTextStream * qts, int tick, float pos, QSet<Note *> * notes, QSet
 }
 
 
-bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
+bool MuseScore::saveSvgCollection(Score* score, const QString& saveName, const bool do_linearize)
       {
 
       MQZipWriter uz(saveName);
@@ -2647,9 +2647,17 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
 
       score->repeatList()->unwind();
       if (score->repeatList()->size()>1) {
-         QMessageBox::critical(0, QObject::tr("SVC export Failed"),
-            QObject::tr("Score contains repeats. Please linearize!"));
-         return false;
+
+         if (do_linearize) {
+            Score * nscore = linearize(score);
+            delete score;
+            score = nscore;
+         }
+         else {
+            QMessageBox::critical(0, QObject::tr("SVC export Failed"),
+               QObject::tr("Score contains repeats. Please linearize!"));
+            return false;
+         }
       }
 
       qreal rel_tempo = score->tempomap()->relTempo();
@@ -2677,13 +2685,38 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
             qts << "I " << iname << endl;
       }
       
-      foreach( Page* page, score->pages() )
-      foreach( System* sys, *(page->systems()) ) {
-            qreal top_margin = score->styleS(StyleIdx::systemFrameDistance).val()*sys->spatium();
-            qreal bot_margin = score->styleS(StyleIdx::frameSystemDistance).val()*sys->spatium();
-            qreal v_margin = score->styleS(StyleIdx::staffDistance).val()*sys->spatium();      
+      foreach( Page* page, score->pages() ) {
 
-            w = sys->width() + 2*v_margin;
+         qreal mtop = 0.0;
+         foreach(System* s, *(page->systems())) {
+            if (!s->staves()->isEmpty())
+                  mtop = qMax(s->distanceUp(0), mtop);
+            }
+
+         qreal mbot = 0.0;
+         foreach(System* s, *(page->systems())) {
+            int staffIdx = s->staves()->size() - 1;
+            if (staffIdx >= 0)
+                  mbot = qMax(s->distanceDown(staffIdx), mbot);
+            }
+
+         foreach( System* sys, *(page->systems()) ) {
+            qreal top_margin = score->styleS(StyleIdx::systemFrameDistance).val()*score->spatium();
+            qreal bot_margin = score->styleS(StyleIdx::frameSystemDistance).val()*score->spatium();
+            qreal h_margin = score->styleS(StyleIdx::staffDistance).val()*score->spatium(); 
+
+            if (sys->isVbox()) {
+               //qDebug("VB %f %f, %f %f %f %f", mtop, mbot, top_margin,sys->vbox()->topGap(),bot_margin, sys->vbox()->bottomGap());
+               top_margin  = sys->vbox()->topGap();
+               bot_margin = sys->vbox()->bottomGap();
+            }
+
+            top_margin = qMax(mtop,top_margin);
+            bot_margin = qMax(mbot,bot_margin);
+
+            qDebug("Margins: %f %f",top_margin,bot_margin);
+
+            w = sys->width() + 2*h_margin;
             h = sys->height() + top_margin + bot_margin;
  
 
@@ -2702,7 +2735,7 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
             svgbuf->open(QIODevice::ReadWrite);
 
             p = getSvgPainter(svgbuf,w,h,mag);
-            p->translate(-(sys->pagePos().rx()-v_margin), -(sys->staffYpage(0)-top_margin) );
+            p->translate(-(sys->pagePos().rx()-h_margin), -(sys->staffYpage(0)-top_margin) );
 
             // Collect together all elements belonging to this system!
             QList<const Element*> elems;
@@ -2826,28 +2859,29 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName)
             
             delete p; delete svgbuf;
          }
-
-         if (measure!=NULL) ticksFromBeg+=measure->ticks();
-         qDebug("Total ticks: %i. End time: %f",ticksFromBeg,score->tempomap()->tick2time(ticksFromBeg));
-         qts << "AT " << score->tempomap()->tick2time(0) << ',' << score->tempomap()->tick2time(ticksFromBeg)<< endl;
-         qts << "TT " << ticksFromBeg << endl;
-
-         uz.addFile(fi.baseName()+".meta",metabuf.data());
-         score->setPrinting(false);
-
-         // Add midifile
-         QString midiname(fi.baseName()+".mid");
-         saveMidi(score,midiname);
-         QFile file(midiname);
-         file.open(QIODevice::ReadOnly);
-         uz.addFile(midiname,&file);
-         uz.close();
-         file.remove();
-
-         score->tempomap()->setRelTempo(rel_tempo);
-
-         return true;
       }
+
+      if (measure!=NULL) ticksFromBeg+=measure->ticks();
+      qDebug("Total ticks: %i. End time: %f",ticksFromBeg,score->tempomap()->tick2time(ticksFromBeg));
+      qts << "AT " << score->tempomap()->tick2time(0) << ',' << score->tempomap()->tick2time(ticksFromBeg)<< endl;
+      qts << "TT " << ticksFromBeg << endl;
+
+      uz.addFile(fi.baseName()+".meta",metabuf.data());
+      score->setPrinting(false);
+
+      // Add midifile
+      QString midiname(fi.baseName()+".mid");
+      saveMidi(score,midiname);
+      QFile file(midiname);
+      file.open(QIODevice::ReadOnly);
+      uz.addFile(midiname,&file);
+      uz.close();
+      file.remove();
+
+      score->tempomap()->setRelTempo(rel_tempo);
+
+      return true;
+   }
 
 
 void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
@@ -2872,7 +2906,7 @@ void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
       score->deselectAll();
    }
 
-bool MuseScore::newLinearized(Score* old_score)
+   Score * MuseScore::linearize(Score* old_score)
       {
 
       Score* score = old_score->clone();
@@ -2934,7 +2968,9 @@ bool MuseScore::newLinearized(Score* old_score)
 
       for(Measure * m = score->firstMeasure(); m; m=m->nextMeasure()) {
          // Remove repeats
-         if (m->repeatFlags()!=Repeat::NONE) { 
+         if (m->repeatFlags()!=Repeat::NONE) {
+
+
             m->setRepeatFlags(Repeat::NONE);
             m->setRepeatCount(0);
          }
@@ -2946,6 +2982,8 @@ bool MuseScore::newLinearized(Score* old_score)
                score->deleteItem(e);
             }
       }
+
+      score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
       
       // score->deselectAll();
       //old_score->deselectAll();
@@ -2954,6 +2992,13 @@ bool MuseScore::newLinearized(Score* old_score)
       score->setLayoutAll(true);
       score->fixTicks();
       score->doLayout();
+
+      return score;
+   }
+
+   bool MuseScore::newLinearized(Score* old_score)
+   {
+      Score * score = linearize(old_score);
       setCurrentScoreView(appendScore(score));
 
       return true;
