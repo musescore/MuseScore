@@ -133,7 +133,7 @@ public:
       Segment* prev1(Type) const;
       Segment* prev1MM(Type) const;
 
-      Segment* nextCR(int track = -1) const;
+      Segment* nextCR(int track = -1, bool sameStaff = false) const;
 
       ChordRest* nextChordRest(int track, bool backwards = false) const;
 
