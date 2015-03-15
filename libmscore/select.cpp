@@ -980,24 +980,21 @@ static bool checkStart(Element* e)
       ChordRest* cr = static_cast<ChordRest*>(e);
       bool rv = false;
       if (cr->tuplet()) {
-            rv = true;
+            // check that complete tuplet is selected, all the way up to top level
             Tuplet* tuplet = cr->tuplet();
             while (tuplet) {
-                  if (tuplet->elements().front() == e) {
-                        rv = false;
-                        break;
-                        }
+                  if (tuplet->elements().front() != e)
+                        return true;
+                  e = tuplet;
                   tuplet = tuplet->tuplet();
                   }
             }
-      else if (e->type() == Element::Type::CHORD) {
+      else if (cr->type() == Element::Type::CHORD) {
             rv = false;
-            Chord* chord = static_cast<Chord*>(e);
+            Chord* chord = static_cast<Chord*>(cr);
             if (chord->tremolo() && chord->tremolo()->twoNotes())
                   rv = chord->tremolo()->chord2() == chord;
             }
-      else
-            rv = false;
       return rv;
       }
 
@@ -1007,31 +1004,32 @@ static bool checkStart(Element* e)
 //     return true  if element is part of a tuplet, but not the end
 //---------------------------------------------------------
 
-static bool checkEnd(Element* e)
+static bool checkEnd(Element* e, int endTick)
       {
       if (e == 0 || !e->isChordRest())
             return false;
       ChordRest* cr = static_cast<ChordRest*>(e);
       bool rv = false;
       if (cr->tuplet()) {
-            rv = true;
+            // check that complete tuplet is selected, all the way up to top level
             Tuplet* tuplet = cr->tuplet();
             while (tuplet) {
-                  if (tuplet->elements().back() == e) {
-                        rv = false;
-                        break;
-                        }
+                  if (tuplet->elements().back() != e)
+                        return true;
+                  e = tuplet;
                   tuplet = tuplet->tuplet();
                   }
+            // also check that the selection extends to the end of the top-level tuplet
+            tuplet = static_cast<Tuplet*>(e);
+            if (tuplet->elements().first()->tick() + tuplet->actualTicks() > endTick)
+                  return true;
             }
-      else if (e->type() == Element::Type::CHORD) {
+      else if (cr->type() == Element::Type::CHORD) {
             rv = false;
-            Chord* chord = static_cast<Chord*>(e);
+            Chord* chord = static_cast<Chord*>(cr);
             if (chord->tremolo() && chord->tremolo()->twoNotes())
                   rv = chord->tremolo()->chord1() == chord;
             }
-      else
-            rv = false;
       return rv;
       }
 
@@ -1046,10 +1044,17 @@ bool Selection::canCopy() const
       if (_state != SelState::RANGE)
             return true;
 
+      int endTick = _endSegment ? _endSegment->tick() : score()->lastSegment()->tick();
+
       for (int staffIdx = _staffStart; staffIdx != _staffEnd; ++staffIdx)
             for (int voice = 0; voice < VOICES; ++voice) {
                   int track = staffIdx * VOICES + voice;
-                  if (checkStart(_startSegment->element(track)))
+                  if (!canSelectVoice(track))
+                        continue;
+
+                  // check first cr in track within selection
+                  ChordRest* check = _startSegment->nextChordRest(track);
+                  if (check && check->tick() < endTick && checkStart(check))
                         return false;
 
                   if (! _endSegment)
@@ -1063,7 +1068,7 @@ bool Selection::canCopy() const
                         (endSegmentSelection->nextCR(track)->tick() < _endSegment->tick()))
                         endSegmentSelection = endSegmentSelection->nextCR(track);
 
-                  if (checkEnd(endSegmentSelection->element(track)))
+                  if (checkEnd(endSegmentSelection->element(track), endTick))
                         return false;
                   }
       return true;
