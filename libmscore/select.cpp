@@ -980,7 +980,7 @@ static bool checkStart(Element* e)
       ChordRest* cr = static_cast<ChordRest*>(e);
       bool rv = false;
       if (cr->tuplet()) {
-            // check that complete tuplet is selected, all thew way up to top level
+            // check that complete tuplet is selected, all the way up to top level
             Tuplet* tuplet = cr->tuplet();
             while (tuplet) {
                   if (tuplet->elements().front() != e)
@@ -1011,7 +1011,7 @@ static bool checkEnd(Element* e, int endTick)
       ChordRest* cr = static_cast<ChordRest*>(e);
       bool rv = false;
       if (cr->tuplet()) {
-            // check that complete tuplet is selected, all thew way up to top level
+            // check that complete tuplet is selected, all the way up to top level
             Tuplet* tuplet = cr->tuplet();
             while (tuplet) {
                   if (tuplet->elements().back() != e)
