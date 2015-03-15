@@ -652,7 +652,7 @@ void LyricsLine::layout()
             // find segment with tick >= endTick
             Segment* s = lyricsSegment;
             while (s && s->tick() < lyricsEndTick)
-                  s = s->nextCR(lyricsTrack);
+                  s = s->nextCR(lyricsTrack, true);
             if (!s) {
                   // user probably deleted measures at end of score, leaving this melisma too long
                   // set s to last segment and reset lyricsEndTick to trigger FIXUP code below
@@ -663,7 +663,7 @@ void LyricsLine::layout()
             // everything is OK if we have reached a chord at right tick on right track
             if (s->tick() == lyricsEndTick && se && se->type() == Element::Type::CHORD) {
                   // advance to next CR, or last segment if no next CR
-                  s = s->nextCR(lyricsTrack);
+                  s = s->nextCR(lyricsTrack, true);
                   if (!s)
                         s = score()->lastSegment();
                   }
@@ -686,7 +686,7 @@ void LyricsLine::layout()
                   if (!ps || ps == lyricsSegment) {
                         // no valid previous CR, so try to lengthen melisma instead
                         ps = ns;
-                        s = ps->nextCR(lyricsTrack);
+                        s = ps->nextCR(lyricsTrack, true);
                         Element* e = s ? s->element(lyricsTrack) : nullptr;
                         // check to make sure we have a chord
                         if (!e || e->type() != Element::Type::CHORD) {

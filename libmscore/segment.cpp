@@ -334,14 +334,21 @@ Segment* Segment::prev1MM(Type types) const
 //    get next ChordRest Segment
 //---------------------------------------------------------
 
-Segment* Segment::nextCR(int track) const
+Segment* Segment::nextCR(int track, bool sameStaff) const
       {
+      int strack = track;
+      int etrack = track + 1;
+      if (sameStaff) {
+            strack = (track / VOICES) * VOICES;
+            etrack = strack + VOICES;
+            }
       Segment* seg = next1();
       for (; seg; seg = seg->next1()) {
             if (seg->segmentType() == Type::ChordRest) {
-                  if (track != -1 && !seg->element(track))
-                        continue;
-                  return seg;
+                  for (int t = strack; t < etrack; ++t) {
+                        if (track != -1 && seg->element(t))
+                              return seg;
+                        }
                   }
             }
       return 0;
