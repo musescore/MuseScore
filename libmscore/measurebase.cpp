@@ -183,7 +183,7 @@ void MeasureBase::remove(Element* el)
             }
       if (!_el.remove(el)) {
             qDebug("MeasureBase(%p)::remove(%s,%p) not found", this, el->name(), el);
-            abort();
+            //abort();
             }
       }
 
