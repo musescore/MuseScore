@@ -159,7 +159,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               Measure* measure = tick2measure(tick);
                               tuplet->setParent(measure);
                               tuplet->setTick(tick);
-                              int ticks = tuplet->duration().ticks();
+                              int ticks = tuplet->actualTicks();
                               int rticks = measure->endTick() - tick;
                               if (rticks < ticks) {
                                     qDebug("tuplet does not fit in measure");
@@ -223,9 +223,13 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                                             }
                                                       }
                                                 }
-                                          // set shorten duration
-                                          cr->setDuration(Fraction::fromTicks(newLength));
-                                          cr->setDurationType(newLength);
+                                          if (!cr->tuplet()/*|| cr->actualTicks() - newLength > (cr->tuplet()->ratio().numerator() + 1 ) / 2*/) {
+                                                // shorten duration
+                                                // exempt notes in tuplets, since we don't allow copy of partial tuplet anyhow
+                                                // TODO: figure out a reasonable fudge factor to make sure shorten tuplets appropriately if we do ever copy a partial tuplet
+                                                cr->setDuration(Fraction::fromTicks(newLength));
+                                                cr->setDurationType(newLength);
+                                                }
                                           }
                                     pasteChordRest(cr, tick, e.transpose());
                                     }
@@ -443,7 +447,11 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
 
       int measureEnd = measure->endTick();
       bool isGrace = (cr->type() == Element::Type::CHORD) && (((Chord*)cr)->noteType() != NoteType::NORMAL);
-      if (!isGrace && (tick + cr->actualTicks() > measureEnd || convertMeasureRest)) {
+      // if note is too long to fit in measure, split it up with a tie across the barline
+      // exclude tuplets from consideration
+      // we have already disallowed a tuplet from crossing the barline, so there is no problem here
+      // but due to rounding, it might appear from actualTicks() that the last note is too long by a couple of ticks
+      if (!isGrace && !cr->tuplet() && (tick + cr->actualTicks() > measureEnd || convertMeasureRest)) {
             if (cr->type() == Element::Type::CHORD) {
                   // split Chord
                   Chord* c = static_cast<Chord*>(cr);
