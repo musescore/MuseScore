@@ -11,6 +11,8 @@
 #include "playpanel.h"
 #include "synthcontrol.h"
 #include "mixer.h"
+#include "drumroll.h"
+#include "pianoroll.h"
 
 namespace Ms{
 
@@ -177,11 +179,14 @@ ScoreAccessibility* ScoreAccessibility::instance()
 
 void ScoreAccessibility::updateAccessibilityInfo()
       {
-      currentInfoChanged();
       ScoreView* w = static_cast<MuseScore*>(mainWindow)->currentScoreView();
+      if (!w) return;
+
+      currentInfoChanged();
 
       //getInspector->isAncestorOf is used so that inspector and search dialog don't loose focus
       //when this method is called
+      //TODO: create a class to manage focus and replace this massive if
       if ( (qApp->focusWidget() != w) &&
            !mscore->inspector()->isAncestorOf(qApp->focusWidget()) &&
            !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(qApp->focusWidget())) &&
@@ -189,7 +194,9 @@ void ScoreAccessibility::updateAccessibilityInfo()
            !(mscore->getPlayPanel() && mscore->getPlayPanel()->isAncestorOf(qApp->focusWidget())) &&
            !(mscore->getSynthControl() && mscore->getSynthControl()->isAncestorOf(qApp->focusWidget())) &&
            !(mscore->getMixer() && mscore->getMixer()->isAncestorOf(qApp->focusWidget())) &&
-           !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(qApp->focusWidget())) ) {
+           !(mscore->searchDialog() && mscore->searchDialog()->isAncestorOf(qApp->focusWidget())) &&
+           !(mscore->getDrumrollEditor() && mscore->getDrumrollEditor()->isAncestorOf(qApp->focusWidget())) &&
+           !(mscore->getPianorollEditor() && mscore->getPianorollEditor()->isAncestorOf(qApp->focusWidget()))) {
             mscore->activateWindow();
             w->setFocus();
             }
