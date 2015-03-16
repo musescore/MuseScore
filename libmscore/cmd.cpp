@@ -2720,7 +2720,7 @@ void Score::cmdSlashFill()
                   int n = (d > 4 && s->measure()->timesig().numerator() % 3 == 0) ? 3 : 1;
                   Fraction f(n, d);
                   // skip over any leading segments before next (first) beat
-                  if (s->tick() % f.ticks())
+                  if (s->rtick() % f.ticks())
                         continue;
                   // determine voice to use - first available voice for this measure / staff
                   if (voice == -1 || s->rtick() == 0) {
