@@ -338,15 +338,17 @@ Segment* Segment::nextCR(int track, bool sameStaff) const
       {
       int strack = track;
       int etrack = track + 1;
-      if (sameStaff) {
+      if (sameStaff && track != -1) {
             strack = (track / VOICES) * VOICES;
             etrack = strack + VOICES;
             }
       Segment* seg = next1();
       for (; seg; seg = seg->next1()) {
             if (seg->segmentType() == Type::ChordRest) {
+                  if (track == -1)
+                        return seg;
                   for (int t = strack; t < etrack; ++t) {
-                        if (track != -1 && seg->element(t))
+                        if (seg->element(t))
                               return seg;
                         }
                   }
