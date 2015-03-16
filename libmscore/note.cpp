@@ -1062,7 +1062,10 @@ void Note::read(XmlReader& e)
                         // (a TextLine is used only because both Spanner or SLine are abstract,
                         // the actual class does not matter, as long as it is derived from Spanner)
                         int id = e.intAttribute("id", -1);
-                        if (id != -1) {
+                        if (id != -1 &&
+                                    // DISABLE if pasting into a staff with linked staves
+                                    // because the glissando is not properly cloned into the linked staves
+                                    (!e.pasteMode() || !staff()->linkedStaves() || staff()->linkedStaves()->isEmpty())) {
                               Spanner* placeholder = new TextLine(score());
                               placeholder->setAnchor(Spanner::Anchor::NOTE);
                               placeholder->setEndElement(this);
@@ -1096,11 +1099,19 @@ void Note::read(XmlReader& e)
                         }
                   sp->setTrack(track());
                   sp->read(e);
-                  sp->setAnchor(Spanner::Anchor::NOTE);
-                  sp->setStartElement(this);
-                  sp->setTick(e.tick());
-                  addSpannerFor(sp);
-                  sp->setParent(this);
+                  // DISABLE pasting of glissandi into staves with other lionked staves
+                  // because the glissando is not properly cloned into the linked staves
+                  if (e.pasteMode() && staff()->linkedStaves() && !staff()->linkedStaves()->isEmpty()) {
+                        e.removeSpanner(sp);    // read() added the element to the XMLReader: remove it
+                        delete sp;
+                        }
+                  else {
+                        sp->setAnchor(Spanner::Anchor::NOTE);
+                        sp->setStartElement(this);
+                        sp->setTick(e.tick());
+                        addSpannerFor(sp);
+                        sp->setParent(this);
+                        }
                   }
             else if (tag == "onTimeType")                   // obsolete
                   e.skipCurrentElement(); // _onTimeType = readValueType(e);
