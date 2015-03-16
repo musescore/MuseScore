@@ -2666,6 +2666,22 @@ void Score::connectTies(bool silent)
                                     nnote->setTieBack(tie);
                                     }
                               }
+                        // connect a glissando without end note (can happen with glissandi cloned in linked staves)
+                        for (Spanner* spanner : n->spannerFor())
+                              if (spanner->endElement() == nullptr) {
+                                    n->removeSpannerFor(spanner);
+                                    if (spanner->type() == Element::Type::GLISSANDO) {
+                                          Note* endNote = Glissando::guessFinalNote(n->chord());
+                                          if (endNote != nullptr) {
+                                                spanner->setNoteSpan(n, endNote);
+                                                n->add(spanner);
+                                                }
+                                          else                    // if no end note found, remove glissando
+                                                delete spanner;
+                                          }
+                                    else                          // if another type of spanner, don't know
+                                          delete spanner;         // what to do: remove it
+                                    }
                         // connect a glissando without initial note (old glissando format)
                         for (Spanner* spanner : n->spannerBack())
                               if (spanner->type() == Element::Type::GLISSANDO
