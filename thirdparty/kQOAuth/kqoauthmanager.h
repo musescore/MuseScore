@@ -44,6 +44,7 @@ public:
         RequestValidationError,     // Request is not valid: some parameter missing?
         RequestUnauthorized,        // Authorization error: trying to access a resource without tokens.
         ContentOperationNotPermittedError,// Authentication is required, key or auth is invalid
+        ContentNotFound,            // Content is not found
         RequestError,               // The given request to KQOAuthManager is invalid: NULL?,
         ManagerError                // Manager error, cannot use for sending requests.
     };

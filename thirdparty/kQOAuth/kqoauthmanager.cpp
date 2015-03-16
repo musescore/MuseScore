@@ -549,9 +549,11 @@ void KQOAuthManager::onRequestReplyReceived() {
 
     case QNetworkReply::ContentAccessDenied:
     case QNetworkReply::UnknownContentError:
-    case QNetworkReply::ContentNotFoundError:
     case QNetworkReply::AuthenticationRequiredError:
         d->error = KQOAuthManager::RequestUnauthorized;
+        break;
+    case QNetworkReply::ContentNotFoundError:
+        d->error = KQOAuthManager::ContentNotFound;
         break;
     case QNetworkReply::ContentOperationNotPermittedError:
         d->error = KQOAuthManager::ContentOperationNotPermittedError;
@@ -639,9 +641,11 @@ void KQOAuthManager::onAuthorizedRequestReplyReceived() {
 
     case QNetworkReply::ContentAccessDenied:
     case QNetworkReply::UnknownContentError:
-    case QNetworkReply::ContentNotFoundError:
     case QNetworkReply::AuthenticationRequiredError:
         d->error = KQOAuthManager::RequestUnauthorized;
+        break;
+    case QNetworkReply::ContentNotFoundError:
+        d->error = KQOAuthManager::ContentNotFound;
         break;
     case QNetworkReply::ContentOperationNotPermittedError:
         d->error = KQOAuthManager::ContentOperationNotPermittedError;
@@ -727,9 +731,11 @@ void KQOAuthManager::slotError(QNetworkReply::NetworkError error) {
         break;
     case QNetworkReply::ContentAccessDenied:
     case QNetworkReply::UnknownContentError:
-    case QNetworkReply::ContentNotFoundError:
     case QNetworkReply::AuthenticationRequiredError:
         d->error = KQOAuthManager::RequestUnauthorized;
+        break;
+    case QNetworkReply::ContentNotFoundError:
+        d->error = KQOAuthManager::ContentNotFound;
         break;
     case QNetworkReply::ContentOperationNotPermittedError:
         d->error = KQOAuthManager::ContentOperationNotPermittedError;
