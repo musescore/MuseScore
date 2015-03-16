@@ -483,6 +483,7 @@ void MuseScore::newFile()
       Fraction timesig        = newWizard->timesig();
       TimeSigType timesigType = newWizard->timesigType();
       KeySigEvent ks          = newWizard->keysig();
+      VBox* nvb               = nullptr;
 
       int pickupTimesigZ;
       int pickupTimesigN;
@@ -533,6 +534,19 @@ void MuseScore::newFile()
                               x->parts().append(score->parts()[pidx]);
                         }
                   excerpts.append(x);
+                  }
+            MeasureBase* mb = tscore->first();
+            if (mb->type() == Element::Type::VBOX) {
+                  VBox* tvb = static_cast<VBox*>(mb);
+                  nvb = new VBox(score);
+                  nvb->setBoxHeight(tvb->boxHeight());
+                  nvb->setBoxWidth(tvb->boxWidth());
+                  nvb->setTopGap(tvb->topGap());
+                  nvb->setBottomGap(tvb->bottomGap());
+                  nvb->setTopMargin(tvb->topMargin());
+                  nvb->setBottomMargin(tvb->bottomMargin());
+                  nvb->setLeftMargin(tvb->leftMargin());
+                  nvb->setRightMargin(tvb->rightMargin());
                   }
             delete tscore;
             }
@@ -663,11 +677,14 @@ void MuseScore::newFile()
       if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !poet.isEmpty()) {
             MeasureBase* measure = score->measures()->first();
             if (measure->type() != Element::Type::VBOX) {
-                  MeasureBase* nm = new VBox(score);
+                  MeasureBase* nm = nvb ? nvb : new VBox(score);
                   nm->setTick(0);
                   nm->setNext(measure);
                   score->measures()->add(nm);
                   measure = nm;
+                  }
+            else if (nvb) {
+                  delete nvb;
                   }
             if (!title.isEmpty()) {
                   Text* s = new Text(score);
@@ -698,6 +715,10 @@ void MuseScore::newFile()
                   score->setMetaTag("lyricist", poet);
                   }
             }
+      else if (nvb) {
+            delete nvb;
+            }
+
       if (newWizard->createTempo()) {
             double tempo = newWizard->tempo();
             TempoText* tt = new TempoText(score);
