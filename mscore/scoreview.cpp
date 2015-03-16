@@ -3167,6 +3167,83 @@ void ScoreView::startNoteEntry()
 
       is.setSegment(0);
       Note* note  = 0;
+
+      if (_score->selection().isNone()) {
+            // no selection
+            // choose page in current view (favor top left quadrant if possible)
+            // select first (top/left) chordrest of that page in current view
+            Page* p = nullptr;
+            QList<QPointF> points;
+            points.append(toLogical(QPoint(width() * 0.25, height() * 0.25)));
+            points.append(toLogical(QPoint(0.0, 0.0)));
+            points.append(toLogical(QPoint(0.0, height())));
+            points.append(toLogical(QPoint(width(), 0.0)));
+            points.append(toLogical(QPoint(width(), height())));
+            int i = 0;
+            while (!p && i < points.size()) {
+                  p = point2page(points[i]);
+                  i++;
+                  }
+            if (p) {
+                  ChordRest* topLeft = nullptr;
+                  qreal tlY = 0.0;
+                  int tlTick = 0;
+                  QRectF viewRect  = toLogical(QRectF(0.0, 0.0, width(), height()));
+                  QRectF pageRect  = p->bbox().translated(p->x(), p->y());
+                  QRectF intersect = viewRect & pageRect;
+                  intersect.translate(-p->x(), -p->y());
+                  QList<Element*> el = p->items(intersect);
+                  for (Element* e : el) {
+                        // loop through visible elements
+                        // looking for the CR in voice 1 with earliest tick and highest staff position
+                        Element::Type et = e->type();
+                        if (et == Element::Type::NOTE || et == Element::Type::REST) {
+                              if (e->voice())
+                                    continue;
+                              ChordRest* cr;
+                              if (et == Element::Type::NOTE) {
+                                    cr = static_cast<ChordRest*>(e->parent());
+                                    if (!cr)
+                                          continue;
+                                    }
+                              else {
+                                    cr = static_cast<ChordRest*>(e);
+                                    }
+                              // compare ticks rather than x position
+                              // to make sure we favor earlier rather than later systems
+                              // even though later system might have note farther to left
+                              int crTick = 0;
+                              if (cr->segment())
+                                    crTick = cr->segment()->tick();
+                              else
+                                    continue;
+                              // compare staff Y position rather than note Y position
+                              // to be sure we do not reject earliest note
+                              // just because it is lower in pitch than subsequent notes
+                              qreal crY = 0.0;
+                              if (cr->measure() && cr->measure()->system())
+                                    crY = cr->measure()->system()->staffYpage(cr->staffIdx());
+                              else
+                                    continue;
+                              if (topLeft) {
+                                    if (crTick <= tlTick && crY <= tlY) {
+                                          topLeft = cr;
+                                          tlTick = crTick;
+                                          tlY = crY;
+                                          }
+                                    }
+                              else {
+                                    topLeft = cr;
+                                    tlTick = crTick;
+                                    tlY = crY;
+                                    }
+                              }
+                        }
+                  if (topLeft)
+                        _score->select(topLeft, SelectType::SINGLE);
+                  }
+            }
+
       Element* el = _score->selection().activeCR() ? _score->selection().activeCR() : _score->selection().element();
       if (!el)
             el = _score->selection().firstChordRest();
@@ -3180,8 +3257,9 @@ void ScoreView::startNoteEntry()
             el = _score->searchNote(tick, track);
             if (!el)
                   el = _score->searchNote(0, track);
-            Q_ASSERT(el);
             }
+      if (!el)
+            return;
       if (el->type() == Element::Type::CHORD) {
             Chord* c = static_cast<Chord*>(el);
             note = c->selectedNote();
