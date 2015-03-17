@@ -555,13 +555,18 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
                               }
                         return false;
                         }
+                  // break if it's a measure, it has a timesig
                   if (!m || m->isMeasure())
                         break;
+                  // skip frames
                   while (!m->isMeasure()) {
                         m = m->next();
                         if (!m)
                               break;
                         }
+                  // after the frame, break if there is a time signature
+                  if (m && static_cast<Measure*>(m)->first(Segment::Type::TimeSig))
+                        break;
                   fm1 = static_cast<Measure*>(m);
                   if (fm1 == 0)
                         break;
