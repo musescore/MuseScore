@@ -1994,8 +1994,24 @@ void Score::cmdDeleteSelection()
             QList<Element*> el(selection().elements());
             if (el.isEmpty())
                   qDebug("...nothing selected");
-            for (Element* e : el)
-                  deleteItem(e);
+
+            // keep track of linked elements that are deleted implicitly
+            // so we don't try to delete them twice if they are also in selection
+            QList<ScoreElement*> deletedElements;
+
+            for (Element* e : el) {
+                  // these are the linked elements we are about to delete
+                  LinkedElements links = *e->links();
+
+                  // delete element if we have not done so already
+                  if (!deletedElements.contains(e))
+                        deleteItem(e);
+
+                  // add these linked elements to list of already-deleted elements
+                  for (ScoreElement* se : links)
+                        deletedElements.append(se);
+                  }
+
             }
       deselectAll();
       _layoutAll = true;
