@@ -2006,7 +2006,9 @@ void Score::cmdDeleteSelection()
 
             for (Element* e : el) {
                   // these are the linked elements we are about to delete
-                  LinkedElements links = *e->links();
+                  QList<ScoreElement*> links;
+                  if (e->links())
+                        links = *e->links();
 
                   // delete element if we have not done so already
                   if (!deletedElements.contains(e))
