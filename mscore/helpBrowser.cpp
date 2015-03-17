@@ -29,7 +29,7 @@ body {
 h2, h3 {
 	font-size:		24px;
 	padding:		6px 0 6px 48px;
-	background:		#dcdcdc left center no-repeat url('mscore.png');
+	/*background:		#dcdcdc left center no-repeat url('mscore.png');*/
 	background-size:32px 32px;
       }
 h4 {
