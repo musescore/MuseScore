@@ -150,6 +150,9 @@
             <layout class="QHBoxLayout" name="horizontalLayout_3">
              <item>
               <widget class="QSpinBox" name="zActual">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -176,6 +179,9 @@
              </item>
              <item>
               <widget class="QSpinBox" name="nActual">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                  <horstretch>0</horstretch>

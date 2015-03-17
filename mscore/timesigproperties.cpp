@@ -138,6 +138,10 @@ void TimeSigProperties::accept()
             timesig->setDenominatorString(QString());
             }
 
+      // TODO: fix http://musescore.org/en/node/42341
+      // for now, editing of actual (local) time sig is disabled in dialog
+      // but more importantly, the dialog should make it clear that this is "local" change only
+      // and not normally the right way to add 7/4 to a score
       Fraction actual(zActual->value(), nActual->value());
       Fraction nominal(zNominal->value(), nNominal->value());
       timesig->setSig(actual, ts);
