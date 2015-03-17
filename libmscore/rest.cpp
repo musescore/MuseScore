@@ -81,7 +81,7 @@ void Rest::draw(QPainter* painter) const
          (staff() && staff()->isTabStaff()
          // in tab staff, do not draw rests is rests are off OR if dur. symbols are on
          && (!staff()->staffType()->showRests() || staff()->staffType()->genDurations())
-         && !measure()->isMMRest())        // show multi measure rest always
+         && (!measure() || !measure()->isMMRest()))        // show multi measure rest always
          || generated()
             )
             return;

@@ -4431,7 +4431,7 @@ void ScoreView::cloneElement(Element* e)
       {
       if (!e->isMovable() && e->type() != Element::Type::SPACER && e->type() != Element::Type::VBOX)
             return;
-      if(e->type() == Element::Type::NOTE || e->type() == Element::Type::MEASURE)
+      if(e->type() == Element::Type::NOTE || e->type() == Element::Type::REST || e->type() == Element::Type::MEASURE)
             return;
       QDrag* drag = new QDrag(this);
       QMimeData* mimeData = new QMimeData;
