@@ -1162,7 +1162,7 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
             EditDrumset drumsetEdit(staff->part()->instr()->drumset(), this);
             if (drumsetEdit.exec()) {
                   _score->undo(new ChangeDrumset(staff->part()->instr(), drumsetEdit.drumset()));
-                  mscore->updateDrumTools();
+                  mscore->updateDrumTools(drumsetEdit.drumset());
                   }
             }
       else if (cmd == "drumroll") {

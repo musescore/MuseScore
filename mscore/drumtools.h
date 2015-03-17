@@ -47,7 +47,7 @@ class DrumTools : public QDockWidget {
    public:
       DrumTools(QWidget* parent = 0);
       void setDrumset(Score*, Staff*, const Drumset*);
-      void updateDrumset();
+      void updateDrumset(const Drumset* ds);
       int selectedDrumNote();
       };
 

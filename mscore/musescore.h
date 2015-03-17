@@ -515,7 +515,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       TextTools* textTools();
       void showDrumTools(const Drumset*, Staff*);
-      void updateDrumTools();
+      void updateDrumTools(const Drumset* ds);
       void showPluginCreator(QAction*);
       void showPluginManager();
 
