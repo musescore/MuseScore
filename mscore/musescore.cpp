@@ -1214,8 +1214,10 @@ void MuseScore::addRecentScore(const QString& scorePath)
       {
       if (scorePath.isEmpty())
             return;
-      _recentScores.removeAll(scorePath);
-      _recentScores.prepend(scorePath);
+      QFileInfo fi(scorePath);
+      QString absoluteFilePath = fi.absoluteFilePath();
+      _recentScores.removeAll(absoluteFilePath);
+      _recentScores.prepend(absoluteFilePath);
       if (_recentScores.size() > RECENT_LIST_SIZE)
             _recentScores.removeLast();
       }
