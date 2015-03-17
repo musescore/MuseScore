@@ -60,6 +60,15 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       Fraction sig(timesig->sig());
       zActual->setValue(sig.numerator());
       nActual->setValue(sig.denominator());
+      zNominal->setEnabled(false);
+      nNominal->setEnabled(false);
+
+       // TODO: fix http://musescore.org/en/node/42341
+      // for now, editing of actual (local) time sig is disabled in dialog
+      // but more importantly, the dialog should make it clear that this is "local" change only
+      // and not normally the right way to add 7/4 to a score
+      zActual->setEnabled(false);
+      nActual->setEnabled(false);
       switch (timesig->timeSigType()) {
             case TimeSigType::NORMAL:
                   textButton->setChecked(true);
