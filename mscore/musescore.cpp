@@ -4407,10 +4407,10 @@ void MuseScore::showDrumTools(const Drumset* drumset, Staff* staff)
 //   updateDrumTools
 //---------------------------------------------------------
 
-void MuseScore::updateDrumTools()
+void MuseScore::updateDrumTools(const Drumset* ds)
       {
       if (_drumTools)
-            _drumTools->updateDrumset();
+            _drumTools->updateDrumset(ds);
       }
 
 //---------------------------------------------------------
