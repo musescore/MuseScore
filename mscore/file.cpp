@@ -638,6 +638,8 @@ void MuseScore::newFile()
                                           k++;
                                           }
                                     }
+                              if (!staff->linkedStaves())
+                                    puRests.clear();
                               }
                         else {
                               if (rest && staff->linkedStaves())
@@ -649,6 +651,8 @@ void MuseScore::newFile()
                               rest->setTrack(staffIdx * VOICES);
                               Segment* seg = measure->getSegment(rest, tick);
                               seg->add(rest);
+                              if (!staff->linkedStaves())
+                                    rest = nullptr;
                               }
                         }
                   }
