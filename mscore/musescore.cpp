@@ -2506,7 +2506,7 @@ void MuseScore::changeState(ScoreState val)
             if (!menu)
                   continue;
             QString s(menu->objectName());
-            if (s == "File" || s == "Help" || s == "Edit" || s == "Plugins")
+            if (s == "File" || s == "Help" || s == "Edit" || s == "Plugins" || s == "View")
                   continue;
             menu->setEnabled(enable);
             }

@@ -3266,7 +3266,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_DISABLED | STATE_NORMAL,
+         STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
          "startcenter",
          QT_TRANSLATE_NOOP("action","Start Center"),
          QT_TRANSLATE_NOOP("action","Start center"),
