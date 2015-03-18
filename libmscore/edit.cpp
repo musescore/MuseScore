@@ -543,10 +543,25 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
               || (static_cast<Measure*>(m)->first(Segment::Type::TimeSig) && m != fm))
                   {
                   if (!rewriteMeasures(fm1, lm, ns, staffIdx)) {
-                        if (staffIdx >= 0)
+                        if (staffIdx >= 0) {
                               warnLocalTimeSig();
-                        else
+                              // restore measure rests that were prematurely modified
+                              Fraction fr(staff(staffIdx)->timeSig(fm->tick())->sig());
+                              for (Measure* m = fm1; m; m = m->nextMeasure()) {
+                                    ChordRest* cr = m->findChordRest(m->tick(), staffIdx * VOICES);
+                                    if (cr && cr->isRest() && cr->durationType() == TDuration::DurationType::V_MEASURE)
+                                          cr->undoChangeProperty(P_ID::DURATION, QVariant::fromValue(fr));
+                                    else
+                                          break;
+                                    }
+                              }
+                        else {
+                              // this can be hit for local time signatures as well
+                              // (if we are rewriting all staves, but one has a local time signature)
+                              // TODO: detect error conditions better, have clearer error messages
+                              // and perform necessary fixups
                               warnTupletCrossing();
+                              }
                         for (Measure* m = fm1; m; m = m->nextMeasure()) {
                               if (m->first(Segment::Type::TimeSig))
                                     break;
@@ -656,6 +671,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             //
             // rewrite all measures up to the next time signature
             //
+            QList<int> keepLocal;   // list of staves with local time signatures to preserve
             if (fm == score->firstMeasure() && (fm->len() != fm->timesig())) {
                   // handle upbeat
                   undoChangeProperty(fm, P_ID::TIMESIG_NOMINAL, QVariant::fromValue(ns));
@@ -664,8 +680,20 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   fm = s ? 0 : fm->nextMeasure();
                   }
             else {
-                  if (sigmap()->timesig(seg->tick()).timesig().identical(ns))
+                  if (sigmap()->timesig(seg->tick()).timesig().identical(ns)) {
+                        // no change to global time signature,
+                        // but we need to rewrite any staves with local time signatures
+                        for (int i = 0; i < nstaves(); ++i) {
+                              if (staff(i)->timeSig(tick)->stretch() != 1) {
+                                    if (!score->rewriteMeasures(fm, ns, i)) {
+                                          // rewrite failed
+                                          // keep local time signature for this staff
+                                          keepLocal.append(i);
+                                          }
+                                    }
+                              }
                         fm = 0;
+                        }
                   }
             if (fm) {
                   if (!score->rewriteMeasures(fm, ns, local ? staffIdx : -1)) {
@@ -682,8 +710,16 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   seg   = nfm->undoGetSegment(Segment::Type::TimeSig, nfm->tick());
                   int startStaffIdx, endStaffIdx;
                   if (local) {
-                        startStaffIdx = staffIdx;
-                        endStaffIdx   = startStaffIdx + 1;
+                        if (score == this) {
+                              startStaffIdx = staffIdx;
+                              endStaffIdx   = startStaffIdx + 1;
+                              }
+                        else {
+                              // TODO: get index for this score
+                              qDebug("cmdAddTimeSig: unable to write local time signature change to linked score");
+                              startStaffIdx = 0;
+                              endStaffIdx   = 0;
+                              }
                         }
                   else {
                         startStaffIdx = 0;
@@ -692,7 +728,12 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   for (int staffIdx = startStaffIdx; staffIdx < endStaffIdx; ++staffIdx) {
                         TimeSig* nsig = static_cast<TimeSig*>(seg->element(staffIdx * VOICES));
                         if (nsig == 0) {
-                              nsig = new TimeSig(*ts);
+                              // preserve local time signature if we were unable to rewrite staff
+                              // TODO: get index for this score, so we can do the same for linked staves
+                              if (score == this && keepLocal.contains(staffIdx))
+                                    nsig = new TimeSig(*staff(staffIdx)->timeSig(tick));
+                              else
+                                    nsig = new TimeSig(*ts);
                               nsig->setScore(score);
                               nsig->setTrack(staffIdx * VOICES);
                               nsig->setParent(seg);
@@ -721,7 +762,6 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
 void Score::cmdRemoveTimeSig(TimeSig* ts)
       {
       Measure* m = ts->measure();
-      TimeSig* ots = ts->clone();   // save a copy in case we need to restore it
 
       //
       // we cannot remove a courtesy time signature
@@ -735,14 +775,17 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
       Fraction ns(pm ? pm->timesig() : Fraction(4,4));
 
       if (!rewriteMeasures(m, ns, -1)) {
-            // restore deleted time signature
+            // restore deleted time signatures
             Segment* s = m->undoGetSegment(Segment::Type::TimeSig, m->tick());
-            ots->setParent(s);
-            undoAddElement(ots);
-            select(ots, SelectType::SINGLE);
-            }
-      else {
-            delete ots;
+            for (int i = 0; i < nstaves(); ++i) {
+                  TimeSig* ots = staff(i)->timeSig(m->tick());
+                  if (ots) {
+                        TimeSig* nts = new TimeSig(*ots);
+                        nts->setParent(s);
+                        nts->setSelected(false);
+                        undoAddElement(nts);
+                        }
+                  }
             }
       }
 
