@@ -669,6 +669,16 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   }
             if (fm) {
                   if (!score->rewriteMeasures(fm, ns, local ? staffIdx : -1)) {
+                        // remove segment if empty
+                        bool empty = true;
+                        for (int i = 0; i < nstaves(); ++i) {
+                              if (seg->element(i * VOICES)) {
+                                    empty = false;
+                                    break;
+                                    }
+                              }
+                        if (empty)
+                              undoRemoveElement(seg);
                         delete ts;
                         return;
                         }
