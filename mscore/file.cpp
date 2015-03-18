@@ -793,8 +793,13 @@ QStringList MuseScore::getOpenScoreNames(const QString& filter, const QString& t
       QSettings settings;
       QString dir = settings.value("lastOpenPath", preferences.myScoresPath).toString();
       if (preferences.nativeDialogs) {
-            return QFileDialog::getOpenFileNames(this,
+            QStringList fileList = QFileDialog::getOpenFileNames(this,
                title, dir, filter);
+            if (fileList.count() > 0) {
+                  QFileInfo fi(fileList[0]);
+                  settings.setValue("lastOpenPath", fi.absolutePath());
+                  }
+            return fileList;
             }
       QFileInfo myScores(preferences.myScoresPath);
       if (myScores.isRelative())
