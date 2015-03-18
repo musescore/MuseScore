@@ -29,7 +29,7 @@ class NoteDot : public Element {
       int _idx;
 
    public:
-      NoteDot(Score* =0);
+      NoteDot(Score* = 0);
       virtual NoteDot* clone() const override     { return new NoteDot(*this); }
       virtual Element::Type type() const override { return Element::Type::NOTEDOT; }
       int idx() const                    { return _idx; }
