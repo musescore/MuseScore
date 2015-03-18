@@ -215,6 +215,7 @@ class Text : public Element {
 
    protected:
       QColor textColor() const;
+      QColor frameColor() const;
       QRectF frame;           // calculated in layout()
       void layoutFrame();
       void layoutEdit();

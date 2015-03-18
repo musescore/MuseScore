@@ -78,7 +78,7 @@ void TextLineSegment::draw(QPainter* painter) const
       QColor color;
       bool normalColor = false;
       if (selected() && !(score() && score()->printing()))
-            color = MScore::selectColor[0];
+            color = (track() > -1) ? MScore::selectColor[voice()] : MScore::selectColor[0];
       else if (!tl->visible())
             color = Qt::gray;
       else {
