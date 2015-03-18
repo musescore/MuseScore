@@ -527,21 +527,29 @@ static void warnLocalTimeSig()
 
 //---------------------------------------------------------
 //   rewriteMeasures
-//    rewrite all measures up to the next time signature
+//    rewrite all measures up to the next time signature or section break
 //---------------------------------------------------------
 
 bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
       {
       Measure* lm  = fm;
       Measure* fm1 = fm;
+      Measure* nm  = nullptr;
+      LayoutBreak* sectionBreak = nullptr;
 
       //
       // split into Measure segments fm-lm
       //
       for (MeasureBase* m = fm; ; m = m->next()) {
-            if (!m || !m->isMeasure()
+
+            if (!m || !m->isMeasure() || lm->sectionBreak()
               || (static_cast<Measure*>(m)->first(Segment::Type::TimeSig) && m != fm))
                   {
+
+                  // save section break to reinstate after rewrite
+                  if (lm->sectionBreak())
+                        sectionBreak = new LayoutBreak(*lm->sectionBreak());
+
                   if (!rewriteMeasures(fm1, lm, ns, staffIdx)) {
                         if (staffIdx >= 0) {
                               warnLocalTimeSig();
@@ -570,24 +578,83 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
                               }
                         return false;
                         }
-                  // break if it's a measure, it has a timesig
+
+                  // after rewrite, lm is not necessarily valid
+                  // m is first MeasureBase after rewritten range
+                  // m->prevMeasure () is new last measure of range
+                  // set nm to first true Measure after rewritten range
+                  // we may use this to reinstate time signatures
+                  if (m && m->prevMeasure())
+                        nm = m->prevMeasure()->nextMeasure();
+
+                  if (sectionBreak) {
+                        // reinstate section break, then stop rewriting
+                        if (m && m->prevMeasure()) {
+                              sectionBreak->setParent(m->prevMeasure());
+                              undoAddElement(sectionBreak);
+                              }
+                        else if (!m) {
+                              sectionBreak->setParent(lastMeasure());
+                              undoAddElement(sectionBreak);
+                              }
+                        else {
+                              qDebug("unable to restore section break");
+                              nm = nullptr;
+                              sectionBreak = nullptr;
+                              }
+                        break;
+                        }
+
+                  // stop rewriting at end of score
+                  // or at a measure (which means we found a time signature segment)
                   if (!m || m->isMeasure())
                         break;
+
                   // skip frames
                   while (!m->isMeasure()) {
+                        if (m->sectionBreak()) {
+                              // frame has a section break; we can stop skipping ahead
+                              sectionBreak = m->sectionBreak();
+                              break;
+                              }
                         m = m->next();
                         if (!m)
                               break;
                         }
-                  // after the frame, break if there is a time signature
-                  if (m && static_cast<Measure*>(m)->first(Segment::Type::TimeSig))
+                  // stop rewriting if we encountered a section break on a frame
+                  // or if there is a time signature on first measure after the frame
+                  if (sectionBreak || (m && static_cast<Measure*>(m)->first(Segment::Type::TimeSig)))
                         break;
+
+                  // set up for next range to rewrite
                   fm1 = static_cast<Measure*>(m);
                   if (fm1 == 0)
                         break;
                   }
-            lm  = static_cast<Measure*>(m);
+
+            // if we didn't break the loop already,
+            // we must have an ordinary measure
+            // add measure to range to rewrite
+            lm = static_cast<Measure*>(m);
             }
+
+      // if any staves don't have time signatures at the point where we stopped,
+      // we need to reinstate their previous time signatures
+      if (!nm)
+            return true;
+      Segment* s = nm->undoGetSegment(Segment::Type::TimeSig, nm->tick());
+      for (int i = 0; i < nstaves(); ++i) {
+            if (!s->element(i * VOICES)) {
+                  TimeSig* nts = new TimeSig(*staff(i)->timeSig(nm->tick()));
+                  nts->setParent(s);
+                  if (sectionBreak) {
+                        nts->setGenerated(false);
+                        nts->setShowCourtesySig(false);
+                        }
+                  undoAddElement(nts);
+                  }
+            }
+
       return true;
       }
 
