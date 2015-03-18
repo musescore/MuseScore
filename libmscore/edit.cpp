@@ -728,6 +728,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
 void Score::cmdRemoveTimeSig(TimeSig* ts)
       {
       Measure* m = ts->measure();
+      TimeSig* ots = ts->clone();   // save a copy in case we need to restore it
 
       //
       // we cannot remove a courtesy time signature
@@ -740,7 +741,16 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
       Measure* pm = m->prevMeasure();
       Fraction ns(pm ? pm->timesig() : Fraction(4,4));
 
-      rewriteMeasures(m, ns, -1);
+      if (!rewriteMeasures(m, ns, -1)) {
+            // restore deleted time signature
+            Segment* s = m->undoGetSegment(Segment::Type::TimeSig, m->tick());
+            ots->setParent(s);
+            undoAddElement(ots);
+            select(ots, SelectType::SINGLE);
+            }
+      else {
+            delete ots;
+            }
       }
 
 //---------------------------------------------------------
