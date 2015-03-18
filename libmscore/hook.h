@@ -29,7 +29,7 @@ class Hook : public Symbol {
       int _hookType;
 
    public:
-      Hook(Score*);
+      Hook(Score* = 0);
       virtual Hook* clone() const override        { return new Hook(*this); }
       virtual qreal mag() const override          { return parent()->mag(); }
       virtual Element::Type type() const override { return Element::Type::HOOK; }

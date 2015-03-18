@@ -50,6 +50,8 @@
 #include "mscoreview.h"
 #include "plugins.h"
 #include "chord.h"
+#include "hook.h"
+#include "stem.h"
 
 namespace Ms {
 
@@ -327,6 +329,10 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<Lyrics>     ("MuseScore", 1, 0, "Lyrics");
             qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
             qmlRegisterType<LayoutBreak>("MuseScore", 1, 0, "LayoutBreak");
+            qmlRegisterType<Hook>       ("MuseScore", 1, 0, "Hook");
+            qmlRegisterType<Stem>       ("MuseScore", 1, 0, "Stem");
+            qmlRegisterType<Stem>       ("MuseScore", 1, 0, "StemSlash");
+            qmlRegisterType<Beam>       ("MuseScore", 1, 0, "Beam");
 
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));

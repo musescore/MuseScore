@@ -74,7 +74,7 @@ class Beam : public Element {
             AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
             };
 
-      Beam(Score* s);
+      Beam(Score* = 0);
       Beam(const Beam&);
       ~Beam();
       virtual Beam* clone() const override         { return new Beam(*this); }
