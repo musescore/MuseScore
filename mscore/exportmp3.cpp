@@ -43,7 +43,7 @@ MP3Exporter::MP3Exporter()
 
       mBitrate = 128;
       mQuality = QUALITY_2;
-      mChannel = CHANNEL_STEREO;
+      mChannel = CHANNEL_JOINT;
       mMode = MODE_CBR;
       mRoutine = ROUTINE_FAST;
       }
@@ -645,7 +645,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       // Retrieve preferences
 //      int highrate = 48000;
 //      int lowrate = 8000;
-      int bitrate = 64;
+//      int bitrate = 64;
 //      int brate = 128;
 //      int rmode = MODE_CBR;
 //      int vmode = ROUTINE_FAST;
@@ -655,11 +655,6 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       int oldSampleRate = MScore::sampleRate;
       int sampleRate = preferences.exportAudioSampleRate;
-
-      exporter.setMode(MODE_CBR);
-      exporter.setBitrate(bitrate);
-      exporter.setChannel(CHANNEL_JOINT);
-      exporter.setQuality(QUALITY_5, ROUTINE_STANDARD);
 
       int inSamples = exporter.initializeStream(channels, sampleRate);
       if (inSamples < 0) {
@@ -821,6 +816,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                         }
                   playTime = endTime;
                   pBar->setValue((pass * et + playTime) / 2);
+                  qApp->processEvents();
                   // create sound until the sound decays
                   if (playTime >= et && max * peak < 0.000001)
                         break;
