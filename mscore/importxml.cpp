@@ -803,7 +803,7 @@ static void addText(VBox* vbx, Score* s, QString strTxt, TextStyleType stl)
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s);
             text->setTextStyleType(stl);
-            text->setPlainText(strTxt);
+            text->setText(strTxt);
             vbx->add(text);
             }
       }
@@ -813,7 +813,7 @@ static void addText2(VBox* vbx, Score* s, QString strTxt, TextStyleType stl, Ali
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s);
             text->setTextStyleType(stl);
-            text->setPlainText(strTxt);
+            text->setText(strTxt);
             text->textStyle().setAlign(v);
             text->textStyle().setYoff(yoffs);
             vbx->add(text);
@@ -1014,11 +1014,11 @@ void MusicXml::doCredits()
             if (!metaPoet.isEmpty()) strPoet = metaPoet;
             if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
 
-            addText(vbox, score, strTitle,      TextStyleType::TITLE);
-            addText(vbox, score, strSubTitle,   TextStyleType::SUBTITLE);
-            addText(vbox, score, strComposer,   TextStyleType::COMPOSER);
-            addText(vbox, score, strPoet,       TextStyleType::POET);
-            addText(vbox, score, strTranslator, TextStyleType::TRANSLATOR);
+            addText(vbox, score, strTitle.toHtmlEscaped(),      TextStyleType::TITLE);
+            addText(vbox, score, strSubTitle.toHtmlEscaped(),   TextStyleType::SUBTITLE);
+            addText(vbox, score, strComposer.toHtmlEscaped(),   TextStyleType::COMPOSER);
+            addText(vbox, score, strPoet.toHtmlEscaped(),       TextStyleType::POET);
+            addText(vbox, score, strTranslator.toHtmlEscaped(), TextStyleType::TRANSLATOR);
             }
 
       if (vbox) {
@@ -1225,6 +1225,10 @@ static QString text2syms(const QString& t)
 static QString nextPartOfFormattedString(QDomElement e)
       {
       QString txt        = e.text();
+      // replace HTML entities
+      QTextDocument txtdoc;
+      txtdoc.setHtml(txt);
+      txt = txtdoc.toPlainText();
       QString syms       = text2syms(txt);
       QString lang       = e.attribute(QString("xml:lang"), "it");
       QString fontWeight = e.attribute(QString("font-weight"));
