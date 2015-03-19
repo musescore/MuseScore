@@ -1201,7 +1201,7 @@ void Score::layoutStage2()
       for (int track = 0; track < tracks; ++track) {
             Staff* stf = staff(track2staff(track));
 
-            // dont compute beams for invisible staffs and tablature in slash style
+            // dont compute beams for invisible staffs and tablature without stems
             if (!stf->show() || (stf->isTabStaff() && stf->staffType()->slashStyle()))
                   continue;
 
@@ -1260,7 +1260,6 @@ void Score::layoutStage2()
 
                   // perform additional context-dependent checks
                   if (bm == Beam::Mode::AUTO) {
-
                         // check if we need to break beams according to minimum duration in current / previous beat
                         if (checkBeats && cr->rtick()) {
                               int tick = (cr->rtick() * stretch.numerator()) / stretch.denominator();
@@ -1270,22 +1269,25 @@ void Score::layoutStage2()
                                     // get minimum duration for this & previous beat
                                     TDuration minDuration = qMin(beatSubdivision[beat], beatSubdivision[beat - 1]);
                                     // re-calculate beam as if this were the duration of current chordrest
-                                    TDuration saveDuration = cr->durationType();
+                                    TDuration saveDuration        = cr->actualDurationType();
+                                    TDuration saveCMDuration      = cr->crossMeasureDurationType();
+                                    CrossMeasure saveCrossMeasVal = cr->crossMeasure();
                                     cr->setDurationType(minDuration);
                                     bm = Groups::endBeam(cr, prev);
                                     cr->setDurationType(saveDuration);
+                                    cr->setCrossMeasure(saveCrossMeasVal);
+                                    cr->setCrossMeasureDurationType(saveCMDuration);
                                     }
                               }
-
                         }
 
                   prev = cr;
 
                   // if chord has hooks and is 2nd element of a cross-measure value
                   // set beam mode to NONE (do not combine with following chord beam/hook, if any)
-
                   if (cr->durationType().hooks() > 0 && cr->crossMeasure() == CrossMeasure::SECOND)
                         bm = Beam::Mode::NONE;
+
                   if (cr->measure() != measure) {
                         if (measure && !beamModeMid(bm)) {
                               if (beam) {
