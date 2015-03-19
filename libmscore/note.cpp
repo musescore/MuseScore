@@ -2563,11 +2563,10 @@ NoteVal Note::noteVal() const
       }
 
 //---------------------------------------------------------
-//   qmlDots
+//   qmlDotsCount
 //    returns number of dots for plugins
 //---------------------------------------------------------
-
-int Note::qmlDots()
+int Note::qmlDotsCount()
       {
       int i = 0;
       for (NoteDot* dot : _dots)
