@@ -33,8 +33,8 @@ namespace Ms {
 Cursor::Cursor(Score* s)
    : QObject(0)
       {
-      _track   = 0;
-      _segment = 0;
+      _segment = s->firstSegment();       // position at first segment
+      _track = 0;
       setScore(s);
       }
 
@@ -53,22 +53,31 @@ void Cursor::setScore(Score* s)
 
 void Cursor::rewind(int type)
       {
-      if (type == 0) {
-            _segment = 0;
-            Measure* m = _score->firstMeasure();
-            if (m) {
-                  _segment = m->first(Segment::Type::ChordRest);
-                  firstChordRestInTrack();
-                  }
-            }
-      else if (type == 1) {
-            _segment  = _score->selection().startSegment();
-            _track    = _score->selection().staffStart() * VOICES;
-            firstChordRestInTrack();
-            }
-      else if (type == 2) {
-            _segment  = _score->selection().endSegment();
-            _track    = (_score->selection().staffEnd() * VOICES) - 1;  // be sure _track exists
+      switch(type) {
+            case 0:                 // score start of current track
+                  _segment = _score->firstSegment();
+                  break;
+            case 1:                 // selection start
+                  _segment  = _score->selection().startSegment();
+                  _track    = _score->selection().staffStart() * VOICES;
+                  // if no selection, return score start
+                  if (_segment == nullptr) {
+                        _segment = _score->firstSegment();
+                        _track = 0;
+                        }
+                  break;
+            case 2:                 // selection end
+                  _segment = _score->selection().endSegment();
+                  _track = (_score->selection().staffEnd() * VOICES) - 1;  // be sure _track exists
+                  // if no selection, return score end
+                  if (_segment == nullptr) {
+                        _segment = _score->lastSegment();
+                        _track = _score->ntracks() - 1;
+                        }
+                  break;
+            case 3:                 // score end of current track
+                  _segment = _score->lastSegment();
+                  break;
             }
       _score->inputState().setTrack(_track);
       _score->inputState().setSegment(_segment);

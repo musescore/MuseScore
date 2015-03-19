@@ -91,9 +91,10 @@ class Cursor : public QObject {
       int qmlKeySignature();
 
       //@ rewind cursor
-      //@   type=0      rewind to start of score
+      //@   type=0      rewind current track to start of score
       //@   type=1      rewind to start of selection
       //@   type=2      rewind to end of selection
+      //@   type=3      rewind current track to end of score
       Q_INVOKABLE void rewind(int type);
 
       Q_INVOKABLE bool next();
