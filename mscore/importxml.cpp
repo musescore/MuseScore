@@ -1215,6 +1215,25 @@ static QString text2syms(const QString& t)
       }
 
 //---------------------------------------------------------
+//   decodeEntities
+///  Allows decode &#...; into UNICODE (utf8) character.
+//---------------------------------------------------------
+
+static QString decodeEntities( const QString& src )
+      {
+      QString ret(src);
+      QRegExp re("&#([0-9]+);");
+      re.setMinimal(true);
+
+      int pos = 0;
+      while( (pos = re.indexIn(src, pos)) != -1 ) {
+            ret = ret.replace(re.cap(0), QChar(re.cap(1).toInt(0,10)));
+            pos += re.matchedLength();
+            }
+      return ret;
+      }
+
+//---------------------------------------------------------
 //   nextPartOfFormattedString
 //---------------------------------------------------------
 
@@ -1226,9 +1245,7 @@ static QString nextPartOfFormattedString(QDomElement e)
       {
       QString txt        = e.text();
       // replace HTML entities
-      QTextDocument txtdoc;
-      txtdoc.setHtml(txt);
-      txt = txtdoc.toPlainText();
+      txt = decodeEntities(txt);
       QString syms       = text2syms(txt);
       QString lang       = e.attribute(QString("xml:lang"), "it");
       QString fontWeight = e.attribute(QString("font-weight"));
