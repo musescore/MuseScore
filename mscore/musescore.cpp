@@ -1436,6 +1436,8 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       getAction("show-frames")->setChecked(cs->showFrames());
       getAction("show-pageborders")->setChecked(cs->showPageborders());
       getAction("fotomode")->setChecked(cv->fotoMode());
+      getAction("join-measure")->setEnabled(cs->rootScore()->excerpts().size() == 0);
+      getAction("split-measure")->setEnabled(cs->rootScore()->excerpts().size() == 0);
       updateUndoRedo();
 
       if (view->magIdx() == MagIdx::MAG_FREE)
