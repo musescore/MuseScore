@@ -52,6 +52,8 @@
 #include "chord.h"
 #include "hook.h"
 #include "stem.h"
+#include "stemslash.h"
+
 
 namespace Ms {
 
@@ -331,6 +333,7 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<LayoutBreak>("MuseScore", 1, 0, "LayoutBreak");
             qmlRegisterType<Hook>       ("MuseScore", 1, 0, "Hook");
             qmlRegisterType<Stem>       ("MuseScore", 1, 0, "Stem");
+            qmlRegisterType<StemSlash>  ("MuseScore", 1, 0, "StemSlash");
             qmlRegisterType<Beam>       ("MuseScore", 1, 0, "Beam");
 
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
