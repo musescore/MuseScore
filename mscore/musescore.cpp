@@ -2498,6 +2498,12 @@ void MuseScore::changeState(ScoreState val)
 
       if (getAction("file-part-export")->isEnabled())
             getAction("file-part-export")->setEnabled(cs && cs->rootScore()->excerpts().size() > 0);
+      if (getAction("join-measure")->isEnabled())
+            getAction("join-measure")->setEnabled(cs && cs->rootScore()->excerpts().size() == 0);
+      if (getAction("split-measure")->isEnabled())
+            getAction("split-measure")->setEnabled(cs && cs->rootScore()->excerpts().size() == 0);
+      
+      //getAction("split-measure")->setEnabled(cs->rootScore()->excerpts().size() == 0);
 
       // disabling top level menu entries does not
       // work for MAC
