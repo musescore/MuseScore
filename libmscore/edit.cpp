@@ -635,7 +635,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             }
 
 
-      if (ots && ots->sig() == ns && ots->stretch() == ts->stretch()) {
+      if (ots && ots->sig().identical(ns) && ots->stretch() == ts->stretch()) {
             ots->undoChangeProperty(P_ID::TIMESIG, QVariant::fromValue(ns));
             ots->undoChangeProperty(P_ID::GROUPS,  QVariant::fromValue(ts->groups()));
             if (ts->hasCustomText()) {
