@@ -22,7 +22,7 @@ namespace Ms {
 //   @@ Marker
 //
 //   @P label       QString
-//   @P markerType  Ms::Marker::Type  (SEGNO, VARSEGNO, CODA, VARCODA, CODETTA, FINE, TOCODA, USER)
+//   @P markerType  Ms::Marker::Type  (SEGNO, VARSEGNO, CODA, VARCODA, CODETTA, FINE, ALCODA, USER)
 //---------------------------------------------------------
 
 class Marker : public Text {
@@ -40,7 +40,7 @@ class Marker : public Text {
             VARCODA,
             CODETTA,
             FINE,
-            TOCODA,
+            ALCODA,
             USER
             };
 

@@ -26,7 +26,7 @@ const MarkerTypeItem markerTypeTable[] = {
       { Marker::Type::VARCODA , QT_TRANSLATE_NOOP("markerType", "Varied coda")    },
       { Marker::Type::CODETTA , QT_TRANSLATE_NOOP("markerType", "Codetta")        },
       { Marker::Type::FINE    , QT_TRANSLATE_NOOP("markerType", "Fine")           },
-      { Marker::Type::TOCODA  , QT_TRANSLATE_NOOP("markerType", "To Coda")        },
+      { Marker::Type::ALCODA  , QT_TRANSLATE_NOOP("markerType", "Al Coda")        },
       { Marker::Type::USER    , QT_TRANSLATE_NOOP("markerType", "Custom")         }
       };
 
@@ -88,8 +88,8 @@ void Marker::setMarkerType(Type t)
                   setLabel("fine");
                   break;
 
-            case Type::TOCODA:
-                  txt = "To Coda";
+            case Type::ALCODA:
+                  txt = "Al Coda";
                   setTextStyleType(TextStyleType::REPEAT_RIGHT);
                   setLabel("coda");
                   break;
@@ -164,7 +164,7 @@ Marker::Type Marker::markerType(const QString& s) const
       else if (s == "fine")
             return Type::FINE;
       else if (s == "coda")
-            return Type::TOCODA;
+            return Type::ALCODA;
       else
             return Type::USER;
       }

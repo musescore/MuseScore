@@ -3581,7 +3581,7 @@ static void directionMarker(Xml& xml, const Marker* const m)
             if (m->label() == "")
                   sound = "coda=\"1\"";
             else
-                  // LVIFIX hack: force label to "coda" to match to coda label
+                  // LVIFIX hack: force label to "coda" to match "Al Coda" label
                   // sound = "coda=\"" + m->label() + "\"";
                   sound = "coda=\"coda\"";
             }
@@ -3596,15 +3596,15 @@ static void directionMarker(Xml& xml, const Marker* const m)
             words = "Fine";
             sound = "fine=\"yes\"";
             }
-      else if (mtp == Marker::Type::TOCODA) {
+      else if (mtp == Marker::Type::ALCODA) {
             if (m->text() == "")
-                  words = "To Coda";
+                  words = "Al Coda";
             else
                   words = m->text();
             if (m->label() == "")
-                  sound = "tocoda=\"1\"";
+                  sound = "alcoda=\"1\"";
             else
-                  sound = "tocoda=\"" + m->label() + "\"";
+                  sound = "alcoda=\"" + m->label() + "\"";
             }
       else
             qDebug("marker type=%hhd not implemented", mtp);
@@ -3670,7 +3670,7 @@ static void repeatAtMeasureStart(Xml& xml, Attributes& attr, Measure* m, int str
                               directionMarker(xml, mk);
                               }
                         else if (   mtp == Marker::Type::FINE
-                                    || mtp == Marker::Type::TOCODA
+                                    || mtp == Marker::Type::ALCODA
                                     ) {
                               // ignore
                               }
@@ -3705,7 +3705,7 @@ static void repeatAtMeasureStop(Xml& xml, Measure* m, int strack, int etrack, in
                         // filter out the markers at measure stop
                         const Marker* const mk = static_cast<const Marker* const>(e);
                         Marker::Type mtp = mk->markerType();
-                        if (mtp == Marker::Type::FINE || mtp == Marker::Type::TOCODA) {
+                        if (mtp == Marker::Type::FINE || mtp == Marker::Type::ALCODA) {
                               directionMarker(xml, mk);
                               }
                         else if (mtp == Marker::Type::SEGNO || mtp == Marker::Type::CODA) {

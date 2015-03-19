@@ -485,7 +485,7 @@ enum class OctaveShiftPosition : char {
 enum class RepeatType : char {
       Segno = 0,
       Coda,
-      ToCoda,
+      AlCoda,
       DSAlCoda,
       DSAlFine,
       DCAlCoda,
