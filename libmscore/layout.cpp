@@ -2647,6 +2647,22 @@ void Score::connectTies(bool silent)
                   Chord* c = static_cast<Chord*>(s->element(i));
                   if (c == 0 || c->type() != Element::Type::CHORD)
                         continue;
+                  // connect grace note tie to main note in 1.3 scores
+                  if (_mscVersion <= 114) {
+                        for (Chord* gc : c->graceNotes()) {
+                              for (Note* gn : gc->notes()) {
+                                    Tie* tie = gn->tieFor();
+                                    if (tie && !tie->endNote()) {
+                                          for (Note* n : c->notes()) {
+                                                if (n->pitch() == gn->pitch()) {
+                                                      tie->setEndNote(n);
+                                                       n->setTieBack(tie);
+                                                      }
+                                                }
+                                          }
+                                    }
+                              }
+                        }
                   for (Note* n : c->notes()) {
                         // connect a tie without end note
                         Tie* tie = n->tieFor();
