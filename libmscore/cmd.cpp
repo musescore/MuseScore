@@ -1342,12 +1342,22 @@ void Score::upDown(bool up, UpDownMode mode)
 
 void Score::addArticulation(ArticulationType attr)
       {
+      QSet<Chord*> set;
       foreach(Element* el, selection().elements()) {
             if (el->type() == Element::Type::NOTE || el->type() == Element::Type::CHORD) {
+                  Chord* cr = nullptr;
+                  // apply articulation on a given chord only once
+                  if (el->type() == Element::Type::NOTE) {
+                        cr = static_cast<Note*>(el)->chord();
+                        if (set.contains(cr))
+                              continue;
+                        }
                   Articulation* na = new Articulation(this);
                   na->setArticulationType(attr);
                   if (!addArticulation(el, na))
                         delete na;
+                  if (cr)
+                        set.insert(cr);
                   }
             }
       }
