@@ -689,8 +689,12 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       MScore::sampleRate = sampleRate;
 
-      QProgressBar* pBar = showProgressBar();
-      pBar->reset();
+      QProgressDialog progress(this);
+      progress.setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
+      progress.setWindowModality(Qt::ApplicationModal);
+      progress.setCancelButton(0);
+      if (!MScore::noGui)
+            progress.show();
 
       static const int FRAMES = 512;
       float bufferL[FRAMES];
@@ -701,7 +705,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       EventMap::const_iterator endPos = events.cend();
       --endPos;
       const int et = (score->utick2utime(endPos->first) + 1) * MScore::sampleRate;
-      pBar->setRange(0, et);
+      progress.setRange(0, et);
 
       for (int pass = 0; pass < 2; ++pass) {
             EventMap::const_iterator playPos;
@@ -815,8 +819,10 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               }
                         }
                   playTime = endTime;
-                  pBar->setValue((pass * et + playTime) / 2);
-                  qApp->processEvents();
+                  if (!MScore::noGui) {
+                        progress.setValue((pass * et + playTime) / 2);
+                        qApp->processEvents();
+                        }
                   // create sound until the sound decays
                   if (playTime >= et && max * peak < 0.000001)
                         break;
@@ -832,7 +838,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       if (bytes > 0L)
             file.write((char*)bufferOut, bytes);
 
-      hideProgressBar();
+      progress.close();
       delete synti;
       delete[] bufferOut;
       file.close();
