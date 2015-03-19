@@ -3457,7 +3457,7 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
 void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
       {
       foreach(const Lyrics* l, *ll) {
-            if (l) {
+            if (l && !l->text().isEmpty()) {
                   if ((l)->track() == trk) {
                         xml.stag(QString("lyric number=\"%1\"").arg((l)->no() + 1));
                         Lyrics::Syllabic syl = (l)->syllabic();
