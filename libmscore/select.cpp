@@ -470,6 +470,8 @@ void Selection::updateSelectedElements()
                         continue;
                   if (e->type() == Element::Type::TIMESIG)
                         continue;
+                  if (e->type() == Element::Type::KEYSIG)
+                        continue;
                   if (e->isChordRest()) {
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         for (Element* e : cr->lyricsList()) {
