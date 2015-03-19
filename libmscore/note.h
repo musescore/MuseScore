@@ -139,7 +139,8 @@ struct NoteVal {
 //   @P elements         array[Ms::Element]      list of elements attached to note head
 //   @P accidental       Ms::Accidental          note accidental (null if none)
 //   @P accidentalType   Ms::Accidental::Type    note accidental type
-//   @P dots             array[Ms::NoteDot]      list of note dots (empty if none)
+//   @P dots             array[Ms::NoteDot]      list of note dots (some can be null, read only)
+//   @P dotsCount        int                     number of note dots (read only)
 //   @P tieFor           Ms::Tie                 note forward tie (null if none, read only)
 //   @P tieBack          Ms::Tie                 note backward tie (null if none, read only)
 //---------------------------------------------------------------------------------------
@@ -170,7 +171,8 @@ class Note : public Element {
       Q_PROPERTY(QQmlListProperty<Ms::Element> elements  READ qmlElements)
       Q_PROPERTY(Ms::Accidental* accidental              READ accidental)
       Q_PROPERTY(Ms::Accidental::Type accidentalType     READ accidentalType   WRITE setAccidentalType)
-      Q_PROPERTY(int dots      READ qmlDots)
+      Q_PROPERTY(QQmlListProperty<Ms::NoteDot> dots      READ qmlDots)
+      Q_PROPERTY(int dotsCount                           READ qmlDotsCount)
       Q_PROPERTY(Ms::Tie* tieFor                         READ tieFor)
       Q_PROPERTY(Ms::Tie* tieBack                        READ tieBack)
       Q_ENUMS(ValueType)
@@ -385,7 +387,8 @@ class Note : public Element {
 
       int customizeVelocity(int velo) const;
       NoteDot* dot(int n)                       { return _dots[n];           }
-      int qmlDots();
+      QQmlListProperty<Ms::NoteDot> qmlDots() { return QQmlListProperty<Ms::NoteDot>(this, _dots);  }
+      int qmlDotsCount();
       void updateAccidental(AccidentalState*);
       void updateLine();
       void setNval(const NoteVal&, int tick = -1);
