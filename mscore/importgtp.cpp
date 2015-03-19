@@ -2266,6 +2266,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                         s = s.mid(21);
                   else {
                         qDebug("unknown gtp format <%s>", ss);
+                        fp.close();
                         return Score::FileError::FILE_BAD_FORMAT;
                         }
                   int a = s.left(1).toInt();
@@ -2283,6 +2284,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                         gp = new GuitarPro5(score, version);
                   else {
                         qDebug("unknown gtp format %d", version);
+                        fp.close();
                         return Score::FileError::FILE_BAD_FORMAT;
                         }
                   gp->initGuitarProDrumset();
