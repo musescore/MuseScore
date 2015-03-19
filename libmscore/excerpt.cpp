@@ -649,8 +649,11 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                     cloneTuplets(ocr, ncr, ot, tupletMap, m, dstTrack);
 
                               // remove lyrics from chord
-                              foreach (Lyrics* l, ncr->lyricsList())
-                                    l->unlink();
+                              // since only one set of lyrics is used with linked staves
+                              foreach (Lyrics* l, ncr->lyricsList()) {
+                                    if (l)
+                                          l->unlink();
+                                    }
                               qDeleteAll(ncr->lyricsList());
                               ncr->lyricsList().clear();
 
@@ -820,11 +823,6 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
                                     ncr->setTuplet(nt);
                                     nt->add(ncr);
                                     }
-                              // remove lyrics from chord
-                              foreach (Lyrics* l, ncr->lyricsList())
-                                    l->unlink();
-                              qDeleteAll(ncr->lyricsList());
-                              ncr->lyricsList().clear();
 
                               foreach (Element* e, oseg->annotations()) {
                                     if (e->generated() || e->systemFlag())
