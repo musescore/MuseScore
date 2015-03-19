@@ -246,7 +246,7 @@
     </SC>
   <SC>
     <key>pitch-up-diatonic</key>
-    <seq>Shift+Up</seq>
+    <seq>Alt+Shift+Up</seq>
     </SC>
   <SC>
     <key>pitch-up-octave</key>
@@ -286,7 +286,7 @@
     </SC>
   <SC>
     <key>pitch-down-diatonic</key>
-    <seq>Shift+Down</seq>
+    <seq>Alt+Shift+Down</seq>
     </SC>
   <SC>
     <key>pitch-down-octave</key>
@@ -362,11 +362,11 @@
     </SC>
   <SC>
     <key>select-staff-above</key>
-    <seq>Alt+Shift+Up</seq>
+    <seq>Shift+Up</seq>
     </SC>
   <SC>
     <key>select-staff-below</key>
-    <seq>Alt+Shift+Down</seq>
+    <seq>Shift+Down</seq>
     </SC>
   <SC>
     <key>page-prev</key>
