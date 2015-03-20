@@ -2060,9 +2060,9 @@ bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mod
                         qDebug("Text::movePosition: not implemented");
                         return false;
                   }
+            if (mode == QTextCursor::MoveAnchor)
+                  _cursor.clearSelection();
             }
-      if (mode == QTextCursor::MoveAnchor)
-            _cursor.clearSelection();
       updateCursorFormat(&_cursor);
       score()->addRefresh(canvasBoundingRect());
       return true;

@@ -246,7 +246,8 @@ void TestText::testTextProperties()
 ///   testCompatibility
 //---------------------------------------------------------
 
-void TestText::testCompatibility() {
+void TestText::testCompatibility()
+      {
       Text* text = new Text(score);
       //bold
       const QString sb("<html><head><meta name=\"qrichtext\" content=\"1\" /><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><style type=\"text/css\">"
@@ -293,10 +294,7 @@ void TestText::testCompatibility() {
 "</style></head><body style=\" font-family:'Times New Roman'; font-size:10.0006pt; font-weight:400; font-style:normal;\">"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">test&amp;&lt;&gt;&quot;'</p></body></html>");
       QCOMPARE(text->convertFromHtml(sescape), QString("<font face=\"Times New Roman\"/>test&amp;&lt;&gt;&quot;'"));
-
-
-}
-
+      }
 
 QTEST_MAIN(TestText)
 
