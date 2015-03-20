@@ -29,7 +29,7 @@
     </message>
     <message>
         <source>About %1</source>
-        <translation>Informzioni su %1</translation>
+        <translation>Informazioni su %1</translation>
     </message>
 </context>
 <context>
@@ -1183,7 +1183,7 @@ Verifica che sia stato fornito il nome corretto della cartella.</translation>
     <message>
         <source>&apos;%1&apos; is write protected.
 Do you want to delete it anyway?</source>
-        <translation>«%1» è protetto da scrittua.
+        <translation>«%1» è protetto da scrittura.
 Vuoi eliminarlo comunque?</translation>
     </message>
     <message>
@@ -1511,7 +1511,7 @@ Vuoi eliminarlo comunque?</translation>
     </message>
     <message>
         <source>Wr&amp;iting System</source>
-        <translation>S&amp;istema di scrittua</translation>
+        <translation>S&amp;istema di scrittura</translation>
     </message>
     <message>
         <source>Select Font</source>
@@ -2116,7 +2116,7 @@ Vuoi eliminarlo comunque?</translation>
     </message>
     <message>
         <source>Minimize</source>
-        <translation>Minizza</translation>
+        <translation>Minimizza</translation>
     </message>
     <message>
         <source>Restore Down</source>
@@ -2593,7 +2593,7 @@ Vuoi eliminarlo comunque?</translation>
     </message>
     <message>
         <source>Could not commit transaction</source>
-        <translation>Impossibile appliare l&apos;istruzione</translation>
+        <translation>Impossibile applicare l&apos;istruzione</translation>
     </message>
     <message>
         <source>Could not rollback transaction</source>
@@ -3178,7 +3178,7 @@ Scegli un nome diverso.</translation>
     </message>
     <message>
         <source>Unable to begin transaction</source>
-        <translation>Impossibile inizare la transazione</translation>
+        <translation>Impossibile iniziare la transazione</translation>
     </message>
     <message>
         <source>Unable to commit transaction</source>
@@ -3656,11 +3656,11 @@ Scegli un nome diverso.</translation>
     </message>
     <message>
         <source>Num Lock</source>
-        <translation>Bllocc Num</translation>
+        <translation>Bloc Num</translation>
     </message>
     <message>
         <source>Number Lock</source>
-        <translation type="unfinished">Blocco tast numerico</translation>
+        <translation>Blocco numeri</translation>
     </message>
     <message>
         <source>Scroll Lock</source>
@@ -3724,7 +3724,7 @@ Scegli un nome diverso.</translation>
     </message>
     <message>
         <source>Ctrl</source>
-        <translation></translation>
+        <translation>Ctrl</translation>
     </message>
     <message>
         <source>Shift</source>
@@ -3732,7 +3732,7 @@ Scegli un nome diverso.</translation>
     </message>
     <message>
         <source>Alt</source>
-        <translation></translation>
+        <translation>Alt</translation>
     </message>
     <message>
         <source>Meta</source>
@@ -4045,7 +4045,7 @@ Scegli un nome diverso.</translation>
     </message>
     <message>
         <source>Request blocked</source>
-        <translation>Richiest bloccata</translation>
+        <translation>Richiesta bloccata</translation>
     </message>
     <message>
         <source>Cannot show URL</source>
@@ -4853,7 +4853,7 @@ Scegli un nome diverso.</translation>
     </message>
     <message>
         <source>A comment cannot end with a %1.</source>
-        <translation>Un commentio non può terminare con un %1.</translation>
+        <translation>Un commento non può terminare con un %1.</translation>
     </message>
     <message>
         <source>No comparisons can be done involving the type %1.</source>
