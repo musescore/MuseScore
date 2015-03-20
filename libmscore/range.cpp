@@ -315,6 +315,7 @@ bool TrackList::write(Measure* measure) const
       Measure* m       = measure;
       Score* score     = m->score();
       Fraction rest    = m->len();
+      //Staff* staff     = score->staff(track2staff(_track));
       Segment* segment = 0;
       int n            = size();
 
@@ -344,6 +345,8 @@ bool TrackList::write(Measure* measure) const
                               if ((_track % VOICES) == 0) {
                                     // write only for voice 1
                                     Rest* r = new Rest(score, TDuration::DurationType::V_MEASURE);
+                                    //Fraction stretchedLen = m->stretchedLen(staff);
+                                    //r->setDuration(stretchedLen);
                                     r->setDuration(m->len());
                                     r->setTrack(_track);
                                     segment->add(r);
