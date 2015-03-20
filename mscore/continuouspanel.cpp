@@ -247,10 +247,8 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   newTs->setTrack(e->track());
                   newTs->layout();
 
-                  qDebug() << "Name="<< newName->text() << "_width ="<< newName->width() ;
                   if ((newName->width() > _lineWidthName) && (newName->text() != ""))
                         _lineWidthName = newName->width();
-                  qDebug() << "Name="<< newName->text() << "_width ="<< newName->width() << "_lineHeightName ="<< _lineWidthName ;
 
                   if (newClef->width() > _widthClef)
                         _widthClef = newClef->width();
