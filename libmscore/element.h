@@ -455,7 +455,7 @@ class Element : public QObject, public ScoreElement {
 
       virtual Space space() const      { return Space(0.0, width()); }
 
-      QColor color() const             { return _color; }
+      virtual QColor color() const             { return _color; }
       QColor curColor() const;
       QColor curColor(const Element* proxy) const;
       virtual void setColor(const QColor& c)     { _color = c;    }

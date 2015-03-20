@@ -234,6 +234,8 @@ class Text : public Element {
       Text &operator=(const Text&) = delete;
 
       virtual void draw(QPainter*) const override;
+      virtual void setColor(const QColor& c) override;
+      virtual QColor color() const             { return textStyle().foregroundColor(); }
 
       virtual void setTextStyle(const TextStyle& st);
       const TextStyle& textStyle() const      { return _textStyle; }
