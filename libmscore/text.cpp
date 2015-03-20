@@ -1941,7 +1941,25 @@ bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mod
       for (int i=0; i < count; i++) {
             switch(op) {
                   case QTextCursor::Left:
-                        if (_cursor.column() == 0) {
+                        if (_cursor.hasSelection() && mode == QTextCursor::MoveAnchor) {
+                              int r1 = _cursor.selectLine();
+                              int r2 = _cursor.line();
+                              int c1 = _cursor.selectColumn();
+                              int c2 = _cursor.column();
+
+                              if (r1 > r2) {
+                                    qSwap(r1, r2);
+                                    qSwap(c1, c2);
+                                    }
+                              else if (r1 == r2) {
+                                    if (c1 > c2)
+                                           qSwap(c1, c2);
+                                    }
+                              _cursor.clearSelection();
+                              _cursor.setLine(r1);
+                              _cursor.setColumn(c1);
+                              }
+                        else if (_cursor.column() == 0) {
                               if (_cursor.line() == 0)
                                     return false;
                               _cursor.setLine(_cursor.line()-1);
@@ -1952,7 +1970,25 @@ bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mod
                         break;
 
                   case QTextCursor::Right:
-                        if (_cursor.column() >= curLine().columns()) {
+                        if (_cursor.hasSelection() && mode == QTextCursor::MoveAnchor) {
+                              int r1 = _cursor.selectLine();
+                              int r2 = _cursor.line();
+                              int c1 = _cursor.selectColumn();
+                              int c2 = _cursor.column();
+
+                              if (r1 > r2) {
+                                    qSwap(r1, r2);
+                                    qSwap(c1, c2);
+                                    }
+                              else if (r1 == r2) {
+                                    if (c1 > c2)
+                                           qSwap(c1, c2);
+                                    }
+                              _cursor.clearSelection();
+                              _cursor.setLine(r2);
+                              _cursor.setColumn(c2);
+                              }
+                        else if (_cursor.column() >= curLine().columns()) {
                               if (_cursor.line() >= _layout.size()-1)
                                     return false;
                               _cursor.setLine(_cursor.line()+1);
