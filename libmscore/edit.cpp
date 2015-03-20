@@ -670,6 +670,9 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
       return true;
       }
 
+// instead of manually restoring aborted rewrites, rely on undo stack
+#define USE_UNWIND
+
 //---------------------------------------------------------
 //   cmdAddTimeSig
 //
@@ -750,7 +753,9 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             //
             // rewrite all measures up to the next time signature
             //
+#ifndef USE_UNWIND
             QList<int> keepLocal;   // list of staves with local time signatures to preserve
+#endif
             if (fm == score->firstMeasure() && (fm->len() != fm->timesig())) {
                   // handle upbeat
                   undoChangeProperty(fm, P_ID::TIMESIG_NOMINAL, QVariant::fromValue(ns));
@@ -765,9 +770,14 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         for (int i = 0; i < nstaves(); ++i) {
                               if (staff(i)->timeSig(tick) && staff(i)->timeSig(tick)->isLocal()) {
                                     if (!score->rewriteMeasures(fm, ns, i)) {
+#ifdef USE_UNWIND
+                                          undo()->current()->unwind();
+                                          return;
+#else
                                           // rewrite failed
                                           // keep local time signature for this staff
                                           keepLocal.append(i);
+#endif
                                           }
                                     }
                               }
@@ -780,10 +790,14 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             // this means, however, that the rewrite cannot depend on the time signatures being in place
             if (fm) {
                   if (!score->rewriteMeasures(fm, ns, local ? staffIdx : -1)) {
+#ifdef USE_UNWIND
+                        undo()->current()->unwind();
+#else
                         // remove segment if empty
                         if (seg->isEmpty())
                               undoRemoveElement(seg);
                         delete ts;
+#endif
                         return;
                         }
                   }
@@ -811,12 +825,16 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         }
                   for (int staffIdx = startStaffIdx; staffIdx < endStaffIdx; ++staffIdx) {
                         TimeSig* nsig = static_cast<TimeSig*>(seg->element(staffIdx * VOICES));
+#ifdef USE_UNWIND
+                        if (nsig == 0) {
+#else
                         if (score == this && keepLocal.contains(staffIdx)) {
                               // preserve local time signature if we were unable to rewrite staff
                               // TODO: get index for this score, so we can do the same for linked staves
                               nsig = new TimeSig(*staff(staffIdx)->timeSig(tick));
                               }
                         else if (nsig == 0) {
+#endif
                               nsig = new TimeSig(*ts);
                               nsig->setScore(score);
                               nsig->setTrack(staffIdx * VOICES);
@@ -860,6 +878,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
             return;
       int tick = m->tick();
 
+#ifndef USE_UNWIND
       // save time signatures for restoration later if the operation fails
       TimeSig* ots[nstaves()];
       for (int i = 0; i < nstaves(); ++i) {
@@ -867,19 +886,30 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
             if (sts) {
                   ots[i] = new TimeSig(*static_cast<TimeSig*>(sts));
                   // remove time signatures individually so map is consistent during rewriteMeasures()
-                  undoRemoveElement(sts);
+                  // this would improve detection of non-empty measures within local timesig
+                  // in cases where we delete a global timesig to reveal a local one
+                  // but it breaks deletion of the local time sig itself
+                  //undoRemoveElement(sts);
                   }
             else {
                   ots[i] = nullptr;
                   }
             }
-      // if we remove all time sigs from segment, segment is already removed
-      //undoRemoveElement(s);
+#endif
+      // if we remove all time sigs from segment, segment will be already removed by now
+      // but this would leave us no means of detecting that we have have measures in a local timesig
+      // in cases where we try deleting the local time sig
+      // known bug: this means we do not correctly detect non-empty measures when deleting global timesig change after a local one
+      // see http://musescore.org/en/node/51596
+      undoRemoveElement(s);
 
       Measure* pm = m->prevMeasure();
       Fraction ns(pm ? pm->timesig() : Fraction(4,4));
 
       if (!rewriteMeasures(m, ns, -1)) {
+#ifdef USE_UNWIND
+            undo()->current()->unwind();
+#else
             // restore deleted time signatures
             m = tick2measure(tick);       // old m may have been replaced
             if (m) {
@@ -904,6 +934,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
                               }
                         }
                   }
+#endif
             }
       else {
             m = tick2measure(tick);       // old m may have been replaced
@@ -923,13 +954,16 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
                               // fix measure rest duration
                               ChordRest* cr = nm->findChordRest(nm->tick(), i * VOICES);
                               if (cr && cr->type() == Element::Type::REST && cr->durationType() == TDuration::DurationType::V_MEASURE)
-                                    cr->setDuration(nm->stretchedLen(staff(i)));
+                                    cr->undoChangeProperty(P_ID::DURATION, QVariant::fromValue(nm->stretchedLen(staff(i))));
+                                    //cr->setDuration(nm->stretchedLen(staff(i)));
                               }
                         }
                   }
+#ifndef USE_UNWIND
             // clean up
             for (int i = 0; i < nstaves(); ++i)
                   delete ots[i];
+#endif
             }
       }
 
