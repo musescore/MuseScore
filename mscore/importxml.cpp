@@ -5927,7 +5927,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             pedalContinue = 0;
             }
 
-      if (!chord)
+      if (!chord && !grace)
             prevtick = tick;  // remember tick where last chordrest was inserted
 
 #ifdef DEBUG_TICK
