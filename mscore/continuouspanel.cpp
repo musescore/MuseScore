@@ -45,7 +45,7 @@ ContinuousPanel::ContinuousPanel(ScoreView* sv)
       _offsetPanel            = 0.0;
       _x                      = 0.0;
       _y                      = 0.0;
-      _lineWidthName         = 0.0;
+      _lineWidthName          = 0.0;
       _widthClef              = 0.0;
       _widthKeySig            = 0.0;
       _widthTimeSig           = 0.0;
@@ -202,7 +202,7 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                  }
                  Text* newName = new Text(_score);
                  newName->textStyle().setSizeIsSpatiumDependent(true);
-                 newName->textStyle().setSize(8);
+                 newName->textStyle().setSize(7);
                  newName->setText(staffName);
                  newName->setParent(parent);
                  newName->setTrack(e->track());
@@ -424,7 +424,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
 
                   Text* newName = new Text(_score);
                   newName->textStyle().setSizeIsSpatiumDependent(true);
-                  newName->textStyle().setSize(8);
+                  newName->textStyle().setSize(7);
                   newName->setText(staffName);
                   newName->setParent(parent);
                   newName->setTrack(e->track());
