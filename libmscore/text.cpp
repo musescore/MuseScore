@@ -903,9 +903,7 @@ void Text::drawSelection(QPainter* p, const QRectF& r) const
 
 void Text::setColor(const QColor& c)
       {
-      TextStyle ts = textStyle();
-      ts.setForegroundColor(c);
-      setTextStyle(ts);
+      textStyle().setForegroundColor(c);
       }
 
 //---------------------------------------------------------
