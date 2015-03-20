@@ -398,20 +398,24 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
             }
       int measures = 1;
       bool fmr = true;
-      for (Measure* m = fm; m != lm; m = m -> nextMeasure()) {
+      for (Measure* m = fm; m; m = m->nextMeasure()) {
             if (!m->isFullMeasureRest())
                   fmr = false;
+            if (m == lm)
+                  break;
             ++measures;
             }
 
       if (!fmr) {
             // check for local time signatures
-            for (Measure* m = fm; m != lm; m = m -> nextMeasure()) {
+            for (Measure* m = fm; m; m = m -> nextMeasure()) {
                   for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                         if (staff(staffIdx)->timeStretch(m->tick()) != Fraction(1,1)) {
                               // we cannot change a staff with a local time signature
                               return false;
                               }
+                        if (m == lm)
+                              break;
                         }
                   }
             }
@@ -536,6 +540,12 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
       Measure* fm1 = fm;
       Measure* nm  = nullptr;
       LayoutBreak* sectionBreak = nullptr;
+
+      // disable local time sig modifications in linked staves
+      if (staffIdx != -1 && rootScore()->excerpts().size() > 0) {
+            warnLocalTimeSig();
+            return false;
+            }
 
       //
       // split into Measure segments fm-lm
@@ -794,13 +804,13 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         }
                   for (int staffIdx = startStaffIdx; staffIdx < endStaffIdx; ++staffIdx) {
                         TimeSig* nsig = static_cast<TimeSig*>(seg->element(staffIdx * VOICES));
-                        if (nsig == 0) {
+                        if (score == this && keepLocal.contains(staffIdx)) {
                               // preserve local time signature if we were unable to rewrite staff
                               // TODO: get index for this score, so we can do the same for linked staves
-                              if (score == this && keepLocal.contains(staffIdx))
-                                    nsig = new TimeSig(*staff(staffIdx)->timeSig(tick));
-                              else
-                                    nsig = new TimeSig(*ts);
+                              nsig = new TimeSig(*staff(staffIdx)->timeSig(tick));
+                              }
+                        else if (nsig == 0) {
+                              nsig = new TimeSig(*ts);
                               nsig->setScore(score);
                               nsig->setTrack(staffIdx * VOICES);
                               nsig->setParent(seg);
@@ -828,15 +838,31 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
 
 void Score::cmdRemoveTimeSig(TimeSig* ts)
       {
+      if (ts->stretch() != 1 && rootScore()->excerpts().size() > 0) {
+            warnLocalTimeSig();
+            return;
+            }
+
       Measure* m = ts->measure();
+      Segment* s = ts->segment();
 
       //
       // we cannot remove a courtesy time signature
       //
-      if (m->tick() != ts->segment()->tick())
+      if (m->tick() != s->tick())
             return;
 
-      undoRemoveElement(ts->segment());
+      // save time signatures for restoration later if the operation fails
+      TimeSig* ots[nstaves()];
+      for (int i = 0; i < nstaves(); ++i) {
+            TimeSig* sts = static_cast<TimeSig*>(s->element(i * VOICES));
+            if (sts)
+                  ots[i] = new TimeSig(*static_cast<TimeSig*>(sts));
+            else
+                  ots[i] = nullptr;
+            }
+
+      undoRemoveElement(s);
 
       Measure* pm = m->prevMeasure();
       Fraction ns(pm ? pm->timesig() : Fraction(4,4));
@@ -845,14 +871,17 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
             // restore deleted time signatures
             Segment* s = m->undoGetSegment(Segment::Type::TimeSig, m->tick());
             for (int i = 0; i < nstaves(); ++i) {
-                  TimeSig* ots = staff(i)->timeSig(m->tick());
-                  if (ots) {
-                        TimeSig* nts = new TimeSig(*ots);
+                  TimeSig* nts = ots[i];
+                  if (nts) {
                         nts->setParent(s);
                         nts->setSelected(false);
                         undoAddElement(nts);
                         }
                   }
+            }
+      else {
+            for (int i = 0; i < nstaves(); ++i)
+                  delete ots[i];
             }
       }
 
