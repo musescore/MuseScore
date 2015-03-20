@@ -760,8 +760,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   if (sigmap()->timesig(seg->tick()).timesig().identical(ns)) {
                         // no change to global time signature,
                         // but we need to rewrite any staves with local time signatures
-                        for (int i = 0; i < nstaves(); ++i) {
-                              if (staff(i)->timeSig(tick)->stretch() != 1) {
+                        for (int i = 0; i < nstaves(); ++i) {                              if (staff(i)->timeSig(tick) && staff(i)->timeSig(tick)->stretch() != 1) {
                                     if (!score->rewriteMeasures(fm, ns, i)) {
                                           // rewrite failed
                                           // keep local time signature for this staff
