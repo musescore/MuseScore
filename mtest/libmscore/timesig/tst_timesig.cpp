@@ -71,8 +71,10 @@ void TestTimesig::timesig02()
       TimeSig* ts = new TimeSig(score);
       ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
+      score->startCmd();
       score->cmdAddTimeSig(m, 0, ts, false);
       score->doLayout();
+      score->endCmd();
 
       QVERIFY(saveCompareScore(score, "timesig-02a.mscx", DIR + "timesig-02-ref.mscx"));
       delete score;
