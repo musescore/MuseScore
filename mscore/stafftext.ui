@@ -954,7 +954,7 @@
           <bool>true</bool>
          </property>
          <property name="title">
-          <string>Change Stops:</string>
+          <string notr="true">Change Stops:</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -991,7 +991,7 @@
                </font>
               </property>
               <property name="text">
-               <string>III</string>
+               <string notr="true">III</string>
               </property>
              </widget>
             </item>
@@ -1046,7 +1046,7 @@
                </font>
               </property>
               <property name="text">
-               <string>Principal
+               <string notr="true">Principal
 8</string>
               </property>
               <property name="checkable">
@@ -1103,7 +1103,7 @@
                </palette>
               </property>
               <property name="text">
-               <string>Gemshorn
+               <string notr="true">Gemshorn
 8</string>
               </property>
               <property name="checkable">
@@ -1157,7 +1157,7 @@
                </palette>
               </property>
               <property name="text">
-               <string>Quinta-
+               <string notr="true">Quinta-
 dena 8</string>
               </property>
               <property name="checkable">
@@ -1211,7 +1211,7 @@ dena 8</string>
                </palette>
               </property>
               <property name="text">
-               <string>Suabile
+               <string notr="true">Suabile
 8</string>
               </property>
               <property name="checkable">
@@ -1265,7 +1265,7 @@ dena 8</string>
                </palette>
               </property>
               <property name="text">
-               <string>Rohrflöte
+               <string notr="true">Rohrflöte
 8</string>
               </property>
               <property name="checkable">
@@ -1319,7 +1319,7 @@ dena 8</string>
                </palette>
               </property>
               <property name="text">
-               <string>Dulzflöte
+               <string notr="true">Dulzflöte
 4</string>
               </property>
               <property name="checkable">
@@ -1373,7 +1373,7 @@ dena 8</string>
                </palette>
               </property>
               <property name="text">
-               <string>Quintflöte
+               <string notr="true">Quintflöte
 2 2/3</string>
               </property>
               <property name="checkable">
@@ -1447,7 +1447,7 @@ dena 8</string>
                </palette>
               </property>
               <property name="text">
-               <string>Super-
+               <string notr="true">Super-
 octave 2</string>
               </property>
               <property name="checkable">
@@ -1501,7 +1501,7 @@ octave 2</string>
                </palette>
               </property>
               <property name="text">
-               <string>Sifflet
+               <string notr="true">Sifflet
 1</string>
               </property>
               <property name="checkable">
@@ -1555,7 +1555,7 @@ octave 2</string>
                </palette>
               </property>
               <property name="text">
-               <string>Cymbel
+               <string notr="true">Cymbel
 VI</string>
               </property>
               <property name="checkable">
@@ -1609,7 +1609,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Oboe</string>
+               <string notr="true">Oboe</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1689,7 +1689,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Tremulant</string>
+               <string notr="true">Tremulant</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1746,7 +1746,7 @@ VI</string>
                </font>
               </property>
               <property name="text">
-               <string>II</string>
+               <string notr="true">II</string>
               </property>
              </widget>
             </item>
@@ -1801,7 +1801,7 @@ VI</string>
                </font>
               </property>
               <property name="text">
-               <string>Rohrflöte
+               <string notr="true">Rohrflöte
 8</string>
               </property>
               <property name="checkable">
@@ -1858,7 +1858,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Harmonic
+               <string notr="true">Harmonic
 Flute 8</string>
               </property>
               <property name="checkable">
@@ -1912,7 +1912,7 @@ Flute 8</string>
                </palette>
               </property>
               <property name="text">
-               <string>Flauto
+               <string notr="true">Flauto
 Dolce 4</string>
               </property>
               <property name="checkable">
@@ -1966,7 +1966,7 @@ Dolce 4</string>
                </palette>
               </property>
               <property name="text">
-               <string>Nasard
+               <string notr="true">Nasard
 2 2/3</string>
               </property>
               <property name="checkable">
@@ -2020,7 +2020,7 @@ Dolce 4</string>
                </palette>
               </property>
               <property name="text">
-               <string>Ottavina
+               <string notr="true">Ottavina
 2</string>
               </property>
               <property name="checkable">
@@ -2074,7 +2074,7 @@ Dolce 4</string>
                </palette>
               </property>
               <property name="text">
-               <string>Tertia
+               <string notr="true">Tertia
 1 3/5</string>
               </property>
               <property name="checkable">
@@ -2128,7 +2128,7 @@ Dolce 4</string>
                </palette>
               </property>
               <property name="text">
-               <string>Sesqui
+               <string notr="true">Sesqui
 altera</string>
               </property>
               <property name="checkable">
@@ -2207,7 +2207,7 @@ altera</string>
                </font>
               </property>
               <property name="text">
-               <string>Septime</string>
+               <string notr="true">Septime</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2263,7 +2263,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>None</string>
+               <string notr="true">None</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2316,7 +2316,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>Krumhorn</string>
+               <string notr="true">Krumhorn</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2369,7 +2369,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>Melodia</string>
+               <string notr="true">Melodia</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2449,7 +2449,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>Tremulant</string>
+               <string notr="true">Tremulant</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2529,7 +2529,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>II+III</string>
+               <string notr="true">II+III</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -2564,7 +2564,7 @@ altera</string>
               <rect>
                <x>20</x>
                <y>30</y>
-               <width>731</width>
+               <width>804</width>
                <height>51</height>
               </rect>
              </property>
@@ -2681,7 +2681,7 @@ altera</string>
                </font>
               </property>
               <property name="text">
-               <string>I</string>
+               <string notr="true">I</string>
               </property>
              </widget>
             </item>
@@ -2736,7 +2736,7 @@ altera</string>
                </font>
               </property>
               <property name="text">
-               <string>Principal
+               <string notr="true">Principal
 8</string>
               </property>
               <property name="checkable">
@@ -2793,7 +2793,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>Principal
+               <string notr="true">Principal
 4</string>
               </property>
               <property name="checkable">
@@ -2847,7 +2847,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>Octave
+               <string notr="true">Octave
 2</string>
               </property>
               <property name="checkable">
@@ -2901,7 +2901,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>Octave
+               <string notr="true">Octave
 1</string>
               </property>
               <property name="checkable">
@@ -2955,7 +2955,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>Quint
+               <string notr="true">Quint
 5 1/3</string>
               </property>
               <property name="checkable">
@@ -3009,7 +3009,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>Quint
+               <string notr="true">Quint
 2 2/3</string>
               </property>
               <property name="checkable">
@@ -3063,7 +3063,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>Tibia
+               <string notr="true">Tibia
 8</string>
               </property>
               <property name="checkable">
@@ -3117,7 +3117,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>Celesta
+               <string notr="true">Celesta
 8</string>
               </property>
               <property name="checkable">
@@ -3196,7 +3196,7 @@ altera</string>
                </font>
               </property>
               <property name="text">
-               <string>Flöte
+               <string notr="true">Flöte
 8</string>
               </property>
               <property name="checkable">
@@ -3253,7 +3253,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>Flöte
+               <string notr="true">Flöte
 4</string>
               </property>
               <property name="checkable">
@@ -3307,7 +3307,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>Flöte
+               <string notr="true">Flöte
 2</string>
               </property>
               <property name="checkable">
@@ -3361,7 +3361,7 @@ altera</string>
                </palette>
               </property>
               <property name="text">
-               <string>Cymbel
+               <string notr="true">Cymbel
 VI</string>
               </property>
               <property name="checkable">
@@ -3415,7 +3415,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Mixtur</string>
+               <string notr="true">Mixtur</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3468,7 +3468,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Trumpet</string>
+               <string notr="true">Trumpet</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3548,7 +3548,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>I+II</string>
+               <string notr="true">I+II</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3628,7 +3628,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>I+III</string>
+               <string notr="true">I+III</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -3685,7 +3685,7 @@ VI</string>
                </font>
               </property>
               <property name="text">
-               <string>P</string>
+               <string notr="true">P</string>
               </property>
              </widget>
             </item>
@@ -3740,7 +3740,7 @@ VI</string>
                </font>
               </property>
               <property name="text">
-               <string>Subbass
+               <string notr="true">Subbass
 16</string>
               </property>
               <property name="checkable">
@@ -3797,7 +3797,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Principal
+               <string notr="true">Principal
 16</string>
               </property>
               <property name="checkable">
@@ -3851,7 +3851,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Principal
+               <string notr="true">Principal
 8</string>
               </property>
               <property name="checkable">
@@ -3905,7 +3905,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Principal
+               <string notr="true">Principal
 4</string>
               </property>
               <property name="checkable">
@@ -3959,7 +3959,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Octave
+               <string notr="true">Octave
 2</string>
               </property>
               <property name="checkable">
@@ -4013,7 +4013,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Octave
+               <string notr="true">Octave
 1</string>
               </property>
               <property name="checkable">
@@ -4067,7 +4067,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Quint
+               <string notr="true">Quint
 5 1/3</string>
               </property>
               <property name="checkable">
@@ -4121,7 +4121,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Quint
+               <string notr="true">Quint
 2 2/3</string>
               </property>
               <property name="checkable">
@@ -4200,7 +4200,7 @@ VI</string>
                </font>
               </property>
               <property name="text">
-               <string>Mixtur</string>
+               <string notr="true">Mixtur</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -4256,7 +4256,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Fagott
+               <string notr="true">Fagott
 16</string>
               </property>
               <property name="checkable">
@@ -4310,7 +4310,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Trombone
+               <string notr="true">Trombone
 16</string>
               </property>
               <property name="checkable">
@@ -4364,7 +4364,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Bombarde
+               <string notr="true">Bombarde
 32</string>
               </property>
               <property name="checkable">
@@ -4418,7 +4418,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>Trumpet</string>
+               <string notr="true">Trumpet</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -4498,7 +4498,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>P+I</string>
+               <string notr="true">P+I</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -4578,7 +4578,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>P+II</string>
+               <string notr="true">P+II</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -4658,7 +4658,7 @@ VI</string>
                </palette>
               </property>
               <property name="text">
-               <string>P+III</string>
+               <string notr="true">P+III</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
