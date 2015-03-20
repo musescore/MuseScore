@@ -3045,7 +3045,7 @@ static QString matchRepeat(const QString& lowerTxt)
       QRegExp dalSegnoAlFine("d\\.? *s\\.? *al *fine|d[ae]l *segno *al *fine");
       QRegExp dalSegnoAlCoda("d\\.? *s\\.? *al *coda|d[ae]l *segno *al *coda");
       QRegExp fine("fine");
-      QRegExp toCoda("to *coda");
+      QRegExp alCoda("to *coda");
       if (daCapo.exactMatch(lowerTxt)) repeat = "daCapo";
       if (daCapoAlFine.exactMatch(lowerTxt)) repeat = "daCapoAlFine";
       if (daCapoAlCoda.exactMatch(lowerTxt)) repeat = "daCapoAlCoda";
@@ -3053,7 +3053,7 @@ static QString matchRepeat(const QString& lowerTxt)
       if (dalSegnoAlFine.exactMatch(lowerTxt)) repeat = "dalSegnoAlFine";
       if (dalSegnoAlCoda.exactMatch(lowerTxt)) repeat = "dalSegnoAlCoda";
       if (fine.exactMatch(lowerTxt)) repeat = "fine";
-      if (toCoda.exactMatch(lowerTxt)) repeat = "toCoda";
+      if (alCoda.exactMatch(lowerTxt)) repeat = "alCoda";
       return repeat;
       }
 
@@ -3130,10 +3130,10 @@ static Marker* findMarker(const QString& repeat, Score* score)
             m->setTextStyleType(TextStyleType::REPEAT_RIGHT);
             m->setMarkerType(Marker::Type::FINE);
             }
-      else if (repeat == "toCoda") {
+      else if (repeat == "alCoda") {
             m = new Marker(score);
             m->setTextStyleType(TextStyleType::REPEAT_RIGHT);
-            m->setMarkerType(Marker::Type::TOCODA);
+            m->setMarkerType(Marker::Type::ALCODA);
             }
       return m;
       }

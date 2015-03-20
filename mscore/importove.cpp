@@ -2087,9 +2087,9 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
                         e = jp;
                         break;
                         }
-                  case OVE::RepeatType::ToCoda:{
+                  case OVE::RepeatType::AlCoda:{
                         Marker* m = new Marker(score_);
-                        m->setMarkerType(Marker::Type::TOCODA);
+                        m->setMarkerType(Marker::Type::ALCODA);
                         e = m;
                         break;
                         }
