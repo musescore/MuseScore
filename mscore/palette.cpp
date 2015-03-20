@@ -896,6 +896,18 @@ void Palette::dropEvent(QDropEvent* event)
                               SlurTie* st = static_cast<SlurTie*>(e);
                               st->setTrack(0);
                               }
+                        else if (e->type() == Element::Type::ICON) {
+                              Icon* i = static_cast<Icon*>(e);
+                              const QByteArray& action = i->action();
+                              if (!action.isEmpty()) {
+                                    const Shortcut* s = Shortcut::getShortcut(action);
+                                    if (s) {
+                                          QAction* a = s->action();
+                                          QIcon icon(a->icon());
+                                          i->setAction(action, icon);
+                                          }
+                                    }
+                              }
 //                        else if (e->type() == Element::Type::KEYSIG) {
 //                              KeySig* k = static_cast<KeySig*>(e);
 //                              }
