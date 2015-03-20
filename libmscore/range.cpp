@@ -345,6 +345,9 @@ bool TrackList::write(Measure* measure) const
                               if ((_track % VOICES) == 0) {
                                     // write only for voice 1
                                     Rest* r = new Rest(score, TDuration::DurationType::V_MEASURE);
+                                    // ideally we should be using stretchedLen
+                                    // but this is not valid during rewrite when adding time signatures
+                                    // since the time signature has not been added yet
                                     //Fraction stretchedLen = m->stretchedLen(staff);
                                     //r->setDuration(stretchedLen);
                                     r->setDuration(m->len());

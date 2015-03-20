@@ -377,6 +377,8 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
       {
       if (staffIdx >= 0) {
             // local timesig
+            // don't actually rewrite, just update measure rest durations
+            // abort if there is anything other than measure rests in range
             int strack = staffIdx * VOICES;
             int etrack = strack + VOICES;
             for (Measure* m = fm; ; m = m->nextMeasure()) {
@@ -760,7 +762,8 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   if (sigmap()->timesig(seg->tick()).timesig().identical(ns)) {
                         // no change to global time signature,
                         // but we need to rewrite any staves with local time signatures
-                        for (int i = 0; i < nstaves(); ++i) {                              if (staff(i)->timeSig(tick) && staff(i)->timeSig(tick)->stretch() != 1) {
+                        for (int i = 0; i < nstaves(); ++i) {
+                              if (staff(i)->timeSig(tick) && staff(i)->timeSig(tick)->isLocal()) {
                                     if (!score->rewriteMeasures(fm, ns, i)) {
                                           // rewrite failed
                                           // keep local time signature for this staff
@@ -771,6 +774,10 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         fm = 0;
                         }
                   }
+
+            // try to rewrite the measures first
+            // we will only add time signatures if this succeeds
+            // this means, however, that the rewrite cannot depend on the time signatures being in place
             if (fm) {
                   if (!score->rewriteMeasures(fm, ns, local ? staffIdx : -1)) {
                         // remove segment if empty
@@ -781,6 +788,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         }
                   }
 
+            // add the time signatures
             foreach (Score* score, scoreList()) {
                   Measure* nfm = score->tick2measure(tick);
                   seg   = nfm->undoGetSegment(Segment::Type::TimeSig, nfm->tick());
@@ -837,7 +845,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
 
 void Score::cmdRemoveTimeSig(TimeSig* ts)
       {
-      if (ts->stretch() != 1 && rootScore()->excerpts().size() > 0) {
+      if (ts->isLocal() && rootScore()->excerpts().size() > 0) {
             warnLocalTimeSig();
             return;
             }
@@ -850,35 +858,76 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
       //
       if (m->tick() != s->tick())
             return;
+      int tick = m->tick();
 
       // save time signatures for restoration later if the operation fails
       TimeSig* ots[nstaves()];
       for (int i = 0; i < nstaves(); ++i) {
             TimeSig* sts = static_cast<TimeSig*>(s->element(i * VOICES));
-            if (sts)
+            if (sts) {
                   ots[i] = new TimeSig(*static_cast<TimeSig*>(sts));
-            else
+                  // remove time signatures individually so map is consistent during rewriteMeasures()
+                  undoRemoveElement(sts);
+                  }
+            else {
                   ots[i] = nullptr;
+                  }
             }
-
-      undoRemoveElement(s);
+      // if we remove all time sigs from segment, segment is already removed
+      //undoRemoveElement(s);
 
       Measure* pm = m->prevMeasure();
       Fraction ns(pm ? pm->timesig() : Fraction(4,4));
 
       if (!rewriteMeasures(m, ns, -1)) {
             // restore deleted time signatures
-            Segment* s = m->undoGetSegment(Segment::Type::TimeSig, m->tick());
-            for (int i = 0; i < nstaves(); ++i) {
-                  TimeSig* nts = ots[i];
-                  if (nts) {
-                        nts->setParent(s);
-                        nts->setSelected(false);
-                        undoAddElement(nts);
+            m = tick2measure(tick);       // old m may have been replaced
+            if (m) {
+                  Segment* s = m->undoGetSegment(Segment::Type::TimeSig, tick);
+                  for (int i = 0; i < nstaves(); ++i) {
+                        TimeSig* nts = ots[i];
+                        if (nts) {
+                              nts->setParent(s);
+                              nts->setSelected(false);
+                              undoAddElement(nts);
+                              }
+                        }
+                  // hack: correct nominal durations too
+                  // since they were incorrectly fixed in rewriteMeasures()
+                  // (that function deals better with add than delete; see hack below)
+                  if (sigmap()) {
+                        Fraction fr(sigmap()->timesig(tick).nominal());
+                        for (Measure* nm = m; nm; nm = nm->nextMeasure()) {
+                              if (nm != m && nm->first(Segment::Type::TimeSig))
+                                    break;
+                              undoChangeProperty(nm, P_ID::TIMESIG_NOMINAL, QVariant::fromValue(fr));
+                              }
                         }
                   }
             }
       else {
+            m = tick2measure(tick);       // old m may have been replaced
+            // hack: fix measure rest durations for staves with local time signatures
+            // if a time signature was deleted to reveal a previous local one,
+            // then rewriteMeasures() got the measure rest durations wrong
+            // (if we fixed it to work for delete, it would fail for add)
+            // so we will fix measure rest durations here
+            // TODO: fix rewriteMeasures() to get this right
+            for (int i = 0; i < nstaves(); ++i) {
+                  TimeSig* ts = staff(i)->timeSig(tick);
+                  if (ts && ts->isLocal()) {
+                        for (Measure* nm = m; nm; nm = nm->nextMeasure()) {
+                              // stop when time signature changes
+                              if (staff(i)->timeSig(nm->tick()) != ts)
+                                    break;
+                              // fix measure rest duration
+                              ChordRest* cr = nm->findChordRest(nm->tick(), i * VOICES);
+                              if (cr && cr->type() == Element::Type::REST && cr->durationType() == TDuration::DurationType::V_MEASURE)
+                                    cr->setDuration(nm->stretchedLen(staff(i)));
+                              }
+                        }
+                  }
+            // clean up
             for (int i = 0; i < nstaves(); ++i)
                   delete ots[i];
             }
