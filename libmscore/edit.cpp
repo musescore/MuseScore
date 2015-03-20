@@ -670,9 +670,6 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
       return true;
       }
 
-// instead of manually restoring aborted rewrites, rely on undo stack
-#define USE_UNWIND
-
 //---------------------------------------------------------
 //   cmdAddTimeSig
 //
