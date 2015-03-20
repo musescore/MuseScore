@@ -30,7 +30,7 @@ static const qreal subScriptSize   = 0.6;
 static const qreal subScriptOffset = 0.5;       // of x-height
 static const qreal superScriptOffset = -0.5;       // of x-height
 
-static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
+//static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
 
 TextCursor Text::_cursor;
 QString Text::preEdit;
@@ -895,6 +895,15 @@ void Text::drawSelection(QPainter* p, const QRectF& r) const
       p->drawRect(r);
       p->setCompositionMode(QPainter::CompositionMode_SourceOver);
       p->setPen(textColor());
+      }
+
+//---------------------------------------------------------
+//   draw
+//---------------------------------------------------------
+
+void Text::setColor(const QColor& c)
+      {
+      textStyle().setForegroundColor(c);
       }
 
 //---------------------------------------------------------
