@@ -2096,19 +2096,19 @@ Bass Huang Harmonica</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="597"/>
         <location filename="../instruments/instrumentsxml.h" line="600"/>
         <source>Baritone Horn</source>
-        <translation>Saxhorn baryton</translation>
+        <translation>Cor baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="599"/>
         <location filename="../instruments/instrumentsxml.h" line="602"/>
         <source>Bar. Hn.</source>
         <extracomment>Baritone Horn</extracomment>
-        <translation>Saxh. Bar.</translation>
+        <translation>Cor Bar.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="603"/>
         <source>Baritone Horn (Treble Clef)</source>
-        <translation>Saxhorn baryton (clé de Sol)</translation>
+        <translation>Cor baryton (clé de Sol)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="604"/>
@@ -4840,7 +4840,7 @@ Acoustic Guitar</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1390"/>
         <source>Electric Guitar [Tablature]</source>
-        <translation>Guitare Electrique [Tablature]</translation>
+        <translation>Guitare électrique [Tablature]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1391"/>

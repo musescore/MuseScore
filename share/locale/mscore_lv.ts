@@ -3,11 +3,11 @@
     <name>AboutBox</name>
     <message>
         <source>About MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Par MuseScore</translation>
     </message>
     <message>
         <source>Copy revision number</source>
-        <translation type="unfinished"/>
+        <translation>Kopijas revīzijas numurs</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -19,14 +19,22 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Meklējiet&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; jaunas versijas un plašāku informāciju.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Atbalstiet MuseScore ar &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;savu ziedojumu&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Autortiesības &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer un citi. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Publicēts saskaņā ar GNU Vispārējo publisko licenci&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
     <name>AboutMusicXMLBox</name>
     <message>
         <source>About MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>Par MusicXML</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -37,11 +45,18 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;supported by many applications. MusicXML is copyright © MakeMusic, Inc.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All rights reserved. For more information, see: &lt;a href=&quot;http://www.musicxml.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;MusicXML.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;MusicXML ir atvērts faila formāts digitāla nošu pieraksta apmaiņai,&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to atbalsta daudzas programmas. MusicXML autortiesības pieder © MakeMusic, Inc.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Visas tiesības paturētas. Vairāk informācijas: &lt;a href=&quot;http://www.musicxml.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;MusicXML.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>The MusicXML Public License:</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML publiskā licence</translation>
     </message>
 </context>
 <context>
@@ -76,15 +91,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>III</source>
-        <translation type="unfinished"/>
+        <translation>III</translation>
     </message>
     <message>
         <source>II</source>
-        <translation type="unfinished"/>
+        <translation>II</translation>
     </message>
     <message>
         <source>I</source>
-        <translation type="unfinished"/>
+        <translation>I</translation>
     </message>
     <message>
         <source>P</source>
@@ -119,11 +134,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"/>
+        <translation>Jauns</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished"/>
+        <translation>Ielādēšana</translation>
     </message>
     <message>
         <source>Print Album</source>
@@ -178,7 +193,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Auto</translation>
     </message>
     <message>
         <source>Up</source>
@@ -198,15 +213,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>MIDI Action</source>
-        <translation type="unfinished"/>
+        <translation>MIDI darbība</translation>
     </message>
     <message>
         <source>Above Staff</source>
-        <translation type="unfinished"/>
+        <translation>Virs nošu raksta</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation type="unfinished"/>
+        <translation>Zem nošu raksta</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
@@ -328,7 +343,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Save As</source>
-        <translation type="unfinished"/>
+        <translation>Saglabāt kā</translation>
     </message>
     <message>
         <source>Load</source>
@@ -336,7 +351,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>ID</source>
-        <translation type="unfinished"/>
+        <translation>ID</translation>
     </message>
 </context>
 <context>
@@ -371,23 +386,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Si</translation>
     </message>
 </context>
 <context>
@@ -406,7 +421,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>Saglabāt</translation>
     </message>
     <message>
         <source>No.</source>
@@ -438,19 +453,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>1</source>
-        <translation type="unfinished"/>
+        <translation>1</translation>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>3</source>
-        <translation type="unfinished"/>
+        <translation>3</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>Shortcut:</source>
@@ -458,39 +473,39 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>A</source>
-        <translation type="unfinished"/>
+        <translation>A</translation>
     </message>
     <message>
         <source>B</source>
-        <translation type="unfinished"/>
+        <translation>B</translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished"/>
+        <translation>C</translation>
     </message>
     <message>
         <source>D</source>
-        <translation type="unfinished"/>
+        <translation>D</translation>
     </message>
     <message>
         <source>E</source>
-        <translation type="unfinished"/>
+        <translation>E</translation>
     </message>
     <message>
         <source>F</source>
-        <translation type="unfinished"/>
+        <translation>F</translation>
     </message>
     <message>
         <source>G</source>
-        <translation type="unfinished"/>
+        <translation>G</translation>
     </message>
     <message>
         <source>--</source>
-        <translation type="unfinished"/>
+        <translation>--</translation>
     </message>
     <message>
         <source>Staff line:</source>
-        <translation type="unfinished"/>
+        <translation>Nošu raksta līnija:</translation>
     </message>
     <message>
         <source>Stem direction:</source>
@@ -517,27 +532,27 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>Skaidrs</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Atcelt</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nosaukums:</translation>
     </message>
     <message>
         <source>Pitch:</source>
-        <translation type="unfinished"/>
+        <translation>Augstums:</translation>
     </message>
     <message>
         <source>Transpose:</source>
-        <translation type="unfinished"/>
+        <translation>Transpozīcija:</translation>
     </message>
     <message>
         <source>Staves:</source>
-        <translation type="unfinished"/>
+        <translation>Nošu līnijas:</translation>
     </message>
     <message>
         <source>Short name:</source>
@@ -545,7 +560,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>MIDI program:</source>
-        <translation type="unfinished"/>
+        <translation>MIDI programma:</translation>
     </message>
 </context>
 <context>
@@ -560,91 +575,91 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Octave 8</source>
-        <translation type="unfinished"/>
+        <translation>Oktāva 8</translation>
     </message>
     <message>
         <source>Octave 7</source>
-        <translation type="unfinished"/>
+        <translation>Oktāva 7</translation>
     </message>
     <message>
         <source>Octave 6</source>
-        <translation type="unfinished"/>
+        <translation>Oktāva 6</translation>
     </message>
     <message>
         <source>Octave 5</source>
-        <translation type="unfinished"/>
+        <translation>Oktāva 5</translation>
     </message>
     <message>
         <source>Octave 4</source>
-        <translation type="unfinished"/>
+        <translation>Oktāva 4</translation>
     </message>
     <message>
         <source>Octave 3</source>
-        <translation type="unfinished"/>
+        <translation>Oktāva 3</translation>
     </message>
     <message>
         <source>Octave 2</source>
-        <translation type="unfinished"/>
+        <translation>Oktāva 2</translation>
     </message>
     <message>
         <source>Octave 1</source>
-        <translation type="unfinished"/>
+        <translation>Oktāva 1</translation>
     </message>
     <message>
         <source>Octave 0</source>
-        <translation type="unfinished"/>
+        <translation>Oktāva 0</translation>
     </message>
     <message>
         <source>Octave -1</source>
-        <translation type="unfinished"/>
+        <translation>Oktāva -1</translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished"/>
+        <translation>C</translation>
     </message>
     <message>
         <source>D</source>
-        <translation type="unfinished"/>
+        <translation>D</translation>
     </message>
     <message>
         <source>E</source>
-        <translation type="unfinished"/>
+        <translation>E</translation>
     </message>
     <message>
         <source>F</source>
-        <translation type="unfinished"/>
+        <translation>F</translation>
     </message>
     <message>
         <source>G</source>
-        <translation type="unfinished"/>
+        <translation>G</translation>
     </message>
     <message>
         <source>A</source>
-        <translation type="unfinished"/>
+        <translation>A</translation>
     </message>
     <message>
         <source>B</source>
-        <translation type="unfinished"/>
+        <translation>B</translation>
     </message>
     <message>
         <source>C 8</source>
-        <translation type="unfinished"/>
+        <translation>C 8</translation>
     </message>
     <message>
         <source>D 8</source>
-        <translation type="unfinished"/>
+        <translation>D 8</translation>
     </message>
     <message>
         <source>E 8</source>
-        <translation type="unfinished"/>
+        <translation>E 8</translation>
     </message>
     <message>
         <source>F 8</source>
-        <translation type="unfinished"/>
+        <translation>F 8</translation>
     </message>
     <message>
         <source>G 8</source>
-        <translation type="unfinished"/>
+        <translation>G 8</translation>
     </message>
     <message>
         <source>A 8</source>
@@ -1162,7 +1177,7 @@ p, li { white-space: pre-wrap; }
     <name>EditStaffBase</name>
     <message>
         <source>MuseScore: Edit Staff/Part Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: labot nošu raksta/daļas rekvizītus</translation>
     </message>
     <message>
         <source>Part Properties</source>
@@ -1170,11 +1185,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Change Instrument...</source>
-        <translation type="unfinished"/>
+        <translation>Mainīt instrumentu...</translation>
     </message>
     <message>
         <source>Instrument:</source>
-        <translation type="unfinished"/>
+        <translation>Instruments:</translation>
     </message>
     <message>
         <source>Amateur:</source>
@@ -1298,15 +1313,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staff Properties</source>
-        <translation type="unfinished"/>
+        <translation>Nošu raksta rekvizīti</translation>
     </message>
     <message>
         <source>Invisible staff lines</source>
-        <translation type="unfinished"/>
+        <translation>Neredzamas nošu raksta līnijas</translation>
     </message>
     <message>
         <source>Small staff</source>
-        <translation type="unfinished"/>
+        <translation>Mazs nošu raksts</translation>
     </message>
     <message>
         <source>sp</source>
@@ -1314,7 +1329,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staff line color:</source>
-        <translation type="unfinished"/>
+        <translation>Nošu raksta līnijas krāsa:</translation>
     </message>
     <message>
         <source>Part name:</source>
@@ -1378,7 +1393,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Extra distance above staff:</source>
-        <translation type="unfinished"/>
+        <translation>Ekstra distance virs nošu raksta:</translation>
     </message>
     <message>
         <source>Never hide</source>
@@ -1409,7 +1424,7 @@ p, li { white-space: pre-wrap; }
     <name>EditStaffType</name>
     <message>
         <source>MuseScore: Edit Staff Type</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: labot nošu raksta veidu</translation>
     </message>
     <message>
         <source>Lines:</source>
@@ -1421,7 +1436,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>STANDARD STAFF</source>
-        <translation type="unfinished"/>
+        <translation>STANDARTA NOŠU RAKSTS</translation>
     </message>
     <message>
         <source>Stemless</source>
@@ -1437,15 +1452,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Font:</source>
-        <translation type="unfinished"/>
+        <translation>Fonts:</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation type="unfinished"/>
+        <translation>Izmērs:</translation>
     </message>
     <message>
         <source>pt</source>
-        <translation type="unfinished"/>
+        <translation>punkti</translation>
     </message>
     <message>
         <source>Marks are:</source>
@@ -1453,11 +1468,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Numbers</source>
-        <translation type="unfinished"/>
+        <translation>Numuri</translation>
     </message>
     <message>
         <source>Letters</source>
-        <translation type="unfinished"/>
+        <translation>Burti</translation>
     </message>
     <message>
         <source>Marks are drawn:</source>
@@ -1704,7 +1719,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Sizes</source>
-        <translation type="unfinished"/>
+        <translation>Izmēri</translation>
     </message>
     <message>
         <source>Hairpins, Volta, Ottava</source>
@@ -1995,7 +2010,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dot size:</source>
-        <translation type="unfinished"/>
+        <translation>Punkta izmērs:</translation>
     </message>
     <message>
         <source>Distance to note:</source>
@@ -2067,7 +2082,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Volta</source>
-        <translation type="unfinished"/>
+        <translation>Volta</translation>
     </message>
     <message>
         <source>Hook height:</source>
@@ -2115,7 +2130,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Solfeggio</source>
-        <translation type="unfinished"/>
+        <translation>Solfeggio</translation>
     </message>
     <message>
         <source>Lower case minor chords</source>
@@ -2131,15 +2146,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Font:</source>
-        <translation type="unfinished"/>
+        <translation>Fonts:</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation type="unfinished"/>
+        <translation>Izmērs:</translation>
     </message>
     <message>
         <source>pt</source>
-        <translation type="unfinished"/>
+        <translation>punkti</translation>
     </message>
     <message>
         <source>Line height:</source>
@@ -2539,11 +2554,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>New All</source>
-        <translation type="unfinished"/>
+        <translation>Jauns viss</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"/>
+        <translation>Jauns</translation>
     </message>
     <message>
         <source>Part title:</source>
@@ -2578,7 +2593,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Sound Fonts</source>
@@ -3389,7 +3404,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Staff</source>
-        <translation type="unfinished"/>
+        <translation>Nošu raksts</translation>
     </message>
     <message>
         <source>Part</source>
@@ -3632,7 +3647,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Staff</source>
-        <translation type="unfinished"/>
+        <translation>Nošu raksts</translation>
     </message>
     <message>
         <source>Part</source>
@@ -3707,7 +3722,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Size</source>
-        <translation type="unfinished"/>
+        <translation>Izmērs</translation>
     </message>
     <message>
         <source>Scale</source>
@@ -3836,7 +3851,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Size</source>
-        <translation type="unfinished"/>
+        <translation>Izmērs</translation>
     </message>
     <message>
         <source>Lasso Inspector</source>
@@ -4742,7 +4757,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>MuseScore: Instruments</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: instrumenti</translation>
     </message>
     <message>
         <source>Load</source>
@@ -4750,7 +4765,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>Saglabāt</translation>
     </message>
     <message>
         <source>OK</source>
@@ -4765,7 +4780,7 @@ space unit</extracomment>
     <name>InstrumentsWidget</name>
     <message>
         <source>MuseScore: Instruments</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: instrumenti</translation>
     </message>
     <message>
         <source>Instrument List</source>
@@ -5089,7 +5104,7 @@ space unit</extracomment>
     <name>LoginDialog</name>
     <message>
         <source>Log in to MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Pieteikties MuseScore</translation>
     </message>
     <message>
         <source>Username or email</source>
@@ -5300,7 +5315,7 @@ pickup measure</source>
     </message>
     <message>
         <source>MuseScore instrument</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore instruments</translation>
     </message>
     <message>
         <source>Show
@@ -5323,7 +5338,7 @@ chord symbols</source>
     </message>
     <message>
         <source>Save as MP3</source>
-        <translation type="unfinished"/>
+        <translation>Saglabāt kā MP3</translation>
     </message>
     <message>
         <source>MuseScore does not export MP3 files directly, but instead uses the freely available LAME library.  You must obtain %1 separately (for details check the handbook), and then locate the file for MuseScore.
@@ -5436,7 +5451,7 @@ Would you like to locate %2 now?</source>
     <name>MeasureProperties</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>cannot change measure length:
@@ -5456,7 +5471,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>New Row</source>
-        <translation type="unfinished"/>
+        <translation>Jauna rinda</translation>
     </message>
     <message>
         <source>Staff</source>
@@ -5644,7 +5659,7 @@ tuplet would cross measure</source>
     <name>MetaEditDialog</name>
     <message>
         <source>MuseScore Version:</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore versija:</translation>
     </message>
     <message>
         <source>Revision:</source>
@@ -5656,7 +5671,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"/>
+        <translation>Jauns</translation>
     </message>
     <message>
         <source>MuseScore: Score Information</source>
@@ -5735,7 +5750,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore faili (*.mscz *.mscx)</translation>
     </message>
     <message>
         <source>MuseScore Album Files (*.album)</source>
@@ -6200,14 +6215,14 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore Instruments (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore instrumenti (*.xml)</translation>
     </message>
 </context>
 <context>
     <name>Ms::InstrumentsWidget</name>
     <message>
         <source>Staff %1</source>
-        <translation type="unfinished"/>
+        <translation>Nošu raksts %1</translation>
     </message>
     <message>
         <source>Staves</source>
@@ -6420,7 +6435,7 @@ before closing?</source>
     </message>
     <message>
         <source>MusicXML Files (*.xml *.mxl);;</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML faili (*.xml *.mxl);;</translation>
     </message>
     <message>
         <source>MIDI Files (*.mid *.midi *.kar);;</source>
@@ -6723,7 +6738,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>sintezators</translation>
     </message>
     <message>
         <source>audio track</source>
@@ -6920,7 +6935,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>New...</source>
-        <translation type="unfinished"/>
+        <translation>Jauns...</translation>
     </message>
     <message>
         <source>Clear Recent Files</source>
@@ -6972,11 +6987,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MusicXML File (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML fails (*.xml)</translation>
     </message>
     <message>
         <source>Compressed MusicXML File (*.mxl)</source>
-        <translation type="unfinished"/>
+        <translation>Kompresēts MusicXML fails (*.mxl)</translation>
     </message>
     <message>
         <source>Show MIDI import panel</source>
@@ -7108,15 +7123,15 @@ please choose a different name:</source>
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Par...</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished"/>
+        <translation>Par &amp;Qt...</translation>
     </message>
     <message>
         <source>About &amp;MusicXML...</source>
-        <translation type="unfinished"/>
+        <translation>Par &amp;MusicXML...</translation>
     </message>
     <message>
         <source>Image Capture</source>
@@ -7747,7 +7762,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Staff</source>
-        <translation type="unfinished"/>
+        <translation>Staff</translation>
     </message>
     <message>
         <source>Staff Properties...</source>
@@ -7988,7 +8003,7 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>New shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Jauna saīsne</translation>
     </message>
 </context>
 <context>
@@ -8475,7 +8490,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Page Size</source>
-        <translation type="unfinished"/>
+        <translation>Lapas izmērs</translation>
     </message>
     <message>
         <source>Landscape</source>
@@ -8842,7 +8857,7 @@ failed: </source>
     </message>
     <message>
         <source>Cell size:</source>
-        <translation type="unfinished"/>
+        <translation>Šūnas izmērs:</translation>
     </message>
     <message>
         <source>Element offset:</source>
@@ -9091,7 +9106,7 @@ failed: </source>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"/>
+        <translation>Jauns</translation>
     </message>
     <message>
         <source>Open</source>
@@ -9099,7 +9114,7 @@ failed: </source>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>Saglabāt</translation>
     </message>
     <message>
         <source>Manual</source>
@@ -9185,7 +9200,7 @@ failed: </source>
     </message>
     <message>
         <source>Auto Save</source>
-        <translation type="unfinished"/>
+        <translation>Auto saglabāšana</translation>
     </message>
     <message>
         <source>minutes</source>
@@ -9201,7 +9216,7 @@ failed: </source>
     </message>
     <message>
         <source>Icon size:</source>
-        <translation type="unfinished"/>
+        <translation>Ikonas izmērs:</translation>
     </message>
     <message>
         <source>Animations</source>
@@ -9409,7 +9424,7 @@ failed: </source>
     </message>
     <message>
         <source>MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML</translation>
     </message>
     <message>
         <source>Import layout</source>
@@ -9629,7 +9644,7 @@ failed: </source>
     </message>
     <message>
         <source>Save every:</source>
-        <translation type="unfinished"/>
+        <translation>Saglabāšanas intervāls:</translation>
     </message>
     <message>
         <source>Proximity for selecting elements:</source>
@@ -10443,7 +10458,8 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>Internal error: MusicXML schema is invalid
 </source>
-        <translation type="unfinished"/>
+        <translation>Iekšēja kļūda: MusicXML shēma ir nederīga
+</translation>
     </message>
     <message>
         <source>Error reading container.xml at line %1 column %2: %3
@@ -10457,7 +10473,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>File &apos;%1&apos; is not a valid MusicXML file</source>
-        <translation type="unfinished"/>
+        <translation>Fails &apos;%1&apos; nav derīgs MusicXML fails</translation>
     </message>
     <message>
         <source>Error at line %1 column %2: %3
@@ -10467,12 +10483,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>Could not open MusicXML file
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Nevar atvērt MusicXML failu
+%1</translation>
     </message>
     <message>
         <source>Could not open compressed MusicXML file
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Nevar atvērt kompresētu MusicXML failu
+%1</translation>
     </message>
     <message>
         <source>normal</source>
@@ -10565,7 +10583,8 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>Internal error: Could not open resource musicxml.xsd
 </source>
-        <translation type="unfinished"/>
+        <translation>Iekšēja kļūda: Nevar atvērt resursu musicxml.xsd
+</translation>
     </message>
     <message>
         <source>Tab. balalaika</source>
@@ -10617,7 +10636,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>File corrupted %1</source>
-        <translation type="unfinished"/>
+        <translation>Fails bojāts %1</translation>
     </message>
 </context>
 <context>
@@ -10753,7 +10772,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>File Size</source>
-        <translation type="unfinished"/>
+        <translation>Faila izmērs</translation>
     </message>
     <message>
         <source>Install/Update</source>
@@ -10783,7 +10802,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Size:</source>
-        <translation type="unfinished"/>
+        <translation>Izmērs:</translation>
     </message>
     <message>
         <source>Created: </source>
@@ -11038,10 +11057,6 @@ Do you want to overwrite it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>III</source>
         <translation type="unfinished"/>
     </message>
@@ -11056,220 +11071,7 @@ Do you want to overwrite it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>PushButton</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>I</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P+III</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -11377,7 +11179,7 @@ altera</source>
     <name>SynthControl</name>
     <message>
         <source>Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Sintezators</translation>
     </message>
     <message>
         <source>Save to Score</source>
@@ -11500,7 +11302,7 @@ altera</source>
     </message>
     <message>
         <source>Size:</source>
-        <translation type="unfinished"/>
+        <translation>Izmērs:</translation>
     </message>
     <message>
         <source>Color:</source>
@@ -11766,7 +11568,7 @@ altera</source>
     </message>
     <message>
         <source>Staff</source>
-        <translation type="unfinished"/>
+        <translation>Staff</translation>
     </message>
     <message>
         <source>Chord Symbol</source>
@@ -11853,7 +11655,7 @@ altera</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"/>
+        <translation>Jauns</translation>
     </message>
 </context>
 <context>
@@ -12224,7 +12026,7 @@ altera</source>
     </message>
     <message>
         <source>Options</source>
-        <translation type="unfinished"/>
+        <translation>Opcijas</translation>
     </message>
     <message>
         <source>Transpose chord symbols</source>
@@ -12451,7 +12253,7 @@ altera</source>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>Apraksts</translation>
     </message>
     <message>
         <source>License</source>
@@ -12467,10 +12269,6 @@ altera</source>
     </message>
     <message>
         <source>Make this score private</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sharing</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -12751,7 +12549,7 @@ failed: </source>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>Saglabāt</translation>
     </message>
     <message>
         <source>Save score to file</source>
@@ -12759,7 +12557,7 @@ failed: </source>
     </message>
     <message>
         <source>Save As...</source>
-        <translation type="unfinished"/>
+        <translation>Saglabāt ķā...</translation>
     </message>
     <message>
         <source>Save score under a new file name</source>
@@ -12811,7 +12609,7 @@ failed: </source>
     </message>
     <message>
         <source>New...</source>
-        <translation type="unfinished"/>
+        <translation>Jauns...</translation>
     </message>
     <message>
         <source>Create new score</source>
@@ -14083,7 +13881,7 @@ failed: </source>
     </message>
     <message>
         <source>Text...</source>
-        <translation type="unfinished"/>
+        <translation>Teksts...</translation>
     </message>
     <message>
         <source>Edit text style</source>
@@ -14107,7 +13905,7 @@ failed: </source>
     </message>
     <message>
         <source>Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Sintezators</translation>
     </message>
     <message>
         <source>Double duration</source>
@@ -14743,7 +14541,7 @@ failed: </source>
     </message>
     <message>
         <source>File: Save</source>
-        <translation type="unfinished"/>
+        <translation>Fails: saglabāt</translation>
     </message>
     <message>
         <source>File: Save online</source>
@@ -14771,7 +14569,7 @@ failed: </source>
     </message>
     <message>
         <source>File: New</source>
-        <translation type="unfinished"/>
+        <translation>Fails: jauns</translation>
     </message>
     <message>
         <source>Note input</source>
@@ -17918,43 +17716,43 @@ Measure is not empty</source>
     </message>
     <message>
         <source>D</source>
-        <translation type="unfinished"/>
+        <translation>D</translation>
     </message>
     <message>
         <source>D#</source>
-        <translation type="unfinished"/>
+        <translation>D#</translation>
     </message>
     <message>
         <source>E</source>
-        <translation type="unfinished"/>
+        <translation>E</translation>
     </message>
     <message>
         <source>F</source>
-        <translation type="unfinished"/>
+        <translation>F</translation>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"/>
+        <translation>F#</translation>
     </message>
     <message>
         <source>G</source>
-        <translation type="unfinished"/>
+        <translation>G</translation>
     </message>
     <message>
         <source>G#</source>
-        <translation type="unfinished"/>
+        <translation>G#</translation>
     </message>
     <message>
         <source>A</source>
-        <translation type="unfinished"/>
+        <translation>A</translation>
     </message>
     <message>
         <source>A#</source>
-        <translation type="unfinished"/>
+        <translation>A#</translation>
     </message>
     <message>
         <source>B</source>
-        <translation type="unfinished"/>
+        <translation>B</translation>
     </message>
 </context>
 </TS>

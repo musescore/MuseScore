@@ -11130,10 +11130,6 @@ Doriți să-l suprascrieți?</translation>
         <translation>Stopuri Aeolus</translation>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation>Schimbă Stopurile.</translation>
-    </message>
-    <message>
         <source>III</source>
         <translation>III</translation>
     </message>
@@ -11150,250 +11146,8 @@ Doriți să-l suprascrieți?</translation>
 8</translation>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation>Cvintă
-dena 8</translation>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation>Suabile
-8</translation>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation>Rohrflöte
-8</translation>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation>Dulzflöte
-4</translation>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation>Quintflöte
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation>Super
-octava 2</translation>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation>Fluier
-1</translation>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation>Cymbel
-VI</translation>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>Oboi</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>Tremolo</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation>Harmonic
-Flute 8</translation>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation>Flaut
-Dulce 4</translation>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation>Nasard
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation>Ottavina
-2</translation>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation>Tertia
-1 3/5</translation>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation>Sesqui
-altera</translation>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation>Septimă</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>fără</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation>Cromornă</translation>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation>Melodia</translation>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation>II+III</translation>
-    </message>
-    <message>
         <source>PushButton</source>
         <translation>Buton Apăsabil</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation>I</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation>Principal
-4</translation>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation>Octava
-2</translation>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation>Octava
-1</translation>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation>Cvintă
-5 1/3</translation>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation>Cvintă
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation>Tibia
-8</translation>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation>Celesta
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation>Flöte
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation>Flöte
-4</translation>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation>Flöte
-2</translation>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation>Mixtur</translation>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>Trumpeta</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation>I+II</translation>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation>I+III</translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation>Subbass
-16</translation>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation>Principal
-16</translation>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation>Fagot
-16</translation>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation>Trombon
-16</translation>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation>Bombarde
-32</translation>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation>P+I</translation>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation>P+II</translation>
-    </message>
-    <message>
-        <source>P+III</source>
-        <translation>P+III</translation>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
@@ -12591,10 +12345,6 @@ altera</translation>
     <message>
         <source>Make this score private</source>
         <translation>Faceți această partitură privată</translation>
-    </message>
-    <message>
-        <source>Sharing</source>
-        <translation>Setări Confidențialitate</translation>
     </message>
 </context>
 <context>
@@ -16065,7 +15815,7 @@ Măsura nu este vidă.</translation>
     </message>
     <message>
         <source>f</source>
-        <translation>f</translation>
+        <translation>fa</translation>
     </message>
     <message>
         <source>f#</source>

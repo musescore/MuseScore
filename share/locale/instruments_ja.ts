@@ -224,7 +224,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="64"/>
         <source>Flageolet</source>
-        <translation>ファゴット</translation>
+        <translation>フラジオレット</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="66"/>
@@ -235,7 +235,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="67"/>
         <source>French Flageolet</source>
-        <translation>フレンチファゴット</translation>
+        <translation>フレンチフラジオレット</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="69"/>
@@ -246,7 +246,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="70"/>
         <source>English Flageolet</source>
-        <translation>イングリッシュファゴット</translation>
+        <translation>イングリッシュフラジオレット</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="72"/>
@@ -257,7 +257,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="73"/>
         <source>Irish Flute</source>
-        <translation>アイリッシュファゴット</translation>
+        <translation>アイリッシュフルート</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="75"/>
@@ -690,7 +690,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="196"/>
         <source>Baritone Oboe</source>
-        <translation>バリトンホルン</translation>
+        <translation>バリトンオーボエ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="198"/>
@@ -797,7 +797,7 @@ Heckelphone-clarinet</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="226"/>
         <source>Cromorne</source>
-        <translation>クルムホルン</translation>
+        <translation>クロモルヌ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="228"/>
@@ -1033,7 +1033,7 @@ Dulcian</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="292"/>
         <source>Soprano Kelhorn</source>
-        <translation>ソプラノケルトホルン</translation>
+        <translation>ソプラノケルホーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="294"/>
@@ -1044,7 +1044,7 @@ Dulcian</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="295"/>
         <source>Alto Kelhorn</source>
-        <translation>アルトケルトホルン</translation>
+        <translation>アルトケルホーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="297"/>
@@ -1055,7 +1055,7 @@ Dulcian</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="298"/>
         <source>Tenor Kelhorn</source>
-        <translation>テナーケルトホルン</translation>
+        <translation>テナーケルホーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="300"/>
@@ -1066,7 +1066,7 @@ Dulcian</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="301"/>
         <source>Bass Kelhorn</source>
-        <translation>バスケルトホルン</translation>
+        <translation>バスケルホーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="303"/>
@@ -1077,7 +1077,7 @@ Dulcian</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="304"/>
         <source>Greatbass Kelhorn</source>
-        <translation>グレートバスケルトホルン</translation>
+        <translation>グレートバスケルホーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="306"/>
@@ -1901,7 +1901,7 @@ Bass Huang Harmonica</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="542"/>
         <location filename="../instruments/instrumentsxml.h" line="543"/>
         <source>Brass</source>
-        <translation>ブラス</translation>
+        <translation>金管楽器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="545"/>
@@ -2068,7 +2068,7 @@ Bass Huang Harmonica</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="590"/>
         <source>Saxhorn</source>
         <extracomment>Saxhorn</extracomment>
-        <translation>サックスホルン</translation>
+        <translation>サクソルン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="591"/>
@@ -2454,7 +2454,7 @@ Bass Huang Harmonica</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="697"/>
         <source>Euphonium Bugle</source>
-        <translation>ユーフォニウム</translation>
+        <translation>ユーフォニウム ビューグル</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="699"/>
@@ -2732,7 +2732,7 @@ Congas</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="777"/>
         <source>Tuba</source>
-        <translation>チューバ</translation>
+        <translation>テューバ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="779"/>
@@ -2746,7 +2746,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="780"/>
         <source>F Tuba</source>
-        <translation>F チューバ</translation>
+        <translation>F テューバ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="782"/>
@@ -2758,7 +2758,7 @@ Tubo</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="783"/>
         <location filename="../instruments/instrumentsxml.h" line="786"/>
         <source>E♭ Tuba</source>
-        <translation>E♭ チューバ</translation>
+        <translation>E♭ テューバ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="785"/>
@@ -2770,12 +2770,12 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="789"/>
         <source>E♭ Tuba (Treble Clef)</source>
-        <translation>E♭ チューバ (ト音記号)</translation>
+        <translation>E♭ テューバ (ト音記号)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="790"/>
         <source>C Tuba</source>
-        <translation>C チューバ</translation>
+        <translation>C テューバ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="792"/>
@@ -2787,7 +2787,7 @@ Tubo</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="793"/>
         <location filename="../instruments/instrumentsxml.h" line="796"/>
         <source>B♭ Tuba</source>
-        <translation>B♭ チューバ</translation>
+        <translation>B♭ テューバ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="795"/>
@@ -2799,12 +2799,12 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="799"/>
         <source>B♭ Tuba (Treble Clef)</source>
-        <translation>B♭ チューバ (ト音記号)</translation>
+        <translation>B♭ テューバ(ト音記号)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="800"/>
         <source>Bass Tuba in F</source>
-        <translation>F バスチューバ</translation>
+        <translation>F バステューバ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="802"/>
@@ -2815,7 +2815,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="803"/>
         <source>Bass Tuba in E♭</source>
-        <translation>E♭ バスチューバ</translation>
+        <translation>E♭ バステューバ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="805"/>
@@ -2826,7 +2826,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="806"/>
         <source>Sub-Contrabass Tuba</source>
-        <translation>サブコントラチューバ</translation>
+        <translation>サブコントラバステューバ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="808"/>
@@ -2855,7 +2855,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="815"/>
         <source>Wagner Tuba</source>
-        <translation>ワグナーチューバ</translation>
+        <translation>ワグナーテューバ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="817"/>
@@ -2866,7 +2866,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="818"/>
         <source>B♭ Wagner Tuba</source>
-        <translation>B♭ ワグナーチューバ</translation>
+        <translation>B♭ ワグナーテューバ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="820"/>
@@ -2877,7 +2877,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="821"/>
         <source>F Wagner Tuba</source>
-        <translation>F ワグナーチューバ</translation>
+        <translation>F ワグナーテューバ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="823"/>
@@ -3014,7 +3014,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="858"/>
         <source>Tubaphone</source>
-        <translation>チューバフォン</translation>
+        <translation>テューバフォン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="860"/>
@@ -3091,7 +3091,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="879"/>
         <source>Tubular Bells</source>
-        <translation>チューブラベル</translation>
+        <translation>チャイム</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="881"/>
@@ -3146,7 +3146,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="894"/>
         <source>Tenor Steel Drums</source>
-        <translation>テナーパン</translation>
+        <translation>テナースティールパン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="896"/>
@@ -3157,7 +3157,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="897"/>
         <source>Cello Steel Drums</source>
-        <translation>チェロパン</translation>
+        <translation>チェロスティールパン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="899"/>
@@ -3509,7 +3509,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="994"/>
         <source>Cuica</source>
-        <translation>クイカ</translation>
+        <translation>クイーカ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="996"/>
@@ -3660,7 +3660,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1039"/>
         <source>Temple Blocks</source>
-        <translation>テンプル ブロック</translation>
+        <translation>木魚</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1041"/>
@@ -3924,7 +3924,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1111"/>
         <source>Shell Wind Chimes</source>
-        <translation>シェールウィンドチャイム</translation>
+        <translation>シェルウィンドチャイム</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1113"/>
@@ -4569,12 +4569,12 @@ String Synthesizer</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1305"/>
         <source>Bass Synthesizer</source>
-        <translation>ベース＋リード シンセサイザー</translation>
+        <translation>シンセベース</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1308"/>
         <source>Brass Synthesizer</source>
-        <translation>ブラス シンセサイザー</translation>
+        <translation>シンセブラス</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1311"/>

@@ -1344,13 +1344,13 @@ Sheng</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="376"/>
         <source>Tarogato</source>
-        <translation type="unfinished"/>
+        <translation>Tárogató</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="378"/>
         <source>Tar.</source>
         <extracomment>Tarogato</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tár.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="379"/>
@@ -1646,7 +1646,7 @@ Sheng</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="460"/>
         <source>Bagpipe</source>
-        <translation type="unfinished"/>
+        <translation>Skótduda</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="462"/>
@@ -1662,7 +1662,7 @@ Sheng</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="464"/>
         <source>Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Harmonika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="466"/>
@@ -1710,7 +1710,7 @@ Sheng</extracomment>
 20 Hole Chordet Harmonica
 ----------
 Harmonium</extracomment>
-        <translation type="unfinished"/>
+        <translation>Harm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="467"/>

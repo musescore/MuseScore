@@ -305,7 +305,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Remove current line breaks</source>
-        <translation type="unfinished"/>
+        <translation>删除当前换行</translation>
     </message>
     <message>
         <source>Break lines every X measures</source>
@@ -316,7 +316,7 @@ p, li { white-space: pre-wrap; }
     <name>ChordBase</name>
     <message>
         <source>Glissando end</source>
-        <translation type="unfinished"/>
+        <translation>滑音结尾</translation>
     </message>
 </context>
 <context>
@@ -374,7 +374,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>XCircle</source>
-        <translation type="unfinished"/>
+        <translation>圆圈带叉</translation>
     </message>
     <message>
         <source>Do</source>
@@ -548,7 +548,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Short name:</source>
-        <translation type="unfinished"/>
+        <translation>简称</translation>
     </message>
     <message>
         <source>MIDI program:</source>
@@ -1154,7 +1154,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Edit Grid</source>
-        <translation type="unfinished"/>
+        <translation>编辑网格</translation>
     </message>
     <message>
         <source>Horizontal grid:</source>
@@ -1341,7 +1341,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Play transposition:</source>
-        <translation type="unfinished"/>
+        <translation>播放移调：</translation>
     </message>
     <message>
         <source>+ Octave:</source>
@@ -1357,7 +1357,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Edit String Data...</source>
-        <translation type="unfinished"/>
+        <translation>编辑字符串……</translation>
     </message>
     <message>
         <source>Show time signature</source>
@@ -1397,7 +1397,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Scale</source>
-        <translation>音阶</translation>
+        <translation>缩放比例</translation>
     </message>
     <message>
         <source>%</source>
@@ -1643,7 +1643,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Delete String</source>
-        <translation type="unfinished"/>
+        <translation>删除字符串</translation>
     </message>
     <message>
         <source>Number of frets:</source>
@@ -2295,7 +2295,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Interval:</source>
-        <translation type="unfinished"/>
+        <translation>间距</translation>
     </message>
     <message>
         <source>Hide instrument name if there is only 1 instrument</source>
@@ -2407,11 +2407,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dash-dotted</source>
-        <translation type="unfinished"/>
+        <translation>─‧─‧─‧ (虚线-点线组合)</translation>
     </message>
     <message>
         <source>Dash-dot-dotted</source>
-        <translation type="unfinished"/>
+        <translation>─‧‧─‧‧ (虚线、点线、点线组合)</translation>
     </message>
     <message>
         <source>Numbers only</source>
@@ -2439,15 +2439,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Vertical Distance from the Notes</source>
-        <translation type="unfinished"/>
+        <translation>音符垂直间距</translation>
     </message>
     <message>
         <source>Horizontal Distance from the Notes</source>
-        <translation type="unfinished"/>
+        <translation>音符水平间距</translation>
     </message>
     <message>
         <source>Only for a change to C Maj / A min</source>
-        <translation type="unfinished"/>
+        <translation>仅当变为C大调/A小调</translation>
     </message>
     <message>
         <source>Create multimeasure rests</source>
@@ -2467,11 +2467,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>A, B♭, H, C, C♯, ...</source>
-        <translation type="unfinished"/>
+        <translation>A, B♭, H, C, C♯, ...</translation>
     </message>
     <message>
         <source>A, B, H, C, Cis</source>
-        <translation type="unfinished"/>
+        <translation>A, B, H, C, Cis</translation>
     </message>
     <message>
         <source>Full German</source>
@@ -2479,11 +2479,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Do, Do♯, Re♭, Re, ...</source>
-        <translation type="unfinished"/>
+        <translation>Do, Do♯, Re♭, Re, ...</translation>
     </message>
     <message>
         <source>Do, Do♯, Ré♭, Ré, ...</source>
-        <translation type="unfinished"/>
+        <translation>Do, Do♯, Ré♭, Ré, ...</translation>
     </message>
     <message>
         <source>French</source>
@@ -2503,7 +2503,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Automatic Capitalization</source>
-        <translation type="unfinished"/>
+        <translation>自动大写</translation>
     </message>
     <message>
         <source>Vertical frame upper margin</source>
@@ -2665,7 +2665,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cancel not applied MIDI import operations</source>
-        <translation type="unfinished"/>
+        <translation>MIDI导入操作不能取消</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2692,7 +2692,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Number of measures to insert:</source>
-        <translation>插入小节数量</translation>
+        <translation>插入小节数：</translation>
     </message>
 </context>
 <context>
@@ -2722,7 +2722,7 @@ space unit</extracomment>
     <name>InspectorAmbitus</name>
     <message>
         <source>Head group</source>
-        <translation type="unfinished"/>
+        <translation>符头组</translation>
     </message>
     <message>
         <source>sp</source>
@@ -2906,7 +2906,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Head type</source>
-        <translation type="unfinished"/>
+        <translation>符头类型</translation>
     </message>
     <message>
         <source>Update Range</source>
@@ -2922,11 +2922,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Leaning Left</source>
-        <translation type="unfinished"/>
+        <translation>左斜</translation>
     </message>
     <message>
         <source>Leaning Right</source>
-        <translation type="unfinished"/>
+        <translation>右斜</translation>
     </message>
     <message>
         <source>Ambitus Inspector</source>
@@ -2978,7 +2978,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>XCircle</source>
-        <translation type="unfinished"/>
+        <translation>圆圈带叉</translation>
     </message>
     <message>
         <source>Do</source>
@@ -3014,7 +3014,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line thickness</source>
-        <translation type="unfinished"/>
+        <translation>谱线宽度</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4069,11 +4069,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Head type</source>
-        <translation type="unfinished"/>
+        <translation>符头类型</translation>
     </message>
     <message>
         <source>Head group</source>
-        <translation type="unfinished"/>
+        <translation>符头组</translation>
     </message>
     <message>
         <source>Dot position</source>
@@ -5606,7 +5606,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Number of measures to append:</source>
-        <translation>追加小节个数：</translation>
+        <translation>追加小节数：</translation>
     </message>
 </context>
 <context>
@@ -6153,7 +6153,7 @@ failed: </source>
     </message>
     <message>
         <source>Hook</source>
-        <translation>勾线</translation>
+        <translation>符尾</translation>
     </message>
     <message>
         <source>Stem</source>
@@ -9436,7 +9436,7 @@ failed: </source>
     </message>
     <message>
         <source>Import layout</source>
-        <translation type="unfinished"/>
+        <translation>导入布局</translation>
     </message>
     <message>
         <source>Import system and page breaks</source>
@@ -11069,10 +11069,6 @@ Do you want to overwrite it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>III</source>
         <translation>III</translation>
     </message>
@@ -11087,220 +11083,7 @@ Do you want to overwrite it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>双簧管</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>震音</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>无</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>PushButton</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>I</source>
-        <translation>I</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>小号</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P+III</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -11625,7 +11408,7 @@ altera</source>
     </message>
     <message>
         <source>Text color</source>
-        <translation type="unfinished"/>
+        <translation>文字颜色</translation>
     </message>
     <message>
         <source>Horizontal offset to reference point</source>
@@ -12500,10 +12283,6 @@ altera</source>
         <source>Make this score private</source>
         <translation type="unfinished"/>
     </message>
-    <message>
-        <source>Sharing</source>
-        <translation type="unfinished"/>
-    </message>
 </context>
 <context>
     <name>VoltaPropertyBase</name>
@@ -13226,7 +13005,7 @@ failed: </source>
     </message>
     <message>
         <source>Marcato</source>
-        <translation type="unfinished"/>
+        <translation>加强音</translation>
     </message>
     <message>
         <source>Reset Beam Mode</source>
@@ -13658,7 +13437,7 @@ failed: </source>
     </message>
     <message>
         <source>Add acciaccatura</source>
-        <translation type="unfinished"/>
+        <translation>添加短倚音</translation>
     </message>
     <message>
         <source>Appoggiatura</source>
@@ -13666,7 +13445,7 @@ failed: </source>
     </message>
     <message>
         <source>Add appoggiatura</source>
-        <translation type="unfinished"/>
+        <translation>添加长倚音</translation>
     </message>
     <message>
         <source>Grace: quarter</source>
@@ -13766,7 +13545,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI Import Panel</source>
-        <translation type="unfinished"/>
+        <translation>MIDI 导入面板</translation>
     </message>
     <message>
         <source>Mixer</source>
@@ -15150,7 +14929,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI import panel</source>
-        <translation type="unfinished"/>
+        <translation>MIDI 导入面板</translation>
     </message>
     <message>
         <source>Status bar</source>
@@ -15702,15 +15481,15 @@ failed: </source>
     </message>
     <message>
         <source>Toggle marcato</source>
-        <translation type="unfinished"/>
+        <translation>切换加强音</translation>
     </message>
     <message>
         <source>Import PDF...</source>
-        <translation type="unfinished"/>
+        <translation>导入 PDF...</translation>
     </message>
     <message>
         <source>Import PDF</source>
-        <translation type="unfinished"/>
+        <translation>导入 PDF</translation>
     </message>
     <message>
         <source>Import a PDF file with an experimental service on musescore.com</source>
@@ -15762,7 +15541,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Fermata</source>
-        <translation type="unfinished"/>
+        <translation>延音</translation>
     </message>
     <message>
         <source>Short fermata</source>
@@ -15798,7 +15577,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Marcato</source>
-        <translation type="unfinished"/>
+        <translation>加强音</translation>
     </message>
     <message>
         <source>Fade in</source>
@@ -15862,7 +15641,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Mordent</source>
-        <translation type="unfinished"/>
+        <translation>波音</translation>
     </message>
     <message>
         <source>Prall prall</source>
@@ -17195,7 +16974,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Hook</source>
-        <translation>勾线</translation>
+        <translation>符尾</translation>
     </message>
     <message>
         <source>Lyrics</source>
@@ -17548,7 +17327,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>[Custom]</source>
-        <translation type="unfinished"/>
+        <translation>[自定义]</translation>
     </message>
 </context>
 <context>
@@ -17567,11 +17346,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>D.S. al Coda</source>
-        <translation type="unfinished"/>
+        <translation>D.S. al Coda</translation>
     </message>
     <message>
         <source>D.S. al Fine</source>
-        <translation type="unfinished"/>
+        <translation>D.S. al Fine</translation>
     </message>
     <message>
         <source>D.S.</source>
@@ -17628,7 +17407,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>To Coda</source>
-        <translation type="unfinished"/>
+        <translation>To Coda</translation>
     </message>
     <message>
         <source>Custom</source>
@@ -17803,7 +17582,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Glissandi</source>
-        <translation type="unfinished"/>
+        <translation>滑音</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>

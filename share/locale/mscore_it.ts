@@ -23,10 +23,10 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; per la nuova versione e maggiori informazioni.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Supporto MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;le tue donazioni&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Visita&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; per la nuova versione e maggiori informazioni.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Supporta MuseScore con &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;le tue donazioni&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer e altri. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Pubblicato sotto GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
@@ -6811,7 +6811,7 @@ selezionare una battuta e riprovare</translation>
     </message>
     <message>
         <source>W&amp;orkspaces</source>
-        <translation>Set di tavolozze</translation>
+        <translation>&amp;Set di tavolozze</translation>
     </message>
     <message>
         <source>&amp;Preferences...</source>
@@ -6831,7 +6831,7 @@ selezionare una battuta e riprovare</translation>
     </message>
     <message>
         <source>T&amp;uplets</source>
-        <translation>Gruppi irregolari</translation>
+        <translation>G&amp;ruppi irregolari</translation>
     </message>
     <message>
         <source>&amp;Layout</source>
@@ -6851,7 +6851,7 @@ selezionare una battuta e riprovare</translation>
     </message>
     <message>
         <source>&amp;Online Handbook</source>
-        <translation>Manuale &amp;online</translation>
+        <translation>&amp;Manuale online</translation>
     </message>
     <message>
         <source>Check for &amp;Update</source>
@@ -7156,11 +7156,11 @@ scegli un nome diverso:</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation>Informazioni su Qt...</translation>
+        <translation>Informazioni su &amp;Qt...</translation>
     </message>
     <message>
         <source>About &amp;MusicXML...</source>
-        <translation>Informazioni su MusicXML...</translation>
+        <translation>Informazioni su &amp;MusicXML...</translation>
     </message>
     <message>
         <source>Image Capture</source>
@@ -8638,7 +8638,7 @@ scegli un nome diverso:</translation>
     </message>
     <message>
         <source>Breaks &amp;&amp; Spacers</source>
-        <translation>Interruzioni &amp;&amp; Spaziatori</translation>
+        <translation>Interruzioni e Spaziatori</translation>
     </message>
     <message>
         <source>Fingering</source>
@@ -8746,7 +8746,7 @@ scegli un nome diverso:</translation>
     </message>
     <message>
         <source>Arpeggios &amp;&amp; Glissandi</source>
-        <translation>Arpeggi &amp;&amp; Glissandi</translation>
+        <translation>Arpeggi e Glissandi</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
@@ -11132,10 +11132,6 @@ Vuoi sovrascriverlo?</translation>
         <translation>Registri Aeolus</translation>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation>Cambia registri:</translation>
-    </message>
-    <message>
         <source>III</source>
         <translation>III</translation>
     </message>
@@ -11152,250 +11148,8 @@ Vuoi sovrascriverlo?</translation>
 8</translation>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation>Quintadena
-8</translation>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation>Soave
-8</translation>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation>Flauto a camino
-8</translation>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation>Flauto dolce
-4</translation>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation>Quinto flauto
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation>Super-
-ottava 2</translation>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation>Sifflet
-1</translation>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation>Cimbalo
-VI</translation>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>Oboe</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>Tremolo</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation>Armonica
-Flauto 8</translation>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation>Flauto
-Dolce 4</translation>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation>Nasard
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation>Ottavina
-2</translation>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation>Tertia
-1 3/5</translation>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation>Sesqui
-altera</translation>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation>Settima</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>Nona</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation>Cromorno</translation>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation>Melodia</translation>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation>II+III</translation>
-    </message>
-    <message>
         <source>PushButton</source>
         <translation>Pulsante</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation>I</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation>Principale
-4</translation>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation>Ottava
-2</translation>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation>Ottava
-1</translation>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation>Quinta
-5 1/3</translation>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation>Quinta
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation>Tibia
-8</translation>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation>Celesta
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation>Flauto
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation>Flauto
-4</translation>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation>Flauto
-2</translation>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation>Ripieno</translation>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>Tromba</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation>I+II</translation>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation>I+III</translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation>Subbasso
-16</translation>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation>Principale
-16</translation>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation>Fagotto
-16</translation>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation>Trombone
-16</translation>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation>Bombarda
-32</translation>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation>P+I</translation>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation>P+II</translation>
-    </message>
-    <message>
-        <source>P+III</source>
-        <translation>P+III</translation>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
@@ -12593,10 +12347,6 @@ altera</translation>
     <message>
         <source>Make this score private</source>
         <translation>Rendi questo spartito privato</translation>
-    </message>
-    <message>
-        <source>Sharing</source>
-        <translation>Condivisione</translation>
     </message>
 </context>
 <context>
@@ -14858,7 +14608,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Resource Manager...</source>
-        <translation>Gestione delle risorse...</translation>
+        <translation>Gestione delle risorse... </translation>
     </message>
     <message>
         <source>Add/Remove Line Breaks...</source>

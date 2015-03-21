@@ -5157,7 +5157,7 @@ Tenor Mandola</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1488"/>
         <source>Strings</source>
-        <translation>Snaren</translation>
+        <translation>Strijkers</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1489"/>

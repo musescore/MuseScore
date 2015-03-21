@@ -339,7 +339,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tab 2</source>
-        <translation>Tab 2 </translation>
+        <translation>Onglet 2</translation>
     </message>
     <message>
         <source>Save As</source>
@@ -927,19 +927,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>E♭</source>
-        <translation>E♭</translation>
+        <translation>Mi♭</translation>
     </message>
     <message>
         <source>F♯</source>
-        <translation>F♯</translation>
+        <translation>Fa♯</translation>
     </message>
     <message>
         <source>A♭</source>
-        <translation>A♭</translation>
+        <translation>La♭</translation>
     </message>
     <message>
         <source>B♭</source>
-        <translation>B♭</translation>
+        <translation>Si♭</translation>
     </message>
     <message>
         <source>C♯ 8</source>
@@ -2467,11 +2467,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Before key signature if changing to fewer sharps or flats</source>
-        <translation>Avant l&apos;armature si le changement utilise moins de dièses ou bémols</translation>
+        <translation>Avant l&apos;armature si le changement utilise moins de ♯ ou de ♭</translation>
     </message>
     <message>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
-        <translation>Après l&apos;armature si le changement utilise moins de dièses ou de bémols. Avant l&apos;armature si le changement passe de dièses à bémols ou inversement.</translation>
+        <translation>Après l&apos;armature si le changement utilise moins de ♯ ou de ♭. Avant s&apos;il passe de ♯ à ♭ ou inversement.</translation>
     </message>
     <message>
         <source>A, B♭, H, C, C♯, ...</source>
@@ -2742,143 +2742,143 @@ space unit</extracomment>
     </message>
     <message>
         <source>C♭♭</source>
-        <translation>C♭♭</translation>
+        <translation>Do♭♭</translation>
     </message>
     <message>
         <source>C♭</source>
-        <translation>C♭</translation>
+        <translation>Do♭</translation>
     </message>
     <message>
         <source>C</source>
-        <translation>C</translation>
+        <translation>Do</translation>
     </message>
     <message>
         <source>C♯</source>
-        <translation>C♯</translation>
+        <translation>Do♯</translation>
     </message>
     <message>
         <source>C♯♯</source>
-        <translation>C♯♯</translation>
+        <translation>Do♯♯</translation>
     </message>
     <message>
         <source>D♭♭</source>
-        <translation>D♭♭</translation>
+        <translation>Re♭♭</translation>
     </message>
     <message>
         <source>D♭</source>
-        <translation>D♭</translation>
+        <translation>Re♭</translation>
     </message>
     <message>
         <source>D</source>
-        <translation>D</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <source>D♯</source>
-        <translation>D♯</translation>
+        <translation>Re♯</translation>
     </message>
     <message>
         <source>D♯♯</source>
-        <translation>D♯♯</translation>
+        <translation>Re♯♯</translation>
     </message>
     <message>
         <source>E♭♭</source>
-        <translation>E♭♭</translation>
+        <translation>Mi♭♭</translation>
     </message>
     <message>
         <source>E♭</source>
-        <translation>E♭</translation>
+        <translation>Mi♭</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>E</translation>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>E♯</source>
-        <translation>E♯</translation>
+        <translation>Mi♯</translation>
     </message>
     <message>
         <source>E♯♯</source>
-        <translation>E♯♯</translation>
+        <translation>Mi♯♯</translation>
     </message>
     <message>
         <source>F♭♭</source>
-        <translation>F♭♭</translation>
+        <translation>Fa♭♭</translation>
     </message>
     <message>
         <source>F♭</source>
-        <translation>F♭</translation>
+        <translation>Fa♭</translation>
     </message>
     <message>
         <source>F</source>
-        <translation>F</translation>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>F♯</source>
-        <translation>F♯</translation>
+        <translation>Fa♯</translation>
     </message>
     <message>
         <source>F♯♯</source>
-        <translation>F♯♯</translation>
+        <translation>Fa♯♯</translation>
     </message>
     <message>
         <source>G♭♭</source>
-        <translation>G♭♭</translation>
+        <translation>Sol♭♭</translation>
     </message>
     <message>
         <source>G♭</source>
-        <translation>G♭</translation>
+        <translation>Sol♭</translation>
     </message>
     <message>
         <source>G</source>
-        <translation>G</translation>
+        <translation>So</translation>
     </message>
     <message>
         <source>G♯</source>
-        <translation>G♯</translation>
+        <translation>So♯</translation>
     </message>
     <message>
         <source>G♯♯</source>
-        <translation>G♯♯</translation>
+        <translation>Sol♯♯</translation>
     </message>
     <message>
         <source>A♭♭</source>
-        <translation>A♭♭</translation>
+        <translation>La♭♭</translation>
     </message>
     <message>
         <source>A♭</source>
-        <translation>A♭</translation>
+        <translation>La♭</translation>
     </message>
     <message>
         <source>A</source>
-        <translation>A</translation>
+        <translation>La</translation>
     </message>
     <message>
         <source>A♯</source>
-        <translation>A♯</translation>
+        <translation>La♯</translation>
     </message>
     <message>
         <source>A♯♯</source>
-        <translation>A♯♯</translation>
+        <translation>La♯♯</translation>
     </message>
     <message>
         <source>B♭♭</source>
-        <translation>B♭♭</translation>
+        <translation>Si♭♭</translation>
     </message>
     <message>
         <source>B♭</source>
-        <translation>B♭</translation>
+        <translation>Si♭</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>B</translation>
+        <translation>Si</translation>
     </message>
     <message>
         <source>B♯</source>
-        <translation>B♯</translation>
+        <translation>Si♯</translation>
     </message>
     <message>
         <source>B♯♯</source>
-        <translation>B♯♯</translation>
+        <translation>Si♯♯</translation>
     </message>
     <message>
         <source>Oct </source>
@@ -5452,7 +5452,7 @@ Voulez vous ajouter %2 maintenant ?</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
-        <translation>Ornement pour cornemuse </translation>
+        <translation>Ornements pour cornemuse </translation>
     </message>
     <message>
         <source>Repeats &amp; Jumps</source>
@@ -6305,7 +6305,7 @@ a échoué :</translation>
     </message>
     <message>
         <source>Please fill in your username and password</source>
-        <translation>Veuillez remplir votre nom d&apos;utilisateur et votre mot de passe</translation>
+        <translation>Veuillez renseigner votre nom d&apos;utilisateur et votre mot de passe</translation>
     </message>
 </context>
 <context>
@@ -8748,7 +8748,7 @@ veuillez choisir un nom différent :</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
-        <translation>Ornement pour cornemuse </translation>
+        <translation>Ornements pour cornemuse </translation>
     </message>
     <message>
         <source>Frames &amp;&amp; Measures</source>
@@ -8836,7 +8836,7 @@ a échoué :</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation>Diagramme d&apos;accord</translation>
+        <translation>Diagrammes d&apos;accord</translation>
     </message>
 </context>
 <context>
@@ -11130,10 +11130,6 @@ Voulez-vous le remplacer ?</translation>
         <translation>Registres pour Aeolus</translation>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation>Changer les arrêts :</translation>
-    </message>
-    <message>
         <source>III</source>
         <translation>III</translation>
     </message>
@@ -11150,250 +11146,8 @@ Voulez-vous le remplacer ?</translation>
 8</translation>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation>Quinta-
-dena 8</translation>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation>Suabile
-8</translation>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation>Rohrflöte
-8</translation>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation>Dulzflöte
-4</translation>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation>Quintflöte
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation>Super-
-octave 2</translation>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation>Sifflet
-1</translation>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation>Cymbale
-VI</translation>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>Hautbois</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>Trémolo</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation>Harmonic
-Flute 8</translation>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation>Flauto
-Dolce 4</translation>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation>Nasard
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation>Ottavina
-2</translation>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation>Tertia
-1 3/5</translation>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation>Sesqui
-altera</translation>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation>Septième</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>Neuvième</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation>Cromorne</translation>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation>Mélodie</translation>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation>II + III</translation>
-    </message>
-    <message>
         <source>PushButton</source>
         <translation>BoutonPoussoir</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation>I</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation>Principal
-4</translation>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation>Octave
-2</translation>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation>Octave
-1</translation>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation>Quint
-5 1/3</translation>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation>Quint
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation>Tibia
-8</translation>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation>Celesta
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation>Flûte
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation>Flûte
-4</translation>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation>Flûte
-2</translation>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation>Mélangeur</translation>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>Trompette</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation>I + II</translation>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation>I + III</translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation>Subbass
-16</translation>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation>Principal
-16</translation>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation>Fagott
-16</translation>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation>Trombone
-16</translation>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation>Bombarde
-32</translation>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation>P + I</translation>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation>P + II</translation>
-    </message>
-    <message>
-        <source>P+III</source>
-        <translation>P+III</translation>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
@@ -12592,10 +12346,6 @@ altera</translation>
         <source>Make this score private</source>
         <translation>Rendre la partition privée</translation>
     </message>
-    <message>
-        <source>Sharing</source>
-        <translation>Partager</translation>
-    </message>
 </context>
 <context>
     <name>VoltaPropertyBase</name>
@@ -13088,7 +12838,7 @@ a échoué :</translation>
     </message>
     <message>
         <source>Enter fourth below</source>
-        <translation>Entrer une  quarte au-dessous</translation>
+        <translation>Entrer une quarte au-dessous</translation>
     </message>
     <message>
         <source>Fifth Below</source>
@@ -13364,11 +13114,11 @@ a échoué :</translation>
     </message>
     <message>
         <source>Up Note in Chord</source>
-        <translation>Monter la note dans l&apos;accord</translation>
+        <translation>Note la plus grave de l&apos;accord</translation>
     </message>
     <message>
         <source>Go to higher pitched note in chord</source>
-        <translation>Aller à la note la plus haute de l&apos;accord</translation>
+        <translation>Aller à la note la plus aigüe de l&apos;accord</translation>
     </message>
     <message>
         <source>Top Note in Chord</source>
@@ -13404,11 +13154,11 @@ a échoué :</translation>
     </message>
     <message>
         <source>Down Note in Chord</source>
-        <translation>Descendre la note dans l&apos;accord</translation>
+        <translation>Note la plus grave dans l&apos;accord</translation>
     </message>
     <message>
         <source>Go to lower pitched note in chord</source>
-        <translation>Aller à la note la plus basse de l&apos;accord</translation>
+        <translation>Aller à la note la plus grave de l&apos;accord</translation>
     </message>
     <message>
         <source>Bottom Note in Chord</source>
@@ -15328,7 +15078,7 @@ a échoué :</translation>
     </message>
     <message>
         <source>Edit element</source>
-        <translation>diter l&apos;élément</translation>
+        <translation>Editer l&apos;élément</translation>
     </message>
     <message>
         <source>Show invisible</source>
@@ -17547,7 +17297,7 @@ La mesure n&apos;est pas vide</translation>
     </message>
     <message>
         <source>Bagpipe Embellishment</source>
-        <translation>Ornements pour cornemuse</translation>
+        <translation>Ornement pour cornemuse</translation>
     </message>
     <message>
         <source>Fretboard Diagram</source>

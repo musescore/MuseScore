@@ -1770,15 +1770,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Don&apos;t hide empty staves in first system</source>
-        <translation type="unfinished"/>
+        <translation>Zobraziť prázdne notové osnovy v prvom systéme</translation>
     </message>
     <message>
         <source>Display note values across measure bar (EXPERIMENTAL, early music only!)</source>
-        <translation type="unfinished"/>
+        <translation>Zobraziť hodnoty nôt </translation>
     </message>
     <message>
         <source>Music top margin:</source>
-        <translation type="unfinished"/>
+        <translation>Horný okraj nôt</translation>
     </message>
     <message>
         <source>Create clef for all systems</source>
@@ -1786,11 +1786,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Music bottom margin:</source>
-        <translation type="unfinished"/>
+        <translation>Dolný okraj nôt</translation>
     </message>
     <message>
         <source>Staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Vzdialenosť medzi notový osnovami</translation>
     </message>
     <message>
         <source>Grand staff distance:</source>
@@ -1798,7 +1798,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Min. system distance:</source>
-        <translation type="unfinished"/>
+        <translation>Minimálna vzdialenosť medzi systémami:</translation>
     </message>
     <message>
         <source>Lyrics top margin:</source>
@@ -1838,7 +1838,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Max. system distance:</source>
-        <translation type="unfinished"/>
+        <translation>Maximǽlna vzdialenosť medzi systémami:</translation>
     </message>
     <message>
         <source>Last system fill threshold:</source>
@@ -1846,7 +1846,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Show first</source>
-        <translation type="unfinished"/>
+        <translation>Zobraziť prvé</translation>
     </message>
     <message>
         <source>Odd/Even</source>
@@ -1874,11 +1874,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>All staves</source>
-        <translation type="unfinished"/>
+        <translation>Všetky osnovy</translation>
     </message>
     <message>
         <source>Every system</source>
-        <translation type="unfinished"/>
+        <translation>Každý systêm</translation>
     </message>
     <message>
         <source>System bracket distance:</source>
@@ -1890,7 +1890,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Spacing (1=tight):</source>
-        <translation type="unfinished"/>
+        <translation>Riadkovanie (1 = tesné)</translation>
     </message>
     <message>
         <source>Minimum measure width:</source>
@@ -1910,7 +1910,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Minimum note distance:</source>
-        <translation type="unfinished"/>
+        <translation>Minimálna vzdialenosť medzi notami</translation>
     </message>
     <message>
         <source>Key signature left margin:</source>
@@ -1922,7 +1922,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Clef/Key right margin:</source>
-        <translation type="unfinished"/>
+        <translation>Pravý okraj kľúča:</translation>
     </message>
     <message>
         <source>Clef to barline distance:</source>
@@ -1982,7 +1982,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Accidental note distance:</source>
-        <translation type="unfinished"/>
+        <translation>Vzdialenosť noty od posuvky</translation>
     </message>
     <message>
         <source>Accidental distance:</source>
@@ -1990,11 +1990,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Note dot distance:</source>
-        <translation type="unfinished"/>
+        <translation>Vzdialenosť noty od bodky</translation>
     </message>
     <message>
         <source>Dot dot distance:</source>
-        <translation type="unfinished"/>
+        <translation>Vzdialenosť medzi bodkami</translation>
     </message>
     <message>
         <source>Ledger line thickness:</source>
@@ -2010,7 +2010,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dot size:</source>
-        <translation type="unfinished"/>
+        <translation>Veľkosť bodky</translation>
     </message>
     <message>
         <source>Distance to note:</source>
@@ -2102,7 +2102,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Trill Line</source>
-        <translation type="unfinished"/>
+        <translation>Trilková čiara</translation>
     </message>
     <message>
         <source>Appearance</source>
@@ -2110,11 +2110,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Standard</source>
-        <translation type="unfinished"/>
+        <translation>Štandardný</translation>
     </message>
     <message>
         <source>Jazz</source>
-        <translation type="unfinished"/>
+        <translation>Jazzový</translation>
     </message>
     <message>
         <source>Custom</source>
@@ -2122,11 +2122,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Load chords.xml</source>
-        <translation type="unfinished"/>
+        <translation>Načítať akordy.xml</translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished"/>
+        <translation>nemecký</translation>
     </message>
     <message>
         <source>Solfeggio</source>
@@ -2134,7 +2134,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Lower case minor chords</source>
-        <translation type="unfinished"/>
+        <translation>Molové akordy písať malými písmenami</translation>
     </message>
     <message>
         <source>Positioning</source>
@@ -2158,7 +2158,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line height:</source>
-        <translation type="unfinished"/>
+        <translation>Výška čiary</translation>
     </message>
     <message>
         <source>Vertical position:</source>
@@ -2178,11 +2178,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>Zhora</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"/>
+        <translation>Zdola</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2190,11 +2190,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Modern</source>
-        <translation type="unfinished"/>
+        <translation>Moderný</translation>
     </message>
     <message>
         <source>Historic</source>
-        <translation type="unfinished"/>
+        <translation>Historický</translation>
     </message>
     <message>
         <source>sp</source>
@@ -2279,15 +2279,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>A, B♭, B, C, C♯, ...</source>
-        <translation type="unfinished"/>
+        <translation>A, B, H, C, Cis, …</translation>
     </message>
     <message>
         <source>Chord Symbols, Fretboard Diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Značky akordov, diagramy hmatníka</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Diagramy hmatníka</translation>
     </message>
     <message>
         <source>Fret offset number font size:</source>
@@ -2295,7 +2295,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Position:</source>
-        <translation type="unfinished"/>
+        <translation>Pozícia:</translation>
     </message>
     <message>
         <source>Minimum tie length:</source>
@@ -2303,11 +2303,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Interval:</source>
-        <translation type="unfinished"/>
+        <translation>Interval:</translation>
     </message>
     <message>
         <source>Hide instrument name if there is only 1 instrument</source>
-        <translation type="unfinished"/>
+        <translation>Skryť názov nástroja, ak je len 1 nástroj</translation>
     </message>
     <message>
         <source>Maximum barline distance:</source>
@@ -2323,11 +2323,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Swing Settings</source>
-        <translation type="unfinished"/>
+        <translation>Nastavenia Swingu</translation>
     </message>
     <message>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Vypnúť</translation>
     </message>
     <message>
         <source>Eighth Note</source>
@@ -2343,11 +2343,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Musical symbols font:</source>
-        <translation type="unfinished"/>
+        <translation>Písmo hudobných symbolov:</translation>
     </message>
     <message>
         <source>Swing:</source>
-        <translation type="unfinished"/>
+        <translation>Swing:</translation>
     </message>
     <message>
         <source>Select swing ratio:</source>
@@ -2355,7 +2355,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Musical text font:</source>
-        <translation type="unfinished"/>
+        <translation>Písmo hudobných textov</translation>
     </message>
     <message>
         <source>Emmentaler Text</source>
@@ -2383,11 +2383,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Use odd/even page header</source>
-        <translation type="unfinished"/>
+        <translation>Použiť rozdielnu hlavičku na párnych a nepárnych stranách</translation>
     </message>
     <message>
         <source>Use odd/even page footer</source>
-        <translation type="unfinished"/>
+        <translation>Použiť rozdielnu pätu na párnych a nepárnych stranách</translation>
     </message>
     <message>
         <source>System bracket thickness:</source>
@@ -2407,11 +2407,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dashed</source>
-        <translation type="unfinished"/>
+        <translation>čiarkovaný</translation>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>bodkovaný</translation>
     </message>
     <message>
         <source>Dash-dotted</source>
@@ -2423,19 +2423,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Numbers only</source>
-        <translation type="unfinished"/>
+        <translation>Iba čísla</translation>
     </message>
     <message>
         <source>Header Text</source>
-        <translation type="unfinished"/>
+        <translation>Text hlavičky</translation>
     </message>
     <message>
         <source>Footer Text</source>
-        <translation type="unfinished"/>
+        <translation>Text päty</translation>
     </message>
     <message>
         <source>Measure Numbers</source>
-        <translation type="unfinished"/>
+        <translation>Čísla taktov</translation>
     </message>
     <message>
         <source>Default TAB Clef</source>
@@ -2459,7 +2459,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Create multimeasure rests</source>
-        <translation type="unfinished"/>
+        <translation>Vytvoriť iactaktovú pomlčku</translation>
     </message>
     <message>
         <source>Multimeasure rest margin:</source>
@@ -2475,35 +2475,35 @@ space unit</extracomment>
     </message>
     <message>
         <source>A, B♭, H, C, C♯, ...</source>
-        <translation type="unfinished"/>
+        <translation>A, B♭, H, C, C♯, …</translation>
     </message>
     <message>
         <source>A, B, H, C, Cis</source>
-        <translation type="unfinished"/>
+        <translation>A, B, H, C, Cis</translation>
     </message>
     <message>
         <source>Full German</source>
-        <translation type="unfinished"/>
+        <translation>Úplná nemecká</translation>
     </message>
     <message>
         <source>Do, Do♯, Re♭, Re, ...</source>
-        <translation type="unfinished"/>
+        <translation>Do, Do♯, Re♭, Re, …</translation>
     </message>
     <message>
         <source>Do, Do♯, Ré♭, Ré, ...</source>
-        <translation type="unfinished"/>
+        <translation>Do, Do♯, Ré♭, Ré, …</translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished"/>
+        <translation>Francúzsky</translation>
     </message>
     <message>
         <source>Lower case bass notes</source>
-        <translation type="unfinished"/>
+        <translation>Písať basové noty malými písmenami</translation>
     </message>
     <message>
         <source>All caps note names</source>
-        <translation type="unfinished"/>
+        <translation>Písať názvy nôt veľkými písmenami</translation>
     </message>
     <message>
         <source>Note Spelling</source>
@@ -2562,15 +2562,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Part title:</source>
-        <translation type="unfinished"/>
+        <translation>Názov partu:</translation>
     </message>
     <message>
         <source>Edit Part</source>
-        <translation type="unfinished"/>
+        <translation>Upraviť part</translation>
     </message>
     <message>
         <source>Select Part</source>
-        <translation type="unfinished"/>
+        <translation>VybraŤ part</translation>
     </message>
 </context>
 <context>
@@ -3057,7 +3057,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation>Automatický akord</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Auto</source>
@@ -4247,7 +4247,7 @@ space unit</extracomment>
     <name>InspectorRest</name>
     <message>
         <source>Rest</source>
-        <translation>Pauza</translation>
+        <translation>Pomlčka</translation>
     </message>
     <message>
         <source>Small</source>
@@ -4852,7 +4852,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Partitur List</source>
-        <translation type="unfinished"/>
+        <translation>Zoznam partitúr</translation>
     </message>
     <message>
         <source>Staff linked to previous</source>
@@ -5320,7 +5320,8 @@ pickup measure</source>
     <message>
         <source>Show
 chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Zobraziť
+značky akordov</translation>
     </message>
 </context>
 <context>
@@ -5705,18 +5706,18 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Version: </source>
-        <translation type="unfinished"/>
+        <translation>Verzia:</translation>
     </message>
     <message>
         <source>Revision: %1</source>
-        <translation type="unfinished"/>
+        <translation>Revízia: %1</translation>
     </message>
 </context>
 <context>
     <name>Ms::AccessibleScoreView</name>
     <message>
         <source>Score %1</source>
-        <translation type="unfinished"/>
+        <translation>Notová osnova %1</translation>
     </message>
 </context>
 <context>
@@ -5735,7 +5736,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Not found </source>
-        <translation type="unfinished"/>
+        <translation>Nenájdené</translation>
     </message>
 </context>
 <context>
@@ -5758,7 +5759,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Error while creating score from album.</source>
-        <translation type="unfinished"/>
+        <translation>Vyskytla sa chyba pri vytváraní notovej osnovy z albumu.</translation>
     </message>
 </context>
 <context>
@@ -5794,7 +5795,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Breath</source>
-        <translation type="unfinished"/>
+        <translation>Nádych</translation>
     </message>
 </context>
 <context>
@@ -5860,7 +5861,7 @@ tuplet would cross measure</source>
     <name>Ms::ChordStyleEditor</name>
     <message>
         <source>MuseScore: Chord Symbols Style Editor</source>
-        <translation>MuseScore: Editor štýlu akordických symbolov</translation>
+        <translation>MuseScore: Editor štýlu značiek akordov</translation>
     </message>
 </context>
 <context>
@@ -5890,7 +5891,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Cursor:</source>
-        <translation type="unfinished"/>
+        <translation>Kurzor:</translation>
     </message>
     <message>
         <source>Velocity:</source>
@@ -5902,7 +5903,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>user</source>
-        <translation type="unfinished"/>
+        <translation>používateľ</translation>
     </message>
     <message>
         <source>Pitch:</source>
@@ -5944,7 +5945,7 @@ zlyhalo.</translation>
     <name>Ms::EditStaff</name>
     <message>
         <source>The instrument name is invalid.</source>
-        <translation type="unfinished"/>
+        <translation>Názov hudobného nástroja je neplatný.</translation>
     </message>
 </context>
 <context>
@@ -5968,7 +5969,7 @@ zlyhalo.</translation>
     </message>
     <message>
         <source>Anchor</source>
-        <translation type="unfinished"/>
+        <translation>Ukotvenie:</translation>
     </message>
     <message>
         <source>Above Staff</source>
@@ -6044,19 +6045,19 @@ zlyhalo.</translation>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Apklikovať pre všetky party</translation>
     </message>
     <message>
         <source>last modification time</source>
-        <translation type="unfinished"/>
+        <translation>čas poslednej úpravy</translation>
     </message>
     <message>
         <source>last modification date</source>
-        <translation type="unfinished"/>
+        <translation>dátum poslednej úpravy</translation>
     </message>
     <message>
         <source>page number, if there is more than one page</source>
-        <translation type="unfinished"/>
+        <translation>číslo strany, ak je viac ako jedna strana</translation>
     </message>
 </context>
 <context>
@@ -6072,18 +6073,18 @@ zlyhalo.</translation>
     <name>Ms::Fingering</name>
     <message>
         <source>String number</source>
-        <translation type="unfinished"/>
+        <translation>Číslo struny</translation>
     </message>
 </context>
 <context>
     <name>Ms::Hairpin</name>
     <message>
         <source>Crescendo</source>
-        <translation type="unfinished"/>
+        <translation>Crescendo</translation>
     </message>
     <message>
         <source>Descrescendo</source>
-        <translation type="unfinished"/>
+        <translation>Descrescendo</translation>
     </message>
     <message>
         <source>Custom</source>
@@ -6094,11 +6095,11 @@ zlyhalo.</translation>
     <name>Ms::Harmony</name>
     <message>
         <source>sharp</source>
-        <translation type="unfinished"/>
+        <translation>krížik</translation>
     </message>
     <message>
         <source>flat</source>
-        <translation type="unfinished"/>
+        <translation>béčko</translation>
     </message>
 </context>
 <context>
@@ -6138,7 +6139,7 @@ zlyhalo.</translation>
     </message>
     <message>
         <source>Rests</source>
-        <translation type="unfinished"/>
+        <translation>Pomlčký</translation>
     </message>
 </context>
 <context>
@@ -6588,7 +6589,7 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore: Export Parts</source>
-        <translation>MuseScore: Exportovať hlasy</translation>
+        <translation>MuseScore: Exportovať party</translation>
     </message>
     <message>
         <source>&quot;%1&quot; already exists.
@@ -6614,7 +6615,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>Parts were successfully exported</source>
-        <translation type="unfinished"/>
+        <translation>Party boli úspešne exportované</translation>
     </message>
     <message>
         <source>MuseScore: Save a Copy</source>
@@ -6886,7 +6887,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Chord Symbols Style File (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>Súbor štýlu značiek akordov</translation>
     </message>
     <message>
         <source>MuseScore: Load Chord Symbols Style</source>
@@ -7060,7 +7061,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Score_and_Parts</source>
-        <translation type="unfinished"/>
+        <translation>Notová_osnova_a_party</translation>
     </message>
     <message>
         <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</source>
@@ -7484,7 +7485,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>Choose Default Style for Parts</source>
-        <translation type="unfinished"/>
+        <translation>Vyberte si predvolený štýl pre party</translation>
     </message>
     <message>
         <source>Choose Instrument List</source>
@@ -8129,7 +8130,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Aplikovať pre všetky party</translation>
     </message>
     <message>
         <source>Text style name:</source>
@@ -8561,7 +8562,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Aplikovať pre všetky party</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
@@ -8931,7 +8932,7 @@ failed: </source>
     </message>
     <message>
         <source>Part name</source>
-        <translation type="unfinished"/>
+        <translation>Názov partu</translation>
     </message>
     <message>
         <source>Panorama position</source>
@@ -9595,7 +9596,7 @@ failed: </source>
     </message>
     <message>
         <source>Rest</source>
-        <translation>Pauza</translation>
+        <translation>Pomlčka</translation>
     </message>
     <message>
         <source>Augmentation dot</source>
@@ -10570,19 +10571,19 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>double flat</source>
-        <translation type="unfinished"/>
+        <translation>dvojité béčko</translation>
     </message>
     <message>
         <source>flat</source>
-        <translation type="unfinished"/>
+        <translation>béčko</translation>
     </message>
     <message>
         <source>sharp</source>
-        <translation type="unfinished"/>
+        <translation>krížik</translation>
     </message>
     <message>
         <source>double sharp</source>
-        <translation type="unfinished"/>
+        <translation>dvojitý krížik</translation>
     </message>
     <message>
         <source>Internal error: Could not open resource musicxml.xsd
@@ -11060,10 +11061,6 @@ Do you want to overwrite it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>III</source>
         <translation>III</translation>
     </message>
@@ -11078,220 +11075,7 @@ Do you want to overwrite it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>Hoboj</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>Tremolo</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>Žiaden</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>PushButton</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>I</source>
-        <translation>I</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>Trúbka</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P+III</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12298,11 +12082,11 @@ altera</source>
     </message>
     <message>
         <source>Single Sharps and Flats Only</source>
-        <translation type="unfinished"/>
+        <translation>Len jednoduché krížiký a béčka</translation>
     </message>
     <message>
         <source>Use Double Sharps and Flats</source>
-        <translation type="unfinished"/>
+        <translation>Používať aj dvojité krížiky a dvojité béčka</translation>
     </message>
     <message>
         <source>Transpose Chromatically</source>
@@ -12491,10 +12275,6 @@ altera</source>
         <source>Make this score private</source>
         <translation type="unfinished"/>
     </message>
-    <message>
-        <source>Sharing</source>
-        <translation type="unfinished"/>
-    </message>
 </context>
 <context>
     <name>VoltaPropertyBase</name>
@@ -12646,7 +12426,7 @@ failed: </source>
     </message>
     <message>
         <source>Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Krížik</translation>
     </message>
     <message>
         <source>Flat</source>
@@ -12654,15 +12434,15 @@ failed: </source>
     </message>
     <message>
         <source>Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Dvojtiý krížik</translation>
     </message>
     <message>
         <source>Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Dvojtié béčko</translation>
     </message>
     <message>
         <source>Natural</source>
-        <translation type="unfinished"/>
+        <translation>Posuvka</translation>
     </message>
     <message>
         <source>Flat-slash</source>
@@ -13197,11 +12977,11 @@ failed: </source>
     </message>
     <message>
         <source>Rest</source>
-        <translation>Pauza (pomlčka)</translation>
+        <translation>Pomlčka</translation>
     </message>
     <message>
         <source>Enter rest</source>
-        <translation>Zadať pauzu (pomlčku)</translation>
+        <translation>Zadať pomlčku</translation>
     </message>
     <message>
         <source>Staccato</source>
@@ -13625,11 +13405,11 @@ failed: </source>
     </message>
     <message>
         <source>Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Dvojitý krížik</translation>
     </message>
     <message>
         <source>Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Krížik</translation>
     </message>
     <message>
         <source>Natural</source>
@@ -14673,7 +14453,7 @@ failed: </source>
     </message>
     <message>
         <source>Add part name</source>
-        <translation type="unfinished"/>
+        <translation>Pridať názov partu</translation>
     </message>
     <message>
         <source>Save Online...</source>
@@ -14785,7 +14565,7 @@ failed: </source>
     </message>
     <message>
         <source>Export parts</source>
-        <translation type="unfinished"/>
+        <translation>Exportovať party</translation>
     </message>
     <message>
         <source>File: Close</source>
@@ -15061,7 +14841,7 @@ failed: </source>
     </message>
     <message>
         <source>Double Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Dvojitý krížik</translation>
     </message>
     <message>
         <source>Note input: Double sharp</source>
@@ -17155,7 +16935,7 @@ Takt nie je prázdny</translation>
     </message>
     <message>
         <source>Rest</source>
-        <translation>Pauza</translation>
+        <translation>Pomlčka</translation>
     </message>
     <message>
         <source>Breath</source>
@@ -17455,7 +17235,7 @@ Takt nie je prázdny</translation>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Značka akordu</translation>
     </message>
     <message>
         <source>Tremolo Bar</source>

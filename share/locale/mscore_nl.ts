@@ -7,7 +7,7 @@
     </message>
     <message>
         <source>Copy revision number</source>
-        <translation>Kopieër revisienummer</translation>
+        <translation>Kopij revisienummer</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -213,7 +213,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>MIDI Action</source>
-        <translation>MIDI actie</translation>
+        <translation>MIDI-actie</translation>
     </message>
     <message>
         <source>Above Staff</source>
@@ -258,11 +258,11 @@ p, li { white-space: pre-wrap; }
     <name>BendDialog</name>
     <message>
         <source>MuseScore: Bend Properties</source>
-        <translation>MuseScore: Bend eigenschappen</translation>
+        <translation>MuseScore: Eigenschappen opdrukken </translation>
     </message>
     <message>
         <source>Bend type:</source>
-        <translation>Bend type:</translation>
+        <translation>Opdrukken type:</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
@@ -270,23 +270,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Bend</source>
-        <translation>Binden</translation>
+        <translation>Opdrukken</translation>
     </message>
     <message>
         <source>Bend/Release</source>
-        <translation>Binden/loslaten</translation>
+        <translation>Opdrukken/loslaten</translation>
     </message>
     <message>
         <source>Bend/Release/Bend</source>
-        <translation>Binden/loslaten/binden</translation>
+        <translation>Opdrukken/loslaten/opdrukken</translation>
     </message>
     <message>
         <source>Prebend</source>
-        <translation>Prebend</translation>
+        <translation>Pre-opdrukken</translation>
     </message>
     <message>
         <source>Prebend/Release</source>
-        <translation>Prebend/loslaten</translation>
+        <translation>pre-opdrukken/loslaten</translation>
     </message>
 </context>
 <context>
@@ -382,7 +382,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>XCircle</source>
-        <translation>XCircel</translation>
+        <translation>XCirkel</translation>
     </message>
     <message>
         <source>Do</source>
@@ -425,7 +425,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>No.</source>
-        <translation>No.</translation>
+        <translation>Nr.</translation>
     </message>
     <message>
         <source>Note</source>
@@ -1576,7 +1576,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Note symbols</source>
-        <translation>Noot symbool</translation>
+        <translation>Nootsymbolen</translation>
     </message>
     <message>
         <source>Upside down</source>
@@ -1670,7 +1670,7 @@ p, li { white-space: pre-wrap; }
     <name>EditStyleBase</name>
     <message>
         <source>MuseScore: Edit Style</source>
-        <translation>MuseScore: Bewerk stijl</translation>
+        <translation>MuseScore: Stijl bewerken</translation>
     </message>
     <message>
         <source>Score</source>
@@ -2585,7 +2585,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Verwijder</translation>
+        <translation>Verwijderen</translation>
     </message>
     <message>
         <source>Add</source>
@@ -5572,7 +5572,7 @@ tuplet zou maat overschrijden</translation>
     </message>
     <message>
         <source>Actual:</source>
-        <translation>werkelijk</translation>
+        <translation>werkelijk:</translation>
     </message>
     <message>
         <source>Add to measure number:</source>
@@ -6982,7 +6982,7 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>View Mode</source>
-        <translation>Beeld modus</translation>
+        <translation>Weergavemodus</translation>
     </message>
     <message>
         <source>Swing</source>
@@ -7499,15 +7499,15 @@ Opslaan voor sluiten?</translation>
     </message>
     <message>
         <source>Choose Background Wallpaper</source>
-        <translation>Kies achtergrond</translation>
+        <translation>Kies achtergrondafbeelding</translation>
     </message>
     <message>
         <source>Choose Default Style</source>
-        <translation>Kies standaard stijl</translation>
+        <translation>Kies standaardstijl</translation>
     </message>
     <message>
         <source>Choose Default Style for Parts</source>
-        <translation>Kies standaard stijl voor partijen</translation>
+        <translation>Kies standaardstijl voor partijen</translation>
     </message>
     <message>
         <source>Choose Instrument List</source>
@@ -7555,7 +7555,7 @@ Opslaan voor sluiten?</translation>
     </message>
     <message>
         <source>Action: %1; Shortcut: %2</source>
-        <translation>Actie: %1; snelkoppeling %2</translation>
+        <translation>Actie: %1; snelkoppeling: %2</translation>
     </message>
     <message>
         <source>No shortcut defined</source>
@@ -7567,7 +7567,7 @@ Opslaan voor sluiten?</translation>
     </message>
     <message>
         <source>SoundFont Folders</source>
-        <translation>Soundfont map</translation>
+        <translation>SoundFontmappen</translation>
     </message>
 </context>
 <context>
@@ -7582,7 +7582,7 @@ Opslaan voor sluiten?</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation>Update</translation>
+        <translation>Updaten</translation>
     </message>
     <message>
         <source>No update</source>
@@ -8460,11 +8460,11 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>Insert lyricist&apos;s name here</source>
-        <translation>Voer hier de tekstschrijver naam in</translation>
+        <translation>Voer hier naam van de tekstschrijver in</translation>
     </message>
     <message>
         <source>Copyright</source>
-        <translation>Copyright</translation>
+        <translation>Auteursrecht</translation>
     </message>
     <message>
         <source>Insert copyright here</source>
@@ -8590,7 +8590,7 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuleer</translation>
+        <translation>Annuleren</translation>
     </message>
     <message>
         <source>Two sided</source>
@@ -9582,7 +9582,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Continue last session</source>
-        <translation>Laatste sessie voortzettem</translation>
+        <translation>Laatste sessie voortzetten</translation>
     </message>
     <message>
         <source>Start with new score</source>
@@ -9779,7 +9779,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Icon Height</source>
-        <translation>Icoon hoogte</translation>
+        <translation>Pictogramhoogte</translation>
     </message>
     <message>
         <source>Icon Width</source>
@@ -9795,7 +9795,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Choose score folder</source>
-        <translation>Kies partituur map</translation>
+        <translation>Kies partituurmap</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the score folder</source>
@@ -9803,7 +9803,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Choose style folder</source>
-        <translation>Kies stijl map</translation>
+        <translation>Kies stijlmap</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the style folder</source>
@@ -9811,15 +9811,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>Score folder</source>
-        <translation>Partituur map</translation>
+        <translation>Partituurmap</translation>
     </message>
     <message>
         <source>Insert path to score folder.</source>
-        <translation>Voer het pas naar de partituur map in.</translation>
+        <translation>Voer het pad naar de partituurmap in.</translation>
     </message>
     <message>
         <source>Template folder</source>
-        <translation>Template map</translation>
+        <translation>Sjabloonmap</translation>
     </message>
     <message>
         <source>Insert path to Template folder</source>
@@ -9851,7 +9851,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Choose template folder</source>
-        <translation>Kies template map</translation>
+        <translation>Kies sjabloonmap</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the template folder</source>
@@ -9867,15 +9867,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>Background Wallpaper</source>
-        <translation>Achtergrond afbeelding</translation>
+        <translation>Achtergrondafbeelding</translation>
     </message>
     <message>
         <source>Background Color</source>
-        <translation>Achtergrond kleur</translation>
+        <translation>Achtergrondkleur</translation>
     </message>
     <message>
         <source>Background wallpaper path</source>
-        <translation>Achtergrond afbeelding pad</translation>
+        <translation>Pad naar achtergrondafbeelding</translation>
     </message>
     <message>
         <source>Insert path to background wallpaper file</source>
@@ -10829,7 +10829,7 @@ Wil je dit overschrijven?</translation>
     <name>Resource</name>
     <message>
         <source>MuseScore Resources</source>
-        <translation>MuseScore middelen</translation>
+        <translation>MuseScore hulpbestanden</translation>
     </message>
     <message>
         <source>Tab 1</source>
@@ -10849,7 +10849,7 @@ Wil je dit overschrijven?</translation>
     </message>
     <message>
         <source>Install/Update</source>
-        <translation>Installeer/update</translation>
+        <translation>Installeren/updaten</translation>
     </message>
     <message>
         <source>Tab 2</source>
@@ -11130,10 +11130,6 @@ Wil je dit overschrijven?</translation>
         <translation>Aeolus stops</translation>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation>Wijzig stops:</translation>
-    </message>
-    <message>
         <source>III</source>
         <translation>III</translation>
     </message>
@@ -11150,249 +11146,8 @@ Wil je dit overschrijven?</translation>
 8</translation>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation>Quinta-
-deen 8</translation>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation>Suabile
-8</translation>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation>Roerfluit
-8</translation>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation>Dulzflöte
-4</translation>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation>Quintfluit
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation>Super
-octaaf 2</translation>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation>Sifflet
-1</translation>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation>Cymbel
-VI</translation>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>Hobo</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>Tremolo</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation>Harmonie
-Fluit 8</translation>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation>Flauto
-Dolce 4</translation>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation>Nasard
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation>Octaaf
-2</translation>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation>Terts
-1 3/5</translation>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation>Sesquialter</translation>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation>Septiem</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>Geen</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation>Kromhoorn</translation>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation>Melodia</translation>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation>II+III</translation>
-    </message>
-    <message>
         <source>PushButton</source>
         <translation>Drukknop</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation>I</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation>Prestant
-4</translation>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation>Octaaf
-2</translation>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation>octaaf
-1</translation>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation>Quint
-5 1/3</translation>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation>Quint
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation>Tibia
-8</translation>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation>Celesta
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation>Fluit
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation>Fluit
-4</translation>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation>Fluit
-2</translation>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation>Mixtuur</translation>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>Trompet</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation>I+II</translation>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation>I+III</translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation>Subbas
-16</translation>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation>Prestant
-16</translation>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation>Fagot
-16</translation>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation>Trombone
-16</translation>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation>Bombardon
-32</translation>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation>P+I</translation>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation>P+II</translation>
-    </message>
-    <message>
-        <source>P+III</source>
-        <translation>P+III</translation>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
@@ -12033,7 +11788,7 @@ altera</source>
     </message>
     <message>
         <source>Add</source>
-        <translation>Voeg toe</translation>
+        <translation>Toevoegen</translation>
     </message>
     <message>
         <source>Add time signature to palette</source>
@@ -12056,7 +11811,7 @@ altera</source>
     </message>
     <message>
         <source>Note Groups</source>
-        <translation>Notitie groep</translation>
+        <translation>Nootgroepen</translation>
     </message>
     <message>
         <source>Values</source>
@@ -12460,7 +12215,7 @@ altera</source>
     <name>TremoloBarDialog</name>
     <message>
         <source>Bend type:</source>
-        <translation>Bend type:</translation>
+        <translation>Buigingstype:</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
@@ -12590,10 +12345,6 @@ altera</source>
     <message>
         <source>Make this score private</source>
         <translation>Maak deze partituur privé</translation>
-    </message>
-    <message>
-        <source>Sharing</source>
-        <translation>Delen</translation>
     </message>
 </context>
 <context>
@@ -14451,15 +14202,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>Note duration: 16th (TAB)</source>
-        <translation>Noot duur: 16e (TAB)</translation>
+        <translation>Nootduur: 16e (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 32nd (TAB)</source>
-        <translation>Noot duur: 32e (TAB)</translation>
+        <translation>Nootduur: 32e (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 64th (TAB)</source>
-        <translation>Noot duur: 64e (TAB)</translation>
+        <translation>Nootduur: 64e (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 128th (TAB)</source>
@@ -14779,7 +14530,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Save Online...</source>
-        <translation>Sla Online Op...</translation>
+        <translation>Online opslaan...</translation>
     </message>
     <message>
         <source>Save score on MuseScore.com</source>
@@ -15663,7 +15414,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Move word left</source>
-        <translation>Verplaats woord rechts</translation>
+        <translation>Woord naar links verplaatsen</translation>
     </message>
     <message>
         <source>Move Word Right</source>
@@ -15671,7 +15422,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Move word right</source>
-        <translation>Verplaats woord links</translation>
+        <translation>Woord naar rechts verplaatsen</translation>
     </message>
     <message>
         <source>Fill with slashes</source>
@@ -15695,91 +15446,91 @@ mislukt:</translation>
     </message>
     <message>
         <source>Longa Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Ga longa verder (basso continuo / akkoordsymbool)</translation>
     </message>
     <message>
         <source>Advance of a longa (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Voortgang met een Longa (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>Breve Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Voortgang met Breve (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>Advance of a double whole note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Voortgang met dubbele hele noot (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>Whole Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Voortgang met hele noot (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>Advance of a whole note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Voortgang met hele noot (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>Half Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>halve noot voortgang (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>Advance of a half note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Voortgang met halve noot (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>Quarter Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>kwart noot voortgang (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>Advance of a quarter note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Voortgang met kwart noot (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>Eighth Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>achtste noot voortgang (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>Advance of an eighth note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Voortgang met achtste noot (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>16th Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>16de noot voortgang (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>Advance of a 16th note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Voortgang met 16de noot (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>32nd Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>32ste noot voortgang (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>Advance of a 32nd note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Voortgang met 32ste noot (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>64th Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>64ste noot voortgang (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>Advance of a 64th note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Voortgang met 64ste noot (becijferde bas/akkoordsymbool)</translation>
     </message>
     <message>
         <source>Previous Measure (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Vorige maat (basso continuo / akkoordsymbool)</translation>
     </message>
     <message>
         <source>Previous measure (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Vorige maat (enkel basso continuo / akkoordsymbool)</translation>
     </message>
     <message>
         <source>Next Measure (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Volgende maat (basso continuo / akkoordsymbool)</translation>
     </message>
     <message>
         <source>Next measure (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Volgende maat (basso continuo / akkoordsymbool)</translation>
     </message>
     <message>
         <source>Toggle staccato</source>
@@ -16913,7 +16664,7 @@ De maat is niet leeg</translation>
     </message>
     <message>
         <source>Acoustic Snare</source>
-        <translation>Accoustische Snare</translation>
+        <translation>Akoestische snare</translation>
     </message>
     <message>
         <source>Hand Clap</source>

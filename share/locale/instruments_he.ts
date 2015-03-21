@@ -4,12 +4,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1"/>
         <source>Common instruments</source>
-        <translation type="unfinished"/>
+        <translation>מכשירים משותפים</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2"/>
         <source>Jazz instruments</source>
-        <translation type="unfinished"/>
+        <translation>מכשירי ג&apos;ז</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3"/>
@@ -40,7 +40,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="10"/>
         <source>Flute</source>
-        <translation type="unfinished"/>
+        <translation>חליל</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="12"/>
@@ -4178,7 +4178,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1180"/>
         <source>Piano</source>
-        <translation type="unfinished"/>
+        <translation>פסנתר</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1182"/>
@@ -4845,7 +4845,7 @@ Acoustic Guitar</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1391"/>
         <source>Harp</source>
-        <translation type="unfinished"/>
+        <translation>נבל</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1393"/>
@@ -5185,7 +5185,7 @@ Tenor Mandola</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1496"/>
         <source>Violin</source>
-        <translation type="unfinished"/>
+        <translation>כינור</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1498"/>

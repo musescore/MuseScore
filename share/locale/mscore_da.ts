@@ -3373,7 +3373,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Show courtesy</source>
-        <translation>Vis forhånds taktart</translation>
+        <translation>Vis hjælpetaktart</translation>
     </message>
     <message>
         <source>Clef Inspector</source>
@@ -3381,7 +3381,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation>Nulstil Vis Forhåndstaktart værdien</translation>
+        <translation>Nulstil Vis hjælpetaktart værdien</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -3553,7 +3553,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show text value</source>
-        <translation>Nulstil Vis tekst værdi</translation>
+        <translation>Nulstil Vis tekstværdi</translation>
     </message>
     <message>
         <source>Show text</source>
@@ -3631,7 +3631,7 @@ space unit</extracomment>
     <name>InspectorHairpin</name>
     <message>
         <source>Hairpin</source>
-        <translation>Styrke kiler</translation>
+        <translation>Hårnål</translation>
     </message>
     <message>
         <source>Height</source>
@@ -3789,7 +3789,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Play until</source>
-        <translation>Pil indtil</translation>
+        <translation>Spil indtil</translation>
     </message>
     <message>
         <source>Continue at</source>
@@ -3820,7 +3820,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Show courtesy</source>
-        <translation>Vis forhånds taktart</translation>
+        <translation>Vis hjælpetaktart</translation>
     </message>
     <message>
         <source>Key Signature Inspector</source>
@@ -3828,7 +3828,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation>Nulstil Vis Forhåndstaktart værdien</translation>
+        <translation>Nulstil Vis hjælpetaktart værdien</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4141,7 +4141,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Tuning value</source>
-        <translation>Nulstil Stemning</translation>
+        <translation>Nulstil stemning</translation>
     </message>
     <message>
         <source>Reset Play value</source>
@@ -4270,7 +4270,7 @@ space unit</extracomment>
     <name>InspectorSegment</name>
     <message>
         <source>Segment</source>
-        <translation>Segment</translation>
+        <translation>Afsnit</translation>
     </message>
     <message>
         <source>sp</source>
@@ -4369,7 +4369,7 @@ space unit</extracomment>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
-        <translation>Tempo</translation>
+        <translation>Tempomarkering</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -4385,7 +4385,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tempo Marking Inspector</source>
-        <translation>Tempo-markerings-inspektør</translation>
+        <translation>Tempomarkerings-inspektør</translation>
     </message>
     <message>
         <source>Reset Tempo value</source>
@@ -4431,11 +4431,11 @@ space unit</extracomment>
     <name>InspectorTextLine</name>
     <message>
         <source>Text Line</source>
-        <translation>Tekst Linie</translation>
+        <translation>Tekstlinje</translation>
     </message>
     <message>
         <source>Text Line Inspector</source>
-        <translation>Tekstlinie-Inspektør</translation>
+        <translation>Tekstlinje-Inspektør</translation>
     </message>
 </context>
 <context>
@@ -4446,7 +4446,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Show courtesy</source>
-        <translation>Vis forhånds taktart</translation>
+        <translation>Vis hjælpetaktart</translation>
     </message>
     <message>
         <source>Time Signature Inspector</source>
@@ -4454,7 +4454,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation>Nulstil Vis Forhåndstaktart værdien</translation>
+        <translation>Nulstil Vis hjælpetaktart værdi</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4620,7 +4620,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Left margin</source>
-        <translation>Venstre margin</translation>
+        <translation>Venstremargen</translation>
     </message>
     <message>
         <source>Top gap</source>
@@ -4738,7 +4738,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Instrument List</source>
-        <translation>Instrument liste</translation>
+        <translation>Instrumentliste</translation>
     </message>
     <message>
         <source>Added Instruments</source>
@@ -4746,7 +4746,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Instrument Genre Filter</source>
-        <translation>Instrument Genre Filter</translation>
+        <translation>Instrument genrefilter</translation>
     </message>
 </context>
 <context>
@@ -4784,7 +4784,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Instrument List</source>
-        <translation>Instrument liste</translation>
+        <translation>Instrumentliste</translation>
     </message>
     <message>
         <source>Search</source>
@@ -4840,11 +4840,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Instrument Genre Filter</source>
-        <translation>Instrument Genre Filter</translation>
+        <translation>Instrument genrefilter</translation>
     </message>
     <message>
         <source>Instrument list</source>
-        <translation>Instrument liste</translation>
+        <translation>Instrumentliste</translation>
     </message>
     <message>
         <source>Clear Search box</source>
@@ -5089,7 +5089,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Place:</source>
-        <translation>position:</translation>
+        <translation>Position:</translation>
     </message>
     <message>
         <source>Hook:</source>
@@ -5127,11 +5127,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>16th</source>
-        <translation>1/16</translation>
+        <translation>16.</translation>
     </message>
     <message>
         <source>32nd</source>
-        <translation>1/32</translation>
+        <translation>32.</translation>
     </message>
     <message>
         <source>64th</source>
@@ -5159,7 +5159,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Import</source>
-        <translation>Importer</translation>
+        <translation>Importér</translation>
     </message>
     <message>
         <source>Staff name</source>
@@ -5199,7 +5199,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tuplets</source>
-        <translation>Tuplet</translation>
+        <translation>Tupletter</translation>
     </message>
     <message>
         <source>2</source>
@@ -5392,7 +5392,7 @@ Du skal kun gøre dette én gang.
     </message>
     <message>
         <source>Breaths &amp; Pauses</source>
-        <translation>Vejrtrækninger &amp; Pauser</translation>
+        <translation>Vejrtrækninger &amp; pauser</translation>
     </message>
     <message>
         <source>Brackets</source>
@@ -5400,7 +5400,7 @@ Du skal kun gøre dette én gang.
     </message>
     <message>
         <source>Articulations &amp; Ornaments</source>
-        <translation>Artikulationer &amp; Ornamenter</translation>
+        <translation>Artikulationer &amp; ornamenter</translation>
     </message>
     <message>
         <source>Accidentals</source>
@@ -5436,7 +5436,7 @@ Du skal kun gøre dette én gang.
     </message>
     <message>
         <source>Frames &amp; Measures</source>
-        <translation>Rammer &amp; Takter</translation>
+        <translation>Rammer &amp; takter</translation>
     </message>
     <message>
         <source>Symbols</source>
@@ -5448,7 +5448,7 @@ Du skal kun gøre dette én gang.
     </message>
     <message>
         <source>Breaks &amp; Spacers</source>
-        <translation>Afbrydelser &amp; Afstande</translation>
+        <translation>Linje/sideskift &amp; afstandsmarkeringer</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
@@ -5556,7 +5556,7 @@ tuplet ville overskride taktstreg</translation>
     </message>
     <message>
         <source>Repeat count:</source>
-        <translation>gentagelses antal:</translation>
+        <translation>Gentagelsesantal:</translation>
     </message>
     <message>
         <source>Layout stretch:</source>
@@ -5568,11 +5568,11 @@ tuplet ville overskride taktstreg</translation>
     </message>
     <message>
         <source>Nominal:</source>
-        <translation>nominal</translation>
+        <translation>Nominal</translation>
     </message>
     <message>
         <source>Actual:</source>
-        <translation>faktisk</translation>
+        <translation>Faktisk</translation>
     </message>
     <message>
         <source>Add to measure number:</source>
@@ -5580,7 +5580,7 @@ tuplet ville overskride taktstreg</translation>
     </message>
     <message>
         <source>Do not count</source>
-        <translation>tæl ikke med</translation>
+        <translation>Tæl ikke med</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -5965,7 +5965,7 @@ fejlede:</translation>
     <message>
         <source>Open</source>
         <comment>string data</comment>
-        <translation>Åbn...</translation>
+        <translation>Åbn</translation>
     </message>
     <message>
         <source>Pitch</source>
@@ -6029,11 +6029,11 @@ fejlede:</translation>
     </message>
     <message>
         <source>current date</source>
-        <translation>Dags dato</translation>
+        <translation>dags dato</translation>
     </message>
     <message>
         <source>creation date</source>
-        <translation>Oprettelsesdato</translation>
+        <translation>oprettelsesdato</translation>
     </message>
     <message>
         <source>copyright, on first page only</source>
@@ -6049,7 +6049,7 @@ fejlede:</translation>
     </message>
     <message>
         <source>meta data tag</source>
-        <translation>Meta data mærke</translation>
+        <translation>meta data mærke</translation>
     </message>
     <message>
         <source>Available tags and their current values:</source>
@@ -6241,11 +6241,11 @@ fejlede:</translation>
     <name>Ms::InstrumentsWidget</name>
     <message>
         <source>Staff %1</source>
-        <translation>Linie %1</translation>
+        <translation>Linje %1</translation>
     </message>
     <message>
         <source>Staves</source>
-        <translation>Nodelinier</translation>
+        <translation>Nodelinjer</translation>
     </message>
     <message>
         <source>Clef</source>
@@ -6253,7 +6253,7 @@ fejlede:</translation>
     </message>
     <message>
         <source>Staff type</source>
-        <translation>Nodelinie type</translation>
+        <translation>Nodelinjetype</translation>
     </message>
     <message>
         <source>Visible</source>
@@ -6389,7 +6389,7 @@ fejlede:</translation>
     </message>
     <message>
         <source>stemless</source>
-        <translation>Uden nodehals</translation>
+        <translation>uden nodehals</translation>
     </message>
 </context>
 <context>
@@ -6579,7 +6579,7 @@ før lukning?</translation>
     </message>
     <message>
         <source>Scalable Vector Graphic (*.svg)</source>
-        <translation>Skalérbar Vector Grafik (*.svg)</translation>
+        <translation>Skalérbar Vectorgrafik (*.svg)</translation>
     </message>
     <message>
         <source>Wave Audio (*.wav)</source>
@@ -6662,7 +6662,7 @@ Vil du erstatte den?</translation>
     </message>
     <message>
         <source>Section break</source>
-        <translation>Sektionsbrud</translation>
+        <translation>Sektionsskift</translation>
     </message>
     <message>
         <source>Staff spacer down</source>
@@ -6714,11 +6714,11 @@ Vil du erstatte den?</translation>
     </message>
     <message>
         <source>Staff Text</source>
-        <translation>Nodelinie tekst</translation>
+        <translation>Nodelinjetekst</translation>
     </message>
     <message>
         <source>System Text</source>
-        <translation>System tekst</translation>
+        <translation>Systemtekst</translation>
     </message>
     <message>
         <source>Instrument</source>
@@ -6756,7 +6756,7 @@ Vil du erstatte den?</translation>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>Ingen takt valgt.
-vælg venligst en takt og prøv igen</translation>
+Vælg en takt og prøv igen</translation>
     </message>
     <message>
         <source>synthesizer</source>
@@ -6768,7 +6768,7 @@ vælg venligst en takt og prøv igen</translation>
     </message>
     <message>
         <source>File Operations</source>
-        <translation>Fil operationer</translation>
+        <translation>Filoperationer</translation>
     </message>
     <message>
         <source>Transport Tools</source>
@@ -6812,7 +6812,7 @@ vælg venligst en takt og prøv igen</translation>
     </message>
     <message>
         <source>&amp;Preferences...</source>
-        <translation>&amp;Instillinger</translation>
+        <translation>&amp;Indstillinger</translation>
     </message>
     <message>
         <source>&amp;View</source>
@@ -7169,7 +7169,7 @@ vælg et andet navn:</translation>
     </message>
     <message>
         <source>Note input mode</source>
-        <translation>Node indtastningstilstand</translation>
+        <translation>Nodeindtastningstilstand</translation>
     </message>
     <message>
         <source>Drum input mode</source>
@@ -7181,7 +7181,7 @@ vælg et andet navn:</translation>
     </message>
     <message>
         <source>Image capture mode</source>
-        <translation>Billedindfangstilstand</translation>
+        <translation>Billedfangsttilstand</translation>
     </message>
     <message>
         <source>Cannot determine file type</source>
@@ -7263,7 +7263,7 @@ vælg et andet navn:</translation>
     </message>
     <message>
         <source>Select Template File:</source>
-        <translation>Vælg skabelon fil:</translation>
+        <translation>Vælg skabelonfil:</translation>
     </message>
 </context>
 <context>
@@ -7304,7 +7304,7 @@ vælg et andet navn:</translation>
     <name>Ms::Note</name>
     <message>
         <source>Appoggiatura</source>
-        <translation>appoggiatura</translation>
+        <translation>Appoggiatura</translation>
     </message>
     <message>
         <source>Grace note after</source>
@@ -7328,7 +7328,7 @@ vælg et andet navn:</translation>
     </message>
     <message>
         <source>Acciaccatura</source>
-        <translation>acciaccatura</translation>
+        <translation>Acciaccatura</translation>
     </message>
     <message>
         <source>%1 Start of %2</source>
@@ -7449,7 +7449,7 @@ vælg et andet navn:</translation>
     <name>Ms::PluginCreator</name>
     <message>
         <source>File Operations</source>
-        <translation>Fil operationer</translation>
+        <translation>Filoperationer</translation>
     </message>
     <message>
         <source>Edit Operations</source>
@@ -7514,11 +7514,11 @@ Gem før lukning?</translation>
     </message>
     <message>
         <source>Instrument List (*.xml)</source>
-        <translation>Instrument liste (*.xml)</translation>
+        <translation>Instrumentliste (*.xml)</translation>
     </message>
     <message>
         <source>Choose Starting Score</source>
-        <translation>Vælg opstarts nodeark</translation>
+        <translation>Vælg nodeark ved programstart</translation>
     </message>
     <message>
         <source>MuseScore Shortcuts</source>
@@ -10261,7 +10261,7 @@ mislykkedes:</translation>
     </message>
     <message>
         <source>Update translations</source>
-        <translation>Updatér oversættelse</translation>
+        <translation>Opdatér oversættelse</translation>
     </message>
     <message>
         <source>Dark</source>
@@ -11127,10 +11127,6 @@ Vil du overskrive?</translation>
         <translation>Æoliske stop</translation>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation>Ændr stop</translation>
-    </message>
-    <message>
         <source>III</source>
         <translation>III</translation>
     </message>
@@ -11147,250 +11143,8 @@ Vil du overskrive?</translation>
 8</translation>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation>Quinta-
-dena 8</translation>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation>Suabile
-8</translation>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation>Rohrflöte
-8</translation>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation>Dulzflöte
-4</translation>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation>Quintflöte
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation>Super-
-octave 2</translation>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation>Sifflet
-1</translation>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation>Cymbel
-VI</translation>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>Obo</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>Tremolo</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation>Harmonisk
-Fløjte 8</translation>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation>Flauto
-Dolce 4</translation>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation>Nasard
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation>Ottavina
-2</translation>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation>Tertia
-1 3/5</translation>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation>Sesqui
-altera</translation>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation>Septime</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>ingen</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation>Krumhorn</translation>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation>Melodia</translation>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation>II+III</translation>
-    </message>
-    <message>
         <source>PushButton</source>
         <translation>Trykknap</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation>K</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation>Principal
-4</translation>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation>Octave
-2</translation>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation>Octave
-1</translation>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation>Quint
-5 1/3</translation>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation>Quint
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation>Tibia
-8</translation>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation>Celesta
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation>Flöte
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation>Flöte
-4</translation>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation>Flöte
-2</translation>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation>Mixtur</translation>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>Trompet</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation>I+II</translation>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation>I+III</translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation>Subbass
-16</translation>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation>Principal
-16</translation>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation>Fagot
-16</translation>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation>Trombone
-16</translation>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation>Bombarde
-32</translation>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation>P+I</translation>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation>P+II</translation>
-    </message>
-    <message>
-        <source>P+III</source>
-        <translation>P+III</translation>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
@@ -12588,10 +12342,6 @@ altera</translation>
     <message>
         <source>Make this score private</source>
         <translation>Gør dette nodeark privat</translation>
-    </message>
-    <message>
-        <source>Sharing</source>
-        <translation>Deling</translation>
     </message>
 </context>
 <context>
@@ -14005,7 +13755,7 @@ fejlede:</translation>
     </message>
     <message>
         <source>Rewind to start position</source>
-        <translation>Spil tilbage til start positionen</translation>
+        <translation>Spol tilbage til start</translation>
     </message>
     <message>
         <source>Player Seek to End</source>
@@ -15797,11 +15547,11 @@ fejlede:</translation>
     </message>
     <message>
         <source>Import PDF...</source>
-        <translation>import PDF...</translation>
+        <translation>Importér PDF...</translation>
     </message>
     <message>
         <source>Import PDF</source>
-        <translation>import PDF</translation>
+        <translation>Importér PDF</translation>
     </message>
     <message>
         <source>Import a PDF file with an experimental service on musescore.com</source>

@@ -2399,7 +2399,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Continue height:</source>
-        <translation>Vortsetzungshöhe</translation>
+        <translation>Fortsetzungshöhe</translation>
     </message>
     <message>
         <source>Continuous</source>
@@ -11134,10 +11134,6 @@ Soll sie überschrieben werden?</translation>
         <translation>Aeolus Register</translation>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation>Register ändern:</translation>
-    </message>
-    <message>
         <source>III</source>
         <translation>III</translation>
     </message>
@@ -11154,250 +11150,8 @@ Soll sie überschrieben werden?</translation>
 8</translation>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation>Quinta-
-dena 8</translation>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation>Suabile
-8</translation>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation>Rohrflöte
-8</translation>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation>Dulzflöte
-4</translation>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation>Quintflöte
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation>Super-
-oktave 2</translation>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation>Sifflöte
-1</translation>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation>Zimbel
-VI</translation>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>Oboe</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>Tremulant</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation>Flûte 
-harmonique 8</translation>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation>Flauto
-Dolce 4</translation>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation>Nasat
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation>Ottavin
-2</translation>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation>Tertia
-1 3/5</translation>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation>Sesqui-
-alter</translation>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation>Septime</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>None</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation>Krummhorn</translation>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation>Melodia</translation>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation>II+III</translation>
-    </message>
-    <message>
         <source>PushButton</source>
         <translation>Druckknopf</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation>I</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation>Prinzipal
-4</translation>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation>Oktave
-2</translation>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation>Oktave
-1</translation>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation>Quinte
-5 1/3</translation>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation>Quinte
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation>Tibia
-8</translation>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation>Celeste
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation>Flöte
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation>Flöte
-4</translation>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation>Flöte
-2</translation>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation>Mixtur</translation>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>Trompete</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation>I+II</translation>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation>I+III</translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation>Subbass
-16</translation>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation>Prinzipal
-16</translation>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation>Fagott
-16</translation>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation>Posaune
-16</translation>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation>Bombarde
-32</translation>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation>P+I</translation>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation>P+II</translation>
-    </message>
-    <message>
-        <source>P+III</source>
-        <translation>P+III</translation>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
@@ -12595,10 +12349,6 @@ alter</translation>
     <message>
         <source>Make this score private</source>
         <translation>Die Partitur privat halten</translation>
-    </message>
-    <message>
-        <source>Sharing</source>
-        <translation>Teilen</translation>
     </message>
 </context>
 <context>
