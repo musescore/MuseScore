@@ -20,7 +20,8 @@
 
 
 REVISION  = $(shell type mscore\revision.h)
-VERSION   = 2.0b-${REVISION}
+#VERSION   = 2.0b-${REVISION}
+VERSION = 2.0.0
 CPUS = 1
 
 release:
