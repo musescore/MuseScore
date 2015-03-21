@@ -225,7 +225,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation>Automático del Acorde</translation>
+        <translation>Automático</translation>
     </message>
     <message>
         <source>Above Chord</source>
@@ -293,7 +293,7 @@ p, li { white-space: pre-wrap; }
     <name>BreaksDialog</name>
     <message>
         <source>MuseScore: Add/Remove Line Breaks</source>
-        <translation>MuseScore: Agregar/Quitar saltos de sistema</translation>
+        <translation>MuseScore: Agregar/Quitar Saltos de Sistema</translation>
     </message>
     <message>
         <source>Break lines every</source>
@@ -2554,11 +2554,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>New All</source>
-        <translation>Todo nuevo</translation>
+        <translation>Agregar Todos</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuevo</translation>
+        <translation>Agregar</translation>
     </message>
     <message>
         <source>Part title:</source>
@@ -3057,7 +3057,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation>Automático del Acorde</translation>
+        <translation>Automático</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -3219,7 +3219,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Beam Inspector</source>
-        <translation>Inspector de barrados</translation>
+        <translation>Inspector de barras de notas</translation>
     </message>
     <message>
         <source>Vertical position offset left</source>
@@ -3286,7 +3286,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Layout Break</source>
-        <translation>Salto de disposición</translation>
+        <translation>Salto de diseño</translation>
     </message>
 </context>
 <context>
@@ -5556,11 +5556,11 @@ el grupo irregular sobrepasaría el compás</translation>
     </message>
     <message>
         <source>Repeat count:</source>
-        <translation>Número de repeticiones</translation>
+        <translation>Número de repeticiones:</translation>
     </message>
     <message>
         <source>Layout stretch:</source>
-        <translation>Ensanchamiento de la disposición:</translation>
+        <translation>Ancho:</translation>
     </message>
     <message>
         <source>Measure number mode:</source>
@@ -5993,7 +5993,7 @@ falló:</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation>Automático del Acorde</translation>
+        <translation>Automático</translation>
     </message>
     <message>
         <source>Above Chord</source>
@@ -6829,11 +6829,11 @@ seleccione un compás e inténtelo de nuevo</translation>
     </message>
     <message>
         <source>T&amp;uplets</source>
-        <translation>Gr&amp;upos especiales</translation>
+        <translation>Gr&amp;upos irregulares</translation>
     </message>
     <message>
         <source>&amp;Layout</source>
-        <translation>&amp;Disposición</translation>
+        <translation>&amp;Diseño</translation>
     </message>
     <message>
         <source>&amp;Style</source>
@@ -9187,7 +9187,7 @@ falló:</translation>
     </message>
     <message>
         <source>Close Plugin Creator</source>
-        <translation>Cerrar el creador de plugins</translation>
+        <translation>Cerrar el Creador de Plugins</translation>
     </message>
 </context>
 <context>
@@ -9477,7 +9477,7 @@ falló:</translation>
     </message>
     <message>
         <source>Import layout</source>
-        <translation>Importar disposición</translation>
+        <translation>Importar diseño de página</translation>
     </message>
     <message>
         <source>Import system and page breaks</source>
@@ -9529,7 +9529,7 @@ falló:</translation>
     </message>
     <message>
         <source>Export layout</source>
-        <translation>Exportar disposición de página</translation>
+        <translation>Exportar diseño de página</translation>
     </message>
     <message>
         <source>Export all system and page breaks</source>
@@ -9541,7 +9541,7 @@ falló:</translation>
     </message>
     <message>
         <source>Do not export system or page breaks</source>
-        <translation>No exportar saltos de sistema o página</translation>
+        <translation>No exportar saltos de sistema o de página</translation>
     </message>
     <message>
         <source>Shortcuts</source>
@@ -11130,10 +11130,6 @@ Do you want to overwrite it?</source>
         <translation>Paradas de Aeolus</translation>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation>Cambiar paradas:</translation>
-    </message>
-    <message>
         <source>III</source>
         <translation>III</translation>
     </message>
@@ -11150,250 +11146,8 @@ Do you want to overwrite it?</source>
 8</translation>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation>Quinta-
-dena 8</translation>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation>Suabile
-8</translation>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation>Rohrflöte
-8</translation>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation>Dulzflöte
-4</translation>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation>Quintflöte
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation>Super-
-octave 2</translation>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation>Sifflet
-1</translation>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation>Cymbel
-VI</translation>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>Oboe</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>Tremulant</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation>Flauta
-armónica 8</translation>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation>Flauto
-Dolce 4</translation>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation>Nasard
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation>Ottavina
-2</translation>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation>Tertia
-1 3/5</translation>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation>Sesqui
-altera</translation>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation>Septime</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>None</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation>Cromorno</translation>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation>Melodía</translation>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation>II+III</translation>
-    </message>
-    <message>
         <source>PushButton</source>
         <translation>Pulsador</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation>I</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation>Principal
-4</translation>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation>Octava
-2</translation>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation>Octava
-1</translation>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation>Quint
-5 1/3</translation>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation>Quinta
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation>Tibia
-8</translation>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation>Celesta
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation>Flöte
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation>Flöte
-4</translation>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation>Flöte
-2</translation>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation>Mixtura</translation>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>Trompeta</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation>I+II</translation>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation>I+III</translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation>Sub-bajo
-16</translation>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation>Principal
-16</translation>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation>Fagott
-16</translation>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation>Trombone
-16</translation>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation>Bombarde
-32</translation>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation>P+I</translation>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation>P+II</translation>
-    </message>
-    <message>
-        <source>P+III</source>
-        <translation>P+III</translation>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
@@ -11569,7 +11323,7 @@ altera</translation>
     </message>
     <message>
         <source>Metronome gain</source>
-        <translation>Ganancia del metrónomo</translation>
+        <translation>Volumen del metrónomo</translation>
     </message>
     <message>
         <source>Effect A</source>
@@ -12592,10 +12346,6 @@ altera</translation>
         <source>Make this score private</source>
         <translation>Hacer privada esta partitura</translation>
     </message>
-    <message>
-        <source>Sharing</source>
-        <translation>Compartiendo</translation>
-    </message>
 </context>
 <context>
     <name>VoltaPropertyBase</name>
@@ -13592,11 +13342,11 @@ falló:</translation>
     </message>
     <message>
         <source>Insert Horizontal Frame</source>
-        <translation>Insertar marco horizontal</translation>
+        <translation>Insertar Marco Horizontal</translation>
     </message>
     <message>
         <source>Insert Text Frame</source>
-        <translation>Insertar marco de texto</translation>
+        <translation>Insertar Marco de Texto</translation>
     </message>
     <message>
         <source>Append Text Frame</source>
@@ -13604,7 +13354,7 @@ falló:</translation>
     </message>
     <message>
         <source>Insert Vertical Frame</source>
-        <translation>Insertar marco vertical</translation>
+        <translation>Insertar Marco Vertical</translation>
     </message>
     <message>
         <source>Append Horizontal Frame</source>
@@ -13656,7 +13406,7 @@ falló:</translation>
     </message>
     <message>
         <source>Longa</source>
-        <translation>Larga</translation>
+        <translation>Longa</translation>
     </message>
     <message>
         <source>Double whole note</source>
@@ -13840,11 +13590,11 @@ falló:</translation>
     </message>
     <message>
         <source>Feathered beam, slower</source>
-        <translation>Barrado en ángulo</translation>
+        <translation>Barras en ángulo (más lento)</translation>
     </message>
     <message>
         <source>Feathered beam, faster</source>
-        <translation>Barrado en ángulo</translation>
+        <translation>Barras en ángulo (más rápido)</translation>
     </message>
     <message>
         <source>Palette</source>
@@ -14152,7 +13902,7 @@ falló:</translation>
     </message>
     <message>
         <source>Reset Stretch</source>
-        <translation>Restablecer ancho</translation>
+        <translation>Restablecer Ancho</translation>
     </message>
     <message>
         <source>Reset measure stretch</source>
@@ -14448,7 +14198,7 @@ falló:</translation>
     </message>
     <message>
         <source>Longa (TAB)</source>
-        <translation>Larga (TAB)</translation>
+        <translation>Longa (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 16th (TAB)</source>
@@ -14788,7 +14538,7 @@ falló:</translation>
     </message>
     <message>
         <source>Explode</source>
-        <translation>Expandir (arreglo)</translation>
+        <translation>Expandir</translation>
     </message>
     <message>
         <source>Explode contents of top selected staff into staves below</source>
@@ -14820,19 +14570,19 @@ falló:</translation>
     </message>
     <message>
         <source>Resequence Rehearsal Marks</source>
-        <translation>Renumerar guías de ensayo</translation>
+        <translation>Renumerar Guías de Ensayo</translation>
     </message>
     <message>
         <source>Increase Stretch</source>
-        <translation>Incrementar Ancho</translation>
+        <translation>Aumentar Ancho</translation>
     </message>
     <message>
         <source>Increase stretch</source>
-        <translation>Incrementar ancho</translation>
+        <translation>Aumentar ancho</translation>
     </message>
     <message>
         <source>Increase stretch of selected measures</source>
-        <translation>Incrementar el ancho de los compases seleccionados</translation>
+        <translation>Aumentar el ancho de los compases seleccionados</translation>
     </message>
     <message>
         <source>Decrease Stretch</source>
@@ -14844,11 +14594,11 @@ falló:</translation>
     </message>
     <message>
         <source>Decrease stretch of selected measures</source>
-        <translation>Estrechar el ancho de los compases seleccionados</translation>
+        <translation>Reducir el ancho de los compases seleccionados</translation>
     </message>
     <message>
         <source>Plugin Creator...</source>
-        <translation>Creador de plugins...</translation>
+        <translation>Creador de Plugins...</translation>
     </message>
     <message>
         <source>Plugin Manager...</source>
@@ -14856,11 +14606,11 @@ falló:</translation>
     </message>
     <message>
         <source>Resource Manager...</source>
-        <translation>Administrador de recursos...</translation>
+        <translation>Administrador de Recursos...</translation>
     </message>
     <message>
         <source>Add/Remove Line Breaks...</source>
-        <translation>Agregar/Quitar saltos de sistema...</translation>
+        <translation>Agregar/Quitar Saltos de Sistema...</translation>
     </message>
     <message>
         <source>File: Open</source>
@@ -15072,7 +14822,7 @@ falló:</translation>
     </message>
     <message>
         <source>Note duration: Longa</source>
-        <translation>Duración de nota: Larga</translation>
+        <translation>Duración de nota: Longa</translation>
     </message>
     <message>
         <source>Double Whole Note</source>
@@ -15228,11 +14978,11 @@ falló:</translation>
     </message>
     <message>
         <source>Feathered Beam, Slower</source>
-        <translation>Barrado en ángulo</translation>
+        <translation>Barras en ángulo (más lento)</translation>
     </message>
     <message>
         <source>Feathered Beam, Faster</source>
-        <translation>Barrado en ángulo</translation>
+        <translation>Barras en ángulo (más rápido)</translation>
     </message>
     <message>
         <source>Play panel</source>
@@ -15420,11 +15170,11 @@ falló:</translation>
     </message>
     <message>
         <source>Toggle Image Capture</source>
-        <translation>Insertar Captura de Imagen</translation>
+        <translation>Activar modo de captura</translation>
     </message>
     <message>
         <source>Toggle image capture</source>
-        <translation>Insertar captura de imagen</translation>
+        <translation>Activar modo de captura</translation>
     </message>
     <message>
         <source>Show OMR Image</source>
@@ -15548,7 +15298,7 @@ falló:</translation>
     </message>
     <message>
         <source>Note duration: Longa (TAB)</source>
-        <translation>Duración de nota: Larga (TAB)</translation>
+        <translation>Duración de nota: Longa (TAB)</translation>
     </message>
     <message>
         <source>Double Whole Note (TAB)</source>
@@ -15696,11 +15446,11 @@ falló:</translation>
     </message>
     <message>
         <source>Longa Advance (F.B./Chord Symbol)</source>
-        <translation>Avance de Larga (B.C./Símbolo de acorde)</translation>
+        <translation>Avance de Longa (B.C./Símbolo de acorde)</translation>
     </message>
     <message>
         <source>Advance of a longa (Figured bass/Chord symbol only)</source>
-        <translation>Avance de Larga (Bajo cifrado/Sólo símbolo de acorde)</translation>
+        <translation>Avance de longa (Bajo cifrado/Sólo símbolo de acorde)</translation>
     </message>
     <message>
         <source>Breve Advance (F.B./Chord Symbol)</source>
@@ -17471,7 +17221,7 @@ El compás no está vacio</translation>
     </message>
     <message>
         <source>Layout Break</source>
-        <translation>Salto de disposición</translation>
+        <translation>Salto de diseño</translation>
     </message>
     <message>
         <source>Staff State</source>

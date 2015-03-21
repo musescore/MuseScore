@@ -150,40 +150,40 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="40"/>
         <source>Danso</source>
-        <translation type="unfinished"/>
+        <translation>Danso</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="42"/>
         <source>Da.</source>
         <extracomment>Danso</extracomment>
-        <translation type="unfinished"/>
+        <translation>Da.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="43"/>
         <source>Dizi</source>
-        <translation type="unfinished"/>
+        <translation>Dizi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="45"/>
         <source>Di.</source>
         <extracomment>Dizi</extracomment>
-        <translation type="unfinished"/>
+        <translation>Di.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="46"/>
         <source>C Dizi</source>
-        <translation type="unfinished"/>
+        <translation>Dizi Dó</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="48"/>
         <source>C Di.</source>
         <extracomment>C Dizi</extracomment>
-        <translation type="unfinished"/>
+        <translation>Di. Dó</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="49"/>
         <source>A Dizi</source>
-        <translation type="unfinished"/>
+        <translation>Dizi Lá</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="51"/>
@@ -192,133 +192,133 @@
         <extracomment>A Dizi
 ----------
 F Dizi</extracomment>
-        <translation type="unfinished"/>
+        <translation>Di. Lá</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="52"/>
         <source>G Dizi</source>
-        <translation type="unfinished"/>
+        <translation>Dizi Sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="54"/>
         <source>G Di.</source>
         <extracomment>G Dizi</extracomment>
-        <translation type="unfinished"/>
+        <translation>Di. Sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="55"/>
         <source>F Dizi</source>
-        <translation type="unfinished"/>
+        <translation>Dizi Fá</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="58"/>
         <source>E Dizi</source>
-        <translation type="unfinished"/>
+        <translation>Dizi Mi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="60"/>
         <source>E Di.</source>
         <extracomment>E Dizi</extracomment>
-        <translation type="unfinished"/>
+        <translation>Di. Mi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="64"/>
         <source>Flageolet</source>
-        <translation type="unfinished"/>
+        <translation>Flautim</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="66"/>
         <source>Fla.</source>
         <extracomment>Flageolet</extracomment>
-        <translation type="unfinished"/>
+        <translation>Fla.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="67"/>
         <source>French Flageolet</source>
-        <translation type="unfinished"/>
+        <translation>Flautim Francesa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="69"/>
         <source>Fr. Fla.</source>
         <extracomment>French Flageolet</extracomment>
-        <translation type="unfinished"/>
+        <translation>Fla.Fr</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="70"/>
         <source>English Flageolet</source>
-        <translation type="unfinished"/>
+        <translation>Flautim inglesa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="72"/>
         <source>Eng. Fla.</source>
         <extracomment>English Flageolet</extracomment>
-        <translation type="unfinished"/>
+        <translation>Fla.Eng</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="73"/>
         <source>Irish Flute</source>
-        <translation type="unfinished"/>
+        <translation>Flauta Irlandesa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="75"/>
         <source>Ir. Fl.</source>
         <extracomment>Irish Flute</extracomment>
-        <translation type="unfinished"/>
+        <translation>Fl.Ir</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="76"/>
         <source>Gemshorn</source>
-        <translation type="unfinished"/>
+        <translation>Germshorn</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="78"/>
         <source>Gh.</source>
         <extracomment>Gemshorn</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="79"/>
         <source>Soprano Gemshorn</source>
-        <translation type="unfinished"/>
+        <translation>Gemshorn Soprano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="81"/>
         <source>S. Gh.</source>
         <extracomment>Soprano Gemshorn</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gh. S.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="82"/>
         <source>Alto Gemshorn</source>
-        <translation type="unfinished"/>
+        <translation>Gemshron Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="84"/>
         <source>A. Gh.</source>
         <extracomment>Alto Gemshorn</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gh. A.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="85"/>
         <source>Tenor Gemshorn</source>
-        <translation type="unfinished"/>
+        <translation>Gemshorn Tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="87"/>
         <source>T. Gh.</source>
         <extracomment>Tenor Gemshorn</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gh T.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="88"/>
         <source>Bass Gemshorn</source>
-        <translation type="unfinished"/>
+        <translation>Gemshorn Baixo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="90"/>
         <source>B. Gh.</source>
         <extracomment>Bass Gemshorn</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gh. B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="91"/>
@@ -445,47 +445,47 @@ F Dizi</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="124"/>
         <location filename="../instruments/instrumentsxml.h" line="136"/>
         <source>Quena</source>
-        <translation type="unfinished"/>
+        <translation>Quena</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="126"/>
         <location filename="../instruments/instrumentsxml.h" line="138"/>
         <source>Qn.</source>
         <extracomment>Quena</extracomment>
-        <translation type="unfinished"/>
+        <translation>Qn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="127"/>
         <source>C Quena</source>
-        <translation type="unfinished"/>
+        <translation>Quena Dó</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="129"/>
         <source>C Qn.</source>
         <extracomment>C Quena</extracomment>
-        <translation type="unfinished"/>
+        <translation>Qn. Dó</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="130"/>
         <source>G Quena</source>
-        <translation type="unfinished"/>
+        <translation>Quena Sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="132"/>
         <source>G Qn.</source>
         <extracomment>G Quena</extracomment>
-        <translation type="unfinished"/>
+        <translation>Qn. Sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="133"/>
         <source>F Quena</source>
-        <translation type="unfinished"/>
+        <translation>Quena Fá</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="135"/>
         <source>F Qn.</source>
         <extracomment>F Quena</extracomment>
-        <translation type="unfinished"/>
+        <translation>Qn. Fá</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="139"/>
@@ -501,13 +501,13 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="142"/>
         <source>Garklein Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Garklein Recorder</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="144"/>
         <source>Gk. Rec.</source>
         <extracomment>Garklein Recorder</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gk. Rec.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="145"/>
@@ -578,30 +578,30 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="163"/>
         <source>Greatbass Recorder</source>
-        <translation type="unfinished"/>
+        <translation>grande gravador de graves</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="165"/>
         <source>Gb. Rec.</source>
         <extracomment>Greatbass Recorder</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gr. Grav. Grave</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="166"/>
         <source>Slide Whistle</source>
-        <translation type="unfinished"/>
+        <translation>Slide Whistle</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="168"/>
         <source>Sl. Wh.</source>
         <extracomment>Slide Whistle</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sl. Wh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="169"/>
         <location filename="../instruments/instrumentsxml.h" line="175"/>
         <source>Tin Whistle</source>
-        <translation type="unfinished"/>
+        <translation>Tin Whistle</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="171"/>
@@ -613,13 +613,13 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="172"/>
         <source>B♭ Tin Whistle</source>
-        <translation type="unfinished"/>
+        <translation> Tin Whistle Sí♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="174"/>
         <source>B♭ Tin. Wh.</source>
         <extracomment>B♭ Tin Whistle</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tin. Wh. Si♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="178"/>
@@ -726,73 +726,73 @@ Heckelphone-clarinet</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="205"/>
         <source>Heckelphone-clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Heckelphone - clarinete</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="208"/>
         <source>Sopranino Shawm</source>
-        <translation type="unfinished"/>
+        <translation> Shawm Sopranino</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="210"/>
         <source>Si. Sh.</source>
         <extracomment>Sopranino Shawm</extracomment>
-        <translation type="unfinished"/>
+        <translation>Si. Sh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="211"/>
         <source>Soprano Shawm</source>
-        <translation type="unfinished"/>
+        <translation>Shawm Soprano </translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="213"/>
         <source>S. Sh.</source>
         <extracomment>Soprano Shawm</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sh. S.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="214"/>
         <source>Alto Shawm</source>
-        <translation type="unfinished"/>
+        <translation>Shawm Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="216"/>
         <source>A. Sh.</source>
         <extracomment>Alto Shawm</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sh. A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="217"/>
         <source>Tenor Shawm</source>
-        <translation type="unfinished"/>
+        <translation>Shawm Tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="219"/>
         <source>T. Sh.</source>
         <extracomment>Tenor Shawm</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sh. T</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="220"/>
         <source>Bass Shawm</source>
-        <translation type="unfinished"/>
+        <translation>Shawn Baixo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="222"/>
         <source>B. Sh.</source>
         <extracomment>Bass Shawm</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sh. B</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="223"/>
         <source>Great Bass Shawm</source>
-        <translation type="unfinished"/>
+        <translation>Shawm grande baixo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="225"/>
         <source>G.B. Sh.</source>
         <extracomment>Great Bass Shawm</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sh. G. B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="226"/>
@@ -1223,24 +1223,24 @@ Sheng</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="343"/>
         <source>Basset Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Basset Clarinete</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="345"/>
         <source>Ba. Cl.</source>
         <extracomment>Basset Clarinet</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ba. Cl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="346"/>
         <source>Basset Horn</source>
-        <translation type="unfinished"/>
+        <translation>Basset Horn</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="348"/>
         <source>Ba. Hn.</source>
         <extracomment>Basset Horn</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ba. Hn</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="349"/>
@@ -1256,13 +1256,13 @@ Sheng</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="352"/>
         <source>Contra-alto Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Clarinete Contra-Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="354"/>
         <source>C-a. Cl.</source>
         <extracomment>Contra-alto Clarinet</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cl.C-a</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="355"/>
@@ -1580,13 +1580,13 @@ Sheng</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="442"/>
         <source>Melody Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Saxofone medolico</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="444"/>
         <source>Mel. Sax.</source>
         <extracomment>Melody Saxophone</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sax. Mel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="445"/>
@@ -2223,13 +2223,13 @@ Bass Huang Harmonica</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="634"/>
         <source>Pocket Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Trompete de bolso</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="636"/>
         <source>Pkt. Tpt.</source>
         <extracomment>Pocket Trumpet</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tpt. Bolso</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="637"/>
@@ -2487,7 +2487,7 @@ Bass Huang Harmonica</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="706"/>
         <source>Mellophone</source>
-        <translation type="unfinished"/>
+        <translation>Melofone</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="708"/>
@@ -3212,13 +3212,13 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="912"/>
         <source>Musical Saw</source>
-        <translation type="unfinished"/>
+        <translation>Serra Musical</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="914"/>
         <source>Mu. Sw.</source>
         <extracomment>Musical Saw</extracomment>
-        <translation type="unfinished"/>
+        <translation>Se. Mus.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="915"/>
@@ -3256,35 +3256,35 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="924"/>
         <source>Orff Soprano Xylophone</source>
-        <translation type="unfinished"/>
+        <translation>Xilofone Orff Soprano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="926"/>
         <source>O. S. Xyl.</source>
         <extracomment>Orff Soprano Xylophone</extracomment>
-        <translation type="unfinished"/>
+        <translation>Xi.O.S</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="927"/>
         <source>Orff Alto Xylophone</source>
-        <translation type="unfinished"/>
+        <translation>Xilofone Orff Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="929"/>
         <source>O. A. Xyl.</source>
         <extracomment>Orff Alto Xylophone</extracomment>
-        <translation type="unfinished"/>
+        <translation>Xi.O.A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="930"/>
         <source>Orff Bass Xylophone</source>
-        <translation type="unfinished"/>
+        <translation>Xilofone Orff Baixo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="932"/>
         <source>O. B. Xyl.</source>
         <extracomment>Orff Bass Xylophone</extracomment>
-        <translation type="unfinished"/>
+        <translation>Xi.O.B</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="933"/>
@@ -3545,13 +3545,13 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1006"/>
         <source>Bells</source>
-        <translation type="unfinished"/>
+        <translation>Sinos</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1008"/>
         <source>Be.</source>
         <extracomment>Bells</extracomment>
-        <translation type="unfinished"/>
+        <translation>Si.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1009"/>
@@ -3748,7 +3748,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1063"/>
         <source>Claves</source>
-        <translation type="unfinished"/>
+        <translation>Claves</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1065"/>
@@ -4012,24 +4012,24 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1136"/>
         <source>Tenor Drums</source>
-        <translation type="unfinished"/>
+        <translation>Bateria Tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1138"/>
         <source>TD</source>
         <extracomment>Tenor Drums</extracomment>
-        <translation type="unfinished"/>
+        <translation>BT</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1139"/>
         <source>Bass Drums</source>
-        <translation type="unfinished"/>
+        <translation>Bateria Baixo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1141"/>
         <source>BD</source>
         <extracomment>Bass Drums</extracomment>
-        <translation type="unfinished"/>
+        <translation>BB</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1142"/>
@@ -4045,12 +4045,12 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1145"/>
         <source>Vocals</source>
-        <translation type="unfinished"/>
+        <translation>Vocais</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1146"/>
         <source>Voice</source>
-        <translation type="unfinished"/>
+        <translation>Voz</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1148"/>
@@ -4094,46 +4094,46 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1158"/>
         <source>Alto</source>
-        <translation type="unfinished"/>
+        <translation>Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1160"/>
         <source>A.</source>
         <extracomment>Alto</extracomment>
-        <translation type="unfinished"/>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1161"/>
         <source>Contralto</source>
-        <translation type="unfinished"/>
+        <translation>Contra-alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1163"/>
         <source>Contr.</source>
         <extracomment>Contralto</extracomment>
-        <translation type="unfinished"/>
+        <translation>Contr</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1164"/>
         <source>Countertenor</source>
-        <translation type="unfinished"/>
+        <translation>Contra-Tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1166"/>
         <source>Ct.</source>
         <extracomment>Countertenor</extracomment>
-        <translation type="unfinished"/>
+        <translation>C.T</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1167"/>
         <source>Tenor</source>
-        <translation type="unfinished"/>
+        <translation>Tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1169"/>
         <source>T.</source>
         <extracomment>Tenor</extracomment>
-        <translation type="unfinished"/>
+        <translation>T.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1170"/>
@@ -4151,13 +4151,13 @@ Tubo</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="1476"/>
         <source>Bass</source>
         <extracomment>Acoustic Bass</extracomment>
-        <translation type="unfinished"/>
+        <translation>Baixo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1175"/>
         <source>B.</source>
         <extracomment>Bass</extracomment>
-        <translation type="unfinished"/>
+        <translation>B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1176"/>
@@ -4178,7 +4178,7 @@ Tubo</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1180"/>
         <source>Piano</source>
-        <translation type="unfinished"/>
+        <translation>Piano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1182"/>
@@ -4195,7 +4195,7 @@ Upright Piano</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1183"/>
         <source>Grand Piano</source>
-        <translation type="unfinished"/>
+        <translation>Grand Piano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1186"/>
@@ -4216,13 +4216,13 @@ Upright Piano</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1192"/>
         <source>Toy Piano</source>
-        <translation type="unfinished"/>
+        <translation>Piano de Brincar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1194"/>
         <source>Toy Pno.</source>
         <extracomment>Toy Piano</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pia. de brincar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1195"/>
@@ -4271,13 +4271,13 @@ Upright Piano</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1207"/>
         <source>Electric Piano</source>
-        <translation type="unfinished"/>
+        <translation>Piano eléctrico</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1209"/>
         <source>El. Pno.</source>
         <extracomment>Electric Piano</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pia. El.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1210"/>
@@ -4293,7 +4293,7 @@ Upright Piano</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1213"/>
         <source>Organ</source>
-        <translation type="unfinished"/>
+        <translation>Orgão</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1215"/>
@@ -4302,7 +4302,7 @@ Upright Piano</extracomment>
         <extracomment>Organ
 ----------
 Pipe Organ</extracomment>
-        <translation type="unfinished"/>
+        <translation>Org</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1216"/>
@@ -4362,12 +4362,12 @@ Pipe Organ</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1235"/>
         <source>Electronic Instruments</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentos Eletronicos</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1236"/>
         <source>Effect Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Efeito de Sintetizador</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1238"/>
@@ -4442,12 +4442,12 @@ Bass Synthesizer
 Brass Synthesizer
 ----------
 String Synthesizer</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1239"/>
         <source>Atmosphere Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Sintetizador Atmosferico</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1242"/>
@@ -4472,17 +4472,17 @@ String Synthesizer</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1254"/>
         <source>Rain Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Sintetizador de chuva</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1257"/>
         <source>Sci-fi Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Sintetizador de Ficção Cientifica</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1260"/>
         <source>Soundtrack Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Sintetizador de banda sonora</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1263"/>
@@ -4569,7 +4569,7 @@ String Synthesizer</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1305"/>
         <source>Bass Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Sintetizador Baixo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1308"/>
@@ -4579,7 +4579,7 @@ String Synthesizer</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1311"/>
         <source>String Synthesizer</source>
-        <translation type="unfinished"/>
+        <translation>Sintetizador de Cordas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1314"/>
@@ -5278,7 +5278,7 @@ Tenor Mandola</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1521"/>
         <source>Viola da gamba</source>
-        <translation type="unfinished"/>
+        <translation>Viola da gamba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1523"/>
@@ -5287,12 +5287,12 @@ Tenor Mandola</extracomment>
         <extracomment>Viola da gamba
 ----------
 Viola da gamba (Tab)</extracomment>
-        <translation type="unfinished"/>
+        <translation>Vla. d. g.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1524"/>
         <source>Viola da gamba (Tab)</source>
-        <translation type="unfinished"/>
+        <translation>Viola da gamba (Tab)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1528"/>

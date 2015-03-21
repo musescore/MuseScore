@@ -358,51 +358,51 @@ p, li { white-space: pre-wrap; }
     <name>EditDrumset</name>
     <message>
         <source>Normal</source>
-        <translation>zwykła</translation>
+        <translation>Zwykła</translation>
     </message>
     <message>
         <source>Cross</source>
-        <translation>krzyżyk</translation>
+        <translation>Krzyżyk</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation>romb</translation>
+        <translation>Romb</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation>trójkąt</translation>
+        <translation>Trójkąt</translation>
     </message>
     <message>
         <source>Mi</source>
-        <translation>mi</translation>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Slash</source>
-        <translation>ukośnik</translation>
+        <translation>Ukośnik</translation>
     </message>
     <message>
         <source>XCircle</source>
-        <translation>x-kółko</translation>
+        <translation>X-kółko</translation>
     </message>
     <message>
         <source>Do</source>
-        <translation>do</translation>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation>re</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation>fa</translation>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation>la</translation>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation>si</translation>
+        <translation>Si</translation>
     </message>
 </context>
 <context>
@@ -2966,59 +2966,59 @@ space unit</extracomment>
     </message>
     <message>
         <source>Normal</source>
-        <translation>zwykła</translation>
+        <translation>Zwykła</translation>
     </message>
     <message>
         <source>Cross</source>
-        <translation>krzyżyk</translation>
+        <translation>Krzyżyk</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation>romb</translation>
+        <translation>Romb</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation>trójkąt</translation>
+        <translation>Trójkąt</translation>
     </message>
     <message>
         <source>Slash</source>
-        <translation>ukośnik</translation>
+        <translation>Ukośnik</translation>
     </message>
     <message>
         <source>XCircle</source>
-        <translation>x-kółko</translation>
+        <translation>X-kółko</translation>
     </message>
     <message>
         <source>Do</source>
-        <translation>do</translation>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation>re</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Mi</source>
-        <translation>mi</translation>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation>fa</translation>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>Sol</source>
-        <translation>sol</translation>
+        <translation>Sol</translation>
     </message>
     <message>
         <source>La</source>
-        <translation>la</translation>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation>si</translation>
+        <translation>Si</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
-        <translation>alt. breve</translation>
+        <translation>Alternatywna breve</translation>
     </message>
     <message>
         <source>Line thickness</source>
@@ -4157,7 +4157,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line</source>
-        <translation>Linia</translation>
+        <translation>Linia:</translation>
     </message>
     <message>
         <source>Fix to line</source>
@@ -5930,7 +5930,7 @@ Grupa niemiarowa przekracza takt.</translation>
     <name>Ms::EditDrumset</name>
     <message>
         <source>invalid</source>
-        <translation>brak</translation>
+        <translation>Brak</translation>
     </message>
     <message>
         <source>MuseScore: Open File</source>
@@ -11129,10 +11129,6 @@ Chcesz go zastąpić?</translation>
         <translation>Aeolus zatrzymuje</translation>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation>Zmiana zatrzymuje:</translation>
-    </message>
-    <message>
         <source>III</source>
         <translation>III</translation>
     </message>
@@ -11149,250 +11145,8 @@ Chcesz go zastąpić?</translation>
 8</translation>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation>Kwinta-
-dena 8</translation>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation>Suabile
-8</translation>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation>Rohrflöte
-8</translation>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation>Dulzflöte
-4</translation>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation>Quintflöte
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation>Super-
-oktawa 2</translation>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation>Gwizdek
-1</translation>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation>Talerz perkusyjny
-VI</translation>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>Obój</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>Drżący</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation>Harmoniczny
-Flet 8</translation>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation>Flet
-Słodki 4</translation>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation>Głos pomocniczy
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation>Flet piccolo
-2</translation>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation>Tertia
-1 3/5</translation>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation>Seskwi
-zmienia</translation>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation>Septyma</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>Brak</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation>Róg</translation>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation>Melodia</translation>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation>II+III</translation>
-    </message>
-    <message>
         <source>PushButton</source>
         <translation>Klawisz</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation>I</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation>Pryncypał
-4</translation>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation>Oktawa
-2</translation>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation>Oktawa
-1</translation>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation>Kwinta
-5 1/3</translation>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation>Kwinta
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation>Tibia
-8</translation>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation>Czelesta
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation>Flet
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation>Flet
-4</translation>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation>Flet
-2</translation>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation>Mixtur</translation>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>Trąbka</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation>I+II</translation>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation>I+III</translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation>Subbas
-16</translation>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation>Pryncypał
-16</translation>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation>Fagot
-16</translation>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation>Puzon
-16</translation>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation>Pomort
-32</translation>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation>P+I</translation>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation>P+II</translation>
-    </message>
-    <message>
-        <source>P+III</source>
-        <translation>P+III</translation>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
@@ -12590,10 +12344,6 @@ zmienia</translation>
     <message>
         <source>Make this score private</source>
         <translation>Uczyń partyturę prywatną</translation>
-    </message>
-    <message>
-        <source>Sharing</source>
-        <translation>Udostępnianie</translation>
     </message>
 </context>
 <context>
@@ -16862,7 +16612,7 @@ Takt nie jest pusty.</translation>
     </message>
     <message>
         <source>Tablature2</source>
-        <translation>Tabulatura alternatywna</translation>
+        <translation>Alternatywna tabulatura</translation>
     </message>
 </context>
 <context>
@@ -17738,59 +17488,59 @@ Takt nie jest pusty.</translation>
     <name>noteheadnames</name>
     <message>
         <source>Normal</source>
-        <translation>zwykła</translation>
+        <translation>Zwykła</translation>
     </message>
     <message>
         <source>Cross</source>
-        <translation>krzyżyk</translation>
+        <translation>Krzyżyk</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation>romb</translation>
+        <translation>Romb</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation>trójkąt</translation>
+        <translation>Trójkąt</translation>
     </message>
     <message>
         <source>Mi</source>
-        <translation>mi</translation>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Slash</source>
-        <translation>ukośnik</translation>
+        <translation>Ukośnik</translation>
     </message>
     <message>
         <source>XCircle</source>
-        <translation>x-kółko</translation>
+        <translation>X-kółko</translation>
     </message>
     <message>
         <source>Do</source>
-        <translation>do</translation>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation>re</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation>fa</translation>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation>la</translation>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation>si</translation>
+        <translation>Si</translation>
     </message>
     <message>
         <source>Sol</source>
-        <translation>sol</translation>
+        <translation>Sol</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
-        <translation>alt. breve</translation>
+        <translation>Alternatywna breve</translation>
     </message>
 </context>
 <context>

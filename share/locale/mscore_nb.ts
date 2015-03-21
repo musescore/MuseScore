@@ -118,11 +118,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Add Score</source>
-        <translation>Legg til noteark</translation>
+        <translation>Legg til partitur</translation>
     </message>
     <message>
         <source>Remove Score</source>
-        <translation>Fjern noteark</translation>
+        <translation>Fjern partitur</translation>
     </message>
     <message>
         <source>Down</source>
@@ -154,11 +154,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Move current score down in list</source>
-        <translation>Flytt nåværende noteark ned i liste</translation>
+        <translation>Flytt nåværende partitur ned i liste</translation>
     </message>
     <message>
         <source>Move current score up in list</source>
-        <translation>Flytt nåværende noteark ned i liste</translation>
+        <translation>Flytt nåværende partitur ned i liste</translation>
     </message>
     <message>
         <source>Album name</source>
@@ -166,7 +166,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Remove current score</source>
-        <translation>Fjern nåværende noteark</translation>
+        <translation>Fjern nåværende partitur</translation>
     </message>
     <message>
         <source>Create new album</source>
@@ -469,7 +469,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Shortcut:</source>
-        <translation>Hurtigtast(er):</translation>
+        <translation>Hurtigtast:</translation>
     </message>
     <message>
         <source>A</source>
@@ -552,15 +552,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staves:</source>
-        <translation>Staver:</translation>
+        <translation>Notesystemer:</translation>
     </message>
     <message>
         <source>Short name:</source>
-        <translation>Kortnavn:</translation>
+        <translation>Kort navn:</translation>
     </message>
     <message>
         <source>MIDI program:</source>
-        <translation>MIDI program:</translation>
+        <translation>MIDI-program:</translation>
     </message>
 </context>
 <context>
@@ -1143,7 +1143,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>»C</source>
-        <translation type="unfinished"/>
+        <translation>»C</translation>
     </message>
 </context>
 <context>
@@ -1393,7 +1393,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Extra distance above staff:</source>
-        <translation>Ekstra avstand over system:</translation>
+        <translation>Ekstra avstand over notesystem:</translation>
     </message>
     <message>
         <source>Never hide</source>
@@ -1512,11 +1512,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Beside staff</source>
-        <translation>Ved siden av system</translation>
+        <translation>Ved siden av notesystem</translation>
     </message>
     <message>
         <source>Through staff</source>
-        <translation>Gjennom system</translation>
+        <translation>Gjennom notesystem</translation>
     </message>
     <message>
         <source>Stem position:</source>
@@ -1674,7 +1674,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Score</source>
-        <translation>Noteark</translation>
+        <translation>Partitur</translation>
     </message>
     <message>
         <source>Page</source>
@@ -1735,7 +1735,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Articulations, Ornaments</source>
-        <translation>Artikulasjon, Ornamentikk</translation>
+        <translation>Artikulasjon, ornamentikk</translation>
     </message>
     <message>
         <source>Accidentals</source>
@@ -1770,7 +1770,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Don&apos;t hide empty staves in first system</source>
-        <translation>Ikke skjul tomme notelinjer i første system</translation>
+        <translation>Ikke skjul tomme notesystemer i første system</translation>
     </message>
     <message>
         <source>Display note values across measure bar (EXPERIMENTAL, early music only!)</source>
@@ -1782,7 +1782,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Create clef for all systems</source>
-        <translation>Opprett nøkler på alle systemer</translation>
+        <translation>Opprett nøkler for alle systemer</translation>
     </message>
     <message>
         <source>Music bottom margin:</source>
@@ -1794,7 +1794,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Grand staff distance:</source>
-        <translation>Klammesystemavstand:</translation>
+        <translation>Avstand til systemklamme:</translation>
     </message>
     <message>
         <source>Min. system distance:</source>
@@ -2642,7 +2642,7 @@ space unit</extracomment>
     <name>GreendotButton</name>
     <message>
         <source>Record</source>
-        <translation>Spill inn</translation>
+        <translation>Ta opp</translation>
     </message>
 </context>
 <context>
@@ -3006,7 +3006,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Sol</source>
-        <translation type="unfinished"/>
+        <translation>Sol</translation>
     </message>
     <message>
         <source>La</source>
@@ -3018,7 +3018,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Alt. Brevis</source>
-        <translation type="unfinished"/>
+        <translation>Breve alt.</translation>
     </message>
     <message>
         <source>Line thickness</source>
@@ -3038,7 +3038,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Ambitus</source>
-        <translation type="unfinished"/>
+        <translation>Ambitus</translation>
     </message>
 </context>
 <context>
@@ -3239,7 +3239,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Local Relayout value</source>
-        <translation type="unfinished"/>
+        <translation>Nullstill lokal justering</translation>
     </message>
     <message>
         <source>Reset Horizontal value</source>
@@ -3271,7 +3271,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Local relayout</source>
-        <translation type="unfinished"/>
+        <translation>Lokal justering</translation>
     </message>
     <message>
         <source>User position</source>
@@ -3286,7 +3286,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Layout Break</source>
-        <translation type="unfinished"/>
+        <translation>Bruddpunkt</translation>
     </message>
 </context>
 <context>
@@ -3476,7 +3476,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Visible value</source>
-        <translation>Nullstilll &quot;Synlig&quot;</translation>
+        <translation>Nullstill &quot;Synlig&quot;</translation>
     </message>
     <message>
         <source>Reset Color value</source>
@@ -3675,7 +3675,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Hairpin Inspector</source>
-        <translation>Hårnålovervåker</translation>
+        <translation>Crescendo-/decrescendo-overvåker</translation>
     </message>
     <message>
         <source>Reset Velocity change value</source>
@@ -3766,7 +3766,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation>Avstand mellom to linjer på ett standard 5-linjers system</translation>
+        <translation>Avstand mellom to linjer på ett standard 5-linjers notesystem</translation>
     </message>
     <message>
         <source>Size in staff space units</source>
@@ -4397,7 +4397,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Follow text value</source>
-        <translation type="unfinished"/>
+        <translation>Nullstill &quot;Følg tekst&quot;</translation>
     </message>
 </context>
 <context>
@@ -4424,7 +4424,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Text to Style</source>
-        <translation type="unfinished"/>
+        <translation>Nullstill &quot;Tekst til stil&quot;</translation>
     </message>
 </context>
 <context>
@@ -4836,7 +4836,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Staff type</source>
-        <translation>Nytesystemtype</translation>
+        <translation>Notesystemtype</translation>
     </message>
     <message>
         <source>Instrument Genre Filter</source>
@@ -4852,11 +4852,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Partitur List</source>
-        <translation type="unfinished"/>
+        <translation>Partiturliste</translation>
     </message>
     <message>
         <source>Staff linked to previous</source>
-        <translation type="unfinished"/>
+        <translation>Notesystem knyttet til forrige</translation>
     </message>
 </context>
 <context>
@@ -5260,31 +5260,36 @@ space unit</extracomment>
     <message>
         <source>2x less
 measure count</source>
-        <translation type="unfinished"/>
+        <translation>2x færre
+antall takter</translation>
     </message>
     <message>
         <source>Is human
 performance</source>
-        <translation type="unfinished"/>
+        <translation>Er menneskelig
+framføring</translation>
     </message>
     <message>
         <source>Split staff</source>
-        <translation type="unfinished"/>
+        <translation>Del opp notesystem</translation>
     </message>
     <message>
         <source>Clef
 changes</source>
-        <translation type="unfinished"/>
+        <translation>Nøkkel
+endringer</translation>
     </message>
     <message>
         <source>Simplify
 durations</source>
-        <translation type="unfinished"/>
+        <translation>Forenkle
+varigheter</translation>
     </message>
     <message>
         <source>Show
 staccato</source>
-        <translation type="unfinished"/>
+        <translation>Vis
+staccato</translation>
     </message>
     <message>
         <source>Dotted
@@ -5306,7 +5311,7 @@ opptakt</translation>
     </message>
     <message>
         <source>Max. quantization</source>
-        <translation type="unfinished"/>
+        <translation>Maks. kvantisering</translation>
     </message>
     <message>
         <source>Max. voices</source>
@@ -5323,7 +5328,8 @@ opptakt</translation>
     <message>
         <source>Show
 chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Vis
+besifring</translation>
     </message>
 </context>
 <context>
@@ -5386,7 +5392,7 @@ Vil du finne %2 nå? </translation>
     </message>
     <message>
         <source>Breaths &amp; Pauses</source>
-        <translation>Pustetegn og Pauser</translation>
+        <translation>Pustetegn og pauser</translation>
     </message>
     <message>
         <source>Brackets</source>
@@ -5394,7 +5400,7 @@ Vil du finne %2 nå? </translation>
     </message>
     <message>
         <source>Articulations &amp; Ornaments</source>
-        <translation>Artikulasjon og Ornamentikk</translation>
+        <translation>Artikulasjon og ornamentikk</translation>
     </message>
     <message>
         <source>Accidentals</source>
@@ -5438,15 +5444,15 @@ Vil du finne %2 nå? </translation>
     </message>
     <message>
         <source>Arpeggios &amp; Glissandi</source>
-        <translation>Arpeggio og Glissando</translation>
+        <translation>Arpeggio og glissando</translation>
     </message>
     <message>
         <source>Breaks &amp; Spacers</source>
-        <translation>Bruddpunkter og Avstandsdelere</translation>
+        <translation>Bruddpunkter og avstandsdelere</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
-        <translation type="unfinished"/>
+        <translation>Sekkepipeforslag</translation>
     </message>
     <message>
         <source>Repeats &amp; Jumps</source>
@@ -5682,26 +5688,26 @@ en ol ville gått ut over takten</translation>
     </message>
     <message>
         <source>MuseScore: Score Information</source>
-        <translation>MuseScore: Notearksinformasjon</translation>
+        <translation>MuseScore: Partiturinformasjon</translation>
     </message>
 </context>
 <context>
     <name>Ms</name>
     <message>
         <source>Fall</source>
-        <translation type="unfinished"/>
+        <translation>Fall</translation>
     </message>
     <message>
         <source>Doit</source>
-        <translation type="unfinished"/>
+        <translation>Doit</translation>
     </message>
     <message>
         <source>Plop</source>
-        <translation type="unfinished"/>
+        <translation>Plop</translation>
     </message>
     <message>
         <source>Scoop</source>
-        <translation type="unfinished"/>
+        <translation>Scoop</translation>
     </message>
 </context>
 <context>
@@ -5723,7 +5729,7 @@ en ol ville gått ut over takten</translation>
     <name>Ms::AccessibleScoreView</name>
     <message>
         <source>Score %1</source>
-        <translation>Noteark %1</translation>
+        <translation>Partitur %1</translation>
     </message>
 </context>
 <context>
@@ -5749,7 +5755,7 @@ en ol ville gått ut over takten</translation>
     <name>Ms::AlbumManager</name>
     <message>
         <source>MuseScore: Add Score</source>
-        <translation>MuseScore: Legg til noteark</translation>
+        <translation>MuseScore: Legg til partitur</translation>
     </message>
     <message>
         <source>MuseScore: Load Album</source>
@@ -5765,7 +5771,7 @@ en ol ville gått ut over takten</translation>
     </message>
     <message>
         <source>Error while creating score from album.</source>
-        <translation>Feil ved opprettelse av noteark fra album</translation>
+        <translation>Feil ved opprettelse av partitur fra album</translation>
     </message>
 </context>
 <context>
@@ -6039,7 +6045,7 @@ feilet: </translation>
     </message>
     <message>
         <source>the $ sign itself</source>
-        <translation type="unfinished"/>
+        <translation>Dollartegnet</translation>
     </message>
     <message>
         <source>meta data tag</source>
@@ -6125,7 +6131,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Inspector Subwindow</source>
-        <translation type="unfinished"/>
+        <translation>Undervindu</translation>
     </message>
 </context>
 <context>
@@ -6158,15 +6164,15 @@ feilet: </translation>
     </message>
     <message>
         <source>Dot1</source>
-        <translation type="unfinished"/>
+        <translation>Punkt1</translation>
     </message>
     <message>
         <source>Dot2</source>
-        <translation type="unfinished"/>
+        <translation>Punkt2</translation>
     </message>
     <message>
         <source>Dot3</source>
-        <translation type="unfinished"/>
+        <translation>Punkt3</translation>
     </message>
     <message>
         <source>Hook</source>
@@ -6247,7 +6253,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Staff type</source>
-        <translation>Nytesystemtype</translation>
+        <translation>Notesystemtype</translation>
     </message>
     <message>
         <source>Visible</source>
@@ -6350,11 +6356,11 @@ feilet: </translation>
     </message>
     <message>
         <source>Please check your Internet connection</source>
-        <translation type="unfinished"/>
+        <translation>Vennligst undersøk din internettilkobling</translation>
     </message>
     <message>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Klokka er ikke stilt riktig på din enhet. Vennligst undersøk dette og still den riktig. Det anbefales å sette tid/tidssone til automatisk. Hvis du fortsatt ikke kan logge inn, &lt;a href=&quot;%1&quot;&gt;ta kontakt med oss&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -6440,7 +6446,7 @@ feilet: </translation>
     <message>
         <source>Save changes to the score &quot;%1&quot;
 before closing?</source>
-        <translation>Lagre endringer på noteark &quot;%1&quot;
+        <translation>Lagre endringer i partitur &quot;%1&quot;
 før lukking?</translation>
     </message>
     <message>
@@ -6477,11 +6483,11 @@ før lukking?</translation>
     </message>
     <message>
         <source>MuseScore: Load Score</source>
-        <translation>MuseScore: Åpne noteark</translation>
+        <translation>MuseScore: Åpne partitur</translation>
     </message>
     <message>
         <source>MuseScore: Save Score</source>
-        <translation>MuseScore: Lagre noteark</translation>
+        <translation>MuseScore: Lagre partitur</translation>
     </message>
     <message>
         <source>MuseScore: Save File</source>
@@ -6725,7 +6731,7 @@ Vil du erstatte den?
     </message>
     <message>
         <source>2/2 alla breve</source>
-        <translation>2/2 alle breve</translation>
+        <translation>2/2 alla breve</translation>
     </message>
     <message>
         <source>&amp;Add</source>
@@ -6811,7 +6817,7 @@ vennligst velg en takt og prøv igjen</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>&amp;Visning</translation>
+        <translation>&amp;Vis</translation>
     </message>
     <message>
         <source>Add N&amp;ote</source>
@@ -7076,7 +7082,7 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Score_and_Parts</source>
-        <translation>Noteark_og_stemmer</translation>
+        <translation>Partitur_og_stemmer</translation>
     </message>
     <message>
         <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</source>
@@ -7112,7 +7118,7 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>No score</source>
-        <translation>Intet noteark</translation>
+        <translation>Intet partitur</translation>
     </message>
     <message>
         <source>Edit mode</source>
@@ -7136,7 +7142,7 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Score locked</source>
-        <translation>Noteark låst</translation>
+        <translation>Partitur låst</translation>
     </message>
     <message>
         <source>Manual</source>
@@ -7214,25 +7220,25 @@ vennligst velg et annet navn:</translation>
     <name>Ms::NewWizard</name>
     <message>
         <source>MuseScore: Create New Score</source>
-        <translation>MuseScore: Opprett nytt noteark</translation>
+        <translation>MuseScore: Opprett nytt partitur</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage1</name>
     <message>
         <source>Create New Score</source>
-        <translation>Opprett nytt noteark</translation>
+        <translation>Opprett nytt partitur</translation>
     </message>
     <message>
         <source>This wizard creates a new score</source>
-        <translation>Denne veiviseren oppretter et nytt noteark</translation>
+        <translation>Denne veiviseren oppretter et nytt partitur</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage2</name>
     <message>
         <source>Create New Score</source>
-        <translation>Opprett nytt noteark</translation>
+        <translation>Opprett nytt partitur</translation>
     </message>
     <message>
         <source>Define a set of instruments. Each instrument is represented by one or more staves</source>
@@ -7243,7 +7249,7 @@ vennligst velg et annet navn:</translation>
     <name>Ms::NewWizardPage3</name>
     <message>
         <source>Create New Score</source>
-        <translation>Opprett nytt noteark</translation>
+        <translation>Opprett nytt partitur</translation>
     </message>
     <message>
         <source>Create Time Signature</source>
@@ -7254,7 +7260,7 @@ vennligst velg et annet navn:</translation>
     <name>Ms::NewWizardPage4</name>
     <message>
         <source>Create New Score</source>
-        <translation>Opprett nytt noteark</translation>
+        <translation>Opprett nytt partitur</translation>
     </message>
     <message>
         <source>Select Template File:</source>
@@ -7265,7 +7271,7 @@ vennligst velg et annet navn:</translation>
     <name>Ms::NewWizardPage5</name>
     <message>
         <source>Create New Score</source>
-        <translation>Opprett nytt noteark</translation>
+        <translation>Opprett nytt partitur</translation>
     </message>
     <message>
         <source>Select Key Signature and Tempo:</source>
@@ -7339,18 +7345,18 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Beat Slash</source>
-        <translation type="unfinished"/>
+        <translation>Slagstrek</translation>
     </message>
     <message>
         <source>Rhythm Slash</source>
-        <translation type="unfinished"/>
+        <translation>Rytmestrek</translation>
     </message>
 </context>
 <context>
     <name>Ms::OmrPanel</name>
     <message>
         <source>OMR Panel</source>
-        <translation type="unfinished"/>
+        <translation>OMR-vindu</translation>
     </message>
 </context>
 <context>
@@ -7437,7 +7443,7 @@ vennligst velg et annet navn:</translation>
     <name>Ms::PianoTools</name>
     <message>
         <source>Piano Keyboard</source>
-        <translation>Piano-keyboard</translation>
+        <translation>Pianotangenter</translation>
     </message>
 </context>
 <context>
@@ -7513,7 +7519,7 @@ Lagre endringene?</translation>
     </message>
     <message>
         <source>Choose Starting Score</source>
-        <translation>Velg første noteark</translation>
+        <translation>Velg første partitur</translation>
     </message>
     <message>
         <source>MuseScore Shortcuts</source>
@@ -7667,11 +7673,11 @@ feilet: %2</translation>
     </message>
     <message>
         <source>Measure %1 Staff %2 incomplete. Expected: %3; Found: %4</source>
-        <translation type="unfinished"/>
+        <translation>Takt %1, notesystem %2 ufullstendig. Forventet: %3; Funnet: %4</translation>
     </message>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
-        <translation type="unfinished"/>
+        <translation>Takt %1, notesystem %2, stemme %3 for lang. Forventet: %4; Funnet: %5</translation>
     </message>
 </context>
 <context>
@@ -7686,11 +7692,11 @@ feilet: %2</translation>
     </message>
     <message>
         <source>Range Selection</source>
-        <translation type="unfinished"/>
+        <translation>Områdevalg</translation>
     </message>
     <message>
         <source>List Selection</source>
-        <translation type="unfinished"/>
+        <translation>Listevalg</translation>
     </message>
     <message>
         <source>Measure: %1</source>
@@ -7717,7 +7723,7 @@ feilet: %2</translation>
     </message>
     <message>
         <source>Create New Score</source>
-        <translation>Opprett nytt noteark</translation>
+        <translation>Opprett nytt partitur</translation>
     </message>
     <message>
         <source>Custom Templates</source>
@@ -7768,7 +7774,7 @@ feilet: %2</translation>
     </message>
     <message>
         <source>Bend Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Egenskaper for bøy...</translation>
     </message>
     <message>
         <source>Add</source>
@@ -7816,7 +7822,7 @@ feilet: %2</translation>
     </message>
     <message>
         <source>Chord Articulation...</source>
-        <translation type="unfinished"/>
+        <translation>Akkordartikulasjon</translation>
     </message>
     <message>
         <source>Section Break Properties...</source>
@@ -7844,7 +7850,7 @@ feilet: %2</translation>
     </message>
     <message>
         <source>Debugger</source>
-        <translation type="unfinished"/>
+        <translation>Debugger</translation>
     </message>
     <message>
         <source>Edit Drumset...</source>
@@ -7864,7 +7870,7 @@ feilet: %2</translation>
     </message>
     <message>
         <source>Object Debugger</source>
-        <translation type="unfinished"/>
+        <translation>Objektdebugger</translation>
     </message>
     <message>
         <source>No staves found:
@@ -7890,7 +7896,7 @@ vennligst velg en takt og prøv igjen</translation>
     </message>
     <message>
         <source>Tremolo Bar Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Egenskaper for tremolo</translation>
     </message>
     <message>
         <source>Text Style...</source>
@@ -7929,8 +7935,8 @@ Vennligst velg en note/pause og prøv igjen</translation>
     <message>
         <source>Cannot split measure here:
 Cannot split tuplet</source>
-        <translation>Kan ikke splitte takten her:
-Kan ikke splitte en ol</translation>
+        <translation>Kan ikke dele opp takten her:
+Kan ikke dele opp en ol</translation>
     </message>
     <message>
         <source>No measures selected:
@@ -7940,7 +7946,7 @@ Vennligst velg takter som skal slås sammen og prøv igjen</translation>
     </message>
     <message>
         <source>Auto-resize to page</source>
-        <translation type="unfinished"/>
+        <translation>Endre størrelse automatisk til side</translation>
     </message>
     <message>
         <source>Hide Courtesy Clef</source>
@@ -7995,7 +8001,7 @@ Vennligst velg takter som skal slås sammen og prøv igjen</translation>
     </message>
     <message>
         <source>Type to search. Press Enter to return to score.</source>
-        <translation>Begynn å skrive for å søke. Trykk Enter for å komme tilbake til notearket.</translation>
+        <translation>Begynn å skrive for å søke. Trykk Enter for å komme tilbake til partituret.</translation>
     </message>
 </context>
 <context>
@@ -8021,7 +8027,7 @@ Vennligst velg takter som skal slås sammen og prøv igjen</translation>
     </message>
     <message>
         <source>Use Tab and Backtab to move through the check boxes</source>
-        <translation type="unfinished"/>
+        <translation>Bruk Tab og Backtab for å flytte mellom sjekkboksene</translation>
     </message>
 </context>
 <context>
@@ -8122,11 +8128,11 @@ Vennligst velg takter som skal slås sammen og prøv igjen</translation>
     </message>
     <message>
         <source>Subscript</source>
-        <translation type="unfinished"/>
+        <translation>Senket</translation>
     </message>
     <message>
         <source>Superscript</source>
-        <translation type="unfinished"/>
+        <translation>Hevet</translation>
     </message>
 </context>
 <context>
@@ -8153,7 +8159,7 @@ Vennligst velg takter som skal slås sammen og prøv igjen</translation>
     <name>Ms::TextStyleDialog</name>
     <message>
         <source>MuseScore: Read Style Name</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Les stilnavn</translation>
     </message>
     <message>
         <source>'%1' does already exist,
@@ -8194,11 +8200,11 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Subscript</source>
-        <translation type="unfinished"/>
+        <translation>Senket</translation>
     </message>
     <message>
         <source>Superscript</source>
-        <translation type="unfinished"/>
+        <translation>Hevet</translation>
     </message>
 </context>
 <context>
@@ -8216,7 +8222,7 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Cut time</source>
-        <translation>2/2 alle breve</translation>
+        <translation>Alla breve</translation>
     </message>
     <message>
         <source>%1/%2 time</source>
@@ -8290,7 +8296,7 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Finished! &lt;a href=&quot;%1&quot;&gt;Go to my score&lt;/a&gt;.</source>
-        <translation>Fullført! &lt;a href=&quot;%1&quot;&gt;Gå til mitt noteark&lt;/a&gt;.</translation>
+        <translation>Fullført! &lt;a href=&quot;%1&quot;&gt;Gå til mitt partitur&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Error</source>
@@ -8302,7 +8308,7 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Respect the &lt;a href=&quot;%1&quot;&gt;community guidelines&lt;/a&gt;. Only make your scores accessible to anyone with permission from the right holders.</source>
-        <translation type="unfinished"/>
+        <translation>Respekter &lt;a href=&quot;%1&quot;&gt;fellesskapets retningslinjer&lt;/a&gt;. Ikke gjør et partitur tilgjengelig hvis du ikke innehar rettighetene til det.</translation>
     </message>
     <message>
         <source>Use a comma to separate the tags</source>
@@ -8310,7 +8316,7 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>[&lt;a href=&quot;%1&quot;&gt;link&lt;/a&gt;]</source>
-        <translation type="unfinished"/>
+        <translation>[&lt;a href=&quot;%1&quot;&gt;lenke&lt;/a&gt;]</translation>
     </message>
 </context>
 <context>
@@ -8399,7 +8405,7 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Open/Atonal</source>
-        <translation type="unfinished"/>
+        <translation>Åpen/atonal</translation>
     </message>
 </context>
 <context>
@@ -8496,19 +8502,19 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Process</source>
-        <translation type="unfinished"/>
+        <translation>Prosess</translation>
     </message>
     <message>
         <source>Mark staves</source>
-        <translation type="unfinished"/>
+        <translation>Marker notesystemer</translation>
     </message>
     <message>
         <source>Mark slices</source>
-        <translation type="unfinished"/>
+        <translation>Marker skiver</translation>
     </message>
     <message>
         <source>Mark barlines</source>
-        <translation type="unfinished"/>
+        <translation>Marker taktstreker</translation>
     </message>
     <message>
         <source>Show lines</source>
@@ -8516,11 +8522,11 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation>Avstand mellom to linjer på ett standard 5-linjers system</translation>
+        <translation>Avstand mellom to linjer på ett standard 5-linjers notesystem</translation>
     </message>
     <message>
         <source>Staff space:</source>
-        <translation type="unfinished"/>
+        <translation>Notesystemstørrelse:</translation>
     </message>
 </context>
 <context>
@@ -8599,11 +8605,11 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation>Avstand mellom to linjer på ett standard 5-linjers system</translation>
+        <translation>Avstand mellom to linjer på ett standard 5-linjers notesystem</translation>
     </message>
     <message>
         <source>Staff space:</source>
-        <translation type="unfinished"/>
+        <translation>Notesystemstørrelse:</translation>
     </message>
 </context>
 <context>
@@ -8630,7 +8636,7 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Breaks &amp;&amp; Spacers</source>
-        <translation>Bruddpunkter &amp;&amp; Avstandsdelere</translation>
+        <translation>Bruddpunkter og avstandsdelere</translation>
     </message>
     <message>
         <source>Fingering</source>
@@ -8650,7 +8656,7 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Breaths &amp;&amp; Pauses</source>
-        <translation>Pustetegn &amp;&amp; Pauser</translation>
+        <translation>Pustetegn og pauser</translation>
     </message>
     <message>
         <source>Clefs</source>
@@ -8734,15 +8740,15 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Staff Changes</source>
-        <translation type="unfinished"/>
+        <translation>Notesystemendringer</translation>
     </message>
     <message>
         <source>Arpeggios &amp;&amp; Glissandi</source>
-        <translation>Arpeggio og Glissando</translation>
+        <translation>Arpeggio og glissando</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
-        <translation type="unfinished"/>
+        <translation>Sekkepipeforslag</translation>
     </message>
     <message>
         <source>Frames &amp;&amp; Measures</source>
@@ -8750,11 +8756,11 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>Articulations &amp;&amp; Ornaments</source>
-        <translation>Artikulasjon og Ornamentikk</translation>
+        <translation>Artikulasjon og ornamentikk</translation>
     </message>
     <message>
         <source>Ambitus</source>
-        <translation type="unfinished"/>
+        <translation>Ambitus</translation>
     </message>
     <message>
         <source>MuseScore: Writing Palette File</source>
@@ -8770,27 +8776,27 @@ feilet: </translation>
     </message>
     <message>
         <source>common symbols</source>
-        <translation type="unfinished"/>
+        <translation>vanlige symboler</translation>
     </message>
     <message>
         <source>all font symbols</source>
-        <translation type="unfinished"/>
+        <translation>alle skrifttype-symboler</translation>
     </message>
     <message>
         <source>Tick 1 span</source>
-        <translation type="unfinished"/>
+        <translation>Markør, 1 høyde</translation>
     </message>
     <message>
         <source>Tick 2 span</source>
-        <translation type="unfinished"/>
+        <translation>Markør, 2 høyder</translation>
     </message>
     <message>
         <source>Short 1 span</source>
-        <translation type="unfinished"/>
+        <translation>Kort, 1 høyde</translation>
     </message>
     <message>
         <source>Short 2 span</source>
-        <translation type="unfinished"/>
+        <translation>Kort, 2 høyder</translation>
     </message>
     <message>
         <source>Repeats &amp;&amp; Jumps</source>
@@ -8818,15 +8824,15 @@ feilet: </translation>
     </message>
     <message>
         <source>Start repeat</source>
-        <translation>Åpent repetisjonstegn</translation>
+        <translation>Start repetisjon</translation>
     </message>
     <message>
         <source>End repeat</source>
-        <translation>Lukket repetisjonstegn</translation>
+        <translation>Slutt repetisjon</translation>
     </message>
     <message>
         <source>End-start repeat</source>
-        <translation>Dobbelt repetisjonstegn</translation>
+        <translation>Slutt-start repetisjon</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
@@ -8837,7 +8843,7 @@ feilet: </translation>
     <name>PaletteCellProperties</name>
     <message>
         <source>Cell Properties</source>
-        <translation type="unfinished"/>
+        <translation>Egenskaper for celle</translation>
     </message>
     <message>
         <source>Palette Cell Properties</source>
@@ -8853,7 +8859,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Content offset</source>
-        <translation type="unfinished"/>
+        <translation>Avstand til innhold</translation>
     </message>
     <message>
         <source>Y:</source>
@@ -8865,11 +8871,11 @@ feilet: </translation>
     </message>
     <message>
         <source>Draw staff</source>
-        <translation type="unfinished"/>
+        <translation>Tegn notesystem</translation>
     </message>
     <message>
         <source>Content scale:</source>
-        <translation type="unfinished"/>
+        <translation>Innholdsskalering</translation>
     </message>
 </context>
 <context>
@@ -8912,7 +8918,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Show &apos;More Elements...&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Vis &apos;Flere elementer...&apos;</translation>
     </message>
 </context>
 <context>
@@ -8971,7 +8977,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Panorama position</source>
-        <translation type="unfinished"/>
+        <translation>Panoramaposisjon</translation>
     </message>
     <message>
         <source>MIDI sound</source>
@@ -9013,15 +9019,15 @@ feilet: </translation>
     </message>
     <message>
         <source>Wave</source>
-        <translation type="unfinished"/>
+        <translation>Bølge</translation>
     </message>
     <message>
         <source>Show wave display</source>
-        <translation type="unfinished"/>
+        <translation>Vis bølgevisning</translation>
     </message>
     <message>
         <source>Toolbar 2</source>
-        <translation type="unfinished"/>
+        <translation>Verktøylinje 2</translation>
     </message>
     <message>
         <source>Cursor:</source>
@@ -9049,7 +9055,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Len:</source>
-        <translation type="unfinished"/>
+        <translation>Lengde:</translation>
     </message>
     <message>
         <source>MuseScore: &lt;%1&gt; Staff: %2</source>
@@ -9110,7 +9116,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Relative Tempo to 120 beats per minute</source>
-        <translation type="unfinished"/>
+        <translation>Relativt tempo til 120 slag per minutt</translation>
     </message>
     <message>
         <source>Use up and down arrows to change value</source>
@@ -9122,14 +9128,14 @@ feilet: </translation>
     </message>
     <message>
         <source>Relative tempo to 120 beats per minute</source>
-        <translation type="unfinished"/>
+        <translation>Relativt tempo til 120 slag per minutt</translation>
     </message>
 </context>
 <context>
     <name>PluginCreatorBase</name>
     <message>
         <source>Run</source>
-        <translation type="unfinished"/>
+        <translation>Kjør</translation>
     </message>
     <message>
         <source>Stop</source>
@@ -9173,7 +9179,7 @@ feilet: </translation>
     </message>
     <message>
         <source>R</source>
-        <translation type="unfinished"/>
+        <translation>R</translation>
     </message>
     <message>
         <source>Reload current plugin source</source>
@@ -9251,7 +9257,7 @@ feilet: </translation>
     </message>
     <message>
         <source>OSC remote control</source>
-        <translation type="unfinished"/>
+        <translation>OSC fjernkontroll</translation>
     </message>
     <message>
         <source>Style</source>
@@ -9267,7 +9273,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Canvas</source>
-        <translation>Tekstur</translation>
+        <translation>Lerret</translation>
     </message>
     <message>
         <source>Background</source>
@@ -9319,7 +9325,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Score</source>
-        <translation>Noteark</translation>
+        <translation>Partitur</translation>
     </message>
     <message>
         <source>View</source>
@@ -9327,7 +9333,7 @@ feilet: </translation>
     </message>
     <message>
         <source>default scale for new score views</source>
-        <translation>standard skalering for nye notearkvisninger</translation>
+        <translation>standard skalering for nye partiturvisninger</translation>
     </message>
     <message>
         <source>Default Files</source>
@@ -9343,7 +9349,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Use JACK MIDI</source>
-        <translation type="unfinished"/>
+        <translation>Bruk JACK MIDI</translation>
     </message>
     <message>
         <source>Remember last connection(s)</source>
@@ -9359,7 +9365,7 @@ feilet: </translation>
     </message>
     <message>
         <source>API:</source>
-        <translation type="unfinished"/>
+        <translation>API:</translation>
     </message>
     <message>
         <source>Device:</source>
@@ -9459,11 +9465,11 @@ feilet: </translation>
     </message>
     <message>
         <source>Overture import character set:</source>
-        <translation type="unfinished"/>
+        <translation>Tegnsett for Overture-import:</translation>
     </message>
     <message>
         <source>Guitar Pro import character set:</source>
-        <translation type="unfinished"/>
+        <translation>Tegnsett for Guitar Pro-import:</translation>
     </message>
     <message>
         <source>MusicXML</source>
@@ -9471,11 +9477,11 @@ feilet: </translation>
     </message>
     <message>
         <source>Import layout</source>
-        <translation type="unfinished"/>
+        <translation>Importer layout</translation>
     </message>
     <message>
         <source>Import system and page breaks</source>
-        <translation type="unfinished"/>
+        <translation>Importer system- og sideskift</translation>
     </message>
     <message>
         <source>MIDI</source>
@@ -9523,7 +9529,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Export layout</source>
-        <translation type="unfinished"/>
+        <translation>Eksporter layout</translation>
     </message>
     <message>
         <source>Export all system and page breaks</source>
@@ -9579,11 +9585,11 @@ feilet: </translation>
     </message>
     <message>
         <source>Start with new score</source>
-        <translation>Start med nytt noteark</translation>
+        <translation>Start med nytt partitur</translation>
     </message>
     <message>
         <source>Start with score:</source>
-        <translation>Start med noteark:</translation>
+        <translation>Start med partitur:</translation>
     </message>
     <message>
         <source>Show splash screen</source>
@@ -9667,15 +9673,15 @@ feilet: </translation>
     </message>
     <message>
         <source>Sample rate:</source>
-        <translation>Innspillingsfrekvens:</translation>
+        <translation>Samplingsrate:</translation>
     </message>
     <message>
         <source>JACK audio server</source>
-        <translation type="unfinished"/>
+        <translation>JACK lydserver</translation>
     </message>
     <message>
         <source>Character Set Used When Importing Binary Files</source>
-        <translation type="unfinished"/>
+        <translation>Tegnsett brukt ved importering av binære filer</translation>
     </message>
     <message>
         <source>Shortest note:</source>
@@ -9708,11 +9714,11 @@ feilet: </translation>
     </message>
     <message>
         <source>Use JACK Audio</source>
-        <translation type="unfinished"/>
+        <translation>Bruk JACK Audio</translation>
     </message>
     <message>
         <source>Use JACK Transport</source>
-        <translation type="unfinished"/>
+        <translation>Bruk JACK Transport</translation>
     </message>
     <message>
         <source>Timebase Master</source>
@@ -9728,11 +9734,11 @@ feilet: </translation>
     </message>
     <message>
         <source>Preferences Tab Manager</source>
-        <translation type="unfinished"/>
+        <translation>Fanebehandler for innstillinger</translation>
     </message>
     <message>
         <source>General Tab</source>
-        <translation type="unfinished"/>
+        <translation>Generelt-fane</translation>
     </message>
     <message>
         <source>Select language</source>
@@ -9744,23 +9750,23 @@ feilet: </translation>
     </message>
     <message>
         <source>Start with score</source>
-        <translation>Start med noteark</translation>
+        <translation>Start med partitur</translation>
     </message>
     <message>
         <source>Insert path to starting score</source>
-        <translation>Legg til sti til oppstartnoteark</translation>
+        <translation>Legg til sti til oppstartspartitur</translation>
     </message>
     <message>
         <source>Choose starting score</source>
-        <translation>Velg oppstartnoteark</translation>
+        <translation>Velg oppstartspartitur</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting the starting score</source>
-        <translation>Åpner et dialogvindu for å velge oppstartnoteark</translation>
+        <translation>Åpner et dialogvindu for å velge oppstartspartitur</translation>
     </message>
     <message>
         <source>Select delay (in minutes) between auto saves</source>
-        <translation type="unfinished"/>
+        <translation>Velg intervall (i minutter) mellom autolagringer</translation>
     </message>
     <message>
         <source>Port number</source>
@@ -9856,7 +9862,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Canvas Tab</source>
-        <translation>Tekstur-fane</translation>
+        <translation>Lerret-fane</translation>
     </message>
     <message>
         <source>Background Wallpaper</source>
@@ -9892,15 +9898,15 @@ feilet: </translation>
     </message>
     <message>
         <source>Paper wallpaper path</source>
-        <translation type="unfinished"/>
+        <translation>Sti til papirtekstur</translation>
     </message>
     <message>
         <source>Insert path to paper wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Legg til sti til papirtekstur</translation>
     </message>
     <message>
         <source>Choose paper wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Velg papirtekstur-fil</translation>
     </message>
     <message>
         <source>Select paper color</source>
@@ -9912,7 +9918,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Paper Wallpaper</source>
-        <translation type="unfinished"/>
+        <translation>Papirtekstur</translation>
     </message>
     <message>
         <source>Paper Color</source>
@@ -9928,99 +9934,99 @@ feilet: </translation>
     </message>
     <message>
         <source>Rewind is active</source>
-        <translation type="unfinished"/>
+        <translation>Spol tilbake er aktiv</translation>
     </message>
     <message>
         <source>Rewind record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Spol tilbake</translation>
     </message>
     <message>
         <source>Toggle play record</source>
-        <translation type="unfinished"/>
+        <translation>Start/Stopp avspiller+opptaker</translation>
     </message>
     <message>
         <source>Whole note is active</source>
-        <translation type="unfinished"/>
+        <translation>Helnote er aktiv</translation>
     </message>
     <message>
         <source>Half note is active</source>
-        <translation type="unfinished"/>
+        <translation>Halvnote er aktiv</translation>
     </message>
     <message>
         <source>Whole note record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Helnote</translation>
     </message>
     <message>
         <source>Half note record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Halvnote</translation>
     </message>
     <message>
         <source>Rest is active</source>
-        <translation type="unfinished"/>
+        <translation>Pause er aktiv</translation>
     </message>
     <message>
         <source>Augmentation dot is active</source>
-        <translation type="unfinished"/>
+        <translation>Punktering er aktiv</translation>
     </message>
     <message>
         <source>Augmentation dot record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Punktering</translation>
     </message>
     <message>
         <source>Double augmentation dot is active</source>
-        <translation type="unfinished"/>
+        <translation>Dobbelpunktering er aktiv</translation>
     </message>
     <message>
         <source>Double augmentation dot record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Dobbelpunktering</translation>
     </message>
     <message>
         <source>Tie is active</source>
-        <translation type="unfinished"/>
+        <translation>Bue er aktiv</translation>
     </message>
     <message>
         <source>Tie record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Bue</translation>
     </message>
     <message>
         <source>Rest record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Pause</translation>
     </message>
     <message>
         <source>Play is active</source>
-        <translation type="unfinished"/>
+        <translation>Spill er aktiv</translation>
     </message>
     <message>
         <source>Stop is active</source>
-        <translation type="unfinished"/>
+        <translation>Stopp er aktiv</translation>
     </message>
     <message>
         <source>Play record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Spill</translation>
     </message>
     <message>
         <source>Stop record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Stopp</translation>
     </message>
     <message>
         <source>16th note is active</source>
-        <translation type="unfinished"/>
+        <translation>Sekstendelsnote er aktiv</translation>
     </message>
     <message>
         <source>16th note record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Sekstendelsnote</translation>
     </message>
     <message>
         <source>32nd note is active</source>
-        <translation type="unfinished"/>
+        <translation>Trettitodelsnote er aktiv</translation>
     </message>
     <message>
         <source>32nd note record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Trettitodelsnote</translation>
     </message>
     <message>
         <source>Score Tab</source>
-        <translation>Noteark-fane</translation>
+        <translation>Partitur-fane</translation>
     </message>
     <message>
         <source>Default zoom</source>
@@ -10084,7 +10090,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Port Audio</source>
-        <translation type="unfinished"/>
+        <translation>Port Audio</translation>
     </message>
     <message>
         <source>API</source>
@@ -10112,27 +10118,27 @@ feilet: </translation>
     </message>
     <message>
         <source>Fragments</source>
-        <translation type="unfinished"/>
+        <translation>Fragmenter</translation>
     </message>
     <message>
         <source>Choose number of fragments</source>
-        <translation type="unfinished"/>
+        <translation>Velg antall fragmenter</translation>
     </message>
     <message>
         <source>Period Size</source>
-        <translation type="unfinished"/>
+        <translation>Punktumstørrelse</translation>
     </message>
     <message>
         <source>Choose period size</source>
-        <translation type="unfinished"/>
+        <translation>Velg punktumstørrelse</translation>
     </message>
     <message>
         <source>Sample rate</source>
-        <translation type="unfinished"/>
+        <translation>Samplingsrate</translation>
     </message>
     <message>
         <source>Choose sample rate</source>
-        <translation type="unfinished"/>
+        <translation>Velg samplingsrate</translation>
     </message>
     <message>
         <source>Import Tab</source>
@@ -10148,19 +10154,19 @@ feilet: </translation>
     </message>
     <message>
         <source>Overture import character set</source>
-        <translation type="unfinished"/>
+        <translation>Tegnsett for Overture-import</translation>
     </message>
     <message>
         <source>Choose Overture import character set</source>
-        <translation type="unfinished"/>
+        <translation>Velg tegnsett for Overture-import</translation>
     </message>
     <message>
         <source>Guitar Pro import character set</source>
-        <translation type="unfinished"/>
+        <translation>Tegnsett for Guitar Pro-import</translation>
     </message>
     <message>
         <source>Choose Guitar Pro import character set</source>
-        <translation type="unfinished"/>
+        <translation>Velg tegnsett for Guitar Pro-import</translation>
     </message>
     <message>
         <source>Shortest note</source>
@@ -10172,7 +10178,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Export Tab</source>
-        <translation type="unfinished"/>
+        <translation>Eksporter-fane</translation>
     </message>
     <message>
         <source>Resolution DPI</source>
@@ -10188,7 +10194,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Shortcuts table</source>
-        <translation type="unfinished"/>
+        <translation>Hurtigtasttabell</translation>
     </message>
     <message>
         <source>Reset Shortcut to default</source>
@@ -10212,7 +10218,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Quarter note record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Fjerdedelsnote</translation>
     </message>
     <message>
         <source>Eighth note is active</source>
@@ -10220,7 +10226,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Eighth note record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Åttedelsnote</translation>
     </message>
     <message>
         <source>64th note</source>
@@ -10232,11 +10238,11 @@ feilet: </translation>
     </message>
     <message>
         <source>64th note record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Sekstifiredelsnote</translation>
     </message>
     <message>
         <source>Here you can configure shortcuts for actions</source>
-        <translation type="unfinished"/>
+        <translation>Her kan du tilpasse hurtigtaster for ulike handlinger</translation>
     </message>
     <message>
         <source>Resets the shortcuts to their default assignment</source>
@@ -10244,15 +10250,15 @@ feilet: </translation>
     </message>
     <message>
         <source>Clears the shortcut assignment for the selected action</source>
-        <translation type="unfinished"/>
+        <translation>Renser hurtigtasten for den valgte handlingen</translation>
     </message>
     <message>
         <source>Opens a dialog for defining a new shortcut for the selected action</source>
-        <translation type="unfinished"/>
+        <translation>Åpner et dialogvindu for å definere en ny hurtigtast for den valgte handlingen</translation>
     </message>
     <message>
         <source>Print the shortcuts list</source>
-        <translation type="unfinished"/>
+        <translation>Skriver ut listen over hurtigtaster</translation>
     </message>
     <message>
         <source>Update translations</source>
@@ -10268,7 +10274,7 @@ feilet: </translation>
     </message>
     <message>
         <source>Enable MIDI remote control</source>
-        <translation type="unfinished"/>
+        <translation>Aktiver MIDI fjernkontroll</translation>
     </message>
     <message>
         <source>Is active</source>
@@ -10276,11 +10282,11 @@ feilet: </translation>
     </message>
     <message>
         <source>Record</source>
-        <translation>Spill inn</translation>
+        <translation>Ta opp</translation>
     </message>
     <message>
         <source>Default scale for new score views</source>
-        <translation>Standard skalering for nye notearkvisninger</translation>
+        <translation>Standard skalering for nye partiturvisninger</translation>
     </message>
     <message>
         <source>Show play panel</source>
@@ -10288,11 +10294,11 @@ feilet: </translation>
     </message>
     <message>
         <source>Show navigator</source>
-        <translation type="unfinished"/>
+        <translation>Vis navigatør</translation>
     </message>
     <message>
         <source>OSC Remote Control</source>
-        <translation type="unfinished"/>
+        <translation>OSC fjernkontroll</translation>
     </message>
     <message>
         <source>MIDI Remote Control</source>
@@ -10300,15 +10306,15 @@ feilet: </translation>
     </message>
     <message>
         <source>Show start center</source>
-        <translation type="unfinished"/>
+        <translation>Vis oppstartssenter</translation>
     </message>
     <message>
         <source>Undo is active</source>
-        <translation type="unfinished"/>
+        <translation>Angre er aktiv</translation>
     </message>
     <message>
         <source>Undo record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Angre</translation>
     </message>
     <message>
         <source>Undo</source>
@@ -10320,19 +10326,19 @@ feilet: </translation>
     </message>
     <message>
         <source>SoundFont folders</source>
-        <translation type="unfinished"/>
+        <translation>Lydbibliotekmapper</translation>
     </message>
     <message>
         <source>Insert path to SoundFont folders</source>
-        <translation type="unfinished"/>
+        <translation>Legg til sti til lydbibliotekmapper</translation>
     </message>
     <message>
         <source>Opens a dialog for configuring the SoundFont folders</source>
-        <translation type="unfinished"/>
+        <translation>Åpner et dialogvindu for å konfigurere lydbibliotekmapper</translation>
     </message>
     <message>
         <source>Note Input Tab</source>
-        <translation type="unfinished"/>
+        <translation>Noteskriving-fane</translation>
     </message>
     <message>
         <source>Note Input</source>
@@ -10344,31 +10350,31 @@ feilet: </translation>
     </message>
     <message>
         <source>Note input is active</source>
-        <translation type="unfinished"/>
+        <translation>Noteskriving er aktiv</translation>
     </message>
     <message>
         <source>Note input record</source>
-        <translation type="unfinished"/>
+        <translation>Ta opp Noteskriving</translation>
     </message>
     <message>
         <source>Folders</source>
-        <translation type="unfinished"/>
+        <translation>Mapper</translation>
     </message>
     <message>
         <source>Images:</source>
-        <translation type="unfinished"/>
+        <translation>Bilder:</translation>
     </message>
     <message>
         <source>Scores:</source>
-        <translation type="unfinished"/>
+        <translation>Partiturer</translation>
     </message>
     <message>
         <source>Styles:</source>
-        <translation type="unfinished"/>
+        <translation>Stiler:</translation>
     </message>
     <message>
         <source>Templates:</source>
-        <translation type="unfinished"/>
+        <translation>Maler:</translation>
     </message>
     <message>
         <source>Plugins:</source>
@@ -10376,11 +10382,11 @@ feilet: </translation>
     </message>
     <message>
         <source>SoundFonts:</source>
-        <translation type="unfinished"/>
+        <translation>Lydbiblioteker:</translation>
     </message>
     <message>
         <source>Check for new version of MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Sjekk etter ny versjon av MuseScore</translation>
     </message>
 </context>
 <context>
@@ -10389,7 +10395,9 @@ feilet: </translation>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
-        <translation type="unfinished"/>
+        <translation>Ingen note eller sangtekst valgt:
+Vennligst velg en enkelt note eller sangtekst og prøv igjen
+</translation>
     </message>
     <message>
         <source>Please select a single note or slur and retry operation
@@ -10458,23 +10466,29 @@ Vennligst velg én enkelt note eller pause og prøv igjen
         <source>Cannot open chord description:
 %1
 %2</source>
-        <translation type="unfinished"/>
+        <translation>Kan ikke åpne besifringsbeskrivelse:
+%1
+%2</translation>
     </message>
     <message>
         <source>Open Chord Description
 %1
 failed: %2</source>
-        <translation type="unfinished"/>
+        <translation>Åpne besifringsbeskrivelse
+%1
+feilet: %2</translation>
     </message>
     <message>
         <source>Write Chord Description failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Skriving av besifringsbeskrivelse feilet: %1</translation>
     </message>
     <message>
         <source>Cannot open tablature font description:
 %1
 %2</source>
-        <translation type="unfinished"/>
+        <translation>Kan ikke åpne beskrivelse av tabulaturskrift:
+%1
+%2</translation>
     </message>
     <message>
         <source>Cannot read file %1:
@@ -10484,20 +10498,21 @@ failed: %2</source>
     </message>
     <message>
         <source>bad format</source>
-        <translation type="unfinished"/>
+        <translation>galt format</translation>
     </message>
     <message>
         <source>unknown type</source>
-        <translation type="unfinished"/>
+        <translation>ukjent type</translation>
     </message>
     <message>
         <source>It was last saved with version 0.9.5 or older.&lt;br&gt;You can convert this score by opening and then saving with MuseScore version 1.x&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Det var sist lagret med versjon 0.9.5 eller eldre.&lt;br&gt;Du kan konvertere dette partituret ved å åpne og så lagre med MuseScore versjon 1.x&lt;/a&gt;</translation>
     </message>
     <message>
         <source>This score was saved using a newer version of MuseScore.&lt;br&gt;
 Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Dette partituret er opprettet med en nyere versjon av MuseScore.&lt;br&gt;
+Besøk &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScores nettside&lt;/a&gt; for å hente siste versjon.</translation>
     </message>
     <message>
         <source>File not found %1</source>
@@ -10516,12 +10531,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>Error reading container.xml at line %1 column %2: %3
 </source>
-        <translation type="unfinished"/>
+        <translation>Feil ved lesing av container.xml på linje %1 kolonne %2: %3
+</translation>
     </message>
     <message>
         <source>Can't find rootfile
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Finner ikke rotfil
+%1</translation>
     </message>
     <message>
         <source>File &apos;%1&apos; is not a valid MusicXML file</source>
@@ -10696,7 +10713,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <name>QWidget</name>
     <message>
         <source>MuseScore: Save Album into Score</source>
-        <translation>MuseScore: Lagre album i noteark</translation>
+        <translation>MuseScore: Lagre album i partitur</translation>
     </message>
     <message>
         <source>MuseScore: Save File</source>
@@ -10805,7 +10822,7 @@ Vil du overskrive den?</translation>
     <name>RecordButton</name>
     <message>
         <source>Record</source>
-        <translation>Spill inn</translation>
+        <translation>Ta opp</translation>
     </message>
 </context>
 <context>
@@ -11113,10 +11130,6 @@ Vil du overskrive den?</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>III</source>
         <translation>III</translation>
     </message>
@@ -11132,225 +11145,12 @@ Vil du overskrive den?</translation>
 8</translation>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>Oboe</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>Tremolo</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>Ingen</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>PushButton</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>I</source>
-        <translation>K</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>Trompet</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P+III</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Switch one or more voices to a specified channel:</source>
-        <translation type="unfinished"/>
+        <translation>Bytt en eller flere stemme til en spesifisert kanal:</translation>
     </message>
     <message>
         <source>MIDI Action</source>
@@ -11393,7 +11193,7 @@ altera</source>
     <name>StaffTypeTemplates</name>
     <message>
         <source>Staff Type Templates</source>
-        <translation type="unfinished"/>
+        <translation>Mal for notesystemtype</translation>
     </message>
     <message>
         <source>Save Templates</source>
@@ -11412,11 +11212,11 @@ altera</source>
     </message>
     <message>
         <source>Create New Score</source>
-        <translation>Opprett nytt noteark</translation>
+        <translation>Opprett nytt partitur</translation>
     </message>
     <message>
         <source>Load Score</source>
-        <translation>Last inn noteark</translation>
+        <translation>Last inn partitur</translation>
     </message>
     <message>
         <source>Startup Dialog</source>
@@ -11431,7 +11231,7 @@ altera</source>
     </message>
     <message>
         <source>Open a score...</source>
-        <translation>Åpne et noteark...</translation>
+        <translation>Åpne et partitur...</translation>
     </message>
     <message>
         <source>Close</source>
@@ -11446,7 +11246,7 @@ altera</source>
     </message>
     <message>
         <source>System flag</source>
-        <translation type="unfinished"/>
+        <translation>Systemflagg</translation>
     </message>
 </context>
 <context>
@@ -11457,11 +11257,11 @@ altera</source>
     </message>
     <message>
         <source>Save to Score</source>
-        <translation>Lagre til noteark</translation>
+        <translation>Lagre til partitur</translation>
     </message>
     <message>
         <source>Load from Score</source>
-        <translation>Last inn fra noteark</translation>
+        <translation>Last inn fra partitur</translation>
     </message>
     <message>
         <source>Vol</source>
@@ -11469,7 +11269,7 @@ altera</source>
     </message>
     <message>
         <source>Master Effects</source>
-        <translation type="unfinished"/>
+        <translation>Hovedeffekter</translation>
     </message>
     <message>
         <source>Effect B:</source>
@@ -11510,11 +11310,11 @@ altera</source>
     </message>
     <message>
         <source>Save to score</source>
-        <translation>Lagre til noteark</translation>
+        <translation>Lagre til partitur</translation>
     </message>
     <message>
         <source>Load from score</source>
-        <translation>Last inn fra noteark</translation>
+        <translation>Last inn fra partitur</translation>
     </message>
     <message>
         <source>Use up and down arrows to modify</source>
@@ -11522,7 +11322,7 @@ altera</source>
     </message>
     <message>
         <source>Metronome gain</source>
-        <translation type="unfinished"/>
+        <translation>Metronomvolum</translation>
     </message>
     <message>
         <source>Effect A</source>
@@ -11584,7 +11384,7 @@ altera</source>
     </message>
     <message>
         <source>System flag</source>
-        <translation type="unfinished"/>
+        <translation>Systemflagg</translation>
     </message>
     <message>
         <source>Offset</source>
@@ -11638,7 +11438,7 @@ altera</source>
     </message>
     <message>
         <source>Reset to Style</source>
-        <translation type="unfinished"/>
+        <translation>Nullstill til stil</translation>
     </message>
     <message>
         <source>Text margin:</source>
@@ -11746,24 +11546,24 @@ altera</source>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation>Avstand mellom to linjer på ett standard 5-linjers system</translation>
+        <translation>Avstand mellom to linjer på ett standard 5-linjers notesystem</translation>
     </message>
     <message>
         <source>Offset in staff space units</source>
-        <translation type="unfinished"/>
+        <translation>Avstand i notesystemenheter</translation>
     </message>
     <message>
         <source>Staff space</source>
         <extracomment>spatium unit</extracomment>
-        <translation type="unfinished"/>
+        <translation>Notesystemavstand</translation>
     </message>
     <message>
         <source>Size follows &apos;Staff space&apos; setting</source>
-        <translation type="unfinished"/>
+        <translation>Størrelsen følger notesystemstørrelsen</translation>
     </message>
     <message>
         <source>Align baseline of text to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Plasser tekstens grunnlinje i forhold til referansepunktet</translation>
     </message>
 </context>
 <context>
@@ -12089,7 +11889,7 @@ altera</source>
     </message>
     <message>
         <source>Cut time</source>
-        <translation>2/2 alle breve</translation>
+        <translation>Alla breve</translation>
     </message>
     <message>
         <source>Common time</source>
@@ -12101,7 +11901,7 @@ altera</source>
     </message>
     <message>
         <source>Beat unit</source>
-        <translation type="unfinished"/>
+        <translation>Taktenhet</translation>
     </message>
     <message>
         <source>Common Time</source>
@@ -12125,7 +11925,7 @@ altera</source>
     </message>
     <message>
         <source>Hint: You can also add or remove measures after creation of the score.</source>
-        <translation>Hint: Du kan også legge til eller fjerne takter etter at notearket er opprettet.</translation>
+        <translation>Hint: Du kan også legge til eller fjerne takter etter at partituret er opprettet.</translation>
     </message>
 </context>
 <context>
@@ -12296,7 +12096,7 @@ altera</source>
     </message>
     <message>
         <source>Keep degree alterations</source>
-        <translation type="unfinished"/>
+        <translation>Behold løse fortegn</translation>
     </message>
     <message>
         <source>Options</source>
@@ -12364,50 +12164,50 @@ altera</source>
     </message>
     <message>
         <source>By Key</source>
-        <translation type="unfinished"/>
+        <translation>Til toneart</translation>
     </message>
     <message>
         <source>By Interval</source>
-        <translation type="unfinished"/>
+        <translation>Med intervall</translation>
     </message>
     <message>
         <source>Transpose Diatonically</source>
-        <translation type="unfinished"/>
+        <translation>Transponér diatonisk</translation>
     </message>
 </context>
 <context>
     <name>Tremolo</name>
     <message>
         <source>Eighth through stem</source>
-        <translation type="unfinished"/>
+        <translation>Åttedel gjennom notehals</translation>
     </message>
     <message>
         <source>16th through stem</source>
-        <translation type="unfinished"/>
+        <translation>Sekstendel gjennom notehals</translation>
     </message>
     <message>
         <source>32nd through stem</source>
-        <translation type="unfinished"/>
+        <translation>Trettitodel gjennom notehals</translation>
     </message>
     <message>
         <source>64th through stem</source>
-        <translation type="unfinished"/>
+        <translation>Sekstifiredel gjennom notehals</translation>
     </message>
     <message>
         <source>Eighth between notes</source>
-        <translation type="unfinished"/>
+        <translation>Åttedel mellom noter</translation>
     </message>
     <message>
         <source>16th between notes</source>
-        <translation type="unfinished"/>
+        <translation>Sekstendel mellom noter</translation>
     </message>
     <message>
         <source>32nd between notes</source>
-        <translation type="unfinished"/>
+        <translation>Trettitodel mellom noter</translation>
     </message>
     <message>
         <source>64th between notes</source>
-        <translation type="unfinished"/>
+        <translation>Sekstifiredel mellom noter</translation>
     </message>
 </context>
 <context>
@@ -12438,15 +12238,15 @@ altera</source>
     </message>
     <message>
         <source>MuseScore: Tremolo Bar Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Egenskaper for tremolo</translation>
     </message>
     <message>
         <source>Release(Up)</source>
-        <translation type="unfinished"/>
+        <translation>Slipp (opp)</translation>
     </message>
     <message>
         <source>Release(Down)</source>
-        <translation type="unfinished"/>
+        <translation>Slipp (ned)</translation>
     </message>
 </context>
 <context>
@@ -12484,7 +12284,7 @@ altera</source>
     </message>
     <message>
         <source>Relation:</source>
-        <translation type="unfinished"/>
+        <translation>Forhold:</translation>
     </message>
     <message>
         <source>Relation</source>
@@ -12503,7 +12303,7 @@ altera</source>
     <name>UploadScoreDialog</name>
     <message>
         <source>Score Information</source>
-        <translation type="unfinished"/>
+        <translation>Partiturinformasjon</translation>
     </message>
     <message>
         <source>You&apos;re logged in as</source>
@@ -12539,15 +12339,11 @@ altera</source>
     </message>
     <message>
         <source>Update the existing score </source>
-        <translation type="unfinished"/>
+        <translation>Oppdater nåværende partitur</translation>
     </message>
     <message>
         <source>Make this score private</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sharing</source>
-        <translation type="unfinished"/>
+        <translation>Gjør dette partituret privat</translation>
     </message>
 </context>
 <context>
@@ -12569,84 +12365,86 @@ altera</source>
     <name>Workspace</name>
     <message>
         <source>MuseScore: Writing Workspace File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Skriver arbeidsområdefil</translation>
     </message>
     <message>
         <source>Writing Workspace File
 %1
 failed: </source>
-        <translation type="unfinished"/>
+        <translation>Skriving av arbeidsområdefil
+%1
+feilet: </translation>
     </message>
 </context>
 <context>
     <name>XmlStream</name>
     <message>
         <source>Extra content at end of document.</source>
-        <translation type="unfinished"/>
+        <translation>Ekstra innhold etter slutten av dokumentet.</translation>
     </message>
     <message>
         <source>Invalid entity value.</source>
-        <translation type="unfinished"/>
+        <translation>Ugyldig entitet.</translation>
     </message>
     <message>
         <source>Invalid XML character.</source>
-        <translation type="unfinished"/>
+        <translation>Ugyldig XML-tegn.</translation>
     </message>
     <message>
         <source>Sequence &apos;]]&gt;&apos; not allowed in content.</source>
-        <translation type="unfinished"/>
+        <translation>Sekvensen &apos;]]&gt;&apos; er ikke lovlig innhold.</translation>
     </message>
     <message>
         <source>Encountered incorrectly encoded content.</source>
-        <translation type="unfinished"/>
+        <translation>Fant feilkodet innhold.</translation>
     </message>
     <message>
         <source>Namespace prefix &apos;%1&apos; not declared</source>
-        <translation type="unfinished"/>
+        <translation>Navneromprefiks &apos;%1&apos; er ikke deklarert</translation>
     </message>
     <message>
         <source>Illegal namespace declaration.</source>
-        <translation type="unfinished"/>
+        <translation>Ugyldig navneromdeklarasjon.</translation>
     </message>
     <message>
         <source>Attribute redefined.</source>
-        <translation type="unfinished"/>
+        <translation>Attributt omdefinert.</translation>
     </message>
     <message>
         <source>Unexpected character &apos;%1&apos; in public id literal.</source>
-        <translation type="unfinished"/>
+        <translation>Tegn ikke forventet &apos;%1&apos; i id-streng.</translation>
     </message>
     <message>
         <source>Invalid XML version string.</source>
-        <translation type="unfinished"/>
+        <translation>Ugyldig XML-versjonsstreng.</translation>
     </message>
     <message>
         <source>Unsupported XML version.</source>
-        <translation type="unfinished"/>
+        <translation>Ikke-støttet XML-versjon</translation>
     </message>
     <message>
         <source>The standalone pseudo attribute must appear after the encoding.</source>
-        <translation type="unfinished"/>
+        <translation>Det frittstående pseudo-attributtet må finnes etter encoding.</translation>
     </message>
     <message>
         <source>%1 is an invalid encoding name.</source>
-        <translation type="unfinished"/>
+        <translation>%1 er et ugyldig encoding-navn.</translation>
     </message>
     <message>
         <source>Encoding %1 is unsupported</source>
-        <translation type="unfinished"/>
+        <translation>Encoding %1 er ikke støttet</translation>
     </message>
     <message>
         <source>Standalone accepts only yes or no.</source>
-        <translation type="unfinished"/>
+        <translation>Frittstående godtar bare ja eller nei.</translation>
     </message>
     <message>
         <source>Invalid attribute in XML declaration.</source>
-        <translation type="unfinished"/>
+        <translation>Ugyldig attributt i XML-deklarasjon.</translation>
     </message>
     <message>
         <source>Premature end of document.</source>
-        <translation type="unfinished"/>
+        <translation>Fant slutten av dokumentet for tidlig.</translation>
     </message>
     <message>
         <source>Invalid document.</source>
@@ -12658,15 +12456,15 @@ failed: </source>
     </message>
     <message>
         <source>, but got &apos;</source>
-        <translation type="unfinished"/>
+        <translation>, men fikk &apos;</translation>
     </message>
     <message>
         <source>Unexpected &apos;</source>
-        <translation type="unfinished"/>
+        <translation>Ikke forventet &apos;</translation>
     </message>
     <message>
         <source>Expected character data.</source>
-        <translation type="unfinished"/>
+        <translation>Forventet tegn.</translation>
     </message>
 </context>
 <context>
@@ -12823,7 +12621,7 @@ failed: </source>
     </message>
     <message>
         <source>Load score from file</source>
-        <translation>Åpne noteark fra fil</translation>
+        <translation>Åpne partitur fra fil</translation>
     </message>
     <message>
         <source>Save</source>
@@ -12831,7 +12629,7 @@ failed: </source>
     </message>
     <message>
         <source>Save score to file</source>
-        <translation>Lagre noteark til fil</translation>
+        <translation>Lagre partitur til fil</translation>
     </message>
     <message>
         <source>Save As...</source>
@@ -12839,7 +12637,7 @@ failed: </source>
     </message>
     <message>
         <source>Save score under a new file name</source>
-        <translation>Lagre noteark til ny fil</translation>
+        <translation>Lagre partitur til ny fil</translation>
     </message>
     <message>
         <source>Save Selection...</source>
@@ -12847,7 +12645,7 @@ failed: </source>
     </message>
     <message>
         <source>Save current selection as new score</source>
-        <translation>Lagre nåværende utvalg på et nytt noteark</translation>
+        <translation>Lagre nåværende utvalg på et nytt partitur</translation>
     </message>
     <message>
         <source>Save a Copy...</source>
@@ -12855,7 +12653,7 @@ failed: </source>
     </message>
     <message>
         <source>Save a copy of the score in addition to the current file</source>
-        <translation>Lagre en kopi av notearket i tillegg til nåværenede fil</translation>
+        <translation>Lagre en kopi av partituret i tillegg til nåværende fil</translation>
     </message>
     <message>
         <source>Export...</source>
@@ -12863,11 +12661,11 @@ failed: </source>
     </message>
     <message>
         <source>Export score</source>
-        <translation>Eksporter noteark</translation>
+        <translation>Eksporter partitur</translation>
     </message>
     <message>
         <source>Save a copy of the score in various formats</source>
-        <translation>Lagre en kopi av notearket i ulike formater</translation>
+        <translation>Lagre en kopi av partituret i ulike formater</translation>
     </message>
     <message>
         <source>Export Parts...</source>
@@ -12875,7 +12673,7 @@ failed: </source>
     </message>
     <message>
         <source>Save a copy of the score&apos;s parts in various formats</source>
-        <translation>Lagre en kopi av notearkets enkeltstemmer i ulike formater</translation>
+        <translation>Lagre en kopi av partiturets enkeltstemmer i ulike formater</translation>
     </message>
     <message>
         <source>Close</source>
@@ -12883,7 +12681,7 @@ failed: </source>
     </message>
     <message>
         <source>Close current score</source>
-        <translation>Lukk nåværende noteark</translation>
+        <translation>Lukk nåværende partitur</translation>
     </message>
     <message>
         <source>New...</source>
@@ -12891,7 +12689,7 @@ failed: </source>
     </message>
     <message>
         <source>Create new score</source>
-        <translation>Opprett nytt noteark</translation>
+        <translation>Opprett nytt partitur</translation>
     </message>
     <message>
         <source>Print...</source>
@@ -12903,7 +12701,7 @@ failed: </source>
     </message>
     <message>
         <source>Print score</source>
-        <translation>Skriv ut noteark</translation>
+        <translation>Skriv ut partitur</translation>
     </message>
     <message>
         <source>Undo</source>
@@ -13295,11 +13093,11 @@ failed: </source>
     </message>
     <message>
         <source>Pitch up or move text or articulation up</source>
-        <translation type="unfinished"/>
+        <translation>Tonehøyde opp eller flytt tekst eller artikulasjon opp</translation>
     </message>
     <message>
         <source>Diatonic pitch up</source>
-        <translation type="unfinished"/>
+        <translation>Diatonisk tonehøyde opp</translation>
     </message>
     <message>
         <source>Up Octave</source>
@@ -13311,7 +13109,7 @@ failed: </source>
     </message>
     <message>
         <source>Pitch up by an octave or move text or articulation up</source>
-        <translation type="unfinished"/>
+        <translation>Tonehøyde opp en oktav eller flytt tekst eller artikulasjon opp</translation>
     </message>
     <message>
         <source>Up Note in Chord</source>
@@ -13339,11 +13137,11 @@ failed: </source>
     </message>
     <message>
         <source>Pitch down or move text or articulation down</source>
-        <translation type="unfinished"/>
+        <translation>Tonehøyde ned eller flytt tekst eller artikulasjon ned</translation>
     </message>
     <message>
         <source>Diatonic pitch down</source>
-        <translation type="unfinished"/>
+        <translation>Diatonisk tonehøyde ned</translation>
     </message>
     <message>
         <source>Pitch down octave</source>
@@ -13351,7 +13149,7 @@ failed: </source>
     </message>
     <message>
         <source>Pitch down by an octave or move text or articulation down</source>
-        <translation type="unfinished"/>
+        <translation>Tonehøyde ned en oktav eller flytt tekst eller artikulasjon ned</translation>
     </message>
     <message>
         <source>Down Note in Chord</source>
@@ -13383,7 +13181,7 @@ failed: </source>
     </message>
     <message>
         <source>Previous staff or voice</source>
-        <translation>Forrige system eller stemme</translation>
+        <translation>Forrige notesystem eller stemme</translation>
     </message>
     <message>
         <source>Go to next chord or move text right</source>
@@ -13395,7 +13193,7 @@ failed: </source>
     </message>
     <message>
         <source>Next staff or voice</source>
-        <translation>Neste system eller stemme</translation>
+        <translation>Neste notesystem eller stemme</translation>
     </message>
     <message>
         <source>Add previous chord to selection</source>
@@ -13411,7 +13209,7 @@ failed: </source>
     </message>
     <message>
         <source>Select Section</source>
-        <translation type="unfinished"/>
+        <translation>Velg seksjon</translation>
     </message>
     <message>
         <source>Move chord/rest right</source>
@@ -13435,11 +13233,11 @@ failed: </source>
     </message>
     <message>
         <source>Select to beginning of score</source>
-        <translation>Velg til begynnelse av noteark</translation>
+        <translation>Velg til begynnelse av partitur</translation>
     </message>
     <message>
         <source>Select to end of score</source>
-        <translation>Velg til slutten av noteark</translation>
+        <translation>Velg til slutten av partitur</translation>
     </message>
     <message>
         <source>Add staff above to selection</source>
@@ -13503,7 +13301,7 @@ failed: </source>
     </message>
     <message>
         <source>Timewise delete</source>
-        <translation type="unfinished"/>
+        <translation>Fjern valgte takter</translation>
     </message>
     <message>
         <source>Timewise Delete</source>
@@ -13659,11 +13457,11 @@ failed: </source>
     </message>
     <message>
         <source>Increase active duration</source>
-        <translation type="unfinished"/>
+        <translation>Øk aktiv varighet</translation>
     </message>
     <message>
         <source>Decrease active duration</source>
-        <translation type="unfinished"/>
+        <translation>Minsk aktiv varighet</translation>
     </message>
     <message>
         <source>Augmentation dot</source>
@@ -13783,7 +13581,7 @@ failed: </source>
     </message>
     <message>
         <source>Beam 32nd sub</source>
-        <translation type="unfinished"/>
+        <translation>Bjelke start 32-del</translation>
     </message>
     <message>
         <source>Auto beam</source>
@@ -13791,11 +13589,11 @@ failed: </source>
     </message>
     <message>
         <source>Feathered beam, slower</source>
-        <translation type="unfinished"/>
+        <translation>Fjærbjelke, saktere</translation>
     </message>
     <message>
         <source>Feathered beam, faster</source>
-        <translation type="unfinished"/>
+        <translation>Fjærbjelke, raskere</translation>
     </message>
     <message>
         <source>Palette</source>
@@ -13811,7 +13609,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI Import Panel</source>
-        <translation type="unfinished"/>
+        <translation>MIDI-importpanel</translation>
     </message>
     <message>
         <source>Mixer</source>
@@ -13827,7 +13625,7 @@ failed: </source>
     </message>
     <message>
         <source>Zoom canvas</source>
-        <translation>Zoom noteark</translation>
+        <translation>Zoom lerret</translation>
     </message>
     <message>
         <source>Lyrics</source>
@@ -13971,7 +13769,7 @@ failed: </source>
     </message>
     <message>
         <source>Toggle repeats playback</source>
-        <translation>Skru av/på avspilling av repetisjoner </translation>
+        <translation>Avspilling av repetisjoner av/på</translation>
     </message>
     <message>
         <source>Pan</source>
@@ -13979,11 +13777,11 @@ failed: </source>
     </message>
     <message>
         <source>Toggle pan score</source>
-        <translation type="unfinished"/>
+        <translation>Panorering av partitur av/på</translation>
     </message>
     <message>
         <source>Pan score during playback</source>
-        <translation type="unfinished"/>
+        <translation>Panorér partitur under avspilling</translation>
     </message>
     <message>
         <source>Load Style...</source>
@@ -14071,7 +13869,7 @@ failed: </source>
     </message>
     <message>
         <source>Edit score info</source>
-        <translation>Rediger notearksinformasjon</translation>
+        <translation>Rediger partiturinformasjon</translation>
     </message>
     <message>
         <source>Toggle System Break</source>
@@ -14083,7 +13881,7 @@ failed: </source>
     </message>
     <message>
         <source>Toggle Section Break</source>
-        <translation type="unfinished"/>
+        <translation>Seksjonsskift av/på</translation>
     </message>
     <message>
         <source>Edit Element</source>
@@ -14099,7 +13897,7 @@ failed: </source>
     </message>
     <message>
         <source>Debugger</source>
-        <translation type="unfinished"/>
+        <translation>Debugger</translation>
     </message>
     <message>
         <source>Reset Stretch</source>
@@ -14107,7 +13905,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset measure stretch</source>
-        <translation type="unfinished"/>
+        <translation>Nullstill strekk i takt</translation>
     </message>
     <message>
         <source>Show Invisible</source>
@@ -14115,7 +13913,7 @@ failed: </source>
     </message>
     <message>
         <source>Show Unprintable</source>
-        <translation type="unfinished"/>
+        <translation>Vis ikke-utskriftsbare</translation>
     </message>
     <message>
         <source>Show Frames</source>
@@ -14199,15 +13997,15 @@ failed: </source>
     </message>
     <message>
         <source>Pan piano roll</source>
-        <translation type="unfinished"/>
+        <translation>Panorér pianorull</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
-        <translation type="unfinished"/>
+        <translation>Panorering av pianorull av/på</translation>
     </message>
     <message>
         <source>Pan roll during playback</source>
-        <translation type="unfinished"/>
+        <translation>Panorér rull under avspilling</translation>
     </message>
     <message>
         <source>Documents Side by Side</source>
@@ -14235,19 +14033,19 @@ failed: </source>
     </message>
     <message>
         <source>Enharmonic up</source>
-        <translation type="unfinished"/>
+        <translation>Enharmonisk opp</translation>
     </message>
     <message>
         <source>Enharmonic down</source>
-        <translation type="unfinished"/>
+        <translation>Enharmonisk ned</translation>
     </message>
     <message>
         <source>Create new revision</source>
-        <translation type="unfinished"/>
+        <translation>Opprett ny revisjon</translation>
     </message>
     <message>
         <source>Show OMR image</source>
-        <translation type="unfinished"/>
+        <translation>Vis OMR-bilde</translation>
     </message>
     <message>
         <source>Full Screen</source>
@@ -14255,15 +14053,15 @@ failed: </source>
     </message>
     <message>
         <source>Re-Pitch Mode</source>
-        <translation type="unfinished"/>
+        <translation>Tonehøydemodus</translation>
     </message>
     <message>
         <source>Replace pitches without changing rhythms</source>
-        <translation type="unfinished"/>
+        <translation>Erstatt tonehøyde uten å endre rytme</translation>
     </message>
     <message>
         <source>Piano Keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Pianotangenter</translation>
     </message>
     <message>
         <source>Additional Media...</source>
@@ -14271,11 +14069,11 @@ failed: </source>
     </message>
     <message>
         <source>Show media dialog</source>
-        <translation type="unfinished"/>
+        <translation>Vis mediadialog</translation>
     </message>
     <message>
         <source>Split Measure</source>
-        <translation>Splitt takt</translation>
+        <translation>Del opp takt</translation>
     </message>
     <message>
         <source>Page Settings...</source>
@@ -14299,11 +14097,11 @@ failed: </source>
     </message>
     <message>
         <source>Next Score</source>
-        <translation type="unfinished"/>
+        <translation>Neste partitur</translation>
     </message>
     <message>
         <source>Previous Score</source>
-        <translation type="unfinished"/>
+        <translation>Forrige partitur</translation>
     </message>
     <message>
         <source>Inspector</source>
@@ -14315,15 +14113,15 @@ failed: </source>
     </message>
     <message>
         <source>Loop</source>
-        <translation type="unfinished"/>
+        <translation>Repetere</translation>
     </message>
     <message>
         <source>Toggle loop playback</source>
-        <translation type="unfinished"/>
+        <translation>Repeter avspilling av/på</translation>
     </message>
     <message>
         <source>Loop playback</source>
-        <translation type="unfinished"/>
+        <translation>Repeter avspilling</translation>
     </message>
     <message>
         <source>Metronome</source>
@@ -14331,19 +14129,19 @@ failed: </source>
     </message>
     <message>
         <source>Toggle metronome playback</source>
-        <translation>Skru av/på metronom</translation>
+        <translation>Metronom av/på</translation>
     </message>
     <message>
         <source>Play metronome during playback</source>
-        <translation type="unfinished"/>
+        <translation>Bruk metronom under avspilling</translation>
     </message>
     <message>
         <source>Toggle count-in playback</source>
-        <translation type="unfinished"/>
+        <translation>Skru av/på opptelling</translation>
     </message>
     <message>
         <source>Play count-in at playback start</source>
-        <translation type="unfinished"/>
+        <translation>Spill opptelling når avspilling starter</translation>
     </message>
     <message>
         <source>Figured Bass</source>
@@ -14383,7 +14181,7 @@ failed: </source>
     </message>
     <message>
         <source>Toggle visibility</source>
-        <translation>Skru på/av synlighet</translation>
+        <translation>Synlighet av/på</translation>
     </message>
     <message>
         <source>Set visible</source>
@@ -14395,7 +14193,7 @@ failed: </source>
     </message>
     <message>
         <source>Lock Score</source>
-        <translation type="unfinished"/>
+        <translation>Lås noteark</translation>
     </message>
     <message>
         <source>Longa (TAB)</source>
@@ -14419,11 +14217,11 @@ failed: </source>
     </message>
     <message>
         <source>Increase active duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Øk aktiv varighet (TAB)</translation>
     </message>
     <message>
         <source>Decrease active duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Minsk aktiv varighet (TAB)</translation>
     </message>
     <message>
         <source>Rest (TAB)</source>
@@ -14435,11 +14233,11 @@ failed: </source>
     </message>
     <message>
         <source>Select string above (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Velg streng over (bare TAB)</translation>
     </message>
     <message>
         <source>Select string below (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Velg streng under (bare TAB)</translation>
     </message>
     <message>
         <source>Fret 0 (TAB)</source>
@@ -14543,7 +14341,7 @@ failed: </source>
     </message>
     <message>
         <source>Add chord symbol</source>
-        <translation>Legg til akkordsymbol</translation>
+        <translation>Legg til besifring</translation>
     </message>
     <message>
         <source>Previous beat (Chord symbol)</source>
@@ -14555,15 +14353,15 @@ failed: </source>
     </message>
     <message>
         <source>Respell Pitches</source>
-        <translation type="unfinished"/>
+        <translation>Redefiner notehøyder</translation>
     </message>
     <message>
         <source>Full Measure Rest</source>
-        <translation type="unfinished"/>
+        <translation>Heltaktspause</translation>
     </message>
     <message>
         <source>Converts the measure to a full measure rest</source>
-        <translation type="unfinished"/>
+        <translation>Konverterer takten til en heltaktspause</translation>
     </message>
     <message>
         <source>Join Measures</source>
@@ -14571,7 +14369,7 @@ failed: </source>
     </message>
     <message>
         <source>OMR Panel</source>
-        <translation type="unfinished"/>
+        <translation>OMR-vindu</translation>
     </message>
     <message>
         <source>Fret 10 (TAB)</source>
@@ -14631,11 +14429,11 @@ failed: </source>
     </message>
     <message>
         <source>All Similar Elements in Range Selection</source>
-        <translation type="unfinished"/>
+        <translation>Alle like elementer i valgt område</translation>
     </message>
     <message>
         <source>Select all similar elements in the range selection</source>
-        <translation type="unfinished"/>
+        <translation>Velg alle like elementer i det valgte området</translation>
     </message>
     <message>
         <source>Add brackets to element</source>
@@ -14643,7 +14441,7 @@ failed: </source>
     </message>
     <message>
         <source>Selection Filter</source>
-        <translation type="unfinished"/>
+        <translation>Utvalgsfilter</translation>
     </message>
     <message>
         <source>Eighth note</source>
@@ -14655,7 +14453,7 @@ failed: </source>
     </message>
     <message>
         <source>Beam 16th sub</source>
-        <translation type="unfinished"/>
+        <translation>Start 16-dels bjelke</translation>
     </message>
     <message>
         <source>Go to the first element</source>
@@ -14663,7 +14461,7 @@ failed: </source>
     </message>
     <message>
         <source>Go to the last element</source>
-        <translation type="unfinished"/>
+        <translation>Gå til siste element</translation>
     </message>
     <message>
         <source>Key Signatures...</source>
@@ -14695,15 +14493,15 @@ failed: </source>
     </message>
     <message>
         <source>Enable snap to horizontal grid</source>
-        <translation type="unfinished"/>
+        <translation>Aktiver fest til horisontalt rutenett</translation>
     </message>
     <message>
         <source>Enable snap to vertical grid</source>
-        <translation type="unfinished"/>
+        <translation>Aktiver fest til vertikalt rutenett</translation>
     </message>
     <message>
         <source>Configure grid</source>
-        <translation type="unfinished"/>
+        <translation>Konfigurer rutenett</translation>
     </message>
     <message>
         <source>Insert one measure</source>
@@ -14735,31 +14533,31 @@ failed: </source>
     </message>
     <message>
         <source>Save score on MuseScore.com</source>
-        <translation>Lagre noteark til MuseScore.com</translation>
+        <translation>Lagre partitur til MuseScore.com</translation>
     </message>
     <message>
         <source>Explode</source>
-        <translation type="unfinished"/>
+        <translation>Bryt opp</translation>
     </message>
     <message>
         <source>Explode contents of top selected staff into staves below</source>
-        <translation type="unfinished"/>
+        <translation>Bryt opp innhold i øverste valgte notesystem og sett inn i notesystemene under dette</translation>
     </message>
     <message>
         <source>Implode</source>
-        <translation type="unfinished"/>
+        <translation>Slå sammen</translation>
     </message>
     <message>
         <source>Implode contents of selected staves into top selected staff</source>
-        <translation type="unfinished"/>
+        <translation>Slå sammen innhold i valgte notesystemer og sett inn i øverste valgte notesystem</translation>
     </message>
     <message>
         <source>Fill With Slashes</source>
-        <translation type="unfinished"/>
+        <translation>Fyll med streker</translation>
     </message>
     <message>
         <source>Toggle Rhythmic Slash Notation</source>
-        <translation type="unfinished"/>
+        <translation>Rytmisk strek-notasjon av/på</translation>
     </message>
     <message>
         <source>Start Center</source>
@@ -14767,11 +14565,11 @@ failed: </source>
     </message>
     <message>
         <source>Toggle create multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>Skru av/på oppretting av flertaktspauser</translation>
     </message>
     <message>
         <source>Resequence Rehearsal Marks</source>
-        <translation type="unfinished"/>
+        <translation>Omberegn øvingsmerkers rekkefølge</translation>
     </message>
     <message>
         <source>Increase Stretch</source>
@@ -14807,7 +14605,7 @@ failed: </source>
     </message>
     <message>
         <source>Resource Manager...</source>
-        <translation type="unfinished"/>
+        <translation>Ressursbehandler...</translation>
     </message>
     <message>
         <source>Add/Remove Line Breaks...</source>
@@ -14855,7 +14653,7 @@ failed: </source>
     </message>
     <message>
         <source>Respell pitches</source>
-        <translation type="unfinished"/>
+        <translation>Redefiner notehøyder</translation>
     </message>
     <message>
         <source>Flip Direction</source>
@@ -14863,7 +14661,7 @@ failed: </source>
     </message>
     <message>
         <source>Diatonic Up</source>
-        <translation type="unfinished"/>
+        <translation>Diatonisk opp</translation>
     </message>
     <message>
         <source>Move Up</source>
@@ -14871,7 +14669,7 @@ failed: </source>
     </message>
     <message>
         <source>Diatonic Down</source>
-        <translation type="unfinished"/>
+        <translation>Diatonisk ned</translation>
     </message>
     <message>
         <source>Down Octave</source>
@@ -14915,7 +14713,7 @@ failed: </source>
     </message>
     <message>
         <source>Previous Staff or Voice</source>
-        <translation>Forrige system eller stemme</translation>
+        <translation>Forrige notesystem eller stemme</translation>
     </message>
     <message>
         <source>Next Chord</source>
@@ -14927,7 +14725,7 @@ failed: </source>
     </message>
     <message>
         <source>Next Staff or Voice</source>
-        <translation>Neste system eller stemme</translation>
+        <translation>Neste notesystem eller stemme</translation>
     </message>
     <message>
         <source>Add Previous Chord to Selection</source>
@@ -14943,7 +14741,7 @@ failed: </source>
     </message>
     <message>
         <source>Select section</source>
-        <translation type="unfinished"/>
+        <translation>Velg seksjon</translation>
     </message>
     <message>
         <source>Move Chord/Rest Right</source>
@@ -14963,11 +14761,11 @@ failed: </source>
     </message>
     <message>
         <source>Select to Beginning of Score</source>
-        <translation>Velg til begynnelse av noteark</translation>
+        <translation>Velg til begynnelse av partitur</translation>
     </message>
     <message>
         <source>Select to End of Score</source>
-        <translation>Velg til slutten av noteark</translation>
+        <translation>Velg til slutten av partitur</translation>
     </message>
     <message>
         <source>Add Staff Above to Selection</source>
@@ -14995,7 +14793,7 @@ failed: </source>
     </message>
     <message>
         <source>Full measure rest</source>
-        <translation type="unfinished"/>
+        <translation>Heltaktspause</translation>
     </message>
     <message>
         <source>Delete selected measures</source>
@@ -15083,11 +14881,11 @@ failed: </source>
     </message>
     <message>
         <source>Increase Active Duration</source>
-        <translation type="unfinished"/>
+        <translation>Øk aktiv varighet</translation>
     </message>
     <message>
         <source>Decrease Active Duration</source>
-        <translation type="unfinished"/>
+        <translation>Minsk aktiv varighet</translation>
     </message>
     <message>
         <source>Augmentation Dot</source>
@@ -15155,11 +14953,11 @@ failed: </source>
     </message>
     <message>
         <source>Beam Start</source>
-        <translation>Bjelke start</translation>
+        <translation>Start bjelke</translation>
     </message>
     <message>
         <source>Beam Middle</source>
-        <translation>Bjelke midten</translation>
+        <translation>Fortsett bjelke</translation>
     </message>
     <message>
         <source>No Beam</source>
@@ -15167,11 +14965,11 @@ failed: </source>
     </message>
     <message>
         <source>Beam 16th Sub</source>
-        <translation type="unfinished"/>
+        <translation>Fortsett 16-dels bjelke</translation>
     </message>
     <message>
         <source>Beam 32nd Sub</source>
-        <translation type="unfinished"/>
+        <translation>Fortsett 32-dels bjelke</translation>
     </message>
     <message>
         <source>Auto Beam</source>
@@ -15179,15 +14977,15 @@ failed: </source>
     </message>
     <message>
         <source>Feathered Beam, Slower</source>
-        <translation type="unfinished"/>
+        <translation>Fjærbjelke, saktere</translation>
     </message>
     <message>
         <source>Feathered Beam, Faster</source>
-        <translation type="unfinished"/>
+        <translation>Fjærbjelke, raskere</translation>
     </message>
     <message>
         <source>Play panel</source>
-        <translation type="unfinished"/>
+        <translation>Avspillingsvindu</translation>
     </message>
     <message>
         <source>Selection filter</source>
@@ -15195,7 +14993,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI import panel</source>
-        <translation type="unfinished"/>
+        <translation>MIDI-importpanel</translation>
     </message>
     <message>
         <source>Status bar</source>
@@ -15203,7 +15001,7 @@ failed: </source>
     </message>
     <message>
         <source>Zoom Canvas</source>
-        <translation>Zoom noteark</translation>
+        <translation>Zoom lerret</translation>
     </message>
     <message>
         <source>Play previous chord</source>
@@ -15359,11 +15157,11 @@ failed: </source>
     </message>
     <message>
         <source>Enharmonic Up</source>
-        <translation type="unfinished"/>
+        <translation>Enharmonisk opp</translation>
     </message>
     <message>
         <source>Enharmonic Down</source>
-        <translation type="unfinished"/>
+        <translation>Enharmonisk ned</translation>
     </message>
     <message>
         <source>Create New Revision</source>
@@ -15379,7 +15177,7 @@ failed: </source>
     </message>
     <message>
         <source>Show OMR Image</source>
-        <translation type="unfinished"/>
+        <translation>Vis OMR-bilde</translation>
     </message>
     <message>
         <source>Full screen</source>
@@ -15387,23 +15185,23 @@ failed: </source>
     </message>
     <message>
         <source>Enable Snap to Horizontal Grid</source>
-        <translation type="unfinished"/>
+        <translation>Aktiver fest til horisontalt rutenett</translation>
     </message>
     <message>
         <source>Enable Snap to Vertical Grid</source>
-        <translation type="unfinished"/>
+        <translation>Aktiver fest til vertikalt rutenett</translation>
     </message>
     <message>
         <source>Configure Grid</source>
-        <translation type="unfinished"/>
+        <translation>Konfigurer rutenett</translation>
     </message>
     <message>
         <source>Piano keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Pianotangenter</translation>
     </message>
     <message>
         <source>Split measure</source>
-        <translation>Splitt takt</translation>
+        <translation>Del opp takt</translation>
     </message>
     <message>
         <source>Join measures</source>
@@ -15415,11 +15213,11 @@ failed: </source>
     </message>
     <message>
         <source>Next score</source>
-        <translation>Neste noteark</translation>
+        <translation>Neste partitur</translation>
     </message>
     <message>
         <source>Previous score</source>
-        <translation>Forrige noteark</translation>
+        <translation>Forrige partitur</translation>
     </message>
     <message>
         <source>Plugin creator</source>
@@ -15431,27 +15229,27 @@ failed: </source>
     </message>
     <message>
         <source>Resource manager</source>
-        <translation type="unfinished"/>
+        <translation>Ressursbehandler</translation>
     </message>
     <message>
         <source>Show OMR panel</source>
-        <translation type="unfinished"/>
+        <translation>Vis OMR-vindu</translation>
     </message>
     <message>
         <source>Loop In</source>
-        <translation type="unfinished"/>
+        <translation>Repeteringsstartpunkt</translation>
     </message>
     <message>
         <source>Loop Out</source>
-        <translation type="unfinished"/>
+        <translation>Repeteringssluttpunkt</translation>
     </message>
     <message>
         <source>Set loop out position</source>
-        <translation type="unfinished"/>
+        <translation>Sett repeteringssluttpunkt</translation>
     </message>
     <message>
         <source>Count-In</source>
-        <translation type="unfinished"/>
+        <translation>Opptelling</translation>
     </message>
     <message>
         <source>Transpose up</source>
@@ -15475,7 +15273,7 @@ failed: </source>
     </message>
     <message>
         <source>Toggle Visibility</source>
-        <translation>Skru på/av synlighet</translation>
+        <translation>Synlighet av/på</translation>
     </message>
     <message>
         <source>Set Visible</source>
@@ -15487,15 +15285,15 @@ failed: </source>
     </message>
     <message>
         <source>Note Anchored Textline</source>
-        <translation type="unfinished"/>
+        <translation>Noteforankret tekstlinje</translation>
     </message>
     <message>
         <source>Note anchored textline</source>
-        <translation type="unfinished"/>
+        <translation>Noteforankret tekstlinje</translation>
     </message>
     <message>
         <source>Lock score</source>
-        <translation type="unfinished"/>
+        <translation>Lås partitur</translation>
     </message>
     <message>
         <source>Note duration: Longa (TAB)</source>
@@ -15559,11 +15357,11 @@ failed: </source>
     </message>
     <message>
         <source>Increase Active Duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Øk aktiv varighet (TAB)</translation>
     </message>
     <message>
         <source>Decrease Active Duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Minsk aktiv varighet (TAB)</translation>
     </message>
     <message>
         <source>Note input: Rest (TAB)</source>
@@ -15591,7 +15389,7 @@ failed: </source>
     </message>
     <message>
         <source>Toggle Create Multimeasure Rest</source>
-        <translation type="unfinished"/>
+        <translation>Slå av/på oppretting av flertaktspause</translation>
     </message>
     <message>
         <source>Bold Face</source>
@@ -15627,11 +15425,11 @@ failed: </source>
     </message>
     <message>
         <source>Fill with slashes</source>
-        <translation type="unfinished"/>
+        <translation>Fyll med streker</translation>
     </message>
     <message>
         <source>Toggle rhythmic slash notation</source>
-        <translation type="unfinished"/>
+        <translation>Rytmisk strek-notasjon av/på</translation>
     </message>
     <message>
         <source>Add/remove line breaks</source>
@@ -15639,7 +15437,7 @@ failed: </source>
     </message>
     <message>
         <source>Resequence rehearsal marks</source>
-        <translation type="unfinished"/>
+        <translation>Omberegn øvingsmerkers rekkefølge</translation>
     </message>
     <message>
         <source>Start center</source>
@@ -15647,123 +15445,123 @@ failed: </source>
     </message>
     <message>
         <source>Longa Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk fram med longa (Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Advance of a longa (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk framover med en longa (bare for Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Breve Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk fram med breve (Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Advance of a double whole note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk framover med en dobbel helnote (bare for Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Whole Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk fram med helnote (Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Advance of a whole note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk framover med en helnote (bare for Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Half Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk fram med halvnote (Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Advance of a half note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk framover med en halvnote (bare for Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Quarter Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk fram med fjerdedelsnote (Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Advance of a quarter note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk framover med en fjerdedelsnote (bare for Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Eighth Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk fram med åttedelsnote (Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Advance of an eighth note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk framover med en åttedelsnote (bare for Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>16th Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk fram med sekstendelsnote (Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Advance of a 16th note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk framover med en sekstendelsnote (bare for Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>32nd Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk fram med trettitodelsnote (Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Advance of a 32nd note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk framover med en trettitodelsnote (bare for Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>64th Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk fram med sekstifiredelsnote (Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Advance of a 64th note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Rykk framover med en sekstifiredelsnote (bare for Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Previous Measure (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Forrige takt (Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Previous measure (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Forrige takt (bare for Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Next Measure (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Neste takt (Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Next measure (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Neste takt (bare for Generalbass/Besifring)</translation>
     </message>
     <message>
         <source>Toggle staccato</source>
-        <translation type="unfinished"/>
+        <translation>Staccato av/på</translation>
     </message>
     <message>
         <source>Toggle tenuto</source>
-        <translation type="unfinished"/>
+        <translation>Tenuto av/på</translation>
     </message>
     <message>
         <source>Toggle trill</source>
-        <translation type="unfinished"/>
+        <translation>Trille av/på</translation>
     </message>
     <message>
         <source>Toggle marcato</source>
-        <translation type="unfinished"/>
+        <translation>Marcato av/på</translation>
     </message>
     <message>
         <source>Import PDF...</source>
-        <translation type="unfinished"/>
+        <translation>Importer PDF...</translation>
     </message>
     <message>
         <source>Import PDF</source>
-        <translation type="unfinished"/>
+        <translation>Importer PDF</translation>
     </message>
     <message>
         <source>Import a PDF file with an experimental service on musescore.com</source>
-        <translation type="unfinished"/>
+        <translation>Importer en PDF med en eksperimentell tjeneste på musescore.com</translation>
     </message>
     <message>
         <source>Set loop in position</source>
-        <translation type="unfinished"/>
+        <translation>Sett repeteringsstartpunkt</translation>
     </message>
 </context>
 <context>
@@ -15849,15 +15647,15 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Fade in</source>
-        <translation type="unfinished"/>
+        <translation>Ton inn</translation>
     </message>
     <message>
         <source>Fade out</source>
-        <translation type="unfinished"/>
+        <translation>Ton ut</translation>
     </message>
     <message>
         <source>Volume swell</source>
-        <translation type="unfinished"/>
+        <translation>Volumsvell</translation>
     </message>
     <message>
         <source>Wiggle sawtooth</source>
@@ -15877,11 +15675,11 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Ouvert</source>
-        <translation type="unfinished"/>
+        <translation>Ouvert</translation>
     </message>
     <message>
         <source>Stopped/Pizzicato left hand</source>
-        <translation type="unfinished"/>
+        <translation>Stoppet/Pizzicato venstre hånd</translation>
     </message>
     <message>
         <source>Up bow</source>
@@ -15977,15 +15775,15 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Lute 1 fing.</source>
-        <translation type="unfinished"/>
+        <translation>Lutt 1 finger</translation>
     </message>
     <message>
         <source>Lute 2 fing.</source>
-        <translation type="unfinished"/>
+        <translation>Lutt 2 finger</translation>
     </message>
     <message>
         <source>Lute 3 fing.</source>
-        <translation type="unfinished"/>
+        <translation>Lutt 3 finger</translation>
     </message>
     <message>
         <source>Tremolo bar</source>
@@ -16095,111 +15893,111 @@ Takten er ikke tom</translation>
     <name>bagpipe</name>
     <message>
         <source>Single grace low G</source>
-        <translation type="unfinished"/>
+        <translation>Enkeltforslag lav G</translation>
     </message>
     <message>
         <source>Single grace low A</source>
-        <translation type="unfinished"/>
+        <translation>Enkeltforslag lav A</translation>
     </message>
     <message>
         <source>Single grace B</source>
-        <translation type="unfinished"/>
+        <translation>Enkeltforslag B</translation>
     </message>
     <message>
         <source>Single grace C</source>
-        <translation type="unfinished"/>
+        <translation>Enkeltforslag C</translation>
     </message>
     <message>
         <source>Single grace D</source>
-        <translation type="unfinished"/>
+        <translation>Enkeltforslag D</translation>
     </message>
     <message>
         <source>Single grace E</source>
-        <translation type="unfinished"/>
+        <translation>Enkeltforslag E</translation>
     </message>
     <message>
         <source>Single grace F</source>
-        <translation type="unfinished"/>
+        <translation>Enkeltforslag F</translation>
     </message>
     <message>
         <source>Single grace high G</source>
-        <translation type="unfinished"/>
+        <translation>Enkeltforslag høy G</translation>
     </message>
     <message>
         <source>Single grace high A</source>
-        <translation type="unfinished"/>
+        <translation>Enkeltforslag høy A</translation>
     </message>
     <message>
         <source>Double grace</source>
-        <translation type="unfinished"/>
+        <translation>Dobbeltforslag</translation>
     </message>
     <message>
         <source>Half doubling on low G</source>
-        <translation type="unfinished"/>
+        <translation>Halvdobling på lav G</translation>
     </message>
     <message>
         <source>Half doubling on low A</source>
-        <translation type="unfinished"/>
+        <translation>Halvdobling på lav A</translation>
     </message>
     <message>
         <source>Half doubling on B</source>
-        <translation type="unfinished"/>
+        <translation>Halvdobling på lav B</translation>
     </message>
     <message>
         <source>Half doubling on C</source>
-        <translation type="unfinished"/>
+        <translation>Halvdobling på C</translation>
     </message>
     <message>
         <source>Half doubling on D</source>
-        <translation type="unfinished"/>
+        <translation>Halvdobling på D</translation>
     </message>
     <message>
         <source>Half doubling on E</source>
-        <translation type="unfinished"/>
+        <translation>Halvdobling på E</translation>
     </message>
     <message>
         <source>Half doubling on F</source>
-        <translation type="unfinished"/>
+        <translation>Halvdobling på F</translation>
     </message>
     <message>
         <source>Doubling on high G</source>
-        <translation type="unfinished"/>
+        <translation>Halvdobling på høy G</translation>
     </message>
     <message>
         <source>Doubling on high A</source>
-        <translation type="unfinished"/>
+        <translation>Halvdobling på høy A</translation>
     </message>
     <message>
         <source>Half strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Halvslag på lav A</translation>
     </message>
     <message>
         <source>Half strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Halvslag på B</translation>
     </message>
     <message>
         <source>Half strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Halvslag på C</translation>
     </message>
     <message>
         <source>Half strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Halvslag på D</translation>
     </message>
     <message>
         <source>Half strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Halvslag på E</translation>
     </message>
     <message>
         <source>Half strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Halvslag på F</translation>
     </message>
     <message>
         <source>Half strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Halvslag på høy G</translation>
     </message>
     <message>
         <source>Grip</source>
-        <translation type="unfinished"/>
+        <translation>Grep</translation>
     </message>
     <message>
         <source>Half D throw</source>
@@ -16207,143 +16005,143 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Doubling on low G</source>
-        <translation type="unfinished"/>
+        <translation>Dobling på høy G</translation>
     </message>
     <message>
         <source>Doubling on low A</source>
-        <translation type="unfinished"/>
+        <translation>Dobling på høy A</translation>
     </message>
     <message>
         <source>Doubling on B</source>
-        <translation type="unfinished"/>
+        <translation>Dobling på B</translation>
     </message>
     <message>
         <source>Doubling on C</source>
-        <translation type="unfinished"/>
+        <translation>Dobling på C</translation>
     </message>
     <message>
         <source>Doubling on D</source>
-        <translation type="unfinished"/>
+        <translation>Dobling på D</translation>
     </message>
     <message>
         <source>Doubling on E</source>
-        <translation type="unfinished"/>
+        <translation>Dobling på E</translation>
     </message>
     <message>
         <source>Doubling on F</source>
-        <translation type="unfinished"/>
+        <translation>Dobling på F</translation>
     </message>
     <message>
         <source>Thumb doubling on low G</source>
-        <translation type="unfinished"/>
+        <translation>Tommeldobling på lav G</translation>
     </message>
     <message>
         <source>Thumb doubling on low A</source>
-        <translation type="unfinished"/>
+        <translation>Tommeldobling på lav A</translation>
     </message>
     <message>
         <source>Thumb doubling on B</source>
-        <translation type="unfinished"/>
+        <translation>Tommeldobling på B</translation>
     </message>
     <message>
         <source>Thumb doubling on C</source>
-        <translation type="unfinished"/>
+        <translation>Tommeldobling på C</translation>
     </message>
     <message>
         <source>Thumb doubling on D</source>
-        <translation type="unfinished"/>
+        <translation>Tommeldobling på D</translation>
     </message>
     <message>
         <source>Thumb doubling on E</source>
-        <translation type="unfinished"/>
+        <translation>Tommeldobling på E</translation>
     </message>
     <message>
         <source>Thumb doubling on F</source>
-        <translation type="unfinished"/>
+        <translation>Tommeldobling på F</translation>
     </message>
     <message>
         <source>G grace note on low A</source>
-        <translation type="unfinished"/>
+        <translation>G-forslag på lav A</translation>
     </message>
     <message>
         <source>G grace note on B</source>
-        <translation type="unfinished"/>
+        <translation>G-forslag på B</translation>
     </message>
     <message>
         <source>G grace note on C</source>
-        <translation type="unfinished"/>
+        <translation>G-forslag på C</translation>
     </message>
     <message>
         <source>G grace note on D</source>
-        <translation type="unfinished"/>
+        <translation>G-forslag på D</translation>
     </message>
     <message>
         <source>G grace note on E</source>
-        <translation type="unfinished"/>
+        <translation>G-forslag på E</translation>
     </message>
     <message>
         <source>G grace note on F</source>
-        <translation type="unfinished"/>
+        <translation>G-forslag på F</translation>
     </message>
     <message>
         <source>Double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Dobbeltslag på lav A</translation>
     </message>
     <message>
         <source>Double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Dobbeltslag på B</translation>
     </message>
     <message>
         <source>Double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Dobbeltslag på C</translation>
     </message>
     <message>
         <source>Double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Dobbeltslag på D</translation>
     </message>
     <message>
         <source>Double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Dobbeltslag på E</translation>
     </message>
     <message>
         <source>Double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Dobbeltslag på F</translation>
     </message>
     <message>
         <source>Double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Dobbeltslag på høy G</translation>
     </message>
     <message>
         <source>Double strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Dobbeltslag på høy A</translation>
     </message>
     <message>
         <source>Thumb strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Tommelslag på lav A</translation>
     </message>
     <message>
         <source>Thumb strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Tommelslag på B</translation>
     </message>
     <message>
         <source>Thumb strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Tommelslag på C</translation>
     </message>
     <message>
         <source>Thumb strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Tommelslag på D</translation>
     </message>
     <message>
         <source>Thumb strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Tommelslag på E</translation>
     </message>
     <message>
         <source>Thumb strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Tommelslag på F</translation>
     </message>
     <message>
         <source>Thumb strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Tommelslag på høy G</translation>
     </message>
     <message>
         <source>Birl</source>
@@ -16933,23 +16731,23 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Mute Hi Conga</source>
-        <translation type="unfinished"/>
+        <translation>Dempet høy conga</translation>
     </message>
     <message>
         <source>Open Hi Conga</source>
-        <translation type="unfinished"/>
+        <translation>Åpen høy conga</translation>
     </message>
     <message>
         <source>Low Conga</source>
-        <translation type="unfinished"/>
+        <translation>Lav conga</translation>
     </message>
     <message>
         <source>High Timbale</source>
-        <translation type="unfinished"/>
+        <translation>Høy timbale</translation>
     </message>
     <message>
         <source>Low Timbale</source>
-        <translation type="unfinished"/>
+        <translation>Lav timbale</translation>
     </message>
     <message>
         <source>High Agogo</source>
@@ -16997,11 +16795,11 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Mute Cuica</source>
-        <translation type="unfinished"/>
+        <translation>Dempet cuica</translation>
     </message>
     <message>
         <source>Open Cuica</source>
-        <translation type="unfinished"/>
+        <translation>Åpen cuica</translation>
     </message>
     <message>
         <source>Mute Triangle</source>
@@ -17021,11 +16819,11 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Mute Surdo</source>
-        <translation type="unfinished"/>
+        <translation>Dempet surdo</translation>
     </message>
     <message>
         <source>Open Surdo</source>
-        <translation type="unfinished"/>
+        <translation>Åpen surdo</translation>
     </message>
     <message>
         <source>Ride Cymbal 1</source>
@@ -17350,7 +17148,7 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Slur Segment</source>
-        <translation type="unfinished"/>
+        <translation>Buesegment</translation>
     </message>
     <message>
         <source>Staff Lines</source>
@@ -17362,7 +17160,7 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Stem Slash</source>
-        <translation type="unfinished"/>
+        <translation>Notehalsstrek</translation>
     </message>
     <message>
         <source>Key Signature</source>
@@ -17378,7 +17176,7 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Chord Line</source>
-        <translation type="unfinished"/>
+        <translation>Akkordlinje</translation>
     </message>
     <message>
         <source>Figured Bass</source>
@@ -17398,19 +17196,19 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Hairpin Segment</source>
-        <translation type="unfinished"/>
+        <translation>Crescendo- / Decrescendo-segment</translation>
     </message>
     <message>
         <source>Ottava Segment</source>
-        <translation type="unfinished"/>
+        <translation>Ottavasegment</translation>
     </message>
     <message>
         <source>Trill Segment</source>
-        <translation type="unfinished"/>
+        <translation>Trillesegment</translation>
     </message>
     <message>
         <source>Text Line Segment</source>
-        <translation type="unfinished"/>
+        <translation>Tekstlinjesegment</translation>
     </message>
     <message>
         <source>Volta Segment</source>
@@ -17418,15 +17216,15 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Pedal Segment</source>
-        <translation type="unfinished"/>
+        <translation>Pedalsegment</translation>
     </message>
     <message>
         <source>Layout Break</source>
-        <translation type="unfinished"/>
+        <translation>Layoutbrekk</translation>
     </message>
     <message>
         <source>Staff State</source>
-        <translation type="unfinished"/>
+        <translation>Notesystemstatus</translation>
     </message>
     <message>
         <source>Ledger Line</source>
@@ -17442,7 +17240,7 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Shadow Note</source>
-        <translation type="unfinished"/>
+        <translation>Skyggenote</translation>
     </message>
     <message>
         <source>Rubber Band</source>
@@ -17454,7 +17252,7 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Font Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Skrifttypesymbol</translation>
     </message>
     <message>
         <source>Hairpin</source>
@@ -17498,7 +17296,7 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Bagpipe Embellishment</source>
-        <translation type="unfinished"/>
+        <translation>Sekkepipeforslag</translation>
     </message>
     <message>
         <source>Fretboard Diagram</source>
@@ -17506,7 +17304,7 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Ambitus</source>
-        <translation type="unfinished"/>
+        <translation>Ambitus</translation>
     </message>
     <message>
         <source>Chord Symbol</source>
@@ -17518,50 +17316,50 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Melisma Line</source>
-        <translation type="unfinished"/>
+        <translation>Melismelinje</translation>
     </message>
     <message>
         <source>Glissando Segment</source>
-        <translation type="unfinished"/>
+        <translation>Glissandosegment</translation>
     </message>
     <message>
         <source>Melisma Line Segment</source>
-        <translation type="unfinished"/>
+        <translation>Melismelinjesegment</translation>
     </message>
 </context>
 <context>
     <name>fotomode</name>
     <message>
         <source>Resize to A</source>
-        <translation type="unfinished"/>
+        <translation>Endre størrelse til A</translation>
     </message>
     <message>
         <source>Resize to B</source>
-        <translation type="unfinished"/>
+        <translation>Endre størrelse til B</translation>
     </message>
     <message>
         <source>Resize to C</source>
-        <translation type="unfinished"/>
+        <translation>Endre størrelse til C</translation>
     </message>
     <message>
         <source>Resize to D</source>
-        <translation type="unfinished"/>
+        <translation>Endre størrelse til D</translation>
     </message>
     <message>
         <source>Set size A</source>
-        <translation type="unfinished"/>
+        <translation>Sett størrelse A</translation>
     </message>
     <message>
         <source>Set size B</source>
-        <translation type="unfinished"/>
+        <translation>Sett størrelse B</translation>
     </message>
     <message>
         <source>Set size C</source>
-        <translation type="unfinished"/>
+        <translation>Sett størrelse C</translation>
     </message>
     <message>
         <source>Set size D</source>
-        <translation type="unfinished"/>
+        <translation>Sett størrelse D</translation>
     </message>
 </context>
 <context>
@@ -17575,27 +17373,27 @@ Takten er ikke tom</translation>
     <name>inspector</name>
     <message>
         <source>Staff default</source>
-        <translation type="unfinished"/>
+        <translation>Standard for notesystem</translation>
     </message>
     <message>
         <source>Tick 1</source>
-        <translation type="unfinished"/>
+        <translation>Merke 1</translation>
     </message>
     <message>
         <source>Tick 2</source>
-        <translation type="unfinished"/>
+        <translation>Merke 2</translation>
     </message>
     <message>
         <source>Short 1</source>
-        <translation type="unfinished"/>
+        <translation>Kort 1</translation>
     </message>
     <message>
         <source>Short 2</source>
-        <translation type="unfinished"/>
+        <translation>Kort 2</translation>
     </message>
     <message>
         <source>[Custom]</source>
-        <translation type="unfinished"/>
+        <translation>[Egendefinert]</translation>
     </message>
 </context>
 <context>
@@ -17738,11 +17536,11 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Sol</source>
-        <translation type="unfinished"/>
+        <translation>Sol</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
-        <translation type="unfinished"/>
+        <translation>Breve alt.</translation>
     </message>
 </context>
 <context>
@@ -17787,7 +17585,7 @@ Takten er ikke tom</translation>
     <name>scores_directory</name>
     <message>
         <source>Scores</source>
-        <translation>Noteark</translation>
+        <translation>Partitur</translation>
     </message>
 </context>
 <context>
@@ -17892,11 +17690,11 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>PERCUSSION STAFF</source>
-        <translation type="unfinished"/>
+        <translation>PERKUSJONSNOTESYSTEM</translation>
     </message>
     <message>
         <source>TABLATURE STAFF</source>
-        <translation type="unfinished"/>
+        <translation>TABULATURNOTESYSTEM</translation>
     </message>
 </context>
 <context>
@@ -17921,19 +17719,19 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Upprall line</source>
-        <translation type="unfinished"/>
+        <translation>Praltrille opp-linje</translation>
     </message>
     <message>
         <source>Downprall line</source>
-        <translation type="unfinished"/>
+        <translation>Praltrille ned-linje</translation>
     </message>
     <message>
         <source>Prallprall line</source>
-        <translation type="unfinished"/>
+        <translation>Lang praltrillelinje</translation>
     </message>
     <message>
         <source>Wavy line</source>
-        <translation type="unfinished"/>
+        <translation>Bølgende linje</translation>
     </message>
 </context>
 <context>

@@ -7257,7 +7257,7 @@ Vyberte, prosím, jiný název:</translation>
     </message>
     <message>
         <source>Create Time Signature</source>
-        <translation>Vytvořit taktové označení</translation>
+        <translation>Vytvořte taktové označení:</translation>
     </message>
 </context>
 <context>
@@ -7279,7 +7279,7 @@ Vyberte, prosím, jiný název:</translation>
     </message>
     <message>
         <source>Select Key Signature and Tempo:</source>
-        <translation>Vybrat předznamenání a tempo:</translation>
+        <translation>Vyberte předznamenání a tempo:</translation>
     </message>
     <message>
         <source>Key Signature</source>
@@ -11135,10 +11135,6 @@ Chcete ji nahradit?</translation>
         <translation>Rejstřík Aeolus</translation>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation>Změnit rejstřík:</translation>
-    </message>
-    <message>
         <source>III</source>
         <translation>III</translation>
     </message>
@@ -11155,250 +11151,8 @@ Chcete ji nahradit?</translation>
 8</translation>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation>Kvintaadena
-8</translation>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation>Suabile
-8</translation>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation>Trubková flétna
-4</translation>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation>Sladká flétna (Flauto Dolce)
-4</translation>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation>Kvintová flétna
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation>Super-
-oktáva 2</translation>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation>Sifflet - hvízdající flétna
-1</translation>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation>Činel
-VI</translation>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>Hoboj</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>Tremulant</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation>Harmonická
-flétna 8</translation>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation>Sladká flétna
-Flauto Dolce 4</translation>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation>Nasard
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation>Ottavina
-2</translation>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation>Tertia
-1 3/5</translation>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation>Sesqui
-altera</translation>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation>Septima</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>Žádný</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation>Křivý roh</translation>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation>Melodia</translation>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation>II+III</translation>
-    </message>
-    <message>
         <source>PushButton</source>
         <translation>Tlačítko</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation>I</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation>Principal
-4</translation>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation>Oktáva
-2</translation>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation>Oktáva
-1</translation>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation>Quinta
-5 1/3</translation>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation>Quinta
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation>Tibia
-8</translation>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation>Celesta
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation>Flétna
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation>Flétna
-4</translation>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation>Flétna
-2</translation>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation>Mixtura</translation>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>Trubka</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation>I+II</translation>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation>I+III</translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation>Subbass
-16</translation>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation>Principal
-16</translation>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation>Fagot
-16</translation>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation>Pozoun (trombón)
-16</translation>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation>Bombarda
-32</translation>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation>P+I</translation>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation>P+II</translation>
-    </message>
-    <message>
-        <source>P+III</source>
-        <translation>P+III</translation>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
@@ -12596,10 +12350,6 @@ altera</translation>
     <message>
         <source>Make this score private</source>
         <translation>Udělat tento notový zápis soukromým</translation>
-    </message>
-    <message>
-        <source>Sharing</source>
-        <translation>Sdílení</translation>
     </message>
 </context>
 <context>
@@ -14861,7 +14611,7 @@ se nezdařil:</translation>
     </message>
     <message>
         <source>Resource Manager...</source>
-        <translation>Správce pomocných prostředků...</translation>
+        <translation>Správce zdrojů...</translation>
     </message>
     <message>
         <source>Add/Remove Line Breaks...</source>
@@ -15485,7 +15235,7 @@ se nezdařil:</translation>
     </message>
     <message>
         <source>Resource manager</source>
-        <translation>Správce pomocných prostředků</translation>
+        <translation>Správce zdrojů</translation>
     </message>
     <message>
         <source>Show OMR panel</source>

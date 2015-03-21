@@ -814,51 +814,51 @@ Heckelphone-clarinet</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="231"/>
         <source>Crh.</source>
         <extracomment>Crumhorn</extracomment>
-        <translation type="unfinished"/>
+        <translation>Krh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="232"/>
         <source>Soprano Crumhorn</source>
-        <translation type="unfinished"/>
+        <translation>Soprankrumhorn</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="234"/>
         <source>S. Crh.</source>
         <extracomment>Soprano Crumhorn</extracomment>
-        <translation type="unfinished"/>
+        <translation>S. krh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="235"/>
         <source>Alto Crumhorn</source>
-        <translation type="unfinished"/>
+        <translation>Altkrumhorn</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="237"/>
         <source>A. Crh.</source>
         <extracomment>Alto Crumhorn</extracomment>
-        <translation type="unfinished"/>
+        <translation>A. krh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="238"/>
         <source>Tenor Crumhorn</source>
-        <translation type="unfinished"/>
+        <translation>Tenorkrumhorn</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="240"/>
         <source>T. Crh.</source>
         <extracomment>Tenor Crumhorn</extracomment>
-        <translation type="unfinished"/>
+        <translation>T. krh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="241"/>
         <source>Bass Crumhorn</source>
-        <translation type="unfinished"/>
+        <translation>Baskrumhorn</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="243"/>
         <source>B. Crh.</source>
         <extracomment>Bass Crumhorn</extracomment>
-        <translation type="unfinished"/>
+        <translation>B. krh.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="244"/>
@@ -1514,24 +1514,24 @@ Sheng</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="424"/>
         <source>Sopranissimo Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Sopranissimosaxofon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="426"/>
         <source>Sio. Sax.</source>
         <extracomment>Sopranissimo Saxophone</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sio. sax.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="427"/>
         <source>Sopranino Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Sopraninosaxofon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="429"/>
         <source>Si. Sax.</source>
         <extracomment>Sopranino Saxophone</extracomment>
-        <translation type="unfinished"/>
+        <translation>Si. sax.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="430"/>
@@ -1542,7 +1542,7 @@ Sheng</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="432"/>
         <source>S. Sax.</source>
         <extracomment>Soprano Saxophone</extracomment>
-        <translation type="unfinished"/>
+        <translation>S. sax.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="433"/>
@@ -5278,7 +5278,7 @@ Tenor Mandola</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1521"/>
         <source>Viola da gamba</source>
-        <translation type="unfinished"/>
+        <translation>Viola da gamba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1523"/>
@@ -5287,7 +5287,7 @@ Tenor Mandola</extracomment>
         <extracomment>Viola da gamba
 ----------
 Viola da gamba (Tab)</extracomment>
-        <translation type="unfinished"/>
+        <translation>Vla. d. g.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1524"/>

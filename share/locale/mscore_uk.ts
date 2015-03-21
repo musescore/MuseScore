@@ -1476,11 +1476,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Marks are drawn:</source>
-        <translation type="unfinished"/>
+        <translation>Позначення знаходяться: </translation>
     </message>
     <message>
         <source>Lines are:</source>
-        <translation type="unfinished"/>
+        <translation>Лінії: </translation>
     </message>
     <message>
         <source>Continuous</source>
@@ -2126,7 +2126,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished"/>
+        <translation>Німецька</translation>
     </message>
     <message>
         <source>Solfeggio</source>
@@ -2399,7 +2399,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Continue height:</source>
-        <translation type="unfinished"/>
+        <translation>Висота продовження: </translation>
     </message>
     <message>
         <source>Continuous</source>
@@ -2507,7 +2507,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Note Spelling</source>
-        <translation type="unfinished"/>
+        <translation>Вимова ноти</translation>
     </message>
     <message>
         <source>Automatic Capitalization</source>
@@ -2535,7 +2535,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Barline to grace note distance:</source>
-        <translation type="unfinished"/>
+        <translation>Відстань тактова риска-форшлаг:</translation>
     </message>
 </context>
 <context>
@@ -2882,11 +2882,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Oct </source>
-        <translation type="unfinished"/>
+        <translation>Окт</translation>
     </message>
     <message>
         <source>Has line</source>
-        <translation type="unfinished"/>
+        <translation>Є лінія</translation>
     </message>
     <message>
         <source>Top note</source>
@@ -2926,15 +2926,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Upright</source>
-        <translation type="unfinished"/>
+        <translation>Вертикально</translation>
     </message>
     <message>
         <source>Leaning Left</source>
-        <translation type="unfinished"/>
+        <translation>Нахил вліво</translation>
     </message>
     <message>
         <source>Leaning Right</source>
-        <translation type="unfinished"/>
+        <translation>Нахил вправо</translation>
     </message>
     <message>
         <source>Ambitus Inspector</source>
@@ -2942,11 +2942,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Oct</source>
-        <translation type="unfinished"/>
+        <translation>Окт</translation>
     </message>
     <message>
         <source>Reset Has line value</source>
-        <translation type="unfinished"/>
+        <translation>Скинути значення „Є лінія“</translation>
     </message>
     <message>
         <source>Reset Head group value</source>
@@ -3663,7 +3663,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Continue height</source>
-        <translation type="unfinished"/>
+        <translation>Продовжити висоту</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3711,7 +3711,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Continue height value</source>
-        <translation type="unfinished"/>
+        <translation>Скинути значення «Продовжити висоту»</translation>
     </message>
 </context>
 <context>
@@ -4161,11 +4161,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Fix to line</source>
-        <translation type="unfinished"/>
+        <translation>Приєднання до лінії</translation>
     </message>
     <message>
         <source>Reset Fix to line</source>
-        <translation type="unfinished"/>
+        <translation>Скинути приєднання до лінії</translation>
     </message>
     <message>
         <source>Reset Line</source>
@@ -4485,15 +4485,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Up Prall</source>
-        <translation type="unfinished"/>
+        <translation>Мордент вгорі</translation>
     </message>
     <message>
         <source>Down Prall</source>
-        <translation type="unfinished"/>
+        <translation>Мордент знизу</translation>
     </message>
     <message>
         <source>Prall Prall</source>
-        <translation type="unfinished"/>
+        <translation>Подвійний мордент</translation>
     </message>
     <message>
         <source>Wavy Line</source>
@@ -5260,7 +5260,8 @@ space unit</extracomment>
     <message>
         <source>2x less
 measure count</source>
-        <translation type="unfinished"/>
+        <translation>2x менший
+підрахунок тактів</translation>
     </message>
     <message>
         <source>Is human
@@ -5694,19 +5695,19 @@ tuplet would cross measure</source>
     <name>Ms</name>
     <message>
         <source>Fall</source>
-        <translation type="unfinished"/>
+        <translation>Ґлісандо Fall</translation>
     </message>
     <message>
         <source>Doit</source>
-        <translation type="unfinished"/>
+        <translation>Ґлісандо Doit</translation>
     </message>
     <message>
         <source>Plop</source>
-        <translation type="unfinished"/>
+        <translation>Ґлісандо Plop</translation>
     </message>
     <message>
         <source>Scoop</source>
-        <translation type="unfinished"/>
+        <translation>Ґлісандо Scoop</translation>
     </message>
 </context>
 <context>
@@ -5857,15 +5858,15 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Dotted %1</source>
-        <translation type="unfinished"/>
+        <translation>Пунктир %1</translation>
     </message>
     <message>
         <source>Double dotted %1</source>
-        <translation type="unfinished"/>
+        <translation>Подвійний пунктир %1</translation>
     </message>
     <message>
         <source>Triple dotted %1</source>
-        <translation type="unfinished"/>
+        <translation>Потрійний пунктир %1</translation>
     </message>
 </context>
 <context>
@@ -6355,11 +6356,11 @@ failed: </source>
     </message>
     <message>
         <source>Please check your Internet connection</source>
-        <translation type="unfinished"/>
+        <translation>Перевірте підключення до мережі інтернет</translation>
     </message>
     <message>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Місцевий час на Вашому пристрої не встановлений правильно. Будь ласка, перевірте його і налаштуйте. Рекомендується встановити час/часовий пояс на автоматичне налаштування. Якщо ви все ще не можете увійти, &lt;a href=&quot;%1&quot;&gt;зв&apos;яжіться з нами&lt;/a&gt; .</translation>
     </message>
 </context>
 <context>
@@ -6666,11 +6667,11 @@ Do you want to replace it?
     </message>
     <message>
         <source>Staff spacer down</source>
-        <translation type="unfinished"/>
+        <translation>Розділювач нотоносця нижче</translation>
     </message>
     <message>
         <source>Staff spacer up</source>
-        <translation type="unfinished"/>
+        <translation>Розділювач нотоносця вище</translation>
     </message>
     <message>
         <source>Fingering %1</source>
@@ -7173,7 +7174,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Drum input mode</source>
-        <translation type="unfinished"/>
+        <translation>Режим вводу ударних</translation>
     </message>
     <message>
         <source>TAB input mode</source>
@@ -7672,11 +7673,11 @@ failed: %2</source>
     </message>
     <message>
         <source>Measure %1 Staff %2 incomplete. Expected: %3; Found: %4</source>
-        <translation type="unfinished"/>
+        <translation>Такт %1 Нотоносець %2 незавершений. Очікувалося: %3; Знайдено: %4</translation>
     </message>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
-        <translation type="unfinished"/>
+        <translation>Такт %1, нотоносець %2, голос %3 занадто довгий. Очікувалося: %4; Знайдено: %5</translation>
     </message>
 </context>
 <context>
@@ -8088,15 +8089,15 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>Dotted %1</source>
-        <translation type="unfinished"/>
+        <translation>Пунктир %1</translation>
     </message>
     <message>
         <source>Double dotted %1</source>
-        <translation type="unfinished"/>
+        <translation>Подвійний пунктир %1</translation>
     </message>
     <message>
         <source>Triple dotted %1</source>
-        <translation type="unfinished"/>
+        <translation>Потрійний пунктир %1</translation>
     </message>
 </context>
 <context>
@@ -9933,15 +9934,15 @@ failed: </source>
     </message>
     <message>
         <source>Rewind is active</source>
-        <translation type="unfinished"/>
+        <translation>Перемотування активне</translation>
     </message>
     <message>
         <source>Rewind record</source>
-        <translation type="unfinished"/>
+        <translation>Перемотати запис</translation>
     </message>
     <message>
         <source>Toggle play record</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути відтворення запису</translation>
     </message>
     <message>
         <source>Whole note is active</source>
@@ -9953,11 +9954,11 @@ failed: </source>
     </message>
     <message>
         <source>Whole note record</source>
-        <translation type="unfinished"/>
+        <translation>Запис цілої ноти</translation>
     </message>
     <message>
         <source>Half note record</source>
-        <translation type="unfinished"/>
+        <translation>Запис половинної ноти</translation>
     </message>
     <message>
         <source>Rest is active</source>
@@ -9969,7 +9970,7 @@ failed: </source>
     </message>
     <message>
         <source>Augmentation dot record</source>
-        <translation type="unfinished"/>
+        <translation>Запис крапки доповнення</translation>
     </message>
     <message>
         <source>Double augmentation dot is active</source>
@@ -9977,7 +9978,7 @@ failed: </source>
     </message>
     <message>
         <source>Double augmentation dot record</source>
-        <translation type="unfinished"/>
+        <translation>Запис подвійної крапки доповнення</translation>
     </message>
     <message>
         <source>Tie is active</source>
@@ -9985,19 +9986,19 @@ failed: </source>
     </message>
     <message>
         <source>Tie record</source>
-        <translation type="unfinished"/>
+        <translation>Запис ліги</translation>
     </message>
     <message>
         <source>Rest record</source>
-        <translation type="unfinished"/>
+        <translation>Запис паузи</translation>
     </message>
     <message>
         <source>Play is active</source>
-        <translation type="unfinished"/>
+        <translation>Програвання активне</translation>
     </message>
     <message>
         <source>Stop is active</source>
-        <translation type="unfinished"/>
+        <translation>Пауза активна</translation>
     </message>
     <message>
         <source>Play record</source>
@@ -10013,7 +10014,7 @@ failed: </source>
     </message>
     <message>
         <source>16th note record</source>
-        <translation type="unfinished"/>
+        <translation>Запис 16-ї ноти</translation>
     </message>
     <message>
         <source>32nd note is active</source>
@@ -10021,7 +10022,7 @@ failed: </source>
     </message>
     <message>
         <source>32nd note record</source>
-        <translation type="unfinished"/>
+        <translation>Запис 32-ї ноти</translation>
     </message>
     <message>
         <source>Score Tab</source>
@@ -10217,7 +10218,7 @@ failed: </source>
     </message>
     <message>
         <source>Quarter note record</source>
-        <translation type="unfinished"/>
+        <translation>Запис четвертної ноти</translation>
     </message>
     <message>
         <source>Eighth note is active</source>
@@ -10225,7 +10226,7 @@ failed: </source>
     </message>
     <message>
         <source>Eighth note record</source>
-        <translation type="unfinished"/>
+        <translation>Запис восьмої ноти</translation>
     </message>
     <message>
         <source>64th note</source>
@@ -10237,7 +10238,7 @@ failed: </source>
     </message>
     <message>
         <source>64th note record</source>
-        <translation type="unfinished"/>
+        <translation>Запис 64-ї ноти</translation>
     </message>
     <message>
         <source>Here you can configure shortcuts for actions</source>
@@ -10277,7 +10278,7 @@ failed: </source>
     </message>
     <message>
         <source>Is active</source>
-        <translation type="unfinished"/>
+        <translation>Активне</translation>
     </message>
     <message>
         <source>Record</source>
@@ -10309,11 +10310,11 @@ failed: </source>
     </message>
     <message>
         <source>Undo is active</source>
-        <translation type="unfinished"/>
+        <translation>Скасування активне</translation>
     </message>
     <message>
         <source>Undo record</source>
-        <translation type="unfinished"/>
+        <translation>Скасувати запис</translation>
     </message>
     <message>
         <source>Undo</source>
@@ -10337,7 +10338,7 @@ failed: </source>
     </message>
     <message>
         <source>Note Input Tab</source>
-        <translation type="unfinished"/>
+        <translation>Вкладка вводу нот</translation>
     </message>
     <message>
         <source>Note Input</source>
@@ -10385,7 +10386,7 @@ failed: </source>
     </message>
     <message>
         <source>Check for new version of MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Перевіряти наявність нової версії MuseScore</translation>
     </message>
 </context>
 <context>
@@ -11126,11 +11127,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Aeolus Stops</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Change Stops:</source>
-        <translation type="unfinished"/>
+        <translation>Aeolus зупиняється</translation>
     </message>
     <message>
         <source>III</source>
@@ -11147,222 +11144,8 @@ Do you want to overwrite it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation>Сопілка
-1</translation>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>Гобой</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>Тремоло</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation>Квінта</translation>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation>Септима</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>Ні</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation>Мелодія</translation>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation>II+III</translation>
-    </message>
-    <message>
         <source>PushButton</source>
         <translation>Кнопка</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation>I</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>Труба</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation>I+II</translation>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation>I+III</translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation>P+I</translation>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation>P+II</translation>
-    </message>
-    <message>
-        <source>P+III</source>
-        <translation>P+III</translation>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
@@ -12560,10 +12343,6 @@ altera</source>
     <message>
         <source>Make this score private</source>
         <translation>Зробити цю партитуру приватною</translation>
-    </message>
-    <message>
-        <source>Sharing</source>
-        <translation>Спільний доступ</translation>
     </message>
 </context>
 <context>
@@ -14357,11 +14136,11 @@ failed: </source>
     </message>
     <message>
         <source>Toggle count-in playback</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути відтворення зворотного відліку</translation>
     </message>
     <message>
         <source>Play count-in at playback start</source>
-        <translation type="unfinished"/>
+        <translation>Грати зворотний відлік спочатку програвання</translation>
     </message>
     <message>
         <source>Figured Bass</source>
@@ -14757,19 +14536,19 @@ failed: </source>
     </message>
     <message>
         <source>Explode</source>
-        <translation type="unfinished"/>
+        <translation>Розірвати</translation>
     </message>
     <message>
         <source>Explode contents of top selected staff into staves below</source>
-        <translation type="unfinished"/>
+        <translation>Розірвати вміст верхнього виділеного стану на нотоносці нижче</translation>
     </message>
     <message>
         <source>Implode</source>
-        <translation type="unfinished"/>
+        <translation>З’єднати</translation>
     </message>
     <message>
         <source>Implode contents of selected staves into top selected staff</source>
-        <translation type="unfinished"/>
+        <translation>З’єднати вміст виділених нотних станів на верхньому виділеному нотоносці</translation>
     </message>
     <message>
         <source>Fill With Slashes</source>
@@ -14789,7 +14568,7 @@ failed: </source>
     </message>
     <message>
         <source>Resequence Rehearsal Marks</source>
-        <translation type="unfinished"/>
+        <translation>Переставити маркери репетиції</translation>
     </message>
     <message>
         <source>Increase Stretch</source>
@@ -14853,19 +14632,19 @@ failed: </source>
     </message>
     <message>
         <source>File: Save a copy</source>
-        <translation type="unfinished"/>
+        <translation>Файл: Зберегти копію</translation>
     </message>
     <message>
         <source>Export parts</source>
-        <translation type="unfinished"/>
+        <translation>Експортувати партії</translation>
     </message>
     <message>
         <source>File: Close</source>
-        <translation type="unfinished"/>
+        <translation>Файл: Закрити</translation>
     </message>
     <message>
         <source>File: New</source>
-        <translation type="unfinished"/>
+        <translation>Файл: Новий</translation>
     </message>
     <message>
         <source>Note input</source>
@@ -14873,207 +14652,207 @@ failed: </source>
     </message>
     <message>
         <source>Respell pitches</source>
-        <translation type="unfinished"/>
+        <translation>Виправити знаки альтерації</translation>
     </message>
     <message>
         <source>Flip Direction</source>
-        <translation type="unfinished"/>
+        <translation>Змінити напрям</translation>
     </message>
     <message>
         <source>Diatonic Up</source>
-        <translation type="unfinished"/>
+        <translation>Догори діатонічно</translation>
     </message>
     <message>
         <source>Move Up</source>
-        <translation type="unfinished"/>
+        <translation>Підняти вище</translation>
     </message>
     <message>
         <source>Diatonic Down</source>
-        <translation type="unfinished"/>
+        <translation>Вниз діатонічно</translation>
     </message>
     <message>
         <source>Down Octave</source>
-        <translation type="unfinished"/>
+        <translation>Октавою нижче</translation>
     </message>
     <message>
         <source>Next Element</source>
-        <translation type="unfinished"/>
+        <translation>Наступний елемент</translation>
     </message>
     <message>
         <source>Accessibility: Next element</source>
-        <translation type="unfinished"/>
+        <translation>Доступність: наступний елемент</translation>
     </message>
     <message>
         <source>Previous Element</source>
-        <translation type="unfinished"/>
+        <translation>Попередній елемент</translation>
     </message>
     <message>
         <source>Accessibility: Previous element</source>
-        <translation type="unfinished"/>
+        <translation>Доступність: попередній елемент</translation>
     </message>
     <message>
         <source>First Element</source>
-        <translation type="unfinished"/>
+        <translation>Перший елемент</translation>
     </message>
     <message>
         <source>Last Element</source>
-        <translation type="unfinished"/>
+        <translation>Останній елемент</translation>
     </message>
     <message>
         <source>Move Down</source>
-        <translation type="unfinished"/>
+        <translation>Опустити нижче</translation>
     </message>
     <message>
         <source>Previous Chord</source>
-        <translation type="unfinished"/>
+        <translation>Попередній акорд</translation>
     </message>
     <message>
         <source>Previous Measure</source>
-        <translation type="unfinished"/>
+        <translation>Попередній такт</translation>
     </message>
     <message>
         <source>Previous Staff or Voice</source>
-        <translation type="unfinished"/>
+        <translation>Попередній стан чи голос</translation>
     </message>
     <message>
         <source>Next Chord</source>
-        <translation type="unfinished"/>
+        <translation>Наступний акорд</translation>
     </message>
     <message>
         <source>Next Measure</source>
-        <translation type="unfinished"/>
+        <translation>Наступний такт</translation>
     </message>
     <message>
         <source>Next Staff or Voice</source>
-        <translation type="unfinished"/>
+        <translation>Наступний стан чи голос</translation>
     </message>
     <message>
         <source>Add Previous Chord to Selection</source>
-        <translation type="unfinished"/>
+        <translation>Додати попередній акорд до вибраного</translation>
     </message>
     <message>
         <source>Select to Beginning of Measure</source>
-        <translation type="unfinished"/>
+        <translation>Вибрати до початку такту</translation>
     </message>
     <message>
         <source>Add Next Chord to Selection</source>
-        <translation type="unfinished"/>
+        <translation>Додати наступний акорд до вибраного</translation>
     </message>
     <message>
         <source>Select section</source>
-        <translation type="unfinished"/>
+        <translation>Вибрати секцію</translation>
     </message>
     <message>
         <source>Move Chord/Rest Right</source>
-        <translation type="unfinished"/>
+        <translation>Змістити акорд/паузу праворуч</translation>
     </message>
     <message>
         <source>Move Chord/Rest left</source>
-        <translation type="unfinished"/>
+        <translation>Змістити акорд/паузу ліворуч</translation>
     </message>
     <message>
         <source>Select to Beginning of Line</source>
-        <translation type="unfinished"/>
+        <translation>Вибрати до початку лінії</translation>
     </message>
     <message>
         <source>Select to End of Line</source>
-        <translation type="unfinished"/>
+        <translation>Вибрати до кінця лінії</translation>
     </message>
     <message>
         <source>Select to Beginning of Score</source>
-        <translation type="unfinished"/>
+        <translation>Вибрати до початку партитури</translation>
     </message>
     <message>
         <source>Select to End of Score</source>
-        <translation type="unfinished"/>
+        <translation>Вибрати до кінця партитури</translation>
     </message>
     <message>
         <source>Add Staff Above to Selection</source>
-        <translation type="unfinished"/>
+        <translation>Додати нотний стан над вибраним</translation>
     </message>
     <message>
         <source>Add Staff Below to Selection</source>
-        <translation type="unfinished"/>
+        <translation>Додати нотний стан під вибраним</translation>
     </message>
     <message>
         <source>Page: Previous</source>
-        <translation type="unfinished"/>
+        <translation>Сторінка: попередня</translation>
     </message>
     <message>
         <source>Page: Next</source>
-        <translation type="unfinished"/>
+        <translation>Сторінка: наступна</translation>
     </message>
     <message>
         <source>Page: Top</source>
-        <translation type="unfinished"/>
+        <translation>Сторінка: перша</translation>
     </message>
     <message>
         <source>Page: End</source>
-        <translation type="unfinished"/>
+        <translation>Сторінка: остання</translation>
     </message>
     <message>
         <source>Full measure rest</source>
-        <translation type="unfinished"/>
+        <translation>Повно тактова пауза</translation>
     </message>
     <message>
         <source>Delete selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Вилучити позначені такти</translation>
     </message>
     <message>
         <source>Append one measure</source>
-        <translation type="unfinished"/>
+        <translation>Додати один такт наприкінці</translation>
     </message>
     <message>
         <source>Append text frame</source>
-        <translation type="unfinished"/>
+        <translation>Додати текстову рамку наприкінці</translation>
     </message>
     <message>
         <source>Insert fretboard diagram frame</source>
-        <translation type="unfinished"/>
+        <translation>Вставити рамку діаграми грифу</translation>
     </message>
     <message>
         <source>Append horizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>Додати горизонтальну рамку наприкінці</translation>
     </message>
     <message>
         <source>Append vertical frame</source>
-        <translation type="unfinished"/>
+        <translation>Додати вертикальну рамку наприкінці</translation>
     </message>
     <message>
         <source>Note duration: Longa</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: чотири цілих</translation>
     </message>
     <message>
         <source>Double Whole Note</source>
-        <translation type="unfinished"/>
+        <translation>Подвійна ціла нота</translation>
     </message>
     <message>
         <source>Note duration: Double whole</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: подвійна ціла</translation>
     </message>
     <message>
         <source>Whole Note</source>
-        <translation type="unfinished"/>
+        <translation>Ціла нота</translation>
     </message>
     <message>
         <source>Note duration: Whole</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: ціла</translation>
     </message>
     <message>
         <source>Half Note</source>
-        <translation type="unfinished"/>
+        <translation>Половинна нота</translation>
     </message>
     <message>
         <source>Note duration: Half</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: половинна</translation>
     </message>
     <message>
         <source>Quarter Note</source>
-        <translation type="unfinished"/>
+        <translation>Четвертна нота</translation>
     </message>
     <message>
         <source>Note duration: Quarter</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: четвертна</translation>
     </message>
     <message>
         <source>Eighth Note</source>
@@ -15081,91 +14860,91 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Eighth</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: восьма</translation>
     </message>
     <message>
         <source>16th Note</source>
-        <translation type="unfinished"/>
+        <translation>16-а нота</translation>
     </message>
     <message>
         <source>32nd Note</source>
-        <translation type="unfinished"/>
+        <translation>32-а нота</translation>
     </message>
     <message>
         <source>64th Note</source>
-        <translation type="unfinished"/>
+        <translation>64-а нота</translation>
     </message>
     <message>
         <source>128th Note</source>
-        <translation type="unfinished"/>
+        <translation>128-а нота</translation>
     </message>
     <message>
         <source>Increase Active Duration</source>
-        <translation type="unfinished"/>
+        <translation>Збільшити активну тривалість</translation>
     </message>
     <message>
         <source>Decrease Active Duration</source>
-        <translation type="unfinished"/>
+        <translation>Зменшити активну тривалість</translation>
     </message>
     <message>
         <source>Augmentation Dot</source>
-        <translation type="unfinished"/>
+        <translation>Крапка доповнення</translation>
     </message>
     <message>
         <source>Note duration: Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: крапка доповнення</translation>
     </message>
     <message>
         <source>Double Augmentation Dot</source>
-        <translation type="unfinished"/>
+        <translation>Подвійна крапка доповнення</translation>
     </message>
     <message>
         <source>Note duration: Double augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: подвійна крапка доповнення</translation>
     </message>
     <message>
         <source>Note duration: Tie</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: Ліга</translation>
     </message>
     <message>
         <source>Note input: Rest</source>
-        <translation type="unfinished"/>
+        <translation>Введення нот: Пауза</translation>
     </message>
     <message>
         <source>Double Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Дубль-дієз</translation>
     </message>
     <message>
         <source>Note input: Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Введення нот: Дубль-дієз</translation>
     </message>
     <message>
         <source>Note input: Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Введення нот: Дієз</translation>
     </message>
     <message>
         <source>Note input: Natural</source>
-        <translation type="unfinished"/>
+        <translation>Введення нот: Бекар</translation>
     </message>
     <message>
         <source>Note input: Flat</source>
-        <translation type="unfinished"/>
+        <translation>Введення нот: Бемоль</translation>
     </message>
     <message>
         <source>Double Flat</source>
-        <translation type="unfinished"/>
+        <translation>Дубль-бемоль</translation>
     </message>
     <message>
         <source>Note input: Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Введення нот: Дубль-бемоль</translation>
     </message>
     <message>
         <source>Grace: Quarter</source>
-        <translation type="unfinished"/>
+        <translation>Форшлаг: четвертний</translation>
     </message>
     <message>
         <source>Grace: Eighth after</source>
-        <translation type="unfinished"/>
+        <translation>Форшлаг: восьмий, після ноти</translation>
     </message>
     <message>
         <source>MIDI Input</source>
@@ -15173,27 +14952,27 @@ failed: </source>
     </message>
     <message>
         <source>Beam Start</source>
-        <translation type="unfinished"/>
+        <translation>Початок в&apos;язки</translation>
     </message>
     <message>
         <source>Beam Middle</source>
-        <translation type="unfinished"/>
+        <translation>Середина в&apos;язки</translation>
     </message>
     <message>
         <source>No Beam</source>
-        <translation type="unfinished"/>
+        <translation>Без в&apos;язки</translation>
     </message>
     <message>
         <source>Beam 16th Sub</source>
-        <translation type="unfinished"/>
+        <translation>16-а суб в&apos;язка</translation>
     </message>
     <message>
         <source>Beam 32nd Sub</source>
-        <translation type="unfinished"/>
+        <translation>32-га суб в&apos;язка</translation>
     </message>
     <message>
         <source>Auto Beam</source>
-        <translation type="unfinished"/>
+        <translation>Автоматична в&apos;язка</translation>
     </message>
     <message>
         <source>Feathered Beam, Slower</source>
@@ -15205,7 +14984,7 @@ failed: </source>
     </message>
     <message>
         <source>Play panel</source>
-        <translation type="unfinished"/>
+        <translation>Пульт програвання</translation>
     </message>
     <message>
         <source>Selection filter</source>
@@ -15213,287 +14992,287 @@ failed: </source>
     </message>
     <message>
         <source>MIDI import panel</source>
-        <translation type="unfinished"/>
+        <translation>Панель імпорту MIDI</translation>
     </message>
     <message>
         <source>Status bar</source>
-        <translation type="unfinished"/>
+        <translation>Рядок стану</translation>
     </message>
     <message>
         <source>Zoom Canvas</source>
-        <translation type="unfinished"/>
+        <translation>Масштабувати канву</translation>
     </message>
     <message>
         <source>Play previous chord</source>
-        <translation type="unfinished"/>
+        <translation>Грати попередній акорд</translation>
     </message>
     <message>
         <source>Play previous measure</source>
-        <translation type="unfinished"/>
+        <translation>Грати попередній такт</translation>
     </message>
     <message>
         <source>Play next chord</source>
-        <translation type="unfinished"/>
+        <translation>Грати наступний акорд</translation>
     </message>
     <message>
         <source>Play next measure</source>
-        <translation type="unfinished"/>
+        <translation>Грати наступний такт</translation>
     </message>
     <message>
         <source>Player seek to begin</source>
-        <translation type="unfinished"/>
+        <translation>Перевести позицію плеєру на початок</translation>
     </message>
     <message>
         <source>Player seek to end</source>
-        <translation type="unfinished"/>
+        <translation>Перевести позицію плеєру на кінець</translation>
     </message>
     <message>
         <source>Play Repeats</source>
-        <translation type="unfinished"/>
+        <translation>Грати повтори</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>Виділити усе</translation>
     </message>
     <message>
         <source>Exchange voice 1-2</source>
-        <translation type="unfinished"/>
+        <translation>Поміняти голоси 1-2</translation>
     </message>
     <message>
         <source>Exchange voice 1-3</source>
-        <translation type="unfinished"/>
+        <translation>Поміняти голоси 1-3</translation>
     </message>
     <message>
         <source>Exchange voice 1-4</source>
-        <translation type="unfinished"/>
+        <translation>Поміняти голоси 1-4</translation>
     </message>
     <message>
         <source>Exchange voice 2-3</source>
-        <translation type="unfinished"/>
+        <translation>Поміняти голоси 2-3</translation>
     </message>
     <message>
         <source>Exchange voice 2-4</source>
-        <translation type="unfinished"/>
+        <translation>Поміняти голоси 2-4</translation>
     </message>
     <message>
         <source>Exchange voice 3-4</source>
-        <translation type="unfinished"/>
+        <translation>Поміняти голоси 3-4</translation>
     </message>
     <message>
         <source>Repeat Last Command</source>
-        <translation type="unfinished"/>
+        <translation>Повторити останню команду</translation>
     </message>
     <message>
         <source>Toggle system break</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути розрив системи</translation>
     </message>
     <message>
         <source>Toggle page break</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути розрив сторінки</translation>
     </message>
     <message>
         <source>Toggle section break</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути розрив секції</translation>
     </message>
     <message>
         <source>Edit element</source>
-        <translation type="unfinished"/>
+        <translation>Редагувати елемент</translation>
     </message>
     <message>
         <source>Show invisible</source>
-        <translation type="unfinished"/>
+        <translation>Показати невидиме</translation>
     </message>
     <message>
         <source>Show unprintable</source>
-        <translation type="unfinished"/>
+        <translation>Показати недруковане</translation>
     </message>
     <message>
         <source>Show frames</source>
-        <translation type="unfinished"/>
+        <translation>Показати рамки</translation>
     </message>
     <message>
         <source>Show page margins</source>
-        <translation type="unfinished"/>
+        <translation>Показати поля сторінки</translation>
     </message>
     <message>
         <source>Insert special characters</source>
-        <translation type="unfinished"/>
+        <translation>Вставити спеціальні символи</translation>
     </message>
     <message>
         <source>Whole Rest</source>
-        <translation type="unfinished"/>
+        <translation>Ціла пауза</translation>
     </message>
     <message>
         <source>Note input: Whole rest</source>
-        <translation type="unfinished"/>
+        <translation>Введення нот: Ціла пауза</translation>
     </message>
     <message>
         <source>Half Rest</source>
-        <translation type="unfinished"/>
+        <translation>Половинна пауза</translation>
     </message>
     <message>
         <source>Note input: Half rest</source>
-        <translation type="unfinished"/>
+        <translation>Введення нот: Половинна пауза</translation>
     </message>
     <message>
         <source>Quarter Rest</source>
-        <translation type="unfinished"/>
+        <translation>Четвертна пауза</translation>
     </message>
     <message>
         <source>Note input: Quarter rest</source>
-        <translation type="unfinished"/>
+        <translation>Введення нот: Четвертна пауза</translation>
     </message>
     <message>
         <source>Eighth Rest</source>
-        <translation type="unfinished"/>
+        <translation>Восьма пауза</translation>
     </message>
     <message>
         <source>Note input: Eighth rest</source>
-        <translation type="unfinished"/>
+        <translation>Введення нот: Восьма пауза</translation>
     </message>
     <message>
         <source>Zoom in</source>
-        <translation type="unfinished"/>
+        <translation>Збільшити</translation>
     </message>
     <message>
         <source>Zoom out</source>
-        <translation type="unfinished"/>
+        <translation>Зменшити</translation>
     </message>
     <message>
         <source>Mirror Note Head</source>
-        <translation type="unfinished"/>
+        <translation>Відзеркалити головку ноти</translation>
     </message>
     <message>
         <source>Double Duration</source>
-        <translation type="unfinished"/>
+        <translation>Подвійна тривалість</translation>
     </message>
     <message>
         <source>Half Duration</source>
-        <translation type="unfinished"/>
+        <translation>Половинна тривалість</translation>
     </message>
     <message>
         <source>Repeat Selection</source>
-        <translation type="unfinished"/>
+        <translation>Повторити вибране</translation>
     </message>
     <message>
         <source>Enharmonic Up</source>
-        <translation type="unfinished"/>
+        <translation>Енгармонічно вище</translation>
     </message>
     <message>
         <source>Enharmonic Down</source>
-        <translation type="unfinished"/>
+        <translation>Енгармонічно нижче</translation>
     </message>
     <message>
         <source>Create New Revision</source>
-        <translation type="unfinished"/>
+        <translation>Створити нову ревізію</translation>
     </message>
     <message>
         <source>Toggle Image Capture</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути захоплення зображення</translation>
     </message>
     <message>
         <source>Toggle image capture</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути захоплення зображення</translation>
     </message>
     <message>
         <source>Show OMR Image</source>
-        <translation type="unfinished"/>
+        <translation>Показати OMR зображення</translation>
     </message>
     <message>
         <source>Full screen</source>
-        <translation type="unfinished"/>
+        <translation>На повний екран</translation>
     </message>
     <message>
         <source>Enable Snap to Horizontal Grid</source>
-        <translation type="unfinished"/>
+        <translation>Включити прив&apos;язку до горизонтальної сітки</translation>
     </message>
     <message>
         <source>Enable Snap to Vertical Grid</source>
-        <translation type="unfinished"/>
+        <translation>Включити прив&apos;язку до вертикальної сітки</translation>
     </message>
     <message>
         <source>Configure Grid</source>
-        <translation type="unfinished"/>
+        <translation>Сконфігурувати сітку</translation>
     </message>
     <message>
         <source>Piano keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Клавіатура піаніно</translation>
     </message>
     <message>
         <source>Split measure</source>
-        <translation type="unfinished"/>
+        <translation>Розбити такт</translation>
     </message>
     <message>
         <source>Join measures</source>
-        <translation type="unfinished"/>
+        <translation>Об&apos;єднати такти</translation>
     </message>
     <message>
         <source>Page settings</source>
-        <translation type="unfinished"/>
+        <translation>Параметри сторінки</translation>
     </message>
     <message>
         <source>Next score</source>
-        <translation type="unfinished"/>
+        <translation>Наступна партитура</translation>
     </message>
     <message>
         <source>Previous score</source>
-        <translation type="unfinished"/>
+        <translation>Попередня партитура</translation>
     </message>
     <message>
         <source>Plugin creator</source>
-        <translation type="unfinished"/>
+        <translation>Створення додатків</translation>
     </message>
     <message>
         <source>Plugin manager</source>
-        <translation type="unfinished"/>
+        <translation>Керування додатками</translation>
     </message>
     <message>
         <source>Resource manager</source>
-        <translation type="unfinished"/>
+        <translation>Керування ресурсами</translation>
     </message>
     <message>
         <source>Show OMR panel</source>
-        <translation type="unfinished"/>
+        <translation>Показати OMR панель</translation>
     </message>
     <message>
         <source>Loop In</source>
-        <translation type="unfinished"/>
+        <translation>Початок зациклення</translation>
     </message>
     <message>
         <source>Loop Out</source>
-        <translation type="unfinished"/>
+        <translation>Кінець зациклення</translation>
     </message>
     <message>
         <source>Set loop out position</source>
-        <translation type="unfinished"/>
+        <translation>Вказати кінцеву позицію зациклення</translation>
     </message>
     <message>
         <source>Count-In</source>
-        <translation type="unfinished"/>
+        <translation>Зворотний відлік</translation>
     </message>
     <message>
         <source>Transpose up</source>
-        <translation type="unfinished"/>
+        <translation>Транспонувати догори</translation>
     </message>
     <message>
         <source>Transpose down</source>
-        <translation type="unfinished"/>
+        <translation>Транспонувати вниз</translation>
     </message>
     <message>
         <source>Toggle view mode</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути режим перегляду</translation>
     </message>
     <message>
         <source>Next Syllable</source>
-        <translation type="unfinished"/>
+        <translation>Наступний склад</translation>
     </message>
     <message>
         <source>Previous Syllable</source>
-        <translation type="unfinished"/>
+        <translation>Попередній склад</translation>
     </message>
     <message>
         <source>Toggle Visibility</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути видимість</translation>
     </message>
     <message>
         <source>Set Visible</source>
@@ -15505,119 +15284,119 @@ failed: </source>
     </message>
     <message>
         <source>Note Anchored Textline</source>
-        <translation type="unfinished"/>
+        <translation>Рядок тексту, прив’язаний до ноти</translation>
     </message>
     <message>
         <source>Note anchored textline</source>
-        <translation type="unfinished"/>
+        <translation>Рядок тексту, прив’язаний до ноти</translation>
     </message>
     <message>
         <source>Lock score</source>
-        <translation type="unfinished"/>
+        <translation>Заблокувати партитуру</translation>
     </message>
     <message>
         <source>Note duration: Longa (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: чотири цілих (ТАБ)</translation>
     </message>
     <message>
         <source>Double Whole Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Подвійна ціла нота (ТАБ)</translation>
     </message>
     <message>
         <source>Note duration: Double whole (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: подвійна ціла (ТАБ)</translation>
     </message>
     <message>
         <source>Whole Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Ціла нота (ТАБ)</translation>
     </message>
     <message>
         <source>Note duration: Whole (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: ціла (ТАБ)</translation>
     </message>
     <message>
         <source>Half Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Половинна нота (ТАБ)</translation>
     </message>
     <message>
         <source>Note duration: Half (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: половинна (ТАБ)</translation>
     </message>
     <message>
         <source>Quarter Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Четвертна нота (ТАБ)</translation>
     </message>
     <message>
         <source>Note duration: Quarter (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: четвертна (ТАБ)</translation>
     </message>
     <message>
         <source>Eighth Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Восьма нота (ТАБ)</translation>
     </message>
     <message>
         <source>Note duration: Eighth (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість ноти: восьма (ТАБ)</translation>
     </message>
     <message>
         <source>16th Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>16-а нота (ТАБ)</translation>
     </message>
     <message>
         <source>32nd Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>32-а нота (ТАБ)</translation>
     </message>
     <message>
         <source>64th Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>64-а нота (ТАБ)</translation>
     </message>
     <message>
         <source>128th Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>128-а нота (ТАБ)</translation>
     </message>
     <message>
         <source>Increase Active Duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Збільшити активну тривалість (таб.)</translation>
     </message>
     <message>
         <source>Decrease Active Duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Зменшити активну тривалість (таб.)</translation>
     </message>
     <message>
         <source>Note input: Rest (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Введення нот: пауза (таб.)</translation>
     </message>
     <message>
         <source>String Above (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Струна вище (таб.)</translation>
     </message>
     <message>
         <source>String Below (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Струна нижче (таб.)</translation>
     </message>
     <message>
         <source>Previous Beat (Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Попередня доля (Символ акорду)</translation>
     </message>
     <message>
         <source>Next Beat (Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Наступна доля (Символ акорду)</translation>
     </message>
     <message>
         <source>Add Brackets to Element</source>
-        <translation type="unfinished"/>
+        <translation>Додати дужки до елементу</translation>
     </message>
     <message>
         <source>Toggle Create Multimeasure Rest</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути створення багатотактових пауз</translation>
     </message>
     <message>
         <source>Bold Face</source>
-        <translation type="unfinished"/>
+        <translation>Жирний шрифт</translation>
     </message>
     <message>
         <source>Bold face</source>
-        <translation type="unfinished"/>
+        <translation>Жирний шрифт</translation>
     </message>
     <message>
         <source>Italic</source>
@@ -15629,39 +15408,39 @@ failed: </source>
     </message>
     <message>
         <source>Move Word Left</source>
-        <translation type="unfinished"/>
+        <translation>Пересунути слово ліворуч</translation>
     </message>
     <message>
         <source>Move word left</source>
-        <translation type="unfinished"/>
+        <translation>Пересунути слово ліворуч</translation>
     </message>
     <message>
         <source>Move Word Right</source>
-        <translation type="unfinished"/>
+        <translation>Пересунути слово праворуч</translation>
     </message>
     <message>
         <source>Move word right</source>
-        <translation type="unfinished"/>
+        <translation>Пересунути слово праворуч</translation>
     </message>
     <message>
         <source>Fill with slashes</source>
-        <translation type="unfinished"/>
+        <translation>Заповнити рисками</translation>
     </message>
     <message>
         <source>Toggle rhythmic slash notation</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути ритмічну нотацію рисками</translation>
     </message>
     <message>
         <source>Add/remove line breaks</source>
-        <translation type="unfinished"/>
+        <translation>Додати/вилучити лінії розриву</translation>
     </message>
     <message>
         <source>Resequence rehearsal marks</source>
-        <translation type="unfinished"/>
+        <translation>Переставити маркери репетиції</translation>
     </message>
     <message>
         <source>Start center</source>
-        <translation type="unfinished"/>
+        <translation>Центр запуску</translation>
     </message>
     <message>
         <source>Longa Advance (F.B./Chord Symbol)</source>
@@ -15753,35 +15532,35 @@ failed: </source>
     </message>
     <message>
         <source>Toggle staccato</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути стакато</translation>
     </message>
     <message>
         <source>Toggle tenuto</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути тенуто</translation>
     </message>
     <message>
         <source>Toggle trill</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути трель</translation>
     </message>
     <message>
         <source>Toggle marcato</source>
-        <translation type="unfinished"/>
+        <translation>Перемкнути маркато</translation>
     </message>
     <message>
         <source>Import PDF...</source>
-        <translation type="unfinished"/>
+        <translation>Імпорт PDF...</translation>
     </message>
     <message>
         <source>Import PDF</source>
-        <translation type="unfinished"/>
+        <translation>Імпорт PDF</translation>
     </message>
     <message>
         <source>Import a PDF file with an experimental service on musescore.com</source>
-        <translation type="unfinished"/>
+        <translation>Імпорт PDF файлу за допомогою експериментального сервісу musescore.com</translation>
     </message>
     <message>
         <source>Set loop in position</source>
-        <translation type="unfinished"/>
+        <translation>Вказати початкову позицію зациклення</translation>
     </message>
 </context>
 <context>
@@ -15793,7 +15572,8 @@ failed: </source>
     <message>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
-        <translation type="unfinished"/>
+        <translation>Неможливо переписати такти:
+особливий ритмічний поділ опиниться між тактами</translation>
     </message>
     <message>
         <source>Cannot change local time signature:
@@ -15866,15 +15646,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Fade in</source>
-        <translation type="unfinished"/>
+        <translation>Плавна поява</translation>
     </message>
     <message>
         <source>Fade out</source>
-        <translation type="unfinished"/>
+        <translation>Плавне згасання</translation>
     </message>
     <message>
         <source>Volume swell</source>
-        <translation type="unfinished"/>
+        <translation>Наростання гучності</translation>
     </message>
     <message>
         <source>Wiggle sawtooth</source>
@@ -15902,19 +15682,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Up bow</source>
-        <translation type="unfinished"/>
+        <translation>Смичок догори</translation>
     </message>
     <message>
         <source>Down bow</source>
-        <translation type="unfinished"/>
+        <translation>Смичок вниз</translation>
     </message>
     <message>
         <source>Reverse turn</source>
-        <translation type="unfinished"/>
+        <translation>Зворотний поворот</translation>
     </message>
     <message>
         <source>Turn</source>
-        <translation type="unfinished"/>
+        <translation>Поворот</translation>
     </message>
     <message>
         <source>Trill</source>
@@ -15922,7 +15702,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Prall</source>
-        <translation type="unfinished"/>
+        <translation>Пральтріллер</translation>
     </message>
     <message>
         <source>Mordent</source>
@@ -15930,19 +15710,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Prall prall</source>
-        <translation type="unfinished"/>
+        <translation>Подвійний мордент</translation>
     </message>
     <message>
         <source>Prall mordent</source>
-        <translation type="unfinished"/>
+        <translation>Подвійний нижній мордент</translation>
     </message>
     <message>
         <source>Up prall</source>
-        <translation type="unfinished"/>
+        <translation>Мордент вгорі</translation>
     </message>
     <message>
         <source>Down prall</source>
-        <translation type="unfinished"/>
+        <translation>Мордент знизу</translation>
     </message>
     <message>
         <source>Up mordent</source>
@@ -15954,15 +15734,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Prall down</source>
-        <translation type="unfinished"/>
+        <translation>Мордент вниз</translation>
     </message>
     <message>
         <source>Prall up</source>
-        <translation type="unfinished"/>
+        <translation>Мордент вгору</translation>
     </message>
     <message>
         <source>Line prall</source>
-        <translation type="unfinished"/>
+        <translation>Лінійний мордент</translation>
     </message>
     <message>
         <source>Schleifer</source>
@@ -15974,19 +15754,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Tapping</source>
-        <translation type="unfinished"/>
+        <translation>Теппінг </translation>
     </message>
     <message>
         <source>Slapping</source>
-        <translation type="unfinished"/>
+        <translation>Слеппінг</translation>
     </message>
     <message>
         <source>Popping</source>
-        <translation type="unfinished"/>
+        <translation>Поппінг</translation>
     </message>
     <message>
         <source>Thumb pos.</source>
-        <translation type="unfinished"/>
+        <translation>Позиція великого пальця</translation>
     </message>
     <message>
         <source>Lute thumb fing.</source>
@@ -17022,19 +16802,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Mute Triangle</source>
-        <translation type="unfinished"/>
+        <translation>Приглушений трикутник</translation>
     </message>
     <message>
         <source>Open Triangle</source>
-        <translation type="unfinished"/>
+        <translation>Відкритий трикутник</translation>
     </message>
     <message>
         <source>Shaker</source>
-        <translation type="unfinished"/>
+        <translation>Шейкер</translation>
     </message>
     <message>
         <source>Bell Tree</source>
-        <translation type="unfinished"/>
+        <translation>Дерево дзвонів</translation>
     </message>
     <message>
         <source>Mute Surdo</source>
@@ -17050,11 +16830,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Китайські тарілки</translation>
     </message>
     <message>
         <source>Splash Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Сплеш</translation>
     </message>
     <message>
         <source>Crash Cymbal 2</source>
@@ -17443,7 +17223,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Staff State</source>
-        <translation type="unfinished"/>
+        <translation>Стан нотоносця</translation>
     </message>
     <message>
         <source>Ledger Line</source>
@@ -17459,11 +17239,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Shadow Note</source>
-        <translation type="unfinished"/>
+        <translation>Тіньова нота</translation>
     </message>
     <message>
         <source>Rubber Band</source>
-        <translation type="unfinished"/>
+        <translation>Резинова стрічка</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>
@@ -17535,15 +17315,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Melisma Line</source>
-        <translation type="unfinished"/>
+        <translation>Рядок мелізматичного співу</translation>
     </message>
     <message>
         <source>Glissando Segment</source>
-        <translation type="unfinished"/>
+        <translation>Сегмент ґлісандо</translation>
     </message>
     <message>
         <source>Melisma Line Segment</source>
-        <translation type="unfinished"/>
+        <translation>Сегмент рядка мелізматичного співу</translation>
     </message>
 </context>
 <context>
@@ -17875,23 +17655,23 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Breath Marks</source>
-        <translation type="unfinished"/>
+        <translation>Позначки дихання</translation>
     </message>
     <message>
         <source>Voice 1</source>
-        <translation type="unfinished"/>
+        <translation>Голос 1</translation>
     </message>
     <message>
         <source>Voice 2</source>
-        <translation type="unfinished"/>
+        <translation>Голос 2</translation>
     </message>
     <message>
         <source>Voice 3</source>
-        <translation type="unfinished"/>
+        <translation>Голос 3</translation>
     </message>
     <message>
         <source>Voice 4</source>
-        <translation type="unfinished"/>
+        <translation>Голос 4</translation>
     </message>
 </context>
 <context>
@@ -17938,15 +17718,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Upprall line</source>
-        <translation type="unfinished"/>
+        <translation>Мордент вгору</translation>
     </message>
     <message>
         <source>Downprall line</source>
-        <translation type="unfinished"/>
+        <translation>Мордент вниз</translation>
     </message>
     <message>
         <source>Prallprall line</source>
-        <translation type="unfinished"/>
+        <translation>Подвійний мордент</translation>
     </message>
     <message>
         <source>Wavy line</source>
