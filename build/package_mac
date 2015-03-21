@@ -138,4 +138,6 @@ hdiutil detach $DEV
 # Convert the disk image to read-only
 hdiutil convert ${WORKING_DIRECTORY}/${DMGNAME} -format UDBZ -o ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
 
+shasum -a 256 ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
+
 rm ${WORKING_DIRECTORY}/${DMGNAME}
