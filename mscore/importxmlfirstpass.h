@@ -27,6 +27,14 @@ public:
       const QString instrument(const Fraction f) const;
       void setInstrument(const QString instr, const Fraction f);
 };
+      
+class MusicXmlOctaveShiftList : public std::map<Fraction, int> {
+public:
+      MusicXmlOctaveShiftList() {}
+      int octaveShift(const Fraction f) const;
+      void addOctaveShift(const int shift, const Fraction f);
+      void calcOctaveShiftShifts();
+};
 
 class MusicXmlPart {
 public:
@@ -38,11 +46,15 @@ public:
       Fraction measureDuration(int i) const;
       int nMeasures() const { return measureDurations.size(); }
       MusicXmlInstrList _instrList; // TODO: make private
+      int octaveShift(const int staff, const Fraction f) const;
+      void addOctaveShift(const int staff, const int shift, const Fraction f);
+      void calcOctaveShifts();
 private:
       QString id;
       QString name;
       QStringList measureNumbers;             // MusicXML measure number attribute
       QList<Fraction> measureDurations;       // duration in fraction for every measure
+      QVector<MusicXmlOctaveShiftList> octaveShifts; // octave shift list for every staff
       };
 
 class MxmlReaderFirstPass {

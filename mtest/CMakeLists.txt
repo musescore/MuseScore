@@ -76,6 +76,9 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_instrument.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_chordname.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmxml.cpp               # required by importxml.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmxmlpass1.cpp          # required by importxml.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmxmlpass2.cpp          # required by importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlfonthandler.cpp

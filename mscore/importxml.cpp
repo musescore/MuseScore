@@ -107,6 +107,7 @@
 #include "libmscore/marker.h"
 #include "importxmlfirstpass.h"
 #include "libmscore/instrchange.h"
+#include "importmxml.h"
 
 namespace Ms {
 
@@ -116,6 +117,12 @@ namespace Ms {
 
 //#define DEBUG_VOICE_MAPPER true
 //#define DEBUG_TICK true
+
+//---------------------------------------------------------
+//   local define to switch between pull (defined true) and DOM (undefined) parser
+//---------------------------------------------------------
+
+#define PULL_PARSER true
 
 //---------------------------------------------------------
 //   MusicXMLStepAltOct2Pitch
@@ -604,6 +611,7 @@ static Score::FileError doValidate(const QString& name, QIODevice* dev)
  Import MusicXML data from file \a name contained in QIODevice \a dev into score \a score.
  */
 
+#ifndef PULL_PARSER
 static Score::FileError doImport(Score* score, const QString& name, QIODevice* dev, MxmlReaderFirstPass const& pass1)
       {
       QTime t;
@@ -623,6 +631,7 @@ static Score::FileError doImport(Score* score, const QString& name, QIODevice* d
       qDebug("Parsing time elapsed: %d ms", t.elapsed());
       return Score::FileError::FILE_NO_ERROR;
       }
+#endif
 
 
 //---------------------------------------------------------
@@ -641,6 +650,9 @@ static Score::FileError doValidateAndImport(Score* score, const QString& name, Q
       if (res != Score::FileError::FILE_NO_ERROR)
             return res;
 
+#ifdef PULL_PARSER
+      importMusicXMLfromBuffer(score, name, dev);
+#else
       // pass 1
       dev->seek(0);
       MxmlReaderFirstPass pass1;
@@ -652,6 +664,7 @@ static Score::FileError doValidateAndImport(Score* score, const QString& name, Q
       // import the file
       dev->seek(0);
       res = doImport(score, name, dev, pass1);
+#endif
       qDebug("importMusicXml() return %hhd", res);
       return res;
       }
