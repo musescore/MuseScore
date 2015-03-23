@@ -1728,6 +1728,8 @@ bool Preferences::readPluginList()
                                     else
                                           e.unknown();
                                     }
+                              d.shortcut.setState(STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT |
+                                          STATE_ALLTEXTUAL_EDIT | STATE_PLAY | STATE_FOTO | STATE_LOCK );
                               if (d.path.endsWith(".qml"))
                                     pluginList.append(d);
                               }
