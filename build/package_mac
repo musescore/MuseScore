@@ -129,6 +129,7 @@ mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
 
 #codesign
 codesign --deep -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app"
+#codesign --deep -s "3rd Party Mac Developer Application: MuseScore (6EPAF2X3PR)" --entitlements build/mscore.entitlements "${VOLUME}/${LONGER_NAME}.app"
 codesign -v "${VOLUME}/${LONGER_NAME}.app"
 spctl --assess --type execute "${VOLUME}/${LONGER_NAME}.app"
  
