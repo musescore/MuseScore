@@ -4528,11 +4528,11 @@ int main(int argc, char* av[])
       revision = QString(f.readAll()).trimmed();
       f.close();
 
-      MuseScoreApplication* app = new MuseScoreApplication("mscore2", argc, av);
+      MuseScoreApplication* app = new MuseScoreApplication("mscore-dev", argc, av);
 
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
-      QCoreApplication::setApplicationName("MuseScore2");
+      QCoreApplication::setApplicationName("MuseScoreDevelopment");
       QCoreApplication::setApplicationVersion(VERSION);
       QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
       QAccessible::installFactory(AccessibleSearchBox::SearchBoxFactory);
