@@ -952,10 +952,8 @@ MuseScore::MuseScore()
       menuHelp->addAction(tr("Check for &Update"), this, SLOT(checkForUpdate()));
 #endif
 
-#ifdef MSCORE_UNSTABLE
       menuHelp->addSeparator();
       menuHelp->addAction(tr("Report a Bug"), this, SLOT(reportBug()));
-#endif
 
       menuHelp->addSeparator();
       menuHelp->addAction(getAction("resource-manager"));
@@ -2854,12 +2852,9 @@ AboutBoxDialog::AboutBoxDialog()
 #endif
       revisionLabel->setText(tr("Revision: %1").arg(revision));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-#ifdef MSCORE_UNSTABLE
+
       copyRevisionButton->setIcon(*icons[int(Icons::copy_ICON)]);
       connect(copyRevisionButton, SIGNAL(clicked()), this, SLOT(copyRevisionToClipboard()));
-#else
-      copyRevisionButton->hide();
-#endif
       }
 
 //---------------------------------------------------------
