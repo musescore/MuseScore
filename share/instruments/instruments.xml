@@ -8888,6 +8888,7 @@
                   <Channel>
                         <program value="24"/>
                   </Channel>
+                  <genre>common</genre>
             </Instrument>
             <Instrument id="ukulele-4-str-tab">
                   <trackName>Ukulele [Tablature]</trackName>
@@ -8896,6 +8897,7 @@
                   <musicXMLid>pluck.ukulele</musicXMLid>
                   <stafftype staffTypePreset="tabUkulele">tablature</stafftype>
 <!--                  <clef>TAB</clef> -->
+                  <genre>common</genre>
             </Instrument>
             <Instrument id="tenor-ukulele">
                   <longName>Tenor Ukulele</longName>
