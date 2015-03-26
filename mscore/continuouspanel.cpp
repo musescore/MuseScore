@@ -45,8 +45,7 @@ ContinuousPanel::ContinuousPanel(ScoreView* sv)
       _offsetPanel            = 0.0;
       _x                      = 0.0;
       _y                      = 0.0;
-      _heightName             = 0.0;
-      _lineHeightName         = 0.0;
+      _lineWidthName          = 0.0;
       _widthClef              = 0.0;
       _widthKeySig            = 0.0;
       _widthTimeSig           = 0.0;
@@ -176,8 +175,7 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
       //
       // The first pass serves to get the maximum width for each elements
       //
-      _heightName = 0;
-      _lineHeightName = 0;
+      _lineWidthName = 0;
       _widthClef = 0;
       _widthKeySig = 0;
       _widthTimeSig = 0;
@@ -194,19 +192,22 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   Segment* parent = _score->tick2segment(_currentMeasureTick);
 
                   //
-                  // Find maximum height for the staff name
-                  //
-                  QList<StaffName>& staffNamesShort = currentStaff->part()->instr()->shortNames();
-                  QString staffName = staffNamesShort.isEmpty() ? "" : staffNamesShort[0].name;
-                  if (staffName == "") {
-                        QList<StaffName>& staffNamesLong = currentStaff->part()->instr()->longNames();
-                        staffName = staffNamesLong.isEmpty() ? " " : staffNamesLong[0].name;
-                  }
-                  Text* newName = new Text(_score);
-                  newName->setText(staffName);
-                  newName->setParent(parent);
-                  newName->setTrack(e->track());
-                  newName->layout();
+                 // Find maximum height for the staff name
+                 //
+                 QList<StaffName>& staffNamesShort = currentStaff->part()->instr()->shortNames();
+                 QString staffName = staffNamesShort.isEmpty() ? "" : staffNamesShort[0].name;
+                 if (staffName == "") {
+                 QList<StaffName>& staffNamesLong = currentStaff->part()->instr()->longNames();
+                 staffName = staffNamesLong.isEmpty() ? " " : staffNamesLong[0].name;
+                 }
+                 Text* newName = new Text(_score);
+                 newName->textStyle().setSizeIsSpatiumDependent(true);
+                 newName->textStyle().setSize(7);
+                 newName->setText(staffName);
+                 newName->setParent(parent);
+                 newName->setTrack(e->track());
+                 newName->layout();
+
 
                   //
                   // Find maximum width for the current Clef
@@ -246,11 +247,8 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   newTs->setTrack(e->track());
                   newTs->layout();
 
-                  if ((newName->height() > _heightName) && (newName->text() != ""))
-                        _heightName = newName->height();
-
-                  if ((newName->lineHeight() > _lineHeightName) && (newName->text() != ""))
-                        _lineHeightName = newName->lineHeight();
+                  if ((newName->width() > _lineWidthName) && (newName->text() != ""))
+                        _lineWidthName = newName->width();
 
                   if (newClef->width() > _widthClef)
                         _widthClef = newClef->width();
@@ -261,8 +259,8 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   if (newTs->width() > _widthTimeSig)
                         _widthTimeSig = newTs->width();
 
-                  delete newClef;
                   delete newName;
+                  delete newClef;
                   delete newKs;
                   delete newTs;
                  }
@@ -271,8 +269,13 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
       _leftMarginTotal = _score->styleP(StyleIdx::clefLeftMargin);
       _leftMarginTotal += _score->styleP(StyleIdx::keysigLeftMargin);
       _leftMarginTotal += _score->styleP(StyleIdx::timesigLeftMargin);
+      _lineWidthName += _score->styleP(StyleIdx::clefLeftMargin) + _widthClef;
 
-      _newWidth = _heightName + _widthClef + _widthKeySig + _widthTimeSig + _leftMarginTotal + _panelRightPadding;
+      _newWidth = _widthClef + _widthKeySig + _widthTimeSig + _leftMarginTotal + _panelRightPadding;
+      if( _newWidth < _lineWidthName ){
+          _newWidth = _lineWidthName;
+          _oldWidth = 0;
+      }
       _xPosMeasure -= _offsetPanel;
       //qDebug() << "_xPosMeasure="<< _xPosMeasure << "_width ="<<_width<< " offsetpanel ="<<_offsetPanel << "newWidth ="<<_newWidth  << "oldWidth ="<<_oldWidth << "_measureWidth ="<<_measureWidth;
       if (_oldWidth == 0) {
@@ -296,7 +299,7 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   }
             }
 
-      _rect = QRect(0, _y, _width, _height);
+            _rect = QRect(0, _y, _width, _height);
       }
 
 //---------------------------------------------------------
@@ -317,7 +320,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
       pen.setWidthF(0.0);
       pen.setStyle( Qt::NoPen );
       painter.setPen(pen);
-      painter.setOpacity(0.80);
+      painter.setOpacity(0.40);
       painter.setBrush(QColor(205, 210, 235, 255));
       painter.drawRect(_rect);
       painter.setClipRect(_rect);
@@ -333,8 +336,9 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
       newElement->setTextStyleType(TextStyleType::DEFAULT);
       newElement->setFlag(ElementFlag::MOVABLE, false);
       newElement->setText(text);
+      newElement->textStyle().setSizeIsSpatiumDependent(true);
       newElement->sameLayout();
-      pos = QPointF (_heightName * 1.5, _y + newElement->height());
+      pos = QPointF (0, _y + newElement->height());
       painter.translate(pos);
       newElement->draw(&painter);
       pos += QPointF (_offsetPanel, 0);
@@ -355,6 +359,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                   Staff* currentStaff = _score->staff(e->staffIdx());
                   Segment* parent = _score->tick2segmentMM(_currentMeasureTick);
 
+
                   //
                   // Get barline height (used to center instrument name
                   //
@@ -367,37 +372,9 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                   newBarLine->setSpanTo(currentStaff->barLineTo());
                   newBarLine->layout();
 
-                  //
-                  // Draw the current staff name
-                  //
-                  QList<StaffName>& staffNamesShort = currentStaff->part()->instr()->shortNames();
-                  QString staffName = staffNamesShort.isEmpty() ? "" : staffNamesShort[0].name;
-                  if (staffName == "") {
-                        QList<StaffName>& staffNamesLong = currentStaff->part()->instr()->longNames();
-                        staffName = staffNamesLong.isEmpty() ? " " : staffNamesLong[0].name;
-                  }
 
-                  Text* newName = new Text(_score);
-                  newName->setText(staffName);
-                  newName->setParent(parent);
-                  newName->setTrack(e->track());
-                  newName->layout();
                   pos = QPointF (_offsetPanel, e->pagePos().y());
                   painter.translate(pos);
-
-                  //if (currentStaff->part()->startTrack() == currentStaff->idx() * VOICES) {
-                  if (currentStaff->part()->staff(0) == currentStaff) {
-                        painter.rotate(-90);
-                        pos = QPointF (- newBarLine->height() / 2 - newName->width() / 2, _heightName - newName->height() + _lineHeightName * 0.8);  // Because we rotate the canvas, height and width are swaped
-                        painter.translate(pos);
-                        newName->draw(&painter);
-                        //qDebug() << "_heightName=" << _heightName << "Barline height=" << newBarLine->height() << "  newName->height=" << newName->height() << "  staff (e->height)=" << e->height() << "  newName->width()=" << newName->width() << "  newName->linespace()=" << newName->lineSpacing() << "  newName->lineHeight()=" << newName->lineHeight() << " pos (" << pos.x() << "," << pos.y() << ")";
-                        painter.translate(-pos);
-                        painter.rotate(90);
-                  }
-                  pos = QPointF (_heightName, 0);
-                  painter.translate(pos);
-                  delete newName;
 
                   //
                   // Draw staff lines
@@ -431,6 +408,35 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                   pos = QPointF(_widthClef,0);
                   painter.translate(pos);
                   delete newClef;
+
+
+                  //
+                  // Draw the current staff name
+                  //
+                  QList<StaffName>& staffNamesShort = currentStaff->part()->instr()->shortNames();
+                  QString staffName = staffNamesShort.isEmpty() ? "" : staffNamesShort[0].name;
+                  if (staffName == "") {
+                        QList<StaffName>& staffNamesLong = currentStaff->part()->instr()->longNames();
+                        staffName = staffNamesLong.isEmpty() ? " " : staffNamesLong[0].name;
+                  }
+
+                  Text* newName = new Text(_score);
+                  newName->textStyle().setSizeIsSpatiumDependent(true);
+                  newName->textStyle().setSize(7);
+                  newName->setText(staffName);
+                  newName->setParent(parent);
+                  newName->setTrack(e->track());
+                  newName->layout();
+                  if (currentStaff->part()->staff(0) == currentStaff) {
+                        double _spatium = _score->spatium();
+                        pos = QPointF (- _spatium/2, 0 - _spatium * 2);
+                        painter.translate(pos);
+                        newName->draw(&painter);
+                        //qDebug() << "_heightName=" << _heightName << "Barline height=" << newBarLine->height() << "  newName->height=" << newName->height() << "  staff (e->height)=" << e->height() << "  newName->width()=" << newName->width() << "  newName->linespace()=" << newName->lineSpacing() << "  newName->lineHeight()=" << newName->lineHeight() << " pos (" << pos.x() << "," << pos.y() << ")";
+                        painter.translate(-pos);
+                  }
+                  delete newName;
+
 
                   //
                   // Draw the current KeySignature
@@ -473,7 +479,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                       newTs->draw(&painter);
                       delete newTs;
                       }
-                  pos = QPointF(_offsetPanel + _heightName + _widthClef + _widthKeySig + _xPosTimeSig + _leftMarginTotal, e->pagePos().y());
+                  pos = QPointF(_offsetPanel + _widthClef + _widthKeySig + _xPosTimeSig + _leftMarginTotal, e->pagePos().y());
                   painter.translate(-pos);
                   }
             }
