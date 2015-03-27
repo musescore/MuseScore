@@ -35,6 +35,7 @@ extern int updateVersion();
 //   QmlPlugin
 //   @@ MuseScore
 //   @P menuPath             QString           where the plugin is placed in menu
+//   @P filePath             QString           source file path, without the file name (read only)
 //   @P version              QString
 //   @P description          QString
 //   @P pluginType           QString
@@ -52,6 +53,7 @@ extern int updateVersion();
 class QmlPlugin : public QQuickItem {
       Q_OBJECT
       Q_PROPERTY(QString menuPath        READ menuPath WRITE setMenuPath)
+      Q_PROPERTY(QString filePath        READ filePath)
       Q_PROPERTY(QString version         READ version WRITE setVersion)
       Q_PROPERTY(QString description     READ description WRITE setDescription)
       Q_PROPERTY(QString pluginType      READ pluginType WRITE setPluginType)
@@ -73,6 +75,8 @@ class QmlPlugin : public QQuickItem {
       QString _version;
       QString _description;
 
+   protected:
+      QString _filePath;            // the path of the source file, without file name
    signals:
       void run();
 
@@ -86,6 +90,8 @@ class QmlPlugin : public QQuickItem {
       QString version() const              { return _version; }
       void setDescription(const QString& s) { _description = s; }
       QString description() const          { return _description; }
+      void setFilePath(const QString s)   { _filePath = s;        }
+      QString filePath() const            { return _filePath;     }
 
       void setPluginType(const QString& s) { _pluginType = s;    }
       QString pluginType() const           { return _pluginType; }
