@@ -3,7 +3,7 @@
 //  Music Composition & Notation
 //
 //  Copyright (C) 2012 Werner Schweer
-//  Copyright (C) 2013, 2014 Nicolas Froment, Joachim Schmitz
+//  Copyright (C) 2013-2015 Nicolas Froment, Joachim Schmitz
 //  Copyright (C) 2014 Jörn Eichler
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -72,7 +72,8 @@ MuseScore {
                                     for (var i = 0; i < graceChords.length; i++) {
                                           // iterate through all grace chords
                                           var notes = graceChords[i].notes;
-                                          func(note);
+                                          for (var j = 0; j < notes.length; j++)
+                                                func(notes[j]);
                                     }
                                     var notes = cursor.element.notes;
                                     for (var i = 0; i < notes.length; i++) {
@@ -91,7 +92,23 @@ MuseScore {
                   note.color = colors[note.pitch % 12];
             else
                   note.color = black;
-      }
+
+            if (note.accidental) {
+                  if (note.accidental.color == black)
+                        note.accidental.color = colors[note.pitch % 12];
+                  else
+                        note.accidental.color = black;
+                  }
+
+            for (var i = 0; i < note.dots.length; i++) {
+                  if (note.dots[i]) {
+                        if (note.dots[i].color == black)
+                              note.dots[i].color = colors[note.pitch % 12];
+                        else
+                              note.dots[i].color = black;
+                        }
+                  }
+         }
 
       onRun: {
             console.log("hello colornotes");
