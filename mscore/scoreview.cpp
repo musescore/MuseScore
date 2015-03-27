@@ -4416,10 +4416,20 @@ void ScoreView::cmdChangeEnharmonic(bool up)
                               break;
                               }
                         }
-                  if (i == 36)
+                  if (i == 36) {
                         qDebug("tpc %d not found", tpc);
-                  else
+                        }
+                  else {
                         n->undoSetTpc(tpc);
+                        if (up) {
+                              // change both spellings
+                              int t = n->transposeTpc(tpc);
+                              if (n->concertPitch())
+                                    n->undoSetTpc2(t);
+                              else
+                                    n->undoSetTpc1(t);
+                              }
+                        }
                   }
             }
       _score->endCmd();
