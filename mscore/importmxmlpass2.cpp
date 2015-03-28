@@ -3459,11 +3459,12 @@ static Rest* addRest(Score* score, Measure* m,
 
 /**
  * Find (or create if not found) the chord at \a tick and \a track.
- * TODO: beammode
+ * Note: staff move is a note property in MusicXML, but chord property in MuseScore
+ * This is simply ignored here, effectively using the last chords value.
  */
 
 static Chord* findOrCreateChord(Score* score, Measure* m,
-                                const int tick, const int track,
+                                const int tick, const int track, const int move,
                                 const TDuration duration, const Fraction dura,
                                 Beam::Mode bm)
       {
@@ -3478,6 +3479,7 @@ static Chord* findOrCreateChord(Score* score, Measure* m,
             Segment* s = m->getSegment(c, tick);
             s->add(c);
             }
+      c->setStaffMove(move);
       return c;
       }
 
@@ -3839,18 +3841,20 @@ void MusicXMLParserPass2::note(const QString& partId,
             int track = msTrack + msVoice;
             cr = addRest(_score, measure, sTime.ticks(), track, msMove,
                          duration, dura);
-            if (currBeam) {
-                  if (currBeam->track() == track) {
-                        cr->setBeamMode(Beam::Mode::MID);
-                        currBeam->add(cr);
+            if (cr) {
+                  if (currBeam) {
+                        if (currBeam->track() == track) {
+                              cr->setBeamMode(Beam::Mode::MID);
+                              currBeam->add(cr);
+                              }
+                        else
+                              removeBeam(currBeam);
                         }
                   else
-                        removeBeam(currBeam);
+                        cr->setBeamMode(Beam::Mode::NONE);
+                  cr->setVisible(printObject);
+                  handleDisplayStep(cr, displayStep, displayOctave, sTime.ticks(), _score->spatium());
                   }
-            else
-                  cr->setBeamMode(Beam::Mode::NONE);
-            cr->setVisible(printObject);
-            handleDisplayStep(cr, displayStep, displayOctave, sTime.ticks(), _score->spatium());
             }
       else {
             Chord* c;
@@ -3861,7 +3865,7 @@ void MusicXMLParserPass2::note(const QString& partId,
                   // this basically ignores <chord/> errors
                   c = findOrCreateChord(_score, measure,
                                         chord ? prevSTime.ticks() : sTime.ticks(),
-                                        msTrack + msVoice,
+                                        msTrack + msVoice, msMove,
                                         duration, dura, bm);
                   // handle beam
                   if (!chord)
