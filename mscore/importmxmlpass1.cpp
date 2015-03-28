@@ -402,7 +402,7 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int m
             return false;
             }
 
-      msMove  = s - mxStaff; // TODO check !!!
+      msMove  = mxStaff - s;
       msVoice = v;
 
       // make score-relative instead on part-relative
@@ -1628,8 +1628,8 @@ void MusicXMLParserPass1::scorePart()
                   // It is displayed by default, but can be suppressed (print-object=”no”)
                   // As of MusicXML 3.0, formatting is deprecated, with part-name in plain text
                   // and the formatted version in the part-name-display element
-                  QString name = _e.readElementText();
                   bool doLong = !(_e.attributes().value("print-object") == "no");
+                  QString name = _e.readElementText();
                   if (_parts.contains(id))
                         logError(QString("duplicate part id '%1'").arg(id));
                   else {
