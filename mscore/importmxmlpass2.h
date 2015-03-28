@@ -118,7 +118,7 @@ public:
       void rest(int& step, int& octave);
       void lyric(QMap<int, Lyrics*>& numbrdLyrics, QMap<int, Lyrics*>& defyLyrics,
                  QList<Lyrics*>& unNumbrdLyrics);
-      void notations(Note* note, ChordRest* cr, MusicXmlTupletDesc& tupletDesc);
+      void notations(Note* note, ChordRest* cr, const int tick, MusicXmlTupletDesc& tupletDesc);
       void stem(MScore::Direction& sd, bool nost);
       void fermata(ChordRest* cr);
       void tuplet(MusicXmlTupletDesc& tupletDesc);
