@@ -5237,7 +5237,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick, M
  Parse the /score-partwise/part/measure/note/stem node.
  */
 
-void MusicXMLParserPass2::stem(MScore::Direction& sd, bool nost)
+void MusicXMLParserPass2::stem(MScore::Direction& sd, bool& nost)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "stem");
 
