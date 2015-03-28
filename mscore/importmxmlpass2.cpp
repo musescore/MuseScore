@@ -3468,7 +3468,8 @@ static Chord* findOrCreateChord(Score* score, Measure* m,
                                 const TDuration duration, const Fraction dura,
                                 Beam::Mode bm)
       {
-      //qDebug("findOrCreateChord dur ticks %d ticks %s", duration.ticks(), qPrintable(dura.print()));
+      //qDebug("findOrCreateChord tick %d track %d dur ticks %d ticks %s",
+      //       tick, track, duration.ticks(), qPrintable(dura.print()));
       Chord* c = m->findChord(tick, track);
       if (c == 0) {
             c = new Chord(score);
@@ -3989,7 +3990,7 @@ void MusicXMLParserPass2::note(const QString& partId,
             if (_e.name() == "lyric")
                   lyric(numberedLyrics, defaultyLyrics, unNumberedLyrics);  // TODO: move track handling to addlyric
             else if (_e.name() == "notations")
-                  notations(note, cr, tupletDesc);
+                  notations(note, cr, sTime.ticks(), tupletDesc);
             else
                   skipLogCurrElem();
 
@@ -4757,12 +4758,11 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
  Read MusicXML notations.
  */
 
-void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, MusicXmlTupletDesc& tupletDesc)
+void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick, MusicXmlTupletDesc& tupletDesc)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "notations");
 
       Measure* measure = cr->measure();
-      int tick = cr->tick();
       int ticks = cr->duration().ticks();
       int track = cr->track();
       int trk = (track / VOICES) * VOICES; // first track of staff
