@@ -1729,6 +1729,67 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const MScor
             beam = 0;
       }
 
+
+//---------------------------------------------------------
+//   measure
+//---------------------------------------------------------
+
+/**
+ Check for "superfluous" accidentals to mark them as USER accidentals.
+ The candiadates list courtAccNotes is ordered voice after voice. Check it here segment after segment.
+ */
+static void markUserAccidentals(const int firstStaff,
+                                const int staves,
+                                const Key key,
+                                const Measure* measure,
+                                const QMap<Note*, int>& alterMap
+                                )
+      {
+      QMap<int, bool> accTmp;
+
+      AccidentalState currAcc;
+      currAcc.init(key);
+      Segment::Type st = Segment::Type::ChordRest;
+      for (Ms::Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
+            for (int track = 0; track < staves * VOICES; ++track) {
+                  Element* e = segment->element(firstStaff * VOICES + track);
+                  if (!e || e->type() != Ms::Element::Type::CHORD)
+                        continue;
+                  Chord* chord = static_cast<Chord*>(e);
+                  foreach (Note* nt, chord->notes()) {
+                        if (alterMap.contains(nt)) {
+                              int alter = alterMap.value(nt);
+                              int ln  = absStep(nt->tpc(), nt->pitch());
+                              AccidentalVal currAccVal = currAcc.accidentalVal(ln);
+                              if ((alter == -1
+                                   && currAccVal == AccidentalVal::FLAT
+                                   && nt->accidental()->accidentalType() == Accidental::Type::FLAT
+                                   && !accTmp.value(ln, false))
+                                  || (alter ==  0
+                                      && currAccVal == AccidentalVal::NATURAL
+                                      && nt->accidental()->accidentalType() == Accidental::Type::NATURAL
+                                      && !accTmp.value(ln, false))
+                                  || (alter ==  1
+                                      && currAccVal == AccidentalVal::SHARP
+                                      && nt->accidental()->accidentalType() == Accidental::Type::SHARP
+                                      && !accTmp.value(ln, false))) {
+                                    nt->accidental()->setRole(Accidental::Role::USER);
+                                    }
+                              else if (nt->accidental()->accidentalType() > Accidental::Type::NATURAL
+                                       && nt->accidental()->accidentalType() < Accidental::Type::END) {
+                                    // microtonal accidental
+                                    nt->accidental()->setRole(Accidental::Role::USER);
+                                    accTmp.insert(ln, false);
+                                    }
+                              else {
+                                    accTmp.insert(ln, true);
+                                    }
+                              }
+                        }
+                  }
+            }
+      }
+
 //---------------------------------------------------------
 //   measure
 //---------------------------------------------------------
@@ -1736,9 +1797,6 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const MScor
 /**
  Parse the /score-partwise/part/measure node.
  */
-
-// TODO how to handle DOM parsers xmlMeasure() courtAccNotes, alterList, alt and accTmp
-// assume this causes the testAccidentals3.xml failure
 
 void MusicXMLParserPass2::measure(const QString& partId,
                                   const Fraction time)
@@ -1765,6 +1823,9 @@ void MusicXMLParserPass2::measure(const QString& partId,
       QString cv = "1";       // current voice for chords, default is 1
       FiguredBassList fbl;               // List of figured bass elements under a single note
 
+      // collect candidates for courtesy accidentals to work out at measure end
+      QMap<Note*, int> alterMap;
+
       while (_e.readNextStartElement()) {
             if (_e.name() == "attributes")
                   attributes(partId, measure, (time + mTime).ticks());
@@ -1781,9 +1842,12 @@ void MusicXMLParserPass2::measure(const QString& partId,
                   harmony(partId, measure, time + mTime);
             else if (_e.name() == "note") {
                   Fraction dura;
+                  int alt = -10;                    // any number outside range of xml-tag "alter"
                   // note: chord and grace note handling done in note()
                   // dura > 0 iff valid rest or first note of chord found
-                  note(partId, measure, time + mTime, time + prevTime, dura, cv, gcl, beam, fbl);
+                  Note* n = note(partId, measure, time + mTime, time + prevTime, dura, cv, gcl, beam, fbl, alt);
+                  if (n && n->accidental() && n->accidental()->accidentalType() != Accidental::Type::NONE)
+                        alterMap.insert(n, alt);
                   if (dura.isValid() && dura > Fraction(0, 1)) {
                         prevTime = mTime; // save time stamp last chord created
                         mTime += dura;
@@ -1841,6 +1905,11 @@ void MusicXMLParserPass2::measure(const QString& partId,
       // - how to handle unmetered music
       if (_timeSigDura.isValid() && !_timeSigDura.isZero())
             measure->setTimesig(_timeSigDura);
+
+      // mark superfluous accidentals as user accidentals
+      const int scoreRelStaff = _score->staffIdx(part);
+      const Key key = _score->staff(scoreRelStaff)->keySigEvent(time.ticks()).key();
+      markUserAccidentals(scoreRelStaff, part->nstaves(), key, measure, alterMap);
 
       // multi-measure rest handling
       if (getAndDecMultiMeasureRestCount() == 0) {
@@ -3613,16 +3682,17 @@ static void displayStepOctave(QXmlStreamReader& e,
  Parse the /score-partwise/part/measure/note node.
  */
 
-void MusicXMLParserPass2::note(const QString& partId,
-                               Measure* measure,
-                               const Fraction sTime,
-                               const Fraction prevSTime,
-                               Fraction& dura,
-                               QString& currentVoice,
-                               GraceChordList& gcl,
-                               Beam*& currBeam,
-                               FiguredBassList& fbl
-                               )
+Note* MusicXMLParserPass2::note(const QString& partId,
+                                Measure* measure,
+                                const Fraction sTime,
+                                const Fraction prevSTime,
+                                Fraction& dura,
+                                QString& currentVoice,
+                                GraceChordList& gcl,
+                                Beam*& currBeam,
+                                FiguredBassList& fbl,
+                                int& alt
+                                )
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "note");
 
@@ -3634,7 +3704,7 @@ void MusicXMLParserPass2::note(const QString& partId,
       bool bRest = false;
       int staff = 1;
       int step = 0;
-      Fraction timeMod(0, 0); // invalid (will handle present but incorrect as not present)
+      Fraction timeMod(0, 0); // invalid (will handle "present but incorrect" as "not present")
       QString type;
       QString voice;
       Accidental::Type accType = Accidental::Type::NONE; // set based on alter value (can be microtonal)
@@ -3824,7 +3894,7 @@ void MusicXMLParserPass2::note(const QString& partId,
                   }
 #endif
             // end experimental fix for testVoiceMapper*
-            return;
+            return 0;
             }
       else {
             }
@@ -3965,8 +4035,12 @@ void MusicXMLParserPass2::note(const QString& partId,
                   _pass1.setDrumsetDefault(partId, instrId, headGroup, line, stemDir);
                   }
 
-            if (acc)
+            if (acc) {
                   note->add(acc);
+                  // save alter value for user accidental
+                  if (acc->accidentalType() != Accidental::Type::NONE)
+                        alt = alter;
+                  }
             c->add(note);
             //c->setStemDirection(stemDir); // already done in handleBeamAndStemDir()
             c->setNoStem(noStem);
@@ -4046,6 +4120,8 @@ void MusicXMLParserPass2::note(const QString& partId,
             dura.set(0, 1);
 
       Q_ASSERT(_e.isEndElement() && _e.name() == "note");
+
+      return note;
       }
 
 //---------------------------------------------------------
