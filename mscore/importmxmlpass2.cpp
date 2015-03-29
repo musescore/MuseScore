@@ -1731,13 +1731,14 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const MScor
 
 
 //---------------------------------------------------------
-//   measure
+//   markUserAccidentals
 //---------------------------------------------------------
 
 /**
  Check for "superfluous" accidentals to mark them as USER accidentals.
- The candiadates list courtAccNotes is ordered voice after voice. Check it here segment after segment.
+ The candidate map alterMap is ordered on note address. Check it here segment after segment.
  */
+
 static void markUserAccidentals(const int firstStaff,
                                 const int staves,
                                 const Key key,
@@ -2469,7 +2470,8 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
 
             // hack: combine with a previous words element
             if (!_wordsText.isEmpty()) {
-                  b->setBeginText(_wordsText, TextStyleType::TEXTLINE);
+                  // TextLine supports only limited formatting, remove all (compatible with 1.3)
+                  b->setBeginText(MScoreTextToMXML::toPlainText(_wordsText), TextStyleType::TEXTLINE);
                   _wordsText = "";
                   }
 
@@ -2512,7 +2514,8 @@ void MusicXMLParserDirection::dashes(const QString& type, const int number,
 
             // hack: combine with a previous words element
             if (!_wordsText.isEmpty()) {
-                  b->setBeginText(_wordsText, TextStyleType::TEXTLINE);
+                  // TextLine supports only limited formatting, remove all (compatible with 1.3)
+                  b->setBeginText(MScoreTextToMXML::toPlainText(_wordsText), TextStyleType::TEXTLINE);
                   _wordsText = "";
                   }
 
