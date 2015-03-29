@@ -102,8 +102,8 @@ public:
       void time(const QString& partId, Measure* measure, const int tick);
       void divisions();
       void transpose(const QString& partId);
-      void note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime,
-                Fraction& dura, QString& currentVoice, GraceChordList& gcl, Beam*& beam, FiguredBassList& fbl);
+      Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime,
+                 Fraction& dura, QString& currentVoice, GraceChordList& gcl, Beam*& beam, FiguredBassList& fbl, int& alt);
       FiguredBassItem* figure(const int idx, const bool paren);
       FiguredBass* figuredBass();
       FretDiagram* frame();
