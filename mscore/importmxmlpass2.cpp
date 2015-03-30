@@ -3911,9 +3911,14 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       ChordRest* cr = 0;
       Note* note = 0;
 
+      // start time for note:
+      // - sTime for non-chord / first chord note
+      // - prevTime for others
+      const Fraction noteStartTime = chord ? prevSTime : sTime;
+
       if (bRest) {
             int track = msTrack + msVoice;
-            cr = addRest(_score, measure, sTime.ticks(), track, msMove,
+            cr = addRest(_score, measure, noteStartTime.ticks(), track, msMove,
                          duration, dura);
             if (cr) {
                   if (currBeam) {
@@ -3927,7 +3932,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   else
                         cr->setBeamMode(Beam::Mode::NONE);
                   cr->setVisible(printObject);
-                  handleDisplayStep(cr, displayStep, displayOctave, sTime.ticks(), _score->spatium());
+                  handleDisplayStep(cr, displayStep, displayOctave, noteStartTime.ticks(), _score->spatium());
                   }
             }
       else {
@@ -3938,7 +3943,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   // else create a new one
                   // this basically ignores <chord/> errors
                   c = findOrCreateChord(_score, measure,
-                                        chord ? prevSTime.ticks() : sTime.ticks(),
+                                        noteStartTime.ticks(),
                                         msTrack + msVoice, msMove,
                                         duration, dura, bm);
                   // handle beam
@@ -3953,6 +3958,15 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   // (the DOM parser does that, but seems to have no effect on the autotester)
                   if (!chord || gcl.isEmpty()) {
                         c = createGraceChord(_score, msTrack + msVoice, duration, graceSlash);
+                        // TODO FIX
+                        // the setStaffMove() below results in identical behaviour as 2.0:
+                        // grace note will be at the wrong staff with the wrong pitch,
+                        // seems to use the line value calculated for the right staff
+                        // leaving it places the note at the wrong staff with the right pitch
+                        // this affects only grace notes where staff move differs from
+                        // the main note, e.g. DebuMandSample.xml first grace in part 2
+                        // c->setStaffMove(msMove);
+                        // END TODO
                         gcl.append(c);
                         }
                   else
@@ -3994,7 +4008,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   }
             else {
                   int ottavaStaff = (msTrack - _pass1.trackForPart(partId)) / VOICES;
-                  int octaveShift = _pass1.octaveShift(partId, ottavaStaff, sTime);
+                  int octaveShift = _pass1.octaveShift(partId, ottavaStaff, noteStartTime);
                   xmlSetPitch(note, step, alter, octave, octaveShift, _pass1.getPart(partId)->instr());
                   }
 
@@ -4005,7 +4019,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
             if (unpitched) {
                   // determine staff line based on display-step / -octave and clef type
-                  ClefType clef = c->staff()->clef(sTime.ticks());
+                  ClefType clef = c->staff()->clef(noteStartTime.ticks());
                   int po = ClefInfo::pitchOffset(clef);
                   int pitch = MusicXMLStepAltOct2Pitch(displayStep, 0, displayOctave);
                   int line = po - absStep(pitch);
@@ -4067,7 +4081,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             if (_e.name() == "lyric")
                   lyric(numberedLyrics, defaultyLyrics, unNumberedLyrics);  // TODO: move track handling to addlyric
             else if (_e.name() == "notations")
-                  notations(note, cr, sTime.ticks(), tupletDesc);
+                  notations(note, cr, noteStartTime.ticks(), tupletDesc);
             else
                   skipLogCurrElem();
 
@@ -4102,7 +4116,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       // add figured bass element
       if (!fbl.isEmpty()) {
-            int sTick = sTime.ticks();        // starting tick
+            int sTick = noteStartTime.ticks();        // starting tick
             foreach (FiguredBass* fb, fbl) {
                   fb->setTrack(msTrack);
                   // No duration tag defaults ticks() to 0; set to note value
