@@ -44,7 +44,6 @@ class VoltaSegment : public TextLineSegment {
       virtual PropertyStyle propertyStyle(P_ID) const override;
       virtual void resetProperty(P_ID id) override;
       virtual void styleChanged() override;
-      virtual void reset() override { spanner()->reset(); }
       };
 
 //---------------------------------------------------------
