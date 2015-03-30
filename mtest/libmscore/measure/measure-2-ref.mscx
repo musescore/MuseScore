@@ -449,7 +449,7 @@
             </Rest>
           </Measure>
         <Measure number="2">
-          <breakMultiMeasureRest/>
+          <breakMultiMeasureRest>1</breakMultiMeasureRest>
           <Tempo>
             <tempo>1.66667</tempo>
             <text>𝅘𝅥 = 100</text>
@@ -686,7 +686,7 @@
             </Rest>
           </Measure>
         <Measure number="2">
-          <breakMultiMeasureRest/>
+          <breakMultiMeasureRest>1</breakMultiMeasureRest>
           <Tempo>
             <tempo>1.66667</tempo>
             <lid>178</lid>

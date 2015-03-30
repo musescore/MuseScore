@@ -434,7 +434,7 @@
             </Text>
           </VBox>
         <Measure number="1">
-          <breakMultiMeasureRest/>
+          <breakMultiMeasureRest>1</breakMultiMeasureRest>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
@@ -672,7 +672,7 @@
             </Text>
           </VBox>
         <Measure number="1">
-          <breakMultiMeasureRest/>
+          <breakMultiMeasureRest>1</breakMultiMeasureRest>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
