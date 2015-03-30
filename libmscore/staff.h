@@ -29,7 +29,6 @@
 
 namespace Ms {
 
-class Instrument;
 class InstrumentTemplate;
 class Xml;
 class Part;
@@ -37,7 +36,6 @@ class Score;
 class KeyList;
 class StaffType;
 class Staff;
-class StringData;
 struct ClefTypeList;
 class Segment;
 class Clef;

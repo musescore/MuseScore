@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt_BR" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="pt_BR">
 <context>
     <name>InstrumentsXML</name>
     <message>
@@ -662,7 +664,7 @@ F Dizi</extracomment>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="189"/>
         <source>Ob. d&apos;a.</source>
-        <extracomment>Oboe d'amore</extracomment>
+        <extracomment>Oboe d&apos;amore</extracomment>
         <translation>Ob. d&apos;a.</translation>
     </message>
     <message>
