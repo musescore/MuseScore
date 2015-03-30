@@ -1678,16 +1678,12 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
                   xml.tagE("startRepeat");
             if (_repeatFlags & Repeat::END)
                   xml.tag("endRepeat", _repeatCount);
-            if (_irregular)
-                  xml.tagE("irregular");
-            if (_breakMultiMeasureRest)
-                  xml.tagE("breakMultiMeasureRest");
-            if (_userStretch != 1.0)
-                  xml.tag("stretch", _userStretch);
-            if (_noOffset)
-                  xml.tag("noOffset", _noOffset);
-            if (_systemInitialBarLineType != BarLineType::NORMAL)
-                  xml.tag("sysInitBarLineType", BarLine::barLineTypeName(_systemInitialBarLineType));
+            writeProperty(xml, P_ID::IRREGULAR);
+            writeProperty(xml, P_ID::BREAK_MMR);
+            writeProperty(xml, P_ID::USER_STRETCH);
+            writeProperty(xml, P_ID::NO_OFFSET);
+            writeProperty(xml, P_ID::MEASURE_NUMBER_MODE);
+            writeProperty(xml, P_ID::SYSTEM_INITIAL_BARLINE_TYPE);
             }
       qreal _spatium = spatium();
       MStaff* mstaff = staves[staff];
@@ -2224,6 +2220,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "noOffset")
                   _noOffset = e.readInt();
+            else if (tag == "measureNumberMode")
+                  setMeasureNumberMode(MeasureNumberMode(e.readInt()));
             else if (tag == "irregular") {
                   _irregular = true;
                   e.readNext();
