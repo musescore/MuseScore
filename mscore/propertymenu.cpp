@@ -67,6 +67,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/jump.h"
 #include "libmscore/marker.h"
+#include "libmscore/measure.h"
 
 namespace Ms {
 
@@ -273,6 +274,9 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             a->setText(tr("Measure"));
             a = new QAction(tr("Measure Properties..."), 0);
             a->setData("measure-props");
+            // disable property changes for multi measure rests
+            a->setEnabled(!static_cast<Note*>(e)->chord()->segment()->measure()->isMMRest());
+
             popup->insertAction(b, a);
 
             genPropertyMenu1(e, popup);
