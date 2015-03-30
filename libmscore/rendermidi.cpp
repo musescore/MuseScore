@@ -66,8 +66,7 @@ void Score::updateSwing()
                   if (e->type() != Element::Type::STAFF_TEXT)
                         continue;
                   const StaffText* st = static_cast<const StaffText*>(e);
-                  QString an(st->plainText());
-                  if (an.isEmpty())
+                  if (st->text().isEmpty())
                         continue;
                   Staff* staff = st->staff();
                   if (!st->swing())
