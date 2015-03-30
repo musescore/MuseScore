@@ -1132,7 +1132,9 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       popup->addAction(getAction("insert-measure"));
       popup->addSeparator();
 
-      popup->addAction(tr("Measure Properties..."))->setData("props");
+      a = popup->addAction(tr("Measure Properties..."));
+      a->setData("props");
+      a->setEnabled(!obj->isMMRest());
       popup->addSeparator();
 
       popup->addAction(tr("Object Debugger"))->setData("list");

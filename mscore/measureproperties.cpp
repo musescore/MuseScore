@@ -47,15 +47,41 @@ MeasureProperties::MeasureProperties(Measure* _m, QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   getNextMeasure
+//    skip multi measure rests
+//---------------------------------------------------------
+
+Measure* getNextMeasure(Measure* m)
+      {
+      Measure* mm = m->nextMeasureMM();
+      while (mm && mm->isMMRest())
+            mm = mm->nextMeasureMM();
+      return mm;
+      }
+
+//---------------------------------------------------------
+//   getPrevMeasure
+//    skip multi measure rests
+//---------------------------------------------------------
+
+Measure* getPrevMeasure(Measure* m)
+      {
+      Measure* mm = m->prevMeasureMM();
+      while (mm && mm->isMMRest())
+            mm = mm->prevMeasureMM();
+      return mm;
+      }
+
+//---------------------------------------------------------
 //   gotoNextMeasure
 //---------------------------------------------------------
 
 void MeasureProperties::gotoNextMeasure()
       {
-      if (m->nextMeasure())
-            setMeasure(m->nextMeasure());
-      nextButton->setEnabled(m->nextMeasure() != 0);
-      previousButton->setEnabled(m->prevMeasure() != 0);
+      if (getNextMeasure(m))
+            setMeasure(getNextMeasure(m));
+      nextButton->setEnabled(getNextMeasure(m));
+      previousButton->setEnabled(getPrevMeasure(m));
       m->score()->end();
       }
 
@@ -65,10 +91,10 @@ void MeasureProperties::gotoNextMeasure()
 
 void MeasureProperties::gotoPreviousMeasure()
       {
-      if (m->prevMeasure())
-            setMeasure(m->prevMeasure());
-      nextButton->setEnabled(m->nextMeasure() != 0);
-      previousButton->setEnabled(m->prevMeasure() != 0);
+      if (getPrevMeasure(m))
+            setMeasure(getPrevMeasure(m));
+      nextButton->setEnabled(getNextMeasure(m));
+      previousButton->setEnabled(getPrevMeasure(m));
       m->score()->end();
       }
 
