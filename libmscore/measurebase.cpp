@@ -208,13 +208,7 @@ Measure* MeasureBase::nextMeasure() const
 
 Measure* MeasureBase::nextMeasureMM() const
       {
-      MeasureBase* m = _next;
-      for (;;) {
-            if (m == 0 || m->type() == Element::Type::MEASURE)
-                  break;
-            m = m->_next;
-            }
-      Measure* mm = static_cast<Measure*>(m);
+      Measure* mm = nextMeasure();
       if (mm && score()->styleB(StyleIdx::createMultiMeasureRests) && mm->hasMMRest())
             return mm->mmRest();
       return mm;
