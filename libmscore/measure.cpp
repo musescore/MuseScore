@@ -3993,7 +3993,7 @@ QVariant Measure::getProperty(P_ID propertyId) const
             case P_ID::MEASURE_NUMBER_MODE:
                   return int(measureNumberMode());
             case P_ID::BREAK_MMR:
-                  return breakMultiMeasureRest();
+                  return getBreakMultiMeasureRest();
             case P_ID::REPEAT_COUNT:
                   return repeatCount();
             case P_ID::USER_STRETCH:
