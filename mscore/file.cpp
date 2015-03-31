@@ -2624,26 +2624,13 @@ void note_row(QTextStream * qts, int tick, float pos, QSet<Note *> * notes, QSet
    (*qts) << endl;
 }
 
+int createSvgs(Score* score, MQZipWriter * uz, QTextStream * qts, QString basename);
 
 bool MuseScore::saveSvgCollection(Score* score, const QString& saveName, const bool do_linearize)
       {
 
       MQZipWriter uz(saveName);
       QFileInfo fi(saveName);
-
-      Measure * measure = NULL;
-      QPainter * p = NULL;
-      TimeSig * timesig = NULL;
-
-      qreal w=1.0, h=1.0;
-      uint count = 1;
-
-      int ticksFromBeg = 0;
-
-      double mag = converterDpi / MScore::DPI;
-
-      QString svgname = "";
-
 
       score->repeatList()->unwind();
       if (score->repeatList()->size()>1) {
@@ -2661,13 +2648,12 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName, const b
       }
 
       qreal rel_tempo = score->tempomap()->relTempo();
-
       score->tempomap()->setRelTempo(1.0);
 
       //if (!metafile.open(QIODevice::WriteOnly))
       //      return false;
 
-      QBuffer metabuf, * svgbuf=NULL;
+      QBuffer metabuf;
       metabuf.open(QIODevice::ReadWrite);
       QTextStream qts(&metabuf);
       //QTextStream qts(stdout, QIODevice::WriteOnly);
@@ -2684,7 +2670,67 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName, const b
          if (iname.length()>0)
             qts << "I " << iname << endl;
       }
+
+
+      LayoutMode layout_mode = score->layoutMode();
+
+
+      qts << "#PAGE" << endl;
+
+      score->undo(new ChangeLayoutMode(score, LayoutMode::PAGE));
+      score->doLayout();
       
+      int ticksFromBeg = createSvgs(score,&uz,&qts,QString("Page"));   
+
+      qts << "#LINE" << endl;
+
+      // Weird hack for it - but done this way pretty much all over :P
+      score->undo(new ChangeLayoutMode(score, LayoutMode::LINE));
+      score->doLayout();
+
+      createSvgs(score,&uz,&qts,QString("Line"));
+
+      qDebug("Total ticks: %i. End time: %f",ticksFromBeg,score->tempomap()->tick2time(ticksFromBeg));
+      qts << "AT " << score->tempomap()->tick2time(0) << ',' << score->tempomap()->tick2time(ticksFromBeg)<< endl;
+      qts << "TT " << ticksFromBeg << endl;
+
+      uz.addFile(fi.baseName()+".meta",metabuf.data());
+      score->setPrinting(false);
+
+      // Add midifile
+      QString midiname(fi.baseName()+".mid");
+      saveMidi(score,midiname);
+      QFile file(midiname);
+      file.open(QIODevice::ReadOnly);
+      uz.addFile(midiname,&file);
+      uz.close();
+      file.remove();
+
+      score->tempomap()->setRelTempo(rel_tempo);
+
+      score->undo(new ChangeLayoutMode(score, layout_mode));
+      score->doLayout();
+
+
+      return true;
+   }
+
+int createSvgs(Score* score, MQZipWriter * uz, QTextStream * qts, QString basename) {
+
+      Measure * measure = NULL;
+      QPainter * p = NULL;
+      TimeSig * timesig = NULL;
+      QBuffer * svgbuf=NULL;
+
+      qreal w=1.0, h=1.0;
+      uint count = 1;
+
+      int ticksFromBeg = 0;
+
+      double mag = converterDpi / MScore::DPI;
+
+      QString svgname = "";
+
       foreach( Page* page, score->pages() ) {
 
          qreal mtop = 0.0;
@@ -2720,16 +2766,16 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName, const b
             h = sys->height() + top_margin + bot_margin;
  
 
-            svgname = fi.baseName()+QString::number(count++)+".svg";
-            qts << "F " << svgname << ' ' << w*mag << ',' << h*mag << endl;
+            svgname = basename + QString::number(count++)+".svg";
+            (*qts) << "F " << svgname << ' ' << w*mag << ',' << h*mag << endl;
 
             // Staff vertical positions
             for(int i=0;i<sys->staves()->size();i++) {
                QRectF bbox = sys->bboxStaff(i);
-               qts << "S " << (top_margin+bbox.top())/h << "," << (top_margin+bbox.bottom())/h << endl;
+               (*qts) << "S " << (top_margin+bbox.top())/h << "," << (top_margin+bbox.bottom())/h << endl;
             }
 
-            //qts << ticksFromBeg << ',' << 0.0 << '\n';
+            //(*qts) << ticksFromBeg << ',' << 0.0 << '\n';
 
             svgbuf = new QBuffer();
             svgbuf->open(QIODevice::ReadWrite);
@@ -2790,7 +2836,7 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName, const b
                      //tick != last_tick
 
                      if (last_tick>=0) {
-                        note_row(&qts,last_tick,last_pos,&notes,&ongoing);
+                        note_row(qts,last_tick,last_pos,&notes,&ongoing);
                      }
 
                      //qDebug("%i (%i) - %f",cr->segment()->tick(),ticksFromBeg,world.m31());
@@ -2799,8 +2845,8 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName, const b
                      last_pos = world.m31()/(w*mag);
                   }
                   else if (tick!=last_tick) { // SHOULD NOT HAPPEN
-                     qts << "# Omitted " << tick << ',' << last_tick << ' ';
-                     qts << last_pos << ' ' << world.m31()/(w*mag) << endl; 
+                     (*qts) << "# Omitted " << tick << ',' << last_tick << ' ';
+                     (*qts) << last_pos << ' ' << world.m31()/(w*mag) << endl; 
                   }
                   else {
                      if (world.m31()/(w*mag)<last_pos) // correct for long rests
@@ -2815,13 +2861,13 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName, const b
                else if (e->type() == Element::Type::MEASURE) {
                   
                   if (last_tick>=0) {
-                     note_row(&qts,last_tick,last_pos,&notes,&ongoing);
+                     note_row(qts,last_tick,last_pos,&notes,&ongoing);
 
                      last_tick = -1;
                   }
 
                   last_pos = world.m31()/(w*mag);
-                  qts << "B " << world.m31()/(w*mag) << ',' << ((Measure*)e)->ticks() << endl;
+                  (*qts) << "B " << world.m31()/(w*mag) << ',' << ((Measure*)e)->ticks() << endl;
                   end_pos = (world.m31() + mag*e->bbox().width())/(w*mag);
                }
                else if (e->type() == Element::Type::TIMESIG) {
@@ -2831,7 +2877,7 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName, const b
                   if (timesig==NULL || 
                       timesig->numerator()!=cur_ts->numerator() || 
                       timesig->denominator()!=cur_ts->denominator()) {
-                     qts << "TS " << cur_ts->numerator() << ',' << cur_ts->denominator() << endl;
+                     (*qts) << "TS " << cur_ts->numerator() << ',' << cur_ts->denominator() << endl;
                      timesig = cur_ts;
                   }
                }
@@ -2844,17 +2890,17 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName, const b
 
             if (end_pos>0) {
                if (last_tick>=0) {
-                  note_row(&qts,last_tick,last_pos,&notes,&ongoing);
+                  note_row(qts,last_tick,last_pos,&notes,&ongoing);
                }
                      
-               qts << "B " << end_pos << endl;
+               (*qts) << "B " << end_pos << endl;
             }
 
 
             p->end();
 
             svgbuf->seek(0);
-            uz.addFile(svgname,svgbuf->data());
+            uz->addFile(svgname,svgbuf->data());
             svgbuf->close();
             
             delete p; delete svgbuf;
@@ -2862,26 +2908,9 @@ bool MuseScore::saveSvgCollection(Score* score, const QString& saveName, const b
       }
 
       if (measure!=NULL) ticksFromBeg+=measure->ticks();
-      qDebug("Total ticks: %i. End time: %f",ticksFromBeg,score->tempomap()->tick2time(ticksFromBeg));
-      qts << "AT " << score->tempomap()->tick2time(0) << ',' << score->tempomap()->tick2time(ticksFromBeg)<< endl;
-      qts << "TT " << ticksFromBeg << endl;
 
-      uz.addFile(fi.baseName()+".meta",metabuf.data());
-      score->setPrinting(false);
-
-      // Add midifile
-      QString midiname(fi.baseName()+".mid");
-      saveMidi(score,midiname);
-      QFile file(midiname);
-      file.open(QIODevice::ReadOnly);
-      uz.addFile(midiname,&file);
-      uz.close();
-      file.remove();
-
-      score->tempomap()->setRelTempo(rel_tempo);
-
-      return true;
-   }
+      return ticksFromBeg;
+}
 
 
 void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
