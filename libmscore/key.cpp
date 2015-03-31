@@ -107,7 +107,8 @@ bool KeySigEvent::operator==(const KeySigEvent& e) const
 
 void AccidentalState::init(Key key)
       {
-      memset(state, 2, 74);
+//      memset(state, 2, 74);
+      memset(state, 2, 75);
       for (int octave = 0; octave < 11; ++octave) {
             if (key > 0) {
                   for (int i = 0; i < int(key); ++i) {

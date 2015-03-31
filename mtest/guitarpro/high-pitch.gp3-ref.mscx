@@ -146,9 +146,6 @@
             </Note>
           <Note>
             <lid>11</lid>
-            <Accidental>
-              <subtype>natural</subtype>
-              </Accidental>
             <pitch>127</pitch>
             <tpc>15</tpc>
             <fret>8</fret>
@@ -445,9 +442,6 @@
               </Note>
             <Note>
               <lid>11</lid>
-              <Accidental>
-                <subtype>natural</subtype>
-                </Accidental>
               <pitch>127</pitch>
               <tpc>15</tpc>
               <fret>8</fret>

@@ -242,12 +242,10 @@ void Accidental::read(XmlReader& e)
 void Accidental::write(Xml& xml) const
       {
       xml.stag(name());
-      if (_hasBracket)
-            xml.tag("bracket", _hasBracket);
-      if (_role != Role::AUTO)
-            xml.tag("role", int(_role));
-      if (_small)
-            xml.tag("small", _small);
+
+      writeProperty(xml, P_ID::ACCIDENTAL_BRACKET);
+      writeProperty(xml, P_ID::ROLE);
+      writeProperty(xml, P_ID::SMALL);
       xml.tag("subtype", accList[int(_accidentalType)].tag);
       Element::writeProperties(xml);
       xml.etag();
@@ -263,28 +261,55 @@ const char* Accidental::subtypeUserName() const
       }
 
 //---------------------------------------------------------
-//   setSubtype
-//---------------------------------------------------------
-
-void Accidental::setSubtype(const QString& tag)
-      {
-      int n = sizeof(accList)/sizeof(*accList);
-      for (int i = 0; i < n; ++i) {
-            if (accList[i].tag == tag) {
-                  setAccidentalType(Type(i));
-                  return;
-                  }
-            }
-      setAccidentalType(Type::NONE);
-      }
-
-//---------------------------------------------------------
 //   symbol
 //---------------------------------------------------------
 
 SymId Accidental::symbol() const
       {
       return accList[int(accidentalType())].sym;
+      }
+
+//---------------------------------------------------------
+//   subtype2value
+//    returns the resulting pitch offset
+//---------------------------------------------------------
+
+AccidentalVal Accidental::subtype2value(Type st)
+      {
+      return accList[int(st)].offset;
+      }
+
+//---------------------------------------------------------
+//   subtype2name
+//---------------------------------------------------------
+
+const char* Accidental::subtype2name(Type st)
+      {
+      return accList[int(st)].tag;
+      }
+
+//---------------------------------------------------------
+//   name2subtype
+//---------------------------------------------------------
+
+Accidental::Type Accidental::name2subtype(const QString& tag)
+      {
+      int i = 0;
+      for (const Acc& acc : accList) {
+            if (acc.tag == tag)
+                  return Type(i);
+            ++i;
+            }
+      return Type::NONE;
+      }
+
+//---------------------------------------------------------
+//   setSubtype
+//---------------------------------------------------------
+
+void Accidental::setSubtype(const QString& tag)
+      {
+      setAccidentalType(name2subtype(tag));
       }
 
 //---------------------------------------------------------
@@ -331,25 +356,6 @@ void Accidental::layout()
       }
 
 //---------------------------------------------------------
-//   subtype2value
-//    returns the resulting pitch offset
-//---------------------------------------------------------
-
-AccidentalVal Accidental::subtype2value(Type st)
-      {
-      return accList[int(st)].offset;
-      }
-
-//---------------------------------------------------------
-//   subtype2name
-//---------------------------------------------------------
-
-const char* Accidental::subtype2name(Type st)
-      {
-      return accList[int(st)].tag;
-      }
-
-//---------------------------------------------------------
 //   value2subtype
 //---------------------------------------------------------
 
@@ -363,20 +369,6 @@ Accidental::Type Accidental::value2subtype(AccidentalVal v)
             case AccidentalVal::FLAT2:   return Type::FLAT2;
             default:
                   qFatal("value2subtype: illegal accidental val %hhd", v);
-            }
-      return Type::NONE;
-      }
-
-//---------------------------------------------------------
-//   name2subtype
-//---------------------------------------------------------
-
-Accidental::Type Accidental::name2subtype(const QString& tag)
-      {
-      int n = sizeof(accList)/sizeof(*accList);
-      for (int i = 0; i < n; ++i) {
-            if (accList[i].tag == tag)
-                  return Type(i);
             }
       return Type::NONE;
       }
@@ -451,11 +443,27 @@ void Accidental::undoSetSmall(bool val)
 
 QVariant Accidental::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SMALL:              return _small;
             case P_ID::ACCIDENTAL_BRACKET: return _hasBracket;
+            case P_ID::ROLE:               return int(role());
             default:
                   return Element::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Accidental::propertyDefault(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::SMALL:              return false;
+            case P_ID::ACCIDENTAL_BRACKET: return false;
+            case P_ID::ROLE:               return int(Role::AUTO);
+            default:
+                  return Element::propertyDefault(propertyId);
             }
       }
 
@@ -465,12 +473,15 @@ QVariant Accidental::getProperty(P_ID propertyId) const
 
 bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SMALL:
                   _small = v.toBool();
                   break;
             case P_ID::ACCIDENTAL_BRACKET:
                   _hasBracket = v.toBool();
+                  break;
+            case P_ID::ROLE:
+                  _role = Role(v.toInt());
                   break;
             default:
                   return Element::setProperty(propertyId, v);
