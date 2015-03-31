@@ -40,6 +40,7 @@ class PaletteBox : public QDockWidget {
       void displayMore(const QString& paletteName);
       void workspaceSelected(int idx);
       void newWorkspaceClicked();
+      void setSinglePalette(bool);
 
    signals:
       void changed();
@@ -53,6 +54,10 @@ class PaletteBox : public QDockWidget {
       QList<Palette*> palettes() const;
       void updateWorkspaces();
       };
+
+//---------------------------------------------------------
+//   PaletteBoxScrollArea
+//---------------------------------------------------------
 
 class PaletteBoxScrollArea : public QScrollArea {
        Q_OBJECT
