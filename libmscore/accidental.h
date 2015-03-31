@@ -85,7 +85,6 @@ class Accidental : public Element {
             END
             };
 
-
    private:
       Q_OBJECT
       Q_PROPERTY(bool                 hasBracket  READ hasBracket  WRITE undoSetHasBracket)
@@ -139,6 +138,7 @@ class Accidental : public Element {
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID propertyId) const override;
 
       static AccidentalVal subtype2value(Type);             // return effective pitch offset
       static const char* subtype2name(Type);
