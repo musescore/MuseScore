@@ -155,7 +155,6 @@ static const ElementName elementNames[] = {
       ElementName("Selection",            QT_TRANSLATE_NOOP("elementName", "Selection")),
       ElementName("Lasso",                QT_TRANSLATE_NOOP("elementName", "Lasso")),
       ElementName("ShadowNote",           QT_TRANSLATE_NOOP("elementName", "Shadow Note")),
-      ElementName("RubberBand",           QT_TRANSLATE_NOOP("elementName", "Rubber Band")),
       ElementName("TabDurationSymbol",    QT_TRANSLATE_NOOP("elementName", "Tab Duration Symbol")),
       ElementName("FSymbol",              QT_TRANSLATE_NOOP("elementName", "Font Symbol")),
       ElementName("Page",                 QT_TRANSLATE_NOOP("elementName", "Page")),
@@ -1133,18 +1132,6 @@ void Element::dump() const
       }
 
 //---------------------------------------------------------
-//   RubberBand::draw
-//---------------------------------------------------------
-
-void RubberBand::draw(QPainter* painter) const
-      {
-      if (!showRubberBand)
-            return;
-      painter->setPen(Qt::red);
-      painter->drawLine(QLineF(_p1.x(), _p1.y(), _p2.x(), _p2.y()));
-      }
-
-//---------------------------------------------------------
 //   mimeData
 //---------------------------------------------------------
 
@@ -1328,7 +1315,6 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::SELECTION:
             case Element::Type::LASSO:
             case Element::Type::SHADOW_NOTE:
-            case Element::Type::RUBBERBAND:
             case Element::Type::SEGMENT:
             case Element::Type::SYSTEM:
             case Element::Type::COMPOUND:
@@ -1415,17 +1401,6 @@ void collectElements(void* data, Element* e)
       {
       QList<Element*>* el = static_cast<QList<Element*>*>(data);
       el->append(e);
-      }
-
-//---------------------------------------------------------
-//   Space::operator+=
-//---------------------------------------------------------
-
-Space& Space::operator+=(const Space& s)
-      {
-      _lw += s._lw;
-      _rw += s._rw;
-      return *this;
       }
 
 //---------------------------------------------------------
@@ -1566,7 +1541,6 @@ bool Element::isPrintable() const
             case Element::Type::SPACER:
             case Element::Type::SHADOW_NOTE:
             case Element::Type::LASSO:
-            case Element::Type::RUBBERBAND:
             case Element::Type::ELEMENT_LIST:
             case Element::Type::STAFF_LIST:
             case Element::Type::MEASURE_LIST:

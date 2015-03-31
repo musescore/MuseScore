@@ -3975,7 +3975,7 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                   space += Space(elsp, etsp);
 
                   if (found || eFound) {
-                        space.rLw()    += clefWidth[staffIdx];
+                        space.addL(clefWidth[staffIdx]);
                         qreal sp        = minDistance + rest[staffIdx] + qMax(space.lw(), stretchDistance);
                         rest[staffIdx]  = space.rw();
                         rest2[staffIdx] = false;

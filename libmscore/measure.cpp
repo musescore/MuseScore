@@ -3397,7 +3397,7 @@ void Measure::layoutX(qreal stretch)
                         // minDistance = 0;
 
                   if (found || eFound) {
-                        space.rLw() += clefWidth[staffIdx];
+                        space.addL(clefWidth[staffIdx]);
                         qreal sp     = minDistance + rest[staffIdx] + qMax(space.lw(), stretchDistance);
                         rest[staffIdx]  = space.rw();
                         rest2[staffIdx] = false;
