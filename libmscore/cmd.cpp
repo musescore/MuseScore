@@ -1477,45 +1477,26 @@ void Score::changeAccidental(Note* note, Accidental::Type accidental)
       else if (acc == acc2 || accidental > Accidental::Type::NATURAL)
             forceAdd = true;
 
-      if (note->links()) {
-            for (ScoreElement* e : *note->links()) {
-                  Note* ln = static_cast<Note*>(e);
-                  if (ln->concertPitch() != note->concertPitch())
-                        continue;
-                  Score* lns = ln->score();
-                  if (forceRemove) {
-                        Accidental* a = ln->accidental();
-                        if (a)
-                              lns->undoRemoveElement(a);
-                        }
-                  else if (forceAdd) {
-                        Accidental* a = new Accidental(lns);
-                        a->setParent(ln);
-                        a->setAccidentalType(accidental);
-                        a->setRole(Accidental::Role::USER);
-                        lns->undoAddElement(a);
-                        }
-                  changeAccidental2(ln, pitch, tpc);
-                  }
-            }
-
-      else {
+      for (ScoreElement* se : note->linkList()) {
+            Note* ln = static_cast<Note*>(se);
+            if (ln->concertPitch() != note->concertPitch())
+                  continue;
+            Score* lns    = ln->score();
+            Accidental* a = ln->accidental();
             if (forceRemove) {
-                  Accidental* a = note->accidental();
                   if (a)
-                        undoRemoveElement(a);
+                        lns->undoRemoveElement(a);
                   }
             else if (forceAdd) {
-                  Accidental* a = note->accidental();
                   if (a)
                         undoRemoveElement(a);
-                  a = new Accidental(this);
-                  a->setParent(note);
+                  Accidental* a = new Accidental(lns);
+                  a->setParent(ln);
                   a->setAccidentalType(accidental);
                   a->setRole(Accidental::Role::USER);
-                  undoAddElement(a);
+                  lns->undoAddElement(a);
                   }
-            changeAccidental2(note, pitch, tpc);
+            changeAccidental2(ln, pitch, tpc);
             }
       }
 

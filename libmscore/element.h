@@ -177,7 +177,7 @@ class Element : public QObject, public ScoreElement {
       Q_PROPERTY(QPointF                  userOff     READ scriptUserOff WRITE scriptSetUserOff)
       Q_PROPERTY(bool                     visible     READ visible      WRITE setVisible)
 
-      Element* _parent       = 0;
+      Element* _parent { 0 };
 
       bool _generated;            ///< automatically generated Element
 
