@@ -1986,7 +1986,7 @@ void Chord::layoutPitched()
                         qreal available = oldR - stemX;
                         qreal newR = stemX + qMax(available, llsp);
                         if (newR > oldR)
-                              pc->_space.rRw() = newR;
+                              pc->_space.setRw(newR);
                         }
                   lll = qMax(llsp, lll);
                   }

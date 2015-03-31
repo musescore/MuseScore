@@ -71,24 +71,29 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(ElementFlags);
 
 //---------------------------------------------------------
 ///   \brief Unit of horizontal measure
+//    represent the space used by a Segment
 //---------------------------------------------------------
 
 class Space {
-      qreal _lw;       // space needed to the left
-      qreal _rw;       // space needed to the right
+      qreal _lw { 0.0 };       // space needed to the left
+      qreal _rw { 0.0 };       // space needed to the right
 
    public:
-      Space() : _lw(0.0), _rw(0.0)  {}
+      Space() {}
       Space(qreal a, qreal b) : _lw(a), _rw(b) {}
       qreal lw() const             { return _lw; }
       qreal rw() const             { return _rw; }
-      qreal& rLw()                 { return _lw; }
-      qreal& rRw()                 { return _rw; }
       qreal width() const          { return _lw + _rw; }
       void setLw(qreal e)          { _lw = e; }
       void setRw(qreal m)          { _rw = m; }
+      void addL(qreal v)           { _lw += v; }
+      void addR(qreal v)           { _rw += v; }
       void max(const Space& s);
-      Space& operator+=(const Space&);
+      Space& operator+=(const Space& s) {
+            _lw += s._lw;
+            _rw += s._rw;
+            return *this;
+            }
       };
 
 //---------------------------------------------------------
@@ -253,7 +258,6 @@ class Element : public QObject, public ScoreElement {
             SELECTION,
             LASSO,
             SHADOW_NOTE,
-            RUBBERBAND,
             TAB_DURATION_SYMBOL,
             FSYMBOL,
             PAGE,
@@ -682,26 +686,6 @@ class Compound : public Element {
       virtual void setSelected(bool f);
       virtual void setVisible(bool);
       virtual void layout();
-      };
-
-//---------------------------------------------------------
-//   @@ RubberBand
-//---------------------------------------------------------
-
-class RubberBand : public Element {
-      Q_OBJECT
-
-      QPointF _p1, _p2;
-
-   public:
-      RubberBand(Score* s) : Element(s) {}
-      virtual RubberBand* clone() const  { return new RubberBand(*this); }
-      virtual Element::Type type() const { return Element::Type::RUBBERBAND; }
-      virtual void draw(QPainter*) const;
-
-      void set(const QPointF& p1, const QPointF& p2) { _p1 = p1; _p2 = p2; }
-      QPointF p1() const { return _p1; }
-      QPointF p2() const { return _p2; }
       };
 
 extern bool elementLessThan(const Element* const, const Element* const);
