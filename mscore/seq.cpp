@@ -614,7 +614,7 @@ void Seq::metronome(unsigned n, float* p, bool force)
 
 void Seq::addCountInClicks()
       {
-      int         plPos       = playPos->first;
+      int         plPos       = cs->playPos();
       Measure*    m           = cs->tick2measure(plPos);
       int         msrTick     = m->tick();
       qreal       tempo       = cs->tempomap()->tempo(msrTick);
