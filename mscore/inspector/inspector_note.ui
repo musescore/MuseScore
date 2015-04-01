@@ -312,6 +312,9 @@
        <property name="accessibleName">
         <string>Tuning</string>
        </property>
+       <property name="suffix">
+        <string>%</string>
+       </property>
        <property name="minimum">
         <double>-200.000000000000000</double>
        </property>
