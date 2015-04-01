@@ -171,6 +171,8 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
                         progress.setValue((pass * et + playTime) / 2);
                         qApp->processEvents();
                         }
+                  if (playTime >= et)
+                        synti->allNotesOff(-1);
                   // create sound until the sound decays
                   if (playTime >= et && max*peak < 0.000001)
                         break;
