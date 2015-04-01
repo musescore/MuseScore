@@ -129,6 +129,21 @@ QSize HPiano::sizeHint() const
       }
 
 //---------------------------------------------------------
+//   pressKeys
+//---------------------------------------------------------
+
+void HPiano::pressKeys(QSet<int> pitches)
+      {
+	for (PianoKeyItem* key : keys) {
+            if (pitches.contains(key->pitch()))
+                  key->setPressed(true);
+            else
+                  key->setPressed(false);
+            key->update();
+            }
+      }
+
+//---------------------------------------------------------
 //   PianoKeyItem
 //---------------------------------------------------------
 
@@ -136,8 +151,8 @@ PianoKeyItem::PianoKeyItem(HPiano* _piano, int p)
    : QGraphicsPathItem()
       {
       piano = _piano;
-      pitch = p;
-      pressed = false;
+      _pitch = p;
+      _pressed = false;
       type = -1;
       }
 
@@ -247,10 +262,10 @@ void PianoKeyItem::setType(int val)
 
 void PianoKeyItem::mousePressEvent(QGraphicsSceneMouseEvent*)
       {
-      pressed = true;
+      _pressed = true;
       update();
       bool ctrl = qApp->keyboardModifiers() & Qt::ControlModifier;
-      emit piano->keyPressed(pitch, ctrl);
+      emit piano->keyPressed(_pitch, ctrl);
       }
 
 //---------------------------------------------------------
@@ -259,7 +274,7 @@ void PianoKeyItem::mousePressEvent(QGraphicsSceneMouseEvent*)
 
 void PianoKeyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent*)
       {
-      pressed = false;
+      _pressed = false;
       update();
       }
 
@@ -271,12 +286,12 @@ void PianoKeyItem::paint(QPainter* p, const QStyleOptionGraphicsItem* /*o*/, QWi
       {
       p->setRenderHint(QPainter::Antialiasing, true);
       p->setPen(QPen(Qt::black, .8));
-      if (pressed)
+      if (_pressed)
             p->setBrush(QColor(255, 255, 128));
       else
             p->setBrush(type >= 7 ? Qt::black : Qt::white);
       p->drawPath(path());
-      if (pitch == 60) {
+      if (_pitch == 60) {
             QFont f("FreeSerif", 8);
             p->setFont(f);
             p->drawText(QRectF(KEY_WIDTH / 2, KEY_HEIGHT - 8, 0, 0),
@@ -293,16 +308,26 @@ PianoTools::PianoTools(QWidget* parent)
       {
       setObjectName("piano");
       setWindowTitle(tr("Piano Keyboard"));
-      setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+      setAllowedAreas(Qt::DockWidgetAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea));
 
-      HPiano* piano = new HPiano;
-      piano->setFocusPolicy(Qt::ClickFocus);
-      setWidget(piano);
+      _piano = new HPiano;
+      _piano->setFocusPolicy(Qt::ClickFocus);
+      setWidget(_piano);
 
-//      QWidget* w = new QWidget(this);
-//      setTitleBarWidget(w);
-//      titleBarWidget()->hide();
-      connect(piano, SIGNAL(keyPressed(int, bool)), SIGNAL(keyPressed(int, bool)));
+      connect(_piano, SIGNAL(keyPressed(int, bool)), SIGNAL(keyPressed(int, bool)));
+      }
+
+//---------------------------------------------------------
+//   heartBeat
+//---------------------------------------------------------
+
+void PianoTools::heartBeat(QList<const Ms::Note *> notes)
+      {
+      QSet<int> pitches;
+      for (const Note* note : notes) {
+          pitches.insert(note->pitch());
+          }
+      _piano->pressKeys(pitches);
       }
 
 //---------------------------------------------------------
