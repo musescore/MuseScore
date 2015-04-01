@@ -21,6 +21,8 @@
 #ifndef __PIANOTOOLS_H__
 #define __PIANOTOOLS_H__
 
+#include "libmscore/note.h"
+
 namespace Ms {
 
 class HPiano;
@@ -31,8 +33,8 @@ class HPiano;
 
 class PianoKeyItem : public QGraphicsPathItem {
       int type;
-      int pitch;
-      bool pressed;
+      int _pitch;
+      bool _pressed;
       HPiano* piano;
 
       virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
@@ -40,8 +42,10 @@ class PianoKeyItem : public QGraphicsPathItem {
       virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 
    public:
-      PianoKeyItem(HPiano* , int pitch);
+      PianoKeyItem(HPiano* , int p);
       void setType(int val);
+      int pitch() { return _pitch; }
+      void setPressed(bool p) { _pressed = p; }
       };
 
 //---------------------------------------------------------
@@ -64,6 +68,7 @@ class HPiano : public QGraphicsView {
    public:
       HPiano(QWidget* parent = 0);
       friend class PianoKeyItem;
+      void pressKeys(QSet<int> pitches);
       virtual QSize sizeHint() const;
       };
 
@@ -74,11 +79,14 @@ class HPiano : public QGraphicsView {
 class PianoTools : public QDockWidget {
       Q_OBJECT
 
+      HPiano* _piano;
+
    signals:
       void keyPressed(int pitch, bool ctrl);
 
    public:
       PianoTools(QWidget* parent = 0);
+      void heartBeat(QList<const Note*> notes);
       };
 
 

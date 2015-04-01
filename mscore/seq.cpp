@@ -42,6 +42,7 @@
 #include "libmscore/audio.h"
 #include "synthcontrol.h"
 #include "pianoroll.h"
+#include "pianotools.h"
 
 #include "click.h"
 
@@ -403,6 +404,9 @@ void Seq::unmarkNotes()
             cs->addRefresh(n->canvasBoundingRect());
             }
       markedNotes.clear();
+      PianoTools* piano = mscore->pianoTools();
+      if (piano && piano->isVisible())
+            piano->heartBeat(markedNotes);
       }
 
 //---------------------------------------------------------
@@ -1482,6 +1486,11 @@ void Seq::heartBeatTimeout()
       PianorollEditor* pre = mscore->getPianorollEditor();
       if (pre && pre->isVisible())
             pre->heartBeat(this);
+
+      PianoTools* piano = mscore->pianoTools();
+      if (piano && piano->isVisible())
+            piano->heartBeat(markedNotes);
+
       cv->update(cv->toPhysical(r));
       }
 
