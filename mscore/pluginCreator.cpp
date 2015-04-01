@@ -298,6 +298,7 @@ void PluginCreator::runClicked()
       run->setEnabled(false);
 
       item = qobject_cast<QmlPlugin*>(obj);
+      item->setFilePath(path.isEmpty() ? QString() : path.section('/', 0, -2));
 
       if (item->pluginType() == "dock" || item->pluginType() == "dialog") {
             view = new QQuickView(qml, 0);
