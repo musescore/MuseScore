@@ -1933,6 +1933,12 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             pageOffset = firstScore->pageNumberOffset();
       bool firstPage = true;
       for (Score* s : cs) {
+            LayoutMode layoutMode = s->layoutMode();
+            if (layoutMode != LayoutMode::PAGE) {
+                  s->startCmd();
+                  s->undo(new ChangeLayoutMode(s, LayoutMode::PAGE));
+                  s->doLayout();
+                  }
             s->setPrinting(true);
             //
             // here we ignore the configured page offset
@@ -1962,6 +1968,8 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             s->setPageNumberOffset(oldPageOffset);
             s->style()->set(StyleIdx::footerFirstPage, oldFirstPageNumber);
             s->doLayout();
+            if (layoutMode != s->layoutMode())
+                  s->endCmd(true);       // rollback
             }
       p.end();
       return true;
