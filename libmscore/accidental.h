@@ -20,8 +20,6 @@
 
 #include "element.h"
 
-class QPainter;
-
 namespace Ms {
 
 class Note;
@@ -41,64 +39,22 @@ struct SymElement {
 //   @@ Accidental
 //   @P hasBracket  bool
 //   @P small       bool
-//   @P acctype     Ms::Accidental::Type  (NONE, SHARP, FLAT, SHARP2, FLAT2, NATURAL, ...) (read only)
-//   @P role        Ms::Accidental::Role  (AUTO, USER) (read only)
+//   @P acctype     Ms::MScore::AccidentalType  (NONE, SHARP, FLAT, SHARP2, FLAT2, NATURAL, ...) (read only)
+//   @P role        Ms::MScore::AccidentalRole  (AUTO, USER) (read only)
 //---------------------------------------------------------
 
 class Accidental : public Element {
-   public:
-      enum class Role : char {
-            AUTO,               // layout created accidental
-            USER                // user created accidental
-            };
-      enum class Type : char {
-            NONE,
-            SHARP,
-            FLAT,
-            SHARP2,
-            FLAT2,
-            NATURAL,
-
-            FLAT_SLASH,
-            FLAT_SLASH2,
-            MIRRORED_FLAT2,
-            MIRRORED_FLAT,
-            MIRRORED_FLAT_SLASH,
-            FLAT_FLAT_SLASH,
-
-            SHARP_SLASH,
-            SHARP_SLASH2,
-            SHARP_SLASH3,
-            SHARP_SLASH4,
-
-            SHARP_ARROW_UP,
-            SHARP_ARROW_DOWN,
-            SHARP_ARROW_BOTH,
-            FLAT_ARROW_UP,
-            FLAT_ARROW_DOWN,
-            FLAT_ARROW_BOTH,
-            NATURAL_ARROW_UP,
-            NATURAL_ARROW_DOWN,
-            NATURAL_ARROW_BOTH,
-            SORI,
-            KORON,
-            END
-            };
-
-   private:
       Q_OBJECT
       Q_PROPERTY(bool                 hasBracket  READ hasBracket  WRITE undoSetHasBracket)
       Q_PROPERTY(bool                 small       READ small       WRITE undoSetSmall)
-      Q_PROPERTY(Ms::Accidental::Type accType     READ accidentalType)
-      Q_PROPERTY(Ms::Accidental::Role role        READ role)
-      Q_ENUMS(Type)
-      Q_ENUMS(Role)
+      Q_PROPERTY(Ms::AccidentalType accType     READ accidentalType)
+      Q_PROPERTY(Ms::AccidentalRole role        READ role)
 
       QList<SymElement> el;
-      Type _accidentalType;
+      AccidentalType _accidentalType;
       bool _hasBracket;
       bool _small;
-      Role _role;
+      AccidentalRole _role;
 
    public:
       Accidental(Score* s = 0);
@@ -107,8 +63,8 @@ class Accidental : public Element {
 
       const char* subtypeUserName() const;
       void setSubtype(const QString& s);
-      void setAccidentalType(Type t)               { _accidentalType = t;    }
-      Type accidentalType() const                  { return _accidentalType; }
+      void setAccidentalType(AccidentalType t)     { _accidentalType = t;    }
+      AccidentalType accidentalType() const        { return _accidentalType; }
       virtual int subtype() const override         { return (int)_accidentalType; }
       virtual QString subtypeName() const override { return QString(subtype2name(_accidentalType)); }
 
@@ -126,8 +82,8 @@ class Accidental : public Element {
       void setHasBracket(bool val)        { _hasBracket = val;      }
       void undoSetHasBracket(bool val);
 
-      Role role() const                   { return _role;           }
-      void setRole(Role r)                { _role = r;              }
+      AccidentalRole role() const         { return _role;           }
+      void setRole(AccidentalRole r)      { _role = r;              }
 
       bool small() const                  { return _small;          }
       void setSmall(bool val)             { _small = val;           }
@@ -140,18 +96,16 @@ class Accidental : public Element {
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID propertyId) const override;
 
-      static AccidentalVal subtype2value(Type);             // return effective pitch offset
-      static const char* subtype2name(Type);
-      static Type value2subtype(AccidentalVal);
-      static Type name2subtype(const QString&);
+      static AccidentalVal subtype2value(AccidentalType);             // return effective pitch offset
+      static const char* subtype2name(AccidentalType);
+      static AccidentalType value2subtype(AccidentalVal);
+      static AccidentalType name2subtype(const QString&);
 
       QString accessibleInfo() override;
       };
 
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Accidental::Role);
-Q_DECLARE_METATYPE(Ms::Accidental::Type);
 
 #endif
 

@@ -331,12 +331,18 @@ enum class IconType : signed char {
       BRACKETS
       };
 
+#include "globalEnums.h"
+
 //---------------------------------------------------------
 //   MScore
 //    MuseScore application object
 //---------------------------------------------------------
 
 class MScore : public QObject {
+   public:
+#include "globalEnums.h"            // export enums for scripting
+
+   private:
       Q_OBJECT
 
    private:
@@ -438,6 +444,10 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Align);
 Q_DECLARE_METATYPE(Ms::MScore::Direction);
 Q_DECLARE_METATYPE(Ms::MScore::DirectionH);
 Q_DECLARE_METATYPE(Ms::TextStyleType);
+Q_DECLARE_METATYPE(Ms::AccidentalRole);
+Q_DECLARE_METATYPE(Ms::AccidentalType);
+Q_DECLARE_METATYPE(Ms::MScore::AccidentalRole);
+Q_DECLARE_METATYPE(Ms::MScore::AccidentalType);
 
 #endif
 

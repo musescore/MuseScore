@@ -1368,7 +1368,7 @@ void Score::addArticulation(ArticulationType attr)
 ///   notes.
 //---------------------------------------------------------
 
-void Score::changeAccidental(Accidental::Type idx)
+void Score::changeAccidental(AccidentalType idx)
       {
       foreach(Note* note, selection().noteList())
             changeAccidental(note, idx);
@@ -1431,7 +1431,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
 ///   note \a note.
 //---------------------------------------------------------
 
-void Score::changeAccidental(Note* note, Accidental::Type accidental)
+void Score::changeAccidental(Note* note, AccidentalType accidental)
       {
       Chord* chord = note->chord();
       if (!chord)
@@ -1455,7 +1455,7 @@ void Score::changeAccidental(Note* note, Accidental::Type accidental)
       // accidental change may result in pitch change
       //
       AccidentalVal acc2 = measure->findAccidental(note);
-      AccidentalVal acc = (accidental == Accidental::Type::NONE) ? acc2 : Accidental::subtype2value(accidental);
+      AccidentalVal acc = (accidental == AccidentalType::NONE) ? acc2 : Accidental::subtype2value(accidental);
 
       int pitch = line2pitch(note->line(), clef, Key::C) + int(acc);
       if (!note->concertPitch())
@@ -1468,13 +1468,13 @@ void Score::changeAccidental(Note* note, Accidental::Type accidental)
 
       // delete accidental
       // both for this note and for any linked notes
-      if (accidental == Accidental::Type::NONE)
+      if (accidental == AccidentalType::NONE)
             forceRemove = true;
 
       // precautionary or microtonal accidental
       // either way, we display it unconditionally
       // both for this note and for any linked notes
-      else if (acc == acc2 || accidental > Accidental::Type::NATURAL)
+      else if (acc == acc2 || accidental > AccidentalType::NATURAL)
             forceAdd = true;
 
       for (ScoreElement* se : note->linkList()) {
@@ -1493,7 +1493,7 @@ void Score::changeAccidental(Note* note, Accidental::Type accidental)
                   Accidental* a = new Accidental(lns);
                   a->setParent(ln);
                   a->setAccidentalType(accidental);
-                  a->setRole(Accidental::Role::USER);
+                  a->setRole(AccidentalRole::USER);
                   lns->undoAddElement(a);
                   }
             changeAccidental2(ln, pitch, tpc);
@@ -2284,15 +2284,15 @@ void Score::cmd(const QAction* a)
       else if (cmd == "beam-32")
             cmdSetBeamMode(Beam::Mode::BEGIN32);
       else if (cmd == "sharp2")
-            changeAccidental(Accidental::Type::SHARP2);
+            changeAccidental(AccidentalType::SHARP2);
       else if (cmd == "sharp")
-            changeAccidental(Accidental::Type::SHARP);
+            changeAccidental(AccidentalType::SHARP);
       else if (cmd == "nat")
-            changeAccidental(Accidental::Type::NATURAL);
+            changeAccidental(AccidentalType::NATURAL);
       else if (cmd == "flat")
-            changeAccidental(Accidental::Type::FLAT);
+            changeAccidental(AccidentalType::FLAT);
       else if (cmd == "flat2")
-            changeAccidental(Accidental::Type::FLAT2);
+            changeAccidental(AccidentalType::FLAT2);
       else if (cmd == "repitch")
             _is.setRepitchMode(a->isChecked());
       else if (cmd == "flip")

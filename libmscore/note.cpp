@@ -944,42 +944,42 @@ void Note::read(XmlReader& e)
                         // TODO: for backward compatibility
                         bool bracket = k & 0x8000;
                         k &= 0xfff;
-                        Accidental::Type at = Accidental::Type::NONE;
+                        AccidentalType at = AccidentalType::NONE;
                         switch(k) {
-                              case 0: at = Accidental::Type::NONE; break;
-                              case 1: at = Accidental::Type::SHARP; break;
-                              case 2: at = Accidental::Type::FLAT; break;
-                              case 3: at = Accidental::Type::SHARP2; break;
-                              case 4: at = Accidental::Type::FLAT2; break;
-                              case 5: at = Accidental::Type::NATURAL; break;
+                              case 0: at = AccidentalType::NONE; break;
+                              case 1: at = AccidentalType::SHARP; break;
+                              case 2: at = AccidentalType::FLAT; break;
+                              case 3: at = AccidentalType::SHARP2; break;
+                              case 4: at = AccidentalType::FLAT2; break;
+                              case 5: at = AccidentalType::NATURAL; break;
 
-                              case 6: at = Accidental::Type::FLAT_SLASH; break;
-                              case 7: at = Accidental::Type::FLAT_SLASH2; break;
-                              case 8: at = Accidental::Type::MIRRORED_FLAT2; break;
-                              case 9: at = Accidental::Type::MIRRORED_FLAT; break;
-                              case 10: at = Accidental::Type::MIRRORED_FLAT_SLASH; break;
-                              case 11: at = Accidental::Type::FLAT_FLAT_SLASH; break;
+                              case 6: at = AccidentalType::FLAT_SLASH; break;
+                              case 7: at = AccidentalType::FLAT_SLASH2; break;
+                              case 8: at = AccidentalType::MIRRORED_FLAT2; break;
+                              case 9: at = AccidentalType::MIRRORED_FLAT; break;
+                              case 10: at = AccidentalType::MIRRORED_FLAT_SLASH; break;
+                              case 11: at = AccidentalType::FLAT_FLAT_SLASH; break;
 
-                              case 12: at = Accidental::Type::SHARP_SLASH; break;
-                              case 13: at = Accidental::Type::SHARP_SLASH2; break;
-                              case 14: at = Accidental::Type::SHARP_SLASH3; break;
-                              case 15: at = Accidental::Type::SHARP_SLASH4; break;
+                              case 12: at = AccidentalType::SHARP_SLASH; break;
+                              case 13: at = AccidentalType::SHARP_SLASH2; break;
+                              case 14: at = AccidentalType::SHARP_SLASH3; break;
+                              case 15: at = AccidentalType::SHARP_SLASH4; break;
 
-                              case 16: at = Accidental::Type::SHARP_ARROW_UP; break;
-                              case 17: at = Accidental::Type::SHARP_ARROW_DOWN; break;
-                              case 18: at = Accidental::Type::SHARP_ARROW_BOTH; break;
-                              case 19: at = Accidental::Type::FLAT_ARROW_UP; break;
-                              case 20: at = Accidental::Type::FLAT_ARROW_DOWN; break;
-                              case 21: at = Accidental::Type::FLAT_ARROW_BOTH; break;
-                              case 22: at = Accidental::Type::NATURAL_ARROW_UP; break;
-                              case 23: at = Accidental::Type::NATURAL_ARROW_DOWN; break;
-                              case 24: at = Accidental::Type::NATURAL_ARROW_BOTH; break;
-                              case 25: at = Accidental::Type::SORI; break;
-                              case 26: at = Accidental::Type::KORON; break;
+                              case 16: at = AccidentalType::SHARP_ARROW_UP; break;
+                              case 17: at = AccidentalType::SHARP_ARROW_DOWN; break;
+                              case 18: at = AccidentalType::SHARP_ARROW_BOTH; break;
+                              case 19: at = AccidentalType::FLAT_ARROW_UP; break;
+                              case 20: at = AccidentalType::FLAT_ARROW_DOWN; break;
+                              case 21: at = AccidentalType::FLAT_ARROW_BOTH; break;
+                              case 22: at = AccidentalType::NATURAL_ARROW_UP; break;
+                              case 23: at = AccidentalType::NATURAL_ARROW_DOWN; break;
+                              case 24: at = AccidentalType::NATURAL_ARROW_BOTH; break;
+                              case 25: at = AccidentalType::SORI; break;
+                              case 26: at = AccidentalType::KORON; break;
                               }
                         _accidental->setAccidentalType(at);
                         _accidental->setHasBracket(bracket);
-                        _accidental->setRole(Accidental::Role::USER);
+                        _accidental->setRole(AccidentalRole::USER);
                         hasAccidental = true;   // we now have an accidental
                         }
                   }
@@ -1759,22 +1759,22 @@ void Note::updateAccidental(AccidentalState* as)
 
       // don't touch accidentals that don't concern tpc such as
       // quarter tones
-      if (!(_accidental && _accidental->accidentalType() > Accidental::Type::NATURAL)) {
+      if (!(_accidental && _accidental->accidentalType() > AccidentalType::NATURAL)) {
             // calculate accidental
-            Accidental::Type acci = Accidental::Type::NONE;
+            AccidentalType acci = AccidentalType::NONE;
 
             AccidentalVal accVal = tpc2alter(tpc());
             if ((accVal != as->accidentalVal(relLine)) || hidden() || as->tieContext(relLine)) {
                   as->setAccidentalVal(relLine, accVal, _tieBack != 0);
                   if (_tieBack)
-                        acci = Accidental::Type::NONE;
+                        acci = AccidentalType::NONE;
                   else {
                         acci = Accidental::value2subtype(accVal);
-                        if (acci == Accidental::Type::NONE)
-                              acci = Accidental::Type::NATURAL;
+                        if (acci == AccidentalType::NONE)
+                              acci = AccidentalType::NATURAL;
                         }
                   }
-            if (acci != Accidental::Type::NONE && !_tieBack && !_hidden) {
+            if (acci != AccidentalType::NONE && !_tieBack && !_hidden) {
                   if (_accidental == 0) {
                         Accidental* a = new Accidental(score());
                         a->setParent(this);
@@ -1791,13 +1791,13 @@ void Note::updateAccidental(AccidentalState* as)
             else {
                   if (_accidental) {
                         // remove this if it was AUTO:
-                        if (_accidental->role() == Accidental::Role::AUTO)
+                        if (_accidental->role() == AccidentalRole::AUTO)
                               score()->undoRemoveElement(_accidental);
                         else {
                               // keep it, but update type if needed
                               acci = Accidental::value2subtype(accVal);
-                              if (acci == Accidental::Type::NONE)
-                                    acci = Accidental::Type::NATURAL;
+                              if (acci == AccidentalType::NONE)
+                                    acci = AccidentalType::NATURAL;
                               if (_accidental->accidentalType() != acci) {
                                     Accidental* a = _accidental->clone();
                                     a->setParent(this);
@@ -1984,7 +1984,7 @@ int Note::line() const
 //   setAccidentalType
 //---------------------------------------------------------
 
-void Note::setAccidentalType(Accidental::Type type)
+void Note::setAccidentalType(AccidentalType type)
       {
       if (_score)
       	_score->changeAccidental(this, type);
