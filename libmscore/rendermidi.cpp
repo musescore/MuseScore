@@ -629,7 +629,8 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
       foreach (const RepeatSegment* rs, *repeatList()) {
             int tickOffset = rs->utick - rs->tick;
             int utick1 = rs->utick;
-            int utick2 = utick1 + rs->len;
+            int tick1 = repeatList()->utick2tick(utick1);
+            int tick2 = tick1 + rs->len;
             std::map<int, std::vector<std::pair<int, bool>>> channelPedalEvents = std::map<int, std::vector<std::pair<int, bool>>>();
             for (const auto& sp : _spanner.map()) {
                   Spanner* s = sp.second;
@@ -647,7 +648,7 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                   else
                         lastEvent = std::pair<int, bool>(0, true);
 
-                  if (s->tick() >= utick1 && s->tick() < utick2) {
+                  if (s->tick() >= tick1 && s->tick() < tick2) {
                         // Handle "overlapping" pedal segments (usual case for connected pedal line)
                         if (lastEvent.second == false && lastEvent.first >= (s->tick() + tickOffset + 2)) {
                               channelPedalEvents.at(channel).pop_back();
@@ -655,8 +656,12 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                               }
                         channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick() + tickOffset + 2, true));
                         }
-                  if (s->tick2() >= utick1 && s->tick2() < utick2)
-                        channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick2() + tickOffset + 1, false));
+                  if (s->tick2() >= tick1 && s->tick2() <= tick2) {
+                        int t = s->tick2() + tickOffset + 1;
+                        if (t > repeatList()->last()->utick + repeatList()->last()->len)
+                             t = repeatList()->last()->utick + repeatList()->last()->len;
+                        channelPedalEvents.at(channel).push_back(std::pair<int, bool>(t, false));
+                        }
                   }
 
             for (const auto& pedalEvents : channelPedalEvents) {
