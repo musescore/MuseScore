@@ -4,34 +4,51 @@ env:
    - "ARTIFACTS_S3_BUCKET=vtest.musescore.org"
    - secure: "lVj+9BBtJIjW3CwfXstvNyYVn0AkXEwTyiPmp4BprcheP78WIqZNC0uG2RjG9MgyHbZkprE7zRdqR9YPWTitg+XYkkD6+jPHRO+PQFLARuiTAX9yhUO53yQQZC2wMkQ+bFuZsFmz1rfAsPHx3bXeZAMsz+Qnh8D2yIqqV7qxwWw="
    - secure: "L+66yQZIZJTyIAfrG89ncKIkMAr4+UvaOZMsd420OSdnEH9kpdm5Kws8rG0VVLAtqhfQfi3K9DuC8Ub7IiXqil//h+I9WJ2LHKirWK0m/MkhTFC6hfi0uSnQCX/jud3Keewxf3ovgiKQvIw6VR37UC50YJM9+KhZKtsNYhGAdos="
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.9
+    - cmake
+    - alsa
+    - libsndfile1 
+    - wget 
+    - make 
+    - ant 
+    - curl
+    - libasound2-dev
+    - portaudio19-dev
+    - libsndfile1-dev
+    - zlib1g-dev
+    - libfreetype6-dev
+    - libfontconfig1-dev
+    - lame 
+    - libmp3lame-dev
+    - libegl1-mesa-dev 
+    - libegl1-mesa
+
+sudo: false
+
 before_install:
-  # rm the rabbitmq source file since it currently times out and we don't need it
-  - "sudo rm -f /etc/apt/sources.list.d/rabbitmq-source.list"
-  - "sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test"
-  - "sudo apt-get -q update"
-  - "sudo apt-get install -y g++-4.9"
-  - "sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 40 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9"
-  - "sudo apt-get install -qq alsa libsndfile1 wget make ant curl cmake"
-  - "sudo apt-get install -qq libasound2-dev portaudio19-dev libsndfile1-dev zlib1g-dev libfreetype6-dev libfontconfig-dev"
-  - "sudo apt-get install -qq lame libmp3lame-dev"
-  - "sudo apt-get install -qq libegl1-mesa-dev libegl1-mesa"
+  - export CC=/usr/bin/gcc-4.9
+  - export CXX=/usr/bin/g++-4.9
   - "mkdir qt5"
-  - "wget -q -O qt5.zip http://ftp.osuosl.org/pub/musescore/utils/qt541.zip"
+  - "wget -q -O qt5.zip http://utils.musescore.org.s3.amazonaws.com/qt541.zip"
   - "unzip -qq qt5.zip -d qt5"
   - "export PATH=`pwd`/qt5/bin:$PATH"
   - "export QT_PLUGIN_PATH=`pwd`/qt5/plugins"
 before_script:
-  # get some memory back
-  - "sudo service mysql stop"
-  - "sudo /etc/init.d/postgresql stop"
   #compatibility between ruby travis artefact and GO one
   - "export ARTIFACTS_KEY=$ARTIFACTS_AWS_ACCESS_KEY_ID"
   - "export ARTIFACTS_SECRET=$ARTIFACTS_AWS_SECRET_ACCESS_KEY"
   - "artifacts -v || curl -sL https://raw.githubusercontent.com/meatballhat/artifacts/master/install | bash"
-  - "export PATH=$PATH:$HOME/bin"
+  - "mkdir $HOME/software"
+  - "export PATH=$PATH:$HOME/bin:$HOME/software/bin"
   - "make revision"
-  - "make debug CPUS=4"
-  - "sudo make installdebug CPUS=4"
+  - "make debug CPUS=2 PREFIX=$HOME/software"
+  - "make installdebug CPUS=2 PREFIX=$HOME/software"
   - "cd build.debug/mtest"
   - "make -j2"
 script:
@@ -54,5 +71,3 @@ notifications:
       - "irc.freenode.net#musescore"
     on_success: change
     on_failure: change
-
-
