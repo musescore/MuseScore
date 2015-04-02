@@ -2331,10 +2331,10 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             double alter2 = 0.0;
             if (acc) {
                   switch (acc->accidentalType()) {
-                        case Accidental::Type::MIRRORED_FLAT:  alter2 = -0.5; break;
-                        case Accidental::Type::SHARP_SLASH:    alter2 = 0.5;  break;
-                        case Accidental::Type::MIRRORED_FLAT2: alter2 = -1.5; break;
-                        case Accidental::Type::SHARP_SLASH4:   alter2 = 1.5;  break;
+                        case AccidentalType::MIRRORED_FLAT:  alter2 = -0.5; break;
+                        case AccidentalType::SHARP_SLASH:    alter2 = 0.5;  break;
+                        case AccidentalType::MIRRORED_FLAT2: alter2 = -1.5; break;
+                        case AccidentalType::SHARP_SLASH4:   alter2 = 1.5;  break;
                         default:                                             break;
                         }
                   }

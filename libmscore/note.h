@@ -42,6 +42,8 @@ class NoteDot;
 class Spanner;
 class StaffType;
 enum class SymId;
+// enum class AccidentalRole : char;
+enum class AccidentalType : char;
 
 static const int MAX_DOTS = 3;
 
@@ -138,7 +140,7 @@ struct NoteVal {
 //   @P headType         Ms::NoteHead::Type      (HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS)
 //   @P elements         array[Ms::Element]      list of elements attached to note head
 //   @P accidental       Ms::Accidental          note accidental (null if none)
-//   @P accidentalType   Ms::Accidental::Type    note accidental type
+//   @P accidentalType   Ms::MScore::AccidentalType note accidental type
 //   @P dots             array[Ms::NoteDot]      list of note dots (some can be null, read only)
 //   @P dotsCount        int                     number of note dots (read only)
 //   @P tieFor           Ms::Tie                 note forward tie (null if none, read only)
@@ -170,7 +172,7 @@ class Note : public Element {
       Q_PROPERTY(Ms::NoteHead::Type headType             READ headType         WRITE undoSetHeadType)
       Q_PROPERTY(QQmlListProperty<Ms::Element> elements  READ qmlElements)
       Q_PROPERTY(Ms::Accidental* accidental              READ accidental)
-      Q_PROPERTY(Ms::Accidental::Type accidentalType     READ accidentalType   WRITE setAccidentalType)
+      Q_PROPERTY(Ms::AccidentalType accidentalType       READ accidentalType   WRITE setAccidentalType)
       Q_PROPERTY(QQmlListProperty<Ms::NoteDot> dots      READ qmlDots)
       Q_PROPERTY(int dotsCount                           READ qmlDotsCount)
       Q_PROPERTY(Ms::Tie* tieFor                         READ tieFor)
@@ -308,8 +310,8 @@ class Note : public Element {
       Accidental* accidental() const    { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a;    }
 
-      Accidental::Type accidentalType() const { return _accidental ? _accidental->accidentalType() : Accidental::Type::NONE; }
-      void setAccidentalType(Accidental::Type type);
+      AccidentalType accidentalType() const { return _accidental ? _accidental->accidentalType() : AccidentalType::NONE; }
+      void setAccidentalType(AccidentalType type);
 
       int line() const;
       void setLine(int n);

@@ -273,24 +273,24 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
       sp->setDrawGrid(true);
 
       if (basic) {
-            static Accidental::Type types[] = {
-                  Accidental::Type::NONE,
-                  Accidental::Type::SHARP,
-                  Accidental::Type::FLAT,
-                  Accidental::Type::SHARP2,
-                  Accidental::Type::FLAT2,
-                  Accidental::Type::NATURAL
+            static AccidentalType types[] = {
+                  AccidentalType::NONE,
+                  AccidentalType::SHARP,
+                  AccidentalType::FLAT,
+                  AccidentalType::SHARP2,
+                  AccidentalType::FLAT2,
+                  AccidentalType::NATURAL
                   };
             for (auto i : types) {
                   Accidental* s = new Accidental(gscore);
-                  s->setAccidentalType(Accidental::Type(i));
+                  s->setAccidentalType(AccidentalType(i));
                   sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
                   }
             }
       else {
-            for (int i = int(Accidental::Type::SHARP); i < int(Accidental::Type::END); ++i) {
+            for (int i = int(AccidentalType::SHARP); i < int(AccidentalType::END); ++i) {
                   Accidental* s = new Accidental(gscore);
-                  s->setAccidentalType(Accidental::Type(i));
+                  s->setAccidentalType(AccidentalType(i));
                   if (s->symbol() != SymId::noSym)
                         sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
                   else
