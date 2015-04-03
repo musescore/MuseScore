@@ -16,6 +16,7 @@
 #include "libmscore/mscore.h"
 #include "libmscore/score.h"
 #include "libmscore/note.h"
+#include "libmscore/accidental.h"
 #include "libmscore/chord.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
@@ -404,7 +405,7 @@ void TestNote::tpcTranspose()
       score->startCmd();
       Measure* m = score->firstMeasure();
       score->select(m, SelectType::SINGLE, 0);
-      score->changeAccidental(Accidental::Type::FLAT);
+      score->changeAccidental(AccidentalType::FLAT);
       score->endCmd();
 
       score->startCmd();
