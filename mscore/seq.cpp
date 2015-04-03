@@ -527,7 +527,7 @@ void Seq::recomputeMaxMidiOutPort() {
       if (!(preferences.useJackMidi || preferences.useAlsaAudio))
             return;
       int max = 0;
-      foreach(Score * s, mscoreCore->scores()) {
+      foreach(Score * s, MuseScoreCore::mscoreCore->scores()) {
             if (s->midiPortCount() > max)
                   max = s->midiPortCount();
             }

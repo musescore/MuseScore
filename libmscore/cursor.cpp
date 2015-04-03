@@ -57,14 +57,14 @@ void Cursor::rewind(int type)
             _segment = 0;
             Measure* m = _score->firstMeasure();
             if (m) {
-                  _segment = m->first(Segment::Type::ChordRest);
-                  firstChordRestInTrack();
+                  _segment = m->first(_filter);
+                  nextInTrack();
                   }
             }
       else if (type == 1) {
             _segment  = _score->selection().startSegment();
             _track    = _score->selection().staffStart() * VOICES;
-            firstChordRestInTrack();
+            nextInTrack();
             }
       else if (type == 2) {
             _segment  = _score->selection().endSegment();
@@ -84,8 +84,8 @@ bool Cursor::next()
       {
       if (!_segment)
             return false;
-      _segment = _segment->next1(Segment::Type::ChordRest);
-      firstChordRestInTrack();
+      _segment = _segment->next1(_filter);
+      nextInTrack();
       _score->inputState().setTrack(_track);
       _score->inputState().setSegment(_segment);
       return _segment != 0;
@@ -106,10 +106,10 @@ bool Cursor::nextMeasure()
             _segment = 0;
             return false;
             }
-      _segment = m->first(Segment::Type::ChordRest);
+      _segment = m->first(_filter);
 //      while (seg && seg->element(_track) == 0)
-//            seg = seg->next1(SegChordRest);
-      firstChordRestInTrack();
+//            seg = seg->next1(_filter);
+      nextInTrack();
       return _segment != 0;
       }
 
@@ -137,8 +137,8 @@ void Cursor::add(Element* s)
             int tick = m->tick();
             _score->cmdAddTimeSig(m, _track, static_cast<TimeSig*>(s), false);
             m = _score->tick2measure(tick);
-            _segment = m->first(Segment::Type::ChordRest);
-            firstChordRestInTrack();
+            _segment = m->first(_filter);
+            nextInTrack();
             }
       else if (s->type() == Element::Type::LAYOUT_BREAK) {
             Measure* m = _segment->measure();
@@ -277,10 +277,10 @@ int Cursor::voice() const
 //    go to first segment at or after _segment which has notes / rests in _track
 //---------------------------------------------------------
 
-inline void Cursor::firstChordRestInTrack()
+void Cursor::nextInTrack()
       {
       while (_segment && _segment->element(_track) == 0)
-            _segment = _segment->next1(Segment::Type::ChordRest);
+            _segment = _segment->next1(_filter);
       }
 
 //---------------------------------------------------------

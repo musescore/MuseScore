@@ -23,7 +23,6 @@
 #include "synthesizerstate.h"
 #include "mscoreview.h"
 #include "segment.h"
-#include "accidental.h"
 #include "ottava.h"
 #include "spannermap.h"
 #include "rehearsalmark.h"

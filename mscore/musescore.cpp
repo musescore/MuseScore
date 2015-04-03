@@ -115,7 +115,6 @@ extern Ms::Synthesizer* createZerberus();
 namespace Ms {
 
 MuseScore* mscore;
-MuseScoreCore* mscoreCore;
 MasterSynthesizer* synti;
 
 bool enableExperimental = false;
@@ -2500,7 +2499,7 @@ void MuseScore::changeState(ScoreState val)
             getAction("join-measure")->setEnabled(cs && cs->rootScore()->excerpts().size() == 0);
       if (getAction("split-measure")->isEnabled())
             getAction("split-measure")->setEnabled(cs && cs->rootScore()->excerpts().size() == 0);
-      
+
       //getAction("split-measure")->setEnabled(cs->rootScore()->excerpts().size() == 0);
 
       // disabling top level menu entries does not
@@ -4915,7 +4914,6 @@ int main(int argc, char* av[])
             }
 
       mscore = new MuseScore();
-      mscoreCore = mscore;
 
       // create a score for internal use
       gscore = new Score(MScore::baseStyle());

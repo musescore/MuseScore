@@ -452,9 +452,10 @@ class Element : public QObject, public ScoreElement {
 
       // debug functions
       virtual void dump() const;
-      Q_INVOKABLE const char* name() const;
-      virtual QString subtypeName() const;
-      virtual QString userName() const;
+      const char* name() const;
+      virtual Q_INVOKABLE QString subtypeName() const;
+      virtual Q_INVOKABLE QString userName() const;
+      virtual Q_INVOKABLE QString _name() const { return QString(name()); }
       void dumpQPointF(const char*) const;
 
       virtual Space space() const      { return Space(0.0, width()); }
