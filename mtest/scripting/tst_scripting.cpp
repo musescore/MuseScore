@@ -34,7 +34,7 @@ class TestScripting : public QObject, public MTest
 
    private slots:
       void initTestCase();
-      void test1() { read1("s1", "p1"); }
+      //void test1() { read1("s1", "p1"); }
       };
 
 //---------------------------------------------------------

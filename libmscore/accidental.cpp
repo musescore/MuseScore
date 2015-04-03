@@ -446,7 +446,7 @@ QVariant Accidental::getProperty(P_ID propertyId) const
       switch (propertyId) {
             case P_ID::SMALL:              return _small;
             case P_ID::ACCIDENTAL_BRACKET: return _hasBracket;
-            case P_ID::ROLE:               return QVariant::fromValue(role());
+            case P_ID::ROLE:               return int(role());
             default:
                   return Element::getProperty(propertyId);
             }
@@ -461,7 +461,7 @@ QVariant Accidental::propertyDefault(P_ID propertyId) const
       switch (propertyId) {
             case P_ID::SMALL:              return false;
             case P_ID::ACCIDENTAL_BRACKET: return false;
-            case P_ID::ROLE:               return QVariant::fromValue(AccidentalRole::AUTO);
+            case P_ID::ROLE:               return int(AccidentalRole::AUTO);
             default:
                   return Element::propertyDefault(propertyId);
             }
