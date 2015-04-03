@@ -1713,7 +1713,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         else {
                               if (cr1->up())
                                     x2 -= stemWidth;
-                              else if (!cr2->up())
+                              if (!cr2->up())
                                     x3 += stemWidth;
                               }
                         }
