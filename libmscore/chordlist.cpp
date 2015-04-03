@@ -809,9 +809,11 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             // eat spaces
             while (i < len && s[i] == ' ')
                   ++i;
-            // get second token - up to first non-digit
+            // get second token - a number <= 13
             for (j = 0, tok2 = ""; i < len; ++i) {
                   if (!s[i].isDigit())
+                        break;
+                  if (j == 1 && (tok2[0] != '1' || s[i] > '3'))
                         break;
                   tok2[j++] = s[i];
                   }
@@ -887,6 +889,8 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                         d = 0;
                   else
                         d = tok2L.toInt();
+                  if (d > 13)
+                        d = 13;
                   QString degree;
                   bool alter = false;
                   if (tok1L == "add") {
@@ -947,6 +951,10 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                         _xmlText = tok1 + tok2;
                         if (_extension == "7" || _extension == "9" || _extension == "11" || _extension == "13") {
                               _xmlDegrees += (_quality == "major") ? "add#7" : "add7";
+                              // hack for programs that cannot assemble names well
+                              // even though the kind is suspended, set text to also include the extension
+                              // in export, we will set the degree text to null
+                              _xmlText = _extension + _xmlText;
                               degree = "";
                               }
                         else if (_extension != "")
