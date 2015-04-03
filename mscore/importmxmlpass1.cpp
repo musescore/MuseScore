@@ -975,7 +975,8 @@ void MusicXMLParserPass1::identification()
       while (_e.readNextStartElement()) {
             if (_e.name() == "creator") {
                   // type is an arbitrary label
-                  _score->setMetaTag(_e.attributes().value("type").toString(), _e.readElementText());
+                  QString strType = _e.attributes().value("type").toString();
+                  _score->setMetaTag(strType, _e.readElementText());
                   }
             else if (_e.name() == "rights")
                   _score->setMetaTag("copyright", _e.readElementText());
