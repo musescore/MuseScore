@@ -4972,8 +4972,9 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
 
             if (!h->xmlKind().isEmpty()) {
                   QString s = "kind";
+                  QString kindText = h->xmlText();
                   if (h->xmlText() != "")
-                        s += " text=\"" + h->xmlText() + "\"";
+                        s += " text=\"" + kindText + "\"";
                   if (h->xmlSymbols() == "yes")
                         s += " use-symbols=\"yes\"";
                   if (h->xmlParens() == "yes")
@@ -4982,7 +4983,24 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                   QStringList l = h->xmlDegrees();
                   if (!l.isEmpty()) {
                         foreach(QString tag, l) {
-                              xml.stag("degree");
+                              QString degreeText;
+                              if (h->xmlKind().startsWith("suspended")
+                                  && tag.startsWith("add") && tag[3].isDigit()
+                                  && !kindText.isEmpty() && kindText[0].isDigit()) {
+                                    // hack to correct text for suspended chords whose kind text has degree information baked in
+                                    // (required by some other applications)
+                                    int tagDegree = tag.mid(3).toInt();
+                                    QString kindTextExtension;
+                                    for (int i = 0; i < kindText.length() && kindText[i].isDigit(); ++i)
+                                          kindTextExtension[i] = kindText[i];
+                                    int kindExtension = kindTextExtension.toInt();
+                                    if (tagDegree <= kindExtension && (tagDegree & 1) && (kindExtension & 1))
+                                          degreeText = "\"\"";
+                                    }
+                              if (degreeText.isEmpty())
+                                    xml.stag("degree");
+                              else
+                                    xml.stag("degree text=" + degreeText);
                               int alter = 0;
                               int idx = 3;
                               if (tag[idx] == '#') {
