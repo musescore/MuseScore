@@ -362,7 +362,7 @@ static void setFirstInstrument(Part* part, const QString& partId,
             part->setMidiProgram(instr.midiProgram);
             part->setPan(instr.midiPan);
             part->setVolume(instr.midiVolume);
-            part->instr()->setTrackName(instr.name);
+            part->instrument()->setTrackName(instr.name);
             }
       else
             qDebug("setFirstInstrument: no instrument found for part '%s'", qPrintable(partId));  // TODO
@@ -381,9 +381,9 @@ static void setStaffTypePercussion(Part* part, Drumset* drumset)
             if (part->staff(j)->lines() == 5 && !part->staff(j)->isDrumStaff())
                   part->staff(j)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
       // set drumset for instrument
-      part->instr()->setDrumset(drumset);
-      part->instr()->channel(0)->bank = 128;
-      part->instr()->channel(0)->updateInitList();
+      part->instrument()->setDrumset(drumset);
+      part->instrument()->channel(0)->bank = 128;
+      part->instrument()->channel(0)->updateInitList();
       }
 
 //---------------------------------------------------------
@@ -3439,7 +3439,7 @@ void MusicXMLParserPass2::transpose(const QString& partId)
                   skipLogCurrElem();
             }
 
-      _pass1.getPart(partId)->instr()->setTranspose(interval);
+      _pass1.getPart(partId)->instrument()->setTranspose(interval);
       }
 
 //---------------------------------------------------------
@@ -4009,7 +4009,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             else {
                   int ottavaStaff = (msTrack - _pass1.trackForPart(partId)) / VOICES;
                   int octaveShift = _pass1.octaveShift(partId, ottavaStaff, noteStartTime);
-                  xmlSetPitch(note, step, alter, octave, octaveShift, _pass1.getPart(partId)->instr());
+                  xmlSetPitch(note, step, alter, octave, octaveShift, _pass1.getPart(partId)->instrument());
                   }
 
             // set drumset information
