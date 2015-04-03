@@ -693,7 +693,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       };
 
 extern MuseScore* mscore;
-extern MuseScoreCore* mscoreCore;
 extern QStringList recentScores;
 extern QString dataPath;
 extern MasterSynthesizer* synti;

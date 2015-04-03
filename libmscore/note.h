@@ -22,7 +22,7 @@
 #include "symbol.h"
 #include "noteevent.h"
 #include "pitchspelling.h"
-#include "accidental.h"
+// #include "accidental.h"
 
 class QPainter;
 
@@ -134,13 +134,13 @@ struct NoteVal {
 //   @P tuning           qreal                   tuning offset in cent
 //   @P veloType         Ms::Note::ValueType     (OFFSET_VAL, USER_VAL)
 //   @P veloOffset       int
-//   @P userMirror       Ms::MScore::DirectionH  (AUTO, LEFT, RIGHT)
-//   @P userDotPosition  Ms::MScore::Direction   (AUTO, UP, DOWN)
-//   @P headGroup        Ms::NoteHead::Group     (HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT)
-//   @P headType         Ms::NoteHead::Type      (HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS)
+//   @P userMirror       MScore::DirectionH      (AUTO, LEFT, RIGHT)
+//   @P userDotPosition  MScore::Direction       (AUTO, UP, DOWN)
+//   @P headGroup        NoteHead::Group         (HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT)
+//   @P headType         NoteHead::Type          (HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS)
 //   @P elements         array[Ms::Element]      list of elements attached to note head
-//   @P accidental       Ms::Accidental          note accidental (null if none)
-//   @P accidentalType   Ms::MScore::AccidentalType note accidental type
+//   @P accidental       Accidental              note accidental (null if none)
+//   @P accidentalType   MScore::AccidentalType  note accidental type
 //   @P dots             array[Ms::NoteDot]      list of note dots (some can be null, read only)
 //   @P dotsCount        int                     number of note dots (read only)
 //   @P tieFor           Ms::Tie                 note forward tie (null if none, read only)
@@ -310,7 +310,7 @@ class Note : public Element {
       Accidental* accidental() const    { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a;    }
 
-      AccidentalType accidentalType() const { return _accidental ? _accidental->accidentalType() : AccidentalType::NONE; }
+      AccidentalType accidentalType() const;
       void setAccidentalType(AccidentalType type);
 
       int line() const;

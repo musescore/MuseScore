@@ -13,6 +13,8 @@
 #ifndef __MSCORE_H__
 #define __MSCORE_H__
 
+#include "config.h"
+
 namespace Ms {
 
 #define MSC_VERSION     "2.06"
@@ -331,21 +333,14 @@ enum class IconType : signed char {
       BRACKETS
       };
 
-#include "globalEnums.h"
-
 //---------------------------------------------------------
 //   MScore
 //    MuseScore application object
 //---------------------------------------------------------
 
 class MScore : public QObject {
-   public:
-#include "globalEnums.h"            // export enums for scripting
-
-   private:
       Q_OBJECT
 
-   private:
       static MStyle* _defaultStyle;       // buildin modified by preferences
       static MStyle* _defaultStyleForParts;
 
@@ -360,6 +355,8 @@ class MScore : public QObject {
    public:
       enum class Direction  : char { AUTO, UP, DOWN };
       enum class DirectionH : char { AUTO, LEFT, RIGHT };
+      Q_ENUMS(Direction DirectionH)
+
       static void init();
 
       static MStyle* defaultStyle();
@@ -444,10 +441,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Align);
 Q_DECLARE_METATYPE(Ms::MScore::Direction);
 Q_DECLARE_METATYPE(Ms::MScore::DirectionH);
 Q_DECLARE_METATYPE(Ms::TextStyleType);
-Q_DECLARE_METATYPE(Ms::AccidentalRole);
-Q_DECLARE_METATYPE(Ms::AccidentalType);
-Q_DECLARE_METATYPE(Ms::MScore::AccidentalRole);
-Q_DECLARE_METATYPE(Ms::MScore::AccidentalType);
 
 #endif
 

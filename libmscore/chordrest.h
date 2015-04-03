@@ -51,7 +51,6 @@ class ChordRest : public DurationElement {
       Q_PROPERTY(int            durationType  READ durationTypeTicks  WRITE setDurationType)
       Q_PROPERTY(Ms::Beam::Mode beamMode      READ beamMode           WRITE undoSetBeamMode)
       Q_PROPERTY(bool           small         READ small              WRITE undoSetSmall)
-      Q_ENUMS(Ms::Beam::Mode)
 
       TDuration _durationType;
       int _staffMove;         // -1, 0, +1, used for crossbeaming

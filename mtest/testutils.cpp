@@ -317,7 +317,6 @@ void MTest::initMTest()
       MScore::DPMM = MScore::DPI / INCH;
       MScore::noGui = true;
 
-
       synti  = new MasterSynthesizer();
       mscore = new MScore;
       new MuseScoreCore;

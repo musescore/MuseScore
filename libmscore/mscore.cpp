@@ -118,8 +118,8 @@ void MScore::init()
       qRegisterMetaType<MScore::Direction>("Direction");
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
       qRegisterMetaType<Element::Placement>("Placement");
-      qRegisterMetaType<AccidentalRole>("AccidentalRole");
-      qRegisterMetaType<AccidentalType>("AccidentalType");
+//      qRegisterMetaType<AccidentalRole>("AccidentalRole");
+//      qRegisterMetaType<AccidentalType>("AccidentalType");
       qRegisterMetaType<Spanner::Anchor>("Anchor");
       qRegisterMetaType<NoteHead::Group>("NoteHeadGroup");
       qRegisterMetaType<NoteHead::Type>("NoteHeadType");
@@ -138,7 +138,6 @@ void MScore::init()
       qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
       qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
       qRegisterMetaType<Glissando::Type>("GlissandoType");
-//      qRegisterMetaType<TextStyle>("TextStyle");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm
@@ -287,6 +286,7 @@ void MScore::defaultStyleForPartsHasChanged()
 QQmlEngine* MScore::qml()
       {
       if (_qml == 0) {
+            qDebug("initializing qml engine");
             //-----------some qt bindings
             _qml = new QQmlEngine;
 #ifdef Q_OS_WIN

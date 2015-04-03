@@ -1981,16 +1981,6 @@ int Note::line() const
       }
 
 //---------------------------------------------------------
-//   setAccidentalType
-//---------------------------------------------------------
-
-void Note::setAccidentalType(AccidentalType type)
-      {
-      if (_score)
-      	_score->changeAccidental(this, type);
-      }
-
-//---------------------------------------------------------
 //   setLine
 //---------------------------------------------------------
 
@@ -2683,5 +2673,25 @@ QList<Note*> Note::tiedNotes() const
             }
       return notes;
       }
+
+//---------------------------------------------------------
+//   accidentalType
+//---------------------------------------------------------
+
+AccidentalType Note::accidentalType() const
+      {
+      return _accidental ? _accidental->accidentalType() : AccidentalType::NONE;
+      }
+
+//---------------------------------------------------------
+//   setAccidentalType
+//---------------------------------------------------------
+
+void Note::setAccidentalType(AccidentalType type)
+      {
+      if (_score)
+      	_score->changeAccidental(this, type);
+      }
+
 
 }

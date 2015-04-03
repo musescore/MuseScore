@@ -55,6 +55,7 @@
 #include "bracket.h"
 #include "ottava.h"
 #include "textframe.h"
+#include "accidental.h"
 
 namespace Ms {
 

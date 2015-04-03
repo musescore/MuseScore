@@ -32,6 +32,7 @@ NICE-TO-HAVE TODO:
 #include "style.h"
 #include "sym.h"
 #include "xml.h"
+#include "accidental.h"
 
 namespace Ms {
 
