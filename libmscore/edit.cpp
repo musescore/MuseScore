@@ -1355,6 +1355,8 @@ void Score::repitchNote(const Position& p, bool replace)
             }
       // add new note to chord
       undoAddElement(note);
+      _playNote = true;
+      _playChord = true;
       // recreate tie forward if there is a note to tie to
       // one-sided ties will not be recreated
       if (firstTiedNote) {
