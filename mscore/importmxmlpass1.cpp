@@ -2204,7 +2204,7 @@ void MusicXMLParserPass1::staffDetails(const QString& partId)
             }
 
       if (t) {
-            Instrument* i = part->instr();
+            Instrument* i = part->instrument();
             i->setStringData(*t);
             }
       }
