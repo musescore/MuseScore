@@ -170,7 +170,7 @@ class Note : public Element {
       Q_PROPERTY(Ms::NoteHead::Type headType             READ headType         WRITE undoSetHeadType)
       Q_PROPERTY(QQmlListProperty<Ms::Element> elements  READ qmlElements)
       Q_PROPERTY(Ms::Accidental* accidental              READ accidental)
-      Q_PROPERTY(Ms::AccidentalType accidentalType       READ accidentalType   WRITE setAccidentalType)
+      Q_PROPERTY(int accidentalType                      READ qmlAccidentalType   WRITE qmlSetAccidentalType)
       Q_PROPERTY(QQmlListProperty<Ms::NoteDot> dots      READ qmlDots)
       Q_PROPERTY(int dotsCount                           READ qmlDotsCount)
       Q_PROPERTY(Ms::Tie* tieFor                         READ tieFor)
@@ -310,6 +310,9 @@ class Note : public Element {
 
       AccidentalType accidentalType() const;
       void setAccidentalType(AccidentalType type);
+
+      int qmlAccidentalType() { return static_cast<int>(accidentalType()); }
+      void qmlSetAccidentalType(int type) { setAccidentalType(static_cast<AccidentalType>(type)); }
 
       int line() const;
       void setLine(int n);
