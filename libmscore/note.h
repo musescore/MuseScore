@@ -22,7 +22,6 @@
 #include "symbol.h"
 #include "noteevent.h"
 #include "pitchspelling.h"
-// #include "accidental.h"
 
 class QPainter;
 
@@ -42,7 +41,6 @@ class NoteDot;
 class Spanner;
 class StaffType;
 enum class SymId;
-// enum class AccidentalRole : char;
 enum class AccidentalType : char;
 
 static const int MAX_DOTS = 3;

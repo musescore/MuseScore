@@ -34,7 +34,7 @@ class TestScripting : public QObject, public MTest
 
    private slots:
       void initTestCase();
-      //void test1() { read1("s1", "p1"); }
+      void test1() { read1("s1", "p1"); }
       };
 
 //---------------------------------------------------------
@@ -62,8 +62,10 @@ void TestScripting::read1(const char* file, const char* script)
       score->doLayout();
 
       QQmlEngine* engine = Ms::MScore::qml();
+      QVERIFY(engine);
 
       QString scriptPath = root + "/" + DIR + script + ".qml";
+
       QFileInfo fi(scriptPath);
       QVERIFY(fi.exists());
 
