@@ -20,6 +20,7 @@ before_install:
   - "unzip -qq qt5.zip -d qt5"
   - "export PATH=`pwd`/qt5/bin:$PATH"
   - "export QT_PLUGIN_PATH=`pwd`/qt5/plugins"
+  - "export QML2_IMPORT_PATH=`pwd`/qt5/qml"
 before_script:
   # get some memory back
   - "sudo service mysql stop"
@@ -30,10 +31,10 @@ before_script:
   - "artifacts -v || curl -sL https://raw.githubusercontent.com/meatballhat/artifacts/master/install | bash"
   - "export PATH=$PATH:$HOME/bin"
   - "make revision"
-  - "make debug CPUS=1"
-  - "sudo make installdebug CPUS=1"
+  - "make debug CPUS=4"
+  - "sudo make installdebug CPUS=4"
   - "cd build.debug/mtest"
-  - "make -j1"
+  - "make -j2"
 script:
   - "../../build/run_tests.sh"
 after_script:
