@@ -1764,22 +1764,22 @@ static void markUserAccidentals(const int firstStaff,
                               AccidentalVal currAccVal = currAcc.accidentalVal(ln);
                               if ((alter == -1
                                    && currAccVal == AccidentalVal::FLAT
-                                   && nt->accidental()->accidentalType() == Accidental::Type::FLAT
+                                   && nt->accidental()->accidentalType() == AccidentalType::FLAT
                                    && !accTmp.value(ln, false))
                                   || (alter ==  0
                                       && currAccVal == AccidentalVal::NATURAL
-                                      && nt->accidental()->accidentalType() == Accidental::Type::NATURAL
+                                      && nt->accidental()->accidentalType() == AccidentalType::NATURAL
                                       && !accTmp.value(ln, false))
                                   || (alter ==  1
                                       && currAccVal == AccidentalVal::SHARP
-                                      && nt->accidental()->accidentalType() == Accidental::Type::SHARP
+                                      && nt->accidental()->accidentalType() == AccidentalType::SHARP
                                       && !accTmp.value(ln, false))) {
-                                    nt->accidental()->setRole(Accidental::Role::USER);
+                                    nt->accidental()->setRole(AccidentalRole::USER);
                                     }
-                              else if (nt->accidental()->accidentalType() > Accidental::Type::NATURAL
-                                       && nt->accidental()->accidentalType() < Accidental::Type::END) {
+                              else if (nt->accidental()->accidentalType() > AccidentalType::NATURAL
+                                       && nt->accidental()->accidentalType() < AccidentalType::END) {
                                     // microtonal accidental
-                                    nt->accidental()->setRole(Accidental::Role::USER);
+                                    nt->accidental()->setRole(AccidentalRole::USER);
                                     accTmp.insert(ln, false);
                                     }
                               else {
@@ -1847,7 +1847,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                   // note: chord and grace note handling done in note()
                   // dura > 0 iff valid rest or first note of chord found
                   Note* n = note(partId, measure, time + mTime, time + prevTime, dura, cv, gcl, beam, fbl, alt);
-                  if (n && n->accidental() && n->accidental()->accidentalType() != Accidental::Type::NONE)
+                  if (n && n->accidental() && n->accidental()->accidentalType() != AccidentalType::NONE)
                         alterMap.insert(n, alt);
                   if (dura.isValid() && dura > Fraction(0, 1)) {
                         prevTime = mTime; // save time stamp last chord created
@@ -2984,36 +2984,36 @@ static bool isAppr(const double v, const double ref, const double epsilon)
 //---------------------------------------------------------
 
 /**
- Convert a MusicXML alter tag into a microtonal accidental in MuseScore enum Accidental::Type.
+ Convert a MusicXML alter tag into a microtonal accidental in MuseScore enum AccidentalType.
  Works only for quarter tone, half tone, three-quarters tone and whole tone accidentals.
  */
 
-static Accidental::Type microtonalGuess(double val)
+static AccidentalType microtonalGuess(double val)
       {
       const double eps = 0.001;
       if (isAppr(val, -2, eps))
-            return Accidental::Type::FLAT2;
+            return AccidentalType::FLAT2;
       else if (isAppr(val, -1.5, eps))
-            return Accidental::Type::MIRRORED_FLAT2;
+            return AccidentalType::MIRRORED_FLAT2;
       else if (isAppr(val, -1, eps))
-            return Accidental::Type::FLAT;
+            return AccidentalType::FLAT;
       else if (isAppr(val, -0.5, eps))
-            return Accidental::Type::MIRRORED_FLAT;
+            return AccidentalType::MIRRORED_FLAT;
       else if (isAppr(val, 0, eps))
-            return Accidental::Type::NATURAL;
+            return AccidentalType::NATURAL;
       else if (isAppr(val, 0.5, eps))
-            return Accidental::Type::SHARP_SLASH;
+            return AccidentalType::SHARP_SLASH;
       else if (isAppr(val, 1, eps))
-            return Accidental::Type::SHARP;
+            return AccidentalType::SHARP;
       else if (isAppr(val, 1.5, eps))
-            return Accidental::Type::SHARP_SLASH4;
+            return AccidentalType::SHARP_SLASH4;
       else if (isAppr(val, 2, eps))
-            return Accidental::Type::SHARP2;
+            return AccidentalType::SHARP2;
       else
             qDebug("Guess for microtonal accidental corresponding to value %f failed.", val);  // TODO
 
       // default
-      return Accidental::Type::NONE;
+      return AccidentalType::NONE;
       }
 
 //---------------------------------------------------------
@@ -3034,7 +3034,7 @@ static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& al
             bool ok;
             double d;
             d = alter.toDouble(&ok);
-            Accidental::Type accTpAlter = ok ? microtonalGuess(d) : Accidental::Type::NONE;
+            AccidentalType accTpAlter = ok ? microtonalGuess(d) : AccidentalType::NONE;
             id = mxmlString2accSymId(accidentalType2MxmlString(accTpAlter));
             }
 
@@ -3710,7 +3710,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       Fraction timeMod(0, 0); // invalid (will handle "present but incorrect" as "not present")
       QString type;
       QString voice;
-      Accidental::Type accType = Accidental::Type::NONE; // set based on alter value (can be microtonal)
+      AccidentalType accType = AccidentalType::NONE; // set based on alter value (can be microtonal)
       Accidental* acc = 0;                               // created based on accidental element
       MScore::Direction stemDir = MScore::Direction::AUTO;
       bool noStem = false;
@@ -3808,8 +3808,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       // accidental handling
       //qDebug("note acc %p type %hhd acctype %hhd",
-      //       acc, acc ? acc->accidentalType() : static_cast<Ms::Accidental::Type>(0), accType);
-      if (!acc && accType != Accidental::Type::NONE) {
+      //       acc, acc ? acc->accidentalType() : static_cast<Ms::AccidentalType>(0), accType);
+      if (!acc && accType != AccidentalType::NONE) {
             acc = new Accidental(_score);
             acc->setAccidentalType(accType);
             }
@@ -4055,7 +4055,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             if (acc) {
                   note->add(acc);
                   // save alter value for user accidental
-                  if (acc->accidentalType() != Accidental::Type::NONE)
+                  if (acc->accidentalType() != AccidentalType::NONE)
                         alt = alter;
                   }
             c->add(note);
@@ -4580,14 +4580,14 @@ Accidental* MusicXMLParserPass2::accidental()
       bool parentheses = _e.attributes().value("parentheses") == "yes";
 
       QString s = _e.readElementText();
-      Accidental::Type type = mxmlString2accidentalType(s);
+      AccidentalType type = mxmlString2accidentalType(s);
 
-      if (type != Accidental::Type::NONE) {
+      if (type != AccidentalType::NONE) {
             Accidental* a = new Accidental(_score);
             a->setAccidentalType(type);
             if (editorial || cautionary || parentheses) {
                   a->setHasBracket(cautionary || parentheses);
-                  a->setRole(Accidental::Role::USER);
+                  a->setRole(AccidentalRole::USER);
                   }
             return a;
             }
@@ -4709,7 +4709,7 @@ void MusicXMLParserPass2::timeModification(Fraction& timeMod, TDuration& normalT
 //   pitch
 //---------------------------------------------------------
 
-void MusicXMLParserPass2::pitch(int& step, int& alter, int& oct, Accidental::Type& accid)
+void MusicXMLParserPass2::pitch(int& step, int& alter, int& oct, AccidentalType& accid)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "pitch");
 
@@ -4727,7 +4727,7 @@ void MusicXMLParserPass2::pitch(int& step, int& alter, int& oct, Accidental::Typ
                         logError(QString("invalid alter '%1'").arg(strAlter));
                         bool ok2;
                         double altervalue = strAlter.toDouble(&ok2);
-                        if (ok2 && (qAbs(altervalue) < 2.0) && (accid == Accidental::Type::NONE)) {
+                        if (ok2 && (qAbs(altervalue) < 2.0) && (accid == AccidentalType::NONE)) {
                               // try to see if a microtonal accidental is needed
                               accid = microtonalGuess(altervalue);
                               }

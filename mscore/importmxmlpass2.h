@@ -114,7 +114,7 @@ public:
       void forward(Fraction& dura);
       void backup(Fraction& dura);
       void timeModification(Fraction& timeMod, TDuration& normalType);
-      void pitch(int& step, int& alter, int& oct, Accidental::Type& accid);
+      void pitch(int& step, int& alter, int& oct, AccidentalType& accid);
       void rest(int& step, int& octave);
       void lyric(QMap<int, Lyrics*>& numbrdLyrics, QMap<int, Lyrics*>& defyLyrics,
                  QList<Lyrics*>& unNumbrdLyrics);
