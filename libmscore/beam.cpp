@@ -1630,7 +1630,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   // loop through chordrests looking for end
                   int c1 = i;
                   ++i;
-                  bool b32, b64;
+                  bool b32 = false, b64 = false;
                   for (; i < n; ++i) {
                         ChordRest* c = crl[i];
                         ChordRest* p = i ? crl[i - 1] : 0;
