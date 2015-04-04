@@ -170,7 +170,7 @@ class Note : public Element {
       Q_PROPERTY(Ms::NoteHead::Type headType             READ headType         WRITE undoSetHeadType)
       Q_PROPERTY(QQmlListProperty<Ms::Element> elements  READ qmlElements)
       Q_PROPERTY(Ms::Accidental* accidental              READ accidental)
-      Q_PROPERTY(Ms::AccidentalType accidentalType       READ accidentalType   WRITE setAccidentalType)
+      Q_PROPERTY(int accidentalType                      READ qmlAccidentalType WRITE qmlSetAccidentalType)
       Q_PROPERTY(QQmlListProperty<Ms::NoteDot> dots      READ qmlDots)
       Q_PROPERTY(int dotsCount                           READ qmlDotsCount)
       Q_PROPERTY(Ms::Tie* tieFor                         READ tieFor)
@@ -181,6 +181,8 @@ class Note : public Element {
 
    public:
       enum class ValueType : char { OFFSET_VAL, USER_VAL };
+      int qmlAccidentalType() const { return int(accidentalType()); }
+      void qmlSetAccidentalType(int t) { setAccidentalType(static_cast<AccidentalType>(t)); }
 
    private:
       int _subchannel     { 0  };   ///< articulation
@@ -305,7 +307,7 @@ class Note : public Element {
       void undoSetTpc2(int tpc)      { undoChangeProperty(P_ID::TPC2, tpc); }
       int transposeTpc(int tpc);
 
-      Accidental* accidental() const    { return _accidental; }
+      Accidental* accidental() const      { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a;    }
 
       AccidentalType accidentalType() const;

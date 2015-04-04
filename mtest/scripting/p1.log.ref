@@ -31,6 +31,8 @@ Chord
     userDotPosition:0
     headGroup:0
     headType:255
+    accidentalType:1
+    dotsCount:0
       Accidental
         hasBracket:false
         small:false
@@ -58,6 +60,8 @@ Chord
     userDotPosition:0
     headGroup:0
     headType:255
+    accidentalType:0
+    dotsCount:0
 Rest
   durationType:480
   beamMode:4
@@ -90,4 +94,6 @@ Chord
     userDotPosition:0
     headGroup:0
     headType:255
+    accidentalType:0
+    dotsCount:0
 BarLine

@@ -49,6 +49,8 @@ MuseScore {
                                 log2("    userDotPosition:", note.userDotPosition);
                                 log2("    headGroup:", note.headGroup);
                                 log2("    headType:", note.headType);
+                                log2("    accidentalType:", note.accidentalType);
+                                log2("    dotsCount:", note.dotsCount);
                                 if (note.accidental) {
                                       var acc = note.accidental;
                                       log2("      ", acc._name());
