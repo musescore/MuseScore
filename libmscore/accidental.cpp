@@ -216,9 +216,9 @@ void Accidental::read(XmlReader& e)
                         setSubtype(text);
                   }
             else if (tag == "role") {
-                  int i = e.readInt();
-                  if (i == int(AccidentalRole::AUTO) || i == int(AccidentalRole::USER))
-                        _role = AccidentalRole(i);
+                  AccidentalRole r = AccidentalRole(e.readInt());
+                  if (r == AccidentalRole::AUTO || r == AccidentalRole::USER)
+                        _role = r;
                   }
             else if (tag == "small")
                   _small = e.readInt();
@@ -242,7 +242,6 @@ void Accidental::read(XmlReader& e)
 void Accidental::write(Xml& xml) const
       {
       xml.stag(name());
-
       writeProperty(xml, P_ID::ACCIDENTAL_BRACKET);
       writeProperty(xml, P_ID::ROLE);
       writeProperty(xml, P_ID::SMALL);
