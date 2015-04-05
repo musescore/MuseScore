@@ -1792,6 +1792,48 @@ static void markUserAccidentals(const int firstStaff,
       }
 
 //---------------------------------------------------------
+//   addGraceChordsAfter
+//---------------------------------------------------------
+
+/**
+ Move \a gac grace chords from grace chord list \a gcl
+ to the chord \a c grace note after list
+ */
+
+static void addGraceChordsAfter(Chord* c, GraceChordList& gcl, int& gac)
+      {
+      if (!c)
+            return;
+
+      while (gac > 0) {
+            if (gcl.size() > 0) {
+                  Chord* graceChord = gcl.first();
+                  gcl.removeFirst();
+                  graceChord->toGraceAfter();
+                  c->add(graceChord);        // TODO check if same voice ?
+                  qDebug("addGraceChordsAfter chord %p grace after chord %p", c, graceChord);
+                  }
+            gac--;
+            }
+      }
+
+//---------------------------------------------------------
+//   addGraceChordsBefore
+//---------------------------------------------------------
+
+/**
+ Move grace chords from grace chord list \a gcl
+ to the chord \a c grace note before list
+ */
+
+static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
+      {
+      for (int i = gcl.size() - 1; i >= 0; i--)
+            c->add(gcl.at(i));        // TODO check if same voice ?
+      gcl.clear();
+      }
+
+//---------------------------------------------------------
 //   measure
 //---------------------------------------------------------
 
@@ -1818,8 +1860,10 @@ void MusicXMLParserPass2::measure(const QString& partId,
 
       Fraction mTime; // current time stamp within measure
       Fraction prevTime; // time stamp within measure previous chord
+      Chord* prevChord = 0;       // previous chord
       Fraction mDura; // current total measure duration
       GraceChordList gcl; // grace chords collected sofar
+      int gac = 0;       // grace after count in the grace chord list
       Beam* beam = 0;       // current beam
       QString cv = "1";       // current voice for chords, default is 1
       FiguredBassList fbl;               // List of figured bass elements under a single note
@@ -1846,7 +1890,9 @@ void MusicXMLParserPass2::measure(const QString& partId,
                   int alt = -10;                    // any number outside range of xml-tag "alter"
                   // note: chord and grace note handling done in note()
                   // dura > 0 iff valid rest or first note of chord found
-                  Note* n = note(partId, measure, time + mTime, time + prevTime, dura, cv, gcl, beam, fbl, alt);
+                  Note* n = note(partId, measure, time + mTime, time + prevTime, dura, cv, gcl, gac, beam, fbl, alt);
+                  if (n && !n->chord()->isGrace())
+                        prevChord = n->chord();  // remember last non-grace chord
                   if (n && n->accidental() && n->accidental()->accidentalType() != AccidentalType::NONE)
                         alterMap.insert(n, alt);
                   if (dura.isValid() && dura > Fraction(0, 1)) {
@@ -1855,6 +1901,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                         if (mTime > mDura)
                               mDura = mTime;
                         }
+                  //qDebug("added note %p gac %d", n, gac);
                   }
             else if (_e.name() == "forward") {
                   Fraction dura;
@@ -1892,6 +1939,10 @@ void MusicXMLParserPass2::measure(const QString& partId,
              qPrintable(mDura.reduced().print()));
              */
             }
+
+      // convert remaining grace chords to grace after
+      gac = gcl.size();
+      addGraceChordsAfter(prevChord, gcl, gac);
 
       // fill possible gaps in voice 1
       Part* part = _pass1.getPart(partId); // should not fail, we only get here if the part exists
@@ -3581,6 +3632,10 @@ NoteType graceNoteType(const TDuration duration, const bool slash)
       return nt;
       }
 
+//---------------------------------------------------------
+//   createGraceChord
+//---------------------------------------------------------
+
 /**
  * Create a grace chord.
  */
@@ -3596,17 +3651,9 @@ static Chord* createGraceChord(Score* score, const int track,
       return c;
       }
 
-/**
- Move grace chords from grace chord list \a gcl
- to the chord c grace note before list
- */
-
-static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
-      {
-      for (int i = gcl.size() - 1; i >= 0; i--)
-            c->add(gcl.at(i));  // TODO check if same voice ?
-      gcl.clear();
-      }
+//---------------------------------------------------------
+//   graceNoteType
+//---------------------------------------------------------
 
 /**
  Check if handling the current element must be postponed
@@ -3692,6 +3739,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                                 Fraction& dura,
                                 QString& currentVoice,
                                 GraceChordList& gcl,
+                                int& gac,
                                 Beam*& currBeam,
                                 FiguredBassList& fbl,
                                 int& alt
@@ -3949,6 +3997,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   // handle beam
                   if (!chord)
                         handleBeamAndStemDir(c, bm, stemDir, currBeam);
+
+                  // append any grace chord after chord to the previous chord
+                  Chord* prevChord = measure->findChord(prevSTime.ticks(), msTrack + msVoice);
+                  addGraceChordsAfter(prevChord, gcl, gac);
+
                   // append any grace chord
                   addGraceChordsBefore(c, gcl);
                   }
@@ -4074,6 +4127,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       QMap<int, Lyrics*> defaultyLyrics; // lyrics with valid default-y
       QList<Lyrics*> unNumberedLyrics;   // lyrics with neither
       MusicXmlTupletDesc tupletDesc;
+      bool lastGraceAFter = false;       // set by notations() if end of grace after sequence found
 
       while (_e.tokenType() == QXmlStreamReader::StartElement) {
 
@@ -4081,7 +4135,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             if (_e.name() == "lyric")
                   lyric(numberedLyrics, defaultyLyrics, unNumberedLyrics);  // TODO: move track handling to addlyric
             else if (_e.name() == "notations")
-                  notations(note, cr, noteStartTime.ticks(), tupletDesc);
+                  notations(note, cr, noteStartTime.ticks(), tupletDesc, lastGraceAFter);
             else
                   skipLogCurrElem();
 
@@ -4097,6 +4151,10 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             }
 
       //qDebug("::note after second loop tokenString '%s' name '%s'", qPrintable(_e.tokenString()), qPrintable(_e.name().toString()));
+
+      // handle grace after state: remember current grace list size
+      if (grace && lastGraceAFter)
+            gac = gcl.size();
 
       if (!chord && !grace) {
             // do tuplet if valid time-modification is not 1/1 and is not 1/2 (tremolo)
@@ -4851,9 +4909,12 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
  Read MusicXML notations.
  */
 
-void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick, MusicXmlTupletDesc& tupletDesc)
+void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
+                                    MusicXmlTupletDesc& tupletDesc, bool& lastGraceAFter)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "notations");
+
+      lastGraceAFter = false;       // ensure default
 
       Measure* measure = cr->measure();
       int ticks = cr->duration().ticks();
@@ -4950,6 +5011,10 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick, M
                               newSlur->setEndElement(cr);
                               _slur[slurNo].stop(newSlur);
                               }
+                        // any grace note containing a slur stop means
+                        // last note of a grace after set has been found
+                        if (cr->isGrace())
+                              lastGraceAFter = true;
                         }
                   else if (slurType == "continue")
                         ;  // ignore
@@ -5068,6 +5133,10 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick, M
                               wavyLineType = _e.attributes().value("type").toString();
                               wavyLineNo   = _e.attributes().value("number").toString().toInt();
                               if (wavyLineNo > 0) wavyLineNo--;
+                              // any grace note containing a wavy-line stop means
+                              // last note of a grace after set has been found
+                              if (wavyLineType == "stop" && cr->isGrace())
+                                    lastGraceAFter = true;
                               _e.readNext();
                               }
                         else if (_e.name() == "tremolo") {

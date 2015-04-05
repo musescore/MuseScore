@@ -103,7 +103,8 @@ public:
       void divisions();
       void transpose(const QString& partId);
       Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime,
-                 Fraction& dura, QString& currentVoice, GraceChordList& gcl, Beam*& beam, FiguredBassList& fbl, int& alt);
+                 Fraction& dura, QString& currentVoice, GraceChordList& gcl, int& gac,
+                 Beam*& beam, FiguredBassList& fbl, int& alt);
       FiguredBassItem* figure(const int idx, const bool paren);
       FiguredBass* figuredBass();
       FretDiagram* frame();
@@ -118,7 +119,7 @@ public:
       void rest(int& step, int& octave);
       void lyric(QMap<int, Lyrics*>& numbrdLyrics, QMap<int, Lyrics*>& defyLyrics,
                  QList<Lyrics*>& unNumbrdLyrics);
-      void notations(Note* note, ChordRest* cr, const int tick, MusicXmlTupletDesc& tupletDesc);
+      void notations(Note* note, ChordRest* cr, const int tick, MusicXmlTupletDesc& tupletDesc, bool& lastGraceAFter);
       void stem(MScore::Direction& sd, bool& nost);
       void fermata(ChordRest* cr);
       void tuplet(MusicXmlTupletDesc& tupletDesc);
