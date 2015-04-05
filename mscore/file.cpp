@@ -536,7 +536,7 @@ void MuseScore::newFile()
                   excerpts.append(x);
                   }
             MeasureBase* mb = tscore->first();
-            if (mb->type() == Element::Type::VBOX) {
+            if (mb && mb->type() == Element::Type::VBOX) {
                   VBox* tvb = static_cast<VBox*>(mb);
                   nvb = new VBox(score);
                   nvb->setBoxHeight(tvb->boxHeight());
