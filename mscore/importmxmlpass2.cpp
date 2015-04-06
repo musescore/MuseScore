@@ -3563,8 +3563,10 @@ static Rest* addRest(Score* score, Measure* m,
       Segment* s = m->getSegment(Segment::Type::ChordRest, tick);
       // Sibelius might export two rests at the same place, ignore the 2nd one
       // <?DoletSibelius Two NoteRests in same voice at same position may be an error?>
-      if (s->element(track))
+      if (s->element(track)) {
+            qDebug("cannot add rest at tick %d track %d: element already present", tick, track);       // TODO
             return 0;
+            }
 
       // Verify the rest fits exactly in the measure, as some programs
       // (e.g. Cakewalk SONAR X2 Studio [Version: 19.0.0.306]) leave out
@@ -3902,10 +3904,10 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   }
             }
       else if (dura.isValid())
-            errorStr = "calculated duration invalid, using specified duration";
+            errorStr = QString("calculated duration invalid, using specified duration (%1)").arg(dura.print());
       else if (calcDura.isValid()) {
             if (!grace) {
-                  errorStr = "specified duration invalid, using calculated duration";
+                  errorStr = QString("specified duration invalid, using calculated duration (%1)").arg(calcDura.print());
                   dura = calcDura; // overrule dura
                   }
             }
@@ -4117,7 +4119,10 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             cr = c;
             }
 
-      cr->setVisible(printObject);
+      // cr can be 0 here(if a rest cannot be added)
+      // TODO: complete and cleanup handling this case
+      if (cr)
+            cr->setVisible(printObject);
 
       // handle the postponed children of <note>
       // if one of these was found, the first while loop was terminated
@@ -4212,10 +4217,10 @@ static Fraction calcTicks(const QString& text, int divs)
             if (divs > 0)
                   dura.set(intDura, 4 * divs);
             else
-                  qDebug("illegal or uninitialized divisions");       // TODO
+                  qDebug("illegal or uninitialized divisions (%d)", divs);       // TODO
             }
       else
-            qDebug("illegal duration");       // TODO
+            qDebug("illegal duration '%s'", qPrintable(text));       // TODO
 
       qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
       return dura;
@@ -4235,10 +4240,10 @@ void MusicXMLParserPass2::duration(Fraction& dura)
             if (_divs > 0)
                   dura.set(intDura, 4 * _divs);
             else
-                  logError("illegal or uninitialized divisions");
+                  logError(QString("illegal or uninitialized divisions (%1)").arg(_divs));
             }
       else
-            logError("illegal duration");
+            logError(QString("illegal duration %1").arg(dura.print()));
       //qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
       }
 
