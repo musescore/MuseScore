@@ -2144,7 +2144,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
       if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
             Text* t = 0;
-            if (_tpoSound > 0.1 || _metroText != "") {
+            if (_tpoSound > 0.1) {
                   _tpoSound /= 60;
                   t = new TempoText(_score);
                   t->setText(_wordsText + _metroText);
@@ -2153,9 +2153,9 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   _score->setTempo(tick, _tpoSound);
                   }
             else {
-                  if (_wordsText != "") {
+                  if (_wordsText != "" || _metroText != "") {
                         t = new StaffText(_score);
-                        t->setText(_wordsText);
+                        t->setText(_wordsText + _metroText);
                         }
                   else {
                         t = new RehearsalMark(_score);
