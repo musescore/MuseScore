@@ -14,6 +14,7 @@ MuseScore {
             cursor.filter = -1;
             log2("filter:", cursor.filter);
             cursor.rewind(0);
+
             while (cursor.segment) {
                   if (cursor.element) {
                         var type = cursor.element.type;
@@ -22,8 +23,11 @@ MuseScore {
                         if (type == Element.CHORD) {
                             log2("  durationType:", e.durationType);
                             log2("  beamMode:", e.beamMode);
-                            log2("  small:", e.small);
-                            log2("  duration:", e.duration);
+                            log2("  small:",    e.small);
+                            logn("  duration:");
+                            log2("    numerator:",   e.duration.numerator);
+                            log2("    denominator:", e.duration.denominator);
+                            log2("    ticks:",       e.duration.ticks);
                             var notes = e.notes;
                             for (var i = 0; i < notes.length; i++) {
                                 var note = notes[i];
@@ -62,10 +66,12 @@ MuseScore {
                                 }
                             }
                         if (type == Element.REST) {
-                            log2("  durationType:", e.durationType);
+                            logn("  duration:");
+                            log2("    numerator:",   e.duration.numerator);
+                            log2("    denominator:", e.duration.denominator);
+                            log2("    ticks:",       e.duration.ticks);
                             log2("  beamMode:", e.beamMode);
                             log2("  small:", e.small);
-                            log2("  duration:", e.duration);
                             }
                         }
                   cursor.next();

@@ -67,19 +67,12 @@ add_library (
       noteline.cpp spannermap.cpp
       bagpembell.cpp ambitus.cpp keylist.cpp scoreElement.cpp
       )
-# if (SCRIPT_INTERFACE)
-   set_target_properties (
+
+set_target_properties (
       libmscore
       PROPERTIES
          COMPILE_FLAGS "-g ${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch"
       )
-# else (SCRIPT_INTERFACE)
-#   set_target_properties (
-#      libmscore
-#      PROPERTIES
-#         COMPILE_FLAGS "-g ${PCH_INCLUDE} -include libmscore/noscript.h -Wall -Wextra -Winvalid-pch"
-#      )
-# endif (SCRIPT_INTERFACE)
 
 xcode_pch(libmscore all)
 
