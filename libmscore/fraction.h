@@ -77,8 +77,40 @@ class Fraction {
       QString print() const { return QString("%1/%2").arg(_numerator).arg(_denominator); }
       };
 
+#ifdef SCRIPT_INTERFACE
+
+//---------------------------------------------------------
+//   FractionWrapper
+//---------------------------------------------------------
+
+class FractionWrapper : public QObject {
+      Q_OBJECT
+      Q_PROPERTY(int numerator READ numerator)
+      Q_PROPERTY(int denominator READ denominator)
+      Q_PROPERTY(int ticks READ ticks)
+
+      Fraction f;
+
+   public slots:
+      void setFraction(Fraction _f) { f = _f; }
+
+   public:
+      FractionWrapper(const FractionWrapper& w) : QObject() { f = w.f; }
+      FractionWrapper() {}
+      FractionWrapper(const Fraction& _f) : f(_f) {}
+
+      Fraction fraction() const { return f; }
+      int numerator() const   { return f.numerator(); }
+      int denominator() const { return f.denominator(); }
+      int ticks() const       { return f.ticks(); }
+      };
+
+
+#endif // SCRIPT_INTERFACE
+
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Fraction);
+Q_DECLARE_METATYPE(Ms::FractionWrapper);
 #endif
 

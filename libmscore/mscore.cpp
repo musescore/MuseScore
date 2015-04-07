@@ -53,7 +53,7 @@
 #include "hook.h"
 #include "stem.h"
 #include "stemslash.h"
-
+#include "fraction.h"
 
 namespace Ms {
 
@@ -286,7 +286,6 @@ void MScore::defaultStyleForPartsHasChanged()
 QQmlEngine* MScore::qml()
       {
       if (_qml == 0) {
-            qDebug("initializing qml engine");
             //-----------some qt bindings
             _qml = new QQmlEngine;
 #ifdef Q_OS_WIN
@@ -335,6 +334,8 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<Stem>       ("MuseScore", 1, 0, "Stem");
             qmlRegisterType<StemSlash>  ("MuseScore", 1, 0, "StemSlash");
             qmlRegisterType<Beam>       ("MuseScore", 1, 0, "Beam");
+            qmlRegisterType<FractionWrapper>   ("MuseScore", 1, 1, "Fraction");
+            qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));

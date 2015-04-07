@@ -8,7 +8,10 @@ Chord
   durationType:480
   beamMode:0
   small:false
-  duration:480
+  duration:
+    numerator:1
+    denominator:4
+    ticks:480
   Note
     subchannel:0
     line:6
@@ -63,15 +66,20 @@ Chord
     accidentalType:0
     dotsCount:0
 Rest
-  durationType:480
+  duration:
+    numerator:1
+    denominator:4
+    ticks:480
   beamMode:4
   small:false
-  duration:480
 Chord
   durationType:960
   beamMode:0
   small:false
-  duration:960
+  duration:
+    numerator:1
+    denominator:2
+    ticks:960
   Note
     subchannel:0
     line:5

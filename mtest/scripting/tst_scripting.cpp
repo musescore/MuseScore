@@ -71,6 +71,11 @@ void TestScripting::read1(const char* file, const char* script)
 
       QQmlComponent component(engine);
       component.loadUrl(QUrl::fromLocalFile(scriptPath));
+      if (component.isError()) {
+            for (QQmlError e : component.errors()) {
+                  qDebug("qml error: %s", qPrintable(e.toString()));
+                  }
+            }
 
       QObject* obj = component.create();
       QVERIFY(obj);
