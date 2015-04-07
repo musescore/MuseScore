@@ -45,6 +45,9 @@ void RepeatMeasure::draw(QPainter* painter) const
 
 void RepeatMeasure::layout()
       {
+      for (Element* e : _el)
+            e->layout();
+
       qreal sp  = spatium();
 
       qreal y   = sp;
