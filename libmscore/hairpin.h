@@ -53,7 +53,6 @@ class HairpinSegment : public LineSegment {
       virtual QVariant propertyDefault(P_ID id) const override;
       virtual PropertyStyle propertyStyle(P_ID id) const override;
       virtual void resetProperty(P_ID id) override;
-      virtual void reset() override { spanner()->reset(); }
       };
 
 //---------------------------------------------------------

@@ -77,7 +77,7 @@ class SpannerSegment : public Element {
       virtual QVariant getProperty(P_ID id) const override;
       virtual bool setProperty(P_ID id, const QVariant& v) override;
       virtual QVariant propertyDefault(P_ID id) const override;
-      virtual void reset() override;
+      void reset() override;
       virtual void setSelected(bool f) override;
       virtual void setVisible(bool f) override;
       virtual void setColor(const QColor& col) override;
