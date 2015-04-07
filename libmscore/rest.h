@@ -30,8 +30,6 @@ class Rest : public ChordRest {
       Q_OBJECT
       Q_PROPERTY(bool  isFullMeasure  READ isFullMeasureRest)
 
-      ElementList _el;              ///< symbols or images
-
       // values calculated by layout:
       SymId _sym;
       int dotline    { -1  };       // depends on rest symbol
@@ -42,6 +40,9 @@ class Rest : public ChordRest {
       virtual qreal downPos() const override;
       virtual qreal centerX() const override;
       virtual void setUserOff(const QPointF& o) override;
+
+   protected:
+      ElementList _el;              ///< symbols or images
 
    public:
       Rest(Score* s = 0);
