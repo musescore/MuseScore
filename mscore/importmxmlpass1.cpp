@@ -111,7 +111,7 @@ static Fraction calculateFraction(const QString& type, const int dots, const Fra
  Input e is the note element.
  If chord or grace, duration is 0.
  */
-
+#if 0
 static QString noteDurationDescription(const Fraction dura, const QString& type,
                                        const int dots, const Fraction timeMod)
       {
@@ -139,7 +139,7 @@ static QString noteDurationDescription(const Fraction dura, const QString& type,
 
       return noteDurDesc;
       }
-
+#endif
 
 // allocate MuseScore staff to MusicXML voices
 // for each staff, allocate at most VOICES voices to the staff
@@ -472,7 +472,7 @@ int MusicXMLParserPass1::octaveShift(const QString& id, const int staff, const F
  Log debug (function) trace.
  */
 
-void MusicXMLParserPass1::logDebugTrace(const QString& info)
+void MusicXMLParserPass1::logDebugTrace(const QString& /*info*/)
       {
       //qDebug("Trace %s", qPrintable(info));
       }
@@ -485,7 +485,7 @@ void MusicXMLParserPass1::logDebugTrace(const QString& info)
  Log debug \a info (non-fatal events relevant for debugging).
  */
 
-void MusicXMLParserPass1::logDebugInfo(const QString& info)
+void MusicXMLParserPass1::logDebugInfo(const QString& /*info*/)
       {
       //qDebug("Info at line %lld col %lld: %s",
       //       _e.lineNumber(), _e.columnNumber(), qPrintable(info));
@@ -2499,7 +2499,7 @@ void MusicXMLParserPass1::note(const QString& partId,
       int dots = 0;
       bool grace = false;
       //int octave = -1;
-      bool bRest = false;
+      //bool bRest = false;
       int staff = 1;
       //int step = 0;
       Fraction timeMod(1, 1);
@@ -2529,7 +2529,7 @@ void MusicXMLParserPass1::note(const QString& partId,
             else if (_e.name() == "pitch")
                   _e.skipCurrentElement();  // skip but don't log
             else if (_e.name() == "rest") {
-                  bRest = true;
+                  //bRest = true;
                   rest();
                   }
             else if (_e.name() == "staff") {
