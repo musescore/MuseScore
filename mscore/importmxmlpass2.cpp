@@ -717,7 +717,7 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
  import will almost certainly break in non-obvious ways.
  Should never happen, thus it is OK to quit the application.
  */
-
+#if 0
 static void tupletAssert()
       {
       if (!(int(TDuration::DurationType::V_BREVE)      == int(TDuration::DurationType::V_LONG)    + 1
@@ -734,6 +734,7 @@ static void tupletAssert()
             qFatal("tupletAssert() failed");
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   smallestTypeAndCount
@@ -751,6 +752,7 @@ static void tupletAssert()
  the note length is divided by two, checked by tupletAssert().
  */
 
+#if 0
 static void smallestTypeAndCount(ChordRest const* const cr, int& type, int& count)
       {
       type = int(cr->durationType().type());
@@ -826,7 +828,6 @@ static void determineTupletTypeAndCount(Tuplet* t, int& tupletType, int& tupletC
             }
       }
 
-#if 0
 //---------------------------------------------------------
 //   determineTupletBaseLen
 //---------------------------------------------------------
