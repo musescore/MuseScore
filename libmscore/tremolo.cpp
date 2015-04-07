@@ -225,6 +225,7 @@ void Tremolo::layout()
             int idx = _chord1->hook() ? 1 : (_chord1->beam() ? 2 : 0);
             y = (line + t[idx][up][_lines-1][line & 1]) * spatium() * .5;
             setPos(x, y);
+            adjustReadPos();
             return;
             }
       y += (h - bbox().height()) * .5;
@@ -252,6 +253,7 @@ void Tremolo::layout()
       // qreal x1     = _chord1->stemPos(_chord1->up(), true).x();
       x             = x1 - _chord1->pagePos().x() + (x2 - x1 + _chord1->upNote()->headWidth()) * .5;
       setPos(x, y);
+      adjustReadPos();
       }
 
 //---------------------------------------------------------
