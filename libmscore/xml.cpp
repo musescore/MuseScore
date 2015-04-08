@@ -222,7 +222,7 @@ bool XmlReader::readBool()
       bool val;
       XmlStreamReader::TokenType tt = readNext();
       if (tt == XmlStreamReader::Characters) {
-            val = tokenString().toInt() != 0;
+            val = text().toInt() != 0;
             readNext();
             }
       else
