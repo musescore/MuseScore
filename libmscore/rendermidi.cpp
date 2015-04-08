@@ -190,6 +190,8 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
             // and processing those notes recursively
             if (note->tieFor()) {
                   for (Note* n : note->tiedNotes()) {
+                        if (n == note)
+                              continue;
                         NoteEventList nel = n->playEvents();
                         if (nel.size() == 1) {
                               // add value of this note to main note
