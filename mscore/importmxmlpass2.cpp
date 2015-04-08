@@ -3395,7 +3395,7 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
             return true;
             }
       else {
-            if (!timeSymbol.isEmpty()) {
+            if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
                   qDebug("ImportMusicXml: time symbol <%s> not recognized with beats=%s and beat-type=%s",
                          qPrintable(timeSymbol), qPrintable(beats), qPrintable(beatType)); // TODO
                   return false;
