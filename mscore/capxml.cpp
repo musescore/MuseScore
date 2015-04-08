@@ -169,6 +169,14 @@ void CapExplicitBarline::readCapx(XmlReader& e)
       else if (type == "dashed") _type = BarLineType::BROKEN;
       else _type = BarLineType::NORMAL; // default
       _barMode = 0;
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "drawObjects") {
+                  e.skipCurrentElement();
+                  }
+            else
+                  e.unknown();
+            }
       e.readNext();
       }
 
