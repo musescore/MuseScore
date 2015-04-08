@@ -1374,7 +1374,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
             Segment* s = measure->getSegment(cr, absTick);
             s->add(cr);
             }
-      QList<Chord*> graceNotes;
+      QList<Ms::Chord*> graceNotes;
       for (int i = 0; i < containers.size(); ++i) {
             OVE::NoteContainer* container = containers[i];
             int tick = mtt_->getTick(measure->no(), container->getTick());
@@ -1438,7 +1438,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               // append grace notes before
                               int ii = -1;
                               for (ii = graceNotes.size() - 1; ii >= 0; ii--) {
-                                    Chord* gc = graceNotes[ii];
+                                    Ms::Chord* gc = graceNotes[ii];
                                     if(gc->voice() == cr->voice()){
                                           cr->add(gc);
                                           }
@@ -1452,7 +1452,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               s->add(cr);
                               }
                         else {
-                              graceNotes.append(static_cast<Chord*>(cr));
+                              graceNotes.append(static_cast<Ms::Chord*>(cr));
                               }
                         }
 
