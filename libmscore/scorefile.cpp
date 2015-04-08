@@ -34,6 +34,7 @@
 #include "excerpt.h"
 #include "mscore.h"
 #include "stafftype.h"
+#include "sym.h"
 #ifdef OMR
 #include "omr/omr.h"
 #include "omr/omrpage.h"
@@ -1055,6 +1056,7 @@ bool Score::read(XmlReader& e)
                         // float mode
                         _style.setSpatium(sp);
                         }
+                  _scoreFont = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
                   }
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);
