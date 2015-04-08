@@ -790,7 +790,7 @@ void Note::write(Xml& xml) const
       writeProperty(xml, P_ID::PITCH);
       // write tpc1 before tpc2 !
       writeProperty(xml, P_ID::TPC1);
-      if ((_tpc[1] != _tpc[0]) && transposition())
+      if (_tpc[1] != _tpc[0])
             writeProperty(xml, P_ID::TPC2);
       writeProperty(xml, P_ID::SMALL);
       writeProperty(xml, P_ID::MIRROR_HEAD);
