@@ -37,6 +37,8 @@ inline void initMyResources() {
       Q_INIT_RESOURCE(musescorefonts_Free);
 }
 
+extern Ms::Score::FileError importOve(Ms::Score*, const QString& name);
+
 namespace Ms {
 
 #ifdef OMR
@@ -139,6 +141,8 @@ Score* MTest::readCreatedScore(const QString& name)
             rv = importCapella(score, name);
       else if (csl == "capx")
             rv = importCapXml(score, name);
+      else if (csl == "ove")
+            rv = importOve(score, name);
       else if (csl == "sgu")
             rv = importBB(score, name);
       else if (csl == "mscz" || csl == "mscx")

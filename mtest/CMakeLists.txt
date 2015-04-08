@@ -49,6 +49,8 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp4.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp5.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importgtp-gp6.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importove.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/ove.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_operations.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_meter.cpp
@@ -149,8 +151,7 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-subdirs (libmscore importmidi capella biab musicxml guitarpro)
-
+subdirs (libmscore importmidi capella biab musicxml guitarpro testoves)
 
 install(FILES
       ../share/styles/chords_std.xml
