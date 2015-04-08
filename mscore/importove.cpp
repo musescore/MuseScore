@@ -1374,7 +1374,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
             Segment* s = measure->getSegment(cr, absTick);
             s->add(cr);
             }
-
+      QList<Chord*> graceNotes;
       for (int i = 0; i < containers.size(); ++i) {
             OVE::NoteContainer* container = containers[i];
             int tick = mtt_->getTick(measure->no(), container->getTick());
@@ -1402,12 +1402,9 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                   s->add(cr);
                   } else {
                   QList<OVE::Note*> notes = container->getNotesRests();
-                  int graceLevel = getGraceLevel(containers, container->getTick(), container->start()->getOffset());
-                  // TODO-S          cr = measure->findChord(tick, noteTrack, graceLevel);
+
                   cr = measure->findChord(tick, noteTrack);
                   if (cr == 0) {
-                        // Segment::Type st = Segment::Type::ChordRest;
-
                         cr = new Ms::Chord(score_);
                         cr->setTrack(noteTrack);
 
@@ -1438,15 +1435,24 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               if (duration.type() == TDuration::DurationType::V_INVALID)
                                     duration.setType(TDuration::DurationType::V_QUARTER);
                               cr->setDurationType(duration);
+                              // append grace notes before
+                              int ii = -1;
+                              for (ii = graceNotes.size() - 1; ii >= 0; ii--) {
+                                    Chord* gc = graceNotes[ii];
+                                    if(gc->voice() == cr->voice()){
+                                          cr->add(gc);
+                                          }
+                                    }
+                              graceNotes.clear();
                               }
                         cr->setDuration(cr->durationType().fraction());
 
-                        //TODO-S	Deal with grace notes
-                        //        Segment* s = measure->getGraceSegment(tick, graceLevel);
-                        //				s->add(cr);
-                        if(graceLevel == 0) {
+                        if(!container->getIsGrace()) {
                               Segment* s = measure->getSegment(cr, tick);
                               s->add(cr);
+                              }
+                        else {
+                              graceNotes.append(static_cast<Chord*>(cr));
                               }
                         }
 
@@ -1488,7 +1494,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               int alter = accidentalToAlter(oveNote->getAccidental());
                               NoteVal nv(pitch);
                               note->setTrack(cr->track());
-                              note->setNval(nv, cr->tick());
+                              note->setNval(nv, tick);
                               // note->setTpcFromPitch();
                               note->setTpc(step2tpc(tone, AccidentalVal(alter)));
 
