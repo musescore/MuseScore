@@ -2543,7 +2543,13 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                         Harmony* h  = static_cast<Harmony*>(e);
                         int rootTpc = transposeTpc(h->rootTpc(), interval, true);
                         int baseTpc = transposeTpc(h->baseTpc(), interval, true);
-                        undoTransposeHarmony(h, rootTpc, baseTpc);
+                        for (ScoreElement* e : h->linkList()) {
+                              // don't transpose all links
+                              // just ones resulting from mmrests
+                              Harmony* he = static_cast<Harmony*>(e);
+                              if (he->staff() == h->staff())
+                                    undoTransposeHarmony(he, rootTpc, baseTpc);
+                              }
                         }
                   }
             }
