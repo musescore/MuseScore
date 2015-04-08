@@ -2222,14 +2222,10 @@ void Measure::read(XmlReader& e, int staffIdx)
                   _noOffset = e.readInt();
             else if (tag == "measureNumberMode")
                   setMeasureNumberMode(MeasureNumberMode(e.readInt()));
-            else if (tag == "irregular") {
-                  _irregular = true;
-                  e.readNext();
-                  }
-            else if (tag == "breakMultiMeasureRest") {
-                  _breakMultiMeasureRest = true;
-                  e.readNext();
-                  }
+            else if (tag == "irregular")
+                  _irregular = e.readBool();
+            else if (tag == "breakMultiMeasureRest")
+                  _breakMultiMeasureRest = e.readBool();
             else if (tag == "sysInitBarLineType") {
                   const QString& val(e.readElementText());
                   _systemInitialBarLineType = BarLineType::NORMAL;

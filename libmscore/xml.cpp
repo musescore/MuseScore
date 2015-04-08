@@ -214,6 +214,23 @@ double XmlReader::readDouble(double min, double max)
       }
 
 //---------------------------------------------------------
+//   readBool
+//---------------------------------------------------------
+
+bool XmlReader::readBool()
+      {
+      bool val;
+      XmlStreamReader::TokenType tt = readNext();
+      if (tt == XmlStreamReader::Characters) {
+            val = tokenString().toInt() != 0;
+            readNext();
+            }
+      else
+            val = true;
+      return val;
+      }
+
+//---------------------------------------------------------
 //   compareProperty
 //---------------------------------------------------------
 
