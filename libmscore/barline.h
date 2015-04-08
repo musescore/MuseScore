@@ -56,10 +56,12 @@ struct BarLineTableItem {
 
 //---------------------------------------------------------
 //   @@ BarLine
+//   @P barLineType  enum  (NORMAL, DOUBLE, START_REPEAT ...) (read only)
 //---------------------------------------------------------
 
 class BarLine : public Element {
       Q_OBJECT
+      Q_PROPERTY(int barLineType READ qmlBarLineType)
 
       BarLineType _barLineType { BarLineType::NORMAL };
       bool _customSpan         { false };
@@ -83,7 +85,14 @@ class BarLine : public Element {
       void updateGenerated(bool canBeTrue = true);
 
    public:
-      BarLine(Score*);
+      enum QmlBarLineType {
+            NORMAL, DOUBLE, START_REPEAT, END_REPEAT,
+            BROKEN, END, END_START_REPEAT, DOTTED
+            };
+      Q_ENUMS(QmlBarLineType)
+      int qmlBarLineType() const { return int(_barLineType); }
+
+      BarLine(Score* s = 0);
       BarLine &operator=(const BarLine&) = delete;
 
       virtual BarLine* clone() const override     { return new BarLine(*this); }
@@ -157,5 +166,8 @@ class BarLine : public Element {
       virtual QString accessibleExtraInfo() override;
       };
 }     // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::BarLine::QmlBarLineType);
+
 #endif
 

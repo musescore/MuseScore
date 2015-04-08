@@ -55,6 +55,7 @@
 #include "stemslash.h"
 #include "fraction.h"
 #include "excerpt.h"
+#include "barline.h"
 
 namespace Ms {
 
@@ -338,6 +339,7 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<StemSlash>  ("MuseScore", 1, 0, "StemSlash");
             qmlRegisterType<Beam>       ("MuseScore", 1, 0, "Beam");
             qmlRegisterType<Excerpt>    ("MuseScore", 1, 0, "Excerpt");
+            qmlRegisterType<BarLine>    ("MuseScore", 1, 0, "BarLine");
             qmlRegisterType<FractionWrapper>   ("MuseScore", 1, 1, "Fraction");
             qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 
