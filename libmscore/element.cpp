@@ -456,6 +456,44 @@ QRectF Element::drag(EditData* data)
             }
       setUserOff(QPointF(x, y));
       setGenerated(false);
+
+      if (type() == Type::TEXT) {         // TODO: check for other types
+            //
+            // restrict move to page boundaries
+            //
+            QRectF r(canvasBoundingRect());
+            Page* p = 0;
+            Element* e = this;
+            while (e) {
+                  if (e->type() == Element::Type::PAGE) {
+                        p = static_cast<Page*>(e);
+                        break;
+                        }
+                  e = e->parent();
+                  }
+            if (p) {
+                  bool move = false;
+                  QRectF pr(p->canvasBoundingRect());
+                  if (r.right() > pr.right()) {
+                        x -= r.right() - pr.right();
+                        move = true;
+                        }
+                  else if (r.left() < pr.left()) {
+                        x += pr.left() - r.left();
+                        move = true;
+                        }
+                  if (r.bottom() > pr.bottom()) {
+                        y -= r.bottom() - pr.bottom();
+                        move = true;
+                        }
+                  else if (r.top() < pr.top()) {
+                        y += pr.top() - r.top();
+                        move = true;
+                        }
+                  if (move)
+                        setUserOff(QPointF(x, y));
+                  }
+            }
       return canvasBoundingRect() | r;
       }
 
