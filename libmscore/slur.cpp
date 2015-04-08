@@ -371,7 +371,7 @@ void SlurSegment::editDrag(const EditData& ed)
                         if (ed.curGrip == Grip::END && spanner->type() == Element::Type::TIE) {
                               Tie* tie = static_cast<Tie*>(spanner);
                               if (tie->startNote()->pitch() == note->pitch()
-                                 && tie->startNote()->chord()->tick() <= note->chord()->tick()) {
+                                 && tie->startNote()->chord()->tick() < note->chord()->tick()) {
                                     ed.view->setDropTarget(note);
                                     if (note != tie->endNote()) {
                                           changeAnchor(ed.view, ed.curGrip, note);
