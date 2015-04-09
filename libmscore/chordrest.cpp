@@ -221,7 +221,7 @@ void ChordRest::writeProperties(Xml& xml) const
       if (!isGrace()) {
             Fraction t(globalDuration());
             if (staff())
-                  t *= staff()->timeStretch(xml.curTick);
+                  t /= staff()->timeStretch(xml.curTick);
             xml.curTick += t.ticks();
             }
       for (auto i : score()->spanner()) {     // TODO: dont search whole list
