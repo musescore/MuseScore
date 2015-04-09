@@ -896,6 +896,61 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       return ell;
       }
 
+    
+void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord, int &ontime){
+    int n = gnb.size();
+    if (n) {
+        //
+        //  render grace notes:
+        //  simplified implementation:
+        //  - grace notes start on the beat of the main note
+        //  - duration: appoggiatura: 0.5  * duration of main note (2/3 for dotted notes, 4/7 for double-dotted)
+        //              acciacatura: min of 0.5 * duration or 65ms fixed (independent of duration or tempo)
+        //  - for appoggiaturas, the duration is divided by the number of grace notes
+        //  - the grace note duration as notated does not matter
+        //
+        Chord* graceChord = gnb[0];
+        if (graceChord->noteType() ==  NoteType::ACCIACCATURA) {
+            qreal ticksPerSecond = tempo(tick) * MScore::division;
+            int graceTimeMS = 65 * n;     // value determined empirically (TODO: make instrument-specific, like articulations)
+            // 1000 occurs below for two different reasons:
+            // number of milliseconds per second, also unit for ontime
+            qreal chordTimeMS = (chord->actualTicks() / ticksPerSecond) * 1000;
+            ontime = qMin(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
+        }
+        else if (chord->dots() == 1) {
+            ontime = 667;
+        }
+        else if (chord->dots() == 2) {
+            ontime = 571;
+        }
+        else {
+            ontime = 500;
+        }
+        int graceDuration = ontime / n;
+        
+        int on = 0;
+        for (int i = 0; i < n; ++i) {
+            QList<NoteEventList> el;
+            Chord* gc = gnb.at(i);
+            int nn = gc->notes().size();
+            for (int ii = 0; ii < nn; ++ii) {
+                NoteEventList nel;
+                nel.append(NoteEvent(0, on, graceDuration));
+                el.append(nel);
+            }
+            
+            if (gc->playEventType() == PlayEventType::InvalidUser)
+                gc->score()->undo(new ChangeEventList(gc, el));
+                else if (gc->playEventType() == PlayEventType::Auto) {
+                    for (int ii = 0; ii < nn; ++ii)
+                        gc->notes()[ii]->setPlayEvents(el[ii]);
+                        }
+            on += graceDuration;
+        }
+    }
+}
+    
 //---------------------------------------------------------
 //   createPlayEvents
 //    create default play events
@@ -921,61 +976,11 @@ void Score::createPlayEvents(Chord* chord)
             Instrument* instr = chord->part()->instrument(tick);
             instr->updateGateTime(&gateTime, 0, "");
             }
-
-      QList<Chord*> gnb = chord->graceNotesBefore();
-      int n = gnb.size();
+          
       int ontime = 0;
-      if (n) {
-            //
-            //  render grace notes:
-            //  simplified implementation:
-            //  - grace notes start on the beat of the main note
-            //  - duration: appoggiatura: 0.5  * duration of main note (2/3 for dotted notes, 4/7 for double-dotted)
-            //              acciacatura: min of 0.5 * duration or 65ms fixed (independent of duration or tempo)
-            //  - for appoggiaturas, the duration is divided by the number of grace notes
-            //  - the grace note duration as notated does not matter
-            //
-            Chord* graceChord = gnb[0];
-            if (graceChord->noteType() ==  NoteType::ACCIACCATURA) {
-                  qreal ticksPerSecond = tempo(tick) * MScore::division;
-                  int graceTimeMS = 65 * n;     // value determined empirically (TODO: make instrument-specific, like articulations)
-                  // 1000 occurs below for two different reasons:
-                  // number of milliseconds per second, also unit for ontime
-                  qreal chordTimeMS = (chord->actualTicks() / ticksPerSecond) * 1000;
-                  ontime = qMin(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
-                  }
-            else if (chord->dots() == 1) {
-                  ontime = 667;
-                  }
-            else if (chord->dots() == 2) {
-                  ontime = 571;
-                  }
-            else {
-                  ontime = 500;
-                  }
-            int graceDuration = ontime / n;
 
-            int on = 0;
-            for (int i = 0; i < n; ++i) {
-                  QList<NoteEventList> el;
-                  Chord* gc = gnb.at(i);
-                  int nn = gc->notes().size();
-                  for (int ii = 0; ii < nn; ++ii) {
-                        NoteEventList nel;
-                        nel.append(NoteEvent(0, on, graceDuration));
-                        el.append(nel);
-                        }
-
-                  if (gc->playEventType() == PlayEventType::InvalidUser)
-                        gc->score()->undo(new ChangeEventList(gc, el));
-                  else if (gc->playEventType() == PlayEventType::Auto) {
-                        for (int ii = 0; ii < nn; ++ii)
-                              gc->notes()[ii]->setPlayEvents(el[ii]);
-                        }
-                  on += graceDuration;
-                  }
-            }
-
+      Score::createGraceNotesPlayEvents(chord->graceNotesBefore(), tick, chord, ontime);
+     
       SwingParameters st = chord->staff()->swing(tick);
       int unit = st.swingUnit;
       int ratio = st.swingRatio;
