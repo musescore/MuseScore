@@ -1215,7 +1215,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                           return;
                                           }
                                     fret += (up ? 1 : -1);
-                                    if (fret < 0 || fret >= stringData->frets()) {
+                                    if (fret < 0 || fret > stringData->frets()) {
                                           qDebug("upDown tab in-string: out of fret range");
                                           return;
                                           }
