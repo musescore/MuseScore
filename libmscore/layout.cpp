@@ -1726,7 +1726,6 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             else {
                   if (clef && clef->generated())
                         undo(new RemoveElement(clef));
-                        // undoRemoveElement(clef);
                   }
             ++i;
             }
@@ -1894,9 +1893,8 @@ void Score::createMMRests()
                               break;
                         }
 
-                  Measure* mmr;
-                  if (m->mmRest()) {
-                        mmr = m->mmRest();
+                  Measure* mmr = m->mmRest();
+                  if (mmr) {
                         if (mmr->len() != len) {
                               Segment* s = mmr->findSegment(Segment::Type::EndBarLine, mmr->endTick());
                               mmr->setLen(len);
@@ -1948,13 +1946,13 @@ void Score::createMMRests()
                         }
                   for (Element* e : oldList)
                         delete e;
-
-                  Segment* s = mmr->undoGetSegment(Segment::Type::ChordRest, m->tick());
+                  Segment* s = mmr->undoGetSegment(Segment::Type::ChordRest, mmr->tick());
                   for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                         int track = staffIdx * VOICES;
                         if (s->element(track) == 0) {
                               Rest* r = new Rest(this);
                               r->setDurationType(TDuration::DurationType::V_MEASURE);
+                              r->setDuration(mmr->len());
                               r->setTrack(track);
                               r->setParent(s);
                               undo(new AddElement(r));
@@ -1983,7 +1981,6 @@ void Score::createMMRests()
                         }
                   else if (ns)
                         undo(new RemoveElement(ns));
-
                   //
                   // check for time signature
                   //
@@ -2570,11 +2567,7 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                         Element* el = seg->element(staffIdx * VOICES);
                         if (el == 0)
                               continue;
-/*
-                        if (el->generated() && ((st == Segment::Type::TimeSigAnnounce && m != em)
-                            || (el->type() == Element::CLEF   && seg->tick() != sm->tick())
-                            || (el->type() == Element::KEYSIG && seg->tick() != sm->tick())))
-*/
+
                         // courtesy time sigs and key sigs: remove if not in last measure (generated or not!)
                         // clefs & keysig: remove if generated and not at beginning of first measure
                         if ( ((st == Segment::Type::TimeSigAnnounce || st == Segment::Type::KeySigAnnounce) && m != em)
@@ -2591,25 +2584,6 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                                     clef->setSmall(small);
                                     m->setDirty();
                                     }
-#if 0
-                              //
-                              // if measure is not the first in the system, the clef at
-                              // measure start has to be moved to the end of the previous measure
-                              // TODO: DEBUG - is this code needed?
-                              // clefs should now be placed in correct measure when adding them (cmdInsertClef)
-                              // and it is good to support clefs at beginning of measures, for use in cues
-                              //
-                              if (s->firstMeasure() != m && seg->tick() == m->tick()) {
-                                    undoRemoveElement(el);
-                                    Measure* pm = m->prevMeasure();
-                                    Segment* s = pm->undoGetSegment(Segment::Type::Clef, m->tick());
-                                    Clef* nc = clef->clone();
-                                    nc->setParent(s);
-                                    undoAddElement(nc);
-                                    m->setDirty();
-                                    pm->setDirty();
-                                    }
-#endif
                               }
                         }
                   }
@@ -2936,7 +2910,6 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         }
 
                   // courtesy clefs: show/hide of courtesy clefs moved to Clef::layout()
-
                   }
 
             //

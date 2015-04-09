@@ -843,8 +843,8 @@
           <multiMeasureRest>31</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="124" n="4"/>
             </Rest>
-          <tick>61440</tick>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
@@ -1227,8 +1227,8 @@
           <multiMeasureRest>31</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="124" n="4"/>
             </Rest>
-          <tick>61440</tick>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>

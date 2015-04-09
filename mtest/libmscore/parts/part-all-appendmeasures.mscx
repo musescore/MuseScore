@@ -1276,8 +1276,8 @@
           <multiMeasureRest>26</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="104" n="4"/>
             </Rest>
-          <tick>59520</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1709,8 +1709,8 @@
           <multiMeasureRest>28</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="112" n="4"/>
             </Rest>
-          <tick>59520</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>

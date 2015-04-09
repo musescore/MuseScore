@@ -1793,12 +1793,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   barLine->read(e);
                   Segment::Type st;
 
-                  if (isMMRest()) {
-                        // to find out the right segment type
-                        setTick(e.lastMeasure()->tick());
-                        e.initTick(e.lastMeasure()->tick());
-                        }
-
                   //
                   //  SegStartRepeatBarLine: always at the beginning tick of a measure
                   //  SegBarLine:            in the middle of a measure, has no semantic
@@ -1810,6 +1804,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         st = Segment::Type::StartRepeatBarLine;
                   else
                         st = Segment::Type::EndBarLine;
+
                   segment = getSegment(st, e.tick()); // let the bar line know it belongs to a Segment,
                   segment->add(barLine);              // before setting its flags
                   if (st == Segment::Type::EndBarLine) {
@@ -2078,7 +2073,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                               }
                         }
                   if (e.tick() != tick())
-                        clef->setSmall(true);
+                        clef->setSmall(true);         // layout does this ?
                   segment->add(clef);
                   }
             else if (tag == "TimeSig") {
@@ -2300,8 +2295,12 @@ void Measure::read(XmlReader& e, int staffIdx)
                   range->setTrack(trackZeroVoice(e.track()));
                   segment->add(range);
                   }
-            else if (tag == "multiMeasureRest")
+            else if (tag == "multiMeasureRest") {
                   _mmRestCount = e.readInt();
+                  // set tick to previous measure
+                  setTick(e.lastMeasure()->tick());
+                  e.initTick(e.lastMeasure()->tick());
+                  }
             else if (Element::readProperties(e))
                   ;
             else

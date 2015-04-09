@@ -711,6 +711,7 @@
             </Tempo>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
           <tick>4800</tick>
           <BarLine>

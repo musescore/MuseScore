@@ -182,10 +182,10 @@ void Clef::layout()
             bool showClef = true;
             // only if there is a clef change
             if (!bHide && tick > 0 && stf->clef(tick) != stf->clef(tick-1)) {
-                  Measure*    meas        = static_cast<Measure*>(clefSeg->parent());
+                  Measure* meas = clefSeg->measure();
                   showClef =                    // show this clef if:
                         // it is not a courtesy clef (not at the end of the last measure of the system)
-                        (meas != meas->system()->lastMeasure()) || (clefSeg->tick() != meas->tick() + meas->ticks())
+                        (meas != meas->system()->lastMeasure()) || (clefSeg->tick() != meas->endTick())
                         // if courtesy clef: show if score has courtesy clefs on
                         || ( score()->styleB(StyleIdx::genCourtesyClef)
                               // AND measure is not at the end of a repeat or of a section
