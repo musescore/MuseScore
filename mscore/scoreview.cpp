@@ -3324,6 +3324,10 @@ void ScoreView::endNoteEntry()
             const QList<SpannerSegment*>& el = is.slur()->spannerSegments();
             if (!el.isEmpty())
                   el.front()->setSelected(false);
+            _score->startCmd();
+            _score->undo(new RemoveElement(is.slur()));
+            _score->doLayout();
+            _score->endCmd();
             is.setSlur(nullptr);
             }
       setMouseTracking(false);

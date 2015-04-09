@@ -1584,35 +1584,6 @@ RemoveElement::RemoveElement(Element* e)
 
       Score* score = element->score();
       if (element->isChordRest()) {
-#if 0
-            // do not delete pending slur in note entry mode
-            Slur* pendingSlur = 0;
-            for (Score* sc : score->scoreList()) {
-                  if (sc->noteEntryMode()) {
-                        pendingSlur = sc->inputState().slur();
-                        break;
-                        }
-                  }
-            // remove any slurs pointing to this chor/rest
-            QList<Spanner*> sl;
-            int tick = static_cast<ChordRest*>(element)->tick();
-            for (auto i : score->spanner()) {     // TODO: dont search whole list
-                  Spanner* s = i.second;
-                  if (pendingSlur && pendingSlur->linkList().contains(s)) {
-                        if (s->startElement() == e)
-                              s->setStartElement(nullptr);
-                        else if (s->endElement() == e)
-                              s->setEndElement(nullptr);
-                        continue;
-                        }
-                  if (s->type() == Element::Type::SLUR && (s->startElement() == e || s->endElement() == e))
-                        sl.append(s);
-                  else if ((s->tick() == tick) && (s->track() == element->track()))
-                        sl.append(s);
-                  }
-            for (auto s : sl)       // actually remove scheduled spanners
-                  score->undo(new RemoveElement(s));
-#endif
             ChordRest* cr = static_cast<ChordRest*>(element);
             if (cr->tuplet() && cr->tuplet()->elements().size() <= 1)
                   score->undo(new RemoveElement(cr->tuplet()));

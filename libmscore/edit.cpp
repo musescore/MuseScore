@@ -2768,13 +2768,15 @@ void Score::checkSpanner(int startTick, int endTick)
 
             if (s->type() == Element::Type::SLUR) {
                   Segment* seg = tick2segmentMM(s->tick(), false, Segment::Type::ChordRest);
-                  if (!seg || !seg->element(s->track())) {
+                  if (!seg || !seg->element(s->track()) ||
+                     ((seg->element(s->track())->type() != Element::Type::CHORD) && !noteEntryMode())) {
                         qDebug("checkSpanner::remove (1)");
                         sl.append(s);
                         }
                   else {
                         seg = tick2segmentMM(s->tick2(), false, Segment::Type::ChordRest);
-                        if (!seg || !seg->element(s->track2())) {
+                        if (!seg || !seg->element(s->track2()) ||
+                           ((seg->element(s->track())->type() != Element::Type::CHORD) && !noteEntryMode())) {
                               qDebug("checkSpanner::remove (2) %d - tick %d track %d",
                                  s->tick(), s->tick2(), s->track2());
                               sl.append(s);
