@@ -713,7 +713,6 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             return;
             }
 
-
       if (ots && ots->sig().identical(ns) && ots->stretch() == ts->stretch()) {
             ots->undoChangeProperty(P_ID::TIMESIG, QVariant::fromValue(ns));
             ots->undoChangeProperty(P_ID::GROUPS,  QVariant::fromValue(ts->groups()));
@@ -811,6 +810,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               nsig->setScore(score);
                               nsig->setTrack(staffIdx * VOICES);
                               nsig->setParent(seg);
+                              nsig->setNeedLayout(true);
                               undoAddElement(nsig);
                               }
                         else {
