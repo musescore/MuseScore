@@ -222,8 +222,8 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
+          <duration z="128" n="4"/>
           </Rest>
-        <tick>61440</tick>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
