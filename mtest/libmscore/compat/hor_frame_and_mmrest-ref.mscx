@@ -142,8 +142,8 @@
           </TimeSig>
         <Rest>
           <durationType>measure</durationType>
+          <duration z="16" n="4"/>
           </Rest>
-        <tick>7680</tick>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>

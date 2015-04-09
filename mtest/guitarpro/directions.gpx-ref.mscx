@@ -857,8 +857,8 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>17280</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -887,8 +887,8 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>21120</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -917,8 +917,8 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>24960</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -947,8 +947,8 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>28800</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -977,8 +977,8 @@
           <multiMeasureRest>3</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="12" n="4"/>
             </Rest>
-          <tick>34560</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1014,8 +1014,8 @@
           <multiMeasureRest>3</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="12" n="4"/>
             </Rest>
-          <tick>40320</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1051,8 +1051,8 @@
           <multiMeasureRest>3</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="12" n="4"/>
             </Rest>
-          <tick>46080</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1088,8 +1088,8 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>49920</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1118,8 +1118,8 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>53760</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1148,8 +1148,8 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>57600</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1372,8 +1372,8 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>17280</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1398,8 +1398,8 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>21120</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1424,8 +1424,8 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>24960</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1450,8 +1450,8 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>28800</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1476,8 +1476,8 @@
           <multiMeasureRest>3</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="12" n="4"/>
             </Rest>
-          <tick>34560</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1509,8 +1509,8 @@
           <multiMeasureRest>3</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="12" n="4"/>
             </Rest>
-          <tick>40320</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1542,8 +1542,8 @@
           <multiMeasureRest>3</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="12" n="4"/>
             </Rest>
-          <tick>46080</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1575,8 +1575,8 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>49920</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1601,8 +1601,8 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>53760</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
@@ -1627,8 +1627,8 @@
           <multiMeasureRest>2</multiMeasureRest>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>57600</tick>
           <BarLine>
             <subtype>normal</subtype>
             <span>1</span>
