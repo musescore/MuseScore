@@ -1,0 +1,84 @@
+test script cursor_seek
+SELECTION: from track 4 to track 7
+FILTER: 128
+TRACK: 0
+	Score start:	cursor tick:  0
+	Sel. start: 	cursor tick:  NULL
+	Sel. end:   	cursor tick:  NULL
+	Score end:  	cursor tick:  3840
+TRACK: 1
+	Score start:	cursor tick:  1920
+	Sel. start: 	cursor tick:  NULL
+	Sel. end:   	cursor tick:  NULL
+	Score end:  	cursor tick:  2880
+TRACK: 2
+	Score start:	cursor tick:  NULL
+	Sel. start: 	cursor tick:  NULL
+	Sel. end:   	cursor tick:  NULL
+	Score end:  	cursor tick:  NULL
+TRACK: 3
+	Score start:	cursor tick:  NULL
+	Sel. start: 	cursor tick:  NULL
+	Sel. end:   	cursor tick:  NULL
+	Score end:  	cursor tick:  NULL
+TRACK: 4
+	Score start:	cursor tick:  0
+	Sel. start: 	cursor tick:  3840
+	Sel. end:   	cursor tick:  3840
+	Score end:  	cursor tick:  3840
+TRACK: 5
+	Score start:	cursor tick:  NULL
+	Sel. start: 	cursor tick:  NULL
+	Sel. end:   	cursor tick:  NULL
+	Score end:  	cursor tick:  NULL
+TRACK: 6
+	Score start:	cursor tick:  NULL
+	Sel. start: 	cursor tick:  NULL
+	Sel. end:   	cursor tick:  NULL
+	Score end:  	cursor tick:  NULL
+TRACK: 7
+	Score start:	cursor tick:  NULL
+	Sel. start: 	cursor tick:  NULL
+	Sel. end:   	cursor tick:  NULL
+	Score end:  	cursor tick:  NULL
+FILTER: 384
+TRACK: 0
+	Score start:	cursor tick:  0
+	Sel. start: 	cursor tick:  NULL
+	Sel. end:   	cursor tick:  NULL
+	Score end:  	cursor tick:  5760
+TRACK: 1
+	Score start:	cursor tick:  1920
+	Sel. start: 	cursor tick:  NULL
+	Sel. end:   	cursor tick:  NULL
+	Score end:  	cursor tick:  2880
+TRACK: 2
+	Score start:	cursor tick:  NULL
+	Sel. start: 	cursor tick:  NULL
+	Sel. end:   	cursor tick:  NULL
+	Score end:  	cursor tick:  NULL
+TRACK: 3
+	Score start:	cursor tick:  NULL
+	Sel. start: 	cursor tick:  NULL
+	Sel. end:   	cursor tick:  NULL
+	Score end:  	cursor tick:  NULL
+TRACK: 4
+	Score start:	cursor tick:  0
+	Sel. start: 	cursor tick:  3840
+	Sel. end:   	cursor tick:  5760
+	Score end:  	cursor tick:  5760
+TRACK: 5
+	Score start:	cursor tick:  NULL
+	Sel. start: 	cursor tick:  NULL
+	Sel. end:   	cursor tick:  NULL
+	Score end:  	cursor tick:  NULL
+TRACK: 6
+	Score start:	cursor tick:  NULL
+	Sel. start: 	cursor tick:  NULL
+	Sel. end:   	cursor tick:  NULL
+	Score end:  	cursor tick:  NULL
+TRACK: 7
+	Score start:	cursor tick:  NULL
+	Sel. start: 	cursor tick:  NULL
+	Sel. end:   	cursor tick:  NULL
+	Score end:  	cursor tick:  NULL

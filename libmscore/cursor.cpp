@@ -75,6 +75,110 @@ void Cursor::rewind(int type)
       }
 
 //---------------------------------------------------------
+//   scoreStart
+//    move cursor's segment to the first segment of the score, on current track;
+//    obeys _filter.
+//
+//    Sets null _segment if current track has no segments of types in _filter
+//---------------------------------------------------------
+
+void Cursor::scoreStart()
+      {
+      _segment = 0;
+      Measure* m = _score->firstMeasure();
+      if (m) {
+            _segment = m->first(_filter);
+            nextInTrack();
+            }
+      _score->inputState().setTrack(_track);
+      _score->inputState().setSegment(_segment);
+      }
+
+//---------------------------------------------------------
+//   scoreEnd
+//    move cursor to the end of the score, on current track;
+//    obeys _filter.
+//
+//    Sets null _segment if current track has no segments of types in _filter
+//---------------------------------------------------------
+
+void Cursor::scoreEnd()
+      {
+      _segment = 0;
+      Measure* m = _score->lastMeasure();
+      if (m) {
+            _segment = m->last();
+            prevInTrack();
+            }
+      _score->inputState().setTrack(_track);
+      _score->inputState().setSegment(_segment);
+      }
+
+//---------------------------------------------------------
+//   selectionStart
+//    move cursor's segment to the first segment of the selection, on current track;
+//    obeys _filter.
+//
+//    Sets null _segment if current track is outside selection OR
+//    has no segments of types in _filter
+//---------------------------------------------------------
+
+void Cursor::selectionStart()
+      {
+      int fromTrack     = _score->qmlSelectionFirstTrack();
+      int toTrack       = _score->qmlSelectionLastTrack();
+      // if current track is outside selection, set _segment to null
+      if (_track < fromTrack || _track > toTrack)
+            _segment = nullptr;
+      else {
+            _segment          = _score->selection().startSegment();
+            // if no selection, return score start
+            if (_segment == nullptr) {
+                  scoreStart();
+                  return;
+                  }
+            // if some selection, return first segment found of required type(s)
+            else
+                  nextInTrack();
+            }
+      _score->inputState().setTrack(_track);
+      _score->inputState().setSegment(_segment);
+      }
+
+//---------------------------------------------------------
+//   selectionEnd
+//    move cursor to the last segment of the selection, on current track;
+//    obeys _filter.
+//
+//    Sets null _segment if current track is outside selection OR
+//    has no segments of types in _filter
+//---------------------------------------------------------
+
+void Cursor::selectionEnd()
+      {
+      int fromTrack     = _score->qmlSelectionFirstTrack();
+      int toTrack       = _score->qmlSelectionLastTrack();
+      // if current track is outside selection, set _segment to null
+      if (_track < fromTrack || _track > toTrack)
+            _segment = nullptr;
+      else {
+            _segment          = _score->selection().endSegment();
+            // if no selection, return score end
+            // (_segment may also be null if there is a selection and it extends up to score last segment)
+            if (_segment == nullptr)
+                  scoreEnd();
+            else {
+                  // returned end segment is right beyond actual selection end
+                  _segment = _segment->prev1();
+                  // if some selection, return last/previous segment found of required type(s)
+                  prevInTrack();
+                  }
+            }
+            _score->inputState().setTrack(_track);
+            _score->inputState().setSegment(_segment);
+      }
+
+//---------------------------------------------------------
 //   next
 //    go to next segment
 //    return false if end of score is reached
@@ -273,13 +377,24 @@ int Cursor::voice() const
       }
 
 //---------------------------------------------------------
+//   prevInTrack
+//    go to first segment with type included in _filter at or before _segment
+//---------------------------------------------------------
+
+void Cursor::prevInTrack()
+      {
+      while (_segment && (_segment->element(_track) == 0 || (_segment->segmentType() & _filter) == 0) )
+            _segment = _segment->prev1(_filter);
+      }
+
+//---------------------------------------------------------
 //   nextInTrack
-//    go to first segment at or after _segment which has notes / rests in _track
+//    go to first segment with type included in _filter at or after _segment
 //---------------------------------------------------------
 
 void Cursor::nextInTrack()
       {
-      while (_segment && _segment->element(_track) == 0)
+      while (_segment && (_segment->element(_track) == 0 || (_segment->segmentType() & _filter) == 0) )
             _segment = _segment->next1(_filter);
       }
 

@@ -67,6 +67,7 @@ class Cursor : public QObject {
 
       // utility methods
       void nextInTrack();
+      void prevInTrack();
 
    public:
       Cursor(Score* c = 0);
@@ -96,17 +97,33 @@ class Cursor : public QObject {
 
       int qmlKeySignature();
 
-      //@ rewind cursor
-      //@   type=0      rewind to start of score
-      //@   type=1      rewind to start of selection
-      //@   type=2      rewind to end of selection
-      Q_INVOKABLE void rewind(int type);
-
+      //@ moves cursor to first element of current track in score (filtered by 'filter')
+      Q_INVOKABLE void scoreStart();
+      //@ moves cursor to last element of current track in score (filtered by 'filter')
+      Q_INVOKABLE void scoreEnd();
+      //@ moves cursor to first element of current track in selection (filtered by 'filter');
+      //@ if there is no selection, same as scoreStart()
+      Q_INVOKABLE void selectionStart();
+      //@ moves cursor to last element of current track in selection (filtered by 'filter');
+      //@ if there is no selection, same as scoreEnd()
+      Q_INVOKABLE void selectionEnd();
+      //@ moves cursor to next element of current track (filtered by 'filter')
       Q_INVOKABLE bool next();
+      //@ moves cursor to first segment of current track in next measure (filtered by 'filter');
+      //@ returns false if end of score is reached
       Q_INVOKABLE bool nextMeasure();
-      Q_INVOKABLE void add(Ms::Element*);
 
+      //@ adds an Element to the current cursor segment in the current track
+      Q_INVOKABLE void add(Ms::Element*);
+      //@ adds a note of pitch 'pitch' to the chord in current track of current segment;
+      //@ chord must already exist
       Q_INVOKABLE void addNote(int pitch);
+
+      // rewind cursor
+      //   type=0      rewind to start of score
+      //   type=1      rewind to start of selection
+      //   type=2      rewind to end of selection
+      Q_INVOKABLE void rewind(int type);  // obsolete; replaced by scoreStart/End() and selectionStart/End():
 
       //@ set duration
       //@   z: numerator

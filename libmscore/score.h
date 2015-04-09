@@ -229,55 +229,60 @@ enum class PasteStatus : char {
 
 //---------------------------------------------------------
 //   @@ Score
+//   @P composer        QString           composer of the score (read only)
+//   @P duration        int               duration of score in seconds (read only)
+//   @P excerpts        array[Ms::Excerpt] the list of the excerpts (linked parts)
 //   @P firstMeasure    Ms::Measure       the first measure of the score (read only)
 //   @P firstMeasureMM  Ms::Measure       the first multi-measure rest measure of the score (read only)
+//   @P harmonyCount    int               number of harmony item (read only)
+//   @P hasHarmonies    bool              true if score has chord symbols (read only)
+//   @P hasLyrics       bool              true if score has lyrics (read only)
+//   @P keysig          int               key signature at the start of the score (read only)
 //   @P lastMeasure     Ms::Measure       the last measure of the score (read only)
 //   @P lastMeasureMM   Ms::Measure       the last multi-measure rest measure of the score (read only)
 //   @P lastSegment     Ms::Segment       the last score segment (read-only)
-//   @P name            QString           name of the score
+//   @P lyricCount      int               number of lyric item (read only)
+//   @P name            QString           the score file name without path or extension
+//   @P nmeasures       int               number of measures (read only)
 //   @P npages          int               number of pages (read only)
 //   @P nstaves         int               number of staves (read only)
 //   @P ntracks         int               number of tracks (staves * 4) (read only)
-//   @P nmeasures       int               number of measures (read only)
+//   @P pageFormat      MS::PageFormat    the score page format
 //   @P parts           array[Ms::Part]   the list of parts (read only)
-//   @P title           QString           title of the score (read only)
-//   @P subtitle        QString           subtitle of the score (read only)
-//   @P composer        QString           composer of the score (read only)
 //   @P poet            QString           poet of the score (read only)
-//   @P hasLyrics       bool              score has lyrics (read only)
-//   @P hasHarmonies    bool              score has chord symbols (read only)
-//   @P lyricCount      int               number of lyric item (read only)
-//   @P harmonyCount    int               number of harmony item (read only)
-//   @P keysig          int               key signature at the start of the score (read only)
-//   @P duration        int               duration of score in seconds (read only)
-//   @P excerpts        array[Ms::Excerpt] the list of the excerpts (linked parts)
+//   @P selectionFirstTrack int           the top track of the selection (or the top score track if there is no selection) (read-only)
+//   @P selectionLastTrack  int           the bottom track of the selection (or the bottom score track if there is no selection) (read-only)
+//   @P subtitle        QString           subtitle of the score (read only)
+//   @P title           QString           title of the score (read only)
 //---------------------------------------------------------
 
 class Score : public QObject {
       Q_OBJECT
-      Q_PROPERTY(Ms::Measure*           firstMeasure      READ firstMeasure)
-      Q_PROPERTY(Ms::Measure*           firstMeasureMM    READ firstMeasureMM)
-      Q_PROPERTY(Ms::Measure*           lastMeasure       READ lastMeasure)
-      Q_PROPERTY(Ms::Measure*           lastMeasureMM     READ lastMeasureMM)
-      Q_PROPERTY(Ms::Segment*           lastSegment       READ lastSegment)
-      Q_PROPERTY(QString                name              READ name           WRITE setName)
-      Q_PROPERTY(int                    npages            READ npages)
-      Q_PROPERTY(int                    nstaves           READ nstaves)
-      Q_PROPERTY(int                    ntracks           READ ntracks)
-      Q_PROPERTY(int                    nmeasures         READ nmeasures)
-      Q_PROPERTY(QQmlListProperty<Ms::Part> parts     READ qmlParts)
-      Q_PROPERTY(QString                title             READ title)
-      Q_PROPERTY(QString                subtitle          READ subtitle)
-      Q_PROPERTY(QString                composer          READ composer)
-      Q_PROPERTY(QString                poet              READ poet)
-      Q_PROPERTY(bool                   hasLyrics         READ hasLyrics)
-      Q_PROPERTY(bool                   hasHarmonies      READ hasHarmonies)
-      Q_PROPERTY(int                    lyricCount        READ lyricCount)
+      Q_PROPERTY(QString                composer            READ composer)
+      Q_PROPERTY(int                    duration            READ duration)
+      Q_PROPERTY(QQmlListProperty<Ms::Excerpt> excerpts     READ qmlExcerpts)
+      Q_PROPERTY(Ms::Measure*           firstMeasure        READ firstMeasure)
+      Q_PROPERTY(Ms::Measure*           firstMeasureMM      READ firstMeasureMM)
       Q_PROPERTY(int                    harmonyCount      READ harmonyCount)
-      Q_PROPERTY(int                    keysig            READ keysig)
-      Q_PROPERTY(int                    duration          READ duration)
-      Q_PROPERTY(QQmlListProperty<Ms::Excerpt> excerpts   READ qmlExcerpts)
-      Q_PROPERTY(Ms::PageFormat*        pageFormat        READ pageFormat     WRITE undoChangePageFormat)
+      Q_PROPERTY(bool                   hasHarmonies        READ hasHarmonies)
+      Q_PROPERTY(bool                   hasLyrics           READ hasLyrics)
+      Q_PROPERTY(int                    keysig              READ keysig)
+      Q_PROPERTY(Ms::Measure*           lastMeasure         READ lastMeasure)
+      Q_PROPERTY(Ms::Measure*           lastMeasureMM       READ lastMeasureMM)
+      Q_PROPERTY(Ms::Segment*           lastSegment         READ lastSegment)
+      Q_PROPERTY(int                    lyricCount        READ lyricCount)
+      Q_PROPERTY(QString                name                READ name           WRITE setName)
+      Q_PROPERTY(int                    nmeasures           READ nmeasures)
+      Q_PROPERTY(int                    npages              READ npages)
+      Q_PROPERTY(int                    nstaves             READ nstaves)
+      Q_PROPERTY(int                    ntracks             READ ntracks)
+      Q_PROPERTY(Ms::PageFormat*        pageFormat          READ pageFormat     WRITE undoChangePageFormat)
+      Q_PROPERTY(QQmlListProperty<Ms::Part> parts           READ qmlParts)
+      Q_PROPERTY(QString                poet                READ poet)
+      Q_PROPERTY(int                    selectionFirstTrack READ qmlSelectionFirstTrack)
+      Q_PROPERTY(int                    selectionLastTrack  READ qmlSelectionLastTrack)
+      Q_PROPERTY(QString                subtitle            READ subtitle)
+      Q_PROPERTY(QString                title               READ title)
 
    public:
       enum class FileError : char {
@@ -1082,6 +1087,11 @@ class Score : public QObject {
 
       bool checkKeys();
       bool checkClefs();
+
+      // for use in plug-ins: if no selection, return first/last score track
+      int qmlSelectionFirstTrack() const     { return selection().staffStart() * VOICES;     }
+      int qmlSelectionLastTrack() const      { return (selection().staffEnd() == 0 ?
+                                                      ntracks() : (selection().staffEnd() * VOICES)) - 1; }
 
       friend class ChangeSynthesizerState;
       friend class Chord;
