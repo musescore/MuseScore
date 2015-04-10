@@ -629,7 +629,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(clearShortcut,  SIGNAL(clicked()), SLOT(clearShortcutClicked()));
       connect(defineShortcut, SIGNAL(clicked()), SLOT(defineShortcutClicked()));
       connect(resetToDefault, SIGNAL(clicked()), SLOT(resetAllValues()));
-
+      connect(filterShortcuts, SIGNAL(textChanged(const QString&)), SLOT(filterShortcutsTextChanged(const QString &)));
       connect(printShortcuts, SIGNAL(clicked()), SLOT(printShortcutsClicked()));
 
       recordButtons = new QButtonGroup(this);
@@ -1080,6 +1080,23 @@ void PreferenceDialog::clearShortcutClicked()
       active->setText(1, "");
       shortcutsChanged = true;
       }
+
+//--------------------------------------------------------
+//   filterShortcutsTextChanged
+//--------------------------------------------------------
+
+void  PreferenceDialog::filterShortcutsTextChanged(const QString &query )
+    {
+    QTreeWidgetItem *item;
+    for(int i = 0; i < shortcutList->topLevelItemCount(); i++) {
+        item = shortcutList->topLevelItem(i);
+
+        if(item->text(0).toLower().contains(query.toLower()))
+            item->setHidden(false);
+        else
+            item->setHidden(true);
+        }
+    }
 
 //---------------------------------------------------------
 //   selectFgWallpaper
