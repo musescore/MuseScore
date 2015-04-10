@@ -37,6 +37,8 @@ class TestSplitStaff : public QObject, public MTest
       void splitstaff01() { splitstaff(1, 0); } //single notes
       void splitstaff02() { splitstaff(2, 0); } //chord
       void splitstaff03() { splitstaff(3, 1); } //non-top staff
+      void splitstaff04() { splitstaff(4, 0); } //slur up
+      void splitstaff05() { splitstaff(5, 0); } //slur down
       };
 
 //---------------------------------------------------------
