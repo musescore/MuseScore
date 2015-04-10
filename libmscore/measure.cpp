@@ -93,6 +93,7 @@ MStaff::MStaff()
       _vspacerDown = 0;
       _visible     = true;
       _slashStyle  = false;
+      _corrupted = false;
       }
 
 MStaff::~MStaff()
@@ -114,6 +115,7 @@ MStaff::MStaff(const MStaff& m)
       _vspacerDown = 0;
       _visible     = m._visible;
       _slashStyle  = m._slashStyle;
+      _corrupted = m._corrupted;
       }
 
 //---------------------------------------------------------

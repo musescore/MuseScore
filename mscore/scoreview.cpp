@@ -1915,6 +1915,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             p.setBrush(QBrush(Qt::NoBrush));
             p.drawRect(r);
             }
+      double _spatium = score()->spatium();
       const Selection& sel = _score->selection();
       if (sel.isRange()) {
             Segment* ss = sel.startSegment();
@@ -1931,7 +1932,6 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             pen.setStyle(Qt::SolidLine);
 
             p.setPen(pen);
-            double _spatium = score()->spatium();
             double x2      = ss->pagePos().x() - _spatium;
             int staffStart = sel.staffStart();
             int staffEnd   = sel.staffEnd();
@@ -1999,6 +1999,21 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             //
             p.drawLine(QLineF(x2, y1, x2, y2).translated(system2->page()->pos()));
             }
+      if (!_score->printing() && MScore::debugMode) {
+            QPen pen;
+            pen.setColor(Qt::red);
+            pen.setWidthF(1);
+            pen.setStyle(Qt::SolidLine);
+            p.setPen(pen);
+            for (Measure* m = _score->firstMeasure(); m; m = m->nextMeasure()) {
+                  for (int staffIdx = 0; staffIdx < _score->nstaves(); staffIdx++) {
+                        if (m->mstaff(staffIdx)->corrupted()) {
+                              p.drawRect(m->staffabbox(staffIdx).translated(m->system()->page()->pos()).adjusted(0, -_spatium, 0, _spatium));
+                              }
+                        }
+                  }
+            }
+
       p.setMatrixEnabled(false);
       if ((_score->layoutMode() != LayoutMode::LINE) && !r1.isEmpty()) {
             p.setClipRegion(r1);  // only background

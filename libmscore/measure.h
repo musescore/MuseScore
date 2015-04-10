@@ -59,6 +59,8 @@ struct MStaff {
       bool _visible;
       bool _slashStyle;
 
+      bool _corrupted;
+
       MStaff();
       ~MStaff();
       MStaff(const MStaff&);
@@ -71,6 +73,8 @@ struct MStaff {
       void setTrack(int);
       Text* noText() const         { return _noText;     }
       void setNoText(Text* t)      { _noText = t;        }
+      void setCorrupted(bool c)    { _corrupted = c; }
+      bool corrupted()             { return _corrupted; }
       };
 
 //---------------------------------------------------------
