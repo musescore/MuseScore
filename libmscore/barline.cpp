@@ -782,9 +782,9 @@ void BarLine::editDrag(const EditData& ed)
       y1 -= yoff1;                  // current positions of barline ends, ignoring any in-process dragging
       y2 -= yoff2;
       if (ed.curGrip == Grip::START) {
-            // min offset for top grip is line -1
+            // min offset for top grip is line -1 (-2 for 1-line staves)
             // max offset is 1 line above bottom grip or 1 below last staff line, whichever comes first
-            min = -y1 - lineDist;
+            min = -y1 - (staff()->lines() == 1 ? lineDist * 2 : lineDist);
             max = y2 - y1 - lineDist;                                   // 1 line above bottom grip
             lastmax = (staff()->lines() - _spanFrom/2) * lineDist;      // 1 line below last staff line
             if (lastmax < max)
@@ -870,10 +870,12 @@ void BarLine::endEditDrag()
                   // round bar line top coord to nearest line of 1st staff (in half line dist units)
                   newSpanFrom = ((int)floor(y1 / (staff()->lineDistance() * spatium()) + 0.5 )) * 2;
                   // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
-                  if (newSpanFrom <  MIN_BARLINE_SPAN_FROMTO)
-                        newSpanFrom = MIN_BARLINE_SPAN_FROMTO;
-                  if (newSpanFrom > Staff1lines*2)
-                        newSpanFrom = Staff1lines*2;
+                  // except for 1-line staves
+                  int minFrom = Staff1lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO;
+                  if (newSpanFrom <  minFrom)
+                        newSpanFrom = minFrom;
+                  if (newSpanFrom > Staff1lines * 2)
+                        newSpanFrom = Staff1lines * 2;
                   }
 
             newSpanTo = _spanTo;
@@ -882,17 +884,18 @@ void BarLine::endEditDrag()
                   qreal staff2TopY = systTopY + syst->staff(staffIdx2)->y();
                   newSpanTo = ((int)floor( (ay2 - staff2TopY) / (staff2->lineDistance() * spatium()) + 0.5 )) * 2;
                   // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
+                  int maxTo = Staff2lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : Staff2lines * 2;
                   if (newSpanTo <  MIN_BARLINE_SPAN_FROMTO)
                         newSpanTo = MIN_BARLINE_SPAN_FROMTO;
-                  if (newSpanTo > Staff2lines*2)
-                        newSpanTo = Staff2lines*2;
+                  if (newSpanTo > maxTo)
+                        newSpanTo = maxTo;
                   }
 //            shiftDrag = false;          // NO: a last call to this function is made when exiting editing:
             }                             // it would find shiftDrag = false and reset extrema to coarse resolution
 
       else {                              // if coarse dragging
-            newSpanFrom = 0;
-            newSpanTo   = (Staff2lines - 1) * 2;
+            newSpanFrom = Staff1lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM: 0;
+            newSpanTo   = Staff2lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (Staff2lines - 1) * 2;
             }
 
       // if any value changed, update

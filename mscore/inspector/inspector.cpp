@@ -1007,7 +1007,7 @@ void InspectorBarLine::manageSpanData()
       //          max = max possible according to number of staff lines
       min   = bl->span() < 2 ? bl->spanFrom() + MIN_BARLINE_FROMTO_DIST
                   : (staffToLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO);
-      max   = staffFromLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffToLines-1) * 2 + 2;
+      max   = staffToLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffToLines-1) * 2 + 2;
       b.spanTo->setMinimum(min);
       b.spanTo->setMaximum(max);
       b.spanTo->setWrapping(false);
