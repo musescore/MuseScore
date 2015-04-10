@@ -5400,6 +5400,8 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
       bool chord = false;
       int velocity = -1;
       bool unpitched = false;
+      bool small = false;
+      bool cue = false;
       QString instrId;
       QList<QDomElement> notations;
 
@@ -5553,8 +5555,11 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                               domError(ee);
                         }
                   }
-            else if (tag == "type")
+            else if (tag == "type") {
                   duration = TDuration(s);
+                  small = e.attribute(QString("size")) == "cue";
+                  }
+
             else if (tag == "chord" || tag == "duration" || tag == "staff" || tag == "voice")
                   // already handled by voice mapper, ignore here but prevent
                   // spurious "Unknown Node <staff>" or "... <voice>" messages
@@ -5647,7 +5652,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   instrId = e.attribute("id");
                   }
             else if (tag == "cue")
-                  domNotImplemented(e);
+                  cue = true;
             else
                   domError(e);
             }
@@ -5689,6 +5694,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             if (!s->element(cr->track()))
                   s->add(cr);
             cr->setVisible(printObject == "yes");
+            cr->setSmall(small);
             handleDisplayStep(cr, step, octave, loc_tick, score->spatium());
             }
       else {
@@ -5760,7 +5766,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                         Segment* s = measure->getSegment(cr, loc_tick);
                         s->add(cr);
                         }
-                   // append grace notes
+                  // append grace notes
                   // first excerpt grace notes after
                   QList<Chord*> toRemove;
                   if(graceNotes.length()){
@@ -5795,6 +5801,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
 
             char c = step[0].toLatin1();
             note = new Note(score);
+            note->setSmall(small);
             note->setHeadGroup(headGroup);
             if (noteheadColor != QColor::Invalid)
                   note->setColor(noteheadColor);
@@ -5834,6 +5841,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             cr->add(note);
 
             static_cast<Chord*>(cr)->setNoStem(noStem);
+            if (cue) cr->setSmall(cue); // only once per chord
 
             // qDebug("staff for new note: %p (staff=%d, relStaff=%d)",
             //        score->staff(staff + relStaff), staff, relStaff);
