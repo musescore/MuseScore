@@ -360,28 +360,22 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                         int track = mapTrack(srcTrack, map);
 
                         Tremolo* tremolo = 0;
-printf("create track==== %d %d->%d\n", nm->tick(), srcTrack, track);
-
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
-printf("  seg %d\n", oseg->tick());
-for (Segment* s = nm->first(); s; s = s->next())
-      printf("   segment %d %s\n", s->tick(), s->subTypeName());
-
                               Segment* ns = nullptr; //create segment later, on demand
                               foreach (Element* e, oseg->annotations()) {
                                     if (e->generated())
                                           continue;
-                                    if ((e->track() == srcTrack && track != -1) || (e->systemFlag() && srcTrack == 0)) {
+                                    if ((e->track() == srcTrack && track != -1)
+                                       || (e->systemFlag() && srcTrack == 0)
+                                       ) {
                                           Element* ne = e->linkedClone();
                                           ne->setUserOff(QPointF());  // reset user offset as most likely
                                                                       // it will not fit
                                           ne->setReadPos(QPointF());
                                           ne->setTrack(track == -1 ? 0 : track);
                                           ne->setScore(score);
-                                          if (!ns) {
+                                          if (!ns)
                                                 ns = nm->getSegment(oseg->segmentType(), oseg->tick());
-printf("  create segment %d %s\n", ns->tick(), ns->subTypeName());
-                                                }
                                           ns->add(ne);
                                           // for chord symbols,
                                           // re-render with new style settings
