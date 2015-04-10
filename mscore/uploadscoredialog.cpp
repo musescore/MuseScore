@@ -23,14 +23,25 @@ namespace Ms {
 
 void MuseScore::showUploadScoreDialog()
       {
+      if (!currentScore())
+            return;
+      if (!currentScore()->sanityCheck()) {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle(QObject::tr("MuseScore: Load Error"));
+            msgBox.setText(tr("This score is corrupted. Please fix the errors first."));
+            msgBox.setDetailedText(MScore::lastError);
+            msgBox.setTextFormat(Qt::RichText);
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.exec();
+            return;
+            }
       if (uploadScoreDialog == nullptr) {
             uploadScoreDialog = new UploadScoreDialog(_loginManager);
             }
 
-      if (currentScore()) {
-            uploadScoreDialog->setTitle(currentScore()->title());
-            _loginManager->tryLogin();
-            }
+      uploadScoreDialog->setTitle(currentScore()->title());
+      _loginManager->tryLogin();
       }
 
 //---------------------------------------------------------
