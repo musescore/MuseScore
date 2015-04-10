@@ -830,9 +830,9 @@ void Measure::add(Element* el)
                               // use order of segments in segment.h
                               if (s && s->tick() == t) {
                                     while (s && s->segmentType() <= st) {
-                                          if (s->next() && s->next()->tick() != t)
-                                                break;
                                           s = s->next();
+                                          if (s && s->tick() != t)
+                                                break;
                                           }
                                     }
                               }
