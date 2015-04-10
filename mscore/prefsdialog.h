@@ -73,6 +73,7 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
       void selectPluginsDirectory();
       void selectImagesDirectory();
       void printShortcutsClicked();
+      void filterShortcutsTextChanged(const QString &);
 
       void languageChanged(int);
       void changeSoundfontPaths();
