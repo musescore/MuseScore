@@ -1457,6 +1457,7 @@ void Element::undoSetPlacement(Placement v)
 QVariant Element::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
+            case P_ID::TRACK:     return track();
             case P_ID::GENERATED: return _generated;
             case P_ID::COLOR:     return color();
             case P_ID::VISIBLE:   return _visible;
@@ -1475,6 +1476,9 @@ QVariant Element::getProperty(P_ID propertyId) const
 bool Element::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case P_ID::TRACK:
+                  setTrack(v.toInt());
+                  break;
             case P_ID::GENERATED:
                   _generated = v.toBool();
                   break;

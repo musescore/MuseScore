@@ -457,8 +457,13 @@ bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::SPANNER_TICKS:
                   setTicks(v.toInt());
                   break;
+            case P_ID::TRACK:
+                  setTrack(v.toInt());
+                  setStartElement(0);
+                  break;
             case P_ID::SPANNER_TRACK2:
                   setTrack2(v.toInt());
+                  setEndElement(0);
                   break;
             case P_ID::ANCHOR:
                   setAnchor(Anchor(v.toInt()));
