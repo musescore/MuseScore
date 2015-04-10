@@ -1122,7 +1122,9 @@ void OveToMScore::convertMeasures() {
             if (mb->type() != Element::Type::MEASURE)
                   continue;
             Measure* measure = static_cast<Measure*>(mb);
-
+            int tick = measure->tick();
+            measure->setLen(score_->sigmap()->timesig(tick).timesig());
+            measure->setTimesig(score_->sigmap()->timesig(tick).timesig()); //?
             convertMeasure(measure);
             }
 
@@ -1140,10 +1142,10 @@ void OveToMScore::convertMeasure(Measure* measure){
       int staffCount = 0;
       int measureCount = ove_->getMeasureCount();
 
-      for( int i=0; i<ove_->getPartCount(); ++i ){
+      for (int i=0; i < ove_->getPartCount(); ++i) {
             int partStaffCount = ove_->getStaffCount(i);
 
-            for( int j=0; j<partStaffCount; ++j ){
+            for (int j=0; j < partStaffCount; ++j) {
                   int measureID = measure->no();
 
                   if (measureID >= 0 && measureID < measureCount) {
@@ -1365,11 +1367,11 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
       int partStaffCount = ove_->getStaffCount(part);
 
       if(containers.empty()){
-            TDuration duration(TDuration::DurationType::V_MEASURE);
             int absTick = mtt_->getTick(measure->no(), 0);
 
-            cr = new Rest(score_, duration);
+            cr = new Rest(score_);
             cr->setDuration(measure->len());
+            cr->setDurationType(TDuration::DurationType::V_MEASURE);
             cr->setTrack(track);
             Segment* s = measure->getSegment(cr, absTick);
             s->add(cr);
@@ -1384,8 +1386,9 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                   TDuration duration = OveNoteType_To_Duration(container->getNoteType());
                   duration.setDots(container->getDot());
 
-                  cr = new Rest(score_, duration);
+                  cr = new Rest(score_);
                   cr->setDuration(duration.fraction());
+                  cr->setDurationType(duration.type());
                   cr->setTrack(noteTrack);
                   cr->setVisible(container->getShow());
 
@@ -1848,7 +1851,7 @@ void OveToMScore::convertArticulation(
                         pedal_->setTrack(track);
                         Segment* seg = measure->getSegment(Segment::Type::ChordRest, absTick);
                         pedal_->setTick(seg->tick());
-                        seg->add(pedal_);
+                        score_->addSpanner(pedal_);
                         }
                   break;
                   }
@@ -2391,11 +2394,6 @@ Score::FileError importOve(Score* score, const QString& name) {
             otm.convert(&oveSong, score);
 
             //		score->connectSlurs();
-            for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-                  int tick = m->tick();
-                  m->setLen(score->sigmap()->timesig(tick).timesig());
-                  m->setTimesig(score->sigmap()->timesig(tick).timesig()); //?
-                  }
             }
 
       return result ? Score::FileError::FILE_NO_ERROR : Score::FileError::FILE_ERROR;
