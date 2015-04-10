@@ -807,6 +807,7 @@ void Measure::add(Element* el)
 
                   // insert segment at specific position
                   if (seg->next()) {
+printf("insert seg at specific position\n");
                         _segments.insert(seg, seg->next());
                         break;
                         }
@@ -829,10 +830,14 @@ void Measure::add(Element* el)
                         else {
                               // use order of segments in segment.h
                               if (s && s->tick() == t) {
+printf("insertSeg at %d %s\n", s->tick(), s->subTypeName());
                                     while (s && s->segmentType() <= st) {
-                                          if (s->next() && s->next()->tick() != t)
-                                                break;
+printf("  insertSeg at %d %s\n", s->tick(), s->subTypeName());
                                           s = s->next();
+//                                          if (s->next() && s->next()->tick() != t)
+                                          if (s && s->tick() != t)
+                                                break;
+                                          //s = s->next();
                                           }
                                     }
                               }
