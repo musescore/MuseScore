@@ -2196,10 +2196,25 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         removeNotes.append(note);
                         }
                   c->sortNotes();
-                  foreach(Note* note, removeNotes) {
+                  for (Note* note : removeNotes) {
                         undoRemoveElement(note);
-                        if (note->chord()->notes().isEmpty())
-                              undoRemoveElement(note->chord());
+                        Chord* chord = note->chord();
+                        if (chord->notes().isEmpty()) {
+                              undoRemoveElement(chord);
+                              for (auto sp : spanner()) {
+                                    Slur* slur = static_cast<Slur*>(sp.second);
+                                    if (slur->type() != Element::Type::SLUR)
+                                          continue;
+                                    if (slur->startCR() == chord) {
+                                          slur->undoChangeProperty(P_ID::TRACK, slur->track()+VOICES);
+                                          slur->setStartElement(0);
+                                          }
+                                    if (slur->endCR() == chord) {
+                                          slur->undoChangeProperty(P_ID::SPANNER_TRACK2, slur->track2()+VOICES);
+                                          slur->setEndElement(0);
+                                          }
+                                    }
+                              }
                         }
                   }
             }

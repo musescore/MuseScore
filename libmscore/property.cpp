@@ -223,6 +223,7 @@ static const PropertyData propertyList[] = {
       { P_ID::DURATION,            false, 0,                       P_TYPE::FRACTION },
       { P_ID::DURATION_TYPE,       false, 0,                       P_TYPE::TDURATION },
       { P_ID::ROLE,                false, "role",                  P_TYPE::INT },
+      { P_ID::TRACK,               false, 0,                       P_TYPE::INT },
 
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };
