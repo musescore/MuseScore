@@ -4421,7 +4421,7 @@ void ScoreView::cmdChangeEnharmonic(bool up)
                         }
                   else {
                         n->undoSetTpc(tpc);
-                        if (up || staff->part()->instrument()->transpose().isZero()) {
+                        if (up || staff->part()->instr()->transpose().isZero()) {
                               // change both spellings
                               int t = n->transposeTpc(tpc);
                               if (n->concertPitch())
