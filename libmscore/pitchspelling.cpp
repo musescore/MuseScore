@@ -21,6 +21,8 @@
 #include "staff.h"
 #include "chord.h"
 #include "score.h"
+#include "part.h"
+#include "utils.h"
 
 namespace Ms {
 
@@ -738,6 +740,22 @@ void spell(QList<Event>& notes, int key)
       }
 
 //---------------------------------------------------------
+//   changeAllTpcs
+//---------------------------------------------------------
+
+void changeAllTpcs(Note* n, int tpc1)
+      {
+      Interval v;
+      if (n && n->part() && n->part()->instrument()) {
+            v = n->part()->instrument()->transpose();
+            v.flip();
+            }
+      int tpc2 = Ms::transposeTpc(tpc1, v, true);
+      n->undoChangeProperty(P_ID::TPC1, tpc1);
+      n->undoChangeProperty(P_ID::TPC2, tpc2);
+      }
+
+//---------------------------------------------------------
 //   spell
 //---------------------------------------------------------
 
@@ -760,16 +778,16 @@ void Score::spellNotelist(QList<Note*>& notes)
                   tab = tab1;
 
             if (start == 0) {
-                  undoChangeTpc(notes[0], tab[(notes[0]->pitch() % 12) * 2 + (opt & 1)]);
+                  changeAllTpcs(notes[0], tab[(notes[0]->pitch() % 12) * 2 + (opt & 1)]);
                   if (n > 1)
-                        undoChangeTpc(notes[1], tab[(notes[1]->pitch() % 12) * 2 + ((opt & 2)>>1)]);
+                        changeAllTpcs(notes[1], tab[(notes[1]->pitch() % 12) * 2 + ((opt & 2)>>1)]);
                   if (n > 2)
-                        undoChangeTpc(notes[2], tab[(notes[2]->pitch() % 12) * 2 + ((opt & 4)>>2)]);
+                        changeAllTpcs(notes[2], tab[(notes[2]->pitch() % 12) * 2 + ((opt & 4)>>2)]);
                   }
             if ((end - start) >= 6) {
-                  undoChangeTpc(notes[start+3], tab[(notes[start+3]->pitch() % 12) * 2 + ((opt &  8) >> 3)]);
-                  undoChangeTpc(notes[start+4], tab[(notes[start+4]->pitch() % 12) * 2 + ((opt & 16) >> 4)]);
-                  undoChangeTpc(notes[start+5], tab[(notes[start+5]->pitch() % 12) * 2 + ((opt & 32) >> 5)]);
+                  changeAllTpcs(notes[start+3], tab[(notes[start+3]->pitch() % 12) * 2 + ((opt &  8) >> 3)]);
+                  changeAllTpcs(notes[start+4], tab[(notes[start+4]->pitch() % 12) * 2 + ((opt & 16) >> 4)]);
+                  changeAllTpcs(notes[start+5], tab[(notes[start+5]->pitch() % 12) * 2 + ((opt & 32) >> 5)]);
                   }
             if (end == n) {
                   int n = end - start;
@@ -777,13 +795,13 @@ void Score::spellNotelist(QList<Note*>& notes)
                   switch(n - 6) {
                         case 3:
                               k = end - start - 3;
-                              undoChangeTpc(notes[end-3], tab[(notes[end-3]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
+                              changeAllTpcs(notes[end-3], tab[(notes[end-3]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
                         case 2:
                               k = end - start - 2;
-                              undoChangeTpc(notes[end-2], tab[(notes[end-2]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
+                              changeAllTpcs(notes[end-2], tab[(notes[end-2]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
                         case 1:
                               k = end - start - 1;
-                              undoChangeTpc(notes[end-1], tab[(notes[end-1]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
+                              changeAllTpcs(notes[end-1], tab[(notes[end-1]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
                         }
                   break;
                   }
