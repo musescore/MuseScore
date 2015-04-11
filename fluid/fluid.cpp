@@ -628,8 +628,10 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
             if (s.isEmpty())
                   continue;
             QString path;
+            QFileInfo fis(s);
+            QString fileName = fis.fileName();
             foreach (const QFileInfo& fi, l) {
-                  if (fi.fileName() == s) {
+                  if (fi.fileName() == fileName) {
                         path = fi.absoluteFilePath();
                         break;
                         }
