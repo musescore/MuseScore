@@ -32,7 +32,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
 
       QAction* a = new QAction(this);
-      a->setText(tr("single Palette"));
+      a->setText(tr("Single Palette"));
       a->setCheckable(true);
       a->setChecked(preferences.singlePalette);
       addAction(a);
@@ -41,6 +41,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       QWidget* w = new QWidget(this);
       w->setContextMenuPolicy(Qt::NoContextMenu);
       QVBoxLayout* vl = new QVBoxLayout(w);
+      vl->setMargin(0);
       QHBoxLayout* hl = new QHBoxLayout;
       hl->setContentsMargins(5,5,5,0);
 
