@@ -736,6 +736,7 @@ bool Score::isSubdivided(ChordRest* chord, int swingUnit)
 static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       {
       QList<NoteEventList> ell;
+      Key key     = chord->staff()->key(chord->segment()->tick());
 
       if (chord->notes().isEmpty())
             return ell;
@@ -840,30 +841,30 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                         NoteEventList* events = &ell[k];
 
                         switch (type) {
-                                // TODO - I'd like to refactor many of the Articulation types to use a common interface.
+                              // TODO - I'd like to refactor many of the Articulation types to use a common interface.
                               case ArticulationType::Trill:{
-                                //
-                                // create default playback for Trill
-                                // this implements a baroque style trill, starting with the note above.
-                                //
-                                events->clear();
-                                Key key     = chord->staff()->key(chord->segment()->tick());
-                                int pitch   = chord->notes()[k]->epitch();
-                                int pitchUp = diatonicUpDown(key, pitch, 1) - pitch;
+                                  //
+                                  // create default playback for Trill
+                                  // this implements a baroque style trill, starting with the note above.
+                                  //
+                                  events->clear();
+                                  int pitch   = chord->notes()[k]->epitch();
+                                  int pitchUp = diatonicUpDown(key, pitch, 1) - pitch;
                                   int stepmax = 1000;
                                   int _16th = MScore::division / 4;
                                   // 1 period per 1/16th note equivalent, but minimum of 2
                                   int numperiods = max(2, chord->actualTicks() / _16th) ; // number of up-down pairs in this trill as played.
-                                  
+
                                   int trillperiod = stepmax / numperiods; // time of a single period
                                   int remaining = stepmax-trillperiod*numperiods; // time left over after all periods have been played
+                                  
                                   for( int c=0; c+trillperiod <= stepmax; c += trillperiod){
                                       events->append(NoteEvent(pitchUp, c,               trillperiod/2));
                                       events->append(NoteEvent(0,       c+trillperiod/2, trillperiod/2));
                                   }
-                                  if ( remaining > 0) {
-                                      events->append(NoteEvent(0, stepmax-remaining, remaining));
-                                  }
+                                  //if ( remaining > 0) {
+                                  //    events->append(NoteEvent(0, stepmax-remaining, remaining));
+                                  //}
                                 }
                                 break;
                                 
