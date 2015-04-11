@@ -208,15 +208,19 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   }
             Measure* measure;
             System* system;
+            SysStaff* sysStaff0 = nullptr;      // top staff for barline in system
             bool systemBarLine;
             if (parent()->type() == Element::Type::SEGMENT) {
                   Segment* segment = static_cast<Segment*>(parent());
                   measure = segment->measure();
                   system  = measure->system();
+                  if (system)
+                        sysStaff0 = system->staff(staffIdx1);
                   systemBarLine = false;
                   }
             else {
                   system  = static_cast<System*>(parent());
+                  sysStaff0 = system->staff(staffIdx1);
                   measure = system->firstMeasure();
                   for (int i = staffIdx1; i < staffIdx2; ++i) {
                         if (!score()->staff(i)->hideSystemBarLine()) {
@@ -265,7 +269,19 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   StaffLines* l1 = measure->staffLines(staffIdx1);
                   StaffLines* l2 = measure->staffLines(staffIdx2);
 
-                  qreal yp = (system && !systemBarLine) ? sysStaff1->y() : 0.0;
+                  qreal yp = 0.0;
+                  if (systemBarLine) {
+                        // system initial barline, parent is system
+                        // base y on top staff for barline
+                        // system barline span already accounts for staff visibility
+                        yp = sysStaff0->y();
+                        }
+                  else if (system) {
+                        // ordinary barline within system, parent is measure
+                        // base y on top visible staff in barline span
+                        // after skipping ones with hideSystemBarLine set
+                        yp = sysStaff1->y();
+                        }
                   *y1 = l1->y1() - yp;
                   *y1 += (_spanFrom * staff1->lineDistance() * staff1->spatium()) / 2;
                   *y2 = l2->y1() - yp;
