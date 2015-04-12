@@ -37,7 +37,6 @@
 #include "libmscore/bracket.h"
 #include "libmscore/drumset.h"
 #include "libmscore/box.h"
-#include "libmscore/keysig.h"
 #include "libmscore/pitchspelling.h"
 #include "importmidi_meter.h"
 #include "importmidi_chord.h"
@@ -279,7 +278,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
 
                   auto &opers = preferences.midiImportOperations;
                   if (opers.data()->processingsOfOpenedFile == 0) {
-                        const int currentTrack = opers.currentTrack();
+                        const int currentTrack = indexOfOperation;
                         opers.data()->trackOpers.staffName.setValue(currentTrack, text);
                         }
 
@@ -523,7 +522,7 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
       const bool useDrumset  = staff->part()->instr()->useDrumset();
 
       const auto& opers = preferences.midiImportOperations.data()->trackOpers;
-      const int currentTrack = preferences.midiImportOperations.currentTrack();
+      const int currentTrack = indexOfOperation;
 
                   // all midiChords here should have the same onTime value
                   // and all notes in each midiChord should have the same duration
@@ -576,36 +575,28 @@ void MTrack::processPendingNotes(QList<MidiChord> &midiChords,
       fillGapWithRests(score, voice, startChordTick, nextChordTick - startChordTick, track);
       }
 
-void MTrack::createKeys(Key k)
+void MTrack::createKeys(Key defaultKey, const KeyList &allKeyList)
       {
-      Score* score = staff->score();
-      const int track = staff->idx() * VOICES;
+      KeyList &staffKeyList = *staff->keyList();
 
-      KeyList* km = staff->keyList();
       if (!hasKey && !mtrack->drumTrack()) {
-            KeySigEvent ke;
-            ke.setKey(k);
-            (*km)[0] = ke;
+            if (allKeyList.empty()) {
+                  KeySigEvent ke;
+                  ke.setKey(defaultKey);
+                  staffKeyList[0] = ke;
+                  MidiKey::assignKeyListToStaff(staffKeyList, staff);
+                  }
+            else {
+                  hasKey = true;
+                  MidiKey::assignKeyListToStaff(allKeyList, staff);
+                  }
             }
-      Key pkey = Key::C;
-      for (auto it = km->begin(); it != km->end(); ++it) {
-            const int tick = it->first;
-            Key key  = it->second.key();
-            if ((key == Key::C) && (key == pkey))     // dont insert uneccessary C key
-                  continue;
-            pkey = key;
-            KeySig* ks = new KeySig(score);
-            ks->setTrack(track);
-            ks->setGenerated(false);
-            ks->setKey(key);
-            ks->setMag(staff->mag());
-            Measure* m = score->tick2measure(tick);
-            Segment* seg = m->getSegment(ks, tick);
-            seg->add(ks);
+      else {
+            MidiKey::assignKeyListToStaff(staffKeyList, staff);
             }
       }
 
-void MTrack::convertTrack(const ReducedFraction &lastTick)
+void MTrack::createNotes(const ReducedFraction &lastTick)
       {
       for (int voice = 0; voice < VOICES; ++voice) {
                         // startChordTick is onTime value of all simultaneous notes
@@ -640,23 +631,6 @@ void MTrack::convertTrack(const ReducedFraction &lastTick)
                         // process last chords at the end of the score
             processPendingNotes(midiChords, voice, startChordTick, lastTick);
             }
-
-      const Key key = Key::C;                // TODO-LIB findKey(mtrack, score->sigmap());
-
-      MidiTuplet::createTuplets(staff, tuplets);
-      createKeys(key);
-
-      const auto& opers = preferences.midiImportOperations.data()->trackOpers;
-      const auto swingType = opers.swing.value(indexOfOperation);
-      Swing::detectSwing(staff, swingType);
-
-      Q_ASSERT_X(MidiTie::areTiesConsistent(staff), "MTrack::convertTrack", "Ties are inconsistent");
-
-      Q_ASSERT_X(MidiTuplet::haveTupletsEnoughElements(staff),
-                 "MTrack::convertTrack",
-                 "Tuplet has less than 2 elements or all elements are rests");
-
-      MidiClef::createClefs(staff, indexOfOperation, mtrack->drumTrack());
       }
 
 Fraction metaTimeSignature(const MidiEvent& e)
@@ -880,7 +854,7 @@ void setTrackInfo(MidiType midiType, MTrack &mt)
       {
       auto &opers = preferences.midiImportOperations;
 
-      const int currentTrack = opers.currentTrack();
+      const int currentTrack = mt.indexOfOperation;
       const QString instrName = MidiInstr::instrumentName(midiType, mt.program,
                                                           mt.mtrack->drumTrack());
       if (opers.data()->processingsOfOpenedFile == 0) {
@@ -954,21 +928,89 @@ void processMeta(MTrack &mt, bool isLyric)
             }
       }
 
-void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks, MidiType midiType)
+// key list with key signatures of all tracks
+//   to assign it to tracks without any specified key signature
+KeyList findAllKeyList(const QList<MTrack> &tracks)
+      {
+      KeyList kl;
+      for (int i = 0; i < tracks.size(); ++i) {
+            if (tracks[i].hasKey) {
+                  for (const auto &key: *tracks[i].staff->keyList())
+                        kl.setKey(key.first, key.second);
+                  }
+            }
+      return kl;
+      }
+
+void createNotes(const ReducedFraction &lastTick, QList<MTrack> &tracks)
       {
       for (int i = 0; i < tracks.size(); ++i) {
             MTrack &mt = tracks[i];
-                        // pass current track index to the convertTrack function
-                        //   through MidiImportOperations
-            auto &opers = preferences.midiImportOperations;
-            MidiOperations::CurrentTrackSetter setCurrentTrack(opers, mt.indexOfOperation);
+            mt.createNotes(lastTick);
+            MidiTuplet::createTupletNotes(mt.staff, mt.tuplets);
+            }
+      }
 
+void processNonLyricMeta(QList<MTrack> &tracks)
+      {
+      for (int i = 0; i < tracks.size(); ++i) {
+            MTrack &mt = tracks[i];
             processMeta(mt, false);
+            }
+      }
+
+void setTrackInfo(QList<MTrack> &tracks, MidiType midiType)
+      {
+      for (int i = 0; i < tracks.size(); ++i) {
+            MTrack &mt = tracks[i];
             if (midiType == MidiType::UNKNOWN)
                   midiType = MidiType::GM;
             setTrackInfo(midiType, mt);
-            mt.convertTrack(lastTick);
+            }
+      }
+
+void processLyricMeta(QList<MTrack> &tracks)
+      {
+      for (int i = 0; i < tracks.size(); ++i) {
+            MTrack &mt = tracks[i];
             processMeta(mt, true);
+            }
+      }
+
+void createKeys(QList<MTrack> &tracks)
+      {
+      const Key defaultKey = Key::C;     // TODO-LIB findKey(mtrack, score->sigmap());
+      const KeyList &allKeyList = findAllKeyList(tracks);
+
+      for (int i = 0; i < tracks.size(); ++i) {
+            MTrack &mt = tracks[i];
+            mt.createKeys(defaultKey, allKeyList);
+            }
+      }
+
+void applySwing(QList<MTrack> &tracks)
+      {
+      for (int i = 0; i < tracks.size(); ++i) {
+            MTrack &mt = tracks[i];
+
+            const auto& opers = preferences.midiImportOperations.data()->trackOpers;
+            const auto swingType = opers.swing.value(mt.indexOfOperation);
+            Swing::detectSwing(mt.staff, swingType);
+
+            Q_ASSERT_X(MidiTie::areTiesConsistent(mt.staff),
+                       "applySwing", "Ties are inconsistent");
+
+            Q_ASSERT_X(MidiTuplet::haveTupletsEnoughElements(mt.staff),
+                       "MTrack::convertTrack",
+                       "Tuplet has less than 2 elements or all elements are rests");
+            }
+      }
+
+void createClefs(QList<MTrack> &tracks)
+      {
+      for (int i = 0; i < tracks.size(); ++i) {
+            MTrack &mt = tracks[i];
+            MidiClef::createClefs(mt.staff, mt.indexOfOperation, mt.mtrack->drumTrack());
             }
       }
 
@@ -1099,13 +1141,21 @@ void convertMidi(Score *score, const MidiFile *mf)
       MidiDrum::setStaffBracketForDrums(trackList);
 
       const auto firstTick = findFirstChordTick(trackList);
+
       createMeasures(firstTick, lastTick, score);
-      createNotes(lastTick, trackList, mf->midiType());
+      processNonLyricMeta(trackList);
+      setTrackInfo(trackList, mf->midiType());
+      createKeys(trackList);
+      createNotes(lastTick, trackList);
+      processLyricMeta(trackList);
+      applySwing(trackList);
+      createClefs(trackList);
       createTimeSignatures(score);
       score->connectTies();
+
       MidiLyrics::setLyricsToScore(trackList);
       MidiTempo::setTempo(tracks, score);
-      MidiKey::setMainKeySig(trackList);
+      MidiKey::recognizeMainKeySig(trackList);
       MidiChordName::setChordNames(trackList);
       }
 
