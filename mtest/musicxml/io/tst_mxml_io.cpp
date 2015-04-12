@@ -63,6 +63,7 @@ private slots:
       void chordNoVoice() { mxmlIoTestRef("testChordNoVoice"); }
       void clefs1() { mxmlIoTest("testClefs1"); }
       void completeMeasureRests() { mxmlIoTest("testCompleteMeasureRests"); }
+      void cueNotes() { mxmlIoTest("testCueNotes"); }
       void dalSegno() { mxmlIoTest("testDalSegno"); }
       void dcalCoda() { mxmlIoTest("testDCalCoda"); }
       void dcalFine() { mxmlIoTest("testDCalFine"); }
