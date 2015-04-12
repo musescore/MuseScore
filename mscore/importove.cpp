@@ -1388,7 +1388,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 
                   cr = new Rest(score_);
                   cr->setDuration(duration.fraction());
-                  cr->setDurationType(duration.type());
+                  cr->setDurationType(duration);
                   cr->setTrack(noteTrack);
                   cr->setVisible(container->getShow());
 
