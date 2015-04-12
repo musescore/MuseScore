@@ -2181,6 +2181,10 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "FiguredBass"
                ) {
                   Element* el = Element::name2Element(tag, score());
+                  // hack - needed because tick tags are unreliable in 1.3 scores
+                  // for symbols attached to anything but a measure
+                  if (score()->mscVersion() <= 114 && el->type() == Element::Type::SYMBOL)
+                        el->setParent(this);    // this will get reset when adding to segment
                   el->setTrack(e.track());
                   el->read(e);
                   segment = getSegment(Segment::Type::ChordRest, e.tick());
