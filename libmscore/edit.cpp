@@ -204,10 +204,10 @@ Chord* Score::addChord(int tick, TDuration d, Chord* oc, bool genTie, Tuplet* tu
 
       foreach(Note* n, oc->notes()) {
             Note* nn = new Note(this);
-            chord->add(nn);
             nn->setPitch(n->pitch());
             nn->setTpc1(n->tpc1());
             nn->setTpc2(n->tpc2());
+            chord->add(nn);
             }
       undoAddCR(chord, measure, tick);
 
