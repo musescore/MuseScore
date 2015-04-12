@@ -3,7 +3,11 @@
 #include "importmidi_chord.h"
 #include "importmidi_inner.h"
 #include "libmscore/key.h"
+#include "libmscore/keysig.h"
+#include "libmscore/keylist.h"
+#include "libmscore/measure.h"
 #include "libmscore/staff.h"
+#include "libmscore/score.h"
 #include "mscore/preferences.h"
 
 
@@ -35,6 +39,30 @@ class KeyData {
       Key key_;
       int count_;
       };
+
+
+void assignKeyListToStaff(const KeyList &kl, Staff *staff)
+      {
+      Score* score = staff->score();
+      const int track = staff->idx() * VOICES;
+      Key pkey = Key::C;
+
+      for (auto it = kl.begin(); it != kl.end(); ++it) {
+            const int tick = it->first;
+            Key key  = it->second.key();
+            if ((key == Key::C) && (key == pkey))     // dont insert uneccessary C key
+                  continue;
+            pkey = key;
+            KeySig* ks = new KeySig(score);
+            ks->setTrack(track);
+            ks->setGenerated(false);
+            ks->setKey(key);
+            ks->setMag(staff->mag());
+            Measure* m = score->tick2measure(tick);
+            Segment* seg = m->getSegment(ks, tick);
+            seg->add(ks);
+            }
+      }
 
 Key findKey(const QList<MTrack> &tracks)
       {
@@ -81,18 +109,41 @@ Key findKey(const QList<MTrack> &tracks)
       return keys[0].key();
       }
 
-void setMainKeySig(QList<MTrack> &tracks)
+void recognizeMainKeySig(QList<MTrack> &tracks)
       {
+      bool needToFindKey = false;
+
+      const auto &opers = preferences.midiImportOperations;
+      const bool isHuman = opers.data()->trackOpers.isHumanPerformance.value();
+      if (isHuman)
+            needToFindKey = true;
+
+      if (!needToFindKey) {
+            for (const MTrack &track: tracks) {
+                  if (track.mtrack->drumTrack())
+                        continue;
+                  if (!track.hasKey) {
+                        needToFindKey = true;
+                        break;
+                        }
+                  }
+            }
+      if (!needToFindKey)
+            return;
+
       const Key key = findKey(tracks);
+
       for (MTrack &track: tracks) {
             if (track.mtrack->drumTrack())
                   continue;
-            auto &opers = preferences.midiImportOperations;
-            MidiOperations::CurrentTrackSetter setCurrentTrack{opers, track.indexOfOperation};
-            if (!track.hasKey || opers.data()->trackOpers.isHumanPerformance.value()) {
+
+            if (!track.hasKey || isHuman) {
                   KeySigEvent ke;
                   ke.setKey(key);
-                  track.staff->setKey(0, ke);
+
+                  KeyList &staffKeyList = *track.staff->keyList();
+                  staffKeyList[0] = ke;
+                  assignKeyListToStaff(staffKeyList, track.staff);
                   }
             }
       }

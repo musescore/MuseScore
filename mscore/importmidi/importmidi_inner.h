@@ -65,6 +65,7 @@ class MidiChord;
 class MidiEvent;
 class TDuration;
 class Measure;
+class KeyList;
 
 class MTrack {
    public:              // chords store tuplet iterators, so we need to copy class explicitly
@@ -85,7 +86,7 @@ class MTrack {
       std::multimap<ReducedFraction, MidiChord> chords;
       std::multimap<ReducedFraction, MidiTuplet::TupletData> tuplets;   // <tupletOnTime, ...>
 
-      void convertTrack(const ReducedFraction &lastTick);
+      void createNotes(const ReducedFraction &lastTick);
       void processPendingNotes(QList<MidiChord>& midiChords,
                                int voice,
                                const ReducedFraction &startChordTickFrac,
@@ -96,7 +97,7 @@ class MTrack {
       QList<std::pair<ReducedFraction, TDuration> >
             toDurationList(const Measure *measure, int voice, const ReducedFraction &startTick,
                            const ReducedFraction &len, Meter::DurationType durationType);
-      void createKeys(Key);
+      void createKeys(Key defaultKey, const Ms::KeyList &allKeyList);
       void updateTupletsFromChords();
 
    private:
