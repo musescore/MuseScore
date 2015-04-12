@@ -2480,10 +2480,11 @@ QString Note::accessibleInfo()
       QString duration = chord()->durationUserName();
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
       QString pitchName;
+      const Drumset* drumset = part()->instr()->drumset();
       if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH)
             pitchName = chord()->noStem() ? tr("Beat Slash") : tr("Rhythm Slash");
-      else if (staff()->isDrumStaff())
-            pitchName = qApp->translate("drumset", staff()->part()->instr()->drumset()->name(pitch()).toUtf8().constData());
+      else if (staff()->isDrumStaff() && drumset)
+            pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
       else
             pitchName = tpcUserName(false);
       return tr("%1; Pitch: %2; Duration: %3%4").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
@@ -2498,10 +2499,11 @@ QString Note::screenReaderInfo()
       QString duration = chord()->durationUserName();
       QString voice = tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
       QString pitchName;
+      const Drumset* drumset = part()->instr()->drumset();
       if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH)
             pitchName = chord()->noStem() ? tr("Beat Slash") : tr("Rhythm Slash");
-      else if (staff()->isDrumStaff())
-            pitchName = qApp->translate("drumset", staff()->part()->instr()->drumset()->name(pitch()).toUtf8().constData());
+      else if (staff()->isDrumStaff() && drumset)
+            pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
       else
             pitchName = tpcUserName(true);
       return QString("%1 %2 %3%4").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
