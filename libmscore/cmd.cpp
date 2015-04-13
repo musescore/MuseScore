@@ -694,16 +694,22 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                         }
                   }
             Tuplet* ltuplet = cr->tuplet();
-            if (cr->tuplet() != tuplet) {
+            if (ltuplet != tuplet) {
                   //
                   // Current location points to the start of a (nested)tuplet.
                   // We have to remove the complete tuplet.
 
+                  // get top level tuplet
+                  while (ltuplet->tuplet())
+                        ltuplet = ltuplet->tuplet();
+
+                  // get last segment of tuplet, drilling down to leaf nodes as necessary
                   Tuplet* t = ltuplet;
                   while (t->elements().last()->type() == Element::Type::TUPLET)
                         t = static_cast<Tuplet*>(t->elements().last());
                   seg = static_cast<ChordRest*>(t->elements().last())->segment();
 
+                  // now delete the full tuplet
                   td = ltuplet->duration();
                   cmdDeleteTuplet(ltuplet, false);
                   tuplet = 0;
@@ -711,6 +717,8 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
             else {
                   if (seg != firstSegment || !keepChord)
                         undoRemoveElement(cr);
+                  // even if there was a tuplet, we didn't remove it
+                  ltuplet = 0;
                   }
             nextTick += td.ticks();
             if (sd < td) {
@@ -731,13 +739,28 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 
                   if ((tuplet == 0) && (((measure->tick() - tick) % dList[0].ticks()) == 0)) {
                         foreach(TDuration d, dList) {
-                              qDebug("    addClone at %d, %d", tick, d.ticks());
-                              tick += addClone(cr, tick, d)->actualTicks();
+                              qDebug("    reinstate at %d, %d", tick, d.ticks());
+                              if (ltuplet) {
+                                    // take care not to recreate tuplet we just deleted
+                                    Rest* r = setRest(tick, track, d.fraction(), false, 0, false);
+                                    tick += r->actualTicks();
+                                    }
+                              else {
+                                    tick += addClone(cr, tick, d)->actualTicks();
+                                    }
                               }
                         }
                   else {
-                        for (int i = dList.size() - 1; i >= 0; --i)
-                              tick += addClone(cr, tick, dList[i])->actualTicks();
+                        for (int i = dList.size() - 1; i >= 0; --i) {
+                              if (ltuplet) {
+                                    // take care not to recreate tuplet we just deleted
+                                    Rest* r = setRest(tick, track, dList[i].fraction(), false, 0, false);
+                                    tick += r->actualTicks();
+                                    }
+                              else {
+                                    tick += addClone(cr, tick, dList[i])->actualTicks();
+                                    }
+                              }
                         }
                   return akkumulated;
                   }
@@ -786,7 +809,7 @@ bool Score::makeGap1(int baseTick, int staffIdx, Fraction len, int voiceOffset[V
             Fraction newLen = len - Fraction::fromTicks(voiceOffset[track-strack]);
             Q_ASSERT(newLen.numerator() != 0);
             bool result = makeGapVoice(seg, track, newLen, tick);
-            if(track == strack && !result) // makeGap failed for first voice
+            if (track == strack && !result) // makeGap failed for first voice
                   return false;
             }
       return true;
