@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/album/album01.mscx   album01-ref.mscx
+

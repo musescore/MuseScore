@@ -192,19 +192,10 @@ InstrumentTemplate::~InstrumentTemplate()
 void InstrumentTemplate::write(Xml& xml) const
       {
       xml.stag(QString("Instrument id=\"%1\"").arg(id));
-      foreach(StaffName sn, longNames) {
-            if (sn.pos == 0)
-                  xml.tag("longName", sn.name);
-            else
-                  xml.tag(QString("longName pos=\"%1\"").arg(sn.pos), sn.name);
-            }
-      foreach(StaffName sn, shortNames) {
-            if (sn.pos == 0)
-                  xml.tag("shortName", sn.name);
-            else
-                  xml.tag(QString("shortName pos=\"%1\"").arg(sn.pos), sn.name);
-            }
-      if(longNames.size() > 1)
+      longNames.write(xml, "longName");
+      shortNames.write(xml, "shortName");
+
+      if (longNames.size() > 1)
             xml.tag("trackName", trackName);
       xml.tag("description", description);
       xml.tag("musicXMLid", musicXMLid);
@@ -303,19 +294,9 @@ void InstrumentTemplate::write(Xml& xml) const
 void InstrumentTemplate::write1(Xml& xml) const
       {
       xml.stag(QString("Instrument id=\"%1\"").arg(id));
-      foreach(StaffName sn, longNames) {
-            if (sn.pos == 0)
-                  xml.tag("longName", sn.name);
-            else
-                  xml.tag(QString("longName pos=\"%1\"").arg(sn.pos), sn.name);
-            }
-      foreach(StaffName sn, shortNames) {
-            if (sn.pos == 0)
-                  xml.tag("shortName", sn.name);
-            else
-                  xml.tag(QString("shortName pos=\"%1\"").arg(sn.pos), sn.name);
-            }
-      if(longNames.size() > 1)
+      longNames.write(xml, "longName");
+      shortNames.write(xml, "shortName");
+      if (longNames.size() > 1)
             xml.tag("trackName", trackName);
       xml.tag("description", description);
       xml.etag();
@@ -335,7 +316,7 @@ void InstrumentTemplate::read(XmlReader& e)
             if (tag == "longName" || tag == "name") {               // "name" is obsolete
                   int pos = e.intAttribute("pos", 0);
                   for (QList<StaffName>::iterator i = longNames.begin(); i != longNames.end(); ++i) {
-                        if((*i).pos == pos)
+                        if ((*i).pos() == pos)
                               longNames.erase(i);
                         break;
                         }
@@ -344,7 +325,7 @@ void InstrumentTemplate::read(XmlReader& e)
             else if (tag == "shortName" || tag == "short-name") {   // "short-name" is obsolete
                   int pos = e.intAttribute("pos", 0);
                   for (QList<StaffName>::iterator i = shortNames.begin(); i != shortNames.end(); ++i) {
-                        if((*i).pos == pos)
+                        if ((*i).pos() == pos)
                               shortNames.erase(i);
                         break;
                         }
@@ -526,9 +507,9 @@ void InstrumentTemplate::read(XmlReader& e)
             channel[0].updateInitList();
             }
       if (trackName.isEmpty() && !longNames.isEmpty())
-            trackName = longNames[0].name;
+            trackName = longNames[0].name();
       if (description.isEmpty() && !longNames.isEmpty())
-            description = longNames[0].name;
+            description = longNames[0].name();
       if (id.isEmpty())
             id = trackName.toLower().replace(" ", "-");
 

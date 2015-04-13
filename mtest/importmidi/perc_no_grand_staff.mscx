@@ -51,8 +51,8 @@
         </Staff>
       <trackName>Tambourine</trackName>
       <Instrument>
-        <longName pos="0">Tambourine</longName>
-        <shortName pos="0">Tamb.</shortName>
+        <longName>Tambourine</longName>
+        <shortName>Tamb.</shortName>
         <trackName>Tambourine</trackName>
         <instrumentId>drum.tambourine</instrumentId>
         <useDrumset>1</useDrumset>
@@ -109,8 +109,8 @@
         </Staff>
       <trackName>Drumset</trackName>
       <Instrument>
-        <longName pos="0">Drumset</longName>
-        <shortName pos="0">Drs.</shortName>
+        <longName>Drumset</longName>
+        <shortName>Drs.</shortName>
         <trackName>Drumset</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>

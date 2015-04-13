@@ -2,6 +2,7 @@
 
 MSCORE=../../build.debug/mtest/importmidi
 
+# min_duration_no_reduce.mscx
 
 
 FILES="m1.mscx
@@ -16,7 +17,6 @@ timesig_changes.mscx
 tuplet_off_time_other_bar.mscx
 tuplet_off_time_other_bar2.mscx
 min_duration.mscx
-min_duration_no_reduce.mscx
 meter_12-8.mscx
 meter_15-8.mscx
 meter_4-4.mscx
@@ -65,6 +65,43 @@ perc_remove_ties.mscx
 swing_clef.mscx
 meter_dot_tie.mscx
 meter_15-8.mscx
+perc_triplet.mscx
+perc_respect_beat.mscx
+perc_tuplet_voice.mscx
+perc_tuplet_simplify.mscx
+perc_tuplet_simplify2.mscx
+perc_short_notes.mscx
+chord_collect.mscx
+chord_legato.mscx
+chord_big_error.mscx
+chord_small_error.mscx
+human_tempo.mscx
+human_4-4.mscx
+split_2_melodies.mscx
+chord_1_tick_long.mscx
+pickup_long.mscx
+pickup_turn_off.mscx
+split_acid.mscx
+split_octave.mscx
+perc_no_grand_staff.mscx
+simplify_32nd_staccato.mscx
+simplify_16th_staccato.mscx
+simplify_8th_dont.mscx
+simplify_4th_dotted_tied.mscx
+simplify_dotted_3-4.mscx
+simplify_8th_dotted_no_staccato.mscx
+simplify_triplet_staccato.mscx
+simplify_staccato_9-8.mscx
+voice_tuplet.mscx
+voice_acid.mscx
+voice_central.mscx
+voice_intersect.mscx
+division.mscx
+instrument_grand.mscx
+instrument_grand2.mscx
+instrument_channels.mscx
+instrument_clef.mscx
+instrument_3staff_organ.mscx
 tuplet_triplets_mixed.mscx"
 
 for i in $FILES; do

@@ -54,8 +54,8 @@
         </Staff>
       <trackName>Electric Piano</trackName>
       <Instrument>
-        <longName pos="0">Electric Piano</longName>
-        <shortName pos="0">El. Pno.</shortName>
+        <longName>Electric Piano</longName>
+        <shortName>El. Pno.</shortName>
         <trackName>Electric Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -110,8 +110,8 @@
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
-        <longName pos="0">Piano</longName>
-        <shortName pos="0">Pno.</shortName>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

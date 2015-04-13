@@ -53,8 +53,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -104,8 +104,8 @@
         </Staff>
       <trackName>Drumset</trackName>
       <Instrument>
-        <longName pos="0">Drumset</longName>
-        <shortName pos="0">Drs.</shortName>
+        <longName>Drumset</longName>
+        <shortName>Drs.</shortName>
         <trackName>Drumset</trackName>
         <useDrumset>1</useDrumset>
         <Drum pitch="35">

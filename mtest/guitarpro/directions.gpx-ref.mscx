@@ -57,8 +57,8 @@
         </Staff>
       <trackName>E-Gt</trackName>
       <Instrument>
-        <longName pos="0">Electric Guitar</longName>
-        <shortName pos="0">El. Guit.</shortName>
+        <longName>Electric Guitar</longName>
+        <shortName>El. Guit.</shortName>
         <trackName>Electric Guitar</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>86</maxPitchP>
@@ -620,8 +620,8 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName pos="0">Electric Guitar</longName>
-          <shortName pos="0">El. Guit.</shortName>
+          <longName>Electric Guitar</longName>
+          <shortName>El. Guit.</shortName>
           <trackName>Electric Guitar</trackName>
           <minPitchP>40</minPitchP>
           <maxPitchP>86</maxPitchP>

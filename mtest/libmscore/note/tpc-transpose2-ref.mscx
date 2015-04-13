@@ -54,8 +54,8 @@
         </Staff>
       <trackName>Alto Saxophone</trackName>
       <Instrument>
-        <longName pos="0">Alto Saxophone</longName>
-        <shortName pos="0">A. Sax.</shortName>
+        <longName>Alto Saxophone</longName>
+        <shortName>A. Sax.</shortName>
         <trackName>Alto Saxophone</trackName>
         <minPitchP>49</minPitchP>
         <maxPitchP>87</maxPitchP>

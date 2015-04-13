@@ -558,7 +558,7 @@ void Xml::tag(const char* name, const QWidget* g)
 
 
 //---------------------------------------------------------
-//   toHtml
+//   xmlString
 //---------------------------------------------------------
 
 QString Xml::xmlString(ushort c)
@@ -581,7 +581,7 @@ QString Xml::xmlString(ushort c)
       }
 
 //---------------------------------------------------------
-//   toHtml
+//   xmlString
 //---------------------------------------------------------
 
 QString Xml::xmlString(const QString& s)

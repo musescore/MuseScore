@@ -1,0 +1,15 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/spanners/glissando01.mscx            glissando01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning01.mscx    glissando-cloning01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning02.mscx    glissando-cloning02-ref.mscx
+cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning03.mscx    glissando-cloning03-ref.mscx
+cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning04.mscx    glissando-cloning04-ref.mscx
+cp ../../../build.debug/mtest/libmscore/spanners/glissando-crsossstaff01.mscx glissando-crossstaff01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/spanners/glissando-graces01.mscx     glissando-graces01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/spanners/lyricsline01.mscx           lyricsline01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/spanners/lyricsline02.mscx           lyricsline02-ref.mscx
+cp ../../../build.debug/mtest/libmscore/spanners/lyricsline03.mscx           lyricsline03-ref.mscx
+cp ../../../build.debug/mtest/libmscore/spanners/lyricsline04.mscx           lyricsline04-ref.mscx
+cp ../../../build.debug/mtest/libmscore/spanners/lyricsline05.mscx           lyricsline05-ref.mscx
+cp ../../../build.debug/mtest/libmscore/spanners/lyricsline06.mscx           lyricsline06-ref.mscx

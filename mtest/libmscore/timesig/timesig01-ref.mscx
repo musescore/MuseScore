@@ -55,7 +55,7 @@
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
-        <shortName pos="0">Vo.</shortName>
+        <shortName>Vo.</shortName>
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>

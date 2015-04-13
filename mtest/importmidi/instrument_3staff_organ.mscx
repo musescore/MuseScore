@@ -59,8 +59,8 @@
         </Staff>
       <trackName>Organ, Manual</trackName>
       <Instrument>
-        <longName pos="0">Organ, Manual</longName>
-        <shortName pos="0">Org.</shortName>
+        <longName>Organ, Manual</longName>
+        <shortName>Org.</shortName>
         <trackName>Organ</trackName>
         <instrumentId>keyboard.organ</instrumentId>
         <clef staff="2">F</clef>

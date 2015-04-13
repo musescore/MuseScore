@@ -89,8 +89,8 @@
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
-        <longName pos="0"><font face="Times New Roman"/>Piano</longName>
-        <shortName pos="0"><font face="Times New Roman"/>Pno.</shortName>
+        <longName><font face="Times New Roman"/>Piano</longName>
+        <shortName><font face="Times New Roman"/>Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

@@ -53,7 +53,7 @@
         </Staff>
       <trackName>S-Gt7</trackName>
       <Instrument>
-        <longName pos="0">Acoustic (DADGAD, capo 6)</longName>
+        <longName>Acoustic (DADGAD, capo 6)</longName>
         <trackName></trackName>
         <StringData>
           <frets>21</frets>
@@ -976,7 +976,7 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName pos="0">Acoustic (DADGAD, capo 6)</longName>
+          <longName>Acoustic (DADGAD, capo 6)</longName>
           <trackName></trackName>
           <StringData>
             <frets>21</frets>

@@ -129,11 +129,11 @@ void EditStaff::updateInstrument()
       updateInterval(instrument.transpose());
 
       QList<StaffName>& snl = instrument.shortNames();
-      QString df = snl.isEmpty() ? "" : snl[0].name;
+      QString df = snl.isEmpty() ? "" : snl[0].name();
       shortName->setPlainText(df);
 
       QList<StaffName>& lnl = instrument.longNames();
-      df = lnl.isEmpty() ? "" : lnl[0].name;
+      df = lnl.isEmpty() ? "" : lnl[0].name();
 
       longName->setPlainText(df);
 
