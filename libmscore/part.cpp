@@ -378,7 +378,7 @@ QString Part::instrumentId(int tick) const
 QString Part::longName(int tick) const
       {
       const QList<StaffName>& nl = longNames(tick);
-      return nl.isEmpty() ? "" : nl[0].name;
+      return nl.isEmpty() ? "" : nl[0].name();
       }
 
 //---------------------------------------------------------
@@ -397,7 +397,7 @@ QString Part::instrumentName(int tick) const
 QString Part::shortName(int tick) const
       {
       const QList<StaffName>& nl = shortNames(tick);
-      return nl.isEmpty() ? "" : nl[0].name;
+      return nl.isEmpty() ? "" : nl[0].name();
       }
 
 //---------------------------------------------------------

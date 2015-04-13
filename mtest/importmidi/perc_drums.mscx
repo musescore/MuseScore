@@ -50,8 +50,8 @@
         </Staff>
       <trackName>Drumset, drum</trackName>
       <Instrument>
-        <longName pos="0">Drumset, drum</longName>
-        <shortName pos="0">Drs.</shortName>
+        <longName>Drumset, drum</longName>
+        <shortName>Drs.</shortName>
         <trackName>Drumset</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>

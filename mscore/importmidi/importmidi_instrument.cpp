@@ -449,7 +449,7 @@ QString msInstrName(int trackIndex)
       if (!instr->trackName.isEmpty())
             return instr->trackName;
       if (!instr->longNames.isEmpty())
-            return instr->longNames.front().name;
+            return instr->longNames.front().name();
       return "";
       }
 

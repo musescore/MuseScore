@@ -65,7 +65,7 @@
         </Staff>
       <trackName>Electric Guitar</trackName>
       <Instrument>
-        <longName pos="0">Electric Guitar</longName>
+        <longName>Electric Guitar</longName>
         <trackName></trackName>
         <StringData>
           <frets>32</frets>
@@ -1982,7 +1982,7 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName pos="0">Electric Guitar</longName>
+          <longName>Electric Guitar</longName>
           <trackName></trackName>
           <StringData>
             <frets>32</frets>

@@ -55,8 +55,8 @@
         </Staff>
       <trackName>Violin</trackName>
       <Instrument>
-        <longName pos="0">Violin</longName>
-        <shortName pos="0">Vln.</shortName>
+        <longName>Violin</longName>
+        <shortName>Vln.</shortName>
         <trackName>Violin</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>

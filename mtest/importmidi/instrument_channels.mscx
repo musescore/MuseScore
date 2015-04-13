@@ -47,8 +47,8 @@
         </Staff>
       <trackName>String Section</trackName>
       <Instrument>
-        <longName pos="0">String Section</longName>
-        <shortName pos="0">Str.</shortName>
+        <longName>String Section</longName>
+        <shortName>Str.</shortName>
         <trackName>String Section</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
@@ -101,8 +101,8 @@
         </Staff>
       <trackName>B♭ Cornet</trackName>
       <Instrument>
-        <longName pos="0">B♭ Cornet</longName>
-        <shortName pos="0">B♭ Cnt.</shortName>
+        <longName>B♭ Cornet</longName>
+        <shortName>B♭ Cnt.</shortName>
         <trackName>B♭ Cornet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>82</maxPitchP>
@@ -155,8 +155,8 @@
         </Staff>
       <trackName>Trombone</trackName>
       <Instrument>
-        <longName pos="0">Trombone</longName>
-        <shortName pos="0">Trb.</shortName>
+        <longName>Trombone</longName>
+        <shortName>Trb.</shortName>
         <trackName>Trombone</trackName>
         <minPitchP>35</minPitchP>
         <maxPitchP>74</maxPitchP>

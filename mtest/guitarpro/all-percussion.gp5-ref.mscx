@@ -59,7 +59,7 @@
         </Staff>
       <trackName>Percussions</trackName>
       <Instrument>
-        <longName pos="0">Percussions</longName>
+        <longName>Percussions</longName>
         <trackName></trackName>
         <useDrumset>1</useDrumset>
         <Drum pitch="27">
@@ -1349,7 +1349,7 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName pos="0">Percussions</longName>
+          <longName>Percussions</longName>
           <trackName></trackName>
           <useDrumset>1</useDrumset>
           <Drum pitch="27">
