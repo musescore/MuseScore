@@ -18,8 +18,8 @@ void addElementToTuplet(int voice,
                         DurationElement *el,
                         std::multimap<ReducedFraction, TupletData> &tuplets);
 
-void createTuplets(Staff *staff,
-                   const std::multimap<ReducedFraction, TupletData> &tuplets);
+void createTupletNotes(Staff *staff,
+                       const std::multimap<ReducedFraction, TupletData> &tuplets);
 
 #ifdef QT_DEBUG
 bool haveTupletsEnoughElements(const Staff *staff);
