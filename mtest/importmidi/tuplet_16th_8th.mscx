@@ -95,6 +95,9 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
+        <KeySig>
+          <accidental>2</accidental>
+          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
