@@ -3752,6 +3752,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       int alter = 0;
       bool chord = false;
+      bool cue = false;
+      bool small = false;
       int dots = 0;
       bool grace = false;
       int octave = -1;
@@ -3786,6 +3788,10 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   beam(bm);
             else if (_e.name() == "chord") {
                   chord = true;
+                  _e.readNext();
+                  }
+            else if (_e.name() == "cue") {
+                  cue = true;
                   _e.readNext();
                   }
             else if (_e.name() == "dot") {
@@ -3830,8 +3836,10 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   stem(stemDir, noStem);
             else if (_e.name() == "time-modification")
                   timeModification(timeMod, normalType);
-            else if (_e.name() == "type")
+            else if (_e.name() == "type") {
+                  small = _e.attributes().value("size") == "cue";
                   type = _e.readElementText();
+                  }
             else if (_e.name() == "unpitched") {
                   unpitched = true;
                   displayStepOctave(_e, displayStep, displayOctave);
@@ -3982,6 +3990,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                         }
                   else
                         cr->setBeamMode(Beam::Mode::NONE);
+                  cr->setSmall(small);
                   cr->setVisible(printObject);
                   handleDisplayStep(cr, displayStep, displayOctave, noteStartTime.ticks(), _score->spatium());
                   }
@@ -4030,6 +4039,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
                   }
             note = new Note(_score);
+            note->setSmall(small);
             note->setHeadGroup(headGroup);
             if (noteheadColor != QColor::Invalid)
                   note->setColor(noteheadColor);
@@ -4122,8 +4132,10 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       // cr can be 0 here(if a rest cannot be added)
       // TODO: complete and cleanup handling this case
-      if (cr)
+      if (cr) {
             cr->setVisible(printObject);
+            if (cue) cr->setSmall(cue); // only once per chord
+            }
 
       // handle the postponed children of <note>
       // if one of these was found, the first while loop was terminated

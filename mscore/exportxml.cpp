@@ -2308,6 +2308,8 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   }
             if (note != nl.front())
                   xml.tagE("chord");
+            else if (note->chord()->small()) // need this only once per chord
+                  xml.tagE("cue");
 
             // step / alter / octave
             QString step;
@@ -2389,7 +2391,10 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   qDebug("no note type found for ticks %d",
                          note->chord()->actualTicks());
                   }
-            xml.tag("type", s);
+            if (note->small())
+                  xml.tag("type size=\"cue\"", s);
+            else
+                  xml.tag("type", s);
             for (int ni = dots; ni > 0; ni--)
                   xml.tagE("dot");
 
@@ -2673,7 +2678,10 @@ void ExportMusicXml::rest(Rest* rest, int staff)
       if (d.type() != TDuration::DurationType::V_MEASURE) {
             QString s = d.name();
             int dots  = rest->dots();
-            xml.tag("type", s);
+            if (rest->small())
+                  xml.tag("type size=\"cue\"", s);
+            else
+                  xml.tag("type", s);
             for (int i = dots; i > 0; i--)
                   xml.tagE("dot");
             }
