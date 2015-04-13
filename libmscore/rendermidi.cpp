@@ -739,6 +739,7 @@ bool Score::isSubdivided(ChordRest* chord, int swingUnit)
 static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       {
       QList<NoteEventList> ell;
+      Key key     = chord->staff()->key(chord->segment()->tick());
 
       if (chord->notes().isEmpty())
             return ell;
@@ -843,6 +844,33 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                         NoteEventList* events = &ell[k];
 
                         switch (type) {
+                              // TODO - I'd like to refactor many of the Articulation types to use a common interface.
+                              case ArticulationType::Trill:{
+                                  //
+                                  // create default playback for Trill
+                                  // this implements a baroque style trill, starting with the note above.
+                                  //
+                                  events->clear();
+                                  int pitch   = chord->notes()[k]->epitch();
+                                  int pitchUp = diatonicUpDown(key, pitch, 1) - pitch;
+                                  int stepmax = 1000;
+                                  int _16th = MScore::division / 4;
+                                  // 1 period per 1/16th note equivalent, but minimum of 2
+                                  int numperiods = max(2, chord->actualTicks() / _16th) ; // number of up-down pairs in this trill as played.
+
+                                  int trillperiod = stepmax / numperiods; // time of a single period
+                                  int remaining = stepmax-trillperiod*numperiods; // time left over after all periods have been played
+                                  
+                                  for( int c=0; c+trillperiod <= stepmax; c += trillperiod){
+                                      events->append(NoteEvent(pitchUp, c,               trillperiod/2));
+                                      events->append(NoteEvent(0,       c+trillperiod/2, trillperiod/2));
+                                  }
+                                  //if ( remaining > 0) {
+                                  //    events->append(NoteEvent(0, stepmax-remaining, remaining));
+                                  //}
+                                }
+                                break;
+                                
                               case ArticulationType::Mordent: {
                                     //
                                     // create default playback for Mordent
@@ -899,6 +927,61 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       return ell;
       }
 
+    
+void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord, int &ontime){
+    int n = gnb.size();
+    if (n) {
+        //
+        //  render grace notes:
+        //  simplified implementation:
+        //  - grace notes start on the beat of the main note
+        //  - duration: appoggiatura: 0.5  * duration of main note (2/3 for dotted notes, 4/7 for double-dotted)
+        //              acciacatura: min of 0.5 * duration or 65ms fixed (independent of duration or tempo)
+        //  - for appoggiaturas, the duration is divided by the number of grace notes
+        //  - the grace note duration as notated does not matter
+        //
+        Chord* graceChord = gnb[0];
+        if (graceChord->noteType() ==  NoteType::ACCIACCATURA) {
+            qreal ticksPerSecond = tempo(tick) * MScore::division;
+            int graceTimeMS = 65 * n;     // value determined empirically (TODO: make instrument-specific, like articulations)
+            // 1000 occurs below for two different reasons:
+            // number of milliseconds per second, also unit for ontime
+            qreal chordTimeMS = (chord->actualTicks() / ticksPerSecond) * 1000;
+            ontime = qMin(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
+        }
+        else if (chord->dots() == 1) {
+            ontime = 667;
+        }
+        else if (chord->dots() == 2) {
+            ontime = 571;
+        }
+        else {
+            ontime = 500;
+        }
+        int graceDuration = ontime / n;
+        
+        int on = 0;
+        for (int i = 0; i < n; ++i) {
+            QList<NoteEventList> el;
+            Chord* gc = gnb.at(i);
+            int nn = gc->notes().size();
+            for (int ii = 0; ii < nn; ++ii) {
+                NoteEventList nel;
+                nel.append(NoteEvent(0, on, graceDuration));
+                el.append(nel);
+            }
+            
+            if (gc->playEventType() == PlayEventType::InvalidUser)
+                gc->score()->undo(new ChangeEventList(gc, el));
+                else if (gc->playEventType() == PlayEventType::Auto) {
+                    for (int ii = 0; ii < nn; ++ii)
+                        gc->notes()[ii]->setPlayEvents(el[ii]);
+                        }
+            on += graceDuration;
+        }
+    }
+}
+    
 //---------------------------------------------------------
 //   createPlayEvents
 //    create default play events
@@ -924,61 +1007,11 @@ void Score::createPlayEvents(Chord* chord)
             Instrument* instr = chord->part()->instrument(tick);
             instr->updateGateTime(&gateTime, 0, "");
             }
-
-      QList<Chord*> gnb = chord->graceNotesBefore();
-      int n = gnb.size();
+          
       int ontime = 0;
-      if (n) {
-            //
-            //  render grace notes:
-            //  simplified implementation:
-            //  - grace notes start on the beat of the main note
-            //  - duration: appoggiatura: 0.5  * duration of main note (2/3 for dotted notes, 4/7 for double-dotted)
-            //              acciacatura: min of 0.5 * duration or 65ms fixed (independent of duration or tempo)
-            //  - for appoggiaturas, the duration is divided by the number of grace notes
-            //  - the grace note duration as notated does not matter
-            //
-            Chord* graceChord = gnb[0];
-            if (graceChord->noteType() ==  NoteType::ACCIACCATURA) {
-                  qreal ticksPerSecond = tempo(tick) * MScore::division;
-                  int graceTimeMS = 65 * n;     // value determined empirically (TODO: make instrument-specific, like articulations)
-                  // 1000 occurs below for two different reasons:
-                  // number of milliseconds per second, also unit for ontime
-                  qreal chordTimeMS = (chord->actualTicks() / ticksPerSecond) * 1000;
-                  ontime = qMin(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
-                  }
-            else if (chord->dots() == 1) {
-                  ontime = 667;
-                  }
-            else if (chord->dots() == 2) {
-                  ontime = 571;
-                  }
-            else {
-                  ontime = 500;
-                  }
-            int graceDuration = ontime / n;
 
-            int on = 0;
-            for (int i = 0; i < n; ++i) {
-                  QList<NoteEventList> el;
-                  Chord* gc = gnb.at(i);
-                  int nn = gc->notes().size();
-                  for (int ii = 0; ii < nn; ++ii) {
-                        NoteEventList nel;
-                        nel.append(NoteEvent(0, on, graceDuration));
-                        el.append(nel);
-                        }
-
-                  if (gc->playEventType() == PlayEventType::InvalidUser)
-                        gc->score()->undo(new ChangeEventList(gc, el));
-                  else if (gc->playEventType() == PlayEventType::Auto) {
-                        for (int ii = 0; ii < nn; ++ii)
-                              gc->notes()[ii]->setPlayEvents(el[ii]);
-                        }
-                  on += graceDuration;
-                  }
-            }
-
+      Score::createGraceNotesPlayEvents(chord->graceNotesBefore(), tick, chord, ontime);
+     
       SwingParameters st = chord->staff()->swing(tick);
       int unit = st.swingUnit;
       int ratio = st.swingRatio;

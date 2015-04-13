@@ -475,6 +475,8 @@ class Score : public QObject {
 
    protected:
       void createPlayEvents(Chord*);
+      void createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord, int& ontime);
+
       SynthesizerState _synthesizerState;
 
    signals:
