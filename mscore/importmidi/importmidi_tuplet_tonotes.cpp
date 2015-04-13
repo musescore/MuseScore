@@ -39,8 +39,9 @@ void addElementToTuplet(int voice,
             }
       }
 
-void createTuplets(Staff *staff,
-                   const std::multimap<ReducedFraction, TupletData> &tuplets)
+void createTupletNotes(
+            Staff *staff,
+            const std::multimap<ReducedFraction, TupletData> &tuplets)
       {
       Score* score = staff->score();
       const int track = staff->idx() * VOICES;

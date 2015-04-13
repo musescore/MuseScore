@@ -4,11 +4,14 @@
 
 namespace Ms {
 
+class Staff;
 class MTrack;
+class KeyList;
 
 namespace MidiKey {
 
-void setMainKeySig(QList<MTrack> &tracks);
+void assignKeyListToStaff(const KeyList &kl, Staff *staff);
+void recognizeMainKeySig(QList<MTrack> &tracks);
 
 } // namespace MidiKey
 } // namespace Ms
