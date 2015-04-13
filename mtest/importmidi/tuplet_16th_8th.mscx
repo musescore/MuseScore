@@ -116,7 +116,7 @@
           <durationType>eighth</durationType>
           <Note>
             <pitch>75</pitch>
-            <tpc>11</tpc>
+            <tpc>23</tpc>
             <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
@@ -159,7 +159,7 @@
           <durationType>16th</durationType>
           <Note>
             <pitch>70</pitch>
-            <tpc>12</tpc>
+            <tpc>24</tpc>
             <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
@@ -184,7 +184,7 @@
           <durationType>eighth</durationType>
           <Note>
             <pitch>63</pitch>
-            <tpc>11</tpc>
+            <tpc>23</tpc>
             <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
@@ -206,7 +206,7 @@
             <Tie id="2">
               </Tie>
             <pitch>70</pitch>
-            <tpc>12</tpc>
+            <tpc>24</tpc>
             <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
@@ -218,7 +218,7 @@
           <Note>
             <endSpanner id="2"/>
             <pitch>70</pitch>
-            <tpc>12</tpc>
+            <tpc>24</tpc>
             <velocity>80</velocity>
             <veloType>user</veloType>
             </Note>
