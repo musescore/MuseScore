@@ -17,6 +17,8 @@
 #include "libmscore/musescoreCore.h"
 #include "mscore/preferences.h"
 #include "mscore/qmlplugin.h"
+#include "libmscore/mscore.h"
+#include "libmscore/barline.h"
 
 #define DIR QString("scripting/")
 
@@ -31,10 +33,12 @@ class TestScripting : public QObject, public MTest
       Q_OBJECT
 
       void read1(const char*, const char*);
+      void testBarLineType();
 
    private slots:
       void initTestCase();
       void test1() { read1("s1", "p1"); }
+      void test2() { testBarLineType(); }
       };
 
 //---------------------------------------------------------
@@ -85,6 +89,25 @@ void TestScripting::read1(const char* file, const char* script)
 
       QVERIFY(compareFiles("p1.log", DIR + "p1.log.ref"));
       delete score;
+      }
+
+//---------------------------------------------------------
+//   testBarLineType
+//
+//   test if enums BarLineType and BarLine::QmlBarLineType match
+//---------------------------------------------------------
+
+void TestScripting::testBarLineType()
+      {
+      initMTest();
+      QVERIFY((int)BarLineType::NORMAL == (int)BarLine::QmlBarLineType::NORMAL);
+      QVERIFY((int)BarLineType::DOUBLE == (int)BarLine::QmlBarLineType::DOUBLE);
+      QVERIFY((int)BarLineType::START_REPEAT == (int)BarLine::QmlBarLineType::START_REPEAT);
+      QVERIFY((int)BarLineType::END_REPEAT == (int)BarLine::QmlBarLineType::END_REPEAT);
+      QVERIFY((int)BarLineType::BROKEN == (int)BarLine::QmlBarLineType::BROKEN);
+      QVERIFY((int)BarLineType::END == (int)BarLine::QmlBarLineType::END);
+      QVERIFY((int)BarLineType::END_START_REPEAT == (int)BarLine::QmlBarLineType::END_START_REPEAT);
+      QVERIFY((int)BarLineType::DOTTED == (int)BarLine::QmlBarLineType::DOTTED);
       }
 
 QTEST_MAIN(TestScripting)
