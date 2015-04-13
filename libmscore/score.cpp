@@ -2207,11 +2207,17 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                                           continue;
                                     if (slur->startCR() == chord) {
                                           slur->undoChangeProperty(P_ID::TRACK, slur->track()+VOICES);
-                                          slur->setStartElement(0);
+                                          for (ScoreElement* ee : slur->linkList()) {
+                                                Slur* lslur = static_cast<Slur*>(ee);
+                                                lslur->setStartElement(0);
+                                                }
                                           }
                                     if (slur->endCR() == chord) {
                                           slur->undoChangeProperty(P_ID::SPANNER_TRACK2, slur->track2()+VOICES);
-                                          slur->setEndElement(0);
+                                          for (ScoreElement* ee : slur->linkList()) {
+                                                Slur* lslur = static_cast<Slur*>(ee);
+                                                lslur->setEndElement(0);
+                                                }
                                           }
                                     }
                               }
