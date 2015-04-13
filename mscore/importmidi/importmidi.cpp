@@ -1146,6 +1146,7 @@ void convertMidi(Score *score, const MidiFile *mf)
       processNonLyricMeta(trackList);
       setTrackInfo(trackList, mf->midiType());
       createKeys(trackList);
+      MidiKey::recognizeMainKeySig(trackList);
       createNotes(lastTick, trackList);
       processLyricMeta(trackList);
       applySwing(trackList);
@@ -1155,7 +1156,6 @@ void convertMidi(Score *score, const MidiFile *mf)
 
       MidiLyrics::setLyricsToScore(trackList);
       MidiTempo::setTempo(tracks, score);
-      MidiKey::recognizeMainKeySig(trackList);
       MidiChordName::setChordNames(trackList);
       }
 
