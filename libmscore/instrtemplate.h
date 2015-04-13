@@ -51,10 +51,10 @@ class InstrumentTemplate {
    public:
       QString id;
       QString trackName;
-      QList<StaffName> longNames;      ///< shown on first system
-      QList<StaffName> shortNames;     ///< shown on followup systems
-      QString musicXMLid;              ///< used in MusicXML 3.0
-      QString description;             ///< a longer description of the instrument
+      StaffNameList longNames;   ///< shown on first system
+      StaffNameList shortNames;  ///< shown on followup systems
+      QString musicXMLid;        ///< used in MusicXML 3.0
+      QString description;       ///< a longer description of the instrument
 
       char minPitchA;         // pitch range playable by an amateur
       char maxPitchA;

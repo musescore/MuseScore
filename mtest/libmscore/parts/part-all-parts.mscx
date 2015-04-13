@@ -59,8 +59,8 @@
         </Staff>
       <trackName>Alto</trackName>
       <Instrument>
-        <longName pos="0">Alto</longName>
-        <shortName pos="0">A.</shortName>
+        <longName>Alto</longName>
+        <shortName>A.</shortName>
         <trackName>Alto</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>77</maxPitchP>
@@ -95,8 +95,8 @@
         </Staff>
       <trackName>Tenor</trackName>
       <Instrument>
-        <longName pos="0">Tenor</longName>
-        <shortName pos="0">T.</shortName>
+        <longName>Tenor</longName>
+        <shortName>T.</shortName>
         <trackName>Tenor</trackName>
         <minPitchP>48</minPitchP>
         <maxPitchP>72</maxPitchP>
@@ -980,8 +980,8 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName pos="0">Alto</longName>
-          <shortName pos="0">A.</shortName>
+          <longName>Alto</longName>
+          <shortName>A.</shortName>
           <trackName>Alto</trackName>
           <minPitchP>55</minPitchP>
           <maxPitchP>77</maxPitchP>
@@ -1529,8 +1529,8 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName pos="0">Tenor</longName>
-          <shortName pos="0">T.</shortName>
+          <longName>Tenor</longName>
+          <shortName>T.</shortName>
           <trackName>Tenor</trackName>
           <minPitchP>48</minPitchP>
           <maxPitchP>72</maxPitchP>

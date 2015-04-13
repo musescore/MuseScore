@@ -48,8 +48,8 @@
         </Staff>
       <trackName>Electric Bass</trackName>
       <Instrument>
-        <longName pos="0">Electric Bass</longName>
-        <shortName pos="0">El. B.</shortName>
+        <longName>Electric Bass</longName>
+        <shortName>El. B.</shortName>
         <trackName>Electric Bass</trackName>
         <minPitchP>28</minPitchP>
         <maxPitchP>65</maxPitchP>

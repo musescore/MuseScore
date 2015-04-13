@@ -572,8 +572,8 @@ void System::setInstrumentNames(bool longName)
                         iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
                         score()->addElement(iname);
                         }
-                  iname->setText(sn.name);
-                  iname->setLayoutPos(sn.pos);
+                  iname->setText(sn.name());
+                  iname->setLayoutPos(sn.pos());
                   ++idx;
                   }
             for (; idx < staff->instrumentNames.size(); ++idx)

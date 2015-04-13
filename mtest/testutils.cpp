@@ -188,11 +188,9 @@ bool MTest::compareFiles(const QString& saveName, const QString& compareWith) co
       args.append(saveName);
       args.append(root + "/" + compareWith);
       QProcess p;
-      //qDebug() << "Running " << cmd << " with arg1:" << saveName << " and arg2: " << compareWith;
+qDebug() << "Running " << cmd << " with arg1:" << saveName << " and arg2: " << compareWith;
       p.start(cmd, args);
-      if (!p.waitForFinished())
-            return false;
-      if (p.exitCode()) {
+      if (!p.waitForFinished() || p.exitCode()) {
             QByteArray ba = p.readAll();
             qDebug("%s", qPrintable(ba));
             qDebug("   <diff -u %s %s failed", qPrintable(saveName),
@@ -208,7 +206,8 @@ bool MTest::compareFiles(const QString& saveName, const QString& compareWith) co
 
 bool MTest::saveCompareScore(Score* score, const QString& saveName, const QString& compareWith) const
       {
-      saveScore(score, saveName);
+      if (!saveScore(score, saveName))
+            return false;
       return compareFiles(saveName, compareWith);
       }
 

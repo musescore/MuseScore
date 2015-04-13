@@ -54,8 +54,8 @@
         </Staff>
       <trackName>String Synthesizer</trackName>
       <Instrument>
-        <longName pos="0">String Synthesizer</longName>
-        <shortName pos="0">Synth.</shortName>
+        <longName>String Synthesizer</longName>
+        <shortName>Synth.</shortName>
         <trackName>String Synthesizer</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -113,8 +113,8 @@
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
-        <longName pos="0">Piano</longName>
-        <shortName pos="0">Pno.</shortName>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

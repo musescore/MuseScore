@@ -57,8 +57,8 @@
         </Staff>
       <trackName></trackName>
       <Instrument>
-        <longName pos="0">Guitar</longName>
-        <shortName pos="0">Gtr.</shortName>
+        <longName>Guitar</longName>
+        <shortName>Gtr.</shortName>
         <trackName></trackName>
         <Channel>
           <program value="24"/>

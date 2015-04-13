@@ -48,8 +48,8 @@
         </Staff>
       <trackName>Acoustic Guitar</trackName>
       <Instrument>
-        <longName pos="0">Acoustic Guitar</longName>
-        <shortName pos="0">Guit.</shortName>
+        <longName>Acoustic Guitar</longName>
+        <shortName>Guit.</shortName>
         <trackName>Acoustic Guitar</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>83</maxPitchP>

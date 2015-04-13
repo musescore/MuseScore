@@ -2,3 +2,4 @@
 
 cp ../../../build.debug/mtest/libmscore/selectionrangedelete/selectionrangedelete03.mscx selectionrangedelete03-ref.mscx
 cp ../../../build.debug/mtest/libmscore/selectionrangedelete/selectionrangedelete04.mscx selectionrangedelete04-ref.mscx
+cp ../../../build.debug/mtest/libmscore/selectionrangedelete/selectionrangedelete05.mscx selectionrangedelete05-ref.mscx

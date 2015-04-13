@@ -55,7 +55,7 @@
         </Staff>
       <trackName>Guitar</trackName>
       <Instrument>
-        <longName pos="0">Guitar</longName>
+        <longName>Guitar</longName>
         <trackName></trackName>
         <StringData>
           <frets>24</frets>
@@ -1561,7 +1561,7 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName pos="0">Guitar</longName>
+          <longName>Guitar</longName>
           <trackName></trackName>
           <StringData>
             <frets>24</frets>

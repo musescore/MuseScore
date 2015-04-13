@@ -56,8 +56,8 @@
         </Staff>
       <trackName>B♭ Trumpet</trackName>
       <Instrument>
-        <longName pos="0">B♭ Trumpet</longName>
-        <shortName pos="0">B♭ Tpt.</shortName>
+        <longName>B♭ Trumpet</longName>
+        <shortName>B♭ Tpt.</shortName>
         <trackName>B♭ Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
@@ -111,8 +111,8 @@
         </Staff>
       <trackName>C Trumpet</trackName>
       <Instrument>
-        <longName pos="0">C Trumpet</longName>
-        <shortName pos="0">C Tpt.</shortName>
+        <longName>C Trumpet</longName>
+        <shortName>C Tpt.</shortName>
         <trackName>C Trumpet</trackName>
         <minPitchP>54</minPitchP>
         <maxPitchP>85</maxPitchP>
@@ -346,8 +346,8 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName pos="0">B♭ Trumpet</longName>
-          <shortName pos="0">B♭ Tpt.</shortName>
+          <longName>B♭ Trumpet</longName>
+          <shortName>B♭ Tpt.</shortName>
           <trackName>B♭ Trumpet</trackName>
           <minPitchP>52</minPitchP>
           <maxPitchP>85</maxPitchP>
@@ -535,8 +535,8 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName pos="0">C Trumpet</longName>
-          <shortName pos="0">C Tpt.</shortName>
+          <longName>C Trumpet</longName>
+          <shortName>C Tpt.</shortName>
           <trackName>C Trumpet</trackName>
           <minPitchP>54</minPitchP>
           <maxPitchP>85</maxPitchP>

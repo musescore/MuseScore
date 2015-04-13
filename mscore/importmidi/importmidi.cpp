@@ -868,7 +868,7 @@ void setTrackInfo(MidiType midiType, MTrack &mt)
 
       if (mt.staff->isTop()) {
             Part *part  = mt.staff->part();
-            part->setLongName(MidiInstr::concatenateWithComma(trackInstrName, mt.name));
+            part->setLongName(Xml::xmlString(MidiInstr::concatenateWithComma(trackInstrName, mt.name)));
             part->setPartName(part->longName());
             part->setMidiChannel(mt.mtrack->outChannel());
             int bank = 0;

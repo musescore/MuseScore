@@ -96,7 +96,7 @@
         </Staff>
       <trackName>Oboe</trackName>
       <Instrument>
-        <shortName pos="0">Ob.</shortName>
+        <shortName>Ob.</shortName>
         <trackName>Oboe</trackName>
         <minPitchP>58</minPitchP>
         <maxPitchP>93</maxPitchP>
@@ -550,7 +550,7 @@
           </Staff>
         <trackName>Oboe</trackName>
         <Instrument>
-          <shortName pos="0">Ob.</shortName>
+          <shortName>Ob.</shortName>
           <trackName>Oboe</trackName>
           <minPitchP>58</minPitchP>
           <maxPitchP>93</maxPitchP>

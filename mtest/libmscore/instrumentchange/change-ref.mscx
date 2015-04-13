@@ -55,8 +55,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -92,8 +92,8 @@
         </Staff>
       <trackName>Oboe</trackName>
       <Instrument>
-        <longName pos="0">Oboe</longName>
-        <shortName pos="0">Ob.</shortName>
+        <longName>Oboe</longName>
+        <shortName>Ob.</shortName>
         <trackName>Oboe</trackName>
         <minPitchP>58</minPitchP>
         <maxPitchP>93</maxPitchP>
@@ -156,8 +156,8 @@
       <Measure number="2">
         <InstrumentChange>
           <Instrument>
-            <longName pos="0">Oboe</longName>
-            <shortName pos="0">Ob.</shortName>
+            <longName>Oboe</longName>
+            <shortName>Ob.</shortName>
             <trackName>Oboe</trackName>
             <minPitchP>58</minPitchP>
             <maxPitchP>93</maxPitchP>

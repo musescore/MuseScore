@@ -47,8 +47,8 @@
         </Staff>
       <trackName>Soprano, Staff</trackName>
       <Instrument>
-        <longName pos="0">Soprano, Staff</longName>
-        <shortName pos="0">S.</shortName>
+        <longName>Soprano, Staff</longName>
+        <shortName>S.</shortName>
         <trackName>Soprano</trackName>
         <minPitchP>60</minPitchP>
         <maxPitchP>84</maxPitchP>

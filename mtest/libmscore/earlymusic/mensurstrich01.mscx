@@ -54,8 +54,8 @@
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
-        <longName pos="0">Voice</longName>
-        <shortName pos="0">Vo.</shortName>
+        <longName>Voice</longName>
+        <shortName>Vo.</shortName>
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>
@@ -105,8 +105,8 @@
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
-        <longName pos="0">Voice</longName>
-        <shortName pos="0">Vo.</shortName>
+        <longName>Voice</longName>
+        <shortName>Vo.</shortName>
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>
