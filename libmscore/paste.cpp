@@ -144,7 +144,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               int tick = e.readInt();
                               e.initTick(tick);
                               int shift = tick - tickStart;
-                              if (makeGap && !makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen),voiceOffset)) {
+                              if (makeGap && !makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen), voiceOffset)) {
                                     qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick + shift);
                                     done = true; // break main loop, cannot make gap
                                     break;
