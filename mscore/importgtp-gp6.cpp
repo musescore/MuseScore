@@ -3,6 +3,7 @@
 //  Music Composition & Notation
 //
 //  Copyright (C) 2014 John Pirie
+//  Parts of the GPX Import based on code contributed by J.Jørgen von Bargen
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
