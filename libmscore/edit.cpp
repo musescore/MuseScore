@@ -476,6 +476,8 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
             nlm->setNext(m2->next());
             s->undo(new InsertMeasures(nfm, nlm));
             }
+      if (!fill.isZero())
+            undoInsertTime(lm->endTick(), fill.ticks());
 
       if (!range.write(rootScore(), fm->tick()))
             qFatal("Cannot write measures");
@@ -2768,7 +2770,7 @@ void Score::checkSpanner(int startTick, int endTick)
             if (s->type() == Element::Type::SLUR) {
                   Segment* seg = tick2segmentMM(s->tick(), false, Segment::Type::ChordRest);
                   if (!seg || !seg->element(s->track())) {
-                        qDebug("checkSpanner::remove (1)");
+                        qDebug("checkSpanner::remove (1) tick %d seg %p", s->tick(), seg);
                         sl.append(s);
                         }
                   else {
