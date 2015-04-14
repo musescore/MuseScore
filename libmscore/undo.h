@@ -456,21 +456,6 @@ class ChangeSingleBarLineSpan : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   SigInsertTime
-//---------------------------------------------------------
-
-class SigInsertTime : public UndoCommand {
-      Score* score;
-      int tick;
-      int len;
-      void flip();
-
-   public:
-      SigInsertTime(Score*, int tick, int len);
-      UNDO_NAME("SigInsertTime")
-      };
-
-//---------------------------------------------------------
 //   TransposeHarmony
 //---------------------------------------------------------
 
