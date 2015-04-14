@@ -263,8 +263,8 @@ void RepeatList::unwind()
 
       rs                  = new RepeatSegment;
       rs->tick            = 0;
-      Measure* endRepeat  = 0;
-      Measure* continueAt = 0;
+      Measure* endRepeat  = 0; // measure where the current repeat should stop
+      Measure* continueAt = 0; // measure where the playback should continue after the repeat (To coda)
       int loop            = 0;
       int repeatCount     = 0;
       bool isGoto         = false;
@@ -275,6 +275,7 @@ void RepeatList::unwind()
       for (Measure* m = fm; m;) {
             m->setPlaybackCount(m->playbackCount() + 1);
             Repeat flags = m->repeatFlags();
+            bool doJump = false; // process jump after endrepeat
 
 // qDebug("repeat m%d(%d) lc%d loop %d repeatCount %d isGoto %d endRepeat %p flags 0x%x",
 //               m->no(), m->tick(), m->playbackCount(), loop, repeatCount, isGoto, endRepeat, int(flags));
@@ -290,36 +291,14 @@ void RepeatList::unwind()
                               }
                         rs->tick = m->endTick();
                         }
-                  }
-            else {
-                  // Jumps are only accepted outside of other repeats
-                  if (flags & Repeat::JUMP) {
-                        Jump* s = 0;
-                        foreach(Element* e, m->el()) {
-                              if (e->type() == Element::Type::JUMP) {
-                                    s = static_cast<Jump*>(e);
-                                    break;
-                                    }
-                              }
-                        if (s) {
-                              Measure* nm = _score->searchLabel(s->jumpTo());
-                              endRepeat   = _score->searchLabel(s->playUntil());
-                              continueAt  = _score->searchLabel(s->continueAt());
-                              isGoto      = true;
-
-                              if (nm && endRepeat) {
-                                    rs->len = m->endTick() - rs->tick;
-                                    append(rs);
-                                    rs = new RepeatSegment;
-                                    rs->tick  = nm->tick();
-                                    m = nm;
-                                    continue;
-                                    }
-                              }
-                        else
-                              qDebug("Jump not found");
+                  else if (flags & Repeat::JUMP) {
+                        doJump = true;
                         }
                   }
+            else if (flags & Repeat::JUMP) { // Jumps are only accepted outside of other repeats
+                  doJump = true;
+                  }
+                  
 
             if (isGoto && (endRepeat == m)) {
                   if (continueAt == 0) {
@@ -339,6 +318,7 @@ void RepeatList::unwind()
                   rs->tick = continueAt->tick();
                   m        = continueAt;
                   isGoto   = false;
+                  endRepeat = 0;
                   continue;
                   }
             else if (flags & Repeat::END) {
@@ -360,6 +340,32 @@ void RepeatList::unwind()
                         m = jumpToStartRepeat(m);
                         continue;
                         }
+                  }
+            if (doJump && !isGoto) {
+                  Jump* s = 0;
+                  foreach(Element* e, m->el()) {
+                        if (e->type() == Element::Type::JUMP) {
+                              s = static_cast<Jump*>(e);
+                              break;
+                              }
+                        }
+                  if (s) {
+                        Measure* nm = _score->searchLabel(s->jumpTo());
+                        endRepeat   = _score->searchLabel(s->playUntil());
+                        continueAt  = _score->searchLabel(s->continueAt());
+                        isGoto      = true;
+
+                        if (nm && endRepeat) {
+                              rs->len = m->endTick() - rs->tick;
+                              append(rs);
+                              rs = new RepeatSegment;
+                              rs->tick  = nm->tick();
+                              m = nm;
+                              continue;
+                              }
+                        }
+                  else
+                        qDebug("Jump not found");
                   }
             m = m->nextMeasure();
             }
