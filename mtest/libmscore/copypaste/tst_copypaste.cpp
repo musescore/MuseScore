@@ -36,6 +36,7 @@ class TestCopyPaste : public QObject, public MTest
       void copypaste(const char*);
       void copypastestaff(const char*);
       void copypastevoice(const char*, int);
+      void copypastetuplet(const char*);
 
    private slots:
       void initTestCase();
@@ -65,6 +66,10 @@ class TestCopyPaste : public QObject, public MTest
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 
       void copyPastePartial();
+      
+      void copyPasteTuplet01() { copypastetuplet("01"); }
+      void copyPasteTuplet02() { copypastetuplet("02"); }
+      
       };
 
 //---------------------------------------------------------
@@ -381,12 +386,42 @@ void TestCopyPaste::copypaste2Voice6()
 
       score->startCmd();
       score->cmdPaste(mimeData,0);
-      score->endCmd();
-
       score->doLayout();
+      score->endCmd();
 
       QVERIFY(saveCompareScore(score, QString("copypaste20.mscx"),
          DIR + QString("copypaste20-ref.mscx")));
+      delete score;
+      }
+
+void TestCopyPaste::copypastetuplet(const char* idx)
+      {
+      Score* score = readScore(DIR + QString("copypaste_tuplet_%1.mscx").arg(idx));
+      score->doLayout();
+
+      Measure* m1 = score->firstMeasure();
+      Measure* m2 = m1->nextMeasure();
+
+      Segment* s = m1->first(Segment::Type::ChordRest);
+      score->select(static_cast<Chord*>(s->element(0))->notes().at(0));
+      s = s->next(Segment::Type::ChordRest);
+      score->select(s->element(0), SelectType::RANGE);
+      QVERIFY(score->selection().canCopy());
+      QString mimeType = score->selection().mimeType();
+      QVERIFY(!mimeType.isEmpty());
+      QMimeData* mimeData = new QMimeData;
+      mimeData->setData(mimeType, score->selection().mimeData());
+      QApplication::clipboard()->setMimeData(mimeData);
+
+      Element* dest = m2->first(Segment::Type::ChordRest)->element(0);
+      score->select(dest);
+      score->startCmd();
+      score->cmdPaste(mimeData,0);
+      score->doLayout();
+      score->endCmd();
+
+      QVERIFY(saveCompareScore(score, QString("copypaste_tuplet_%1.mscx").arg(idx),
+         DIR + QString("copypaste_tuplet_%1-ref.mscx").arg(idx)));
       delete score;
       }
 
