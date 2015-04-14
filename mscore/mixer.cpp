@@ -338,11 +338,15 @@ void PartEdit::soloToggled(bool val)
       if (val) {
             mute->setChecked(false);
             for (Part* p : part->score()->parts()) {
-                  for (Channel* a : p->instrument()->channel()) {
-                        a->soloMute = (channel != a && !a->solo);
-                        a->solo     = (channel == a || a->solo);
-                        if (a->soloMute)
-                              seq->stopNotes(a->channel);
+                  const InstrumentList* il = p->instruments();
+                  for (auto i = il->begin(); i != il->end(); ++i) {
+                        const Instrument* instr = i->second;
+                        for (Channel* a : instr->channel()) {
+                              a->soloMute = (channel != a && !a->solo);
+                              a->solo     = (channel == a || a->solo);
+                              if (a->soloMute)
+                                    seq->stopNotes(a->channel);
+                              }
                         }
                   }
             emit soloChanged(true);
@@ -350,18 +354,26 @@ void PartEdit::soloToggled(bool val)
       else { //do nothing except if it's the last solo to be switched off
             bool found = false;
             for (Part* p : part->score()->parts()) {
-                  for (Channel* a : p->instrument()->channel()) {
-                        if (a->solo){
-                            found = true;
-                            break;
-                            }
+                  const InstrumentList* il = p->instruments();
+                  for (auto i = il->begin(); i != il->end(); ++i) {
+                        const Instrument* instr = i->second;
+                        for (Channel* a : instr->channel()) {
+                              if (a->solo){
+                                    found = true;
+                                    break;
+                                    }
+                              }
                         }
                   }
             if (!found){
                   foreach(Part* p, part->score()->parts()) {
-                        for (Channel* a : p->instrument()->channel()) {
-                              a->soloMute = false;
-                              a->solo     = false;
+                        const InstrumentList* il = p->instruments();
+                        for (auto i = il->begin(); i != il->end(); ++i) {
+                              const Instrument* instr = i->second;
+                              for (Channel* a : instr->channel()) {
+                                    a->soloMute = false;
+                                    a->solo     = false;
+                                    }
                               }
                         }
                   emit soloChanged(false);
