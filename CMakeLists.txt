@@ -22,6 +22,12 @@ project(mscore)
 #minimum tested, report if it works with older
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7)
 
+set (CI $ENV{CI})
+if (CI)
+    SET_PROPERTY(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+    SET_PROPERTY(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+endif (CI)
+
 cmake_policy(SET CMP0003 NEW)
 
 if(POLICY CMP0053)
