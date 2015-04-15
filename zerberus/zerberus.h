@@ -107,7 +107,7 @@ class Zerberus : public Ms::Synthesizer {
       virtual const QList<Ms::MidiPatch*>& getPatchInfo() const;
 
       virtual Ms::SynthesizerGroup state() const;
-      virtual void setState(const Ms::SynthesizerGroup&);
+      virtual bool setState(const Ms::SynthesizerGroup&);
 
       virtual void allSoundsOff(int channel);
       virtual void allNotesOff(int channel);
