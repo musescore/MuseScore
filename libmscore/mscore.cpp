@@ -194,6 +194,8 @@ void MScore::init()
             ":/fonts/FreeSans.ttf",
             ":/fonts/FreeSerif.ttf",
             ":/fonts/FreeSerifBold.ttf",
+            ":/fonts/FreeSerifItalic.ttf",
+            ":/fonts/FreeSerifBoldItalic.ttf",
             ":/fonts/mscoreTab.ttf",
             ":/fonts/mscore-BC.ttf",
             ":/fonts/bravura/BravuraText.otf",

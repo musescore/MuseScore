@@ -529,6 +529,8 @@ if (APPLE)
       ../fonts/MuseJazz.ttf
       ../fonts/FreeSerif.ttf
       ../fonts/FreeSerifBold.ttf
+      ../fonts/FreeSerifItalic.ttf
+      ../fonts/FreeSerifBoldItalic.ttf
       ../fonts/FreeSans.ttf
       ../fonts/mscoreTab.ttf
       ../fonts/mscore-BC.ttf
