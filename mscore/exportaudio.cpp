@@ -59,7 +59,9 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
       synti->init();
       int sampleRate = preferences.exportAudioSampleRate;
       synti->setSampleRate(sampleRate);
-      synti->setState(score->synthesizerState());
+      bool r = synti->setState(score->synthesizerState());
+      if (!r)
+          synti->init();
 
       int oldSampleRate  = MScore::sampleRate;
       MScore::sampleRate = sampleRate;
