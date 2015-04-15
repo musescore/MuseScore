@@ -3056,6 +3056,7 @@ void InsertRemoveMeasures::removeMeasures()
                         sp->removeUnmanaged();
             score->connectTies(true);   // ??
             }
+      score->setLayoutAll(true);
       }
 
 //---------------------------------------------------------
