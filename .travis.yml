@@ -71,3 +71,6 @@ notifications:
       - "irc.freenode.net#musescore"
     on_success: change
     on_failure: change
+  webhooks:
+    # trigger Buildtime Trend Service to parse Travis CI log
+    - https://buildtimetrend.herokuapp.com/travis
