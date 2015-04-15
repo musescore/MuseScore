@@ -84,7 +84,7 @@ class MasterSynthesizer : public QObject {
       QList<MidiPatch*> getPatchInfo() const;
 
       SynthesizerState state() const;
-      void setState(const SynthesizerState&);
+      bool setState(const SynthesizerState&);
 
       Synthesizer* synthesizer(const QString& name);
       const std::vector<Effect*>& effectList(int ab) const { return _effectList[ab]; }

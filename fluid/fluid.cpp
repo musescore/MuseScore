@@ -850,7 +850,7 @@ SynthesizerGroup Fluid::state() const
 //   setState
 //---------------------------------------------------------
 
-void Fluid::setState(const SynthesizerGroup& sp)
+bool Fluid::setState(const SynthesizerGroup& sp)
       {
       QStringList sfl;
       for (const IdValue& v : sp) {
@@ -859,7 +859,7 @@ void Fluid::setState(const SynthesizerGroup& sp)
             else
                   qDebug("Fluid::setState: unknown id %d", v.id);
             }
-      loadSoundFonts(sfl);
+      return loadSoundFonts(sfl);
       }
 
 //---------------------------------------------------------

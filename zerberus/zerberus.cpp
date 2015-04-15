@@ -369,12 +369,12 @@ Ms::SynthesizerGroup Zerberus::state() const
 //   setState
 //---------------------------------------------------------
 
-void Zerberus::setState(const Ms::SynthesizerGroup& sp)
+bool Zerberus::setState(const Ms::SynthesizerGroup& sp)
       {
       QStringList sfs;
       for (const Ms::IdValue& v : sp)
             sfs.append(v.data);
-      loadSoundFonts(sfs);
+      return loadSoundFonts(sfs);
       }
 
 //---------------------------------------------------------
