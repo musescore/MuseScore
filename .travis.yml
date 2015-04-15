@@ -28,8 +28,13 @@ addons:
     - libmp3lame-dev
     - libegl1-mesa-dev 
     - libegl1-mesa
+    - ccache
 
 sudo: false
+
+cache:
+  directories:
+    - $HOME/.ccache
 
 before_install:
   - export CC=/usr/bin/gcc-4.9
