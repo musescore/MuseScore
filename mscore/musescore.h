@@ -616,7 +616,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 //      bool saveLilypond(Score*, const QString& name);
       bool saveMidi(Score* score, const QString& name);
 
-      void closeScore(Score* score);
+      virtual void closeScore(Score* score);
 
       void addTempo();
       void addMetronome();
