@@ -34,6 +34,7 @@ class MuseScoreCore
       void setCurrentScore(Score* score) { cs = score;    }
 
       virtual bool saveAs(Score*, bool /*saveCopy*/, const QString& /*path*/, const QString& /*ext*/) { return false; }
+      virtual void closeScore(Score*) {}
       virtual void cmd(QAction* /*a*/) {}
       virtual void setCurrentView(int /*tabIdx*/, int /*idx*/) {}
 
