@@ -882,7 +882,7 @@ void Score::undoAddElement(Element* element)
                   Score* score = staff->score();
                   int staffIdx = score->staffIdx(staff);
                   Element* ne;
-                  if (staff == ostaff)
+                  if (staff->score() == ostaff->score())
                         ne = element;
                   else {
                         ne = element->linkedClone();
