@@ -23,7 +23,6 @@
 #include "synthesizerstate.h"
 #include "mscoreview.h"
 #include "segment.h"
-#include "accidental.h"
 #include "ottava.h"
 #include "spannermap.h"
 #include "rehearsalmark.h"
@@ -598,8 +597,8 @@ class Score : public QObject {
 
       // undo/redo ops
       void addArticulation(ArticulationType);
-      void changeAccidental(Accidental::Type);
-      void changeAccidental(Note* oNote, Ms::Accidental::Type);
+      void changeAccidental(AccidentalType);
+      void changeAccidental(Note* oNote, Ms::AccidentalType);
 
       void addElement(Element*);
       void removeElement(Element*);

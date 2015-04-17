@@ -63,8 +63,8 @@
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
-        <longName pos="0">Piano</longName>
-        <shortName pos="0">Pno.</shortName>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -99,8 +99,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -389,8 +389,8 @@
           </Staff>
         <trackName>Piano</trackName>
         <Instrument>
-          <longName pos="0">Piano</longName>
-          <shortName pos="0">Pno.</shortName>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
           <trackName>Piano</trackName>
           <minPitchP>21</minPitchP>
           <maxPitchP>108</maxPitchP>
@@ -449,7 +449,7 @@
             </Rest>
           </Measure>
         <Measure number="2">
-          <breakMultiMeasureRest/>
+          <breakMultiMeasureRest>1</breakMultiMeasureRest>
           <Tempo>
             <tempo>1.66667</tempo>
             <text>𝅘𝅥 = 100</text>
@@ -626,8 +626,8 @@
           </Staff>
         <trackName>Flute</trackName>
         <Instrument>
-          <longName pos="0">Flute</longName>
-          <shortName pos="0">Fl.</shortName>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
           <trackName>Flute</trackName>
           <minPitchP>59</minPitchP>
           <maxPitchP>98</maxPitchP>
@@ -686,7 +686,7 @@
             </Rest>
           </Measure>
         <Measure number="2">
-          <breakMultiMeasureRest/>
+          <breakMultiMeasureRest>1</breakMultiMeasureRest>
           <Tempo>
             <tempo>1.66667</tempo>
             <lid>178</lid>
@@ -707,8 +707,8 @@
             </Tempo>
           <Rest>
             <durationType>measure</durationType>
+            <duration z="8" n="4"/>
             </Rest>
-          <tick>4800</tick>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>

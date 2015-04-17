@@ -18,6 +18,8 @@
 #include "undo.h"
 #include "mscore.h"
 #include "xml.h"
+#include "measure.h"
+#include "system.h"
 
 namespace Ms {
 
@@ -123,5 +125,51 @@ bool InstrumentChange::setProperty(P_ID propertyId, const QVariant& v)
             }
       return true;
       }
+
+//---------------------------------------------------------
+//   dragAnchor
+//---------------------------------------------------------
+
+QLineF InstrumentChange::dragAnchor() const
+      {
+      qreal xp = 0.0;
+      for (Element* e = parent(); e; e = e->parent())
+            xp += e->x();
+      qreal yp = segment()->measure()->system()->staffYpage(staffIdx());
+      QPointF p(xp, yp);
+
+      return QLineF(p, canvasPos());
+      }
+
+//---------------------------------------------------------
+//   drag
+//---------------------------------------------------------
+
+QRectF InstrumentChange::drag(EditData* ed)
+      {
+      QRectF f = Element::drag(ed);
+
+      //
+      // move anchor
+      //
+      Qt::KeyboardModifiers km = qApp->keyboardModifiers();
+      if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
+            int si;
+            Segment* seg = 0;
+            if (_score->pos2measure(ed->pos, &si, 0, &seg, 0) == nullptr)
+                  return f;
+            if (seg && (seg != segment() || staffIdx() != si)) {
+                  QPointF pos1(canvasPos());
+                  score()->undo(new ChangeParent(this, seg, si));
+                  setUserOff(QPointF());
+                  layout();
+                  QPointF pos2(canvasPos());
+                  setUserOff(pos1 - pos2);
+                  ed->startMove = pos2;
+                  }
+            }
+      return f;
+      }
+
 }
 

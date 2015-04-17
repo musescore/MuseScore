@@ -60,7 +60,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       maxPitchPSelect->setIcon(editIcon);
 
       Part* part        = orgStaff->part();
-      instrument        = *part->instr();
+      instrument        = *part->instrument();
       Score* score      = part->score();
       staff             = new Staff(score);
       staff->setSmall(orgStaff->small());
@@ -129,11 +129,11 @@ void EditStaff::updateInstrument()
       updateInterval(instrument.transpose());
 
       QList<StaffName>& snl = instrument.shortNames();
-      QString df = snl.isEmpty() ? "" : snl[0].name;
+      QString df = snl.isEmpty() ? "" : snl[0].name();
       shortName->setPlainText(df);
 
       QList<StaffName>& lnl = instrument.longNames();
-      df = lnl.isEmpty() ? "" : lnl[0].name;
+      df = lnl.isEmpty() ? "" : lnl[0].name();
 
       longName->setPlainText(df);
 
@@ -262,9 +262,9 @@ void EditStaff::apply()
       bool hideSystemBL = hideSystemBarLine->isChecked();
 
       QString newPartName = partName->text().simplified();
-      if (!(instrument == *part->instr()) || part->partName() != newPartName) {
+      if (!(instrument == *part->instrument()) || part->partName() != newPartName) {
             Interval v1 = instrument.transpose();
-            Interval v2 = part->instr()->transpose();
+            Interval v2 = part->instrument()->transpose();
 
             score->undo(new ChangePart(part, new Instrument(instrument), newPartName));
             emit instrumentChanged();

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="cs">
 <context>
     <name>AboutBox</name>
     <message>
@@ -13,20 +15,21 @@
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; for new versions and more information.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Support MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;your donation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2014 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; for new versions and more information.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Support MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;your donation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Navštivte&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;, kde naleznete nové verze a více informací.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Podpořte MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;svým darem&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Autorské právo &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2014 Werner Schweer a jiní. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Navštivte &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; kvůli novým verzím a dalším informacím.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Podpořte MuseScore &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;svým darem&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;;br /&gt;&lt;;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer a další. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Zveřejněno pod GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
@@ -40,7 +43,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;MusicXML is an open file format for exchanging digital sheet music,&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;supported by many applications. MusicXML is copyright © MakeMusic, Inc.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All rights reserved. For more information, see: &lt;a href=&quot;http://www.musicxml.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;MusicXML.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
@@ -318,6 +321,13 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Break lines every X measures</source>
         <translation>Zalomit řádky každých X taktů</translation>
+    </message>
+</context>
+<context>
+    <name>ChordBase</name>
+    <message>
+        <source>Glissando end</source>
+        <translation>Konec glissanda</translation>
     </message>
 </context>
 <context>
@@ -1134,6 +1144,10 @@ p, li { white-space: pre-wrap; }
         <source>B♭ -1</source>
         <translation>B -1</translation>
     </message>
+    <message>
+        <source>»C</source>
+        <translation>»C</translation>
+    </message>
 </context>
 <context>
     <name>EditRaster</name>
@@ -1179,10 +1193,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Instrument:</source>
         <translation>Nástroj:</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Amateur:</source>
@@ -1408,6 +1418,10 @@ p, li { white-space: pre-wrap; }
         <source>Advanced Style Properties...</source>
         <translation>Pokročilé vlastnosti stylu...</translation>
     </message>
+    <message>
+        <source>Hide system barline</source>
+        <translation>Skrýt taktovou čáru osnovy</translation>
+    </message>
 </context>
 <context>
     <name>EditStaffType</name>
@@ -1599,6 +1613,26 @@ p, li { white-space: pre-wrap; }
         <source>&lt; Reset to Template</source>
         <translation>&lt; Nastavit znovu na předlohu</translation>
     </message>
+    <message>
+        <source>Repeat:</source>
+        <translation>Opakovat:</translation>
+    </message>
+    <message>
+        <source>Never</source>
+        <translation>Nikdy</translation>
+    </message>
+    <message>
+        <source>At new system</source>
+        <translation>Na nové osnově</translation>
+    </message>
+    <message>
+        <source>At new meas.</source>
+        <translation>Na novém taktu</translation>
+    </message>
+    <message>
+        <source>Always</source>
+        <translation>Vždy</translation>
+    </message>
 </context>
 <context>
     <name>EditStringDataBase</name>
@@ -1778,16 +1812,8 @@ space unit</extracomment>
         <translation>Dolní okraj textu písně:</translation>
     </message>
     <message>
-        <source>Vertical-frame upper margin</source>
-        <translation>Horní okraj svislého rámečku</translation>
-    </message>
-    <message>
         <source>Vertical frame top margin:</source>
         <translation>Horní okraj svislého rámečku:</translation>
-    </message>
-    <message>
-        <source>Vertical-frame lower margin</source>
-        <translation>Dolní okraj svislého rámečku</translation>
     </message>
     <message>
         <source>Vertical frame bottom margin:</source>
@@ -1796,10 +1822,6 @@ space unit</extracomment>
     <message>
         <source>Create courtesy clefs</source>
         <translation>Vytvořit upozornění na změnu klíče</translation>
-    </message>
-    <message>
-        <source>Create time signature for all systems</source>
-        <translation>Vytvořit taktové označení pro všechny osnovy</translation>
     </message>
     <message>
         <source>Create courtesy time signatures</source>
@@ -1848,10 +1870,6 @@ space unit</extracomment>
     <message>
         <source>Even</source>
         <translation>Sudé</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Odd</source>
@@ -2375,14 +2393,6 @@ space unit</extracomment>
         <translation>Použít text pro liché/sudé zápatí</translation>
     </message>
     <message>
-        <source>Fixed number of measures/system:</source>
-        <translation>Pevný počet taktů/osnov:</translation>
-    </message>
-    <message>
-        <source>Fixed measure width</source>
-        <translation>Pevná šířka taktu</translation>
-    </message>
-    <message>
         <source>System bracket thickness:</source>
         <translation>Tloušťka závorky velké osnovy:</translation>
     </message>
@@ -2506,6 +2516,30 @@ space unit</extracomment>
         <source>Automatic Capitalization</source>
         <translation>Automatické psaní velkých písmen</translation>
     </message>
+    <message>
+        <source>Vertical frame upper margin</source>
+        <translation>Horní okraj svislého rámečku</translation>
+    </message>
+    <message>
+        <source>Vertical frame lower margin</source>
+        <translation>Dolní okraj svislého rámečku</translation>
+    </message>
+    <message>
+        <source>Scale:</source>
+        <translation>Měřítko:</translation>
+    </message>
+    <message>
+        <source>Barré line thickness:</source>
+        <translation>Tloušťka čáry barré:</translation>
+    </message>
+    <message>
+        <source>Scale barlines to staff size</source>
+        <translation>Změnit velikost taktových čar na velikost osnovy</translation>
+    </message>
+    <message>
+        <source>Barline to grace note distance:</source>
+        <translation>Vzdálenost taktové čáry od noty ozdoby:</translation>
+    </message>
 </context>
 <context>
     <name>ExcerptsDialog</name>
@@ -2565,11 +2599,15 @@ space unit</extracomment>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <source>Soundfont %1 already loaded</source>
+        <source>Sound Fonts</source>
+        <translation>Zvukové banky</translation>
+    </message>
+    <message>
+        <source>SoundFont %1 already loaded</source>
         <translation>Zvuková banka %1 již nahrána</translation>
     </message>
     <message>
-        <source>cannot load soundfont %1</source>
+        <source>Cannot load SoundFont %1</source>
         <translation>Nelze nahrát zvukovou banku %1</translation>
     </message>
 </context>
@@ -2617,24 +2655,12 @@ space unit</extracomment>
         <translation>Zavřít panel pro zavedení MIDI</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Move track up</source>
         <translation>Přesunout stopu nahoru</translation>
     </message>
     <message>
-        <source>Up</source>
-        <translation>Nahoru</translation>
-    </message>
-    <message>
         <source>Move track down</source>
         <translation>Přesunout stopu dolů</translation>
-    </message>
-    <message>
-        <source>Down</source>
-        <translation>Dolů</translation>
     </message>
     <message>
         <source>Text charset:</source>
@@ -2687,10 +2713,6 @@ space unit</extracomment>
         <translation>Posuvka</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Small</source>
         <translation>Malá</translation>
     </message>
@@ -2710,20 +2732,12 @@ space unit</extracomment>
 <context>
     <name>InspectorAmbitus</name>
     <message>
-        <source>Part Range</source>
-        <translation>Rozsah hlasu skladby</translation>
-    </message>
-    <message>
         <source>Head group</source>
         <translation>Skupina notové hlavičky</translation>
     </message>
     <message>
         <source>sp</source>
         <translation> sp</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Bottom note</source>
@@ -3025,6 +3039,10 @@ space unit</extracomment>
         <source>[Undefined]</source>
         <translation>[Nestanoveno]</translation>
     </message>
+    <message>
+        <source>Ambitus</source>
+        <translation>Tónový rozsah</translation>
+    </message>
 </context>
 <context>
     <name>InspectorArticulation</name>
@@ -3055,10 +3073,6 @@ space unit</extracomment>
     <message>
         <source>Down</source>
         <translation>Dolů</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Above Staff</source>
@@ -3102,10 +3116,6 @@ space unit</extracomment>
     <message>
         <source>Barline</source>
         <translation>Taktová čára</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Style:</source>
@@ -3207,10 +3217,6 @@ space unit</extracomment>
         <translation>Poloha</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Horizontal</source>
         <translation>Vodorovně</translation>
     </message>
@@ -3276,14 +3282,21 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorBreak</name>
+    <message>
+        <source>Element Inspector</source>
+        <translation>Dohlížitel na prvky</translation>
+    </message>
+    <message>
+        <source>Layout Break</source>
+        <translation>Zalomení rozvržení</translation>
+    </message>
+</context>
+<context>
     <name>InspectorChord</name>
     <message>
         <source>Chord</source>
         <translation>Akord</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Stem direction</source>
@@ -3362,10 +3375,6 @@ space unit</extracomment>
         <translation>Klíč</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Show courtesy</source>
         <translation>Ukázat upozornění na změnu</translation>
     </message>
@@ -3391,10 +3400,6 @@ space unit</extracomment>
     <message>
         <source>Dynamic Range</source>
         <translation>Dynamický rozsah</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Velocity</source>
@@ -3453,10 +3458,6 @@ space unit</extracomment>
         <translation>Barva</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Horizontal offset</source>
         <translation>Vodorovný posun</translation>
     </message>
@@ -3497,6 +3498,29 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorFret</name>
+    <message>
+        <source>Ottava Inspector</source>
+        <translation>Dohlížitel na oktávy</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation>Měřítko</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Nastavit hodnotu znovu</translation>
+    </message>
+    <message>
+        <source>Reset Type value</source>
+        <translation>Nastavit znovu typ</translation>
+    </message>
+    <message>
+        <source>Fretboard Diagram</source>
+        <translation>Nákres hmatníku</translation>
+    </message>
+</context>
+<context>
     <name>InspectorGlissando</name>
     <message>
         <source>Glissando</source>
@@ -3509,10 +3533,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>Typ</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Glissando Inspector</source>
@@ -3586,10 +3606,6 @@ space unit</extracomment>
         <translation>Šířka</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Horizontal Frame Inspector</source>
         <translation>Dohlížitel na vodorovné rámečky</translation>
     </message>
@@ -3631,10 +3647,6 @@ space unit</extracomment>
     <message>
         <source>Dynamic range</source>
         <translation>Dynamický rozsah</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Staff</source>
@@ -3712,10 +3724,6 @@ space unit</extracomment>
         <translation>Obrázek</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Size</source>
         <translation>Velikost</translation>
     </message>
@@ -3779,10 +3787,6 @@ space unit</extracomment>
         <translation>Skok</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Jump to</source>
         <translation>Skočit na</translation>
     </message>
@@ -3816,10 +3820,6 @@ space unit</extracomment>
     <message>
         <source>Key Signature</source>
         <translation>Předznamenání</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Show courtesy</source>
@@ -3882,10 +3882,6 @@ space unit</extracomment>
     <message>
         <source>Line</source>
         <translation>Linka</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3966,10 +3962,6 @@ space unit</extracomment>
     <message>
         <source>Marker</source>
         <translation>Značka</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Label</source>
@@ -4061,10 +4053,6 @@ space unit</extracomment>
     <message>
         <source>Bottom</source>
         <translation>Dole</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Whole</source>
@@ -4198,10 +4186,6 @@ space unit</extracomment>
         <translation>Typ</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Placement</source>
         <translation>Umístění</translation>
     </message>
@@ -4269,10 +4253,6 @@ space unit</extracomment>
         <translation>Pomlka</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Small</source>
         <translation>Malá</translation>
     </message>
@@ -4301,10 +4281,6 @@ space unit</extracomment>
         <translation> sp</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Trailing space</source>
         <translation>Místo vpravo</translation>
     </message>
@@ -4331,10 +4307,6 @@ space unit</extracomment>
 </context>
 <context>
     <name>InspectorSlur</name>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
     <message>
         <source>Line type:</source>
         <translation>Typ linky:</translation>
@@ -4388,10 +4360,6 @@ space unit</extracomment>
         <translation> sp</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Spacer Inspector</source>
         <translation>Dohlížitel na vymezovače odstupu</translation>
     </message>
@@ -4405,10 +4373,6 @@ space unit</extracomment>
     <message>
         <source>Tempo Marking</source>
         <translation>Označení tempa</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -4450,10 +4414,6 @@ space unit</extracomment>
         <translation>Styl</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Text Inspector</source>
         <translation>Dohlížitel na texty</translation>
     </message>
@@ -4464,6 +4424,10 @@ space unit</extracomment>
     <message>
         <source>Reset value</source>
         <translation>Nastavit hodnotu znovu</translation>
+    </message>
+    <message>
+        <source>Reset Text to Style</source>
+        <translation>Nastavit text znovu na styl</translation>
     </message>
 </context>
 <context>
@@ -4482,10 +4446,6 @@ space unit</extracomment>
     <message>
         <source>Time Signature</source>
         <translation>Taktové označení</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Show courtesy</source>
@@ -4513,10 +4473,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>Typ</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Trill Inspector</source>
@@ -4556,10 +4512,6 @@ space unit</extracomment>
     <message>
         <source>Tuplet</source>
         <translation>Rytmická notová skupina</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Number</source>
@@ -4631,10 +4583,6 @@ space unit</extracomment>
     <message>
         <source>Vertical Frame</source>
         <translation>Svislý rámeček</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>mm</source>
@@ -4723,10 +4671,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>Typ</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Volta Inspector</source>
@@ -5111,10 +5055,6 @@ space unit</extracomment>
         <translation>Začátek</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Above</source>
         <translation>Nad</translation>
     </message>
@@ -5380,6 +5320,20 @@ předtaktí</translation>
         <source>Max. voices</source>
         <translation>Nejvíce hlasů</translation>
     </message>
+    <message>
+        <source>Channel</source>
+        <translation>Kanál</translation>
+    </message>
+    <message>
+        <source>MuseScore instrument</source>
+        <translation>Nástroj MuseScore</translation>
+    </message>
+    <message>
+        <source>Show
+chord symbols</source>
+        <translation>Ukázat
+značky akordů</translation>
+    </message>
 </context>
 <context>
     <name>MIDI import: tracks model</name>
@@ -5399,18 +5353,55 @@ předtaktí</translation>
         <translation>Uložit jako MP3</translation>
     </message>
     <message>
-        <source>MuseScore does not export MP3 files directly, but instead uses 
-the freely available LAME library.  You must obtain %1 
-separately, and then locate the file for MuseScore.
+        <source>MuseScore does not export MP3 files directly, but instead uses the freely available LAME library.  You must obtain %1 separately (for details check the handbook), and then locate the file for MuseScore.
 You only need to do this once.
 
 Would you like to locate %2 now?</source>
         <translation>MuseScore nepodporuje soubory MP3 přímo, ale namísto toho 
 používá volně dostupnou knihovnu LAME.  Musíte %1 obdržet 
-samostatně, a potom najít soubor pro MuseScore.
+samostatně (podrobnosti najdete v příručce), a potom najít soubor pro MuseScore.
 Musíte to udělat jen jednou.
 
 Chcete %2 najít nyní?</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <source>Open PDF/XPS file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished">Otevřít</translation>
+    </message>
+    <message>
+        <source>Previous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ZoomIn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ZoomOut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ToolBar</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5476,10 +5467,6 @@ Chcete %2 najít nyní?</translation>
         <translation>Tremolo</translation>
     </message>
     <message>
-        <source>Repeats</source>
-        <translation>Opakování</translation>
-    </message>
-    <message>
         <source>Tempo</source>
         <translation>Tempo</translation>
     </message>
@@ -5510,6 +5497,10 @@ Chcete %2 najít nyní?</translation>
     <message>
         <source>Bagpipe Embellishments</source>
         <translation>Ozdoby pro dudy</translation>
+    </message>
+    <message>
+        <source>Repeats &amp; Jumps</source>
+        <translation>Opakování a skoky</translation>
     </message>
 </context>
 <context>
@@ -5694,10 +5685,6 @@ Rytmická notová skupina by takt přepsala</translation>
         <translation>Snímek PDF</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Add Scan</source>
         <translation>Přidat snímek</translation>
     </message>
@@ -5790,6 +5777,25 @@ Rytmická notová skupina by takt přepsala</translation>
     </message>
 </context>
 <context>
+    <name>Ms::AccessibleSearchBox</name>
+    <message>
+        <source>Measure</source>
+        <translation>Takt</translation>
+    </message>
+    <message>
+        <source>Page</source>
+        <translation>Strana</translation>
+    </message>
+    <message>
+        <source>Rehearsal Mark</source>
+        <translation>Zkušební značka</translation>
+    </message>
+    <message>
+        <source>Not found </source>
+        <translation>Nenalezeno</translation>
+    </message>
+</context>
+<context>
     <name>Ms::AlbumManager</name>
     <message>
         <source>MuseScore: Add Score</source>
@@ -5879,18 +5885,6 @@ Rytmická notová skupina by takt přepsala</translation>
         <translation>Vlastní rytmická notová skupina</translation>
     </message>
     <message>
-        <source>Dotted</source>
-        <translation>Tečkovaná</translation>
-    </message>
-    <message>
-        <source>Double dotted</source>
-        <translation>Dvojitá tečka</translation>
-    </message>
-    <message>
-        <source>Triple dotted</source>
-        <translation>Trojitá tečka</translation>
-    </message>
-    <message>
         <source>Quintuplet</source>
         <translation>Kvintola</translation>
     </message>
@@ -5905,6 +5899,18 @@ Rytmická notová skupina by takt přepsala</translation>
     <message>
         <source>%1 End of %2</source>
         <translation>%1 Konec %2</translation>
+    </message>
+    <message>
+        <source>Dotted %1</source>
+        <translation>Tečkovaná %1</translation>
+    </message>
+    <message>
+        <source>Double dotted %1</source>
+        <translation>Dvojitá tečka %1</translation>
+    </message>
+    <message>
+        <source>Triple dotted %1</source>
+        <translation>Trojitá tečka %1</translation>
     </message>
 </context>
 <context>
@@ -5989,6 +5995,13 @@ failed: </source>
         <translation>Otevření souboru
 %1
 se nezdařilo:</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::EditStaff</name>
+    <message>
+        <source>The instrument name is invalid.</source>
+        <translation>Název nástroje je neplatný.</translation>
     </message>
 </context>
 <context>
@@ -6148,6 +6161,13 @@ se nezdařilo:</translation>
     </message>
 </context>
 <context>
+    <name>Ms::HelpQuery</name>
+    <message>
+        <source>Search for: </source>
+        <translation>Hledat:</translation>
+    </message>
+</context>
+<context>
     <name>Ms::Inspector</name>
     <message>
         <source>Inspector</source>
@@ -6163,6 +6183,21 @@ se nezdařilo:</translation>
     <message>
         <source>Inspector</source>
         <translation>Dozorce</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::InspectorGroupElement</name>
+    <message>
+        <source>Select</source>
+        <translation>Vybrat</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation>Noty</translation>
+    </message>
+    <message>
+        <source>Rests</source>
+        <translation>Pomlky</translation>
     </message>
 </context>
 <context>
@@ -6324,10 +6359,6 @@ se nezdařilo:</translation>
         <translation>Chyba sítě</translation>
     </message>
     <message>
-        <source>Please check your internet connection</source>
-        <translation>Prověřte, prosím, své internetové připojení</translation>
-    </message>
-    <message>
         <source>Unsuccessful login. Please try again.</source>
         <translation>Nepodařilo se přihlásit se. Zkuste to, prosím, znovu.</translation>
     </message>
@@ -6366,6 +6397,14 @@ se nezdařilo:</translation>
     <message>
         <source>Your MuseScore version is too old to use this feature.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Please upgrade first&lt;/a&gt;.</source>
         <translation>Verze MuseScore je příliš stará na to, aby používala tuto funkci.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Nejprve, prosím, proveďte povýšení&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>Please check your Internet connection</source>
+        <translation>Prověřte, prosím, své internetové připojení</translation>
+    </message>
+    <message>
+        <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
+        <translation>Místní čas zařízení není nastaven správně. Prověřte to, prosím, a upravte jej. Doporučuje se čas/časové pásmo nastavit na automatickou volbu. Pokud se nadále nemůžete připojit, &lt;a href=&quot;%1&quot;&gt;spojte se s námi&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -6607,10 +6646,6 @@ do notového zápisu &quot;%1&quot;?</translation>
         <translation>MuseScore: Uložit jako</translation>
     </message>
     <message>
-        <source>cannot determine file type</source>
-        <translation>Nelze rozpoznat typ souboru</translation>
-    </message>
-    <message>
         <source>MuseScore: Export Parts</source>
         <translation>MuseScore: Vyvést výtahy hlasů</translation>
     </message>
@@ -6796,10 +6831,6 @@ Vyberte, prosím, nějaký takt a zkuste to znovu</translation>
         <translation>Koncertní ladění</translation>
     </message>
     <message>
-        <source>Note Entry</source>
-        <translation>Vkládání not</translation>
-    </message>
-    <message>
         <source>&amp;File</source>
         <translation>&amp;Soubor</translation>
     </message>
@@ -6864,52 +6895,8 @@ Vyberte, prosím, nějaký takt a zkuste to znovu</translation>
         <translation>Příručka na &amp;internetu</translation>
     </message>
     <message>
-        <source>&amp;About</source>
-        <translation>&amp;O programu</translation>
-    </message>
-    <message>
-        <source>About &amp;Qt</source>
-        <translation>O &amp;Qt</translation>
-    </message>
-    <message>
-        <source>About &amp;MusicXML</source>
-        <translation>O &amp;MusicXML</translation>
-    </message>
-    <message>
         <source>Check for &amp;Update</source>
         <translation>Zkontrolovat &amp;aktualizace</translation>
-    </message>
-    <message>
-        <source>no score</source>
-        <translation>Žádný notový zápis</translation>
-    </message>
-    <message>
-        <source>NOTE entry mode</source>
-        <translation>Režim vkládání not</translation>
-    </message>
-    <message>
-        <source>DRUM entry mode</source>
-        <translation>Režim vkládání bicích</translation>
-    </message>
-    <message>
-        <source>TAB entry mode</source>
-        <translation>Režim vkládání tabulatur</translation>
-    </message>
-    <message>
-        <source>edit mode</source>
-        <translation>Režim úprav</translation>
-    </message>
-    <message>
-        <source>text edit mode</source>
-        <translation>Režim úprav textu</translation>
-    </message>
-    <message>
-        <source>lyrics edit mode</source>
-        <translation>Režim úprav textu písně</translation>
-    </message>
-    <message>
-        <source>play</source>
-        <translation>Přehrávání</translation>
     </message>
     <message>
         <source>The previous session quit unexpectedly.
@@ -6944,7 +6931,7 @@ Obnovit sezení?</translation>
         <translation>MuseScore: Číst název pracovní plochy</translation>
     </message>
     <message>
-        <source>'%1' does already exist,
+        <source>&apos;%1&apos; does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; již existuje:
 Vyberte, prosím, jiný název:</translation>
@@ -6976,10 +6963,6 @@ Vyberte, prosím, jiný název:</translation>
     <message>
         <source>MuseScore: Insert Image</source>
         <translation>MuseScore: Vložit obrázek</translation>
-    </message>
-    <message>
-        <source>chord symbol/figured bass edit mode</source>
-        <translation>Režim úprav akordických značek/číslovaného basu</translation>
     </message>
     <message>
         <source>Report a Bug</source>
@@ -7047,18 +7030,6 @@ Vyberte, prosím, jiný název:</translation>
         <translation>Režim pohledu</translation>
     </message>
     <message>
-        <source>Screenshot Mode</source>
-        <translation>Režim snímku obrazovky</translation>
-    </message>
-    <message>
-        <source>screenshot mode</source>
-        <translation>Režim snímku obrazovky</translation>
-    </message>
-    <message>
-        <source>score locked</source>
-        <translation>Notový zápis uzamknut</translation>
-    </message>
-    <message>
         <source>Swing</source>
         <translation>Swing</translation>
     </message>
@@ -7112,7 +7083,7 @@ Vyberte, prosím, jiný název:</translation>
     </message>
     <message>
         <source>Rehearsal mark</source>
-        <translation>Značka opakování</translation>
+        <translation>Zkušební značka</translation>
     </message>
     <message>
         <source>Instrument change</source>
@@ -7190,6 +7161,86 @@ Vyberte, prosím, jiný název:</translation>
         <source>&amp;Tools</source>
         <translation>&amp;Nástroje</translation>
     </message>
+    <message>
+        <source>No score</source>
+        <translation>Žádný notový zápis</translation>
+    </message>
+    <message>
+        <source>Edit mode</source>
+        <translation>Režim úprav</translation>
+    </message>
+    <message>
+        <source>Text edit mode</source>
+        <translation>Režim úprav textu</translation>
+    </message>
+    <message>
+        <source>Lyrics edit mode</source>
+        <translation>Režim úprav textu písně</translation>
+    </message>
+    <message>
+        <source>Chord symbol/figured bass edit mode</source>
+        <translation>Režim úprav akordických značek/číslovaného basu</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Přehrát</translation>
+    </message>
+    <message>
+        <source>Score locked</source>
+        <translation>Notový zápis uzamknut</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Příručka</translation>
+    </message>
+    <message>
+        <source>&amp;About...</source>
+        <translation>&amp;O programu...</translation>
+    </message>
+    <message>
+        <source>About &amp;Qt...</source>
+        <translation>O &amp;Qt...</translation>
+    </message>
+    <message>
+        <source>About &amp;MusicXML...</source>
+        <translation>O &amp;MusicXML...</translation>
+    </message>
+    <message>
+        <source>Image Capture</source>
+        <translation>Zachytávání obrázků</translation>
+    </message>
+    <message>
+        <source>Note Input</source>
+        <translation>Vkládání not</translation>
+    </message>
+    <message>
+        <source>Note input mode</source>
+        <translation>Režim vkládání not</translation>
+    </message>
+    <message>
+        <source>Drum input mode</source>
+        <translation>Režim vkládání bicích</translation>
+    </message>
+    <message>
+        <source>TAB input mode</source>
+        <translation>Režim vkládání tabulatur</translation>
+    </message>
+    <message>
+        <source>Image capture mode</source>
+        <translation>Režim zachytávání obrázků</translation>
+    </message>
+    <message>
+        <source>Cannot determine file type</source>
+        <translation>Nelze určit typ souboru</translation>
+    </message>
+    <message>
+        <source>MuseScore:</source>
+        <translation>MuseScore</translation>
+    </message>
+    <message>
+        <source>Cannot write into %1</source>
+        <translation>Nelze zapisovat do %1</translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7247,7 +7298,7 @@ Vyberte, prosím, jiný název:</translation>
     </message>
     <message>
         <source>Create Time Signature</source>
-        <translation>Vytvořit taktové označení</translation>
+        <translation>Vytvořte taktové označení:</translation>
     </message>
 </context>
 <context>
@@ -7269,7 +7320,7 @@ Vyberte, prosím, jiný název:</translation>
     </message>
     <message>
         <source>Select Key Signature and Tempo:</source>
-        <translation>Vybrat předznamenání a tempo:</translation>
+        <translation>Vyberte předznamenání a tempo:</translation>
     </message>
     <message>
         <source>Key Signature</source>
@@ -7286,6 +7337,13 @@ Vyberte, prosím, jiný název:</translation>
     <message>
         <source>Beats per minute</source>
         <translation>Úderů za minutu</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::NoEffectGui</name>
+    <message>
+        <source>No Plugin</source>
+        <translation>Žádný přídavný modul</translation>
     </message>
 </context>
 <context>
@@ -7434,57 +7492,6 @@ Vyberte, prosím, jiný název:</translation>
     </message>
 </context>
 <context>
-    <name>Ms::PianorollEditor</name>
-    <message>
-        <source>Toolbar 1</source>
-        <translation>Nástrojový pruh 1</translation>
-    </message>
-    <message>
-        <source>Wave</source>
-        <translation>Vlna</translation>
-    </message>
-    <message>
-        <source>Show wave display</source>
-        <translation>Ukázat křivku</translation>
-    </message>
-    <message>
-        <source>Toolbar 2</source>
-        <translation>Nástrojový pruh 2</translation>
-    </message>
-    <message>
-        <source>Cursor:</source>
-        <translation>Ukazatel:</translation>
-    </message>
-    <message>
-        <source>Velocity:</source>
-        <translation>Síla tónu:</translation>
-    </message>
-    <message>
-        <source>Offset</source>
-        <translation>Odstup</translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation>Uživatel</translation>
-    </message>
-    <message>
-        <source>Pitch:</source>
-        <translation>Výška tónu:</translation>
-    </message>
-    <message>
-        <source>OnTime:</source>
-        <translation>Doba zapnutí:</translation>
-    </message>
-    <message>
-        <source>Len:</source>
-        <translation>Délka:</translation>
-    </message>
-    <message>
-        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
-        <translation>MuseScore: &lt;%1&gt; Notová osnova: %2</translation>
-    </message>
-</context>
-<context>
     <name>Ms::PluginCreator</name>
     <message>
         <source>File Operations</source>
@@ -7521,8 +7528,8 @@ Uložit před zavřením?</translation>
         <translation>MuseScore: Uložit přídavný modul</translation>
     </message>
     <message>
-        <source>cannot determine file type</source>
-        <translation>Nelze rozpoznat typ souboru</translation>
+        <source>Cannot determine file type</source>
+        <translation>Nelze určit typ souboru</translation>
     </message>
 </context>
 <context>
@@ -7592,14 +7599,6 @@ Uložit před zavřením?</translation>
         <translation>Vybrat složku pro obrázek</translation>
     </message>
     <message>
-        <source>Soundfont Folders</source>
-        <translation>Složky se zvukovými bankami</translation>
-    </message>
-    <message>
-        <source>SFZ Folders</source>
-        <translation>Složky s SFZ</translation>
-    </message>
-    <message>
         <source>Action: %1; Shortcut: %2</source>
         <translation>Činnost: %1; Klávesová zkratka: %2</translation>
     </message>
@@ -7610,6 +7609,10 @@ Uložit před zavřením?</translation>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;All (*)</source>
         <translation>Soubory MuseScore (*.mscz *mscx);;Vše (*)</translation>
+    </message>
+    <message>
+        <source>SoundFont Folders</source>
+        <translation>Složky se zvukovými bankami</translation>
     </message>
 </context>
 <context>
@@ -7641,17 +7644,6 @@ Uložit před zavřením?</translation>
     <message>
         <source>Updated</source>
         <translation>Aktualizováno</translation>
-    </message>
-</context>
-<context>
-    <name>Ms::Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Hlas: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Doba trvání: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -7725,6 +7717,14 @@ se nezdařilo: %2</translation>
         <source>No selection</source>
         <translation>Žádný výběr</translation>
     </message>
+    <message>
+        <source>Measure %1 Staff %2 incomplete. Expected: %3; Found: %4</source>
+        <translation>Takt %1 Osnova %2 nedokončený. Očekáváno: %3; Nalezeno: %4</translation>
+    </message>
+    <message>
+        <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
+        <translation>Takt %1 Osnova %2, hlas %3 příliš dlouhý. Očekáváno: %4; Nalezeno: %5</translation>
+    </message>
 </context>
 <context>
     <name>Ms::ScoreAccessibility</name>
@@ -7762,22 +7762,29 @@ se nezdařilo: %2</translation>
     </message>
 </context>
 <context>
-    <name>Ms::ScoreView</name>
+    <name>Ms::ScoreBrowser</name>
     <message>
-        <source>transparent background</source>
-        <translation>Průhledné pozadí</translation>
+        <source>Choose Instruments</source>
+        <translation>Vybrat nástroje</translation>
     </message>
+    <message>
+        <source>Create New Score</source>
+        <translation>Vytvořit nový notový zápis</translation>
+    </message>
+    <message>
+        <source>Custom Templates</source>
+        <translation>Vlastní předlohy</translation>
+    </message>
+    <message>
+        <source>Getting Started</source>
+        <translation>Začínáme</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::ScoreView</name>
     <message>
         <source>Set Standard Size...</source>
         <translation>Nastavit standardní velikost...</translation>
-    </message>
-    <message>
-        <source>Save As (print mode)...</source>
-        <translation>Uložit jako (tiskový režim)...</translation>
-    </message>
-    <message>
-        <source>Save As (screenshot mode)...</source>
-        <translation>Uložit jako (snímkový režim)...</translation>
     </message>
     <message>
         <source>MuseScore: Set Output Resolution</source>
@@ -7798,10 +7805,6 @@ se nezdařilo: %2</translation>
     <message>
         <source>MuseScore: Save As</source>
         <translation>MuseScore: Uložit jako</translation>
-    </message>
-    <message>
-        <source>cannot determine file type</source>
-        <translation>Nelze rozpoznat typ souboru</translation>
     </message>
     <message>
         <source>Layer</source>
@@ -7916,22 +7919,6 @@ se nezdařilo: %2</translation>
         <translation>Program na hledání chyb předmětů</translation>
     </message>
     <message>
-        <source>Please select the complete tuplet and retry the copy operation</source>
-        <translation>Vyberte, prosím, celou rytmickou notovou skupinu a zkuste operaci kopírování ještě jednou</translation>
-    </message>
-    <message>
-        <source>Please select the complete tuplet and retry the cut operation</source>
-        <translation>Vyberte, prosím, celou rytmickou notovou skupinu a zkuste operaci vyjmutí ještě jednou</translation>
-    </message>
-    <message>
-        <source>no destination to paste</source>
-        <translation>Žádná osnova pro vložení</translation>
-    </message>
-    <message>
-        <source>cannot paste into tuplet</source>
-        <translation>Nelze vložit do rytmické notové skupiny</translation>
-    </message>
-    <message>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -7970,10 +7957,6 @@ Vyberte, prosím, nějaký takt a zkuste to znovu</translation>
         <translation>Rozlišení (%1 DPI)...</translation>
     </message>
     <message>
-        <source>Screenshot Mode</source>
-        <translation>Režim snímku obrazovky</translation>
-    </message>
-    <message>
         <source>Hide Courtesy Time Signature</source>
         <translation>Skrýt upozornění na změnu taktového označení</translation>
     </message>
@@ -7982,24 +7965,12 @@ Vyberte, prosím, nějaký takt a zkuste to znovu</translation>
         <translation>Ukázat upozornění na změnu  taktového označení</translation>
     </message>
     <message>
-        <source>Hide courtesy clef</source>
-        <translation>Skrýt upozornění na změnu klíče</translation>
-    </message>
-    <message>
-        <source>Show courtesy clef</source>
-        <translation>Ukázat upozornění na změnu klíče</translation>
-    </message>
-    <message>
         <source>Hide Courtesy Key Signature</source>
         <translation>Skrýt upozornění na změnu předznamenání</translation>
     </message>
     <message>
         <source>Show Courtesy Key Signature</source>
         <translation>Ukázat upozornění na změnu předznamenání</translation>
-    </message>
-    <message>
-        <source>tuplet cannot cross barlines</source>
-        <translation>Rytmická notová skupina nemůže překročit hranice taktu</translation>
     </message>
     <message>
         <source>No chord/rest selected:
@@ -8023,13 +7994,64 @@ Vyberte, prosím, rozsah taktů k připojení a zkuste to ještě jednou</transl
         <source>Auto-resize to page</source>
         <translation>Automaticky nastavit na velikost strany</translation>
     </message>
+    <message>
+        <source>Hide Courtesy Clef</source>
+        <translation>Ukázat upozornění na změnu klíče</translation>
+    </message>
+    <message>
+        <source>Show Courtesy Clef</source>
+        <translation>Ukázat upozornění na změnu klíče</translation>
+    </message>
+    <message>
+        <source>Please select the complete tuplet/tremolo and retry the command</source>
+        <translation>Vyberte, prosím, celou rytmickou notovou skupinu/tremolo a zkuste příkaz ještě jednou</translation>
+    </message>
+    <message>
+        <source>Image Capture</source>
+        <translation>Zachytávání obrázků</translation>
+    </message>
+    <message>
+        <source>Save As (Print Mode)...</source>
+        <translation>Uložit jako (tiskový režim)...</translation>
+    </message>
+    <message>
+        <source>Save As (Screenshot Mode)...</source>
+        <translation>Uložit jako (snímkový režim)...</translation>
+    </message>
+    <message>
+        <source>Cannot determine file type</source>
+        <translation>Nelze určit typ souboru</translation>
+    </message>
+    <message>
+        <source>No destination to paste</source>
+        <translation>Žádná osnova pro vložení</translation>
+    </message>
+    <message>
+        <source>Cannot paste into tuplet</source>
+        <translation>Nelze vložit do rytmické notové skupiny</translation>
+    </message>
+    <message>
+        <source>Tuplet cannot cross barlines</source>
+        <translation>Rytmická notová skupina nemůže překročit hranice taktu</translation>
+    </message>
+    <message>
+        <source>Transparent background</source>
+        <translation>Průhledné pozadí</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::SearchComboBox</name>
+    <message>
+        <source>Search Box</source>
+        <translation>Vyhledávací pole</translation>
+    </message>
+    <message>
+        <source>Type to search. Press Enter to return to score.</source>
+        <translation>Pište pro hledání. Stiskněte Enter pro návrat do notového zápisu.</translation>
+    </message>
 </context>
 <context>
     <name>Ms::Segment</name>
-    <message>
-        <source>Annotations: </source>
-        <translation>Poznámky:</translation>
-    </message>
     <message>
         <source>Start of </source>
         <translation>Začátek</translation>
@@ -8037,6 +8059,21 @@ Vyberte, prosím, rozsah taktů k připojení a zkuste to ještě jednou</transl
     <message>
         <source>End of </source>
         <translation>Konec</translation>
+    </message>
+    <message>
+        <source>Annotations:</source>
+        <translation>Poznámky:</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::SelectionListWidget</name>
+    <message>
+        <source>Selection filter</source>
+        <translation>Filtr výběru</translation>
+    </message>
+    <message>
+        <source>Use Tab and Backtab to move through the check boxes</source>
+        <translation>Použijte tabulátor pro pohyb zaškrtávacími okénky dopředu a dozadu</translation>
     </message>
 </context>
 <context>
@@ -8093,20 +8130,20 @@ Vyberte, prosím, rozsah taktů k připojení a zkuste to ještě jednou</transl
 <context>
     <name>Ms::TempoText</name>
     <message>
-        <source>Dotted</source>
-        <translation>Tečkovaná</translation>
-    </message>
-    <message>
-        <source>Double dotted</source>
-        <translation>Dvojitá tečka</translation>
-    </message>
-    <message>
-        <source>Triple dotted</source>
-        <translation>Trojitá tečka</translation>
-    </message>
-    <message>
         <source>note = %1</source>
         <translation>nota = %1</translation>
+    </message>
+    <message>
+        <source>Dotted %1</source>
+        <translation>Tečkovaná %1</translation>
+    </message>
+    <message>
+        <source>Double dotted %1</source>
+        <translation>Dvojitá tečka %1</translation>
+    </message>
+    <message>
+        <source>Triple dotted %1</source>
+        <translation>Trojitá tečka %1</translation>
     </message>
 </context>
 <context>
@@ -8171,7 +8208,7 @@ Vyberte, prosím, rozsah taktů k připojení a zkuste to ještě jednou</transl
         <translation>MuseScore: Číst název stylu</translation>
     </message>
     <message>
-        <source>'%1' does already exist,
+        <source>&apos;%1&apos; does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; již existuje:
 Vyberte, prosím, jiný název:</translation>
@@ -8311,6 +8348,22 @@ Vyberte, prosím, jiný název:</translation>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
+    <message>
+        <source>&lt;a href=&quot;%1&quot;&gt;What does this mean?&lt;/a&gt;</source>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Co to znamená? Co je to?&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <source>Respect the &lt;a href=&quot;%1&quot;&gt;community guidelines&lt;/a&gt;. Only make your scores accessible to anyone with permission from the right holders.</source>
+        <translation>Dodržujte &lt;a href=&quot;%1&quot;&gt;pravidla společenství&lt;/a&gt;. Zpřístupňujte své notové zápisy jen lidem s oprávněním od držitelů práv.</translation>
+    </message>
+    <message>
+        <source>Use a comma to separate the tags</source>
+        <translation>Použít čárku k oddělení značek</translation>
+    </message>
+    <message>
+        <source>[&lt;a href=&quot;%1&quot;&gt;link&lt;/a&gt;]</source>
+        <translation>[&lt;a href=&quot;%1&quot;&gt;odkaz&lt;/a&gt;]</translation>
+    </message>
 </context>
 <context>
     <name>Ms::Workspace</name>
@@ -8395,6 +8448,10 @@ Vyberte, prosím, jiný název:</translation>
     <message>
         <source>C# major, A# minor</source>
         <translation>Cis dur, ais moll</translation>
+    </message>
+    <message>
+        <source>Open/Atonal</source>
+        <translation>Otevřený/Atonální</translation>
     </message>
 </context>
 <context>
@@ -8624,14 +8681,6 @@ Vyberte, prosím, jiný název:</translation>
         <translation>Taktové čáry</translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation>Normální</translation>
-    </message>
-    <message>
-        <source>Repeats</source>
-        <translation>Opakování</translation>
-    </message>
-    <message>
         <source>Breaks &amp;&amp; Spacers</source>
         <translation>Zalomení a &amp;odstup</translation>
     </message>
@@ -8740,10 +8789,6 @@ Vyberte, prosím, jiný název:</translation>
         <translation>Změna notové osnovy</translation>
     </message>
     <message>
-        <source>Symbols</source>
-        <translation>Symboly</translation>
-    </message>
-    <message>
         <source>Arpeggios &amp;&amp; Glissandi</source>
         <translation>Arpeggia a &amp;glissanda</translation>
     </message>
@@ -8784,14 +8829,6 @@ se nezdařil:</translation>
         <translation>Všechny symboly písma</translation>
     </message>
     <message>
-        <source>Dashed style</source>
-        <translation>Čárkovaný styl</translation>
-    </message>
-    <message>
-        <source>Dotted style</source>
-        <translation>Tečkovaný styl</translation>
-    </message>
-    <message>
         <source>Tick 1 span</source>
         <translation>Rozpětí tiku 1</translation>
     </message>
@@ -8808,12 +8845,28 @@ se nezdařil:</translation>
         <translation>Rozpětí krátkého 2</translation>
     </message>
     <message>
-        <source>End bar style</source>
-        <translation>Styl koncové taktové čáry</translation>
+        <source>Repeats &amp;&amp; Jumps</source>
+        <translation>Opakování &amp;a skoky</translation>
     </message>
     <message>
-        <source>Double bar style</source>
-        <translation>Styl dvojité taktové čáry</translation>
+        <source>Normal barline</source>
+        <translation>Normální taktová čára</translation>
+    </message>
+    <message>
+        <source>Dashed barline</source>
+        <translation>Čárkovaná taktová čára</translation>
+    </message>
+    <message>
+        <source>Dotted barline</source>
+        <translation>Tečkovaná taktová čára</translation>
+    </message>
+    <message>
+        <source>End bar barline</source>
+        <translation>Koncová taktová čára</translation>
+    </message>
+    <message>
+        <source>Double barline</source>
+        <translation>Dvojitá taktová čára</translation>
     </message>
     <message>
         <source>Start repeat</source>
@@ -8826,6 +8879,10 @@ se nezdařil:</translation>
     <message>
         <source>End-start repeat</source>
         <translation>Opakování začátek-konec</translation>
+    </message>
+    <message>
+        <source>Fretboard Diagrams</source>
+        <translation>Nákresy hmatníků</translation>
     </message>
 </context>
 <context>
@@ -8972,6 +9029,18 @@ se nezdařil:</translation>
         <source>MIDI sound</source>
         <translation>Zvuk MIDI</translation>
     </message>
+    <message>
+        <source>Part Name</source>
+        <translation>Název výtahu hlasu skladby</translation>
+    </message>
+    <message>
+        <source>Use arrows to modify</source>
+        <translation>Použít šipek pro změnu</translation>
+    </message>
+    <message>
+        <source>Sound</source>
+        <translation>Zvuk</translation>
+    </message>
 </context>
 <context>
     <name>PathListDialog</name>
@@ -8986,6 +9055,57 @@ se nezdařil:</translation>
     <message>
         <source>Add</source>
         <translation>Přidat</translation>
+    </message>
+</context>
+<context>
+    <name>PianorollEditor</name>
+    <message>
+        <source>Toolbar 1</source>
+        <translation>Nástrojový pruh 1</translation>
+    </message>
+    <message>
+        <source>Wave</source>
+        <translation>Vlna</translation>
+    </message>
+    <message>
+        <source>Show wave display</source>
+        <translation>Ukázat křivku</translation>
+    </message>
+    <message>
+        <source>Toolbar 2</source>
+        <translation>Nástrojový pruh 2</translation>
+    </message>
+    <message>
+        <source>Cursor:</source>
+        <translation>Ukazatel:</translation>
+    </message>
+    <message>
+        <source>Velocity:</source>
+        <translation>Síla tónu:</translation>
+    </message>
+    <message>
+        <source>Offset</source>
+        <translation>Odstup</translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation>Uživatel</translation>
+    </message>
+    <message>
+        <source>Pitch:</source>
+        <translation>Výška tónu:</translation>
+    </message>
+    <message>
+        <source>OnTime:</source>
+        <translation>Doba zapnutí:</translation>
+    </message>
+    <message>
+        <source>Len:</source>
+        <translation>Délka:</translation>
+    </message>
+    <message>
+        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
+        <translation>MuseScore: &lt;%1&gt; Notová osnova: %2</translation>
     </message>
 </context>
 <context>
@@ -9036,6 +9156,26 @@ se nezdařil:</translation>
         <source>Measure.Beat</source>
         <translation>Takt.Doba</translation>
     </message>
+    <message>
+        <source>Playback Position</source>
+        <translation>Poloha přehrávání</translation>
+    </message>
+    <message>
+        <source>Relative Tempo to 120 beats per minute</source>
+        <translation>Poměrné tempo na 120 úderů za minutu</translation>
+    </message>
+    <message>
+        <source>Use up and down arrows to change value</source>
+        <translation>Použít šipek nahoru a dolů pro změnu hodnoty</translation>
+    </message>
+    <message>
+        <source>Master Volume</source>
+        <translation>Hlavní hlasitost</translation>
+    </message>
+    <message>
+        <source>Relative tempo to 120 beats per minute</source>
+        <translation>Poměrné tempo na 120 úderů za minutu</translation>
+    </message>
 </context>
 <context>
     <name>PluginCreatorBase</name>
@@ -9084,16 +9224,16 @@ se nezdařil:</translation>
         <translation>Znovu</translation>
     </message>
     <message>
-        <source>Quit</source>
-        <translation>Ukončit</translation>
-    </message>
-    <message>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
         <source>Reload current plugin source</source>
         <translation>Nahrát nynější přídavný modul znovu</translation>
+    </message>
+    <message>
+        <source>Close Plugin Creator</source>
+        <translation>Zavřít tvůrce přídavných modulů</translation>
     </message>
 </context>
 <context>
@@ -9121,6 +9261,10 @@ se nezdařil:</translation>
     <message>
         <source>Shortcut:</source>
         <translation>Zkratka:</translation>
+    </message>
+    <message>
+        <source>Clear Shortcut</source>
+        <translation>Vyprázdnit zkratky</translation>
     </message>
 </context>
 <context>
@@ -9174,14 +9318,6 @@ se nezdařil:</translation>
         <translation>Animace</translation>
     </message>
     <message>
-        <source>Paths</source>
-        <translation>Cesty</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Canvas</source>
         <translation>Plátno</translation>
     </message>
@@ -9204,10 +9340,6 @@ se nezdařil:</translation>
     <message>
         <source>Miscellaneous</source>
         <translation>Různé</translation>
-    </message>
-    <message>
-        <source>Note Entry</source>
-        <translation>Vkládání not</translation>
     </message>
     <message>
         <source>Enable MIDI input</source>
@@ -9570,10 +9702,6 @@ se nezdařil:</translation>
         <translation>Zastavit</translation>
     </message>
     <message>
-        <source>Note entry</source>
-        <translation>Vkládání not</translation>
-    </message>
-    <message>
         <source>Instrument list 2:</source>
         <translation>Seznam nástrojů 2:</translation>
     </message>
@@ -9610,34 +9738,6 @@ se nezdařil:</translation>
         <translation>Dvojitá tečka</translation>
     </message>
     <message>
-        <source>Image folder:</source>
-        <translation>Složka pro obrázek:</translation>
-    </message>
-    <message>
-        <source>Score folder:</source>
-        <translation>Složka pro notový zápis:</translation>
-    </message>
-    <message>
-        <source>Style folder:</source>
-        <translation>Složka pro styl:</translation>
-    </message>
-    <message>
-        <source>Template folder:</source>
-        <translation>Složka pro předlohu:</translation>
-    </message>
-    <message>
-        <source>Plugin folder:</source>
-        <translation>Složka pro přídavný modul:</translation>
-    </message>
-    <message>
-        <source>Soundfont folders:</source>
-        <translation>Složky se zvukovými bankami:</translation>
-    </message>
-    <message>
-        <source>SFZ folders:</source>
-        <translation>Složky s SFZ:</translation>
-    </message>
-    <message>
         <source>Save every:</source>
         <translation>Uložit každé:</translation>
     </message>
@@ -9653,10 +9753,6 @@ se nezdařil:</translation>
     <message>
         <source>Resolution DPI:</source>
         <translation>Rozlišení (DPI)</translation>
-    </message>
-    <message>
-        <source>Check for new versions of MuseScore on startup:</source>
-        <translation>Při spuštění provést zjišťování nové verze MuseScore:</translation>
     </message>
     <message>
         <source>Port number:</source>
@@ -9792,14 +9888,6 @@ se nezdařil:</translation>
         <translation>Otevře okenní dialog pro výběr složky pro přídavný modul</translation>
     </message>
     <message>
-        <source>Soundfont folders</source>
-        <translation>Složky se zvukovými bankami</translation>
-    </message>
-    <message>
-        <source>Insert path to soundfont folders</source>
-        <translation>Vložit cestu pro složky se zvukovými bankami</translation>
-    </message>
-    <message>
         <source>Image folder</source>
         <translation>Složka pro obrázek</translation>
     </message>
@@ -9816,24 +9904,8 @@ se nezdařil:</translation>
         <translation>Otevře okenní dialog pro výběr složky pro předlohu</translation>
     </message>
     <message>
-        <source>SFZ folders</source>
-        <translation>Složky s SFZ</translation>
-    </message>
-    <message>
-        <source>Insert path to SFZ folders</source>
-        <translation>Vložit cestu pro složky SFZ</translation>
-    </message>
-    <message>
         <source>Opens a folder dialog for selecting the image folder</source>
         <translation>Otevře okenní dialog pro výběr složky pro obrázek</translation>
-    </message>
-    <message>
-        <source>Opens a dialog for configuring the soundfont folders</source>
-        <translation>Otevře okenní dialog pro nastavení složek se zvukovými bankami</translation>
-    </message>
-    <message>
-        <source>Opens a dialog for configuring the SFZ folders</source>
-        <translation>Otevře okenní dialog pro nastavení složek SFZ</translation>
     </message>
     <message>
         <source>Canvas Tab</source>
@@ -9898,10 +9970,6 @@ se nezdařil:</translation>
     <message>
         <source>Paper Color</source>
         <translation>Barva papíru</translation>
-    </message>
-    <message>
-        <source>Note Entry Tab</source>
-        <translation>Karta pro vkládání not</translation>
     </message>
     <message>
         <source>Enable MIDI Input</source>
@@ -9986,14 +10054,6 @@ se nezdařil:</translation>
     <message>
         <source>Stop record</source>
         <translation>Zastavit záznam</translation>
-    </message>
-    <message>
-        <source>Note entry is active</source>
-        <translation>Vkládání not je činné</translation>
-    </message>
-    <message>
-        <source>Note entry record</source>
-        <translation>Záznam vložení noty</translation>
     </message>
     <message>
         <source>16th note is active</source>
@@ -10196,14 +10256,6 @@ se nezdařil:</translation>
         <translation>Karta pro aktualizaci</translation>
     </message>
     <message>
-        <source>Check for new versions of MuseScore on startup</source>
-        <translation>Při spuštění provést zjišťování nové verze MuseScore</translation>
-    </message>
-    <message>
-        <source>Choose interval</source>
-        <translation>Vybrat interval</translation>
-    </message>
-    <message>
         <source>Eighth note</source>
         <translation>Osminová nota</translation>
     </message>
@@ -10315,6 +10367,74 @@ se nezdařil:</translation>
         <source>Undo</source>
         <translation>Zpět</translation>
     </message>
+    <message>
+        <source>Play whole chord when adding note</source>
+        <translation>Přehrávat celý akord při přidávání noty</translation>
+    </message>
+    <message>
+        <source>SoundFont folders</source>
+        <translation>Složky se zvukovými bankami</translation>
+    </message>
+    <message>
+        <source>Insert path to SoundFont folders</source>
+        <translation>Vložit cestu pro složky se zvukovými bankami</translation>
+    </message>
+    <message>
+        <source>Opens a dialog for configuring the SoundFont folders</source>
+        <translation>Otevře okenní dialog pro nastavení složek se zvukovými bankami</translation>
+    </message>
+    <message>
+        <source>Note Input Tab</source>
+        <translation>Karta pro vkládání not</translation>
+    </message>
+    <message>
+        <source>Note Input</source>
+        <translation>Vkládání not</translation>
+    </message>
+    <message>
+        <source>Note input</source>
+        <translation>Vkládání not</translation>
+    </message>
+    <message>
+        <source>Note input is active</source>
+        <translation>Vkládání not je činné</translation>
+    </message>
+    <message>
+        <source>Note input record</source>
+        <translation>Záznam vkládání not</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>Složky</translation>
+    </message>
+    <message>
+        <source>Images:</source>
+        <translation>Obrázky:</translation>
+    </message>
+    <message>
+        <source>Scores:</source>
+        <translation>Notové zápisy:</translation>
+    </message>
+    <message>
+        <source>Styles:</source>
+        <translation>Styly:</translation>
+    </message>
+    <message>
+        <source>Templates:</source>
+        <translation>Předlohy:</translation>
+    </message>
+    <message>
+        <source>Plugins:</source>
+        <translation>Přídavné moduly:</translation>
+    </message>
+    <message>
+        <source>SoundFonts:</source>
+        <translation>Zvukové banky:</translation>
+    </message>
+    <message>
+        <source>Check for new version of MuseScore</source>
+        <translation>Podívat se po nové verzi MuseScore</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10382,56 +10502,12 @@ Vyberte, prosím, nějakou notu nebo pomlku a zkuste to ještě jednou
         <translation>Bicí 5 linek</translation>
     </message>
     <message>
-        <source>Tab. 6-str simple</source>
-        <translation>Tabulatura 6 strunná jednoduchá</translation>
-    </message>
-    <message>
-        <source>Tab. 6-str common</source>
-        <translation>Tabulatura 6 strunná obecná</translation>
-    </message>
-    <message>
-        <source>Tab. 6-str full</source>
-        <translation>Tabulatura 6 strunná celá</translation>
-    </message>
-    <message>
-        <source>Tab. 4-str simple</source>
-        <translation>Tabulatura 4 strunná jednoduchá</translation>
-    </message>
-    <message>
-        <source>Tab. 4-str common</source>
-        <translation>Tabulatura 4 strunná obecná</translation>
-    </message>
-    <message>
-        <source>Tab. 4-str full</source>
-        <translation>Tabulatura 4 strunná celá</translation>
-    </message>
-    <message>
         <source>Tab. ukulele</source>
         <translation>Tabulatura ukulele</translation>
     </message>
     <message>
-        <source>Tab. 6-str Italian</source>
-        <translation>Tabulatura 6 strunná italská</translation>
-    </message>
-    <message>
-        <source>Tab. 6-str French</source>
-        <translation>Tabulatura 6 strunná francouzská</translation>
-    </message>
-    <message>
         <source>Perc. 1 line</source>
         <translation>Bicí 1 linka</translation>
-    </message>
-    <message>
-        <source>Tab. 5-str simple</source>
-        <translation>Tabulatura 5 strunná jednoduchá</translation>
-    </message>
-    <message>
-        <source>Tab. 5-str common</source>
-        <translation>Tabulatura 5 strunná obecná</translation>
-    </message>
-    <message>
-        <source>Tab. 5-str full</source>
-        <translation>Tabulatura 5 strunná celá</translation>
     </message>
     <message>
         <source>Cannot open chord description:
@@ -10506,7 +10582,7 @@ Navštivte &lt;a href=&quot;http://musescore.org&quot;&gt;stránky MuseScore&lt;
 </translation>
     </message>
     <message>
-        <source>Can't find rootfile
+        <source>Can&apos;t find rootfile
 %1</source>
         <translation>Nelze najít rootfile
 %1</translation>
@@ -10630,6 +10706,54 @@ Navštivte &lt;a href=&quot;http://musescore.org&quot;&gt;stránky MuseScore&lt;
         <source>Tab. balalaika</source>
         <translation>Tab. Balalajka</translation>
     </message>
+    <message>
+        <source>Tab. 6-str. simple</source>
+        <translation>Tabulatura 6 strunná jednoduchá</translation>
+    </message>
+    <message>
+        <source>Tab. 6-str. common</source>
+        <translation>Tabulatura 6 strunná obecná</translation>
+    </message>
+    <message>
+        <source>Tab. 6-str. full</source>
+        <translation>Tabulatura 6 strunná celá</translation>
+    </message>
+    <message>
+        <source>Tab. 4-str. simple</source>
+        <translation>Tabulatura 4 strunná jednoduchá</translation>
+    </message>
+    <message>
+        <source>Tab. 4-str. common</source>
+        <translation>Tabulatura 4 strunná obecná</translation>
+    </message>
+    <message>
+        <source>Tab. 4-str. full</source>
+        <translation>Tabulatura 4 strunná celá</translation>
+    </message>
+    <message>
+        <source>Tab. 5-str. simple</source>
+        <translation>Tabulatura 5 strunná jednoduchá</translation>
+    </message>
+    <message>
+        <source>Tab. 5-str. common</source>
+        <translation>Tabulatura 5 strunná obecná</translation>
+    </message>
+    <message>
+        <source>Tab. 5-str. full</source>
+        <translation>Tabulatura 5 strunná celá</translation>
+    </message>
+    <message>
+        <source>Tab. 6-str. Italian</source>
+        <translation>Tabulatura 6 strunná italská</translation>
+    </message>
+    <message>
+        <source>Tab. 6-str. French</source>
+        <translation>Tabulatura 6 strunná francouzská</translation>
+    </message>
+    <message>
+        <source>File corrupted %1</source>
+        <translation>Soubor poškozen %1</translation>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10714,30 +10838,30 @@ se nezdařilo:</translation>
         <translation>Soubory MuseScore (*.album)</translation>
     </message>
     <message>
-        <source>Soundfont installed</source>
-        <translation>Zvuková banka nainstalována</translation>
-    </message>
-    <message>
-        <source>Install Soundfont</source>
-        <translation>Instalovat zvukovou banku</translation>
-    </message>
-    <message>
-        <source>Do you want to install the soundfont %1?</source>
-        <translation>Chcete nainstalovat zvukovou banku %1?</translation>
-    </message>
-    <message>
         <source>Overwrite?</source>
         <translation>Přepsat?</translation>
-    </message>
-    <message>
-        <source>Soundfont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
-        <translation>Zvuková banka nainstalována. Jděte, prosím, do Pohled -&gt; Syntetizátor pro její přidání a do Pohled -&gt; Směšovač pro výběr zvuku nějakého nástroje.</translation>
     </message>
     <message>
         <source>%1 already exists.
 Do you want to overwrite it?</source>
         <translation>%1 již existuje.
 Chcete ji nahradit?</translation>
+    </message>
+    <message>
+        <source>Install SoundFont</source>
+        <translation>Instalovat zvukovou banku</translation>
+    </message>
+    <message>
+        <source>Do you want to install the SoundFont %1?</source>
+        <translation>Chcete nainstalovat zvukovou banku %1?</translation>
+    </message>
+    <message>
+        <source>SoundFont installed</source>
+        <translation>Zvuková banka nainstalována</translation>
+    </message>
+    <message>
+        <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
+        <translation>Zvuková banka nainstalována. Jděte, prosím, do Pohled -&gt; Syntetizátor pro její přidání a do Pohled -&gt; Směšovač pro výběr zvuku nějakého nástroje.</translation>
     </message>
 </context>
 <context>
@@ -10779,10 +10903,14 @@ Chcete ji nahradit?</translation>
     </message>
 </context>
 <context>
-    <name>ScoreBrowser</name>
+    <name>Rest</name>
     <message>
-        <source>Form</source>
-        <translation>Formulář</translation>
+        <source>Voice: %1</source>
+        <translation>Hlas: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Doba trvání: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10912,7 +11040,7 @@ Chcete ji nahradit?</translation>
 <context>
     <name>SfListDialog</name>
     <message>
-        <source>Soundfont Files</source>
+        <source>SoundFont Files</source>
         <translation>Složky se zvukovými bankami</translation>
     </message>
 </context>
@@ -11048,10 +11176,6 @@ Chcete ji nahradit?</translation>
         <translation>Rejstřík Aeolus</translation>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation>Změnit rejstřík:</translation>
-    </message>
-    <message>
         <source>III</source>
         <translation>III</translation>
     </message>
@@ -11068,250 +11192,8 @@ Chcete ji nahradit?</translation>
 8</translation>
     </message>
     <message>
-        <source>Quinta-
-dena 8</source>
-        <translation>Kvintaadena
-8</translation>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation>Suabile
-8</translation>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation>Trubková flétna
-4</translation>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation>Sladká flétna (Flauto Dolce)
-4</translation>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation>Kvintová flétna
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation>Super-
-oktáva 2</translation>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation>Sifflet - hvízdající flétna
-1</translation>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation>Činel
-VI</translation>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>Hoboj</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>Tremulant</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation>Harmonická
-flétna 8</translation>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation>Sladká flétna
-Flauto Dolce 4</translation>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation>Nasard
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation>Ottavina
-2</translation>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation>Tertia
-1 3/5</translation>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation>Sesqui
-altera</translation>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation>Septima</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>Žádný</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation>Křivý roh</translation>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation>Melodia</translation>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation>II+III</translation>
-    </message>
-    <message>
         <source>PushButton</source>
         <translation>Tlačítko</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation>I</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation>Principal
-4</translation>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation>Oktáva
-2</translation>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation>Oktáva
-1</translation>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation>Quinta
-5 1/3</translation>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation>Quinta
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation>Tibia
-8</translation>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation>Celesta
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation>Flétna
-8</translation>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation>Flétna
-4</translation>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation>Flétna
-2</translation>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation>Mixtura</translation>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>Trubka</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation>I+II</translation>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation>I+III</translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation>Subbass
-16</translation>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation>Principal
-16</translation>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation>Fagot
-16</translation>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation>Pozoun (trombón)
-16</translation>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation>Bombarda
-32</translation>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation>P+I</translation>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation>P+II</translation>
-    </message>
-    <message>
-        <source>P+III</source>
-        <translation>P+III</translation>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
@@ -11395,8 +11277,12 @@ altera</translation>
         <translation>Zahajovací středisko</translation>
     </message>
     <message>
-        <source>&lt;a href=&quot;#&quot;&gt;Open an existing score&lt;/a&gt;</source>
-        <translation>&lt;a href=&quot;#&quot;&gt;Otevřít stávající notový zápis&lt;/a&gt;</translation>
+        <source>Open a score...</source>
+        <translation>Otevřít notový zápis...</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Zavřít</translation>
     </message>
 </context>
 <context>
@@ -11476,6 +11362,30 @@ altera</translation>
     <message>
         <source>Load from score</source>
         <translation>Nahrát z notového zápisu</translation>
+    </message>
+    <message>
+        <source>Use up and down arrows to modify</source>
+        <translation>Použít šipek nahoru a dolů pro změnu hodnoty</translation>
+    </message>
+    <message>
+        <source>Metronome gain</source>
+        <translation>Zesílení metronomu</translation>
+    </message>
+    <message>
+        <source>Effect A</source>
+        <translation>Efekt A</translation>
+    </message>
+    <message>
+        <source>Effect B</source>
+        <translation>Efekt B</translation>
+    </message>
+    <message>
+        <source>Hertz</source>
+        <translation>Hertz</translation>
+    </message>
+    <message>
+        <source>Master tuning</source>
+        <translation>Hlavní ladění</translation>
     </message>
 </context>
 <context>
@@ -11638,10 +11548,6 @@ altera</translation>
         <translation>Zarovnat pravý okraj textu podle srovnávacího bodu</translation>
     </message>
     <message>
-        <source>Center text vertical to text baseline</source>
-        <translation>Vystředit text svisle vůči základní čáře textu</translation>
-    </message>
-    <message>
         <source>Center text vertical to reference point</source>
         <translation>Zarovnat text na střed svisle podle srovnávacího bodu</translation>
     </message>
@@ -11701,6 +11607,10 @@ altera</translation>
     <message>
         <source>Size follows &apos;Staff space&apos; setting</source>
         <translation>Velikost následuje nastavení jednotky mezery notové osnovy</translation>
+    </message>
+    <message>
+        <source>Align baseline of text to reference point</source>
+        <translation>Zarovnat účaří textu podle srovnávacího bodu</translation>
     </message>
 </context>
 <context>
@@ -11787,7 +11697,7 @@ altera</translation>
     </message>
     <message>
         <source>Rehearsal Mark</source>
-        <translation>Značka nácviku</translation>
+        <translation>Zkušební značka</translation>
     </message>
     <message>
         <source>Repeat Text Left</source>
@@ -11852,6 +11762,10 @@ altera</translation>
     <message>
         <source>RH Guitar Fingering</source>
         <translation>Prstoklad pravoruké kytary</translation>
+    </message>
+    <message>
+        <source>Pedal</source>
+        <translation>Pedál</translation>
     </message>
 </context>
 <context>
@@ -12463,64 +12377,20 @@ altera</translation>
         <translation>Popis</translation>
     </message>
     <message>
-        <source>Who can access this score?</source>
-        <translation>Kdo může přistupovat k tomuto notovému zápisu?</translation>
-    </message>
-    <message>
-        <source>Anyone</source>
-        <translation>Kdokoli</translation>
-    </message>
-    <message>
-        <source>Just you</source>
-        <translation>Pouze vy</translation>
-    </message>
-    <message>
         <source>License</source>
         <translation>Povolení</translation>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://musescore.com/help/license&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;What does this mean?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://musescore.com/help/license&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;Co to znamená?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Tags</source>
         <translation>Značky</translation>
     </message>
     <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:italic;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Use a comma to separate the tags&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:italic;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;K oddělení značek použijte čárku&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Respect the &lt;/span&gt;&lt;a href=&quot;http://musescore.com/community-guidelines&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;community guidelines&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;. Only make your scores accessible to anyone with permission from the right holders.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Dodržujte &lt;/span&gt;&lt;a href=&quot;http://musescore.com/community-guidelines&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;směrnice společenství&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;. Své notové zápisy zpřístupňujte pouze těm, kteří mají dovolení od držitelů práv.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>Update the existing score </source>
         <translation>Aktualizovat stávající notový zápis</translation>
+    </message>
+    <message>
+        <source>Make this score private</source>
+        <translation>Udělat tento notový zápis soukromým</translation>
     </message>
 </context>
 <context>
@@ -12659,11 +12529,11 @@ se nezdařil:</translation>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <source>Soundfont %1 already loaded</source>
+        <source>SoundFont %1 already loaded</source>
         <translation>Zvuková banka %1 již nahrána</translation>
     </message>
     <message>
-        <source>cannot load soundfont %1</source>
+        <source>Cannot load SoundFont %1</source>
         <translation>Nelze nahrát zvukovou banku %1</translation>
     </message>
 </context>
@@ -12797,20 +12667,12 @@ se nezdařil:</translation>
         <translation>Otevřít...</translation>
     </message>
     <message>
-        <source>File open</source>
-        <translation>Otevřít soubor</translation>
-    </message>
-    <message>
         <source>Load score from file</source>
         <translation>Načíst notový zápis ze souboru</translation>
     </message>
     <message>
         <source>Save</source>
         <translation>Uložit</translation>
-    </message>
-    <message>
-        <source>File save</source>
-        <translation>Uložit soubor</translation>
     </message>
     <message>
         <source>Save score to file</source>
@@ -12821,10 +12683,6 @@ se nezdařil:</translation>
         <translation>Uložit jako...</translation>
     </message>
     <message>
-        <source>File save as</source>
-        <translation>Uložit soubor jako</translation>
-    </message>
-    <message>
         <source>Save score under a new file name</source>
         <translation>Uložit notový zápis pod novým souborovým názvem</translation>
     </message>
@@ -12833,20 +12691,12 @@ se nezdařil:</translation>
         <translation>Uložit výběr...</translation>
     </message>
     <message>
-        <source>Save Selection</source>
-        <translation>Uložit výběr</translation>
-    </message>
-    <message>
         <source>Save current selection as new score</source>
         <translation>Uložit nynější výběr jako nový notový zápis</translation>
     </message>
     <message>
         <source>Save a Copy...</source>
         <translation>Uložit kopii...</translation>
-    </message>
-    <message>
-        <source>File save a copy</source>
-        <translation>Uložit kopii souboru</translation>
     </message>
     <message>
         <source>Save a copy of the score in addition to the current file</source>
@@ -12869,10 +12719,6 @@ se nezdařil:</translation>
         <translation>Vyvést výtahy hlasů...</translation>
     </message>
     <message>
-        <source>Export Parts</source>
-        <translation>Vyvést výtahy hlasů</translation>
-    </message>
-    <message>
         <source>Save a copy of the score&apos;s parts in various formats</source>
         <translation>Uložit kopie výtahů hlasů notového zápisu v různých formátech</translation>
     </message>
@@ -12881,20 +12727,12 @@ se nezdařil:</translation>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <source>File close</source>
-        <translation>Zavřít soubor</translation>
-    </message>
-    <message>
         <source>Close current score</source>
         <translation>Zavřít nynější notový zápis</translation>
     </message>
     <message>
         <source>New...</source>
         <translation>Nový...</translation>
-    </message>
-    <message>
-        <source>File new</source>
-        <translation>Nový soubor</translation>
     </message>
     <message>
         <source>Create new score</source>
@@ -12951,10 +12789,6 @@ se nezdařil:</translation>
     <message>
         <source>Note Input</source>
         <translation>Vkládání not</translation>
-    </message>
-    <message>
-        <source>Note input mode</source>
-        <translation>Režim vkládání not</translation>
     </message>
     <message>
         <source>Unison Above</source>
@@ -13273,48 +13107,16 @@ se nezdařil:</translation>
         <translation>Staccato</translation>
     </message>
     <message>
-        <source>Add staccato</source>
-        <translation>Přidat staccato</translation>
-    </message>
-    <message>
         <source>Tenuto</source>
         <translation>Tenuto</translation>
-    </message>
-    <message>
-        <source>Add tenuto</source>
-        <translation>Přidat tenuto</translation>
     </message>
     <message>
         <source>Trill</source>
         <translation>Trylek</translation>
     </message>
     <message>
-        <source>Add trill</source>
-        <translation>Přidat trylek</translation>
-    </message>
-    <message>
         <source>Marcato</source>
         <translation>Marcato</translation>
-    </message>
-    <message>
-        <source>Add marcato</source>
-        <translation>Přidat marcato</translation>
-    </message>
-    <message>
-        <source>Add More Stretch</source>
-        <translation>Natáhnout</translation>
-    </message>
-    <message>
-        <source>Add more stretch</source>
-        <translation>Roztáhnout</translation>
-    </message>
-    <message>
-        <source>Add Less Stretch</source>
-        <translation>Stáhnout</translation>
-    </message>
-    <message>
-        <source>Add less stretch</source>
-        <translation>Srazit</translation>
     </message>
     <message>
         <source>Reset Beam Mode</source>
@@ -13339,10 +13141,6 @@ se nezdařil:</translation>
     <message>
         <source>Pitch up or move text or articulation up</source>
         <translation>Výška tónu nahoru nebo přesunout text nebo artikulaci nahoru</translation>
-    </message>
-    <message>
-        <source>Diatonic up</source>
-        <translation>Diatonický nahoru</translation>
     </message>
     <message>
         <source>Diatonic pitch up</source>
@@ -13389,16 +13187,8 @@ se nezdařil:</translation>
         <translation>Výška tónu dolů nebo přesunout text nebo artikulaci dolů</translation>
     </message>
     <message>
-        <source>Diatonic down</source>
-        <translation>Diatonický dolů</translation>
-    </message>
-    <message>
         <source>Diatonic pitch down</source>
         <translation>Diatonický půltónový krok dolů</translation>
-    </message>
-    <message>
-        <source>Down octave</source>
-        <translation>O oktávu dolů</translation>
     </message>
     <message>
         <source>Pitch down octave</source>
@@ -13429,16 +13219,8 @@ se nezdařil:</translation>
         <translation>Dolů</translation>
     </message>
     <message>
-        <source>Previous chord</source>
-        <translation>Předchozí akord</translation>
-    </message>
-    <message>
         <source>Go to previous chord or move text left</source>
         <translation>Jít na předchozí akord nebo posunout text doleva</translation>
-    </message>
-    <message>
-        <source>Previous measure</source>
-        <translation>Předchozí takt</translation>
     </message>
     <message>
         <source>Go to previous measure or move text left</source>
@@ -13449,16 +13231,8 @@ se nezdařil:</translation>
         <translation>Předchozí notová osnova nebo hlas</translation>
     </message>
     <message>
-        <source>Next chord</source>
-        <translation>Další akord</translation>
-    </message>
-    <message>
         <source>Go to next chord or move text right</source>
         <translation>Jít na další akord nebo posunout text doprava</translation>
-    </message>
-    <message>
-        <source>Next measure</source>
-        <translation>Další takt</translation>
     </message>
     <message>
         <source>Go to next measure or move text right</source>
@@ -13519,22 +13293,6 @@ se nezdařil:</translation>
     <message>
         <source>Add staff below to selection</source>
         <translation>Přidat notovou osnovu ležící níže do výběru</translation>
-    </message>
-    <message>
-        <source>Page: previous</source>
-        <translation>Strana: Předchozí</translation>
-    </message>
-    <message>
-        <source>Page: next</source>
-        <translation>Strana: Další</translation>
-    </message>
-    <message>
-        <source>Page: top</source>
-        <translation>Strana: Začátek</translation>
-    </message>
-    <message>
-        <source>Page: end</source>
-        <translation>Strana: Konec</translation>
     </message>
     <message>
         <source>Slur</source>
@@ -13697,40 +13455,20 @@ se nezdařil:</translation>
         <translation>Longa</translation>
     </message>
     <message>
-        <source>Note duration: longa</source>
-        <translation>Doba trvání noty: Longa</translation>
-    </message>
-    <message>
         <source>Double whole note</source>
         <translation>Zdvojená celá nota</translation>
-    </message>
-    <message>
-        <source>Note duration: double whole</source>
-        <translation>Doba trvání noty: Zdvojená celá nota</translation>
     </message>
     <message>
         <source>Whole note</source>
         <translation>Celá nota</translation>
     </message>
     <message>
-        <source>Note duration: whole</source>
-        <translation>Doba trvání noty: Celá nota</translation>
-    </message>
-    <message>
         <source>Half note</source>
         <translation>Půlová nota</translation>
     </message>
     <message>
-        <source>Note duration: half</source>
-        <translation>Doba trvání noty: Půlová nota</translation>
-    </message>
-    <message>
         <source>Quarter note</source>
         <translation>Čtvrťová nota</translation>
-    </message>
-    <message>
-        <source>Note duration: quarter</source>
-        <translation>Doba trvání noty: Čtvrťová nota</translation>
     </message>
     <message>
         <source>16th note</source>
@@ -13777,68 +13515,32 @@ se nezdařil:</translation>
         <translation>Tečka</translation>
     </message>
     <message>
-        <source>Note duration: augmentation dot</source>
-        <translation>Doba trvání noty: Tečka</translation>
-    </message>
-    <message>
         <source>Double augmentation dot</source>
         <translation>Dvojitá tečka</translation>
-    </message>
-    <message>
-        <source>Note duration: double augmentation dot</source>
-        <translation>Doba trvání noty: Dvojitá tečka</translation>
     </message>
     <message>
         <source>Tie</source>
         <translation>Ligatura</translation>
     </message>
     <message>
-        <source>Note duration: tie</source>
-        <translation>Doba trvání noty: Ligatura</translation>
-    </message>
-    <message>
-        <source>Note entry: rest</source>
-        <translation>Zadání noty: Pomlka</translation>
-    </message>
-    <message>
         <source>Double sharp</source>
         <translation>Dvojitý křížek</translation>
-    </message>
-    <message>
-        <source>Note entry: double sharp</source>
-        <translation>Zadání noty: Dvojitý křížek</translation>
     </message>
     <message>
         <source>Sharp</source>
         <translation>Křížek</translation>
     </message>
     <message>
-        <source>Note entry: sharp</source>
-        <translation>Zadání noty: Křížek</translation>
-    </message>
-    <message>
         <source>Natural</source>
         <translation>Odrážka</translation>
-    </message>
-    <message>
-        <source>Note entry: natural</source>
-        <translation>Zadání noty: Odrážka</translation>
     </message>
     <message>
         <source>Flat</source>
         <translation>Béčko</translation>
     </message>
     <message>
-        <source>Note entry: flat</source>
-        <translation>Zadání noty: Béčko</translation>
-    </message>
-    <message>
         <source>Double flat</source>
         <translation>Dvojité béčko</translation>
-    </message>
-    <message>
-        <source>Note entry: double flat</source>
-        <translation>Zadání noty: Dvojité béčko</translation>
     </message>
     <message>
         <source>Acciaccatura</source>
@@ -13907,10 +13609,6 @@ se nezdařil:</translation>
     <message>
         <source>Voice 4</source>
         <translation>Hlas 4</translation>
-    </message>
-    <message>
-        <source>MIDI input</source>
-        <translation>Vstup MIDI</translation>
     </message>
     <message>
         <source>Enable MIDI input</source>
@@ -14050,11 +13748,11 @@ se nezdařil:</translation>
     </message>
     <message>
         <source>Rehearsal Mark</source>
-        <translation>Značka nácviku</translation>
+        <translation>Zkušební značka</translation>
     </message>
     <message>
         <source>Add rehearsal mark</source>
-        <translation>Přidat značku nácviku</translation>
+        <translation>Přidat zkušební značku</translation>
     </message>
     <message>
         <source>Picture</source>
@@ -14277,34 +13975,6 @@ se nezdařil:</translation>
         <translation>Vložit zvláštní znaky...</translation>
     </message>
     <message>
-        <source>Insert Special Characters</source>
-        <translation>Vložit zvláštní znaky</translation>
-    </message>
-    <message>
-        <source>Whole rest</source>
-        <translation>Celá pomlka</translation>
-    </message>
-    <message>
-        <source>Note entry: whole rest</source>
-        <translation>Zadání noty: Celá pomlka</translation>
-    </message>
-    <message>
-        <source>Half rest</source>
-        <translation>Půlová pomlka</translation>
-    </message>
-    <message>
-        <source>Note entry: half rest</source>
-        <translation>Zadání noty: Půlová pomlka</translation>
-    </message>
-    <message>
-        <source>Quarter rest</source>
-        <translation>Čtvrťová pomlka</translation>
-    </message>
-    <message>
-        <source>Note entry: quarter rest</source>
-        <translation>Zadání noty: Čtvrťová pomlka</translation>
-    </message>
-    <message>
         <source>Backspace</source>
         <translation>Backspace</translation>
     </message>
@@ -14418,7 +14088,7 @@ se nezdařil:</translation>
     </message>
     <message>
         <source>Create new revision</source>
-        <translation>Vytvořit nové zpracování</translation>
+        <translation>Vytvořit nové přepracování</translation>
     </message>
     <message>
         <source>Show OMR image</source>
@@ -14457,10 +14127,6 @@ se nezdařil:</translation>
         <translation>Nastavení strany...</translation>
     </message>
     <message>
-        <source>Page Settings</source>
-        <translation>Nastavení strany</translation>
-    </message>
-    <message>
         <source>Album...</source>
         <translation>Album...</translation>
     </message>
@@ -14485,28 +14151,12 @@ se nezdařil:</translation>
         <translation>Předchozí notový zápis</translation>
     </message>
     <message>
-        <source>Plugin Creator</source>
-        <translation>Tvůrce přídavných modulů</translation>
-    </message>
-    <message>
-        <source>Plugin Manager</source>
-        <translation>Správce přídavných modulů</translation>
-    </message>
-    <message>
         <source>Inspector</source>
         <translation>Dozorce</translation>
     </message>
     <message>
         <source>Show inspector</source>
         <translation>Ukázat dozorce</translation>
-    </message>
-    <message>
-        <source>Resource Manager</source>
-        <translation>Správce zdrojů</translation>
-    </message>
-    <message>
-        <source>Show OMR Panel</source>
-        <translation>Ukázat panel OMR</translation>
     </message>
     <message>
         <source>Loop</source>
@@ -14521,22 +14171,6 @@ se nezdařil:</translation>
         <translation>Přehrávat ve smyčce</translation>
     </message>
     <message>
-        <source>Loop in</source>
-        <translation>Začátek smyčky</translation>
-    </message>
-    <message>
-        <source>Set loop In position</source>
-        <translation>Určit začátek smyčky</translation>
-    </message>
-    <message>
-        <source>Loop out</source>
-        <translation>Konec smyčky</translation>
-    </message>
-    <message>
-        <source>Set loop Out position</source>
-        <translation>Určit konec smyčky</translation>
-    </message>
-    <message>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
@@ -14547,10 +14181,6 @@ se nezdařil:</translation>
     <message>
         <source>Play metronome during playback</source>
         <translation>Hrát metronom během přehrávání</translation>
-    </message>
-    <message>
-        <source>Count-in</source>
-        <translation>Počítat</translation>
     </message>
     <message>
         <source>Toggle count-in playback</source>
@@ -14609,10 +14239,6 @@ se nezdařil:</translation>
         <translation>Nastavit neviditelné</translation>
     </message>
     <message>
-        <source>Note anchored Textline</source>
-        <translation>K notě ukotvený textový řádek</translation>
-    </message>
-    <message>
         <source>Lock Score</source>
         <translation>Zamknout notový zápis</translation>
     </message>
@@ -14621,68 +14247,16 @@ se nezdařil:</translation>
         <translation>Longa (TAB)</translation>
     </message>
     <message>
-        <source>Note duration: longa (TAB)</source>
-        <translation>Doba trvání noty: Longa (TAB)</translation>
-    </message>
-    <message>
-        <source>Double whole note (TAB)</source>
-        <translation>Zdvojená celá nota (TAB)</translation>
-    </message>
-    <message>
-        <source>Note duration: double whole (TAB)</source>
-        <translation>Doba trvání noty: Zdvojená celá nota (TAB)</translation>
-    </message>
-    <message>
-        <source>Whole note (TAB)</source>
-        <translation>Celá nota (TAB)</translation>
-    </message>
-    <message>
-        <source>Note duration: whole (TAB)</source>
-        <translation>Doba trvání noty: Celá nota (TAB)</translation>
-    </message>
-    <message>
-        <source>Half note (TAB)</source>
-        <translation>Půlová nota (TAB)</translation>
-    </message>
-    <message>
-        <source>Note duration: half (TAB)</source>
-        <translation>Doba trvání noty: Půlová nota (TAB)</translation>
-    </message>
-    <message>
-        <source>Quarter note (TAB)</source>
-        <translation>Čtvrťová nota (TAB)</translation>
-    </message>
-    <message>
-        <source>Note duration: quarter (TAB)</source>
-        <translation>Doba trvání noty: Čtvrťová nota (TAB)</translation>
-    </message>
-    <message>
-        <source>16th note (TAB)</source>
-        <translation>Šestnáctinová nota (TAB)</translation>
-    </message>
-    <message>
         <source>Note duration: 16th (TAB)</source>
         <translation>Doba trvání noty: Šestnáctinová nota (TAB)</translation>
-    </message>
-    <message>
-        <source>32nd note (TAB)</source>
-        <translation>Dvaatřicetinová nota (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 32nd (TAB)</source>
         <translation>Doba trvání noty: Dvaatřicetinová nota (TAB)</translation>
     </message>
     <message>
-        <source>64th note (TAB)</source>
-        <translation>Čtyřiašedesátinová nota (TAB)</translation>
-    </message>
-    <message>
         <source>Note duration: 64th (TAB)</source>
         <translation>Doba trvání noty: Čtyřiašedesátinová nota (TAB)</translation>
-    </message>
-    <message>
-        <source>128th note (TAB)</source>
-        <translation>Stodvacetiosminová nota (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 128th (TAB)</source>
@@ -14705,20 +14279,8 @@ se nezdařil:</translation>
         <translation>Zadat pomlku (TAB)</translation>
     </message>
     <message>
-        <source>Note entry: rest (TAB)</source>
-        <translation>Zadání noty: Pomlka (TAB)</translation>
-    </message>
-    <message>
-        <source>String above (TAB)</source>
-        <translation>Struna nad (TAB)</translation>
-    </message>
-    <message>
         <source>Select string above (TAB only)</source>
         <translation>Vybrat strunu nad (pouze TAB)</translation>
-    </message>
-    <message>
-        <source>String below (TAB)</source>
-        <translation>Struna pod (TAB)</translation>
     </message>
     <message>
         <source>Select string below (TAB only)</source>
@@ -14805,86 +14367,6 @@ se nezdařil:</translation>
         <translation>Přidat pražec 9 k nynější struně (pouze TAB)</translation>
     </message>
     <message>
-        <source>Longa advance (F.B./Harm.)</source>
-        <translation>Krok Longa (číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Advance of a longa (F.B./Harm. only)</source>
-        <translation>Pokrok v Longa (jen číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Breve advance (F.B./Harm.)</source>
-        <translation>Krok Breve (číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Advance of a double whole note (F.B./Harm. only)</source>
-        <translation>Pokrok v Breve - zdvojená celá nota (jen číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Whole note advance (F.B./Harm.)</source>
-        <translation>Celý notový krok (číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Advance of a whole note (F.B./Harm. only)</source>
-        <translation>Pokrok v celé notě (jen číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Half note advance (F.B./Harm.)</source>
-        <translation>Půlový notový krok (číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Advance of a half note (F.B./Harm. only)</source>
-        <translation>Pokrok v půlové notě (jen číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Quarter note advance (F.B./Harm.)</source>
-        <translation>Čtvrťový notový krok (číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Advance of a quarter note (F.B./Harm. only)</source>
-        <translation>Pokrok v čtvrťové notě (jen číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Eighth note advance (F.B./Harm.)</source>
-        <translation>Osminový notový krok (číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Advance of an eighth note (F.B./Harm. only)</source>
-        <translation>Pokrok v osminové notě (jen číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>16th note advance (F.B./Harm.)</source>
-        <translation>Šestnáctinový notový krok (číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Advance of a 16th note (F.B./Harm. only)</source>
-        <translation>Pokrok v šestnáctinové notě (jen číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>32nd note advance (F.B./Harm.)</source>
-        <translation>Dvaatřicetinový notový krok (číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Advance of a 32nd note (F.B./Harm. only)</source>
-        <translation>Pokrok v dvaatřicetinové notě (jen číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>64th note advance (F.B./Harm.)</source>
-        <translation>Čtyřiašedesátinový notový krok (číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Advance of a 64th note (F.B./Harm. only)</source>
-        <translation>Pokrok v čtyřiašedesátinové notě (jen číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Previous measure (F.B./Harm.)</source>
-        <translation>Předchozí takt (číslovaný bas/akord)</translation>
-    </message>
-    <message>
-        <source>Next measure (F.B./Harm.)</source>
-        <translation>Další takt (číslovaný bas/akord)</translation>
-    </message>
-    <message>
         <source>Insert Fretboard Diagram Frame</source>
         <translation>Vložit rámeček pro nákres hmatníku</translation>
     </message>
@@ -14919,18 +14401,6 @@ se nezdařil:</translation>
     <message>
         <source>Respell Pitches</source>
         <translation>Přepočítat posuvky</translation>
-    </message>
-    <message>
-        <source>bold face</source>
-        <translation>tučné</translation>
-    </message>
-    <message>
-        <source>italic</source>
-        <translation>kurzíva</translation>
-    </message>
-    <message>
-        <source>underline</source>
-        <translation>podtržené</translation>
     </message>
     <message>
         <source>Full Measure Rest</source>
@@ -15033,36 +14503,8 @@ se nezdařil:</translation>
         <translation>Šestnáctinový podtrámec</translation>
     </message>
     <message>
-        <source>Eighth rest</source>
-        <translation>Osminová pomlka</translation>
-    </message>
-    <message>
-        <source>Toggle screenshot mode</source>
-        <translation>Přepnout režim snímku obrazovky</translation>
-    </message>
-    <message>
-        <source>Eighth note (TAB)</source>
-        <translation>Osminová nota (TAB)</translation>
-    </message>
-    <message>
-        <source>Next element</source>
-        <translation>Další prvek</translation>
-    </message>
-    <message>
-        <source>Previous element</source>
-        <translation>Předchozí prvek</translation>
-    </message>
-    <message>
-        <source>First element</source>
-        <translation>První prvek</translation>
-    </message>
-    <message>
         <source>Go to the first element</source>
         <translation>Jít na první prvek</translation>
-    </message>
-    <message>
-        <source>Last element</source>
-        <translation>Poslední prvek</translation>
     </message>
     <message>
         <source>Go to the last element</source>
@@ -15093,36 +14535,8 @@ se nezdařil:</translation>
         <translation>Ukázat paletu se symboly</translation>
     </message>
     <message>
-        <source>Accessibility: next element</source>
-        <translation>Přístupnost: Další prvek</translation>
-    </message>
-    <message>
-        <source>Accessibility: previous element</source>
-        <translation>Přístupnost: Předchozí prvek</translation>
-    </message>
-    <message>
-        <source>Note duration: eighth</source>
-        <translation>Doba trvání noty: Osminová nota</translation>
-    </message>
-    <message>
         <source>Grace: eighth after</source>
         <translation>Ozdoba: Osminová nota po</translation>
-    </message>
-    <message>
-        <source>Note entry: eighth rest</source>
-        <translation>Zadání noty: Osminová pomlka</translation>
-    </message>
-    <message>
-        <source>Note duration: eighth (TAB)</source>
-        <translation>Doba trvání noty: Osminová nota (TAB)</translation>
-    </message>
-    <message>
-        <source>Add more stretch to selected measures</source>
-        <translation>Roztáhnout vybrané takty</translation>
-    </message>
-    <message>
-        <source>Add less stretch to selected measures</source>
-        <translation>Stáhnout vybrané takty</translation>
     </message>
     <message>
         <source>Enable snap to horizontal grid</source>
@@ -15165,10 +14579,6 @@ se nezdařil:</translation>
         <translation>Uložit na internet...</translation>
     </message>
     <message>
-        <source>File save online</source>
-        <translation>Uložení souboru na internetu</translation>
-    </message>
-    <message>
         <source>Save score on MuseScore.com</source>
         <translation>Uložit notový zápis na MuseScore.com</translation>
     </message>
@@ -15197,10 +14607,6 @@ se nezdařil:</translation>
         <translation>Přepnout rytmickou lomítkovou notaci</translation>
     </message>
     <message>
-        <source>Add/Remove Line Breaks</source>
-        <translation>Přidat/Odstranit zalomení řádků</translation>
-    </message>
-    <message>
         <source>Start Center</source>
         <translation>Zahajovací středisko</translation>
     </message>
@@ -15210,7 +14616,999 @@ se nezdařil:</translation>
     </message>
     <message>
         <source>Resequence Rehearsal Marks</source>
-        <translation>Roztřídit znovu značky opakování</translation>
+        <translation>Roztřídit znovu zkušební značky</translation>
+    </message>
+    <message>
+        <source>Increase Stretch</source>
+        <translation>Zvětšit natažení</translation>
+    </message>
+    <message>
+        <source>Increase stretch</source>
+        <translation>Zvětšit natažení</translation>
+    </message>
+    <message>
+        <source>Increase stretch of selected measures</source>
+        <translation>Zvětšit natažení vybraných taktů</translation>
+    </message>
+    <message>
+        <source>Decrease Stretch</source>
+        <translation>Zmenšit natažení</translation>
+    </message>
+    <message>
+        <source>Decrease stretch</source>
+        <translation>Zmenšit natažení</translation>
+    </message>
+    <message>
+        <source>Decrease stretch of selected measures</source>
+        <translation>Zmenšit natažení vybraných taktů</translation>
+    </message>
+    <message>
+        <source>Plugin Creator...</source>
+        <translation>Tvůrce přídavných modulů...</translation>
+    </message>
+    <message>
+        <source>Plugin Manager...</source>
+        <translation>Správce přídavných modulů...</translation>
+    </message>
+    <message>
+        <source>Resource Manager...</source>
+        <translation>Správce zdrojů...</translation>
+    </message>
+    <message>
+        <source>Add/Remove Line Breaks...</source>
+        <translation>Přidat/Odstranit zalomení řádků...</translation>
+    </message>
+    <message>
+        <source>File: Open</source>
+        <translation>Soubor: Otevřít</translation>
+    </message>
+    <message>
+        <source>File: Save</source>
+        <translation>Soubor: Uložit</translation>
+    </message>
+    <message>
+        <source>File: Save online</source>
+        <translation>Soubor: Uložit na internetu</translation>
+    </message>
+    <message>
+        <source>File: Save as</source>
+        <translation>Soubor: Uložit jako</translation>
+    </message>
+    <message>
+        <source>Save selection</source>
+        <translation>Uložit výběr</translation>
+    </message>
+    <message>
+        <source>File: Save a copy</source>
+        <translation>Soubor: Uložit kopii</translation>
+    </message>
+    <message>
+        <source>Export parts</source>
+        <translation>Vyvést výtahy hlasů</translation>
+    </message>
+    <message>
+        <source>File: Close</source>
+        <translation>Soubor: Zavřít</translation>
+    </message>
+    <message>
+        <source>File: New</source>
+        <translation>Soubor: Nový</translation>
+    </message>
+    <message>
+        <source>Note input</source>
+        <translation>Vkládání not</translation>
+    </message>
+    <message>
+        <source>Respell pitches</source>
+        <translation>Vypočítat posuvky znovu</translation>
+    </message>
+    <message>
+        <source>Flip Direction</source>
+        <translation>Obrátit směr</translation>
+    </message>
+    <message>
+        <source>Diatonic Up</source>
+        <translation>Diatonický nahoru</translation>
+    </message>
+    <message>
+        <source>Move Up</source>
+        <translation>Posunout nahoru</translation>
+    </message>
+    <message>
+        <source>Diatonic Down</source>
+        <translation>Diatonický dolů</translation>
+    </message>
+    <message>
+        <source>Down Octave</source>
+        <translation>O oktávu dolů</translation>
+    </message>
+    <message>
+        <source>Next Element</source>
+        <translation>Další prvek</translation>
+    </message>
+    <message>
+        <source>Accessibility: Next element</source>
+        <translation>Přístupnost: Další prvek</translation>
+    </message>
+    <message>
+        <source>Previous Element</source>
+        <translation>Předchozí prvek</translation>
+    </message>
+    <message>
+        <source>Accessibility: Previous element</source>
+        <translation>Přístupnost: Předchozí prvek</translation>
+    </message>
+    <message>
+        <source>First Element</source>
+        <translation>První prvek</translation>
+    </message>
+    <message>
+        <source>Last Element</source>
+        <translation>Poslední prvek</translation>
+    </message>
+    <message>
+        <source>Move Down</source>
+        <translation>Posun dolů</translation>
+    </message>
+    <message>
+        <source>Previous Chord</source>
+        <translation>Předchozí akord</translation>
+    </message>
+    <message>
+        <source>Previous Measure</source>
+        <translation>Předchozí takt</translation>
+    </message>
+    <message>
+        <source>Previous Staff or Voice</source>
+        <translation>Předchozí notová osnova nebo hlas</translation>
+    </message>
+    <message>
+        <source>Next Chord</source>
+        <translation>Další akord</translation>
+    </message>
+    <message>
+        <source>Next Measure</source>
+        <translation>Další takt</translation>
+    </message>
+    <message>
+        <source>Next Staff or Voice</source>
+        <translation>Další notová osnova nebo hlas</translation>
+    </message>
+    <message>
+        <source>Add Previous Chord to Selection</source>
+        <translation>Přidat předchozí akord do výběru</translation>
+    </message>
+    <message>
+        <source>Select to Beginning of Measure</source>
+        <translation>Vybrat po začátek taktu</translation>
+    </message>
+    <message>
+        <source>Add Next Chord to Selection</source>
+        <translation>Přidat další akord do výběru</translation>
+    </message>
+    <message>
+        <source>Select section</source>
+        <translation>Vybrat úsek</translation>
+    </message>
+    <message>
+        <source>Move Chord/Rest Right</source>
+        <translation>Posunout akord/pomlku doprava</translation>
+    </message>
+    <message>
+        <source>Move Chord/Rest left</source>
+        <translation>Posunout akord/pomlku doleva</translation>
+    </message>
+    <message>
+        <source>Select to Beginning of Line</source>
+        <translation>Vybrat po začátek řádku</translation>
+    </message>
+    <message>
+        <source>Select to End of Line</source>
+        <translation>Vybrat po konec řádku</translation>
+    </message>
+    <message>
+        <source>Select to Beginning of Score</source>
+        <translation>Vybrat po začátek notového zápisu</translation>
+    </message>
+    <message>
+        <source>Select to End of Score</source>
+        <translation>Vybrat po konec notového zápisu</translation>
+    </message>
+    <message>
+        <source>Add Staff Above to Selection</source>
+        <translation>Přidat notovou osnovu ležící výše do výběru</translation>
+    </message>
+    <message>
+        <source>Add Staff Below to Selection</source>
+        <translation>Přidat notovou osnovu ležící níže do výběru</translation>
+    </message>
+    <message>
+        <source>Page: Previous</source>
+        <translation>Strana: Předchozí</translation>
+    </message>
+    <message>
+        <source>Page: Next</source>
+        <translation>Strana: Další</translation>
+    </message>
+    <message>
+        <source>Page: Top</source>
+        <translation>Strana: Začátek</translation>
+    </message>
+    <message>
+        <source>Page: End</source>
+        <translation>Strana: Konec</translation>
+    </message>
+    <message>
+        <source>Full measure rest</source>
+        <translation>Celotaktová pomlka</translation>
+    </message>
+    <message>
+        <source>Delete selected measures</source>
+        <translation>Smazat vybrané takty</translation>
+    </message>
+    <message>
+        <source>Append one measure</source>
+        <translation>Připojit jeden takt</translation>
+    </message>
+    <message>
+        <source>Append text frame</source>
+        <translation>Připojit textový rámeček</translation>
+    </message>
+    <message>
+        <source>Insert fretboard diagram frame</source>
+        <translation>Vložit rámeček pro nákres hmatníku</translation>
+    </message>
+    <message>
+        <source>Append horizontal frame</source>
+        <translation>Připojit vodorovný rámeček</translation>
+    </message>
+    <message>
+        <source>Append vertical frame</source>
+        <translation>Připojit svislý rámeček</translation>
+    </message>
+    <message>
+        <source>Note duration: Longa</source>
+        <translation>Doba trvání noty: Longa</translation>
+    </message>
+    <message>
+        <source>Double Whole Note</source>
+        <translation>Zdvojená celá nota</translation>
+    </message>
+    <message>
+        <source>Note duration: Double whole</source>
+        <translation>Doba trvání noty: Zdvojená celá nota</translation>
+    </message>
+    <message>
+        <source>Whole Note</source>
+        <translation>Celá nota</translation>
+    </message>
+    <message>
+        <source>Note duration: Whole</source>
+        <translation>Doba trvání noty: Celá nota</translation>
+    </message>
+    <message>
+        <source>Half Note</source>
+        <translation>Půlová nota</translation>
+    </message>
+    <message>
+        <source>Note duration: Half</source>
+        <translation>Doba trvání noty: Půlová nota</translation>
+    </message>
+    <message>
+        <source>Quarter Note</source>
+        <translation>Čtvrťová nota</translation>
+    </message>
+    <message>
+        <source>Note duration: Quarter</source>
+        <translation>Doba trvání noty: Čtvrťová nota</translation>
+    </message>
+    <message>
+        <source>Eighth Note</source>
+        <translation>Osminová nota</translation>
+    </message>
+    <message>
+        <source>Note duration: Eighth</source>
+        <translation>Doba trvání noty: Osminová nota</translation>
+    </message>
+    <message>
+        <source>16th Note</source>
+        <translation>Šestnáctinová nota</translation>
+    </message>
+    <message>
+        <source>32nd Note</source>
+        <translation>Dvaatřicetinová nota</translation>
+    </message>
+    <message>
+        <source>64th Note</source>
+        <translation>Čtyřiašedesátinová nota</translation>
+    </message>
+    <message>
+        <source>128th Note</source>
+        <translation>Stodvacetiosminová nota</translation>
+    </message>
+    <message>
+        <source>Increase Active Duration</source>
+        <translation>Prodloužit činnou dobu trvání</translation>
+    </message>
+    <message>
+        <source>Decrease Active Duration</source>
+        <translation>Zkrátit činnou dobu trvání</translation>
+    </message>
+    <message>
+        <source>Augmentation Dot</source>
+        <translation>Tečka</translation>
+    </message>
+    <message>
+        <source>Note duration: Augmentation dot</source>
+        <translation>Doba trvání noty: Tečka</translation>
+    </message>
+    <message>
+        <source>Double Augmentation Dot</source>
+        <translation>Dvojitá tečka</translation>
+    </message>
+    <message>
+        <source>Note duration: Double augmentation dot</source>
+        <translation>Doba trvání noty: Dvojitá tečka</translation>
+    </message>
+    <message>
+        <source>Note duration: Tie</source>
+        <translation>Doba trvání noty: Ligatura</translation>
+    </message>
+    <message>
+        <source>Note input: Rest</source>
+        <translation>Vkládání not: Pomlka</translation>
+    </message>
+    <message>
+        <source>Double Sharp</source>
+        <translation>Dvojitý křížek</translation>
+    </message>
+    <message>
+        <source>Note input: Double sharp</source>
+        <translation>Vkládání not: Dvojitý křížek</translation>
+    </message>
+    <message>
+        <source>Note input: Sharp</source>
+        <translation>Vkládání not: Křížek</translation>
+    </message>
+    <message>
+        <source>Note input: Natural</source>
+        <translation>Vkládání not: Odrážka</translation>
+    </message>
+    <message>
+        <source>Note input: Flat</source>
+        <translation>Vkládání not: Béčko</translation>
+    </message>
+    <message>
+        <source>Double Flat</source>
+        <translation>Dvojité béčko</translation>
+    </message>
+    <message>
+        <source>Note input: Double flat</source>
+        <translation>Vkládání not: Dvojité béčko</translation>
+    </message>
+    <message>
+        <source>Grace: Quarter</source>
+        <translation>Ozdoba: Čtvrťová nota</translation>
+    </message>
+    <message>
+        <source>Grace: Eighth after</source>
+        <translation>Ozdoba: Osminová nota po</translation>
+    </message>
+    <message>
+        <source>MIDI Input</source>
+        <translation>Vstup MIDI</translation>
+    </message>
+    <message>
+        <source>Beam Start</source>
+        <translation>Začátek trámce</translation>
+    </message>
+    <message>
+        <source>Beam Middle</source>
+        <translation>Střed trámce</translation>
+    </message>
+    <message>
+        <source>No Beam</source>
+        <translation>Žádný trámec</translation>
+    </message>
+    <message>
+        <source>Beam 16th Sub</source>
+        <translation>Šestnáctinový podtrámec</translation>
+    </message>
+    <message>
+        <source>Beam 32nd Sub</source>
+        <translation>Dvaatřicetinový podtrámec</translation>
+    </message>
+    <message>
+        <source>Auto Beam</source>
+        <translation>Automatické trámce</translation>
+    </message>
+    <message>
+        <source>Feathered Beam, Slower</source>
+        <translation>Opeřený trámec, pomalejší</translation>
+    </message>
+    <message>
+        <source>Feathered Beam, Faster</source>
+        <translation>Opeřený trámec, rychlejší</translation>
+    </message>
+    <message>
+        <source>Play panel</source>
+        <translation>Přehrávací panel</translation>
+    </message>
+    <message>
+        <source>Selection filter</source>
+        <translation>Filtr výběru</translation>
+    </message>
+    <message>
+        <source>MIDI import panel</source>
+        <translation>Panel pro zavedení MIDI</translation>
+    </message>
+    <message>
+        <source>Status bar</source>
+        <translation>Stavový řádek</translation>
+    </message>
+    <message>
+        <source>Zoom Canvas</source>
+        <translation>Zvětšit plátno</translation>
+    </message>
+    <message>
+        <source>Play previous chord</source>
+        <translation>Přehrát předchozí akord</translation>
+    </message>
+    <message>
+        <source>Play previous measure</source>
+        <translation>Přehrát předchozí takt</translation>
+    </message>
+    <message>
+        <source>Play next chord</source>
+        <translation>Přehrát další akord</translation>
+    </message>
+    <message>
+        <source>Play next measure</source>
+        <translation>Přehrát další takt</translation>
+    </message>
+    <message>
+        <source>Player seek to begin</source>
+        <translation>Posunování přehrávání k začátku</translation>
+    </message>
+    <message>
+        <source>Player seek to end</source>
+        <translation>Posunování přehrávání ke konci</translation>
+    </message>
+    <message>
+        <source>Play Repeats</source>
+        <translation>Přehrát opakování</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Vybrat vše</translation>
+    </message>
+    <message>
+        <source>Exchange voice 1-2</source>
+        <translation>Vyměnit hlasy 1-2</translation>
+    </message>
+    <message>
+        <source>Exchange voice 1-3</source>
+        <translation>Vyměnit hlasy 1-3</translation>
+    </message>
+    <message>
+        <source>Exchange voice 1-4</source>
+        <translation>Vyměnit hlasy 1-4</translation>
+    </message>
+    <message>
+        <source>Exchange voice 2-3</source>
+        <translation>Vyměnit hlasy 2-3</translation>
+    </message>
+    <message>
+        <source>Exchange voice 2-4</source>
+        <translation>Vyměnit hlasy 2-4</translation>
+    </message>
+    <message>
+        <source>Exchange voice 3-4</source>
+        <translation>Vyměnit hlasy 3-4</translation>
+    </message>
+    <message>
+        <source>Repeat Last Command</source>
+        <translation>Opakovat poslední příkaz</translation>
+    </message>
+    <message>
+        <source>Toggle system break</source>
+        <translation>Přepnout zalomení osnovy</translation>
+    </message>
+    <message>
+        <source>Toggle page break</source>
+        <translation>Přepnout zalomení strany</translation>
+    </message>
+    <message>
+        <source>Toggle section break</source>
+        <translation>Přepnout zalomení úseku</translation>
+    </message>
+    <message>
+        <source>Edit element</source>
+        <translation>Upravit prvek</translation>
+    </message>
+    <message>
+        <source>Show invisible</source>
+        <translation>Ukázat neviditelné</translation>
+    </message>
+    <message>
+        <source>Show unprintable</source>
+        <translation>Ukázat netisknutelné</translation>
+    </message>
+    <message>
+        <source>Show frames</source>
+        <translation>Ukázat rámečky</translation>
+    </message>
+    <message>
+        <source>Show page margins</source>
+        <translation>Ukázat okraje stran</translation>
+    </message>
+    <message>
+        <source>Insert special characters</source>
+        <translation>Vložit zvláštní znaky</translation>
+    </message>
+    <message>
+        <source>Whole Rest</source>
+        <translation>Celá pomlka</translation>
+    </message>
+    <message>
+        <source>Note input: Whole rest</source>
+        <translation>Vkládání not: Celá pomlka</translation>
+    </message>
+    <message>
+        <source>Half Rest</source>
+        <translation>Půlová pomlka</translation>
+    </message>
+    <message>
+        <source>Note input: Half rest</source>
+        <translation>Vkládání not: Půlová pomlka</translation>
+    </message>
+    <message>
+        <source>Quarter Rest</source>
+        <translation>Čtvrťová pomlka</translation>
+    </message>
+    <message>
+        <source>Note input: Quarter rest</source>
+        <translation>Vkládání not: Čtvrťová pomlka</translation>
+    </message>
+    <message>
+        <source>Eighth Rest</source>
+        <translation>Osminová pomlka</translation>
+    </message>
+    <message>
+        <source>Note input: Eighth rest</source>
+        <translation>Vkládání not: Osminová pomlka</translation>
+    </message>
+    <message>
+        <source>Zoom in</source>
+        <translation>Přiblížit</translation>
+    </message>
+    <message>
+        <source>Zoom out</source>
+        <translation>Oddálit</translation>
+    </message>
+    <message>
+        <source>Mirror Note Head</source>
+        <translation>Zrcadlit hlavičku noty</translation>
+    </message>
+    <message>
+        <source>Double Duration</source>
+        <translation>Zdvojit dobu trvání</translation>
+    </message>
+    <message>
+        <source>Half Duration</source>
+        <translation>Rozpůlit dobu trvání</translation>
+    </message>
+    <message>
+        <source>Repeat Selection</source>
+        <translation>Opakovat výběr</translation>
+    </message>
+    <message>
+        <source>Enharmonic Up</source>
+        <translation>Enharmonicky nahoru</translation>
+    </message>
+    <message>
+        <source>Enharmonic Down</source>
+        <translation>Enharmonicky dolů</translation>
+    </message>
+    <message>
+        <source>Create New Revision</source>
+        <translation>Vytvořit nové přepracování</translation>
+    </message>
+    <message>
+        <source>Toggle Image Capture</source>
+        <translation>Přepnout zachytávání obrázků</translation>
+    </message>
+    <message>
+        <source>Toggle image capture</source>
+        <translation>Přepnout zachytávání obrázků</translation>
+    </message>
+    <message>
+        <source>Show OMR Image</source>
+        <translation>Ukázat obrázek OMR</translation>
+    </message>
+    <message>
+        <source>Full screen</source>
+        <translation>Celá obrazovka</translation>
+    </message>
+    <message>
+        <source>Enable Snap to Horizontal Grid</source>
+        <translation>Povolit zapadnutí do vodorovné mřížky</translation>
+    </message>
+    <message>
+        <source>Enable Snap to Vertical Grid</source>
+        <translation>Povolit zapadnutí do svislé mřížky</translation>
+    </message>
+    <message>
+        <source>Configure Grid</source>
+        <translation>Nastavit mřížku</translation>
+    </message>
+    <message>
+        <source>Piano keyboard</source>
+        <translation>Klávesnice klavíru</translation>
+    </message>
+    <message>
+        <source>Split measure</source>
+        <translation>Rozdělit takt</translation>
+    </message>
+    <message>
+        <source>Join measures</source>
+        <translation>Spojit takty</translation>
+    </message>
+    <message>
+        <source>Page settings</source>
+        <translation>Nastavení strany</translation>
+    </message>
+    <message>
+        <source>Next score</source>
+        <translation>Další notový zápis</translation>
+    </message>
+    <message>
+        <source>Previous score</source>
+        <translation>Předchozí notový zápis</translation>
+    </message>
+    <message>
+        <source>Plugin creator</source>
+        <translation>Tvůrce přídavných modulů</translation>
+    </message>
+    <message>
+        <source>Plugin manager</source>
+        <translation>Správce přídavných modulů</translation>
+    </message>
+    <message>
+        <source>Resource manager</source>
+        <translation>Správce zdrojů</translation>
+    </message>
+    <message>
+        <source>Show OMR panel</source>
+        <translation>Ukázat panel OMR</translation>
+    </message>
+    <message>
+        <source>Loop In</source>
+        <translation>Začátek smyčky</translation>
+    </message>
+    <message>
+        <source>Loop Out</source>
+        <translation>Konec smyčky</translation>
+    </message>
+    <message>
+        <source>Set loop out position</source>
+        <translation>Určit konec smyčky</translation>
+    </message>
+    <message>
+        <source>Count-In</source>
+        <translation>Počítat</translation>
+    </message>
+    <message>
+        <source>Transpose up</source>
+        <translation>Převést nahoru</translation>
+    </message>
+    <message>
+        <source>Transpose down</source>
+        <translation>Převést dolů</translation>
+    </message>
+    <message>
+        <source>Toggle view mode</source>
+        <translation>Přepnout režim pohledu</translation>
+    </message>
+    <message>
+        <source>Next Syllable</source>
+        <translation>Další slabika</translation>
+    </message>
+    <message>
+        <source>Previous Syllable</source>
+        <translation>Předchozí slabika</translation>
+    </message>
+    <message>
+        <source>Toggle Visibility</source>
+        <translation>Přepnout viditelnost</translation>
+    </message>
+    <message>
+        <source>Set Visible</source>
+        <translation>Nastavit viditelné</translation>
+    </message>
+    <message>
+        <source>Set Invisible</source>
+        <translation>Nastavit neviditelné</translation>
+    </message>
+    <message>
+        <source>Note Anchored Textline</source>
+        <translation>K notě ukotvený textový řádek</translation>
+    </message>
+    <message>
+        <source>Note anchored textline</source>
+        <translation>K notě ukotvený textový řádek</translation>
+    </message>
+    <message>
+        <source>Lock score</source>
+        <translation>Zamknout notový zápis</translation>
+    </message>
+    <message>
+        <source>Note duration: Longa (TAB)</source>
+        <translation>Doba trvání noty: Longa (TAB)</translation>
+    </message>
+    <message>
+        <source>Double Whole Note (TAB)</source>
+        <translation>Zdvojená celá nota (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Double whole (TAB)</source>
+        <translation>Doba trvání noty: Zdvojená celá nota (TAB)</translation>
+    </message>
+    <message>
+        <source>Whole Note (TAB)</source>
+        <translation>Celá nota (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Whole (TAB)</source>
+        <translation>Doba trvání noty: Celá nota (TAB)</translation>
+    </message>
+    <message>
+        <source>Half Note (TAB)</source>
+        <translation>Půlová nota (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Half (TAB)</source>
+        <translation>Doba trvání noty: Půlová nota (TAB)</translation>
+    </message>
+    <message>
+        <source>Quarter Note (TAB)</source>
+        <translation>Čtvrťová nota (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Quarter (TAB)</source>
+        <translation>Doba trvání noty: Čtvrťová nota (TAB)</translation>
+    </message>
+    <message>
+        <source>Eighth Note (TAB)</source>
+        <translation>Osminová nota (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Eighth (TAB)</source>
+        <translation>Doba trvání noty: Osminová nota (TAB)</translation>
+    </message>
+    <message>
+        <source>16th Note (TAB)</source>
+        <translation>Šestnáctinová nota (TAB)</translation>
+    </message>
+    <message>
+        <source>32nd Note (TAB)</source>
+        <translation>Dvaatřicetinová nota (TAB)</translation>
+    </message>
+    <message>
+        <source>64th Note (TAB)</source>
+        <translation>Čtyřiašedesátinová nota (TAB)</translation>
+    </message>
+    <message>
+        <source>128th Note (TAB)</source>
+        <translation>Stodvacetiosminová nota (TAB)</translation>
+    </message>
+    <message>
+        <source>Increase Active Duration (TAB)</source>
+        <translation>Prodloužit činnou dobu trvání (TAB)</translation>
+    </message>
+    <message>
+        <source>Decrease Active Duration (TAB)</source>
+        <translation>Zkrátit činnou dobu trvání (TAB)</translation>
+    </message>
+    <message>
+        <source>Note input: Rest (TAB)</source>
+        <translation>Vkládání not: Pomlka (TAB)</translation>
+    </message>
+    <message>
+        <source>String Above (TAB)</source>
+        <translation>Struna nad (TAB)</translation>
+    </message>
+    <message>
+        <source>String Below (TAB)</source>
+        <translation>Struna pod (TAB)</translation>
+    </message>
+    <message>
+        <source>Previous Beat (Chord Symbol)</source>
+        <translation>Předchozí doba (značka akordu)</translation>
+    </message>
+    <message>
+        <source>Next Beat (Chord Symbol)</source>
+        <translation>Další doba (značka akordu)</translation>
+    </message>
+    <message>
+        <source>Add Brackets to Element</source>
+        <translation>Přidat závorky k prvku</translation>
+    </message>
+    <message>
+        <source>Toggle Create Multimeasure Rest</source>
+        <translation>Přepnout vícetaktové pomlky</translation>
+    </message>
+    <message>
+        <source>Bold Face</source>
+        <translation>Tučné</translation>
+    </message>
+    <message>
+        <source>Bold face</source>
+        <translation>Tučné</translation>
+    </message>
+    <message>
+        <source>Italic</source>
+        <translation>Kurzíva</translation>
+    </message>
+    <message>
+        <source>Underline</source>
+        <translation>Podtržení</translation>
+    </message>
+    <message>
+        <source>Move Word Left</source>
+        <translation>Posunout slovo doleva</translation>
+    </message>
+    <message>
+        <source>Move word left</source>
+        <translation>Posunout slovo doleva</translation>
+    </message>
+    <message>
+        <source>Move Word Right</source>
+        <translation>Posunout slovo doprava</translation>
+    </message>
+    <message>
+        <source>Move word right</source>
+        <translation>Posunout slovo doprava</translation>
+    </message>
+    <message>
+        <source>Fill with slashes</source>
+        <translation>Vyplnit lomítky</translation>
+    </message>
+    <message>
+        <source>Toggle rhythmic slash notation</source>
+        <translation>Přepnout rytmickou lomítkovou notaci</translation>
+    </message>
+    <message>
+        <source>Add/remove line breaks</source>
+        <translation>Přidat/Odstranit zalomení řádků</translation>
+    </message>
+    <message>
+        <source>Resequence rehearsal marks</source>
+        <translation>Roztřídit znovu zkušební značky</translation>
+    </message>
+    <message>
+        <source>Start center</source>
+        <translation>Zahajovací středisko</translation>
+    </message>
+    <message>
+        <source>Longa Advance (F.B./Chord Symbol)</source>
+        <translation>Krok Longa (číslovaný bas/značku akordu)</translation>
+    </message>
+    <message>
+        <source>Advance of a longa (Figured bass/Chord symbol only)</source>
+        <translation>Pokrok v Longa (jen číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Breve Advance (F.B./Chord Symbol)</source>
+        <translation>Krok Breve (číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Advance of a double whole note (Figured bass/Chord symbol only)</source>
+        <translation>Pokrok v Breve - zdvojená celá nota (jen číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Whole Note Advance (F.B./Chord Symbol)</source>
+        <translation>Celý notový krok (číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Advance of a whole note (Figured bass/Chord symbol only)</source>
+        <translation>Pokrok v celé notě (jen číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Half Note Advance (F.B./Chord Symbol)</source>
+        <translation>Půlový notový krok (číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Advance of a half note (Figured bass/Chord symbol only)</source>
+        <translation>Pokrok v půlové notě (jen číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Quarter Note Advance (F.B./Chord Symbol)</source>
+        <translation>Čtvrťový notový krok (číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Advance of a quarter note (Figured bass/Chord symbol only)</source>
+        <translation>Pokrok v čtvrťové notě (jen číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Eighth Note Advance (F.B./Chord Symbol)</source>
+        <translation>Osminový notový krok (číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Advance of an eighth note (Figured bass/Chord symbol only)</source>
+        <translation>Pokrok v osminové notě (jen číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>16th Note Advance (F.B./Chord Symbol)</source>
+        <translation>Šestnáctinový notový krok (číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Advance of a 16th note (Figured bass/Chord symbol only)</source>
+        <translation>Pokrok v šestnáctinové notě (jen číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>32nd Note Advance (F.B./Chord Symbol)</source>
+        <translation>Dvaatřicetinový notový krok (číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Advance of a 32nd note (Figured bass/Chord symbol only)</source>
+        <translation>Pokrok v dvaatřicetinové notě (jen číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>64th Note Advance (F.B./Chord Symbol)</source>
+        <translation>Čtyřiašedesátinový notový krok (číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Advance of a 64th note (Figured bass/Chord symbol only)</source>
+        <translation>Pokrok v čtyřiašedesátinové notě (jen číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Previous Measure (F.B./Chord Symbol)</source>
+        <translation>Předchozí takt (číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Previous measure (Figured bass/Chord symbol only)</source>
+        <translation>Předchozí takt (jen číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Next Measure (F.B./Chord Symbol)</source>
+        <translation>Další takt (číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Next measure (Figured bass/Chord symbol only)</source>
+        <translation>Další takt (jen číslovaný bas/značka akordu)</translation>
+    </message>
+    <message>
+        <source>Toggle staccato</source>
+        <translation>Přepnout staccato</translation>
+    </message>
+    <message>
+        <source>Toggle tenuto</source>
+        <translation>Přepnout tenuto</translation>
+    </message>
+    <message>
+        <source>Toggle trill</source>
+        <translation>Přepnout trylek</translation>
+    </message>
+    <message>
+        <source>Toggle marcato</source>
+        <translation>Přepnout marcato</translation>
+    </message>
+    <message>
+        <source>Import PDF...</source>
+        <translation>Zavést PDF...</translation>
+    </message>
+    <message>
+        <source>Import PDF</source>
+        <translation>Zavést PDF</translation>
+    </message>
+    <message>
+        <source>Import a PDF file with an experimental service on musescore.com</source>
+        <translation>Zavést soubor PDF prostřednictvím pokusné služby na musescore.com</translation>
+    </message>
+    <message>
+        <source>Set loop in position</source>
+        <translation>Určit začátek smyčky</translation>
     </message>
 </context>
 <context>
@@ -15224,6 +15622,12 @@ se nezdařil:</translation>
 Tuplet would cross measure</source>
         <translation>Nelze znovu zapsat takty:
 Rytmická notová skupina by překročila takt</translation>
+    </message>
+    <message>
+        <source>Cannot change local time signature:
+Measure is not empty</source>
+        <translation>Nelze změnit místní taktové označení:
+Takt není prázdný</translation>
     </message>
 </context>
 <context>
@@ -16176,41 +16580,6 @@ Rytmická notová skupina by překročila takt</translation>
     </message>
 </context>
 <context>
-    <name>barline</name>
-    <message>
-        <source>normal</source>
-        <translation>Normální</translation>
-    </message>
-    <message>
-        <source>double</source>
-        <translation>Dvojitá</translation>
-    </message>
-    <message>
-        <source>start-repeat</source>
-        <translation>Začít opakování</translation>
-    </message>
-    <message>
-        <source>end-repeat</source>
-        <translation>Ukončit opakování</translation>
-    </message>
-    <message>
-        <source>dashed</source>
-        <translation>Čárkovaná</translation>
-    </message>
-    <message>
-        <source>end</source>
-        <translation>KONEC</translation>
-    </message>
-    <message>
-        <source>end-start-repeat</source>
-        <translation>Opakování začátek-konec</translation>
-    </message>
-    <message>
-        <source>dotted</source>
-        <translation>Tečkovaná</translation>
-    </message>
-</context>
-<context>
     <name>clefTable</name>
     <message>
         <source>Treble clef</source>
@@ -16813,10 +17182,6 @@ Rytmická notová skupina by překročila takt</translation>
         <translation>Prvek</translation>
     </message>
     <message>
-        <source>Layout</source>
-        <translation>Uspořádání</translation>
-    </message>
-    <message>
         <source>Icon</source>
         <translation>Ikonka</translation>
     </message>
@@ -16870,7 +17235,7 @@ Rytmická notová skupina by překročila takt</translation>
     </message>
     <message>
         <source>Rehearsal Mark</source>
-        <translation>Značka nácviku</translation>
+        <translation>Zkušební značka</translation>
     </message>
     <message>
         <source>Instrument Change</source>
@@ -16995,6 +17360,18 @@ Rytmická notová skupina by překročila takt</translation>
     <message>
         <source>Tremolo Bar</source>
         <translation>Pruh tremola</translation>
+    </message>
+    <message>
+        <source>Melisma Line</source>
+        <translation>Řádek s melismou</translation>
+    </message>
+    <message>
+        <source>Glissando Segment</source>
+        <translation>Část glissando</translation>
+    </message>
+    <message>
+        <source>Melisma Line Segment</source>
+        <translation>Část řádek s melismou</translation>
     </message>
 </context>
 <context>
@@ -17261,22 +17638,6 @@ Rytmická notová skupina by překročila takt</translation>
 <context>
     <name>selectionfilter</name>
     <message>
-        <source>1st Voice</source>
-        <translation>1. hlas</translation>
-    </message>
-    <message>
-        <source>2nd Voice</source>
-        <translation>2. hlas</translation>
-    </message>
-    <message>
-        <source>3rd Voice</source>
-        <translation>3. hlas</translation>
-    </message>
-    <message>
-        <source>4th Voice</source>
-        <translation>4. hlas</translation>
-    </message>
-    <message>
         <source>Dynamics</source>
         <translation>Dynamika</translation>
     </message>
@@ -17341,15 +17702,24 @@ Rytmická notová skupina by překročila takt</translation>
         <translation>Nákresy hmatníků</translation>
     </message>
     <message>
-        <source>Breathmarks</source>
+        <source>Breath Marks</source>
         <translation>Značky pro dýchání</translation>
     </message>
-</context>
-<context>
-    <name>sfz_files_directory</name>
     <message>
-        <source>SFZ</source>
-        <translation>SFZ</translation>
+        <source>Voice 1</source>
+        <translation>Hlas 1</translation>
+    </message>
+    <message>
+        <source>Voice 2</source>
+        <translation>Hlas 2</translation>
+    </message>
+    <message>
+        <source>Voice 3</source>
+        <translation>Hlas 3</translation>
+    </message>
+    <message>
+        <source>Voice 4</source>
+        <translation>Hlas 4</translation>
     </message>
 </context>
 <context>

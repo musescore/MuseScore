@@ -53,7 +53,7 @@
         </Staff>
       <trackName>Bells</trackName>
       <Instrument>
-        <longName pos="0">Bells</longName>
+        <longName>Bells</longName>
         <trackName></trackName>
         <StringData>
           <frets>24</frets>
@@ -253,7 +253,7 @@
           </Staff>
         <trackName></trackName>
         <Instrument>
-          <longName pos="0">Bells</longName>
+          <longName>Bells</longName>
           <trackName></trackName>
           <StringData>
             <frets>24</frets>

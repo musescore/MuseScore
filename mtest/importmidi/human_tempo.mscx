@@ -54,8 +54,8 @@
         </Staff>
       <trackName>Piano, PIANO                               </trackName>
       <Instrument>
-        <longName pos="0">Piano, PIANO                               </longName>
-        <shortName pos="0">Pno.</shortName>
+        <longName>Piano, PIANO                               </longName>
+        <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

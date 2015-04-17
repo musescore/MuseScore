@@ -82,7 +82,7 @@
             <enum>Qt::PlainText</enum>
            </property>
            <property name="pixmap">
-            <pixmap>:/data/musescore_logo_full.png</pixmap>
+            <pixmap resource="musescore.qrc">:/data/musescore_logo_full.png</pixmap>
            </property>
            <property name="margin">
             <number>0</number>
@@ -125,12 +125,12 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="copyRevisionButton">
+            <widget class="QToolButton" name="copyRevisionButton">
              <property name="toolTip">
               <string>Copy revision number</string>
              </property>
              <property name="text">
-              <string/>
+              <string notr="true"/>
              </property>
             </widget>
            </item>

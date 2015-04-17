@@ -178,7 +178,7 @@ static Fraction noteDurationAsFraction(const int divisions, QDomElement e, Fract
       if (rest && type == "")
             // typeless "whole" measure rests are determined by duration
             return duration;
-            
+
       if (rest && type == "whole" && duration.isValid())
             // "whole" measure rests with valid duration are determined by duration
             return duration;
@@ -276,7 +276,7 @@ static void aaamoveTick(Fraction& tick, Fraction& maxtick,
 MusicXmlPart::MusicXmlPart(QString id, QString name)
       : id(id), name(name)
       {
-      // nothing yet
+      octaveShifts.resize(MAX_STAVES);
       }
 
 
@@ -314,6 +314,31 @@ QString MusicXmlPart::toString() const
             }
 
       return res;
+      }
+
+int MusicXmlPart::octaveShift(const int staff, const Fraction f) const
+      {
+      if (staff < 0 || MAX_STAVES <= staff)
+            return 0;
+      if (f < Fraction(0, 1))
+            return 0;
+      return octaveShifts[staff].octaveShift(f);            
+      }
+      
+void MusicXmlPart::addOctaveShift(const int staff, const int shift, const Fraction f)
+      {
+      if (staff < 0 || MAX_STAVES <= staff)
+            return;
+      if (f < Fraction(0, 1))
+            return;
+      octaveShifts[staff].addOctaveShift(shift, f);
+      }
+
+void MusicXmlPart::calcOctaveShifts()
+      {
+      for (int i = 0; i < MAX_STAVES; ++i) {
+            octaveShifts[i].calcOctaveShiftShifts();
+            }
       }
 
 
@@ -474,7 +499,7 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
             return true;
             }
       else {
-            if (!timeSymbol.isEmpty()) {
+            if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
                   qDebug("ImportMusicXml: time symbol <%s> not recognized with beats=%s and beat-type=%s",
                          qPrintable(timeSymbol), qPrintable(beats), qPrintable(beatType));
                   return false;
@@ -634,7 +659,7 @@ void MxmlReaderFirstPass::initVoiceMapperAndMapVoices(QDomElement e, int partNr)
                                     // Same fix is required in MusicXml::xmlNote
                                     // make sure staff is valid
                                     int corrStaff = (staff >= 0 && staff < staves) ? staff : 0;
-                                    
+
                                     // count the chords (only the first note in a chord is counted)
                                     if (corrStaff < MAX_STAVES) {
                                           if (!parts[partNr].voicelist.contains(voice)) {
@@ -923,6 +948,53 @@ void MusicXmlInstrList::setInstrument(const QString instr, const Fraction f)
             qDebug("MusicXmlInstrList::setInstrument instr '%s', tick %s (%d): element already exists",
                    qPrintable(instr), qPrintable(f.print()), f.ticks());
             //(*this)[f] = instr;
+      }
+
+// TODO: move to importmxml*.cpp
+      
+int MusicXmlOctaveShiftList::octaveShift(const Fraction f) const
+      {
+      if (empty())
+            return 0;
+      auto i = upper_bound(f);
+      if (i == begin())
+            return 0;
+      --i;
+      return i->second;
+      }
+
+void MusicXmlOctaveShiftList::addOctaveShift(const int shift, const Fraction f)
+      {
+      Q_ASSERT(Fraction(0, 1) <= f);
+               
+      qDebug("addOctaveShift(shift %d f %s)", shift, qPrintable(f.print()));
+      auto i = find(f);
+      if (i == end()) {
+            qDebug("addOctaveShift: not found, inserting");
+            insert({f, shift});
+            }
+      else {
+            qDebug("addOctaveShift: found %d, adding", (*this)[f]);
+            (*this)[f] += shift;
+            qDebug("addOctaveShift: res %d", (*this)[f]);
+            }
+      }
+
+      void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
+      {
+      for (auto i = cbegin(); i != cend(); ++i)
+            qDebug(" [%s : %d]", qPrintable((*i).first.print()), (*i).second);
+
+      // to each MusicXmlOctaveShiftList entry, add the sum of all previous ones
+      int currentShift = 0;
+      for (auto i = begin(); i != end(); ++i) {
+            currentShift += i->second;
+            i->second = currentShift;
+      }
+
+      for (auto i = cbegin(); i != cend(); ++i)
+            qDebug(" [%s : %d]", qPrintable((*i).first.print()), (*i).second);
+
       }
 
 }

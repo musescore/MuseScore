@@ -31,14 +31,28 @@ class StringData;
 //   StaffName
 //---------------------------------------------------------
 
-struct StaffName {
-      QString name;
-      int pos;          // even number -> between staves
+class StaffName {
+      QString _name;    // html string
+      int _pos;         // even number -> between staves
 
+   public:
       StaffName() {}
-      StaffName(const QString& s, int p=0) : name(s), pos(p) {}
+      StaffName(const QString& s, int p=0) : _name(s), _pos(p) {}
+
       bool operator==(const StaffName&) const;
       void read(XmlReader&);
+      void write(Xml& xml, const char* name) const;
+      int pos() const { return _pos; }
+      QString name() const { return _name; }
+      };
+
+//---------------------------------------------------------
+//   StaffNameList
+//---------------------------------------------------------
+
+class StaffNameList : public QList<StaffName> {
+
+   public:
       void write(Xml& xml, const char* name) const;
       };
 
@@ -117,8 +131,8 @@ struct Channel {
 //---------------------------------------------------------
 
 class Instrument {
-      QList<StaffName> _longNames;
-      QList<StaffName> _shortNames;
+      StaffNameList _longNames;
+      StaffNameList _shortNames;
       QString _trackName;
 
       char _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
@@ -126,7 +140,7 @@ class Instrument {
       QString _instrumentId;
 
       bool _useDrumset;
-      const Drumset* _drumset;
+      Drumset* _drumset;
       StringData  _stringData;
 
       QList<NamedEventList>   _midiActions;
@@ -160,6 +174,7 @@ class Instrument {
 
       void setDrumset(const Drumset* ds);
       const Drumset* drumset() const                         { return _drumset;    }
+      Drumset* drumset()                                     { return _drumset;    }
       bool useDrumset() const                                { return _useDrumset; }
       void setUseDrumset(bool val);
       void setAmateurPitchRange(int a, int b)                { _minPitchA = a; _maxPitchA = b; }

@@ -54,8 +54,8 @@
         </Staff>
       <trackName>B♭ Clarinet</trackName>
       <Instrument>
-        <longName pos="0">B♭ Clarinet</longName>
-        <shortName pos="0">B♭ Cl.</shortName>
+        <longName>B♭ Clarinet</longName>
+        <shortName>B♭ Cl.</shortName>
         <trackName>B♭ Clarinet</trackName>
         <minPitchP>50</minPitchP>
         <maxPitchP>94</maxPitchP>

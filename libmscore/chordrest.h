@@ -51,7 +51,6 @@ class ChordRest : public DurationElement {
       Q_PROPERTY(int            durationType  READ durationTypeTicks  WRITE setDurationType)
       Q_PROPERTY(Ms::Beam::Mode beamMode      READ beamMode           WRITE undoSetBeamMode)
       Q_PROPERTY(bool           small         READ small              WRITE undoSetSmall)
-      Q_ENUMS(Ms::Beam::Mode)
 
       TDuration _durationType;
       int _staffMove;         // -1, 0, +1, used for crossbeaming
@@ -156,6 +155,10 @@ class ChordRest : public DurationElement {
       CrossMeasure crossMeasure() const            { return _crossMeasure; }
       void setCrossMeasure(CrossMeasure val)       { _crossMeasure = val;  }
       virtual void crossMeasureSetup(bool /*on*/)   { }
+      // the following two functions should not be used, unless absolutely necessary;
+      // the cross-measure duration is best managed through setDuration() and crossMeasureSetup()
+      TDuration crossMeasureDurationType() const      { return _crossMeasureTDur;   }
+      void setCrossMeasureDurationType(TDuration v)   { _crossMeasureTDur = v;      }
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;

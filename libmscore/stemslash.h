@@ -29,7 +29,7 @@ class StemSlash : public Element {
       QLineF line;
 
    public:
-      StemSlash(Score* s) : Element(s)   {}
+      StemSlash(Score* s = 0) : Element(s)   {}
 
       virtual qreal mag() const          { return parent()->mag(); }
       void setLine(const QLineF& l);

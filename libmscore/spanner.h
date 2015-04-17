@@ -77,7 +77,7 @@ class SpannerSegment : public Element {
       virtual QVariant getProperty(P_ID id) const override;
       virtual bool setProperty(P_ID id, const QVariant& v) override;
       virtual QVariant propertyDefault(P_ID id) const override;
-      virtual void reset() override;
+      void reset() override;
       virtual void setSelected(bool f) override;
       virtual void setVisible(bool f) override;
       virtual void setColor(const QColor& col) override;
@@ -93,9 +93,11 @@ class SpannerSegment : public Element {
 //   @@ Spanner
 ///   Virtual base class for slurs, ties, lines etc.
 //
-//    @P tick      int                  tick start position
-//    @P tick2     int                  tick end position
-//    @P anchor    Ms::Spanner::Anchor  (SEGMENT, MEASURE, CHORD, NOTE)
+//    @P anchor         Ms::Spanner::Anchor     (SEGMENT, MEASURE, CHORD, NOTE)
+//    @P endElement     MS::Element             the element the spanner end is anchored to (read-only)
+//    @P startElement   MS::Element             the element the spanner start is anchored to (read-only)
+//    @P tick           int                     tick start position
+//    @P tick2          int                     tick end position
 //----------------------------------------------------------------------------------
 
 class Spanner : public Element {
@@ -107,9 +109,11 @@ class Spanner : public Element {
             SEGMENT, MEASURE, CHORD, NOTE
             };
    private:
-      Q_PROPERTY(int                 tick    READ tick    WRITE setTick)
-      Q_PROPERTY(int                 tick2   READ tick2   WRITE setTick2)
-      Q_PROPERTY(Ms::Spanner::Anchor anchor  READ anchor  WRITE setAnchor)
+      Q_PROPERTY(Ms::Spanner::Anchor      anchor            READ anchor       WRITE setAnchor)
+      Q_PROPERTY(Ms::Element*             endElement        READ endElement)
+      Q_PROPERTY(Ms::Element*             startElement      READ startElement)
+      Q_PROPERTY(int                      tick              READ tick         WRITE setTick)
+      Q_PROPERTY(int                      tick2             READ tick2        WRITE setTick2)
 
       Element* _startElement { 0  };
       Element* _endElement   { 0  };

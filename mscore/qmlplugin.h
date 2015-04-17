@@ -35,6 +35,7 @@ extern int updateVersion();
 //   QmlPlugin
 //   @@ MuseScore
 //   @P menuPath             QString           where the plugin is placed in menu
+//   @P filePath             QString           source file path, without the file name (read only)
 //   @P version              QString
 //   @P description          QString
 //   @P pluginType           QString
@@ -52,6 +53,7 @@ extern int updateVersion();
 class QmlPlugin : public QQuickItem {
       Q_OBJECT
       Q_PROPERTY(QString menuPath        READ menuPath WRITE setMenuPath)
+      Q_PROPERTY(QString filePath        READ filePath)
       Q_PROPERTY(QString version         READ version WRITE setVersion)
       Q_PROPERTY(QString description     READ description WRITE setDescription)
       Q_PROPERTY(QString pluginType      READ pluginType WRITE setPluginType)
@@ -72,7 +74,10 @@ class QmlPlugin : public QQuickItem {
       QString _dockArea;
       QString _version;
       QString _description;
+      QFile logFile;
 
+   protected:
+      QString _filePath;            // the path of the source file, without file name
    signals:
       void run();
 
@@ -86,6 +91,8 @@ class QmlPlugin : public QQuickItem {
       QString version() const              { return _version; }
       void setDescription(const QString& s) { _description = s; }
       QString description() const          { return _description; }
+      void setFilePath(const QString s)   { _filePath = s;        }
+      QString filePath() const            { return _filePath;     }
 
       void setPluginType(const QString& s) { _pluginType = s;    }
       QString pluginType() const           { return _pluginType; }
@@ -109,6 +116,13 @@ class QmlPlugin : public QQuickItem {
       Q_INVOKABLE Ms::MsProcess* newQProcess();
       Q_INVOKABLE bool writeScore(Ms::Score*, const QString& name, const QString& ext);
       Q_INVOKABLE Ms::Score* readScore(const QString& name);
+      Q_INVOKABLE void closeScore(Ms::Score*);
+
+      Q_INVOKABLE void log(const QString&);
+      Q_INVOKABLE void logn(const QString&);
+      Q_INVOKABLE void log2(const QString&, const QString&);
+      Q_INVOKABLE void openLog(const QString&);
+      Q_INVOKABLE void closeLog();
       };
 
 

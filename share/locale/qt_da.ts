@@ -944,6 +944,13 @@ til
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation>Gem ikke</translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <source>OK</source>
@@ -976,10 +983,6 @@ til
     <message>
         <source>Help</source>
         <translation>Hjælp</translation>
-    </message>
-    <message>
-        <source>Don&apos;t Save</source>
-        <translation>Gem ikke</translation>
     </message>
     <message>
         <source>Discard</source>

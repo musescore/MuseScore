@@ -30,7 +30,7 @@ static const qreal subScriptSize   = 0.6;
 static const qreal subScriptOffset = 0.5;       // of x-height
 static const qreal superScriptOffset = -0.5;       // of x-height
 
-static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
+//static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
 
 TextCursor Text::_cursor;
 QString Text::preEdit;
@@ -901,18 +901,21 @@ void Text::drawSelection(QPainter* p, const QRectF& r) const
 //   draw
 //---------------------------------------------------------
 
+void Text::setColor(const QColor& c)
+      {
+      textStyle().setForegroundColor(c);
+      }
+
+//---------------------------------------------------------
+//   draw
+//---------------------------------------------------------
+
 void Text::draw(QPainter* p) const
       {
       if (textStyle().hasFrame()) {
             if (textStyle().frameWidth().val() != 0.0) {
-                  QColor color(textStyle().frameColor());
-                  if (score() && !score()->printing()) {
-                        if (!visible())
-                              color = Qt::gray;
-                        else if (selected())
-                              color = MScore::selectColor[0];
-                        }
-                  QPen pen(color, textStyle().frameWidth().val() * spatium());
+                  QColor fColor = frameColor();
+                  QPen pen(fColor, textStyle().frameWidth().val() * spatium());
                   p->setPen(pen);
                   }
             else
@@ -1012,13 +1015,27 @@ QRectF Text::cursorRect() const
 QColor Text::textColor() const
       {
       if (score() && !score()->printing()) {
-            QColor color;
             if (selected())
-                  return MScore::selectColor[0];
+                  return (track() > -1) ? MScore::selectColor[voice()] : MScore::selectColor[0];
             if (!visible())
                   return Qt::gray;
             }
       return textStyle().foregroundColor();
+      }
+
+//---------------------------------------------------------
+//   frameColor
+//---------------------------------------------------------
+
+QColor Text::frameColor() const
+      {
+      if (score() && !score()->printing()) {
+            if (selected())
+                  return (track() > -1) ? MScore::selectColor[voice()] : MScore::selectColor[0];
+            if (!visible())
+                  return Qt::gray;
+            }
+      return textStyle().frameColor();
       }
 
 //---------------------------------------------------------
@@ -1924,7 +1941,25 @@ bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mod
       for (int i=0; i < count; i++) {
             switch(op) {
                   case QTextCursor::Left:
-                        if (_cursor.column() == 0) {
+                        if (_cursor.hasSelection() && mode == QTextCursor::MoveAnchor) {
+                              int r1 = _cursor.selectLine();
+                              int r2 = _cursor.line();
+                              int c1 = _cursor.selectColumn();
+                              int c2 = _cursor.column();
+
+                              if (r1 > r2) {
+                                    qSwap(r1, r2);
+                                    qSwap(c1, c2);
+                                    }
+                              else if (r1 == r2) {
+                                    if (c1 > c2)
+                                           qSwap(c1, c2);
+                                    }
+                              _cursor.clearSelection();
+                              _cursor.setLine(r1);
+                              _cursor.setColumn(c1);
+                              }
+                        else if (_cursor.column() == 0) {
                               if (_cursor.line() == 0)
                                     return false;
                               _cursor.setLine(_cursor.line()-1);
@@ -1935,7 +1970,25 @@ bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mod
                         break;
 
                   case QTextCursor::Right:
-                        if (_cursor.column() >= curLine().columns()) {
+                        if (_cursor.hasSelection() && mode == QTextCursor::MoveAnchor) {
+                              int r1 = _cursor.selectLine();
+                              int r2 = _cursor.line();
+                              int c1 = _cursor.selectColumn();
+                              int c2 = _cursor.column();
+
+                              if (r1 > r2) {
+                                    qSwap(r1, r2);
+                                    qSwap(c1, c2);
+                                    }
+                              else if (r1 == r2) {
+                                    if (c1 > c2)
+                                           qSwap(c1, c2);
+                                    }
+                              _cursor.clearSelection();
+                              _cursor.setLine(r2);
+                              _cursor.setColumn(c2);
+                              }
+                        else if (_cursor.column() >= curLine().columns()) {
                               if (_cursor.line() >= _layout.size()-1)
                                     return false;
                               _cursor.setLine(_cursor.line()+1);
@@ -2007,9 +2060,9 @@ bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mod
                         qDebug("Text::movePosition: not implemented");
                         return false;
                   }
+            if (mode == QTextCursor::MoveAnchor)
+                  _cursor.clearSelection();
             }
-      if (mode == QTextCursor::MoveAnchor)
-            _cursor.clearSelection();
       updateCursorFormat(&_cursor);
       score()->addRefresh(canvasBoundingRect());
       return true;

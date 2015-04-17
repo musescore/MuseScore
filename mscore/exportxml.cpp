@@ -1224,7 +1224,7 @@ static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       {
 
       const Staff* st = note->staff();
-      const Instrument* instr = st->part()->instr();
+      const Instrument* instr = st->part()->instrument();
       const Interval intval = instr->transpose();
 
       s      = tpc2stepName(note->tpc());
@@ -2250,12 +2250,12 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
       {
       Part* part = chord->score()->staff(chord->track() / VOICES)->part();
       int partNr = _score->parts().indexOf(part);
-      int instNr = instrMap.value(part->instr(tick), -1);
+      int instNr = instrMap.value(part->instrument(tick), -1);
       /*
       qDebug("chord() %p parent %p isgrace %d #gracenotes %d graceidx %d",
              chord, chord->parent(), chord->isGrace(), chord->graceNotes().size(), chord->graceIndex());
       qDebug("track %d tick %d part %p nr %d instr %p nr %d",
-             chord->track(), chord->tick(), part, partNr, part->instr(tick), instNr);
+             chord->track(), chord->tick(), part, partNr, part->instrument(tick), instNr);
       foreach(Element* e, chord->el())
             qDebug("chord %p el %p", chord, e);
        */
@@ -2308,6 +2308,8 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   }
             if (note != nl.front())
                   xml.tagE("chord");
+            else if (note->chord()->small()) // need this only once per chord
+                  xml.tagE("cue");
 
             // step / alter / octave
             QString step;
@@ -2331,10 +2333,10 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
             double alter2 = 0.0;
             if (acc) {
                   switch (acc->accidentalType()) {
-                        case Accidental::Type::MIRRORED_FLAT:  alter2 = -0.5; break;
-                        case Accidental::Type::SHARP_SLASH:    alter2 = 0.5;  break;
-                        case Accidental::Type::MIRRORED_FLAT2: alter2 = -1.5; break;
-                        case Accidental::Type::SHARP_SLASH4:   alter2 = 1.5;  break;
+                        case AccidentalType::MIRRORED_FLAT:  alter2 = -0.5; break;
+                        case AccidentalType::SHARP_SLASH:    alter2 = 0.5;  break;
+                        case AccidentalType::MIRRORED_FLAT2: alter2 = -1.5; break;
+                        case AccidentalType::SHARP_SLASH4:   alter2 = 1.5;  break;
                         default:                                             break;
                         }
                   }
@@ -2389,7 +2391,10 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   qDebug("no note type found for ticks %d",
                          note->chord()->actualTicks());
                   }
-            xml.tag("type", s);
+            if (note->small())
+                  xml.tag("type size=\"cue\"", s);
+            else
+                  xml.tag("type", s);
             for (int ni = dots; ni > 0; ni--)
                   xml.tagE("dot");
 
@@ -2673,7 +2678,10 @@ void ExportMusicXml::rest(Rest* rest, int staff)
       if (d.type() != TDuration::DurationType::V_MEASURE) {
             QString s = d.name();
             int dots  = rest->dots();
-            xml.tag("type", s);
+            if (rest->small())
+                  xml.tag("type size=\"cue\"", s);
+            else
+                  xml.tag("type", s);
             for (int i = dots; i > 0; i--)
                   xml.tagE("dot");
             }
@@ -3457,7 +3465,7 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
 void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
       {
       foreach(const Lyrics* l, *ll) {
-            if (l) {
+            if (l && !l->text().isEmpty()) {
                   if ((l)->track() == trk) {
                         xml.stag(QString("lyric number=\"%1\"").arg((l)->no() + 1));
                         Lyrics::Syllabic syl = (l)->syllabic();
@@ -4349,7 +4357,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   }
 
             xml.stag(QString("score-part id=\"P%1\"").arg(idx+1));
-            initInstrMap(instrMap, part->instrList(), _score);
+            initInstrMap(instrMap, part->instruments(), _score);
             // by default export the parts long name as part-name
             if (part->longName() != "")
                   xml.tag("part-name", MScoreTextToMXML::toPlainText(part->longName()));
@@ -4366,8 +4374,8 @@ void ExportMusicXml::write(QIODevice* dev)
             if (!part->shortName().isEmpty())
                   xml.tag("part-abbreviation", MScoreTextToMXML::toPlainText(part->shortName()));
 
-            if (part->instr()->useDrumset()) {
-                  const Drumset* drumset = part->instr()->drumset();
+            if (part->instrument()->useDrumset()) {
+                  const Drumset* drumset = part->instrument()->drumset();
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
                         if (di.notehead != NoteHead::Group::HEAD_INVALID)
@@ -4378,7 +4386,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
                         if (di.notehead != NoteHead::Group::HEAD_INVALID)
-                              midiInstrument(xml, idx + 1, i + 1, part->instr(), _score, i + 1);
+                              midiInstrument(xml, idx + 1, i + 1, part->instrument(), _score, i + 1);
                         }
                   }
             else {
@@ -4419,7 +4427,7 @@ void ExportMusicXml::write(QIODevice* dev)
 
             trillStart.clear();
             trillStop.clear();
-            initInstrMap(instrMap, part->instrList(), _score);
+            initInstrMap(instrMap, part->instruments(), _score);
 
             int measureNo = 1;          // number of next regular measure
             int irregularMeasureNo = 1; // number of next irregular measure
@@ -4646,7 +4654,7 @@ void ExportMusicXml::write(QIODevice* dev)
 
                   // output attributes with the first actual measure (pickup or regular) only
                   if ((irregularMeasureNo + measureNo + pickupMeasureNo) == 4) {
-                        const Instrument* instrument = part->instr();
+                        const Instrument* instrument = part->instrument();
 
                         // staff details
                         // TODO: decide how to handle linked regular / TAB staff
@@ -4784,11 +4792,11 @@ void ExportMusicXml::write(QIODevice* dev)
                                    // ise grace after
                                           if(c){
                                                 for (Chord* g : c->graceNotesBefore()) {
-                                                      chord(g, sstaff, ll, part->instr()->useDrumset());
+                                                      chord(g, sstaff, ll, part->instrument()->useDrumset());
                                                       }
-                                                chord(c, sstaff, ll, part->instr()->useDrumset());
+                                                chord(c, sstaff, ll, part->instrument()->useDrumset());
                                                  for (Chord* g : c->graceNotesAfter()) {
-                                                       chord(g, sstaff, ll, part->instr()->useDrumset());
+                                                       chord(g, sstaff, ll, part->instrument()->useDrumset());
                                                        }
                                                 }
                                           break;
@@ -4972,8 +4980,9 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
 
             if (!h->xmlKind().isEmpty()) {
                   QString s = "kind";
+                  QString kindText = h->xmlText();
                   if (h->xmlText() != "")
-                        s += " text=\"" + h->xmlText() + "\"";
+                        s += " text=\"" + kindText + "\"";
                   if (h->xmlSymbols() == "yes")
                         s += " use-symbols=\"yes\"";
                   if (h->xmlParens() == "yes")
@@ -4982,7 +4991,24 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                   QStringList l = h->xmlDegrees();
                   if (!l.isEmpty()) {
                         foreach(QString tag, l) {
-                              xml.stag("degree");
+                              QString degreeText;
+                              if (h->xmlKind().startsWith("suspended")
+                                  && tag.startsWith("add") && tag[3].isDigit()
+                                  && !kindText.isEmpty() && kindText[0].isDigit()) {
+                                    // hack to correct text for suspended chords whose kind text has degree information baked in
+                                    // (required by some other applications)
+                                    int tagDegree = tag.mid(3).toInt();
+                                    QString kindTextExtension;
+                                    for (int i = 0; i < kindText.length() && kindText[i].isDigit(); ++i)
+                                          kindTextExtension[i] = kindText[i];
+                                    int kindExtension = kindTextExtension.toInt();
+                                    if (tagDegree <= kindExtension && (tagDegree & 1) && (kindExtension & 1))
+                                          degreeText = "\"\"";
+                                    }
+                              if (degreeText.isEmpty())
+                                    xml.stag("degree");
+                              else
+                                    xml.stag("degree text=" + degreeText);
                               int alter = 0;
                               int idx = 3;
                               if (tag[idx] == '#') {

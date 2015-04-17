@@ -369,12 +369,12 @@ Ms::SynthesizerGroup Zerberus::state() const
 //   setState
 //---------------------------------------------------------
 
-void Zerberus::setState(const Ms::SynthesizerGroup& sp)
+bool Zerberus::setState(const Ms::SynthesizerGroup& sp)
       {
       QStringList sfs;
       for (const Ms::IdValue& v : sp)
             sfs.append(v.data);
-      loadSoundFonts(sfs);
+      return loadSoundFonts(sfs);
       }
 
 //---------------------------------------------------------
@@ -401,13 +401,15 @@ bool Zerberus::loadInstrument(const QString& s)
       {
       if (s.isEmpty())
             return false;
+      QFileInfo fis(s);
+      QString fileName = fis.fileName();
       for (ZInstrument* instr : instruments) {
-            if (QFileInfo(instr->path()).fileName() == s) {   // already loaded?
+            if (QFileInfo(instr->path()).fileName() == fileName) {   // already loaded?
                   return true;
                   }
             }
       for (ZInstrument* instr : globalInstruments) {
-            if (QFileInfo(instr->path()).fileName() == s) {
+            if (QFileInfo(instr->path()).fileName() == fileName) {
                   instruments.push_back(instr);
                   instr->setRefCount(instr->refCount() + 1);
                   if (instruments.size() == 1) {
@@ -422,7 +424,7 @@ bool Zerberus::loadInstrument(const QString& s)
       QFileInfoList l = Zerberus::sfzFiles();
       QString path;
       foreach (const QFileInfo& fi, l) {
-            if (fi.fileName() == s) {
+            if (fi.fileName() == fileName) {
                   path = fi.absoluteFilePath();
                   break;
                   }

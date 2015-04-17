@@ -22,7 +22,6 @@
 #include "symbol.h"
 #include "noteevent.h"
 #include "pitchspelling.h"
-#include "accidental.h"
 
 class QPainter;
 
@@ -42,6 +41,7 @@ class NoteDot;
 class Spanner;
 class StaffType;
 enum class SymId;
+enum class AccidentalType : char;
 
 static const int MAX_DOTS = 3;
 
@@ -132,14 +132,15 @@ struct NoteVal {
 //   @P tuning           qreal                   tuning offset in cent
 //   @P veloType         Ms::Note::ValueType     (OFFSET_VAL, USER_VAL)
 //   @P veloOffset       int
-//   @P userMirror       Ms::MScore::DirectionH  (AUTO, LEFT, RIGHT)
-//   @P userDotPosition  Ms::MScore::Direction   (AUTO, UP, DOWN)
-//   @P headGroup        Ms::NoteHead::Group     (HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT)
-//   @P headType         Ms::NoteHead::Type      (HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS)
+//   @P userMirror       MScore::DirectionH      (AUTO, LEFT, RIGHT)
+//   @P userDotPosition  MScore::Direction       (AUTO, UP, DOWN)
+//   @P headGroup        NoteHead::Group         (HEAD_NORMAL, HEAD_CROSS, HEAD_DIAMOND, HEAD_TRIANGLE, HEAD_MI, HEAD_SLASH, HEAD_XCIRCLE, HEAD_DO, HEAD_RE, HEAD_FA, HEAD_LA, HEAD_TI, HEAD_SOL, HEAD_BREVIS_ALT)
+//   @P headType         NoteHead::Type          (HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS)
 //   @P elements         array[Ms::Element]      list of elements attached to note head
-//   @P accidental       Ms::Accidental          note accidental (null if none)
-//   @P accidentalType   Ms::Accidental::Type    note accidental type
-//   @P dots             array[Ms::NoteDot]      list of note dots (empty if none)
+//   @P accidental       Accidental              note accidental (null if none)
+//   @P accidentalType   MScore::AccidentalType  note accidental type
+//   @P dots             array[Ms::NoteDot]      list of note dots (some can be null, read only)
+//   @P dotsCount        int                     number of note dots (read only)
 //   @P tieFor           Ms::Tie                 note forward tie (null if none, read only)
 //   @P tieBack          Ms::Tie                 note backward tie (null if none, read only)
 //---------------------------------------------------------------------------------------
@@ -169,8 +170,9 @@ class Note : public Element {
       Q_PROPERTY(Ms::NoteHead::Type headType             READ headType         WRITE undoSetHeadType)
       Q_PROPERTY(QQmlListProperty<Ms::Element> elements  READ qmlElements)
       Q_PROPERTY(Ms::Accidental* accidental              READ accidental)
-      Q_PROPERTY(Ms::Accidental::Type accidentalType     READ accidentalType   WRITE setAccidentalType)
-      Q_PROPERTY(int dots      READ qmlDots)
+      Q_PROPERTY(int accidentalType                      READ qmlAccidentalType WRITE qmlSetAccidentalType)
+      Q_PROPERTY(QQmlListProperty<Ms::NoteDot> dots      READ qmlDots)
+      Q_PROPERTY(int dotsCount                           READ qmlDotsCount)
       Q_PROPERTY(Ms::Tie* tieFor                         READ tieFor)
       Q_PROPERTY(Ms::Tie* tieBack                        READ tieBack)
       Q_ENUMS(ValueType)
@@ -179,6 +181,8 @@ class Note : public Element {
 
    public:
       enum class ValueType : char { OFFSET_VAL, USER_VAL };
+      int qmlAccidentalType() const { return int(accidentalType()); }
+      void qmlSetAccidentalType(int t) { setAccidentalType(static_cast<AccidentalType>(t)); }
 
    private:
       int _subchannel     { 0  };   ///< articulation
@@ -303,11 +307,11 @@ class Note : public Element {
       void undoSetTpc2(int tpc)      { undoChangeProperty(P_ID::TPC2, tpc); }
       int transposeTpc(int tpc);
 
-      Accidental* accidental() const    { return _accidental; }
+      Accidental* accidental() const      { return _accidental; }
       void setAccidental(Accidental* a)   { _accidental = a;    }
 
-      Accidental::Type accidentalType() const { return _accidental ? _accidental->accidentalType() : Accidental::Type::NONE; }
-      void setAccidentalType(Accidental::Type type);
+      AccidentalType accidentalType() const;
+      void setAccidentalType(AccidentalType type);
 
       int line() const;
       void setLine(int n);
@@ -385,7 +389,8 @@ class Note : public Element {
 
       int customizeVelocity(int velo) const;
       NoteDot* dot(int n)                       { return _dots[n];           }
-      int qmlDots();
+      QQmlListProperty<Ms::NoteDot> qmlDots() { return QQmlListProperty<Ms::NoteDot>(this, _dots);  }
+      int qmlDotsCount();
       void updateAccidental(AccidentalState*);
       void updateLine();
       void setNval(const NoteVal&, int tick = -1);

@@ -53,8 +53,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -106,8 +106,8 @@
         </Staff>
       <trackName>Harp</trackName>
       <Instrument>
-        <longName pos="0">Harp</longName>
-        <shortName pos="0">Hrp.</shortName>
+        <longName>Harp</longName>
+        <shortName>Hrp.</shortName>
         <trackName>Harp</trackName>
         <minPitchP>23</minPitchP>
         <maxPitchP>104</maxPitchP>
@@ -158,8 +158,8 @@
         </Staff>
       <trackName>Violoncello</trackName>
       <Instrument>
-        <longName pos="0">Violoncello</longName>
-        <shortName pos="0">Vlc.</shortName>
+        <longName>Violoncello</longName>
+        <shortName>Vlc.</shortName>
         <trackName>Violoncello</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>90</maxPitchP>

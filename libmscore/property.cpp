@@ -155,7 +155,7 @@ static const PropertyData propertyList[] = {
       { P_ID::END_BARLINE_TYPE,    false, 0,               P_TYPE::INT    },
       { P_ID::END_BARLINE_VISIBLE, false, 0,               P_TYPE::BOOL   },
       { P_ID::END_BARLINE_COLOR,   false, 0,               P_TYPE::COLOR  },
-      { P_ID::MEASURE_NUMBER_MODE, false, 0,               P_TYPE::INT    },
+      { P_ID::MEASURE_NUMBER_MODE, false, "measureNumberMode", P_TYPE::INT    },
 
       { P_ID::GLISS_TYPE,          false, 0,               P_TYPE::INT    },
       { P_ID::GLISS_TEXT,          false, 0,               P_TYPE::STRING },
@@ -222,6 +222,8 @@ static const PropertyData propertyList[] = {
 
       { P_ID::DURATION,            false, 0,                       P_TYPE::FRACTION },
       { P_ID::DURATION_TYPE,       false, 0,                       P_TYPE::TDURATION },
+      { P_ID::ROLE,                false, "role",                  P_TYPE::INT },
+      { P_ID::TRACK,               false, 0,                       P_TYPE::INT },
 
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };

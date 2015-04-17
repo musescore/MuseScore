@@ -488,6 +488,7 @@ void MuseScore::newFile()
       Fraction timesig        = newWizard->timesig();
       TimeSigType timesigType = newWizard->timesigType();
       KeySigEvent ks          = newWizard->keysig();
+      VBox* nvb               = nullptr;
 
       int pickupTimesigZ;
       int pickupTimesigN;
@@ -511,7 +512,7 @@ void MuseScore::newFile()
             // create instruments from template
             for (Part* tpart : tscore->parts()) {
                   Part* part = new Part(score);
-                  part->setInstrument(tpart->instr());
+                  part->setInstrument(tpart->instrument());
                   part->setPartName(tpart->partName());
 
                   for (Staff* tstaff : *tpart->staves()) {
@@ -538,6 +539,19 @@ void MuseScore::newFile()
                               x->parts().append(score->parts()[pidx]);
                         }
                   excerpts.append(x);
+                  }
+            MeasureBase* mb = tscore->first();
+            if (mb && mb->type() == Element::Type::VBOX) {
+                  VBox* tvb = static_cast<VBox*>(mb);
+                  nvb = new VBox(score);
+                  nvb->setBoxHeight(tvb->boxHeight());
+                  nvb->setBoxWidth(tvb->boxWidth());
+                  nvb->setTopGap(tvb->topGap());
+                  nvb->setBottomGap(tvb->bottomGap());
+                  nvb->setTopMargin(tvb->topMargin());
+                  nvb->setBottomMargin(tvb->bottomMargin());
+                  nvb->setLeftMargin(tvb->leftMargin());
+                  nvb->setRightMargin(tvb->rightMargin());
                   }
             delete tscore;
             }
@@ -588,13 +602,13 @@ void MuseScore::newFile()
                               Segment* s = m->getSegment(ts, 0);
                               s->add(ts);
                               Part* part = staff->part();
-                              if (!part->instr()->useDrumset()) {
+                              if (!part->instrument()->useDrumset()) {
                                     //
                                     // transpose key
                                     //
                                     KeySigEvent nKey = ks;
-                                    if (!nKey.custom() && part->instr()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
-                                          int diff = -part->instr()->transpose().chromatic;
+                                    if (!nKey.custom() && part->instrument()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
+                                          int diff = -part->instrument()->transpose().chromatic;
                                           nKey.setKey(transposeKey(nKey.key(), diff));
                                           }
                                     // do not create empty, invisible keysig
@@ -629,6 +643,8 @@ void MuseScore::newFile()
                                           k++;
                                           }
                                     }
+                              if (!staff->linkedStaves())
+                                    puRests.clear();
                               }
                         else {
                               if (rest && staff->linkedStaves())
@@ -640,6 +656,8 @@ void MuseScore::newFile()
                               rest->setTrack(staffIdx * VOICES);
                               Segment* seg = measure->getSegment(rest, tick);
                               seg->add(rest);
+                              if (!staff->linkedStaves())
+                                    rest = nullptr;
                               }
                         }
                   }
@@ -668,11 +686,14 @@ void MuseScore::newFile()
       if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !poet.isEmpty()) {
             MeasureBase* measure = score->measures()->first();
             if (measure->type() != Element::Type::VBOX) {
-                  MeasureBase* nm = new VBox(score);
+                  MeasureBase* nm = nvb ? nvb : new VBox(score);
                   nm->setTick(0);
                   nm->setNext(measure);
                   score->measures()->add(nm);
                   measure = nm;
+                  }
+            else if (nvb) {
+                  delete nvb;
                   }
             if (!title.isEmpty()) {
                   Text* s = new Text(score);
@@ -703,6 +724,10 @@ void MuseScore::newFile()
                   score->setMetaTag("lyricist", poet);
                   }
             }
+      else if (nvb) {
+            delete nvb;
+            }
+
       if (newWizard->createTempo()) {
             double tempo = newWizard->tempo();
             TempoText* tt = new TempoText(score);
@@ -773,8 +798,13 @@ QStringList MuseScore::getOpenScoreNames(const QString& filter, const QString& t
       QSettings settings;
       QString dir = settings.value("lastOpenPath", preferences.myScoresPath).toString();
       if (preferences.nativeDialogs) {
-            return QFileDialog::getOpenFileNames(this,
+            QStringList fileList = QFileDialog::getOpenFileNames(this,
                title, dir, filter);
+            if (fileList.count() > 0) {
+                  QFileInfo fi(fileList[0]);
+                  settings.setValue("lastOpenPath", fi.absolutePath());
+                  }
+            return fileList;
             }
       QFileInfo myScores(preferences.myScoresPath);
       if (myScores.isRelative())
@@ -1921,6 +1951,12 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             pageOffset = firstScore->pageNumberOffset();
       bool firstPage = true;
       for (Score* s : cs) {
+            LayoutMode layoutMode = s->layoutMode();
+            if (layoutMode != LayoutMode::PAGE) {
+                  s->startCmd();
+                  s->undo(new ChangeLayoutMode(s, LayoutMode::PAGE));
+                  s->doLayout();
+                  }
             s->setPrinting(true);
             //
             // here we ignore the configured page offset
@@ -1950,6 +1986,8 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             s->setPageNumberOffset(oldPageOffset);
             s->style()->set(StyleIdx::footerFirstPage, oldFirstPageNumber);
             s->doLayout();
+            if (layoutMode != s->layoutMode())
+                  s->endCmd(true);       // rollback
             }
       p.end();
       return true;

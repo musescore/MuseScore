@@ -938,6 +938,13 @@ niet hernoemen naar
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation>Niet opslaan</translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <source>OK</source>
@@ -970,10 +977,6 @@ niet hernoemen naar
     <message>
         <source>Help</source>
         <translation>Help</translation>
-    </message>
-    <message>
-        <source>Don&apos;t Save</source>
-        <translation>Niet opslaan</translation>
     </message>
     <message>
         <source>Discard</source>

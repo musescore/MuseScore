@@ -73,8 +73,9 @@ class Beam : public Element {
       enum class Mode : signed char {
             AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
             };
+      Q_ENUMS(Mode)
 
-      Beam(Score* s);
+      Beam(Score* = 0);
       Beam(const Beam&);
       ~Beam();
       virtual Beam* clone() const override         { return new Beam(*this); }

@@ -4,7 +4,7 @@ LONG_NAME=MuseScore
 LONGER_NAME="MuseScore 2"
 
 WORKING_DIRECTORY=applebuild
-BACKGROUND=build/packaging/musescore-dmg-background.png
+BACKGROUND=build/packaging/musescore-dmg-background.tiff
 APP_PATH=applebuild/${APPNAME}.app
  
 VOLNAME=${LONG_NAME}-${VERSION}
@@ -34,7 +34,7 @@ function set_bundle_display_options() {
             set position of item "Applications" to {150,125}
             close
             open
-            set background picture of the icon view options of container window to file "background.png" of folder "Pictures"
+            set background picture of the icon view options of container window to file "background.tiff" of folder "Pictures"
             set the bounds of the container window to {0, 0, 540, 300}
             update without registering applications
             delay 5 -- sync
@@ -120,7 +120,7 @@ mv ${VOLUME}/${APPNAME}.app "${VOLUME}/${LONGER_NAME}.app"
 # copy in background image
 mkdir -p ${VOLUME}/Pictures
 # fixme: path
-cp  ${BACKGROUND} ${VOLUME}/Pictures/background.png
+cp  ${BACKGROUND} ${VOLUME}/Pictures/background.tiff
 
 # symlink applications
 ln -s /Applications/ ${VOLUME}/Applications
@@ -129,6 +129,7 @@ mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
 
 #codesign
 codesign --deep -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app"
+#codesign --deep -s "3rd Party Mac Developer Application: MuseScore (6EPAF2X3PR)" --entitlements build/mscore.entitlements "${VOLUME}/${LONGER_NAME}.app"
 codesign -v "${VOLUME}/${LONGER_NAME}.app"
 spctl --assess --type execute "${VOLUME}/${LONGER_NAME}.app"
  
@@ -137,5 +138,7 @@ hdiutil detach $DEV
  
 # Convert the disk image to read-only
 hdiutil convert ${WORKING_DIRECTORY}/${DMGNAME} -format UDBZ -o ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
+
+shasum -a 256 ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
 
 rm ${WORKING_DIRECTORY}/${DMGNAME}

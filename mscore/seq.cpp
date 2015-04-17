@@ -42,6 +42,7 @@
 #include "libmscore/audio.h"
 #include "synthcontrol.h"
 #include "pianoroll.h"
+#include "pianotools.h"
 
 #include "click.h"
 
@@ -403,6 +404,9 @@ void Seq::unmarkNotes()
             cs->addRefresh(n->canvasBoundingRect());
             }
       markedNotes.clear();
+      PianoTools* piano = mscore->pianoTools();
+      if (piano && piano->isVisible())
+            piano->heartBeat(markedNotes);
       }
 
 //---------------------------------------------------------
@@ -499,7 +503,7 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
             const Note* note = event.note();
 
             if (note) {
-                  Instrument* instr = note->staff()->part()->instr(note->chord()->tick());
+                  Instrument* instr = note->staff()->part()->instrument(note->chord()->tick());
                   const Channel* a = instr->channel(note->subchannel());
                   mute = a->mute || a->soloMute;
                   }
@@ -523,7 +527,7 @@ void Seq::recomputeMaxMidiOutPort() {
       if (!(preferences.useJackMidi || preferences.useAlsaAudio))
             return;
       int max = 0;
-      foreach(Score * s, mscoreCore->scores()) {
+      foreach(Score * s, MuseScoreCore::mscoreCore->scores()) {
             if (s->midiPortCount() > max)
                   max = s->midiPortCount();
             }
@@ -614,7 +618,7 @@ void Seq::metronome(unsigned n, float* p, bool force)
 
 void Seq::addCountInClicks()
       {
-      int         plPos       = playPos->first;
+      int         plPos       = cs->playPos();
       Measure*    m           = cs->tick2measure(plPos);
       int         msrTick     = m->tick();
       qreal       tempo       = cs->tempomap()->tempo(msrTick);
@@ -1482,6 +1486,11 @@ void Seq::heartBeatTimeout()
       PianorollEditor* pre = mscore->getPianorollEditor();
       if (pre && pre->isVisible())
             pre->heartBeat(this);
+
+      PianoTools* piano = mscore->pianoTools();
+      if (piano && piano->isVisible())
+            piano->heartBeat(markedNotes);
+
       cv->update(cv->toPhysical(r));
       }
 

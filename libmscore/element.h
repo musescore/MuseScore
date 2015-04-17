@@ -71,24 +71,29 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(ElementFlags);
 
 //---------------------------------------------------------
 ///   \brief Unit of horizontal measure
+//    represent the space used by a Segment
 //---------------------------------------------------------
 
 class Space {
-      qreal _lw;       // space needed to the left
-      qreal _rw;       // space needed to the right
+      qreal _lw { 0.0 };       // space needed to the left
+      qreal _rw { 0.0 };       // space needed to the right
 
    public:
-      Space() : _lw(0.0), _rw(0.0)  {}
+      Space() {}
       Space(qreal a, qreal b) : _lw(a), _rw(b) {}
       qreal lw() const             { return _lw; }
       qreal rw() const             { return _rw; }
-      qreal& rLw()                 { return _lw; }
-      qreal& rRw()                 { return _rw; }
       qreal width() const          { return _lw + _rw; }
       void setLw(qreal e)          { _lw = e; }
       void setRw(qreal m)          { _rw = m; }
+      void addL(qreal v)           { _lw += v; }
+      void addR(qreal v)           { _rw += v; }
       void max(const Space& s);
-      Space& operator+=(const Space&);
+      Space& operator+=(const Space& s) {
+            _lw += s._lw;
+            _rw += s._rw;
+            return *this;
+            }
       };
 
 //---------------------------------------------------------
@@ -172,7 +177,7 @@ class Element : public QObject, public ScoreElement {
       Q_PROPERTY(QPointF                  userOff     READ scriptUserOff WRITE scriptSetUserOff)
       Q_PROPERTY(bool                     visible     READ visible      WRITE setVisible)
 
-      Element* _parent       = 0;
+      Element* _parent { 0 };
 
       bool _generated;            ///< automatically generated Element
 
@@ -253,7 +258,6 @@ class Element : public QObject, public ScoreElement {
             SELECTION,
             LASSO,
             SHADOW_NOTE,
-            RUBBERBAND,
             TAB_DURATION_SYMBOL,
             FSYMBOL,
             PAGE,
@@ -448,14 +452,15 @@ class Element : public QObject, public ScoreElement {
 
       // debug functions
       virtual void dump() const;
-      Q_INVOKABLE const char* name() const;
-      virtual QString subtypeName() const;
-      virtual QString userName() const;
+      const char* name() const;
+      virtual Q_INVOKABLE QString subtypeName() const;
+      virtual Q_INVOKABLE QString userName() const;
+      virtual Q_INVOKABLE QString _name() const { return QString(name()); }
       void dumpQPointF(const char*) const;
 
       virtual Space space() const      { return Space(0.0, width()); }
 
-      QColor color() const             { return _color; }
+      virtual QColor color() const             { return _color; }
       QColor curColor() const;
       QColor curColor(const Element* proxy) const;
       virtual void setColor(const QColor& c)     { _color = c;    }
@@ -682,26 +687,6 @@ class Compound : public Element {
       virtual void setSelected(bool f);
       virtual void setVisible(bool);
       virtual void layout();
-      };
-
-//---------------------------------------------------------
-//   @@ RubberBand
-//---------------------------------------------------------
-
-class RubberBand : public Element {
-      Q_OBJECT
-
-      QPointF _p1, _p2;
-
-   public:
-      RubberBand(Score* s) : Element(s) {}
-      virtual RubberBand* clone() const  { return new RubberBand(*this); }
-      virtual Element::Type type() const { return Element::Type::RUBBERBAND; }
-      virtual void draw(QPainter*) const;
-
-      void set(const QPointF& p1, const QPointF& p2) { _p1 = p1; _p2 = p2; }
-      QPointF p1() const { return _p1; }
-      QPointF p2() const { return _p2; }
       };
 
 extern bool elementLessThan(const Element* const, const Element* const);

@@ -43,7 +43,7 @@ MP3Exporter::MP3Exporter()
 
       mBitrate = 128;
       mQuality = QUALITY_2;
-      mChannel = CHANNEL_STEREO;
+      mChannel = CHANNEL_JOINT;
       mMode = MODE_CBR;
       mRoutine = ROUTINE_FAST;
       }
@@ -645,7 +645,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       // Retrieve preferences
 //      int highrate = 48000;
 //      int lowrate = 8000;
-      int bitrate = 64;
+//      int bitrate = 64;
 //      int brate = 128;
 //      int rmode = MODE_CBR;
 //      int vmode = ROUTINE_FAST;
@@ -655,11 +655,6 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       int oldSampleRate = MScore::sampleRate;
       int sampleRate = preferences.exportAudioSampleRate;
-
-      exporter.setMode(MODE_CBR);
-      exporter.setBitrate(bitrate);
-      exporter.setChannel(CHANNEL_JOINT);
-      exporter.setQuality(QUALITY_5, ROUTINE_STANDARD);
 
       int inSamples = exporter.initializeStream(channels, sampleRate);
       if (inSamples < 0) {
@@ -690,12 +685,18 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       MasterSynthesizer* synti = synthesizerFactory();
       synti->init();
       synti->setSampleRate(sampleRate);
-      synti->setState(score->synthesizerState());
+      bool r = synti->setState(score->synthesizerState());
+      if (!r)
+          synti->init();
 
       MScore::sampleRate = sampleRate;
 
-      QProgressBar* pBar = showProgressBar();
-      pBar->reset();
+      QProgressDialog progress(this);
+      progress.setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
+      progress.setWindowModality(Qt::ApplicationModal);
+      progress.setCancelButton(0);
+      if (!MScore::noGui)
+            progress.show();
 
       static const int FRAMES = 512;
       float bufferL[FRAMES];
@@ -706,7 +707,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       EventMap::const_iterator endPos = events.cend();
       --endPos;
       const int et = (score->utick2utime(endPos->first) + 1) * MScore::sampleRate;
-      pBar->setRange(0, et);
+      progress.setRange(0, et);
 
       for (int pass = 0; pass < 2; ++pass) {
             EventMap::const_iterator playPos;
@@ -717,7 +718,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
             // init instruments
             //
             foreach(Part* part, score->parts()) {
-                  InstrumentList* il = part->instrList();
+                  const InstrumentList* il = part->instruments();
                   for(auto i = il->begin(); i!= il->end(); i++) {
                         foreach(const Channel* a, i->second->channel()) {
                               a->updateInitList();
@@ -820,7 +821,12 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               }
                         }
                   playTime = endTime;
-                  pBar->setValue((pass * et + playTime) / 2);
+                  if (!MScore::noGui) {
+                        progress.setValue((pass * et + playTime) / 2);
+                        qApp->processEvents();
+                        }
+                  if (playTime >= et)
+                        synti->allNotesOff(-1);
                   // create sound until the sound decays
                   if (playTime >= et && max * peak < 0.000001)
                         break;
@@ -836,7 +842,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       if (bytes > 0L)
             file.write((char*)bufferOut, bytes);
 
-      hideProgressBar();
+      progress.close();
       delete synti;
       delete[] bufferOut;
       file.close();

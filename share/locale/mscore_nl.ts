@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="nl">
 <context>
     <name>AboutBox</name>
     <message>
@@ -7,27 +9,27 @@
     </message>
     <message>
         <source>Copy revision number</source>
-        <translation>Kopieër revisie nummer</translation>
+        <translation>Kopij revisienummer</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; for new versions and more information.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Support MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;your donation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2014 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; for new versions and more information.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Support MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;your donation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Bezoek&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; voor nieuwe versies en meer informatie.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Ondersteun MuseScore met &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;jouw donatie!&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Ondersteun MuseScore met &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;jouw donatie&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2014 Werner Schweer en anderen. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Gepubliceerd onder de GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer en anderen. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Geprubliceerd onder de GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -40,7 +42,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;MusicXML is an open file format for exchanging digital sheet music,&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;supported by many applications. MusicXML is copyright © MakeMusic, Inc.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All rights reserved. For more information, see: &lt;a href=&quot;http://www.musicxml.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;MusicXML.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
@@ -56,7 +58,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>The MusicXML Public License:</source>
-        <translation>De MusicXML Public License:</translation>
+        <translation>De MusicXML Openbare Licentie:</translation>
     </message>
 </context>
 <context>
@@ -71,7 +73,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Reflect</source>
-        <translation>Spiegel</translation>
+        <translation>Spiegelen</translation>
     </message>
     <message>
         <source>Reverb</source>
@@ -114,7 +116,7 @@ p, li { white-space: pre-wrap; }
     <name>AlbumManager</name>
     <message>
         <source>MuseScore: Album Manager</source>
-        <translation>MuseScore: Album manager</translation>
+        <translation>MuseScore: Albummanager</translation>
     </message>
     <message>
         <source>Add Score</source>
@@ -142,11 +144,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Print Album</source>
-        <translation>Album printen</translation>
+        <translation>Print album</translation>
     </message>
     <message>
         <source>Join Scores</source>
-        <translation>Partituren samenvoegen</translation>
+        <translation>Voeg partituren samen</translation>
     </message>
     <message>
         <source>Album name:</source>
@@ -154,11 +156,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Move current score down in list</source>
-        <translation>Verplaats partituur omlaag in de lijst</translation>
+        <translation>Verplaats huidige partituur omlaag in de lijst</translation>
     </message>
     <message>
         <source>Move current score up in list</source>
-        <translation>Verplaats partituur omhoog in de lijst</translation>
+        <translation>Verplaats huidige partituur omhoog in de lijst</translation>
     </message>
     <message>
         <source>Album name</source>
@@ -166,7 +168,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Remove current score</source>
-        <translation>Verwijder huidige partituu</translation>
+        <translation>Verwijder huidige partituur</translation>
     </message>
     <message>
         <source>Create new album</source>
@@ -174,14 +176,14 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Load an existing album</source>
-        <translation>Laad een bestaand album</translation>
+        <translation>Laad bestaand album</translation>
     </message>
 </context>
 <context>
     <name>ArticulationProperties</name>
     <message>
         <source>MuseScore: Articulations Properties</source>
-        <translation>MuseScore: Articulatie eigenschappen</translation>
+        <translation>MuseScore: Articulatieeigenschappen</translation>
     </message>
     <message>
         <source>Appearance</source>
@@ -213,7 +215,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>MIDI Action</source>
-        <translation>MIDI actie</translation>
+        <translation>MIDI-actie</translation>
     </message>
     <message>
         <source>Above Staff</source>
@@ -258,11 +260,11 @@ p, li { white-space: pre-wrap; }
     <name>BendDialog</name>
     <message>
         <source>MuseScore: Bend Properties</source>
-        <translation>MuseScore: Bend eigenschappen</translation>
+        <translation>MuseScore: Eigenschappen opdrukken </translation>
     </message>
     <message>
         <source>Bend type:</source>
-        <translation>Bend type:</translation>
+        <translation>Opdrukken type:</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
@@ -270,54 +272,61 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Bend</source>
-        <translation>Bend</translation>
+        <translation>Opdrukken</translation>
     </message>
     <message>
         <source>Bend/Release</source>
-        <translation>Bend/loslaten</translation>
+        <translation>Opdrukken/loslaten</translation>
     </message>
     <message>
         <source>Bend/Release/Bend</source>
-        <translation>Bend/loslaten/bend</translation>
+        <translation>Opdrukken/loslaten/opdrukken</translation>
     </message>
     <message>
         <source>Prebend</source>
-        <translation>Prebend</translation>
+        <translation>Pre-opdrukken</translation>
     </message>
     <message>
         <source>Prebend/Release</source>
-        <translation>Prebend/loslaten</translation>
+        <translation>pre-opdrukken/loslaten</translation>
     </message>
 </context>
 <context>
     <name>BreaksDialog</name>
     <message>
         <source>MuseScore: Add/Remove Line Breaks</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Regeleinde toevoegen/verwijderen</translation>
     </message>
     <message>
         <source>Break lines every</source>
-        <translation type="unfinished"/>
+        <translation>Breek regels af om de</translation>
     </message>
     <message>
         <source>Number of measures</source>
-        <translation type="unfinished"/>
+        <translation>Aantal maten</translation>
     </message>
     <message>
         <source>measures</source>
-        <translation type="unfinished"/>
+        <translation>maten</translation>
     </message>
     <message>
         <source>Add line breaks at end of each system</source>
-        <translation type="unfinished"/>
+        <translation>Voeg regeleindes toe aan einde van elk systeem</translation>
     </message>
     <message>
         <source>Remove current line breaks</source>
-        <translation type="unfinished"/>
+        <translation>Verwijder huidige regeleindes</translation>
     </message>
     <message>
         <source>Break lines every X measures</source>
-        <translation type="unfinished"/>
+        <translation>Breek regel af elke X maten</translation>
+    </message>
+</context>
+<context>
+    <name>ChordBase</name>
+    <message>
+        <source>Glissando end</source>
+        <translation>Glissando eind</translation>
     </message>
 </context>
 <context>
@@ -375,7 +384,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>XCircle</source>
-        <translation>XCircel</translation>
+        <translation>XCirkel</translation>
     </message>
     <message>
         <source>Do</source>
@@ -418,7 +427,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>No.</source>
-        <translation>No.</translation>
+        <translation>Nr.</translation>
     </message>
     <message>
         <source>Note</source>
@@ -1134,6 +1143,10 @@ p, li { white-space: pre-wrap; }
         <source>B♭ -1</source>
         <translation>1/</translation>
     </message>
+    <message>
+        <source>»C</source>
+        <translation>»C</translation>
+    </message>
 </context>
 <context>
     <name>EditRaster</name>
@@ -1166,11 +1179,11 @@ p, li { white-space: pre-wrap; }
     <name>EditStaffBase</name>
     <message>
         <source>MuseScore: Edit Staff/Part Properties</source>
-        <translation>MuseScore: Bewerk notenbalk/partij eigenschappen</translation>
+        <translation>MuseScore: Bewerk notenbalk-/partij-eigenschappen</translation>
     </message>
     <message>
         <source>Part Properties</source>
-        <translation>Partij eigenschappen</translation>
+        <translation>Partij-eigenschappen</translation>
     </message>
     <message>
         <source>Change Instrument...</source>
@@ -1179,10 +1192,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Instrument:</source>
         <translation>Instrument:</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Amateur:</source>
@@ -1306,11 +1315,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staff Properties</source>
-        <translation>Notenbalk eigenschappen</translation>
+        <translation>Notenbalkeigenschappen</translation>
     </message>
     <message>
         <source>Invisible staff lines</source>
-        <translation>Onzichtbare notenbalk regels</translation>
+        <translation>Onzichtbare notenbalkregels</translation>
     </message>
     <message>
         <source>Small staff</source>
@@ -1322,7 +1331,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staff line color:</source>
-        <translation>Notenbalk regel kleur</translation>
+        <translation>Notenbalkregelkleur:</translation>
     </message>
     <message>
         <source>Part name:</source>
@@ -1382,7 +1391,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Line distance:</source>
-        <translation>Regel afstand:</translation>
+        <translation>Regelafstand:</translation>
     </message>
     <message>
         <source>Extra distance above staff:</source>
@@ -1407,6 +1416,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Advanced Style Properties...</source>
         <translation>Geavanceerde stijleigenschappen...</translation>
+    </message>
+    <message>
+        <source>Hide system barline</source>
+        <translation>Verberg systeemmaatstreep</translation>
     </message>
 </context>
 <context>
@@ -1433,7 +1446,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Create a new staff type of current group.</source>
-        <translation>Creëer een nieuwe notenbalk type voor de huidige groep</translation>
+        <translation>Creëer een nieuw notenbalktype voor de huidige groep</translation>
     </message>
     <message>
         <source>Fret Marks</source>
@@ -1473,7 +1486,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Continuous</source>
-        <translation>Onafgebroken</translation>
+        <translation>Doorlopend</translation>
     </message>
     <message>
         <source>Broken</source>
@@ -1537,7 +1550,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Line distance:</source>
-        <translation>Regel afstand</translation>
+        <translation>Regelafstand</translation>
     </message>
     <message>
         <source>Show clef</source>
@@ -1565,7 +1578,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Note symbols</source>
-        <translation>Noot symbool</translation>
+        <translation>Nootsymbolen</translation>
     </message>
     <message>
         <source>Upside down</source>
@@ -1589,7 +1602,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show ledger lines</source>
-        <translation>Toon hulpstreepjes</translation>
+        <translation>Toon hulplijnen</translation>
     </message>
     <message>
         <source>Show Key signature</source>
@@ -1598,6 +1611,26 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>&lt; Reset to Template</source>
         <translation>&lt;Herstellen naar template</translation>
+    </message>
+    <message>
+        <source>Repeat:</source>
+        <translation>Herhaal:</translation>
+    </message>
+    <message>
+        <source>Never</source>
+        <translation>Nooit</translation>
+    </message>
+    <message>
+        <source>At new system</source>
+        <translation>Op nieuw systeem</translation>
+    </message>
+    <message>
+        <source>At new meas.</source>
+        <translation>Bij nieuwe maat</translation>
+    </message>
+    <message>
+        <source>Always</source>
+        <translation>Altijd</translation>
     </message>
 </context>
 <context>
@@ -1639,7 +1672,7 @@ p, li { white-space: pre-wrap; }
     <name>EditStyleBase</name>
     <message>
         <source>MuseScore: Edit Style</source>
-        <translation>MuseScore: Bewerk stijl</translation>
+        <translation>MuseScore: Stijl bewerken</translation>
     </message>
     <message>
         <source>Score</source>
@@ -1684,7 +1717,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Slurs/Ties</source>
-        <translation>Verbindingen/bindbogen</translation>
+        <translation>Fraseringsbogen/verbindingsbogen</translation>
     </message>
     <message>
         <source>Sizes</source>
@@ -1767,7 +1800,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Min. system distance:</source>
-        <translation>MIn. systeem afstand</translation>
+        <translation>Min. systeemafstand</translation>
     </message>
     <message>
         <source>Lyrics top margin:</source>
@@ -1778,16 +1811,8 @@ space unit</extracomment>
         <translation>Tekst onderkant rand</translation>
     </message>
     <message>
-        <source>Vertical-frame upper margin</source>
-        <translation>Hoogste verticaalframe marge</translation>
-    </message>
-    <message>
         <source>Vertical frame top margin:</source>
         <translation>Verticaal frame bovenste marge:</translation>
-    </message>
-    <message>
-        <source>Vertical-frame lower margin</source>
-        <translation>Laagste verticaalframe marge</translation>
     </message>
     <message>
         <source>Vertical frame bottom margin:</source>
@@ -1796,10 +1821,6 @@ space unit</extracomment>
     <message>
         <source>Create courtesy clefs</source>
         <translation>Creëer gunstige muzieksleutel</translation>
-    </message>
-    <message>
-        <source>Create time signature for all systems</source>
-        <translation>Creëer maatsoort voor alle systemen</translation>
     </message>
     <message>
         <source>Create courtesy time signatures</source>
@@ -1819,7 +1840,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Max. system distance:</source>
-        <translation>Max. systeem afstand</translation>
+        <translation>Max. systeemafstand</translation>
     </message>
     <message>
         <source>Last system fill threshold:</source>
@@ -1850,10 +1871,6 @@ space unit</extracomment>
         <translation>Even</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Odd</source>
         <translation>Oneven</translation>
     </message>
@@ -1871,7 +1888,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Brace distance:</source>
-        <translation>Accolade afstand:</translation>
+        <translation>Accolade-afstand:</translation>
     </message>
     <message>
         <source>Spacing (1=tight):</source>
@@ -1883,11 +1900,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Note to barline distance:</source>
-        <translation>Noot tot maatstreep afstand:</translation>
+        <translation>Afstand noot tot maatstreep:</translation>
     </message>
     <message>
         <source>Barline to note distance:</source>
-        <translation>Maatstreep tot noot afstand:</translation>
+        <translation>Afstand maatstreep tot noot:</translation>
     </message>
     <message>
         <source>Clef left margin:</source>
@@ -1903,15 +1920,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Time signature left margin:</source>
-        <translation>Linker maatsoort marge</translation>
+        <translation>Linker maatsoort marge:</translation>
     </message>
     <message>
         <source>Clef/Key right margin:</source>
-        <translation>Muzieksleutel/sleutel rechter marge</translation>
+        <translation>Muzieksleutel/sleutel rechter marge:</translation>
     </message>
     <message>
         <source>Clef to barline distance:</source>
-        <translation>Muzieksleutel tot maatstreep afstand:</translation>
+        <translation>Afstand sleutel tot maatstreep:</translation>
     </message>
     <message>
         <source>Staff line thickness:</source>
@@ -1919,11 +1936,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Barline to accidental distance:</source>
-        <translation>Maatstreep tot voorteken afstand:</translation>
+        <translation>Afstand maatstreep tot voorteken:</translation>
     </message>
     <message>
         <source>Show repeat bar tips (&quot;winged&quot; repeats)</source>
-        <translation>Herhalingsmaatstrepen met &quot;vleugels&quot;</translation>
+        <translation>Herhalingsmaatstrepen met &apos;vleugels&apos;</translation>
     </message>
     <message>
         <source>Barline at start of single staff</source>
@@ -1967,35 +1984,35 @@ space unit</extracomment>
     </message>
     <message>
         <source>Accidental note distance:</source>
-        <translation>Voorteken noot afstand:</translation>
+        <translation>Afstand voorteken noot:</translation>
     </message>
     <message>
         <source>Accidental distance:</source>
-        <translation>Voorteken afstand:</translation>
+        <translation>Afstand voorteken:</translation>
     </message>
     <message>
         <source>Note dot distance:</source>
-        <translation>Noot punt afstand:</translation>
+        <translation>Afstand noot punt:</translation>
     </message>
     <message>
         <source>Dot dot distance:</source>
-        <translation>Punt punt afstand:</translation>
+        <translation>Afstand punt punt:</translation>
     </message>
     <message>
         <source>Ledger line thickness:</source>
-        <translation>Zetlijn dikte:</translation>
+        <translation>Dikte hulplijn:</translation>
     </message>
     <message>
         <source>Ledger line length:</source>
-        <translation>Zetlijn lengte:</translation>
+        <translation>Lengte hulplijn:</translation>
     </message>
     <message>
         <source>Stem thickness:</source>
-        <translation>Stokdikte</translation>
+        <translation>Stokdikte:</translation>
     </message>
     <message>
         <source>Dot size:</source>
-        <translation>Punt maat:</translation>
+        <translation>Puntgrootte:</translation>
     </message>
     <message>
         <source>Distance to note:</source>
@@ -2011,15 +2028,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Beam thickness:</source>
-        <translation>Waardestreep dikte:</translation>
+        <translation>Dikte waardestreep:</translation>
     </message>
     <message>
         <source>Beam distance (in beam thickness units):</source>
-        <translation>Waardestreep afstand (in waardestreep dikte eenheden)</translation>
+        <translation>Afstand waardestreep (in waardestreep dikte eenheden):</translation>
     </message>
     <message>
         <source>Broken beam minimum length:</source>
-        <translation>Minimum lengte gebroken waardestreep:</translation>
+        <translation>Minimumlengte gebroken waardestreep:</translation>
     </message>
     <message>
         <source>Flatten all beams</source>
@@ -2035,11 +2052,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dotted line thickness:</source>
-        <translation>Gestippelde lijndikte</translation>
+        <translation>Gestippelde lijndikte:</translation>
     </message>
     <message>
         <source>Small staff size:</source>
-        <translation>Kleine notenbalkmaat</translation>
+        <translation>Kleine notenbalkmaat:</translation>
     </message>
     <message>
         <source>Small note size:</source>
@@ -2375,16 +2392,8 @@ space unit</extracomment>
         <translation>Gebruik even/oneven pagina voettekst</translation>
     </message>
     <message>
-        <source>Fixed number of measures/system:</source>
-        <translation>Vast aantal maten/systeem</translation>
-    </message>
-    <message>
-        <source>Fixed measure width</source>
-        <translation>Vaste breedte maten</translation>
-    </message>
-    <message>
         <source>System bracket thickness:</source>
-        <translation>Systeem klamp dikte:</translation>
+        <translation>Systeem haak dikte:</translation>
     </message>
     <message>
         <source>Brace thickness:</source>
@@ -2448,7 +2457,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Only for a change to C Maj / A min</source>
-        <translation type="unfinished"/>
+        <translation>Enkel voor verandering naar C Maj / A min</translation>
     </message>
     <message>
         <source>Create multimeasure rests</source>
@@ -2460,51 +2469,75 @@ space unit</extracomment>
     </message>
     <message>
         <source>Before key signature if changing to fewer sharps or flats</source>
-        <translation type="unfinished"/>
+        <translation>Voor wijzigingen naar minder kruisen / mollen</translation>
     </message>
     <message>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
-        <translation type="unfinished"/>
+        <translation>Na wijzigen naar minder kruisen / mollen (maar voor wijzigen tussen kruis / mol)</translation>
     </message>
     <message>
         <source>A, B♭, H, C, C♯, ...</source>
-        <translation type="unfinished"/>
+        <translation>A, B♭, B, C, C♯, ...</translation>
     </message>
     <message>
         <source>A, B, H, C, Cis</source>
-        <translation type="unfinished"/>
+        <translation>A, B♭, B, C, Cis</translation>
     </message>
     <message>
         <source>Full German</source>
-        <translation type="unfinished"/>
+        <translation>Volledig Duits</translation>
     </message>
     <message>
         <source>Do, Do♯, Re♭, Re, ...</source>
-        <translation type="unfinished"/>
+        <translation>Do, Do♯, Re♭, Re, ...</translation>
     </message>
     <message>
         <source>Do, Do♯, Ré♭, Ré, ...</source>
-        <translation type="unfinished"/>
+        <translation>Do, Do♯, Ré♭, Ré, ...</translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished"/>
+        <translation>Frans</translation>
     </message>
     <message>
         <source>Lower case bass notes</source>
-        <translation type="unfinished"/>
+        <translation>Bas noten in kleine letters</translation>
     </message>
     <message>
         <source>All caps note names</source>
-        <translation type="unfinished"/>
+        <translation>Alleen hoofdletters noot namen</translation>
     </message>
     <message>
         <source>Note Spelling</source>
-        <translation type="unfinished"/>
+        <translation>Noot Spelling</translation>
     </message>
     <message>
         <source>Automatic Capitalization</source>
-        <translation type="unfinished"/>
+        <translation>Automatische Hoofdletters</translation>
+    </message>
+    <message>
+        <source>Vertical frame upper margin</source>
+        <translation>Verticaal frame boven marge</translation>
+    </message>
+    <message>
+        <source>Vertical frame lower margin</source>
+        <translation>Verticaal frame onder marge</translation>
+    </message>
+    <message>
+        <source>Scale:</source>
+        <translation>Schaal:</translation>
+    </message>
+    <message>
+        <source>Barré line thickness:</source>
+        <translation>Barré lijndikte</translation>
+    </message>
+    <message>
+        <source>Scale barlines to staff size</source>
+        <translation>Schaal maatstrepen naar Notenbalk grootte</translation>
+    </message>
+    <message>
+        <source>Barline to grace note distance:</source>
+        <translation>Maatstreep tot voorslag afstand:</translation>
     </message>
 </context>
 <context>
@@ -2554,7 +2587,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Verwijder</translation>
+        <translation>Verwijderen</translation>
     </message>
     <message>
         <source>Add</source>
@@ -2565,12 +2598,16 @@ space unit</extracomment>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <source>Soundfont %1 already loaded</source>
-        <translation>Soundfont %1 al geladen</translation>
+        <source>Sound Fonts</source>
+        <translation>Sound Fonts</translation>
     </message>
     <message>
-        <source>cannot load soundfont %1</source>
-        <translation>kan soundfont %1 niet laden</translation>
+        <source>SoundFont %1 already loaded</source>
+        <translation>SoundFont %1 is al geladen</translation>
+    </message>
+    <message>
+        <source>Cannot load SoundFont %1</source>
+        <translation>Kan SoundFont %1 niet laden</translation>
     </message>
 </context>
 <context>
@@ -2617,24 +2654,12 @@ space unit</extracomment>
         <translation>Sluit MIDI import paneel</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Move track up</source>
         <translation>Verplaats track omhoog</translation>
     </message>
     <message>
-        <source>Up</source>
-        <translation>Omhoog</translation>
-    </message>
-    <message>
         <source>Move track down</source>
         <translation>Verplaats track omlaag</translation>
-    </message>
-    <message>
-        <source>Down</source>
-        <translation>Omlaag</translation>
     </message>
     <message>
         <source>Text charset:</source>
@@ -2650,7 +2675,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cancel not applied MIDI import operations</source>
-        <translation type="unfinished"/>
+        <translation>Annuleer niet toegepaste MIDI import operaties</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2687,10 +2712,6 @@ space unit</extracomment>
         <translation>Voorteken</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Small</source>
         <translation>Klein</translation>
     </message>
@@ -2710,20 +2731,12 @@ space unit</extracomment>
 <context>
     <name>InspectorAmbitus</name>
     <message>
-        <source>Part Range</source>
-        <translation>Partij bereik</translation>
-    </message>
-    <message>
         <source>Head group</source>
         <translation>Hoofdgroep</translation>
     </message>
     <message>
         <source>sp</source>
         <translation>sp</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Bottom note</source>
@@ -3025,6 +3038,10 @@ space unit</extracomment>
         <source>[Undefined]</source>
         <translation>[Ongedefineerd]</translation>
     </message>
+    <message>
+        <source>Ambitus</source>
+        <translation>Ambitus</translation>
+    </message>
 </context>
 <context>
     <name>InspectorArticulation</name>
@@ -3055,10 +3072,6 @@ space unit</extracomment>
     <message>
         <source>Down</source>
         <translation>Omlaag</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Above Staff</source>
@@ -3102,10 +3115,6 @@ space unit</extracomment>
     <message>
         <source>Barline</source>
         <translation>Maatstreep</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Style:</source>
@@ -3207,10 +3216,6 @@ space unit</extracomment>
         <translation>Positie</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Horizontal</source>
         <translation>Horizontaal</translation>
     </message>
@@ -3236,7 +3241,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Local Relayout value</source>
-        <translation type="unfinished"/>
+        <translation>Herstellen lokaal heropmaken waarde</translation>
     </message>
     <message>
         <source>Reset Horizontal value</source>
@@ -3268,7 +3273,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Local relayout</source>
-        <translation type="unfinished"/>
+        <translation>Plaatselijk heropmaken</translation>
     </message>
     <message>
         <source>User position</source>
@@ -3276,14 +3281,21 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorBreak</name>
+    <message>
+        <source>Element Inspector</source>
+        <translation>Element instellingen</translation>
+    </message>
+    <message>
+        <source>Layout Break</source>
+        <translation>Lay-out onderbreking</translation>
+    </message>
+</context>
+<context>
     <name>InspectorChord</name>
     <message>
         <source>Chord</source>
         <translation>Akkoord</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Stem direction</source>
@@ -3362,12 +3374,8 @@ space unit</extracomment>
         <translation>Sleutel</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Show courtesy</source>
-        <translation type="unfinished"/>
+        <translation>Hulp tonen</translation>
     </message>
     <message>
         <source>Clef Inspector</source>
@@ -3375,7 +3383,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation type="unfinished"/>
+        <translation>Herstellen hulp tonen waarde</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -3391,10 +3399,6 @@ space unit</extracomment>
     <message>
         <source>Dynamic Range</source>
         <translation>Dynamisch bereik</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Velocity</source>
@@ -3453,10 +3457,6 @@ space unit</extracomment>
         <translation>Kleur</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Horizontal offset</source>
         <translation>Horizontale verschuiving</translation>
     </message>
@@ -3497,6 +3497,29 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorFret</name>
+    <message>
+        <source>Ottava Inspector</source>
+        <translation>Ottava instellingen</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation>Schaal:</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Waarde herstellen</translation>
+    </message>
+    <message>
+        <source>Reset Type value</source>
+        <translation>Herstellen type waarde</translation>
+    </message>
+    <message>
+        <source>Fretboard Diagram</source>
+        <translation>Fretboord diagram</translation>
+    </message>
+</context>
+<context>
     <name>InspectorGlissando</name>
     <message>
         <source>Glissando</source>
@@ -3509,10 +3532,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>Type</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Glissando Inspector</source>
@@ -3586,10 +3605,6 @@ space unit</extracomment>
         <translation>Breedte</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Horizontal Frame Inspector</source>
         <translation>Horizontaal frame instellingen</translation>
     </message>
@@ -3631,10 +3646,6 @@ space unit</extracomment>
     <message>
         <source>Dynamic range</source>
         <translation>Dynamisch bereik</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Staff</source>
@@ -3712,10 +3723,6 @@ space unit</extracomment>
         <translation>Afbeelding</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Size</source>
         <translation>Grootte</translation>
     </message>
@@ -3753,7 +3760,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Lock aspect ratio value</source>
-        <translation type="unfinished"/>
+        <translation>Herstellen behoud verhoudingen waarde</translation>
     </message>
     <message>
         <source>Lock aspect ratio</source>
@@ -3777,10 +3784,6 @@ space unit</extracomment>
     <message>
         <source>Jump</source>
         <translation>Spring</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Jump to</source>
@@ -3818,12 +3821,8 @@ space unit</extracomment>
         <translation>Voortekens</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Show courtesy</source>
-        <translation type="unfinished"/>
+        <translation>Hulp tonen</translation>
     </message>
     <message>
         <source>Key Signature Inspector</source>
@@ -3831,7 +3830,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation type="unfinished"/>
+        <translation>Herstellen hulp tonen waarde</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -3882,10 +3881,6 @@ space unit</extracomment>
     <message>
         <source>Line</source>
         <translation>Lijn</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3968,10 +3963,6 @@ space unit</extracomment>
         <translation>Markeer</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Label</source>
         <translation>Label</translation>
     </message>
@@ -4048,7 +4039,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Mirror head</source>
-        <translation type="unfinished"/>
+        <translation>Spiegel nootkop</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -4061,10 +4052,6 @@ space unit</extracomment>
     <message>
         <source>Bottom</source>
         <translation>Onderaan</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Whole</source>
@@ -4124,7 +4111,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Mirror head value</source>
-        <translation type="unfinished"/>
+        <translation>Herstel koptype waarde</translation>
     </message>
     <message>
         <source>Reset Velocity type value</source>
@@ -4140,7 +4127,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Mirror Head</source>
-        <translation type="unfinished"/>
+        <translation>Spiegel Nootkop</translation>
     </message>
     <message>
         <source>Small</source>
@@ -4156,7 +4143,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Tuning value</source>
-        <translation type="unfinished"/>
+        <translation>Waarde stemming herstellen</translation>
     </message>
     <message>
         <source>Reset Play value</source>
@@ -4168,7 +4155,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Dot position value</source>
-        <translation type="unfinished"/>
+        <translation>Herstel Puntposititie</translation>
     </message>
     <message>
         <source>Line</source>
@@ -4176,15 +4163,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Fix to line</source>
-        <translation type="unfinished"/>
+        <translation>Bevestig aan lijn</translation>
     </message>
     <message>
         <source>Reset Fix to line</source>
-        <translation type="unfinished"/>
+        <translation>Herstellen Bevestig aan lijn</translation>
     </message>
     <message>
         <source>Reset Line</source>
-        <translation type="unfinished"/>
+        <translation>Herstel Lijn</translation>
     </message>
 </context>
 <context>
@@ -4196,10 +4183,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>Type</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Placement</source>
@@ -4269,10 +4252,6 @@ space unit</extracomment>
         <translation>rust</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Small</source>
         <translation>Klein</translation>
     </message>
@@ -4299,10 +4278,6 @@ space unit</extracomment>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Trailing space</source>
@@ -4332,20 +4307,16 @@ space unit</extracomment>
 <context>
     <name>InspectorSlur</name>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Line type:</source>
         <translation>Lijnsoort:</translation>
     </message>
     <message>
         <source>Slur/Tie</source>
-        <translation>Verbinding/bindboog</translation>
+        <translation>Legatoboog/bindboog</translation>
     </message>
     <message>
         <source>Slur Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Legatoboog Inspecteren</translation>
     </message>
     <message>
         <source>Reset Line type value</source>
@@ -4388,10 +4359,6 @@ space unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Spacer Inspector</source>
         <translation>Tussenruimte instellingen</translation>
     </message>
@@ -4405,10 +4372,6 @@ space unit</extracomment>
     <message>
         <source>Tempo Marking</source>
         <translation>Tempo</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -4450,10 +4413,6 @@ space unit</extracomment>
         <translation>Stijl</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Text Inspector</source>
         <translation>Tekst instellingen</translation>
     </message>
@@ -4464,6 +4423,10 @@ space unit</extracomment>
     <message>
         <source>Reset value</source>
         <translation>Waarde hertellen</translation>
+    </message>
+    <message>
+        <source>Reset Text to Style</source>
+        <translation>Tekst opnieuw instellen naar stijl</translation>
     </message>
 </context>
 <context>
@@ -4484,12 +4447,8 @@ space unit</extracomment>
         <translation>Maatsoort</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Show courtesy</source>
-        <translation type="unfinished"/>
+        <translation>Hulp tonen</translation>
     </message>
     <message>
         <source>Time Signature Inspector</source>
@@ -4497,7 +4456,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation type="unfinished"/>
+        <translation>Herstellen hulp tonen waarde</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4513,10 +4472,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>Type</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Trill Inspector</source>
@@ -4558,10 +4513,6 @@ space unit</extracomment>
         <translation>Tuplet</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Number</source>
         <translation>Nummer</translation>
     </message>
@@ -4579,7 +4530,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Bracket</source>
-        <translation>Klamp</translation>
+        <translation>Haak</translation>
     </message>
     <message>
         <source>Direction</source>
@@ -4615,7 +4566,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Bracket type value</source>
-        <translation>Herstel klamptype waarde</translation>
+        <translation>Herstel haaktype waarde</translation>
     </message>
     <message>
         <source>Number type</source>
@@ -4623,7 +4574,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Bracket type</source>
-        <translation>Klampwaarde</translation>
+        <translation>Haakwaarde</translation>
     </message>
 </context>
 <context>
@@ -4631,10 +4582,6 @@ space unit</extracomment>
     <message>
         <source>Vertical Frame</source>
         <translation>Verticaal frame</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>mm</source>
@@ -4663,11 +4610,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Top gap value</source>
-        <translation type="unfinished"/>
+        <translation>Herstel bovenmarge waarde</translation>
     </message>
     <message>
         <source>Reset Bottom gap value</source>
-        <translation type="unfinished"/>
+        <translation>Herstel ondermarge waarde</translation>
     </message>
     <message>
         <source>Bottom margin</source>
@@ -4723,10 +4670,6 @@ space unit</extracomment>
     <message>
         <source>Type</source>
         <translation>Type</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
     </message>
     <message>
         <source>Volta Inspector</source>
@@ -5111,10 +5054,6 @@ space unit</extracomment>
         <translation>Begin</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Above</source>
         <translation>Boven</translation>
     </message>
@@ -5167,15 +5106,15 @@ space unit</extracomment>
     <name>LoginDialog</name>
     <message>
         <source>Log in to MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Meld u aan bij MuseScore</translation>
     </message>
     <message>
         <source>Username or email</source>
-        <translation type="unfinished"/>
+        <translation>Gebruikersnaam of email</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"/>
+        <translation>Wachtwoord</translation>
     </message>
 </context>
 <context>
@@ -5323,12 +5262,14 @@ space unit</extracomment>
     <message>
         <source>2x less
 measure count</source>
-        <translation type="unfinished"/>
+        <translation>2x minder
+maten telling</translation>
     </message>
     <message>
         <source>Is human
 performance</source>
-        <translation type="unfinished"/>
+        <translation>Is menselijke
+uitvoering</translation>
     </message>
     <message>
         <source>Split staff</source>
@@ -5367,15 +5308,30 @@ tempo tekst</translation>
     <message>
         <source>Recognize
 pickup measure</source>
-        <translation type="unfinished"/>
+        <translation>Herken
+opmaak</translation>
     </message>
     <message>
         <source>Max. quantization</source>
-        <translation type="unfinished"/>
+        <translation>Max. quantizatie</translation>
     </message>
     <message>
         <source>Max. voices</source>
         <translation>Max. stemmen</translation>
+    </message>
+    <message>
+        <source>Channel</source>
+        <translation>Kanaal</translation>
+    </message>
+    <message>
+        <source>MuseScore instrument</source>
+        <translation>MuseScore instrument</translation>
+    </message>
+    <message>
+        <source>Show
+chord symbols</source>
+        <translation>Toon
+akkoordsymbolen</translation>
     </message>
 </context>
 <context>
@@ -5396,18 +5352,53 @@ pickup measure</source>
         <translation>Opslaan als mp3</translation>
     </message>
     <message>
-        <source>MuseScore does not export MP3 files directly, but instead uses 
-the freely available LAME library.  You must obtain %1 
-separately, and then locate the file for MuseScore.
+        <source>MuseScore does not export MP3 files directly, but instead uses the freely available LAME library.  You must obtain %1 separately (for details check the handbook), and then locate the file for MuseScore.
 You only need to do this once.
 
 Would you like to locate %2 now?</source>
-        <translation>MuseScore exporteert niet MP3 files direct, maar gebruikt in plaats 
-daarvan de vrij beschikbare LAME bibliotheek.  Deze %1 moet apart 
-verkregen worden en dan beschikbaar maken voor MuseScore.
-Dit hoeft slecht eenmalig te gebeuren.
+        <translation>MuseScore exporteert niet direct naar MP3 bestanden, maar in plaats daarvan gebruikt het de gratis beschikbare LAME software.  U moet %1 eerst apart verkrijgen (zie het handboek voor details), en vervolgens het bestand aanwijzen voor MuseScore.
+Dit is slechts een eenmalige handeling.
 
-Wil je %2 nu localiseren?</translation>
+Wilt u %2 nu aanwijzen?</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <source>Open PDF/XPS file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ZoomIn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ZoomOut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ToolBar</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5446,7 +5437,7 @@ Wil je %2 nu localiseren?</translation>
     </message>
     <message>
         <source>Brackets</source>
-        <translation>Klampen</translation>
+        <translation>Haken</translation>
     </message>
     <message>
         <source>Articulations &amp; Ornaments</source>
@@ -5471,10 +5462,6 @@ Wil je %2 nu localiseren?</translation>
     <message>
         <source>Tremolo</source>
         <translation>Tremolo</translation>
-    </message>
-    <message>
-        <source>Repeats</source>
-        <translation>Herhalingstekens</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -5508,6 +5495,10 @@ Wil je %2 nu localiseren?</translation>
         <source>Bagpipe Embellishments</source>
         <translation>Doedelzak versierselen</translation>
     </message>
+    <message>
+        <source>Repeats &amp; Jumps</source>
+        <translation>Herhalingen &amp; sprongen</translation>
+    </message>
 </context>
 <context>
     <name>MeasureProperties</name>
@@ -5518,7 +5509,8 @@ Wil je %2 nu localiseren?</translation>
     <message>
         <source>cannot change measure length:
 tuplet would cross measure</source>
-        <translation type="unfinished"/>
+        <translation>kan maatlengte niet aanpassen:
+tuplet zou maat overschrijden</translation>
     </message>
 </context>
 <context>
@@ -5597,11 +5589,11 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Other</source>
-        <translation>Ander</translation>
+        <translation>Overige</translation>
     </message>
     <message>
         <source>Exclude from measure count</source>
-        <translation>Sluit ui van maten telling</translation>
+        <translation>Sluit uit van maten telling</translation>
     </message>
     <message>
         <source>Repeat count:</source>
@@ -5609,7 +5601,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Layout stretch:</source>
-        <translation>indeling uitrekken</translation>
+        <translation>Indeling uitrekken</translation>
     </message>
     <message>
         <source>Measure number mode:</source>
@@ -5621,7 +5613,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Actual:</source>
-        <translation>werkelijk</translation>
+        <translation>werkelijk:</translation>
     </message>
     <message>
         <source>Add to measure number:</source>
@@ -5690,10 +5682,6 @@ tuplet would cross measure</source>
         <translation>PDF-Scan</translation>
     </message>
     <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Add Scan</source>
         <translation>Scan toevoegen</translation>
     </message>
@@ -5752,7 +5740,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Doit</source>
-        <translation type="unfinished"/>
+        <translation>Doit</translation>
     </message>
     <message>
         <source>Plop</source>
@@ -5786,6 +5774,25 @@ tuplet would cross measure</source>
     </message>
 </context>
 <context>
+    <name>Ms::AccessibleSearchBox</name>
+    <message>
+        <source>Measure</source>
+        <translation>Maat</translation>
+    </message>
+    <message>
+        <source>Page</source>
+        <translation>Pagina</translation>
+    </message>
+    <message>
+        <source>Rehearsal Mark</source>
+        <translation>Repetitiecijfer/-letter</translation>
+    </message>
+    <message>
+        <source>Not found </source>
+        <translation>Niet gevonden</translation>
+    </message>
+</context>
+<context>
     <name>Ms::AlbumManager</name>
     <message>
         <source>MuseScore: Add Score</source>
@@ -5805,14 +5812,14 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Error while creating score from album.</source>
-        <translation type="unfinished"/>
+        <translation>Fout bij maken van partituur vanuit album</translation>
     </message>
 </context>
 <context>
     <name>Ms::Ambitus</name>
     <message>
         <source>%1; Top pitch: %2%3; Bottom pitch: %4%5</source>
-        <translation type="unfinished"/>
+        <translation>%1; Hoogste toonhoogte: %2%3; laagste toonhoogte: %4%5</translation>
     </message>
 </context>
 <context>
@@ -5875,18 +5882,6 @@ tuplet would cross measure</source>
         <translation>Eigen tuplet</translation>
     </message>
     <message>
-        <source>Dotted</source>
-        <translation>Gepunteerd</translation>
-    </message>
-    <message>
-        <source>Double dotted</source>
-        <translation>Dubbele gepunteerd</translation>
-    </message>
-    <message>
-        <source>Triple dotted</source>
-        <translation>Drievoudige gepunteerd</translation>
-    </message>
-    <message>
         <source>Quintuplet</source>
         <translation>Kwintool</translation>
     </message>
@@ -5901,6 +5896,18 @@ tuplet would cross measure</source>
     <message>
         <source>%1 End of %2</source>
         <translation>%1 Einde van %2</translation>
+    </message>
+    <message>
+        <source>Dotted %1</source>
+        <translation>Gepunteerde %1</translation>
+    </message>
+    <message>
+        <source>Double dotted %1</source>
+        <translation>Dubbel gepunteerde %1</translation>
+    </message>
+    <message>
+        <source>Triple dotted %1</source>
+        <translation>Drievoudig gepunteerde %1</translation>
     </message>
 </context>
 <context>
@@ -5982,9 +5989,16 @@ tuplet would cross measure</source>
         <source>Open File
 %1
 failed: </source>
-        <translation>Open bestand
+        <translation>Openen bestand
 %1
 mislukt:</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::EditStaff</name>
+    <message>
+        <source>The instrument name is invalid.</source>
+        <translation>De instrumentnaam is ongeldig.</translation>
     </message>
 </context>
 <context>
@@ -6144,6 +6158,13 @@ mislukt:</translation>
     </message>
 </context>
 <context>
+    <name>Ms::HelpQuery</name>
+    <message>
+        <source>Search for: </source>
+        <translation>Zoek naar:</translation>
+    </message>
+</context>
+<context>
     <name>Ms::Inspector</name>
     <message>
         <source>Inspector</source>
@@ -6159,6 +6180,21 @@ mislukt:</translation>
     <message>
         <source>Inspector</source>
         <translation>Instellingen</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::InspectorGroupElement</name>
+    <message>
+        <source>Select</source>
+        <translation>Selecteer</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation>Noten</translation>
+    </message>
+    <message>
+        <source>Rests</source>
+        <translation>Rusten</translation>
     </message>
 </context>
 <context>
@@ -6233,7 +6269,7 @@ mislukt:</translation>
         <source>Open Instruments File
 %1
 failed: </source>
-        <translation>Open instrument bestand
+        <translation>Openen instrument bestand
 %1
 mislukt:</translation>
     </message>
@@ -6298,70 +6334,74 @@ mislukt:</translation>
     <name>Ms::LoginDialog</name>
     <message>
         <source>&lt;a href=&quot;%1&quot;&gt;Create an account&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Maak account aan&lt;/a&gt;</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;%1&quot;&gt;Forgot password?&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Wachtwoord vergeten?&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Login error</source>
-        <translation type="unfinished"/>
+        <translation>Aanmeldingsprobleem</translation>
     </message>
     <message>
         <source>Please fill in your username and password</source>
-        <translation type="unfinished"/>
+        <translation>A.u.b. gebruikersnaam en wachtwoord invullen</translation>
     </message>
 </context>
 <context>
     <name>Ms::LoginManager</name>
     <message>
         <source>Network error</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Please check your internet connection</source>
-        <translation type="unfinished"/>
+        <translation>Netwerkprobleem</translation>
     </message>
     <message>
         <source>Unsuccessful login. Please try again.</source>
-        <translation type="unfinished"/>
+        <translation>Login mislukt. Probeer a.u.b opnieuw.</translation>
     </message>
     <message>
         <source>Sorry, wrong email address, username or password. Please check again. &lt;a href=&quot;%1&quot;&gt;Have you forgotten your password&lt;/a&gt;?</source>
-        <translation type="unfinished"/>
+        <translation>Sorry, verkeerd e-mailadres, gebruikersnaam of wachtwoord. Controleer a.u.b. opnieuw. &lt;a href=&quot;%1&quot;&gt;Bent u uw wachtwoord vergeten?&lt;/a&gt;</translation>
     </message>
     <message>
         <source>This account has been blocked.</source>
-        <translation type="unfinished"/>
+        <translation>Dit account is geblokkeerd.</translation>
     </message>
     <message>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or &lt;a href=&quot;%1&quot;&gt;request a new activation email&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Uw account is nog niet geactiveerd. Controleer a.u.b. uw mailbox om uw account te activeren of &lt;a href=&quot;%1&quot;&gt;vraag een nieuwe activerings-e-mail aan&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Error while getting user info. Please try again</source>
-        <translation type="unfinished"/>
+        <translation>Fout bij ophalen van gebruikersinformatie. Probeer a.u.b. opnieuw.</translation>
     </message>
     <message>
         <source>Error while getting user info: %1</source>
-        <translation type="unfinished"/>
+        <translation>Fout bij ophalen gebruikersinformatie: %1</translation>
     </message>
     <message>
         <source>An error occurred during the file transfer. Please try again</source>
-        <translation type="unfinished"/>
+        <translation>Er is een fout opgetreden bij de bestandsoverdracht. Probeer het a.u.b. opnieuw.</translation>
     </message>
     <message>
         <source>Cannot upload: %1</source>
-        <translation type="unfinished"/>
+        <translation>Uploaden mislukt: %1</translation>
     </message>
     <message>
         <source>Please upgrade</source>
-        <translation type="unfinished"/>
+        <translation>Upgrade a.u.b.</translation>
     </message>
     <message>
         <source>Your MuseScore version is too old to use this feature.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Please upgrade first&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Uw versie van MuseScore is te oud om deze functie te gebruiken.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;A.u.b. eerst upgraden&lt;/a&gt;.</translation>
+    </message>
+    <message>
+        <source>Please check your Internet connection</source>
+        <translation>Controleer je internet connectie a.u.b.</translation>
+    </message>
+    <message>
+        <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
+        <translation>De datum- of tijdsinstelling van uw computer is niet juist ingesteld. Controleer het en pas het aan. Het is aanbevolen om de tijdzone op automatisch te plaatsen. Indien je nog steeds niet kan inloggen, &lt;a href=&quot;%1&quot;&gt;contacteer ons&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -6422,7 +6462,7 @@ mislukt:</translation>
     <name>Ms::MuseScore</name>
     <message>
         <source>Could not open MP3 encoding library!</source>
-        <translation>Kan de MP3 encoding bobliotheek niet openen!</translation>
+        <translation>Kan de MP3-encodingbibliotheek niet openen!</translation>
     </message>
     <message>
         <source>Not a valid or supported MP3 encoding library!</source>
@@ -6434,7 +6474,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Unable to open target file for writing</source>
-        <translation>Doelbestand niet schrijfbaar</translation>
+        <translation>Doelbestand kan niet worden opgeslagen</translation>
     </message>
     <message>
         <source>Error %1 returned from MP3 encoder</source>
@@ -6476,11 +6516,11 @@ voordat u afsluit?</translation>
     </message>
     <message>
         <source>Overture / Score Writer Files &lt;experimental&gt; (*.ove *.scw);;</source>
-        <translation>Ouverture / partituur schrijver bestand &lt;experimental&gt; (*.ove *.scw);;</translation>
+        <translation>Overture / Score Writer bestanden &lt;experimenteel&gt; (*.ove *.scw);;</translation>
     </message>
     <message>
         <source>Bagpipe Music Writer Files &lt;experimental&gt; (*.bww);;</source>
-        <translation>Doedelzak muziek schrijver bestand &lt;experimental&gt; (*.bww);;</translation>
+        <translation>Bagpipe Music Writer bestanden &lt;experimenteel&gt; (*.bww);;</translation>
     </message>
     <message>
         <source>MuseScore: Load Score</source>
@@ -6592,7 +6632,7 @@ voordat u afsluit?</translation>
     </message>
     <message>
         <source>MP3 Audio (*.mp3)</source>
-        <translation>Wave Audio (*.wav)</translation>
+        <translation>MP3 Audio (*.mp3)</translation>
     </message>
     <message>
         <source>MuseScore: Export</source>
@@ -6601,10 +6641,6 @@ voordat u afsluit?</translation>
     <message>
         <source>MuseScore: Save As</source>
         <translation>MuseScore: Opslaan als</translation>
-    </message>
-    <message>
-        <source>cannot determine file type</source>
-        <translation>Kan bestandstype niet achterhalen</translation>
     </message>
     <message>
         <source>MuseScore: Export Parts</source>
@@ -6660,7 +6696,7 @@ Wil je dit vervangen?
     </message>
     <message>
         <source>Line break</source>
-        <translation>Regeleinde</translation>
+        <translation>Regel-einde</translation>
     </message>
     <message>
         <source>Page break</source>
@@ -6688,7 +6724,7 @@ Wil je dit vervangen?
     </message>
     <message>
         <source>Bracket</source>
-        <translation>Klamp</translation>
+        <translation>Haak</translation>
     </message>
     <message>
         <source>Brace</source>
@@ -6793,16 +6829,12 @@ selecteer eerst een maat en probeer het dan opnieuw</translation>
         <translation>Werkelijke toonhoogte</translation>
     </message>
     <message>
-        <source>Note Entry</source>
-        <translation>Noten invoeren</translation>
-    </message>
-    <message>
         <source>&amp;File</source>
         <translation>&amp;Bestand</translation>
     </message>
     <message>
         <source>Open &amp;Recent</source>
-        <translation>Open &amp;Recente</translation>
+        <translation>&amp;Recent geopend</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
@@ -6861,52 +6893,8 @@ selecteer eerst een maat en probeer het dan opnieuw</translation>
         <translation>&amp;Online handleiding</translation>
     </message>
     <message>
-        <source>&amp;About</source>
-        <translation>&amp;Over</translation>
-    </message>
-    <message>
-        <source>About &amp;Qt</source>
-        <translation>Over &amp;Qt</translation>
-    </message>
-    <message>
-        <source>About &amp;MusicXML</source>
-        <translation>Over &amp;MusicXML</translation>
-    </message>
-    <message>
         <source>Check for &amp;Update</source>
         <translation>Controleer op &amp;updates</translation>
-    </message>
-    <message>
-        <source>no score</source>
-        <translation>geen partituur</translation>
-    </message>
-    <message>
-        <source>NOTE entry mode</source>
-        <translation>NOOT invoer modus</translation>
-    </message>
-    <message>
-        <source>DRUM entry mode</source>
-        <translation>DRUM invoer modus</translation>
-    </message>
-    <message>
-        <source>TAB entry mode</source>
-        <translation>TAB invoer modus</translation>
-    </message>
-    <message>
-        <source>edit mode</source>
-        <translation>wijzig modus</translation>
-    </message>
-    <message>
-        <source>text edit mode</source>
-        <translation>tekst wijzig modus</translation>
-    </message>
-    <message>
-        <source>lyrics edit mode</source>
-        <translation>lyrics wijzig modus</translation>
-    </message>
-    <message>
-        <source>play</source>
-        <translation>speel</translation>
     </message>
     <message>
         <source>The previous session quit unexpectedly.
@@ -6941,7 +6929,7 @@ Sessie herstellen?</translation>
         <translation>MuseScore: Lees werkruimte naam</translation>
     </message>
     <message>
-        <source>'%1' does already exist,
+        <source>&apos;%1&apos; does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; bestaat reeds,
 kies een andere naam:</translation>
@@ -6975,10 +6963,6 @@ kies een andere naam:</translation>
         <translation>MuseScore: Afbeelding toevoegen </translation>
     </message>
     <message>
-        <source>chord symbol/figured bass edit mode</source>
-        <translation>Akkoord symbool/basso wijzig modus</translation>
-    </message>
-    <message>
         <source>Report a Bug</source>
         <translation>Een fout melden</translation>
     </message>
@@ -6993,7 +6977,7 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>Error Opening LAME library</source>
-        <translation>Fout bij openen LAME bibliotheek</translation>
+        <translation>Fout bij openen LAME-bibliotheek</translation>
     </message>
     <message>
         <source>Encoding Error</source>
@@ -7015,7 +6999,7 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>PDF Files &lt;experimental OMR&gt; (*.pdf);;</source>
-        <translation>PDF bestanden &lt;experimental OMR&gt; (*.pdf);;</translation>
+        <translation>PDF bestanden &lt;experimenteel OMR&gt; (*.pdf);;</translation>
     </message>
     <message>
         <source>New...</source>
@@ -7039,19 +7023,7 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>View Mode</source>
-        <translation>Beeld modus</translation>
-    </message>
-    <message>
-        <source>Screenshot Mode</source>
-        <translation>Schermafdruk modus</translation>
-    </message>
-    <message>
-        <source>screenshot mode</source>
-        <translation>schermafdruk modus</translation>
-    </message>
-    <message>
-        <source>score locked</source>
-        <translation>partituur geblokkeerd</translation>
+        <translation>Weergavemodus</translation>
     </message>
     <message>
         <source>Swing</source>
@@ -7079,7 +7051,7 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>Uncompressed MuseScore File (*.mscx)</source>
-        <translation>Ongecomprimeerde MuseScore bestand (*.mscx)</translation>
+        <translation>Ongecomprimeerd MuseScore bestand (*.mscx)</translation>
     </message>
     <message>
         <source>MusicXML File (*.xml)</source>
@@ -7087,7 +7059,7 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>Compressed MusicXML File (*.mxl)</source>
-        <translation>gecomprimeerd MusicXML bestand (*.mxl)</translation>
+        <translation>Gecomprimeerd MusicXML bestand (*.mxl)</translation>
     </message>
     <message>
         <source>Show MIDI import panel</source>
@@ -7183,7 +7155,87 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Gereedschappen</translation>
+    </message>
+    <message>
+        <source>No score</source>
+        <translation>geen partituur</translation>
+    </message>
+    <message>
+        <source>Edit mode</source>
+        <translation>Bewerkingsmodus</translation>
+    </message>
+    <message>
+        <source>Text edit mode</source>
+        <translation>Tekstbewerkingsmodus</translation>
+    </message>
+    <message>
+        <source>Lyrics edit mode</source>
+        <translation>Songtekstbewerkingsmodus</translation>
+    </message>
+    <message>
+        <source>Chord symbol/figured bass edit mode</source>
+        <translation>Akkoordsymbool-/becijferde bas-bewerkingsmodus</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Afspelen</translation>
+    </message>
+    <message>
+        <source>Score locked</source>
+        <translation>Partituur geblokkeerd</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Handleiding</translation>
+    </message>
+    <message>
+        <source>&amp;About...</source>
+        <translation>&amp;Over...</translation>
+    </message>
+    <message>
+        <source>About &amp;Qt...</source>
+        <translation>Over &amp;Qt...</translation>
+    </message>
+    <message>
+        <source>About &amp;MusicXML...</source>
+        <translation>Over &amp;MusicXML...</translation>
+    </message>
+    <message>
+        <source>Image Capture</source>
+        <translation>Afbeelding opname</translation>
+    </message>
+    <message>
+        <source>Note Input</source>
+        <translation>Noteninvoer</translation>
+    </message>
+    <message>
+        <source>Note input mode</source>
+        <translation>Noteninvoer modus</translation>
+    </message>
+    <message>
+        <source>Drum input mode</source>
+        <translation>Drum invoer modus</translation>
+    </message>
+    <message>
+        <source>TAB input mode</source>
+        <translation>TAB invoer modus</translation>
+    </message>
+    <message>
+        <source>Image capture mode</source>
+        <translation>Afbeelding aanmaak modus</translation>
+    </message>
+    <message>
+        <source>Cannot determine file type</source>
+        <translation>Kan het bestandsformaat niet herkennen</translation>
+    </message>
+    <message>
+        <source>MuseScore:</source>
+        <translation>MuseScore:</translation>
+    </message>
+    <message>
+        <source>Cannot write into %1</source>
+        <translation>Kan niet schrijven naar %1</translation>
     </message>
 </context>
 <context>
@@ -7284,10 +7336,17 @@ kies een andere naam:</translation>
     </message>
 </context>
 <context>
+    <name>Ms::NoEffectGui</name>
+    <message>
+        <source>No Plugin</source>
+        <translation>Geen plugin</translation>
+    </message>
+</context>
+<context>
     <name>Ms::Note</name>
     <message>
         <source>Appoggiatura</source>
-        <translation>lange voorslag</translation>
+        <translation>Lange voorslag</translation>
     </message>
     <message>
         <source>Grace note after</source>
@@ -7311,7 +7370,7 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>Acciaccatura</source>
-        <translation>korte voorslag</translation>
+        <translation>Korte voorslag</translation>
     </message>
     <message>
         <source>%1 Start of %2</source>
@@ -7323,15 +7382,15 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>%1; Pitch: %2; Duration: %3%4</source>
-        <translation type="unfinished"/>
+        <translation>%1; Toonhoogte: %2; Duur: %3%4</translation>
     </message>
     <message>
         <source>Beat Slash</source>
-        <translation type="unfinished"/>
+        <translation>Maat slash</translation>
     </message>
     <message>
         <source>Rhythm Slash</source>
-        <translation type="unfinished"/>
+        <translation>Ritmische Slash</translation>
     </message>
 </context>
 <context>
@@ -7429,57 +7488,6 @@ kies een andere naam:</translation>
     </message>
 </context>
 <context>
-    <name>Ms::PianorollEditor</name>
-    <message>
-        <source>Toolbar 1</source>
-        <translation>Werkbalk 1</translation>
-    </message>
-    <message>
-        <source>Wave</source>
-        <translation>Golf</translation>
-    </message>
-    <message>
-        <source>Show wave display</source>
-        <translation>Toon golf beeld</translation>
-    </message>
-    <message>
-        <source>Toolbar 2</source>
-        <translation>Werkbalk  2</translation>
-    </message>
-    <message>
-        <source>Cursor:</source>
-        <translation>Cursor:</translation>
-    </message>
-    <message>
-        <source>Velocity:</source>
-        <translation>Geluidssterkte:</translation>
-    </message>
-    <message>
-        <source>Offset</source>
-        <translation>Verschuiving</translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation>Gebruiker</translation>
-    </message>
-    <message>
-        <source>Pitch:</source>
-        <translation>Toonhoogte:</translation>
-    </message>
-    <message>
-        <source>OnTime:</source>
-        <translation>Tijd Aan:</translation>
-    </message>
-    <message>
-        <source>Len:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
-        <translation>MuseScore: &lt;%1&gt; Notenbalk: %2</translation>
-    </message>
-</context>
-<context>
     <name>Ms::PluginCreator</name>
     <message>
         <source>File Operations</source>
@@ -7516,8 +7524,8 @@ Opslaan voor sluiten?</translation>
         <translation>MuseScore: Plugin opslaan</translation>
     </message>
     <message>
-        <source>cannot determine file type</source>
-        <translation>Kan bestandstype niet achterhalen</translation>
+        <source>Cannot determine file type</source>
+        <translation>Kan het bestandsformaat niet herkennen</translation>
     </message>
 </context>
 <context>
@@ -7532,15 +7540,15 @@ Opslaan voor sluiten?</translation>
     </message>
     <message>
         <source>Choose Background Wallpaper</source>
-        <translation>Kies achtergrond</translation>
+        <translation>Kies achtergrondafbeelding</translation>
     </message>
     <message>
         <source>Choose Default Style</source>
-        <translation>Kies standaard stijl</translation>
+        <translation>Kies standaardstijl</translation>
     </message>
     <message>
         <source>Choose Default Style for Parts</source>
-        <translation>Kies standaard stijl voor partijen</translation>
+        <translation>Kies standaardstijl voor partijen</translation>
     </message>
     <message>
         <source>Choose Instrument List</source>
@@ -7587,16 +7595,8 @@ Opslaan voor sluiten?</translation>
         <translation>Kies afbeeldings map</translation>
     </message>
     <message>
-        <source>Soundfont Folders</source>
-        <translation>Soundfont map</translation>
-    </message>
-    <message>
-        <source>SFZ Folders</source>
-        <translation>SFZ map</translation>
-    </message>
-    <message>
         <source>Action: %1; Shortcut: %2</source>
-        <translation>Actie: %1; snelkoppeling %2</translation>
+        <translation>Actie: %1; snelkoppeling: %2</translation>
     </message>
     <message>
         <source>No shortcut defined</source>
@@ -7605,6 +7605,10 @@ Opslaan voor sluiten?</translation>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;All (*)</source>
         <translation>MuseScore bestanden (*.mscz *.mscx);;All (*)</translation>
+    </message>
+    <message>
+        <source>SoundFont Folders</source>
+        <translation>SoundFontmappen</translation>
     </message>
 </context>
 <context>
@@ -7619,7 +7623,7 @@ Opslaan voor sluiten?</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation>Update</translation>
+        <translation>Updaten</translation>
     </message>
     <message>
         <source>No update</source>
@@ -7636,17 +7640,6 @@ Opslaan voor sluiten?</translation>
     <message>
         <source>Updated</source>
         <translation>Bijgewerkt</translation>
-    </message>
-</context>
-<context>
-    <name>Ms::Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Stem: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7669,7 +7662,7 @@ Probeer op een andere plaats op te slaan.</translation>
         <source>Open Temp File
 %1
 failed: %2</source>
-        <translation>Open tijdelijk bestand
+        <translation>Openen tijdelijk bestand
 %1
 mislukt: %2</translation>
     </message>
@@ -7687,7 +7680,7 @@ mislukt: %2</translation>
         <source>Open File
 %1
 failed: </source>
-        <translation>Open bestand
+        <translation>Openen bestand
 %1
 mislukt:</translation>
     </message>
@@ -7695,7 +7688,7 @@ mislukt:</translation>
         <source>Open File
 %1
 failed: %2</source>
-        <translation>Open bestand
+        <translation>Openen bestand
 %1
 mislukt: %2</translation>
     </message>
@@ -7703,7 +7696,7 @@ mislukt: %2</translation>
         <source>Open Style File
 %1
 failed: %2</source>
-        <translation>Open stijlbestand
+        <translation>Openen stijlbestand
 %1
 mislukt: %2</translation>
     </message>
@@ -7718,6 +7711,14 @@ mislukt: %2</translation>
     <message>
         <source>No selection</source>
         <translation>Geen selectie</translation>
+    </message>
+    <message>
+        <source>Measure %1 Staff %2 incomplete. Expected: %3; Found: %4</source>
+        <translation>Maat %1 Regel %2 incompleet. Verwacht: %3; Gevonden: %4</translation>
+    </message>
+    <message>
+        <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
+        <translation>Maat %1, staf %2, stem %3 te lang. Verwacht: %4; Gevonden: %5</translation>
     </message>
 </context>
 <context>
@@ -7756,22 +7757,29 @@ mislukt: %2</translation>
     </message>
 </context>
 <context>
-    <name>Ms::ScoreView</name>
+    <name>Ms::ScoreBrowser</name>
     <message>
-        <source>transparent background</source>
-        <translation>transparante achtergrond</translation>
+        <source>Choose Instruments</source>
+        <translation>Kies Instrumenten</translation>
     </message>
+    <message>
+        <source>Create New Score</source>
+        <translation>Creëer nieuwe partituur</translation>
+    </message>
+    <message>
+        <source>Custom Templates</source>
+        <translation>Aangepaste Templates</translation>
+    </message>
+    <message>
+        <source>Getting Started</source>
+        <translation>Aan de slag</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::ScoreView</name>
     <message>
         <source>Set Standard Size...</source>
         <translation>Standaardgrootte instellen...</translation>
-    </message>
-    <message>
-        <source>Save As (print mode)...</source>
-        <translation>Opslaan als (afdruk modus)</translation>
-    </message>
-    <message>
-        <source>Save As (screenshot mode)...</source>
-        <translation>Opslaan als (schermafdruk modus)</translation>
     </message>
     <message>
         <source>MuseScore: Set Output Resolution</source>
@@ -7792,10 +7800,6 @@ mislukt: %2</translation>
     <message>
         <source>MuseScore: Save As</source>
         <translation>MuseScore: Opslaan als</translation>
-    </message>
-    <message>
-        <source>cannot determine file type</source>
-        <translation>Kan bestandstype niet achterhalen</translation>
     </message>
     <message>
         <source>Layer</source>
@@ -7910,22 +7914,6 @@ mislukt: %2</translation>
         <translation>Object debugger</translation>
     </message>
     <message>
-        <source>Please select the complete tuplet and retry the copy operation</source>
-        <translation>Selecteer de volledige tuplet en probeer het kopiëren opnieuw</translation>
-    </message>
-    <message>
-        <source>Please select the complete tuplet and retry the cut operation</source>
-        <translation>Selecteer de volledige tuplet en probeer het knippen opnieuw</translation>
-    </message>
-    <message>
-        <source>no destination to paste</source>
-        <translation>geen bestemming om te plakken</translation>
-    </message>
-    <message>
-        <source>cannot paste into tuplet</source>
-        <translation>kan niet plakken in een tuplet</translation>
-    </message>
-    <message>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -7949,7 +7937,7 @@ selecteer eerst een maat en probeer het dan opnieuw</translation>
     </message>
     <message>
         <source>Tremolo Bar Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Tremolo-lijn eigenschappen...</translation>
     </message>
     <message>
         <source>Text Style...</source>
@@ -7964,10 +7952,6 @@ selecteer eerst een maat en probeer het dan opnieuw</translation>
         <translation>Resolutie (%1 DPI)</translation>
     </message>
     <message>
-        <source>Screenshot Mode</source>
-        <translation>Schermafdruk modus</translation>
-    </message>
-    <message>
         <source>Hide Courtesy Time Signature</source>
         <translation>Verberg hulp maatsoorten</translation>
     </message>
@@ -7976,24 +7960,12 @@ selecteer eerst een maat en probeer het dan opnieuw</translation>
         <translation>Toon hulp maatsoorten</translation>
     </message>
     <message>
-        <source>Hide courtesy clef</source>
-        <translation>Verberg hulp-sleutel</translation>
-    </message>
-    <message>
-        <source>Show courtesy clef</source>
-        <translation>Toon hulp-sleutel</translation>
-    </message>
-    <message>
         <source>Hide Courtesy Key Signature</source>
         <translation>Verberg herstellingsteken </translation>
     </message>
     <message>
         <source>Show Courtesy Key Signature</source>
         <translation>Toon herstellingsteken </translation>
-    </message>
-    <message>
-        <source>tuplet cannot cross barlines</source>
-        <translation>tuplet kan geen notenbalklijnen kruizen</translation>
     </message>
     <message>
         <source>No chord/rest selected:
@@ -8015,15 +7987,66 @@ selecteer een bereik van maten om te combineren en probeer opnieuw</translation>
     </message>
     <message>
         <source>Auto-resize to page</source>
-        <translation type="unfinished"/>
+        <translation>Automatisch resizen naar pagina</translation>
+    </message>
+    <message>
+        <source>Hide Courtesy Clef</source>
+        <translation>Verberg hulp-sleutel</translation>
+    </message>
+    <message>
+        <source>Show Courtesy Clef</source>
+        <translation>Toon hulp-sleutel</translation>
+    </message>
+    <message>
+        <source>Please select the complete tuplet/tremolo and retry the command</source>
+        <translation>Selecteer de volledige tuplet/tremolo en probeer het opnieuw</translation>
+    </message>
+    <message>
+        <source>Image Capture</source>
+        <translation>Afbeelding opname</translation>
+    </message>
+    <message>
+        <source>Save As (Print Mode)...</source>
+        <translation>Opslaan als (afdruk modus)</translation>
+    </message>
+    <message>
+        <source>Save As (Screenshot Mode)...</source>
+        <translation>Opslaan als (schermafdruk modus)</translation>
+    </message>
+    <message>
+        <source>Cannot determine file type</source>
+        <translation>Kan het bestandsformaat niet herkennen</translation>
+    </message>
+    <message>
+        <source>No destination to paste</source>
+        <translation>Geen bestemming om te plakken</translation>
+    </message>
+    <message>
+        <source>Cannot paste into tuplet</source>
+        <translation>Kan niet plakken in een tuplet</translation>
+    </message>
+    <message>
+        <source>Tuplet cannot cross barlines</source>
+        <translation>Tuplet kan geen maatstrepen overschreiden</translation>
+    </message>
+    <message>
+        <source>Transparent background</source>
+        <translation>Transparante achtergrond</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::SearchComboBox</name>
+    <message>
+        <source>Search Box</source>
+        <translation>Zoek vak</translation>
+    </message>
+    <message>
+        <source>Type to search. Press Enter to return to score.</source>
+        <translation>Typ om te zoeken. Druk op Enter om naar de partituur te gaan.</translation>
     </message>
 </context>
 <context>
     <name>Ms::Segment</name>
-    <message>
-        <source>Annotations: </source>
-        <translation>Annotaties:</translation>
-    </message>
     <message>
         <source>Start of </source>
         <translation>Begin met</translation>
@@ -8031,6 +8054,21 @@ selecteer een bereik van maten om te combineren en probeer opnieuw</translation>
     <message>
         <source>End of </source>
         <translation>Einde van</translation>
+    </message>
+    <message>
+        <source>Annotations:</source>
+        <translation>Annotaties:</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::SelectionListWidget</name>
+    <message>
+        <source>Selection filter</source>
+        <translation>Selectie filter</translation>
+    </message>
+    <message>
+        <source>Use Tab and Backtab to move through the check boxes</source>
+        <translation>Gebruik TAB en Shift-Tab om door de opties te lopen</translation>
     </message>
 </context>
 <context>
@@ -8087,20 +8125,20 @@ selecteer een bereik van maten om te combineren en probeer opnieuw</translation>
 <context>
     <name>Ms::TempoText</name>
     <message>
-        <source>Dotted</source>
-        <translation>gepunteerd</translation>
-    </message>
-    <message>
-        <source>Double dotted</source>
-        <translation>Dubbele gepunteerd</translation>
-    </message>
-    <message>
-        <source>Triple dotted</source>
-        <translation>Drievoudige gepunteerd</translation>
-    </message>
-    <message>
         <source>note = %1</source>
         <translation>Noot - %1</translation>
+    </message>
+    <message>
+        <source>Dotted %1</source>
+        <translation>Gepunteerde %1</translation>
+    </message>
+    <message>
+        <source>Double dotted %1</source>
+        <translation>Dubbel gepunteerde %1</translation>
+    </message>
+    <message>
+        <source>Triple dotted %1</source>
+        <translation>Drievoudig gepunteerde %1</translation>
     </message>
 </context>
 <context>
@@ -8119,7 +8157,7 @@ selecteer een bereik van maten om te combineren en probeer opnieuw</translation>
     </message>
     <message>
         <source>Align left</source>
-        <translation>links uitlijnen</translation>
+        <translation>Links uitlijnen</translation>
     </message>
     <message>
         <source>Align center</source>
@@ -8165,7 +8203,7 @@ selecteer een bereik van maten om te combineren en probeer opnieuw</translation>
         <translation>MuseScore: lees stijlnaam</translation>
     </message>
     <message>
-        <source>'%1' does already exist,
+        <source>&apos;%1&apos; does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; bestaat reeds,
 kies een andere naam:</translation>
@@ -8251,59 +8289,75 @@ kies een andere naam:</translation>
     <name>Ms::UploadScoreDialog</name>
     <message>
         <source>All Rights reserved</source>
-        <translation type="unfinished"/>
+        <translation>Alle rechten voorbehouden</translation>
     </message>
     <message>
         <source>Creative Commons Attribution</source>
-        <translation type="unfinished"/>
+        <translation>Creative Commons Naamsvermelding</translation>
     </message>
     <message>
         <source>Creative Commons Attribution Share Alike</source>
-        <translation type="unfinished"/>
+        <translation>Creative Commons Naamsvermelding-GelijkDelen</translation>
     </message>
     <message>
         <source>Creative Commons Attribution No Derivative Works</source>
-        <translation type="unfinished"/>
+        <translation>Creative Commons Naamsvermelding-GeenAfgeleideWerken</translation>
     </message>
     <message>
         <source>Creative Commons Attribution Noncommercial</source>
-        <translation type="unfinished"/>
+        <translation>Creative Commons Naamsvermelding-NietCommercieel</translation>
     </message>
     <message>
         <source>Creative Commons Attribution Noncommercial Share Alike</source>
-        <translation type="unfinished"/>
+        <translation>Creative Commons Naamsvermelding-NietCommercieel-GelijkDelen</translation>
     </message>
     <message>
         <source>Creative Commons Attribution Noncommercial Non Derivate Works</source>
-        <translation type="unfinished"/>
+        <translation>Creative Commons Naamsvermelding-NietCommercieel-GeenAfgeleideWerken</translation>
     </message>
     <message>
         <source>Public Domain</source>
-        <translation type="unfinished"/>
+        <translation>Publieke Domein</translation>
     </message>
     <message>
         <source>Creative Commons Zero</source>
-        <translation type="unfinished"/>
+        <translation>Creative Commons Nul</translation>
     </message>
     <message>
         <source>Missing title</source>
-        <translation type="unfinished"/>
+        <translation>Ontbrekende titel</translation>
     </message>
     <message>
         <source>Please provide a title</source>
-        <translation type="unfinished"/>
+        <translation>Geef a.u.b. een titel op</translation>
     </message>
     <message>
         <source>Success</source>
-        <translation type="unfinished"/>
+        <translation>Gelukt</translation>
     </message>
     <message>
         <source>Finished! &lt;a href=&quot;%1&quot;&gt;Go to my score&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Klaar! &lt;a href=&quot;%1&quot;&gt;Ga naar mijn partiruren&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"/>
+        <translation>Fout</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;%1&quot;&gt;What does this mean?&lt;/a&gt;</source>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Wat betekent dit?&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <source>Respect the &lt;a href=&quot;%1&quot;&gt;community guidelines&lt;/a&gt;. Only make your scores accessible to anyone with permission from the right holders.</source>
+        <translation>Houd je aan de &lt;a href=&quot;%1&quot;&gt;community guidelines&lt;/a&gt;. Maak jouw partituren alleen met toestemming van de rechthebbenden toegankelijk voor iedereen.</translation>
+    </message>
+    <message>
+        <source>Use a comma to separate the tags</source>
+        <translation>Gebruik komma&apos;s om tags te scheiden</translation>
+    </message>
+    <message>
+        <source>[&lt;a href=&quot;%1&quot;&gt;link&lt;/a&gt;]</source>
+        <translation>[&lt;a href=&quot;%1&quot;&gt;link&lt;/a&gt;]</translation>
     </message>
 </context>
 <context>
@@ -8332,15 +8386,15 @@ kies een andere naam:</translation>
     <name>MuseScore</name>
     <message>
         <source>G major, E minor</source>
-        <translation>G majeur, E mineur</translation>
+        <translation>G groot, E klein</translation>
     </message>
     <message>
         <source>D major, B minor</source>
-        <translation>D majeur, B mineur</translation>
+        <translation>D groot, B klein</translation>
     </message>
     <message>
         <source>C major, A minor</source>
-        <translation>C majeur, A mineur</translation>
+        <translation>C groot, A klein</translation>
     </message>
     <message>
         <source>F major, D minor</source>
@@ -8389,6 +8443,10 @@ kies een andere naam:</translation>
     <message>
         <source>C# major, A# minor</source>
         <translation>C# groot, A# klein</translation>
+    </message>
+    <message>
+        <source>Open/Atonal</source>
+        <translation>Open/Atonaal</translation>
     </message>
 </context>
 <context>
@@ -8443,11 +8501,11 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>Insert lyricist&apos;s name here</source>
-        <translation>Voer hier de tekstschrijver naam in</translation>
+        <translation>Voer hier naam van de tekstschrijver in</translation>
     </message>
     <message>
         <source>Copyright</source>
-        <translation>Copyright</translation>
+        <translation>Auteursrecht</translation>
     </message>
     <message>
         <source>Insert copyright here</source>
@@ -8493,7 +8551,7 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>Mark slices</source>
-        <translation type="unfinished"/>
+        <translation>Markeer stukjes</translation>
     </message>
     <message>
         <source>Mark barlines</source>
@@ -8573,7 +8631,7 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuleer</translation>
+        <translation>Annuleren</translation>
     </message>
     <message>
         <source>Two sided</source>
@@ -8619,14 +8677,6 @@ kies een andere naam:</translation>
         <translation>Maatstrepen</translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation>Normaal</translation>
-    </message>
-    <message>
-        <source>Repeats</source>
-        <translation>Herhalingstekens</translation>
-    </message>
-    <message>
         <source>Breaks &amp;&amp; Spacers</source>
         <translation>Onderbrekingen &amp;&amp; tussenruimte</translation>
     </message>
@@ -8644,7 +8694,7 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>Brackets</source>
-        <translation>Klampen</translation>
+        <translation>Haken</translation>
     </message>
     <message>
         <source>Breaths &amp;&amp; Pauses</source>
@@ -8735,10 +8785,6 @@ kies een andere naam:</translation>
         <translation>Notenbalk wijzigingen</translation>
     </message>
     <message>
-        <source>Symbols</source>
-        <translation>Symbolen</translation>
-    </message>
-    <message>
         <source>Arpeggios &amp;&amp; Glissandi</source>
         <translation>Arpeggios &amp;&amp; Glissandi</translation>
     </message>
@@ -8779,14 +8825,6 @@ mislukt:</translation>
         <translation>alle lettertype symbolen</translation>
     </message>
     <message>
-        <source>Dashed style</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dotted style</source>
-        <translation>Gepunteerde stijl</translation>
-    </message>
-    <message>
         <source>Tick 1 span</source>
         <translation>Tik 1 omspan</translation>
     </message>
@@ -8803,12 +8841,28 @@ mislukt:</translation>
         <translation>Kort 2 omspan</translation>
     </message>
     <message>
-        <source>End bar style</source>
-        <translation type="unfinished"/>
+        <source>Repeats &amp;&amp; Jumps</source>
+        <translation>Herhalingen &amp;&amp; Sprongen</translation>
     </message>
     <message>
-        <source>Double bar style</source>
-        <translation type="unfinished"/>
+        <source>Normal barline</source>
+        <translation>Normale maatstreep</translation>
+    </message>
+    <message>
+        <source>Dashed barline</source>
+        <translation>Gestreepte maatstreep</translation>
+    </message>
+    <message>
+        <source>Dotted barline</source>
+        <translation>Gestippelde maatstreep</translation>
+    </message>
+    <message>
+        <source>End bar barline</source>
+        <translation>Slot-maatstreep</translation>
+    </message>
+    <message>
+        <source>Double barline</source>
+        <translation>Dubbele maatstreep</translation>
     </message>
     <message>
         <source>Start repeat</source>
@@ -8822,12 +8876,16 @@ mislukt:</translation>
         <source>End-start repeat</source>
         <translation>Einde-Start Herhaling</translation>
     </message>
+    <message>
+        <source>Fretboard Diagrams</source>
+        <translation>Fretboord diagrammen</translation>
+    </message>
 </context>
 <context>
     <name>PaletteCellProperties</name>
     <message>
         <source>Cell Properties</source>
-        <translation type="unfinished"/>
+        <translation>Cel eigenschappen</translation>
     </message>
     <message>
         <source>Palette Cell Properties</source>
@@ -8843,7 +8901,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Content offset</source>
-        <translation type="unfinished"/>
+        <translation>Inhoud compensatie</translation>
     </message>
     <message>
         <source>Y:</source>
@@ -8859,7 +8917,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Content scale:</source>
-        <translation type="unfinished"/>
+        <translation>Inhoud-schaal:</translation>
     </message>
 </context>
 <context>
@@ -8961,11 +9019,23 @@ mislukt:</translation>
     </message>
     <message>
         <source>Panorama position</source>
-        <translation type="unfinished"/>
+        <translation>Panorama positie</translation>
     </message>
     <message>
         <source>MIDI sound</source>
         <translation>MIDI klank</translation>
+    </message>
+    <message>
+        <source>Part Name</source>
+        <translation>Naam partij</translation>
+    </message>
+    <message>
+        <source>Use arrows to modify</source>
+        <translation>Gebruik pijlen om te wijzigen</translation>
+    </message>
+    <message>
+        <source>Sound</source>
+        <translation>Geluid</translation>
     </message>
 </context>
 <context>
@@ -8981,6 +9051,57 @@ mislukt:</translation>
     <message>
         <source>Add</source>
         <translation>Toevoegen</translation>
+    </message>
+</context>
+<context>
+    <name>PianorollEditor</name>
+    <message>
+        <source>Toolbar 1</source>
+        <translation>Werkbalk 1</translation>
+    </message>
+    <message>
+        <source>Wave</source>
+        <translation>Golf</translation>
+    </message>
+    <message>
+        <source>Show wave display</source>
+        <translation>Toon golf beeld</translation>
+    </message>
+    <message>
+        <source>Toolbar 2</source>
+        <translation>Werkbalk  2</translation>
+    </message>
+    <message>
+        <source>Cursor:</source>
+        <translation>Cursor:</translation>
+    </message>
+    <message>
+        <source>Velocity:</source>
+        <translation>Geluidssterkte:</translation>
+    </message>
+    <message>
+        <source>Offset</source>
+        <translation>Verschuiving</translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation>Gebruiker</translation>
+    </message>
+    <message>
+        <source>Pitch:</source>
+        <translation>Toonhoogte:</translation>
+    </message>
+    <message>
+        <source>OnTime:</source>
+        <translation>Tijd Aan:</translation>
+    </message>
+    <message>
+        <source>Len:</source>
+        <translation>Lengte:</translation>
+    </message>
+    <message>
+        <source>MuseScore: &lt;%1&gt; Staff: %2</source>
+        <translation>MuseScore: &lt;%1&gt; Notenbalk: %2</translation>
     </message>
 </context>
 <context>
@@ -9031,6 +9152,26 @@ mislukt:</translation>
         <source>Measure.Beat</source>
         <translation>maat.tel</translation>
     </message>
+    <message>
+        <source>Playback Position</source>
+        <translation>Afspeel Positie</translation>
+    </message>
+    <message>
+        <source>Relative Tempo to 120 beats per minute</source>
+        <translation>Relatieve Tempo tot 120 bpm</translation>
+    </message>
+    <message>
+        <source>Use up and down arrows to change value</source>
+        <translation>Gebruik omhoog- en omlaag-pijl om te wijzigen</translation>
+    </message>
+    <message>
+        <source>Master Volume</source>
+        <translation>Hoofd Volume</translation>
+    </message>
+    <message>
+        <source>Relative tempo to 120 beats per minute</source>
+        <translation>Relatieve tempo tot 120 bpm</translation>
+    </message>
 </context>
 <context>
     <name>PluginCreatorBase</name>
@@ -9079,16 +9220,16 @@ mislukt:</translation>
         <translation>Opnieuw</translation>
     </message>
     <message>
-        <source>Quit</source>
-        <translation>Afsluiten</translation>
-    </message>
-    <message>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
         <source>Reload current plugin source</source>
         <translation>Herlaad huidige plugin bron</translation>
+    </message>
+    <message>
+        <source>Close Plugin Creator</source>
+        <translation>Sluit Plugin-maker</translation>
     </message>
 </context>
 <context>
@@ -9116,6 +9257,10 @@ mislukt:</translation>
     <message>
         <source>Shortcut:</source>
         <translation>Snelkoppeling:</translation>
+    </message>
+    <message>
+        <source>Clear Shortcut</source>
+        <translation>Wis snelkoppeling</translation>
     </message>
 </context>
 <context>
@@ -9169,14 +9314,6 @@ mislukt:</translation>
         <translation>Animaties</translation>
     </message>
     <message>
-        <source>Paths</source>
-        <translation>Mappen</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
         <source>Canvas</source>
         <translation>Scherminstellingen</translation>
     </message>
@@ -9199,10 +9336,6 @@ mislukt:</translation>
     <message>
         <source>Miscellaneous</source>
         <translation>Allerlei</translation>
-    </message>
-    <message>
-        <source>Note Entry</source>
-        <translation>Noten invoeren</translation>
     </message>
     <message>
         <source>Enable MIDI input</source>
@@ -9490,7 +9623,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Continue last session</source>
-        <translation>Laatste sessie voortzettem</translation>
+        <translation>Laatste sessie voortzetten</translation>
     </message>
     <message>
         <source>Start with new score</source>
@@ -9530,11 +9663,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Toggle play</source>
-        <translation type="unfinished"/>
+        <translation>Schakel afspelen in/uit</translation>
     </message>
     <message>
         <source>Whole note</source>
-        <translation>Hele nootr</translation>
+        <translation>Hele noot</translation>
     </message>
     <message>
         <source>Half note</source>
@@ -9550,7 +9683,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Puntering</translation>
     </message>
     <message>
         <source>Tie</source>
@@ -9563,10 +9696,6 @@ mislukt:</translation>
     <message>
         <source>Stop</source>
         <translation>Stop</translation>
-    </message>
-    <message>
-        <source>Note entry</source>
-        <translation>Noten invoer</translation>
     </message>
     <message>
         <source>Instrument list 2:</source>
@@ -9602,35 +9731,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Double augmentation dot</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Image folder:</source>
-        <translation>Afbeeldingsmap</translation>
-    </message>
-    <message>
-        <source>Score folder:</source>
-        <translation>Partituur map</translation>
-    </message>
-    <message>
-        <source>Style folder:</source>
-        <translation>Style map:</translation>
-    </message>
-    <message>
-        <source>Template folder:</source>
-        <translation>Template map</translation>
-    </message>
-    <message>
-        <source>Plugin folder:</source>
-        <translation>Plugin map</translation>
-    </message>
-    <message>
-        <source>Soundfont folders:</source>
-        <translation>Soundfont map</translation>
-    </message>
-    <message>
-        <source>SFZ folders:</source>
-        <translation>SFZ map:</translation>
+        <translation>Dubbele puntering</translation>
     </message>
     <message>
         <source>Save every:</source>
@@ -9649,10 +9750,6 @@ mislukt:</translation>
         <translation>Resolutie DPI:</translation>
     </message>
     <message>
-        <source>Check for new versions of MuseScore on startup:</source>
-        <translation>Controleer voor nieuwe MuseScore versies bij opstarten:</translation>
-    </message>
-    <message>
         <source>Port number:</source>
         <extracomment>The UDP port number on which the MuseScore OSC server will listen on</extracomment>
         <translation>Poort nummer</translation>
@@ -9667,7 +9764,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Timebase Master</source>
-        <translation type="unfinished"/>
+        <translation>Hoofdtijdbasis</translation>
     </message>
     <message>
         <source>MIDI Input:</source>
@@ -9707,7 +9804,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting the starting score</source>
-        <translation>Open een bestand dialoogvenster voor het selecteren van de begin partituur</translation>
+        <translation>Open een bestanddialoogvenster voor het selecteren van de beginpartituur</translation>
     </message>
     <message>
         <source>Select delay (in minutes) between auto saves</source>
@@ -9723,7 +9820,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Icon Height</source>
-        <translation>Icoon hoogte</translation>
+        <translation>Pictogramhoogte</translation>
     </message>
     <message>
         <source>Icon Width</source>
@@ -9739,31 +9836,31 @@ mislukt:</translation>
     </message>
     <message>
         <source>Choose score folder</source>
-        <translation>Kies partituur map</translation>
+        <translation>Kies partituurmap</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the score folder</source>
-        <translation>Open een map dialoogvenster voor het selecteren van de partituur map</translation>
+        <translation>Open een mapdialoogvenster voor het selecteren van de partituurmap</translation>
     </message>
     <message>
         <source>Choose style folder</source>
-        <translation>Kies stijl map</translation>
+        <translation>Kies stijlmap</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the style folder</source>
-        <translation>Open een map dialoogvenster voor het selecteren van de stijl map</translation>
+        <translation>Open een mapdialoogvenster voor het selecteren van de stijlmap</translation>
     </message>
     <message>
         <source>Score folder</source>
-        <translation>Partituur map</translation>
+        <translation>Partituurmap</translation>
     </message>
     <message>
         <source>Insert path to score folder.</source>
-        <translation>Voer het pas naar de partituur map in.</translation>
+        <translation>Voer het pad naar de partituurmap in.</translation>
     </message>
     <message>
         <source>Template folder</source>
-        <translation>Template map</translation>
+        <translation>Sjabloonmap</translation>
     </message>
     <message>
         <source>Insert path to Template folder</source>
@@ -9783,15 +9880,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the plugin folder</source>
-        <translation>Open een map dialoogvenster voor het selecteren van de plugin map</translation>
-    </message>
-    <message>
-        <source>Soundfont folders</source>
-        <translation>Sounfont mappen</translation>
-    </message>
-    <message>
-        <source>Insert path to soundfont folders</source>
-        <translation>Voer pad naar soundfont map in</translation>
+        <translation>Open een mapdialoogvenster voor het selecteren van de pluginmap</translation>
     </message>
     <message>
         <source>Image folder</source>
@@ -9803,31 +9892,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>Choose template folder</source>
-        <translation>Kies template map</translation>
+        <translation>Kies sjabloonmap</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the template folder</source>
-        <translation>Open een map dialoogvenster voor het selecteren van de tempalte map</translation>
-    </message>
-    <message>
-        <source>SFZ folders</source>
-        <translation>SFZ mappen</translation>
-    </message>
-    <message>
-        <source>Insert path to SFZ folders</source>
-        <translation>Voer pad in voor SFZ map</translation>
+        <translation>Open een mapdialoogvenster voor het selecteren van de templatemap</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the image folder</source>
-        <translation>Open een map dialoogvenster voor selecten van de afbeelding map</translation>
-    </message>
-    <message>
-        <source>Opens a dialog for configuring the soundfont folders</source>
-        <translation>Open een dialoogvenster voor het configureren van de soundfont mappen</translation>
-    </message>
-    <message>
-        <source>Opens a dialog for configuring the SFZ folders</source>
-        <translation>Open een dialoogvenster voor het configureren van de SFZ mappen</translation>
+        <translation>Open een mapdialoogvenster voor selecteren van de afbeeldingenmap</translation>
     </message>
     <message>
         <source>Canvas Tab</source>
@@ -9835,15 +9908,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>Background Wallpaper</source>
-        <translation>Achtergrond afbeelding</translation>
+        <translation>Achtergrondafbeelding</translation>
     </message>
     <message>
         <source>Background Color</source>
-        <translation>Achtergrond kleur</translation>
+        <translation>Achtergrondkleur</translation>
     </message>
     <message>
         <source>Background wallpaper path</source>
-        <translation>Achtergrond afbeelding pad</translation>
+        <translation>Pad naar achtergrondafbeelding</translation>
     </message>
     <message>
         <source>Insert path to background wallpaper file</source>
@@ -9855,7 +9928,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting the wallpaper file</source>
-        <translation>Open een bestand dialoovenster voor het selecteren van het achtergrondbestand</translation>
+        <translation>Open een bestanddialoovenster voor het selecteren van een achtergrondbestand</translation>
     </message>
     <message>
         <source>Select background color</source>
@@ -9894,10 +9967,6 @@ mislukt:</translation>
         <translation>Papier kleur</translation>
     </message>
     <message>
-        <source>Note Entry Tab</source>
-        <translation>Noot invoer tab</translation>
-    </message>
-    <message>
         <source>Enable MIDI Input</source>
         <translation>Midi input inschakelen</translation>
     </message>
@@ -9915,7 +9984,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Toggle play record</source>
-        <translation type="unfinished"/>
+        <translation>Schakel afspelen opnemen in/uit</translation>
     </message>
     <message>
         <source>Whole note is active</source>
@@ -9927,11 +9996,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Whole note record</source>
-        <translation type="unfinished"/>
+        <translation>Hele noot opnemen</translation>
     </message>
     <message>
         <source>Half note record</source>
-        <translation type="unfinished"/>
+        <translation>Halve noot opnemen</translation>
     </message>
     <message>
         <source>Rest is active</source>
@@ -9939,19 +10008,19 @@ mislukt:</translation>
     </message>
     <message>
         <source>Augmentation dot is active</source>
-        <translation type="unfinished"/>
+        <translation>Puntering is actief</translation>
     </message>
     <message>
         <source>Augmentation dot record</source>
-        <translation type="unfinished"/>
+        <translation>Puntering opnemen</translation>
     </message>
     <message>
         <source>Double augmentation dot is active</source>
-        <translation type="unfinished"/>
+        <translation>Dubbele puntering ia actief</translation>
     </message>
     <message>
         <source>Double augmentation dot record</source>
-        <translation type="unfinished"/>
+        <translation>Dubbele puntering opnemen</translation>
     </message>
     <message>
         <source>Tie is active</source>
@@ -9959,11 +10028,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Tie record</source>
-        <translation type="unfinished"/>
+        <translation>Bindboog opnemen</translation>
     </message>
     <message>
         <source>Rest record</source>
-        <translation type="unfinished"/>
+        <translation>Rust opnemen</translation>
     </message>
     <message>
         <source>Play is active</source>
@@ -9982,28 +10051,20 @@ mislukt:</translation>
         <translation>Stop opname</translation>
     </message>
     <message>
-        <source>Note entry is active</source>
-        <translation>Noot invoer is actief</translation>
-    </message>
-    <message>
-        <source>Note entry record</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>16th note is active</source>
         <translation>16e noot is actief</translation>
     </message>
     <message>
         <source>16th note record</source>
-        <translation type="unfinished"/>
+        <translation>16e noot opnemen</translation>
     </message>
     <message>
         <source>32nd note is active</source>
-        <translation type="unfinished"/>
+        <translation>32e noot is actief</translation>
     </message>
     <message>
         <source>32nd note record</source>
-        <translation type="unfinished"/>
+        <translation>32e noot opnemen</translation>
     </message>
     <message>
         <source>Score Tab</source>
@@ -10019,7 +10080,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a instrument list file</source>
-        <translation>Open een bestand dialoogvenster voor het selecteren van een instrumentlijst bestand</translation>
+        <translation>Open een bestanddialoogvenster voor het selecteren van een instrumentlijstbestand</translation>
     </message>
     <message>
         <source>Instrument list 1</source>
@@ -10039,7 +10100,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a style file</source>
-        <translation>Opeen een bestand dialoogvenster voor het selecteren van een stijl bestand</translation>
+        <translation>Opeen een bestanddialoogvenster voor het selecteren van een stijlbestand</translation>
     </message>
     <message>
         <source>Style for part</source>
@@ -10055,7 +10116,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a style file for part</source>
-        <translation>Open een bestand dialoogvenster voor het selecteren van stijl bestand voor een partij</translation>
+        <translation>Open een bestanddialoogvenster voor het selecteren van stijl bestand voor een partij</translation>
     </message>
     <message>
         <source>Instrument list 2</source>
@@ -10107,19 +10168,19 @@ mislukt:</translation>
     </message>
     <message>
         <source>Period Size</source>
-        <translation type="unfinished"/>
+        <translation>Looptijd Grootte</translation>
     </message>
     <message>
         <source>Choose period size</source>
-        <translation type="unfinished"/>
+        <translation>Kies looptijd grootte</translation>
     </message>
     <message>
         <source>Sample rate</source>
-        <translation type="unfinished"/>
+        <translation>Samplefrequentie</translation>
     </message>
     <message>
         <source>Choose sample rate</source>
-        <translation type="unfinished"/>
+        <translation>Kies Samplefrequentie</translation>
     </message>
     <message>
         <source>Import Tab</source>
@@ -10190,44 +10251,36 @@ mislukt:</translation>
         <translation>Update tab</translation>
     </message>
     <message>
-        <source>Check for new versions of MuseScore on startup</source>
-        <translation>Controleer tijdens het opstarten op nieuwe versies van MuseScore</translation>
-    </message>
-    <message>
-        <source>Choose interval</source>
-        <translation>Kies interval</translation>
-    </message>
-    <message>
         <source>Eighth note</source>
         <translation>Achtste noot</translation>
     </message>
     <message>
         <source>Quarter note is active</source>
-        <translation type="unfinished"/>
+        <translation>Kwartnoot is actief</translation>
     </message>
     <message>
         <source>Quarter note record</source>
-        <translation type="unfinished"/>
+        <translation>Kwartnoot opnemen</translation>
     </message>
     <message>
         <source>Eighth note is active</source>
-        <translation type="unfinished"/>
+        <translation>Achtste noot is actief</translation>
     </message>
     <message>
         <source>Eighth note record</source>
-        <translation type="unfinished"/>
+        <translation>Achtste noot opnemen</translation>
     </message>
     <message>
         <source>64th note</source>
-        <translation type="unfinished"/>
+        <translation>64e noot</translation>
     </message>
     <message>
         <source>64th note is active</source>
-        <translation type="unfinished"/>
+        <translation>64e noot is actief</translation>
     </message>
     <message>
         <source>64th note record</source>
-        <translation type="unfinished"/>
+        <translation>64e noot opnemen</translation>
     </message>
     <message>
         <source>Here you can configure shortcuts for actions</source>
@@ -10243,7 +10296,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Opens a dialog for defining a new shortcut for the selected action</source>
-        <translation>Open een dialoogvenster voor het defineren van een nieuwe sneltoets voor een geselecteerde actie</translation>
+        <translation>Open een dialoogvenster voor het definiëren van een nieuwe sneltoets voor een geselecteerde actie</translation>
     </message>
     <message>
         <source>Print the shortcuts list</source>
@@ -10295,19 +10348,87 @@ mislukt:</translation>
     </message>
     <message>
         <source>Show start center</source>
-        <translation type="unfinished"/>
+        <translation>Toon start scherm</translation>
     </message>
     <message>
         <source>Undo is active</source>
-        <translation type="unfinished"/>
+        <translation>Ongedaan maken is actief</translation>
     </message>
     <message>
         <source>Undo record</source>
-        <translation type="unfinished"/>
+        <translation>Ongedaan maken opnemen</translation>
     </message>
     <message>
         <source>Undo</source>
         <translation>Maak ongedaan</translation>
+    </message>
+    <message>
+        <source>Play whole chord when adding note</source>
+        <translation>Speel heel akkoord bij noten toevoegen</translation>
+    </message>
+    <message>
+        <source>SoundFont folders</source>
+        <translation>Sounfont mappen</translation>
+    </message>
+    <message>
+        <source>Insert path to SoundFont folders</source>
+        <translation>Voer pad naar soundfont mappen in</translation>
+    </message>
+    <message>
+        <source>Opens a dialog for configuring the SoundFont folders</source>
+        <translation>Open een dialoogvenster voor het configureren van de soundfont mappen</translation>
+    </message>
+    <message>
+        <source>Note Input Tab</source>
+        <translation>Noteninvoer Tab</translation>
+    </message>
+    <message>
+        <source>Note Input</source>
+        <translation>Noteninvoer</translation>
+    </message>
+    <message>
+        <source>Note input</source>
+        <translation>Noteninvoer</translation>
+    </message>
+    <message>
+        <source>Note input is active</source>
+        <translation>Noteninvoer is actief</translation>
+    </message>
+    <message>
+        <source>Note input record</source>
+        <translation>Noteninvoer opnemen</translation>
+    </message>
+    <message>
+        <source>Folders</source>
+        <translation>Mappen</translation>
+    </message>
+    <message>
+        <source>Images:</source>
+        <translation>Afbeeldingen:</translation>
+    </message>
+    <message>
+        <source>Scores:</source>
+        <translation>Partituren:</translation>
+    </message>
+    <message>
+        <source>Styles:</source>
+        <translation>Stijlen:</translation>
+    </message>
+    <message>
+        <source>Templates:</source>
+        <translation>Sjablonen:</translation>
+    </message>
+    <message>
+        <source>Plugins:</source>
+        <translation>Plugins:</translation>
+    </message>
+    <message>
+        <source>SoundFonts:</source>
+        <translation>SoundFonts:</translation>
+    </message>
+    <message>
+        <source>Check for new version of MuseScore</source>
+        <translation>Controleer op een nieuwe versie van MuseScore</translation>
     </message>
 </context>
 <context>
@@ -10323,8 +10444,7 @@ selecteer een enekel noot of liedtekst en probeer opnieuw
     <message>
         <source>Please select a single note or slur and retry operation
 </source>
-        <translation>Selecteer één noot of boog en probeer het opnieuw
-</translation>
+        <translation>Selecteer één noot of Legatoboog en probeer het opnieuw</translation>
     </message>
     <message>
         <source>Please select one or more staves and retry operation
@@ -10369,69 +10489,25 @@ Selecteer één noot of rust en probeer het opnieuw
     </message>
     <message>
         <source>Perc. 3 lines</source>
-        <translation type="unfinished"/>
+        <translation>Perc. 3 lijnen</translation>
     </message>
     <message>
         <source>Perc. 5 lines</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str simple</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str common</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str full</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 4-str simple</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 4-str common</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 4-str full</source>
-        <translation type="unfinished"/>
+        <translation>Perc. 5 lijnen</translation>
     </message>
     <message>
         <source>Tab. ukulele</source>
         <translation>Tab. ukulele</translation>
     </message>
     <message>
-        <source>Tab. 6-str Italian</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 6-str French</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Perc. 1 line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 5-str simple</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 5-str common</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tab. 5-str full</source>
-        <translation type="unfinished"/>
+        <translation>Perc. 1 lijn</translation>
     </message>
     <message>
         <source>Cannot open chord description:
 %1
 %2</source>
-        <translation>Kan geen akkoord beschrijving openen:
+        <translation>Kan geen akkoordbeschrijving openen:
 %1
 %2</translation>
     </message>
@@ -10439,7 +10515,7 @@ Selecteer één noot of rust en probeer het opnieuw
         <source>Open Chord Description
 %1
 failed: %2</source>
-        <translation>Openen akkoord beschrijving
+        <translation>Openen akkoordbeschrijving
 %1
 mislukt: %2</translation>
     </message>
@@ -10451,7 +10527,7 @@ mislukt: %2</translation>
         <source>Cannot open tablature font description:
 %1
 %2</source>
-        <translation>Kan tablatuur lettertype beschrijving niet openen:
+        <translation>Kan tablatuur lettertypebeschrijving niet openen:
 %1
 %2</translation>
     </message>
@@ -10500,7 +10576,7 @@ Bezoek de &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
 </translation>
     </message>
     <message>
-        <source>Can't find rootfile
+        <source>Can&apos;t find rootfile
 %1</source>
         <translation>Kan rootbestand niet vinden
 %1</translation>
@@ -10518,13 +10594,13 @@ Bezoek de &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>Could not open MusicXML file
 %1</source>
-        <translation>Kan MusicXML bestand niet openen
+        <translation>Kan MusicXML-bestand niet openen
 %1</translation>
     </message>
     <message>
         <source>Could not open compressed MusicXML file
 %1</source>
-        <translation>Kan gecomprimeerd MusicXML bestand niet openen
+        <translation>Kan gecomprimeerd MusicXML-bestand niet openen
 %1</translation>
     </message>
     <message>
@@ -10625,6 +10701,54 @@ Bezoek de &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>Tab. balalaika</source>
         <translation>Tab. balalaika</translation>
     </message>
+    <message>
+        <source>Tab. 6-str. simple</source>
+        <translation>Tab. 6-snr. simpel</translation>
+    </message>
+    <message>
+        <source>Tab. 6-str. common</source>
+        <translation>Tab. 6-snr. regulier</translation>
+    </message>
+    <message>
+        <source>Tab. 6-str. full</source>
+        <translation>Tab. 6-snr. volledig</translation>
+    </message>
+    <message>
+        <source>Tab. 4-str. simple</source>
+        <translation>Tab. 4-snr. simpel</translation>
+    </message>
+    <message>
+        <source>Tab. 4-str. common</source>
+        <translation>Tab. 4-snr. regulier</translation>
+    </message>
+    <message>
+        <source>Tab. 4-str. full</source>
+        <translation>Tab. 4-snr. volledig</translation>
+    </message>
+    <message>
+        <source>Tab. 5-str. simple</source>
+        <translation>Tab. 5-snr. simpel</translation>
+    </message>
+    <message>
+        <source>Tab. 5-str. common</source>
+        <translation>Tab. 5-snr. regulier</translation>
+    </message>
+    <message>
+        <source>Tab. 5-str. full</source>
+        <translation>Tab. 5-snr. volledig</translation>
+    </message>
+    <message>
+        <source>Tab. 6-str. Italian</source>
+        <translation>Tab. 6-snr. Italiaans</translation>
+    </message>
+    <message>
+        <source>Tab. 6-str. French</source>
+        <translation>Tab. 6-snr. Frans</translation>
+    </message>
+    <message>
+        <source>File corrupted %1</source>
+        <translation>Bestand beschadigd %1</translation>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10698,7 +10822,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>MuseScore: Open Album File</source>
-        <translation>MuseScore: Open album bestand</translation>
+        <translation>MuseScore: Open albumbestand</translation>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
@@ -10706,32 +10830,33 @@ mislukt:</translation>
     </message>
     <message>
         <source>MuseScore Files (*.album)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Soundfont installed</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Install Soundfont</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Do you want to install the soundfont %1?</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore bestand (*.album)</translation>
     </message>
     <message>
         <source>Overwrite?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Soundfont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
-        <translation type="unfinished"/>
+        <translation>Overschrijven?</translation>
     </message>
     <message>
         <source>%1 already exists.
 Do you want to overwrite it?</source>
-        <translation type="unfinished"/>
+        <translation>%1 bestaat reeds.
+Wil je dit overschrijven?</translation>
+    </message>
+    <message>
+        <source>Install SoundFont</source>
+        <translation>Soundfont installeren</translation>
+    </message>
+    <message>
+        <source>Do you want to install the SoundFont %1?</source>
+        <translation>Wilt u het soundfont %1 installeren?</translation>
+    </message>
+    <message>
+        <source>SoundFont installed</source>
+        <translation>Soundfont geïnstalleerd</translation>
+    </message>
+    <message>
+        <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
+        <translation>Soundfont geïnstalleerd. Ga a.u.b. naar Beeld &gt; Synthesizer om deze toe te voegen en Beeld &gt; Mixer om een instrument te kiezen.</translation>
     </message>
 </context>
 <context>
@@ -10745,7 +10870,7 @@ Do you want to overwrite it?</source>
     <name>Resource</name>
     <message>
         <source>MuseScore Resources</source>
-        <translation>MuseScore middelen</translation>
+        <translation>MuseScore hulpbestanden</translation>
     </message>
     <message>
         <source>Tab 1</source>
@@ -10765,7 +10890,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Install/Update</source>
-        <translation>Installeer/update</translation>
+        <translation>Installeren/updaten</translation>
     </message>
     <message>
         <source>Tab 2</source>
@@ -10773,10 +10898,14 @@ Do you want to overwrite it?</source>
     </message>
 </context>
 <context>
-    <name>ScoreBrowser</name>
+    <name>Rest</name>
     <message>
-        <source>Form</source>
-        <translation>Vorm</translation>
+        <source>Voice: %1</source>
+        <translation>Stem: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Duur: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10791,7 +10920,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Created: </source>
-        <translation type="unfinished"/>
+        <translation>Gecreëerd:</translation>
     </message>
     <message>
         <source>Name:</source>
@@ -10906,7 +11035,7 @@ Do you want to overwrite it?</source>
 <context>
     <name>SfListDialog</name>
     <message>
-        <source>Soundfont Files</source>
+        <source>SoundFont Files</source>
         <translation>Soundfont bestanden</translation>
     </message>
 </context>
@@ -11042,10 +11171,6 @@ Do you want to overwrite it?</source>
         <translation>Aeolus stops</translation>
     </message>
     <message>
-        <source>Change Stops:</source>
-        <translation>Wijzig stops:</translation>
-    </message>
-    <message>
         <source>III</source>
         <translation>III</translation>
     </message>
@@ -11058,230 +11183,12 @@ Do you want to overwrite it?</source>
     <message>
         <source>Gemshorn
 8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quinta-
-dena 8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Suabile
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Rohrflöte
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Dulzflöte
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quintflöte
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Super-
-octave 2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sifflet
-1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cymbel
-VI</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Oboe</source>
-        <translation>Hobo</translation>
-    </message>
-    <message>
-        <source>Tremulant</source>
-        <translation>Tremolo</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation>II</translation>
-    </message>
-    <message>
-        <source>Harmonic
-Flute 8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flauto
-Dolce 4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Nasard
-2 2/3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Ottavina
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tertia
-1 3/5</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Sesqui
-altera</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Septime</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>None</source>
-        <translation>Geen</translation>
-    </message>
-    <message>
-        <source>Krumhorn</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Melodia</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>II+III</source>
-        <translation>II+III</translation>
+        <translation>Gemshoorn
+8</translation>
     </message>
     <message>
         <source>PushButton</source>
         <translation>Drukknop</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation>I</translation>
-    </message>
-    <message>
-        <source>Principal
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Octave
-2</source>
-        <translation>Octaaf
-2</translation>
-    </message>
-    <message>
-        <source>Octave
-1</source>
-        <translation>octaaf
-1</translation>
-    </message>
-    <message>
-        <source>Quint
-5 1/3</source>
-        <translation>Quint
-5 1/3</translation>
-    </message>
-    <message>
-        <source>Quint
-2 2/3</source>
-        <translation>Quint
-2 2/3</translation>
-    </message>
-    <message>
-        <source>Tibia
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Celesta
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-8</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flöte
-2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Mixtur</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Trumpet</source>
-        <translation>Trompet</translation>
-    </message>
-    <message>
-        <source>I+II</source>
-        <translation>I+II</translation>
-    </message>
-    <message>
-        <source>I+III</source>
-        <translation>I+III</translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation>P</translation>
-    </message>
-    <message>
-        <source>Subbass
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Principal
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fagott
-16</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Trombone
-16</source>
-        <translation>Trombone
-16</translation>
-    </message>
-    <message>
-        <source>Bombarde
-32</source>
-        <translation>Bombardon
-32</translation>
-    </message>
-    <message>
-        <source>P+I</source>
-        <translation>P+I</translation>
-    </message>
-    <message>
-        <source>P+II</source>
-        <translation>P+II</translation>
-    </message>
-    <message>
-        <source>P+III</source>
-        <translation>P+III</translation>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
@@ -11362,11 +11269,15 @@ altera</source>
     <name>Startcenter</name>
     <message>
         <source>Start Center</source>
-        <translation type="unfinished"/>
+        <translation>Start Scherm</translation>
     </message>
     <message>
-        <source>&lt;a href=&quot;#&quot;&gt;Open an existing score&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <source>Open a score...</source>
+        <translation>Open een partituur...</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Sluit</translation>
     </message>
 </context>
 <context>
@@ -11400,7 +11311,7 @@ altera</source>
     </message>
     <message>
         <source>Master Effects</source>
-        <translation type="unfinished"/>
+        <translation>Master Effecten</translation>
     </message>
     <message>
         <source>Effect B:</source>
@@ -11421,7 +11332,7 @@ altera</source>
     </message>
     <message>
         <source>Change Tuning</source>
-        <translation type="unfinished"/>
+        <translation>Wijzig Stemming</translation>
     </message>
     <message>
         <source>Master volume</source>
@@ -11437,7 +11348,7 @@ altera</source>
     </message>
     <message>
         <source>Master tuning:</source>
-        <translation type="unfinished"/>
+        <translation>Hoofdstemming:</translation>
     </message>
     <message>
         <source>Save to score</source>
@@ -11446,6 +11357,30 @@ altera</source>
     <message>
         <source>Load from score</source>
         <translation>Laad van partituur</translation>
+    </message>
+    <message>
+        <source>Use up and down arrows to modify</source>
+        <translation>Gebruik Omhoog- en omlaag-pijl om te wijzigen</translation>
+    </message>
+    <message>
+        <source>Metronome gain</source>
+        <translation>Metronoom toename</translation>
+    </message>
+    <message>
+        <source>Effect A</source>
+        <translation>Effect A</translation>
+    </message>
+    <message>
+        <source>Effect B</source>
+        <translation>Effect B</translation>
+    </message>
+    <message>
+        <source>Hertz</source>
+        <translation>Hertz</translation>
+    </message>
+    <message>
+        <source>Master tuning</source>
+        <translation>Hoofdstemming</translation>
     </message>
 </context>
 <context>
@@ -11601,15 +11536,11 @@ altera</source>
     </message>
     <message>
         <source>Align top edge of text to reference point</source>
-        <translation>Lijn bovenkant van tekst naar referentiepunt</translation>
+        <translation>Lijn bovenkant van tekst uit naar referentiepunt</translation>
     </message>
     <message>
         <source>Align right edge of text to reference point</source>
-        <translation>Lijn rechterkant van tekst naar referentiepunt</translation>
-    </message>
-    <message>
-        <source>Center text vertical to text baseline</source>
-        <translation>Centreer tekst verticaal naar tekst basislijn</translation>
+        <translation>Lijn rechterkant van tekst uit naar referentiepunt</translation>
     </message>
     <message>
         <source>Center text vertical to reference point</source>
@@ -11637,15 +11568,15 @@ altera</source>
     </message>
     <message>
         <source>Frame line thickness</source>
-        <translation type="unfinished"/>
+        <translation>Dikte van de kaderlijn</translation>
     </message>
     <message>
         <source>Frame inner margin</source>
-        <translation type="unfinished"/>
+        <translation>Kader binnenmarge</translation>
     </message>
     <message>
         <source>Corner round</source>
-        <translation type="unfinished"/>
+        <translation>Ronde hoeken</translation>
     </message>
     <message>
         <source>Text background color</source>
@@ -11671,6 +11602,10 @@ altera</source>
     <message>
         <source>Size follows &apos;Staff space&apos; setting</source>
         <translation>Maat volgt &apos;Notenbalk ruimte&apos; instelling</translation>
+    </message>
+    <message>
+        <source>Align baseline of text to reference point</source>
+        <translation>Lijn basislijn van de text uit naar het referentiepunt</translation>
     </message>
 </context>
 <context>
@@ -11823,6 +11758,10 @@ altera</source>
         <source>RH Guitar Fingering</source>
         <translation>Rechtshandige gitaar vingerzetting</translation>
     </message>
+    <message>
+        <source>Pedal</source>
+        <translation>Pedaal</translation>
+    </message>
 </context>
 <context>
     <name>TextStyleDialog</name>
@@ -11890,7 +11829,7 @@ altera</source>
     </message>
     <message>
         <source>Add</source>
-        <translation>Voeg toe</translation>
+        <translation>Toevoegen</translation>
     </message>
     <message>
         <source>Add time signature to palette</source>
@@ -11913,7 +11852,7 @@ altera</source>
     </message>
     <message>
         <source>Note Groups</source>
-        <translation>Notitie groep</translation>
+        <translation>Nootgroepen</translation>
     </message>
     <message>
         <source>Values</source>
@@ -12004,11 +11943,11 @@ altera</source>
     </message>
     <message>
         <source>Beat unit</source>
-        <translation type="unfinished"/>
+        <translation>Maateenheid</translation>
     </message>
     <message>
         <source>Common Time</source>
-        <translation type="unfinished"/>
+        <translation>Gemeenschappelijke tijd</translation>
     </message>
     <message>
         <source>Enter Number of Measures</source>
@@ -12024,7 +11963,7 @@ altera</source>
     </message>
     <message>
         <source>Beats in a measure</source>
-        <translation type="unfinished"/>
+        <translation>Tellen per maat</translation>
     </message>
     <message>
         <source>Hint: You can also add or remove measures after creation of the score.</source>
@@ -12039,19 +11978,19 @@ altera</source>
     </message>
     <message>
         <source>F major / D minor</source>
-        <translation>F majeur / D mineur</translation>
+        <translation>F groot, D klein</translation>
     </message>
     <message>
         <source>C major / A minor</source>
-        <translation>C majeur / A mineur</translation>
+        <translation>C groot, A klein</translation>
     </message>
     <message>
         <source>G major / E minor</source>
-        <translation>G majeur / E mineur</translation>
+        <translation>G groot, E klein</translation>
     </message>
     <message>
         <source>D major / B minor</source>
-        <translation>D majeur / B mineur</translation>
+        <translation>D groot, B klein</translation>
     </message>
     <message>
         <source>Up</source>
@@ -12199,7 +12138,7 @@ altera</source>
     </message>
     <message>
         <source>Keep degree alterations</source>
-        <translation type="unfinished"/>
+        <translation>Behoud graadswijzigingen</translation>
     </message>
     <message>
         <source>Options</source>
@@ -12263,7 +12202,7 @@ altera</source>
     </message>
     <message>
         <source>Transpose Chromatically</source>
-        <translation type="unfinished"/>
+        <translation>Transponees Chromatisch</translation>
     </message>
     <message>
         <source>By Key</source>
@@ -12275,49 +12214,49 @@ altera</source>
     </message>
     <message>
         <source>Transpose Diatonically</source>
-        <translation type="unfinished"/>
+        <translation>Transponeer Diatonisch</translation>
     </message>
 </context>
 <context>
     <name>Tremolo</name>
     <message>
         <source>Eighth through stem</source>
-        <translation type="unfinished"/>
+        <translation>Achtste door stok</translation>
     </message>
     <message>
         <source>16th through stem</source>
-        <translation type="unfinished"/>
+        <translation>16e door stok</translation>
     </message>
     <message>
         <source>32nd through stem</source>
-        <translation type="unfinished"/>
+        <translation>32e door stok</translation>
     </message>
     <message>
         <source>64th through stem</source>
-        <translation type="unfinished"/>
+        <translation>64e door stok</translation>
     </message>
     <message>
         <source>Eighth between notes</source>
-        <translation type="unfinished"/>
+        <translation>Achtste tussen noten</translation>
     </message>
     <message>
         <source>16th between notes</source>
-        <translation type="unfinished"/>
+        <translation>16e tussen noten</translation>
     </message>
     <message>
         <source>32nd between notes</source>
-        <translation type="unfinished"/>
+        <translation>32e tussen noten</translation>
     </message>
     <message>
         <source>64th between notes</source>
-        <translation type="unfinished"/>
+        <translation>64e tussen noten</translation>
     </message>
 </context>
 <context>
     <name>TremoloBarDialog</name>
     <message>
         <source>Bend type:</source>
-        <translation>Bend type:</translation>
+        <translation>Buigingstype:</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
@@ -12325,15 +12264,15 @@ altera</source>
     </message>
     <message>
         <source>Dip</source>
-        <translation type="unfinished"/>
+        <translation>Dip</translation>
     </message>
     <message>
         <source>Dive</source>
-        <translation type="unfinished"/>
+        <translation>Duik</translation>
     </message>
     <message>
         <source>Inverted Dip</source>
-        <translation type="unfinished"/>
+        <translation>Tegengestelde Dip</translation>
     </message>
     <message>
         <source>Return</source>
@@ -12341,15 +12280,15 @@ altera</source>
     </message>
     <message>
         <source>MuseScore: Tremolo Bar Properties</source>
-        <translation type="unfinished"/>
+        <translation>Musescore: Tremolo lijn eigenschappen</translation>
     </message>
     <message>
         <source>Release(Up)</source>
-        <translation type="unfinished"/>
+        <translation>Loslaten (omhoog)</translation>
     </message>
     <message>
         <source>Release(Down)</source>
-        <translation type="unfinished"/>
+        <translation>Loslaten (omlaag)</translation>
     </message>
 </context>
 <context>
@@ -12383,7 +12322,7 @@ altera</source>
     </message>
     <message>
         <source>Bracket</source>
-        <translation>Afbreken</translation>
+        <translation>Haak</translation>
     </message>
     <message>
         <source>Relation:</source>
@@ -12399,30 +12338,30 @@ altera</source>
     </message>
     <message>
         <source>Auto bracket</source>
-        <translation>Automatisch afbreken</translation>
+        <translation>Automatische haken</translation>
     </message>
 </context>
 <context>
     <name>UploadScoreDialog</name>
     <message>
         <source>Score Information</source>
-        <translation type="unfinished"/>
+        <translation>Partituurinformatie</translation>
     </message>
     <message>
         <source>You&apos;re logged in as</source>
-        <translation type="unfinished"/>
+        <translation>U bent ingelogd als</translation>
     </message>
     <message>
         <source>USERNAME</source>
-        <translation type="unfinished"/>
+        <translation>GEBRUIKERSNAAM</translation>
     </message>
     <message>
         <source>Sign out</source>
-        <translation type="unfinished"/>
+        <translation>Uitloggen</translation>
     </message>
     <message>
         <source>Sign out on exit</source>
-        <translation type="unfinished"/>
+        <translation>Uitloggen bij afsluiten</translation>
     </message>
     <message>
         <source>Title</source>
@@ -12433,52 +12372,20 @@ altera</source>
         <translation>Beschrijving</translation>
     </message>
     <message>
-        <source>Who can access this score?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Anyone</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Just you</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>License</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://musescore.com/help/license&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;What does this mean?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Licentie</translation>
     </message>
     <message>
         <source>Tags</source>
         <translation>Etiket</translation>
     </message>
     <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:italic;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Use a comma to separate the tags&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Respect the &lt;/span&gt;&lt;a href=&quot;http://musescore.com/community-guidelines&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;community guidelines&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;. Only make your scores accessible to anyone with permission from the right holders.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Update the existing score </source>
-        <translation type="unfinished"/>
+        <translation>Update de bestaande partituur</translation>
+    </message>
+    <message>
+        <source>Make this score private</source>
+        <translation>Maak deze partituur privé</translation>
     </message>
 </context>
 <context>
@@ -12527,27 +12434,27 @@ mislukt:</translation>
     </message>
     <message>
         <source>Sequence &apos;]]&gt;&apos; not allowed in content.</source>
-        <translation type="unfinished"/>
+        <translation>Tekst &apos;]]&gt;&apos; niet toegestaan in inhoud.</translation>
     </message>
     <message>
         <source>Encountered incorrectly encoded content.</source>
-        <translation type="unfinished"/>
+        <translation>De inhoud is verkeerd gedeerd.</translation>
     </message>
     <message>
         <source>Namespace prefix &apos;%1&apos; not declared</source>
-        <translation type="unfinished"/>
+        <translation>Namespace voorvoegsel &apos;%1&apos; is niet gedeclareerd</translation>
     </message>
     <message>
         <source>Illegal namespace declaration.</source>
-        <translation type="unfinished"/>
+        <translation>Ongeldige namespacedeclaratie</translation>
     </message>
     <message>
         <source>Attribute redefined.</source>
-        <translation type="unfinished"/>
+        <translation>Attribuut hergedefineerd</translation>
     </message>
     <message>
         <source>Unexpected character &apos;%1&apos; in public id literal.</source>
-        <translation type="unfinished"/>
+        <translation>Onverwacht karakter &apos;%1&apos; in &quot;public id literal&quot;</translation>
     </message>
     <message>
         <source>Invalid XML version string.</source>
@@ -12559,11 +12466,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>The standalone pseudo attribute must appear after the encoding.</source>
-        <translation type="unfinished"/>
+        <translation>Het alleenstaand pseudo attribuut moet na de codering voorkomen.</translation>
     </message>
     <message>
         <source>%1 is an invalid encoding name.</source>
-        <translation type="unfinished"/>
+        <translation>%1 is een ongeldige coderingsnaam</translation>
     </message>
     <message>
         <source>Encoding %1 is unsupported</source>
@@ -12571,7 +12478,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Standalone accepts only yes or no.</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Standalone&quot; accepteert alleen &quot;yes&quot; of &quot;no&quot;.</translation>
     </message>
     <message>
         <source>Invalid attribute in XML declaration.</source>
@@ -12617,12 +12524,12 @@ mislukt:</translation>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <source>Soundfont %1 already loaded</source>
-        <translation>Soundfont %1 reeds geladen</translation>
+        <source>SoundFont %1 already loaded</source>
+        <translation>Soundfont %1 is al geladen</translation>
     </message>
     <message>
-        <source>cannot load soundfont %1</source>
-        <translation>kan soundfont %1 niet laden</translation>
+        <source>Cannot load SoundFont %1</source>
+        <translation>Kan SoundFont %1 niet laden</translation>
     </message>
 </context>
 <context>
@@ -12653,83 +12560,83 @@ mislukt:</translation>
     </message>
     <message>
         <source>Flat-slash</source>
-        <translation type="unfinished"/>
+        <translation>Mol schuin</translation>
     </message>
     <message>
         <source>Flat-slash2</source>
-        <translation type="unfinished"/>
+        <translation>Mol schuin2</translation>
     </message>
     <message>
         <source>Mirrored-flat2</source>
-        <translation type="unfinished"/>
+        <translation>Gespiegelde mol2</translation>
     </message>
     <message>
         <source>Mirrored-flat</source>
-        <translation type="unfinished"/>
+        <translation>Gespiegelde mol</translation>
     </message>
     <message>
         <source>Mirrored-flat-slash</source>
-        <translation type="unfinished"/>
+        <translation>Gespiegelde mol schuin</translation>
     </message>
     <message>
         <source>Flat-flat-slash</source>
-        <translation type="unfinished"/>
+        <translation>Dubbelmol schuin</translation>
     </message>
     <message>
         <source>Sharp-slash</source>
-        <translation type="unfinished"/>
+        <translation>Kruis schuin</translation>
     </message>
     <message>
         <source>Sharp-slash2</source>
-        <translation type="unfinished"/>
+        <translation>Kruis schuin2</translation>
     </message>
     <message>
         <source>Sharp-slash3</source>
-        <translation type="unfinished"/>
+        <translation>Kruis schuin3</translation>
     </message>
     <message>
         <source>Sharp-slash4</source>
-        <translation type="unfinished"/>
+        <translation>Kruis schuin4</translation>
     </message>
     <message>
         <source>Sharp arrow up</source>
-        <translation type="unfinished"/>
+        <translation>Kruis met pijl omhoog</translation>
     </message>
     <message>
         <source>Sharp arrow down</source>
-        <translation type="unfinished"/>
+        <translation>Kruis met pijl naar beneden</translation>
     </message>
     <message>
         <source>Sharp arrow both</source>
-        <translation type="unfinished"/>
+        <translation>Kruis met pijl omhoog en omlaag</translation>
     </message>
     <message>
         <source>Flat arrow up</source>
-        <translation type="unfinished"/>
+        <translation>Mol met pijl omhoog</translation>
     </message>
     <message>
         <source>Flat arrow down</source>
-        <translation type="unfinished"/>
+        <translation>Mol met pijl naar beneden</translation>
     </message>
     <message>
         <source>Flat arrow both</source>
-        <translation type="unfinished"/>
+        <translation>Mol met pijl omhoog en naar beneden</translation>
     </message>
     <message>
         <source>Natural arrow up</source>
-        <translation type="unfinished"/>
+        <translation>Hestelling met pijl omhoog</translation>
     </message>
     <message>
         <source>Natural arrow down</source>
-        <translation type="unfinished"/>
+        <translation>Hestelling met pijl naar beneden</translation>
     </message>
     <message>
         <source>Natural arrow both</source>
-        <translation type="unfinished"/>
+        <translation>Herstelling met pijl omhoog en naar beneden</translation>
     </message>
     <message>
         <source>Sori</source>
-        <translation type="unfinished"/>
+        <translation>Sori</translation>
     </message>
     <message>
         <source>Koron</source>
@@ -12755,20 +12662,12 @@ mislukt:</translation>
         <translation>Open...</translation>
     </message>
     <message>
-        <source>File open</source>
-        <translation>Bestand openen</translation>
-    </message>
-    <message>
         <source>Load score from file</source>
         <translation>Laad partituur van bestand</translation>
     </message>
     <message>
         <source>Save</source>
         <translation>Sla op</translation>
-    </message>
-    <message>
-        <source>File save</source>
-        <translation>Bestand opslaan</translation>
     </message>
     <message>
         <source>Save score to file</source>
@@ -12779,10 +12678,6 @@ mislukt:</translation>
         <translation>Opslaan als...</translation>
     </message>
     <message>
-        <source>File save as</source>
-        <translation>Bestand opslaan als</translation>
-    </message>
-    <message>
         <source>Save score under a new file name</source>
         <translation>Opslaan partituur onder een nieuwe bestandsnaam</translation>
     </message>
@@ -12791,20 +12686,12 @@ mislukt:</translation>
         <translation>Selectie opslaan...</translation>
     </message>
     <message>
-        <source>Save Selection</source>
-        <translation>Selectie opslaan</translation>
-    </message>
-    <message>
         <source>Save current selection as new score</source>
         <translation>Bewaar de huidige selectie als een nieuwe partituur</translation>
     </message>
     <message>
         <source>Save a Copy...</source>
         <translation>Opslaan als kopie...</translation>
-    </message>
-    <message>
-        <source>File save a copy</source>
-        <translation>Bestand opslaan als kopie</translation>
     </message>
     <message>
         <source>Save a copy of the score in addition to the current file</source>
@@ -12827,10 +12714,6 @@ mislukt:</translation>
         <translation>Partijen exporteren...</translation>
     </message>
     <message>
-        <source>Export Parts</source>
-        <translation>Exporteer partijen</translation>
-    </message>
-    <message>
         <source>Save a copy of the score&apos;s parts in various formats</source>
         <translation>Bewaar een kopie van de partituur partijen in verschillende formaten</translation>
     </message>
@@ -12839,20 +12722,12 @@ mislukt:</translation>
         <translation>Sluit</translation>
     </message>
     <message>
-        <source>File close</source>
-        <translation>Bestand afsluiten</translation>
-    </message>
-    <message>
         <source>Close current score</source>
         <translation>Afsluiten huidige partituur</translation>
     </message>
     <message>
         <source>New...</source>
         <translation>Nieuw...</translation>
-    </message>
-    <message>
-        <source>File new</source>
-        <translation>Nieuw bestand</translation>
     </message>
     <message>
         <source>Create new score</source>
@@ -12909,10 +12784,6 @@ mislukt:</translation>
     <message>
         <source>Note Input</source>
         <translation>Noteninvoer</translation>
-    </message>
-    <message>
-        <source>Note input mode</source>
-        <translation>Noot-invoermodus</translation>
     </message>
     <message>
         <source>Unison Above</source>
@@ -13231,48 +13102,16 @@ mislukt:</translation>
         <translation>Staccato</translation>
     </message>
     <message>
-        <source>Add staccato</source>
-        <translation>Staccato toevoegen</translation>
-    </message>
-    <message>
         <source>Tenuto</source>
         <translation>Tenuto</translation>
-    </message>
-    <message>
-        <source>Add tenuto</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Trill</source>
         <translation>Triller</translation>
     </message>
     <message>
-        <source>Add trill</source>
-        <translation>Triller toevoegen</translation>
-    </message>
-    <message>
         <source>Marcato</source>
         <translation>Marcato</translation>
-    </message>
-    <message>
-        <source>Add marcato</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add More Stretch</source>
-        <translation>Afstanden vergroten</translation>
-    </message>
-    <message>
-        <source>Add more stretch</source>
-        <translation>Afstanden vergroten</translation>
-    </message>
-    <message>
-        <source>Add Less Stretch</source>
-        <translation>Afstanden verkleinen</translation>
-    </message>
-    <message>
-        <source>Add less stretch</source>
-        <translation>Afstanden verkleinen</translation>
     </message>
     <message>
         <source>Reset Beam Mode</source>
@@ -13296,15 +13135,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Pitch up or move text or articulation up</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Diatonic up</source>
-        <translation type="unfinished"/>
+        <translation>Toonhoogte omhoog of verplaats de tekst of articulatie omlaag</translation>
     </message>
     <message>
         <source>Diatonic pitch up</source>
-        <translation type="unfinished"/>
+        <translation>Diatonische toonhoogte omhoog</translation>
     </message>
     <message>
         <source>Up Octave</source>
@@ -13316,7 +13151,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Pitch up by an octave or move text or articulation up</source>
-        <translation type="unfinished"/>
+        <translation>Toonhoogte een octaaf onhoog of verplaats de tekst of articulatie omlaag</translation>
     </message>
     <message>
         <source>Up Note in Chord</source>
@@ -13344,19 +13179,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Pitch down or move text or articulation down</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Diatonic down</source>
-        <translation type="unfinished"/>
+        <translation>Toonhoogte omlaag of verplaats de tekst of articulatie omlaag</translation>
     </message>
     <message>
         <source>Diatonic pitch down</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Down octave</source>
-        <translation>Octaaf omlaag</translation>
+        <translation>Diatonische toonhoogte omlaag</translation>
     </message>
     <message>
         <source>Pitch down octave</source>
@@ -13364,7 +13191,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Pitch down by an octave or move text or articulation down</source>
-        <translation type="unfinished"/>
+        <translation>Toonhoogte een octaaf omlaag of verplaats de tekst of articulatie omlaag</translation>
     </message>
     <message>
         <source>Down Note in Chord</source>
@@ -13387,16 +13214,8 @@ mislukt:</translation>
         <translation>Verplaats naar beneden</translation>
     </message>
     <message>
-        <source>Previous chord</source>
-        <translation>Vorige akkoord</translation>
-    </message>
-    <message>
         <source>Go to previous chord or move text left</source>
         <translation>Ga naar vorig akkoord of verplaats de tekst naar links</translation>
-    </message>
-    <message>
-        <source>Previous measure</source>
-        <translation>Vorige maat</translation>
     </message>
     <message>
         <source>Go to previous measure or move text left</source>
@@ -13407,16 +13226,8 @@ mislukt:</translation>
         <translation>Vorige notenbalk of stem</translation>
     </message>
     <message>
-        <source>Next chord</source>
-        <translation>Volgende akkoord</translation>
-    </message>
-    <message>
         <source>Go to next chord or move text right</source>
         <translation>Ga naar volgende akkoord of verplaats de tekst naar rechts</translation>
-    </message>
-    <message>
-        <source>Next measure</source>
-        <translation>Volgende maat</translation>
     </message>
     <message>
         <source>Go to next measure or move text right</source>
@@ -13479,28 +13290,12 @@ mislukt:</translation>
         <translation>notenbalk onder de selectie toevoegen</translation>
     </message>
     <message>
-        <source>Page: previous</source>
-        <translation>Pagina: vorige</translation>
-    </message>
-    <message>
-        <source>Page: next</source>
-        <translation>Pagina: volgende</translation>
-    </message>
-    <message>
-        <source>Page: top</source>
-        <translation>Pagina: bovenaan</translation>
-    </message>
-    <message>
-        <source>Page: end</source>
-        <translation>Pagina: onderaan</translation>
-    </message>
-    <message>
         <source>Slur</source>
-        <translation>Boog</translation>
+        <translation>Legatoboog</translation>
     </message>
     <message>
         <source>Add slur</source>
-        <translation>bindingsboog toevoegen</translation>
+        <translation>Legatoboog toevoegen</translation>
     </message>
     <message>
         <source>Crescendo</source>
@@ -13520,19 +13315,19 @@ mislukt:</translation>
     </message>
     <message>
         <source>Ottava 8va</source>
-        <translation type="unfinished"/>
+        <translation>Ottava 8va</translation>
     </message>
     <message>
         <source>Add ottava 8va</source>
-        <translation type="unfinished"/>
+        <translation>Ottava 8va toevoegen</translation>
     </message>
     <message>
         <source>Ottava 8vb</source>
-        <translation type="unfinished"/>
+        <translation>Ottava 8vb</translation>
     </message>
     <message>
         <source>Add ottava 8vb</source>
-        <translation type="unfinished"/>
+        <translation>Ottava 8vb toevoegen</translation>
     </message>
     <message>
         <source>Escape</source>
@@ -13655,40 +13450,20 @@ mislukt:</translation>
         <translation>Longa</translation>
     </message>
     <message>
-        <source>Note duration: longa</source>
-        <translation>Noot duur: Longa</translation>
-    </message>
-    <message>
         <source>Double whole note</source>
         <translation>Dubbele hele noot</translation>
     </message>
     <message>
-        <source>Note duration: double whole</source>
-        <translation>Nootduur: dubbele hele</translation>
-    </message>
-    <message>
         <source>Whole note</source>
-        <translation>Hele nootr</translation>
-    </message>
-    <message>
-        <source>Note duration: whole</source>
-        <translation>Noot duur: heel</translation>
+        <translation>Hele noot</translation>
     </message>
     <message>
         <source>Half note</source>
         <translation>Halve noot</translation>
     </message>
     <message>
-        <source>Note duration: half</source>
-        <translation>Noot duur: half</translation>
-    </message>
-    <message>
         <source>Quarter note</source>
         <translation>Kwartnoot</translation>
-    </message>
-    <message>
-        <source>Note duration: quarter</source>
-        <translation>Noot duur: kwart</translation>
     </message>
     <message>
         <source>16th note</source>
@@ -13696,7 +13471,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Note duration: 16th</source>
-        <translation type="unfinished"/>
+        <translation>Noot duur: 16e</translation>
     </message>
     <message>
         <source>32nd note</source>
@@ -13704,115 +13479,79 @@ mislukt:</translation>
     </message>
     <message>
         <source>Note duration: 32nd</source>
-        <translation type="unfinished"/>
+        <translation>Noot duur: 32e</translation>
     </message>
     <message>
         <source>64th note</source>
-        <translation type="unfinished"/>
+        <translation>64e noot</translation>
     </message>
     <message>
         <source>Note duration: 64th</source>
-        <translation type="unfinished"/>
+        <translation>Noot duur: 64e</translation>
     </message>
     <message>
         <source>128th note</source>
-        <translation type="unfinished"/>
+        <translation>128e noot</translation>
     </message>
     <message>
         <source>Note duration: 128th</source>
-        <translation type="unfinished"/>
+        <translation>Noot duur: 128e</translation>
     </message>
     <message>
         <source>Increase active duration</source>
-        <translation type="unfinished"/>
+        <translation>Actieve duur vermeerderen</translation>
     </message>
     <message>
         <source>Decrease active duration</source>
-        <translation type="unfinished"/>
+        <translation>Actieve duur verminderen</translation>
     </message>
     <message>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Puntering</translation>
     </message>
     <message>
         <source>Double augmentation dot</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: double augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Dubbele puntering</translation>
     </message>
     <message>
         <source>Tie</source>
         <translation>Bindboog</translation>
     </message>
     <message>
-        <source>Note duration: tie</source>
-        <translation>Noot duur: bindboog</translation>
-    </message>
-    <message>
-        <source>Note entry: rest</source>
-        <translation>Noot invoer: rust</translation>
-    </message>
-    <message>
         <source>Double sharp</source>
         <translation>dubbelkruis</translation>
-    </message>
-    <message>
-        <source>Note entry: double sharp</source>
-        <translation>Noot invoer: dubbelkruis</translation>
     </message>
     <message>
         <source>Sharp</source>
         <translation>kruis</translation>
     </message>
     <message>
-        <source>Note entry: sharp</source>
-        <translation>Noot invoer: kruis</translation>
-    </message>
-    <message>
         <source>Natural</source>
-        <translation>Natuurlijk</translation>
-    </message>
-    <message>
-        <source>Note entry: natural</source>
-        <translation>Noot invoer: natuurlijk</translation>
+        <translation>Herstelling</translation>
     </message>
     <message>
         <source>Flat</source>
         <translation>Mol</translation>
     </message>
     <message>
-        <source>Note entry: flat</source>
-        <translation>Not invoer: mol</translation>
-    </message>
-    <message>
         <source>Double flat</source>
         <translation>dubbelmol</translation>
     </message>
     <message>
-        <source>Note entry: double flat</source>
-        <translation>Noot invoer: dubbele mol</translation>
-    </message>
-    <message>
         <source>Acciaccatura</source>
-        <translation>korte voorslag</translation>
+        <translation>Korte voorslag</translation>
     </message>
     <message>
         <source>Add acciaccatura</source>
-        <translation type="unfinished"/>
+        <translation>Voeg korte voorslag toe</translation>
     </message>
     <message>
         <source>Appoggiatura</source>
-        <translation>lange voorslag</translation>
+        <translation>Lange voorslag</translation>
     </message>
     <message>
         <source>Add appoggiatura</source>
-        <translation type="unfinished"/>
+        <translation>Voeg lange voorslag toe</translation>
     </message>
     <message>
         <source>Grace: quarter</source>
@@ -13867,10 +13606,6 @@ mislukt:</translation>
         <translation>stem 4</translation>
     </message>
     <message>
-        <source>MIDI input</source>
-        <translation>MIDI-invoer</translation>
-    </message>
-    <message>
         <source>Enable MIDI input</source>
         <translation>Midi input inschakelen</translation>
     </message>
@@ -13880,7 +13615,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Beam middle</source>
-        <translation type="unfinished"/>
+        <translation>Waardestreep midden</translation>
     </message>
     <message>
         <source>No beam</source>
@@ -13888,7 +13623,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Beam 32nd sub</source>
-        <translation type="unfinished"/>
+        <translation>32e noot waardestreep onder</translation>
     </message>
     <message>
         <source>Auto beam</source>
@@ -13896,11 +13631,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Feathered beam, slower</source>
-        <translation type="unfinished"/>
+        <translation>Versnellende waardestrepen</translation>
     </message>
     <message>
         <source>Feathered beam, faster</source>
-        <translation type="unfinished"/>
+        <translation>Vertragende waardestrepen</translation>
     </message>
     <message>
         <source>Palette</source>
@@ -14012,7 +13747,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add rehearsal mark</source>
-        <translation type="unfinished"/>
+        <translation>Voeg repetitie markering toe</translation>
     </message>
     <message>
         <source>Picture</source>
@@ -14052,7 +13787,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Player Seek to Begin</source>
-        <translation type="unfinished"/>
+        <translation>Speler Zoet tot Begin</translation>
     </message>
     <message>
         <source>Rewind</source>
@@ -14068,15 +13803,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>Player Seek to End</source>
-        <translation type="unfinished"/>
+        <translation>Speler Positie Naar Einde</translation>
     </message>
     <message>
         <source>Play repeats</source>
-        <translation type="unfinished"/>
+        <translation>Herhalingen Afspelen</translation>
     </message>
     <message>
         <source>Toggle repeats playback</source>
-        <translation type="unfinished"/>
+        <translation>Schakel afspelen herhalingen in/uit</translation>
     </message>
     <message>
         <source>Pan</source>
@@ -14084,11 +13819,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Toggle pan score</source>
-        <translation type="unfinished"/>
+        <translation>Schakel meelopen in/uit</translation>
     </message>
     <message>
         <source>Pan score during playback</source>
-        <translation type="unfinished"/>
+        <translation>Muziek meelopen bij afspelen</translation>
     </message>
     <message>
         <source>Load Style...</source>
@@ -14180,15 +13915,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>Toggle System Break</source>
-        <translation>Systeem afbreken aan / uit</translation>
+        <translation>Schakel systeem afbreken in/uit</translation>
     </message>
     <message>
         <source>Toggle Page Break</source>
-        <translation>Pagina afbreken aan / uit</translation>
+        <translation>Schakel pagina afbreken in/uit</translation>
     </message>
     <message>
         <source>Toggle Section Break</source>
-        <translation type="unfinished"/>
+        <translation>Schakel sectie einde in/uit</translation>
     </message>
     <message>
         <source>Edit Element</source>
@@ -14208,11 +13943,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Reset Stretch</source>
-        <translation>Herstellen afstanden</translation>
+        <translation>Herstellen Afstanden</translation>
     </message>
     <message>
         <source>Reset measure stretch</source>
-        <translation type="unfinished"/>
+        <translation>Herstel afstanden maat naar standaard</translation>
     </message>
     <message>
         <source>Show Invisible</source>
@@ -14232,35 +13967,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Insert Special Characters...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Insert Special Characters</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Whole rest</source>
-        <translation>Hele rust</translation>
-    </message>
-    <message>
-        <source>Note entry: whole rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Half rest</source>
-        <translation>Halve rust</translation>
-    </message>
-    <message>
-        <source>Note entry: half rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quarter rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: quarter rest</source>
-        <translation type="unfinished"/>
+        <translation>Speciale Tekens Invoegen...</translation>
     </message>
     <message>
         <source>Backspace</source>
@@ -14280,7 +13987,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Mirror note head</source>
-        <translation type="unfinished"/>
+        <translation>Spiegel nootkop</translation>
     </message>
     <message>
         <source>General...</source>
@@ -14288,7 +13995,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Edit general style</source>
-        <translation type="unfinished"/>
+        <translation>Bewerk algemene stijl</translation>
     </message>
     <message>
         <source>Text...</source>
@@ -14320,11 +14027,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Double duration</source>
-        <translation type="unfinished"/>
+        <translation>Dubbele duur</translation>
     </message>
     <message>
         <source>Half duration</source>
-        <translation type="unfinished"/>
+        <translation>Halve duur</translation>
     </message>
     <message>
         <source>Repeat selection</source>
@@ -14332,15 +14039,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>Pan piano roll</source>
-        <translation type="unfinished"/>
+        <translation>Meelopen met piano rol</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
-        <translation type="unfinished"/>
+        <translation>Schakel meelopen piano rol in/uit</translation>
     </message>
     <message>
         <source>Pan roll during playback</source>
-        <translation type="unfinished"/>
+        <translation>Rol meelopen bij afspelen</translation>
     </message>
     <message>
         <source>Documents Side by Side</source>
@@ -14356,7 +14063,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Display documents stacked</source>
-        <translation type="unfinished"/>
+        <translation>Toon documenten boven elkaar</translation>
     </message>
     <message>
         <source>Parts...</source>
@@ -14368,15 +14075,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>Enharmonic up</source>
-        <translation type="unfinished"/>
+        <translation>Enharmonisch op</translation>
     </message>
     <message>
         <source>Enharmonic down</source>
-        <translation type="unfinished"/>
+        <translation>Enharmonisch neer</translation>
     </message>
     <message>
         <source>Create new revision</source>
-        <translation type="unfinished"/>
+        <translation>Maak nieuwe bewerking</translation>
     </message>
     <message>
         <source>Show OMR image</source>
@@ -14388,11 +14095,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Re-Pitch Mode</source>
-        <translation type="unfinished"/>
+        <translation>Herstel toonhoogte modus</translation>
     </message>
     <message>
         <source>Replace pitches without changing rhythms</source>
-        <translation type="unfinished"/>
+        <translation>Vervang toonhoogte zonder het ritme te veranderen</translation>
     </message>
     <message>
         <source>Piano Keyboard</source>
@@ -14413,10 +14120,6 @@ mislukt:</translation>
     <message>
         <source>Page Settings...</source>
         <translation>Pagina instellingen...</translation>
-    </message>
-    <message>
-        <source>Page Settings</source>
-        <translation>Pagina instellingen</translation>
     </message>
     <message>
         <source>Album...</source>
@@ -14443,14 +14146,6 @@ mislukt:</translation>
         <translation>Vorige partituur</translation>
     </message>
     <message>
-        <source>Plugin Creator</source>
-        <translation>Plugin maker</translation>
-    </message>
-    <message>
-        <source>Plugin Manager</source>
-        <translation>Plugin mananger</translation>
-    </message>
-    <message>
         <source>Inspector</source>
         <translation>Instellingen</translation>
     </message>
@@ -14459,40 +14154,16 @@ mislukt:</translation>
         <translation>Toon instellingen</translation>
     </message>
     <message>
-        <source>Resource Manager</source>
-        <translation>Taalbron manager</translation>
-    </message>
-    <message>
-        <source>Show OMR Panel</source>
-        <translation>Toon OMR paneel</translation>
-    </message>
-    <message>
         <source>Loop</source>
         <translation>Loop</translation>
     </message>
     <message>
         <source>Toggle loop playback</source>
-        <translation type="unfinished"/>
+        <translation>Schakel lus afspelen in/uit</translation>
     </message>
     <message>
         <source>Loop playback</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Loop in</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Set loop In position</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Loop out</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Set loop Out position</source>
-        <translation type="unfinished"/>
+        <translation>Lus afspelen</translation>
     </message>
     <message>
         <source>Metronome</source>
@@ -14500,23 +14171,19 @@ mislukt:</translation>
     </message>
     <message>
         <source>Toggle metronome playback</source>
-        <translation type="unfinished"/>
+        <translation>Schakel metronoom afspelen in/uit</translation>
     </message>
     <message>
         <source>Play metronome during playback</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Count-in</source>
-        <translation type="unfinished"/>
+        <translation>Speel metronoom tijdens afspelen</translation>
     </message>
     <message>
         <source>Toggle count-in playback</source>
-        <translation type="unfinished"/>
+        <translation>Schakel opmaat afspelen in/uit</translation>
     </message>
     <message>
         <source>Play count-in at playback start</source>
-        <translation type="unfinished"/>
+        <translation>Speel opmaat wanneer afspelen start</translation>
     </message>
     <message>
         <source>Figured Bass</source>
@@ -14548,11 +14215,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Next syllable</source>
-        <translation type="unfinished"/>
+        <translation>Volgende lettergreep</translation>
     </message>
     <message>
         <source>Previous syllable</source>
-        <translation type="unfinished"/>
+        <translation>Vorige lettergreep</translation>
     </message>
     <message>
         <source>Toggle visibility</source>
@@ -14567,10 +14234,6 @@ mislukt:</translation>
         <translation>Maak onzichtbaar</translation>
     </message>
     <message>
-        <source>Note anchored Textline</source>
-        <translation>Noot verankerd aan tekstlijn</translation>
-    </message>
-    <message>
         <source>Lock Score</source>
         <translation>Partituur vergrendelen</translation>
     </message>
@@ -14579,80 +14242,28 @@ mislukt:</translation>
         <translation>Longa (TAB)</translation>
     </message>
     <message>
-        <source>Note duration: longa (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Double whole note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: double whole (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Whole note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: whole (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Half note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: half (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quarter note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: quarter (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>16th note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Note duration: 16th (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>32nd note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nootduur: 16e (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 32nd (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>64th note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nootduur: 32e (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 64th (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>128th note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nootduur: 64e (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 128th (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Noot duur: 128e (TAB)</translation>
     </message>
     <message>
         <source>Increase active duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Toename actieve duur (TAB)</translation>
     </message>
     <message>
         <source>Decrease active duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Afname actieve duur (TAB)</translation>
     </message>
     <message>
         <source>Rest (TAB)</source>
@@ -14660,27 +14271,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>Enter rest (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note entry: rest (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>String above (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Rust toevoegen (TAB)</translation>
     </message>
     <message>
         <source>Select string above (TAB only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>String below (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Kies snaar boven (alleen TAB)</translation>
     </message>
     <message>
         <source>Select string below (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Kies snaar onder (alleen TAB)</translation>
     </message>
     <message>
         <source>Fret 0 (TAB)</source>
@@ -14688,7 +14287,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add fret 0 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 0 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Fret 1 (TAB)</source>
@@ -14696,7 +14295,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add fret 1 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 1 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Fret 2 (TAB)</source>
@@ -14704,7 +14303,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add fret 2 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 2 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Fret 3 (TAB)</source>
@@ -14712,7 +14311,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add fret 3 on current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 3 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Fret 4 (TAB)</source>
@@ -14720,7 +14319,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add fret 4 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 4 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Fret 5 (TAB)</source>
@@ -14728,7 +14327,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add fret 5 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 5 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Fret 6 (TAB)</source>
@@ -14736,7 +14335,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add fret 6 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 6 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Fret 7 (TAB)</source>
@@ -14744,7 +14343,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add fret 7 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 7 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Fret 8 (TAB)</source>
@@ -14752,7 +14351,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add fret 8 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 8 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Fret 9 (TAB)</source>
@@ -14760,91 +14359,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add fret 9 of current string (TAB only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Longa advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a longa (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Breve advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a double whole note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Whole note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a whole note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Half note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a half note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Quarter note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a quarter note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Eighth note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of an eighth note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>16th note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a 16th note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>32nd note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a 32nd note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>64th note advance (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Advance of a 64th note (F.B./Harm. only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Previous measure (F.B./Harm.)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next measure (F.B./Harm.)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 9 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Insert Fretboard Diagram Frame</source>
-        <translation type="unfinished"/>
+        <translation>Fretboord Diagram Frame Invoegen</translation>
     </message>
     <message>
         <source>Add quarter grace note</source>
@@ -14868,27 +14387,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>Previous beat (Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Vorige tel (Akkoord symbool)</translation>
     </message>
     <message>
         <source>Next beat (Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Volgende tel (Akkoord symbool)</translation>
     </message>
     <message>
         <source>Respell Pitches</source>
         <translation>Herbepaal toonhoogte</translation>
-    </message>
-    <message>
-        <source>bold face</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>italic</source>
-        <translation>cursief</translation>
-    </message>
-    <message>
-        <source>underline</source>
-        <translation>onderlijnen</translation>
     </message>
     <message>
         <source>Full Measure Rest</source>
@@ -14912,7 +14419,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add fret 10 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 10 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Fret 11 (TAB)</source>
@@ -14920,7 +14427,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add fret 11 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 11 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Fret 12 (TAB)</source>
@@ -14928,15 +14435,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add fret 12 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 12 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Fret 13 (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 13 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 13 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 13 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Fret 14 (TAB)</source>
@@ -14944,7 +14451,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add fret 14 of current string (TAB only)</source>
-        <translation type="unfinished"/>
+        <translation>Fret 14 toevoegen aan huidige snaar (alleen TAB)</translation>
     </message>
     <message>
         <source>Grace: 16th after</source>
@@ -14964,15 +14471,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>All Similar Elements in Range Selection</source>
-        <translation type="unfinished"/>
+        <translation>Alle Soortgelijke Elementen in Bereik Selecteren</translation>
     </message>
     <message>
         <source>Select all similar elements in the range selection</source>
-        <translation type="unfinished"/>
+        <translation>Alle Soortgelijke Elementen in Bereik Selecteren</translation>
     </message>
     <message>
         <source>Add brackets to element</source>
-        <translation type="unfinished"/>
+        <translation>Voeg haken toe aan element</translation>
     </message>
     <message>
         <source>Selection Filter</source>
@@ -14988,39 +14495,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Beam 16th sub</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Eighth rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Toggle screenshot mode</source>
-        <translation>Wissel schermafdruk modus</translation>
-    </message>
-    <message>
-        <source>Eighth note (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Next element</source>
-        <translation>Volgende element</translation>
-    </message>
-    <message>
-        <source>Previous element</source>
-        <translation>Vorige element</translation>
-    </message>
-    <message>
-        <source>First element</source>
-        <translation>Eerste element</translation>
+        <translation>16e noot waardestreep onder</translation>
     </message>
     <message>
         <source>Go to the first element</source>
         <translation>Ga naar eerste element</translation>
-    </message>
-    <message>
-        <source>Last element</source>
-        <translation>Laatste element</translation>
     </message>
     <message>
         <source>Go to the last element</source>
@@ -15051,48 +14530,20 @@ mislukt:</translation>
         <translation>Toon symbool palet</translation>
     </message>
     <message>
-        <source>Accessibility: next element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Accessibility: previous element</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: eighth</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Grace: eighth after</source>
         <translation>Voorslag: 1/8 erna</translation>
     </message>
     <message>
-        <source>Note entry: eighth rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Note duration: eighth (TAB)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add more stretch to selected measures</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add less stretch to selected measures</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Enable snap to horizontal grid</source>
-        <translation type="unfinished"/>
+        <translation>Schakel uitlijnen op horizontaal raster in</translation>
     </message>
     <message>
         <source>Enable snap to vertical grid</source>
-        <translation type="unfinished"/>
+        <translation>Schakel uitlijnen op verticaal raster in</translation>
     </message>
     <message>
         <source>Configure grid</source>
-        <translation type="unfinished"/>
+        <translation>Matrix configureren</translation>
     </message>
     <message>
         <source>Insert one measure</source>
@@ -15120,55 +14571,1039 @@ mislukt:</translation>
     </message>
     <message>
         <source>Save Online...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>File save online</source>
-        <translation type="unfinished"/>
+        <translation>Online opslaan...</translation>
     </message>
     <message>
         <source>Save score on MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Partituur opslaan in MuseScore.com</translation>
     </message>
     <message>
         <source>Explode</source>
-        <translation type="unfinished"/>
+        <translation>Explodeer</translation>
     </message>
     <message>
         <source>Explode contents of top selected staff into staves below</source>
-        <translation type="unfinished"/>
+        <translation>Breidt de inhoud van de bovenste geselecteerde notenbalk uit naar de onderstaande notenbalken</translation>
     </message>
     <message>
         <source>Implode</source>
-        <translation type="unfinished"/>
+        <translation>Implodeer</translation>
     </message>
     <message>
         <source>Implode contents of selected staves into top selected staff</source>
-        <translation type="unfinished"/>
+        <translation>Perk de inhoud van geselecteerde notenbalken in tot de bovenste geselecteerde notenbalk</translation>
     </message>
     <message>
         <source>Fill With Slashes</source>
-        <translation type="unfinished"/>
+        <translation>Vul met slashes</translation>
     </message>
     <message>
         <source>Toggle Rhythmic Slash Notation</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add/Remove Line Breaks</source>
-        <translation type="unfinished"/>
+        <translation>Schakel ritmische slash-notatie in/uit</translation>
     </message>
     <message>
         <source>Start Center</source>
-        <translation type="unfinished"/>
+        <translation>Start scherm</translation>
     </message>
     <message>
         <source>Toggle create multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>Schakel rusten over meerdere maten in/uit</translation>
     </message>
     <message>
         <source>Resequence Rehearsal Marks</source>
-        <translation type="unfinished"/>
+        <translation>Repetitiemarkeringen hernummeren</translation>
+    </message>
+    <message>
+        <source>Increase Stretch</source>
+        <translation>Afstand Vergroten</translation>
+    </message>
+    <message>
+        <source>Increase stretch</source>
+        <translation>Afstand vergroten</translation>
+    </message>
+    <message>
+        <source>Increase stretch of selected measures</source>
+        <translation>Afstand vergroten van geselecteerde maten</translation>
+    </message>
+    <message>
+        <source>Decrease Stretch</source>
+        <translation>Afstand Verminderen</translation>
+    </message>
+    <message>
+        <source>Decrease stretch</source>
+        <translation>Afstand verminderen</translation>
+    </message>
+    <message>
+        <source>Decrease stretch of selected measures</source>
+        <translation>Afstand verminderen van geselecteerde maten</translation>
+    </message>
+    <message>
+        <source>Plugin Creator...</source>
+        <translation>Plugin maker...</translation>
+    </message>
+    <message>
+        <source>Plugin Manager...</source>
+        <translation>Plugin Beheer...</translation>
+    </message>
+    <message>
+        <source>Resource Manager...</source>
+        <translation>Bronnen beheer...</translation>
+    </message>
+    <message>
+        <source>Add/Remove Line Breaks...</source>
+        <translation>Toevoegen/Verwijderen regeleinden...</translation>
+    </message>
+    <message>
+        <source>File: Open</source>
+        <translation>Bestand openen</translation>
+    </message>
+    <message>
+        <source>File: Save</source>
+        <translation>Bestand opslaan</translation>
+    </message>
+    <message>
+        <source>File: Save online</source>
+        <translation>Bestand online opslaan</translation>
+    </message>
+    <message>
+        <source>File: Save as</source>
+        <translation>Bestand opslaan als</translation>
+    </message>
+    <message>
+        <source>Save selection</source>
+        <translation>Selectie opslaan</translation>
+    </message>
+    <message>
+        <source>File: Save a copy</source>
+        <translation>Bestand: Kopie opslaan</translation>
+    </message>
+    <message>
+        <source>Export parts</source>
+        <translation>Exporteer partijen</translation>
+    </message>
+    <message>
+        <source>File: Close</source>
+        <translation>Bestand afsluiten</translation>
+    </message>
+    <message>
+        <source>File: New</source>
+        <translation>Nieuw bestand</translation>
+    </message>
+    <message>
+        <source>Note input</source>
+        <translation>Noteninvoer</translation>
+    </message>
+    <message>
+        <source>Respell pitches</source>
+        <translation>Herbepaal toonhoogte</translation>
+    </message>
+    <message>
+        <source>Flip Direction</source>
+        <translation>Stokrichting</translation>
+    </message>
+    <message>
+        <source>Diatonic Up</source>
+        <translation>Diatonisch omhoog</translation>
+    </message>
+    <message>
+        <source>Move Up</source>
+        <translation>Omhoog</translation>
+    </message>
+    <message>
+        <source>Diatonic Down</source>
+        <translation>Diatonic omlaag</translation>
+    </message>
+    <message>
+        <source>Down Octave</source>
+        <translation>Octaaf lager</translation>
+    </message>
+    <message>
+        <source>Next Element</source>
+        <translation>Volgende element</translation>
+    </message>
+    <message>
+        <source>Accessibility: Next element</source>
+        <translation>Toegankelijkheid: volgend element</translation>
+    </message>
+    <message>
+        <source>Previous Element</source>
+        <translation>Vorige element</translation>
+    </message>
+    <message>
+        <source>Accessibility: Previous element</source>
+        <translation>Toegankelijkheid: vorig element</translation>
+    </message>
+    <message>
+        <source>First Element</source>
+        <translation>Eerste element</translation>
+    </message>
+    <message>
+        <source>Last Element</source>
+        <translation>Laatste element</translation>
+    </message>
+    <message>
+        <source>Move Down</source>
+        <translation>Omlaag</translation>
+    </message>
+    <message>
+        <source>Previous Chord</source>
+        <translation>Vorige akkoord</translation>
+    </message>
+    <message>
+        <source>Previous Measure</source>
+        <translation>Vorige Maat</translation>
+    </message>
+    <message>
+        <source>Previous Staff or Voice</source>
+        <translation>Vorige notenbalk of stem</translation>
+    </message>
+    <message>
+        <source>Next Chord</source>
+        <translation>Volgende akkoord</translation>
+    </message>
+    <message>
+        <source>Next Measure</source>
+        <translation>Volgende Maat</translation>
+    </message>
+    <message>
+        <source>Next Staff or Voice</source>
+        <translation>Volgende notenbalk of stem</translation>
+    </message>
+    <message>
+        <source>Add Previous Chord to Selection</source>
+        <translation>vorig akkoord aan selectie toevoegen</translation>
+    </message>
+    <message>
+        <source>Select to Beginning of Measure</source>
+        <translation>selecteer tot het begin van de maat</translation>
+    </message>
+    <message>
+        <source>Add Next Chord to Selection</source>
+        <translation>Voeg volgend akkoord aan selectie toe</translation>
+    </message>
+    <message>
+        <source>Select section</source>
+        <translation>Selecteer sectie</translation>
+    </message>
+    <message>
+        <source>Move Chord/Rest Right</source>
+        <translation>Verplaats akkoord/rust rechts</translation>
+    </message>
+    <message>
+        <source>Move Chord/Rest left</source>
+        <translation>Verplaats akkoord/rust links</translation>
+    </message>
+    <message>
+        <source>Select to Beginning of Line</source>
+        <translation>Selecteer naar begin van regel</translation>
+    </message>
+    <message>
+        <source>Select to End of Line</source>
+        <translation>Selecteer naar einde van regel</translation>
+    </message>
+    <message>
+        <source>Select to Beginning of Score</source>
+        <translation>Selecteer naar begin van Partituur</translation>
+    </message>
+    <message>
+        <source>Select to End of Score</source>
+        <translation>Selecteer naar einde van partituur</translation>
+    </message>
+    <message>
+        <source>Add Staff Above to Selection</source>
+        <translation>notenbalk boven de selectie toevoegen</translation>
+    </message>
+    <message>
+        <source>Add Staff Below to Selection</source>
+        <translation>notenbalk onder de selectie toevoegen</translation>
+    </message>
+    <message>
+        <source>Page: Previous</source>
+        <translation>Pagina: vorige</translation>
+    </message>
+    <message>
+        <source>Page: Next</source>
+        <translation>Pagina: volgende</translation>
+    </message>
+    <message>
+        <source>Page: Top</source>
+        <translation>Pagina: top</translation>
+    </message>
+    <message>
+        <source>Page: End</source>
+        <translation>Pagina: einde</translation>
+    </message>
+    <message>
+        <source>Full measure rest</source>
+        <translation>Gehele maat rust</translation>
+    </message>
+    <message>
+        <source>Delete selected measures</source>
+        <translation>Verwijder geselecteerde maten</translation>
+    </message>
+    <message>
+        <source>Append one measure</source>
+        <translation>Een maat toevoegen</translation>
+    </message>
+    <message>
+        <source>Append text frame</source>
+        <translation>Tekst frame toevoegen</translation>
+    </message>
+    <message>
+        <source>Insert fretboard diagram frame</source>
+        <translation>Voeg fretboard diagram frame in</translation>
+    </message>
+    <message>
+        <source>Append horizontal frame</source>
+        <translation>Toevoegen horizontaal frame</translation>
+    </message>
+    <message>
+        <source>Append vertical frame</source>
+        <translation>Toevoegen verticaal frame</translation>
+    </message>
+    <message>
+        <source>Note duration: Longa</source>
+        <translation>Nootduut: lang</translation>
+    </message>
+    <message>
+        <source>Double Whole Note</source>
+        <translation>Dubbele hele noot</translation>
+    </message>
+    <message>
+        <source>Note duration: Double whole</source>
+        <translation>Nootduur: dubbele hele</translation>
+    </message>
+    <message>
+        <source>Whole Note</source>
+        <translation>Hele noot</translation>
+    </message>
+    <message>
+        <source>Note duration: Whole</source>
+        <translation>Nootduur: hele</translation>
+    </message>
+    <message>
+        <source>Half Note</source>
+        <translation>Halve noot</translation>
+    </message>
+    <message>
+        <source>Note duration: Half</source>
+        <translation>Nootduur: half</translation>
+    </message>
+    <message>
+        <source>Quarter Note</source>
+        <translation>Kwartnoot</translation>
+    </message>
+    <message>
+        <source>Note duration: Quarter</source>
+        <translation>Nootduur: kwart</translation>
+    </message>
+    <message>
+        <source>Eighth Note</source>
+        <translation>Achtste noot</translation>
+    </message>
+    <message>
+        <source>Note duration: Eighth</source>
+        <translation>Nootduur: achtste</translation>
+    </message>
+    <message>
+        <source>16th Note</source>
+        <translation>16e noot</translation>
+    </message>
+    <message>
+        <source>32nd Note</source>
+        <translation>32e noot</translation>
+    </message>
+    <message>
+        <source>64th Note</source>
+        <translation>64e noot</translation>
+    </message>
+    <message>
+        <source>128th Note</source>
+        <translation>128e noot</translation>
+    </message>
+    <message>
+        <source>Increase Active Duration</source>
+        <translation>Actieve duur vermeerderen</translation>
+    </message>
+    <message>
+        <source>Decrease Active Duration</source>
+        <translation>Actieve duur verminderen</translation>
+    </message>
+    <message>
+        <source>Augmentation Dot</source>
+        <translation>Puntering</translation>
+    </message>
+    <message>
+        <source>Note duration: Augmentation dot</source>
+        <translation>Noot duur: puntering</translation>
+    </message>
+    <message>
+        <source>Double Augmentation Dot</source>
+        <translation>Dubbele puntering</translation>
+    </message>
+    <message>
+        <source>Note duration: Double augmentation dot</source>
+        <translation>Noot duur: dubbele puntering</translation>
+    </message>
+    <message>
+        <source>Note duration: Tie</source>
+        <translation>Noot duur: bindboog</translation>
+    </message>
+    <message>
+        <source>Note input: Rest</source>
+        <translation>Noteninvoer: rust</translation>
+    </message>
+    <message>
+        <source>Double Sharp</source>
+        <translation>Dubbelkruis</translation>
+    </message>
+    <message>
+        <source>Note input: Double sharp</source>
+        <translation>Noteninvoer: dubbelkruis</translation>
+    </message>
+    <message>
+        <source>Note input: Sharp</source>
+        <translation>Noteninvoer: kruis</translation>
+    </message>
+    <message>
+        <source>Note input: Natural</source>
+        <translation>Noteninvoer: natuurlijk</translation>
+    </message>
+    <message>
+        <source>Note input: Flat</source>
+        <translation>Noteninvoer: mol</translation>
+    </message>
+    <message>
+        <source>Double Flat</source>
+        <translation>Dubbelmol</translation>
+    </message>
+    <message>
+        <source>Note input: Double flat</source>
+        <translation>Noteninvoer: dubbele mol</translation>
+    </message>
+    <message>
+        <source>Grace: Quarter</source>
+        <translation>Voorslag: kwart</translation>
+    </message>
+    <message>
+        <source>Grace: Eighth after</source>
+        <translation>Voorslag: 1/8 erna</translation>
+    </message>
+    <message>
+        <source>MIDI Input</source>
+        <translation>MIDI invoer</translation>
+    </message>
+    <message>
+        <source>Beam Start</source>
+        <translation>Waardestreep begin</translation>
+    </message>
+    <message>
+        <source>Beam Middle</source>
+        <translation>Tussen waardestreep</translation>
+    </message>
+    <message>
+        <source>No Beam</source>
+        <translation>Geen waardestreep</translation>
+    </message>
+    <message>
+        <source>Beam 16th Sub</source>
+        <translation>Waardestreep 16th Sub</translation>
+    </message>
+    <message>
+        <source>Beam 32nd Sub</source>
+        <translation>Waardestreep 32nd Sub</translation>
+    </message>
+    <message>
+        <source>Auto Beam</source>
+        <translation>Auto waardestreep</translation>
+    </message>
+    <message>
+        <source>Feathered Beam, Slower</source>
+        <translation>Versnellende waardestrepen</translation>
+    </message>
+    <message>
+        <source>Feathered Beam, Faster</source>
+        <translation>Vertragende waardestrepen</translation>
+    </message>
+    <message>
+        <source>Play panel</source>
+        <translation>Speel paneel</translation>
+    </message>
+    <message>
+        <source>Selection filter</source>
+        <translation>Selectie filter</translation>
+    </message>
+    <message>
+        <source>MIDI import panel</source>
+        <translation>MIDI import paneel</translation>
+    </message>
+    <message>
+        <source>Status bar</source>
+        <translation>Statusbalk</translation>
+    </message>
+    <message>
+        <source>Zoom Canvas</source>
+        <translation>Inzoomen/Uitzoomen</translation>
+    </message>
+    <message>
+        <source>Play previous chord</source>
+        <translation>Vorig akkoord spelen</translation>
+    </message>
+    <message>
+        <source>Play previous measure</source>
+        <translation>Vorige maat spelen</translation>
+    </message>
+    <message>
+        <source>Play next chord</source>
+        <translation>Volgend akkoord spelen</translation>
+    </message>
+    <message>
+        <source>Play next measure</source>
+        <translation>Volgende maat spelen</translation>
+    </message>
+    <message>
+        <source>Player seek to begin</source>
+        <translation>Speler positie naar begin</translation>
+    </message>
+    <message>
+        <source>Player seek to end</source>
+        <translation>Speler positie naar einde</translation>
+    </message>
+    <message>
+        <source>Play Repeats</source>
+        <translation>Herhalingen afspelen</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Selecteer alles</translation>
+    </message>
+    <message>
+        <source>Exchange voice 1-2</source>
+        <translation>Verwissel stem 1-2</translation>
+    </message>
+    <message>
+        <source>Exchange voice 1-3</source>
+        <translation>Verwissel stem 1-3</translation>
+    </message>
+    <message>
+        <source>Exchange voice 1-4</source>
+        <translation>Verwissel stem 1-4</translation>
+    </message>
+    <message>
+        <source>Exchange voice 2-3</source>
+        <translation>Verwissel stem 2-3</translation>
+    </message>
+    <message>
+        <source>Exchange voice 2-4</source>
+        <translation>Verwissel stem 2-4</translation>
+    </message>
+    <message>
+        <source>Exchange voice 3-4</source>
+        <translation>Verwissel stem 3-4</translation>
+    </message>
+    <message>
+        <source>Repeat Last Command</source>
+        <translation>Herhaal laatste opdracht</translation>
+    </message>
+    <message>
+        <source>Toggle system break</source>
+        <translation>Schakel systeem afbreken in/uit</translation>
+    </message>
+    <message>
+        <source>Toggle page break</source>
+        <translation>Schakel pagina afbreken in/uit</translation>
+    </message>
+    <message>
+        <source>Toggle section break</source>
+        <translation>Sectie einde aan / uit</translation>
+    </message>
+    <message>
+        <source>Edit element</source>
+        <translation>Bewerk element</translation>
+    </message>
+    <message>
+        <source>Show invisible</source>
+        <translation>Onzichtbare objecten tonen</translation>
+    </message>
+    <message>
+        <source>Show unprintable</source>
+        <translation>Niet-afdrukbare weergeven</translation>
+    </message>
+    <message>
+        <source>Show frames</source>
+        <translation>Toon kaders</translation>
+    </message>
+    <message>
+        <source>Show page margins</source>
+        <translation>Paginamarge&apos;s tonen</translation>
+    </message>
+    <message>
+        <source>Insert special characters</source>
+        <translation>Speciale tekens invoegen</translation>
+    </message>
+    <message>
+        <source>Whole Rest</source>
+        <translation>Hele rust</translation>
+    </message>
+    <message>
+        <source>Note input: Whole rest</source>
+        <translation>Noteninvoer: hele rust</translation>
+    </message>
+    <message>
+        <source>Half Rest</source>
+        <translation>Halve rust</translation>
+    </message>
+    <message>
+        <source>Note input: Half rest</source>
+        <translation>Noteninvoer: halve rust</translation>
+    </message>
+    <message>
+        <source>Quarter Rest</source>
+        <translation>Kwart rust</translation>
+    </message>
+    <message>
+        <source>Note input: Quarter rest</source>
+        <translation>Noteninvoer: kwart rust</translation>
+    </message>
+    <message>
+        <source>Eighth Rest</source>
+        <translation>Achtste rust</translation>
+    </message>
+    <message>
+        <source>Note input: Eighth rest</source>
+        <translation>Noteninvoer: achtste rust</translation>
+    </message>
+    <message>
+        <source>Zoom in</source>
+        <translation>Inzoomen</translation>
+    </message>
+    <message>
+        <source>Zoom out</source>
+        <translation>Uitzoomen</translation>
+    </message>
+    <message>
+        <source>Mirror Note Head</source>
+        <translation>Spiegel nootkop</translation>
+    </message>
+    <message>
+        <source>Double Duration</source>
+        <translation>Dubbele duur</translation>
+    </message>
+    <message>
+        <source>Half Duration</source>
+        <translation>Halve duur</translation>
+    </message>
+    <message>
+        <source>Repeat Selection</source>
+        <translation>Herhaal selectie</translation>
+    </message>
+    <message>
+        <source>Enharmonic Up</source>
+        <translation>Enharmonisch op</translation>
+    </message>
+    <message>
+        <source>Enharmonic Down</source>
+        <translation>Enharmonisch neer</translation>
+    </message>
+    <message>
+        <source>Create New Revision</source>
+        <translation>Maak nieuwe revisie</translation>
+    </message>
+    <message>
+        <source>Toggle Image Capture</source>
+        <translation>Afbeelding opname aan / uit</translation>
+    </message>
+    <message>
+        <source>Toggle image capture</source>
+        <translation>Afbeelding opname aan / uit</translation>
+    </message>
+    <message>
+        <source>Show OMR Image</source>
+        <translation>Toon OMR afbeelding</translation>
+    </message>
+    <message>
+        <source>Full screen</source>
+        <translation>Schermvullend</translation>
+    </message>
+    <message>
+        <source>Enable Snap to Horizontal Grid</source>
+        <translation>Schakel uitlijnen op horizontaal raster in</translation>
+    </message>
+    <message>
+        <source>Enable Snap to Vertical Grid</source>
+        <translation>Schakel uitlijnen op verticaal raster in</translation>
+    </message>
+    <message>
+        <source>Configure Grid</source>
+        <translation>Configureer uitlijnen</translation>
+    </message>
+    <message>
+        <source>Piano keyboard</source>
+        <translation>Piano toestenbord</translation>
+    </message>
+    <message>
+        <source>Split measure</source>
+        <translation>Splits maat</translation>
+    </message>
+    <message>
+        <source>Join measures</source>
+        <translation>Maten samenvoegen</translation>
+    </message>
+    <message>
+        <source>Page settings</source>
+        <translation>Pagina-instellingen</translation>
+    </message>
+    <message>
+        <source>Next score</source>
+        <translation>Volgende partituur</translation>
+    </message>
+    <message>
+        <source>Previous score</source>
+        <translation>Vorige partituur</translation>
+    </message>
+    <message>
+        <source>Plugin creator</source>
+        <translation>Plugin maker</translation>
+    </message>
+    <message>
+        <source>Plugin manager</source>
+        <translation>Plugin manager</translation>
+    </message>
+    <message>
+        <source>Resource manager</source>
+        <translation>Taalbron manager</translation>
+    </message>
+    <message>
+        <source>Show OMR panel</source>
+        <translation>Toon OMR paneel</translation>
+    </message>
+    <message>
+        <source>Loop In</source>
+        <translation>Lus in</translation>
+    </message>
+    <message>
+        <source>Loop Out</source>
+        <translation>Lus uit</translation>
+    </message>
+    <message>
+        <source>Set loop out position</source>
+        <translation>Zet lus uit positie</translation>
+    </message>
+    <message>
+        <source>Count-In</source>
+        <translation>Aftellen</translation>
+    </message>
+    <message>
+        <source>Transpose up</source>
+        <translation>Transponeer omhoog</translation>
+    </message>
+    <message>
+        <source>Transpose down</source>
+        <translation>Transponeer omlaag</translation>
+    </message>
+    <message>
+        <source>Toggle view mode</source>
+        <translation>Wissel beeld modus</translation>
+    </message>
+    <message>
+        <source>Next Syllable</source>
+        <translation>Volgende lettergreep</translation>
+    </message>
+    <message>
+        <source>Previous Syllable</source>
+        <translation>Vorige lettergreep</translation>
+    </message>
+    <message>
+        <source>Toggle Visibility</source>
+        <translation>Zichtbaarheid omschakelen</translation>
+    </message>
+    <message>
+        <source>Set Visible</source>
+        <translation>Maak zichtbaar</translation>
+    </message>
+    <message>
+        <source>Set Invisible</source>
+        <translation>Maak onzichtbaar</translation>
+    </message>
+    <message>
+        <source>Note Anchored Textline</source>
+        <translation>Noot verankerde tekstregel</translation>
+    </message>
+    <message>
+        <source>Note anchored textline</source>
+        <translation>Noot verankerde tekstregel</translation>
+    </message>
+    <message>
+        <source>Lock score</source>
+        <translation>Partituur vergrendelen</translation>
+    </message>
+    <message>
+        <source>Note duration: Longa (TAB)</source>
+        <translation>Noot duur: longa (TAB)</translation>
+    </message>
+    <message>
+        <source>Double Whole Note (TAB)</source>
+        <translation>Dubbele hele noot (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Double whole (TAB)</source>
+        <translation>Noot duur: dubbele hele (TAB)</translation>
+    </message>
+    <message>
+        <source>Whole Note (TAB)</source>
+        <translation>Hele noot (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Whole (TAB)</source>
+        <translation>Noot duur: heel (TAB)</translation>
+    </message>
+    <message>
+        <source>Half Note (TAB)</source>
+        <translation>Halve noot (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Half (TAB)</source>
+        <translation>Noot duur: half (TAB)</translation>
+    </message>
+    <message>
+        <source>Quarter Note (TAB)</source>
+        <translation>Kwartnoot (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Quarter (TAB)</source>
+        <translation>Noot duur: kwart (TAB)</translation>
+    </message>
+    <message>
+        <source>Eighth Note (TAB)</source>
+        <translation>Achtste noot (TAB)</translation>
+    </message>
+    <message>
+        <source>Note duration: Eighth (TAB)</source>
+        <translation>Noot duur: achtste (TAB)</translation>
+    </message>
+    <message>
+        <source>16th Note (TAB)</source>
+        <translation>16e noot (TAB)</translation>
+    </message>
+    <message>
+        <source>32nd Note (TAB)</source>
+        <translation>32e noot (TAB)</translation>
+    </message>
+    <message>
+        <source>64th Note (TAB)</source>
+        <translation>64e noot (TAB)</translation>
+    </message>
+    <message>
+        <source>128th Note (TAB)</source>
+        <translation>128e noot (TAB)</translation>
+    </message>
+    <message>
+        <source>Increase Active Duration (TAB)</source>
+        <translation>Verleng actieve duur (TAB)</translation>
+    </message>
+    <message>
+        <source>Decrease Active Duration (TAB)</source>
+        <translation>Kort in actieve duur (TAB)</translation>
+    </message>
+    <message>
+        <source>Note input: Rest (TAB)</source>
+        <translation>Noteninvoer: rust (TAB)</translation>
+    </message>
+    <message>
+        <source>String Above (TAB)</source>
+        <translation>Snaar boven (TAB)</translation>
+    </message>
+    <message>
+        <source>String Below (TAB)</source>
+        <translation>Snaar onder (TAB)</translation>
+    </message>
+    <message>
+        <source>Previous Beat (Chord Symbol)</source>
+        <translation>Vorige beat (akkoord symbool)</translation>
+    </message>
+    <message>
+        <source>Next Beat (Chord Symbol)</source>
+        <translation>Volgende beat (akkoord symbool)</translation>
+    </message>
+    <message>
+        <source>Add Brackets to Element</source>
+        <translation>Voeg haken toe aan element</translation>
+    </message>
+    <message>
+        <source>Toggle Create Multimeasure Rest</source>
+        <translation>Wissel maken meerdere maten rust</translation>
+    </message>
+    <message>
+        <source>Bold Face</source>
+        <translation>Vetgedrukt</translation>
+    </message>
+    <message>
+        <source>Bold face</source>
+        <translation>Vetgedrukt</translation>
+    </message>
+    <message>
+        <source>Italic</source>
+        <translation>Cursief</translation>
+    </message>
+    <message>
+        <source>Underline</source>
+        <translation>Onderstreept</translation>
+    </message>
+    <message>
+        <source>Move Word Left</source>
+        <translation>Verplaats woord links</translation>
+    </message>
+    <message>
+        <source>Move word left</source>
+        <translation>Woord naar links verplaatsen</translation>
+    </message>
+    <message>
+        <source>Move Word Right</source>
+        <translation>Verplaats woord rechts</translation>
+    </message>
+    <message>
+        <source>Move word right</source>
+        <translation>Woord naar rechts verplaatsen</translation>
+    </message>
+    <message>
+        <source>Fill with slashes</source>
+        <translation>Vul met slashes</translation>
+    </message>
+    <message>
+        <source>Toggle rhythmic slash notation</source>
+        <translation>Wissel ritmische slash notatie</translation>
+    </message>
+    <message>
+        <source>Add/remove line breaks</source>
+        <translation>Voeg toe/verwijder lijnbreeks</translation>
+    </message>
+    <message>
+        <source>Resequence rehearsal marks</source>
+        <translation>heropeenvolg herhalings markering</translation>
+    </message>
+    <message>
+        <source>Start center</source>
+        <translation>Start centrum</translation>
+    </message>
+    <message>
+        <source>Longa Advance (F.B./Chord Symbol)</source>
+        <translation>Ga longa verder (basso continuo / akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Advance of a longa (Figured bass/Chord symbol only)</source>
+        <translation>Voortgang met een Longa (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Breve Advance (F.B./Chord Symbol)</source>
+        <translation>Voortgang met Breve (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Advance of a double whole note (Figured bass/Chord symbol only)</source>
+        <translation>Voortgang met dubbele hele noot (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Whole Note Advance (F.B./Chord Symbol)</source>
+        <translation>Voortgang met hele noot (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Advance of a whole note (Figured bass/Chord symbol only)</source>
+        <translation>Voortgang met hele noot (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Half Note Advance (F.B./Chord Symbol)</source>
+        <translation>halve noot voortgang (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Advance of a half note (Figured bass/Chord symbol only)</source>
+        <translation>Voortgang met halve noot (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Quarter Note Advance (F.B./Chord Symbol)</source>
+        <translation>kwart noot voortgang (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Advance of a quarter note (Figured bass/Chord symbol only)</source>
+        <translation>Voortgang met kwart noot (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Eighth Note Advance (F.B./Chord Symbol)</source>
+        <translation>achtste noot voortgang (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Advance of an eighth note (Figured bass/Chord symbol only)</source>
+        <translation>Voortgang met achtste noot (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>16th Note Advance (F.B./Chord Symbol)</source>
+        <translation>16de noot voortgang (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Advance of a 16th note (Figured bass/Chord symbol only)</source>
+        <translation>Voortgang met 16de noot (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>32nd Note Advance (F.B./Chord Symbol)</source>
+        <translation>32ste noot voortgang (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Advance of a 32nd note (Figured bass/Chord symbol only)</source>
+        <translation>Voortgang met 32ste noot (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>64th Note Advance (F.B./Chord Symbol)</source>
+        <translation>64ste noot voortgang (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Advance of a 64th note (Figured bass/Chord symbol only)</source>
+        <translation>Voortgang met 64ste noot (becijferde bas/akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Previous Measure (F.B./Chord Symbol)</source>
+        <translation>Vorige maat (basso continuo / akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Previous measure (Figured bass/Chord symbol only)</source>
+        <translation>Vorige maat (enkel basso continuo / akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Next Measure (F.B./Chord Symbol)</source>
+        <translation>Volgende maat (basso continuo / akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Next measure (Figured bass/Chord symbol only)</source>
+        <translation>Volgende maat (basso continuo / akkoordsymbool)</translation>
+    </message>
+    <message>
+        <source>Toggle staccato</source>
+        <translation>Schakel staccato in/uit</translation>
+    </message>
+    <message>
+        <source>Toggle tenuto</source>
+        <translation>Schakel tenuto in/uit</translation>
+    </message>
+    <message>
+        <source>Toggle trill</source>
+        <translation>Schakel triller in/uit</translation>
+    </message>
+    <message>
+        <source>Toggle marcato</source>
+        <translation>Schakel marcato in/uit</translation>
+    </message>
+    <message>
+        <source>Import PDF...</source>
+        <translation>Importeer PDF...</translation>
+    </message>
+    <message>
+        <source>Import PDF</source>
+        <translation>Importeer PDF</translation>
+    </message>
+    <message>
+        <source>Import a PDF file with an experimental service on musescore.com</source>
+        <translation>Importeer een PDF bestand met een experimentele dienst op musescore.com</translation>
+    </message>
+    <message>
+        <source>Set loop in position</source>
+        <translation>Zet lus in positie</translation>
     </message>
 </context>
 <context>
@@ -15183,6 +15618,12 @@ Tuplet would cross measure</source>
         <translation>Kan geen maten herschrijven:
 tuplet zou maat kruisen</translation>
     </message>
+    <message>
+        <source>Cannot change local time signature:
+Measure is not empty</source>
+        <translation>Kan de lokale maatsoort niet wijzigen
+De maat is niet leeg</translation>
+    </message>
 </context>
 <context>
     <name>articulation</name>
@@ -15192,19 +15633,19 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Slide out down</source>
-        <translation type="unfinished"/>
+        <translation>Schuif naar beneden</translation>
     </message>
     <message>
         <source>Slide out up</source>
-        <translation type="unfinished"/>
+        <translation>Schuif naar boven</translation>
     </message>
     <message>
         <source>Slide in below</source>
-        <translation type="unfinished"/>
+        <translation>Schuif naar beneden</translation>
     </message>
     <message>
         <source>Slide in above</source>
-        <translation type="unfinished"/>
+        <translation>Schuif naar boven</translation>
     </message>
     <message>
         <source>Fermata</source>
@@ -15260,19 +15701,19 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Wiggle sawtooth</source>
-        <translation type="unfinished"/>
+        <translation>Wiebelende zaagtand</translation>
     </message>
     <message>
         <source>Wiggle sawtooth wide</source>
-        <translation type="unfinished"/>
+        <translation>Wiebelende zaagtang breed</translation>
     </message>
     <message>
         <source>Wiggle vibrato large faster</source>
-        <translation type="unfinished"/>
+        <translation>Wiebelende vibrato groot sneller</translation>
     </message>
     <message>
         <source>Wiggle vibrato large slowest</source>
-        <translation type="unfinished"/>
+        <translation>Wiebelende vibrato groot langzamer</translation>
     </message>
     <message>
         <source>Ouvert</source>
@@ -15280,7 +15721,7 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Stopped/Pizzicato left hand</source>
-        <translation type="unfinished"/>
+        <translation>Gestopt/Pizzicato linker hand</translation>
     </message>
     <message>
         <source>Up bow</source>
@@ -15308,7 +15749,7 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Mordent</source>
-        <translation type="unfinished"/>
+        <translation>Mordent</translation>
     </message>
     <message>
         <source>Prall prall</source>
@@ -15328,11 +15769,11 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Up mordent</source>
-        <translation type="unfinished"/>
+        <translation>boven mordent</translation>
     </message>
     <message>
         <source>Down mordent</source>
-        <translation type="unfinished"/>
+        <translation>onder mordent</translation>
     </message>
     <message>
         <source>Prall down</source>
@@ -15348,23 +15789,23 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Schleifer</source>
-        <translation type="unfinished"/>
+        <translation>Schleifer</translation>
     </message>
     <message>
         <source>Snap pizzicato</source>
-        <translation type="unfinished"/>
+        <translation>Snap pizzicato</translation>
     </message>
     <message>
         <source>Tapping</source>
-        <translation type="unfinished"/>
+        <translation>Tappen</translation>
     </message>
     <message>
         <source>Slapping</source>
-        <translation type="unfinished"/>
+        <translation>Slappen</translation>
     </message>
     <message>
         <source>Popping</source>
-        <translation type="unfinished"/>
+        <translation>Poppen</translation>
     </message>
     <message>
         <source>Thumb pos.</source>
@@ -15388,7 +15829,7 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Tremolo bar</source>
-        <translation type="unfinished"/>
+        <translation>Tremolo-lijn</translation>
     </message>
 </context>
 <context>
@@ -15494,115 +15935,115 @@ tuplet zou maat kruisen</translation>
     <name>bagpipe</name>
     <message>
         <source>Single grace low G</source>
-        <translation type="unfinished"/>
+        <translation>Enkele voorslag lage G</translation>
     </message>
     <message>
         <source>Single grace low A</source>
-        <translation type="unfinished"/>
+        <translation>Enkele voorslag lage A</translation>
     </message>
     <message>
         <source>Single grace B</source>
-        <translation type="unfinished"/>
+        <translation>Voorslag B</translation>
     </message>
     <message>
         <source>Single grace C</source>
-        <translation type="unfinished"/>
+        <translation>Voorslag C</translation>
     </message>
     <message>
         <source>Single grace D</source>
-        <translation type="unfinished"/>
+        <translation>Voorslag D</translation>
     </message>
     <message>
         <source>Single grace E</source>
-        <translation type="unfinished"/>
+        <translation>Voorslag E</translation>
     </message>
     <message>
         <source>Single grace F</source>
-        <translation type="unfinished"/>
+        <translation>Voorslag F</translation>
     </message>
     <message>
         <source>Single grace high G</source>
-        <translation type="unfinished"/>
+        <translation>Voorslag hoge G</translation>
     </message>
     <message>
         <source>Single grace high A</source>
-        <translation type="unfinished"/>
+        <translation>Voorslag hoge A</translation>
     </message>
     <message>
         <source>Double grace</source>
-        <translation type="unfinished"/>
+        <translation>Dubbele voorslag</translation>
     </message>
     <message>
         <source>Half doubling on low G</source>
-        <translation type="unfinished"/>
+        <translation>Halve verdubbeling op lage G</translation>
     </message>
     <message>
         <source>Half doubling on low A</source>
-        <translation type="unfinished"/>
+        <translation>Halve verdubbeling op lage A</translation>
     </message>
     <message>
         <source>Half doubling on B</source>
-        <translation type="unfinished"/>
+        <translation>Halve verdubbeling op B</translation>
     </message>
     <message>
         <source>Half doubling on C</source>
-        <translation type="unfinished"/>
+        <translation>Halve verdubbeling op C</translation>
     </message>
     <message>
         <source>Half doubling on D</source>
-        <translation type="unfinished"/>
+        <translation>Halve verdubbeling op D</translation>
     </message>
     <message>
         <source>Half doubling on E</source>
-        <translation type="unfinished"/>
+        <translation>Halve verdubbeling op E</translation>
     </message>
     <message>
         <source>Half doubling on F</source>
-        <translation type="unfinished"/>
+        <translation>Halve verdubbeling op F</translation>
     </message>
     <message>
         <source>Doubling on high G</source>
-        <translation type="unfinished"/>
+        <translation>Halve verdubbeling op hoge G</translation>
     </message>
     <message>
         <source>Doubling on high A</source>
-        <translation type="unfinished"/>
+        <translation>Halve verdubbeling op hoge A</translation>
     </message>
     <message>
         <source>Half strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Halve slag op lage A</translation>
     </message>
     <message>
         <source>Half strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Halve slag op B</translation>
     </message>
     <message>
         <source>Half strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Halve slag op C</translation>
     </message>
     <message>
         <source>Half strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Halve slag op D</translation>
     </message>
     <message>
         <source>Half strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Halve slag op E</translation>
     </message>
     <message>
         <source>Half strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Halve slag op F</translation>
     </message>
     <message>
         <source>Half strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Halve slag op hoge G</translation>
     </message>
     <message>
         <source>Grip</source>
-        <translation type="unfinished"/>
+        <translation>Greep</translation>
     </message>
     <message>
         <source>Half D throw</source>
-        <translation type="unfinished"/>
+        <translation>Halve D throw</translation>
     </message>
     <message>
         <source>Doubling on low G</source>
@@ -15634,538 +16075,503 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Thumb doubling on low G</source>
-        <translation type="unfinished"/>
+        <translation>Duim verdubbeling op lage G</translation>
     </message>
     <message>
         <source>Thumb doubling on low A</source>
-        <translation type="unfinished"/>
+        <translation>Duim verdubbeling op lage A</translation>
     </message>
     <message>
         <source>Thumb doubling on B</source>
-        <translation type="unfinished"/>
+        <translation>Duim verdubbeling op B</translation>
     </message>
     <message>
         <source>Thumb doubling on C</source>
-        <translation type="unfinished"/>
+        <translation>Duim verdubbeling op C</translation>
     </message>
     <message>
         <source>Thumb doubling on D</source>
-        <translation type="unfinished"/>
+        <translation>Duim verdubbeling op D</translation>
     </message>
     <message>
         <source>Thumb doubling on E</source>
-        <translation type="unfinished"/>
+        <translation>Duim verdubbeling op E</translation>
     </message>
     <message>
         <source>Thumb doubling on F</source>
-        <translation type="unfinished"/>
+        <translation>Duim verdubbeling op F</translation>
     </message>
     <message>
         <source>G grace note on low A</source>
-        <translation type="unfinished"/>
+        <translation>G voorslag op lage A</translation>
     </message>
     <message>
         <source>G grace note on B</source>
-        <translation type="unfinished"/>
+        <translation>G voorslag op B</translation>
     </message>
     <message>
         <source>G grace note on C</source>
-        <translation type="unfinished"/>
+        <translation>G voorslag op C</translation>
     </message>
     <message>
         <source>G grace note on D</source>
-        <translation type="unfinished"/>
+        <translation>G voorslag op D</translation>
     </message>
     <message>
         <source>G grace note on E</source>
-        <translation type="unfinished"/>
+        <translation>G voorslag op E</translation>
     </message>
     <message>
         <source>G grace note on F</source>
-        <translation type="unfinished"/>
+        <translation>G voorslag op F</translation>
     </message>
     <message>
         <source>Double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Dubbelslag op lage A</translation>
     </message>
     <message>
         <source>Double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Dubbelsag op B</translation>
     </message>
     <message>
         <source>Double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Dubbelslag op C</translation>
     </message>
     <message>
         <source>Double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Dubbelslag op D</translation>
     </message>
     <message>
         <source>Double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Dubbelslag op E</translation>
     </message>
     <message>
         <source>Double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Dubbelslag op F</translation>
     </message>
     <message>
         <source>Double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Dubbelslag op hoge G</translation>
     </message>
     <message>
         <source>Double strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Dubbelslag op hoge A</translation>
     </message>
     <message>
         <source>Thumb strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Duimslag op lage A</translation>
     </message>
     <message>
         <source>Thumb strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Duimslag op B</translation>
     </message>
     <message>
         <source>Thumb strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Duimslag op C</translation>
     </message>
     <message>
         <source>Thumb strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Duimslag op D</translation>
     </message>
     <message>
         <source>Thumb strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Duimslag op E</translation>
     </message>
     <message>
         <source>Thumb strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Duimslag op F</translation>
     </message>
     <message>
         <source>Thumb strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Duimslag op hoge G</translation>
     </message>
     <message>
         <source>Birl</source>
-        <translation type="unfinished"/>
+        <translation>Draai</translation>
     </message>
     <message>
         <source>D throw</source>
-        <translation type="unfinished"/>
+        <translation>D throw</translation>
     </message>
     <message>
         <source>Half heavy D throw</source>
-        <translation type="unfinished"/>
+        <translation>Halve zware D trhow</translation>
     </message>
     <message>
         <source>Taorluath</source>
-        <translation type="unfinished"/>
+        <translation>Taorluath</translation>
     </message>
     <message>
         <source>Bubly</source>
-        <translation type="unfinished"/>
+        <translation>Bubly</translation>
     </message>
     <message>
         <source>Heavy D throw</source>
-        <translation type="unfinished"/>
+        <translation>Zware D throw</translation>
     </message>
     <message>
         <source>Half double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Halve dubbelslag op lage A</translation>
     </message>
     <message>
         <source>Half double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Halve dubbelslag op B</translation>
     </message>
     <message>
         <source>Half double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Halve dubbelslag op C</translation>
     </message>
     <message>
         <source>Half double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Halve dubbelslag op D</translation>
     </message>
     <message>
         <source>Half double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Halve dubbelslag op E</translation>
     </message>
     <message>
         <source>Half double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Halve dubbelslag op F</translation>
     </message>
     <message>
         <source>Half double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Halve dubbelslag op hoge G</translation>
     </message>
     <message>
         <source>Half double strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Halve dubbelslag op hoge A</translation>
     </message>
     <message>
         <source>Half grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>Halve greep op lage A</translation>
     </message>
     <message>
         <source>Half grip on B</source>
-        <translation type="unfinished"/>
+        <translation>Halve greep op B</translation>
     </message>
     <message>
         <source>Half grip on C</source>
-        <translation type="unfinished"/>
+        <translation>Halve greep op C</translation>
     </message>
     <message>
         <source>Half grip on D</source>
-        <translation type="unfinished"/>
+        <translation>Halve greep op D</translation>
     </message>
     <message>
         <source>Half grip on E</source>
-        <translation type="unfinished"/>
+        <translation>Halve greep op E</translation>
     </message>
     <message>
         <source>Half grip on F</source>
-        <translation type="unfinished"/>
+        <translation>Halve greep op F</translation>
     </message>
     <message>
         <source>Half grip on high G</source>
-        <translation type="unfinished"/>
+        <translation>Halve greep op hoge G</translation>
     </message>
     <message>
         <source>Half grip on high A</source>
-        <translation type="unfinished"/>
+        <translation>Halve greep op hoge A</translation>
     </message>
     <message>
         <source>Half pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>Halve pele op lage A</translation>
     </message>
     <message>
         <source>Half pele on B</source>
-        <translation type="unfinished"/>
+        <translation>Halve pele op B</translation>
     </message>
     <message>
         <source>Half pele on C</source>
-        <translation type="unfinished"/>
+        <translation>Halve pele op C</translation>
     </message>
     <message>
         <source>Half pele on D</source>
-        <translation type="unfinished"/>
+        <translation>Halve pele op D</translation>
     </message>
     <message>
         <source>Half pele on E</source>
-        <translation type="unfinished"/>
+        <translation>Halve pele op E</translation>
     </message>
     <message>
         <source>Half pele on F</source>
-        <translation type="unfinished"/>
+        <translation>Halve pele op F</translation>
     </message>
     <message>
         <source>Half pele on high G</source>
-        <translation type="unfinished"/>
+        <translation>Halve pele op hoge G</translation>
     </message>
     <message>
         <source>G grace note grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>G voorslag greep op lage A</translation>
     </message>
     <message>
         <source>G grace note grip on B</source>
-        <translation type="unfinished"/>
+        <translation>G voorslag greep op B</translation>
     </message>
     <message>
         <source>G grace note grip on C</source>
-        <translation type="unfinished"/>
+        <translation>G voorslag greep op C</translation>
     </message>
     <message>
         <source>G grace note grip on D</source>
-        <translation type="unfinished"/>
+        <translation>G voorslag greep op D</translation>
     </message>
     <message>
         <source>G grace note grip on E</source>
-        <translation type="unfinished"/>
+        <translation>G voorslag greep op E</translation>
     </message>
     <message>
         <source>G grace note grip on F</source>
-        <translation type="unfinished"/>
+        <translation>G voorslag greep op F</translation>
     </message>
     <message>
         <source>Thumb grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>Duimgreep op lage A</translation>
     </message>
     <message>
         <source>Thumb grip on B</source>
-        <translation type="unfinished"/>
+        <translation>Duimgreep op B</translation>
     </message>
     <message>
         <source>Thumb grip on C</source>
-        <translation type="unfinished"/>
+        <translation>Duimgreep op C</translation>
     </message>
     <message>
         <source>Thumb grip on D</source>
-        <translation type="unfinished"/>
+        <translation>Duimgreep op D</translation>
     </message>
     <message>
         <source>Thumb grip on E</source>
-        <translation type="unfinished"/>
+        <translation>Duimgreep op E</translation>
     </message>
     <message>
         <source>Thumb grip on F</source>
-        <translation type="unfinished"/>
+        <translation>Duimgreep op F</translation>
     </message>
     <message>
         <source>Thumb grip on high G</source>
-        <translation type="unfinished"/>
+        <translation>Duimgreep op hoge G</translation>
     </message>
     <message>
         <source>Pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>Pele-voorslag op lage A</translation>
     </message>
     <message>
         <source>Pele on B</source>
-        <translation type="unfinished"/>
+        <translation>Pele-voorslag op B</translation>
     </message>
     <message>
         <source>Pele on C</source>
-        <translation type="unfinished"/>
+        <translation>Pele-voorslag op C</translation>
     </message>
     <message>
         <source>Pele on D</source>
-        <translation type="unfinished"/>
+        <translation>Pele-voorslag op D</translation>
     </message>
     <message>
         <source>Pele on E</source>
-        <translation type="unfinished"/>
+        <translation>Pele-voorslag op E</translation>
     </message>
     <message>
         <source>Pele on F</source>
-        <translation type="unfinished"/>
+        <translation>Pele-voorslag op F</translation>
     </message>
     <message>
         <source>Thumb grace note pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>Duim pele-voorslag op lage A</translation>
     </message>
     <message>
         <source>Thumb grace note pele on B</source>
-        <translation type="unfinished"/>
+        <translation>Duim pele-voorslag op B</translation>
     </message>
     <message>
         <source>Thumb grace note pele on C</source>
-        <translation type="unfinished"/>
+        <translation>Duim pele-voorslag op C</translation>
     </message>
     <message>
         <source>Thumb grace note pele on D</source>
-        <translation type="unfinished"/>
+        <translation>Duim pele-voorslag op D</translation>
     </message>
     <message>
         <source>Thumb grace note pele on E</source>
-        <translation type="unfinished"/>
+        <translation>Duim pele-voorslag op E</translation>
     </message>
     <message>
         <source>Thumb grace note pele on F</source>
-        <translation type="unfinished"/>
+        <translation>Duim pele-voorslag op F</translation>
     </message>
     <message>
         <source>Thumb grace note pele on high G</source>
-        <translation type="unfinished"/>
+        <translation>Duim pele-voorslag op hoge G</translation>
     </message>
     <message>
         <source>G grace note double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>G dubbele voorslag op lage A</translation>
     </message>
     <message>
         <source>G grace note double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>G dubbele voorslag op B</translation>
     </message>
     <message>
         <source>G grace note double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>G dubbele voorslag op C</translation>
     </message>
     <message>
         <source>G grace note double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>G dubbele voorslag op D</translation>
     </message>
     <message>
         <source>G grace note double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>G dubbele voorslag op E</translation>
     </message>
     <message>
         <source>G grace note double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>G dubbele voorslag op F</translation>
     </message>
     <message>
         <source>Thumb double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Duim dubbelslag op lage A</translation>
     </message>
     <message>
         <source>Thumb double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Duim dubbelslag op B</translation>
     </message>
     <message>
         <source>Thumb double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Duim dubbelslag op C</translation>
     </message>
     <message>
         <source>Thumb double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Duim dubbelslag op D</translation>
     </message>
     <message>
         <source>Thumb double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Duim dubbelslag op E</translation>
     </message>
     <message>
         <source>Thumb double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Duim dubbelslag op F</translation>
     </message>
     <message>
         <source>Thumb double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Duim dubbelslag op hoge G</translation>
     </message>
     <message>
         <source>Triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Trippelslag op lage A</translation>
     </message>
     <message>
         <source>Triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Trippelslag op B</translation>
     </message>
     <message>
         <source>Triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Trippelslag op C</translation>
     </message>
     <message>
         <source>Triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Trippelslag op D</translation>
     </message>
     <message>
         <source>Triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Trippelslag op E</translation>
     </message>
     <message>
         <source>Triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Trippelslag op F</translation>
     </message>
     <message>
         <source>Triple strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Trippelslag op hoge G</translation>
     </message>
     <message>
         <source>Triple strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Trippelslag op hoge A</translation>
     </message>
     <message>
         <source>Half triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Halve trippelslag op lage A</translation>
     </message>
     <message>
         <source>Half triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Halve trippelslag op B</translation>
     </message>
     <message>
         <source>Half triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Halve trippelslag op C</translation>
     </message>
     <message>
         <source>Half triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Halve trippelslag op D</translation>
     </message>
     <message>
         <source>Half triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Halve trippelslag op E</translation>
     </message>
     <message>
         <source>Half triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Halve trippelslag op F</translation>
     </message>
     <message>
         <source>Half triple strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Halve trippelslag op hoge G</translation>
     </message>
     <message>
         <source>Half triple strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Halve trippelslag op hoge A</translation>
     </message>
     <message>
         <source>G grace note triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>G dubbele voorslag op lage A</translation>
     </message>
     <message>
         <source>G grace note triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>G trippel voorslag op B</translation>
     </message>
     <message>
         <source>G grace note triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>G trippel voorslag op C</translation>
     </message>
     <message>
         <source>G grace note triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>G trippel voorslag op D</translation>
     </message>
     <message>
         <source>G grace note triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>G trippel voorslag op E</translation>
     </message>
     <message>
         <source>G grace note triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>G trippel voorslag op F</translation>
     </message>
     <message>
         <source>Thumb triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Duim trippelslag op lage A</translation>
     </message>
     <message>
         <source>Thumb triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Duim trippelslag op B</translation>
     </message>
     <message>
         <source>Thumb triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Duim trippelslag op C</translation>
     </message>
     <message>
         <source>Thumb triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Duim trippelslag op D</translation>
     </message>
     <message>
         <source>Thumb triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Duim trippelslag op E</translation>
     </message>
     <message>
         <source>Thumb triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Duim trippelslag op F</translation>
     </message>
     <message>
         <source>Thumb triple strike on high G</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>barline</name>
-    <message>
-        <source>normal</source>
-        <translation>normaal</translation>
-    </message>
-    <message>
-        <source>double</source>
-        <translation>dubbel</translation>
-    </message>
-    <message>
-        <source>start-repeat</source>
-        <translation>start herhaling</translation>
-    </message>
-    <message>
-        <source>end-repeat</source>
-        <translation>stop herhaling</translation>
-    </message>
-    <message>
-        <source>dashed</source>
-        <translation>streepjes</translation>
-    </message>
-    <message>
-        <source>end</source>
-        <translation>einde</translation>
-    </message>
-    <message>
-        <source>end-start-repeat</source>
-        <translation>eind-start-herhaal</translation>
-    </message>
-    <message>
-        <source>dotted</source>
-        <translation>gepunteerd</translation>
+        <translation>Duim trippelslag op hoge G</translation>
     </message>
 </context>
 <context>
@@ -16267,23 +16673,23 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>High Q</source>
-        <translation type="unfinished"/>
+        <translation>High Q</translation>
     </message>
     <message>
         <source>Slap</source>
-        <translation type="unfinished"/>
+        <translation>Slap</translation>
     </message>
     <message>
         <source>Scratch Push</source>
-        <translation type="unfinished"/>
+        <translation>Duwend krassen</translation>
     </message>
     <message>
         <source>Scratch Pull</source>
-        <translation type="unfinished"/>
+        <translation>Trekkende krassen</translation>
     </message>
     <message>
         <source>Sticks</source>
-        <translation type="unfinished"/>
+        <translation>Drumstokken</translation>
     </message>
     <message>
         <source>Metronome Click</source>
@@ -16299,7 +16705,7 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Acoustic Snare</source>
-        <translation type="unfinished"/>
+        <translation>Akoestische snare</translation>
     </message>
     <message>
         <source>Hand Clap</source>
@@ -16311,7 +16717,7 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Low Floor Tom</source>
-        <translation type="unfinished"/>
+        <translation>Low Floor Tom</translation>
     </message>
     <message>
         <source>Closed Hi-Hat</source>
@@ -16319,7 +16725,7 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>High Floor Tom</source>
-        <translation type="unfinished"/>
+        <translation>High Floor Tom</translation>
     </message>
     <message>
         <source>Pedal Hi-Hat</source>
@@ -16327,7 +16733,7 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Low Tom</source>
-        <translation type="unfinished"/>
+        <translation>Lage Tom</translation>
     </message>
     <message>
         <source>Open Hi-Hat</source>
@@ -16335,23 +16741,23 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Low-Mid Tom</source>
-        <translation type="unfinished"/>
+        <translation>Low-Mid Tom</translation>
     </message>
     <message>
         <source>Hi-Mid Tom</source>
-        <translation type="unfinished"/>
+        <translation>Hi-Mid Tom</translation>
     </message>
     <message>
         <source>Crash Cymbal 1</source>
-        <translation type="unfinished"/>
+        <translation>Crashbekken 1</translation>
     </message>
     <message>
         <source>High Tom</source>
-        <translation type="unfinished"/>
+        <translation>Hoge Tom</translation>
     </message>
     <message>
         <source>Ride Bell</source>
-        <translation type="unfinished"/>
+        <translation>Ride Bell</translation>
     </message>
     <message>
         <source>Cowbell</source>
@@ -16359,47 +16765,47 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Vibraslap</source>
-        <translation type="unfinished"/>
+        <translation>Vibraslap</translation>
     </message>
     <message>
         <source>Low Bongo</source>
-        <translation type="unfinished"/>
+        <translation>Lage Bongo</translation>
     </message>
     <message>
         <source>Mute Hi Conga</source>
-        <translation type="unfinished"/>
+        <translation>Gedempte Hoge Conga</translation>
     </message>
     <message>
         <source>Open Hi Conga</source>
-        <translation type="unfinished"/>
+        <translation>Open Hi Conga</translation>
     </message>
     <message>
         <source>Low Conga</source>
-        <translation type="unfinished"/>
+        <translation>Lage Conga</translation>
     </message>
     <message>
         <source>High Timbale</source>
-        <translation type="unfinished"/>
+        <translation>High Timbale</translation>
     </message>
     <message>
         <source>Low Timbale</source>
-        <translation type="unfinished"/>
+        <translation>Low Timbale</translation>
     </message>
     <message>
         <source>High Agogo</source>
-        <translation type="unfinished"/>
+        <translation>High Agogo</translation>
     </message>
     <message>
         <source>Low Agogo</source>
-        <translation type="unfinished"/>
+        <translation>Low Agogo</translation>
     </message>
     <message>
         <source>Cabasa</source>
-        <translation type="unfinished"/>
+        <translation>Kabassa</translation>
     </message>
     <message>
         <source>Maracas</source>
-        <translation type="unfinished"/>
+        <translation>Maracas</translation>
     </message>
     <message>
         <source>Short Whistle</source>
@@ -16411,35 +16817,35 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Short Guiro</source>
-        <translation type="unfinished"/>
+        <translation>Korte Güiro</translation>
     </message>
     <message>
         <source>Long Guiro</source>
-        <translation type="unfinished"/>
+        <translation>Lange Güiro</translation>
     </message>
     <message>
         <source>Claves</source>
-        <translation type="unfinished"/>
+        <translation>Claves</translation>
     </message>
     <message>
         <source>Hi Wood Block</source>
-        <translation type="unfinished"/>
+        <translation>Hi Wood Block</translation>
     </message>
     <message>
         <source>Low Wood Block</source>
-        <translation type="unfinished"/>
+        <translation>Low Wood Block</translation>
     </message>
     <message>
         <source>Mute Cuica</source>
-        <translation type="unfinished"/>
+        <translation>Gedempte Cuica</translation>
     </message>
     <message>
         <source>Open Cuica</source>
-        <translation type="unfinished"/>
+        <translation>Open Cuica</translation>
     </message>
     <message>
         <source>Mute Triangle</source>
-        <translation type="unfinished"/>
+        <translation>Gedempte Triangel</translation>
     </message>
     <message>
         <source>Open Triangle</source>
@@ -16451,51 +16857,51 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Bell Tree</source>
-        <translation type="unfinished"/>
+        <translation>Bell Tree</translation>
     </message>
     <message>
         <source>Mute Surdo</source>
-        <translation type="unfinished"/>
+        <translation>Gedempte Surdo</translation>
     </message>
     <message>
         <source>Open Surdo</source>
-        <translation type="unfinished"/>
+        <translation>Open Surdo</translation>
     </message>
     <message>
         <source>Ride Cymbal 1</source>
-        <translation type="unfinished"/>
+        <translation>Ridebekken 1</translation>
     </message>
     <message>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Chinees bekken</translation>
     </message>
     <message>
         <source>Splash Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Splashbekken</translation>
     </message>
     <message>
         <source>Crash Cymbal 2</source>
-        <translation type="unfinished"/>
+        <translation>Crashbekken 2</translation>
     </message>
     <message>
         <source>Ride Cymbal 2</source>
-        <translation type="unfinished"/>
+        <translation>Ridebekken 2</translation>
     </message>
     <message>
         <source>Castanets</source>
-        <translation type="unfinished"/>
+        <translation>Castagnetten</translation>
     </message>
     <message>
         <source>Square Click</source>
-        <translation type="unfinished"/>
+        <translation>Square Click</translation>
     </message>
     <message>
         <source>Hi Bongo</source>
-        <translation type="unfinished"/>
+        <translation>Hoge Bongo</translation>
     </message>
     <message>
         <source>Sleigh Bell</source>
-        <translation type="unfinished"/>
+        <translation>Sleebellen</translation>
     </message>
 </context>
 <context>
@@ -16764,15 +17170,11 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Slur</source>
-        <translation>Boog</translation>
+        <translation>Legatoboog</translation>
     </message>
     <message>
         <source>Element</source>
         <translation>Element</translation>
-    </message>
-    <message>
-        <source>Layout</source>
-        <translation>Opmaak</translation>
     </message>
     <message>
         <source>Icon</source>
@@ -16788,7 +17190,7 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Slur Segment</source>
-        <translation type="unfinished"/>
+        <translation>Legatoboog Segment</translation>
     </message>
     <message>
         <source>Staff Lines</source>
@@ -16796,11 +17198,11 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Bar Line</source>
-        <translation type="unfinished"/>
+        <translation>Maatstreep</translation>
     </message>
     <message>
         <source>Stem Slash</source>
-        <translation>Stok slash</translation>
+        <translation>Stok schuin</translation>
     </message>
     <message>
         <source>Key Signature</source>
@@ -16844,7 +17246,7 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Trill Segment</source>
-        <translation type="unfinished"/>
+        <translation>Triller segment</translation>
     </message>
     <message>
         <source>Text Line Segment</source>
@@ -16868,7 +17270,7 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Ledger Line</source>
-        <translation type="unfinished"/>
+        <translation>Hulplijn</translation>
     </message>
     <message>
         <source>Note Head</source>
@@ -16884,7 +17286,7 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Rubber Band</source>
-        <translation type="unfinished"/>
+        <translation>Elastiek</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>
@@ -16952,7 +17354,19 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Tremolo Bar</source>
-        <translation type="unfinished"/>
+        <translation>Tremolo-lijn</translation>
+    </message>
+    <message>
+        <source>Melisma Line</source>
+        <translation>Melisme-streep</translation>
+    </message>
+    <message>
+        <source>Glissando Segment</source>
+        <translation>Glissando segment</translation>
+    </message>
+    <message>
+        <source>Melisma Line Segment</source>
+        <translation>Melisme-streep segment</translation>
     </message>
 </context>
 <context>
@@ -17055,7 +17469,7 @@ tuplet zou maat kruisen</translation>
     <name>lines</name>
     <message>
         <source>Slur</source>
-        <translation>Boog</translation>
+        <translation>Legatoboog</translation>
     </message>
     <message>
         <source>Crescendo</source>
@@ -17140,7 +17554,7 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>XCircle</source>
-        <translation>XCircel</translation>
+        <translation>XCirkel </translation>
     </message>
     <message>
         <source>Do</source>
@@ -17219,22 +17633,6 @@ tuplet zou maat kruisen</translation>
 <context>
     <name>selectionfilter</name>
     <message>
-        <source>1st Voice</source>
-        <translation>1e stem</translation>
-    </message>
-    <message>
-        <source>2nd Voice</source>
-        <translation>2e stem</translation>
-    </message>
-    <message>
-        <source>3rd Voice</source>
-        <translation>3e stem</translation>
-    </message>
-    <message>
-        <source>4th Voice</source>
-        <translation>4e stem</translation>
-    </message>
-    <message>
         <source>Dynamics</source>
         <translation>Dynamiek</translation>
     </message>
@@ -17260,7 +17658,7 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Slurs</source>
-        <translation>Verbinden</translation>
+        <translation>Legatobogen</translation>
     </message>
     <message>
         <source>Figured Bass</source>
@@ -17299,15 +17697,24 @@ tuplet zou maat kruisen</translation>
         <translation>Fretboord diagrammen</translation>
     </message>
     <message>
-        <source>Breathmarks</source>
-        <translation type="unfinished"/>
+        <source>Breath Marks</source>
+        <translation>Ademhalingstekens</translation>
     </message>
-</context>
-<context>
-    <name>sfz_files_directory</name>
     <message>
-        <source>SFZ</source>
-        <translation>SFZ</translation>
+        <source>Voice 1</source>
+        <translation>Stem 1</translation>
+    </message>
+    <message>
+        <source>Voice 2</source>
+        <translation>Stem 2</translation>
+    </message>
+    <message>
+        <source>Voice 3</source>
+        <translation>Stem 3</translation>
+    </message>
+    <message>
+        <source>Voice 4</source>
+        <translation>Stem 4</translation>
     </message>
 </context>
 <context>
@@ -17366,7 +17773,7 @@ tuplet zou maat kruisen</translation>
     </message>
     <message>
         <source>Wavy line</source>
-        <translation>Golf lijn</translation>
+        <translation>Golvende lijn</translation>
     </message>
 </context>
 <context>

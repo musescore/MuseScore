@@ -316,8 +316,9 @@ int MasterSynthesizer::indexOfEffect(int ab)
 //   setState
 //---------------------------------------------------------
 
-void MasterSynthesizer::setState(const SynthesizerState& ss)
+bool MasterSynthesizer::setState(const SynthesizerState& ss)
       {
+      bool result = true;
       for (const SynthesizerGroup& g : ss) {
             if (g.name() == "master") {
                   for (const IdValue& v : g) {
@@ -343,8 +344,10 @@ void MasterSynthesizer::setState(const SynthesizerState& ss)
                   }
             else {
                   Synthesizer* s = synthesizer(g.name());
-                  if (s)
-                        s->setState(g);
+                  if (s) {
+                        bool r = s->setState(g);
+                        result = result && r;
+                        }
                   else {
                         if (effect(0) && effect(0)->name() == g.name())
                               effect(0)->setState(g);
@@ -355,7 +358,7 @@ void MasterSynthesizer::setState(const SynthesizerState& ss)
                         }
                   }
             }
-
+      return result;
       }
 
 //---------------------------------------------------------

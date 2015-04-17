@@ -1201,7 +1201,7 @@ void Score::layoutStage2()
       for (int track = 0; track < tracks; ++track) {
             Staff* stf = staff(track2staff(track));
 
-            // dont compute beams for invisible staffs and tablature in slash style
+            // dont compute beams for invisible staffs and tablature without stems
             if (!stf->show() || (stf->isTabStaff() && stf->staffType()->slashStyle()))
                   continue;
 
@@ -1260,7 +1260,6 @@ void Score::layoutStage2()
 
                   // perform additional context-dependent checks
                   if (bm == Beam::Mode::AUTO) {
-
                         // check if we need to break beams according to minimum duration in current / previous beat
                         if (checkBeats && cr->rtick()) {
                               int tick = (cr->rtick() * stretch.numerator()) / stretch.denominator();
@@ -1270,22 +1269,25 @@ void Score::layoutStage2()
                                     // get minimum duration for this & previous beat
                                     TDuration minDuration = qMin(beatSubdivision[beat], beatSubdivision[beat - 1]);
                                     // re-calculate beam as if this were the duration of current chordrest
-                                    TDuration saveDuration = cr->durationType();
+                                    TDuration saveDuration        = cr->actualDurationType();
+                                    TDuration saveCMDuration      = cr->crossMeasureDurationType();
+                                    CrossMeasure saveCrossMeasVal = cr->crossMeasure();
                                     cr->setDurationType(minDuration);
                                     bm = Groups::endBeam(cr, prev);
                                     cr->setDurationType(saveDuration);
+                                    cr->setCrossMeasure(saveCrossMeasVal);
+                                    cr->setCrossMeasureDurationType(saveCMDuration);
                                     }
                               }
-
                         }
 
                   prev = cr;
 
                   // if chord has hooks and is 2nd element of a cross-measure value
                   // set beam mode to NONE (do not combine with following chord beam/hook, if any)
-
                   if (cr->durationType().hooks() > 0 && cr->crossMeasure() == CrossMeasure::SECOND)
                         bm = Beam::Mode::NONE;
+
                   if (cr->measure() != measure) {
                         if (measure && !beamModeMid(bm)) {
                               if (beam) {
@@ -1622,6 +1624,9 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
       int tick = m->tick();
       int i    = 0;
       foreach (Staff* staff, _staves) {
+            // At this time we don't know which staff is visible or not...
+            // but let's not create the key/clef if there were no visible before this layout
+            // sometimes we will be right, other time it will take another layout to be right...
             if (!m->system()->staff(i)->show()) {
                   ++i;
                   continue;
@@ -1721,7 +1726,6 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             else {
                   if (clef && clef->generated())
                         undo(new RemoveElement(clef));
-                        // undoRemoveElement(clef);
                   }
             ++i;
             }
@@ -1889,9 +1893,8 @@ void Score::createMMRests()
                               break;
                         }
 
-                  Measure* mmr;
-                  if (m->mmRest()) {
-                        mmr = m->mmRest();
+                  Measure* mmr = m->mmRest();
+                  if (mmr) {
                         if (mmr->len() != len) {
                               Segment* s = mmr->findSegment(Segment::Type::EndBarLine, mmr->endTick());
                               mmr->setLen(len);
@@ -1943,13 +1946,13 @@ void Score::createMMRests()
                         }
                   for (Element* e : oldList)
                         delete e;
-
-                  Segment* s = mmr->undoGetSegment(Segment::Type::ChordRest, m->tick());
+                  Segment* s = mmr->undoGetSegment(Segment::Type::ChordRest, mmr->tick());
                   for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                         int track = staffIdx * VOICES;
                         if (s->element(track) == 0) {
                               Rest* r = new Rest(this);
                               r->setDurationType(TDuration::DurationType::V_MEASURE);
+                              r->setDuration(mmr->len());
                               r->setTrack(track);
                               r->setParent(s);
                               undo(new AddElement(r));
@@ -1978,7 +1981,6 @@ void Score::createMMRests()
                         }
                   else if (ns)
                         undo(new RemoveElement(ns));
-
                   //
                   // check for time signature
                   //
@@ -2565,11 +2567,7 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                         Element* el = seg->element(staffIdx * VOICES);
                         if (el == 0)
                               continue;
-/*
-                        if (el->generated() && ((st == Segment::Type::TimeSigAnnounce && m != em)
-                            || (el->type() == Element::CLEF   && seg->tick() != sm->tick())
-                            || (el->type() == Element::KEYSIG && seg->tick() != sm->tick())))
-*/
+
                         // courtesy time sigs and key sigs: remove if not in last measure (generated or not!)
                         // clefs & keysig: remove if generated and not at beginning of first measure
                         if ( ((st == Segment::Type::TimeSigAnnounce || st == Segment::Type::KeySigAnnounce) && m != em)
@@ -2586,25 +2584,6 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                                     clef->setSmall(small);
                                     m->setDirty();
                                     }
-#if 0
-                              //
-                              // if measure is not the first in the system, the clef at
-                              // measure start has to be moved to the end of the previous measure
-                              // TODO: DEBUG - is this code needed?
-                              // clefs should now be placed in correct measure when adding them (cmdInsertClef)
-                              // and it is good to support clefs at beginning of measures, for use in cues
-                              //
-                              if (s->firstMeasure() != m && seg->tick() == m->tick()) {
-                                    undoRemoveElement(el);
-                                    Measure* pm = m->prevMeasure();
-                                    Segment* s = pm->undoGetSegment(Segment::Type::Clef, m->tick());
-                                    Clef* nc = clef->clone();
-                                    nc->setParent(s);
-                                    undoAddElement(nc);
-                                    m->setDirty();
-                                    pm->setDirty();
-                                    }
-#endif
                               }
                         }
                   }
@@ -2642,6 +2621,22 @@ void Score::connectTies(bool silent)
                   Chord* c = static_cast<Chord*>(s->element(i));
                   if (c == 0 || c->type() != Element::Type::CHORD)
                         continue;
+                  // connect grace note tie to main note in 1.3 scores
+                  if (_mscVersion <= 114) {
+                        for (Chord* gc : c->graceNotes()) {
+                              for (Note* gn : gc->notes()) {
+                                    Tie* tie = gn->tieFor();
+                                    if (tie && !tie->endNote()) {
+                                          for (Note* n : c->notes()) {
+                                                if (n->pitch() == gn->pitch()) {
+                                                      tie->setEndNote(n);
+                                                       n->setTieBack(tie);
+                                                      }
+                                                }
+                                          }
+                                    }
+                              }
+                        }
                   for (Note* n : c->notes()) {
                         // connect a tie without end note
                         Tie* tie = n->tieFor();
@@ -2915,7 +2910,6 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         }
 
                   // courtesy clefs: show/hide of courtesy clefs moved to Clef::layout()
-
                   }
 
             //
@@ -3487,6 +3481,7 @@ void Score::layoutPage(const PageContext& pC, qreal d)
 
       // allow room for lyrics (and/or spacer) on last visible staff of last system
       // these are not included in system height or in previous margin calculations
+      // TODO: why *not* include this space in system height?
       System* lastSystem = page->systems()->last();
       int lastStaff = nstaves() - 1;
       if (!lastSystem->isVbox()) {
@@ -3498,7 +3493,13 @@ void Score::layoutPage(const PageContext& pC, qreal d)
                         }
                   }
             if (lastVisible >= 0) {
-                  qreal extra = pC.sr.extraDistance(lastVisible);
+                  // allow lyrics to extend into the "music bottom margin" (as opposed to page margin)
+                  // on the assumption that this is consistent with its main purpose
+                  // the extra distance includes the "lyrics bottom margin"
+                  // we could strip this off too, but then the lyrics might crowd the page margin too much
+                  // TODO: consider another style parameter here
+                  qreal allowableMargin = d;    // + styleP(StyleIdx::lyricsMinBottomDistance);
+                  qreal extra = qMax(pC.sr.extraDistance(lastVisible) - allowableMargin, 0.0);
                   // for last staff of system, this distance has not been accounted for at all
                   // for interior staves (with last staves hidden), this is only partially accounted for
                   if (lastVisible == lastStaff)
@@ -3947,7 +3948,7 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                   space += Space(elsp, etsp);
 
                   if (found || eFound) {
-                        space.rLw()    += clefWidth[staffIdx];
+                        space.addL(clefWidth[staffIdx]);
                         qreal sp        = minDistance + rest[staffIdx] + qMax(space.lw(), stretchDistance);
                         rest[staffIdx]  = space.rw();
                         rest2[staffIdx] = false;
@@ -4045,9 +4046,12 @@ void Score::updateBarLineSpans(int idx, int linesOld, int linesNew)
                   // if it has no bar line, set barLineTo to a default value
                   if(_staff->barLineSpan() == 0)
                         _staff->setBarLineTo( (linesNew-1) * 2);
-                  // if new line number is 1, set default From for 1-line staves
+                  // if new line count is 1, set default From for 1-line staves
                   else if(linesNew == 1)
                         _staff->setBarLineFrom(BARLINE_SPAN_1LINESTAFF_FROM);
+                  // if old line count was 1, set default From for normal staves
+                  else if (linesOld == 1)
+                        _staff->setBarLineFrom(0);
                   // if barLineFrom was below the staff middle position
                   // raise or lower it to account for new number of lines
                   else if(_staff->barLineFrom() > linesOld - 1)
@@ -4056,9 +4060,12 @@ void Score::updateBarLineSpans(int idx, int linesOld, int linesNew)
 
             // if the modified staff is the destination of the current staff bar span:
             if(sIdx + _staff->barLineSpan() - 1 == idx) {
-                  // if new line number is 1, set default To for 1-line staves
+                  // if new line count is 1, set default To for 1-line staves
                   if(linesNew == 1)
                         _staff->setBarLineTo(BARLINE_SPAN_1LINESTAFF_TO);
+                  // if old line count was 1, set default To for normal staves
+                  else if (linesOld == 1)
+                        _staff->setBarLineTo((linesNew - 1) * 2);
                   // if barLineTo was below its middle position, raise or lower it
                   else if(_staff->barLineTo() > linesOld - 1)
                         _staff->setBarLineTo(_staff->barLineTo() + (linesNew - linesOld)*2);

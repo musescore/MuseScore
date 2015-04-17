@@ -404,7 +404,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   npitch        = line2pitch(line, clef, key);
 
                   int ntpc   = pitch2tpc(npitch, key, Prefer::NEAREST);
-                  Interval v = on->staff()->part()->instr()->transpose();
+                  Interval v = on->part()->instrument()->transpose();
                   if (v.isZero())
                         ntpc1 = ntpc2 = ntpc;
                   else {
@@ -694,16 +694,22 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                         }
                   }
             Tuplet* ltuplet = cr->tuplet();
-            if (cr->tuplet() != tuplet) {
+            if (ltuplet != tuplet) {
                   //
                   // Current location points to the start of a (nested)tuplet.
                   // We have to remove the complete tuplet.
 
+                  // get top level tuplet
+                  while (ltuplet->tuplet())
+                        ltuplet = ltuplet->tuplet();
+
+                  // get last segment of tuplet, drilling down to leaf nodes as necessary
                   Tuplet* t = ltuplet;
                   while (t->elements().last()->type() == Element::Type::TUPLET)
                         t = static_cast<Tuplet*>(t->elements().last());
                   seg = static_cast<ChordRest*>(t->elements().last())->segment();
 
+                  // now delete the full tuplet
                   td = ltuplet->duration();
                   cmdDeleteTuplet(ltuplet, false);
                   tuplet = 0;
@@ -711,6 +717,8 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
             else {
                   if (seg != firstSegment || !keepChord)
                         undoRemoveElement(cr);
+                  // even if there was a tuplet, we didn't remove it
+                  ltuplet = 0;
                   }
             nextTick += td.ticks();
             if (sd < td) {
@@ -731,13 +739,28 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 
                   if ((tuplet == 0) && (((measure->tick() - tick) % dList[0].ticks()) == 0)) {
                         foreach(TDuration d, dList) {
-                              qDebug("    addClone at %d, %d", tick, d.ticks());
-                              tick += addClone(cr, tick, d)->actualTicks();
+                              qDebug("    reinstate at %d, %d", tick, d.ticks());
+                              if (ltuplet) {
+                                    // take care not to recreate tuplet we just deleted
+                                    Rest* r = setRest(tick, track, d.fraction(), false, 0, false);
+                                    tick += r->actualTicks();
+                                    }
+                              else {
+                                    tick += addClone(cr, tick, d)->actualTicks();
+                                    }
                               }
                         }
                   else {
-                        for (int i = dList.size() - 1; i >= 0; --i)
-                              tick += addClone(cr, tick, dList[i])->actualTicks();
+                        for (int i = dList.size() - 1; i >= 0; --i) {
+                              if (ltuplet) {
+                                    // take care not to recreate tuplet we just deleted
+                                    Rest* r = setRest(tick, track, dList[i].fraction(), false, 0, false);
+                                    tick += r->actualTicks();
+                                    }
+                              else {
+                                    tick += addClone(cr, tick, dList[i])->actualTicks();
+                                    }
+                              }
                         }
                   return akkumulated;
                   }
@@ -786,7 +809,7 @@ bool Score::makeGap1(int baseTick, int staffIdx, Fraction len, int voiceOffset[V
             Fraction newLen = len - Fraction::fromTicks(voiceOffset[track-strack]);
             Q_ASSERT(newLen.numerator() != 0);
             bool result = makeGapVoice(seg, track, newLen, tick);
-            if(track == strack && !result) // makeGap failed for first voice
+            if (track == strack && !result) // makeGap failed for first voice
                   return false;
             }
       return true;
@@ -1178,14 +1201,14 @@ void Score::upDown(bool up, UpDownMode mode)
             switch (staff->staffType()->group()) {
                   case StaffGroup::PERCUSSION:
                         {
-                        const Drumset* ds = part->instr()->drumset();
+                        const Drumset* ds = part->instrument()->drumset();
                         if (ds)
                               newPitch = up ? ds->prevPitch(pitch) : ds->nextPitch(pitch);
                         }
                         break;
                   case StaffGroup::TAB:
                         {
-                        const StringData* stringData = part->instr()->stringData();
+                        const StringData* stringData = part->instrument()->stringData();
                         switch (mode) {
                               case UpDownMode::OCTAVE:          // move same note to next string, if possible
                                     {
@@ -1215,7 +1238,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                           return;
                                           }
                                     fret += (up ? 1 : -1);
-                                    if (fret < 0 || fret >= stringData->frets()) {
+                                    if (fret < 0 || fret > stringData->frets()) {
                                           qDebug("upDown tab in-string: out of fret range");
                                           return;
                                           }
@@ -1318,7 +1341,7 @@ void Score::upDown(bool up, UpDownMode mode)
                         refret = true;
                         }
                   if (refret) {
-                        const StringData* stringData = part->instr()->stringData();
+                        const StringData* stringData = part->instrument()->stringData();
                         stringData->fretChords(oNote->chord());
                         }
                   }
@@ -1342,12 +1365,22 @@ void Score::upDown(bool up, UpDownMode mode)
 
 void Score::addArticulation(ArticulationType attr)
       {
+      QSet<Chord*> set;
       foreach(Element* el, selection().elements()) {
             if (el->type() == Element::Type::NOTE || el->type() == Element::Type::CHORD) {
+                  Chord* cr = nullptr;
+                  // apply articulation on a given chord only once
+                  if (el->type() == Element::Type::NOTE) {
+                        cr = static_cast<Note*>(el)->chord();
+                        if (set.contains(cr))
+                              continue;
+                        }
                   Articulation* na = new Articulation(this);
                   na->setArticulationType(attr);
                   if (!addArticulation(el, na))
                         delete na;
+                  if (cr)
+                        set.insert(cr);
                   }
             }
       }
@@ -1358,7 +1391,7 @@ void Score::addArticulation(ArticulationType attr)
 ///   notes.
 //---------------------------------------------------------
 
-void Score::changeAccidental(Accidental::Type idx)
+void Score::changeAccidental(AccidentalType idx)
       {
       foreach(Note* note, selection().noteList())
             changeAccidental(note, idx);
@@ -1382,7 +1415,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
                   // as pitch has changed, calculate new
                   // string & fret
                   //
-                  const StringData* stringData = n->staff()->part()->instr()->stringData();
+                  const StringData* stringData = n->part()->instrument()->stringData();
                   if (stringData)
                         stringData->convertPitch(pitch, st, chord->tick(), &string, &fret);
                   }
@@ -1421,7 +1454,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
 ///   note \a note.
 //---------------------------------------------------------
 
-void Score::changeAccidental(Note* note, Accidental::Type accidental)
+void Score::changeAccidental(Note* note, AccidentalType accidental)
       {
       Chord* chord = note->chord();
       if (!chord)
@@ -1445,7 +1478,7 @@ void Score::changeAccidental(Note* note, Accidental::Type accidental)
       // accidental change may result in pitch change
       //
       AccidentalVal acc2 = measure->findAccidental(note);
-      AccidentalVal acc = (accidental == Accidental::Type::NONE) ? acc2 : Accidental::subtype2value(accidental);
+      AccidentalVal acc = (accidental == AccidentalType::NONE) ? acc2 : Accidental::subtype2value(accidental);
 
       int pitch = line2pitch(note->line(), clef, Key::C) + int(acc);
       if (!note->concertPitch())
@@ -1458,54 +1491,35 @@ void Score::changeAccidental(Note* note, Accidental::Type accidental)
 
       // delete accidental
       // both for this note and for any linked notes
-      if (accidental == Accidental::Type::NONE)
+      if (accidental == AccidentalType::NONE)
             forceRemove = true;
 
       // precautionary or microtonal accidental
       // either way, we display it unconditionally
       // both for this note and for any linked notes
-      else if (acc == acc2 || accidental > Accidental::Type::NATURAL)
+      else if (acc == acc2 || accidental > AccidentalType::NATURAL)
             forceAdd = true;
 
-      if (note->links()) {
-            for (ScoreElement* e : *note->links()) {
-                  Note* ln = static_cast<Note*>(e);
-                  if (ln->concertPitch() != note->concertPitch())
-                        continue;
-                  Score* lns = ln->score();
-                  if (forceRemove) {
-                        Accidental* a = ln->accidental();
-                        if (a)
-                              lns->undoRemoveElement(a);
-                        }
-                  else if (forceAdd) {
-                        Accidental* a = new Accidental(lns);
-                        a->setParent(ln);
-                        a->setAccidentalType(accidental);
-                        a->setRole(Accidental::Role::USER);
-                        lns->undoAddElement(a);
-                        }
-                  changeAccidental2(ln, pitch, tpc);
-                  }
-            }
-
-      else {
+      for (ScoreElement* se : note->linkList()) {
+            Note* ln = static_cast<Note*>(se);
+            if (ln->concertPitch() != note->concertPitch())
+                  continue;
+            Score* lns    = ln->score();
+            Accidental* a = ln->accidental();
             if (forceRemove) {
-                  Accidental* a = note->accidental();
                   if (a)
-                        undoRemoveElement(a);
+                        lns->undoRemoveElement(a);
                   }
             else if (forceAdd) {
-                  Accidental* a = note->accidental();
                   if (a)
                         undoRemoveElement(a);
-                  a = new Accidental(this);
-                  a->setParent(note);
+                  Accidental* a = new Accidental(lns);
+                  a->setParent(ln);
                   a->setAccidentalType(accidental);
-                  a->setRole(Accidental::Role::USER);
-                  undoAddElement(a);
+                  a->setRole(AccidentalRole::USER);
+                  lns->undoAddElement(a);
                   }
-            changeAccidental2(note, pitch, tpc);
+            changeAccidental2(ln, pitch, tpc);
             }
       }
 
@@ -1704,10 +1718,10 @@ bool Score::processMidiInput()
                         p = staff(staffIdx)->part();
                   if (p) {
                         if (!styleB(StyleIdx::concertPitch)) {
-                              ev.pitch += p->instr(selection().tickStart())->transpose().chromatic;
+                              ev.pitch += p->instrument(selection().tickStart())->transpose().chromatic;
                         }
                         MScore::seq->startNote(
-                                          p->instr()->channel(0)->channel,
+                                          p->instrument()->channel(0)->channel,
                                           ev.pitch,
                                           80,
                                           MScore::defaultPlayDuration,
@@ -1725,7 +1739,7 @@ bool Score::processMidiInput()
                   // if transposing, interpret MIDI pitch as representing desired written pitch
                   // set pitch based on corresponding sounding pitch
                   if (!styleB(StyleIdx::concertPitch))
-                        nval.pitch += st->part()->instr(inputState().tick())->transpose().chromatic;
+                        nval.pitch += st->part()->instrument(inputState().tick())->transpose().chromatic;
                   // let addPitch calculate tpc values from pitch
                   //Key key   = st->key(inputState().tick());
                   //nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
@@ -2293,15 +2307,15 @@ void Score::cmd(const QAction* a)
       else if (cmd == "beam-32")
             cmdSetBeamMode(Beam::Mode::BEGIN32);
       else if (cmd == "sharp2")
-            changeAccidental(Accidental::Type::SHARP2);
+            changeAccidental(AccidentalType::SHARP2);
       else if (cmd == "sharp")
-            changeAccidental(Accidental::Type::SHARP);
+            changeAccidental(AccidentalType::SHARP);
       else if (cmd == "nat")
-            changeAccidental(Accidental::Type::NATURAL);
+            changeAccidental(AccidentalType::NATURAL);
       else if (cmd == "flat")
-            changeAccidental(Accidental::Type::FLAT);
+            changeAccidental(AccidentalType::FLAT);
       else if (cmd == "flat2")
-            changeAccidental(Accidental::Type::FLAT2);
+            changeAccidental(AccidentalType::FLAT2);
       else if (cmd == "repitch")
             _is.setRepitchMode(a->isChecked());
       else if (cmd == "flip")
@@ -2720,7 +2734,7 @@ void Score::cmdSlashFill()
                   int n = (d > 4 && s->measure()->timesig().numerator() % 3 == 0) ? 3 : 1;
                   Fraction f(n, d);
                   // skip over any leading segments before next (first) beat
-                  if (s->tick() % f.ticks())
+                  if (s->rtick() % f.ticks())
                         continue;
                   // determine voice to use - first available voice for this measure / staff
                   if (voice == -1 || s->rtick() == 0) {

@@ -27,11 +27,21 @@ namespace Ms {
 PaletteBox::PaletteBox(QWidget* parent)
    : QDockWidget(tr("Palettes"), parent)
       {
+      setContextMenuPolicy(Qt::ActionsContextMenu);
       setObjectName("palette-box");
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
 
+      QAction* a = new QAction(this);
+      a->setText(tr("Single Palette"));
+      a->setCheckable(true);
+      a->setChecked(preferences.singlePalette);
+      addAction(a);
+      connect(a, SIGNAL(toggled(bool)), SLOT(setSinglePalette(bool)));
+
       QWidget* w = new QWidget(this);
+      w->setContextMenuPolicy(Qt::NoContextMenu);
       QVBoxLayout* vl = new QVBoxLayout(w);
+      vl->setMargin(0);
       QHBoxLayout* hl = new QHBoxLayout;
       hl->setContentsMargins(5,5,5,0);
 
@@ -40,7 +50,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       updateWorkspaces();
       hl->addWidget(workspaceList);
       QToolButton* nb = new QToolButton;
-      
+
       nb->setMinimumHeight(27);
       nb->setText(tr("+"));
       nb->setToolTip(tr("Add new workspace"));
@@ -58,7 +68,6 @@ PaletteBox::PaletteBox(QWidget* parent)
       sa->setFrameShape(QFrame::NoFrame);
       vl->addWidget(sa);
       vl->addLayout(hl);
-      // setWidget(sa);
 
       QWidget* paletteList = new QWidget;
       sa->setWidget(paletteList);
@@ -348,5 +357,14 @@ QSize PaletteBoxScrollArea::sizeHint() const
       return QSize(170 * guiScaling, 170 * guiScaling);
       }
 
+//---------------------------------------------------------
+//   setSinglePalette
+//---------------------------------------------------------
+
+void PaletteBox::setSinglePalette(bool val)
+      {
+      preferences.singlePalette = val;
+      preferences.dirty = true;
+      }
 }
 

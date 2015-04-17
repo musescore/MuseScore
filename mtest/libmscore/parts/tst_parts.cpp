@@ -111,6 +111,11 @@ class TestParts : public QObject, public MTest
 //      void staffStyles();
 
       void measureProperties();
+
+ // second part has system text on empty chordrest segment
+      void createPart3() {
+            testPartCreation("part-54346");
+            }
       };
 
 //---------------------------------------------------------

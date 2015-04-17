@@ -208,15 +208,19 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   }
             Measure* measure;
             System* system;
+            SysStaff* sysStaff0 = nullptr;      // top staff for barline in system
             bool systemBarLine;
             if (parent()->type() == Element::Type::SEGMENT) {
                   Segment* segment = static_cast<Segment*>(parent());
                   measure = segment->measure();
                   system  = measure->system();
+                  if (system)
+                        sysStaff0 = system->staff(staffIdx1);
                   systemBarLine = false;
                   }
             else {
                   system  = static_cast<System*>(parent());
+                  sysStaff0 = system->staff(staffIdx1);
                   measure = system->firstMeasure();
                   for (int i = staffIdx1; i < staffIdx2; ++i) {
                         if (!score()->staff(i)->hideSystemBarLine()) {
@@ -265,7 +269,19 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   StaffLines* l1 = measure->staffLines(staffIdx1);
                   StaffLines* l2 = measure->staffLines(staffIdx2);
 
-                  qreal yp = (system && !systemBarLine) ? sysStaff1->y() : 0.0;
+                  qreal yp = 0.0;
+                  if (systemBarLine) {
+                        // system initial barline, parent is system
+                        // base y on top staff for barline
+                        // system barline span already accounts for staff visibility
+                        yp = sysStaff0->y();
+                        }
+                  else if (system) {
+                        // ordinary barline within system, parent is measure
+                        // base y on top visible staff in barline span
+                        // after skipping ones with hideSystemBarLine set
+                        yp = sysStaff1->y();
+                        }
                   *y1 = l1->y1() - yp;
                   *y1 += (_spanFrom * staff1->lineDistance() * staff1->spatium()) / 2;
                   *y2 = l2->y1() - yp;
@@ -782,9 +798,9 @@ void BarLine::editDrag(const EditData& ed)
       y1 -= yoff1;                  // current positions of barline ends, ignoring any in-process dragging
       y2 -= yoff2;
       if (ed.curGrip == Grip::START) {
-            // min offset for top grip is line -1
+            // min offset for top grip is line -1 (-2 for 1-line staves)
             // max offset is 1 line above bottom grip or 1 below last staff line, whichever comes first
-            min = -y1 - lineDist;
+            min = -y1 - (staff()->lines() == 1 ? lineDist * 2 : lineDist);
             max = y2 - y1 - lineDist;                                   // 1 line above bottom grip
             lastmax = (staff()->lines() - _spanFrom/2) * lineDist;      // 1 line below last staff line
             if (lastmax < max)
@@ -870,10 +886,12 @@ void BarLine::endEditDrag()
                   // round bar line top coord to nearest line of 1st staff (in half line dist units)
                   newSpanFrom = ((int)floor(y1 / (staff()->lineDistance() * spatium()) + 0.5 )) * 2;
                   // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
-                  if (newSpanFrom <  MIN_BARLINE_SPAN_FROMTO)
-                        newSpanFrom = MIN_BARLINE_SPAN_FROMTO;
-                  if (newSpanFrom > Staff1lines*2)
-                        newSpanFrom = Staff1lines*2;
+                  // except for 1-line staves
+                  int minFrom = Staff1lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO;
+                  if (newSpanFrom <  minFrom)
+                        newSpanFrom = minFrom;
+                  if (newSpanFrom > Staff1lines * 2)
+                        newSpanFrom = Staff1lines * 2;
                   }
 
             newSpanTo = _spanTo;
@@ -882,17 +900,18 @@ void BarLine::endEditDrag()
                   qreal staff2TopY = systTopY + syst->staff(staffIdx2)->y();
                   newSpanTo = ((int)floor( (ay2 - staff2TopY) / (staff2->lineDistance() * spatium()) + 0.5 )) * 2;
                   // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
+                  int maxTo = Staff2lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : Staff2lines * 2;
                   if (newSpanTo <  MIN_BARLINE_SPAN_FROMTO)
                         newSpanTo = MIN_BARLINE_SPAN_FROMTO;
-                  if (newSpanTo > Staff2lines*2)
-                        newSpanTo = Staff2lines*2;
+                  if (newSpanTo > maxTo)
+                        newSpanTo = maxTo;
                   }
 //            shiftDrag = false;          // NO: a last call to this function is made when exiting editing:
             }                             // it would find shiftDrag = false and reset extrema to coarse resolution
 
       else {                              // if coarse dragging
-            newSpanFrom = 0;
-            newSpanTo   = (Staff2lines - 1) * 2;
+            newSpanFrom = Staff1lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM: 0;
+            newSpanTo   = Staff2lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (Staff2lines - 1) * 2;
             }
 
       // if any value changed, update

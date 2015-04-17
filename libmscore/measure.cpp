@@ -318,8 +318,8 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm, AccidentalState* as)
             if (chord->noteType() != NoteType::NORMAL)
                   m *= score()->styleD(StyleIdx::graceNoteMag);
             const Drumset* drumset = 0;
-            if (cr->staff()->part()->instr()->useDrumset())
-                  drumset = cr->staff()->part()->instr()->drumset();
+            if (cr->part()->instrument()->useDrumset())
+                  drumset = cr->part()->instrument()->drumset();
             if (drumset) {
                   for (Note* note : chord->notes()) {
                         int pitch = note->pitch();
@@ -830,9 +830,9 @@ void Measure::add(Element* el)
                               // use order of segments in segment.h
                               if (s && s->tick() == t) {
                                     while (s && s->segmentType() <= st) {
-                                          if (s->next() && s->next()->tick() != t)
-                                                break;
                                           s = s->next();
+                                          if (s && s->tick() != t)
+                                                break;
                                           }
                                     }
                               }
@@ -1580,9 +1580,10 @@ void Measure::adjustToLen(Fraction nf)
             // if just a single rest
             if (rests == 1 && chords == 0) {
                   // if measure value didn't change, stick to whole measure rest
-                  if (_timesig == nf)
-                        rest->undoChangeProperty(P_ID::DURATION,
-                           QVariant::fromValue<TDuration>(TDuration(TDuration::DurationType::V_MEASURE)));
+                  if (_timesig == nf) {
+                        rest->undoChangeProperty(P_ID::DURATION, QVariant::fromValue<Fraction>(nf));
+                        rest->undoChangeProperty(P_ID::DURATION_TYPE, QVariant::fromValue<TDuration>(TDuration::DurationType::V_MEASURE));
+                        }
                   else {      // if measure value did change, represent with rests actual measure value
                         // convert the measure duration in a list of values (no dots for rests)
                         QList<TDuration> durList = toDurationList(nf, false, 0);
@@ -1677,16 +1678,12 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
                   xml.tagE("startRepeat");
             if (_repeatFlags & Repeat::END)
                   xml.tag("endRepeat", _repeatCount);
-            if (_irregular)
-                  xml.tagE("irregular");
-            if (_breakMultiMeasureRest)
-                  xml.tagE("breakMultiMeasureRest");
-            if (_userStretch != 1.0)
-                  xml.tag("stretch", _userStretch);
-            if (_noOffset)
-                  xml.tag("noOffset", _noOffset);
-            if (_systemInitialBarLineType != BarLineType::NORMAL)
-                  xml.tag("sysInitBarLineType", BarLine::barLineTypeName(_systemInitialBarLineType));
+            writeProperty(xml, P_ID::IRREGULAR);
+            writeProperty(xml, P_ID::BREAK_MMR);
+            writeProperty(xml, P_ID::USER_STRETCH);
+            writeProperty(xml, P_ID::NO_OFFSET);
+            writeProperty(xml, P_ID::MEASURE_NUMBER_MODE);
+            writeProperty(xml, P_ID::SYSTEM_INITIAL_BARLINE_TYPE);
             }
       qreal _spatium = spatium();
       MStaff* mstaff = staves[staff];
@@ -1796,12 +1793,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   barLine->read(e);
                   Segment::Type st;
 
-                  if (isMMRest()) {
-                        // to find out the right segment type
-                        setTick(e.lastMeasure()->tick());
-                        e.initTick(e.lastMeasure()->tick());
-                        }
-
                   //
                   //  SegStartRepeatBarLine: always at the beginning tick of a measure
                   //  SegBarLine:            in the middle of a measure, has no semantic
@@ -1813,6 +1804,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                         st = Segment::Type::StartRepeatBarLine;
                   else
                         st = Segment::Type::EndBarLine;
+
                   segment = getSegment(st, e.tick()); // let the bar line know it belongs to a Segment,
                   segment->add(barLine);              // before setting its flags
                   if (st == Segment::Type::EndBarLine) {
@@ -2081,7 +2073,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                               }
                         }
                   if (e.tick() != tick())
-                        clef->setSmall(true);
+                        clef->setSmall(true);         // layout does this ?
                   segment->add(clef);
                   }
             else if (tag == "TimeSig") {
@@ -2189,6 +2181,10 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "FiguredBass"
                ) {
                   Element* el = Element::name2Element(tag, score());
+                  // hack - needed because tick tags are unreliable in 1.3 scores
+                  // for symbols attached to anything but a measure
+                  if (score()->mscVersion() <= 114 && el->type() == Element::Type::SYMBOL)
+                        el->setParent(this);    // this will get reset when adding to segment
                   el->setTrack(e.track());
                   el->read(e);
                   segment = getSegment(Segment::Type::ChordRest, e.tick());
@@ -2223,14 +2219,12 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "noOffset")
                   _noOffset = e.readInt();
-            else if (tag == "irregular") {
-                  _irregular = true;
-                  e.readNext();
-                  }
-            else if (tag == "breakMultiMeasureRest") {
-                  _breakMultiMeasureRest = true;
-                  e.readNext();
-                  }
+            else if (tag == "measureNumberMode")
+                  setMeasureNumberMode(MeasureNumberMode(e.readInt()));
+            else if (tag == "irregular")
+                  _irregular = e.readBool();
+            else if (tag == "breakMultiMeasureRest")
+                  _breakMultiMeasureRest = e.readBool();
             else if (tag == "sysInitBarLineType") {
                   const QString& val(e.readElementText());
                   _systemInitialBarLineType = BarLineType::NORMAL;
@@ -2305,8 +2299,12 @@ void Measure::read(XmlReader& e, int staffIdx)
                   range->setTrack(trackZeroVoice(e.track()));
                   segment->add(range);
                   }
-            else if (tag == "multiMeasureRest")
+            else if (tag == "multiMeasureRest") {
                   _mmRestCount = e.readInt();
+                  // set tick to previous measure
+                  setTick(e.lastMeasure()->tick());
+                  e.initTick(e.lastMeasure()->tick());
+                  }
             else if (Element::readProperties(e))
                   ;
             else
@@ -3396,7 +3394,7 @@ void Measure::layoutX(qreal stretch)
                         // minDistance = 0;
 
                   if (found || eFound) {
-                        space.rLw() += clefWidth[staffIdx];
+                        space.addL(clefWidth[staffIdx]);
                         qreal sp     = minDistance + rest[staffIdx] + qMax(space.lw(), stretchDistance);
                         rest[staffIdx]  = space.rw();
                         rest2[staffIdx] = false;
@@ -3998,7 +3996,7 @@ QVariant Measure::getProperty(P_ID propertyId) const
             case P_ID::MEASURE_NUMBER_MODE:
                   return int(measureNumberMode());
             case P_ID::BREAK_MMR:
-                  return breakMultiMeasureRest();
+                  return getBreakMultiMeasureRest();
             case P_ID::REPEAT_COUNT:
                   return repeatCount();
             case P_ID::USER_STRETCH:

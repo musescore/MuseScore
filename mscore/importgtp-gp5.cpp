@@ -163,7 +163,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
 
       Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
       if (beatBits & BEAT_CHORD) {
-            int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+            int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
             skip(17);
             QString name = readPascalString(21);
             skip(4);
@@ -250,7 +250,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   segment->add(cr);
 
             Staff* staff = cr->staff();
-            int numStrings = staff->part()->instr()->stringData()->strings();
+            int numStrings = staff->part()->instrument()->stringData()->strings();
             bool hasSlur = false;
             for (int i = 6; i >= 0; --i) {
                   if (strings & (1 << i) && ((6-i) < numStrings)) {
@@ -413,7 +413,7 @@ void GuitarPro5::readTracks()
             for (int k = 0; k < strings; ++k)
                   tuning2[strings-k-1] = tuning[k];
             StringData stringData(frets, strings, tuning2);
-            Instrument* instr = part->instr();
+            Instrument* instr = part->instrument();
             instr->setStringData(stringData);
             part->setPartName(name);
             part->setLongName(name);
@@ -652,7 +652,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
                   }
             gn->setFret(fret);
             gn->setString(note->string());
-            int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(note->string(), fret, nullptr, 0);
+            int grace_pitch = note->staff()->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr, 0);
             gn->setPitch(grace_pitch);
             gn->setTpcFromPitch();
 
@@ -660,10 +660,6 @@ bool GuitarPro5::readNoteEffects(Note* note)
             gc->setTrack(note->chord()->track());
             gc->add(gn);
             gc->setParent(note->chord());
-            note->chord()->add(gc);
-
-            // TODO: Add dynamic. Dynamic now can be added only to a segment, not directly to a grace note
-            addDynamic(gn, dynamic);
 
             TDuration d;
             d.setVal(grace_len);
@@ -673,6 +669,9 @@ bool GuitarPro5::readNoteEffects(Note* note)
             gc->setDuration(d.fraction());
             gc->setNoteType(note_type);
             gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
+            note->chord()->add(gc);
+            addDynamic(gn, dynamic);
+
             if (transition == 0) {
                   // no transition
                   }
@@ -884,7 +883,7 @@ bool GuitarPro5::readNote(int string, Note* note)
             note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
-      int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber, nullptr, 0);
+      int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr, 0);
       note->setFret(fretNumber);
       note->setString(string);
       note->setPitch(pitch);

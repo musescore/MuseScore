@@ -1107,9 +1107,9 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       a->setText(tr("Staff"));
       a = popup->addAction(tr("Edit Drumset..."));
       a->setData("edit-drumset");
-      a->setEnabled(staff->part()->instr()->drumset() != 0);
+      a->setEnabled(staff->part()->instrument()->drumset() != 0);
 
-      if (staff->part()->instr()->drumset()) {
+      if (staff->part()->instrument()->drumset()) {
             a = popup->addAction(tr("Drumroll Editor..."));
             a->setData("drumroll");
             }
@@ -1132,7 +1132,9 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       popup->addAction(getAction("insert-measure"));
       popup->addSeparator();
 
-      popup->addAction(tr("Measure Properties..."))->setData("props");
+      a = popup->addAction(tr("Measure Properties..."));
+      a->setData("props");
+      a->setEnabled(!obj->isMMRest());
       popup->addSeparator();
 
       popup->addAction(tr("Object Debugger"))->setData("list");
@@ -1159,10 +1161,10 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
                   }
             }
       else if (cmd == "edit-drumset") {
-            EditDrumset drumsetEdit(staff->part()->instr()->drumset(), this);
+            EditDrumset drumsetEdit(staff->part()->instrument()->drumset(), this);
             if (drumsetEdit.exec()) {
-                  _score->undo(new ChangeDrumset(staff->part()->instr(), drumsetEdit.drumset()));
-                  mscore->updateDrumTools();
+                  _score->undo(new ChangeDrumset(staff->part()->instrument(), drumsetEdit.drumset()));
+                  mscore->updateDrumTools(drumsetEdit.drumset());
                   }
             }
       else if (cmd == "drumroll") {
@@ -1614,7 +1616,7 @@ void ScoreView::setShadowNote(const QPointF& p)
       shadowNote->setVisible(true);
       Staff* staff      = score()->staff(pos.staffIdx);
       shadowNote->setMag(staff->mag());
-      const Instrument* instr     = staff->part()->instr();
+      const Instrument* instr     = staff->part()->instrument();
       NoteHead::Group noteheadGroup = NoteHead::Group::HEAD_NORMAL;
       int line                    = pos.line;
       NoteHead::Type noteHead       = is.duration().headType();
@@ -3170,6 +3172,83 @@ void ScoreView::startNoteEntry()
 
       is.setSegment(0);
       Note* note  = 0;
+
+      if (_score->selection().isNone()) {
+            // no selection
+            // choose page in current view (favor top left quadrant if possible)
+            // select first (top/left) chordrest of that page in current view
+            Page* p = nullptr;
+            QList<QPointF> points;
+            points.append(toLogical(QPoint(width() * 0.25, height() * 0.25)));
+            points.append(toLogical(QPoint(0.0, 0.0)));
+            points.append(toLogical(QPoint(0.0, height())));
+            points.append(toLogical(QPoint(width(), 0.0)));
+            points.append(toLogical(QPoint(width(), height())));
+            int i = 0;
+            while (!p && i < points.size()) {
+                  p = point2page(points[i]);
+                  i++;
+                  }
+            if (p) {
+                  ChordRest* topLeft = nullptr;
+                  qreal tlY = 0.0;
+                  int tlTick = 0;
+                  QRectF viewRect  = toLogical(QRectF(0.0, 0.0, width(), height()));
+                  QRectF pageRect  = p->bbox().translated(p->x(), p->y());
+                  QRectF intersect = viewRect & pageRect;
+                  intersect.translate(-p->x(), -p->y());
+                  QList<Element*> el = p->items(intersect);
+                  for (Element* e : el) {
+                        // loop through visible elements
+                        // looking for the CR in voice 1 with earliest tick and highest staff position
+                        Element::Type et = e->type();
+                        if (et == Element::Type::NOTE || et == Element::Type::REST) {
+                              if (e->voice())
+                                    continue;
+                              ChordRest* cr;
+                              if (et == Element::Type::NOTE) {
+                                    cr = static_cast<ChordRest*>(e->parent());
+                                    if (!cr)
+                                          continue;
+                                    }
+                              else {
+                                    cr = static_cast<ChordRest*>(e);
+                                    }
+                              // compare ticks rather than x position
+                              // to make sure we favor earlier rather than later systems
+                              // even though later system might have note farther to left
+                              int crTick = 0;
+                              if (cr->segment())
+                                    crTick = cr->segment()->tick();
+                              else
+                                    continue;
+                              // compare staff Y position rather than note Y position
+                              // to be sure we do not reject earliest note
+                              // just because it is lower in pitch than subsequent notes
+                              qreal crY = 0.0;
+                              if (cr->measure() && cr->measure()->system())
+                                    crY = cr->measure()->system()->staffYpage(cr->staffIdx());
+                              else
+                                    continue;
+                              if (topLeft) {
+                                    if (crTick <= tlTick && crY <= tlY) {
+                                          topLeft = cr;
+                                          tlTick = crTick;
+                                          tlY = crY;
+                                          }
+                                    }
+                              else {
+                                    topLeft = cr;
+                                    tlTick = crTick;
+                                    tlY = crY;
+                                    }
+                              }
+                        }
+                  if (topLeft)
+                        _score->select(topLeft, SelectType::SINGLE);
+                  }
+            }
+
       Element* el = _score->selection().activeCR() ? _score->selection().activeCR() : _score->selection().element();
       if (!el)
             el = _score->selection().firstChordRest();
@@ -3183,8 +3262,9 @@ void ScoreView::startNoteEntry()
             el = _score->searchNote(tick, track);
             if (!el)
                   el = _score->searchNote(0, track);
-            Q_ASSERT(el);
             }
+      if (!el)
+            return;
       if (el->type() == Element::Type::CHORD) {
             Chord* c = static_cast<Chord*>(el);
             note = c->selectedNote();
@@ -4288,11 +4368,11 @@ void ScoreView::cmdChangeEnharmonic(bool up)
       _score->startCmd();
       for (Note* n : _score->selection().noteList()) {
             Staff* staff = n->staff();
-            if (staff->part()->instr()->useDrumset())
+            if (staff->part()->instrument()->useDrumset())
                   continue;
             if (staff->isTabStaff()) {
                   int string = n->line() + (up ? 1 : -1);
-                  int fret   = staff->part()->instr()->stringData()->fret(n->pitch(), string, staff, n->chord()->tick());
+                  int fret   = staff->part()->instrument()->stringData()->fret(n->pitch(), string, staff, n->chord()->tick());
                   if (fret != -1) {
                         score()->undoChangeProperty(n, P_ID::FRET, fret);
                         score()->undoChangeProperty(n, P_ID::STRING, string);
@@ -4339,10 +4419,20 @@ void ScoreView::cmdChangeEnharmonic(bool up)
                               break;
                               }
                         }
-                  if (i == 36)
+                  if (i == 36) {
                         qDebug("tpc %d not found", tpc);
-                  else
+                        }
+                  else {
                         n->undoSetTpc(tpc);
+                        if (up || staff->part()->instrument()->transpose().isZero()) {
+                              // change both spellings
+                              int t = n->transposeTpc(tpc);
+                              if (n->concertPitch())
+                                    n->undoSetTpc2(t);
+                              else
+                                    n->undoSetTpc1(t);
+                              }
+                        }
                   }
             }
       _score->endCmd();
@@ -4356,7 +4446,7 @@ void ScoreView::cloneElement(Element* e)
       {
       if (!e->isMovable() && e->type() != Element::Type::SPACER && e->type() != Element::Type::VBOX)
             return;
-      if(e->type() == Element::Type::NOTE || e->type() == Element::Type::MEASURE)
+      if(e->type() == Element::Type::NOTE || e->type() == Element::Type::REST || e->type() == Element::Type::MEASURE)
             return;
       QDrag* drag = new QDrag(this);
       QMimeData* mimeData = new QMimeData;

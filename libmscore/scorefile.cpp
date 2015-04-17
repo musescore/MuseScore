@@ -34,6 +34,7 @@
 #include "excerpt.h"
 #include "mscore.h"
 #include "stafftype.h"
+#include "sym.h"
 #ifdef OMR
 #include "omr/omr.h"
 #include "omr/omrpage.h"
@@ -1055,6 +1056,7 @@ bool Score::read(XmlReader& e)
                         // float mode
                         _style.setSpatium(sp);
                         }
+                  _scoreFont = ScoreFont::fontFactory(_style.value(StyleIdx::MusicalSymbolFont).toString());
                   }
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);
@@ -1191,10 +1193,11 @@ bool Score::read(XmlReader& e)
                   st->setBarLineSpan(barLineSpan);
                   }
             // check spanFrom
-            if(st->barLineFrom() < MIN_BARLINE_SPAN_FROMTO)
-                  st->setBarLineFrom(MIN_BARLINE_SPAN_FROMTO);
-            if(st->barLineFrom() > st->lines()*2)
-                  st->setBarLineFrom(st->lines()*2);
+            int minBarLineFrom = st->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO;
+            if (st->barLineFrom() < minBarLineFrom)
+                  st->setBarLineFrom(minBarLineFrom);
+            if (st->barLineFrom() > st->lines() * 2)
+                  st->setBarLineFrom(st->lines() * 2);
             // check spanTo
             Staff* stTo = st->barLineSpan() <= 1 ? st : staff(idx + st->barLineSpan() - 1);
             // 1-line staves have special bar line spans
@@ -1208,7 +1211,7 @@ bool Score::read(XmlReader& e)
                   st->setBarLineTo(maxBarLineTo);
             // on single staff span, check spanFrom and spanTo are distant enough
             if (st->barLineSpan() == 1) {
-                  if(st->barLineTo() - st->barLineFrom() < MIN_BARLINE_FROMTO_DIST) {
+                  if (st->barLineTo() - st->barLineFrom() < MIN_BARLINE_FROMTO_DIST) {
                         st->setBarLineFrom(0);
                         st->setBarLineTo(defaultBarLineTo);
                         }

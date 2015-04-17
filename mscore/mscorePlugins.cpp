@@ -413,6 +413,7 @@ void MuseScore::pluginTriggered(int idx)
             }
 
       QmlPlugin* p = qobject_cast<QmlPlugin*>(obj);
+      p->setFilePath(pp.section('/', 0, -2));
 
       if (p->pluginType() == "dock" || p->pluginType() == "dialog") {
             QQuickView* view = new QQuickView(engine, 0);

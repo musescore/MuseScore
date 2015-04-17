@@ -1185,6 +1185,13 @@ to
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <location filename="../src/gui/dialogs/qmessagebox.cpp" line="+1866"/>

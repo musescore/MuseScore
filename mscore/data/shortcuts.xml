@@ -97,38 +97,6 @@
     <seq>Alt+9</seq>
     </SC>
   <SC>
-    <key>interval-2</key>
-    <seq>Shift+2</seq>
-    </SC>
-  <SC>
-    <key>interval-3</key>
-    <seq>Shift+3</seq>
-    </SC>
-  <SC>
-    <key>interval-4</key>
-    <seq>Shift+4</seq>
-    </SC>
-  <SC>
-    <key>interval-5</key>
-    <seq>Shift+5</seq>
-    </SC>
-  <SC>
-    <key>interval-6</key>
-    <seq>Shift+6</seq>
-    </SC>
-  <SC>
-    <key>interval-7</key>
-    <seq>Shift+7</seq>
-    </SC>
-  <SC>
-    <key>interval-8</key>
-    <seq>Shift+8</seq>
-    </SC>
-  <SC>
-    <key>interval-9</key>
-    <seq>Shift+9</seq>
-    </SC>
-  <SC>
     <key>note-a</key>
     <seq>A</seq>
     </SC>
@@ -246,7 +214,7 @@
     </SC>
   <SC>
     <key>pitch-up-diatonic</key>
-    <seq>Shift+Up</seq>
+    <seq>Alt+Shift+Up</seq>
     </SC>
   <SC>
     <key>pitch-up-octave</key>
@@ -286,7 +254,7 @@
     </SC>
   <SC>
     <key>pitch-down-diatonic</key>
-    <seq>Shift+Down</seq>
+    <seq>Alt+Shift+Down</seq>
     </SC>
   <SC>
     <key>pitch-down-octave</key>
@@ -362,11 +330,11 @@
     </SC>
   <SC>
     <key>select-staff-above</key>
-    <seq>Alt+Shift+Up</seq>
+    <seq>Shift+Up</seq>
     </SC>
   <SC>
     <key>select-staff-below</key>
-    <seq>Alt+Shift+Down</seq>
+    <seq>Shift+Down</seq>
     </SC>
   <SC>
     <key>page-prev</key>

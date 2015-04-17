@@ -36,7 +36,7 @@ class Stem : public Element {
       virtual void startEdit(MuseScoreView*, const QPointF&);
 
    public:
-      Stem(Score*);
+      Stem(Score* = 0);
       Stem &operator=(const Stem&) = delete;
 
       virtual Stem* clone() const        { return new Stem(*this); }

@@ -155,7 +155,6 @@ static const ElementName elementNames[] = {
       ElementName("Selection",            QT_TRANSLATE_NOOP("elementName", "Selection")),
       ElementName("Lasso",                QT_TRANSLATE_NOOP("elementName", "Lasso")),
       ElementName("ShadowNote",           QT_TRANSLATE_NOOP("elementName", "Shadow Note")),
-      ElementName("RubberBand",           QT_TRANSLATE_NOOP("elementName", "Rubber Band")),
       ElementName("TabDurationSymbol",    QT_TRANSLATE_NOOP("elementName", "Tab Duration Symbol")),
       ElementName("FSymbol",              QT_TRANSLATE_NOOP("elementName", "Font Symbol")),
       ElementName("Page",                 QT_TRANSLATE_NOOP("elementName", "Page")),
@@ -457,6 +456,44 @@ QRectF Element::drag(EditData* data)
             }
       setUserOff(QPointF(x, y));
       setGenerated(false);
+
+      if (type() == Type::TEXT) {         // TODO: check for other types
+            //
+            // restrict move to page boundaries
+            //
+            QRectF r(canvasBoundingRect());
+            Page* p = 0;
+            Element* e = this;
+            while (e) {
+                  if (e->type() == Element::Type::PAGE) {
+                        p = static_cast<Page*>(e);
+                        break;
+                        }
+                  e = e->parent();
+                  }
+            if (p) {
+                  bool move = false;
+                  QRectF pr(p->canvasBoundingRect());
+                  if (r.right() > pr.right()) {
+                        x -= r.right() - pr.right();
+                        move = true;
+                        }
+                  else if (r.left() < pr.left()) {
+                        x += pr.left() - r.left();
+                        move = true;
+                        }
+                  if (r.bottom() > pr.bottom()) {
+                        y -= r.bottom() - pr.bottom();
+                        move = true;
+                        }
+                  else if (r.top() < pr.top()) {
+                        y += pr.top() - r.top();
+                        move = true;
+                        }
+                  if (move)
+                        setUserOff(QPointF(x, y));
+                  }
+            }
       return canvasBoundingRect() | r;
       }
 
@@ -694,12 +731,16 @@ bool Element::readProperties(XmlReader& e)
                   //   the tick is not needed for glissandi anyhow, so we can ignore it
                   // - another bug allowed text items attached to notes or chords to also have invalid tick values (#25616)
                   //   the text might be of any type, but we are now converting any text elements within notes into FINGERING
-                  // - at some point, a check for SYMBOL was included here, but it isn't clear what the issue was
-                  //   ignoring ticks for symbols means they will be positioned incorrectly if not at start of measure, and it is not safe in any case:
-                  //   it causes problems if there is also another item such as a STAFF_TEXT that was depending on the tick value of the symbol (http://musescore.org/en/node/25572)
-                  //   when we re-discover the issue that caused the check for SYMBOL to be added,
-                  //   we will need to find a different solution if possible
-                  if (score()->mscVersion() > 114 || (type() != Element::Type::GLISSANDO && type() != Element::Type::FINGERING))
+                  // - another bug allowed copy & paste of symbols attached to notes to produce invalid tick values (#56146)
+                  //   we can't ignore tick for all symbols, because it is needed for correct positioning of symbols attached to measures
+                  //   and it also can be relied upon by subsequent elements (http://musescore.org/en/node/25572)
+                  //   so honor tick only for elements attached to measures
+                  //   symbols attached to notes or other elements don't need the tick anyhow
+                  if (score()->mscVersion() <= 114 && type() == Element::Type::SYMBOL) {
+                        if (!parent() || parent()->type() != Element::Type::MEASURE)
+                              val = -1;
+                        }
+                  if (score()->mscVersion() > 114 || (type() != Element::Type::GLISSANDO && type() != Element::Type::FINGERING && val >= 0))
                         e.initTick(score()->fileDivision(val));
                   }
             }
@@ -1133,18 +1174,6 @@ void Element::dump() const
       }
 
 //---------------------------------------------------------
-//   RubberBand::draw
-//---------------------------------------------------------
-
-void RubberBand::draw(QPainter* painter) const
-      {
-      if (!showRubberBand)
-            return;
-      painter->setPen(Qt::red);
-      painter->drawLine(QLineF(_p1.x(), _p1.y(), _p2.x(), _p2.y()));
-      }
-
-//---------------------------------------------------------
 //   mimeData
 //---------------------------------------------------------
 
@@ -1328,7 +1357,6 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::SELECTION:
             case Element::Type::LASSO:
             case Element::Type::SHADOW_NOTE:
-            case Element::Type::RUBBERBAND:
             case Element::Type::SEGMENT:
             case Element::Type::SYSTEM:
             case Element::Type::COMPOUND:
@@ -1418,17 +1446,6 @@ void collectElements(void* data, Element* e)
       }
 
 //---------------------------------------------------------
-//   Space::operator+=
-//---------------------------------------------------------
-
-Space& Space::operator+=(const Space& s)
-      {
-      _lw += s._lw;
-      _rw += s._rw;
-      return *this;
-      }
-
-//---------------------------------------------------------
 //   undoSetPlacement
 //---------------------------------------------------------
 
@@ -1444,8 +1461,9 @@ void Element::undoSetPlacement(Placement v)
 QVariant Element::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
+            case P_ID::TRACK:     return track();
             case P_ID::GENERATED: return _generated;
-            case P_ID::COLOR:     return _color;
+            case P_ID::COLOR:     return color();
             case P_ID::VISIBLE:   return _visible;
             case P_ID::SELECTED:  return _selected;
             case P_ID::USER_OFF:  return _userOff;
@@ -1462,6 +1480,9 @@ QVariant Element::getProperty(P_ID propertyId) const
 bool Element::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case P_ID::TRACK:
+                  setTrack(v.toInt());
+                  break;
             case P_ID::GENERATED:
                   _generated = v.toBool();
                   break;
@@ -1566,7 +1587,6 @@ bool Element::isPrintable() const
             case Element::Type::SPACER:
             case Element::Type::SHADOW_NOTE:
             case Element::Type::LASSO:
-            case Element::Type::RUBBERBAND:
             case Element::Type::ELEMENT_LIST:
             case Element::Type::STAFF_LIST:
             case Element::Type::MEASURE_LIST:

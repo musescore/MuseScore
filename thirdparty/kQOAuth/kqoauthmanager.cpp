@@ -549,9 +549,11 @@ void KQOAuthManager::onRequestReplyReceived() {
 
     case QNetworkReply::ContentAccessDenied:
     case QNetworkReply::UnknownContentError:
-    case QNetworkReply::ContentNotFoundError:
     case QNetworkReply::AuthenticationRequiredError:
         d->error = KQOAuthManager::RequestUnauthorized;
+        break;
+    case QNetworkReply::ContentNotFoundError:
+        d->error = KQOAuthManager::ContentNotFound;
         break;
     case QNetworkReply::ContentOperationNotPermittedError:
         d->error = KQOAuthManager::ContentOperationNotPermittedError;
@@ -586,13 +588,6 @@ void KQOAuthManager::onRequestReplyReceived() {
     foreach (QNetworkCookie cookie , c)
             qDebug() << cookie.name() << cookie.value();*/
 
-    // Just don't do anything if we didn't get anything useful.
-    if(networkReply.isEmpty()) {
-        reply->deleteLater();
-        return;
-    }
-    QMultiMap<QString, QString> responseTokens;
-
     // We need to emit the signal even if we got an error.
     if (d->error != KQOAuthManager::NoError) {
         reply->deleteLater();
@@ -600,6 +595,13 @@ void KQOAuthManager::onRequestReplyReceived() {
         //d->emitTokens();
         return;
     }
+
+    // Just don't do anything if we didn't get anything useful.
+    if(networkReply.isEmpty()) {
+        reply->deleteLater();
+        return;
+    }
+    QMultiMap<QString, QString> responseTokens;
 
     responseTokens = d->createTokensFromResponse(networkReply);
     d->opaqueRequest->clearRequest();
@@ -639,9 +641,11 @@ void KQOAuthManager::onAuthorizedRequestReplyReceived() {
 
     case QNetworkReply::ContentAccessDenied:
     case QNetworkReply::UnknownContentError:
-    case QNetworkReply::ContentNotFoundError:
     case QNetworkReply::AuthenticationRequiredError:
         d->error = KQOAuthManager::RequestUnauthorized;
+        break;
+    case QNetworkReply::ContentNotFoundError:
+        d->error = KQOAuthManager::ContentNotFound;
         break;
     case QNetworkReply::ContentOperationNotPermittedError:
         d->error = KQOAuthManager::ContentOperationNotPermittedError;
@@ -670,8 +674,6 @@ void KQOAuthManager::onAuthorizedRequestReplyReceived() {
         d->r->requestTimerStop();
         d->currentRequestType = d->r->requestType();
     }
-
-
 
     // Just don't do anything if we didn't get anything useful.
     if(networkReply.isEmpty()) {
@@ -729,9 +731,11 @@ void KQOAuthManager::slotError(QNetworkReply::NetworkError error) {
         break;
     case QNetworkReply::ContentAccessDenied:
     case QNetworkReply::UnknownContentError:
-    case QNetworkReply::ContentNotFoundError:
     case QNetworkReply::AuthenticationRequiredError:
         d->error = KQOAuthManager::RequestUnauthorized;
+        break;
+    case QNetworkReply::ContentNotFoundError:
+        d->error = KQOAuthManager::ContentNotFound;
         break;
     case QNetworkReply::ContentOperationNotPermittedError:
         d->error = KQOAuthManager::ContentOperationNotPermittedError;

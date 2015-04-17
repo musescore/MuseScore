@@ -143,6 +143,7 @@ class Shortcut {
       void reset();           //! reset to buildin
       void addShortcut(const QKeySequence&);
       int state() const                        { return _state; }
+      void setState(int v)                      { _state = v;     }
       bool needsScore() const                  { return _flags & ShortcutFlags::A_SCORE; }
       bool isCmd() const                       { return _flags & ShortcutFlags::A_CMD; }
       bool isCheckable() const                 { return _flags & ShortcutFlags::A_CHECKABLE; }

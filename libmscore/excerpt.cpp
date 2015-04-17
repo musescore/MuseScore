@@ -119,7 +119,7 @@ void createExcerpt(Excerpt* excerpt)
 
       foreach (Part* part, parts) {
             Part* p = new Part(score);
-            p->setInstrument(*part->instr());
+            p->setInstrument(*part->instrument());
 
             foreach (Staff* staff, *part->staves()) {
                   Staff* s = new Staff(score);
@@ -173,7 +173,7 @@ void createExcerpt(Excerpt* excerpt)
             for (Staff* staff : score->staves()) {
                   if (staff->staffType()->group() == StaffGroup::PERCUSSION)
                         continue;
-                  Interval interval = staff->part()->instr()->transpose();
+                  Interval interval = staff->part()->instrument()->transpose();
                   if (interval.isZero())
                         continue;
                   if (oscore->styleB(StyleIdx::concertPitch))
@@ -610,6 +610,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
             for (int srcTrack = sTrack; srcTrack < eTrack; ++srcTrack) {
                   TupletMap tupletMap;    // tuplets cannot cross measure boundaries
                   int dstTrack = dstStaffIdx * VOICES + (srcTrack - sTrack);
+                  Tremolo* tremolo = 0;
                   for (Segment* seg = m->first(); seg; seg = seg->next()) {
                         Element* oe = seg->element(srcTrack);
                         if (oe == 0 || oe->generated())
@@ -648,8 +649,11 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                     cloneTuplets(ocr, ncr, ot, tupletMap, m, dstTrack);
 
                               // remove lyrics from chord
-                              foreach (Lyrics* l, ncr->lyricsList())
-                                    l->unlink();
+                              // since only one set of lyrics is used with linked staves
+                              foreach (Lyrics* l, ncr->lyricsList()) {
+                                    if (l)
+                                          l->unlink();
+                                    }
                               qDeleteAll(ncr->lyricsList());
                               ncr->lyricsList().clear();
 
@@ -715,6 +719,29 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                                       qDebug("cloneStave: cannot find spanner start note");
                                                       }
                                                 }
+                                          }
+                                    // two note tremolo
+                                    if (och->tremolo() && och->tremolo()->twoNotes()) {
+                                          if (och == och->tremolo()->chord1()) {
+                                                if (tremolo)
+                                                      qDebug("unconnected two note tremolo");
+                                                tremolo = static_cast<Tremolo*>(och->tremolo()->linkedClone());
+                                                tremolo->setScore(nch->score());
+                                                tremolo->setParent(nch);
+                                                tremolo->setTrack(nch->track());
+                                                tremolo->setChords(nch, 0);
+                                                nch->setTremolo(tremolo);
+                                                }
+                                          else if (och == och->tremolo()->chord2()) {
+                                                if (!tremolo)
+                                                      qDebug("first note for two note tremolo missing");
+                                                else {
+                                                      tremolo->setChords(tremolo->chord1(), nch);
+                                                      nch->setTremolo(tremolo);
+                                                      }
+                                                }
+                                          else
+                                                qDebug("inconsistent two note tremolo");
                                           }
                                     }
                               }
@@ -796,11 +823,6 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
                                     ncr->setTuplet(nt);
                                     nt->add(ncr);
                                     }
-                              // remove lyrics from chord
-                              foreach (Lyrics* l, ncr->lyricsList())
-                                    l->unlink();
-                              qDeleteAll(ncr->lyricsList());
-                              ncr->lyricsList().clear();
 
                               foreach (Element* e, oseg->annotations()) {
                                     if (e->generated() || e->systemFlag())

@@ -515,7 +515,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       TextTools* textTools();
       void showDrumTools(const Drumset*, Staff*);
-      void updateDrumTools();
+      void updateDrumTools(const Drumset* ds);
       void showPluginCreator(QAction*);
       void showPluginManager();
 
@@ -533,6 +533,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void editInDrumroll(Staff* staff);
       PianorollEditor* getPianorollEditor() const { return pianorollEditor; }
       DrumrollEditor* getDrumrollEditor() const   { return drumrollEditor; }
+      PianoTools* pianoTools() const              { return _pianoTools; }
       void writeSessionFile(bool);
       bool restoreSession(bool);
       bool splitScreen() const { return _splitScreen; }
@@ -598,7 +599,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void printFile();
       void exportFile();
       bool exportParts();
-      bool saveAs(Score*, bool saveCopy, const QString& path, const QString& ext);
+      virtual bool saveAs(Score*, bool saveCopy, const QString& path, const QString& ext);
       bool savePdf(const QString& saveName);
       bool savePdf(Score* cs, const QString& saveName);
       bool savePdf(QList<Score*> cs, const QString& saveName);
@@ -619,7 +620,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 //      bool saveLilypond(Score*, const QString& name);
       bool saveMidi(Score* score, const QString& name);
 
-      void closeScore(Score* score);
+      virtual void closeScore(Score* score);
 
       void addTempo();
       void addMetronome();
@@ -696,7 +697,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       };
 
 extern MuseScore* mscore;
-extern MuseScoreCore* mscoreCore;
 extern QStringList recentScores;
 extern QString dataPath;
 extern MasterSynthesizer* synti;

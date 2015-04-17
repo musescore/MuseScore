@@ -6,7 +6,6 @@
     <Division>480</Division>
     <Style>
       <minSystemDistance>9.2</minSystemDistance>
-      <lyricsDistance>2</lyricsDistance>
       <frameSystemDistance>1</frameSystemDistance>
       <minMeasureWidth>4</minMeasureWidth>
       <endBarDistance>0.3</endBarDistance>
@@ -24,10 +23,32 @@
       <chordStyle>custom</chordStyle>
       <chordsXmlFile>1</chordsXmlFile>
       <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
-      <FixMeasureNumbers>4</FixMeasureNumbers>
-      <FixMeasureWidth>1</FixMeasureWidth>
       <voltaY>-2</voltaY>
       <keySigNaturals>1</keySigNaturals>
+      <TextStyle>
+        <halign>left</halign>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>-3.5</yoffset>
+        <offsetType>spatium</offsetType>
+        <name>Repeat Text Left</name>
+        <family>FreeSerif</family>
+        <size>20</size>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <systemFlag>1</systemFlag>
+        </TextStyle>
+      <TextStyle>
+        <halign>right</halign>
+        <valign>baseline</valign>
+        <xoffset>0</xoffset>
+        <yoffset>-3.5</yoffset>
+        <offsetType>spatium</offsetType>
+        <name>Repeat Text Right</name>
+        <family>FreeSerif</family>
+        <size>12</size>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <systemFlag>1</systemFlag>
+        </TextStyle>
       <ChordList>
         <font id="0" family="default">
           <mag>1</mag>
@@ -1436,23 +1457,19 @@
           </System>
         <System>
           </System>
-        <System>
-          </System>
-        <System>
-          </System>
-        <System>
-          </System>
         </Page>
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="1"/>
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
-        <longName pos="0">Voice</longName>
-        <shortName pos="0">Vo.</shortName>
+        <longName>Voice</longName>
+        <shortName>Vo.</shortName>
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>
@@ -1468,7 +1485,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <bottomGap>57.96</bottomGap>
+        <bottomGap>11.6667</bottomGap>
         <Text>
           <style>Title</style>
           <text>Play It Again, Sam</text>
@@ -1479,9 +1496,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -1490,7 +1504,6 @@
         <Tempo>
           <tempo>5</tempo>
           <pos x="-8.03037" y="-4"/>
-          <style>Tempo</style>
           <text>Adjust Tempo for faster or slower playback</text>
           </Tempo>
         <Chord>
@@ -1554,11 +1567,14 @@
         </Measure>
       <Measure number="7">
         <Marker>
-          <pos x="21.8599" y="-3.20773"/>
           <style>Repeat Text Right</style>
           <text>To Coda</text>
           <label>coda</label>
           </Marker>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          <pause>3</pause>
+          </LayoutBreak>
         <Chord>
           <durationType>whole</durationType>
           <Note>
@@ -1599,20 +1615,14 @@
         </Measure>
       <Measure number="9">
         <Volta id="2">
-          <subtype>1</subtype>
-          <beginHookHeight>1.9</beginHookHeight>
-          <endHookHeight>1.9</endHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
+          <endHook>1</endHook>
           <lineWidth>0.1</lineWidth>
-          <anchor>1</anchor>
           <Segment>
             <subtype>0</subtype>
             <off2 x="0" y="0"/>
             <offset x="0.244584" y="-2.60023"/>
             </Segment>
           <beginText>
-            <style>Volta</style>
             <text>1.</text>
             </beginText>
           <endings>1</endings>
@@ -1624,10 +1634,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="10">
         <endRepeat>2</endRepeat>
@@ -1663,20 +1669,14 @@
       <Measure number="11">
         <endSpanner id="2"/>
         <Volta id="3">
-          <subtype>1</subtype>
-          <beginHookHeight>1.9</beginHookHeight>
-          <endHookHeight>1.9</endHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
+          <endHook>1</endHook>
           <lineWidth>0.1</lineWidth>
-          <anchor>1</anchor>
           <Segment>
             <subtype>0</subtype>
             <off2 x="-1.81159" y="0"/>
             <offset x="0.832017" y="-2.6585"/>
             </Segment>
           <beginText>
-            <style>Volta</style>
             <text>2.</text>
             </beginText>
           <endings>1</endings>
@@ -1723,19 +1723,13 @@
       <Measure number="13">
         <endSpanner id="3"/>
         <Volta id="4">
-          <subtype>0</subtype>
-          <beginHookHeight>1.9</beginHookHeight>
-          <beginTextPlace>2</beginTextPlace>
-          <beginTextPlace>2</beginTextPlace>
           <lineWidth>0.1</lineWidth>
-          <anchor>1</anchor>
           <Segment>
             <subtype>0</subtype>
             <off2 x="0" y="0"/>
             <offset x="0.113878" y="-2.65662"/>
             </Segment>
           <beginText>
-            <style>Volta</style>
             <text>3.</text>
             </beginText>
           <endings>1</endings>
@@ -1759,6 +1753,10 @@
           </Chord>
         </Measure>
       <Measure number="15">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          <pause>3</pause>
+          </LayoutBreak>
         <Chord>
           <durationType>whole</durationType>
           <Note>
@@ -1769,6 +1767,10 @@
         </Measure>
       <Measure number="16">
         <startRepeat/>
+        <BarLine>
+          <subtype>start-repeat</subtype>
+          <span>1</span>
+          </BarLine>
         <Chord>
           <durationType>whole</durationType>
           <Note>
@@ -1838,7 +1840,6 @@
           <pause>3</pause>
           </LayoutBreak>
         <Jump>
-          <pos x="30.314" y="-1.27536"/>
           <style>Repeat Text Right</style>
           <text>D.S. al Coda</text>
           <jumpTo>segno</jumpTo>

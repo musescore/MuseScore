@@ -49,7 +49,7 @@ ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent
       if (cr) {
             Segment* segment       = cr->segment();
             Part* part             = articulation->staff()->part();
-            Instrument* instrument = part->instr(segment->tick());
+            Instrument* instrument = part->instrument(segment->tick());
 
 //      const QList<NamedEventList>& midiActions() const;
 //      const QList<MidiArticulation>& articulation() const;

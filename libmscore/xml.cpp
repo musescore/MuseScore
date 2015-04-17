@@ -214,6 +214,23 @@ double XmlReader::readDouble(double min, double max)
       }
 
 //---------------------------------------------------------
+//   readBool
+//---------------------------------------------------------
+
+bool XmlReader::readBool()
+      {
+      bool val;
+      XmlStreamReader::TokenType tt = readNext();
+      if (tt == XmlStreamReader::Characters) {
+            val = text().toInt() != 0;
+            readNext();
+            }
+      else
+            val = true;
+      return val;
+      }
+
+//---------------------------------------------------------
 //   compareProperty
 //---------------------------------------------------------
 
@@ -541,7 +558,7 @@ void Xml::tag(const char* name, const QWidget* g)
 
 
 //---------------------------------------------------------
-//   toHtml
+//   xmlString
 //---------------------------------------------------------
 
 QString Xml::xmlString(ushort c)
@@ -564,7 +581,7 @@ QString Xml::xmlString(ushort c)
       }
 
 //---------------------------------------------------------
-//   toHtml
+//   xmlString
 //---------------------------------------------------------
 
 QString Xml::xmlString(const QString& s)

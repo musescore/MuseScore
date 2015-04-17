@@ -209,7 +209,9 @@ add_executable ( ${ExecutableName}
 
       recordbutton.h greendotbutton prefsdialog.h
       scoreview.cpp editinstrument.cpp editstyle.cpp
-      icons.cpp importbww.cpp instrdialog.cpp instrwidget.cpp
+      icons.cpp importbww.cpp
+      importmxml.cpp importmxmlpass1.cpp importmxmlpass2.cpp
+      instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
       mixer.cpp playpanel.cpp selectionwindow.cpp preferences.cpp measureproperties.cpp
@@ -527,6 +529,8 @@ if (APPLE)
       ../fonts/MuseJazz.ttf
       ../fonts/FreeSerif.ttf
       ../fonts/FreeSerifBold.ttf
+      ../fonts/FreeSerifItalic.ttf
+      ../fonts/FreeSerifBoldItalic.ttf
       ../fonts/FreeSans.ttf
       ../fonts/mscoreTab.ttf
       ../fonts/mscore-BC.ttf

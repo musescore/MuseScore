@@ -67,6 +67,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/jump.h"
 #include "libmscore/marker.h"
+#include "libmscore/measure.h"
 
 namespace Ms {
 
@@ -259,6 +260,22 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             //popup->addAction(tr("Edit Mode"))->setData("edit");
             }
       else if (e->type() == Element::Type::REST) {
+            QAction* b = popup->actions()[0];
+            QAction* a = popup->insertSeparator(b);
+            a->setText(tr("Staff"));
+            a = new QAction(tr("Staff Properties..."), 0);
+            a->setData("staff-props");
+            popup->insertAction(b, a);
+
+            a = popup->insertSeparator(b);
+            a->setText(tr("Measure"));
+            a = new QAction(tr("Measure Properties..."), 0);
+            a->setData("measure-props");
+            // disable property changes for multi measure rests
+            a->setEnabled(!static_cast<Rest*>(e)->segment()->measure()->isMMRest());
+
+            popup->insertAction(b, a);
+
             genPropertyMenu1(e, popup);
             }
       else if (e->type() == Element::Type::NOTE) {
@@ -273,6 +290,9 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             a->setText(tr("Measure"));
             a = new QAction(tr("Measure Properties..."), 0);
             a->setData("measure-props");
+            // disable property changes for multi measure rests
+            a->setEnabled(!static_cast<Note*>(e)->chord()->segment()->measure()->isMMRest());
+
             popup->insertAction(b, a);
 
             genPropertyMenu1(e, popup);
@@ -325,8 +345,15 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   }
             }
       else if (cmd == "measure-props") {
-            MeasureProperties vp(static_cast<Note*>(e)->chord()->segment()->measure());
-            vp.exec();
+            Measure* m = 0;
+            if (e->type() == Element::Type::NOTE)
+                  m = static_cast<Note*>(e)->chord()->segment()->measure();
+            else if (e->type() == Element::Type::REST)
+                  m = static_cast<Rest*>(e)->segment()->measure();
+            if (m) {
+                  MeasureProperties vp(m);
+                  vp.exec();
+                  }
             }
       else if (cmd == "picture") {
             mscore->addImage(score(), static_cast<HBox*>(e));

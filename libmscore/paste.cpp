@@ -48,8 +48,8 @@ static void transposeChord(Chord* c, Interval srcTranspose)
       int nn     = (track / VOICES) + c->staffMove();
       if (nn < 0 || nn >= c->score()->nstaves())
             c->setStaffMove(0);
-      Part* part = c->staff()->part();
-      Interval dstTranspose = part->instr()->transpose();
+      Part* part = c->part();
+      Interval dstTranspose = part->instrument()->transpose();
 
       if (srcTranspose != dstTranspose) {
             if (!dstTranspose.isZero()) {
@@ -144,7 +144,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               int tick = e.readInt();
                               e.initTick(tick);
                               int shift = tick - tickStart;
-                              if (makeGap && !makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen),voiceOffset)) {
+                              if (makeGap && !makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen), voiceOffset)) {
                                     qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick + shift);
                                     done = true; // break main loop, cannot make gap
                                     break;
@@ -159,7 +159,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               Measure* measure = tick2measure(tick);
                               tuplet->setParent(measure);
                               tuplet->setTick(tick);
-                              int ticks = tuplet->duration().ticks();
+                              int ticks = tuplet->actualTicks();
                               int rticks = measure->endTick() - tick;
                               if (rticks < ticks) {
                                     qDebug("tuplet does not fit in measure");
@@ -223,9 +223,13 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                                             }
                                                       }
                                                 }
-                                          // set shorten duration
-                                          cr->setDuration(Fraction::fromTicks(newLength));
-                                          cr->setDurationType(newLength);
+                                          if (!cr->tuplet()/*|| cr->actualTicks() - newLength > (cr->tuplet()->ratio().numerator() + 1 ) / 2*/) {
+                                                // shorten duration
+                                                // exempt notes in tuplets, since we don't allow copy of partial tuplet anyhow
+                                                // TODO: figure out a reasonable fudge factor to make sure shorten tuplets appropriately if we do ever copy a partial tuplet
+                                                cr->setDuration(Fraction::fromTicks(newLength));
+                                                cr->setDurationType(newLength);
+                                                }
                                           }
                                     pasteChordRest(cr, tick, e.transpose());
                                     }
@@ -271,7 +275,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               harmony->setTrack(e.track());
                               // transpose
                               Part* partDest = staff(e.track() / VOICES)->part();
-                              Interval interval = partDest->instr()->transpose();
+                              Interval interval = partDest->instrument()->transpose();
                               if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                                     interval.flip();
                                     int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
@@ -443,7 +447,11 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
 
       int measureEnd = measure->endTick();
       bool isGrace = (cr->type() == Element::Type::CHORD) && (((Chord*)cr)->noteType() != NoteType::NORMAL);
-      if (!isGrace && (tick + cr->actualTicks() > measureEnd || convertMeasureRest)) {
+      // if note is too long to fit in measure, split it up with a tie across the barline
+      // exclude tuplets from consideration
+      // we have already disallowed a tuplet from crossing the barline, so there is no problem here
+      // but due to rounding, it might appear from actualTicks() that the last note is too long by a couple of ticks
+      if (!isGrace && !cr->tuplet() && (tick + cr->actualTicks() > measureEnd || convertMeasureRest)) {
             if (cr->type() == Element::Type::CHORD) {
                   // split Chord
                   Chord* c = static_cast<Chord*>(cr);
@@ -601,7 +609,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                               el->setTrack(trackZeroVoice(destTrack));
                               // transpose
                               Part* partDest = staff(track2staff(destTrack))->part();
-                              Interval interval = partDest->instr()->transpose();
+                              Interval interval = partDest->instrument()->transpose();
                               if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                                     interval.flip();
                                     int rootTpc = transposeTpc(el->rootTpc(), interval, true);

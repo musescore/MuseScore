@@ -50,6 +50,10 @@
 #include "mscoreview.h"
 #include "plugins.h"
 #include "chord.h"
+#include "hook.h"
+#include "stem.h"
+#include "stemslash.h"
+#include "fraction.h"
 
 namespace Ms {
 
@@ -114,8 +118,8 @@ void MScore::init()
       qRegisterMetaType<MScore::Direction>("Direction");
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
       qRegisterMetaType<Element::Placement>("Placement");
-      qRegisterMetaType<Accidental::Role>("AccidentalRole");
-      qRegisterMetaType<Accidental::Type>("AccidentalType");
+//      qRegisterMetaType<AccidentalRole>("AccidentalRole");
+//      qRegisterMetaType<AccidentalType>("AccidentalType");
       qRegisterMetaType<Spanner::Anchor>("Anchor");
       qRegisterMetaType<NoteHead::Group>("NoteHeadGroup");
       qRegisterMetaType<NoteHead::Type>("NoteHeadType");
@@ -134,7 +138,6 @@ void MScore::init()
       qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
       qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
       qRegisterMetaType<Glissando::Type>("GlissandoType");
-//      qRegisterMetaType<TextStyle>("TextStyle");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm
@@ -191,6 +194,8 @@ void MScore::init()
             ":/fonts/FreeSans.ttf",
             ":/fonts/FreeSerif.ttf",
             ":/fonts/FreeSerifBold.ttf",
+            ":/fonts/FreeSerifItalic.ttf",
+            ":/fonts/FreeSerifBoldItalic.ttf",
             ":/fonts/mscoreTab.ttf",
             ":/fonts/mscore-BC.ttf",
             ":/fonts/bravura/BravuraText.otf",
@@ -327,6 +332,12 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<Lyrics>     ("MuseScore", 1, 0, "Lyrics");
             qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
             qmlRegisterType<LayoutBreak>("MuseScore", 1, 0, "LayoutBreak");
+            qmlRegisterType<Hook>       ("MuseScore", 1, 0, "Hook");
+            qmlRegisterType<Stem>       ("MuseScore", 1, 0, "Stem");
+            qmlRegisterType<StemSlash>  ("MuseScore", 1, 0, "StemSlash");
+            qmlRegisterType<Beam>       ("MuseScore", 1, 0, "Beam");
+            qmlRegisterType<FractionWrapper>   ("MuseScore", 1, 1, "Fraction");
+            qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));

@@ -1124,6 +1124,13 @@ Proszę wybrać inną nazwę pliku.</translation>
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation>Nie zachowuj</translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <source>OK</source>
@@ -1216,10 +1223,6 @@ Proszę wybrać inną nazwę pliku.</translation>
     <message>
         <source>Yes to &amp;All</source>
         <translation>Ta&amp;k dla wszystkich</translation>
-    </message>
-    <message>
-        <source>Don&apos;t Save</source>
-        <translation>Nie zachowuj</translation>
     </message>
 </context>
 <context>

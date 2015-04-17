@@ -579,9 +579,9 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
       part->setMidiProgram(track->getPatch());
 
       if (ove_->getShowTransposeTrack() && track->getTranspose() != 0 ) {
-            Ms::Interval interval = part->instr()->transpose();
+            Ms::Interval interval = part->instrument()->transpose();
             interval.diatonic = -track->getTranspose();
-            part->instr()->setTranspose(interval);
+            part->instrument()->setTranspose(interval);
             }
 
       // DrumSet
@@ -607,10 +607,10 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
                         }
                   }
 
-            part->instr()->channel(0)->bank = 128;
+            part->instrument()->channel(0)->bank = 128;
             part->setMidiProgram(0);
-            part->instr()->setDrumset(smDrumset);
-            part->instr()->setDrumset(drumset);
+            part->instrument()->setDrumset(smDrumset);
+            part->instrument()->setDrumset(drumset);
             }
       }
 
@@ -1122,7 +1122,9 @@ void OveToMScore::convertMeasures() {
             if (mb->type() != Element::Type::MEASURE)
                   continue;
             Measure* measure = static_cast<Measure*>(mb);
-
+            int tick = measure->tick();
+            measure->setLen(score_->sigmap()->timesig(tick).timesig());
+            measure->setTimesig(score_->sigmap()->timesig(tick).timesig()); //?
             convertMeasure(measure);
             }
 
@@ -1140,10 +1142,10 @@ void OveToMScore::convertMeasure(Measure* measure){
       int staffCount = 0;
       int measureCount = ove_->getMeasureCount();
 
-      for( int i=0; i<ove_->getPartCount(); ++i ){
+      for (int i=0; i < ove_->getPartCount(); ++i) {
             int partStaffCount = ove_->getStaffCount(i);
 
-            for( int j=0; j<partStaffCount; ++j ){
+            for (int j=0; j < partStaffCount; ++j) {
                   int measureID = measure->no();
 
                   if (measureID >= 0 && measureID < measureCount) {
@@ -1351,7 +1353,7 @@ bool isRestDefaultLine(OVE::Note* rest, OVE::NoteType noteType) {
 
 Drumset* getDrumset(Score* score, int part) {
       Part* p = score->parts().at(part);
-      return const_cast<Drumset*>(p->instr()->drumset());   //TODO: remove cast
+      return const_cast<Drumset*>(p->instrument()->drumset());   //TODO: remove cast
       }
 
 void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track){
@@ -1365,16 +1367,16 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
       int partStaffCount = ove_->getStaffCount(part);
 
       if(containers.empty()){
-            TDuration duration(TDuration::DurationType::V_MEASURE);
             int absTick = mtt_->getTick(measure->no(), 0);
 
-            cr = new Rest(score_, duration);
+            cr = new Rest(score_);
             cr->setDuration(measure->len());
+            cr->setDurationType(TDuration::DurationType::V_MEASURE);
             cr->setTrack(track);
             Segment* s = measure->getSegment(cr, absTick);
             s->add(cr);
             }
-
+      QList<Ms::Chord*> graceNotes;
       for (int i = 0; i < containers.size(); ++i) {
             OVE::NoteContainer* container = containers[i];
             int tick = mtt_->getTick(measure->no(), container->getTick());
@@ -1384,8 +1386,9 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                   TDuration duration = OveNoteType_To_Duration(container->getNoteType());
                   duration.setDots(container->getDot());
 
-                  cr = new Rest(score_, duration);
+                  cr = new Rest(score_);
                   cr->setDuration(duration.fraction());
+                  cr->setDurationType(duration);
                   cr->setTrack(noteTrack);
                   cr->setVisible(container->getShow());
 
@@ -1402,12 +1405,9 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                   s->add(cr);
                   } else {
                   QList<OVE::Note*> notes = container->getNotesRests();
-                  int graceLevel = getGraceLevel(containers, container->getTick(), container->start()->getOffset());
-                  // TODO-S          cr = measure->findChord(tick, noteTrack, graceLevel);
+
                   cr = measure->findChord(tick, noteTrack);
                   if (cr == 0) {
-                        // Segment::Type st = Segment::Type::ChordRest;
-
                         cr = new Ms::Chord(score_);
                         cr->setTrack(noteTrack);
 
@@ -1438,15 +1438,24 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               if (duration.type() == TDuration::DurationType::V_INVALID)
                                     duration.setType(TDuration::DurationType::V_QUARTER);
                               cr->setDurationType(duration);
+                              // append grace notes before
+                              int ii = -1;
+                              for (ii = graceNotes.size() - 1; ii >= 0; ii--) {
+                                    Ms::Chord* gc = graceNotes[ii];
+                                    if(gc->voice() == cr->voice()){
+                                          cr->add(gc);
+                                          }
+                                    }
+                              graceNotes.clear();
                               }
                         cr->setDuration(cr->durationType().fraction());
 
-                        //TODO-S	Deal with grace notes
-                        //        Segment* s = measure->getGraceSegment(tick, graceLevel);
-                        //				s->add(cr);
-                        if(graceLevel == 0) {
+                        if(!container->getIsGrace()) {
                               Segment* s = measure->getSegment(cr, tick);
                               s->add(cr);
+                              }
+                        else {
+                              graceNotes.append(static_cast<Ms::Chord*>(cr));
                               }
                         }
 
@@ -1488,7 +1497,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               int alter = accidentalToAlter(oveNote->getAccidental());
                               NoteVal nv(pitch);
                               note->setTrack(cr->track());
-                              note->setNval(nv, cr->tick());
+                              note->setNval(nv, tick);
                               // note->setTpcFromPitch();
                               note->setTpc(step2tpc(tone, AccidentalVal(alter)));
 
@@ -1842,7 +1851,7 @@ void OveToMScore::convertArticulation(
                         pedal_->setTrack(track);
                         Segment* seg = measure->getSegment(Segment::Type::ChordRest, absTick);
                         pedal_->setTick(seg->tick());
-                        seg->add(pedal_);
+                        score_->addSpanner(pedal_);
                         }
                   break;
                   }
@@ -2385,11 +2394,6 @@ Score::FileError importOve(Score* score, const QString& name) {
             otm.convert(&oveSong, score);
 
             //		score->connectSlurs();
-            for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-                  int tick = m->tick();
-                  m->setLen(score->sigmap()->timesig(tick).timesig());
-                  m->setTimesig(score->sigmap()->timesig(tick).timesig()); //?
-                  }
             }
 
       return result ? Score::FileError::FILE_NO_ERROR : Score::FileError::FILE_ERROR;

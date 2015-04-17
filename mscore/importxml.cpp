@@ -107,6 +107,7 @@
 #include "libmscore/marker.h"
 #include "importxmlfirstpass.h"
 #include "libmscore/instrchange.h"
+#include "importmxml.h"
 
 namespace Ms {
 
@@ -116,6 +117,12 @@ namespace Ms {
 
 //#define DEBUG_VOICE_MAPPER true
 //#define DEBUG_TICK true
+
+//---------------------------------------------------------
+//   local define to switch between pull (defined true) and DOM (undefined) parser
+//---------------------------------------------------------
+
+#define PULL_PARSER true
 
 //---------------------------------------------------------
 //   MusicXMLStepAltOct2Pitch
@@ -162,7 +169,7 @@ static void xmlSetPitch(Note* n, char step, int alter, int octave, Ottava* (&ott
       //       n, step, alter, octave);
 
       const Staff* staff = n->score()->staff(track / VOICES);
-      const Instrument* instr = staff->part()->instr();
+      const Instrument* instr = staff->part()->instrument();
       const Interval intval = instr->transpose();
       //qDebug("  staff=%p instr=%p dia=%d chro=%d",
       //       staff, instr, (int) intval.diatonic, (int) intval.chromatic);
@@ -604,6 +611,7 @@ static Score::FileError doValidate(const QString& name, QIODevice* dev)
  Import MusicXML data from file \a name contained in QIODevice \a dev into score \a score.
  */
 
+#ifndef PULL_PARSER
 static Score::FileError doImport(Score* score, const QString& name, QIODevice* dev, MxmlReaderFirstPass const& pass1)
       {
       QTime t;
@@ -623,6 +631,7 @@ static Score::FileError doImport(Score* score, const QString& name, QIODevice* d
       qDebug("Parsing time elapsed: %d ms", t.elapsed());
       return Score::FileError::FILE_NO_ERROR;
       }
+#endif
 
 
 //---------------------------------------------------------
@@ -641,6 +650,9 @@ static Score::FileError doValidateAndImport(Score* score, const QString& name, Q
       if (res != Score::FileError::FILE_NO_ERROR)
             return res;
 
+#ifdef PULL_PARSER
+      importMusicXMLfromBuffer(score, name, dev);
+#else
       // pass 1
       dev->seek(0);
       MxmlReaderFirstPass pass1;
@@ -652,6 +664,7 @@ static Score::FileError doValidateAndImport(Score* score, const QString& name, Q
       // import the file
       dev->seek(0);
       res = doImport(score, name, dev, pass1);
+#endif
       qDebug("importMusicXml() return %hhd", res);
       return res;
       }
@@ -803,7 +816,7 @@ static void addText(VBox* vbx, Score* s, QString strTxt, TextStyleType stl)
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s);
             text->setTextStyleType(stl);
-            text->setPlainText(strTxt);
+            text->setText(strTxt);
             vbx->add(text);
             }
       }
@@ -813,7 +826,7 @@ static void addText2(VBox* vbx, Score* s, QString strTxt, TextStyleType stl, Ali
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s);
             text->setTextStyleType(stl);
-            text->setPlainText(strTxt);
+            text->setText(strTxt);
             text->textStyle().setAlign(v);
             text->textStyle().setYoff(yoffs);
             vbx->add(text);
@@ -1014,11 +1027,11 @@ void MusicXml::doCredits()
             if (!metaPoet.isEmpty()) strPoet = metaPoet;
             if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
 
-            addText(vbox, score, strTitle,      TextStyleType::TITLE);
-            addText(vbox, score, strSubTitle,   TextStyleType::SUBTITLE);
-            addText(vbox, score, strComposer,   TextStyleType::COMPOSER);
-            addText(vbox, score, strPoet,       TextStyleType::POET);
-            addText(vbox, score, strTranslator, TextStyleType::TRANSLATOR);
+            addText(vbox, score, strTitle.toHtmlEscaped(),      TextStyleType::TITLE);
+            addText(vbox, score, strSubTitle.toHtmlEscaped(),   TextStyleType::SUBTITLE);
+            addText(vbox, score, strComposer.toHtmlEscaped(),   TextStyleType::COMPOSER);
+            addText(vbox, score, strPoet.toHtmlEscaped(),       TextStyleType::POET);
+            addText(vbox, score, strTranslator.toHtmlEscaped(), TextStyleType::TRANSLATOR);
             }
 
       if (vbox) {
@@ -1069,7 +1082,7 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
             return true;
             }
       else {
-            if (!timeSymbol.isEmpty()) {
+            if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
                   qDebug("ImportMusicXml: time symbol <%s> not recognized with beats=%s and beat-type=%s",
                          qPrintable(timeSymbol), qPrintable(beats), qPrintable(beatType));
                   return false;
@@ -1215,6 +1228,25 @@ static QString text2syms(const QString& t)
       }
 
 //---------------------------------------------------------
+//   decodeEntities
+///  Allows decode &#...; into UNICODE (utf8) character.
+//---------------------------------------------------------
+
+static QString decodeEntities( const QString& src )
+      {
+      QString ret(src);
+      QRegExp re("&#([0-9]+);");
+      re.setMinimal(true);
+
+      int pos = 0;
+      while( (pos = re.indexIn(src, pos)) != -1 ) {
+            ret = ret.replace(re.cap(0), QChar(re.cap(1).toInt(0,10)));
+            pos += re.matchedLength();
+            }
+      return ret;
+      }
+
+//---------------------------------------------------------
 //   nextPartOfFormattedString
 //---------------------------------------------------------
 
@@ -1225,6 +1257,8 @@ static QString text2syms(const QString& t)
 static QString nextPartOfFormattedString(QDomElement e)
       {
       QString txt        = e.text();
+      // replace HTML entities
+      txt = decodeEntities(txt);
       QString syms       = text2syms(txt);
       QString lang       = e.attribute(QString("xml:lang"), "it");
       QString fontWeight = e.attribute(QString("font-weight"));
@@ -2164,7 +2198,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             part->setMidiProgram(instr.midiProgram);
             part->setPan(instr.midiPan);
             part->setVolume(instr.midiVolume);
-            part->instr()->setTrackName(instr.name);
+            part->instrument()->setTrackName(instr.name);
             }
       else
             qDebug("xmlPart: no instrument found for part '%s'", qPrintable(id));
@@ -2177,9 +2211,9 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                   if (part->staff(j)->lines() == 5 && !part->staff(j)->isDrumStaff())
                         part->staff(j)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
             // set drumset for instrument
-            part->instr()->setDrumset(drumset);
-            part->instr()->channel(0)->bank = 128;
-            part->instr()->channel(0)->updateInitList();
+            part->instrument()->setDrumset(drumset);
+            part->instrument()->channel(0)->bank = 128;
+            part->instrument()->channel(0)->updateInitList();
             }
       else {
             // drumset is not needed
@@ -2473,7 +2507,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                   Note* note = xmlNote(measure, staff, part->id(), beam, cv, e, graceNotes, alt);
                   if(note) {
                         if(note->accidental()){
-                              if(note->accidental()->accidentalType() != Accidental::Type::NONE){
+                              if(note->accidental()->accidentalType() != AccidentalType::NONE){
                                     courtAccNotes.append(note);
                                     alterList.append(alt);
                                     }
@@ -2741,14 +2775,14 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                                int alter = alterList.value(i);
                                int ln  = absStep(nt->tpc(), nt->pitch());
                                AccidentalVal currAccVal = currAcc.accidentalVal(ln);
-                               if ((alter == -1 && currAccVal == AccidentalVal::FLAT && nt->accidental()->accidentalType() == Accidental::Type::FLAT    && !accTmp.value(ln))
-                                     || (alter ==  0 && currAccVal == AccidentalVal::NATURAL && nt->accidental()->accidentalType() == Accidental::Type::NATURAL && !accTmp.value(ln))
-                                     || (alter ==  1 && currAccVal == AccidentalVal::SHARP   && nt->accidental()->accidentalType() == Accidental::Type::SHARP   && !accTmp.value(ln))) {
-                                     nt->accidental()->setRole(Accidental::Role::USER);
+                               if ((alter == -1 && currAccVal == AccidentalVal::FLAT && nt->accidental()->accidentalType() == AccidentalType::FLAT    && !accTmp.value(ln))
+                                     || (alter ==  0 && currAccVal == AccidentalVal::NATURAL && nt->accidental()->accidentalType() == AccidentalType::NATURAL && !accTmp.value(ln))
+                                     || (alter ==  1 && currAccVal == AccidentalVal::SHARP   && nt->accidental()->accidentalType() == AccidentalType::SHARP   && !accTmp.value(ln))) {
+                                     nt->accidental()->setRole(AccidentalRole::USER);
                                      }
-                               else if  ((nt->accidental()->accidentalType() > Accidental::Type::NATURAL) && (nt->accidental()->accidentalType() < Accidental::Type::END)) { // microtonal accidental
+                               else if  ((nt->accidental()->accidentalType() > AccidentalType::NATURAL) && (nt->accidental()->accidentalType() < AccidentalType::END)) { // microtonal accidental
                                      alter = 0;
-                                     nt->accidental()->setRole(Accidental::Role::USER);
+                                     nt->accidental()->setRole(AccidentalRole::USER);
                                      accTmp.replace(ln, false);
                                      }
                                else {
@@ -3684,7 +3718,7 @@ static void xmlStaffDetails(Score* score, int staff, StringData* t, QDomElement 
 
       if (t) {
             readStringData(t, e);
-            Instrument* i = score->staff(staff)->part()->instr();
+            Instrument* i = score->staff(staff)->part()->instrument();
             i->setStringData(*t);
             }
       }
@@ -3708,36 +3742,36 @@ static bool isAppr(const double v, const double ref, const double epsilon)
 //---------------------------------------------------------
 
 /**
- Convert a MusicXML alter tag into a microtonal accidental in MuseScore enum Accidental::Type.
+ Convert a MusicXML alter tag into a microtonal accidental in MuseScore enum AccidentalType.
  Works only for quarter tone, half tone, three-quarters tone and whole tone accidentals.
  */
 
-static Accidental::Type microtonalGuess(double val)
+static AccidentalType microtonalGuess(double val)
       {
       const double eps = 0.001;
       if (isAppr(val, -2, eps))
-            return Accidental::Type::FLAT2;
+            return AccidentalType::FLAT2;
       else if (isAppr(val, -1.5, eps))
-            return Accidental::Type::MIRRORED_FLAT2;
+            return AccidentalType::MIRRORED_FLAT2;
       else if (isAppr(val, -1, eps))
-            return Accidental::Type::FLAT;
+            return AccidentalType::FLAT;
       else if (isAppr(val, -0.5, eps))
-            return Accidental::Type::MIRRORED_FLAT;
+            return AccidentalType::MIRRORED_FLAT;
       else if (isAppr(val, 0, eps))
-            return Accidental::Type::NATURAL;
+            return AccidentalType::NATURAL;
       else if (isAppr(val, 0.5, eps))
-            return Accidental::Type::SHARP_SLASH;
+            return AccidentalType::SHARP_SLASH;
       else if (isAppr(val, 1, eps))
-            return Accidental::Type::SHARP;
+            return AccidentalType::SHARP;
       else if (isAppr(val, 1.5, eps))
-            return Accidental::Type::SHARP_SLASH4;
+            return AccidentalType::SHARP_SLASH4;
       else if (isAppr(val, 2, eps))
-            return Accidental::Type::SHARP2;
+            return AccidentalType::SHARP2;
       else
             qDebug("Guess for microtonal accidental corresponding to value %f failed.", val);
 
       // default
-      return Accidental::Type::NONE;
+      return AccidentalType::NONE;
       }
 
 //---------------------------------------------------------
@@ -3758,7 +3792,7 @@ static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& al
             bool ok;
             double d;
             d = alter.toDouble(&ok);
-            Accidental::Type accTpAlter = ok ? microtonalGuess(d) : Accidental::Type::NONE;
+            AccidentalType accTpAlter = ok ? microtonalGuess(d) : AccidentalType::NONE;
             id = mxmlString2accSymId(accidentalType2MxmlString(accTpAlter));
             }
 
@@ -3984,7 +4018,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         else
                               domError(ee);
                         }
-                  score->staff(staff)->part()->instr()->setTranspose(interval);
+                  score->staff(staff)->part()->instrument()->setTranspose(interval);
                   }
             else if (e.tagName() == "measure-style")
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
@@ -5354,7 +5388,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
       QString step;
       int alter  = 0;
       int octave = 4;
-      Accidental::Type accidental = Accidental::Type::NONE;
+      AccidentalType accidental = AccidentalType::NONE;
       bool parentheses = false;
       bool editorial = false;
       bool cautionary = false;
@@ -5366,6 +5400,8 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
       bool chord = false;
       int velocity = -1;
       bool unpitched = false;
+      bool small = false;
+      bool cue = false;
       QString instrId;
       QList<QDomElement> notations;
 
@@ -5492,7 +5528,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                                            qPrintable(altertext), ee.lineNumber(), ee.columnNumber());
                                     bool ok2;
                                     double altervalue = altertext.toDouble(&ok2);
-                                    if (ok2 && (qAbs(altervalue) < 2.0) && (accidental == Accidental::Type::NONE)) {
+                                    if (ok2 && (qAbs(altervalue) < 2.0) && (accidental == AccidentalType::NONE)) {
                                           // try to see if a microtonal accidental is needed
                                           accidental = microtonalGuess(altervalue);
                                           }
@@ -5519,8 +5555,11 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                               domError(ee);
                         }
                   }
-            else if (tag == "type")
+            else if (tag == "type") {
                   duration = TDuration(s);
+                  small = e.attribute(QString("size")) == "cue";
+                  }
+
             else if (tag == "chord" || tag == "duration" || tag == "staff" || tag == "voice")
                   // already handled by voice mapper, ignore here but prevent
                   // spurious "Unknown Node <staff>" or "... <voice>" messages
@@ -5613,7 +5652,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   instrId = e.attribute("id");
                   }
             else if (tag == "cue")
-                  domNotImplemented(e);
+                  cue = true;
             else
                   domError(e);
             }
@@ -5655,6 +5694,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             if (!s->element(cr->track()))
                   s->add(cr);
             cr->setVisible(printObject == "yes");
+            cr->setSmall(small);
             handleDisplayStep(cr, step, octave, loc_tick, score->spatium());
             }
       else {
@@ -5726,7 +5766,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                         Segment* s = measure->getSegment(cr, loc_tick);
                         s->add(cr);
                         }
-                   // append grace notes
+                  // append grace notes
                   // first excerpt grace notes after
                   QList<Chord*> toRemove;
                   if(graceNotes.length()){
@@ -5761,6 +5801,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
 
             char c = step[0].toLatin1();
             note = new Note(score);
+            note->setSmall(small);
             note->setHeadGroup(headGroup);
             if (noteheadColor != QColor::Invalid)
                   note->setColor(noteheadColor);
@@ -5800,16 +5841,17 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             cr->add(note);
 
             static_cast<Chord*>(cr)->setNoStem(noStem);
+            if (cue) cr->setSmall(cue); // only once per chord
 
             // qDebug("staff for new note: %p (staff=%d, relStaff=%d)",
             //        score->staff(staff + relStaff), staff, relStaff);
 
-            if(accidental != Accidental::Type::NONE){
+            if(accidental != AccidentalType::NONE){
                   Accidental* a = new Accidental(score);
                   a->setAccidentalType(accidental);
                    if (editorial || cautionary || parentheses) {
                           a->setHasBracket(cautionary || parentheses);
-                          a->setRole(Accidental::Role::USER);
+                          a->setRole(AccidentalRole::USER);
                           }
                     else {
                           alt = alter;
@@ -5906,7 +5948,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             pedalContinue = 0;
             }
 
-      if (!chord)
+      if (!chord && !grace)
             prevtick = tick;  // remember tick where last chordrest was inserted
 
 #ifdef DEBUG_TICK

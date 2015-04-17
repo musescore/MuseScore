@@ -115,7 +115,6 @@ extern Ms::Synthesizer* createZerberus();
 namespace Ms {
 
 MuseScore* mscore;
-MuseScoreCore* mscoreCore;
 MasterSynthesizer* synti;
 
 bool enableExperimental = false;
@@ -928,7 +927,7 @@ MuseScore::MuseScore()
             connect(menuHelp, SIGNAL(aboutToShow()), hw, SLOT(setFocus()));
             }
 #endif
-      menuHelp->addAction(getAction("local-help"));
+      //menuHelp->addAction(getAction("local-help"));
       menuHelp->addAction(tr("&Online Handbook"), this, SLOT(helpBrowser1()));
 
       menuHelp->addSeparator();
@@ -953,10 +952,8 @@ MuseScore::MuseScore()
       menuHelp->addAction(tr("Check for &Update"), this, SLOT(checkForUpdate()));
 #endif
 
-#ifdef MSCORE_UNSTABLE
       menuHelp->addSeparator();
       menuHelp->addAction(tr("Report a Bug"), this, SLOT(reportBug()));
-#endif
 
       menuHelp->addSeparator();
       menuHelp->addAction(getAction("resource-manager"));
@@ -1053,7 +1050,7 @@ void MuseScore::helpBrowser1() const
 
       if (MScore::debugMode)
             qDebug("open online handbook for language <%s>", qPrintable(lang));
-      QString help("http://musescore.org/en/handbook-2.0");
+      QString help = QString("https://musescore.org/redirect/help?tag=handbook&locale=%1").arg(getLocaleISOCode());
       //try to find an exact match
       bool found = false;
       foreach (LanguageItem item, _languages) {
@@ -1080,7 +1077,7 @@ void MuseScore::helpBrowser1() const
             }
 
       //track visits. see: http://www.google.com/support/googleanalytics/bin/answer.py?answer=55578
-      help += QString("?utm_source=software&utm_medium=menu&utm_content=r%1&utm_campaign=MuseScore%2").arg(rev.trimmed()).arg(QString(VERSION));
+      help += QString("&utm_source=desktop&utm_medium=menu&utm_content=%1&utm_campaign=MuseScore%2").arg(rev.trimmed()).arg(QString(VERSION));
       QDesktopServices::openUrl(QUrl(help));
       }
 
@@ -1215,8 +1212,10 @@ void MuseScore::addRecentScore(const QString& scorePath)
       {
       if (scorePath.isEmpty())
             return;
-      _recentScores.removeAll(scorePath);
-      _recentScores.prepend(scorePath);
+      QFileInfo fi(scorePath);
+      QString absoluteFilePath = fi.absoluteFilePath();
+      _recentScores.removeAll(absoluteFilePath);
+      _recentScores.prepend(absoluteFilePath);
       if (_recentScores.size() > RECENT_LIST_SIZE)
             _recentScores.removeLast();
       }
@@ -1435,6 +1434,8 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       getAction("show-frames")->setChecked(cs->showFrames());
       getAction("show-pageborders")->setChecked(cs->showPageborders());
       getAction("fotomode")->setChecked(cv->fotoMode());
+      getAction("join-measure")->setEnabled(cs->rootScore()->excerpts().size() == 0);
+      getAction("split-measure")->setEnabled(cs->rootScore()->excerpts().size() == 0);
       updateUndoRedo();
 
       if (view->magIdx() == MagIdx::MAG_FREE)
@@ -2490,6 +2491,8 @@ void MuseScore::changeState(ScoreState val)
                         qDebug("disable synth control");
                   a->setEnabled(driver);
                   }
+            else if (s->key() == "pad-dot" || s->key() == "pad-dot-dot")
+                        a->setEnabled(!(val & (STATE_ALLTEXTUAL_EDIT | STATE_EDIT)));
             else {
                   a->setEnabled(s->state() & val);
                   }
@@ -2497,6 +2500,12 @@ void MuseScore::changeState(ScoreState val)
 
       if (getAction("file-part-export")->isEnabled())
             getAction("file-part-export")->setEnabled(cs && cs->rootScore()->excerpts().size() > 0);
+      if (getAction("join-measure")->isEnabled())
+            getAction("join-measure")->setEnabled(cs && cs->rootScore()->excerpts().size() == 0);
+      if (getAction("split-measure")->isEnabled())
+            getAction("split-measure")->setEnabled(cs && cs->rootScore()->excerpts().size() == 0);
+
+      //getAction("split-measure")->setEnabled(cs->rootScore()->excerpts().size() == 0);
 
       // disabling top level menu entries does not
       // work for MAC
@@ -2507,7 +2516,7 @@ void MuseScore::changeState(ScoreState val)
             if (!menu)
                   continue;
             QString s(menu->objectName());
-            if (s == "File" || s == "Help" || s == "Edit" || s == "Plugins")
+            if (s == "File" || s == "Help" || s == "Edit" || s == "Plugins" || s == "View")
                   continue;
             menu->setEnabled(enable);
             }
@@ -2784,7 +2793,7 @@ void MuseScore::play(Element* e) const
             Part* part = c->staff()->part();
             int tick = c->segment() ? c->segment()->tick() : 0;
             seq->seek(tick);
-            Instrument* instr = part->instr(tick);
+            Instrument* instr = part->instrument(tick);
             foreach(Note* n, c->notes()) {
                   const Channel* channel = instr->channel(n->subchannel());
                   seq->startNote(channel->channel, n->ppitch(), 80, n->tuning());
@@ -2802,7 +2811,7 @@ void MuseScore::play(Element* e, int pitch) const
             int tick = note->chord()->tick();
             if (tick < 0)
                   tick = 0;
-            Instrument* instr = note->part()->instr(tick);
+            Instrument* instr = note->part()->instrument(tick);
             const Channel* channel = instr->channel(note->subchannel());
             seq->startNote(channel->channel, pitch, 80, MScore::defaultPlayDuration, note->tuning());
             }
@@ -2847,12 +2856,9 @@ AboutBoxDialog::AboutBoxDialog()
 #endif
       revisionLabel->setText(tr("Revision: %1").arg(revision));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-#ifdef MSCORE_UNSTABLE
+
       copyRevisionButton->setIcon(*icons[int(Icons::copy_ICON)]);
       connect(copyRevisionButton, SIGNAL(clicked()), this, SLOT(copyRevisionToClipboard()));
-#else
-      copyRevisionButton->hide();
-#endif
       }
 
 //---------------------------------------------------------
@@ -3816,7 +3822,7 @@ void MuseScore::transpose()
       Staff* staff = cs->staff(startStaffIdx);
       Key key = staff->key(startTick);
       if (!cs->styleB(StyleIdx::concertPitch)) {
-            int diff = staff->part()->instr(startTick)->transpose().chromatic;
+            int diff = staff->part()->instrument(startTick)->transpose().chromatic;
             if (diff)
                   key = transposeKey(key, diff);
             }
@@ -4412,10 +4418,10 @@ void MuseScore::showDrumTools(const Drumset* drumset, Staff* staff)
 //   updateDrumTools
 //---------------------------------------------------------
 
-void MuseScore::updateDrumTools()
+void MuseScore::updateDrumTools(const Drumset* ds)
       {
       if (_drumTools)
-            _drumTools->updateDrumset();
+            _drumTools->updateDrumset(ds);
       }
 
 //---------------------------------------------------------
@@ -4915,7 +4921,6 @@ int main(int argc, char* av[])
             }
 
       mscore = new MuseScore();
-      mscoreCore = mscore;
 
       // create a score for internal use
       gscore = new Score(MScore::baseStyle());

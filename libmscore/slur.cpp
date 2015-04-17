@@ -180,14 +180,14 @@ bool SlurSegment::edit(MuseScoreView* viewer, Grip curGrip, int key, Qt::Keyboar
       else if (key == Qt::Key_Right)
             cr = nextChordRest(e);
       else if (key == Qt::Key_Up) {
-            Part* part     = e->staff()->part();
+            Part* part     = e->part();
             int startTrack = part->startTrack();
             int endTrack   = e->track();
             cr = searchCR(e->segment(), endTrack, startTrack);
             }
       else if (key == Qt::Key_Down) {
             int startTrack = e->track() + 1;
-            Part* part     = e->staff()->part();
+            Part* part     = e->part();
             int endTrack   = part->endTrack();
             cr = searchCR(e->segment(), startTrack, endTrack);
             }
@@ -371,7 +371,7 @@ void SlurSegment::editDrag(const EditData& ed)
                         if (ed.curGrip == Grip::END && spanner->type() == Element::Type::TIE) {
                               Tie* tie = static_cast<Tie*>(spanner);
                               if (tie->startNote()->pitch() == note->pitch()
-                                 && tie->startNote()->chord()->tick() <= note->chord()->tick()) {
+                                 && tie->startNote()->chord()->tick() < note->chord()->tick()) {
                                     ed.view->setDropTarget(note);
                                     if (note != tie->endNote()) {
                                           changeAnchor(ed.view, ed.curGrip, note);
@@ -1639,6 +1639,7 @@ void SlurTie::endEdit()
             score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF3, o.o[2]);
             score()->undoPropertyChanged(ss, P_ID::SLUR_UOFF4, o.o[3]);
             }
+      score()->setLayoutAll(true);
       }
 
 }

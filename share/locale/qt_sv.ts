@@ -944,6 +944,13 @@ till
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation>Spara inte</translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <source>OK</source>
@@ -976,10 +983,6 @@ till
     <message>
         <source>Help</source>
         <translation>Hjälp</translation>
-    </message>
-    <message>
-        <source>Don&apos;t Save</source>
-        <translation>Spara inte</translation>
     </message>
     <message>
         <source>Discard</source>

@@ -66,8 +66,7 @@ void Score::updateSwing()
                   if (e->type() != Element::Type::STAFF_TEXT)
                         continue;
                   const StaffText* st = static_cast<const StaffText*>(e);
-                  QString an(st->plainText());
-                  if (an.isEmpty())
+                  if (st->text().isEmpty())
                         continue;
                   Staff* staff = st->staff();
                   if (!st->swing())
@@ -115,7 +114,7 @@ void Score::updateChannel()
                         if (an.isEmpty())
                               continue;
                         Staff* staff = _staves[st->staffIdx()];
-                        int a = staff->part()->instr(s->tick())->channelIdx(an);
+                        int a = staff->part()->instrument(s->tick())->channelIdx(an);
                         if (a != -1)
                               staff->channelList(voice)->insert(s->tick(), a);
                         }
@@ -204,7 +203,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                               collectNote(events, channel, n, velo, tickOffset);
                               break;
                               }
-                        if (n->tieFor())
+                        if (n->tieFor())		
                               n = n->tieFor()->endNote();
                         else
                               break;
@@ -343,7 +342,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   Chord* chord = static_cast<Chord*>(cr);
                   Staff* staff = chord->staff();
                   int velocity = staff->velocities().velo(seg->tick());
-                  Instrument* instr = chord->staff()->part()->instr(tick);
+                  Instrument* instr = chord->part()->instrument(tick);
                   int channel = instr->channel(chord->upNote()->subchannel())->channel;
 
                   foreach (Articulation* a, chord->articulations()) {
@@ -384,7 +383,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   const StaffText* st = static_cast<const StaffText*>(e);
                   int tick = s->tick() + tickOffset;
 
-                  Instrument* instr = e->staff()->part()->instr(tick);
+                  Instrument* instr = e->part()->instrument(tick);
                   foreach (const ChannelActions& ca, *st->channelActions()) {
                         int channel = ca.channel;
                         foreach(const QString& ma, ca.midiActionNames) {
@@ -630,7 +629,8 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
       foreach (const RepeatSegment* rs, *repeatList()) {
             int tickOffset = rs->utick - rs->tick;
             int utick1 = rs->utick;
-            int utick2 = utick1 + rs->len;
+            int tick1 = repeatList()->utick2tick(utick1);
+            int tick2 = tick1 + rs->len;
             std::map<int, std::vector<std::pair<int, bool>>> channelPedalEvents = std::map<int, std::vector<std::pair<int, bool>>>();
             for (const auto& sp : _spanner.map()) {
                   Spanner* s = sp.second;
@@ -638,7 +638,7 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                         continue;
 
                   int idx = s->staff()->channel(s->tick(), 0);
-                  int channel = s->staff()->part()->instr(s->tick())->channel(idx)->channel;
+                  int channel = s->part()->instrument(s->tick())->channel(idx)->channel;
                   channelPedalEvents.insert({channel, std::vector<std::pair<int, bool>>()});
                   std::vector<std::pair<int, bool>> pedalEventList = channelPedalEvents.at(channel);
                   std::pair<int, bool> lastEvent;
@@ -648,7 +648,7 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                   else
                         lastEvent = std::pair<int, bool>(0, true);
 
-                  if (s->tick() >= utick1 && s->tick() < utick2) {
+                  if (s->tick() >= tick1 && s->tick() < tick2) {
                         // Handle "overlapping" pedal segments (usual case for connected pedal line)
                         if (lastEvent.second == false && lastEvent.first >= (s->tick() + tickOffset + 2)) {
                               channelPedalEvents.at(channel).pop_back();
@@ -656,8 +656,12 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                               }
                         channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick() + tickOffset + 2, true));
                         }
-                  if (s->tick2() >= utick1 && s->tick2() < utick2)
-                        channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick2() + tickOffset + 1, false));
+                  if (s->tick2() >= tick1 && s->tick2() <= tick2) {
+                        int t = s->tick2() + tickOffset + 1;
+                        if (t > repeatList()->last()->utick + repeatList()->last()->len)
+                             t = repeatList()->last()->utick + repeatList()->last()->len;
+                        channelPedalEvents.at(channel).push_back(std::pair<int, bool>(t, false));
+                        }
                   }
 
             for (const auto& pedalEvents : channelPedalEvents) {
@@ -829,7 +833,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             }
 
       if (!chord->articulations().isEmpty() && !chord->arpeggio()) {
-            Instrument* instr = chord->staff()->part()->instr(seg->tick());
+            Instrument* instr = chord->part()->instrument(seg->tick());
             int channel  = 0;  // note->subchannel();
 
 //qDebug("Chord");
@@ -846,7 +850,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                                     events->clear();
                                     events->append(NoteEvent(0, 0, 125));
                                     Key key     = chord->staff()->key(chord->segment()->tick());
-                                    int pitch   = chord->notes()[k]->pitch();
+                                    int pitch   = chord->notes()[k]->epitch();
                                     int pitchDown = diatonicUpDown(key, pitch, -1);
                                     events->append(NoteEvent(pitchDown - pitch, 125, 125));
                                     events->append(NoteEvent(0, 250, 750));
@@ -860,7 +864,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                                     events->clear();
                                     events->append(NoteEvent(0, 0, 125));
                                     Key key       = chord->staff()->key(chord->segment()->tick());
-                                    int pitch     = chord->notes()[k]->pitch();
+                                    int pitch     = chord->notes()[k]->epitch();
                                     int pitchUp = diatonicUpDown(key, pitch, 1);
                                     events->append(NoteEvent(pitchUp - pitch, 125, 125));
                                     events->append(NoteEvent(0, 250, 750));
@@ -917,7 +921,7 @@ void Score::createPlayEvents(Chord* chord)
             }
       // gateTime is 100% for slured notes
       if (!slur) {
-            Instrument* instr = chord->staff()->part()->instr(tick);
+            Instrument* instr = chord->part()->instrument(tick);
             instr->updateGateTime(&gateTime, 0, "");
             }
 

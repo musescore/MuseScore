@@ -25,6 +25,7 @@
 #include "globals.h"
 #include "musicxmlsupport.h"
 #include "libmscore/sym.h"
+#include "libmscore/accidental.h"
 
 namespace Ms {
 
@@ -386,24 +387,24 @@ QString accSymId2MxmlString(const SymId id)
             case SymId::accidentalBakiyeFlat:            s = "slash-flat";           break;
             case SymId::accidentalBuyukMucennebFlat:     s = "double-slash-flat";    break;
                   /* TODO
-            case Accidental::Type::FLAT_ARROW_UP:      s = "flat-up";              break;
-            case Accidental::Type::NATURAL_ARROW_DOWN: s = "natural-down";         break;
-            case Accidental::Type::SHARP_ARROW_DOWN:   s = "sharp-down";           break;
-            case Accidental::Type::NATURAL_ARROW_UP:   s = "natural-up";           break;
-            case Accidental::Type::MIRRORED_FLAT2:     s = "three-quarters-flat";  break;
-            case Accidental::Type::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break;
-            case Accidental::Type::FLAT_ARROW_DOWN:    s = "flat-down";            break;
-            case Accidental::Type::SHARP_SLASH4:       s = "three-quarters-sharp"; break;
-            case Accidental::Type::SHARP_ARROW_UP:     s = "sharp-up";             break;
-            case Accidental::Type::SORI:               s = "sori";                 break;
-            case Accidental::Type::KORON:              s = "koron";                break;
+            case AccidentalType::FLAT_ARROW_UP:      s = "flat-up";              break;
+            case AccidentalType::NATURAL_ARROW_DOWN: s = "natural-down";         break;
+            case AccidentalType::SHARP_ARROW_DOWN:   s = "sharp-down";           break;
+            case AccidentalType::NATURAL_ARROW_UP:   s = "natural-up";           break;
+            case AccidentalType::MIRRORED_FLAT2:     s = "three-quarters-flat";  break;
+            case AccidentalType::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break;
+            case AccidentalType::FLAT_ARROW_DOWN:    s = "flat-down";            break;
+            case AccidentalType::SHARP_SLASH4:       s = "three-quarters-sharp"; break;
+            case AccidentalType::SHARP_ARROW_UP:     s = "sharp-up";             break;
+            case AccidentalType::SORI:               s = "sori";                 break;
+            case AccidentalType::KORON:              s = "koron";                break;
                    */
             default:
                   qDebug("accSymId2MxmlString: unknown accidental %d", static_cast<int>(id));
             }
       return s;
       }
-      
+
 //---------------------------------------------------------
 //   mxmlString2accSymId
 //---------------------------------------------------------
@@ -419,30 +420,30 @@ SymId mxmlString2accSymId(const QString mxmlName)
       map["flat-flat"] = SymId::accidentalDoubleFlat;
 
       //map["double-flat"] = SymId::accidentalDoubleFlat;
-      //map["natural-flat"] = Accidental::Type::FLAT;
-      
+      //map["natural-flat"] = AccidentalType::FLAT;
+
       map["quarter-flat"] = SymId::accidentalQuarterToneFlatStein;
       map["quarter-sharp"] = SymId::accidentalQuarterToneSharpStein;
-      //map["three-quarters-flat"] = Accidental::Type::MIRRORED_FLAT2;
-      //map["three-quarters-sharp"] = Accidental::Type::SHARP_SLASH4;
-      
-      //map["sharp-down"] = Accidental::Type::SHARP_ARROW_DOWN;
-      //map["sharp-up"] = Accidental::Type::SHARP_ARROW_UP;
-      //map["natural-down"] = Accidental::Type::NATURAL_ARROW_DOWN;
-      //map["natural-up"] = Accidental::Type::NATURAL_ARROW_UP;
-      //map["flat-down"] = Accidental::Type::FLAT_ARROW_DOWN;
-      //map["flat-up"] = Accidental::Type::FLAT_ARROW_UP;
-      
+      //map["three-quarters-flat"] = AccidentalType::MIRRORED_FLAT2;
+      //map["three-quarters-sharp"] = AccidentalType::SHARP_SLASH4;
+
+      //map["sharp-down"] = AccidentalType::SHARP_ARROW_DOWN;
+      //map["sharp-up"] = AccidentalType::SHARP_ARROW_UP;
+      //map["natural-down"] = AccidentalType::NATURAL_ARROW_DOWN;
+      //map["natural-up"] = AccidentalType::NATURAL_ARROW_UP;
+      //map["flat-down"] = AccidentalType::FLAT_ARROW_DOWN;
+      //map["flat-up"] = AccidentalType::FLAT_ARROW_UP;
+
       map["slash-quarter-sharp"] = SymId::accidentalKucukMucennebSharp;
       map["slash-sharp"] = SymId::accidentalBuyukMucennebSharp;
       map["slash-flat"] = SymId::accidentalBakiyeFlat;
       map["double-slash-flat"] = SymId::accidentalBuyukMucennebFlat;
-      
-      //map["sori"] = Accidental::Type::SORI;
-      //map["koron"] = Accidental::Type::KORON;
-      
-      //map["natural-sharp"] = Accidental::Type::SHARP;
-      
+
+      //map["sori"] = AccidentalType::SORI;
+      //map["koron"] = AccidentalType::KORON;
+
+      //map["natural-sharp"] = AccidentalType::SHARP;
+
       if (map.contains(mxmlName))
             return map.value(mxmlName);
       else
@@ -455,87 +456,87 @@ SymId mxmlString2accSymId(const QString mxmlName)
 //---------------------------------------------------------
 //   accidentalType2MxmlString
 //---------------------------------------------------------
-      
-QString accidentalType2MxmlString(const Accidental::Type type)
+
+QString accidentalType2MxmlString(const AccidentalType type)
       {
       QString s;
       switch (type) {
-            case Accidental::Type::SHARP:              s = "sharp";                break;
-            case Accidental::Type::FLAT:               s = "flat";                 break;
-            case Accidental::Type::SHARP2:             s = "double-sharp";         break;
-            case Accidental::Type::FLAT2:              s = "flat-flat";            break;
-            case Accidental::Type::NATURAL:            s = "natural";              break;
-            case Accidental::Type::FLAT_SLASH:         s = "slash-flat";           break;
-            case Accidental::Type::MIRRORED_FLAT:      s = "quarter-flat";         break;
-            case Accidental::Type::FLAT_ARROW_UP:      s = "flat-up";              break;
-            case Accidental::Type::NATURAL_ARROW_DOWN: s = "natural-down";         break;
-            case Accidental::Type::SHARP_SLASH:        s = "quarter-sharp";        break;
-            case Accidental::Type::SHARP_ARROW_DOWN:   s = "sharp-down";           break;
-            case Accidental::Type::NATURAL_ARROW_UP:   s = "natural-up";           break;
-            case Accidental::Type::MIRRORED_FLAT2:     s = "three-quarters-flat";  break;
-            case Accidental::Type::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break;
-            case Accidental::Type::FLAT_ARROW_DOWN:    s = "flat-down";            break;
-            case Accidental::Type::SHARP_SLASH4:       s = "three-quarters-sharp"; break;
-            case Accidental::Type::SHARP_ARROW_UP:     s = "sharp-up";             break;
-            case Accidental::Type::SHARP_SLASH3:       s = "slash-quarter-sharp";  break;
-            case Accidental::Type::FLAT_SLASH2:        s = "double-slash-flat";    break;
-            case Accidental::Type::SHARP_SLASH2:       s = "slash-sharp";          break;
-            case Accidental::Type::SORI:               s = "sori";                 break;
-            case Accidental::Type::KORON:              s = "koron";                break;
+            case AccidentalType::SHARP:              s = "sharp";                break;
+            case AccidentalType::FLAT:               s = "flat";                 break;
+            case AccidentalType::SHARP2:             s = "double-sharp";         break;
+            case AccidentalType::FLAT2:              s = "flat-flat";            break;
+            case AccidentalType::NATURAL:            s = "natural";              break;
+            case AccidentalType::FLAT_SLASH:         s = "slash-flat";           break;
+            case AccidentalType::MIRRORED_FLAT:      s = "quarter-flat";         break;
+            case AccidentalType::FLAT_ARROW_UP:      s = "flat-up";              break;
+            case AccidentalType::NATURAL_ARROW_DOWN: s = "natural-down";         break;
+            case AccidentalType::SHARP_SLASH:        s = "quarter-sharp";        break;
+            case AccidentalType::SHARP_ARROW_DOWN:   s = "sharp-down";           break;
+            case AccidentalType::NATURAL_ARROW_UP:   s = "natural-up";           break;
+            case AccidentalType::MIRRORED_FLAT2:     s = "three-quarters-flat";  break;
+            case AccidentalType::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break;
+            case AccidentalType::FLAT_ARROW_DOWN:    s = "flat-down";            break;
+            case AccidentalType::SHARP_SLASH4:       s = "three-quarters-sharp"; break;
+            case AccidentalType::SHARP_ARROW_UP:     s = "sharp-up";             break;
+            case AccidentalType::SHARP_SLASH3:       s = "slash-quarter-sharp";  break;
+            case AccidentalType::FLAT_SLASH2:        s = "double-slash-flat";    break;
+            case AccidentalType::SHARP_SLASH2:       s = "slash-sharp";          break;
+            case AccidentalType::SORI:               s = "sori";                 break;
+            case AccidentalType::KORON:              s = "koron";                break;
             default:
                   qDebug("accidentalType2MxmlString: unknown accidental %d", static_cast<int>(type));
             }
       return s;
       }
-      
+
 //---------------------------------------------------------
 //   mxmlString2accidentalType
 //---------------------------------------------------------
 
 /**
- Convert a MusicXML accidental name to a MuseScore enum Accidental::Type.
+ Convert a MusicXML accidental name to a MuseScore enum AccidentalType.
  */
 
-Accidental::Type mxmlString2accidentalType(const QString mxmlName)
+AccidentalType mxmlString2accidentalType(const QString mxmlName)
       {
-      QMap<QString, Accidental::Type> map; // map MusicXML accidental name to MuseScore enum Accidental::Type
-      map["natural"] = Accidental::Type::NATURAL;
-      map["flat"] = Accidental::Type::FLAT;
-      map["sharp"] = Accidental::Type::SHARP;
-      map["double-sharp"] = Accidental::Type::SHARP2;
-      map["sharp-sharp"] = Accidental::Type::SHARP2;
-      map["flat-flat"] = Accidental::Type::FLAT2;
-      map["double-flat"] = Accidental::Type::FLAT2;
-      map["natural-flat"] = Accidental::Type::FLAT;
-      
-      map["quarter-flat"] = Accidental::Type::MIRRORED_FLAT;
-      map["quarter-sharp"] = Accidental::Type::SHARP_SLASH;
-      map["three-quarters-flat"] = Accidental::Type::MIRRORED_FLAT2;
-      map["three-quarters-sharp"] = Accidental::Type::SHARP_SLASH4;
-      
-      map["sharp-down"] = Accidental::Type::SHARP_ARROW_DOWN;
-      map["sharp-up"] = Accidental::Type::SHARP_ARROW_UP;
-      map["natural-down"] = Accidental::Type::NATURAL_ARROW_DOWN;
-      map["natural-up"] = Accidental::Type::NATURAL_ARROW_UP;
-      map["flat-down"] = Accidental::Type::FLAT_ARROW_DOWN;
-      map["flat-up"] = Accidental::Type::FLAT_ARROW_UP;
-      
-      map["slash-quarter-sharp"] = Accidental::Type::SHARP_SLASH3; // MIRRORED_FLAT_SLASH; ?
-      map["slash-sharp"] = Accidental::Type::SHARP_SLASH2; // SHARP_SLASH; ?
-      map["slash-flat"] = Accidental::Type::FLAT_SLASH;
-      map["double-slash-flat"] = Accidental::Type::FLAT_SLASH2;
-      
-      map["sori"] = Accidental::Type::SORI;
-      map["koron"] = Accidental::Type::KORON;
-      
-      map["natural-sharp"] = Accidental::Type::SHARP;
-      
+      QMap<QString, AccidentalType> map; // map MusicXML accidental name to MuseScore enum AccidentalType
+      map["natural"] = AccidentalType::NATURAL;
+      map["flat"] = AccidentalType::FLAT;
+      map["sharp"] = AccidentalType::SHARP;
+      map["double-sharp"] = AccidentalType::SHARP2;
+      map["sharp-sharp"] = AccidentalType::SHARP2;
+      map["flat-flat"] = AccidentalType::FLAT2;
+      map["double-flat"] = AccidentalType::FLAT2;
+      map["natural-flat"] = AccidentalType::FLAT;
+
+      map["quarter-flat"] = AccidentalType::MIRRORED_FLAT;
+      map["quarter-sharp"] = AccidentalType::SHARP_SLASH;
+      map["three-quarters-flat"] = AccidentalType::MIRRORED_FLAT2;
+      map["three-quarters-sharp"] = AccidentalType::SHARP_SLASH4;
+
+      map["sharp-down"] = AccidentalType::SHARP_ARROW_DOWN;
+      map["sharp-up"] = AccidentalType::SHARP_ARROW_UP;
+      map["natural-down"] = AccidentalType::NATURAL_ARROW_DOWN;
+      map["natural-up"] = AccidentalType::NATURAL_ARROW_UP;
+      map["flat-down"] = AccidentalType::FLAT_ARROW_DOWN;
+      map["flat-up"] = AccidentalType::FLAT_ARROW_UP;
+
+      map["slash-quarter-sharp"] = AccidentalType::SHARP_SLASH3; // MIRRORED_FLAT_SLASH; ?
+      map["slash-sharp"] = AccidentalType::SHARP_SLASH2; // SHARP_SLASH; ?
+      map["slash-flat"] = AccidentalType::FLAT_SLASH;
+      map["double-slash-flat"] = AccidentalType::FLAT_SLASH2;
+
+      map["sori"] = AccidentalType::SORI;
+      map["koron"] = AccidentalType::KORON;
+
+      map["natural-sharp"] = AccidentalType::SHARP;
+
       if (map.contains(mxmlName))
             return map.value(mxmlName);
       else
             qDebug("mxmlString2accidentalType: unknown accidental '%s'", qPrintable(mxmlName));
-      // default: return Accidental::Type::NONE
-      return Accidental::Type::NONE;
+      // default: return AccidentalType::NONE
+      return AccidentalType::NONE;
       }
 
 }

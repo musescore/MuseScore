@@ -227,8 +227,6 @@ void Stem::read(XmlReader& e)
             else if (!Element::readProperties(e))
                   e.unknown();
             }
-      if (_userLen < 0.0)
-            _userLen = -_userLen;
       }
 
 //---------------------------------------------------------

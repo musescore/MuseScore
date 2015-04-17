@@ -59,7 +59,9 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
       synti->init();
       int sampleRate = preferences.exportAudioSampleRate;
       synti->setSampleRate(sampleRate);
-      synti->setState(score->synthesizerState());
+      bool r = synti->setState(score->synthesizerState());
+      if (!r)
+          synti->init();
 
       int oldSampleRate  = MScore::sampleRate;
       MScore::sampleRate = sampleRate;
@@ -77,15 +79,19 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             return false;
             }
 
-      QProgressBar* pBar = showProgressBar();
-      pBar->reset();
+      QProgressDialog progress(this);
+      progress.setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
+      progress.setWindowModality(Qt::ApplicationModal);
+      progress.setCancelButton(0);
+      if (!MScore::noGui)
+            progress.show();
 
       float peak  = 0.0;
       double gain = 1.0;
       EventMap::const_iterator endPos = events.cend();
       --endPos;
       const int et = (score->utick2utime(endPos->first) + 1) * MScore::sampleRate;
-      pBar->setRange(0, et);
+      progress.setRange(0, et);
 
       for (int pass = 0; pass < 2; ++pass) {
             EventMap::const_iterator playPos;
@@ -96,7 +102,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             // init instruments
             //
             foreach(Part* part, score->parts()) {
-                  InstrumentList* il = part->instrList();
+                  const InstrumentList* il = part->instruments();
                   for(auto i = il->begin(); i!= il->end(); i++) {
                         foreach(const Channel* a, i->second->channel()) {
                               a->updateInitList();
@@ -163,7 +169,12 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
                               }
                         }
                   playTime = endTime;
-                  pBar->setValue((pass * et + playTime) / 2);
+                  if (!MScore::noGui) {
+                        progress.setValue((pass * et + playTime) / 2);
+                        qApp->processEvents();
+                        }
+                  if (playTime >= et)
+                        synti->allNotesOff(-1);
                   // create sound until the sound decays
                   if (playTime >= et && max*peak < 0.000001)
                         break;
@@ -175,7 +186,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             gain = 0.99 / peak;
             }
 
-      hideProgressBar();
+      progress.close();
 
       MScore::sampleRate = oldSampleRate;
       delete synti;

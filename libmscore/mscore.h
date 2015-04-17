@@ -13,6 +13,8 @@
 #ifndef __MSCORE_H__
 #define __MSCORE_H__
 
+#include "config.h"
+
 namespace Ms {
 
 #define MSC_VERSION     "2.06"
@@ -339,7 +341,6 @@ enum class IconType : signed char {
 class MScore : public QObject {
       Q_OBJECT
 
-   private:
       static MStyle* _defaultStyle;       // buildin modified by preferences
       static MStyle* _defaultStyleForParts;
 
@@ -354,6 +355,8 @@ class MScore : public QObject {
    public:
       enum class Direction  : char { AUTO, UP, DOWN };
       enum class DirectionH : char { AUTO, LEFT, RIGHT };
+      Q_ENUMS(Direction DirectionH)
+
       static void init();
 
       static MStyle* defaultStyle();

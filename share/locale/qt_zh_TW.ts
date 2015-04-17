@@ -936,6 +936,13 @@ to
     </message>
 </context>
 <context>
+    <name>QCocoaTheme</name>
+    <message>
+        <source>Don&apos;t Save</source>
+        <translation>不儲存</translation>
+    </message>
+</context>
+<context>
     <name>QPlatformTheme</name>
     <message>
         <source>OK</source>
@@ -968,10 +975,6 @@ to
     <message>
         <source>Help</source>
         <translation>說明</translation>
-    </message>
-    <message>
-        <source>Don&apos;t Save</source>
-        <translation>不儲存</translation>
     </message>
     <message>
         <source>Discard</source>

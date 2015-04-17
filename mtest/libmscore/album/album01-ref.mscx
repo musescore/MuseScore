@@ -53,8 +53,8 @@
         </Staff>
       <trackName>Flûte</trackName>
       <Instrument>
-        <longName pos="0">Flûte</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName>Flûte</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flûte</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>

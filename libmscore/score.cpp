@@ -897,9 +897,9 @@ void Score::rebuildMidiMapping()
       int idx         = 0;
       int maxport     = 0;
       for (Part* part : _parts) {
-            InstrumentList* il = part->instrList();
+            const InstrumentList* il = part->instruments();
             for (auto i = il->begin(); i != il->end(); ++i) {
-                  Instrument* instr = i->second;
+                  const Instrument* instr = i->second;
                   bool drum         = instr->useDrumset();
 
                   for (Channel* channel : instr->channel()) {
@@ -2196,10 +2196,31 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         removeNotes.append(note);
                         }
                   c->sortNotes();
-                  foreach(Note* note, removeNotes) {
+                  for (Note* note : removeNotes) {
                         undoRemoveElement(note);
-                        if (note->chord()->notes().isEmpty())
-                              undoRemoveElement(note->chord());
+                        Chord* chord = note->chord();
+                        if (chord->notes().isEmpty()) {
+                              undoRemoveElement(chord);
+                              for (auto sp : spanner()) {
+                                    Slur* slur = static_cast<Slur*>(sp.second);
+                                    if (slur->type() != Element::Type::SLUR)
+                                          continue;
+                                    if (slur->startCR() == chord) {
+                                          slur->undoChangeProperty(P_ID::TRACK, slur->track()+VOICES);
+                                          for (ScoreElement* ee : slur->linkList()) {
+                                                Slur* lslur = static_cast<Slur*>(ee);
+                                                lslur->setStartElement(0);
+                                                }
+                                          }
+                                    if (slur->endCR() == chord) {
+                                          slur->undoChangeProperty(P_ID::SPANNER_TRACK2, slur->track2()+VOICES);
+                                          for (ScoreElement* ee : slur->linkList()) {
+                                                Slur* lslur = static_cast<Slur*>(ee);
+                                                lslur->setEndElement(0);
+                                                }
+                                          }
+                                    }
+                              }
                         }
                   }
             }
@@ -2416,7 +2437,7 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
                         continue;
                   KeySigEvent oKey = i->second;
                   KeySigEvent nKey = oKey;
-                  int diff = -staff->part()->instr()->transpose().chromatic;
+                  int diff = -staff->part()->instrument()->transpose().chromatic;
                   if (diff != 0 && !styleB(StyleIdx::concertPitch) && !oKey.custom())
                         nKey.setKey(transposeKey(nKey.key(), diff));
                   staff->setKey(tick, nKey);
@@ -2524,7 +2545,7 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
       for (Staff* staff : _staves) {
             if (staff->staffType()->group() == StaffGroup::PERCUSSION)
                   continue;
-            Interval interval = staff->part()->instr()->transpose();
+            Interval interval = staff->part()->instrument()->transpose();
             if (interval.isZero())
                   continue;
             if (!flag)
@@ -2543,7 +2564,13 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                         Harmony* h  = static_cast<Harmony*>(e);
                         int rootTpc = transposeTpc(h->rootTpc(), interval, true);
                         int baseTpc = transposeTpc(h->baseTpc(), interval, true);
-                        undoTransposeHarmony(h, rootTpc, baseTpc);
+                        for (ScoreElement* e : h->linkList()) {
+                              // don't transpose all links
+                              // just ones resulting from mmrests
+                              Harmony* he = static_cast<Harmony*>(e);
+                              if (he->staff() == h->staff())
+                                    undoTransposeHarmony(he, rootTpc, baseTpc);
+                              }
                         }
                   }
             }
@@ -3430,6 +3457,8 @@ void Score::insertTime(int tick, int len)
       {
       for (Staff* staff : staves())
             staff->insertTime(tick, len);
+      for (Part* part : parts())
+            part->insertTime(tick, len);
       }
 
 //---------------------------------------------------------
@@ -3731,7 +3760,7 @@ int Score::keysig()
             if (st->staffType()->group() == StaffGroup::PERCUSSION || st->keySigEvent(0).custom())      // ignore percussion and custom key
                   continue;
             result = key;
-            int diff = st->part()->instr()->transpose().chromatic;
+            int diff = st->part()->instrument()->transpose().chromatic;
             if (!styleB(StyleIdx::concertPitch) && diff)
                   result = transposeKey(key, diff);
             break;

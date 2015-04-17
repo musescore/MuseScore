@@ -159,8 +159,12 @@ Instrument::~Instrument()
 
 void StaffName::write(Xml& xml, const char* tag) const
       {
-      if (!name.isEmpty())
-            xml.writeXml(QString("%1 pos=\"%2\"").arg(tag).arg(pos), name);
+      if (!name().isEmpty()) {
+            if (pos() == 0)
+                  xml.writeXml(QString("%1").arg(tag), name());
+            else
+                  xml.writeXml(QString("%1 pos=\"%2\"").arg(tag).arg(pos()), name());
+            }
       }
 
 //---------------------------------------------------------
@@ -169,11 +173,11 @@ void StaffName::write(Xml& xml, const char* tag) const
 
 void StaffName::read(XmlReader& e)
       {
-      pos  = e.intAttribute("pos", 0);
-      name = e.readXml();
-      if (name.startsWith("<html>")) {
+      _pos  = e.intAttribute("pos", 0);
+      _name = e.readXml();
+      if (_name.startsWith("<html>")) {
             // compatibility to old html implementation:
-            name = QTextDocumentFragment::fromHtml(name).toPlainText();
+            _name = QTextDocumentFragment::fromHtml(_name).toPlainText();
             }
       }
 
@@ -184,10 +188,8 @@ void StaffName::read(XmlReader& e)
 void Instrument::write(Xml& xml) const
       {
       xml.stag("Instrument");
-      foreach(const StaffName& doc, _longNames)
-            doc.write(xml, "longName");
-      foreach(const StaffName& doc, _shortNames)
-            doc.write(xml, "shortName");
+      _longNames.write(xml, "longName");
+      _shortNames.write(xml, "shortName");
 //      if (!_trackName.isEmpty())
             xml.tag("trackName", _trackName);
       if (_minPitchP > 0)
@@ -691,7 +693,7 @@ bool Instrument::operator==(const Instrument& i) const
       if (i._shortNames.size() != n)
             return false;
       for (int k = 0; k < n; ++k) {
-            if (!(i._shortNames[k] == _shortNames[k].name))
+            if (!(i._shortNames[k] == _shortNames[k].name()))
                   return false;
             }
       return i._minPitchA == _minPitchA
@@ -715,7 +717,7 @@ bool Instrument::operator==(const Instrument& i) const
 
 bool StaffName::operator==(const StaffName& i) const
       {
-      return (i.pos == pos) && (i.name == name);
+      return (i._pos == _pos) && (i._name == _name);
       }
 
 //---------------------------------------------------------
@@ -748,6 +750,7 @@ void Instrument::setDrumset(const Drumset* ds)
 
 //---------------------------------------------------------
 //   setLongName
+//    f is in richtext format
 //---------------------------------------------------------
 
 void Instrument::setLongName(const QString& f)
@@ -759,6 +762,7 @@ void Instrument::setLongName(const QString& f)
 
 //---------------------------------------------------------
 //   setShortName
+//    f is in richtext format
 //---------------------------------------------------------
 
 void Instrument::setShortName(const QString& f)
@@ -955,10 +959,10 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       Instrument instr;
       instr.setAmateurPitchRange(t->minPitchA, t->maxPitchA);
       instr.setProfessionalPitchRange(t->minPitchP, t->maxPitchP);
-      foreach(StaffName sn, t->longNames)
-            instr.addLongName(StaffName(sn.name, sn.pos));
-      foreach(StaffName sn, t->shortNames)
-            instr.addShortName(StaffName(sn.name, sn.pos));
+      for (StaffName sn : t->longNames)
+            instr.addLongName(StaffName(sn.name(), sn.pos()));
+      for (StaffName sn : t->shortNames)
+            instr.addShortName(StaffName(sn.name(), sn.pos()));
       instr.setTrackName(t->trackName);
       instr.setTranspose(t->transpose);
       instr.setInstrumentId(t->musicXMLid);
@@ -975,5 +979,14 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       return instr;
       }
 
+//---------------------------------------------------------
+//   StaffNameList::write
+//---------------------------------------------------------
+
+void StaffNameList::write(Xml& xml, const char* name) const
+      {
+      for (const StaffName& sn : *this)
+            sn.write(xml, name);
+      }
 }
 

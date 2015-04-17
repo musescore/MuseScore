@@ -51,8 +51,8 @@
         </Staff>
       <trackName>Alto Saxophone</trackName>
       <Instrument>
-        <longName pos="0">Alto Saxophone</longName>
-        <shortName pos="0">A. Sax.</shortName>
+        <longName>Alto Saxophone</longName>
+        <shortName>A. Sax.</shortName>
         <trackName>Alto Saxophone</trackName>
         <minPitchP>49</minPitchP>
         <maxPitchP>87</maxPitchP>
@@ -105,8 +105,8 @@
         </Staff>
       <trackName>Tenor Saxophone</trackName>
       <Instrument>
-        <longName pos="0">Tenor Saxophone</longName>
-        <shortName pos="0">T. Sax.</shortName>
+        <longName>Tenor Saxophone</longName>
+        <shortName>T. Sax.</shortName>
         <trackName>Tenor Saxophone</trackName>
         <minPitchP>44</minPitchP>
         <maxPitchP>82</maxPitchP>

@@ -338,7 +338,7 @@ class Fluid : public Synthesizer {
 
       // get/set synthesizer state (parameter set)
       virtual SynthesizerGroup state() const;
-      virtual void setState(const SynthesizerGroup&);
+      virtual bool setState(const SynthesizerGroup&);
 
       virtual void allSoundsOff(int);
       virtual void allNotesOff(int);

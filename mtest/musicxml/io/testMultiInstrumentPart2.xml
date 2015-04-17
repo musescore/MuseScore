@@ -192,6 +192,7 @@
       <note>
         <rest/>
         <duration>4</duration>
+        <instrument id="P2-I1"/>
         <voice>1</voice>
         </note>
       </measure>
@@ -199,6 +200,7 @@
       <note>
         <rest/>
         <duration>4</duration>
+        <instrument id="P2-I1"/>
         <voice>1</voice>
         </note>
       </measure>
@@ -211,6 +213,7 @@
       <note>
         <rest/>
         <duration>4</duration>
+        <instrument id="P2-I1"/>
         <voice>1</voice>
         </note>
       </measure>
@@ -218,6 +221,7 @@
       <note>
         <rest/>
         <duration>4</duration>
+        <instrument id="P2-I1"/>
         <voice>1</voice>
         </note>
       </measure>

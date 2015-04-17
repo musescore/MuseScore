@@ -287,7 +287,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                         fret = 0;
                   gn->setFret(fret);
                   gn->setString(string);
-                  int grace_pitch = note->staff()->part()->instr()->stringData()->getPitch(string, fret, nullptr, 0);
+                  int grace_pitch = note->part()->instrument()->stringData()->getPitch(string, fret, nullptr, 0);
                   gn->setPitch(grace_pitch);
                   gn->setTpcFromPitch();
 
@@ -295,10 +295,6 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                   gc->setTrack(note->chord()->track());
                   gc->add(gn);
                   gc->setParent(note->chord());
-                  note->chord()->add(gc);
-
-                  // TODO: Add dynamic. Dynamic now can be added only to a segment, not directly to a grace note
-                  addDynamic(gn, dynamic);
 
                   TDuration d;
                   d.setVal(grace_len);
@@ -308,6 +304,8 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                   gc->setDuration(d.fraction());
                   gc->setNoteType(NoteType::ACCIACCATURA);
                   gc->setMag(note->chord()->staff()->mag() * score->styleD(StyleIdx::graceNoteMag));
+                  note->chord()->add(gc);
+                  addDynamic(gn, dynamic);
 
                   if (transition == 0) {
                         // no transition
@@ -408,7 +406,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
       // dead note represented as high numbers - fix to zero
       if (fretNumber > 99 || fretNumber == -1)
             fretNumber = 0;
-      int pitch = staff->part()->instr()->stringData()->getPitch(string, fretNumber, nullptr, 0);
+      int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr, 0);
       note->setFret(fretNumber);
       note->setString(string);
       note->setPitch(pitch);
@@ -608,7 +606,7 @@ void GuitarPro4::read(QFile* fp)
                   tuning2[strings-k-1] = tuning[k];
             StringData stringData(frets, strings, tuning2);
             Part* part = score->staff(i)->part();
-            Instrument* instr = part->instr();
+            Instrument* instr = part->instrument();
             instr->setStringData(stringData);
             part->setPartName(name);
             part->setLongName(name);
@@ -704,7 +702,7 @@ void GuitarPro4::read(QFile* fp)
                               tuple = readInt();
                         Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
                         if (beatBits & BEAT_CHORD) {
-                              int numStrings = score->staff(staffIdx)->part()->instr()->stringData()->strings();
+                              int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
                               int header = readUChar();
                               QString name;
                               if ((header & 1) == 0) {
@@ -800,7 +798,7 @@ void GuitarPro4::read(QFile* fp)
                         if(!segment->cr(track))
                               segment->add(cr);
                         Staff* staff = cr->staff();
-                        int numStrings = staff->part()->instr()->stringData()->strings();
+                        int numStrings = staff->part()->instrument()->stringData()->strings();
                         bool hasSlur = false;
 
                         for (int i = 6; i >= 0; --i) {
