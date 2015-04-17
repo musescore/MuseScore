@@ -341,6 +341,14 @@ ReducedFraction toMuseScoreTicks(int tick, int oldDivision, bool isDivisionInTps
       if (isDivisionInTps)
             return ReducedFraction::fromTicks(tick);
 
+      // avoid overflow for high values of oldDivision
+      // if possible, divide tick and oldDivision by their gcd
+      int tmpQ = gcd(tick, oldDivision);
+      if (tmpQ > 1) {
+            tick = tick / tmpQ;
+            oldDivision = oldDivision / tmpQ;
+            }
+
       Q_ASSERT_X(!isMultiplicationOverflow(tick, MScore::division),
                  "ReducedFraction::toMuseScoreTicks", "Multiplication overflow");
       Q_ASSERT_X(!isAdditionOverflow(tick * MScore::division, oldDivision / 2),
