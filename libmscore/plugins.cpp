@@ -129,6 +129,21 @@ bool FileIO::exists()
       return file.exists();
       }
 
+int FileIO::modifiedTime()
+      {
+      if (mSource.isEmpty()) {
+            emit error("source is empty");
+            return 0;
+            }
+      QUrl url(mSource);
+      QString source(mSource);
+      if(url.isValid() && url.isLocalFile()) {
+            source = url.toLocalFile();
+            }
+      QFileInfo fileInfo(source);
+      return fileInfo.lastModified().toTime_t();
+      }
+
 //---------------------------------------------------------
 //   setScore
 //---------------------------------------------------------
