@@ -134,6 +134,7 @@ int trimMargin = -1;
 QString mscoreGlobalShare;
 
 static QString outFileName;
+static QString partsFileName;
 static QString audioDriver;
 static QString pluginName;
 static QString styleFile;
@@ -2134,8 +2135,12 @@ static bool processNonGui()
                   return mscore->savePng(cs, fn);
             if (fn.endsWith(".svg"))
                   return mscore->saveSvg(cs, fn);
-            if (fn.endsWith("svc"))
-                  return mscore->saveSvgCollection(cs, fn, true);
+            if (fn.endsWith("svc")) {
+                  return mscore->saveSvgCollection(cs, fn, true, partsFileName);
+            }
+            if (fn.endsWith("json")) {
+                  return mscore->getPartsDescriptions(cs, fn);
+            }
 #ifdef HAS_AUDIOFILE
             if (fn.endsWith(".wav") || fn.endsWith(".ogg") || fn.endsWith(".flac"))
                   return mscore->saveAudio(cs, fn);
@@ -4593,6 +4598,12 @@ int main(int argc, char* av[])
                         if (argv.size() - i < 2)
                               usage();
                         outFileName = argv.takeAt(i + 1);
+                        break;
+                  case 'P':
+                        MScore::noGui = true;
+                        if (argv.size() - i < 2)
+                              usage();
+                        partsFileName = argv.takeAt(i + 1);
                         break;
                   case 'p':
                         pluginMode = true;

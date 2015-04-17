@@ -3,7 +3,8 @@
 	[
 		{
 			"path": "/home/velochy/MuseScore",
-      "file_exclude_patterns": ["*.sublime-*"]
+      "file_exclude_patterns": ["*.sublime-*"],
+      "folder_exclude_patterns": ["build.release"]
 		}
 	]
 }

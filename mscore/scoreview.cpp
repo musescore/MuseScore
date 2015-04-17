@@ -1951,8 +1951,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   }
             SysStaff* ss2 = system2->staff(lastStaff);
 
-            qreal top_margin = _score->styleS(StyleIdx::systemFrameDistance).val();
-            qreal bot_margin = _score->styleS(StyleIdx::frameSystemDistance).val();
+            qreal top_margin = _score->styleS(StyleIdx::staffUpperBorder).val();
+            qreal bot_margin = _score->styleS(StyleIdx::staffLowerBorder).val();
 
             double y1 = ss1->y() - top_margin * _spatium + y;
             double y2 = ss2->y() + ss2->bbox().height() + bot_margin * _spatium + y;
