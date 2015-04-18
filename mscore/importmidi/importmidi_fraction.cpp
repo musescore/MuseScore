@@ -163,7 +163,7 @@ int ReducedFraction::ticks() const
 
       Q_ASSERT_X(!isDivisionOverflow(tmp, denominator_),
                  "ReducedFraction::ticks", "Division overflow");
-      Q_ASSERT_X(!isMultiplicationOverflow(integral, denominator_),
+      Q_ASSERT_X(!isMultiplicationOverflow(integral, division),
                  "ReducedFraction::ticks", "Multiplication overflow");
       Q_ASSERT_X(!isAdditionOverflow(tmp / denominator_, integral * division),
                  "ReducedFraction::ticks", "Addition overflow");
