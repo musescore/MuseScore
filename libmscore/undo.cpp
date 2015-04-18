@@ -1027,6 +1027,7 @@ void Score::undoAddElement(Element* element)
          && et != Element::Type::TREMOLO
          && et != Element::Type::ARPEGGIO
          && et != Element::Type::SYMBOL
+         && et != Element::Type::TREMOLOBAR
          && et != Element::Type::FRET_DIAGRAM
          && et != Element::Type::HARMONY)
             ) {
@@ -1127,6 +1128,7 @@ void Score::undoAddElement(Element* element)
             //
             else if (element->type() == Element::Type::SYMBOL
                || element->type() == Element::Type::IMAGE
+               || element->type() == Element::Type::TREMOLOBAR
                || element->type() == Element::Type::DYNAMIC
                || element->type() == Element::Type::STAFF_TEXT
                || element->type() == Element::Type::FRET_DIAGRAM

@@ -438,8 +438,10 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "tr-props") {
             TremoloBar* tb = static_cast<TremoloBar*>(e);
             TremoloBarProperties bp(tb, 0);
-            if (bp.exec())
-                  score()->undo(new ChangeTremoloBar(tb, bp.points()));
+            if (bp.exec()) {
+                  for (ScoreElement* b : tb->linkList())
+                        score()->undo(new ChangeTremoloBar(static_cast<TremoloBar*>(b), bp.points()));
+                  }
             }
       if (cmd == "ts-courtesy") {
             TimeSig* ts = static_cast<TimeSig*>(e);
