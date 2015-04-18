@@ -758,7 +758,7 @@ void MusicXml::import(Score* s)
 
 /**
  Initialize members as required for reading the MusicXML part element.
- TODO: factor out part reading into a separate
+ TODO: factor out part reading into a separate class
  */
 
 void MusicXml::initPartState()
@@ -770,6 +770,7 @@ void MusicXml::initPartState()
       lastMeasureLen        = 0;
       multiMeasureRestCount = -1;
       startMultiMeasureRest = false;
+      hasDrumset = false;
       tie    = 0;
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
             slur[i] = SlurDesc();
@@ -2087,6 +2088,23 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             }
 
       initPartState();
+            
+      // determine if the part contains a drumset
+      // this is the case if any instrument has a midi-unpitched element,
+      // (which stored in the MusicXMLDrumInstrument pitch field)
+      // debug: also dump the drumset for this part
+      
+      hasDrumset = false;
+      MusicXMLDrumsetIterator iii(drumsets[id]);
+      while (iii.hasNext()) {
+            iii.next();
+            //qDebug("xmlPart: instrument: %s %s", qPrintable(iii.key()), qPrintable(iii.value().toString()));
+            int pitch = iii.value().pitch;
+            if (0 <= pitch && pitch <= 127) {
+                  hasDrumset = true;
+            }
+      }
+      //qDebug("xmlPart: hasDrumset %d", hasDrumset);
 
       KeySigEvent ev;
       KeySig currKeySig;
@@ -2134,14 +2152,10 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             }
       spanners.clear();
 
-      // determine if the part contains a drumset
-      // this is the case if any instrument has a midi-unpitched element,
-      // (which stored in the MusicXMLDrumInstrument pitch field)
-      // if the part contains a drumset, Drumset drumset is intialized
+      // intialize Drumset drumset
       // debug: also dump the drumset for this part
 
       Drumset* drumset = new Drumset;
-      bool hasDrumset = false;
       drumset->clear();
       MusicXMLDrumsetIterator ii(drumsets[id]);
       while (ii.hasNext()) {
@@ -2149,13 +2163,11 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             //qDebug("xmlPart: instrument: %s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
             int pitch = ii.value().pitch;
             if (0 <= pitch && pitch <= 127) {
-                  hasDrumset = true;
                   drumset->drum(ii.value().pitch)
                         = DrumInstrument(ii.value().name.toLatin1().constData(),
                                          ii.value().notehead, ii.value().line, ii.value().stemDirection);
                   }
             }
-      //qDebug("xmlPart: hasDrumset %d", hasDrumset);
 
       // debug: dump the instrument map
       /*
@@ -3973,7 +3985,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         staffIdx += number - 1;
                   // qDebug("xmlAttributes clef score->staff(0) %p staffIdx %d score->staff(%d) %p",
                   //       score->staff(0), staffIdx, staffIdx, score->staff(staffIdx));
-                  if (st != StaffTypes::STANDARD)
+                  if (st == StaffTypes::TAB_DEFAULT || (hasDrumset && st == StaffTypes::PERC_DEFAULT))
                         score->staff(staffIdx)->setStaffType(StaffType::preset(st));
                   }
             else if (e.tagName() == "staves")
@@ -5813,6 +5825,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             // is inserted into pitch sorted list (ws)
 
             if (unpitched
+                && hasDrumset
                 && drumsets.contains(partId)
                 && drumsets[partId].contains(instrId)) {
                   // step and oct are display-step and ...-oct
