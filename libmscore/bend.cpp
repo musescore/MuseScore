@@ -160,8 +160,6 @@ void Bend::layout()
 
 void Bend::draw(QPainter* painter) const
       {
-      if (staff() && !staff()->isTabStaff())
-            return;
       QPen pen(curColor(), _lw, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
       painter->setPen(pen);
       painter->setBrush(QBrush(Qt::black));
