@@ -196,6 +196,7 @@ class MusicXml {
       int lastMeasureLen;
       int multiMeasureRestCount;                ///< Remaining measures in a multi measure rest
       bool startMultiMeasureRest;               ///< Multi measure rest started in this measure
+      bool hasDrumset;                          ///< Part has defined a drumset
 
       int divisions;                            ///< Current MusicXML divisions
       QVector<Tuplet*> tuplets;                 ///< Current tuplet for each track in the current part
