@@ -304,38 +304,60 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
       }
 
 //---------------------------------------------------------
+//   hasDrumset
+//---------------------------------------------------------
+
+/**
+ Determine if \a mxmlDrumset contains a valid drumset.
+ This is the case if any instrument has a midi-unpitched element,
+ (which stored in the MusicXMLDrumInstrument pitch field).
+ */
+
+static bool hasDrumset(const MusicXMLDrumset& mxmlDrumset)
+      {
+      bool res = false;
+      MusicXMLDrumsetIterator ii(mxmlDrumset);
+      while (ii.hasNext()) {
+            ii.next();
+            // debug: dump the drumset
+            //qDebug("hasDrumset: instrument: %s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
+            int pitch = ii.value().pitch;
+            if (0 <= pitch && pitch <= 127) {
+                  res = true;
+                  }
+            }
+
+      return res;
+      }
+
+//---------------------------------------------------------
 //   initDrumset
 //---------------------------------------------------------
 
 /**
- Initialize \a drumset.
- Return true if the part has a drumset.
+ Initialize drumset \a drumset.
  */
 
 // determine if the part contains a drumset
 // this is the case if any instrument has a midi-unpitched element,
 // (which stored in the MusicXMLDrumInstrument pitch field)
 // if the part contains a drumset, Drumset drumset is intialized
-// debug: also dump the drumset for this part
 
-static bool initDrumset(Drumset* drumset, const MusicXMLDrumset& mxmlDrumset)
+static void initDrumset(Drumset* drumset, const MusicXMLDrumset& mxmlDrumset)
       {
-      bool hasDrumset = false;
       drumset->clear();
       MusicXMLDrumsetIterator ii(mxmlDrumset);
       while (ii.hasNext()) {
             ii.next();
+            // debug: also dump the drumset for this part
             //qDebug("initDrumset: instrument: %s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
             int pitch = ii.value().pitch;
             if (0 <= pitch && pitch <= 127) {
-                  hasDrumset = true;
                   drumset->drum(ii.value().pitch)
                         = DrumInstrument(ii.value().name.toLatin1().constData(),
                                          ii.value().notehead, ii.value().line, ii.value().stemDirection);
                   }
             }
-
-      return hasDrumset;
       }
 
 //---------------------------------------------------------
@@ -1280,6 +1302,7 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
       _tuplets.resize(nstaves * VOICES);
       _tie    = 0;
       _lastVolta = 0;
+      _hasDrumset = false;
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
             _slur[i] = SlurDesc();
       for (int i = 0; i < MAX_BRACKETS; ++i)
@@ -1569,6 +1592,9 @@ void MusicXMLParserPass2::part()
 
       initPartState(id);
 
+      const MusicXMLDrumset& mxmlDrumset = _pass1.getDrumset(id);
+      _hasDrumset = hasDrumset(mxmlDrumset);
+
 #ifdef DEBUG_VOICE_MAPPER
       VoiceList voicelist = _pass1.getVoiceList(id);
       // debug: print voice mapper contents
@@ -1618,8 +1644,8 @@ void MusicXMLParserPass2::part()
       // if the part contains a drumset, Drumset drumset is intialized
 
       Drumset* drumset = new Drumset;
-      const MusicXMLDrumset& mxmlDrumset = _pass1.getDrumset(id);
-      bool hasDrumset = initDrumset(drumset, mxmlDrumset);
+      const MusicXMLDrumset& mxmlDrumsetAfterPass2 = _pass1.getDrumset(id);
+      initDrumset(drumset, mxmlDrumsetAfterPass2);
 
       // debug: dump the instrument map
       /*
@@ -1637,7 +1663,7 @@ void MusicXMLParserPass2::part()
       QString instrId = _pass1.getInstrList(id).instrument(Fraction(0, 1));
       setFirstInstrument(_pass1.getPart(id), id, instrId, mxmlDrumset);
 
-      if (hasDrumset) {
+      if (_hasDrumset) {
             // set staff type to percussion if incorrectly imported as pitched staff
             // Note: part has been read, staff type already set based on clef type and staff-details
             // but may be incorrect for a percussion staff that does not use a percussion clef
@@ -3355,7 +3381,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       // also note that clef handling should probably done in pass1
       int staffIdx = _score->staffIdx(part);
       int lines = _score->staff(staffIdx)->lines();
-      if (st != StaffTypes::STANDARD) {
+      if (st == StaffTypes::TAB_DEFAULT || (_hasDrumset && st == StaffTypes::PERC_DEFAULT)) {
             _score->staff(staffIdx)->setStaffType(StaffType::preset(st));
             _score->staff(staffIdx)->setLines(lines);
             _score->staff(staffIdx)->setBarLineTo((lines - 1) * 2);
@@ -4062,15 +4088,21 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   }
 
             const MusicXMLDrumset& mxmlDrumset = _pass1.getDrumset(partId);
-            if (unpitched
-                //&& drumsets.contains(partId)
-                && mxmlDrumset.contains(instrId)) {
-                  // step and oct are display-step and ...-oct
-                  // get pitch from instrument definition in drumset instead
-                  int pitch = mxmlDrumset[instrId].pitch;
-                  note->setPitch(pitch);
-                  // TODO - does this need to be key-aware?
-                  note->setTpc(pitch2tpc(pitch, Key::C, Prefer::NEAREST)); // TODO: necessary ?
+            if (unpitched) {
+                  //&& drumsets.contains(partId)
+                  if (_hasDrumset
+                      && mxmlDrumset.contains(instrId)) {
+                        // step and oct are display-step and ...-oct
+                        // get pitch from instrument definition in drumset instead
+                        int pitch = mxmlDrumset[instrId].pitch;
+                        note->setPitch(pitch);
+                        // TODO - does this need to be key-aware?
+                        note->setTpc(pitch2tpc(pitch, Key::C, Prefer::NEAREST)); // TODO: necessary ?
+                        }
+                  else {
+                        qDebug("disp step %d oct %d", displayStep, displayOctave);
+                        xmlSetPitch(note, displayStep, 0, displayOctave, 0, _pass1.getPart(partId)->instrument());
+                        }
                   }
             else {
                   int ottavaStaff = (msTrack - _pass1.trackForPart(partId)) / VOICES;
@@ -4134,7 +4166,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       // TODO: complete and cleanup handling this case
       if (cr) {
             cr->setVisible(printObject);
-            if (cue) cr->setSmall(cue); // only once per chord
+            if (cue) cr->setSmall(cue);  // only once per chord
             }
 
       // handle the postponed children of <note>
