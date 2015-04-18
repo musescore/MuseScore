@@ -2703,7 +2703,7 @@ void Note::setAccidentalType(AccidentalType type)
 //   not be passed to the undo system.
 //---------------------------------------------------------
 
-void Note::qmlSetPitch(int pitch) 
+void Note::qmlSetPitch(int pitch)
       {
       if (pitch < 0 || pitch > 127)
             // invalid pitch
@@ -2719,7 +2719,7 @@ void Note::qmlSetPitch(int pitch)
             }
       }
 
-void Note::qmlSetTpc1(int v) 
+void Note::qmlSetTpc1(int v)
       {
       if (!tpcIsValid(v))
             // invalid tpc
@@ -2735,7 +2735,7 @@ void Note::qmlSetTpc1(int v)
             }
       }
 
-void Note::qmlSetTpc2(int v) 
+void Note::qmlSetTpc2(int v)
       {
       if (!tpcIsValid(v))
             // invalid tpc
