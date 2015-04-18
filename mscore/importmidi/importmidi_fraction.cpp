@@ -341,17 +341,29 @@ ReducedFraction toMuseScoreTicks(int tick, int oldDivision, bool isDivisionInTps
       if (isDivisionInTps)
             return ReducedFraction::fromTicks(tick);
 
-      Q_ASSERT_X(!isMultiplicationOverflow(tick, MScore::division),
+      Q_ASSERT_X(!isDivisionOverflow(tick, oldDivision),
+                 "ReducedFraction::toMuseScoreTicks", "Division overflow");
+      Q_ASSERT_X(!isRemainderOverflow(tick, oldDivision),
+                 "ReducedFraction::toMuseScoreTicks", "Remainder overflow");
+
+      const int integral = tick / oldDivision;
+      const int remainder = tick % oldDivision;
+
+      Q_ASSERT_X(!isMultiplicationOverflow(remainder, MScore::division),
                  "ReducedFraction::toMuseScoreTicks", "Multiplication overflow");
-      Q_ASSERT_X(!isAdditionOverflow(tick * MScore::division, oldDivision / 2),
+      Q_ASSERT_X(!isAdditionOverflow(remainder * MScore::division, oldDivision / 2),
                  "ReducedFraction::toMuseScoreTicks", "Addition overflow");
 
-      const int tmp = tick * MScore::division + oldDivision / 2;
+      const int tmp = remainder * MScore::division + oldDivision / 2;
 
       Q_ASSERT_X(!isDivisionOverflow(tmp, oldDivision),
                  "ReducedFraction::toMuseScoreTicks", "Division overflow");
+      Q_ASSERT_X(!isMultiplicationOverflow(integral, MScore::division),
+                 "ReducedFraction::toMuseScoreTicks", "Multiplication overflow");
+      Q_ASSERT_X(!isAdditionOverflow(tmp / oldDivision, integral *  MScore::division),
+                 "ReducedFraction::toMuseScoreTicks", "Addition overflow");
 
-      return ReducedFraction::fromTicks(tmp / oldDivision);
+      return ReducedFraction::fromTicks(tmp / oldDivision + integral * MScore::division);
       }
 
 } // namespace Ms
