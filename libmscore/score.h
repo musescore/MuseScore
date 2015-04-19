@@ -172,6 +172,7 @@ struct MidiMapping {
 struct MidiInputEvent {
       int pitch;
       bool chord;
+      int velocity;
       };
 
 //---------------------------------------------------------
