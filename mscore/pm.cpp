@@ -225,6 +225,11 @@ void PortMidiDriver::read()
                         (void)Pm_MessageData2(buffer[0].message); // read but ignore
                         mscore->midiNoteReceived(channel, pitch, 0);
                         }
+                  else if (type == ME_CONTROLLER) {
+                        int param = Pm_MessageData1(buffer[0].message);
+                        int value = Pm_MessageData2(buffer[0].message);
+                        mscore->midiCtrlReceived(param, value);
+                        }
                   }
             }
       }
