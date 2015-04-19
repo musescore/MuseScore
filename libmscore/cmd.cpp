@@ -1723,12 +1723,13 @@ bool Score::processMidiInput()
                         MScore::seq->startNote(
                                           p->instrument()->channel(0)->channel,
                                           ev.pitch,
-                                          80,
-                                          MScore::defaultPlayDuration,
+                                          ev.velocity,
                                           0.0);
                         }
                   }
             else  {
+                  if (ev.velocity == 0)
+                        continue;
                   if (!cmdActive) {
                         startCmd();
                         cmdActive = true;

@@ -416,7 +416,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void setCursorVisible(bool v);
       void showOmr(bool flag);
       Element* getCurElement() const { return curElement; }   // current item at mouse press
-      void midiNoteReceived(int pitch, bool);
+      void midiNoteReceived(int pitch, bool chord, int velocity);
       void setEditPos(const QPointF&);
 
       virtual void moveCursor() override;
