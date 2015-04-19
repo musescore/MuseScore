@@ -217,7 +217,7 @@ class Seq : public QObject, public Sequencer {
       int getEndTick() const    { return endTick;  }
       bool isRealtime() const   { return true;     }
       void sendMessage(SeqMsg&) const;
-      virtual void startNote(int channel, int, int, int, double nt);
+
       void setController(int, int, int);
       virtual void sendEvent(const NPlayEvent&);
       void setScoreView(ScoreView*);
@@ -235,7 +235,8 @@ class Seq : public QObject, public Sequencer {
 
       void putEvent(const NPlayEvent&, unsigned framePos = 0);
       void startNoteTimer(int duration);
-      void startNote(int channel, int, int, double nt);
+      virtual void startNote(int channel, int, int, double nt) override;
+      virtual void startNote(int channel, int, int, int, double nt) override;
       void eventToGui(NPlayEvent);
       void stopNoteTimer();
       void recomputeMaxMidiOutPort();
