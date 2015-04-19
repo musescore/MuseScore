@@ -209,6 +209,16 @@ void Tuplet::layout()
       qreal noteLeft = score()->styleS(StyleIdx::tupletNoteLeftDistance).val() * _spatium;
       qreal noteRight = score()->styleS(StyleIdx::tupletNoteRightDistance).val() * _spatium;
 
+      int move = 0;
+      if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
+            // account for staff move when adjusting bracket to avoid staff
+            // but don't attempt adjustment unless both endpoints are in same staff
+            if (static_cast<const ChordRest*>(cr1)->staffMove() == static_cast<const ChordRest*>(cr2)->staffMove())
+                  move = static_cast<const ChordRest*>(cr1)->staffMove();
+            else
+                  outOfStaff = false;
+            }
+
       qreal l1 = _spatium;          // bracket tip height
       qreal l2l = vHeadDistance;    // left bracket vertical distance
       qreal l2r = vHeadDistance;    // right bracket vertical distance right
@@ -296,12 +306,12 @@ void Tuplet::layout()
 
             // outOfStaff
             if (outOfStaff) {
-                  qreal min = cr1->measure()->staffabbox(cr1->staffIdx()).y();
+                  qreal min = cr1->measure()->staffabbox(cr1->staffIdx() + move).y();
                   if (min < p1.y()) {
                         p1.ry() = min;
                         l2l = vStemDistance;
                         }
-                  min = cr2->measure()->staffabbox(cr2->staffIdx()).y();
+                  min = cr2->measure()->staffabbox(cr2->staffIdx() + move).y();
                   if (min < p2.y()) {
                         p2.ry() = min;
                         l2r = vStemDistance;
@@ -407,12 +417,12 @@ void Tuplet::layout()
                   }
             // outOfStaff
             if (outOfStaff) {
-                  qreal max = cr1->measure()->staffabbox(cr1->staffIdx()).bottom();
+                  qreal max = cr1->measure()->staffabbox(cr1->staffIdx() + move).bottom();
                   if (max > p1.y()) {
                         p1.ry() = max;
                         l2l = vStemDistance;
                         }
-                  max = cr2->measure()->staffabbox(cr2->staffIdx()).bottom();
+                  max = cr2->measure()->staffabbox(cr2->staffIdx() + move).bottom();
                   if (max > p2.y()) {
                         p2.ry() = max;
                         l2r = vStemDistance;
