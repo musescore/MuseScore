@@ -822,6 +822,11 @@ QStringList MuseScore::getOpenScoreNames(const QString& filter, const QString& t
             loadScoreDialog->setAcceptMode(QFileDialog::AcceptOpen);
             loadScoreDialog->setDirectory(dir);
             }
+      else {
+            // dialog already exists, but set title and filter
+            loadScoreDialog->setWindowTitle(title);
+            loadScoreDialog->setNameFilter(filter);
+            }
 
       QStringList result;
       if (loadScoreDialog->exec())
