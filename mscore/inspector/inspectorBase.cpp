@@ -306,6 +306,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
       else {
             if (ii.r)
                   ii.r->setEnabled(true);
+            ii.w->setStyleSheet("");
             }
       }
 
