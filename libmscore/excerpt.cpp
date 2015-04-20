@@ -218,6 +218,9 @@ void createExcerpt(Excerpt* excerpt)
 
 static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
       {
+      // dont clone voltas for track != 0
+      if (s->type() == Element::Type::VOLTA && s->track() != 0)
+            return;
       Spanner* ns = static_cast<Spanner*>(s->linkedClone());
       ns->setScore(score);
       ns->setParent(0);
