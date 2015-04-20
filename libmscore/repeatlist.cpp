@@ -260,7 +260,7 @@ void RepeatList::unwind()
             return;
 
 // qDebug("unwind===================");
-
+      QList<Jump*> jumps; // take the jumps only once so store them
       rs                  = new RepeatSegment;
       rs->tick            = 0;
       Measure* endRepeat  = 0; // measure where the current repeat should stop
@@ -349,6 +349,12 @@ void RepeatList::unwind()
                               break;
                               }
                         }
+                  // jump only once
+                  if (jumps.contains(s)) {
+                        m = m->nextMeasure();
+                        continue;
+                        }
+                  jumps.append(s);
                   if (s) {
                         Measure* nm = _score->searchLabel(s->jumpTo());
                         endRepeat   = _score->searchLabel(s->playUntil());
