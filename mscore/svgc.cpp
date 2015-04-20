@@ -171,9 +171,33 @@ void addFileToZip(MQZipWriter * uz, const QString& filename) {
     file.remove();
 }
 
+// Check if the file might be a clever construction that would take ages to parse
+QString checkSafety(Score * score) {
+
+	if (score->rootScore()->excerpts().size() > 20) return QString("Too many parts");
+
+	score->repeatList()->unwind();
+	if (score->repeatList()->size() > 100) return QString("Too many repeats");
+
+	RepeatSegment * rs = score->repeatList()->last();
+	int endTick= rs->tick + rs->len;
+	qreal endtime = score->tempomap()->tick2time(endTick);
+
+	if (endtime>60*10) return QString("Piece lasts too long");
+
+	// Empty string to signify 'no complaints'
+	return QString();
+}
+
 bool createSvgCollection(MQZipWriter * uz, Score* score, const bool do_linearize);
 
 bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const bool do_linearize, const QString& partsName) {
+
+	QString safe = checkSafety(cs);
+	if (!safe.isEmpty()) {
+		qDebug(safe.toLatin1());
+		return false;
+	}
 
 	int i = '1';
 
@@ -230,27 +254,71 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 }
 
 
+QJsonArray stavesToJson(Score * score) {
+	QJsonArray s_ar = QJsonArray();
+    foreach( Staff * staff, score->staves()) {
+    	QJsonObject sobj = QJsonObject();
+
+    	sobj["type"] = staff->isPitchedStaff()?"standard":(
+    					staff->isDrumStaff()?"percussion":(
+    					 staff->isTabStaff()?"tab":"unknown"));
+
+    	s_ar.append(sobj);
+    }
+
+    return s_ar;
+}
+
 bool MuseScore::getPartsDescriptions(Score* score, const QString& saveName) {
 
-	// Get info about:
-	// * Excerpts (names, instruments)
-	// * Tab or note
-	// * Parts/voices present in each
-
+	QString safe = checkSafety(score);
+	if (!safe.isEmpty()) {
+		qDebug(safe.toLatin1());
+		return false;
+	}
 
 	QFile file(saveName);
-	file.open(QIODevice::ReadWrite | QIODevice::Text);
+	file.open(QIODevice::WriteOnly | QIODevice::Text);
 	
 	QJsonObject obj = QJsonObject();
-	obj["XXX"]="YYY";
+
+	// List all parts
+	QJsonArray p_ar = QJsonArray();
+	int pi = 1;
+    foreach( Part * part, score->parts().toSet()) {
+    	part->setId(QString::number(pi++));
+
+    	QJsonObject pobj = QJsonObject();
+	    pobj["id"] = part->id();
+	    pobj["instrument"] = getInstrumentName(part->instrument());
+	    pobj["name"] = part->partName();
+        p_ar.append(pobj);
+    }
+    obj["parts"] = p_ar;
+
+    // List staves in main score
+    obj["staves"] = stavesToJson(score);
+
+    // List all excerpts
+
+    QJsonArray e_ar = QJsonArray();
+	foreach (Excerpt* e, score->rootScore()->excerpts())  {
+		QJsonObject eobj = QJsonObject();
+
+		QJsonArray ep_ar = QJsonArray();
+		foreach(Part * part, e->parts().toSet()) {
+			ep_ar.append(part->id());
+		}
+		eobj["parts"] = ep_ar;
+
+	    eobj["staves"] = stavesToJson(e->partScore());
+
+        e_ar.append(eobj);
+    }
+    obj["excerpts"] = e_ar;
+
 	file.write(QJsonDocument(obj).toJson());
 	file.close();
-		    
-    foreach( Part * part, score->parts()) {
-        QString iname = getInstrumentName(part->instrument());
-        QString pname = part->partName();
-        qDebug("PART "+pname.toLatin1()+" with instr. "+iname.toLatin1());
-    }
 
     return true;
 }
@@ -316,7 +384,7 @@ bool createSvgCollection(MQZipWriter * uz, Score* score, const bool do_linearize
       createSvgs(score,uz,&qts,QString("Line"));
 
       qDebug("Total ticks: %i. End time: %f",ticksFromBeg,score->tempomap()->tick2time(ticksFromBeg));
-      qts << "AT " << score->tempomap()->tick2time(0) << ',' << score->tempomap()->tick2time(ticksFromBeg)<< endl;
+      qts << "AT " << score->tempomap()->tick2time(0) << ',' << score->tempomap()->tick2time(ticksFromBeg) << endl;
       qts << "TT " << ticksFromBeg << endl;
 
       uz->addFile("metainfo.meta",metabuf.data());
@@ -345,6 +413,8 @@ int createSvgs(Score* score, MQZipWriter * uz, QTextStream * qts, QString basena
 
       int ticksFromBeg = 0;
 
+      int firstNonRest = 0, lastNonRest = 0;
+
       double mag = converterDpi / MScore::DPI;
 
       QString svgname = "";
@@ -366,7 +436,7 @@ int createSvgs(Score* score, MQZipWriter * uz, QTextStream * qts, QString basena
                bot_margin = sys->vbox()->bottomGap();
             }
 
-            qDebug("TOP %f BOT %f FALLBACK %f",top_margin,bot_margin,staff_dist/2);//score->styleP(StyleIdx::minSystemDistance));
+            //qDebug("TOP %f BOT %f FALLBACK %f",top_margin,bot_margin,staff_dist/2);//score->styleP(StyleIdx::minSystemDistance));
 
             top_margin = qMax(staff_dist/2,top_margin);
             bot_margin = qMax(staff_dist/2,bot_margin);
@@ -450,6 +520,13 @@ int createSvgs(Score* score, MQZipWriter * uz, QTextStream * qts, QString basena
                         note_row(qts,last_tick,last_pos,&notes,&ongoing);
                      }
 
+                     // Update the bounds for actual audio
+                     if (e->type() == Element::Type::NOTE) {
+                      if (firstNonRest<0 || tick<firstNonRest) firstNonRest = tick;
+                      int dur = cr->durationTypeTicks();
+                      if (tick+dur > lastNonRest) lastNonRest = tick+dur;
+                     }
+
                      //qDebug("%i (%i) - %f",cr->segment()->tick(),ticksFromBeg,world.m31());
                      last_tick = tick;
 
@@ -517,6 +594,9 @@ int createSvgs(Score* score, MQZipWriter * uz, QTextStream * qts, QString basena
             delete p; delete svgbuf;
          }
       }
+
+      // Print actual audio bounds (i.e. the interval outside which everything is silence)
+      (*qts) << "AA " << score->tempomap()->tick2time(firstNonRest) << ',' << score->tempomap()->tick2time(lastNonRest) << endl;
 
       if (measure!=NULL) ticksFromBeg+=measure->ticks();
 
