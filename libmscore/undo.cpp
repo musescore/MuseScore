@@ -878,13 +878,16 @@ void Score::undoAddElement(Element* element)
             foreach(Score* s, scoreList())
                   staffList.append(s->staff(0));
 
-            foreach(Staff* staff, staffList) {
+            foreach (Staff* staff, staffList) {
                   Score* score = staff->score();
                   int staffIdx = score->staffIdx(staff);
                   Element* ne;
                   if (staff->score() == ostaff->score())
                         ne = element;
                   else {
+                        // only create linked volta for first staff
+                        if (et == Element::Type::VOLTA && element->track() != 0)
+                              continue;
                         ne = element->linkedClone();
                         ne->setScore(score);
                         ne->setSelected(false);
