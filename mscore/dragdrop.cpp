@@ -329,8 +329,8 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
       if (dragElement) {
             switch(dragElement->type()) {
                   case Element::Type::VOLTA:
-                        dragMeasureAnchorElement(pos);
-                        break;
+                        // dragMeasureAnchorElement(pos);
+                        // break;
                   case Element::Type::PEDAL:
                   case Element::Type::DYNAMIC:
                   case Element::Type::OTTAVA:
