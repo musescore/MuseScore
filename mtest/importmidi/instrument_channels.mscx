@@ -45,11 +45,11 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>String Section</trackName>
+      <trackName>Violins</trackName>
       <Instrument>
-        <longName>String Section</longName>
-        <shortName>Str.</shortName>
-        <trackName>String Section</trackName>
+        <longName>Violins</longName>
+        <shortName>Vlns.</shortName>
+        <trackName>Violins</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
         <minPitchA>55</minPitchA>

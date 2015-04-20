@@ -3447,7 +3447,7 @@
             </Instrument>
             <Instrument id="euphonium-bugle">
                   <longName>Euphonium Bugle</longName>
-                  <shortName>Eu. Bu.</shortName>
+                  <shortName>Euph. Bu.</shortName>
                   <description>Euphonium Bugle</description>
                   <musicXMLid>brass.bugle.euphonium-bugle</musicXMLid>
                   <clef>C</clef>
@@ -3785,7 +3785,7 @@
             </Instrument>
             <Instrument id="euphonium">
                   <longName>Euphonium</longName>
-                  <shortName>Eu.</shortName>
+                  <shortName>Euph.</shortName>
                   <description>Euphonium</description>
                   <musicXMLid>brass.euphonium</musicXMLid>
                   <clef>F</clef>
@@ -3801,7 +3801,7 @@
             <Instrument id="euphonium-treble">
                   <trackName>Euphonium (Treble Clef)</trackName>
                   <longName>Euphonium</longName>
-                  <shortName>Eu.</shortName>
+                  <shortName>Euph.</shortName>
                   <description>Euphonium</description>
                   <musicXMLid>brass.euphonium</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -3817,7 +3817,7 @@
             </Instrument>
             <Instrument id="tuba">
                   <longName>Tuba</longName>
-                  <shortName>Tu.</shortName>
+                  <shortName>Tba.</shortName>
                   <description>Tuba (generic)</description>
                   <musicXMLid>brass.tuba</musicXMLid>
                   <clef>F</clef>
@@ -9110,26 +9110,6 @@
                   </Channel>
                   <genre>ethnic</genre>
             </Instrument>
-            <Instrument id="string-section">
-                  <longName>String Section</longName>
-                  <shortName>Str.</shortName>
-                  <description>String Section</description>
-                  <trackName>String Section</trackName>
-                  <musicXMLid>strings.group</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>55-88</aPitchRange>
-                  <pPitchRange>55-103</pPitchRange>
-                  <Channel>
-                        <program value="48"/>
-                  </Channel>
-                  <Channel name="pizzicato">
-                        <program value="45"/>
-                  </Channel>
-                  <Channel name="tremolo">
-                        <program value="44"/>
-                  </Channel>
-            </Instrument>
             <Instrument id="violin">
                   <longName>Violin</longName>
                   <shortName>Vln.</shortName>
@@ -9152,7 +9132,26 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
-            <!-- Violins 1 & 2 have been removed as un-necessary duplications -->
+            <Instrument id="violins">
+                  <longName>Violins</longName>
+                  <shortName>Vlns.</shortName>
+                  <description>Violins</description>
+                  <musicXMLid>strings.group</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>55-88</aPitchRange>
+                  <pPitchRange>55-103</pPitchRange>
+                  <Channel>
+                        <program value="48"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
+                  <genre>orchestra</genre>
+            </Instrument>
             <Instrument id="viola">
                   <longName>Viola</longName>
                   <shortName>Vla.</shortName>
@@ -9173,6 +9172,26 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
+                  <genre>orchestra</genre>
+            </Instrument>
+            <Instrument id="violas">
+                  <longName>Violas</longName>
+                  <shortName>Vlas.</shortName>
+                  <description>Violas</description>
+                  <musicXMLid>strings.group</musicXMLid>
+                  <clef>C3</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>48-79</aPitchRange>
+                  <pPitchRange>48-93</pPitchRange>
+                  <Channel>
+                        <program value="48"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="violoncello">
@@ -9197,6 +9216,26 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
+            <Instrument id="violoncellos">
+                  <longName>Violoncellos</longName>
+                  <shortName>Vlcs.</shortName>
+                  <description>Violoncellos</description>
+                  <musicXMLid>strings.group</musicXMLid>
+                  <clef>F</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>36-67</aPitchRange>
+                  <pPitchRange>36-90</pPitchRange>
+                  <Channel>
+                        <program value="48"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
+                  <genre>orchestra</genre>
+            </Instrument>
             <Instrument id="contrabass">
                   <longName>Contrabass</longName>
                   <shortName>Cb.</shortName>
@@ -9219,9 +9258,30 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
             </Instrument>
+            <Instrument id="contrabasss">
+                  <longName>Contrabasses</longName>
+                  <shortName>Cbs.</shortName>
+                  <description>Contrabasses</description>
+                  <musicXMLid>strings.group</musicXMLid>
+                  <clef>F8vb</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>28-62</aPitchRange>
+                  <pPitchRange>28-67</pPitchRange>
+                  <Channel>
+                        <program value="48"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
+                  <genre>orchestra</genre>
+            </Instrument>
             <Instrument id="double-bass">
                   <init>contrabass</init>
                   <longName>Double Bass</longName>
+                  <shortName>Db.</shortName>
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
