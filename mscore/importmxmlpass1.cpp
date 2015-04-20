@@ -2030,7 +2030,9 @@ void MusicXMLParserPass1::clef(const QString& partId)
       int staves = part->nstaves();
       int staffIdx = _score->staffIdx(part);
 
-      if (0 <= n && n < staves && staffType != StaffTypes::STANDARD)
+      // TODO: changed for #55501, but now staff type init is shared between pass 1 and 2
+      // old code: if (0 <= n && n < staves && staffType != StaffTypes::STANDARD)
+      if (0 <= n && n < staves && staffType == StaffTypes::TAB_DEFAULT)
             _score->staff(staffIdx + n)->setStaffType(StaffType::preset(staffType));
       }
 

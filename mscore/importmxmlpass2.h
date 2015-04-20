@@ -169,6 +169,7 @@ private:
 
       Tie* _tie;
       Volta* _lastVolta;
+      bool _hasDrumset;                           ///< drumset defined TODO: move to pass 1
 
       MusicXmlSpannerMap _spanners;
 
