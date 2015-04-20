@@ -1,5 +1,6 @@
 #!/bin/sh
-xvfb-run ctest
+xvfb-run ctest --output-on-failure
+
 PROC_RET=$?
 
 if [ "$PROC_RET" -ne 0 ]; then
