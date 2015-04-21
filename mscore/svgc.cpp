@@ -164,10 +164,10 @@ void createBackingTrack(Excerpt * e, Score * cs, const QString& midiname) {
     		channel->mute = false;
 }
 
-void addFileToZip(MQZipWriter * uz, const QString& filename) {
+void addFileToZip(MQZipWriter * uz, const QString& filename, const QString & zippath) {
     QFile file(filename);
     file.open(QIODevice::ReadOnly);
-    uz->addFile(filename,&file);
+    uz->addFile(zippath,&file);
     file.remove();
 }
 
@@ -189,7 +189,7 @@ QString checkSafety(Score * score) {
 	return QString();
 }
 
-bool createSvgCollection(MQZipWriter * uz, Score* score, const bool do_linearize);
+bool createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const bool do_linearize);
 
 bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const bool do_linearize, const QString& partsName) {
 
@@ -199,12 +199,10 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 		return false;
 	}
 
-	int i = '1';
+  MQZipWriter uz(saveName);
 
     Score* thisScore = cs->rootScore();
     if (thisScore->excerpts().count()==0) {
-
-		MQZipWriter uz(saveName);
 
 		/*
 		// Convert to tab (list of types in stafftype.h)
@@ -212,14 +210,12 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 			staff->setStaffType(StaffType::preset(StaffTypes::TAB_6COMMON));
 		*/
 
-    	createSvgCollection(&uz, cs, do_linearize);
+    	createSvgCollection(&uz, cs, QString(), do_linearize);
 
     	// Add midifile
         QString tname("track.mid");
         saveMidi(cs,tname);
-        addFileToZip(&uz, tname);
-
-    	uz.close();
+        addFileToZip(&uz, tname, tname);
     }
     else {
     	/*if (!partsName.isEmpty()) {
@@ -228,104 +224,35 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 		    QJsonObject sett2 = QJsonDocument::fromJson(file.readAll()).object();
 		    qWarning() << sett2["title"].toString();  // <- print my title
       	}*/
+
+      int i = 1;
 	    foreach (Excerpt* e, thisScore->excerpts())  {
 	    	Score * tScore = e->partScore();
 
-	    	MQZipWriter uz(i + saveName);
-
-	    	createSvgCollection(&uz, tScore, do_linearize);
+        QString prefix = QString::number(i)+'/';
+	    	createSvgCollection(&uz, tScore, prefix, do_linearize);
 
 	    	// Add midifile
 	        QString tname("track.mid");
 	        saveMidi(tScore,tname);
-	        addFileToZip(&uz, tname);
+	        addFileToZip(&uz, tname, prefix+tname);
 
 	    	QString bname("backing.mid");
 	    	createBackingTrack(e,cs,bname);
-	    	addFileToZip(&uz, bname);
-
-	    	uz.close();
+	    	addFileToZip(&uz, bname, prefix+bname);
 
 	    	i++;
 	    }
 	}
 
+  uz.close();
+
 	return true;
-}
-
-
-QJsonArray stavesToJson(Score * score) {
-	QJsonArray s_ar = QJsonArray();
-    foreach( Staff * staff, score->staves()) {
-    	QJsonObject sobj = QJsonObject();
-
-    	sobj["type"] = staff->isPitchedStaff()?"standard":(
-    					staff->isDrumStaff()?"percussion":(
-    					 staff->isTabStaff()?"tab":"unknown"));
-
-    	s_ar.append(sobj);
-    }
-
-    return s_ar;
-}
-
-bool MuseScore::getPartsDescriptions(Score* score, const QString& saveName) {
-
-	QString safe = checkSafety(score);
-	if (!safe.isEmpty()) {
-		qDebug(safe.toLatin1());
-		return false;
-	}
-
-	QFile file(saveName);
-	file.open(QIODevice::WriteOnly | QIODevice::Text);
-	
-	QJsonObject obj = QJsonObject();
-
-	// List all parts
-	QJsonArray p_ar = QJsonArray();
-	int pi = 1;
-    foreach( Part * part, score->parts().toSet()) {
-    	part->setId(QString::number(pi++));
-
-    	QJsonObject pobj = QJsonObject();
-	    pobj["id"] = part->id();
-	    pobj["instrument"] = getInstrumentName(part->instrument());
-	    pobj["name"] = part->partName();
-        p_ar.append(pobj);
-    }
-    obj["parts"] = p_ar;
-
-    // List staves in main score
-    obj["staves"] = stavesToJson(score);
-
-    // List all excerpts
-
-    QJsonArray e_ar = QJsonArray();
-	foreach (Excerpt* e, score->rootScore()->excerpts())  {
-		QJsonObject eobj = QJsonObject();
-
-		QJsonArray ep_ar = QJsonArray();
-		foreach(Part * part, e->parts().toSet()) {
-			ep_ar.append(part->id());
-		}
-		eobj["parts"] = ep_ar;
-
-	    eobj["staves"] = stavesToJson(e->partScore());
-
-        e_ar.append(eobj);
-    }
-    obj["excerpts"] = e_ar;
-
-	file.write(QJsonDocument(obj).toJson());
-	file.close();
-
-    return true;
 }
 
 int createSvgs(Score* score, MQZipWriter * uz, QTextStream * qts, QString basename);
 
-bool createSvgCollection(MQZipWriter * uz, Score* score, const bool do_linearize) {
+bool createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const bool do_linearize) {
 
       score->repeatList()->unwind();
       if (score->repeatList()->size()>1) {
@@ -373,7 +300,7 @@ bool createSvgCollection(MQZipWriter * uz, Score* score, const bool do_linearize
       score->undo(new ChangeLayoutMode(score, LayoutMode::PAGE));
       score->doLayout();
       
-      int ticksFromBeg = createSvgs(score,uz,&qts,QString("Page"));   
+      int ticksFromBeg = createSvgs(score,uz,&qts,prefix+QString("Page"));   
 
       qts << "#LINE" << endl;
 
@@ -381,16 +308,14 @@ bool createSvgCollection(MQZipWriter * uz, Score* score, const bool do_linearize
       score->undo(new ChangeLayoutMode(score, LayoutMode::LINE));
       score->doLayout();
 
-      createSvgs(score,uz,&qts,QString("Line"));
+      createSvgs(score,uz,&qts,prefix+QString("Line"));
 
       qDebug("Total ticks: %i. End time: %f",ticksFromBeg,score->tempomap()->tick2time(ticksFromBeg));
       qts << "AT " << score->tempomap()->tick2time(0) << ',' << score->tempomap()->tick2time(ticksFromBeg) << endl;
       qts << "TT " << ticksFromBeg << endl;
 
-      uz->addFile("metainfo.meta",metabuf.data());
+      uz->addFile(prefix+"metainfo.meta",metabuf.data());
       score->setPrinting(false);
-
-
 
       score->tempomap()->setRelTempo(rel_tempo);
 
@@ -723,4 +648,76 @@ void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
 
       return true;
       }
+
+
+
+  QJsonArray stavesToJson(Score * score) {
+    QJsonArray s_ar = QJsonArray();
+      foreach( Staff * staff, score->staves()) {
+        QJsonObject sobj = QJsonObject();
+
+        sobj["type"] = staff->isPitchedStaff()?"standard":(
+                staff->isDrumStaff()?"percussion":(
+                 staff->isTabStaff()?"tab":"unknown"));
+
+        s_ar.append(sobj);
+      }
+
+      return s_ar;
+  }
+
+
+  bool MuseScore::getPartsDescriptions(Score* score, const QString& saveName) {
+
+      QString safe = checkSafety(score);
+      if (!safe.isEmpty()) {
+        qDebug(safe.toLatin1());
+        return false;
+      }
+
+      QFile file(saveName);
+      file.open(QIODevice::WriteOnly | QIODevice::Text);
+      
+      QJsonObject obj = QJsonObject();
+
+      // List all parts
+      QJsonArray p_ar = QJsonArray();
+      int pi = 1;
+        foreach( Part * part, score->parts().toSet()) {
+          part->setId(QString::number(pi++));
+
+          QJsonObject pobj = QJsonObject();
+          pobj["id"] = part->id();
+          pobj["instrument"] = getInstrumentName(part->instrument());
+          pobj["name"] = part->partName();
+            p_ar.append(pobj);
+        }
+        obj["parts"] = p_ar;
+
+        // List staves in main score
+        obj["staves"] = stavesToJson(score);
+
+        // List all excerpts
+
+        QJsonArray e_ar = QJsonArray();
+      foreach (Excerpt* e, score->rootScore()->excerpts())  {
+        QJsonObject eobj = QJsonObject();
+
+        QJsonArray ep_ar = QJsonArray();
+        foreach(Part * part, e->parts().toSet()) {
+          ep_ar.append(part->id());
+        }
+        eobj["parts"] = ep_ar;
+
+          eobj["staves"] = stavesToJson(e->partScore());
+
+            e_ar.append(eobj);
+        }
+        obj["excerpts"] = e_ar;
+
+      file.write(QJsonDocument(obj).toJson());
+      file.close();
+
+        return true;
+    }
 }
