@@ -603,6 +603,11 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                     Measure* meas     = tick2measure(destTick);
                                     harmSegm          = meas->getSegment(Segment::Type::ChordRest, destTick);
                               }
+                              if (destTrack >= maxTrack) {
+                                    qDebug("PasteSymbols: no track for %s", tag.toUtf8().data());
+                                    e.skipCurrentElement();       // ignore
+                                    continue;
+                                    }
                               Harmony* el = new Harmony(this);
                               el->setTrack(trackZeroVoice(destTrack));
                               el->read(e);
