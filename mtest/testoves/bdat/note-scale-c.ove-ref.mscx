@@ -86,11 +86,13 @@
           </TimeSig>
         <Tempo>
           <tempo>1.6</tempo>
+          <visible>0</visible>
           <xoffset>0</xoffset>
           <yoffset>-2</yoffset>
-          <text></text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 96</text>
           </Tempo>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <StemDirection>up</StemDirection>
           <Note>
@@ -101,6 +103,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <StemDirection>up</StemDirection>
           <Note>
@@ -114,6 +117,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <StemDirection>up</StemDirection>
           <Note>
@@ -124,6 +128,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <StemDirection>up</StemDirection>
           <Note>
@@ -143,6 +148,7 @@
         </Measure>
       <Measure number="2">
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <StemDirection>up</StemDirection>
           <Note>
@@ -153,6 +159,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <StemDirection>up</StemDirection>
           <Note>
@@ -163,6 +170,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <StemDirection>up</StemDirection>
           <Note>
@@ -176,6 +184,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <StemDirection>up</StemDirection>
           <Note>
@@ -192,6 +201,7 @@
         </Measure>
       <Measure number="3">
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <StemDirection>up</StemDirection>
           <Note>
@@ -205,6 +215,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <StemDirection>up</StemDirection>
           <Note>
@@ -215,6 +226,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <StemDirection>down</StemDirection>
           <Note>
@@ -228,6 +240,7 @@
             </Note>
           </Chord>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <StemDirection>down</StemDirection>
           <Note>
@@ -247,6 +260,7 @@
         </Measure>
       <Measure number="4">
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>whole</durationType>
           <noStem>1</noStem>
           <StemDirection>down</StemDirection>
