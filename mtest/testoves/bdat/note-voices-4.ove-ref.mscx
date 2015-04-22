@@ -84,7 +84,7 @@
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <sigN>2</sigN>
+          <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
@@ -95,24 +95,49 @@
           <yoffset>-2</yoffset>
           <text><sym>unicodeNoteQuarterUp</sym> = 96</text>
           </Tempo>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="2" n="4"/>
-          </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
-        </Measure>
-      <Measure number="2">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="2" n="4"/>
-          </Rest>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>whole</durationType>
+          <noStem>1</noStem>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
           </BarLine>
+        <tick>0</tick>
+        <Chord>
+          <track>1</track>
+          <BeamMode>no</BeamMode>
+          <durationType>half</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <track>1</track>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <track>1</track>
+          <BeamMode>no</BeamMode>
+          <durationType>half</durationType>
+          <StemDirection>down</StemDirection>
+          <Note>
+            <track>1</track>
+            <pitch>74</pitch>
+            <tpc>16</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         </Measure>
       </Staff>
     </Score>

@@ -50,9 +50,16 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
+        <bracket type="1" span="2"/>
+        <barLineSpan>2</barLineSpan>
+        </Staff>
+      <Staff id="2">
+        <StaffType group="pitched">
+          </StaffType>
         </Staff>
       <trackName></trackName>
       <Instrument>
+        <longName>Piano</longName>
         <trackName></trackName>
         <Channel>
           <program value="0"/>
@@ -95,106 +102,159 @@
           <yoffset>-2</yoffset>
           <text><sym>unicodeNoteQuarterUp</sym> = 96</text>
           </Tempo>
-        <Chord>
-          <BeamMode>no</BeamMode>
-          <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Tremolo>
-            <subtype>r8</subtype>
-            </Tremolo>
-          </Chord>
-        <Chord>
-          <BeamMode>no</BeamMode>
-          <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Tremolo>
-            <subtype>r16</subtype>
-            </Tremolo>
-          </Chord>
-        <Chord>
-          <BeamMode>no</BeamMode>
-          <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Tremolo>
-            <subtype>r32</subtype>
-            </Tremolo>
-          </Chord>
-        <Chord>
-          <BeamMode>no</BeamMode>
-          <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Tremolo>
-            <subtype>r64</subtype>
-            </Tremolo>
-          </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
-        </Measure>
-      <Measure number="2">
-        <Chord>
-          <BeamMode>no</BeamMode>
-          <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <Tie id="2">
-              </Tie>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Tremolo>
-            <subtype>r16</subtype>
-            </Tremolo>
-          </Chord>
-        <Chord>
-          <BeamMode>no</BeamMode>
-          <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <endSpanner id="2"/>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Tremolo>
-            <subtype>r16</subtype>
-            </Tremolo>
-          </Chord>
         <Rest>
           <durationType>half</durationType>
           </Rest>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>quarter</durationType>
+          <StemDirection>down</StemDirection>
+          <Note>
+            <pitch>64</pitch>
+            <tpc>18</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>quarter</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          <Note>
+            <pitch>64</pitch>
+            <tpc>18</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          <Note>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         <BarLine>
           <subtype>end</subtype>
-          <span>1</span>
+          <span>2</span>
           </BarLine>
+        <tick>0</tick>
+        <Rest>
+          <offset x="0" y="0.5"/>
+          <track>1</track>
+          <durationType>half</durationType>
+          </Rest>
+        <Beam id="1">
+          <track>1</track>
+          <l1>-12</l1>
+          <l2>-11</l2>
+          </Beam>
+        <Chord>
+          <track>1</track>
+          <BeamMode>begin</BeamMode>
+          <dots>1</dots>
+          <durationType>eighth</durationType>
+          <Beam>1</Beam>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <track>1</track>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          <Note>
+            <track>1</track>
+            <pitch>76</pitch>
+            <tpc>18</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <track>1</track>
+          <BeamMode>end</BeamMode>
+          <durationType>16th</durationType>
+          <Beam>1</Beam>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <track>1</track>
+            <pitch>71</pitch>
+            <tpc>19</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          <Note>
+            <track>1</track>
+            <pitch>74</pitch>
+            <tpc>16</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Rest>
+          <offset x="0" y="3.5"/>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          </Rest>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
+          </Clef>
+        <KeySig>
+          <accidental>0</accidental>
+          </KeySig>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <durationType>half</durationType>
+          </Rest>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>quarter</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>43</pitch>
+            <tpc>15</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>quarter</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         </Measure>
       </Staff>
     </Score>

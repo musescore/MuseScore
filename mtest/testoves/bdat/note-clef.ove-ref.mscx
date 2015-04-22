@@ -84,7 +84,7 @@
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <sigN>2</sigN>
+          <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
@@ -95,20 +95,62 @@
           <yoffset>-2</yoffset>
           <text><sym>unicodeNoteQuarterUp</sym> = 96</text>
           </Tempo>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>16th</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         <Rest>
-          <durationType>measure</durationType>
-          <duration z="2" n="4"/>
+          <dots>1</dots>
+          <durationType>eighth</durationType>
           </Rest>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>half</durationType>
+          </Rest>
+        <Clef>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
+          </Clef>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="2">
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>16th</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>40</pitch>
+            <tpc>18</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         <Rest>
-          <durationType>measure</durationType>
-          <duration z="2" n="4"/>
+          <dots>1</dots>
+          <durationType>eighth</durationType>
           </Rest>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>half</durationType>
+          </Rest>
+        <Clef>
+          <concertClefType>G8vb</concertClefType>
+          <transposingClefType>G8vb</transposingClefType>
+          </Clef>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
