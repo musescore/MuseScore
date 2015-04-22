@@ -248,6 +248,7 @@ enum class PasteStatus : char {
 //   @P hasHarmonies    bool              score has chord symbols (read only)
 //   @P keysig          int               key signature at the start of the score (read only)
 //   @P duration        int               duration of score in seconds (read only)
+//   @P excerpts        array[Ms::Excerpt] the list of the excerpts (linked parts)
 //---------------------------------------------------------
 
 class Score : public QObject {
@@ -271,6 +272,7 @@ class Score : public QObject {
       Q_PROPERTY(bool                   hasHarmonies      READ hasHarmonies)
       Q_PROPERTY(int                    keysig            READ keysig)
       Q_PROPERTY(int                    duration          READ duration)
+      Q_PROPERTY(QQmlListProperty<Ms::Excerpt> excerpts   READ qmlExcerpts)
       Q_PROPERTY(Ms::PageFormat*        pageFormat        READ pageFormat     WRITE undoChangePageFormat)
 
    public:
@@ -474,6 +476,7 @@ class Score : public QObject {
       void selectRange(Element* e, int staffIdx);
 
       QQmlListProperty<Ms::Part> qmlParts() { return QQmlListProperty<Ms::Part>(this, _parts); }
+      QQmlListProperty<Ms::Excerpt> qmlExcerpts() { return QQmlListProperty<Ms::Excerpt>(this, _excerpts); }
 
    protected:
       void createPlayEvents(Chord*);

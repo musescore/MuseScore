@@ -53,7 +53,7 @@
 #include "hook.h"
 #include "stem.h"
 #include "stemslash.h"
-
+#include "excerpt.h"
 
 namespace Ms {
 
@@ -337,7 +337,7 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<Stem>       ("MuseScore", 1, 0, "Stem");
             qmlRegisterType<StemSlash>  ("MuseScore", 1, 0, "StemSlash");
             qmlRegisterType<Beam>       ("MuseScore", 1, 0, "Beam");
-
+            qmlRegisterType<Excerpt>    ("MuseScore", 1, 0, "Excerpt");
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));
 
