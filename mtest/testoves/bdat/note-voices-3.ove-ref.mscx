@@ -50,9 +50,16 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
+        <bracket type="1" span="2"/>
+        <barLineSpan>2</barLineSpan>
+        </Staff>
+      <Staff id="2">
+        <StaffType group="pitched">
+          </StaffType>
         </Staff>
       <trackName></trackName>
       <Instrument>
+        <longName>Piano</longName>
         <trackName></trackName>
         <Channel>
           <program value="0"/>
@@ -84,7 +91,7 @@
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <sigN>2</sigN>
+          <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
@@ -95,24 +102,79 @@
           <yoffset>-2</yoffset>
           <text><sym>unicodeNoteQuarterUp</sym> = 96</text>
           </Tempo>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="2" n="4"/>
-          </Rest>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
-        </Measure>
-      <Measure number="2">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="2" n="4"/>
-          </Rest>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>half</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>65</pitch>
+            <tpc>13</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>half</durationType>
+          <StemDirection>down</StemDirection>
+          <Note>
+            <pitch>64</pitch>
+            <tpc>18</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         <BarLine>
           <subtype>end</subtype>
-          <span>1</span>
+          <span>2</span>
           </BarLine>
+        <tick>0</tick>
+        <Rest>
+          <offset x="0" y="1.5"/>
+          <track>1</track>
+          <durationType>half</durationType>
+          </Rest>
+        <Chord>
+          <track>1</track>
+          <BeamMode>no</BeamMode>
+          <durationType>half</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <track>1</track>
+            <pitch>71</pitch>
+            <tpc>19</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>F</concertClefType>
+          <transposingClefType>F</transposingClefType>
+          </Clef>
+        <KeySig>
+          <accidental>0</accidental>
+          </KeySig>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>whole</durationType>
+          <noStem>1</noStem>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         </Measure>
       </Staff>
     </Score>

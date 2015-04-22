@@ -1819,9 +1819,9 @@ public:
       void setShowParenthesis(bool show);
       bool getShowParenthesis() const;
 
-      void setTypeTempo(int tempo); //0x2580 = 96.00
-      int getTypeTempo() const;
-      int getQuarterTempo() const;
+      void setTypeTempo(double tempo); //0x2580 = 96.00
+      double getTypeTempo() const;
+      double getQuarterTempo() const;
 
       void setLeftText(const QString& str);// string at left of the mark
       QString getLeftText() const;
@@ -1833,18 +1833,30 @@ public:
       bool getSwingEighth() const;
 
       void setRightNoteType(int type);
-      int getRightNoteType() const;
+      NoteType getRightNoteType() const;
+
+      void setLeftNoteDot(bool showDot);
+      bool getLeftNoteDot() const;
+
+      void setRightNoteDot(bool showDot);
+      bool getRightNoteDot() const;
+
+      void setRightSideType(int type);
+      int getRightSideType() const;
 
 private:
       int leftNoteType_;
       bool showMark_;
       bool showText_;
       bool showParenthesis_;
-      int typeTempo_;
+      double typeTempo_;
       QString leftText_;
       QString rightText_;
       bool swingEighth_;
       int rightNoteType_;
+      bool leftNoteDot_;
+      bool rightNoteDot_;
+      int rightSideType_;
       };
 
 class Text: public MusicData, public LengthElement {

@@ -84,7 +84,7 @@
           <accidental>0</accidental>
           </KeySig>
         <TimeSig>
-          <sigN>2</sigN>
+          <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
@@ -95,19 +95,70 @@
           <yoffset>-2</yoffset>
           <text><sym>unicodeNoteQuarterUp</sym> = 96</text>
           </Tempo>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>quarter</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         <Rest>
-          <durationType>measure</durationType>
-          <duration z="2" n="4"/>
+          <durationType>quarter</durationType>
           </Rest>
+        <Slur id="2">
+          <track>0</track>
+          <up>1</up>
+          </Slur>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>quarter</durationType>
+          <Slur type="start" id="2"/>
+          <StemDirection>down</StemDirection>
+          <Note>
+            <pitch>76</pitch>
+            <tpc>18</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>quarter</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         <BarLine>
           <subtype>normal</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
       <Measure number="2">
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>quarter</durationType>
+          <Slur type="stop" id="2"/>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <velocity>80</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         <Rest>
-          <durationType>measure</durationType>
-          <duration z="2" n="4"/>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>half</durationType>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
