@@ -22,17 +22,23 @@ class Staff;
 class XmlReader;
 
 //---------------------------------------------------------
-//   Excerpt
+//   @@ Excerpt
+//   @P partScore  Ms::Score  the score object for this part
+//   @P title      QString    the title of this part
 //---------------------------------------------------------
 
-class Excerpt {
+class Excerpt : public QObject {
+      Q_OBJECT
+      Q_PROPERTY(Ms::Score*  partScore  READ partScore)
+      Q_PROPERTY(QString     title      READ title)
+
       Score* _oscore;               // main score
       Score* _partScore  { 0 };
       QString _title;
       QList<Part*> _parts;
 
    public:
-      Excerpt(Score* s)                    { _oscore = s;       }
+      Excerpt(Score* s = 0)                { _oscore = s;       }
 
       QList<Part*>& parts()                { return _parts;     }
       void setParts(const QList<Part*>& p) { _parts = p;        }
