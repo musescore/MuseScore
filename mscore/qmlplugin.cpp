@@ -69,14 +69,21 @@ bool QmlPlugin::writeScore(Score* s, const QString& name, const QString& ext)
 
 //---------------------------------------------------------
 //   readScore
+//
+// noninteractive can be used to avoid a 'save changes'
+// dialog on closing a score that is either imported
+// or was created with an older version of MuseScore
 //---------------------------------------------------------
 
-Score* QmlPlugin::readScore(const QString& name)
+Score* QmlPlugin::readScore(const QString& name, bool noninteractive)
       {
       Score * score = msc->openScore(name);
       // tell QML not to garbage collect this score
-      if (score)
+      if (score) {
             QQmlEngine::setObjectOwnership(score, QQmlEngine::CppOwnership);
+            if (noninteractive)
+	          score->setCreated(false);
+            }
       return score;
       }
 
