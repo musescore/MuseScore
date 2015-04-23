@@ -21,8 +21,8 @@ namespace Ms {
 //---------------------------------------------------------
 //   @@ Marker
 //
-//   @P label       QString
-//   @P markerType  Ms::Marker::Type  (SEGNO, VARSEGNO, CODA, VARCODA, CODETTA, FINE, TOCODA, USER)
+//   @P label       string
+//   @P markerType  enum (Marker.CODA, .CODETTA, .FINE, .SEGNO, .TOCODA, .USER, .VARCODA, .VARSEGNO)
 //---------------------------------------------------------
 
 class Marker : public Text {
