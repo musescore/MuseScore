@@ -50,13 +50,13 @@ enum class PlayEventType : char    {
 ///    Graphic representation of a chord.
 ///    Single notes are handled as degenerated chords.
 //
-//   @P notes       array[Ms::Note]    the list of notes (read only)
-//   @P lyrics      array[Ms::Lyrics]  the list of lyrics (read only)
-//   @P graceNotes  array[Ms::Chord]   the list of grace note chords (read only)
-//   @P stem        Ms::Stem           the stem of the chord if any (read only)
-//   @P hook        Ms::Hook           the hook of the chord if any (read only)
-//   @P beam        Ms::Beam           the beam of the chord if any (read only)
-//   @P stemSlash   Ms::StemSlash      the stem slash of the chord (acciacatura) if any (read only)
+//   @P beam        Beam            the beam of the chord if any (read only)
+//   @P graceNotes  array[Chord]    the list of grace note chords (read only)
+//   @P hook        Hook            the hook of the chord if any (read only)
+//   @P lyrics      array[Lyrics]   the list of lyrics (read only)
+//   @P notes       array[Note]     the list of notes (read only)
+//   @P stem        Stem            the stem of the chord if any (read only)
+//   @P stemSlash   StemSlash       the stem slash of the chord (acciaccatura) if any (read only)
 //---------------------------------------------------------
 
 class Chord : public ChordRest {
@@ -69,12 +69,12 @@ class Chord : public ChordRest {
             bool  accidental;
             };
 
-      Q_PROPERTY(QQmlListProperty<Ms::Note> notes READ qmlNotes)
-      Q_PROPERTY(QQmlListProperty<Ms::Lyrics> lyrics READ qmlLyrics)
+      Q_PROPERTY(Ms::Beam* beam              READ beam)
       Q_PROPERTY(QQmlListProperty<Ms::Chord> graceNotes READ qmlGraceNotes)
       Q_PROPERTY(Ms::Hook* hook              READ hook)
+      Q_PROPERTY(QQmlListProperty<Ms::Lyrics> lyrics READ qmlLyrics)
+      Q_PROPERTY(QQmlListProperty<Ms::Note> notes READ qmlNotes)
       Q_PROPERTY(Ms::Stem* stem              READ stem)
-      Q_PROPERTY(Ms::Beam* beam              READ beam)
       Q_PROPERTY(Ms::StemSlash* stemSlash    READ stemSlash)
 
       QList<Note*>         _notes;       // sorted to decreasing line step
@@ -178,7 +178,9 @@ class Chord : public ChordRest {
       bool underBeam() const;
       Hook* hook() const                     { return _hook; }
 
+      //@ add an element to the Chord
       Q_INVOKABLE virtual void add(Ms::Element*);
+      //@ remove the element from the Chord
       Q_INVOKABLE virtual void remove(Ms::Element*);
 
       Note* selectedNote() const;

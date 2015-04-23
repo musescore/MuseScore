@@ -25,7 +25,7 @@ class Segment;
 //   @@ Dynamic
 ///    dynamics marker; determines midi velocity
 //
-//   @P range  Ms::Dynamic::Range (STAFF, PART, SYSTEM)
+//   @P range  enum (Dynamic.STAFF, .PART, .SYSTEM)
 //-----------------------------------------------------------------------------
 
 class Dynamic : public Text {
