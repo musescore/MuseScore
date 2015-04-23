@@ -23,8 +23,8 @@ class XmlReader;
 
 //---------------------------------------------------------
 //   @@ Excerpt
-//   @P partScore  Ms::Score  the score object for this part
-//   @P title      QString    the title of this part
+//   @P partScore  Score      the score object for this part
+//   @P title      string     the title of this part
 //---------------------------------------------------------
 
 class Excerpt : public QObject {

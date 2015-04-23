@@ -51,9 +51,9 @@ class GlissandoSegment : public LineSegment {
 
 //---------------------------------------------------------
 //   @@ Glissando
-//   @P glissandoType  Ms::Glissando::Type (STRAIGHT, WAVY)
-//   @P text           QString
+//   @P glissandoType  enum (Glissando.STRAIGHT, Glissando.WAVY)
 //   @P showText       bool
+//   @P text           string
 //---------------------------------------------------------
 
 class Glissando : public SLine {
