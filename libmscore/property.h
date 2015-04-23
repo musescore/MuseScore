@@ -164,6 +164,8 @@ enum class P_ID : unsigned char {
       LASSO_SIZE,
 
       TIME_STRETCH,
+      ORNAMENT_STYLE,
+      PLAY_ARTICULATION,
       TIMESIG,
       TIMESIG_GLOBAL,
       TIMESIG_STRETCH,
@@ -240,6 +242,7 @@ enum class P_TYPE : char {
       COLOR,
       DIRECTION,      // enum class MScore::Direction
       DIRECTION_H,    // enum class MScore::DirectionH
+      ORNAMENT_STYLE, // enum class MScore::OrnamentStyle
       TDURATION,
       LAYOUT_BREAK,
       VALUE_TYPE,

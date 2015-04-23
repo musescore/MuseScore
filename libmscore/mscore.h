@@ -355,7 +355,9 @@ class MScore : public QObject {
    public:
       enum class Direction  : char { AUTO, UP, DOWN };
       enum class DirectionH : char { AUTO, LEFT, RIGHT };
-      Q_ENUMS(Direction DirectionH)
+      enum class OrnamentStyle : char { DEFAULT, BAROQUE};
+
+      Q_ENUMS(Direction DirectionH OrnamentStyle)
 
       static void init();
 

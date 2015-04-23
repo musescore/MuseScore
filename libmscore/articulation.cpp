@@ -32,170 +32,170 @@ namespace Ms {
 ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATIONS)] = {
       { SymId::fermataAbove, SymId::fermataBelow,
             "fermata", QT_TRANSLATE_NOOP("articulation", "Fermata"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::fermataShortAbove, SymId::fermataShortBelow,
             "shortfermata", QT_TRANSLATE_NOOP("articulation", "Short fermata"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::fermataLongAbove, SymId::fermataLongBelow,
             "longfermata", QT_TRANSLATE_NOOP("articulation", "Long fermata"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::fermataVeryLongAbove, SymId::fermataVeryLongBelow,
             "verylongfermata", QT_TRANSLATE_NOOP("articulation", "Very long fermata"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::articAccentAbove,   SymId::articAccentBelow,
             "sforzato", QT_TRANSLATE_NOOP("articulation", "Sforzato"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
 // <> not available in smufl?
 //      { SymId::esprSym, SymId::esprSym             ,
 //            "espressivo", QT_TRANSLATE_NOOP("articulation", "Espressivo"),
-//            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+//            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
 //            },
       { SymId::articStaccatoAbove, SymId::articStaccatoBelow,
             "staccato", QT_TRANSLATE_NOOP("articulation", "Staccato"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::articStaccatissimoAbove,   SymId::articStaccatissimoBelow,
             "staccatissimo", QT_TRANSLATE_NOOP("articulation", "Staccatissimo"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::articTenutoAbove, SymId::articTenutoBelow,
             "tenuto", QT_TRANSLATE_NOOP("articulation", "Tenuto"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::articTenutoStaccatoAbove, SymId::articTenutoStaccatoBelow,
             "portato", QT_TRANSLATE_NOOP("articulation", "Portato"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::articMarcatoAbove, SymId::articMarcatoBelow,
             "marcato", QT_TRANSLATE_NOOP("articulation", "Marcato"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::guitarFadeIn, SymId::guitarFadeIn,
             "fadein", QT_TRANSLATE_NOOP("articulation", "Fade in"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::guitarFadeOut, SymId::guitarFadeOut,
             "fadeout", QT_TRANSLATE_NOOP("articulation", "Fade out"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::guitarVolumeSwell, SymId::guitarVolumeSwell,
             "volumeswell", QT_TRANSLATE_NOOP("articulation", "Volume swell"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::wiggleSawtooth, SymId::wiggleSawtooth,
             "wigglesawtooth", QT_TRANSLATE_NOOP("articulation", "Wiggle sawtooth"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide,
             "wigglesawtoothwide", QT_TRANSLATE_NOOP("articulation", "Wiggle sawtooth wide"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::wiggleVibratoLargeFaster, SymId::wiggleVibratoLargeFaster,
             "wigglevibratolargefaster", QT_TRANSLATE_NOOP("articulation", "Wiggle vibrato large faster"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::wiggleVibratoLargeSlowest, SymId::wiggleVibratoLargeSlowest,
             "wigglevibratolargeslowest", QT_TRANSLATE_NOOP("articulation", "Wiggle vibrato large slowest"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::brassMuteOpen, SymId::brassMuteOpen,
             "ouvert", QT_TRANSLATE_NOOP("articulation", "Ouvert"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::brassMuteClosed, SymId::brassMuteClosed,
             "plusstop", QT_TRANSLATE_NOOP("articulation", "Stopped/Pizzicato left hand"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::stringsUpBow, SymId::stringsUpBow,
             "upbow", QT_TRANSLATE_NOOP("articulation", "Up bow"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::stringsDownBow, SymId::stringsDownBow,
             "downbow", QT_TRANSLATE_NOOP("articulation", "Down bow"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentTurnInverted, SymId::ornamentTurnInverted,
             "reverseturn", QT_TRANSLATE_NOOP("articulation", "Reverse turn"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentTurn, SymId::ornamentTurn,
             "turn", QT_TRANSLATE_NOOP("articulation", "Turn"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentTrill, SymId::ornamentTrill,
             "trill", QT_TRANSLATE_NOOP("articulation", "Trill"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentMordent, SymId::ornamentMordent,
             "prall", QT_TRANSLATE_NOOP("articulation", "Prall"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentMordentInverted, SymId::ornamentMordentInverted,
             "mordent", QT_TRANSLATE_NOOP("articulation", "Mordent"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentTremblement, SymId::ornamentTremblement,
             "prallprall", QT_TRANSLATE_NOOP("articulation", "Prall prall"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentPrallMordent, SymId::ornamentPrallMordent,
             "prallmordent", QT_TRANSLATE_NOOP("articulation", "Prall mordent"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentUpPrall, SymId::ornamentUpPrall,
             "upprall", QT_TRANSLATE_NOOP("articulation", "Up prall"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentDownPrall, SymId::ornamentDownPrall,
             "downprall", QT_TRANSLATE_NOOP("articulation", "Down prall"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentUpMordent, SymId::ornamentUpMordent,
             "upmordent", QT_TRANSLATE_NOOP("articulation", "Up mordent"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentDownMordent, SymId::ornamentDownMordent,
             "downmordent", QT_TRANSLATE_NOOP("articulation", "Down mordent"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentPrallDown, SymId::ornamentPrallDown,
             "pralldown", QT_TRANSLATE_NOOP("articulation", "Prall down"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentPrallUp, SymId::ornamentPrallUp,
             "prallup", QT_TRANSLATE_NOOP("articulation", "Prall up"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentLinePrall, SymId::ornamentLinePrall,
             "lineprall", QT_TRANSLATE_NOOP("articulation", "Line prall"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::ornamentPrecompSlide, SymId::ornamentPrecompSlide,
             "schleifer", QT_TRANSLATE_NOOP("articulation", "Schleifer"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::pluckedSnapPizzicatoAbove, SymId::pluckedSnapPizzicatoBelow,
             "snappizzicato", QT_TRANSLATE_NOOP("articulation", "Snap pizzicato"),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
 
 #if 0
       { SymId::letterTSym, SymId::letterTSym,
             "tapping", QT_TRANSLATE_NOOP("articulation", "Tapping"),
-            1.0, ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::TABLATURE
             },
       { SymId::letterSSym, SymId::letterSSym,
             "slapping", QT_TRANSLATE_NOOP("articulation", "Slapping"),
-            1.0, ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::TABLATURE
             },
       { SymId::letterPSym, SymId::letterPSym,
             "popping", QT_TRANSLATE_NOOP("articulation", "Popping"),
-            1.0, ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::TABLATURE
             },
 #endif
 
@@ -203,23 +203,23 @@ ArticulationInfo Articulation::articulationList[int(ArticulationType::ARTICULATI
 
       { SymId::stringsThumbPosition, SymId::stringsThumbPosition,
             "thumb", QT_TRANSLATE_NOOP("articulation", "Thumb pos."),
-            1.0, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::PITCHED_STAFF | ArticulationShowIn::TABLATURE
             },
       { SymId::luteFingeringRHThumb, SymId::luteFingeringRHThumb,
             "lutefingeringthumb", QT_TRANSLATE_NOOP("articulation", "Lute thumb fing."),
-            1.0, ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::TABLATURE
             },
       { SymId::luteFingeringRHFirst, SymId::luteFingeringRHFirst,
             "lutefingering1st", QT_TRANSLATE_NOOP("articulation", "Lute 1 fing."),
-            1.0, ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::TABLATURE
             },
       { SymId::luteFingeringRHSecond, SymId::luteFingeringRHSecond,
             "lutefingering2nd", QT_TRANSLATE_NOOP("articulation", "Lute 2 fing."),
-            1.0, ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::TABLATURE
             },
       { SymId::luteFingeringRHThird, SymId::luteFingeringRHThird,
             "lutefingering3rd", QT_TRANSLATE_NOOP("articulation", "Lute 3 fing."),
-            1.0, ArticulationShowIn::TABLATURE
+            1.0, MScore::OrnamentStyle::DEFAULT, true, ArticulationShowIn::TABLATURE
             },
       };
 
@@ -246,6 +246,8 @@ void Articulation::setArticulationType(ArticulationType idx)
       _anchor           = score()->style()->articulationAnchor(int(_articulationType));
       anchorStyle       = PropertyStyle::STYLED;
       _timeStretch      = articulationList[int(articulationType())].timeStretch;
+      _ornamentStyle    = MScore::OrnamentStyle::DEFAULT;
+      setPlayArticulation(true);
       }
 
 //---------------------------------------------------------
@@ -270,6 +272,11 @@ void Articulation::read(XmlReader& e)
             else if (tag == "direction") {
                   setProperty(P_ID::DIRECTION, Ms::getProperty(P_ID::DIRECTION, e));
                   }
+            else if ( tag == "ornamentStyle")
+                _ornamentStyle = MScore::OrnamentStyle(e.readInt());
+            else if ( tag == "playArticulation")
+                //_playArticulation = e.readBool();
+                setPlayArticulation(e.readBool());
             else if (tag == "timeStretch")
                   _timeStretch = e.readDouble();
             else if (tag == "offset") {
@@ -298,6 +305,10 @@ void Articulation::write(Xml& xml) const
       xml.tag("subtype", subtypeName());
       if (_timeStretch != 1.0)
             xml.tag("timeStretch", _timeStretch);
+      if (_ornamentStyle != MScore::OrnamentStyle::DEFAULT)
+            xml.tag("ornamentStyle", int(_ornamentStyle));
+      if ( playArticulation() == false) // if it is true, then write nothing as true is the default
+            xml.tag("playArticulation", false);
       Element::writeProperties(xml);
       if (anchorStyle == PropertyStyle::UNSTYLED)
             xml.tag("anchor", int(_anchor));
@@ -525,6 +536,7 @@ void Articulation::reset()
       ArticulationAnchor a = score()->style()->articulationAnchor(int(articulationType()));
       if (_anchor != a)
             score()->undoChangeProperty(this, P_ID::ARTICULATION_ANCHOR, int(a));
+      //MScore::OrnamentStyle o = score()->style()->ornamentStyle(int(ornamentStyle()));
       Element::reset();
       if (chordRest())
             chordRest()->layoutArticulations();
@@ -550,6 +562,8 @@ QVariant Articulation::getProperty(P_ID propertyId) const
             case P_ID::DIRECTION:           return int(direction());
             case P_ID::ARTICULATION_ANCHOR: return int(anchor());
             case P_ID::TIME_STRETCH:        return timeStretch();
+            case P_ID::ORNAMENT_STYLE:      return int(ornamentStyle());
+            case P_ID::PLAY_ARTICULATION:   return bool(playArticulation());
             default:
                   return Element::getProperty(propertyId);
             }
@@ -569,6 +583,12 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::ARTICULATION_ANCHOR:
                   anchorStyle = PropertyStyle::UNSTYLED;
                   setAnchor(ArticulationAnchor(v.toInt()));
+                  break;
+            case P_ID::PLAY_ARTICULATION:
+                  setPlayArticulation(v.toBool());
+                  break;
+            case P_ID::ORNAMENT_STYLE:
+                  setOrnamentStyle(MScore::OrnamentStyle(v.toInt()));
                   break;
             case P_ID::TIME_STRETCH:
                   setTimeStretch(v.toDouble());
@@ -613,6 +633,11 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
             case P_ID::TIME_STRETCH:
                   return articulationList[int(articulationType())].timeStretch;
 
+            case P_ID::ORNAMENT_STYLE:
+                  //return int(score()->style()->ornamentStyle(_ornamentStyle));
+                  return int(MScore::OrnamentStyle::DEFAULT);
+            case P_ID::PLAY_ARTICULATION:
+                  return true;
             default:
                   break;
             }
@@ -648,6 +673,7 @@ void Articulation::resetProperty(P_ID id)
       switch (id) {
             case P_ID::DIRECTION:
             case P_ID::TIME_STRETCH:
+            case P_ID::ORNAMENT_STYLE: // TODO not sure whether ornament style needs resetProperty handling.
                   return;
 
             case P_ID::ARTICULATION_ANCHOR:

@@ -95,7 +95,8 @@ class StyleData : public QSharedData {
       PageFormat _pageFormat;
       qreal _spatium;
       ArticulationAnchor _articulationAnchor[int(ArticulationType::ARTICULATIONS)];
-
+      MScore::OrnamentStyle _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
+    
       bool _customChordList;        // if true, chordlist will be saved as part of score
 
       void set(StyleIdx id, const QVariant& v)            { _values[int(id)] = v; }
@@ -126,6 +127,9 @@ class StyleData : public QSharedData {
       void setSpatium(qreal v)                                   { _spatium = v;    }
       ArticulationAnchor articulationAnchor(int id) const        { return _articulationAnchor[id]; }
       void setArticulationAnchor(int id, ArticulationAnchor val) { _articulationAnchor[id] = val;  }
+      MScore::OrnamentStyle ornamentStyle()                      { return _ornamentStyle ; }
+      void setOrnamentStyle(MScore::OrnamentStyle val)           { _ornamentStyle = val; }
+    
       friend class TextStyle;
       };
 
