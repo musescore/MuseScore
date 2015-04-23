@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2015 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -66,6 +66,7 @@ static void addHeader(QString& out)
              "<html>\n"
              "<head>\n"
              "   <meta charset=\"utf-8\">\n"
+             "   <link rel=\"stylesheet\" type=\"text/css\" href=\"manual.css\"/>\n"
              "   </head>\n"
              "<body>\n";
       }
@@ -76,12 +77,9 @@ static void addHeader(QString& out)
 
 static void addFooter(QString& out)
       {
-/*      out += "<div class=\"footer\"><a href=\"http://musescore.org/\">MuseScore</a> - Free music notation software<br />\n"
-             "&copy; 2002-2014 Werner Schweer &amp; others</div>\n"
+      out += "<div class=\"footer\"><a href=\"http://musescore.org/\">MuseScore</a> - Free music notation software<br />\n"
+             "&copy; 2002-2015 Werner Schweer &amp; others</div>\n"
              "</body>\n"
-             "</html>\n";
-      */
-      out += "</body>\n"
              "</html>\n";
       }
 
@@ -97,90 +95,111 @@ static void parseClass(const QString& name, const QString& in)
       QStringList sl = in.split("\n");
       QStringList methodDescription;
 
-      QRegExp re("@P ([^\\s]+)\\s+([^\\s]+)(.*)");
+      QRegExp propRegExp("@P ([^\\s]+)\\s+([^\\s]+)(.*)");
 
       // matches Q_INVOKABLE void mops(int a);   // comment
-      QRegExp re1("Q_INVOKABLE +([^ ]+) +([^;]+); */*(.*)");
-      QRegExp re2("Q_INVOKABLE +([^ ]+) +([^\\{]+)\\{");
-      QRegExp re3("Q_INVOKABLE +([^ ]+) +(\\w+\\([^\\)]*\\))\\s+const\\s*([^\\{]*)\\{");
+      QRegExp methodRegExp1("Q_INVOKABLE +([^ ]+) +([^;]+); */*(.*)");
+      QRegExp methodRegExp2("Q_INVOKABLE +([^ ]+) +([^\\{]+)\\{");
+      QRegExp methodRegExp3("Q_INVOKABLE +([^ ]+) +(\\w+\\([^\\)]*\\))\\s+const\\s*([^\\{]*)\\{");
 
-      QRegExp reD("//@ (.*)");
-      QRegExp re4 ("class +(\\w+) *: *public +(\\w+) *\\{");
-      QRegExp re4b("class +(\\w+) *: *public +(\\w+), *public");
+      QRegExp descrRegExp("//@ (.*)");
+      QRegExp classNameRegExp1 ("class +(\\w+) *: *public +(\\w+) *\\{");
+      QRegExp classNameRegExp2("class +(\\w+) *: *public +(\\w+), *public");
 
-      Q_ASSERT(re1.isValid() && re2.isValid() && re3.isValid());
+      Q_ASSERT(methodRegExp1.isValid() && methodRegExp2.isValid() && methodRegExp3.isValid());
 
       bool parseClassDescription = true;
 
       foreach(const QString& s, sl) {
-            if (re.indexIn(s, 0) != -1) {             //@P
+
+            // Properties
+
+            if (propRegExp.indexIn(s, 0) != -1) {             //@P
                   parseClassDescription = false;
                   Prop p;
-                  p.name        = re.cap(1);
-                  p.type        = re.cap(2);
-                  p.description = re.cap(3);
+                  p.name        = propRegExp.cap(1);
+                  p.type        = propRegExp.cap(2);
+                  p.description = propRegExp.cap(3);
                   cl.props.append(p);
                   }
-            else if (re2.indexIn(s, 0) != -1) {
+
+            // Methods
+
+            else if (methodRegExp2.indexIn(s, 0) != -1) {
                   parseClassDescription = false;
-                  Proc p;
-                  p.type        = re2.cap(1);
-                  p.name        = re2.cap(2);
-                  p.description = methodDescription;
+                  // only document a method if it has a "//@" comment
+                  if (methodDescription.count() > 0) {
+                        Proc p;
+                        p.type        = methodRegExp2.cap(1);
+                        p.name        = methodRegExp2.cap(2);
+                        p.description = methodDescription;
+                        cl.procs.append(p);
+                        }
                   methodDescription.clear();
-                  cl.procs.append(p);
                   }
-            else if (re1.indexIn(s, 0) != -1) {
+            else if (methodRegExp1.indexIn(s, 0) != -1) {
                   parseClassDescription = false;
-                  Proc p;
-                  p.type        = re1.cap(1);
-                  p.name        = re1.cap(2);
-                  p.description = methodDescription;
+                  // only document a method if it has a "//@" comment
+                  if (methodDescription.count() > 0) {
+                        Proc p;
+                        p.type        = methodRegExp1.cap(1);
+                        p.name        = methodRegExp1.cap(2);
+                        p.description = methodDescription;
+                        cl.procs.append(p);
+                        }
                   methodDescription.clear();
-                  cl.procs.append(p);
                   }
-            else if (re3.indexIn(s, 0) != -1) {
+            else if (methodRegExp3.indexIn(s, 0) != -1) {
                   parseClassDescription = false;
-                  Proc p;
-                  p.type        = re3.cap(1);
-                  p.name        = re3.cap(2);
-                  p.description = methodDescription;
+                  // only document a method if it has a "//@" comment
+                  if (methodDescription.count() > 0) {
+                        Proc p;
+                        p.type        = methodRegExp3.cap(1);
+                        p.name        = methodRegExp3.cap(2);
+                        p.description = methodDescription;
+                        cl.procs.append(p);
+                        }
                   methodDescription.clear();
-                  cl.procs.append(p);
                   }
-            else if ((reD.indexIn(s, 0) != -1)) {
+
+            // Descriptions
+
+            else if ((descrRegExp.indexIn(s, 0) != -1)) {
                   if (parseClassDescription)
-                        cl.description.append(reD.cap(1));
+                        cl.description.append(descrRegExp.cap(1));
                   else
-                        methodDescription.append(reD.cap(1));
+                        methodDescription.append(descrRegExp.cap(1));
                   }
             else if (s.startsWith("///")) {
                   QString ss = s.mid(3);
                   if (parseClassDescription)
                         cl.description.append(ss);
-                  else
-                        methodDescription.append(ss);
+//                  else
+//                        methodDescription.append(ss);
                   }
-            else if (re4.indexIn(s, 0) != -1) {
+
+            // Class names
+
+            else if (classNameRegExp1.indexIn(s, 0) != -1) {
                   parseClassDescription = false;
-                  QString parent = re4.cap(2).simplified();
-                  if (name == re4.cap(1).simplified()) {
+                  QString parent = classNameRegExp1.cap(2).simplified();
+                  if (name == classNameRegExp1.cap(1).simplified()) {
                         cl.parent = parent;
                         }
                   else {
                         printf("?<%s>!=<%s> derived from <%s>\n",
-                           qPrintable(name), qPrintable(re4.cap(1).simplified()), qPrintable(parent));
+                           qPrintable(name), qPrintable(classNameRegExp1.cap(1).simplified()), qPrintable(parent));
                         }
                   }
-            else if (re4b.indexIn(s, 0) != -1) {
+            else if (classNameRegExp2.indexIn(s, 0) != -1) {
                   parseClassDescription = false;
-                  QString parent = re4b.cap(2).simplified();
-                  if (name == re4b.cap(1).simplified()) {
+                  QString parent = classNameRegExp2.cap(2).simplified();
+                  if (name == classNameRegExp2.cap(1).simplified()) {
                         cl.parent = parent;
                         }
                   else {
                         printf("?<%s>!=<%s> derived from <%s>\n",
-                           qPrintable(name), qPrintable(re4b.cap(1).simplified()), qPrintable(parent));
+                           qPrintable(name), qPrintable(classNameRegExp2.cap(1).simplified()), qPrintable(parent));
                         }
                   }
             }
@@ -196,21 +215,21 @@ static void scanFile(const QString& in)
       QList<Prop> props;
       QList<Proc> procs;
 
-      QRegExp re("@@ ([^\\n]*)");
+      QRegExp classRegExp("@@ ([^\\n]*)");
       int gpos = 0;
       QString className;
       for (;;) {
-            int rv = re.indexIn(in, gpos);
+            int rv = classRegExp.indexIn(in, gpos);
             if (rv == -1) {
                   if (!className.isEmpty())
                         parseClass(className, in.mid(gpos, in.size() - gpos));
                   break;
                   }
-            int next = rv + re.matchedLength();
+            int next = rv + classRegExp.matchedLength();
             if (gpos)
                   parseClass(className, in.mid(gpos, next-gpos));
 
-            className = re.cap(1).simplified();
+            className = classRegExp.cap(1).simplified();
             gpos = next;
             }
       }
@@ -251,7 +270,7 @@ static void writeOutput()
                   out += "<h4>Methods</h4>\n";
                   out += "<div class=\"methods\">\n";
                   foreach(const Proc& p, cl.procs) {
-                        out += "<div class=\"method\">\n";
+                        out += "<div class=\"method\">";
 
                         QString type(p.type);
                         bool found = false;
@@ -277,17 +296,17 @@ static void writeOutput()
                         else {
                               out += QString("<b>%2</b>\n").arg(p.name);
                               }
-                        out += "</div>\n";
                         if (!p.description.isEmpty()) {
-                              out += "<div class=\"method-description\">\n";
+                              out += "<div class=\"method-description\">";
                               foreach(const QString& s, p.description) {
                                     out += s.simplified();
                                     out += "<br/>\n";
                                     }
-                              out += "</div>\n";
+                              out += "</div>";
                               }
+                        out += "</div>\n";            // end of .method div
                         }
-                  out += "</div>\n";
+                  out += "</div>\n";                  // end of .methods div
                   }
             if (!cl.props.isEmpty()) {
                   out += "<h4>Properties</h4>\n";
@@ -350,8 +369,7 @@ static void copyAssets(QString& srcPath, QString& dstPath)
       {
       QString assetDstPath = dstPath + "/plugins/";
       QString assetSrcPath = srcPath + "/manual/";
-//      QStringList files = {"manual.css", "manual-dark.css", "mscore.png" };
-      QStringList files = {"mscore.png" };
+      QStringList files = {"manual.css", /*"manual-dark.css",*/ "mscore.png" };
 
       // copy files from source to destination path
       for (QString f : files) {

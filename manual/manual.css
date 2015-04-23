@@ -1,0 +1,73 @@
+/*
+	CSS style sheet for
+	MuseScore Plugin Interface Manual
+*/
+
+body {
+	font-family:	Arial, Helvetica, FreeSans, "DejaVu Sans", sans-serif;
+	font-size:		11pt;
+	margin:			15px;
+}
+
+h2, h3 {
+	font-size:		24px;
+	padding:		6px 0 6px 48px;
+	background:		#dcdcdc 4px center no-repeat url('mscore.png');
+	background-size:32px 32px;
+}
+
+h4 {
+	margin:			16px 0 8px 16px;
+}
+
+table {
+	border-collapse:collapse;
+}
+
+td {
+	padding:		2px 12px 2px 0;
+	vertical-align:	text-top;
+}
+
+.class-description {
+	margin:			0 0 16px 0;
+}
+
+.class-inherit {
+	margin:			0 0 16px 0;
+	font-size:		0.8em;
+}
+
+.method {
+	font-family:	"Lucida Console", Monaco, "DejaVu Sans Mono", monospace;
+	font-size:		0.8em;
+}
+
+.method-description {
+	font-family:	Arial, Helvetica, FreeSans, "DejaVu Sans", sans-serif;
+	padding-left:	2.5em;
+}
+
+.prop-odd {
+	background:		#dcdcdc;
+}
+
+.prop-name {
+	font-weight:	bold;
+}
+
+.prop-type {
+	font-style:		italic
+}
+
+.prop-desc {
+
+}
+
+.footer {
+	margin-top:		24px;
+	background:		#dcdcdc;
+	padding:		16px;
+	text-align:		center;
+	font-size:		0.8em;
+}
