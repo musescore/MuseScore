@@ -85,20 +85,20 @@ struct SymElement {
 
 //---------------------------------------------------------
 //   @@ Accidental
+//   @P acctype     enum  (???.NONE, .SHARP, .FLAT, .SHARP2, .FLAT2, .NATURAL, .FLAT_SLASH, .FLAT_SLASH2, .MIRRORED_FLAT2, .MIRRORED_FLAT, .MIRRORED_FLAT_SLASH, .FLAT_FLAT_SLASH, .SHARP_SLASH, .SHARP_SLASH2, .SHARP_SLASH3, .SHARP_SLASH4, .SHARP_ARROW_UP, .SHARP_ARROW_DOWN, .SHARP_ARROW_BOTH, .FLAT_ARROW_UP, .FLAT_ARROW_DOWN, .FLAT_ARROW_BOTH, .NATURAL_ARROW_UP, .NATURAL_ARROW_DOWN, .NATURAL_ARROW_BOTH, .SORI, .KORON) (read only)
 //   @P hasBracket  bool
+//   @P role        enum  (???.AUTO, .USER) (read only)
 //   @P small       bool
-//   @P acctype     enum  (NONE, SHARP, FLAT, SHARP2, FLAT2, NATURAL, ...) (read only)
-//   @P role        enum  (AUTO, USER) (read only)
 //---------------------------------------------------------
 
 class Accidental : public Element {
 
 #ifdef SCRIPT_INTERFACE
       Q_OBJECT
-      Q_PROPERTY(bool hasBracket  READ hasBracket  WRITE undoSetHasBracket)
-      Q_PROPERTY(bool small       READ small       WRITE undoSetSmall)
       Q_PROPERTY(int  accType     READ qmlAccidentalType)
+      Q_PROPERTY(bool hasBracket  READ hasBracket  WRITE undoSetHasBracket)
       Q_PROPERTY(int  role        READ qmlRole)
+      Q_PROPERTY(bool small       READ small       WRITE undoSetSmall)
 
    public:
       enum QmlAccidentalRole { AUTO, USER };
