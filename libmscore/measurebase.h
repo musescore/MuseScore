@@ -31,12 +31,12 @@ class Measure;
 //   @@ MeasureBase
 ///    Virtual base class for Measure, HBox and VBox
 //
-//   @P lineBreak       bool              true if a system break is positioned on this measure
-//   @P nextMeasure     Ms::Measure       the next Measure (read-only)
-//   @P nextMeasureMM   Ms::Measure       the next multi-measure rest Measure (read-only)
-//   @P pageBreak       bool              true if a page break is positioned on this measure
-//   @P prevMeasure     Ms::Measure       the previous Measure (read-only)
-//   @P prevMeasureMM   Ms::Measure       the previous multi-measure rest Measure (read-only)
+//   @P lineBreak       bool        true if a system break is positioned on this measure
+//   @P nextMeasure     Measure     the next Measure (read-only)
+//   @P nextMeasureMM   Measure     the next multi-measure rest Measure (read-only)
+//   @P pageBreak       bool        true if a page break is positioned on this measure
+//   @P prevMeasure     Measure     the previous Measure (read-only)
+//   @P prevMeasureMM   Measure     the previous multi-measure rest Measure (read-only)
 //---------------------------------------------------------
 
 class MeasureBase : public Element {

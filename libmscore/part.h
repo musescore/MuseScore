@@ -26,38 +26,43 @@ class InstrumentTemplate;
 
 //---------------------------------------------------------
 //   @@ Part
-//   @P partName   QString  name of the part, used in the mixer
-//   @P show       bool     check/set whether or not a part is shown
-//   @P longName   QString
-//   @P shortName  QString
-//   @P volume     int
-//   @P mute       bool
-//   @P endTrack   int      (read only)
-//   @P startTrack int      (read only)
-//   @  midiProgram int     (read only)
-//   @  midiChannel int     (read only)
-//   @  instrumentId string (read only)
+//   @P endTrack        int         (read only)
+//   @P harmonyCount    int         (read only)
+//   @P hasDrumStaff    bool        (read only)
+//   @P hasPitchedStaff bool        (read only)
+//   @P hasTabStaff     bool        (read only)
+//   @P instrumentId    string      (read only)
+//   @P longName        string
+//   @P lyricCount      int         (read only)
+//   @P midiChannel     int         (read only)
+//   @P midiProgram     int         (read only)
+//   @P mute            bool
+//   @P partName        string      name of the part, used in the mixer
+//   @P shortName       string
+//   @P show            bool        check/set whether or not a part is shown
+//   @P startTrack      int         (read only)
+//   @P volume          int
 //---------------------------------------------------------
 
 class Part : public QObject, public ScoreElement {
       Q_OBJECT
 
-      Q_PROPERTY(QString partName READ partName WRITE setPartName)
-      Q_PROPERTY(bool show READ show WRITE setShow)
-      Q_PROPERTY(QString longName READ longName WRITE setLongName)
-      Q_PROPERTY(QString shortName READ shortName WRITE setShortName)
-      Q_PROPERTY(int volume READ volume WRITE setVolume)
-      Q_PROPERTY(bool mute READ mute WRITE setMute)
-      Q_PROPERTY(int endTrack READ endTrack)
-      Q_PROPERTY(int startTrack READ startTrack)
-      Q_PROPERTY(int midiProgram READ midiProgram)
-      Q_PROPERTY(int midiChannel READ midiChannel)
-      Q_PROPERTY(QString instrumentId READ instrumentId)
-      Q_PROPERTY(int lyricCount READ lyricCount)
-      Q_PROPERTY(int harmonyCount READ harmonyCount)
-      Q_PROPERTY(bool hasTabStaff READ hasTabStaff)
-      Q_PROPERTY(bool hasPitchedStaff READ hasPitchedStaff)
-      Q_PROPERTY(bool hasDrumStaff READ hasDrumStaff)
+      Q_PROPERTY(int          endTrack          READ endTrack)
+      Q_PROPERTY(int          harmonyCount      READ harmonyCount)
+      Q_PROPERTY(bool         hasDrumStaff      READ hasDrumStaff)
+      Q_PROPERTY(bool         hasPitchedStaff   READ hasPitchedStaff)
+      Q_PROPERTY(bool         hasTabStaff       READ hasTabStaff)
+      Q_PROPERTY(QString      instrumentId      READ instrumentId)
+      Q_PROPERTY(QString      longName          READ longName     WRITE setLongName)
+      Q_PROPERTY(int          lyricCount        READ lyricCount)
+      Q_PROPERTY(int          midiChannel       READ midiChannel)
+      Q_PROPERTY(int          midiProgram       READ midiProgram)
+      Q_PROPERTY(bool         mute              READ mute         WRITE setMute)
+      Q_PROPERTY(QString      partName          READ partName     WRITE setPartName)
+      Q_PROPERTY(QString      shortName         READ shortName    WRITE setShortName)
+      Q_PROPERTY(bool         show              READ show         WRITE setShow)
+      Q_PROPERTY(int          startTrack        READ startTrack)
+      Q_PROPERTY(int          volume            READ volume       WRITE setVolume)
 
       QString _partName;           ///< used in tracklist (mixer)
       InstrumentList _instruments;
