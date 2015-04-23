@@ -50,6 +50,7 @@ class KeySig : public Element {
       virtual void layout() override;
       virtual qreal mag() const override;
 
+      //@ sets the key of the key signature
       Q_INVOKABLE void setKey(Key);
 
       Segment* segment() const            { return (Segment*)parent(); }
@@ -57,7 +58,7 @@ class KeySig : public Element {
       Space space() const;
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
-      //@ -7 (flats) -- +7 (sharps)
+      //@ returns the key of the key signature (from -7 (flats) to +7 (sharps) )
       Q_INVOKABLE Key key() const         { return _sig.key(); }
       bool isCustom() const               { return _sig.custom(); }
       KeySigEvent keySigEvent() const     { return _sig; }
