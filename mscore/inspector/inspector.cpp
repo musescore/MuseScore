@@ -394,7 +394,9 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
             { P_ID::USER_OFF,            1, 0, e.offsetY,      e.resetY          },
             { P_ID::ARTICULATION_ANCHOR, 0, 0, ar.anchor,      ar.resetAnchor    },
             { P_ID::DIRECTION,           0, 0, ar.direction,   ar.resetDirection },
-            { P_ID::TIME_STRETCH,        0, 0, ar.timeStretch, ar.resetTimeStretch }
+            { P_ID::TIME_STRETCH,        0, 0, ar.timeStretch, ar.resetTimeStretch },
+            { P_ID::ORNAMENT_STYLE,      0, 0, ar.ornamentStyle, ar.resetOrnamentStyle },
+            { P_ID::PLAY_ARTICULATION,   0, 0, ar.playArticulation, ar.resetPlayArticulation}
             };
       mapSignals();
       }
