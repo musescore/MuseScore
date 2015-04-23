@@ -21,19 +21,20 @@ namespace Ms {
 //   @@ Jump
 ///    Jump label
 //
-//   @P jumpTo      QString
-//   @P playUntil   QString
-//   @P continueAt  QString
-//   @P jumpType    Ms::Jump::Type (DC, DC_AL_FINE, DC_AL_CODA, DS_AL_CODA, DS_AL_FINE, DS, USER) (read only)
+//   @P continueAt  string
+//   @P jumpTo      string
+// not used?
+//      jumpType    enum (Jump.DC, .DC_AL_FINE, .DC_AL_CODA, .DS_AL_CODA, .DS_AL_FINE, .DS, USER) (read only)
+//   @P playUntil   string
 //---------------------------------------------------------
 
 
 class Jump : public Text {
       Q_OBJECT
 
+      Q_PROPERTY(QString continueAt  READ continueAt  WRITE undoSetContinueAt)
       Q_PROPERTY(QString jumpTo      READ jumpTo      WRITE undoSetJumpTo)
       Q_PROPERTY(QString playUntil   READ playUntil   WRITE undoSetPlayUntil)
-      Q_PROPERTY(QString continueAt  READ continueAt  WRITE undoSetContinueAt)
       //Q_Property(Ms::Jump::Type      READ jumpType)
       //Q_ENUMS(Type)
 
