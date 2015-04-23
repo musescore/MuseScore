@@ -42,28 +42,28 @@ extern const PaperSize* getPaperSize(const qreal wi, const qreal hi);
 
 //---------------------------------------------------------
 //   @@ PageFormat
-//   @P size              QSizeF  paper size in inch
-//   @P printableWidth    qreal
-//   @P evenLeftMargin    qreal
-//   @P oddLeftMargin     qreal
-//   @P eventTopMargin    qreal
-//   @P oddTopMargin      qreal
-//   @P evenBottomMargin  qreal
-//   @P oddBottomMargin   qreal
+//   @P evenBottomMargin  float
+//   @P evenLeftMargin    float
+//   @P eventTopMargin    float
+//   @P oddBottomMargin   float
+//   @P oddLeftMargin     float
+//   @P oddTopMargin      float
+//   @P printableWidth    float
+//   @P size              size  paper size in inch
 //   @P twosided          bool
 //---------------------------------------------------------
 
 #ifdef SCRIPT_INTERFACE
 class PageFormat : public QObject {
       Q_OBJECT
-      Q_PROPERTY(QSizeF size             READ size             WRITE setSize)
-      Q_PROPERTY(qreal  printableWidth   READ printableWidth   WRITE setPrintableWidth  )
-      Q_PROPERTY(qreal  evenLeftMargin   READ evenLeftMargin   WRITE setEvenLeftMargin  )
-      Q_PROPERTY(qreal  oddLeftMargin    READ oddLeftMargin    WRITE setOddLeftMargin   )
-      Q_PROPERTY(qreal  evenTopMargin    READ evenTopMargin    WRITE setEvenTopMargin  )
-      Q_PROPERTY(qreal  oddTopMargin     READ oddTopMargin     WRITE setOddTopMargin    )
       Q_PROPERTY(qreal  evenBottomMargin READ evenBottomMargin WRITE setEvenBottomMargin)
+      Q_PROPERTY(qreal  evenLeftMargin   READ evenLeftMargin   WRITE setEvenLeftMargin  )
+      Q_PROPERTY(qreal  evenTopMargin    READ evenTopMargin    WRITE setEvenTopMargin  )
       Q_PROPERTY(qreal  oddBottomMargin  READ oddBottomMargin  WRITE setOddBottomMargin )
+      Q_PROPERTY(qreal  oddLeftMargin    READ oddLeftMargin    WRITE setOddLeftMargin   )
+      Q_PROPERTY(qreal  oddTopMargin     READ oddTopMargin     WRITE setOddTopMargin    )
+      Q_PROPERTY(qreal  printableWidth   READ printableWidth   WRITE setPrintableWidth  )
+      Q_PROPERTY(QSizeF size             READ size             WRITE setSize)
       Q_PROPERTY(bool   twosided         READ twosided         WRITE setTwosided        )
 #else
 class PageFormat {
