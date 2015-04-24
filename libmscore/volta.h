@@ -48,7 +48,7 @@ class VoltaSegment : public TextLineSegment {
 
 //---------------------------------------------------------
 //   @@ Volta
-//   @P voltaType  Ms::Volta::Type  (OPEN, CLOSED)
+//   @P voltaType  enum (Volta.CLOSE, Volta.OPEN)
 //---------------------------------------------------------
 
 class Volta : public TextLine {
