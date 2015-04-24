@@ -305,10 +305,8 @@ void Articulation::write(Xml& xml) const
       xml.tag("subtype", subtypeName());
       if (_timeStretch != 1.0)
             xml.tag("timeStretch", _timeStretch);
-      if (_ornamentStyle != MScore::OrnamentStyle::DEFAULT)
-            xml.tag("ornamentStyle", int(_ornamentStyle));
-      if ( playArticulation() == false) // if it is true, then write nothing as true is the default
-            xml.tag("playArticulation", false);
+      writeProperty(xml, P_ID::PLAY_ARTICULATION);
+      writeProperty(xml, P_ID::ORNAMENT_STYLE);
       Element::writeProperties(xml);
       if (anchorStyle == PropertyStyle::UNSTYLED)
             xml.tag("anchor", int(_anchor));

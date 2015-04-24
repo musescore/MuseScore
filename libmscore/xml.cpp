@@ -410,6 +410,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
             case P_TYPE::POINT:
             case P_TYPE::SIZE:
             case P_TYPE::COLOR:
+            case P_TYPE::ORNAMENT_STYLE:
                   tag(name, data);
                   break;
 
