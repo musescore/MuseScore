@@ -149,17 +149,20 @@ QString getInstrumentName(Instrument * in) {
 	      }
 }*/
 
-void createBackingTrack(Excerpt * e, Score * cs, const QString& midiname) {
-	// Mute the parts in the current excerpt
-	foreach( Part * part, e->parts())
-    	foreach( Channel * channel, part->instrument()->channel())
-    		channel->mute = true;
+void createAudioTrack(QJsonArray plist, Score * cs, const QString& midiname) {
+  	// Mute the parts in the current excerpt
+    foreach( Part * part, cs->parts()){
+  	  if (!plist.contains(QJsonValue(part->id())))
+      	foreach( Channel * channel, part->instrument()->channel())
+      		channel->mute = true;
+      //else
+      //  qWarning() << "TEST RETURNED TRUE!!!" << endl;
+    }
 
-    
     mscore->saveMidi(cs,midiname);
 
-    // Unmute the parts in the current excerpt
-    foreach( Part * part, e->parts())
+    // Unmute all parts
+    foreach( Part * part, cs->parts())
     	foreach( Channel * channel, part->instrument()->channel())
     		channel->mute = false;
 }
@@ -202,7 +205,7 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
   MQZipWriter uz(saveName);
 
     Score* thisScore = cs->rootScore();
-    if (thisScore->excerpts().count()==0) {
+    if (thisScore->excerpts().count()==0 || partsName.isEmpty()) {
 
 		/*
 		// Convert to tab (list of types in stafftype.h)
@@ -218,30 +221,38 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
         addFileToZip(&uz, tname, tname);
     }
     else {
-    	/*if (!partsName.isEmpty()) {
-		    QFile file(partsName);
-		    file.open(QIODevice::ReadOnly | QIODevice::Text);
-		    QJsonObject sett2 = QJsonDocument::fromJson(file.readAll()).object();
-		    qWarning() << sett2["title"].toString();  // <- print my title
-      	}*/
+ 
+      // Load json
+      QFile partsfile(partsName);
+      partsfile.open(QIODevice::ReadOnly | QIODevice::Text);
+      QJsonObject partsinfo = QJsonDocument::fromJson(partsfile.readAll()).object();
 
-      int i = 1;
+      // Number parts just the same as exporting metadata
+      int pi = 1;
+      foreach( Part * part, cs->parts()) {
+        part->setId(QString::number(pi++));
+      }
+
+      //qWarning() << "JSON HAS " << partsinfo.size() << " PARTS" << endl;
+
+      int ti = 1;
+      foreach ( QJsonValue plist, partsinfo["audio"].toArray()) {
+        // Synthesize the described track
+
+        QString tname = QString::number(ti++) + ".mid";
+        createAudioTrack(plist.toArray(),cs,tname);
+        addFileToZip(&uz, tname, tname);
+      }
+
+      int ei = 0;
+      QString prefix = QString::number(ei++)+'/';
+      createSvgCollection(&uz, cs, prefix, do_linearize);
+
 	    foreach (Excerpt* e, thisScore->excerpts())  {
 	    	Score * tScore = e->partScore();
 
-        QString prefix = QString::number(i)+'/';
+        prefix = QString::number(ei++)+'/';
 	    	createSvgCollection(&uz, tScore, prefix, do_linearize);
-
-	    	// Add midifile
-	        QString tname("track.mid");
-	        saveMidi(tScore,tname);
-	        addFileToZip(&uz, tname, prefix+tname);
-
-	    	QString bname("backing.mid");
-	    	createBackingTrack(e,cs,bname);
-	    	addFileToZip(&uz, bname, prefix+bname);
-
-	    	i++;
 	    }
 	}
 
@@ -683,41 +694,61 @@ void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
       // List all parts
       QJsonArray p_ar = QJsonArray();
       int pi = 1;
-        foreach( Part * part, score->parts().toSet()) {
-          part->setId(QString::number(pi++));
+      foreach( Part * part, score->parts()) {
+        part->setId(QString::number(pi++));
 
-          QJsonObject pobj = QJsonObject();
-          pobj["id"] = part->id();
-          pobj["instrument"] = getInstrumentName(part->instrument());
-          pobj["name"] = part->partName();
-            p_ar.append(pobj);
-        }
-        obj["parts"] = p_ar;
+        QJsonObject pobj = QJsonObject();
+        pobj["id"] = part->id();
+        pobj["instrument"] = getInstrumentName(part->instrument());
+        pobj["name"] = part->partName();
+          p_ar.append(pobj);
+      }
+      obj["parts"] = p_ar;
 
-        // List staves in main score
-        obj["staves"] = stavesToJson(score);
 
-        // List all excerpts
+      // List all excerpts
 
-        QJsonArray e_ar = QJsonArray();
+      QJsonArray e_ar = QJsonArray();
+      int ei = 0;
+
+      // Create the "Full" excerpt
+
+      QJsonObject eobj = QJsonObject();
+
+      eobj["id"] = QString::number(ei++);
+      eobj["title"] = "Full";
+      eobj["staves"] = stavesToJson(score);
+
+      QJsonArray ep_ar = QJsonArray();
+      foreach(Part * part, score->parts()) {
+        ep_ar.append(part->id());
+      }
+      eobj["parts"] = ep_ar;
+
+      e_ar.append(eobj);
+
+      // Create the other excerpt objects
+
       foreach (Excerpt* e, score->rootScore()->excerpts())  {
-        QJsonObject eobj = QJsonObject();
+        eobj = QJsonObject();
 
-        QJsonArray ep_ar = QJsonArray();
+        eobj["id"] = QString::number(ei++);
+        eobj["title"] = e->title();
+        eobj["staves"] = stavesToJson(e->partScore());
+
+        ep_ar = QJsonArray();
         foreach(Part * part, e->parts().toSet()) {
           ep_ar.append(part->id());
         }
         eobj["parts"] = ep_ar;
 
-          eobj["staves"] = stavesToJson(e->partScore());
-
-            e_ar.append(eobj);
-        }
-        obj["excerpts"] = e_ar;
+        e_ar.append(eobj);
+      }
+      obj["excerpts"] = e_ar;
 
       file.write(QJsonDocument(obj).toJson());
       file.close();
 
-        return true;
+      return true;
     }
 }
