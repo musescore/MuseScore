@@ -22,8 +22,8 @@ namespace Ms {
 //   @@ TempoText
 ///    Tempo marker which determines the midi tempo.
 //
-//   @P tempo       qreal  tempo in beats per second (beat=1/4)
-//   @P followText  bool   determine tempo from text
+//   @P tempo       float     tempo in quarter notes (crochets) per second
+//   @P followText  bool      determine tempo from text
 //-------------------------------------------------------------------
 
 class TempoText : public Text  {

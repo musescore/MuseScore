@@ -59,7 +59,7 @@ struct SlurOffsets {
 
 //---------------------------------------------------------
 //   @@ SlurSegment
-///    also used for Tie
+///    a single segment of slur; also used for Tie
 //---------------------------------------------------------
 
 class SlurSegment : public SpannerSegment {
@@ -124,8 +124,8 @@ class SlurSegment : public SpannerSegment {
 
 //-------------------------------------------------------------------
 //   @@ SlurTie
-//   @P lineType       int                    (0 - solid, 1 - dotted, 2 - dashed)
-//   @P slurDirection  Ms::MScore::Direction  (AUTO, UP, DOWN)
+//   @P lineType       int    (0 - solid, 1 - dotted, 2 - dashed)
+//   @P slurDirection  enum (Direction.AUTO, Direction.DOWN, Direction.UP)
 //-------------------------------------------------------------------
 
 class SlurTie : public Spanner {
