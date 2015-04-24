@@ -954,6 +954,8 @@ QList<Note*> Selection::noteList(int selTrack) const
                         if (!(seg->segmentType() & (Segment::Type::ChordRest)))
                               continue;
                         for (int track = startTrack; track < endTrack; ++track) {
+                              if (!canSelectVoice(track))
+                                  continue;
                               Element* e = seg->element(track);
                               if (e == 0 || e->type() != Element::Type::CHORD
                                  || (selTrack != -1 && selTrack != track))
