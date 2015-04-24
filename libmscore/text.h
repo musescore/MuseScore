@@ -178,7 +178,7 @@ class TextBlock {
 //   @@ Text
 ///    Graphic representation of a text.
 //
-//   @P text  Qstring  the raw text
+//   @P text  string  the raw text
 //---------------------------------------------------------
 
 class Text : public Element {
