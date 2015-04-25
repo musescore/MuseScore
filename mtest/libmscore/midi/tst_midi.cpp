@@ -93,6 +93,8 @@ void TestMidi::events_data()
       QTest::newRow("testGlissandoAcrossStaffs") << "testGlissandoAcrossStaffs";
       // pedal
       QTest::newRow("testPedal") <<  "testPedal";
+      // multi note tremolo
+      QTest::newRow("testMultiNoteTremolo") << "testMultiNoteTremolo";
       }
 
 //---------------------------------------------------------
