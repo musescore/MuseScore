@@ -600,6 +600,8 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
                   // we may use this to reinstate time signatures
                   if (m && m->prevMeasure())
                         nm = m->prevMeasure()->nextMeasure();
+                  else
+                        nm = nullptr;
 
                   if (sectionBreak) {
                         // reinstate section break, then stop rewriting
@@ -659,13 +661,16 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
       Segment* s = nm->undoGetSegment(Segment::Type::TimeSig, nm->tick());
       for (int i = 0; i < nstaves(); ++i) {
             if (!s->element(i * VOICES)) {
-                  TimeSig* nts = new TimeSig(*staff(i)->timeSig(nm->tick()));
-                  nts->setParent(s);
-                  if (sectionBreak) {
-                        nts->setGenerated(false);
-                        nts->setShowCourtesySig(false);
+                  TimeSig* ots = staff(i)->timeSig(nm->tick());
+                  if (ots) {
+                        TimeSig* nts = new TimeSig(*ots);
+                        nts->setParent(s);
+                        if (sectionBreak) {
+                              nts->setGenerated(false);
+                              nts->setShowCourtesySig(false);
+                              }
+                        undoAddElement(nts);
                         }
-                  undoAddElement(nts);
                   }
             }
 
