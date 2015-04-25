@@ -438,7 +438,7 @@ class Element : public QObject, public ScoreElement {
 
       int staffIdx() const                    { return _track >> 2;        }
       int voice() const                       { return _track & 3;         }
-      void setVoice(int v)                    { _track = (_track / VOICES) + v; }
+      void setVoice(int v)                    { _track = (_track / VOICES) * VOICES + v; }
       Staff* staff() const;
       Part* part() const;
 
