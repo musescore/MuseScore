@@ -754,20 +754,46 @@ void renderTremolo(Chord *chord, QList<NoteEventList> & ell)
                   seg2 = seg2->next(st);
             Chord* c2 = seg2 ? static_cast<Chord*>(seg2->element(track)) : 0;
             if (c2 && c2->type() == Element::Type::CHORD) {
-                  int tnotes = qMin(notes, c2->notes().size());
+                  int notes2 = c2->notes().size();
+                  int tnotes = qMax(notes, notes2);
                   int tticks = chord->actualTicks() * 2; // use twice the size
                   int n = tticks / t;
                   n /= 2;
                   int l = 2000 * t / tticks;
                   for (int k = 0; k < tnotes; ++k) {
-                        NoteEventList* events = &ell[k];
-                        events->clear();
-                        int p1 = chord->notes()[k]->pitch();
-                        int p2 = c2->notes()[k]->pitch();
-                        int dpitch = p2 - p1;
-                        for (int i = 0; i < n; ++i) {
-                              events->append(NoteEvent(0, l * i * 2, l));
-                              events->append(NoteEvent(dpitch, l * i * 2 + l, l));
+                        NoteEventList* events;
+                        if (k < notes) {
+                              // first chord has note
+                              events = &ell[k];
+                              events->clear();
+                              }
+                        else {
+                              // otherwise reuse note 0
+                              events = &ell[0];
+                              }
+                        if (k < notes && k < notes2) {
+                              // both chords have note
+                              int p1 = chord->notes()[k]->pitch();
+                              int p2 = c2->notes()[k]->pitch();
+                              int dpitch = p2 - p1;
+                              for (int i = 0; i < n; ++i) {
+                                    events->append(NoteEvent(0, l * i * 2, l));
+                                    events->append(NoteEvent(dpitch, l * i * 2 + l, l));
+                                    }
+                              }
+                        else if (k < notes) {
+                              // only first chord has note
+                              for (int i = 0; i < n; ++i)
+                                    events->append(NoteEvent(0, l * i * 2, l));
+                              }
+                        else {
+                              // only second chord has note
+                              // reuse note 0 of first chord
+                              int p1 = chord->notes()[0]->pitch();
+                              int p2 = c2->notes()[k]->pitch();
+                              int dpitch = p2-p1;
+                              for (int i = 0; i < n; ++i)
+                                    events->append(NoteEvent(dpitch, l * i * 2 + l, l));
                               }
                         }
                   }
