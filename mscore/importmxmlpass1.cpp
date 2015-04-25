@@ -102,48 +102,14 @@ static Fraction calculateFraction(const QString& type, const int dots, const Fra
       }
 
 //---------------------------------------------------------
-//   noteDurationAsFraction
+//   allocateStaves
 //---------------------------------------------------------
 
 /**
- Determine note duration as fraction based on type, dots and tuplet.
- Also return duration as fraction (calculated from the <duration> element).
- Input e is the note element.
- If chord or grace, duration is 0.
+ Allocate MuseScore staff to MusicXML voices.
+ For each staff, allocate at most VOICES voices to the staff.
  */
-#if 0
-static QString noteDurationDescription(const Fraction dura, const QString& type,
-                                       const int dots, const Fraction timeMod)
-      {
-      QString noteDurDesc = "";
 
-      // printable representations for specified and calculated duration
-      // specified duration
-      noteDurDesc += "dur ";
-      noteDurDesc += dura.print();
-      // calculated duration
-      noteDurDesc += " calcdur '";
-      noteDurDesc += noteTypeToFraction(type).print();
-      for (int i = 0; i < dots; ++i) noteDurDesc += ".";
-      if (timeMod.isValid() && timeMod.reduced() != Fraction(1, 1))
-            noteDurDesc += QString(" norm/act %1").arg(timeMod.print());
-
-      // calculate note duration as fraction based on type, dots, normal and actual notes
-      Fraction f = calculateFraction(type, dots, timeMod);
-      noteDurDesc += " -> ";
-      if (f.isValid())
-            noteDurDesc += f.print();
-      else
-            noteDurDesc += "invalid";
-      noteDurDesc += "'";
-
-      return noteDurDesc;
-      }
-#endif
-
-// allocate MuseScore staff to MusicXML voices
-// for each staff, allocate at most VOICES voices to the staff
-//
 // for regular (non-overlapping) voices:
 // 1) assign voice to a staff (allocateStaves)
 // 2) assign voice numbers (allocateVoices)
@@ -215,10 +181,15 @@ static void allocateStaves(VoiceList& vcLst)
             }
       }
 
+//---------------------------------------------------------
+//   allocateVoices
+//---------------------------------------------------------
 
-// allocate MuseScore voice to MusicXML voices
-// for each staff, the voices are number 1, 2, 3, 4
-// in the same order they are numbered in the MusicXML file
+/**
+ Allocate MuseScore voice to MusicXML voices.
+ For each staff, the voices are number 1, 2, 3, 4
+ in the same order they are numbered in the MusicXML file.
+ */
 
 static void allocateVoices(VoiceList& vcLst)
       {
@@ -249,7 +220,14 @@ static void allocateVoices(VoiceList& vcLst)
             }
       }
 
-//  copy the overlap data from the overlap detector to the voice list
+
+//---------------------------------------------------------
+//   copyOverlapData
+//---------------------------------------------------------
+
+/**
+ Copy the overlap data from the overlap detector to the voice list.
+ */
 
 static void copyOverlapData(VoiceOverlapDetector& vod, VoiceList& vcLst)
       {
@@ -323,6 +301,15 @@ bool MusicXMLParserPass1::determineMeasureLength(QVector<Fraction>& ml) const
       return true;
       }
 
+//---------------------------------------------------------
+//   getVoiceList
+//---------------------------------------------------------
+
+/**
+ Get the VoiceList for part \a id.
+ Return an empty VoiceList on error.
+ */
+
 VoiceList MusicXMLParserPass1::getVoiceList(const QString id) const
       {
       if (_parts.contains(id))
@@ -330,12 +317,30 @@ VoiceList MusicXMLParserPass1::getVoiceList(const QString id) const
       return VoiceList();
       }
 
+//---------------------------------------------------------
+//   getInstrList
+//---------------------------------------------------------
+
+/**
+ Get the MusicXmlInstrList for part \a id.
+ Return an empty MusicXmlInstrList on error.
+ */
+
 MusicXmlInstrList MusicXMLParserPass1::getInstrList(const QString id) const
       {
       if (_parts.contains(id))
             return _parts.value(id)._instrList;
       return MusicXmlInstrList();
       }
+
+//---------------------------------------------------------
+//   determineMeasureLength
+//---------------------------------------------------------
+
+/**
+ Set default notehead, line and stem direction
+ for instrument \a instrId in part \a id.
+ */
 
 void MusicXMLParserPass1::setDrumsetDefault(const QString& id,
                                             const QString& instrId,
@@ -351,6 +356,10 @@ void MusicXMLParserPass1::setDrumsetDefault(const QString& id,
             }
       }
 
+
+//---------------------------------------------------------
+//   determineStaffMoveVoice
+//---------------------------------------------------------
 
 /**
  For part \a id, determine MuseScore (ms) staffmove, track and voice from MusicXML (mx) staff and voice
@@ -419,6 +428,10 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int m
       return true;
       }
 
+//---------------------------------------------------------
+//   hasPart
+//---------------------------------------------------------
+
 /**
  Check if part \a id is found.
  */
@@ -427,6 +440,10 @@ bool MusicXMLParserPass1::hasPart(const QString& id) const
       {
       return _parts.contains(id);
       }
+
+//---------------------------------------------------------
+//   trackForPart
+//---------------------------------------------------------
 
 /**
  Return the (score relative) track number for the first staff of part \a id.
@@ -440,6 +457,10 @@ int MusicXMLParserPass1::trackForPart(const QString& id) const
       return scoreRelStaff * VOICES;
       }
 
+//---------------------------------------------------------
+//   getMeasureStart
+//---------------------------------------------------------
+
 /**
  Return the measure start time for measure \a i.
  */
@@ -451,6 +472,10 @@ Fraction MusicXMLParserPass1::getMeasureStart(const int i) const
       else
             return Fraction(0, 0);       // invalid
       }
+
+//---------------------------------------------------------
+//   octaveShift
+//---------------------------------------------------------
 
 /**
  Return the octave shift for part \a id in \a staff at \a f.
@@ -465,7 +490,7 @@ int MusicXMLParserPass1::octaveShift(const QString& id, const int staff, const F
       }
 
 //---------------------------------------------------------
-//   logDebugInfo
+//   logDebugTrace
 //---------------------------------------------------------
 
 /**
@@ -522,6 +547,14 @@ void MusicXMLParserPass1::skipLogCurrElem()
       _e.skipCurrentElement();
       }
 
+//---------------------------------------------------------
+//   createMeasures
+//---------------------------------------------------------
+
+/**
+ Create required measures with correct number, start tick and length for Score \a score.
+ */
+
 static void createMeasures(Score* score, const QVector<Fraction>& ml, const QVector<Fraction>& ms)
       {
       for (int i = 0; i < ml.size(); ++i) {
@@ -562,6 +595,10 @@ static void determineMeasureStart(const QVector<Fraction>& ml, QVector<Fraction>
 //   addText
 //---------------------------------------------------------
 
+/**
+ Add text \a strTxt to VBox \a vbx using TextStyleType \a stl.
+ */
+
 static void addText(VBox* vbx, Score* s, QString strTxt, TextStyleType stl)
       {
       if (!strTxt.isEmpty()) {
@@ -571,6 +608,15 @@ static void addText(VBox* vbx, Score* s, QString strTxt, TextStyleType stl)
             vbx->add(text);
             }
       }
+
+//---------------------------------------------------------
+//   addText
+//---------------------------------------------------------
+
+/**
+ Add text \a strTxt to VBox \a vbx using TextStyleType \a stl.
+ Also sets Align and Yoff.
+ */
 
 static void addText2(VBox* vbx, Score* s, QString strTxt, TextStyleType stl, Align v, double yoffs)
       {
@@ -963,8 +1009,8 @@ void MusicXMLParserPass1::scorePartwise()
 //---------------------------------------------------------
 
 /**
- Parse the /score-partwise/identification node.
- Read the metadata.
+ Parse the /score-partwise/identification node:
+ read the metadata.
  */
 
 void MusicXMLParserPass1::identification()
@@ -1067,8 +1113,11 @@ static QString text2syms(const QString& t)
 
 //---------------------------------------------------------
 //   decodeEntities
-///  Allows decode &#...; into UNICODE (utf8) character.
 //---------------------------------------------------------
+
+/**
+ Decode &#...; in string \a src into UNICODE (utf8) character.
+ */
 
 static QString decodeEntities( const QString& src )
       {
@@ -1156,8 +1205,8 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
 //---------------------------------------------------------
 
 /**
- Parse the /score-partwise/credit node.
- Read the credits for later handling by doCredits().
+ Parse the /score-partwise/credit node:
+ read the credits for later handling by doCredits().
  */
 
 void MusicXMLParserPass1::credit(CreditWordsList& credits)
@@ -1210,7 +1259,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
       }
 
 //---------------------------------------------------------
-//   updateStyles
+//   mustSetSize
 //---------------------------------------------------------
 
 /**
@@ -1244,6 +1293,10 @@ static bool mustSetSize(const int i)
             || i == int(TextStyleType::INSTRUMENT_CHANGE);
       }
 
+//---------------------------------------------------------
+//   updateStyles
+//---------------------------------------------------------
+
 /**
  Update the style definitions to match the MusicXML word-font and lyric-font.
  */
@@ -1276,8 +1329,8 @@ static void updateStyles(Score* score,
 //---------------------------------------------------------
 
 /**
- Parse the /score-partwise/defaults node.
- Read the general score layout settings.
+ Parse the /score-partwise/defaults node:
+ read the general score layout settings.
  */
 
 void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
@@ -1375,8 +1428,8 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
 //---------------------------------------------------------
 
 /**
- Parse the /score-partwise/defaults/page-layout node.
- Read the page layout.
+ Parse the /score-partwise/defaults/page-layout node:
+ read the page layout.
  */
 
 void MusicXMLParserPass1::pageLayout(PageFormat& pf, const qreal conversion,
@@ -1447,8 +1500,9 @@ void MusicXMLParserPass1::pageLayout(PageFormat& pf, const qreal conversion,
 //---------------------------------------------------------
 
 /**
- Parse the /score-partwise/part-list nod_e.
- Create the parts and for each part sets id and nam_e.
+ Parse the /score-partwise/part-list:
+ create the parts and for each part set id and name.
+ Also handle the part-groups.
  */
 
 void MusicXMLParserPass1::partList(MusicXmlPartGroupList& partGroupList)
@@ -1602,8 +1656,8 @@ void MusicXMLParserPass1::partGroup(const int scoreParts,
       else if (type == "stop")
             partGroupStop(partGroups, number, scoreParts, partGroupList);
       else
-            qDebug("Import MusicXml:xmlPartList: part-group type '%s' not supported",
-                   qPrintable(type));
+            qDebug("MusicXMLParserPass1::partGroup: part-group type '%s' not supported",
+                   qPrintable(type));  // TODO
       }
 
 //---------------------------------------------------------
@@ -1611,8 +1665,8 @@ void MusicXMLParserPass1::partGroup(const int scoreParts,
 //---------------------------------------------------------
 
 /**
- Parse the /score-partwise/part-list/score-part node.
- Create the part and sets id and name.
+ Parse the /score-partwise/part-list/score-part node:
+ create the part and sets id and name.
  Note that a part is created even if no part-name is present
  which is invalid MusicXML but is (sometimes ?) generated by NWC2MusicXML.
  */
@@ -1787,6 +1841,12 @@ void MusicXMLParserPass1::midiInstrument(const QString& partId)
 //   part
 //---------------------------------------------------------
 
+/**
+ Parse the /score-partwise/part node:
+ read the parts data to determine measure timing and octave shifts.
+ Assign voices and staves.
+ */
+
 void MusicXMLParserPass1::part()
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "part");
@@ -1836,9 +1896,9 @@ void MusicXMLParserPass1::part()
 //---------------------------------------------------------
 
 /**
-Determine a suitable measure duration value given the time signature
-by setting the duration denominator to be greater than or equal
-to the time signature denominator
+ Determine a suitable measure duration value given the time signature
+ by setting the duration denominator to be greater than or equal
+ to the time signature denominator
  */
 
 static Fraction measureDurationAsFraction(const Fraction length, const int tsigtype)
@@ -1858,6 +1918,12 @@ static Fraction measureDurationAsFraction(const Fraction length, const int tsigt
 //---------------------------------------------------------
 //   measure
 //---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure node:
+ read the measures data as required to determine measure timing, octave shifts
+ and assign voices and staves.
+ */
 
 void MusicXMLParserPass1::measure(const QString& partId,
                                   const Fraction time,
@@ -2130,6 +2196,10 @@ void MusicXMLParserPass1::time()
 //   divisions
 //---------------------------------------------------------
 
+/**
+ Parse the /score-partwise/part/measure/attributes/divisions node.
+ */
+
 void MusicXMLParserPass1::divisions()
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "divisions");
@@ -2140,8 +2210,12 @@ void MusicXMLParserPass1::divisions()
       }
 
 //---------------------------------------------------------
-//   setStaffLines - set stafflines and barline span for a single staff
+//   setStaffLines
 //---------------------------------------------------------
+
+/**
+ Set stafflines and barline span for a single staff
+ */
 
 static void setStaffLines(Score* score, int staffIdx, int stafflines)
       {
@@ -2330,7 +2404,9 @@ void MusicXMLParserPass1::staves(const QString& partId)
 //---------------------------------------------------------
 
 /**
- Parse the /score-partwise/part/measure/direction node.
+ Parse the /score-partwise/part/measure/direction node
+ to be able to handle octave-shifts, as these must be interpreted
+ in musical order instead of in MusicXML file order.
  */
 
 void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
@@ -2457,6 +2533,10 @@ void MusicXMLParserPass1::directionType(const Fraction cTime,
       Q_ASSERT(_e.isEndElement() && _e.name() == "direction-type");
       }
 
+//---------------------------------------------------------
+//   handleOctaveShift
+//---------------------------------------------------------
+
 void MusicXMLParserPass1::handleOctaveShift(const Fraction cTime,
                                             const QString& type, short size,
                                             MxmlOctaveShiftDesc& desc)
@@ -2494,6 +2574,10 @@ void MusicXMLParserPass1::handleOctaveShift(const Fraction cTime,
 //---------------------------------------------------------
 //   note
 //---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/note node.
+ */
 
 void MusicXMLParserPass1::note(const QString& partId,
                                const Fraction sTime,
@@ -2638,6 +2722,10 @@ void MusicXMLParserPass1::note(const QString& partId,
 //   duration
 //---------------------------------------------------------
 
+/**
+ Parse the /score-partwise/part/measure/note/duration node.
+ */
+
 void MusicXMLParserPass1::duration(Fraction& dura)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "duration");
@@ -2660,6 +2748,10 @@ void MusicXMLParserPass1::duration(Fraction& dura)
 //   forward
 //---------------------------------------------------------
 
+/**
+ Parse the /score-partwise/part/measure/note/forward node.
+ */
+
 void MusicXMLParserPass1::forward(Fraction& dura)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "forward");
@@ -2681,6 +2773,10 @@ void MusicXMLParserPass1::forward(Fraction& dura)
 //   backup
 //---------------------------------------------------------
 
+/**
+ Parse the /score-partwise/part/measure/note/backup node.
+ */
+
 void MusicXMLParserPass1::backup(Fraction& dura)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "backup");
@@ -2697,6 +2793,10 @@ void MusicXMLParserPass1::backup(Fraction& dura)
 //---------------------------------------------------------
 //   timeModification
 //---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/note/time-modification node.
+ */
 
 void MusicXMLParserPass1::timeModification(Fraction& timeMod)
       {
@@ -2731,6 +2831,10 @@ void MusicXMLParserPass1::timeModification(Fraction& timeMod)
 //---------------------------------------------------------
 //   rest
 //---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/note/rest node.
+ */
 
 void MusicXMLParserPass1::rest()
       {
