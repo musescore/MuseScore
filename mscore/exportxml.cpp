@@ -552,7 +552,7 @@ void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
                         slur[i] = s;
                         started[i] = false;
                         notations.tag(xml);
-                        xml.tagE("slur type=\"stop\" number=\"%d\"", i + 1);
+                        xml.tagE(QString("slur type=\"stop\" number=\"%1\"").arg(i + 1));
                         }
                   else
                         qDebug("no free slur slot");
@@ -566,7 +566,7 @@ void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
                         slur[i] = 0;
                         started[i] = false;
                         notations.tag(xml);
-                        xml.tagE("slur type=\"stop\" number=\"%d\"", i + 1);
+                        xml.tagE(QString("slur type=\"stop\" number=\"%1\"").arg(i + 1));
                         }
                   }
             }
@@ -1366,9 +1366,9 @@ static void ending(Xml& xml, Volta* v, bool left)
                         break;
                   }
             }
-      xml.tagE("ending number=\"%s\" type=\"%s\"",
-               number.toLatin1().data(),
-               type.toLatin1().data());
+      xml.tagE(QString("ending number=\"%1\" type=\"%2\"")
+               .arg(number.toLatin1().data())
+               .arg(type.toLatin1().data()));
       }
 
 //---------------------------------------------------------
@@ -1437,7 +1437,7 @@ void ExportMusicXml::barlineRight(Measure* m)
       if (bst == BarLineType::END_REPEAT || bst == BarLineType::END_START_REPEAT)
       {
           if (m->repeatCount() > 2) {
-              xml.tagE("repeat direction=\"backward\" times=\"%i\"",m->repeatCount());
+              xml.tagE(QString("repeat direction=\"backward\" times=\"%1\"").arg(m->repeatCount()));
           }else{
               xml.tagE("repeat direction=\"backward\"");
           }
@@ -1661,7 +1661,7 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
                   }
             notations.tag(xml);
             ornaments.tag(xml);
-            xml.tagE("wavy-line type=\"stop\" number=\"%d\"", n + 1);
+            xml.tagE(QString("wavy-line type=\"stop\" number=\"%1\"").arg(n + 1));
             trillStop.remove(chord);
             }
       if (trillStart.contains(chord)) {
@@ -1676,7 +1676,7 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
                   notations.tag(xml);
                   ornaments.tag(xml);
                   xml.tagE("trill-mark");
-                  xml.tagE("wavy-line type=\"start\" number=\"%d\"", n + 1);
+                  xml.tagE(QString("wavy-line type=\"start\" number=\"%1\"").arg(n + 1));
                   trillStart.remove(chord);
                   }
             }
@@ -3175,21 +3175,21 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
       if (hp->tick() == tick){
           if( hp->hairpinType() == Hairpin::Type::CRESCENDO ){
               if( hp->hairpinCircledTip() ){
-                xml.tagE("wedge type=\"crescendo\" niente=\"yes\" number=\"%d\"", n + 1);
+                xml.tagE(QString("wedge type=\"crescendo\" niente=\"yes\" number=\"%1\"").arg(n + 1));
               }
               else{
-                xml.tagE("wedge type=\"crescendo\" number=\"%d\"", n + 1);
+                xml.tagE(QString("wedge type=\"crescendo\" number=\"%1\"").arg(n + 1));
               }
           }
           else{
-              xml.tagE("wedge type=\"diminuendo\" number=\"%d\"", n + 1);
+              xml.tagE(QString("wedge type=\"diminuendo\" number=\"%1\"").arg(n + 1));
           }
       }
       else{
           if( hp->hairpinCircledTip() && hp->hairpinType() == Hairpin::Type::DECRESCENDO )
-                xml.tagE("wedge type=\"stop\" niente=\"yes\" number=\"%d\"", n + 1);
+                xml.tagE(QString("wedge type=\"stop\" niente=\"yes\" number=\"%1\"").arg(n + 1));
           else
-                xml.tagE("wedge type=\"stop\" number=\"%d\"", n + 1);
+                xml.tagE(QString("wedge type=\"stop\" number=\"%1\"").arg(n + 1));
 
       }
       xml.etag();
@@ -3252,13 +3252,13 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
                         qDebug("ottava subtype %hhd not understood", st);
                   }
             if (sz && tp)
-                  xml.tagE("octave-shift type=\"%s\" size=\"%s\" number=\"%d\"", tp, sz, n + 1);
+                  xml.tagE(QString("octave-shift type=\"%1\" size=\"%2\" number=\"%3\"").arg(tp).arg(sz).arg(n + 1));
             }
       else {
             if (st == Ottava::Type::OTTAVA_8VA || st == Ottava::Type::OTTAVA_8VB)
-                  xml.tagE("octave-shift type=\"stop\" size=\"8\" number=\"%d\"", n + 1);
+                  xml.tagE(QString("octave-shift type=\"stop\" size=\"8\" number=\"%1\"").arg(n + 1));
             else if (st == Ottava::Type::OTTAVA_15MA || st == Ottava::Type::OTTAVA_15MB)
-                  xml.tagE("octave-shift type=\"stop\" size=\"15\" number=\"%d\"", n + 1);
+                  xml.tagE(QString("octave-shift type=\"stop\" size=\"15\" number=\"%1\"").arg(n + 1));
             else
                   qDebug("ottava subtype %hhd not understood", st);
             }
@@ -4406,7 +4406,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   int end = partGroupEnd[i];
                   if (end >= 0) {
                         if (staffCount >= end) {
-                              xml.tagE("part-group type=\"stop\" number=\"%d\"", i + 1);
+                              xml.tagE(QString("part-group type=\"stop\" number=\"%1\"").arg(i + 1));
                               partGroupEnd[i] = -1;
                               }
                         }

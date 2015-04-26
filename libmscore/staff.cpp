@@ -481,8 +481,8 @@ void Staff::write(Xml& xml) const
       if (_hideSystemBarLine)
             xml.tag("hideSystemBarLine", _hideSystemBarLine);
 
-      foreach(const BracketItem& i, _brackets)
-            xml.tagE("bracket type=\"%d\" span=\"%d\"", i._bracket, i._bracketSpan);
+      for (const BracketItem& i : _brackets)
+            xml.tagE(QString("bracket type=\"%1\" span=\"%2\"").arg((signed char)(i._bracket)).arg(i._bracketSpan));
 
       // for economy and consistency, only output "from" and "to" attributes if different from default
       int defaultLineFrom = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
