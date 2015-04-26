@@ -177,7 +177,7 @@ void Groups::write(Xml& xml) const
       {
       xml.stag("Groups");
       for (const GroupNode& n : *this)
-            xml.tagE(QString("Node pos=\"%1\" action=\"%3\"")
+            xml.tagE(QString("Node pos=\"%1\" action=\"%2\"")
                .arg(n.pos).arg(n.action));
       xml.etag();
       }
