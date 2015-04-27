@@ -144,7 +144,7 @@ void addTitle(Score *score, const QString &string, int *textCounter)
                   text->setTextStyleType(TextStyleType::TITLE);
             else if (*textCounter == 2)
                   text->setTextStyleType(TextStyleType::COMPOSER);
-            text->setText(string.right(string.size() - TEXT_PREFIX.size()));
+            text->setPlainText(string.right(string.size() - TEXT_PREFIX.size()));
 
             MeasureBase* measure = score->first();
             if (measure->type() != Element::Type::VBOX) {

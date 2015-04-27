@@ -55,7 +55,7 @@ void Jump::setJumpType(Type t)
       {
       for (const JumpTypeTable& p : jumpTypeTable) {
             if (p.type == t) {
-                  setText(p.text);
+                  setXmlText(p.text);
                   setJumpTo(p.jumpTo);
                   setPlayUntil(p.playUntil);
                   setContinueAt(p.continueAt);

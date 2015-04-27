@@ -504,8 +504,8 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         }
                   if (ot->textStyle() != nText->textStyle())
                         ot->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue<TextStyle>(nText->textStyle()));
-                  if (ot->text() != nText->text())
-                        ot->undoChangeProperty(P_ID::TEXT, nText->text());
+                  if (ot->xmlText() != nText->xmlText())
+                        ot->undoChangeProperty(P_ID::TEXT, nText->xmlText());
                   }
             delete nText;
             }

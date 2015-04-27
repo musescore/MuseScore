@@ -2227,7 +2227,7 @@ void Text::writeProperties(Xml& xml, bool writeText, bool writeStyle) const
             _textStyle.writeProperties(xml, score()->textStyle(_styleIndex));
             }
       if (writeText)
-            xml.writeXml("text", text());
+            xml.writeXml("text", xmlText());
       }
 
 //---------------------------------------------------------
@@ -2309,7 +2309,7 @@ bool Text::readProperties(XmlReader& e)
       else if (tag == "text")
             _text = e.readXml();
       else if (tag == "html-data")
-            setText(convertFromHtml(e.readXml()));
+            setXmlText(convertFromHtml(e.readXml()));
       else if (tag == "subtype")          // obsolete
             e.skipCurrentElement();
       else if (tag == "frameWidth") {           // obsolete
@@ -2345,7 +2345,7 @@ void Text::setTextStyle(const TextStyle& st)
       {
       _textStyle = st;
       if (editMode()) {
-            setText(plainText());
+            setXmlText(plainText());
             createLayout();
             }
       }
@@ -2449,7 +2449,7 @@ QVariant Text::getProperty(P_ID propertyId) const
             case P_ID::TEXT_STYLE_TYPE:
                   return QVariant(int(_styleIndex));
             case P_ID::TEXT:
-                  return text();
+                  return xmlText();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -2472,7 +2472,7 @@ bool Text::setProperty(P_ID propertyId, const QVariant& v)
                   setGenerated(false);
                   break;
             case P_ID::TEXT:
-                  setText(v.toString());
+                  setXmlText(v.toString());
                   break;
             default:
                   rv = Element::setProperty(propertyId, v);
@@ -2696,14 +2696,14 @@ Element* Text::drop(const DropData& data)
 
 void Text::setPlainText(const QString& s)
       {
-      setText(s.toHtmlEscaped());
+      setXmlText(s.toHtmlEscaped());
       }
 
 //---------------------------------------------------------
-//   setText
+//   setXmlText
 //---------------------------------------------------------
 
-void Text::setText(const QString& s)
+void Text::setXmlText(const QString& s)
       {
       _text = s;
       textChanged();

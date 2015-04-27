@@ -382,7 +382,7 @@ void GuitarPro::addTextToNote(QString string, TextStyle textStyle, Note* note)
       {
       Text* text = new Text(score);
       text->setTextStyle(textStyle);
-      text->setText(string);
+      text->setPlainText(string);
       text->setAbove(true);
       note->add(text);
       }
@@ -501,7 +501,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
                               break;
                         }
                   }
-            volta->setText(voltaTextString);
+            volta->setText(Xml::xmlString(voltaTextString));
             volta->setTick(m->tick());
             volta->setTick2(m->tick() + m->ticks());
             score->addElement(volta);
@@ -563,7 +563,7 @@ void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx)
       // shift / legato slide
       if (slide == SHIFT_SLIDE || slide == LEGATO_SLIDE) {
             Glissando* s = new Glissando(score);
-/*            s->setText("");
+/*            s->setXmlText("");
             s->setGlissandoType(Glissando::Type::STRAIGHT);
             cr->add(s); */
             s->setAnchor(Spanner::Anchor::NOTE);
@@ -906,7 +906,7 @@ void GuitarPro1::read(QFile* fp)
 
             if (!gpbar.marker.isEmpty()) {
                   Text* s = new RehearsalMark(score);
-                  s->setText(gpbar.marker.trimmed());
+                  s->setPlainText(gpbar.marker.trimmed());
                   s->setTrack(0);
                   Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
                   segment->add(s);
@@ -950,7 +950,7 @@ void GuitarPro1::read(QFile* fp)
                         Lyrics* lyrics = 0;
                         if (beatBits & BEAT_LYRICS) {
                               lyrics = new Lyrics(score);
-                              lyrics->setText(readDelphiString());
+                              lyrics->setPlainText(readDelphiString());
                               }
                         if (beatBits & BEAT_EFFECTS)
                               readBeatEffects(track, segment);
@@ -1028,7 +1028,7 @@ void GuitarPro::setTempo(int tempo, Measure* measure)
       {
       TempoText* tt = new TempoText(score);
       tt->setTempo(double(tempo)/60.0);
-      tt->setText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(tempo));
+      tt->setXmlText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(tempo));
 
       tt->setTrack(0);
       Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
@@ -1309,7 +1309,7 @@ void GuitarPro2::read(QFile* fp)
             Instrument* instr = part->instrument();
             instr->setStringData(stringData);
             part->setPartName(name);
-            part->setLongName(name);
+            part->setPlainLongName(name);
 
             //
             // determine clef
@@ -1338,7 +1338,7 @@ void GuitarPro2::read(QFile* fp)
                   Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
                   StaffText* st = new StaffText(score);
                   st->setTextStyleType(TextStyleType::STAFF);
-                  st->setText(QString("Capo. fret ") + QString::number(capo));
+                  st->setPlainText(QString("Capo. fret ") + QString::number(capo));
                   st->setParent(s);
                   st->setTrack(i * VOICES);
                   measure->add(st);
@@ -1369,7 +1369,7 @@ void GuitarPro2::read(QFile* fp)
 
             if (!gpbar.marker.isEmpty()) {
                   Text* s = new RehearsalMark(score);
-                  s->setText(gpbar.marker.trimmed());
+                  s->setPlainText(gpbar.marker.trimmed());
                   s->setTrack(0);
                   Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
                   segment->add(s);
@@ -1414,7 +1414,7 @@ void GuitarPro2::read(QFile* fp)
                         if (beatBits & BEAT_LYRICS) {
                               QString txt = readDelphiString();
                               lyrics = new Lyrics(score);
-                              lyrics->setText(txt);
+                              lyrics->setPlainText(txt);
                               }
                         if (beatBits & BEAT_EFFECTS)
                               readBeatEffects(track, segment);
@@ -1925,7 +1925,7 @@ void GuitarPro3::read(QFile* fp)
             Instrument* instr = part->instrument();
             instr->setStringData(stringData);
             part->setPartName(name);
-            part->setLongName(name);
+            part->setPlainLongName(name);
 
             //
             // determine clef
@@ -1954,7 +1954,7 @@ void GuitarPro3::read(QFile* fp)
                   Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
                   StaffText* st = new StaffText(score);
                   st->setTextStyleType(TextStyleType::STAFF);
-                  st->setText(QString("Capo. fret ") + QString::number(capo));
+                  st->setPlainText(QString("Capo. fret ") + QString::number(capo));
                   st->setParent(s);
                   st->setTrack(i * VOICES);
                   measure->add(st);
@@ -1985,7 +1985,7 @@ void GuitarPro3::read(QFile* fp)
 
             if (!gpbar.marker.isEmpty()) {
                   Text* s = new RehearsalMark(score);
-                  s->setText(gpbar.marker.trimmed());
+                  s->setPlainText(gpbar.marker.trimmed());
                   s->setTrack(0);
                   Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
                   segment->add(s);
@@ -2036,7 +2036,7 @@ void GuitarPro3::read(QFile* fp)
                         if (beatBits & BEAT_LYRICS) {
                               QString txt = readDelphiString();
                               lyrics = new Lyrics(score);
-                              lyrics->setText(txt);
+                              lyrics->setPlainText(txt);
                               }
                         int beatEffects = 0;
                         if (beatBits & BEAT_EFFECTS)
@@ -2324,7 +2324,7 @@ Score::FileError importGTP(Score* score, const QString& name)
             Text* s = new Text(score);
             // s->setSubtype(TEXT_TITLE);
             s->setTextStyleType(TextStyleType::TITLE);
-            s->setText(gp->title);
+            s->setPlainText(gp->title);
             m->add(s);
             }
       if (!gp->subtitle.isEmpty() && !gp->artist.isEmpty() && !gp->album.isEmpty()) {
@@ -2344,14 +2344,14 @@ Score::FileError importGTP(Score* score, const QString& name)
                         str.append("\n");
                   str.append(gp->album);
                   }
-            s->setText(str);
+            s->setPlainText(str);
             m->add(s);
             }
       if (!gp->composer.isEmpty()) {
             Text* s = new Text(score);
             // s->setSubtype(TEXT_COMPOSER);
             s->setTextStyleType(TextStyleType::COMPOSER);
-            s->setText(gp->composer);
+            s->setPlainText(gp->composer);
             m->add(s);
             }
       int idx = 0;
@@ -2428,7 +2428,7 @@ Score::FileError importGTP(Score* score, const QString& name)
                   }
             Text* txt = new Text(pscore);
             txt->setTextStyleType(TextStyleType::INSTRUMENT_EXCERPT);
-            txt->setText(part->longName());
+            txt->setPlainText(part->longName());
             measure->add(txt);
 
             //

@@ -438,28 +438,28 @@ Palette* MuseScore::newFingeringPalette()
       const char* finger = "012345";
       for (unsigned i = 0; i < strlen(finger); ++i) {
             Fingering* f = new Fingering(gscore);
-            f->setText(QString(finger[i]));
+            f->setXmlText(QString(finger[i]));
             sp->append(f, tr("Fingering %1").arg(finger[i]));
             }
       finger = "pimac";
       for (unsigned i = 0; i < strlen(finger); ++i) {
             Fingering* f = new Fingering(gscore);
             f->setTextStyleType(TextStyleType::RH_GUITAR_FINGERING);
-            f->setText(QString(finger[i]));
+            f->setXmlText(QString(finger[i]));
             sp->append(f, tr("RH Guitar Fingering %1").arg(finger[i]));
             }
       finger = "012345";
       for (unsigned i = 0; i < strlen(finger); ++i) {
             Fingering* f = new Fingering(gscore);
             f->setTextStyleType(TextStyleType::LH_GUITAR_FINGERING);
-            f->setText(QString(finger[i]));
+            f->setXmlText(QString(finger[i]));
             sp->append(f, tr("LH Guitar Fingering %1").arg(finger[i]));
             }
       const char* stringnumber = "0123456";
       for (unsigned i = 0; i < strlen(stringnumber); ++i) {
             Fingering* f = new Fingering(gscore);
             f->setTextStyleType(TextStyleType::STRING_NUMBER);
-            f->setText(QString(stringnumber[i]));
+            f->setXmlText(QString(stringnumber[i]));
             sp->append(f, tr("String number %1").arg(stringnumber[i]));
             }
       return sp;
@@ -979,7 +979,7 @@ Palette* MuseScore::newTempoPalette()
             // (it will then be set to 0 there)
             //tt->setTrack(0);
             tt->setTempo(tp[i].f);
-            tt->setText(tp[i].pattern);
+            tt->setXmlText(tp[i].pattern);
             sp->append(tt, tr("Tempo text"), QString(), 1.5);
             }
       return sp;
@@ -999,26 +999,26 @@ Palette* MuseScore::newTextPalette()
 
       StaffText* st = new StaffText(gscore);
       st->setTextStyleType(TextStyleType::STAFF);
-      st->setText(tr("Staff Text"));
+      st->setXmlText(tr("Staff Text"));
       sp->append(st, tr("Staff text"));
 
       st = new StaffText(gscore);
       st->setTextStyleType(TextStyleType::SYSTEM);
-      st->setText(tr("System Text"));
+      st->setXmlText(tr("System Text"));
       sp->append(st, tr("System text"));
 
       st = new StaffText(gscore);
       st->setTextStyleType(TextStyleType::TEMPO);
-      st->setText(tr("Swing"));
+      st->setXmlText(tr("Swing"));
       st->setSwing(true);
       sp->append(st, tr("Swing"));
 
       RehearsalMark* rhm = new RehearsalMark(gscore);
-      rhm->setText("B1");
+      rhm->setXmlText("B1");
       sp->append(rhm, tr("Rehearsal mark"));
 
       InstrumentChange* is = new InstrumentChange(gscore);
-      is->setText(tr("Instrument"));
+      is->setXmlText(tr("Instrument"));
       sp->append(is, tr("Instrument change"));
 
       return sp;
@@ -1299,7 +1299,7 @@ void MuseScore::addTempo()
       TempoText* tt = new TempoText(cs);
       tt->setParent(cr->segment());
       tt->setTrack(0);
-      tt->setText(text);
+      tt->setXmlText(text);
       tt->setFollowText(true);
       //tt->setTempo(bps);
       cs->undoAddElement(tt);

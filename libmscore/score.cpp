@@ -3138,7 +3138,7 @@ void Score::addLyrics(int tick, int staffIdx, const QString& txt)
       ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
       if (cr) {
             Lyrics* l = new Lyrics(this);
-            l->setText(txt);
+            l->setXmlText(txt);
             l->setTrack(track);
             cr->add(l);
             }
@@ -3388,6 +3388,7 @@ void Score::appendMeasures(int n)
             insertMeasure(Element::Type::MEASURE, 0, false);
       }
 
+#ifdef SCRIPT_INTERFACE
 //---------------------------------------------------------
 //   addText
 //---------------------------------------------------------
@@ -3405,7 +3406,7 @@ void Score::addText(const QString& type, const QString& txt)
       else if (type == "subtitle")
             text->setTextStyleType(TextStyleType::SUBTITLE);
       text->setParent(measure);
-      text->setText(txt);
+      text->setXmlText(txt);
       undoAddElement(text);
       }
 
@@ -3417,6 +3418,7 @@ Cursor* Score::newCursor()
       {
       return new Cursor(this);
       }
+#endif
 
 //---------------------------------------------------------
 //   addSpanner
@@ -3638,7 +3640,7 @@ QString Score::title()
       QString fn;
       Text* t = getText(TextStyleType::TITLE);
       if (t)
-            fn = QTextDocumentFragment::fromHtml(t->text()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+            fn = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
 
       if (fn.isEmpty())
             fn = metaTag("workTitle");
@@ -3661,7 +3663,7 @@ QString Score::subtitle()
       QString fn;
       Text* t = getText(TextStyleType::SUBTITLE);
       if (t)
-            fn = QTextDocumentFragment::fromHtml(t->text()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+            fn = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
 
       return fn.simplified();
       }
@@ -3675,7 +3677,7 @@ QString Score::composer()
       QString fn;
       Text* t = getText(TextStyleType::COMPOSER);
       if (t)
-            fn = QTextDocumentFragment::fromHtml(t->text()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+            fn = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
 
       if (fn.isEmpty())
             fn = metaTag("composer");
@@ -3692,7 +3694,7 @@ QString Score::poet()
       QString fn;
       Text* t = getText(TextStyleType::POET);
       if (t)
-            fn = QTextDocumentFragment::fromHtml(t->text()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+            fn = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
 
       if (fn.isEmpty())
             fn = metaTag("lyricist");
@@ -3803,21 +3805,20 @@ QString Score::createRehearsalMarkText(RehearsalMark* current) const
                   break;
             }
       QString s = "A";
-      QString s1 = before ? before->text() : "";
-      QString s2 = after ? after->text()  : "";
-//      qDebug("createRehearsalMark <%s> xx <%s>", qPrintable(s1), qPrintable(s2));
+      QString s1 = before ? before->xmlText() : "";
+      QString s2 = after ? after->xmlText()  : "";
       if (s1.isEmpty())
             return s;
       s = nextRehearsalMarkText(before, current);                       // try to sequence
       if (!s2.isEmpty()) {
-            if (s != s2 && s != current->text())
+            if (s != s2 && s != current->xmlText())
                   return s;                                             // found something between before & after
             else if (s1.size() == 2)
                   s = s1[0] + QChar::fromLatin1(s1[1].toLatin1() + 1);  // B1 -> B2, BB -> BC, etc
             else if (s1[0].isLetter())
                   s = s1 + QChar::fromLatin1('1');                      // B -> B1, Bridge -> Bridge1, etc
             }
-      else if (s == current->text()) {
+      else if (s == current->xmlText()) {
             s = s1 + QChar::fromLatin1('1');                            // B -> B1, Bridge -> Bridge1, etc
             }
       return s;
@@ -3836,8 +3837,8 @@ QString Score::createRehearsalMarkText(RehearsalMark* current) const
 
 QString Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const
       {
-      QString previousText = previous->text();
-      QString fallback = current ? current->text() : previousText + "'";
+      QString previousText = previous->xmlText();
+      QString fallback = current ? current->xmlText() : previousText + "'";
 
       if (previousText.length() == 1 && previousText[0].isLetter()) {
             // single letter sequence

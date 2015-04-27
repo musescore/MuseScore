@@ -617,7 +617,7 @@ void Measure::layout2()
                         score()->undo(new AddElement(t));
                         // score()->undoAddElement(t);
                         }
-                  t->setText(s);
+                  t->setXmlText(s);
                   t->layout();
                   }
             else {
@@ -2165,7 +2165,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   dyn->setTrack(e.track());
                   dyn->read(e);
                   if (score()->mscVersion() <= 114)
-                        dyn->setDynamicType(dyn->text());
+                        dyn->setDynamicType(dyn->xmlText());
                   segment = getSegment(Segment::Type::ChordRest, e.tick());
                   segment->add(dyn);
                   }

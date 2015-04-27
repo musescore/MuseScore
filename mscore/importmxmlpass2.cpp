@@ -426,7 +426,7 @@ static QString findDeleteStaffText(Segment* s, int track)
                   continue;
             Text* t = static_cast<Text*>(e);
             //qDebug("findDeleteWords t %p text '%s'", t, qPrintable(t->text()));
-            QString res = t->text();
+            QString res = t->xmlText();
             if (res != "") {
                   s->remove(t);
                   return res;
@@ -469,10 +469,7 @@ static void setPartInstruments(Part* part, const QString& partId,
                         // if there is already a staff text at this tick / track,
                         // delete it and use its text here instead of "Instrument"
                         QString text = findDeleteStaffText(segment, track);
-                        if (text == "")
-                              ic->setText("Instrument");
-                        else
-                              ic->setText(text);
+                        ic->setXmlText(text.isEmpty() ? "Instrument" : text);
                         segment->add(ic);
                         }
                   }
@@ -2174,7 +2171,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             if (_tpoSound > 0.1) {
                   _tpoSound /= 60;
                   t = new TempoText(_score);
-                  t->setText(_wordsText + _metroText);
+                  t->setXmlText(_wordsText + _metroText);
                   ((TempoText*) t)->setTempo(_tpoSound);
                   ((TempoText*) t)->setFollowText(true);
                   _score->setTempo(tick, _tpoSound);
@@ -2182,13 +2179,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
             else {
                   if (_wordsText != "" || _metroText != "") {
                         t = new StaffText(_score);
-                        t->setText(_wordsText + _metroText);
+                        t->setXmlText(_wordsText + _metroText);
                         }
                   else {
                         t = new RehearsalMark(_score);
                         if (!_rehearsalText.contains("<b>"))
                               _rehearsalText = "<b></b>" + _rehearsalText;  // explicitly turn bold off
-                        t->setText(_rehearsalText);
+                        t->setXmlText(_rehearsalText);
                         if (!_hasDefaultY)
                               t->setPlacement(Element::Placement::ABOVE);  // crude way to force placement TODO improve ?
                         }
@@ -4406,7 +4403,7 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
                   }
             }
 
-      fb->setPlainText(normalizedText);                        // this is the text to show while editing
+      fb->setXmlText(normalizedText);                        // this is the text to show while editing
 
       if (normalizedText.isEmpty()) {
             delete fb;
@@ -4947,7 +4944,7 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
                   skipLogCurrElem();
             }
       //qDebug("formatted lyric '%s'", qPrintable(formattedText));
-      l->setText(formattedText);
+      l->setXmlText(formattedText);
       }
 
 
