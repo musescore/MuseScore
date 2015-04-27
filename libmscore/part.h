@@ -34,6 +34,9 @@ class InstrumentTemplate;
 //   @P mute       bool
 //   @P endTrack   int      (read only)
 //   @P startTrack int      (read only)
+//   @  midiProgram int     (read only)
+//   @  midiChannel int     (read only)
+//   @  instrumentId string (read only)
 //---------------------------------------------------------
 
 class Part : public QObject, public ScoreElement {
@@ -48,6 +51,7 @@ class Part : public QObject, public ScoreElement {
       Q_PROPERTY(int endTrack READ endTrack)
       Q_PROPERTY(int startTrack READ startTrack)
       Q_PROPERTY(int midiProgram READ midiProgram)
+      Q_PROPERTY(int midiChannel READ midiChannel)
       Q_PROPERTY(QString instrumentId READ instrumentId)
 
       QString _partName;           ///< used in tracklist (mixer)
@@ -87,6 +91,9 @@ class Part : public QObject, public ScoreElement {
 
       void setLongName(const QString& s);
       void setShortName(const QString& s);
+
+      void setPlainLongName(const QString& s);
+      void setPlainShortName(const QString& s);
 
       void setStaves(int);
 

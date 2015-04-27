@@ -44,7 +44,6 @@ void TremoloBar::layout()
                   noteWidth = -_spatium*2;
                   notePos   = QPointF(0.0, _spatium*3);
                   }
-            return;
             }
 
       _lw = _spatium * 0.1;
@@ -82,8 +81,6 @@ void TremoloBar::layout()
 
 void TremoloBar::draw(QPainter* painter) const
       {
-      if (staff() && !staff()->isTabStaff())
-            return;
       QPen pen(curColor(), _lw, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
       painter->setPen(pen);
       painter->setBrush(QBrush(Qt::black));

@@ -377,7 +377,7 @@ void GuitarPro6::readTracks(QDomNode* track)
             while (!currentNode.isNull()) {
                   QString nodeName = currentNode.nodeName();
                   if (nodeName == "Name")
-                        part->setLongName(currentNode.toElement().text());
+                        part->setPlainLongName(currentNode.toElement().text());
                   else if (nodeName == "Color") {}
                   else if (nodeName == "SystemsLayout") {}
                   // this is a typo is guitar pro - 'defaut' is correct here
@@ -1183,7 +1183,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                             else if (!finger.compare("C"))
                                                                   finger = "4";
                                                             }
-                                                      f->setText(finger);
+                                                      f->setPlainText(finger);
                                                       note->add(f);
                                                       f->reset();
                                                       }
@@ -1349,7 +1349,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                     if (!argument.compare("Rasgueado")) {
                                           StaffText* st = new StaffText(score);
                                           st->setTextStyleType(TextStyleType::STAFF);
-                                          st->setText("rasg.");
+                                          st->setXmlText("rasg.");
                                           st->setParent(segment);
                                           st->setTrack(track);
                                           score->addElement(st);
@@ -1647,7 +1647,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
 
             if (!gpbar.marker.isEmpty()) {
                   Text* s = new RehearsalMark(score);
-                  s->setText(gpbar.marker.trimmed());
+                  s->setPlainText(gpbar.marker.trimmed());
                   s->setTrack(0);
                   Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
                   segment->add(s);
@@ -1667,7 +1667,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         s->add(ts);
                         StaffText* st = new StaffText(score);
                         st->setTextStyleType(TextStyleType::STAFF);
-                        st->setText("Free time");
+                        st->setXmlText("Free time");
                         st->setParent(s);
                         st->setTrack(stave);
                         score->addElement(st);
@@ -1690,33 +1690,33 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         StaffText* st = new StaffText(score);
                         st->setTextStyleType(TextStyleType::STAFF);
                         if (!bars[measureCounter].direction.compare("Fine"))
-                              st->setText("fine");
+                              st->setXmlText("fine");
                         else if (!bars[measureCounter].direction.compare("DaCapo"))
-                              st->setText("Da Capo");
+                              st->setXmlText("Da Capo");
                         else if (!bars[measureCounter].direction.compare("DaCapoAlCoda"))
-                              st->setText("D.C. al Coda");
+                              st->setXmlText("D.C. al Coda");
                         else if (!bars[measureCounter].direction.compare("DaCapoAlDoubleCoda"))
-                              st->setText("D.C. al Double Coda");
+                              st->setXmlText("D.C. al Double Coda");
                         else if (!bars[measureCounter].direction.compare("DaCapoAlFine"))
-                              st->setText("D.C. al Fine");
+                              st->setXmlText("D.C. al Fine");
                         else if (!bars[measureCounter].direction.compare("DaSegnoAlCoda"))
-                              st->setText("D.S. al Coda");
+                              st->setXmlText("D.S. al Coda");
                         else if (!bars[measureCounter].direction.compare("DaSegnoAlDoubleCoda"))
-                              st->setText("D.S. al Double Coda");
+                              st->setXmlText("D.S. al Double Coda");
                         else if (!bars[measureCounter].direction.compare("DaSegnoAlFine"))
-                              st->setText("D.S. al Fine");
+                              st->setXmlText("D.S. al Fine");
                         else if (!bars[measureCounter].direction.compare("DaSegnoSegno"))
-                              st->setText("Da Segno Segno");
+                              st->setXmlText("Da Segno Segno");
                         else if (!bars[measureCounter].direction.compare("DaSegnoSegnoAlCoda"))
-                              st->setText("D.S.S. al Coda");
+                              st->setXmlText("D.S.S. al Coda");
                         else if (!bars[measureCounter].direction.compare("DaSegnoSegnoAlDoubleCoda"))
-                              st->setText("D.S.S. al Double Coda");
+                              st->setXmlText("D.S.S. al Double Coda");
                         else if (!bars[measureCounter].direction.compare("DaSegnoSegnoAlFine"))
-                              st->setText("D.S.S. al Fine");
+                              st->setXmlText("D.S.S. al Fine");
                         else if (!bars[measureCounter].direction.compare("DaCoda"))
-                              st->setText("Da Coda");
+                              st->setXmlText("Da Coda");
                         else if (!bars[measureCounter].direction.compare("DaDoubleCoda"))
-                              st->setText("Da Double Coda");
+                              st->setXmlText("Da Double Coda");
                         st->setParent(s);
                         st->setTrack(stave);
                         score->addElement(st);

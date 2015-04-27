@@ -1796,7 +1796,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
                   iter = 0;
                   }
 // qDebug("    midiNoteReceived %d active %d", pitch, active);
-            cv->midiNoteReceived(pitch, active > 0);
+            cv->midiNoteReceived(pitch, active > 0, velo);
             ++active;
             }
       else {
@@ -1807,6 +1807,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
 
             if ((channel != 0x09) && (active > 0))
                   --active;
+            cv->midiNoteReceived(pitch, false, velo);
             }
       }
 
@@ -3590,7 +3591,7 @@ PaletteBox* MuseScore::getPaletteBox()
 void MuseScore::midiNoteReceived(int pitch, bool ctrl)
       {
       if (cv)
-            cv->midiNoteReceived(pitch, ctrl);
+            cv->midiNoteReceived(pitch, ctrl, 80);
       }
 
 //---------------------------------------------------------

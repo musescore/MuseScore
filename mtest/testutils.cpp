@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include <QtTest/QtTest>
+#include <QTextStream>
 #include "config.h"
 #include "libmscore/score.h"
 #include "libmscore/note.h"
@@ -36,6 +37,8 @@ inline void initMyResources() {
       Q_INIT_RESOURCE(musescorefonts_FreeSerif);
       Q_INIT_RESOURCE(musescorefonts_Free);
 }
+
+extern Ms::Score::FileError importOve(Ms::Score*, const QString& name);
 
 namespace Ms {
 
@@ -139,6 +142,8 @@ Score* MTest::readCreatedScore(const QString& name)
             rv = importCapella(score, name);
       else if (csl == "capx")
             rv = importCapXml(score, name);
+      else if (csl == "ove")
+            rv = importOve(score, name);
       else if (csl == "sgu")
             rv = importBB(score, name);
       else if (csl == "mscz" || csl == "mscx")
@@ -192,9 +197,12 @@ qDebug() << "Running " << cmd << " with arg1:" << saveName << " and arg2: " << c
       p.start(cmd, args);
       if (!p.waitForFinished() || p.exitCode()) {
             QByteArray ba = p.readAll();
-            qDebug("%s", qPrintable(ba));
-            qDebug("   <diff -u %s %s failed", qPrintable(saveName),
-               qPrintable(QString(root + "/" + compareWith)));
+            //qDebug("%s", qPrintable(ba));
+            //qDebug("   <diff -u %s %s failed", qPrintable(saveName),
+            //   qPrintable(QString(root + "/" + compareWith)));
+            QTextStream outputText(stdout);
+            outputText << QString(ba);
+            outputText << QString("   <diff -u %1 %2 failed").arg(QString(saveName)).arg(QString(root + "/" + compareWith));
             return false;
             }
       return true;

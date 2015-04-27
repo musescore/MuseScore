@@ -1035,7 +1035,7 @@ void FiguredBass::read(XmlReader& e)
             }
       // if items could be parsed set normalized text
       if (items.size() > 0)
-            setText(normalizedText);      // this is the text to show while editing
+            setXmlText(normalizedText);      // this is the text to show while editing
       }
 
 //---------------------------------------------------------
@@ -1220,7 +1220,7 @@ void FiguredBass::endEdit()
       // retrieve and work only on the plain text
       QString txt = plainText();
       if(txt.isEmpty()) {                       // if no text, nothing to do
-            setText(txt);                       // clear the stored text: the empty f.b. element will be deleted
+            setXmlText(txt);                       // clear the stored text: the empty f.b. element will be deleted
             return;
             }
 
@@ -1247,7 +1247,7 @@ void FiguredBass::endEdit()
             }
       // if all items parsed and text is styled, replaced entered text with normalized text
       if (items.size()) {
-            setText(normalizedText);
+            setXmlText(normalizedText);
             layout();
             }
       }

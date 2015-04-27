@@ -262,13 +262,13 @@ void Part::read114(XmlReader& e)
             else if (tag == "name") {
                   Text* t = new Text(score());
                   t->read(e);
-                  instrument()->setLongName(t->text());
+                  instrument()->setLongName(t->xmlText());
                   delete t;
                   }
             else if (tag == "shortName") {
                   Text* t = new Text(score());
                   t->read(e);
-                  instrument()->setShortName(t->text());
+                  instrument()->setShortName(t->xmlText());
                   delete t;
                   }
             else if (tag == "trackName")
@@ -736,7 +736,7 @@ Score::FileError Score::read114(XmlReader& e)
             qreal tempo = i->second.tempo;
             if (tempomap()->tempo(tick) != tempo) {
                   TempoText* tt = new TempoText(this);
-                  tt->setText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(qRound(tempo*60)));
+                  tt->setXmlText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(qRound(tempo*60)));
                   tt->setTempo(tempo);
                   tt->setTrack(0);
                   tt->setVisible(false);

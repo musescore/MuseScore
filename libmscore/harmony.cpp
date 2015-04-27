@@ -702,10 +702,8 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
 
 void Harmony::startEdit(MuseScoreView* view, const QPointF& p)
       {
-      if (!textList.isEmpty()) {
-            QString s(harmonyName());
-            setText(s);
-            }
+      if (!textList.isEmpty())
+            setXmlText(harmonyName());
       Text::startEdit(view, p);
       layout();
       }
@@ -719,7 +717,7 @@ bool Harmony::edit(MuseScoreView* view, Grip grip, int key, Qt::KeyboardModifier
       if (key == Qt::Key_Return)
             return true; // Harmony only single line
       bool rv = Text::edit(view, grip, key, mod, s);
-      QString str = text();
+      QString str = xmlText();
       int root, base;
       bool badSpell = !str.isEmpty() && !parseHarmony(str, &root, &base, true);
       spellCheckUnderline(badSpell);
@@ -755,7 +753,7 @@ void Harmony::endEdit()
                               h->setRootTpc(rootTpc);
                               h->setBaseTpc(baseTpc);
                               // this invokes textChanged(), which handles the rendering
-                              h->setText(h->harmonyName());
+                              h->setXmlText(h->harmonyName());
                               }
                         }
                   }

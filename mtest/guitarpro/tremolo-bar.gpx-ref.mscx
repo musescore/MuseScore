@@ -140,6 +140,11 @@
           <lid>6</lid>
           <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
           </Tempo>
+        <TremoloBar>
+          <point time="0" pitch="0" vibrato="0"/>
+          <point time="50" pitch="-125" vibrato="0"/>
+          <point time="100" pitch="-250" vibrato="0"/>
+          </TremoloBar>
         <Chord>
           <lid>7</lid>
           <durationType>quarter</durationType>
@@ -165,6 +170,11 @@
           </Rest>
         </Measure>
       <Measure number="2">
+        <TremoloBar>
+          <point time="0" pitch="0" vibrato="0"/>
+          <point time="50" pitch="150" vibrato="0"/>
+          <point time="100" pitch="0" vibrato="0"/>
+          </TremoloBar>
         <TremoloBar>
           <point time="0" pitch="0" vibrato="0"/>
           <point time="50" pitch="150" vibrato="0"/>
@@ -200,6 +210,11 @@
           <point time="50" pitch="-550" vibrato="0"/>
           <point time="100" pitch="-550" vibrato="0"/>
           </TremoloBar>
+        <TremoloBar>
+          <point time="0" pitch="0" vibrato="0"/>
+          <point time="50" pitch="-550" vibrato="0"/>
+          <point time="100" pitch="-550" vibrato="0"/>
+          </TremoloBar>
         <Chord>
           <lid>21</lid>
           <durationType>quarter</durationType>
@@ -211,6 +226,11 @@
             <string>1</string>
             </Note>
           </Chord>
+        <TremoloBar>
+          <point time="0" pitch="-550" vibrato="0"/>
+          <point time="50" pitch="-550" vibrato="0"/>
+          <point time="100" pitch="-400" vibrato="0"/>
+          </TremoloBar>
         <TremoloBar>
           <point time="0" pitch="-550" vibrato="0"/>
           <point time="50" pitch="-550" vibrato="0"/>
@@ -242,6 +262,11 @@
           <point time="50" pitch="200" vibrato="0"/>
           <point time="100" pitch="300" vibrato="0"/>
           </TremoloBar>
+        <TremoloBar>
+          <point time="0" pitch="0" vibrato="0"/>
+          <point time="50" pitch="200" vibrato="0"/>
+          <point time="100" pitch="300" vibrato="0"/>
+          </TremoloBar>
         <Chord>
           <lid>30</lid>
           <durationType>quarter</durationType>
@@ -253,6 +278,10 @@
             <string>1</string>
             </Note>
           </Chord>
+        <TremoloBar>
+          <point time="0" pitch="300" vibrato="0"/>
+          <point time="100" pitch="300" vibrato="0"/>
+          </TremoloBar>
         <TremoloBar>
           <point time="0" pitch="300" vibrato="0"/>
           <point time="100" pitch="300" vibrato="0"/>
@@ -443,6 +472,11 @@
             <lid>6</lid>
             <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
             </Tempo>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="50" pitch="-125" vibrato="0"/>
+            <point time="100" pitch="-250" vibrato="0"/>
+            </TremoloBar>
           <Chord>
             <lid>7</lid>
             <durationType>quarter</durationType>
@@ -468,6 +502,11 @@
             </Rest>
           </Measure>
         <Measure number="2">
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="50" pitch="150" vibrato="0"/>
+            <point time="100" pitch="0" vibrato="0"/>
+            </TremoloBar>
           <TremoloBar>
             <point time="0" pitch="0" vibrato="0"/>
             <point time="50" pitch="150" vibrato="0"/>
@@ -503,6 +542,11 @@
             <point time="50" pitch="-550" vibrato="0"/>
             <point time="100" pitch="-550" vibrato="0"/>
             </TremoloBar>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="50" pitch="-550" vibrato="0"/>
+            <point time="100" pitch="-550" vibrato="0"/>
+            </TremoloBar>
           <Chord>
             <lid>21</lid>
             <durationType>quarter</durationType>
@@ -514,6 +558,11 @@
               <string>1</string>
               </Note>
             </Chord>
+          <TremoloBar>
+            <point time="0" pitch="-550" vibrato="0"/>
+            <point time="50" pitch="-550" vibrato="0"/>
+            <point time="100" pitch="-400" vibrato="0"/>
+            </TremoloBar>
           <TremoloBar>
             <point time="0" pitch="-550" vibrato="0"/>
             <point time="50" pitch="-550" vibrato="0"/>
@@ -545,6 +594,11 @@
             <point time="50" pitch="200" vibrato="0"/>
             <point time="100" pitch="300" vibrato="0"/>
             </TremoloBar>
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="50" pitch="200" vibrato="0"/>
+            <point time="100" pitch="300" vibrato="0"/>
+            </TremoloBar>
           <Chord>
             <lid>30</lid>
             <durationType>quarter</durationType>
@@ -556,6 +610,10 @@
               <string>1</string>
               </Note>
             </Chord>
+          <TremoloBar>
+            <point time="0" pitch="300" vibrato="0"/>
+            <point time="100" pitch="300" vibrato="0"/>
+            </TremoloBar>
           <TremoloBar>
             <point time="0" pitch="300" vibrato="0"/>
             <point time="100" pitch="300" vibrato="0"/>

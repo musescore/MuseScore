@@ -175,14 +175,14 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
       if (beatBits & BEAT_LYRICS) {
             QString txt = readDelphiString();
             lyrics = new Lyrics(score);
-            lyrics->setText(txt);
+            lyrics->setPlainText(txt);
             }
       gpLyrics.beatCounter++;
       if (gpLyrics.beatCounter >= gpLyrics.fromBeat && gpLyrics.lyricTrack == staffIdx+1) {
             int index = gpLyrics.beatCounter - gpLyrics.fromBeat;
             if (index < gpLyrics.lyrics.size()) {
                   lyrics = new Lyrics(score);
-                  lyrics->setText(gpLyrics.lyrics[index]);
+                  lyrics->setPlainText(gpLyrics.lyrics[index]);
                   }
             }
       int beatEffects = 0;
@@ -416,7 +416,7 @@ void GuitarPro5::readTracks()
             Instrument* instr = part->instrument();
             instr->setStringData(stringData);
             part->setPartName(name);
-            part->setLongName(name);
+            part->setPlainLongName(name);
 
             //
             // determine clef
@@ -444,7 +444,7 @@ void GuitarPro5::readTracks()
                   Segment* s = measure->getSegment(Segment::Type::ChordRest, measure->tick());
                   StaffText* st = new StaffText(score);
                   st->setTextStyleType(TextStyleType::STAFF);
-                  st->setText(QString("Capo. fret ") + QString::number(capo));
+                  st->setPlainText(QString("Capo. fret ") + QString::number(capo));
                   st->setParent(s);
                   st->setTrack(i * VOICES);
                   measure->add(st);
@@ -484,7 +484,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
 
             if (!gpbar.marker.isEmpty()) {
                   Text* s = new RehearsalMark(score);
-                  s->setText(gpbar.marker.trimmed());
+                  s->setPlainText(gpbar.marker.trimmed());
                   s->setTrack(0);
                   Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
                   segment->add(s);
@@ -851,7 +851,7 @@ bool GuitarPro5::readNote(int string, Note* note)
                   else if (rightFinger == 4)
                         finger = "O";
                   }
-            f->setText(finger);
+            f->setPlainText(finger);
             note->add(f);
             f->reset();
             }

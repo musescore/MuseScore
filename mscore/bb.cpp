@@ -462,7 +462,7 @@ Score::FileError importBB(Score* score, const QString& name)
       Text* text = new Text(score);
 //      text->setSubtype(TEXT_TITLE);
       text->setTextStyleType(TextStyleType::TITLE);
-      text->setText(bb.title());
+      text->setPlainText(bb.title());
 
       MeasureBase* measure = score->first();
       if (measure->type() != Element::Type::VBOX) {

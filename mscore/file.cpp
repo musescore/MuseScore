@@ -726,7 +726,7 @@ void MuseScore::newFile()
       if (newWizard->createTempo()) {
             double tempo = newWizard->tempo();
             TempoText* tt = new TempoText(score);
-            tt->setText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(tempo));
+            tt->setXmlText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(tempo));
             tempo /= 60;      // bpm -> bps
 
             tt->setTempo(tempo);
@@ -821,6 +821,11 @@ QStringList MuseScore::getOpenScoreNames(const QString& filter, const QString& t
             restoreDialogState("loadScoreDialog", loadScoreDialog);
             loadScoreDialog->setAcceptMode(QFileDialog::AcceptOpen);
             loadScoreDialog->setDirectory(dir);
+            }
+      else {
+            // dialog already exists, but set title and filter
+            loadScoreDialog->setWindowTitle(title);
+            loadScoreDialog->setNameFilter(filter);
             }
 
       QStringList result;
@@ -2106,6 +2111,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                   qDebug("unknown file suffix <%s>, name <%s>", qPrintable(suffix), qPrintable(name));
                   return Score::FileError::FILE_UNKNOWN_TYPE;
                   }
+            score->setMetaTag("originalFormat", suffix);
             score->connectTies();
             score->setCreated(true); // force save as for imported files
             }

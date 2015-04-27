@@ -817,10 +817,12 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               undoAddElement(nsig);
                               }
                         else {
-                              nsig->undoChangeProperty(P_ID::SHOW_COURTESY, false);
+                              nsig->undoChangeProperty(P_ID::SHOW_COURTESY, ts->showCourtesySig());
+                              nsig->undoChangeProperty(P_ID::TIMESIG_TYPE, int(ts->timeSigType()));
                               nsig->undoChangeProperty(P_ID::TIMESIG, QVariant::fromValue(ts->sig()));
                               nsig->undoChangeProperty(P_ID::NUMERATOR_STRING, ts->numeratorString());
                               nsig->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
+                              // HACK do it twice to accommodate undo
                               nsig->undoChangeProperty(P_ID::TIMESIG_TYPE, int(ts->timeSigType()));
                               nsig->undoChangeProperty(P_ID::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
                               nsig->setSelected(false);

@@ -18,6 +18,7 @@
  Definition of Score class.
 */
 
+#include "config.h"
 #include "input.h"
 #include "select.h"
 #include "synthesizerstate.h"
@@ -172,6 +173,7 @@ struct MidiMapping {
 struct MidiInputEvent {
       int pitch;
       bool chord;
+      int velocity;
       };
 
 //---------------------------------------------------------
@@ -246,6 +248,7 @@ enum class PasteStatus : char {
 //   @P hasHarmonies    bool              score has chord symbols (read only)
 //   @P keysig          int               key signature at the start of the score (read only)
 //   @P duration        int               duration of score in seconds (read only)
+//   @P excerpts        array[Ms::Excerpt] the list of the excerpts (linked parts)
 //---------------------------------------------------------
 
 class Score : public QObject {
@@ -269,6 +272,7 @@ class Score : public QObject {
       Q_PROPERTY(bool                   hasHarmonies      READ hasHarmonies)
       Q_PROPERTY(int                    keysig            READ keysig)
       Q_PROPERTY(int                    duration          READ duration)
+      Q_PROPERTY(QQmlListProperty<Ms::Excerpt> excerpts   READ qmlExcerpts)
       Q_PROPERTY(Ms::PageFormat*        pageFormat        READ pageFormat     WRITE undoChangePageFormat)
 
    public:
@@ -472,6 +476,7 @@ class Score : public QObject {
       void selectRange(Element* e, int staffIdx);
 
       QQmlListProperty<Ms::Part> qmlParts() { return QQmlListProperty<Ms::Part>(this, _parts); }
+      QQmlListProperty<Ms::Excerpt> qmlExcerpts() { return QQmlListProperty<Ms::Excerpt>(this, _excerpts); }
 
    protected:
       void createPlayEvents(Chord*);
@@ -989,8 +994,10 @@ class Score : public QObject {
       void layoutPage(const PageContext&,  qreal);
       Q_INVOKABLE void appendPart(const QString&);
       Q_INVOKABLE void appendMeasures(int);
+#ifdef SCRIPT_INTERFACE
       Q_INVOKABLE void addText(const QString&, const QString&);
       Q_INVOKABLE Ms::Cursor* newCursor();
+#endif
       qreal computeMinWidth(Segment* fs, bool firstMeasureInSystem);
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
 

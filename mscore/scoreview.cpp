@@ -4909,11 +4909,12 @@ void ScoreView::cmdTuplet(int n)
 //   midiNoteReceived
 //---------------------------------------------------------
 
-void ScoreView::midiNoteReceived(int pitch, bool chord)
+void ScoreView::midiNoteReceived(int pitch, bool chord, int velocity)
       {
       MidiInputEvent ev;
       ev.pitch = pitch;
       ev.chord = chord;
+      ev.velocity = velocity;
 
 qDebug("midiNoteReceived %d chord %d", pitch, chord);
       score()->enqueueMidiEvent(ev);
@@ -5456,7 +5457,7 @@ bool ScoreView::searchRehearsalMark(const QString& s)
             for (Element* e : seg->annotations()){
                   if (e->type() == Element::Type::REHEARSAL_MARK) {
                         RehearsalMark* rm = static_cast<RehearsalMark*>(e);
-                        QString rms = rm->text().toLower();
+                        QString rms = rm->plainText().toLower();
                         if (rms.startsWith(ss)) {
                               gotoMeasure(seg->measure());
                               found = true;
@@ -5861,7 +5862,7 @@ void ScoreView::cmdAddRemoveBreaks()
 
       // loop through measures in selection
       int count = 0;
-      for (Measure* m = startMeasure; m != endMeasure; m = m->nextMeasure()) {
+      for (Measure* m = startMeasure; m; m = m->nextMeasure()) {
             if (lock) {
                   // skip if it already has a break
                   if (m->lineBreak() || m->pageBreak())
@@ -5877,9 +5878,11 @@ void ScoreView::cmdAddRemoveBreaks()
                              m->undoSetLineBreak(false);
                         }
                   else {
+                        // skip last measure in score (even if in selection)
                         if (++count == interval) {
                               // found place for break; add if not already one present
-                              if (!(m->lineBreak() || m->pageBreak()))
+                              // but skip last measure in score (even if in selection)
+                              if (!(m->lineBreak() || m->pageBreak() || m == m->system()->lastMeasure()))
                                     m->undoSetLineBreak(true);
                               // reset count
                               count = 0;
@@ -5890,6 +5893,8 @@ void ScoreView::cmdAddRemoveBreaks()
                               }
                         }
                   }
+            if (m == endMeasure)
+                  break;
             }
 
       if (noSelection)

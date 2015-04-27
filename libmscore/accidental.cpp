@@ -284,7 +284,7 @@ AccidentalVal Accidental::subtype2value(AccidentalType st)
 
 const char* Accidental::subtype2name(AccidentalType st)
       {
-      return accList[int(st)].tag;
+      return accList[int(st)].name;
       }
 
 //---------------------------------------------------------

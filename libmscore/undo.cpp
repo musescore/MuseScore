@@ -878,13 +878,16 @@ void Score::undoAddElement(Element* element)
             foreach(Score* s, scoreList())
                   staffList.append(s->staff(0));
 
-            foreach(Staff* staff, staffList) {
+            foreach (Staff* staff, staffList) {
                   Score* score = staff->score();
                   int staffIdx = score->staffIdx(staff);
                   Element* ne;
                   if (staff->score() == ostaff->score())
                         ne = element;
                   else {
+                        // only create linked volta for first staff
+                        if (et == Element::Type::VOLTA && element->track() != 0)
+                              continue;
                         ne = element->linkedClone();
                         ne->setScore(score);
                         ne->setSelected(false);
@@ -1027,6 +1030,7 @@ void Score::undoAddElement(Element* element)
          && et != Element::Type::TREMOLO
          && et != Element::Type::ARPEGGIO
          && et != Element::Type::SYMBOL
+         && et != Element::Type::TREMOLOBAR
          && et != Element::Type::FRET_DIAGRAM
          && et != Element::Type::HARMONY)
             ) {
@@ -1127,6 +1131,7 @@ void Score::undoAddElement(Element* element)
             //
             else if (element->type() == Element::Type::SYMBOL
                || element->type() == Element::Type::IMAGE
+               || element->type() == Element::Type::TREMOLOBAR
                || element->type() == Element::Type::DYNAMIC
                || element->type() == Element::Type::STAFF_TEXT
                || element->type() == Element::Type::FRET_DIAGRAM
@@ -2245,7 +2250,7 @@ void TransposeHarmony::flip()
       int rootTpc1 = harmony->rootTpc();
       harmony->setBaseTpc(baseTpc);
       harmony->setRootTpc(rootTpc);
-      harmony->setText(harmony->harmonyName());
+      harmony->setXmlText(harmony->harmonyName());
       rootTpc = rootTpc1;
       baseTpc = baseTpc1;
       }
@@ -2384,8 +2389,8 @@ void EditText::redo()
 
 void EditText::undoRedo()
       {
-      QString s = text->text();
-      text->setText(oldText);
+      QString s = text->xmlText();
+      text->setXmlText(oldText);
       oldText = s;
       text->score()->setLayoutAll(true);
       }

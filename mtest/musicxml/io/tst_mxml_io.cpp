@@ -141,6 +141,7 @@ private slots:
       void tuplets4() { mxmlIoTest("testTuplets4"); }
       //void uninitializedDivisions() { mxmlIoTestRef("testUninitializedDivisions"); } correct behaviour to be checked
       void unusualDurations() { mxmlIoTestRef("testUnusualDurations"); }
+      void virtualInstruments() { mxmlIoTestRef("testVirtualInstruments"); }
       void voiceMapper1() { mxmlIoTestRef("testVoiceMapper1"); }
       void voiceMapper2() { mxmlIoTestRef("testVoiceMapper2"); }
       void voiceMapper3() { mxmlIoTestRef("testVoiceMapper3"); }

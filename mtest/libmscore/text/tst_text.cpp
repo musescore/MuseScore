@@ -60,32 +60,32 @@ void TestText::testText()
       text->moveCursorToEnd();
       text->insertText("a");
       text->endEdit();
-      QCOMPARE(text->text(), QString("a"));
+      QCOMPARE(text->xmlText(), QString("a"));
 
       text->startEdit(0, QPoint());
       text->moveCursorToEnd();
       text->insertText("bc");
       text->endEdit();
-      QCOMPARE(text->text(), QString("abc"));
+      QCOMPARE(text->xmlText(), QString("abc"));
 
       text->startEdit(0, QPoint());
       text->moveCursorToEnd();
       text->insertText("d");
       text->insertText("e");
       text->endEdit();
-      QCOMPARE(text->text(), QString("abcde"));
+      QCOMPARE(text->xmlText(), QString("abcde"));
 
       text->startEdit(0, QPoint());
       text->moveCursorToStart();
       text->insertText("1");
       text->endEdit();
-      QCOMPARE(text->text(), QString("1abcde"));
+      QCOMPARE(text->xmlText(), QString("1abcde"));
 
       text->startEdit(0, QPoint());
       text->moveCursorToStart();
       text->insertText("0");
       text->endEdit();
-      QCOMPARE(text->text(), QString("01abcde"));
+      QCOMPARE(text->xmlText(), QString("01abcde"));
 
       text->startEdit(0, QPoint());
       text->moveCursorToStart();
@@ -93,7 +93,7 @@ void TestText::testText()
       text->movePosition(QTextCursor::Right);
       text->insertText("2");
       text->endEdit();
-      QCOMPARE(text->text(), QString("012abcde"));
+      QCOMPARE(text->xmlText(), QString("012abcde"));
 
       text->startEdit(0, QPoint());
       text->moveCursorToEnd();
@@ -104,20 +104,20 @@ void TestText::testText()
       text->movePosition(QTextCursor::Left);
       text->insertText("3");
       text->endEdit();
-      QCOMPARE(text->text(), QString("0123abcde"));
+      QCOMPARE(text->xmlText(), QString("0123abcde"));
 
       text->startEdit(0, QPoint());
       text->moveCursorToEnd();
       text->insertSym(SymId::segno);
       text->endEdit();
-      QCOMPARE(text->text(), QString("0123abcde<sym>segno</sym>"));
+      QCOMPARE(text->xmlText(), QString("0123abcde<sym>segno</sym>"));
 
       text->startEdit(0, QPoint());
       text->moveCursorToEnd();
       text->movePosition(QTextCursor::Left);
       text->insertText("#");
       text->endEdit();
-      QCOMPARE(text->text(), QString("0123abcde#<sym>segno</sym>"));
+      QCOMPARE(text->xmlText(), QString("0123abcde#<sym>segno</sym>"));
       }
 
 //---------------------------------------------------------
@@ -135,31 +135,31 @@ void TestText::testSpecialSymbols()
       text->moveCursorToEnd();
       text->insertText("<");
       text->endEdit();
-      QCOMPARE(text->text(), QString("&lt;"));
+      QCOMPARE(text->xmlText(), QString("&lt;"));
 
       text->selectAll();
       text->deleteSelectedText();
       text->insertText("&");
       text->endEdit();
-      QCOMPARE(text->text(), QString("&amp;"));
+      QCOMPARE(text->xmlText(), QString("&amp;"));
 
       text->selectAll();
       text->deleteSelectedText();
       text->insertText(">");
       text->endEdit();
-      QCOMPARE(text->text(), QString("&gt;"));
+      QCOMPARE(text->xmlText(), QString("&gt;"));
 
       text->selectAll();
       text->deleteSelectedText();
       text->insertText("\"");
       text->endEdit();
-      QCOMPARE(text->text(), QString("&quot;"));
+      QCOMPARE(text->xmlText(), QString("&quot;"));
 
       text->selectAll();
       text->deleteSelectedText();
       text->insertText("&gt;");
       text->endEdit();
-      QCOMPARE(text->text(), QString("&amp;gt;"));
+      QCOMPARE(text->xmlText(), QString("&amp;gt;"));
       }
 
 //---------------------------------------------------------
@@ -177,7 +177,7 @@ void TestText::testTextProperties()
       text->moveCursorToEnd();
       text->insertText("ILoveMuseScore");
       text->endEdit();
-      QCOMPARE(text->text(), QString("ILoveMuseScore"));
+      QCOMPARE(text->xmlText(), QString("ILoveMuseScore"));
 
       //select Love and make it bold
       text->startEdit(0, QPoint());
@@ -187,7 +187,7 @@ void TestText::testTextProperties()
 
       text->setFormat(FormatId::Bold , true);
       text->endEdit();
-      QCOMPARE(text->text(), QString("I<b>Love</b>MuseScore"));
+      QCOMPARE(text->xmlText(), QString("I<b>Love</b>MuseScore"));
 
       //select Love and unbold it
       text->startEdit(0, QPoint());
@@ -197,7 +197,7 @@ void TestText::testTextProperties()
 
       text->setFormat(FormatId::Bold , false);
       text->endEdit();
-      QCOMPARE(text->text(), QString("ILoveMuseScore"));
+      QCOMPARE(text->xmlText(), QString("ILoveMuseScore"));
 
       //select Love and make it bold again
       text->startEdit(0, QPoint());
@@ -207,7 +207,7 @@ void TestText::testTextProperties()
 
       text->setFormat(FormatId::Bold , true);
       text->endEdit();
-      QCOMPARE(text->text(), QString("I<b>Love</b>MuseScore"));
+      QCOMPARE(text->xmlText(), QString("I<b>Love</b>MuseScore"));
 
       //select veMu and make it bold
       text->startEdit(0, QPoint());
@@ -217,7 +217,7 @@ void TestText::testTextProperties()
 
       text->setFormat(FormatId::Bold , true);
       text->endEdit();
-      QCOMPARE(text->text(), QString("I<b>LoveMu</b>seScore"));
+      QCOMPARE(text->xmlText(), QString("I<b>LoveMu</b>seScore"));
 
       //select Mu and make it nonbold
       text->startEdit(0, QPoint());
@@ -227,7 +227,7 @@ void TestText::testTextProperties()
 
       text->setFormat(FormatId::Bold , false);
       text->endEdit();
-      QCOMPARE(text->text(), QString("I<b>Love</b>MuseScore"));
+      QCOMPARE(text->xmlText(), QString("I<b>Love</b>MuseScore"));
 
       //make veMuse italic
       text->startEdit(0, QPoint());
@@ -237,7 +237,7 @@ void TestText::testTextProperties()
 
       text->setFormat(FormatId::Italic , true);
       text->endEdit();
-      QCOMPARE(text->text(), QString("I<b>Lo<i>ve</i></b><i>Muse</i>Score"));
+      QCOMPARE(text->xmlText(), QString("I<b>Lo<i>ve</i></b><i>Muse</i>Score"));
 
       }
 

@@ -258,11 +258,6 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
             return;
       Text text(score());
       text.setTextStyleType(area < 3 ? TextStyleType::HEADER : TextStyleType::FOOTER);
-
-//      QString txt = text.convertFromHtml(s);
-//      if (txt.isEmpty())
-//            return;
-
       text.setParent(const_cast<Page*>(this));
       text.setLayoutToParentWidth(true);
 
@@ -276,7 +271,7 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
             case 5: flags = AlignmentFlags::RIGHT   | AlignmentFlags::BOTTOM; break;
             }
       text.textStyle().setAlign(flags);
-      text.setText(s);
+      text.setXmlText(s);
       text.layout();
       p->translate(text.pos());
       text.draw(p);
