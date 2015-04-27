@@ -102,7 +102,7 @@ void Marker::setMarkerType(Type t)
                   break;
             }
       if (isEmpty() && txt)
-            setText(txt);
+            setXmlText(txt);
       }
 
 QString Marker::markerTypeUserName()

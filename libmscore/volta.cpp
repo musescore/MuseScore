@@ -199,10 +199,7 @@ void Volta::setText(const QString& s)
 
 QString Volta::text() const
       {
-      if (_beginText)
-            return _beginText->text();
-      else
-            return QString();
+      return _beginText ? _beginText->xmlText() : QString();
       }
 
 //---------------------------------------------------------

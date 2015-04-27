@@ -58,7 +58,7 @@ static void addText(Ms::VBox*& vbx, Ms::Score* s, QString strTxt, Ms::TextStyleT
       if (!strTxt.isEmpty()) {
             Ms::Text* text = new Ms::Text(s);
             text->setTextStyleType(stl);
-            text->setText(strTxt);
+            text->setPlainText(strTxt);
             if (vbx == 0)
                   vbx = new Ms::VBox(s);
             vbx->add(text);
@@ -113,7 +113,7 @@ static void setTempo(Ms::Score* score, int tempo)
       tt->setTrack(0);
       QString tempoText = Ms::TempoText::duration2tempoTextString(Ms::TDuration::DurationType::V_QUARTER);
       tempoText += QString(" = %1").arg(tempo);
-      tt->setText(tempoText);
+      tt->setPlainText(tempoText);
       Ms::Measure* measure = score->firstMeasure();
       Ms::Segment* segment = measure->getSegment(Ms::Segment::Type::ChordRest, 0);
       segment->add(tt);
@@ -444,7 +444,7 @@ void MsScWriter::header(const QString title, const QString type,
             score->style()->set(Ms::StyleIdx::oddFooterC, footer);
 
       Ms::Part* part = score->staff(0)->part();
-      part->setLongName(instrumentName());
+      part->setPlainLongName(instrumentName());
       part->setPartName(instrumentName());
       part->instrument()->setTrackName(instrumentName());
       part->setMidiProgram(midiProgram() - 1);

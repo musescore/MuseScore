@@ -567,7 +567,7 @@ static void addText(VBox* vbx, Score* s, QString strTxt, TextStyleType stl)
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s);
             text->setTextStyleType(stl);
-            text->setText(strTxt);
+            text->setXmlText(strTxt);
             vbx->add(text);
             }
       }
@@ -577,7 +577,7 @@ static void addText2(VBox* vbx, Score* s, QString strTxt, TextStyleType stl, Ali
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s);
             text->setTextStyleType(stl);
-            text->setText(strTxt);
+            text->setXmlText(strTxt);
             text->textStyle().setAlign(v);
             text->textStyle().setYoff(yoffs);
             vbx->add(text);
@@ -1486,7 +1486,7 @@ static void createPart(Score* score, const QString& id, const QString& name, con
       part->setId(id);
       part->setPartName(name);
       if (doLong)
-            part->setLongName(name);
+            part->setPlainLongName(name);
       score->appendPart(part);
       Staff* staff = new Staff(score);
       staff->setPart(part);
@@ -1649,7 +1649,7 @@ void MusicXMLParserPass1::scorePart()
                   // As of MusicXML 3.0, formatting is deprecated, with part-name in plain text
                   // and the formatted version in the part-abbreviation-display element
                   if (!(_e.attributes().value("print-object") == "no"))
-                        _partMap[id]->setShortName(_e.readElementText());
+                        _partMap[id]->setPlainShortName(_e.readElementText());
                   }
             else if (_e.name() == "part-abbreviation-display")
                   _e.skipCurrentElement();  // skip but don't log

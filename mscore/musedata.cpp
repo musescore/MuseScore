@@ -402,7 +402,7 @@ void MuseData::readNote(Part* part, const QString& s)
             foreach(QString w, sl) {
                   w = diacritical(w);
                   Lyrics* l = new Lyrics(score);
-                  l->setText(w);
+                  l->setPlainText(w);
                   l->setNo(no++);
                   l->setTrack(gstaff * VOICES);
                   Segment* segment = measure->tick2segment(tick);
@@ -695,7 +695,7 @@ bool MuseData::read(const QString& name)
                         }
                   score->appendPart(mpart);
                   if(part.size() > 8)
-                        mpart->setLongName(part[8]);
+                        mpart->setPlainLongName(part[8]);
                   part.clear();
                   continue;
                   }

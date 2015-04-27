@@ -2250,7 +2250,7 @@ void TransposeHarmony::flip()
       int rootTpc1 = harmony->rootTpc();
       harmony->setBaseTpc(baseTpc);
       harmony->setRootTpc(rootTpc);
-      harmony->setText(harmony->harmonyName());
+      harmony->setXmlText(harmony->harmonyName());
       rootTpc = rootTpc1;
       baseTpc = baseTpc1;
       }
@@ -2389,8 +2389,8 @@ void EditText::redo()
 
 void EditText::undoRedo()
       {
-      QString s = text->text();
-      text->setText(oldText);
+      QString s = text->xmlText();
+      text->setXmlText(oldText);
       oldText = s;
       text->score()->setLayoutAll(true);
       }

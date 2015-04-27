@@ -72,8 +72,8 @@ void TempoText::read(XmlReader& e)
 //                  }
             }
       // check sanity
-      if (text().isEmpty()) {
-            setText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(lrint(60 * _tempo)));
+      if (xmlText().isEmpty()) {
+            setXmlText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(lrint(60 * _tempo)));
             setVisible(false);
             }
       }
@@ -134,9 +134,9 @@ int TempoText::findTempoDuration(const QString& s, int& len, TDuration& dur)
 
 QString TempoText::duration2tempoTextString(const TDuration dur)
       {
-      for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
-            if (tp[i].d == dur) {
-                  QString res = tp[i].pattern;
+      for (const TempoPattern& pa : tp) {
+            if (pa.d == dur) {
+                  QString res = pa.pattern;
                   res.remove("\\s*");
                   return res;
                   }
@@ -153,16 +153,16 @@ void TempoText::textChanged()
       {
       if (!_followText)
             return;
-      QString s = text();
-      s.replace(QString(","), QString("."));
-      for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
-            QRegExp re(QString(tp[i].pattern)+"\\s*=\\s*(\\d+[.]{0,1}\\d*)");
+      QString s = xmlText();
+      s.replace(",", ".");
+      for (const TempoPattern& pa : tp) {
+            QRegExp re(QString(pa.pattern)+"\\s*=\\s*(\\d+[.]{0,1}\\d*)");
             if (re.indexIn(s) != -1) {
                   QStringList sl = re.capturedTexts();
                   if (sl.size() == 2) {
-                        qreal nt = qreal(sl[1].toDouble()) * tp[i].f;
+                        qreal nt = qreal(sl[1].toDouble()) * pa.f;
                         if (nt != _tempo) {
-                              _tempo = qreal(sl[1].toDouble()) * tp[i].f;
+                              _tempo = qreal(sl[1].toDouble()) * pa.f;
                               if(segment())
                                     score()->setTempo(segment(), _tempo);
                               score()->setPlaylistDirty();

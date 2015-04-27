@@ -5454,7 +5454,7 @@ bool ScoreView::searchRehearsalMark(const QString& s)
             for (Element* e : seg->annotations()){
                   if (e->type() == Element::Type::REHEARSAL_MARK) {
                         RehearsalMark* rm = static_cast<RehearsalMark*>(e);
-                        QString rms = rm->text().toLower();
+                        QString rms = rm->plainText().toLower();
                         if (rms.startsWith(ss)) {
                               gotoMeasure(seg->measure());
                               found = true;

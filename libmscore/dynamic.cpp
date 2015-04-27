@@ -222,9 +222,8 @@ void Dynamic::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag = e.name();
-            if (tag == "subtype") {
+            if (tag == "subtype")
                   setDynamicType(e.readElementText());
-                  }
             else if (tag == "velocity")
                   _velocity = e.readInt();
             else if (tag == "dynType")
@@ -285,13 +284,13 @@ void Dynamic::setDynamicType(const QString& tag)
       for (int i = 0; i < n; ++i) {
             if (dynList[i].tag == tag || dynList[i].text == tag) {
                   setDynamicType(Type(i));
-                  setText(QString::fromUtf8(dynList[i].text));
+                  setXmlText(QString::fromUtf8(dynList[i].text));
                   return;
                   }
             }
       qDebug("setDynamicType: other <%s>", qPrintable(tag));
       setDynamicType(Type::OTHER);
-      setText(tag);
+      setXmlText(tag);
       }
 
 //---------------------------------------------------------
@@ -319,7 +318,7 @@ void Dynamic::startEdit(MuseScoreView* v, const QPointF& p)
 void Dynamic::endEdit()
       {
       Text::endEdit();
-      if (text() != QString::fromUtf8(dynList[int(_dynamicType)].text))
+      if (xmlText() != QString::fromUtf8(dynList[int(_dynamicType)].text))
             _dynamicType = Type::OTHER;
       }
 
@@ -329,7 +328,6 @@ void Dynamic::endEdit()
 
 void Dynamic::reset()
       {
-//      setDynamicType(getText());
       Text::reset();
       }
 

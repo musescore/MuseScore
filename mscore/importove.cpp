@@ -326,7 +326,7 @@ void addText(VBox* & vbox, Score* s, QString strTxt, TextStyleType stl) {
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s);
             text->setTextStyleType(stl);
-            text->setText(strTxt);
+            text->setPlainText(strTxt);
             if(vbox == 0) {
                   vbox = new VBox(s);
                   }
@@ -581,12 +581,12 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
 
       QString longName = track->getName();
       if (longName != QString() && track->getShowName()){
-            part->setLongName(longName);
+            part->setPlainLongName(longName);
             }
 
       QString shortName = track->getBriefName();
       if (shortName != QString() && track->getShowBriefName()) {
-            part->setShortName(shortName);
+            part->setPlainShortName(shortName);
             }
 
       part->setMidiProgram(track->getPatch());
@@ -1273,7 +1273,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
             OVE::Text* textPtr = static_cast<OVE::Text*>(texts[i]);
             if(textPtr->getTextType() == OVE::Text::Type::Rehearsal){
                   Text* text = new RehearsalMark(score_);
-                  text->setText(textPtr->getText());
+                  text->setPlainText(textPtr->getText());
                   text->setAbove(true);
                   text->setTrack(track);
 
@@ -1293,7 +1293,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
             score_->setTempo(absTick, tpo);
 
             t->setTempo(tpo);
-            t->setText(tempoPtr->getRightText());
+            t->setPlainText(tempoPtr->getRightText());
             t->setAbove(true);
             t->setTrack(track);
 
@@ -1904,7 +1904,7 @@ void OveToMScore::convertLyrics(Measure* measure, int part, int staff, int track
 
             Lyrics* lyric = new Lyrics(score_);
             lyric->setNo(oveLyric->getVerse());
-            lyric->setText(oveLyric->getLyric());
+            lyric->setPlainText(oveLyric->getLyric());
             lyric->setTrack(track);
             Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
             if (segment->element(track))
@@ -2287,7 +2287,7 @@ void OveToMScore::convertExpressions(Measure* measure, int part, int staff, int 
             Text* t = new Text(score_);
 
             t->setTextStyleType(TextStyleType::TECHNIQUE);
-            t->setText(expressionPtr->getText());
+            t->setPlainText(expressionPtr->getText());
             t->setTrack(track);
 
             Segment* s = measure->getSegment(Segment::Type::ChordRest, absTick);
