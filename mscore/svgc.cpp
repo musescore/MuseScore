@@ -205,7 +205,7 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
   MQZipWriter uz(saveName);
 
     Score* thisScore = cs->rootScore();
-    if (thisScore->excerpts().count()==0 || partsName.isEmpty()) {
+    if (partsName.isEmpty()) {
 
 		/*
 		// Convert to tab (list of types in stafftype.h)
@@ -213,10 +213,10 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 			staff->setStaffType(StaffType::preset(StaffTypes::TAB_6COMMON));
 		*/
 
-    	createSvgCollection(&uz, cs, QString(), do_linearize);
+    	createSvgCollection(&uz, cs, QString("0/"), do_linearize);
 
     	// Add midifile
-        QString tname("track.mid");
+        QString tname("1.mid");
         saveMidi(cs,tname);
         addFileToZip(&uz, tname, tname);
     }
