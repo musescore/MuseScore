@@ -330,7 +330,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         text->textStyle().setBold(f.bold());
                         text->textStyle().setSize(f.pointSizeF());
 
-                        text->setText(st->text());
+                        text->setPlainText(st->text());
                         QPointF p(st->pos());
                         p = p / 32.0 * score->spatium();
                         // text->setUserOff(st->pos());
@@ -753,7 +753,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         foreach(Verse v, o->verse) {
                               Lyrics* l = new Lyrics(score);
                               l->setTrack(track);
-                              l->setText(v.text);
+                              l->setPlainText(v.text);
                               if (v.hyphen)
                                     l->setSyllabic(Lyrics::Syllabic::BEGIN);
                               l->setNo(v.num);
@@ -949,7 +949,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
 
                               // qDebug("string %f:%f w %d ratio %d <%s>",
                               //    to->relPos.x(), to->relPos.y(), to->width, to->yxRatio, qPrintable(ss));
-                              s->setText(ss);
+                              s->setXmlText(ss);
                               MeasureBase* measure = score->measures()->first();
                               if (measure->type() != Element::Type::VBOX) {
                                     MeasureBase* mb = new VBox(score);
@@ -1164,8 +1164,8 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             else
                   part->setMidiProgram(cl->sound, 0);
             part->setPartName(cl->descr);
-            part->setLongName(cl->name);
-            part->setShortName(cl->abbrev);
+            part->setPlainLongName(cl->name);
+            part->setPlainShortName(cl->abbrev);
 
             // ClefType clefType = CapClef::clefType(cl->form, cl->line, cl->oct);
             // s->setClef(0, clefType);
@@ -1218,7 +1218,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                         s->textStyle().setSize(f.pointSizeF());
 
                         QString ss = to->text();
-                        s->setText(ss);
+                        s->setPlainText(ss);
                         MeasureBase* measure = new VBox(score);
                         measure->setTick(0);
                         score->addMeasure(measure, score->measures()->first());

@@ -84,7 +84,7 @@ void TestInstrumentChange::testAdd()
       InstrumentChange* ic = new InstrumentChange(score);
       ic->setParent(s);
       ic->setTrack(0);
-      ic->setText("Instrument");
+      ic->setXmlText("Instrument");
       score->undoAddElement(ic);
       score->doLayout();
       test_post(score, "add");
@@ -110,7 +110,7 @@ void TestInstrumentChange::testChange()
       Instrument* ni = score->staff(1)->part()->instrument();
       ic->setInstrument(*ni);
       score->startCmd();
-      ic->setText("Instrument Oboe");
+      ic->setXmlText("Instrument Oboe");
       score->undo(new ChangeInstrument(ic, ic->instrument()));
       score->endCmd();
       score->doLayout();
@@ -132,7 +132,7 @@ void TestInstrumentChange::testMixer()
       mp->prog = 41;
       mp->synti = "Fluid";
       score->startCmd();
-      ic->setText("Mixer Viola");
+      ic->setXmlText("Mixer Viola");
       score->undo(new ChangePatch(score, c, mp));
       score->endCmd();
       score->doLayout();

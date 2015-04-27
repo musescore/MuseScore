@@ -492,7 +492,7 @@ Score* TestParts::doAddFingering()
       DropData dd;
       dd.view = 0;
       Fingering* b = new Fingering(score);
-      b->setText("3");
+      b->setXmlText("3");
       dd.element = b;
 
       score->startCmd();

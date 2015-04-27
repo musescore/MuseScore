@@ -1369,7 +1369,7 @@ void TextView::setElement(Element* e)
 
       TextStyle ts = te->textStyle();
       ShowElementBase::setElement(e);
-      tb.text->setPlainText(te->text());
+      tb.text->setPlainText(te->xmlText());
       tb.xoffset->setValue(ts.offset().x());
       tb.yoffset->setValue(ts.offset().y());
       tb.offsetType->setCurrentIndex(int(ts.offsetType()));
@@ -1405,7 +1405,7 @@ void HarmonyView::setElement(Element* e)
 
       const TextStyle& ts = harmony->textStyle();
       ShowElementBase::setElement(e);
-      tb.text->setPlainText(harmony->text());
+      tb.text->setPlainText(harmony->xmlText());
       tb.xoffset->setValue(ts.offset().x());
       tb.yoffset->setValue(ts.offset().y());
       tb.offsetType->setCurrentIndex(int(ts.offsetType()));
@@ -1594,7 +1594,7 @@ void DynamicView::setElement(Element* e)
             tb.textStyle->addItem(e->score()->textStyle(TextStyleType(i)).name());
 
       const TextStyle& ts = dynamic->textStyle();
-      tb.text->setPlainText(dynamic->text());
+      tb.text->setPlainText(dynamic->xmlText());
       tb.xoffset->setValue(ts.offset().x());
       tb.yoffset->setValue(ts.offset().y());
       tb.offsetType->setCurrentIndex(int(ts.offsetType()));

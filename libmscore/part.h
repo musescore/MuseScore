@@ -92,6 +92,9 @@ class Part : public QObject, public ScoreElement {
       void setLongName(const QString& s);
       void setShortName(const QString& s);
 
+      void setPlainLongName(const QString& s);
+      void setPlainShortName(const QString& s);
+
       void setStaves(int);
 
       int volume() const;

@@ -122,9 +122,9 @@ void Tuplet::layout()
                   _number->setVisible(visible());
                   }
             if (_numberType == NumberType::SHOW_NUMBER)
-                  _number->setText(QString("%1").arg(_ratio.numerator()));
+                  _number->setXmlText(QString("%1").arg(_ratio.numerator()));
             else
-                  _number->setText(QString("%1:%2").arg(_ratio.numerator()).arg(_ratio.denominator()));
+                  _number->setXmlText(QString("%1:%2").arg(_ratio.numerator()).arg(_ratio.denominator()));
             }
       else {
             if (_number) {

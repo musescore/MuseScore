@@ -184,7 +184,7 @@ class TextBlock {
 class Text : public Element {
       Q_OBJECT
 
-      Q_PROPERTY(QString text READ text WRITE undoSetText)
+      Q_PROPERTY(QString text READ xmlText WRITE undoSetText)
 
       QString _text;
       static QString oldText;      // used to remember original text in edit mode
@@ -245,8 +245,8 @@ class Text : public Element {
       void restyle(TextStyleType);
 
       void setPlainText(const QString&);
-      void setText(const QString&);
-      QString text() const                    { return _text; }
+      void setXmlText(const QString&);
+      QString xmlText() const                 { return _text; }
       QString plainText(bool noSym = false) const;
       void insertText(const QString&);
 

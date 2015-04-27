@@ -419,6 +419,24 @@ void Part::setShortName(const QString& s)
       }
 
 //---------------------------------------------------------
+//   setPlainLongName
+//---------------------------------------------------------
+
+void Part::setPlainLongName(const QString& s)
+      {
+      setLongName(Xml::xmlString(s));
+      }
+
+//---------------------------------------------------------
+//   setPlainShortName
+//---------------------------------------------------------
+
+void Part::setPlainShortName(const QString& s)
+      {
+      setShortName(Xml::xmlString(s));
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

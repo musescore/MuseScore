@@ -18,6 +18,7 @@
  Definition of Score class.
 */
 
+#include "config.h"
 #include "input.h"
 #include "select.h"
 #include "synthesizerstate.h"
@@ -994,8 +995,10 @@ class Score : public QObject {
       void layoutPage(const PageContext&,  qreal);
       Q_INVOKABLE void appendPart(const QString&);
       Q_INVOKABLE void appendMeasures(int);
+#ifdef SCRIPT_INTERFACE
       Q_INVOKABLE void addText(const QString&, const QString&);
       Q_INVOKABLE Ms::Cursor* newCursor();
+#endif
       qreal computeMinWidth(Segment* fs, bool firstMeasureInSystem);
       void updateBarLineSpans(int idx, int linesOld, int linesNew);
 

@@ -66,7 +66,7 @@ void Score::updateSwing()
                   if (e->type() != Element::Type::STAFF_TEXT)
                         continue;
                   const StaffText* st = static_cast<const StaffText*>(e);
-                  if (st->text().isEmpty())
+                  if (st->xmlText().isEmpty())
                         continue;
                   Staff* staff = st->staff();
                   if (!st->swing())

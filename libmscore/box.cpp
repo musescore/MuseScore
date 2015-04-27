@@ -558,7 +558,7 @@ Element* Box::drop(const DropData& data)
                   Text* text = new Text(score());
                   text->setTextStyleType(TextStyleType::FRAME);
                   text->setParent(this);
-                  text->setText(static_cast<StaffText*>(e)->text());
+                  text->setXmlText(static_cast<StaffText*>(e)->xmlText());
                   score()->undoAddElement(text);
                   delete e;
                   return text;

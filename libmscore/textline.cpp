@@ -184,7 +184,7 @@ void TextLineSegment::setText(Text* t)
             else {
                   _text->setTextStyleType(t->textStyleType());
                   _text->setTextStyle(t->textStyle());
-                  _text->setText(t->text());
+                  _text->setXmlText(t->xmlText());
                   }
             }
       else {
@@ -226,7 +226,7 @@ void TextLineSegment::layout1()
             else {
                   _endText->setTextStyleType(tl->_endText->textStyleType());
                   _endText->setTextStyle(tl->_endText->textStyle());
-                  _endText->setText(tl->_endText->text());
+                  _endText->setXmlText(tl->_endText->xmlText());
                   }
             }
       else {
@@ -491,7 +491,7 @@ void TextLine::setBeginText(const QString& s, TextStyleType textStyle)
             _beginText->setParent(this);
             }
       _beginText->setTextStyleType(textStyle);
-      _beginText->setText(s);
+      _beginText->setXmlText(s);
       }
 
 void TextLine::setBeginText(const QString& s)
@@ -502,7 +502,7 @@ void TextLine::setBeginText(const QString& s)
             return;
             }
       createBeginTextElement();
-      _beginText->setText(s);
+      _beginText->setXmlText(s);
       }
 
 //---------------------------------------------------------
@@ -516,7 +516,7 @@ void TextLine::setContinueText(const QString& s, TextStyleType textStyle)
             _continueText->setParent(this);
             }
       _continueText->setTextStyleType(textStyle);
-      _continueText->setText(s);
+      _continueText->setXmlText(s);
       }
 
 void TextLine::setContinueText(const QString& s)
@@ -527,7 +527,7 @@ void TextLine::setContinueText(const QString& s)
             return;
             }
       createContinueTextElement();
-      _continueText->setText(s);
+      _continueText->setXmlText(s);
       }
 
 //---------------------------------------------------------
@@ -546,7 +546,7 @@ void TextLine::setEndText(const QString& s, TextStyleType textStyle)
             _endText->setParent(this);
             }
       _endText->setTextStyleType(textStyle);
-      _endText->setText(s);
+      _endText->setXmlText(s);
       }
 
 void TextLine::setEndText(const QString& s)
@@ -557,7 +557,7 @@ void TextLine::setEndText(const QString& s)
             return;
             }
       createEndTextElement();
-      _endText->setText(s);
+      _endText->setXmlText(s);
       }
 
 //---------------------------------------------------------
@@ -627,7 +627,7 @@ void TextLine::spatiumChanged(qreal ov, qreal nv)
 
 QString TextLine::beginText() const
       {
-      return _beginText ? _beginText->text() : "";
+      return _beginText ? _beginText->xmlText() : "";
       }
 
 //---------------------------------------------------------
@@ -636,7 +636,7 @@ QString TextLine::beginText() const
 
 QString TextLine::continueText() const
       {
-      return _continueText ? _continueText->text() : "";
+      return _continueText ? _continueText->xmlText() : "";
       }
 
 //---------------------------------------------------------
@@ -645,7 +645,7 @@ QString TextLine::continueText() const
 
 QString TextLine::endText() const
       {
-      return _endText ? _endText->text() : "";
+      return _endText ? _endText->xmlText() : "";
       }
 
 //---------------------------------------------------------
@@ -669,7 +669,7 @@ void TextLine::writeProperties(Xml& xml) const
       SLine::writeProperties(xml);
 
       if (_beginText) {
-            bool textDiff  = _beginText->text() != propertyDefault(P_ID::BEGIN_TEXT).toString();
+            bool textDiff  = _beginText->xmlText() != propertyDefault(P_ID::BEGIN_TEXT).toString();
             bool styleDiff = _beginText->textStyle() != propertyDefault(P_ID::BEGIN_TEXT_STYLE).value<TextStyle>();
             if (styleDiff)
                   textDiff = true;
@@ -680,7 +680,7 @@ void TextLine::writeProperties(Xml& xml) const
                   }
             }
       if (_continueText) {
-            bool textDiff  = _continueText->text() != propertyDefault(P_ID::CONTINUE_TEXT).toString();
+            bool textDiff  = _continueText->xmlText() != propertyDefault(P_ID::CONTINUE_TEXT).toString();
             bool styleDiff = _continueText->textStyle() != propertyDefault(P_ID::CONTINUE_TEXT_STYLE).value<TextStyle>();
             if (styleDiff)
                   textDiff = true;
@@ -691,7 +691,7 @@ void TextLine::writeProperties(Xml& xml) const
                   }
             }
       if (_endText) {
-            bool textDiff  = _endText->text() != propertyDefault(P_ID::END_TEXT).toString();
+            bool textDiff  = _endText->xmlText() != propertyDefault(P_ID::END_TEXT).toString();
             bool styleDiff = _endText->textStyle() != propertyDefault(P_ID::END_TEXT_STYLE).value<TextStyle>();
             if (styleDiff)
                   textDiff = true;
@@ -782,7 +782,7 @@ bool TextLine::readProperties(XmlReader& e)
                   _beginText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
                   }
             else
-                  _beginText->setText("");
+                  _beginText->setXmlText("");
             _beginText->read(e);
             }
       else if (tag == "continueText") {
@@ -792,7 +792,7 @@ bool TextLine::readProperties(XmlReader& e)
                   _continueText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
                   }
             else
-                  _continueText->setText("");
+                  _continueText->setXmlText("");
             _continueText->read(e);
             }
       else if (tag == "endText") {
@@ -802,7 +802,7 @@ bool TextLine::readProperties(XmlReader& e)
                   _endText->setTextStyleType(static_cast<TextStyleType>(propertyDefault(P_ID::TEXT_STYLE_TYPE).toInt()));
                   }
             else
-                  _endText->setText("");
+                  _endText->setXmlText("");
             _endText->read(e);
             }
       else if (!SLine::readProperties(e)) {

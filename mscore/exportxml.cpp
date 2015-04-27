@@ -2537,7 +2537,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                         Text* f = (Text*)e;
                         notations.tag(xml);
                         technical.tag(xml);
-                        QString t = MScoreTextToMXML::toPlainText(f->text());
+                        QString t = MScoreTextToMXML::toPlainText(f->xmlText());
                         if (f->textStyleType() == TextStyleType::RH_GUITAR_FINGERING)
                               xml.tag("pluck", t);
                         else if (f->textStyleType() == TextStyleType::LH_GUITAR_FINGERING)
@@ -3103,7 +3103,7 @@ void ExportMusicXml::words(Text const* const text, int staff)
              text->userOff().x(), text->userOff().y(), qPrintable(text->text()));
       */
 
-      if (text->text() == "") {
+      if (text->xmlText() == "") {
             // sometimes empty Texts are present, exporting would result
             // in invalid MusicXML (as an empty direction-type would be created)
             return;
@@ -3120,7 +3120,7 @@ void ExportMusicXml::words(Text const* const text, int staff)
 
 void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       {
-      if (rmk->text() == "") {
+      if (rmk->xmlText() == "") {
             // sometimes empty Texts are present, exporting would result
             // in invalid MusicXML (as an empty direction-type would be created)
             return;
@@ -3465,7 +3465,7 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
 void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
       {
       foreach(const Lyrics* l, *ll) {
-            if (l && !l->text().isEmpty()) {
+            if (l && !l->xmlText().isEmpty()) {
                   if ((l)->track() == trk) {
                         xml.stag(QString("lyric number=\"%1\"").arg((l)->no() + 1));
                         Lyrics::Syllabic syl = (l)->syllabic();
@@ -3514,41 +3514,41 @@ static void directionJump(Xml& xml, const Jump* const jp)
       QString type  = "";
       QString sound = "";
       if (jtp == Jump::Type::DC) {
-            if (jp->text() == "")
+            if (jp->xmlText() == "")
                   words = "D.C.";
             else
-                  words = jp->text();
+                  words = jp->xmlText();
             sound = "dacapo=\"yes\"";
             }
       else if (jtp == Jump::Type::DC_AL_FINE) {
-            if (jp->text() == "")
+            if (jp->xmlText() == "")
                   words = "D.C. al Fine";
             else
-                  words = jp->text();
+                  words = jp->xmlText();
             sound = "dacapo=\"yes\"";
             }
       else if (jtp == Jump::Type::DC_AL_CODA) {
-            if (jp->text() == "")
+            if (jp->xmlText() == "")
                   words = "D.C. al Coda";
             else
-                  words = jp->text();
+                  words = jp->xmlText();
             sound = "dacapo=\"yes\"";
             }
       else if (jtp == Jump::Type::DS_AL_CODA) {
-            if (jp->text() == "")
+            if (jp->xmlText() == "")
                   words = "D.S. al Coda";
             else
-                  words = jp->text();
+                  words = jp->xmlText();
             if (jp->jumpTo() == "")
                   sound = "dalsegno=\"1\"";
             else
                   sound = "dalsegno=\"" + jp->jumpTo() + "\"";
             }
       else if (jtp == Jump::Type::DS_AL_FINE) {
-            if (jp->text() == "")
+            if (jp->xmlText() == "")
                   words = "D.S. al Fine";
             else
-                  words = jp->text();
+                  words = jp->xmlText();
             if (jp->jumpTo() == "")
                   sound = "dalsegno=\"1\"";
             else
@@ -3605,10 +3605,10 @@ static void directionMarker(Xml& xml, const Marker* const m)
             sound = "fine=\"yes\"";
             }
       else if (mtp == Marker::Type::TOCODA) {
-            if (m->text() == "")
+            if (m->xmlText() == "")
                   words = "To Coda";
             else
-                  words = m->text();
+                  words = m->xmlText();
             if (m->label() == "")
                   sound = "tocoda=\"1\"";
             else

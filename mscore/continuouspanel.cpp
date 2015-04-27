@@ -203,7 +203,7 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                         staffName = staffNamesLong.isEmpty() ? " " : staffNamesLong[0].name();
                   }
                   Text* newName = new Text(_score);
-                  newName->setText(staffName);
+                  newName->setXmlText(staffName);
                   newName->setParent(parent);
                   newName->setTrack(e->track());
                   newName->layout();
@@ -246,10 +246,10 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   newTs->setTrack(e->track());
                   newTs->layout();
 
-                  if ((newName->height() > _heightName) && (newName->text() != ""))
+                  if ((newName->height() > _heightName) && (newName->xmlText() != ""))
                         _heightName = newName->height();
 
-                  if ((newName->lineHeight() > _lineHeightName) && (newName->text() != ""))
+                  if ((newName->lineHeight() > _lineHeightName) && (newName->xmlText() != ""))
                         _lineHeightName = newName->lineHeight();
 
                   if (newClef->width() > _widthClef)
@@ -332,7 +332,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
       Text* newElement = new Text(_score);
       newElement->setTextStyleType(TextStyleType::DEFAULT);
       newElement->setFlag(ElementFlag::MOVABLE, false);
-      newElement->setText(text);
+      newElement->setXmlText(text);
       newElement->sameLayout();
       pos = QPointF (_heightName * 1.5, _y + newElement->height());
       painter.translate(pos);
@@ -378,7 +378,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                   }
 
                   Text* newName = new Text(_score);
-                  newName->setText(staffName);
+                  newName->setXmlText(staffName);
                   newName->setParent(parent);
                   newName->setTrack(e->track());
                   newName->layout();
