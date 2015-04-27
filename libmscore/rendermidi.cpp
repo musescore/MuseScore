@@ -203,7 +203,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                               collectNote(events, channel, n, velo, tickOffset);
                               break;
                               }
-                        if (n->tieFor())		
+                        if (n->tieFor() && n != n->tieFor()->endNote())
                               n = n->tieFor()->endNote();
                         else
                               break;
