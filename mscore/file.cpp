@@ -2098,6 +2098,7 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
                   qDebug("unknown file suffix <%s>, name <%s>", qPrintable(suffix), qPrintable(name));
                   return Score::FileError::FILE_UNKNOWN_TYPE;
                   }
+            score->setMetaTag("originalFormat", suffix);
             score->connectTies();
             score->setCreated(true); // force save as for imported files
             }
