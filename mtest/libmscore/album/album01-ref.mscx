@@ -212,11 +212,9 @@
       <Measure number="4">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <LayoutBreak>
           <subtype>section</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <endSpanner id="4"/>
         <Chord>

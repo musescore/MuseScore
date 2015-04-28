@@ -135,7 +135,6 @@
       <Measure number="3">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>2</pause>
           </LayoutBreak>
         <Chord>
           <durationType>whole</durationType>
@@ -170,11 +169,9 @@
       <Measure number="6">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>2</pause>
           </LayoutBreak>
         <LayoutBreak>
           <subtype>section</subtype>
-          <pause>2</pause>
           </LayoutBreak>
         <Chord>
           <durationType>whole</durationType>

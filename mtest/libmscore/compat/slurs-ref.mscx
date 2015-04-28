@@ -239,7 +239,6 @@
       <Measure number="4">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Slur id="5">
           <track>0</track>
@@ -464,7 +463,6 @@
       <Measure number="8">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Slur id="10">
           <track>0</track>
@@ -670,7 +668,6 @@
       <Measure number="12">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Rest>
           <durationType>measure</durationType>

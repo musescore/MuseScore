@@ -144,7 +144,6 @@
       <Measure number="4">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <StaffText>
           <pos x="5" y="-4"/>
