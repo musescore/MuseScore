@@ -264,7 +264,7 @@ QVariant LayoutBreak::propertyDefault(P_ID id) const
             case P_ID::LAYOUT_BREAK:
                   return QVariant(); // LAYOUT_BREAK_LINE;
             case P_ID::PAUSE:
-                  return 0.0; // score()->styleD(StyleIdx::SectionPause);
+                  return score()->styleD(StyleIdx::SectionPause);
             default:
                   return Element::propertyDefault(id);
             }
