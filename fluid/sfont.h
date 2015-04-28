@@ -68,7 +68,7 @@ class SFont {
 
       void read_listchunk(SFChunk* chunk);
       void process_info(int size);
-      void process_sdta(int size);
+      void process_sdta(unsigned int size);
       void pdtahelper(unsigned int expid, unsigned int reclen, SFChunk* chunk, int* size);
 
       void process_pdta(int size);
