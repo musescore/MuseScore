@@ -901,7 +901,7 @@ void SFont::process_info(int size)
 //    return true on success
 //---------------------------------------------------------
 
-void SFont::process_sdta (int size)
+void SFont::process_sdta (unsigned int size)
       {
       if (size == 0)
             return;		// no sample data?
@@ -914,12 +914,15 @@ void SFont::process_sdta (int size)
       if (chunkid (chunk.id) != SMPL_ID)
             throw(QString("Expected SMPL chunk found invalid id instead"));
 
-      if ((size - chunk.size) != 0)
+      /* SDTA chunk may also contain sm24 chunk for 24 bit samples
+      * (not yet supported), only an error if SMPL chunk size is
+      * greater than SDTA. */
+      if (chunk.size > size)
             throw(QString("SDTA chunk size mismatch %1 != %2").arg(size).arg(chunk.size));
       /* sample data follows */
       setSamplepos(f.pos());
       setSamplesize(chunk.size);
-      FSKIP(chunk.size);
+      FSKIP(size);
       }
 
 //---------------------------------------------------------
