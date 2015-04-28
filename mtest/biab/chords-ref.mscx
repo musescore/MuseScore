@@ -141,7 +141,6 @@
       <Measure number="5">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Harmony>
           <root>14</root>
@@ -189,7 +188,6 @@
       <Measure number="9">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Harmony>
           <root>14</root>
@@ -237,7 +235,6 @@
       <Measure number="13">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Harmony>
           <root>14</root>
@@ -285,7 +282,6 @@
       <Measure number="17">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Harmony>
           <root>14</root>
@@ -333,7 +329,6 @@
       <Measure number="21">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Harmony>
           <root>14</root>
@@ -381,7 +376,6 @@
       <Measure number="25">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Harmony>
           <root>14</root>
@@ -429,7 +423,6 @@
       <Measure number="29">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Harmony>
           <root>14</root>
@@ -477,7 +470,6 @@
       <Measure number="33">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Harmony>
           <root>14</root>
@@ -525,7 +517,6 @@
       <Measure number="37">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Harmony>
           <root>14</root>
@@ -573,7 +564,6 @@
       <Measure number="41">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Harmony>
           <root>14</root>
@@ -621,7 +611,6 @@
       <Measure number="45">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Harmony>
           <root>14</root>

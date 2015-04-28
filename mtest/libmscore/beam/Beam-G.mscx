@@ -185,7 +185,6 @@
       <Measure number="2">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Rest>
           <durationType>measure</durationType>
@@ -282,7 +281,6 @@
       <Measure number="4">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Beam id="8">
           <StemDirection>up</StemDirection>
@@ -493,7 +491,6 @@
       <Measure number="7">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Rest>
           <durationType>measure</durationType>
@@ -591,7 +588,6 @@
       <Measure number="9">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Beam id="21">
           <StemDirection>up</StemDirection>
@@ -747,7 +743,6 @@
       <Measure number="11">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Beam id="28">
           <l1>9</l1>
@@ -957,7 +952,6 @@
       <Measure number="14">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Rest>
           <durationType>measure</durationType>
@@ -1055,7 +1049,6 @@
       <Measure number="16">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Beam id="41">
           <StemDirection>down</StemDirection>

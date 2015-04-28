@@ -340,7 +340,6 @@
       <Measure number="5">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Chord>
           <lid>45</lid>
