@@ -265,7 +265,6 @@
       <Measure number="4">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>
@@ -407,7 +406,6 @@
       <Measure number="7">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>
@@ -584,7 +582,6 @@
       <Measure number="11">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Chord>
           <durationType>quarter</durationType>

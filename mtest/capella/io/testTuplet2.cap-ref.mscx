@@ -98,7 +98,6 @@
       <Measure number="1">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Clef>
           <concertClefType>G</concertClefType>
@@ -174,7 +173,6 @@
       <Measure number="2">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Clef>
           <concertClefType>G</concertClefType>
@@ -256,7 +254,6 @@
       <Measure number="3">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Clef>
           <concertClefType>G</concertClefType>
@@ -370,7 +367,6 @@
       <Measure number="4">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Clef>
           <concertClefType>G</concertClefType>
@@ -497,7 +493,6 @@
       <Measure number="5">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Clef>
           <concertClefType>G</concertClefType>
@@ -595,7 +590,6 @@
       <Measure number="6" len="12/8">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Clef>
           <concertClefType>G</concertClefType>
@@ -671,7 +665,6 @@
       <Measure number="7">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Clef>
           <concertClefType>G</concertClefType>
@@ -769,7 +762,6 @@
       <Measure number="8">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Clef>
           <concertClefType>G</concertClefType>
@@ -888,7 +880,6 @@
       <Measure number="9">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Clef>
           <concertClefType>G</concertClefType>
@@ -1025,7 +1016,6 @@
       <Measure number="10">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Clef>
           <concertClefType>G</concertClefType>
@@ -1244,7 +1234,6 @@
       <Measure number="11" len="4/4">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Clef>
           <concertClefType>G</concertClefType>
@@ -1393,7 +1382,6 @@
       <Measure number="12">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Clef>
           <concertClefType>G</concertClefType>
@@ -1542,7 +1530,6 @@
       <Measure number="13">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Clef>
           <concertClefType>G</concertClefType>
@@ -1731,7 +1718,6 @@
       <Measure number="14">
         <LayoutBreak>
           <subtype>line</subtype>
-          <pause>3</pause>
           </LayoutBreak>
         <Clef>
           <concertClefType>G</concertClefType>
