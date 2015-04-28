@@ -822,16 +822,6 @@ void renderArpeggio(Chord *chord, bool &gateEvents, QList<NoteEventList> & ell) 
     }
 }
     
-int articulationExcursion(Key & key, int pitch, int delta)
-    {
-        if ( delta == 0) {
-            return 0;
-        }
-        else {
-            return diatonicUpDown(key,pitch,delta)-pitch;
-        }
-    }
-    
 void renderNoteArticulation(NoteEventList* events,
                         Chord *chord,
                         int pitch,
@@ -864,7 +854,6 @@ void renderNoteArticulation(NoteEventList* events,
     // This corresponds to 16 notes per second. 16 = 32 / (120 / 60).
     // Thus minduration = ticksPerSecond / 16.
     int mintickspernote = static_cast<int>(ticksPerSecond / 16); // minimum number of ticks for the shortest note in a trill or other articulation
-    //qDebug("P=%d B=%d S=%d tickspernote(given)=%d minduration=%d maxticks=%d", P, B, S, tickspernote, mintickspernote, maxticks);
 
     // is the requested duration smaller than the minimum, if so, increase it to the minimum.
     tickspernote = max(tickspernote, mintickspernote);
@@ -878,8 +867,27 @@ void renderNoteArticulation(NoteEventList* events,
         tickspernote = maxticks / (P + B + S) ; // integer division ignoring remainder
     }
     int millespernote = space * tickspernote / maxticks ; // rescale duration into per mille
-    //qDebug("finally tickspernote = %d millespernote=%d", tickspernote, millespernote);
-
+    
+    // local function:
+    // look ahead in the given vector to see if the current note is the same pitch as the next note or next several notes.
+    // If so, increment the duration by the appropraite note duration, and increment the index, j, to the next note index
+    // of a different pitch.
+    // The total duration of the tied note is returned, and the index is modified.
+    auto tieForward = [millespernote] (int & j, const vector<int> & vec) {
+        int size = vec.size();
+        int duration = millespernote;
+        while ( j < size-1 && vec[j] == vec[j+1] ) {
+            duration += millespernote;
+            j++;
+        }
+        return duration;
+    };
+    // local function:
+    auto articulationExcursion = [key, pitch] (int delta) {
+        return (delta == 0)
+            ? 0
+            : diatonicUpDown(key,pitch,delta)-pitch;
+    };
     // calculate the number of times to repeat the body, and sustain the last note of the body
     // 1000 = P + numrepeat*B+sustain + S
     if ( repeatp ) {
@@ -888,43 +896,68 @@ void renderNoteArticulation(NoteEventList* events,
     if ( sustainp ) {
         sustain   = space - millespernote*(P + numrepeat*B + S);
     }
-
     // render the prefix
-    //qDebug("prefix");
-    for (int j=0; j<P; j++, ontime += millespernote) {
-        //qDebug("   pitch=%d ontime=%d millespernote=%d", pitch, ontime, millespernote);
-        events->append( NoteEvent( articulationExcursion(key, pitch, prefix[j]), ontime, millespernote));
+    for (int j=0; j<P; j++) {
+        int tied = tieForward(j,prefix);
+        events->append( NoteEvent( articulationExcursion(prefix[j]), ontime, tied));
+        ontime += tied;
     }
-    //qDebug("body");
     if ( B > 0 ) {
        // render the body, but not the final repetion
        for (int r=0; r < numrepeat-1; r++){
            for (int j=0; j<B; j++, ontime += millespernote) {
-               //qDebug("   (1) pitch=%d ontime=%d millspernote=%d", pitch, ontime, millespernote);
-               events->append( NoteEvent( articulationExcursion(key, pitch, body[j]), ontime, millespernote));
+               events->append( NoteEvent( articulationExcursion(body[j]), ontime, millespernote));
            }
        }
        // render the final repetion of body, but not the final note of the repition
        for (int j=0; j<B-1; j++, ontime += millespernote) {
-           //qDebug("   (2) pitch=%d ontime=%d millspernote=%d", pitch, ontime, millespernote);
-           events->append( NoteEvent( articulationExcursion(key, pitch, body[j]), ontime, millespernote));
+           events->append( NoteEvent( articulationExcursion(body[j]), ontime, millespernote));
        }
        // render the final note of the final repeat of body
-       //qDebug("   (3) pitch=%d ontime=%d millespernote=%d", pitch, ontime, millespernote);
-
-       events->append( NoteEvent( articulationExcursion(key, pitch, body[B-1]), ontime, millespernote+sustain));
+       events->append( NoteEvent( articulationExcursion(body[B-1]), ontime, millespernote+sustain));
        ontime += (millespernote+sustain);
     }
     // render the suffix
-    //qDebug("suffix");
-    for (int j=0; j<S; j++, ontime += millespernote) {
-        //qDebug("   pitch=%d ontime=%d millespernote=%d", pitch, ontime, millespernote);
-        events->append( NoteEvent( articulationExcursion(key, pitch, suffix[j]), ontime, millespernote));
+    for (int j=0; j<S; j++) {
+        int tied = tieForward(j,suffix);
+        events->append( NoteEvent( articulationExcursion(suffix[j]), ontime, tied));
+        ontime += tied;
     }
 }
-    
 
+    // TODO
+    // * refactor xml read/write to use symbolic names rather than integers for ornamentStyles.
+    // * test for accidentals in the mesure.
+    //      I.e., if F is sharpened earlier in the measure then a trill'ed E should trill to F#
+    // * check orig score vs midi-in
+    // 
 void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gateTime) {
+    // This struct specifies how to render an articulation.
+    //   atype - the articulation type to implement, such as ArticulationType::Turn
+    //   ostyles - the actual ornament has a property called ornamentStyle whose value is
+    //             a value of type MScore::OrnamentStyle.  This ostyles field indicates the
+    //             the set of ornamentStyles which apply to this rendition.
+    //   duration - the default duration for each note in the rendition, the final duration
+    //            rendered might be less than this if an articulation is attached to a note of
+    //            short duration.
+    //   prefix - vector of integers. indicating which notes to play at the beginning of rendering the
+    //            articulation.  0 represents the principle note, 1==> the note diatonically 1 above
+    //            -1 ==> the note diatonically 1 below.  E.g., in the key of G, if a turn articulation
+    //            occures above the note F#, then 0==>F#, 1==>G, -1==>E.
+    //            These integers indicate which notes actual notes to play when rendering the ornamented
+    //            note.   However, if the same integer appears several times adjacently such as {0,0,0,1}
+    //            That means play the notes tied.  e.g., F# followed by G, but the duration of F# is 3x the
+    //            duration of the G.
+    //    body   - notes to play comprising the body of the rendered ornament.
+    //            The body differs from the prefix and suffix in several ways.
+    //            * body does not support tied notes: {0,0,0,1} means play 4 distinct notes (not tied).
+    //            * if there is sufficient duration in the principle note, AND repeatep is true, then body
+    //               will be rendered multiple times, as the duration allows.
+    //            * to avoid a time gap (or rest) in rendering the articulation, if sustainp is true,
+    //               then the final note of the body will be sustained to fill the left-over time.
+    //    suffix - similar to prefix but played once at the end of the rendered ornament.
+    //    repeatp  - whether the body is repeatable in its entirety.
+    //    sustainp - whether the final note of the body should be sustained to fill the remaining duration.
     struct OrnamentExcursion {
         ArticulationType atype;
         set<MScore::OrnamentStyle> ostyles;
@@ -958,16 +991,23 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
            ,{ArticulationType::Prall,       any,     _32nd, {},    {0,1,0},      false, true, {}} // inverted mordent
            ,{ArticulationType::PrallPrall,  any,     _32nd, {1,0}, {1,0},        false, true, {}}
            ,{ArticulationType::PrallMordent,any,     _32nd, {},    {1,0,-1,0},   false, true, {}}
-           ,{ArticulationType::UpPrall,     any,     _32nd, {-1,0},{1,0,1,0},    false, true, {}}
-           ,{ArticulationType::UpMordent,   any,     _32nd, {-1,0},{1,0,-1,0},   false, true, {}}
-           ,{ArticulationType::DownPrall,   any,     _32nd, {1,0,-1,0},
-                                                                   {1,0,1,0},    false, true, {}}
-           ,{ArticulationType::DownMordent, any,     _32nd, {1,0,-1,0},
-                                                                   {1,0,-1,0},   false, true, {}}
-           ,{ArticulationType::PrallUp,     any,     _32nd, {1,0}, {1,0},        false, true, {1}}
-           ,{ArticulationType::PrallDown,   any,     _32nd, {1,0}, {1,0},        false, true, {-1}}
-           ,{ArticulationType::Schleifer,   any,     _32nd, {},    {-2,-1,0},    false, true, {1,0,1,0}}
+           ,{ArticulationType::UpPrall,     any,     _16th, {-1,0},{1,0},        true,  true, {1,0}} // p 144 Ex 152 [1]
+           ,{ArticulationType::UpMordent,   any,     _16th, {-1,0},{1,0},        true,  true, {-1,0}} // p 144 Ex 152 [1]
+           ,{ArticulationType::DownPrall,   any,     _16th, {1,1,1,0},
+                                                                   {1,0},        true,  true, {}} // p136 Cadence Appuyee [1] [2]
+           ,{ArticulationType::DownMordent, any,     _16th, {1,1,1,0},
+                                                                   {1,0},        true, true, {-1, 0}} // p136 Cadence Appuyee + mordent [1] [2]
+           ,{ArticulationType::PrallUp,     any,     _16th, {1,0}, {1,0},        true, true, {-1,0}} // p136 Double Cadence [1]
+           ,{ArticulationType::PrallDown,   any,     _16th, {1,0}, {1,0},        true,  true, {-1,0,0,0}} // p144 ex 153 [1]
+           ,{ArticulationType::Schleifer,   any,     _32nd, {},    {0},          false, true, {}}
        };
+    
+    // [1] Some of the articulations/ornaments in the excursions table above come from
+    // Baroque Music, Style and Performance A Handbook, by Robert Donington,(c) 1982
+    // ISBN 0-393-30052-8, W. W. Norton & Company, Inc.
+    
+    // [2] In some cases, the example from [1] does not preserve the timing.
+    // For example, illustrates 2+1/4 counts per half note.
     
     for (Articulation* a : chord->articulations()) {
         if ( false == a->playArticulation())
@@ -984,7 +1024,6 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
                 renderNoteArticulation(events, chord, pitch, oe->duration,
                                        oe->prefix, oe->body, oe->repeatp, oe->sustainp, oe->suffix);
             } else {
-                qDebug("MISSING %hhd %s", a->articulationType(), qPrintable(a->subtypeName()));
                 instr->updateGateTime(&gateTime, channel, a->subtypeName());
             }
         }
