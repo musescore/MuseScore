@@ -3369,7 +3369,7 @@ void Score::appendPart(const QString& name)
                   staff->setBracket(0, t->bracket[0]);
                   staff->setBracketSpan(0, t->nstaves());
                   }
-            undoInsertStaff(staff, n + i);
+            undoInsertStaff(staff, i);
             }
 
       part->staves()->front()->setBarLineSpan(part->nstaves());
