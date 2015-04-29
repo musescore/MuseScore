@@ -243,7 +243,6 @@ bool MTest::savePdf(Score* cs, const QString& saveName)
       printerDev.setFullPage(true);
       printerDev.setColorMode(QPrinter::Color);
       printerDev.setDocName(cs->name());
-      printerDev.setDoubleSidedPrinting(pf->twosided());
       printerDev.setOutputFormat(QPrinter::PdfFormat);
 
       printerDev.setOutputFileName(saveName);

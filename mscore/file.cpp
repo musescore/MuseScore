@@ -1468,7 +1468,6 @@ void MuseScore::printFile()
             qDebug("unable to clear printer margins");
       printerDev.setColorMode(QPrinter::Color);
       printerDev.setDocName(cs->name());
-      printerDev.setDoubleSidedPrinting(pf->twosided());
       printerDev.setOutputFormat(QPrinter::NativeFormat);
       printerDev.setFromTo(1, cs->pages().size());
 
@@ -1859,7 +1858,6 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
             qDebug("unable to clear printer margins");
       printerDev.setColorMode(QPrinter::Color);
       printerDev.setDocName(cs->name());
-      printerDev.setDoubleSidedPrinting(pf->twosided());
       printerDev.setOutputFormat(QPrinter::PdfFormat);
 
       printerDev.setOutputFileName(saveName);
@@ -1915,7 +1913,6 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             qDebug("unable to clear printer margins");
       printerDev.setColorMode(QPrinter::Color);
       printerDev.setDocName(firstScore->name());
-      printerDev.setDoubleSidedPrinting(pf->twosided());
       printerDev.setOutputFormat(QPrinter::PdfFormat);
 
       printerDev.setOutputFileName(saveName);
@@ -1956,7 +1953,6 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
 
             const PageFormat* pf = s->pageFormat();
             printerDev.setPaperSize(pf->size(), QPrinter::Inch);
-            //printerDev.setDoubleSidedPrinting(pf->twosided());
 
             const QList<Page*> pl = s->pages();
             int pages    = pl.size();
