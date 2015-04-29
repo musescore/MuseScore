@@ -4597,6 +4597,9 @@ int main(int argc, char* av[])
                               usage();
                         pluginName = argv.takeAt(i + 1);
                         break;
+                  case 'P':
+                        MScore::saveTemplateMode = true;
+                        break;
                   case 'r':
                         if (argv.size() - i < 2)
                               usage();
