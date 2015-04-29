@@ -274,7 +274,7 @@ bool Score::checkClefs()
                               }
                         }
                   if (staff(i)->clef(m->tick()) != clef) {
-                        qDebug("measure %d (tick %d) : clef %d, map %d", m->no(), m->tick(), clef, staff(i)->clef(m->tick()));
+                        qDebug("measure %d (tick %d) : clef %hhd, map %hhd", m->no(), m->tick(), clef, staff(i)->clef(m->tick()));
                         rc = false;
                         }
                   cm = m;
