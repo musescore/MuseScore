@@ -69,7 +69,6 @@ ScoreBrowser::ScoreBrowser(QWidget* parent)
 ScoreListWidget* ScoreBrowser::createScoreList()
       {
       ScoreListWidget* sl = new ScoreListWidget;
-      static_cast<QVBoxLayout*>(scoreList->layout())->addWidget(sl);
       sl->setWrapping(true);
       sl->setViewMode(QListView::IconMode);
       sl->setIconSize(QSize(sl->cellWidth(), sl->cellHeight() - 30));
@@ -168,18 +167,21 @@ ScoreItem* ScoreBrowser::genScoreItem(const QFileInfo& fi, ScoreListWidget* l)
 //   setScores
 //---------------------------------------------------------
 
-void ScoreBrowser::setScores(const QFileInfoList& s)
+void ScoreBrowser::setScores(QFileInfoList& s)
       {
       qDeleteAll(scoreLists);
       scoreLists.clear();
 
-      QLayout* l = scoreList->layout();
+      QVBoxLayout* l = static_cast<QVBoxLayout*>(scoreList->layout());
       while (l->count())
             l->removeItem(l->itemAt(0));
 
       ScoreListWidget* sl = 0;
 
       QStringList filter = { "*.mscz" };
+
+      if (_showCustomCategory)
+            std::sort(s.begin(), s.end(), [](QFileInfo a, QFileInfo b)->bool { return a.fileName() < b.fileName(); });
 
       QSet<QString> entries; //to avoid duplicates
       for (const QFileInfo& fi : s) {
@@ -195,6 +197,7 @@ void ScoreBrowser::setScores(const QFileInfoList& s)
                   static_cast<QVBoxLayout*>(l)->addWidget(label);
                   QDir dir(fi.filePath());
                   sl = createScoreList();
+                  l->addWidget(sl);
                   unsigned count = 0; //nbr of entries added
                   for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files, QDir::Name)){
                         if (entries.contains(fi.filePath()))
@@ -222,9 +225,10 @@ void ScoreBrowser::setScores(const QFileInfoList& s)
                                     QFont f = label->font();
                                     f.setBold(true);
                                     label->setFont(f);
-                                    static_cast<QVBoxLayout*>(l)->addWidget(label);
+                                    l->insertWidget(2,label);
                                     }
                               sl = createScoreList();
+                              l->insertWidget(3,sl);
                               }
                         sl->addItem(genScoreItem(fi, sl));
                         entries.insert(s);
