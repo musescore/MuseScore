@@ -3861,8 +3861,8 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                               foreach (Lyrics* l, cr->lyricsList()) {
                                     if (!l)
                                           continue;
+                                    l->layout();      // need to create layout even if empty
                                     if (!l->isEmpty()) {
-                                          l->layout();
                                           lyrics = l;
                                           QRectF b(l->bbox().translated(l->pos()));
                                           llw = qMax(llw, -(b.left()+lx+cx));
