@@ -1267,6 +1267,7 @@ static void usage()
         "   -x factor set scaling factor for GUI elements\n"
         "   -S style  load style file\n"
         "   -p name   execute named plugin\n"
+        "   -P        save template mode, no page size\n"
         "   -F        use factory settings\n"
         "   -R        revert to default preferences\n"
         "   -i        load icons from INSTALLPATH/icons\n"
