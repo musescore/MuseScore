@@ -90,11 +90,13 @@
           </TimeSig>
         <Tempo>
           <tempo>1.6</tempo>
+          <visible>0</visible>
           <xoffset>0</xoffset>
           <yoffset>-2</yoffset>
-          <text></text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 96</text>
           </Tempo>
         <Chord>
+          <BeamMode>no</BeamMode>
           <dots>1</dots>
           <durationType>quarter</durationType>
           <StemDirection>up</StemDirection>
@@ -109,6 +111,7 @@
           <durationType>eighth</durationType>
           </Rest>
         <Chord>
+          <BeamMode>no</BeamMode>
           <dots>2</dots>
           <durationType>eighth</durationType>
           <StemDirection>up</StemDirection>
@@ -123,6 +126,7 @@
           <durationType>32nd</durationType>
           </Rest>
         <Chord>
+          <BeamMode>no</BeamMode>
           <dots>3</dots>
           <durationType>eighth</durationType>
           <StemDirection>down</StemDirection>

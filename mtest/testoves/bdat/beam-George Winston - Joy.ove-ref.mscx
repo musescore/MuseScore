@@ -28,11 +28,11 @@
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
     <metaTag name="arranger"></metaTag>
-    <metaTag name="composer">作者</metaTag>
-    <metaTag name="copyright">www.popiano.org</metaTag>
+    <metaTag name="composer">George Winston</metaTag>
+    <metaTag name="copyright"></metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
-    <metaTag name="movementTitle">标题</metaTag>
+    <metaTag name="movementTitle">Joy</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -50,6 +50,12 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
+        <bracket type="1" span="2"/>
+        <barLineSpan>2</barLineSpan>
+        </Staff>
+      <Staff id="2">
+        <StaffType group="pitched">
+          </StaffType>
         </Staff>
       <trackName></trackName>
       <Instrument>
@@ -64,15 +70,11 @@
         <height>10</height>
         <Text>
           <style>Title</style>
-          <text>标题</text>
-          </Text>
-        <Text>
-          <style>Lyricist</style>
-          <text>注解</text>
+          <text>Joy</text>
           </Text>
         <Text>
           <style>Composer</style>
-          <text>作者</text>
+          <text>George Winston</text>
           </Text>
         </VBox>
       <Measure number="1">
@@ -81,7 +83,7 @@
           <transposingClefType>G</transposingClefType>
           </Clef>
         <KeySig>
-          <accidental>0</accidental>
+          <accidental>-4</accidental>
           </KeySig>
         <TimeSig>
           <sigN>4</sigN>
@@ -89,112 +91,110 @@
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Tempo>
-          <tempo>1.6</tempo>
-          <visible>0</visible>
+          <tempo>2.25</tempo>
           <xoffset>0</xoffset>
           <yoffset>-2</yoffset>
-          <text><sym>unicodeNoteQuarterUp</sym> = 96</text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 135</text>
           </Tempo>
-        <Chord>
-          <BeamMode>no</BeamMode>
-          <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Tremolo>
-            <subtype>r8</subtype>
-            </Tremolo>
-          </Chord>
-        <Chord>
-          <BeamMode>no</BeamMode>
-          <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Tremolo>
-            <subtype>r16</subtype>
-            </Tremolo>
-          </Chord>
-        <Chord>
-          <BeamMode>no</BeamMode>
-          <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Tremolo>
-            <subtype>r32</subtype>
-            </Tremolo>
-          </Chord>
-        <Chord>
-          <BeamMode>no</BeamMode>
-          <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Tremolo>
-            <subtype>r64</subtype>
-            </Tremolo>
-          </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
-        </Measure>
-      <Measure number="2">
-        <Chord>
-          <BeamMode>no</BeamMode>
-          <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <Tie id="2">
-              </Tie>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Tremolo>
-            <subtype>r16</subtype>
-            </Tremolo>
-          </Chord>
-        <Chord>
-          <BeamMode>no</BeamMode>
-          <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <endSpanner id="2"/>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Tremolo>
-            <subtype>r16</subtype>
-            </Tremolo>
-          </Chord>
         <Rest>
-          <durationType>half</durationType>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
           </Rest>
         <BarLine>
           <subtype>end</subtype>
-          <span>1</span>
+          <span>2</span>
           </BarLine>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
+        <KeySig>
+          <accidental>-4</accidental>
+          </KeySig>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Beam id="1">
+          <l1>0</l1>
+          <l2>0</l2>
+          </Beam>
+        <Chord>
+          <BeamMode>begin</BeamMode>
+          <durationType>eighth</durationType>
+          <Beam>1</Beam>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>56</pitch>
+            <tpc>10</tpc>
+            <velocity>40</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <BeamMode>mid</BeamMode>
+          <durationType>eighth</durationType>
+          <Beam>1</Beam>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>63</pitch>
+            <tpc>11</tpc>
+            <velocity>40</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <BeamMode>mid</BeamMode>
+          <durationType>eighth</durationType>
+          <Beam>1</Beam>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>68</pitch>
+            <tpc>10</tpc>
+            <velocity>40</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <BeamMode>end</BeamMode>
+          <durationType>eighth</durationType>
+          <Beam>1</Beam>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>63</pitch>
+            <tpc>11</tpc>
+            <velocity>40</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>eighth</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>68</pitch>
+            <tpc>10</tpc>
+            <velocity>40</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <dots>1</dots>
+          <durationType>quarter</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>63</pitch>
+            <tpc>11</tpc>
+            <velocity>40</velocity>
+            <veloType>user</veloType>
+            </Note>
+          </Chord>
         </Measure>
       </Staff>
     </Score>

@@ -90,14 +90,16 @@
           </TimeSig>
         <Tempo>
           <tempo>1.6</tempo>
+          <visible>0</visible>
           <xoffset>0</xoffset>
           <yoffset>-2</yoffset>
-          <text></text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 96</text>
           </Tempo>
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <StemDirection>up</StemDirection>
           <Note>
@@ -115,6 +117,7 @@
           <transposingClefType>F</transposingClefType>
           </Clef>
         <Chord>
+          <BeamMode>no</BeamMode>
           <durationType>quarter</durationType>
           <StemDirection>up</StemDirection>
           <Note>

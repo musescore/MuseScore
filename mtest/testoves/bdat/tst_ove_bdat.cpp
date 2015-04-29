@@ -37,7 +37,7 @@ private slots:
 
       //void oveBeamMultipleVoicesTest() { oveReadTest("beam - multiple voices"); }
       void oveBeam2Test()              { oveReadTest("beam 2"); }
-      //void oveBeamWinstonTest()        { oveReadTest("beam-George Winston - Joy"); }
+      void oveBeamWinstonTest()        { oveReadTest("beam-George Winston - Joy"); }
       //void oveBeamOverBarlineTest()    { oveReadTest("beam-over-barline"); }
       //void oveBeamTest()               { oveReadTest("beam"); }
       void oveClef2Test()              { oveReadTest("clef-2"); }
@@ -74,7 +74,7 @@ private slots:
       void oveTrillTest()              { oveReadTest("note-articulation-trill"); }
       //void oveFermataRestTest()        { oveReadTest("note-articulation-with-rest"); }
       //void oveArticulationsTest()      { oveReadTest("note-articulation"); }
-      //void oveClefChangeTest()         { oveReadTest("note-clef"); }
+      void oveClefChangeTest()         { oveReadTest("note-clef"); }
       //void oveCrossStaff2Test()        { oveReadTest("note-cross-staff 2"); }
       //void oveCrossStaff3Test()        { oveReadTest("note-cross-staff 3"); }
       //void oveCrossStaffTest()         { oveReadTest("note-cross-staff"); }

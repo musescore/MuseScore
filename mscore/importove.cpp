@@ -880,7 +880,7 @@ void OveToMScore::convertSignatures(){
             }
 
       // Tempo
-      std::map<int, int> tempos;
+      std::map<int, double> tempos;
       for(i=0; i<ove_->getPartCount(); ++i){
             int partStaffCount = ove_->getStaffCount(i);
 
@@ -892,13 +892,13 @@ void OveToMScore::convertSignatures(){
 
                         if(k==0 || ( k>0 && qAbs(measure->getTypeTempo()-ove_->getMeasure(k-1)->getTypeTempo())>0.01 )){
                               int tick = mtt_->getTick(k, 0);
-                              tempos[tick] = (int)measure->getTypeTempo();
+                              tempos[tick] = measure->getTypeTempo();
                               }
 
                         for(int l=0; l<tempoPtrs.size(); ++l) {
                               OVE::Tempo* ptr = static_cast<OVE::Tempo*>(tempoPtrs[l]);
                               int tick = mtt_->getTick(measure->getBarNumber()->getIndex(), ptr->getTick());
-                              int tempo = ptr->getQuarterTempo()>0 ? ptr->getQuarterTempo() : 1;
+                              double tempo = ptr->getQuarterTempo()>0 ? ptr->getQuarterTempo() : 1.0;
 
                               tempos[tick] = tempo;
                               }
@@ -906,11 +906,11 @@ void OveToMScore::convertSignatures(){
                   }
             }
 
-      std::map<int, int>::iterator it;
+      std::map<int, double>::iterator it;
       int lastTempo = 0;
       for(it=tempos.begin(); it!=tempos.end(); ++it) {
             if( it==tempos.begin() || (*it).second != lastTempo ) {
-                  double tpo = ((double)(*it).second) / 60.0;
+                  double tpo = ((*it).second) / 60.0;
                   score_->setTempo((*it).first, tpo);
                   }
 
@@ -1288,12 +1288,57 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
             OVE::Tempo* tempoPtr = static_cast<OVE::Tempo*>(tempos[i]);
             TempoText* t = new TempoText(score_);
             int absTick = mtt_->getTick(measure->no(), tempoPtr->getTick());
-            double tpo = ((double)tempoPtr->getQuarterTempo())/60.0;
+            double tpo = (tempoPtr->getQuarterTempo())/60.0;
 
             score_->setTempo(absTick, tpo);
 
             t->setTempo(tpo);
-            t->setPlainText(tempoPtr->getRightText());
+            QString durationTempoL;
+            QString durationTempoR;
+            if ((int)(tempoPtr->getLeftNoteType()))
+                  durationTempoL = TempoText::duration2tempoTextString(OveNoteType_To_Duration(tempoPtr->getLeftNoteType()));
+            if ((int)(tempoPtr->getRightNoteType()))
+                  durationTempoR = TempoText::duration2tempoTextString(OveNoteType_To_Duration(tempoPtr->getRightNoteType()));
+            QString textTempo;
+            if (tempoPtr->getShowBeforeText())
+                  textTempo += (tempoPtr->getLeftText()).toHtmlEscaped();
+            if (tempoPtr->getShowMark()) {
+                  if (!textTempo.isEmpty())
+                        textTempo += " ";
+                  if (tempoPtr->getShowParenthesis())
+                        textTempo += "(";
+                  textTempo += durationTempoL;
+                  if (tempoPtr->getLeftNoteDot())
+                        textTempo += "<sym>space</sym><sym>unicodeAugmentationDot</sym>";
+                  textTempo += " = ";
+                  switch (tempoPtr->getRightSideType()) {
+                        case 1:
+                              textTempo += durationTempoR;
+                              if (tempoPtr->getRightNoteDot())
+                                    textTempo += "<sym>space</sym><sym>unicodeAugmentationDot</sym>";
+                              break;
+                        case 2:
+                              textTempo += (tempoPtr->getRightText()).toHtmlEscaped();
+                              break;
+                        case 3:
+                              textTempo += QString::number(qFloor(tempoPtr->getTypeTempo()));
+                              break;
+                        case 0:
+                        default:
+                              textTempo += QString::number(tempoPtr->getTypeTempo());
+                              break;
+                        }
+                  if (tempoPtr->getShowParenthesis())
+                        textTempo += ")";
+                  }
+            if (textTempo.isEmpty()) {
+                  textTempo = durationTempoL;
+                  if (tempoPtr->getLeftNoteDot())
+                        textTempo += "<sym>space</sym><sym>unicodeAugmentationDot</sym>";
+                  textTempo += " = " + QString::number(tempoPtr->getTypeTempo());
+                  t->setVisible(false);
+                  }
+            t->setXmlText(textTempo);
             t->setAbove(true);
             t->setTrack(track);
 
@@ -1404,18 +1449,20 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                   cr->setDurationType(duration);
                   cr->setTrack(noteTrack);
                   cr->setVisible(container->getShow());
+                  Segment* s = measure->getSegment(cr, tick);
+                  s->add(cr);
 
                   QList<OVE::Note*> notes = container->getNotesRests();
                   for (j = 0; j < notes.size(); ++j) {
                         OVE::Note* notePtr = notes[j];
                         if(!isRestDefaultLine(notePtr, container->getNoteType()) && notePtr->getLine() != 0) {
                               double yOffset = -((double)notePtr->getLine()/2.0 * score_->spatium());
+                              int stepOffset = cr->staff()->staffType()->stepOffset();
+                              int lineOffset = static_cast<Ms::Rest*>(cr)->computeLineOffset();
+                              yOffset -= (qreal(lineOffset + stepOffset) * .5) * score_->spatium();
                               cr->setUserYoffset(yOffset);
                               }
                         }
-
-                  Segment* s = measure->getSegment(cr, tick);
-                  s->add(cr);
                   }
             else {
                   QList<OVE::Note*> notes = container->getNotesRests();
@@ -1494,7 +1541,8 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               if(drumset != 0) {
                                     if (!drumset->isValid(pitch) || pitch == -1) {
                                           qDebug("unmapped drum note 0x%02x %d", note->pitch(), note->pitch());
-                                          } else {
+                                          }
+                                    else {
                                           note->setHeadGroup(drumset->noteHead(pitch));
                                           int line = drumset->line(pitch);
                                           note->setLine(line);
@@ -1503,7 +1551,8 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                                           setDirection = true;
                                           }
                                     }
-                              } else {
+                              }
+                        else {
                               const int OCTAVE = 7;
                               OVE::ToneType clefMiddleTone;
                               int clefMiddleOctave;
@@ -1549,7 +1598,8 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                   }
 
             // beam
-            Beam::Mode bm = container->getIsRest() ? Beam::Mode::NONE : Beam::Mode::AUTO;
+            //Beam::Mode bm = container->getIsRest() ? Beam::Mode::NONE : Beam::Mode::AUTO;
+            Beam::Mode bm = Beam::Mode::NONE;
             if(container->getInBeam()){
                   OVE::MeasurePos pos = container->start()->shiftMeasure(0);
                   OVE::MusicData* data = getCrossMeasureElementByPos(part, staff, pos, container->getVoice(), OVE::MusicDataType::Beam);
