@@ -2576,6 +2576,9 @@ Tempo::Tempo() {
       rightText_ = QString();
       swingEighth_ = false;
       rightNoteType_ = 3;
+      leftNoteDot_ = false;
+      rightNoteDot_ = false;
+      rightSideType_ = 0;
       }
 
 void Tempo::setLeftNoteType(int type) {
@@ -2610,17 +2613,19 @@ bool Tempo::getShowParenthesis() const {
       return showParenthesis_;
       }
 
-void Tempo::setTypeTempo(int tempo) {
+void Tempo::setTypeTempo(double tempo) {
       typeTempo_ = tempo;
       }
 
-int Tempo::getTypeTempo() const {
+double Tempo::getTypeTempo() const {
       return typeTempo_;
       }
 
-int Tempo::getQuarterTempo() const {
+double Tempo::getQuarterTempo() const {
       double factor = pow(2.0, int(NoteType::Note_Quarter) - int(getLeftNoteType()));
-      int tempo = int((double) getTypeTempo() * factor);
+      if (getLeftNoteDot())
+            factor *= 3.0/2.0;
+      double tempo = getTypeTempo() * factor;
 
       return tempo;
       }
@@ -2653,8 +2658,32 @@ void Tempo::setRightNoteType(int type) {
       rightNoteType_ = type;
       }
 
-int Tempo::getRightNoteType() const {
-      return rightNoteType_;
+NoteType Tempo::getRightNoteType() const {
+      return (NoteType) rightNoteType_;
+      }
+
+void Tempo::setLeftNoteDot(bool showDot) {
+      leftNoteDot_ = showDot;
+      }
+
+bool Tempo::getLeftNoteDot() const {
+      return leftNoteDot_;
+      }
+
+void Tempo::setRightNoteDot(bool showDot) {
+      rightNoteDot_ = showDot;
+      }
+
+bool Tempo::getRightNoteDot() const {
+      return rightNoteDot_;
+      }
+
+void Tempo::setRightSideType(int type) {
+      rightSideType_ = type;
+      }
+
+int Tempo::getRightSideType() const {
+      return rightSideType_;
       }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -4718,15 +4747,14 @@ bool BarsParse::parseTempo(MeasureData* measureData, int /*length*/) {
 
       Tempo* tempo = new Tempo();
       measureData->addMusicData(tempo);
-
-      if( !jump(3) ) { return false; }
-
+      if( !jump(3) )
+            return false;
       // common
-      if( !parseCommonBlock(tempo) ) { return false; }
-
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if( !parseCommonBlock(tempo) )
+            return false;
+      if( !readBuffer(placeHolder, 1) )
+            return false;
       thisByte = placeHolder.toUnsignedInt();
-
       // show tempo
       tempo->setShowMark( (getHighNibble(thisByte) & 0x4) == 0x4 );
       // show before text
@@ -4735,47 +4763,56 @@ bool BarsParse::parseTempo(MeasureData* measureData, int /*length*/) {
       tempo->setShowParenthesis( (getHighNibble(thisByte) & 0x1 ) == 0x1 );
       // left note type
       tempo->setLeftNoteType( getLowNibble(thisByte) );
-
-      if( !jump(1) ) { return false; }
-
+      // left note dot
+      tempo->setLeftNoteDot((getHighNibble(thisByte) & 0x2 ) == 0x2 );
+      if( !jump(1) )  // dimension of the note symbol
+            return false;
       if( ove_->getIsVersion4() ) {
-            if( !jump(2) ) { return false; }
-
+            if( !jump(2) )
+                  return false;
             // tempo
-            if( !readBuffer(placeHolder, 2) ) { return false; }
-            tempo->setTypeTempo(placeHolder.toUnsignedInt()/100);
-            } else {
-            // tempo
-            if( !readBuffer(placeHolder, 2) ) { return false; }
-            tempo->setTypeTempo(placeHolder.toUnsignedInt());
-
-            if( !jump(2) ) { return false; }
+            if( !readBuffer(placeHolder, 2) )
+                  return false;
+            tempo->setTypeTempo(((double)placeHolder.toUnsignedInt())/100.0);
             }
-
+      else {
+            // tempo
+            if( !readBuffer(placeHolder, 2) )
+                  return false;
+            tempo->setTypeTempo((double)placeHolder.toUnsignedInt());
+            if( !jump(2) )
+                  return false;
+            }
       // offset
-      if( !parseOffsetElement(tempo) ) { return false; }
-
-      if( !jump(16) ) { return false; }
-
+      if( !parseOffsetElement(tempo) )
+            return false;
+      if( !jump(16) )
+            return false;
       // 31 bytes left text
-      if( !readBuffer(placeHolder, 31) ) { return false; }
+      if( !readBuffer(placeHolder, 31) )
+            return false;
       tempo->setLeftText(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
 
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if( !readBuffer(placeHolder, 1) )
+            return false;
       thisByte = placeHolder.toUnsignedInt();
-
       // swing eighth
-      tempo->setSwingEighth(getHighNibble(thisByte)!=8);
-
+      tempo->setSwingEighth((getHighNibble(thisByte) & 0x4 ) == 0x4 );
+      // right note dot
+      tempo->setRightNoteDot((getHighNibble(thisByte) & 0x1 ) == 0x1 );
+      // compatibility with v3 files ?
+      tempo->setRightSideType((int)(getHighNibble(thisByte) & 0x2));
       // right note type
       tempo->setRightNoteType(getLowNibble(thisByte));
-
       // right text
       if( ove_->getIsVersion4() ) {
-            if( !readBuffer(placeHolder, 31) ) { return false; }
+            if( !readBuffer(placeHolder, 31) )
+                  return false;
             tempo->setRightText(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
-
-            if( !jump(1) ) { return false; }
+            if( !readBuffer(placeHolder, 1) )
+                  return false;
+            // 00 -> float      03 -> integer(floor)     01 -> notetype    02 -> text
+            tempo->setRightSideType(placeHolder.toInt());
             }
 
       return true;
