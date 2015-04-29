@@ -44,28 +44,38 @@ install(FILES
       )
 
 install(FILES
-      03-Solo/01-Guitar.mscz
-      03-Solo/02-Guitar_+_Tablature.mscz
-      03-Solo/03-Guitar_Tablature.mscz
-      03-Solo/04-Piano.mscz
+      03-Chamber_Music/01-String_Quartet.mscz
+      03-Chamber_Music/02-Wind_Quintet.mscz
+      03-Chamber_Music/03-Wind_Quartet.mscz
+      03-Chamber_Music/04-Saxophone_Quartet.mscz
+      03-Chamber_Music/05-Brass_Quintet.mscz
+      03-Chamber_Music/06-Brass_Quartet.mscz
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/03-Chamber_Music
+      )
+
+install(FILES
+      04-Solo/01-Guitar.mscz
+      04-Solo/02-Guitar_+_Tablature.mscz
+      04-Solo/03-Guitar_Tablature.mscz
+      04-Solo/04-Piano.mscz
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/03-Solo
       )
 
 install(FILES
-      04-Jazz/01-Jazz_Lead_Sheet.mscz
-      04-Jazz/02-Big_Band.mscz
-      04-Jazz/03-Jazz_Combo.mscz
+      05-Jazz/01-Jazz_Lead_Sheet.mscz
+      05-Jazz/02-Big_Band.mscz
+      05-Jazz/03-Jazz_Combo.mscz
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/04-Jazz
       )
 
 install(FILES
-      05-Orchestral/01-Classical_Orchestra.mscz
-      05-Orchestral/02-String_Quartet.mscz
+      06-Orchestral/01-Classical_Orchestra.mscz
+      06-Orchestral/03-String_Orchestra.mscz
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/05-Orchestral
       )
 
 install(FILES
-      06-Band/01-Rock_Band.mscz
+      07-Band/01-Rock_Band.mscz
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/06-Band
       )
 
