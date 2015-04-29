@@ -1870,7 +1870,6 @@ void PreferenceDialog::printShortcutsClicked()
       printer.setFullPage(true);
       printer.setColorMode(QPrinter::Color);
       printer.setDocName(tr("MuseScore Shortcuts"));
-      printer.setDoubleSidedPrinting(pf->twosided());
       printer.setOutputFormat(QPrinter::NativeFormat);
 
       QPrintDialog pd(&printer, 0);
