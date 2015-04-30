@@ -2466,10 +2466,13 @@ enum class SymId {
 //---------------------------------------------------------
 
 class Sym {
+   protected:
+      quint32 _index { 0xffffffff };
       QString _string;
       QPointF _attach;
       qreal _width;                       // cached width
       QRectF _bbox;                       // cached bbox
+
       QPointF _cutOutNE;
       QPointF _cutOutNW;
       QPointF _cutOutSE;
@@ -2480,7 +2483,10 @@ class Sym {
 
       const QString& string() const              { return _string;   }
       void setString(const QString& s)           { _string = s;      }
-      bool isValid() const                       { return !_string.isEmpty(); }
+      int index() const                          { return _index;    }
+      void setIndex(int i)                       { _index = i; }
+
+      bool isValid() const                       { return _index != 0xffffffff; }
       QPointF attach() const                     { return _attach;   }
       void setAttach(const QPointF& r)           { _attach = r;      }
       qreal width() const                        { return _width;    }
@@ -2508,6 +2514,7 @@ class Sym {
       static QVector<QString> symUserNames;
       static QHash<QString, SymId> lnhash;
       static QHash<QString, SymId> lonhash;
+      friend class ScoreFont;
       };
 
 //---------------------------------------------------------
@@ -2515,8 +2522,7 @@ class Sym {
 //---------------------------------------------------------
 
 class ScoreFont {
-      QFont* _font = 0;
-      QFontMetricsF* _fm = 0;
+      QRawFont* _font = 0;
       QVector<Sym> _symbols;
       QString _name;
       QString _family;
@@ -2544,20 +2550,20 @@ class ScoreFont {
       static const char* fallbackTextFont();
       static const QVector<ScoreFont>& scoreFonts() { return _scoreFonts; }
 
-      const QFont& font() const { return *_font; }
+      const QRawFont& font() const { return *_font; }
       const QString& toString(SymId id) const { return _symbols[int(id)].string(); }
+      const quint32* index(SymId id) const    { return &_symbols[int(id)]._index; }
+
+      QPixmap sym2pixmap(SymId, qreal) { return QPixmap(); }
 
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos = QPointF()) const;
       void draw(const QString&, QPainter*, qreal mag, const QPointF& pos = QPointF()) const;
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const;
 
-      QString symToHtml(SymId, int leftMargin=0, const TextStyle* ts = 0, qreal sp=10.0);
-      QString symToHtml(SymId, SymId, int leftMargin=0);
-      QPixmap sym2pixmap(SymId id, qreal mag);
-
-      qreal height(SymId id, qreal mag) const         { return _fm->tightBoundingRect(toString(id)).height() * mag; }
+      qreal height(SymId id, qreal mag) const         { return _symbols[int(id)].bbox().height() * mag; }
       qreal width(SymId id, qreal mag) const          { return _symbols[int(id)].width() * mag;  }
-      qreal width(const QString& s, qreal mag) const  { return _fm->width(s) * mag;  }
+      qreal width(const QString&, qreal mag) const;
+
       const QRectF bbox(SymId id, qreal mag) const;
       const QRectF bbox(const QString& s, qreal mag) const;
       QPointF attach(SymId id, qreal mag) const       { return _symbols[int(id)].attach() * mag;   }

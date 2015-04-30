@@ -113,8 +113,8 @@ void Rest::draw(QPainter* painter) const
             painter->drawLine(QLineF(x1, y-_spatium, x1, y+_spatium));
             painter->drawLine(QLineF(x2, y-_spatium, x2, y+_spatium));
 
-            painter->setFont(score()->scoreFont()->font());
-            QFontMetricsF fm(score()->scoreFont()->font());
+//            painter->setFont(score()->scoreFont()->font());
+//            QFontMetricsF fm(score()->scoreFont()->font());
             QString s = toTimeSigString(QString("%1").arg(n));
             y  = -_spatium * 1.5 - staff()->height() *.5;
             qreal x = center(x1, x2);
