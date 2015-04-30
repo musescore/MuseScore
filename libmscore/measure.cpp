@@ -1678,8 +1678,10 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
                   xml.tagE("startRepeat");
             if (_repeatFlags & Repeat::END)
                   xml.tag("endRepeat", _repeatCount);
-            writeProperty(xml, P_ID::IRREGULAR);
-            writeProperty(xml, P_ID::BREAK_MMR);
+            if (_irregular)
+                  xml.tagE("irregular");
+            if (_breakMultiMeasureRest)
+                  xml.tagE("breakMultiMeasureRest");
             writeProperty(xml, P_ID::USER_STRETCH);
             writeProperty(xml, P_ID::NO_OFFSET);
             writeProperty(xml, P_ID::MEASURE_NUMBER_MODE);
