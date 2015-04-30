@@ -272,8 +272,13 @@ void Articulation::read(XmlReader& e)
             else if (tag == "direction") {
                   setProperty(P_ID::DIRECTION, Ms::getProperty(P_ID::DIRECTION, e));
                   }
-            else if ( tag == "ornamentStyle")
-                _ornamentStyle = MScore::OrnamentStyle(e.readInt());
+            else if ( tag == "ornamentStyle") {
+                auto text = e.readElementText();
+                if ( text == "Baroque" || text == "1")
+                    setOrnamentStyle(MScore::OrnamentStyle::BAROQUE);
+                else
+                    setOrnamentStyle(MScore::OrnamentStyle::DEFAULT);
+            }
             else if ( tag == "playArticulation")
                 //_playArticulation = e.readBool();
                 setPlayArticulation(e.readBool());
@@ -306,7 +311,12 @@ void Articulation::write(Xml& xml) const
       if (_timeStretch != 1.0)
             xml.tag("timeStretch", _timeStretch);
       writeProperty(xml, P_ID::PLAY_ARTICULATION);
-      writeProperty(xml, P_ID::ORNAMENT_STYLE);
+      // avoid writing an integer for ornamentStyle, write a string instead.
+      if ( ornamentStyle() == MScore::OrnamentStyle::DEFAULT) {
+          ; // do nothing
+      } else if ( ornamentStyle() == MScore::OrnamentStyle::BAROQUE ) {
+          xml.tag("ornamentStyle", "Baroque");
+      }
       Element::writeProperties(xml);
       if (anchorStyle == PropertyStyle::UNSTYLED)
             xml.tag("anchor", int(_anchor));
