@@ -824,6 +824,7 @@ void renderArpeggio(Chord *chord, bool &gateEvents, QList<NoteEventList> & ell) 
     
 void renderNoteArticulation(NoteEventList* events,
                         Chord *chord,
+                        Note * note,
                         int pitch,
                         int tickspernote, // number of ticks, either _16h or _32nd, i.e., MScore::division/4 or MScore::division/8
                         const vector<int> & prefix,
@@ -834,9 +835,9 @@ void renderNoteArticulation(NoteEventList* events,
                         )
 {
     events->clear();
-
+    
     Key key       = chord->staff()->key(chord->segment()->tick());
-    int space   = 1000;
+    int space   = 1000 * chord->actualTicks();
     int maxticks = chord->actualTicks();
     int numrepeat = 1;
     int sustain   = 0;
@@ -857,7 +858,7 @@ void renderNoteArticulation(NoteEventList* events,
 
     // is the requested duration smaller than the minimum, if so, increase it to the minimum.
     tickspernote = max(tickspernote, mintickspernote);
-    
+
     // calculate whether to shorten the duration value.
     if ( tickspernote*( P + B + S) <= maxticks ) {
         ; // plenty of space to play the notes without changing the requested trill note duration
@@ -888,6 +889,13 @@ void renderNoteArticulation(NoteEventList* events,
             ? 0
             : diatonicUpDown(key,pitch,delta)-pitch;
     };
+    // local function:
+    auto makeEvent = [chord,events,articulationExcursion] (int pitch, int ontime, int duration) {
+        events->append( NoteEvent(articulationExcursion(pitch),
+                                  ontime/chord->actualTicks(),
+                                  duration/chord->actualTicks()));
+        return ontime+duration;
+    };
     // calculate the number of times to repeat the body, and sustain the last note of the body
     // 1000 = P + numrepeat*B+sustain + S
     if ( repeatp ) {
@@ -898,39 +906,32 @@ void renderNoteArticulation(NoteEventList* events,
     }
     // render the prefix
     for (int j=0; j<P; j++) {
-        int tied = tieForward(j,prefix);
-        events->append( NoteEvent( articulationExcursion(prefix[j]), ontime, tied));
-        ontime += tied;
+        ontime = makeEvent(prefix[j], ontime, tieForward(j,prefix));
     }
     if ( B > 0 ) {
        // render the body, but not the final repetion
        for (int r=0; r < numrepeat-1; r++){
-           for (int j=0; j<B; j++, ontime += millespernote) {
-               events->append( NoteEvent( articulationExcursion(body[j]), ontime, millespernote));
+           for (int j=0; j<B; j++) {
+               ontime = makeEvent(body[j], ontime, millespernote);
            }
        }
        // render the final repetion of body, but not the final note of the repition
-       for (int j=0; j<B-1; j++, ontime += millespernote) {
-           events->append( NoteEvent( articulationExcursion(body[j]), ontime, millespernote));
+       for (int j=0; j<B-1; j++) {
+           ontime = makeEvent(body[j], ontime, millespernote);
        }
        // render the final note of the final repeat of body
-       events->append( NoteEvent( articulationExcursion(body[B-1]), ontime, millespernote+sustain));
-       ontime += (millespernote+sustain);
+       ontime = makeEvent(body[B-1], ontime, millespernote+sustain);
     }
     // render the suffix
     for (int j=0; j<S; j++) {
-        int tied = tieForward(j,suffix);
-        events->append( NoteEvent( articulationExcursion(suffix[j]), ontime, tied));
-        ontime += tied;
+        ontime = makeEvent(suffix[j], ontime, tieForward(j,suffix));
     }
 }
 
     // TODO
-    // * refactor xml read/write to use symbolic names rather than integers for ornamentStyles.
     // * test for accidentals in the mesure.
     //      I.e., if F is sharpened earlier in the measure then a trill'ed E should trill to F#
-    // * check orig score vs midi-in
-    // 
+    //
 void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gateTime) {
     // This struct specifies how to render an articulation.
     //   atype - the articulation type to implement, such as ArticulationType::Turn
@@ -1021,7 +1022,7 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
                                                                         || oe.ostyles.end() != oe.ostyles.find(a->ornamentStyle())));
                                  });
             if ( oe != excursions.cend()) {
-                renderNoteArticulation(events, chord, pitch, oe->duration,
+                renderNoteArticulation(events, chord, chord->notes()[k], pitch, oe->duration,
                                        oe->prefix, oe->body, oe->repeatp, oe->sustainp, oe->suffix);
             } else {
                 instr->updateGateTime(&gateTime, channel, a->subtypeName());
@@ -1125,10 +1126,10 @@ void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord
             
             if (gc->playEventType() == PlayEventType::InvalidUser)
                 gc->score()->undo(new ChangeEventList(gc, el));
-                else if (gc->playEventType() == PlayEventType::Auto) {
-                    for (int ii = 0; ii < nn; ++ii)
-                        gc->notes()[ii]->setPlayEvents(el[ii]);
-                        }
+            else if (gc->playEventType() == PlayEventType::Auto) {
+                for (int ii = 0; ii < nn; ++ii)
+                    gc->notes()[ii]->setPlayEvents(el[ii]);
+            }
             on += graceDuration;
         }
     }
