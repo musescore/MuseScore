@@ -160,6 +160,7 @@ QList<Element*> Page::items(const QPointF& p)
             doRebuildBspTree();
       return bspTree.items(p);
 #else
+      Q_UNUSED(p)
       return QList<Element*>();
 #endif
       }

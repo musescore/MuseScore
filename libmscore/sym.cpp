@@ -5162,49 +5162,40 @@ QVector<oldName> oldNames = {
 };
 
 //---------------------------------------------------------
-//   sym2pixmap
-//---------------------------------------------------------
-
-QPixmap ScoreFont::sym2pixmap(SymId id, qreal mag)
-      {
-      QString string = toString(id);
-      QRectF  bb(bbox(id, mag));
-      bb.setRect(bb.x() * mag, bb.y() * mag, bb.width() * mag, bb.height() * mag);
-
-      bb.adjust(-5, -5, 5, 5);
-      int w = lrint(bb.width());
-      int h = lrint(bb.height());
-      QPixmap pm(w, h);
-      pm.fill(QColor(0, 0, 0, 0));
-      QPainter painter;
-      painter.begin(&pm);
-      painter.setPen(Qt::black);
-      draw(id, &painter, mag, -bb.topLeft() + QPointF(2.0, 2.0));
-      painter.end();
-      return pm;
-      }
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
 void ScoreFont::draw(const QString& s, QPainter* painter, qreal mag, const QPointF& pos) const
       {
-#if defined(Q_OS_WIN) && (QT_VERSION == QT_VERSION_CHECK(5,4,0))
-      if (dynamic_cast<QPrinter*>(painter->device()) &&
-          painter->device()->paintEngine()->type() == QPaintEngine::Pdf)
-            mag *= 4.333;
-#endif
       qreal imag = 1.0 / mag;
       painter->scale(mag, mag);
-      painter->setFont(font());
-      painter->drawText(pos * imag, s);
+      QGlyphRun glyphs;
+      glyphs.setRawFont(font());
+
+      QVector<quint32> indexes;
+      indexes << (font().glyphIndexesForString(s));
+      glyphs.setGlyphIndexes(indexes);
+
+      QVector<QPointF> positions;
+      positions << QPointF();
+      glyphs.setPositions(positions);
+
+      painter->drawGlyphRun(pos * imag, glyphs);
       painter->scale(imag, imag);
       }
 
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos) const
       {
-      draw(toString(id), painter, mag, pos);
+      qreal imag = 1.0 / mag;
+      painter->scale(mag, mag);
+
+      QGlyphRun glyphs;
+      glyphs.setRawFont(font());
+      QPointF pt;
+      glyphs.setRawData(index(id), &pt, 1);
+
+      painter->drawGlyphRun(pos * imag, glyphs);
+      painter->scale(imag, imag);
       }
 
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const
@@ -5214,66 +5205,6 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
       for (int i = 0; i < n; ++i)
             d += s;
       draw(d, painter, mag, pos);
-      }
-
-//---------------------------------------------------------
-//   symToHtml
-//    transform symbol into html code suitable
-//    for QDocument->setHtml()
-//---------------------------------------------------------
-
-QString ScoreFont::symToHtml(SymId s, int leftMargin, const TextStyle* ts, qreal _spatium)
-      {
-      qreal size;
-      if (ts) {
-            size = ts->font(_spatium).pointSizeF();
-            }
-      else {
-            size = _font->pixelSize();
-            }
-
-      QString family = _font->family();
-      return QString(
-      "<data>"
-        "<html>"
-          "<head>"
-            "<meta name=\"qrichtext\" content=\"1\" >"
-            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf8\" />"
-            "<style type=\"text/css\">"
-              "p, li { white-space: pre-wrap; }"
-              "</style>"
-            "</head>"
-          "<body style=\" font-family:'%1'; font-size:%2pt;\">"
-            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:%3px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
-                "&#%4;"
-              "</p>"
-            "</body>"
-          "</html>"
-      "</data>").arg(family).arg(size).arg(leftMargin).arg(toString(s));
-      }
-
-QString ScoreFont::symToHtml(SymId s1, SymId s2, int leftMargin)
-      {
-      qreal size = _font->pixelSize();
-      QString family = _font->family();
-
-      return QString(
-      "<data>"
-        "<html>"
-          "<head>"
-            "<meta name=\"qrichtext\" content=\"1\" >"
-            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf8\" />"
-            "<style type=\"text/css\">"
-              "p, li { white-space: pre-wrap; }"
-              "</style>"
-            "</head>"
-          "<body style=\" font-family:'%1'; font-size:%2pt;\">"
-            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:%3px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
-                "&#%4;&#%5;"
-              "</p>"
-            "</body>"
-          "</html>"
-      "</data>").arg(family).arg(size).arg(leftMargin).arg(toString(s1)).arg(toString(s2));
       }
 
 //---------------------------------------------------------
@@ -5298,10 +5229,10 @@ void initScoreFonts()
       ScoreFont::fontFactory("Bravura");       // load reference font
       for (oldName i : oldNames)
             Sym::lonhash.insert(i.name, SymId(i.symId));
-      QFont::insertSubstitution("MScore Text", "Bravura Text");
+      QFont::insertSubstitution("MScore Text",    "Bravura Text");
       QFont::insertSubstitution("Gootville Text", "Bravura Text");
-      QFont::insertSubstitution("ScoreFont", "Bravura Text");
-      QFont::insertSubstitution("MuseJazz", "Bravura Text");
+      QFont::insertSubstitution("ScoreFont",      "Bravura Text");
+      QFont::insertSubstitution("MuseJazz",       "Bravura Text");
       }
 
 //---------------------------------------------------------
@@ -5321,42 +5252,33 @@ static QString codeToString(int code)
       }
 
 //---------------------------------------------------------
+//   computeMetrics
+//---------------------------------------------------------
+
+static void computeMetrics(Sym* sym, QRawFont* _font, int code)
+      {
+      sym->setString(codeToString(code));
+
+      quint32 index;
+      QChar c(code);
+      int n = 1;
+      _font->glyphIndexesForChars(&c, 1, &index, &n);
+      sym->setIndex(index);
+
+      QRectF bbox(_font->boundingRect(index));
+      sym->setBbox(bbox);
+      QPointF w;
+      _font->advancesForGlyphIndexes(&index, &w, 1);
+      sym->setWidth(w.x());
+      }
+
+//---------------------------------------------------------
 //   load
 //---------------------------------------------------------
 
 void ScoreFont::load()
       {
-      //qDebug() << "load" << _filename;
-#if !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
-      if (-1 == QFontDatabase::addApplicationFont(_fontPath + _filename)) {
-            qDebug("ScoreFont: fatal error: cannot load internal font <%s>", qPrintable(_fontPath + _filename));
-            if (!QFile(_fontPath + _filename).exists())
-                  qDebug("   file not found");
-            if (!MScore::debugMode)
-                  exit(-1);
-            }
-#endif
-      _font = new QFont();
-      _font->setWeight(QFont::Normal);  // if not set we get system default
-      _font->setItalic(false);
-      _font->setFamily(_family);
-      _font->setStyleStrategy(QFont::NoFontMerging);
-
-      // horizontal hinting is bad as note hooks do not attach to stems
-      // properly at some magnifications
-      _font->setHintingPreference(QFont::PreferVerticalHinting);
-
-      qreal size = 20.0 * MScore::DPI / PPI;
-      QFont font2(font());                  // See comment below
-      _font->setPixelSize(lrint(size));
-      font2.setPixelSize(lrint(size)*100);  // See comment below
-      // Since under Windows HintingPreferences always behave as PreferFullHinting (integer result)
-      // unless DirectWrite is enabled during Qt compilation (and it would work only for Windows 7
-      // and above or Vista with Platform Update; it wouldn't work for XP), a trick is used to
-      // retrieve the actual real-number width of the character: the character is scaled up by a
-      // factor 100, its width is extracted with QFontMetricsF::width and then this width is re-scaled
-      // down by a factor 100. See issue #25142: "Stem slightly misaligned on upstem notes"
-      // TODO : Investigate the possible use of QGlyphRun instead
+      _font = new QRawFont(_fontPath + filename, 20.0 * MScore::DPI/PPI, QFont::PreferVerticalHinting);
 
       QFile fi(_fontPath + "glyphnames.json");
       if (!fi.open(QIODevice::ReadOnly))
@@ -5367,8 +5289,6 @@ void ScoreFont::load()
             qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
                error.offset, qPrintable(error.errorString()));
 
-      _fm = new QFontMetricsF(font());
-      QFontMetrics fm2(font2);         // See comment above
       for (auto i : o.keys()) {
             bool ok;
             int code = o.value(i).toObject().value("codepoint").toString().mid(2).toInt(&ok, 16);
@@ -5377,9 +5297,7 @@ void ScoreFont::load()
             if (Sym::lnhash.contains(i)) {
                   SymId symId = Sym::lnhash.value(i);
                   Sym* sym = &_symbols[int(symId)];
-                  sym->setString(codeToString(code));
-                  sym->setWidth((fm2.width(sym->string()))/100.0); // Renormalization; see comment above
-                  sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
+                  computeMetrics(sym, _font, code);
                   }
             //else
             //      qDebug("unknown glyph: %s", qPrintable(i));
@@ -5512,7 +5430,7 @@ void ScoreFont::load()
                   for (SymId id : c.rids)
                         s += _symbols[int(id)].string();
                   sym->setString(s);
-                  sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
+//TODOxxxx                  sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
                   }
             }
 
@@ -5550,7 +5468,7 @@ void ScoreFont::load()
                               if (ok) {
                                     QString s = codeToString(code);
                                     sym->setString(s);
-                                    sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
+//TODOxxxx                                    sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
                                     }
                               break;
                               }
@@ -5578,14 +5496,12 @@ void ScoreFont::load()
       for (const UnicodeAlternate& unicode : unicodes) {
             Sym* sym = &_symbols[int(unicode.id)];
             sym->setString(unicode.string);
-            sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
+//TODOxxxx            sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
             }
-
 
       // add space symbol
       Sym* sym = &_symbols[int(SymId::space)];
-      sym->setString("\u0020");
-      sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
+      computeMetrics(sym, _font, 32);
 
       /*for (int i = 1; i < int(SymId::lastSym); ++i) {
             Sym sym = _symbols[i];
@@ -5648,8 +5564,15 @@ const QRectF ScoreFont::bbox(SymId id, qreal mag) const
 
 const QRectF ScoreFont::bbox(const QString& s, qreal mag) const
       {
-      QRectF r(_fm->tightBoundingRect(s));
+//TODOxxxx      QRectF r(_fm->tightBoundingRect(s));
+      QRectF r;
       return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
+      }
+
+qreal ScoreFont::width(const QString&, qreal mag) const
+      {
+//TODOxxxx
+      return 0.0 * mag;
       }
 
 //---------------------------------------------------------

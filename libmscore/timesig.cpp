@@ -309,6 +309,7 @@ void TimeSig::layout1()
                   }
             QString ns = toTimeSigString(_numeratorString);
             QString ds = toTimeSigString(_denominatorString);
+#if 0 //TODOxxxx
             QFont font = score()->scoreFont()->font();
             QFontMetricsF fm(font);
             qreal mag = magS();
@@ -350,6 +351,7 @@ void TimeSig::layout1()
                   addbbox(QRect(pointLargeLeftParen.x(), pointLargeLeftParen.y() - denRect.height(), _spatium / 2, numRect.height() + denRect.height()));
                   addbbox(QRect(pointLargeRightParen.x(), pointLargeRightParen.y() - denRect.height(),  _spatium / 2, numRect.height() + denRect.height()));
                   }
+#endif
             }
 
       _needLayout = false;

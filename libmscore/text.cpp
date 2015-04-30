@@ -994,8 +994,8 @@ QRectF Text::cursorRect() const
       QFont font;
       if (fragment) {
             font = fragment->font(this);
-            if (font.family() == score()->scoreFont()->font().family())
-                  font = _textStyle.fontPx(spatium());
+//TODOxxxx            if (font.family() == score()->scoreFont()->font().family())
+//                  font = _textStyle.fontPx(spatium());
             }
       else
             font = _textStyle.fontPx(spatium());
