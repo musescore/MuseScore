@@ -1621,6 +1621,15 @@ void Element::undoSetColor(const QColor& c)
       }
 
 //---------------------------------------------------------
+//   undoSetVisible
+//---------------------------------------------------------
+
+void Element::undoSetVisible(bool v)
+      {
+      score()->undoChangeProperty(this, P_ID::VISIBLE, v);
+      }
+
+//---------------------------------------------------------
 //   bbox() function for scripts
 //
 //    use spatium units rather than raster units
