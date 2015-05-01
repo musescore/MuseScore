@@ -175,7 +175,7 @@ class Element : public QObject, public ScoreElement {
       Q_PROPERTY(int                      track       READ track        WRITE setTrack)
       Q_PROPERTY(Ms::Element::Type        type        READ type)
       Q_PROPERTY(QPointF                  userOff     READ scriptUserOff WRITE scriptSetUserOff)
-      Q_PROPERTY(bool                     visible     READ visible      WRITE setVisible)
+      Q_PROPERTY(bool                     visible     READ visible      WRITE undoSetVisible)
 
       Element* _parent { 0 };
 
@@ -464,6 +464,7 @@ class Element : public QObject, public ScoreElement {
       QColor curColor(const Element* proxy) const;
       virtual void setColor(const QColor& c)     { _color = c;    }
       void undoSetColor(const QColor& c);
+      void undoSetVisible(bool v);
 
       static Element::Type readType(XmlReader& node, QPointF*, Fraction*);
 
