@@ -35,11 +35,11 @@ private slots:
       // The list of Ove regression tests
       // Currently failing tests are commented out and annotated with the failure reason
 
-      //void oveBeamMultipleVoicesTest() { oveReadTest("beam - multiple voices"); }
+      void oveBeamMultipleVoicesTest() { oveReadTest("beam - multiple voices"); }
       void oveBeam2Test()              { oveReadTest("beam 2"); }
       void oveBeamWinstonTest()        { oveReadTest("beam-George Winston - Joy"); }
       //void oveBeamOverBarlineTest()    { oveReadTest("beam-over-barline"); }
-      //void oveBeamTest()               { oveReadTest("beam"); }
+      void oveBeamTest()               { oveReadTest("beam"); }
       void oveClef2Test()              { oveReadTest("clef-2"); }
       //void oveClefTypes()              { oveReadTest("clef-types"); }
       //void oveClefTest()               { oveReadTest("clef"); }
@@ -65,20 +65,20 @@ private slots:
       //void oveLyricsVerseTest()        { oveReadTest("lyric-verse"); }
       void oveLyricsTest()             { oveReadTest("lyric"); }
       //void oveMultimeasureRestTest()   { oveReadTest("multi-measure-rest"); }
-      //void oveAccidentalsTest()        { oveReadTest("note-accidental"); }
+      void oveAccidentalsTest()        { oveReadTest("note-accidental"); }
       //void oveArticulations2Test()     { oveReadTest("note-articulation-2"); }
       void oveArpeggioTest()           { oveReadTest("note-articulation-arpeggio"); }
       //void ovePedalTest()              { oveReadTest("note-articulation-pedal"); }
       void oveTremoloTest()            { oveReadTest("note-articulation-tremolo"); }
       //void oveTrillLineTest()          { oveReadTest("note-articulation-trill-section"); }
       void oveTrillTest()              { oveReadTest("note-articulation-trill"); }
-      //void oveFermataRestTest()        { oveReadTest("note-articulation-with-rest"); }
+      void oveFermataRestTest()        { oveReadTest("note-articulation-with-rest"); }
       //void oveArticulationsTest()      { oveReadTest("note-articulation"); }
       void oveClefChangeTest()         { oveReadTest("note-clef"); }
-      //void oveCrossStaff2Test()        { oveReadTest("note-cross-staff 2"); }
+      void oveCrossStaff2Test()        { oveReadTest("note-cross-staff 2"); }
       //void oveCrossStaff3Test()        { oveReadTest("note-cross-staff 3"); }
-      //void oveCrossStaffTest()         { oveReadTest("note-cross-staff"); }
-      //void oveCueTest()                { oveReadTest("note-cue"); }
+      void oveCrossStaffTest()         { oveReadTest("note-cross-staff"); }
+      void oveCueTest()                { oveReadTest("note-cue"); }
       void oveNoteDotTest()            { oveReadTest("note-dot"); }
       //void oveGraceBeamTest()          { oveReadTest("note-grace-with-beam"); }
       //void oveGraceTest()              { oveReadTest("note-grace"); }
@@ -88,17 +88,17 @@ private slots:
       void oveScaleTest()              { oveReadTest("note-scale-c"); }
       //void oveScaleKeysTest()          { oveReadTest("note-scale-key"); }
       //void oveDurationTest()           { oveReadTest("note-type"); }
-      //void oveVoices5Test()            { oveReadTest("note-voices 5"); }
-      //void oveVoices2Test()            { oveReadTest("note-voices-2."); }
-      //void oveVoices3Test()            { oveReadTest("note-voices-3"); }
-      //void oveVoices4Test()            { oveReadTest("note-voices-4"); }
-      //void oveVoicesTest()             { oveReadTest("note-voices"); }
+      void oveVoices5Test()            { oveReadTest("note-voices 5"); }
+      //void oveVoices2Test()            { oveReadTest("note-voices-2"); }
+      void oveVoices3Test()            { oveReadTest("note-voices-3"); }
+      void oveVoices4Test()            { oveReadTest("note-voices-4"); }
+      void oveVoicesTest()             { oveReadTest("note-voices"); }
       void oveNoteTest()               { oveReadTest("note"); }
       //void oveOctaveTest()             { oveReadTest("octave-shift"); }
       //void ovePedal2Test()             { oveReadTest("pedal-half-pedal"); }
       //void ovePedal3Test()             { oveReadTest("pedal"); }
-      //void oveSlur2Test()              { oveReadTest("slur 2"); }
-      //void oveSlurTest()               { oveReadTest("slur"); }
+      void oveSlur2Test()              { oveReadTest("slur 2"); }
+      void oveSlurTest()               { oveReadTest("slur"); }
       //void oveTextLinesTest()          { oveReadTest("text-measure-text-lines"); }
       //void oveTextTest()               { oveReadTest("text-measure-text"); }
       //void oveRehearsalLinesTest()     { oveReadTest("text-rehearsal-lines"); }
@@ -106,13 +106,13 @@ private slots:
       //void oveSystemText2Test()        { oveReadTest("text-system-text-lines"); }
       //void oveSystemTextTest()         { oveReadTest("text-system-text"); }
       //void oveTie2Test()               { oveReadTest("tie-2"); }
-      //void oveTieTest()                { oveReadTest("tie"); }
-      //void oveTuplet2Test()            { oveReadTest("tuplet 2"); }
-      //void oveTuplet3Test()            { oveReadTest("tuplet-beam"); }
+      void oveTieTest()                { oveReadTest("tie"); }
+      void oveTuplet2Test()            { oveReadTest("tuplet 2"); }
+      void oveTuplet3Test()            { oveReadTest("tuplet-beam"); }
       //void oveTuplet4Test()            { oveReadTest("tuplet-in-second-staff"); }
-      //void oveTuplet5Test()            { oveReadTest("tuplet-rest-start 2"); }
+      void oveTuplet5Test()            { oveReadTest("tuplet-rest-start 2"); }
       //void oveTuplet6Test()            { oveReadTest("tuplet-rest-start 3"); }
-      //void oveTuplet7Test()            { oveReadTest("tuplet-rest-start"); }
+      void oveTuplet7Test()            { oveReadTest("tuplet-rest-start"); }
       //void oveTupletTest()             { oveReadTest("tuplet"); }
       //void oveWedge2Test()             { oveReadTest("wedge-2"); }
       //void oveWedgeTest()              { oveReadTest("wedge"); }
