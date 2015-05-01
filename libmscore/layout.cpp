@@ -2820,14 +2820,14 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
             Measure* nm = m ? m->nextMeasure() : 0;
             Segment* s;
 
-            if (m && nm && !(m->sectionBreak() && _layoutMode != LayoutMode::FLOAT)) {
+            if (m && nm) {
                   int tick = m->tick() + m->ticks();
 
                   // locate a time sig. in the next measure and, if found,
                   // check if it has cout. sig. turned off
                   TimeSig* ts;
                   Segment* tss         = nm->findSegment(Segment::Type::TimeSig, tick);
-                  bool showCourtesySig = tss && styleB(StyleIdx::genCourtesyTimesig);
+                  bool showCourtesySig = tss && styleB(StyleIdx::genCourtesyTimesig) && !(m->sectionBreak() && _layoutMode != LayoutMode::FLOAT);
                   if (showCourtesySig) {
                         ts = static_cast<TimeSig*>(tss->element(0));
                         if (ts && !ts->showCourtesySig())
@@ -2866,11 +2866,11 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
                         int track = staffIdx * VOICES;
                         Staff* staff = _staves[staffIdx];
-                        showCourtesySig = false;
+                        showCourtesySig = styleB(StyleIdx::genCourtesyKeysig) && !(m->sectionBreak() && _layoutMode != LayoutMode::FLOAT);
 
                         KeySigEvent key1 = staff->keySigEvent(tick - 1);
                         KeySigEvent key2 = staff->keySigEvent(tick);
-                        if (styleB(StyleIdx::genCourtesyKeysig) && !(key1 == key2)) {
+                        if (showCourtesySig && !(key1 == key2)) {
                               // locate a key sig. in next measure and, if found,
                               // check if it has court. sig turned off
                               s = nm->findSegment(Segment::Type::KeySig, tick);
