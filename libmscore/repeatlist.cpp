@@ -293,6 +293,7 @@ void RepeatList::unwind()
                         }
                   else if (flags & Repeat::JUMP) {
                         doJump = true;
+                        isGoto = false;
                         }
                   }
             else if (flags & Repeat::JUMP) { // Jumps are only accepted outside of other repeats

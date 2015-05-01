@@ -54,8 +54,10 @@ class TestRepeat : public QObject, public MTest
       
       void repeat18() { repeat("repeat18.mscx", "1;2;1;3;4;5;6;5;7;8"); } // twice volta
       void repeat19() { repeat("repeat19.mscx", "1;2;3;4;1;2;4"); } // DS al coda after the coda
+      
+      void repeat20() { repeat("repeat20.mscx", "1;2;3;1;4;5;6;7;8;5;6"); } // two sections, 1/ DS al Coda, 2/DS Al fine
+      void repeat21() { repeat("repeat21.mscx", "1;2;3;1;2;3;4;5;6;7;5;8"); } // two sections, 1/DS, 2/DS al Coda
       };
-
 
 //---------------------------------------------------------
 //   initTestCase
