@@ -5301,7 +5301,8 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
                   thisByte = placeHolder.toUnsignedInt();
                   notePtr->setAccidental(getLowNibble(thisByte));
                   // accidental 0: influenced by key, 4: influenced by previous accidental in measure
-                  bool notShow = ( getHighNibble(thisByte) == 0 ) || ( getHighNibble(thisByte) == 4 );
+                  //bool notShow = ( getHighNibble(thisByte) == 0 ) || ( getHighNibble(thisByte) == 4 );
+                  bool notShow = !(getHighNibble(thisByte)&0x1);
                   notePtr->setShowAccidental(!notShow);
 
                   if( !jump(1) ) { return false; }
