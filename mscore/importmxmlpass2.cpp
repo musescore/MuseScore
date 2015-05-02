@@ -216,8 +216,12 @@ static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octa
       }
 
 //---------------------------------------------------------
-//   fillGap -- fill one gap (tstart - tend) in this track in this measure with rest(s)
+//   fillGap
 //---------------------------------------------------------
+
+/**
+ Fill one gap (tstart - tend) in this track in this measure with rest(s).
+ */
 
 static void fillGap(Measure* measure, int track, int tstart, int tend)
       {
@@ -248,8 +252,12 @@ static void fillGap(Measure* measure, int track, int tstart, int tend)
       }
 
 //---------------------------------------------------------
-//   fillGapsInFirstVoices -- fill gaps in first voice of every staff in this measure for this part with rest(s)
+//   fillGapsInFirstVoices
 //---------------------------------------------------------
+
+/**
+ Fill gaps in first voice of every staff in this measure for this part with rest(s).
+ */
 
 static void fillGapsInFirstVoices(Measure* measure, Part* part)
       {
@@ -364,7 +372,9 @@ static void initDrumset(Drumset* drumset, const MusicXMLDrumset& mxmlDrumset)
 //   setFirstInstrument
 //---------------------------------------------------------
 
-// set the parts first instrument
+/**
+ Set first instrument for Part \a part
+ */
 
 static void setFirstInstrument(Part* part, const QString& partId,
                                const QString& instrId, const MusicXMLDrumset& mxmlDrumset)
@@ -395,7 +405,9 @@ static void setFirstInstrument(Part* part, const QString& partId,
 //   setStaffTypePercussion
 //---------------------------------------------------------
 
-// set staff type to percussion
+/**
+ Set staff type to percussion
+ */
 
 static void setStaffTypePercussion(Part* part, Drumset* drumset)
       {
@@ -409,7 +421,7 @@ static void setStaffTypePercussion(Part* part, Drumset* drumset)
       }
 
 //---------------------------------------------------------
-//   findDeleteWords
+//   findDeleteStaffText
 //---------------------------------------------------------
 
 /**
@@ -545,8 +557,11 @@ static QString text2syms(const QString& t)
 
 //---------------------------------------------------------
 //   decodeEntities
-///  Allows decode &#...; into UNICODE (utf8) character.
 //---------------------------------------------------------
+
+/**
+ Decode &#...; in string \a src into UNICODE (utf8) character.
+ */
 
 static QString decodeEntities( const QString& src )
       {
@@ -630,9 +645,12 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
       }
 
 //---------------------------------------------------------
-//   addLyric -- add a single lyric to the score
-//                or delete it (if number too high)
+//   addLyric
 //---------------------------------------------------------
+
+/**
+ Add a single lyric to the score or delete it (if number too high)
+ */
 
 static void addLyric(ChordRest* cr, Lyrics* l, int lyricNo)
       {
@@ -647,8 +665,12 @@ static void addLyric(ChordRest* cr, Lyrics* l, int lyricNo)
       }
 
 //---------------------------------------------------------
-//   addLyrics -- add a notes lyrics to the score
+//   addLyrics
 //---------------------------------------------------------
+
+/**
+ Add a notes lyrics to the score
+ */
 
 static void addLyrics(ChordRest* cr,
                       QMap<int, Lyrics*>& numbrdLyrics,
@@ -736,6 +758,7 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
  import will almost certainly break in non-obvious ways.
  Should never happen, thus it is OK to quit the application.
  */
+
 #if 0
 static void tupletAssert()
       {
@@ -1193,11 +1216,14 @@ static void addFermata(ChordRest* cr, const QString type, const ArticulationType
       }
 
 //---------------------------------------------------------
-//   setSLinePlacement -- helper for direction
+//   setSLinePlacement
 //---------------------------------------------------------
 
-// SLine placement is modified by changing the first segments user offset
-// As the SLine has just been created, it does not have any segment yet
+/**
+ Helper for direction().
+ SLine placement is modified by changing the first segments user offset
+ As the SLine has just been created, it does not have any segment yet
+ */
 
 static void setSLinePlacement(SLine* sli, const QString placement)
       {
@@ -1531,7 +1557,7 @@ void MusicXMLParserPass2::scorePartwise()
 //---------------------------------------------------------
 
 /**
-Parse the /score-partwise/part-list node.
+ Parse the /score-partwise/part-list node.
  */
 
 void MusicXMLParserPass2::partList()
@@ -1679,7 +1705,7 @@ void MusicXMLParserPass2::part()
 //---------------------------------------------------------
 
 /**
- In \a score find the measure starting at \a tick.
+ In Score \a score find the measure starting at \a tick.
  */
 
 static Measure* findMeasure(Score* score, const int tick)
@@ -1696,7 +1722,7 @@ static Measure* findMeasure(Score* score, const int tick)
 //---------------------------------------------------------
 
 /**
- beam mode for all elements and remove the beam
+ Set beam mode for all elements and remove the beam
  */
 
 static void removeBeam(Beam*& beam)
@@ -3130,6 +3156,10 @@ static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& al
             }
       }
 
+//---------------------------------------------------------
+//   addKey
+//---------------------------------------------------------
+
 /**
  Add a KeySigEvent to the score.
  */
@@ -3572,6 +3602,10 @@ static void setDuration(ChordRest* cr, bool rest, bool wholeMeasure, TDuration d
             }
       }
 
+//---------------------------------------------------------
+//   addRest
+//---------------------------------------------------------
+
 /**
  * Add a rest to the score
  * TODO: beam handling
@@ -3605,6 +3639,10 @@ static Rest* addRest(Score* score, Measure* m,
       s->add(cr);
       return cr;
       }
+
+//---------------------------------------------------------
+//   findOrCreateChord
+//---------------------------------------------------------
 
 /**
  * Find (or create if not found) the chord at \a tick and \a track.
@@ -3678,7 +3716,7 @@ static Chord* createGraceChord(Score* score, const int track,
       }
 
 //---------------------------------------------------------
-//   graceNoteType
+//   elementMustBePostponed
 //---------------------------------------------------------
 
 /**
@@ -3713,6 +3751,10 @@ static void handleDisplayStep(ChordRest* cr, int step, int octave, int tick, qre
             cr->setUserYoffset((po - dp + 3) * spatium / 2);
             }
       }
+
+//---------------------------------------------------------
+//   displayStepOctave
+//---------------------------------------------------------
 
 /**
  Handle <display-step> and <display-octave> for <rest> and <unpitched>
@@ -4272,6 +4314,10 @@ static Fraction calcTicks(const QString& text, int divs)
 //   duration
 //---------------------------------------------------------
 
+/**
+ Parse the /score-partwise/part/measure/note/duration node.
+ */
+
 void MusicXMLParserPass2::duration(Fraction& dura)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "duration");
@@ -4738,6 +4784,10 @@ void MusicXMLParserPass2::beam(Beam::Mode& beamMode)
 //   forward
 //---------------------------------------------------------
 
+/**
+ Parse the /score-partwise/part/measure/note/forward node.
+ */
+
 void MusicXMLParserPass2::forward(Fraction& dura)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "forward");
@@ -4758,6 +4808,10 @@ void MusicXMLParserPass2::forward(Fraction& dura)
 //   backup
 //---------------------------------------------------------
 
+/**
+ Parse the /score-partwise/part/measure/note/backup node.
+ */
+
 void MusicXMLParserPass2::backup(Fraction& dura)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "backup");
@@ -4773,6 +4827,10 @@ void MusicXMLParserPass2::backup(Fraction& dura)
 //---------------------------------------------------------
 //   timeModification
 //---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/note/time-modification node.
+ */
 
 void MusicXMLParserPass2::timeModification(Fraction& timeMod, TDuration& normalType)
       {
@@ -4813,6 +4871,10 @@ void MusicXMLParserPass2::timeModification(Fraction& timeMod, TDuration& normalT
 //---------------------------------------------------------
 //   pitch
 //---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/note/pitch node.
+ */
 
 void MusicXMLParserPass2::pitch(int& step, int& alter, int& oct, AccidentalType& accid)
       {
@@ -4866,6 +4928,10 @@ void MusicXMLParserPass2::pitch(int& step, int& alter, int& oct, AccidentalType&
 //   rest
 //---------------------------------------------------------
 
+/**
+ Parse the /score-partwise/part/measure/note/rest node.
+ */
+
 void MusicXMLParserPass2::rest(int& step, int& octave)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "rest");
@@ -4876,6 +4942,10 @@ void MusicXMLParserPass2::rest(int& step, int& octave)
 //---------------------------------------------------------
 //   lyric -- parse a MusicXML lyric element
 //---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/note/lyric node.
+ */
 
 void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
                                 QMap<int, Lyrics*>& defyLyrics,
@@ -4952,8 +5022,9 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
 //   notations
 //---------------------------------------------------------
 
+
 /**
- Read MusicXML notations.
+ Parse the /score-partwise/part/measure/note/notations node.
  */
 
 void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
