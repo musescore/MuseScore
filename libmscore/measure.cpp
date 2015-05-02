@@ -2151,6 +2151,14 @@ void Measure::read(XmlReader& e, int staffIdx)
                         qDebug("reading empty text: deleted");
                         delete t;
                         }
+                  else if ((score()->mscVersion() <= 114) && t->textStyleType() == TextStyleType::REHEARSAL_MARK) {
+                        RehearsalMark* rh = new RehearsalMark(score());
+                        rh->setXmlText(t->xmlText());
+                        rh->setTrack(t->track());
+                        segment = getSegment(Segment::Type::ChordRest, e.tick());
+                        segment->add(rh);
+                        delete t;
+                        }
                   else {
                         segment = getSegment(Segment::Type::ChordRest, e.tick());
                         segment->add(t);
