@@ -872,7 +872,7 @@ void MidiFile::separateChannel()
             for (int ii = 1; ii < nn; ++ii) {
                   MidiTrack t;
                   t.setOutChannel(channel[ii]);
-                  _tracks.insert(i + 1, t);
+                  _tracks.insert(i + ii, t);
                   }
                         // extract all different channel events from current track to inserted tracks
             for (auto ie = mt.events().begin(); ie != mt.events().end(); ) {
