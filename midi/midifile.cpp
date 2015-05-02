@@ -857,8 +857,8 @@ void MidiFile::separateChannel()
                         // create a list of channels used in current track
             QList<int> channel;
             MidiTrack &mt = _tracks[i];      // current track
-            for (auto i : mt.events()) {
-                  const MidiEvent& e = i.second;
+            for (const auto& ie : mt.events()) {
+                  const MidiEvent& e = ie.second;
                   if (e.isChannelEvent() && !channel.contains(e.channel()))
                         channel.append(e.channel());
                   }
