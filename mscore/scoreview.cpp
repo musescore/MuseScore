@@ -4987,7 +4987,12 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                   Chord* chord = static_cast<Note*>(el)->chord();
                   Note* n = chord->upNote();
                   octave = n->epitch() / 12;
-                  if (tab[note] <= n->epitch() % 12)
+                  int tpc = n->tpc();
+                  if (tpc == Tpc::TPC_C_BB || tpc == Tpc::TPC_C_B)
+                        ++octave;
+                  else if (tpc == Tpc::TPC_B_S || tpc == Tpc::TPC_B_SS)
+                        --octave;
+                  if (note <= tpc2step(tpc))
                         octave++;
                   }
             else {
