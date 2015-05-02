@@ -235,8 +235,11 @@ class SlurHandler {
 
 public:
       SlurHandler();
-      void doSlurStart(Chord* chord, Notations& notations, Xml& xml, bool grace = false);
-      void doSlurStop(Chord* chord, Notations& notations, Xml& xml);
+      void doSlurs(Chord* chord, Notations& notations, Xml& xml);
+
+private:
+      void doSlurStart(const Slur* s, Notations& notations, Xml& xml);
+      void doSlurStop(const Slur* s, Notations& notations, Xml& xml);
       };
 
 //---------------------------------------------------------
@@ -456,72 +459,126 @@ int SlurHandler::findSlur(const Slur* s) const
       }
 
 //---------------------------------------------------------
+//   findFirstChord -- find first chord (in musical order) for slur s
+//   note that this is not necessarily the same as s->startElement()
+//---------------------------------------------------------
+
+static const Chord* findFirstChord(const Slur* s)
+      {
+      const Element* e1 = s->startElement();
+      if (e1 == 0 || e1->type() != Element::Type::CHORD) {
+            qDebug("no valid start chord for slur %p", s);
+            return 0;
+            }
+
+      const Element* e2 = s->endElement();
+      if (e2 == 0 || e2->type() != Element::Type::CHORD) {
+            qDebug("no valid stop chord for slur %p", s);
+            return 0;
+      }
+
+      const Chord* c1 = static_cast<const Chord*>(e1);
+      const Chord* c2 = static_cast<const Chord*>(e2);
+
+      if (c1->tick() < c2->tick())
+            return c1;
+      else if (c1->tick() > c2->tick())
+            return c2;
+      else {
+            // c1->tick() == c2->tick()
+            if (!c1->isGrace() && !c2->isGrace()) {
+                  // slur between two regular notes at the same tick
+                  // probably shouldn't happen but handle just in case
+                  qDebug("invalid slur between chords %p and %p at tick %d", c1, c2, c1->tick());
+                  return 0;
+                  }
+            else if (c1->isGraceBefore() && !c2->isGraceBefore())
+                  return c1; // easy case: c1 first
+            else if (c1->isGraceAfter() && !c2->isGraceAfter())
+                  return c2; // easy case: c2 first
+            else if (c2->isGraceBefore() && !c1->isGraceBefore())
+                  return c2; // easy case: c2 first
+            else if (c2->isGraceAfter() && !c1->isGraceAfter())
+                  return c1; // easy case: c1 first
+            else {
+                  // both are grace before or both are grace after -> compare grace indexes
+                  // (note: higher means closer to the non-grace chord it is attached to)
+                  if ((c1->isGraceBefore() && c1->graceIndex() < c2->graceIndex())
+                      || (c1->isGraceAfter() && c1->graceIndex() > c2->graceIndex()))
+                        return c1;
+                  else
+                        return c2;
+                  }
+            }
+
+      // not reached
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   doSlurs
+//---------------------------------------------------------
+
+void SlurHandler::doSlurs(Chord* chord, Notations& notations, Xml& xml)
+      {
+      // loop over all slurs twice, first to handle the stops, then the starts
+      for (int i = 0; i < 2; ++i) {
+            // search for slur(s) starting or stopping at this chord
+            for (auto it : chord->score()->spanner()) {
+                  Spanner* sp = it.second;
+                  if (sp->generated() || sp->type() != Element::Type::SLUR)
+                        continue;
+                  if (chord == sp->startElement() || chord == sp->endElement()) {
+                        const Slur* s = static_cast<const Slur*>(sp);
+                        const Chord* firstChord = findFirstChord(s);
+                        if (firstChord) {
+                              if (i == 0) {
+                                    // first time: do slur stops
+                                    if (firstChord != chord)
+                                          doSlurStop(s, notations, xml);
+                                    }
+                              else {
+                                    // second time: do slur starts
+                                    if (firstChord == chord)
+                                          doSlurStart(s, notations, xml);
+                                    }
+                              }
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   doSlurStart
 //---------------------------------------------------------
 
-void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml, bool grace)
+void SlurHandler::doSlurStart(const Slur* s, Notations& notations, Xml& xml)
       {
-      // slurs on grace notes are not in spanner list, therefore:
-      if (grace){
-            foreach(Element* el, chord->el()){
-                  if (el->type() == Element::Type::SLUR){
-                        const Slur* s = static_cast<const Slur*>(el);
-                        //define line type
-                        QString rest = slurTieLineStyle(s);
-                        if (chord->isGraceBefore()){
-                             int i = findSlur(0);
-                             if (i >= 0) {
-                                   slur[i] = s;
-                                   started[i] = true;
-                                   notations.tag(xml);
-                                   xml.tagE(QString("slur%1 type=\"start\" number=\"%2\"").arg(rest).arg(i + 1));
-                                   }
-                             else
-                                   qDebug("no free slur slot");
-                             }
-                        else if (chord->isGraceAfter()){
-                             int i = findSlur(s);
-                             if (i >= 0) {
-                                   // remove from list and print stop
-                                   slur[i] = 0;
-                                   started[i] = false;
-                                   notations.tag(xml);
-                                   xml.tagE(QString("slur%1 type=\"stop\"%2 number=\"%3\"").arg(rest).arg(s->slurDirection() == MScore::Direction::UP ? " placement=\"above\"" : "").arg(i + 1));
-                                   }
-                             }
-                        }
-                  }
-             return;
+      // check if on slur list (i.e. stop already seen)
+      int i = findSlur(s);
+      //define line type
+      QString rest = slurTieLineStyle(s);
+      if (i >= 0) {
+            // remove from list and print start
+            slur[i] = 0;
+            started[i] = false;
+            notations.tag(xml);
+            xml.tagE(QString("slur%1 type=\"start\"%2 number=\"%3\"")
+                     .arg(rest)
+                     .arg(s->slurDirection() == MScore::Direction::UP ? " placement=\"above\"" : "")
+                     .arg(i + 1));
             }
-      // search for slur(s) starting at this chord
-      for (auto it : chord->score()->spanner()) {
-            Spanner* sp = it.second;
-            if (sp->type() != Element::Type::SLUR || sp->tick() != chord->tick() || sp->track() != chord->track())
-                  continue;
-            const Slur* s = static_cast<const Slur*>(sp);
-            // check if on slur list (i.e. stop already seen)
-            int i = findSlur(s);
-            //define line type
-            QString rest = slurTieLineStyle(s);
+      else {
+            // find free slot to store it
+            i = findSlur(0);
             if (i >= 0) {
-                  // remove from list and print start
-                  slur[i] = 0;
-                  started[i] = false;
+                  slur[i] = s;
+                  started[i] = true;
                   notations.tag(xml);
-                  xml.tagE(QString("slur%1 type=\"start\"%2 number=\"%3\"").arg(rest).arg(s->slurDirection() == MScore::Direction::UP ? " placement=\"above\"" : "").arg(i + 1));
+                  xml.tagE(QString("slur%1 type=\"start\" number=\"%2\"").arg(rest).arg(i + 1));
                   }
-            else {
-                  // find free slot to store it
-                  i = findSlur(0);
-                  if (i >= 0) {
-                        slur[i] = s;
-                        started[i] = true;
-                        notations.tag(xml);
-                        xml.tagE(QString("slur%1 type=\"start\" number=\"%2\"").arg(rest).arg(i + 1));
-                        }
-                  else
-                        qDebug("no free slur slot");
-                  }
+            else
+                  qDebug("no free slur slot");
             }
       }
 
@@ -535,59 +592,28 @@ void SlurHandler::doSlurStart(Chord* chord, Notations& notations, Xml& xml, bool
 // - generate stop anyway and put it on the slur list
 // - doSlurStart() starts slur but doesn't store it
 
-void SlurHandler::doSlurStop(Chord* chord, Notations& notations, Xml& xml)
+void SlurHandler::doSlurStop(const Slur* s, Notations& notations, Xml& xml)
       {
-      // search for slur(s) stopping at this chord but not on slur list yet
-      for (auto it : chord->score()->spanner()) {
-            Spanner* sp = it.second;
-            if (sp->type() != Element::Type::SLUR || sp->tick2() != chord->tick() || sp->track() != chord->track())
-                  continue;
-            const Slur* s = static_cast<const Slur*>(sp);
-            // check if on slur list
-            int i = findSlur(s);
-            if (i < 0) {
-                  // if not, find free slot to store it
-                  i = findSlur(0);
-                  if (i >= 0) {
-                        slur[i] = s;
-                        started[i] = false;
-                        notations.tag(xml);
-                        xml.tagE(QString("slur type=\"stop\" number=\"%1\"").arg(i + 1));
-                        }
-                  else
-                        qDebug("no free slur slot");
+      // check if on slur list
+      int i = findSlur(s);
+      if (i < 0) {
+            // if not, find free slot to store it
+            i = findSlur(0);
+            if (i >= 0) {
+                  slur[i] = s;
+                  started[i] = false;
+                  notations.tag(xml);
+                  xml.tagE(QString("slur type=\"stop\" number=\"%1\"").arg(i + 1));
                   }
+            else
+                  qDebug("no free slur slot");
             }
-
-      // search slur list for already started slur(s) stopping at this chord
-      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-            if (slur[i] && slur[i]->tick2() == chord->tick() && slur[i]->track() == chord->track()) {
-                  if (started[i]) {
-                        slur[i] = 0;
-                        started[i] = false;
-                        notations.tag(xml);
-                        xml.tagE(QString("slur type=\"stop\" number=\"%1\"").arg(i + 1));
-                        }
-                  }
-            }
-      // surch for slurs to grace notes after
-      for (Chord* g : chord->graceNotesAfter()) {
-            foreach(Element* el, g->el()){
-                  if (el->type() == Element::Type::SLUR){
-                        const Slur* s = static_cast<const Slur*>(el);
-                        //define line type
-                        QString rest = slurTieLineStyle(s);
-                        int i = findSlur(0);
-                        if (i >= 0) {
-                              slur[i] = s;
-                              started[i] = true;
-                              notations.tag(xml);
-                              xml.tagE(QString("slur%1 type=\"start\" number=\"%2\"").arg(rest).arg(i + 1));
-                              }
-                        else
-                              qDebug("no free slur slot"); break;
-                        }
-                  }
+      else {
+            // found (already started), stop it and remove from list
+            slur[i] = 0;
+            started[i] = false;
+            notations.tag(xml);
+            xml.tagE(QString("slur type=\"stop\" number=\"%1\"").arg(i + 1));
             }
       }
 
@@ -2522,16 +2548,14 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   }
 
             if (note == nl.front()) {
-                  if (grace){
-                        sh.doSlurStart(chord, notations, xml, true);
-                        }
-                  else {
+                  if (!grace)
                         tupletStartStop(chord, notations, xml);
-                        sh.doSlurStop(chord, notations, xml);
-                        sh.doSlurStart(chord, notations, xml);
-                        }
+
+                  sh.doSlurs(chord, notations, xml);
+
                   chordAttributes(chord, notations, technical, trillStart, trillStop);
                   }
+
             foreach (const Element* e, note->el()) {
                   if (e->type() == Element::Type::FINGERING) {
                         Text* f = (Text*)e;
