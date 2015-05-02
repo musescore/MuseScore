@@ -5229,10 +5229,10 @@ QString ScoreFont::symToHtml(SymId s, int leftMargin, const TextStyle* ts, qreal
             size = ts->font(_spatium).pointSizeF();
             }
       else {
-            size = _font->pixelSize();
+            size = _font.pixelSize();
             }
 
-      QString family = _font->family();
+      QString family = _font.family();
       return QString(
       "<data>"
         "<html>"
@@ -5254,8 +5254,8 @@ QString ScoreFont::symToHtml(SymId s, int leftMargin, const TextStyle* ts, qreal
 
 QString ScoreFont::symToHtml(SymId s1, SymId s2, int leftMargin)
       {
-      qreal size = _font->pixelSize();
-      QString family = _font->family();
+      qreal size = _font.pixelSize();
+      QString family = _font.family();
 
       return QString(
       "<data>"
@@ -5336,19 +5336,19 @@ void ScoreFont::load()
                   exit(-1);
             }
 #endif
-      _font = new QFont();
-      _font->setWeight(QFont::Normal);  // if not set we get system default
-      _font->setItalic(false);
-      _font->setFamily(_family);
-      _font->setStyleStrategy(QFont::NoFontMerging);
+      _font = QFont();
+      _font.setWeight(QFont::Normal);  // if not set we get system default
+      _font.setItalic(false);
+      _font.setFamily(_family);
+      _font.setStyleStrategy(QFont::NoFontMerging);
 
       // horizontal hinting is bad as note hooks do not attach to stems
       // properly at some magnifications
-      _font->setHintingPreference(QFont::PreferVerticalHinting);
+      _font.setHintingPreference(QFont::PreferVerticalHinting);
 
       qreal size = 20.0 * MScore::DPI / PPI;
       QFont font2(font());                  // See comment below
-      _font->setPixelSize(lrint(size));
+      _font.setPixelSize(lrint(size));
       font2.setPixelSize(lrint(size)*100);  // See comment below
       // Since under Windows HintingPreferences always behave as PreferFullHinting (integer result)
       // unless DirectWrite is enabled during Qt compilation (and it would work only for Windows 7
@@ -5367,7 +5367,7 @@ void ScoreFont::load()
             qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
                error.offset, qPrintable(error.errorString()));
 
-      _fm = new QFontMetricsF(font());
+      _fm = QFontMetricsF(font());
       QFontMetrics fm2(font2);         // See comment above
       for (auto i : o.keys()) {
             bool ok;
@@ -5379,7 +5379,7 @@ void ScoreFont::load()
                   Sym* sym = &_symbols[int(symId)];
                   sym->setString(codeToString(code));
                   sym->setWidth((fm2.width(sym->string()))/100.0); // Renormalization; see comment above
-                  sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
+                  sym->setBbox(QRectF(_fm.tightBoundingRect(sym->string())));
                   }
             //else
             //      qDebug("unknown glyph: %s", qPrintable(i));
@@ -5512,7 +5512,7 @@ void ScoreFont::load()
                   for (SymId id : c.rids)
                         s += _symbols[int(id)].string();
                   sym->setString(s);
-                  sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
+                  sym->setBbox(QRectF(_fm.tightBoundingRect(s)));
                   }
             }
 
@@ -5550,7 +5550,7 @@ void ScoreFont::load()
                               if (ok) {
                                     QString s = codeToString(code);
                                     sym->setString(s);
-                                    sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
+                                    sym->setBbox(QRectF(_fm.tightBoundingRect(s)));
                                     }
                               break;
                               }
@@ -5578,14 +5578,14 @@ void ScoreFont::load()
       for (const UnicodeAlternate& unicode : unicodes) {
             Sym* sym = &_symbols[int(unicode.id)];
             sym->setString(unicode.string);
-            sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
+            sym->setBbox(QRectF(_fm.tightBoundingRect(sym->string())));
             }
 
 
       // add space symbol
       Sym* sym = &_symbols[int(SymId::space)];
       sym->setString("\u0020");
-      sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
+      sym->setBbox(QRectF(_fm.tightBoundingRect(sym->string())));
 
       /*for (int i = 1; i < int(SymId::lastSym); ++i) {
             Sym sym = _symbols[i];
@@ -5648,7 +5648,7 @@ const QRectF ScoreFont::bbox(SymId id, qreal mag) const
 
 const QRectF ScoreFont::bbox(const QString& s, qreal mag) const
       {
-      QRectF r(_fm->tightBoundingRect(s));
+      QRectF r(_fm.tightBoundingRect(s));
       return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
       }
 
