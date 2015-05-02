@@ -57,6 +57,11 @@ class TestRepeat : public QObject, public MTest
       
       void repeat20() { repeat("repeat20.mscx", "1;2;3;1;4;5;6;7;8;5;6"); } // two sections, 1/ DS al Coda, 2/DS Al fine
       void repeat21() { repeat("repeat21.mscx", "1;2;3;1;2;3;4;5;6;7;5;8"); } // two sections, 1/DS, 2/DS al Coda
+      
+      void repeat22() { repeat("repeat22.mscx", "1;2;3;2;3;4;5;5;6"); } // DS and ||: :||
+      // complex roadmap
+      void repeat23() { repeat("repeat23.mscx", "1;2;1;2;3;2;3;4;5;6;7;6;7;8;9;10;11;9;10;12;12;13;14;13;14;15;16;13;14"); }
+      
       };
 
 //---------------------------------------------------------
