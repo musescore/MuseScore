@@ -181,7 +181,7 @@ void Clef::layout()
             //
             bool showClef = true;
             // only if there is a clef change
-            if (!bHide && tick > 0 && stf->clef(tick) != stf->clef(tick-1)) {
+            if (!bHide && tick > 0 ) {
                   Measure* meas = clefSeg->measure();
                   showClef =                    // show this clef if:
                         // it is not a courtesy clef (not at the end of the last measure of the system)
