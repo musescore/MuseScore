@@ -492,7 +492,7 @@ static int musicXMLValidationErrorDialog(QString text, QString detailedText)
       QMessageBox errorDialog;
       errorDialog.setIcon(QMessageBox::Question);
       errorDialog.setText(text);
-      errorDialog.setInformativeText("Do you want to try to load this file anyway?");
+      errorDialog.setInformativeText(QObject::tr("Do you want to try to load this file anyway?"));
       errorDialog.setDetailedText(detailedText);
       errorDialog.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
       errorDialog.setDefaultButton(QMessageBox::No);
