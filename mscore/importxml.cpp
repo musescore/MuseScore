@@ -4827,16 +4827,11 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                         if (slur[slurNo].isStart()) {
                               // slur stop when slur already started: wrap up
                               Slur* newSlur = slur[slurNo].slur();
-                              if(cr->isGrace()){
-                                    newSlur->setAnchor(Spanner::Anchor::CHORD);
-                                    newSlur->setEndElement(newSlur->startElement());
-                                    newSlur->setStartElement(cr);
-                                    }
-                              else {
+                              if(!(cr->isGrace())){
                                     newSlur->setTick2(tick);
                                     newSlur->setTrack2(track);
-                                    newSlur->setEndElement(cr);
                                     }
+                              newSlur->setEndElement(cr);
                               slur[slurNo] = SlurDesc();
                               }
                         else if (slur[slurNo].isStop())
@@ -4845,8 +4840,10 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                         else {
                               // slur stop for new slur: init
                               Slur* newSlur = new Slur(score);
-                              newSlur->setTick2(tick);
-                              newSlur->setTrack2(track);
+                              if(!(cr->isGrace())){
+                                    newSlur->setTick2(tick);
+                                    newSlur->setTrack2(track);
+                                    }
                               newSlur->setEndElement(cr);
                               slur[slurNo].stop(newSlur);
                               }
