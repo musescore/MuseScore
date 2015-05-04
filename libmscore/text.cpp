@@ -1737,13 +1737,13 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                         break;
 
                   case Qt::Key_Minus:
-                        s = "-";
-                        modifiers = 0;
+                        if (modifiers == 0)
+                              s = "-";
                         break;
 
                   case Qt::Key_Underscore:
-                        s = "_";
-                        modifiers = 0;
+                        if (modifiers == 0)
+                              s = "_";
                         break;
 
                   case Qt::Key_A:
