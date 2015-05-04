@@ -1,3 +1,7 @@
+Version 2.107 Add Mellow Yamaha Grand at Bank #8 Patch #0
+Version 2.106 Fix Alto Sax range issue
+Version 2.105 Fix Recorder range issue
+Version 2.104 Tweak tuning for Violin preset
 Version 2.103 Remove Burst Noise preset which was overloading FluidSynth
 Version 2.102 Fix name problem for Bass & Lead
 Version 2.101 Fix typo in Accordion def
