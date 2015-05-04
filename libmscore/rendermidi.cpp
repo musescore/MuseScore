@@ -883,11 +883,36 @@ void renderNoteArticulation(NoteEventList* events,
         }
         return duration;
     };
+    auto accidentalDelta = [chord] (int line) {
+        auto measure = chord->segment()->measure();
+        AccidentalVal acci = measure->findAccidental(chord->segment(), chord->staff()->idx(), line);
+        // FLAT2 --> -1
+        // FLAT  --> -1
+        // NATURAL --> 0
+        // SHARP --> 1
+        // SHARP2 --> 2
+        return int(acci);
+    };
     // local function:
-    auto articulationExcursion = [key, pitch] (int delta) {
-        return (delta == 0)
-            ? 0
-            : diatonicUpDown(key,pitch,delta)-pitch;
+    auto articulationExcursion = [key, pitch, chord, note, accidentalDelta] (int deltastep) {
+        if ( 0 == deltastep )
+            return 0;
+        // deltastep is the number of diatonic steps between the base note and this articulation step.
+        int tick = chord->tick();
+        Staff * staff = chord->staff();
+        ClefType clef = staff->clef(tick);
+        // line represents the ledger line of the staff.  0 is the top line, 1, is the space between the top 2 lines,
+        //  ... 8 is the bottom line.
+        int line     = note->line();
+        
+        // we use line - deltastep, because lines are oriented from top to bottom, while step is oriented from bottom to top.
+        int line2    = line - deltastep;
+        int acci2    = accidentalDelta(line2);
+        int pitch2_C = line2pitch(line-deltastep, clef, Key::C);
+        int pitch2   = pitch2_C + acci2;
+        int halfsteps = pitch2 - pitch;
+
+        return halfsteps ;
     };
     // local function:
     auto makeEvent = [chord,events,articulationExcursion] (int pitch, int ontime, int duration) {
@@ -928,10 +953,6 @@ void renderNoteArticulation(NoteEventList* events,
     }
 }
 
-    // TODO
-    // * test for accidentals in the mesure.
-    //      I.e., if F is sharpened earlier in the measure then a trill'ed E should trill to F#
-    //
 void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gateTime) {
     // This struct specifies how to render an articulation.
     //   atype - the articulation type to implement, such as ArticulationType::Turn
