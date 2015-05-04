@@ -22,8 +22,8 @@ REVISION  = `cat mscore/revision.h`
 CPUS      = `grep -c processor /proc/cpuinfo`
 
 PREFIX    = "/usr/local"
-VERSION   = "2.0.1b-${REVISION}"
-#VERSION = 2.0.1
+#VERSION   = "2.0.1b-${REVISION}"
+VERSION = 2.0.1
 
 #
 # change path to include your Qt5 installation
