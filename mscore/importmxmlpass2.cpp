@@ -5106,16 +5106,11 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                         if (_slur[slurNo].isStart()) {
                               // slur stop when slur already started: wrap up
                               Slur* newSlur = _slur[slurNo].slur();
-                              if (cr->isGrace()) {
-                                    newSlur->setAnchor(Spanner::Anchor::CHORD);
-                                    newSlur->setEndElement(newSlur->startElement());
-                                    newSlur->setStartElement(cr);
-                                    }
-                              else {
+                              if(!(cr->isGrace())){
                                     newSlur->setTick2(tick);
                                     newSlur->setTrack2(track);
-                                    newSlur->setEndElement(cr);
                                     }
+                              newSlur->setEndElement(cr);
                               _slur[slurNo] = SlurDesc();
                               }
                         else if (_slur[slurNo].isStop())
@@ -5124,8 +5119,10 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                         else {
                               // slur stop for new slur: init
                               Slur* newSlur = new Slur(_score);
-                              newSlur->setTick2(tick);
-                              newSlur->setTrack2(track);
+                              if(!(cr->isGrace())){
+                                    newSlur->setTick2(tick);
+                                    newSlur->setTrack2(track);
+                                    }
                               newSlur->setEndElement(cr);
                               _slur[slurNo].stop(newSlur);
                               }
