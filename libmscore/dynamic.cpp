@@ -391,7 +391,7 @@ void Dynamic::undoSetDynRange(Range v)
 
 QVariant Dynamic::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::DYNAMIC_RANGE:     return int(_dynRange);
             case P_ID::VELOCITY:          return velocity();
             case P_ID::SUBTYPE:           return int(_dynamicType);
@@ -431,7 +431,7 @@ bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Dynamic::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::TEXT_STYLE_TYPE: return int(TextStyleType::DYNAMICS);
             case P_ID::DYNAMIC_RANGE:   return int(Range::PART);
             case P_ID::VELOCITY:        return -1;

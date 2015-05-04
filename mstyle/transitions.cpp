@@ -100,7 +100,7 @@ void Transitions::unregisterWidget( QWidget* widget ) const {
       // the following allows some optimization of widget unregistration
       // it assumes that a widget can be registered atmost in one of the
       // engines stored in the list.
-      foreach( const BaseEngine::Pointer & engine, engines_ ) {
+      for ( const BaseEngine::Pointer & engine : engines_ ) {
             if ( engine && engine.data()->unregisterWidget( widget ) ) break;
             }
 

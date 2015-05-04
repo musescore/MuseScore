@@ -86,7 +86,7 @@ ScoreAccessibility::~ScoreAccessibility()
 
 void ScoreAccessibility::clearAccessibilityInfo()
       {
-      if(statusBarLabel != 0) {
+      if (statusBarLabel != 0) {
             mainWindow->statusBar()->removeWidget(statusBarLabel);
             delete statusBarLabel;
             statusBarLabel = 0;
@@ -113,7 +113,7 @@ void ScoreAccessibility::currentInfoChanged()
                   bar_beat = barbeat(s->startSegment());
                   barsAndBeats += tr("Start Measure: %1; Start Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
                   Segment* seg = s->endSegment();
-                  if(!seg)
+                  if (!seg)
                         seg = score->lastSegment()->prev1MM(Segment::Type::ChordRest);
 
                   if (seg->tick() != score->lastSegment()->prev1MM(Segment::Type::ChordRest)->tick() &&
@@ -216,7 +216,7 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
       int ticks = 0;
       TimeSigMap* tsm = e->score()->sigmap();
       Element* p = e;
-      while(p && p->type() != Element::Type::SEGMENT && p->type() != Element::Type::MEASURE)
+      while (p && p->type() != Element::Type::SEGMENT && p->type() != Element::Type::MEASURE)
             p = p->parent();
 
       if (!p) {

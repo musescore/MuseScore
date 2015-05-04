@@ -157,7 +157,7 @@ void LoginManager::onTryLoginError(const QString& error)
 
 void LoginManager::login(QString login, QString password)
       {
-      if(login == "" || password == "")
+      if (login == "" || password == "")
            return;
       
       connect(_oauthManager, SIGNAL(requestReady(QByteArray)),

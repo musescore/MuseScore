@@ -196,7 +196,7 @@ ChordRest* Selection::firstChordRest(int track) const
             return 0;
             }
       ChordRest* cr = 0;
-      foreach (Element* el, _el) {
+      for (Element* el : _el) {
             if (el->type() == Element::Type::NOTE)
                   el = el->parent();
             if (el->isChordRest()) {
@@ -411,10 +411,10 @@ void Selection::appendChord(Chord* chord)
 //      if (chord->glissando()) appendFiltered(chord->glissando());
       if (chord->stemSlash()) _el.append(chord->stemSlash());
       if (chord->tremolo()) appendFiltered(chord->tremolo());
-      foreach(Note* note, chord->notes()) {
+      for (Note* note : chord->notes()) {
             _el.append(note);
             if (note->accidental()) _el.append(note->accidental());
-            foreach(Element* el, note->el())
+            for (Element* el : note->el())
                   appendFiltered(el);
             for (int x = 0; x < MAX_DOTS; x++)
                   if (note->dot(x) != 0) _el.append(note->dot(x));
@@ -436,7 +436,7 @@ void Selection::appendChord(Chord* chord)
 
 void Selection::updateSelectedElements()
       {
-      foreach(Element* e, _el)
+      for (Element* e : _el)
             e->setSelected(false);
       _el.clear();
 
@@ -457,7 +457,7 @@ void Selection::updateSelectedElements()
             for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
                   if (s->segmentType() == Segment::Type::EndBarLine)  // do not select end bar line
                         continue;
-                  foreach(Element* e, s->annotations()) {
+                  for (Element* e : s->annotations()) {
                         if (e->track() != st)
                               continue;
                         if (e->systemFlag()) //exclude system text
@@ -479,7 +479,7 @@ void Selection::updateSelectedElements()
                               if (e)
                                     appendFiltered(e);
                               }
-                        foreach (Articulation* art, cr->articulations())
+                        for (Articulation* art : cr->articulations())
                               appendFiltered(art);
                         }
                   if (e->type() == Element::Type::CHORD) {
@@ -550,12 +550,12 @@ void Selection::update()
 void Selection::dump()
       {
       qDebug("Selection dump: ");
-      switch(_state) {
+      switch (_state) {
             case SelState::NONE:   qDebug("NONE"); return;
             case SelState::RANGE:  qDebug("RANGE"); break;
             case SelState::LIST:   qDebug("LIST"); break;
             }
-      foreach(const Element* e, _el)
+      for (const Element* e : _el)
             qDebug("  %p %s", e, e->name());
       }
 
@@ -737,7 +737,7 @@ QByteArray Selection::symbolListMimeData() const
       std::multimap<qint64, MAPDATA> map;
 
       // scan selection element list, inserting relevant elements in a tick-sorted map
-      foreach (Element* e, _el) {
+      for (Element* e : _el) {
             switch (e->type()) {
 /* All these element types are ignored:
 
@@ -893,7 +893,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                         if (seg->segmentType() == Segment::Type::ChordRest) {
                               // if no ChordRest in right track, look in anotations
                               if (seg->element(currTrack) == nullptr) {
-                                    foreach (Element* el, seg->annotations()) {
+                                    for (Element* el : seg->annotations()) {
                                           // do annotations include our element?
                                           if (el == iter->second.e) {
                                                 done = true;
@@ -941,7 +941,7 @@ QList<Note*> Selection::noteList(int selTrack) const
       QList<Note*>nl;
 
       if (_state == SelState::LIST) {
-            foreach(Element* e, _el) {
+            for (Element* e : _el) {
                   if (e->type() == Element::Type::NOTE)
                         nl.append(static_cast<Note*>(e));
                   }

@@ -114,7 +114,7 @@ void PaletteBox::updateWorkspaces()
       const QList<Workspace*> pl = Workspace::workspaces();
       int idx = 0;
       int curIdx = -1;
-      foreach (Workspace* p, pl) {
+      for (Workspace* p : pl) {
             workspaceList->addItem(qApp->translate("Ms::Workspace", p->name().toUtf8()), p->path());
             if (p->name() == preferences.workspace)
                   curIdx = idx;
@@ -188,7 +188,7 @@ void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
       PaletteBoxButton* b = static_cast<PaletteBoxButton*>(item->widget());
       Palette* palette    = static_cast<Palette*>(vbox->itemAt(slot+1)->widget());
 
-      switch(cmd) {
+      switch (cmd) {
             case PaletteCommand::PDELETE:
                   {
                   vbox->removeItem(item);

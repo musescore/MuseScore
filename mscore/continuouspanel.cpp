@@ -125,7 +125,7 @@ void ContinuousPanel::paint(const QRect& /*r*/, QPainter& p)
       qStableSort(elementsCurrent.begin(), elementsCurrent.end(), elementLessThan);
 
       _currentMeasure = nullptr;
-      foreach(const Element* e, elementsCurrent) {
+      for (const Element* e : elementsCurrent) {
             e->itemDiscovered = 0;
             if (!e->visible()) {
                   if (_score->printing() || !_score->showInvisible())
@@ -182,7 +182,7 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
       _widthKeySig = 0;
       _widthTimeSig = 0;
       _xPosTimeSig = 0;
-      foreach(const Element* e, el) {
+      for (const Element* e : el) {
             e->itemDiscovered = 0;
             if (!e->visible()) {
                   if (_score->printing() || !_score->showInvisible())
@@ -344,7 +344,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
       //
       // This second pass draws the elements spaced evently using the width of the largest element
       //
-      foreach(const Element* e, el) {
+      for (const Element* e : el) {
             e->itemDiscovered = 0;
             if (!e->visible()) {
                   if (_score->printing() || !_score->showInvisible())

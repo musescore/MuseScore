@@ -977,7 +977,7 @@ void SLine::write(Xml& xml) const
 
 void SLine::read(XmlReader& e)
       {
-      foreach(SpannerSegment* seg, spannerSegments())
+      for (SpannerSegment* seg : spannerSegments())
             delete seg;
       spannerSegments().clear();
       e.addSpanner(e.intAttribute("id", -1), this);

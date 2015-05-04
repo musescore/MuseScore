@@ -95,7 +95,7 @@ void Tie::computeBezier(SlurSegment* ss, QPointF p6o)
       QPointF p3o = p6o + t.map(ss->ups(Grip::BEZIER1).off * _spatium);
       QPointF p4o = p6o + t.map(ss->ups(Grip::BEZIER2).off * _spatium);
 
-      if(!p6o.isNull()) {
+      if (!p6o.isNull()) {
             QPointF p6i = t.inverted().map(p6o) / _spatium;
             ss->ups(Grip::BEZIER1).off += p6i ;
             ss->ups(Grip::BEZIER2).off += p6i;
@@ -400,7 +400,7 @@ void Tie::layout()
       int sysIdx1 = systems->indexOf(sPos.system1);
       if (sysIdx1 == -1) {
             qDebug("system not found");
-            foreach(System* s, *systems)
+            for (System* s : *systems)
                   qDebug("   search %p in %p", sPos.system1, s);
             return;
             }

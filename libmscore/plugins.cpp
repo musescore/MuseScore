@@ -78,7 +78,7 @@ QString FileIO::read()
             }
       QUrl url(mSource);
       QString source(mSource);
-      if(url.isValid() && url.isLocalFile()) {
+      if (url.isValid() && url.isLocalFile()) {
             source = url.toLocalFile();
             }
       QFile file(source);
@@ -137,7 +137,7 @@ int FileIO::modifiedTime()
             }
       QUrl url(mSource);
       QString source(mSource);
-      if(url.isValid() && url.isLocalFile()) {
+      if (url.isValid() && url.isLocalFile()) {
             source = url.toLocalFile();
             }
       QFileInfo fileInfo(source);
@@ -185,13 +185,13 @@ void MsScoreView::paint(QPainter* p)
 
       Page* page = score->pages()[_currentPage];
       QList<const Element*> el;
-      foreach(System* s, *page->systems()) {
-            foreach(MeasureBase* m, s->measures())
+      for (System* s : *page->systems()) {
+            for (MeasureBase* m : s->measures())
                   m->scanElements(&el, collectElements, false);
             }
       page->scanElements(&el, collectElements, false);
 
-      foreach(const Element* e, el) {
+      for (const Element* e : el) {
             QPointF pos(e->pagePos());
             p->translate(pos);
             e->draw(p);

@@ -711,7 +711,7 @@ static QString resolveSymCompatibility(SymId i, QString programVersion)
       {
       if (!programVersion.isEmpty() && programVersion < "1.1")
             i = SymId(int(i) + 5);
-      switch(int(i)) {
+      switch (int(i)) {
             case 197:   return "keyboardPedalPed";
             case 191:   return "keyboardPedalUp";
             case 193:   return "noSym"; //SymId(pedaldotSym);

@@ -80,7 +80,7 @@ void Revisions::write(Xml& xml) const
 void Revisions::write(Xml& xml, const Revision* r) const
       {
       r->write(xml);
-      foreach(const Revision* rr, r->branches())
+      for (const Revision* rr : r->branches())
             write(xml, rr);
       }
 

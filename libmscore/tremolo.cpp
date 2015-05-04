@@ -290,7 +290,7 @@ void Tremolo::read(XmlReader& e)
 
 QString Tremolo::tremoloTypeName() const
       {
-      switch(tremoloType()) {
+      switch (tremoloType()) {
             case TremoloType::R8:  return QString("r8");
             case TremoloType::R16: return QString("r16");
             case TremoloType::R32: return QString("r32");
@@ -340,7 +340,7 @@ void Tremolo::setTremoloType(const QString& s)
 Fraction Tremolo::tremoloLen() const
       {
       Fraction f;
-      switch(lines()) {
+      switch (lines()) {
             case 1: f.set(1,8); break;
             case 2: f.set(1,16); break;
             case 3: f.set(1,32); break;

@@ -139,7 +139,7 @@ void Clef::addElement(Element* e, qreal x, qreal y)
 void Clef::setSelected(bool f)
       {
       Element::setSelected(f);
-      foreach(Element* e, elements)
+      for (Element* e : elements)
             e->setSelected(f);
       }
 
@@ -342,7 +342,7 @@ void Clef::draw(QPainter* painter) const
       if (staff() && !staff()->staffType()->genClef())
             return;
       QColor color(curColor());
-      foreach(Element* e, elements) {
+      for (Element* e : elements) {
             e->setColor(color);
             QPointF pt(e->pos());
             painter->translate(pt);
@@ -437,9 +437,9 @@ void Clef::read(XmlReader& e)
 void Clef::write(Xml& xml) const
       {
       xml.stag(name());
-      if(_clefTypes._concertClef != ClefType::INVALID)
+      if (_clefTypes._concertClef != ClefType::INVALID)
             xml.tag("concertClefType", ClefInfo::tag(_clefTypes._concertClef));
-      if(_clefTypes._transposingClef != ClefType::INVALID)
+      if (_clefTypes._transposingClef != ClefType::INVALID)
             xml.tag("transposingClefType", ClefInfo::tag(_clefTypes._transposingClef));
       if (!_showCourtesy)
             xml.tag("showCourtesyClef", _showCourtesy);
@@ -596,7 +596,7 @@ void Clef::undoSetShowCourtesy(bool v)
 
 QVariant Clef::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SHOW_COURTESY: return showCourtesy();
             case P_ID::SMALL:         return small();
             default:
@@ -610,7 +610,7 @@ QVariant Clef::getProperty(P_ID propertyId) const
 
 bool Clef::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SHOW_COURTESY: _showCourtesy = v.toBool(); break;
             case P_ID::SMALL:         setSmall(v.toBool()); break;
             default:
@@ -625,7 +625,7 @@ bool Clef::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Clef::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::SHOW_COURTESY: return true;
             case P_ID::SMALL:         return false;
             default:              return Element::propertyDefault(id);

@@ -102,7 +102,7 @@ void StaffState::layout()
       qreal w  = _spatium * 2.5;
 //      qreal w1 = w * .6;
 
-      switch(staffStateType()) {
+      switch (staffStateType()) {
             case StaffStateType::INSTRUMENT:
                   path.lineTo(w, 0.0);
                   path.lineTo(w, h);
@@ -167,7 +167,7 @@ void StaffState::setStaffStateType(const QString& s)
 
 QString StaffState::staffStateTypeName() const
       {
-      switch(staffStateType()) {
+      switch (staffStateType()) {
             case StaffStateType::INSTRUMENT:
                   return "instrument";
             case StaffStateType::TYPE:

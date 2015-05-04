@@ -738,7 +738,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   int tick  = cr->tick() + f.ticks();
 
                   if ((tuplet == 0) && (((measure->tick() - tick) % dList[0].ticks()) == 0)) {
-                        foreach(TDuration d, dList) {
+                        for (TDuration d : dList) {
                               qDebug("    reinstate at %d, %d", tick, d.ticks());
                               if (ltuplet) {
                                     // take care not to recreate tuplet we just deleted
@@ -929,7 +929,7 @@ QList<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
 
       Tuplet* tuplet = cr->tuplet();
       if (tuplet) {
-            if(tuplet->tuplet())
+            if (tuplet->tuplet())
                   return flist; // do no deal with nested tuplets
             Fraction rest = Fraction::fromTicks(tuplet->tick() + tuplet->duration().ticks() - cr->segment()->tick()) * tuplet->ratio();
             if (rest < gap)
@@ -994,7 +994,7 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
                         if (tremolo->twoNotes())
                               undoRemoveElement(tremolo);
                         }
-                  foreach (Note* n, c->notes()) {
+                  for (Note* n : c->notes()) {
                         if (n->tieFor())
                               undoRemoveElement(n->tieFor());
                         }
@@ -1054,7 +1054,7 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
                   Measure* measure = tick2measure(tick);
                   int etick = measure->tick();
                   if (((tick - etick) % dList[0].ticks()) == 0) {
-                        foreach(TDuration du, dList) {
+                        for (TDuration du : dList) {
                               bool genTie;
                               Chord* cc;
                               if (oc) {
@@ -1184,7 +1184,7 @@ void Score::upDown(bool up, UpDownMode mode)
       if (el.empty())
             return;
 
-      foreach (Note* oNote, el) {
+      for (Note* oNote : el) {
             int tick     = oNote->chord()->tick();
             Staff* staff = oNote->staff();
             Part* part   = staff->part();
@@ -1259,7 +1259,7 @@ void Score::upDown(bool up, UpDownMode mode)
                         }
                         break;
                   case StaffGroup::STANDARD:
-                        switch(mode) {
+                        switch (mode) {
                               case UpDownMode::OCTAVE:
                                     if (up) {
                                           if (pitch < 116)
@@ -1366,7 +1366,7 @@ void Score::upDown(bool up, UpDownMode mode)
 void Score::addArticulation(ArticulationType attr)
       {
       QSet<Chord*> set;
-      foreach(Element* el, selection().elements()) {
+      for (Element* el : selection().elements()) {
             if (el->type() == Element::Type::NOTE || el->type() == Element::Type::CHORD) {
                   Chord* cr = nullptr;
                   // apply articulation on a given chord only once
@@ -1393,7 +1393,7 @@ void Score::addArticulation(ArticulationType attr)
 
 void Score::changeAccidental(AccidentalType idx)
       {
-      foreach(Note* note, selection().noteList())
+      for (Note* note : selection().noteList())
             changeAccidental(note, idx);
       }
 
@@ -1561,15 +1561,15 @@ void Score::resetUserStretch()
       Segment* s2 = _selection.endSegment();
       // if either segment is not returned by the selection
       // (for instance, no selection) fall back to first/last measure
-      if(!s1)
+      if (!s1)
             m1 = firstMeasure();
       else
             m1 = s1->measure();
-      if(!s2)
+      if (!s2)
             m2 = lastMeasure();
       else
             m2 = s2->measure();
-      if(!m1 || !m2)                // should not happen!
+      if (!m1 || !m2)                // should not happen!
             return;
 
       for (Measure* m = m1; m; m = m->nextMeasure()) {
@@ -1754,7 +1754,7 @@ bool Score::processMidiInput()
             //after relayout
             Element* e = inputState().cr();
             if (e) {
-                  for(MuseScoreView* v : viewer)
+                  for (MuseScoreView* v : viewer)
                         v->adjustCanvasPosition(e, false);
                   }
             return true;
@@ -1823,7 +1823,7 @@ Element* Score::move(const QString& cmd)
                         // segment for sure contains chords/rests,
                         int size = seg->elist().size();
                         // if segment has a chord/rest in original element track, use it
-                        if(track > -1 && track < size && seg->element(track)) {
+                        if (track > -1 && track < size && seg->element(track)) {
                               trg  = seg->element(track);
                               cr = static_cast<ChordRest*>(trg);
                               break;
@@ -1914,7 +1914,7 @@ Element* Score::move(const QString& cmd)
             _playNote = true;
             select(el, SelectType::SINGLE, 0);
             if (noteEntryMode()) {
-                  foreach (MuseScoreView* view ,viewer)
+                  for (MuseScoreView* view : viewer)
                         view->moveCursor();
                   }
             }
@@ -1986,7 +1986,7 @@ Element* Score::selectMove(const QString& cmd)
 void Score::cmdMirrorNoteHead()
       {
       const QList<Element*>& el = selection().elements();
-      foreach(Element* e, el) {
+      for (Element* e : el) {
             if (e->type() == Element::Type::NOTE) {
                   Note* note = static_cast<Note*>(e);
                   if (note->staff() && note->staff()->isTabStaff())
@@ -2069,7 +2069,7 @@ void Score::cmdDoubleDuration()
 
 void Score::cmdAddBracket()
       {
-      for(Element* el : selection().elements()) {
+      for (Element* el : selection().elements()) {
             if (el->type() == Element::Type::NOTE) {
                   Note* n = static_cast<Note*>(el);
                   n->addBracket();
@@ -2583,7 +2583,7 @@ void Score::cmdExplode()
                         int stavesPerNote = qMax((lastStaff - srcStaff) / nnotes, 1);
                         int keepIndex = qMax(nnotes - 1 - (i / stavesPerNote), 0);
                         Note* keepNote = c->notes()[keepIndex];
-                        foreach (Note* n, notes) {
+                        for (Note* n : notes) {
                               if (n != keepNote)
                                     undoRemoveElement(n);
                               }
@@ -2641,7 +2641,7 @@ void Score::cmdImplode()
                   Chord* dstChord = static_cast<Chord*>(dst);
                   // see if we are tying in to this chord
                   Chord* tied = 0;
-                  foreach (Note* n, dstChord->notes()) {
+                  for (Note* n : dstChord->notes()) {
                         if (n->tieBack()) {
                               tied = n->tieBack()->startNote()->chord();
                               break;
@@ -2657,7 +2657,7 @@ void Score::cmdImplode()
                               if ((trackInc == 1) && (srcChord->duration() != dstChord->duration()))
                                     continue;
                               // add notes
-                              foreach (Note* n, srcChord->notes()) {
+                              for (Note* n : srcChord->notes()) {
                                     NoteVal nv(n->pitch());
                                     nv.tpc1 = n->tpc1();
                                     // skip duplicates
@@ -2667,7 +2667,7 @@ void Score::cmdImplode()
                                     // add tie to this note if original chord was tied
                                     if (tied) {
                                           // find note to tie to
-                                          foreach (Note *tn, tied->notes()) {
+                                          for (Note *tn : tied->notes()) {
                                                 if (nn->pitch() == tn->pitch() && nn->tpc() == tn->tpc() && !tn->tieFor()) {
                                                       // found note to tie
                                                       Tie* tie = new Tie(this);
@@ -2800,7 +2800,7 @@ void Score::cmdSlashFill()
                   s = setNoteRest(s, track + voice, nv, f);
                   Chord* c = static_cast<Chord*>(s->element(track + voice));
                   if (c->links()) {
-                        foreach (ScoreElement* e, *c->links()) {
+                        for (ScoreElement* e : *c->links()) {
                               Chord* lc = static_cast<Chord*>(e);
                               lc->setSlash(true, true);
                               }
@@ -2831,7 +2831,7 @@ void Score::cmdSlashRhythm()
       {
       QList<Chord*> chords;
       // loop through all notes in selection
-      foreach (Element* e, selection().elements()) {
+      for (Element* e : selection().elements()) {
             if (e->voice() >= 2 && e->type() == Element::Type::REST) {
                   Rest* r = static_cast<Rest*>(e);
                   r->setAccent(!r->accent());

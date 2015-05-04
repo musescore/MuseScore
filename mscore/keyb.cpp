@@ -78,7 +78,7 @@ bool ScoreView::editKeyLyrics(QKeyEvent* ev)
       QString s                       = ev->text();
       bool ctrl                       = modifiers == Qt::ControlModifier;
 
-      switch(key) {
+      switch (key) {
             case Qt::Key_Space:
                   if (!(modifiers & CONTROL_MODIFIER)) {
                         // TODO: shift+tab events are filtered by qt
@@ -117,7 +117,7 @@ bool ScoreView::editKeyLyrics(QKeyEvent* ev)
                   break;
             default:
                   {
-                  if(s == "-" && !(modifiers & CONTROL_MODIFIER))
+                  if (s == "-" && !(modifiers & CONTROL_MODIFIER))
                         lyricsMinus();
                   else if (s == "_" && !(modifiers & CONTROL_MODIFIER))
                         lyricsUnderscore();

@@ -721,7 +721,7 @@ void spell(QList<Event>& notes, int key)
             if (end == n) {
                   int n = end - start;
                   int k;
-                  switch(n - 6) {
+                  switch (n - 6) {
                         case 3:
                               k = end - start - 3;
                               notes[end-3].setTpc(tab[(notes[end-3].dataA() % 12) * 2 + ((opt & (1<<k)) >> k)]);
@@ -792,7 +792,7 @@ void Score::spellNotelist(QList<Note*>& notes)
             if (end == n) {
                   int n = end - start;
                   int k;
-                  switch(n - 6) {
+                  switch (n - 6) {
                         case 3:
                               k = end - start - 3;
                               changeAllTpcs(notes[end-3], tab[(notes[end-3]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);

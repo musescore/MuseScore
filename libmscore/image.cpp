@@ -148,7 +148,7 @@ void Image::setScale(const QSizeF& scale)
 
 QSizeF Image::scaleForSize(const QSizeF& s) const
       {
-      if(!isValid())
+      if (!isValid())
             return QSizeF();
       QSizeF sz = s * scaleFactor();
       return QSizeF(
@@ -176,7 +176,7 @@ QSizeF Image::sizeForScale(const QSizeF& scale) const
 
 QVariant Image::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::AUTOSCALE:
                   return autoScale();
             case P_ID::SIZE:
@@ -200,7 +200,7 @@ bool Image::setProperty(P_ID propertyId, const QVariant& v)
       {
       bool rv = true;
       score()->addRefresh(canvasBoundingRect());
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::AUTOSCALE:
                   setAutoScale(v.toBool());
                   break;
@@ -231,7 +231,7 @@ bool Image::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Image::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::AUTOSCALE:             return defaultAutoScale;
             case P_ID::SIZE:                  break;
             case P_ID::LOCK_ASPECT_RATIO:     return defaultLockAspectRatio;
@@ -324,7 +324,7 @@ void Image::write(Xml& xml) const
             if (imgFPath.startsWith(scorePath, Qt::CaseSensitive)) {
                   // relative img path is the part exceeding scorePath
                   imgFPath.remove(0, scorePath.size());
-                  if(imgFPath.startsWith('/'))
+                  if (imgFPath.startsWith('/'))
                         imgFPath.remove(0, 1);
                   relativeFilePath = imgFPath;
                   }

@@ -184,7 +184,7 @@ bool TrillSegment::acceptDrop(const DropData& data) const
 Element* TrillSegment::drop(const DropData& data)
       {
       Element* e = data.element;
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::ACCIDENTAL:
                   e->setParent(trill());
                   score()->undoAddElement(e);
@@ -417,7 +417,7 @@ void Trill::setTrillType(const QString& s)
 
 QString Trill::trillTypeName() const
       {
-      switch(trillType()) {
+      switch (trillType()) {
             case Type::TRILL_LINE:
                   return "trill";
             case Type::UPPRALL_LINE:
@@ -461,7 +461,7 @@ void Trill::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 QVariant Trill::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::TRILL_TYPE:
                   return int(trillType());
             default:
@@ -476,7 +476,7 @@ QVariant Trill::getProperty(P_ID propertyId) const
 
 bool Trill::setProperty(P_ID propertyId, const QVariant& val)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::TRILL_TYPE:
                   setTrillType(Type(val.toInt()));
                   break;
@@ -495,7 +495,7 @@ bool Trill::setProperty(P_ID propertyId, const QVariant& val)
 
 QVariant Trill::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::TRILL_TYPE:
                   return 0;
             default:

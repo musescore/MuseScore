@@ -107,7 +107,7 @@ static size_t ovRead(void* ptr, size_t size, size_t nmemb, void* datasource)
 static int ovSeek(void* datasource, ogg_int64_t offset, int whence)
       {
       VorbisData* vd = (VorbisData*)datasource;
-      switch(whence) {
+      switch (whence) {
             case SEEK_SET:
                   vd->pos = offset;
                   break;
@@ -399,7 +399,7 @@ void MuseScore::seqStopped()
 
 void Seq::unmarkNotes()
       {
-      foreach(const Note* n, markedNotes) {
+      for (const Note* n : markedNotes) {
             n->setMark(false);
             cs->addRefresh(n->canvasBoundingRect());
             }
@@ -435,7 +435,7 @@ void Seq::guiStop()
 
 void Seq::seqMessage(int msg, int arg)
       {
-      switch(msg) {
+      switch (msg) {
             case '5': {
                   // Update the screen after seeking from the realtime thread
                   Segment* seg = cs->tick2segment(arg);
@@ -527,7 +527,7 @@ void Seq::recomputeMaxMidiOutPort() {
       if (!(preferences.useJackMidi || preferences.useAlsaAudio))
             return;
       int max = 0;
-      foreach(Score * s, MuseScoreCore::mscoreCore->scores()) {
+      for (Score * s : MuseScoreCore::mscoreCore->scores()) {
             if (s->midiPortCount() > max)
                   max = s->midiPortCount();
             }
@@ -545,7 +545,7 @@ void Seq::processMessages()
             if (toSeq.isEmpty())
                   break;
             SeqMsg msg = toSeq.dequeue();
-            switch(msg.id) {
+            switch (msg.id) {
                   case SeqMsgId::TEMPO_CHANGE:
                         {
                         if (!cs)
@@ -966,9 +966,9 @@ void Seq::initInstruments(bool realTime)
                   _driver->updateOutPortCount(maxMidiOutPort + 1);
             }
 
-      foreach(const MidiMapping& mm, *cs->midiMapping()) {
+      for (const MidiMapping& mm : *cs->midiMapping()) {
             Channel* channel = mm.articulation;
-            foreach(const MidiCoreEvent& e, channel->init) {
+            for (const MidiCoreEvent& e : channel->init) {
                   if (e.type() == ME_INVALID)
                         continue;
                   NPlayEvent event(e.type(), channel->channel, e.dataA(), e.dataB());
@@ -1174,7 +1174,7 @@ void Seq::stopNotes(int channel, bool realTime)
       };
       // Stop notes in all channels
       if (channel == -1) {
-            for(int ch = 0; ch < cs->midiMapping()->size(); ch++) {
+            for (int ch = 0; ch < cs->midiMapping()->size(); ch++) {
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_ALL_NOTES_OFF, 0));
                   }

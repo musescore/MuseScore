@@ -425,7 +425,7 @@ void Lyrics::paste(MuseScoreView* scoreview)
       QStringList hyph = sl[0].split("-");
       bool minus = false;
       bool underscore = false;
-      if(hyph.length() > 1) {
+      if (hyph.length() > 1) {
             insertText(hyph[0]);
             hyph.removeFirst();
             sl[0] =  hyph.join("-");
@@ -525,9 +525,9 @@ void Lyrics::setNo(int n)
       // adjust beween LYRICS1 and LYRICS2 only; keep other styles as they are
       // (_no is 0-based, so odd _no means even line and viceversa)
       if (type() == Element::Type::LYRICS) {
-            if( (_no & 1) && textStyleType() == TextStyleType::LYRIC1)
+            if ( (_no & 1) && textStyleType() == TextStyleType::LYRIC1)
                   setTextStyleType(TextStyleType::LYRIC2);
-            if( !(_no & 1) && textStyleType() == TextStyleType::LYRIC2)
+            if ( !(_no & 1) && textStyleType() == TextStyleType::LYRIC2)
                   setTextStyleType(TextStyleType::LYRIC1);
             }
       }
@@ -751,7 +751,7 @@ void LyricsLine::removeUnmanaged()
 
 bool LyricsLine::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SPANNER_TICKS:
                   {
                   // if parent lyrics has a melisma, change its length too

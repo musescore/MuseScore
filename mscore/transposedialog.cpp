@@ -108,7 +108,7 @@ void TransposeDialog::enableTransposeChordNames(bool val)
 
 TransposeDirection TransposeDialog::direction() const
       {
-      switch(mode())
+      switch (mode())
       {
       case TransposeMode::BY_KEY:
             if (closestKey->isChecked())

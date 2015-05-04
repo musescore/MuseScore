@@ -59,7 +59,7 @@ void PositionCursor::paint(QPainter* p)
       qreal y = _rect.top();
       qreal tx = x - 1.0;
 
-      switch(_type) {
+      switch (_type) {
             case CursorType::LOOP_IN:
                   p->setPen(QPen(_color, 2.0, Qt::SolidLine, Qt::FlatCap));
                   p->drawLine(x, y, x, _rect.bottom());
@@ -95,7 +95,7 @@ QRectF PositionCursor::bbox() const
       QRectF r;
       qreal h = _sv->score()->spatium() * 2;
 
-      switch(_type) {
+      switch (_type) {
             case CursorType::LOOP_IN:
                   r.setRect(_rect.x(), _rect.y(), h, _rect.height());
                   break;

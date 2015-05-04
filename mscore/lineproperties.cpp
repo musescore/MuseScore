@@ -92,7 +92,7 @@ LineProperties::~LineProperties()
 static PlaceText getPlaceText(QComboBox* cb)
       {
       PlaceText p = PlaceText::ABOVE;
-      switch(cb->currentIndex()) {
+      switch (cb->currentIndex()) {
             case 0: p = PlaceText::ABOVE; break;
             case 1: p = PlaceText::BELOW; break;
             case 2: p = PlaceText::LEFT; break;

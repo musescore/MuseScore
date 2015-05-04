@@ -532,7 +532,7 @@ Score::FileError importBww(Score* score, const QString& path)
       qDebug("Score::importBww(%s)", qPrintable(path));
 
       QFile fp(path);
-      if(!fp.exists())
+      if (!fp.exists())
             return Score::FileError::FILE_NOT_FOUND;
       if (!fp.open(QIODevice::ReadOnly))
             return Score::FileError::FILE_OPEN_ERROR;

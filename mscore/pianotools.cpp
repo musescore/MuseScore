@@ -53,7 +53,7 @@ HPiano::HPiano(QWidget* parent)
       qreal x = 0.0;
       for (int i = _firstKey; i <= _lastKey; ++i) {
             PianoKeyItem* k = new PianoKeyItem(this, i);
-            switch(i % 12) {
+            switch (i % 12) {
                   case  0:
                   case  5:
                         k->setType(i == _lastKey ? 6 : 0);
@@ -165,7 +165,7 @@ void PianoKeyItem::setType(int val)
       type = val;
       QPainterPath path;
 
-      switch(type) {
+      switch (type) {
             case 0:
                   path.moveTo(0,0);
                   path.lineTo(0,   KEY_HEIGHT-2);

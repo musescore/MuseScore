@@ -58,7 +58,7 @@ void Symbol::setAbove(bool val)
 
 void Symbol::layout()
       {
-      // foreach(Element* e, leafs())     done in BSymbol::layout() ?
+      // for (Element* e : leafs())     done in BSymbol::layout() ?
       //      e->layout();
       ElementLayout::layout(this);
       BSymbol::layout();

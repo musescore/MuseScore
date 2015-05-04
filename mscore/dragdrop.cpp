@@ -250,7 +250,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
 
       if (data->hasUrls()) {
             QList<QUrl>ul = data->urls();
-            foreach(const QUrl& u, ul) {
+            for (const QUrl& u : ul) {
                   if (MScore::debugMode)
                         qDebug("drag Url: %s", qPrintable(u.toString()));
                   if (u.scheme() == "file" || u.scheme() == "http") {
@@ -270,7 +270,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
             }
       QStringList formats = data->formats();
       qDebug("unknown drop format: formats:");
-      foreach(const QString& s, formats)
+      for (const QString& s : formats)
             qDebug("  <%s>", qPrintable(s));
       }
 
@@ -327,7 +327,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
       dropData.modifiers  = event->keyboardModifiers();
 
       if (dragElement) {
-            switch(dragElement->type()) {
+            switch (dragElement->type()) {
                   case Element::Type::VOLTA:
                         // dragMeasureAnchorElement(pos);
                         // break;
@@ -379,7 +379,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                         {
                         QList<Element*> el = elementsAt(pos);
                         bool found = false;
-                        foreach(const Element* e, el) {
+                        for (const Element* e : el) {
                               if (e->acceptDrop(dropData)) {
                                     if (e->type() != Element::Type::MEASURE)
                                           setDropTarget(const_cast<Element*>(e));
@@ -474,7 +474,7 @@ void ScoreView::dropEvent(QDropEvent* event)
             _score->startCmd();
             dragElement->setScore(_score);      // CHECK: should already be ok
             _score->addRefresh(dragElement->canvasBoundingRect());
-            switch(dragElement->type()) {
+            switch (dragElement->type()) {
                   case Element::Type::VOLTA:
                   case Element::Type::OTTAVA:
                   case Element::Type::TRILL:
@@ -690,7 +690,7 @@ void ScoreView::dropEvent(QDropEvent* event)
       else {
             qDebug("cannot drop this object: unknown mime type");
             QStringList sl = md->formats();
-            foreach(QString s, sl)
+            for (QString s : sl)
                   qDebug("  %s", qPrintable(s));
             _score->end();
             return;
@@ -751,7 +751,7 @@ void ScoreView::dragLeaveEvent(QDragLeaveEvent*)
 bool ScoreView::dropCanvas(Element* e)
       {
       if (e->type() == Element::Type::ICON) {
-            switch(static_cast<Icon*>(e)->iconType()) {
+            switch (static_cast<Icon*>(e)->iconType()) {
                   case IconType::VFRAME:
                         score()->insertMeasure(Element::Type::VBOX, 0);
                         break;

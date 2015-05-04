@@ -180,7 +180,7 @@ static void fixupScore(Score* score)
 
 #if 0
       int staffIdx = 0;
-      foreach(Staff* st, score->staves()) {
+      for (Staff* st : score->staves()) {
             if (st->updateKeymap())
                   st->clearKeys();
             int track = staffIdx * VOICES;

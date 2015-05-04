@@ -268,7 +268,7 @@ void TextBlock::layout(Text* t)
       Element* e = t->parent();
       if (e && t->layoutToParentWidth()) {
             layoutWidth = e->width();
-            switch(e->type()) {
+            switch (e->type()) {
                   case Element::Type::HBOX:
                   case Element::Type::VBOX:
                   case Element::Type::TBOX: {
@@ -645,7 +645,7 @@ QString TextBlock::remove(int start, int n)
             int idx  = 0;
             int rcol = 0;
             bool inc = true;
-            foreach (const QChar& c, i->text) {       // iterate on copy of i->text
+            for (const QChar& c : i->text) {       // iterate on copy of i->text
                   if (col == start) {
                         if (c.isSurrogate()) {
                               s += c;
@@ -1939,7 +1939,7 @@ bool Text::deleteChar()
 bool Text::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode, int count)
       {
       for (int i=0; i < count; i++) {
-            switch(op) {
+            switch (op) {
                   case QTextCursor::Left:
                         if (_cursor.hasSelection() && mode == QTextCursor::MoveAnchor) {
                               int r1 = _cursor.selectLine();
@@ -2645,7 +2645,7 @@ Element* Text::drop(const DropData& data)
       {
       Element* e = data.element;
 
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::SYMBOL:
                   {
                   SymId id = static_cast<Symbol*>(e)->sym();
@@ -3053,7 +3053,7 @@ void Text::inputTransition(QInputMethodEvent* ie)
             if (!preEdit.isEmpty()) {
 #if 0
                   for (auto a : ie->attributes()) {
-                        switch(a.type) {
+                        switch (a.type) {
                               case QInputMethodEvent::TextFormat:
                                     {
                                     printf("attribute TextFormat: %d-%d\n", a.start, a.length);

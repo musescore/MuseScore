@@ -115,8 +115,8 @@ void LineEditData::checkClearButton( void ) {
       if ( !target_ ) return;
       QObjectList children( target_.data()->children() );
       hasClearButton_ = false;
-      foreach( QObject * child, children ) {
-            if ( child->inherits( "KLineEditButton" ) ) {
+      for (QObject * child : children) {
+            if (child->inherits("KLineEditButton")) {
                   hasClearButton_ = true;
                   clearButtonRect_ = static_cast<QWidget*>(child)->geometry();
                   break;

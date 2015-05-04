@@ -64,7 +64,7 @@ static size_t ovRead(void* ptr, size_t size, size_t nmemb, void* datasource)
 static int ovSeek(void* datasource, ogg_int64_t offset, int whence)
       {
       VorbisData* vd = (VorbisData*)datasource;
-      switch(whence) {
+      switch (whence) {
             case SEEK_SET:
                   vd->pos = offset;
                   break;

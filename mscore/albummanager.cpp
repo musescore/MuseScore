@@ -71,10 +71,10 @@ void AlbumManager::addClicked()
          );
       if (files.isEmpty())
             return;
-      foreach(QString fn, files) {
+      for (QString fn : files) {
             if (fn.isEmpty())
                   continue;
-            if(fn.endsWith (".mscz") || fn.endsWith (".mscx")) {
+            if (fn.endsWith (".mscz") || fn.endsWith (".mscx")) {
                   AlbumItem* item = new AlbumItem;
                   item->path = fn;
                   album->append(item);
@@ -203,7 +203,7 @@ void AlbumManager::setAlbum(Album* a)
       album = a;
       scoreList->clear();
       albumName->setText(album->name().isEmpty() ? QWidget::tr("Untitled") : album->name());
-      foreach(AlbumItem* a, album->scores()) {
+      for (AlbumItem* a : album->scores()) {
             QListWidgetItem* li = new QListWidgetItem(a->name, scoreList);
             li->setToolTip(a->path);
             li->setFlags(Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled));

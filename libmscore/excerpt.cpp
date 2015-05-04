@@ -112,16 +112,16 @@ void createExcerpt(Excerpt* excerpt)
             }
       score->setCurrentLayer(oscore->currentLayer());
       score->layer().clear();
-      foreach (const Layer& l, oscore->layer())
+      for (const Layer& l : oscore->layer())
             score->layer().append(l);
 
       score->setPageNumberOffset(oscore->pageNumberOffset());
 
-      foreach (Part* part, parts) {
+      for (Part* part : parts) {
             Part* p = new Part(score);
             p->setInstrument(*part->instrument());
 
-            foreach (Staff* staff, *part->staves()) {
+            for (Staff* staff : *part->staves()) {
                   Staff* s = new Staff(score);
                   s->setPart(p);
                   s->setStaffType(staff->staffType());
@@ -304,7 +304,7 @@ static int mapTrack(int srcTrack, const QList<int>& map)
             return -1;
       int track = -1;
       int st = 0;
-      foreach(int staff, map) {
+      for (int staff : map) {
             if (staff == srcTrack / VOICES) {
                   track = (st * VOICES) + srcTrack % VOICES;
                   break;
@@ -365,7 +365,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                         Tremolo* tremolo = 0;
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                               Segment* ns = nullptr; //create segment later, on demand
-                              foreach (Element* e, oseg->annotations()) {
+                              for (Element* e : oseg->annotations()) {
                                     if (e->generated())
                                           continue;
                                     if ((e->track() == srcTrack && track != -1)
@@ -495,7 +495,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                   }
 
             nmb->linkTo(mb);
-            foreach (Element* e, mb->el()) {
+            for (Element* e : mb->el()) {
                   if (e->type() == Element::Type::LAYOUT_BREAK) {
                         LayoutBreak::Type st = static_cast<LayoutBreak*>(e)->layoutBreakType();
                         if (st == LayoutBreak::Type::PAGE || st == LayoutBreak::Type::LINE)
@@ -558,7 +558,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                         }
                   dstStaff->setBarLineSpan(span);
                   int idx = 0;
-                  foreach(BracketItem bi, srcStaff->brackets()) {
+                  for (BracketItem bi : srcStaff->brackets()) {
                         dstStaff->setBracket(idx, bi._bracket);
                         dstStaff->setBracketSpan(idx, bi._bracketSpan);
                         }
@@ -653,14 +653,14 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
 
                               // remove lyrics from chord
                               // since only one set of lyrics is used with linked staves
-                              foreach (Lyrics* l, ncr->lyricsList()) {
+                              for (Lyrics* l : ncr->lyricsList()) {
                                     if (l)
                                           l->unlink();
                                     }
                               qDeleteAll(ncr->lyricsList());
                               ncr->lyricsList().clear();
 
-                              foreach (Element* e, seg->annotations()) {
+                              for (Element* e : seg->annotations()) {
                                     if (e->generated() || e->systemFlag())
                                           continue;
                                     if (e->track() != srcTrack)
@@ -827,7 +827,7 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
                                     nt->add(ncr);
                                     }
 
-                              foreach (Element* e, oseg->annotations()) {
+                              for (Element* e : oseg->annotations()) {
                                     if (e->generated() || e->systemFlag())
                                           continue;
                                     if (e->track() != srcTrack)

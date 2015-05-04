@@ -614,14 +614,14 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       {
       EventMap events;
       score->renderMidi(&events);
-      if(events.size() == 0)
+      if (events.size() == 0)
             return false;
 
       MP3Exporter exporter;
       if (!exporter.loadLibrary(MP3Exporter::AskUser::MAYBE)) {
             QSettings settings;
             settings.setValue("/Export/lameMP3LibPath", "");
-            if(!MScore::noGui)
+            if (!MScore::noGui)
                   QMessageBox::warning(0,
                                tr("Error Opening LAME library"),
                                tr("Could not open MP3 encoding library!"),
@@ -633,7 +633,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       if (!exporter.validLibraryLoaded()) {
             QSettings settings;
             settings.setValue("/Export/lameMP3LibPath", "");
-            if(!MScore::noGui)
+            if (!MScore::noGui)
                   QMessageBox::warning(0,
                                tr("Error Opening LAME library"),
                                tr("Not a valid or supported MP3 encoding library!"),
@@ -717,12 +717,12 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
             //
             // init instruments
             //
-            foreach(Part* part, score->parts()) {
+            for (Part* part : score->parts()) {
                   const InstrumentList* il = part->instruments();
-                  for(auto i = il->begin(); i!= il->end(); i++) {
-                        foreach(const Channel* a, i->second->channel()) {
+                  for (auto i = il->begin(); i!= il->end(); i++) {
+                        for (const Channel* a : i->second->channel()) {
                               a->updateInitList();
-                              foreach(MidiCoreEvent e, a->init) {
+                              for (MidiCoreEvent e : a->init) {
                                     if (e.type() == ME_INVALID)
                                           continue;
                                     e.setChannel(a->channel);

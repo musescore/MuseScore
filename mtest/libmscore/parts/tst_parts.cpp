@@ -344,7 +344,7 @@ Score* TestParts::doAddBreath()
       Score* score = readScore(DIR + "part-empty-parts.mscx");
       score->doLayout();
 
-      foreach(Excerpt* e, score->excerpts())
+      for (Excerpt* e : score->excerpts())
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
@@ -417,7 +417,7 @@ Score* TestParts::doRemoveBreath()
       {
       Score* score = readScore(DIR + "part-breath-add.mscx");
       score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
+      for (Excerpt* e : score->excerpts())
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
@@ -482,7 +482,7 @@ Score* TestParts::doAddFingering()
       {
       Score* score = readScore(DIR + "part-empty-parts.mscx");
       score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
+      for (Excerpt* e : score->excerpts())
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
@@ -548,7 +548,7 @@ Score* TestParts::doRemoveFingering()
       {
       Score* score = readScore(DIR + "part-fingering-parts.mscx");
       score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
+      for (Excerpt* e : score->excerpts())
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
@@ -556,7 +556,7 @@ Score* TestParts::doRemoveFingering()
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       Element* fingering = 0;
-      foreach(Element* e, note->el()) {
+      for (Element* e : note->el()) {
             if (e->type() == Element::Type::FINGERING) {
                   fingering = e;
                   break;
@@ -618,7 +618,7 @@ Score* TestParts::doAddSymbol()
       {
       Score* score = readScore(DIR + "part-empty-parts.mscx");
       score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
+      for (Excerpt* e : score->excerpts())
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
@@ -684,7 +684,7 @@ Score* TestParts::doRemoveSymbol()
       {
       Score* score = readScore(DIR + "part-symbol-parts.mscx");
       score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
+      for (Excerpt* e : score->excerpts())
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
@@ -692,7 +692,7 @@ Score* TestParts::doRemoveSymbol()
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       Element* se = 0;
-      foreach(Element* e, note->el()) {
+      for (Element* e : note->el()) {
             if (e->type() == Element::Type::SYMBOL) {
                   se = e;
                   break;
@@ -754,7 +754,7 @@ Score* TestParts::doAddChordline()
       {
       Score* score = readScore(DIR + "part-empty-parts.mscx");
       score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
+      for (Excerpt* e : score->excerpts())
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
@@ -821,7 +821,7 @@ Score* TestParts::doRemoveChordline()
       {
       Score* score = readScore(DIR + "part-chordline-parts.mscx");
       score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
+      for (Excerpt* e : score->excerpts())
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
@@ -829,7 +829,7 @@ Score* TestParts::doRemoveChordline()
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
 
       Element* se = 0;
-      foreach(Element* e, chord->el()) {
+      for (Element* e : chord->el()) {
             if (e->type() == Element::Type::CHORDLINE) {
                   se = e;
                   break;
@@ -892,7 +892,7 @@ Score* TestParts::doAddImage()
       {
       Score* score = readScore(DIR + "part1-2o.mscx");
       score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
+      for (Excerpt* e : score->excerpts())
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
@@ -958,7 +958,7 @@ Score* TestParts::doRemoveImage()
       {
       Score* score = readScore(DIR + "part12o.mscx");
       score->doLayout();
-      foreach(Excerpt* e, score->excerpts())
+      for (Excerpt* e : score->excerpts())
             e->partScore()->doLayout();
 
       Measure* m   = score->firstMeasure();
@@ -966,7 +966,7 @@ Score* TestParts::doRemoveImage()
       Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
       Note* note   = chord->upNote();
       Element* fingering = 0;
-      foreach(Element* e, note->el()) {
+      for (Element* e : note->el()) {
             if (e->type() == IMAGE) {
                   fingering = e;
                   break;

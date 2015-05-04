@@ -211,7 +211,7 @@ class MenuEngineV2: public MenuBaseEngine {
             //! duration
             virtual void setFollowMouseDuration( int duration ) {
                   followMouseDuration_ = duration;
-                  foreach( const DataMap<MenuDataV2>::Value & value, data_.values() ) {
+                  for ( const DataMap<MenuDataV2>::Value & value : data_.values() ) {
                         if ( value ) value.data()->setFollowMouseDuration( duration );
                         }
                   }

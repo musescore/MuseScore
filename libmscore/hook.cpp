@@ -35,7 +35,7 @@ Hook::Hook(Score* s)
 void Hook::setHookType(int i)
       {
       _hookType = i;
-      switch(i) {
+      switch (i) {
             case 0:    break;
             case 1:    setSym(SymId::flag8thUp);     break;
             case 2:    setSym(SymId::flag16thUp);    break;

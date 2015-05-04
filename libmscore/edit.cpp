@@ -101,7 +101,7 @@ void Score::getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const
       {
       *cr1 = 0;
       *cr2 = 0;
-      foreach(Element* e, selection().elements()) {
+      for (Element* e : selection().elements()) {
             if (e->type() == Element::Type::NOTE)
                   e = e->parent();
             if (e->isChordRest()) {
@@ -128,7 +128,7 @@ int Score::pos()
       if (selection().activeCR())
             el = selection().activeCR();
       if (el) {
-            switch(el->type()) {
+            switch (el->type()) {
                   case Element::Type::NOTE:
                         el = el->parent();
                         // fall through
@@ -203,7 +203,7 @@ Chord* Score::addChord(int tick, TDuration d, Chord* oc, bool genTie, Tuplet* tu
       chord->setDurationType(d);
       chord->setDuration(d.fraction());
 
-      foreach(Note* n, oc->notes()) {
+      for (Note* n : oc->notes()) {
             Note* nn = new Note(this);
             nn->setPitch(n->pitch());
             nn->setTpc1(n->tpc1());
@@ -218,7 +218,7 @@ Chord* Score::addChord(int tick, TDuration d, Chord* oc, bool genTie, Tuplet* tu
       //
       if (genTie) {
             int n = oc->notes().size();
-            for(int i = 0; i < n; ++i) {
+            for (int i = 0; i < n; ++i) {
                   Note* n  = oc->notes()[i];
                   Note* nn = chord->notes()[i];
                   Tie* tie = new Tie(this);
@@ -322,7 +322,7 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
 
                   Rest* rest = 0;
                   if (((tick - measure->tick()) % dList[0].ticks()) == 0) {
-                        foreach(TDuration d, dList) {
+                        for (TDuration d : dList) {
                               rest = addRest(tick, track, d, tuplet);
                               if (r == 0)
                                     r = rest;
@@ -728,7 +728,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   ots->undoChangeProperty(P_ID::NUMERATOR_STRING, ts->numeratorString());
                   ots->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
                   }
-            foreach (Score* score, scoreList()) {
+            for (Score* score : scoreList()) {
                   Measure* fm = score->tick2measure(tick);
                   for (Measure* m = fm; m; m = m->nextMeasure()) {
                         if ((m != fm) && m->first(Segment::Type::TimeSig))
@@ -791,7 +791,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   }
 
             // add the time signatures
-            foreach (Score* score, scoreList()) {
+            for (Score* score : scoreList()) {
                   Measure* nfm = score->tick2measure(tick);
                   seg   = nfm->undoGetSegment(Segment::Type::TimeSig, nfm->tick());
                   int startStaffIdx, endStaffIdx;
@@ -1235,7 +1235,7 @@ void Score::putNote(const Position& p, bool replace)
                   {
                   if (st->isTabStaff()) {      // TAB
                         // if a note on same string already exists, update to new pitch/fret
-                        foreach (Note* note, static_cast<Chord*>(cr)->notes())
+                        for (Note* note : static_cast<Chord*>(cr)->notes())
                               if (note->string() == nval.string) {       // if string is the same
                                     // if adding a new digit will keep fret number within fret limit,
                                     // add a digit to existing fret number
@@ -1311,7 +1311,7 @@ void Score::repitchNote(const Position& p, bool replace)
       Chord* chord;
       if (_is.cr()->type() == Element::Type::REST) { //skip rests
             ChordRest* next = nextChordRest(_is.cr());
-            while(next && next->type() != Element::Type::CHORD)
+            while (next && next->type() != Element::Type::CHORD)
                   next = nextChordRest(next);
             if (next)
                   _is.moveInputPos(next->segment());
@@ -1407,7 +1407,7 @@ void Score::cmdAddTie()
             }
 
       startCmd();
-      foreach (Note* note, noteList) {
+      for (Note* note : noteList) {
             if (note->tieFor()) {
                   qDebug("cmdAddTie: note %p has already tie? noteFor: %p", note, note->tieFor());
                   continue;
@@ -1463,7 +1463,7 @@ void Score::cmdAddTie()
                               int staffIdx = cr->staffIdx() + cr->staffMove();
                               if (staffIdx != chord->staffIdx() + chord->staffMove())
                                     continue;
-                              foreach(Note* n, static_cast<Chord*>(cr)->notes()) {
+                              for (Note* n : static_cast<Chord*>(cr)->notes()) {
                                     if (n->pitch() == note->pitch()) {
                                           if (note2 == 0 || note->chord()->track() == chord->track())
                                                 note2 = n;
@@ -1539,7 +1539,7 @@ void Score::cmdFlip()
             selectNoteSlurMessage();
             return;
             }
-      foreach (Element* e, el) {
+      for (Element* e : el) {
             if (e->type() == Element::Type::NOTE || e->type() == Element::Type::STEM || e->type() == Element::Type::HOOK) {
                   Chord* chord;
                   if (e->type() == Element::Type::NOTE)
@@ -1776,7 +1776,7 @@ void Score::deleteItem(Element* el)
                         break;
                         }
 
-                  foreach(Score* score, scoreList()) {
+                  for (Score* score : scoreList()) {
                         Measure* m   = score->tick2measure(tick);
                         if (segType == Segment::Type::StartRepeatBarLine)
                               undoChangeProperty(m, P_ID::REPEAT_FLAGS, int(m->repeatFlags()) & ~int(Repeat::START));
@@ -1831,7 +1831,7 @@ void Score::deleteItem(Element* el)
                   if (m->isMMRest()) {
                         // propagate to original measure
                         m = m->mmRestLast();
-                        foreach(Element* e, m->el()) {
+                        for (Element* e : m->el()) {
                               if (e->type() == Element::Type::LAYOUT_BREAK) {
                                     undoRemoveElement(e);
                                     break;
@@ -1971,7 +1971,7 @@ void Score::cmdDeleteSelectedMeasures()
       int endTick   = ie->tick();
 
       undoInsertTime(is->tick(), -(ie->endTick() - is->tick()));
-      foreach (Score* score, scoreList()) {
+      for (Score* score : scoreList()) {
             Measure* is = score->tick2measure(startTick);
             Measure* ie = score->tick2measure(endTick);
 
@@ -1979,7 +1979,7 @@ void Score::cmdDeleteSelectedMeasures()
 
             // adjust views
             Measure* focusOn = is->prevMeasure() ? is->prevMeasure() : firstMeasure();
-            foreach(MuseScoreView* v, score->viewer)
+            for (MuseScoreView* v : score->viewer)
                   v->adjustCanvasPosition(focusOn, false);
 
             if (createEndBar) {
@@ -2065,7 +2065,7 @@ void Score::cmdDeleteSelection()
                               deleteItem(s->element(track));
                               continue;
                               }
-                        foreach (Element* annotation, s->annotations()) {
+                        for (Element* annotation : s->annotations()) {
                               // skip if not included in selection (eg, filter)
                               if (!selectionFilter().canSelect(annotation))
                                     continue;
@@ -2280,7 +2280,7 @@ Lyrics* Score::addLyrics()
       ChordRest* cr;
       if (el->type() == Element::Type::NOTE) {
             cr = static_cast<Note*>(el)->chord();
-            if(cr->isGrace())
+            if (cr->isGrace())
                   cr = static_cast<ChordRest*>(cr->parent());
             }
       else if (el->type() == Element::Type::LYRICS)
@@ -2340,7 +2340,7 @@ qDebug("cmdCreateTuplet at %d <%s> track %d duration <%s> ratio <%s> baseLen <%s
       ChordRest* cr;
       if (ocr->type() == Element::Type::CHORD) {
             cr = new Chord(this);
-            foreach (Note* oldNote, static_cast<Chord*>(ocr)->notes()) {
+            for (Note* oldNote : static_cast<Chord*>(ocr)->notes()) {
                   Note* note = new Note(this);
                   note->setPitch(oldNote->pitch());
                   note->setTpc1(oldNote->tpc1());
@@ -2390,7 +2390,7 @@ void Score::colorItem(Element* element)
       if (!c.isValid())
             return;
 
-      foreach(Element* e, selection().elements()) {
+      for (Element* e : selection().elements()) {
             if (e->color() != c) {
                   undoChangeProperty(e, P_ID::COLOR, c);
                   e->setGenerated(false);
@@ -2500,7 +2500,7 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
 
 void Score::cmdDeleteTuplet(Tuplet* tuplet, bool replaceWithRest)
       {
-      foreach(DurationElement* de, tuplet->elements()) {
+      for (DurationElement* de : tuplet->elements()) {
             if (de->isChordRest())
                   removeChordRest(static_cast<ChordRest*>(de), true);
             else {

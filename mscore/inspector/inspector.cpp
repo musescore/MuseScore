@@ -134,7 +134,7 @@ void Inspector::setElements(const QList<Element*>& l)
                   ie = new InspectorEmpty(this);
 
             bool sameTypes = true;
-            foreach(Element* ee, _el) {
+            for (Element* ee : _el) {
                   if (_element->type() != ee->type())
                         sameTypes = false;
                   else {
@@ -147,7 +147,7 @@ void Inspector::setElements(const QList<Element*>& l)
             if (!sameTypes)
                   ie = new InspectorGroupElement(this);
             else if (_element) {
-                  switch(_element->type()) {
+                  switch (_element->type()) {
                         case Element::Type::FBOX:
                         case Element::Type::TBOX:
                         case Element::Type::VBOX:
@@ -930,7 +930,7 @@ void InspectorBarLine::spanTypeChanged(int idx)
       spanStaves = 1;               // in most cases, num. of spanned staves is 1
       switch (idx) {
             case 0:                 // staff default selected
-                  if(bl->staff()) {                   // if there is a staff
+                  if (bl->staff()) {                   // if there is a staff
                         Staff* st = bl->staff();      // use its span values as selected values
                         spanStaves  = st->barLineSpan();
                         spanFrom    = st->barLineFrom();
@@ -965,11 +965,11 @@ void InspectorBarLine::spanTypeChanged(int idx)
             }
 
       // if combo values different from bar line's, set them
-      if(bl->span() != spanStaves || bl->spanFrom() != spanFrom || bl->spanTo() != spanTo) {
+      if (bl->span() != spanStaves || bl->spanFrom() != spanFrom || bl->spanTo() != spanTo) {
             blockSpanDataSignals(true);
             score->undoChangeSingleBarLineSpan(bl, spanStaves, spanFrom, spanTo);
             // if value reverted to staff default, update combo box
-            if(!bl->customSpan())
+            if (!bl->customSpan())
                   b.spanType->setCurrentIndex(0);
             blockSpanDataSignals(false);
             }

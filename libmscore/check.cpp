@@ -31,7 +31,7 @@ namespace Ms {
 void Score::checkSlurs()
       {
 #if 0 //TODO1
-      foreach(Element* e, _gel) {
+      for (Element* e : _gel) {
             if (e->type() != SLUR)
                   continue;
             Slur* s = (Slur*)e;
@@ -73,7 +73,7 @@ void Score::checkScore()
 
             if (s->segmentType() & (Segment::Type::ChordRest)) {
                   bool empty = true;
-                  foreach(Element* e, s->elist()) {
+                  for (Element* e : s->elist()) {
                         if (e) {
                               empty = false;
                               break;
@@ -136,7 +136,7 @@ qDebug("    - insert %d/%d", ff.numerator(), ff.denominator());
                                     Fraction fff = ff / timeStretch;
 
                                     QList<Duration> dl = toDurationList(fff, true);
-                                    foreach(Duration d, dl) {
+                                    for (Duration d : dl) {
                                           Rest* rest = new Rest(this);
                                           rest->setDurationType(d);
                                           rest->setDuration(d.fraction());

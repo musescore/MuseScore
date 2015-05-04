@@ -68,7 +68,7 @@ void TremoloBarProperties::bendTypeChanged(int n)
       QList<PitchValue>& points = bendCanvas->points();
 
       points.clear();
-      switch(n) {
+      switch (n) {
             case 0:
                   points.append(PitchValue(0,0));
                   points.append(PitchValue(15,100));
@@ -162,7 +162,7 @@ void TremoloBarCanvas::paintEvent(QPaintEvent* ev)
       pen.setWidth(5);
       pen.setColor(Qt::gray);
       p.setPen(pen);
-      foreach(const PitchValue& v, _points) {
+      for (const PitchValue& v : _points) {
             int x = ((tw * v.time) / 60) + lm;
             int y = th - ((th * v.pitch) / 300) + tm;
             if (idx)
@@ -172,7 +172,7 @@ void TremoloBarCanvas::paintEvent(QPaintEvent* ev)
             ++idx;
             }
 
-      foreach(const PitchValue& v, _points) {
+      for (const PitchValue& v : _points) {
             int x = ((tw * v.time) / 60) + lm;
             int y = th - ((th * v.pitch) / 300) + tm;
             p.fillRect(x - GRIP2, y - GRIP2, GRIP, GRIP, Qt::blue);

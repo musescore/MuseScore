@@ -233,7 +233,7 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
       if (nb->type() == Element::Type::HBOX || nb->type() == Element::Type::VBOX
          || nb->type() == Element::Type::TBOX || nb->type() == Element::Type::FBOX)
             nb->setSystem(ob->system());
-      foreach(Element* e, nb->el())
+      for (Element* e : nb->el())
             e->setParent(nb);
       }
 
@@ -405,7 +405,7 @@ Score::Score(Score* parent, const MStyle* s)
 Score::~Score()
       {
       _midiPortCount = 0;
-      foreach(MuseScoreView* v, viewer)
+      for (MuseScoreView* v : viewer)
             v->removeScore();
       // deselectAll();
       for (MeasureBase* m = _measures.first(); m;) {
@@ -413,15 +413,15 @@ Score::~Score()
             delete m;
             m = nm;
             }
-      foreach(Part* p, _parts)
+      for (Part* p : _parts)
             delete p;
-      foreach(Staff* staff, _staves)
+      for (Staff* staff : _staves)
             delete staff;
-      foreach(System* s, _systems)
+      for (System* s : _systems)
             delete s;
-      foreach(Page* page, _pages)
+      for (Page* page : _pages)
             delete page;
-      foreach(Excerpt* e, _excerpts)
+      for (Excerpt* e : _excerpts)
             delete e;
       delete _revisions;
       delete _undo;           // this also removes _undoStack from Mscore::_undoGroup
@@ -532,7 +532,7 @@ void Score::fixTicks()
                                     }
                               }
                         else if (!parentScore() && (s->segmentType() == Segment::Type::ChordRest)) {
-                              foreach (Element* e, s->annotations()) {
+                              for (Element* e : s->annotations()) {
                                     if (e->type() == Element::Type::TEMPO_TEXT) {
                                           const TempoText* tt = static_cast<const TempoText*>(e);
                                           setTempo(tt->segment(), tt->tempo());
@@ -679,7 +679,7 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
 int Score::staffIdx(const Part* part) const
       {
       int idx = 0;
-      foreach(Part* p, _parts) {
+      for (Part* p : _parts) {
             if (p == part)
                   break;
             idx += p->nstaves();
@@ -983,7 +983,7 @@ int Score::midiChannel(int idx) const
 
 Page* Score::searchPage(const QPointF& p) const
       {
-      foreach(Page* page, pages()) {
+      for (Page* page : pages()) {
             if (page->bbox().translated(page->pos()).contains(p))
                   return page;
             }
@@ -1046,9 +1046,9 @@ Measure* Score::searchMeasure(const QPointF& p) const
       if (systems.isEmpty())
             return 0;
 
-      foreach(System* system, systems) {
+      for (System* system : systems) {
             qreal x = p.x() - system->canvasPos().x();
-            foreach(MeasureBase* mb, system->measures()) {
+            for (MeasureBase* mb : system->measures()) {
                   if (mb->type() != Element::Type::MEASURE)
                         continue;
                   if (x < (mb->x() + mb->bbox().width()))
@@ -1265,10 +1265,10 @@ bool Score::checkHasMeasures() const
 
 void Score::moveBracket(int staffIdx, int srcCol, int dstCol)
       {
-      foreach(System* system, *systems()) {
+      for (System* system : *systems()) {
             if (system->isVbox())
                   continue;
-            foreach(Bracket* b, system->brackets()) {
+            for (Bracket* b : system->brackets()) {
                   if (b->staffIdx() == staffIdx && b->level() == srcCol)
                         b->setLevel(dstCol);
                   }
@@ -1295,7 +1295,7 @@ void Score::spatiumChanged(qreal oldValue, qreal newValue)
       data[0] = oldValue;
       data[1] = newValue;
       scanElements(data, spatiumHasChanged, true);
-      foreach (Staff* staff, _staves)
+      for (Staff* staff : _staves)
             staff->spatiumChanged(oldValue, newValue);
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, newValue / (MScore::DPI * SPATIUM20));
       }
@@ -1371,7 +1371,7 @@ void Score::addElement(Element* element)
       if (element->parent())
             element->parent()->add(element);
 
-      switch(et) {
+      switch (et) {
             case Element::Type::BEAM:
                   {
                   Beam* b = static_cast<Beam*>(element);
@@ -1406,7 +1406,7 @@ void Score::addElement(Element* element)
                   {
                   Ottava* o = static_cast<Ottava*>(element);
                   addSpanner(o);
-                  foreach(SpannerSegment* ss, o->spannerSegments()) {
+                  for (SpannerSegment* ss : o->spannerSegments()) {
                         if (ss->system())
                               ss->system()->add(ss);
                         }
@@ -1509,11 +1509,11 @@ void Score::removeElement(Element* element)
       if (parent)
             parent->remove(element);
 
-      switch(et) {
+      switch (et) {
             case Element::Type::BEAM:
                   {
                   Beam* b = static_cast<Beam*>(element);
-                  foreach(ChordRest* cr, b->elements())
+                  for (ChordRest* cr : b->elements())
                         cr->setBeam(0);
                   }
                   break;
@@ -1544,7 +1544,7 @@ void Score::removeElement(Element* element)
                   {
                   Ottava* o = static_cast<Ottava*>(element);
                   removeSpanner(o);
-                  foreach(SpannerSegment* ss, o->spannerSegments()) {
+                  for (SpannerSegment* ss : o->spannerSegments()) {
                         if (ss->system())
                               ss->system()->remove(ss);
                         }
@@ -1806,7 +1806,7 @@ void Score::setSelection(const Selection& s)
       deselectAll();
       _selection = s;
 
-      foreach(Element* e, _selection.elements())
+      for (Element* e : _selection.elements())
             e->setSelected(true);
       }
 
@@ -1818,7 +1818,7 @@ Text* Score::getText(TextStyleType subtype)
       {
       MeasureBase* m = first();
       if (m && m->type() == Element::Type::VBOX) {
-            foreach(Element* e, m->el()) {
+            for (Element* e : m->el()) {
                   if (e->type() == Element::Type::TEXT && static_cast<Text*>(e)->textStyleType() == subtype)
                         return static_cast<Text*>(e);
                   }
@@ -1931,11 +1931,11 @@ void Score::addExcerpt(Score* score)
       ex->setPartScore(score);
       excerpts().append(ex);
       ex->setTitle(score->name());
-      foreach(Staff* s, score->staves()) {
+      for (Staff* s : score->staves()) {
             LinkedStaves* ls = s->linkedStaves();
             if (ls == 0)
                   continue;
-            foreach(Staff* ps, ls->staves()) {
+            for (Staff* ps : ls->staves()) {
                   if (ps->score() == this) {
                         ex->parts().append(ps->part());
                         break;
@@ -1951,7 +1951,7 @@ void Score::addExcerpt(Score* score)
 
 void Score::removeExcerpt(Score* score)
       {
-      foreach (Excerpt* ex, excerpts()) {
+      for (Excerpt* ex : excerpts()) {
             if (ex->partScore() == score) {
                   if (excerpts().removeOne(ex)) {
                         delete ex;
@@ -2007,7 +2007,7 @@ void Score::setSynthesizerState(const SynthesizerState& s)
 
 void Score::setLayoutAll(bool val)
       {
-      foreach(Score* score, scoreList())
+      for (Score* score : scoreList())
             score->_layoutAll = val;
       }
 
@@ -2177,7 +2177,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                   if (c == 0 || c->type() != Element::Type::CHORD)
                         continue;
                   QList<Note*> removeNotes;
-                  foreach(Note* note, c->notes()) {
+                  for (Note* note : c->notes()) {
                         if (note->pitch() >= splitPoint)
                               continue;
                         Chord* chord = static_cast<Chord*>(s->element(dtrack + voice));
@@ -2502,7 +2502,7 @@ void Score::sortStaves(QList<int>& dst)
       _parts.clear();
       Part* curPart = 0;
       QList<Staff*> dl;
-      foreach (int idx, dst) {
+      for (int idx : dst) {
             Staff* staff = _staves[idx];
             if (staff->part() != curPart) {
                   curPart = staff->part();
@@ -3010,7 +3010,7 @@ void Score::selectSimilar(Element* e, bool sameStaff)
       score->scanElements(&pattern, collectMatch);
 
       score->select(0, SelectType::SINGLE, 0);
-      foreach (Element* e, pattern.el) {
+      for (Element* e : pattern.el) {
             score->select(e, SelectType::ADD, 0);
             }
       }
@@ -3036,7 +3036,7 @@ void Score::selectSimilarInRange(Element* e)
       score->scanElementsInRange(&pattern, collectMatch);
 
       score->select(0, SelectType::SINGLE, 0);
-      foreach (Element* e, pattern.el) {
+      for (Element* e : pattern.el) {
                   score->select(e, SelectType::ADD, 0);
             }
       }
@@ -3049,7 +3049,7 @@ void Score::lassoSelect(const QRectF& bbox)
       {
       select(0, SelectType::SINGLE, 0);
       QRectF fr(bbox.normalized());
-      foreach(Page* page, _pages) {
+      for (Page* page : _pages) {
             QRectF pr(page->bbox());
             QRectF frr(fr.translated(-page->pos()));
             if (pr.right() < frr.left())
@@ -3088,7 +3088,7 @@ void Score::lassoSelectEnd()
             }
       _selection.setState(SelState::LIST);
 
-      foreach(const Element* e, _selection.elements()) {
+      for (const Element* e : _selection.elements()) {
             if (e->type() != Element::Type::NOTE && e->type() != Element::Type::REST)
                   continue;
             ++noteRestCount;
@@ -3894,7 +3894,7 @@ void Score::changeVoice(int voice)
       {
       startCmd();
       QList<Element*> el;
-      foreach(Element* e, selection().elements()) {
+      for (Element* e : selection().elements()) {
             if (e->type() == Element::Type::NOTE) {
                   Note* note   = static_cast<Note*>(e);
                   Chord* chord = note->chord();
@@ -4001,7 +4001,7 @@ void Score::changeVoice(int voice)
 
       if (!el.isEmpty())
             selection().clear();
-      foreach(Element* e, el)
+      for (Element* e : el)
             select(e, SelectType::ADD, -1);
       setLayoutAll(true);
       endCmd();

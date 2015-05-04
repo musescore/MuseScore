@@ -1051,7 +1051,7 @@ void StyleData::load(XmlReader& e)
             else {
                   if (tag == "stemDir") {
                         int voice = e.attribute("voice", "1").toInt() - 1;
-                        switch(voice) {
+                        switch (voice) {
                               case 0: tag = "StemDir1"; break;
                               case 1: tag = "StemDir2"; break;
                               case 2: tag = "StemDir3"; break;
@@ -1069,7 +1069,7 @@ void StyleData::load(XmlReader& e)
                   for (i = 0; i < int(StyleIdx::STYLES); ++i) {
                         StyleIdx idx = static_cast<StyleIdx>(i);
                         if (styleTypes.name(idx) == tag) {
-                              switch(styleTypes.valueType(idx)) {
+                              switch (styleTypes.valueType(idx)) {
                                     case StyleValueType::SPATIUM:   set(idx, QVariant(val.toDouble()));    break;
                                     case StyleValueType::DOUBLE:    set(idx, QVariant(val.toDouble()));    break;
                                     case StyleValueType::BOOL:      set(idx, QVariant(bool(val.toInt()))); break;
@@ -1181,7 +1181,7 @@ void StyleData::save(Xml& xml, bool optimize) const
             StyleIdx idx = StyleIdx(i);
             if (optimize && isDefault(idx))
                   continue;
-            switch(styleTypes.valueType(idx)) {
+            switch (styleTypes.valueType(idx)) {
                   case StyleValueType::SPATIUM:
                   case StyleValueType::DOUBLE:    xml.tag(styleTypes.name(idx), value(idx).toDouble()); break;
                   case StyleValueType::BOOL:      xml.tag(styleTypes.name(idx), value(idx).toBool()); break;
@@ -1304,7 +1304,7 @@ void MStyle::setChordList(ChordList* cl, bool custom)
 
 const TextStyle& StyleData::textStyle(const QString& name) const
       {
-      foreach(const TextStyle& s, _textStyles) {
+      for (const TextStyle& s : _textStyles) {
             if (s.name() == name)
                   return s;
             }

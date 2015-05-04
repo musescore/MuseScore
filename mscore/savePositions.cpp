@@ -118,7 +118,7 @@ bool savePositions(Score* score, const QString& name, bool segments)
 
       xml.stag("events");
       score->updateRepeatList(true);
-      foreach(const RepeatSegment* rs, *score->repeatList()) {
+      for (const RepeatSegment* rs : *score->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len;
             int tickOffset = rs->utick - rs->tick;

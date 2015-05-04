@@ -411,7 +411,7 @@ void PianorollEditor::updateVelocity(Note* note)
       Note::ValueType vt = note->veloType();
       if (vt != Note::ValueType(veloType->currentIndex())) {
             veloType->setCurrentIndex(int(vt));
-            switch(vt) {
+            switch (vt) {
                   case Note::ValueType::USER_VAL:
                         velocity->setReadOnly(false);
                         velocity->setSuffix("");
@@ -424,7 +424,7 @@ void PianorollEditor::updateVelocity(Note* note)
                         break;
                   }
             }
-      switch(vt) {
+      switch (vt) {
             case Note::ValueType::USER_VAL:
                   // TODO velocity->setValue(note->velocity());
                   break;
@@ -508,7 +508,7 @@ void PianorollEditor::cmd(QAction* a)
       score()->startCmd();
       if (a->data() == "delete") {
             QList<QGraphicsItem*> items = gv->items();
-            foreach(QGraphicsItem* item, items) {
+            for (QGraphicsItem* item : items) {
                   if (item->type() == PianoItemType) {
                         Note* note = static_cast<PianoItem*>(item)->note();
                         score()->deleteItem(note);

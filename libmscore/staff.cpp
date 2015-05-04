@@ -103,7 +103,7 @@ void Staff::addBracket(BracketItem b)
             //
             // create new bracket level
             //
-            foreach(Staff* s, _score->staves()) {
+            for (Staff* s : _score->staves()) {
                   if (s == this)
                         s->_brackets.append(b);
                   else
@@ -185,7 +185,7 @@ ClefTypeList Staff::clefType(int tick) const
       {
       ClefTypeList ct = clefs.clef(tick);
       if (ct._concertClef == ClefType::INVALID) {
-            switch(_staffType.group()) {
+            switch (_staffType.group()) {
                   case StaffGroup::TAB:
                         ct = ClefTypeList(ClefType(score()->styleI(StyleIdx::tabClef)));
                         break;
@@ -444,7 +444,7 @@ void Staff::write(Xml& xml) const
             Score* s = score();
             if (s->parentScore())
                   s = s->parentScore();
-            foreach(Staff* staff, linkedStaves()->staves()) {
+            for (Staff* staff : linkedStaves()->staves()) {
                   if ((staff->score() == s) && (staff != this))
                         xml.tag("linkedTo", s->staffIdx(staff) + 1);
                   }
@@ -499,7 +499,7 @@ void Staff::write(Xml& xml) const
             defaultLineTo = (targetStaffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (targetStaffLines-1) * 2);
             }
       if (_barLineSpan != 1 || _barLineFrom != defaultLineFrom || _barLineTo != defaultLineTo) {
-            if(_barLineFrom != defaultLineFrom || _barLineTo != defaultLineTo)
+            if (_barLineFrom != defaultLineFrom || _barLineTo != defaultLineTo)
                   xml.tag(QString("barLineSpan from=\"%1\" to=\"%2\"").arg(_barLineFrom).arg(_barLineTo), _barLineSpan);
             else
                   xml.tag("barLineSpan", _barLineSpan);
@@ -810,8 +810,8 @@ bool Staff::isLinked(Staff* staff)
       if (staff == this || !_linkedStaves)
             return false;
 
-      for(Staff* s : _linkedStaves->staves()) {
-            if(s == staff)
+      for (Staff* s : _linkedStaves->staves()) {
+            if (s == staff)
                   return true;
             }
       return false;
@@ -828,7 +828,7 @@ bool Staff::primaryStaff() const
       QList<Staff*> s;
       if (!_linkedStaves)
             return true;
-      foreach(Staff* staff, _linkedStaves->staves()) {
+      for (Staff* staff : _linkedStaves->staves()) {
             if (staff->score() == score())
                   s.append(staff);
             }

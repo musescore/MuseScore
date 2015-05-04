@@ -195,7 +195,7 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
       if (stringData) {
             for (int string = 0; string < _strings; ++string)
                   _marker[string] = 'X';
-            foreach(const Note* note, chord->notes()) {
+            for (const Note* note : chord->notes()) {
                   int string;
                   int fret;
                   if (stringData->convertPitch(note->pitch(), chord->staff(), chord->segment()->tick(), &string, &fret))

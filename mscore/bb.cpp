@@ -112,7 +112,7 @@ bool BBFile::read(const QString& name)
 
       int idx = 0;
       _version = a[idx++];
-      switch(_version) {
+      switch (_version) {
             case 0x43 ... 0x49:
                   break;
             default:
@@ -239,7 +239,7 @@ bool BBFile::read(const QString& name)
 
 #if 0
       qDebug("================chords=======================");
-      foreach(BBChord c, _chords) {
+      for (BBChord c : _chords) {
             qDebug("chord beat %3d bass %d root %d extension %d",
                c.beat, c.bass, c.root, c.extension);
             }
@@ -320,7 +320,7 @@ bool BBFile::read(const QString& name)
                   if (type == 0x90) {
                         int channel = a[idx + 7];
                         BBTrack* track = 0;
-                        foreach (BBTrack* t, _tracks) {
+                        for (BBTrack* t : _tracks) {
                               if (t->outChannel() == channel) {
                                     track = t;
                                     break;
@@ -377,7 +377,7 @@ bool BBFile::read(const QString& name)
 Score::FileError importBB(Score* score, const QString& name)
       {
       BBFile bb;
-      if(!QFileInfo(name).exists())
+      if (!QFileInfo(name).exists())
             return Score::FileError::FILE_NOT_FOUND;
       if (!bb.read(name)) {
             qDebug("Cannot open file <%s>", qPrintable(name));
@@ -418,7 +418,7 @@ Score::FileError importBB(Score* score, const QString& name)
       //  create notes
       //---------------------------------------------------
 
-      foreach (BBTrack* track, *tracks)
+      for (BBTrack* track : *tracks)
             track->cleanup();
 
       if (tracks->isEmpty()) {
@@ -435,7 +435,7 @@ Score::FileError importBB(Score* score, const QString& name)
             }
       else {
             int staffIdx = 0;
-            foreach (BBTrack* track, *tracks)
+            for (BBTrack* track : *tracks)
                   bb.convertTrack(score, track, staffIdx++);
             }
 
@@ -481,7 +481,7 @@ Score::FileError importBB(Score* score, const QString& name)
           //C  Db, D,  Eb,  E, F, Gb, G,  Ab, A,  Bb, B,  C#, D#, F#  G#  A#
             14, 9, 16, 11, 18, 13, 8, 15, 10, 17, 12, 19, 21, 23, 20, 22, 24
             };
-      foreach(const BBChord& c, bb.chords()) {
+      for (const BBChord& c : bb.chords()) {
             int tick = c.beat * MScore::division;
 // qDebug("CHORD %d %d", c.beat, tick);
             Measure* m = score->tick2measure(tick);
@@ -530,7 +530,7 @@ Score::FileError importBB(Score* score, const QString& name)
             ++n;
             }
 
-      foreach(Staff* staff, score->staves()) {
+      for (Staff* staff : score->staves()) {
             int tick = 0;
             KeySigEvent ke;
             ke.setKey(Key(bb.key()));
@@ -561,7 +561,7 @@ int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int
       //
       // look for len of shortest note
       //
-      foreach (const MNote* n, *notes) {
+      for (const MNote* n : *notes) {
             if (n->mc.duration() < len)
                   len = n->mc.duration();
             }
@@ -586,7 +586,7 @@ int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int
       Segment* s = measure->getSegment(chord, tick);
       s->add(chord);
 
-      foreach (MNote* n, *notes) {
+      for (MNote* n : *notes) {
             QList<Event>& nl = n->mc.notes();
             for (int i = 0; i < nl.size(); ++i) {
                   const Event& mn = nl[i];
@@ -859,7 +859,7 @@ void BBTrack::cleanup()
       // quantize
       //
       int lastTick = 0;
-      foreach (const Event& e, _events) {
+      for (const Event& e : _events) {
             if (e.type() != ME_NOTE)
                   continue;
             int offtime  = e.offtime();
@@ -880,7 +880,7 @@ void BBTrack::cleanup()
       //
       _events.clear();
 
-      for(iEvent i = dl.begin(); i != dl.end(); ++i) {
+      for (iEvent i = dl.begin(); i != dl.end(); ++i) {
             Event& e = *i;
             if (e.type() == ME_NOTE) {
                   iEvent ii = i;

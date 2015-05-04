@@ -192,7 +192,7 @@ void ChordView::drawBackground(QPainter* p, const QRectF& r)
       p->fillRect(r.intersected(r1), bg1);
       p->fillRect(r.intersected(r2), bg1);
 
-      foreach (const Note* n, chord->notes()) {
+      for (const Note* n : chord->notes()) {
             p->fillRect(QRect(CHORD_MAP_OFFSET, (127 - n->pitch()) * keyHeight,
                1000, keyHeight), bg2);
             }
@@ -273,7 +273,7 @@ void ChordView::setChord(Chord* c)
 
       curEvent = 0;
       _curNote  = 0;
-      foreach(Note* note, c->notes()) {
+      for (Note* note : c->notes()) {
             if (note->selected() && _curNote == 0)
                   _curNote = note;
             int n = note->playEvents().size();
@@ -307,7 +307,7 @@ void ChordView::setChord(Chord* c)
       //
       QList<QGraphicsItem*> items = scene()->selectedItems();
       QRectF boundingRect;
-      foreach(QGraphicsItem* item, items) {
+      for (QGraphicsItem* item : items) {
             Note* note = static_cast<Note*>(item->data(0).value<void*>());
             if (note)
                   boundingRect |= item->mapToScene(item->boundingRect()).boundingRect();
@@ -451,7 +451,7 @@ void ChordView::mousePressEvent(QMouseEvent* event)
             int pitch = y2pitch(int(p.y()));
             int tick  = int(p.x()) - CHORD_MAP_OFFSET;
             int ticks = 1000 - tick;
-            foreach(const NoteEvent& e, _curNote->playEvents()) {
+            for (const NoteEvent& e : _curNote->playEvents()) {
                   if (e.pitch() != pitch)
                         continue;
                   if (tick >= e.ontime() && tick < e.offtime()) {
@@ -562,7 +562,7 @@ void ChordView::selectionChanged()
 void ChordView::deleteItem()
       {
       QList<QGraphicsItem*> items = scene()->selectedItems();
-      foreach(QGraphicsItem* item, items) {
+      for (QGraphicsItem* item : items) {
             if (item->type() == ChordTypeItem) {
                   ChordItem* ci = static_cast<ChordItem*>(item);
                   if (curEvent == ci)

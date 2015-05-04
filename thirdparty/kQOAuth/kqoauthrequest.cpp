@@ -50,7 +50,7 @@ void KQOAuthRequestPrivate::prepareRequest() {
 
     // If parameter list is not empty, we don't want to insert these values by
     // accident a second time. So giving up.
-    if( !requestParameters.isEmpty() ) {
+    if ( !requestParameters.isEmpty() ) {
         return;
     }
 
@@ -122,7 +122,7 @@ bool normalizedParameterSort(const QPair<QString, QString> &left, const QPair<QS
     QString keyRight = right.first;
     QString valueRight = right.second;
 
-    if(keyLeft == keyRight) {
+    if (keyLeft == keyRight) {
         return (valueLeft < valueRight);
     } else {
         return (keyLeft < keyRight);
@@ -161,14 +161,13 @@ QByteArray KQOAuthRequestPrivate::encodedParamaterList(const QList< QPair<QStrin
     QByteArray resultList;
 
     bool first = true;
-    QPair<QString, QString> parameter;
 
     // Do the debug output.
     if (debugOutput) {
         qDebug() << "========== KQOAuthRequest has the following parameters:";
     }
-    foreach (parameter, parameters) {
-        if(!first) {
+    for (QPair<QString, QString> parameter : parameters) {
+        if (!first) {
             resultList.append( "&" );
         } else {
             first = false;
@@ -408,7 +407,7 @@ void KQOAuthRequest::setAdditionalParameters(const KQOAuthParameters &additional
     QList<QString> additionalValues = additionalParams.values();
 
     int i=0;
-    foreach(QString key, additionalKeys) {
+    for (QString key : additionalKeys) {
         QString value = additionalValues.at(i);
         d->additionalParameters.append( qMakePair(key, value) );
         i++;
@@ -419,7 +418,7 @@ KQOAuthParameters KQOAuthRequest::additionalParameters() const {
     Q_D(const KQOAuthRequest);
 
     QMultiMap<QString, QString> additionalParams;
-    for(int i=0; i<d->additionalParameters.size(); i++) {
+    for (int i=0; i<d->additionalParameters.size(); i++) {
         additionalParams.insert(d->additionalParameters.at(i).first,
                                 d->additionalParameters.at(i).second);
     }
@@ -449,12 +448,9 @@ QList<QByteArray> KQOAuthRequest::requestParameters() {
 
     d->signRequest();
 
-    QPair<QString, QString> requestParam;
-    QString param;
-    QString value;
-    foreach (requestParam, d->requestParameters) {
-        param = requestParam.first;
-        value = requestParam.second;
+    for (QPair<QString, QString> requestParam : d->requestParameters) {
+        QString param = requestParam.first;
+        QString value = requestParam.second;
         if (param != OAUTH_KEY_SIGNATURE) {
             value = QUrl::toPercentEncoding(value);
         }
@@ -507,8 +503,8 @@ QByteArray KQOAuthRequest::requestBody() const {
 
     QByteArray postBodyContent;
     bool first = true;
-    for(int i=0; i < d->additionalParameters.size(); i++) {
-        if(!first) {
+    for (int i=0; i < d->additionalParameters.size(); i++) {
+        if (!first) {
             postBodyContent.append("&");
         } else {
             first = false;
@@ -611,6 +607,6 @@ void KQOAuthRequest::requestTimerStart()
 void KQOAuthRequest::requestTimerStop()
 {
     Q_D(KQOAuthRequest);
-    if( d->timer.isActive() )
+    if ( d->timer.isActive() )
         d->timer.stop();
 }

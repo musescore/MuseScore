@@ -79,7 +79,7 @@ QString rtf2html(const QString& iString)
    bool bInTable=false;
    int iDocWidth=12240;
    int iMarginLeft=1800;
-   while(buf_in!=buf_in_end)
+   while (buf_in!=buf_in_end)
    {
       switch (*buf_in)
       {

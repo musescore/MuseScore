@@ -5544,7 +5544,7 @@ void ScoreFont::load()
                   // locate the relevant altKey in alternate array
                   for (auto j : oaa) {
                         QJsonObject jo = j.toObject();
-                        if(jo.value("name") == c.altKey) {
+                        if (jo.value("name") == c.altKey) {
                               Sym* sym = &_symbols[int(c.id)];
                               int code = jo.value("codepoint").toString().mid(2).toInt(&ok, 16);
                               if (ok) {

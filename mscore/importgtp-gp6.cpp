@@ -94,7 +94,7 @@ int GuitarPro6::readBits(int bitsToRead) {
 
 int GuitarPro6::readBitsReversed(int bitsToRead) {
       int bits = 0;
-      for( int i = 0 ; i < bitsToRead ; i ++ ) {
+      for ( int i = 0 ; i < bitsToRead ; i ++ ) {
             bits |= (readBit() << i );
             }
       return bits;
@@ -161,7 +161,7 @@ void GuitarPro6::readGPX(QByteArray* buffer) {
             int length = readInteger(buffer, this->position/BITS_IN_BYTE);
             QByteArray* bcfsBuffer = new QByteArray();
             int positionCounter = 0;
-            while(!f->error() && (this->position/this->BITS_IN_BYTE) < length) {
+            while (!f->error() && (this->position/this->BITS_IN_BYTE) < length) {
                   // read the bit indicating compression information
                   int flag = this->readBits(1);
 
@@ -172,14 +172,14 @@ void GuitarPro6::readGPX(QByteArray* buffer) {
 
                         QByteArray bcfsBufferCopy = *bcfsBuffer;
                         int pos = (bcfsBufferCopy.length() - offs );
-                        for( int i = 0; i < (size > offs ? offs : size) ; i ++ ) {
+                        for ( int i = 0; i < (size > offs ? offs : size) ; i ++ ) {
                               bcfsBuffer->insert(positionCounter, bcfsBufferCopy[pos + i] ) ;
                               positionCounter++;
                               }
                         }
                   else  {
                         int size = this->readBitsReversed(2);
-                        for(int i = 0; i < size; i++) {
+                        for (int i = 0; i < size; i++) {
                               bcfsBuffer->insert(positionCounter, this->readBits(8));
                               positionCounter++;
                               }
@@ -205,7 +205,7 @@ void GuitarPro6::readGPX(QByteArray* buffer) {
                         int block = 0;
                         int blockCount = 0;
                         QByteArray* fileBytes = new QByteArray();
-                        while((block = (readInteger(buffer, (indexOfBlock + (4 * (blockCount ++)))))) != 0 ) {
+                        while ((block = (readInteger(buffer, (indexOfBlock + (4 * (blockCount ++)))))) != 0 ) {
                               fileBytes->push_back(getBytes(buffer, (offset = (block*sectorSize)), sectorSize));
                               }
                         // get file information and read the file
@@ -230,7 +230,7 @@ void GuitarPro6::parseFile(char* filename, QByteArray* data)
       {
       // test to check if we are dealing with the score
       if (!strcmp(filename, "score.gpif"))
-            readGpif(data);
+            readGpif (data);
       }
 
 
@@ -716,7 +716,7 @@ void GuitarPro6::makeTie(Note* note) {
             if (e) {
                   if (e->type() == Element::Type::CHORD) {
                         Chord* chord2 = static_cast<Chord*>(e);
-                        foreach(Note* note2, chord2->notes()) {
+                        for (Note* note2 : chord2->notes()) {
                               if (note2->string() == note->string()) {
                                     Tie* tie = new Tie(score);
                                     tie->setEndNote(note);
@@ -775,7 +775,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               cr->setDurationType(d);
 
 
-                              if(!segment->cr(staffIdx * VOICES + voiceNum))
+                              if (!segment->cr(staffIdx * VOICES + voiceNum))
                                     segment->add(cr);
 
 
@@ -1386,7 +1386,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                               }
                         else
                               cr->setDurationType(d);
-                        if(!segment->cr(track))
+                        if (!segment->cr(track))
                               segment->add(cr);
                   }
                   auto fermataList = fermatas.find(measureCounter);
@@ -1501,7 +1501,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                         cr->setDurationType(d);
 
                   Segment* segment = measure->getSegment(Segment::Type::ChordRest, tick);
-                  if(!segment->cr(staffIdx * VOICES + voiceNum))
+                  if (!segment->cr(staffIdx * VOICES + voiceNum))
                         segment->add(cr);
                   tick += cr->actualTicks();
                   staffIdx++;
@@ -1526,7 +1526,7 @@ bool checkForHold(Segment* segment, QList<PitchValue> points)
       Segment* prevSeg = segment->prev1(Segment::Type::ChordRest);
       if (!prevSeg)
             return false;
-      foreach (Element* e, prevSeg->annotations()) {
+      for (Element* e : prevSeg->annotations()) {
             if (e->type() == Element::Type::TREMOLOBAR) {
                   QList<PitchValue> prevPoints = ((TremoloBar*)e)->points();
                   if (prevPoints.length() != points.length())
@@ -1593,7 +1593,7 @@ void GuitarPro6::addTremoloBar(Segment* segment, int track, int whammyOrigin, in
             Segment* prevSeg = segment->prev1(Segment::Type::ChordRest);
             if (!prevSeg)
                   return;
-            foreach (Element* e, prevSeg->annotations()) {
+            for (Element* e : prevSeg->annotations()) {
                   if (e->type() == Element::Type::TREMOLOBAR) {
                         QList<PitchValue> prevPoints = ((TremoloBar*)e)->points();
                         QList<PitchValue> points;
@@ -1812,7 +1812,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
 //   readGpif
 //---------------------------------------------------------
 
-void GuitarPro6::readGpif(QByteArray* data)
+void GuitarPro6::readGpif (QByteArray* data)
       {
       QDomDocument qdomDoc;
       qdomDoc.setContent(*data);

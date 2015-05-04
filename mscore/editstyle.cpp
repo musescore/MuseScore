@@ -210,7 +210,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       // figured bass init
       QList<QString> fbFontNames = FiguredBass::fontNames();
-      foreach(const QString& family, fbFontNames)
+      for (const QString& family : fbFontNames)
             comboFBFont->addItem(family);
       comboFBFont->setCurrentIndex(0);
       connect(comboFBFont, SIGNAL(currentIndexChanged(int)), SLOT(on_comboFBFont_currentIndexChanged(int)));
@@ -313,7 +313,7 @@ void EditStyle::buttonClicked(QAbstractButton* b)
                   done(1);
                   break;
             case QDialogButtonBox::Cancel:
-                  if(cs->undo() && cs->undo()->current()) {
+                  if (cs->undo() && cs->undo()->current()) {
                         cs->undo()->current()->unwind();
                         cs->setLayoutAll(true);
                         }
@@ -502,7 +502,7 @@ void EditStyle::getValues()
       // figured bass
       int         idx = comboFBFont->currentIndex();
       QString     family;
-      if(FiguredBass::fontData(idx, &family, 0, 0, 0))
+      if (FiguredBass::fontData(idx, &family, 0, 0, 0))
             lstyle.set(StyleIdx::figuredBassFontFamily, family);
       qreal size = doubleSpinFBSize->value();
       qreal vPos = doubleSpinFBVertPos->value();
@@ -692,8 +692,8 @@ void EditStyle::setValues()
       shortenStem->setChecked(lstyle.value(StyleIdx::shortenStem).toBool());
 
       // figured bass
-      for(int i = 0; i < comboFBFont->count(); i++)
-            if(comboFBFont->itemText(i) == lstyle.value(StyleIdx::figuredBassFontFamily).toString()) {
+      for (int i = 0; i < comboFBFont->count(); i++)
+            if (comboFBFont->itemText(i) == lstyle.value(StyleIdx::figuredBassFontFamily).toString()) {
                   comboFBFont->setCurrentIndex(i);
                   break;
             }
@@ -808,7 +808,7 @@ void EditStyle::selectChordDescriptionFile()
 
 void EditStyle::setSwingParams(bool checked)
       {
-      if( !checked)
+      if ( !checked)
             return;
       if (SwingOff->isChecked()) {
             lstyle.set(StyleIdx::swingUnit, TDuration(TDuration::DurationType::V_ZERO).name());

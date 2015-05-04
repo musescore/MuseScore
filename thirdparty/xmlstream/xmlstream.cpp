@@ -1520,7 +1520,7 @@ ushort XmlStreamReaderPrivate::getChar_helper()
 
     decoder->toUnicode(&readBuffer, rawReadBuffer.constData(), nbytesread);
 
-    if(lockEncoding && decoder->hasFailure()) {
+    if (lockEncoding && decoder->hasFailure()) {
         raiseWellFormedError(XmlStream::tr("Encountered incorrectly encoded content."));
         readBuffer.clear();
         return 0;
@@ -1582,7 +1582,7 @@ void XmlStreamReaderPrivate::resolveTag()
                 namespaceDeclaration.prefix.clear();
 
                 const QStringRef ns(dtdAttribute.defaultValue);
-                if(ns == QLatin1String("http://www.w3.org/2000/xmlns/") ||
+                if (ns == QLatin1String("http://www.w3.org/2000/xmlns/") ||
                    ns == QLatin1String("http://www.w3.org/XML/1998/namespace"))
                     raiseWellFormedError(XmlStream::tr("Illegal namespace declaration."));
                 else
@@ -1794,9 +1794,9 @@ void XmlStreamReaderPrivate::startDocument()
             const QString name(value.toString());
             documentEncoding = value;
 
-            if(hasStandalone)
+            if (hasStandalone)
                 err = XmlStream::tr("The standalone pseudo attribute must appear after the encoding.");
-            if(!QXmlUtils::isEncName(name))
+            if (!QXmlUtils::isEncName(name))
                 err = XmlStream::tr("%1 is an invalid encoding name.").arg(name);
             else {
 #ifdef QT_NO_TEXTCODEC

@@ -113,7 +113,7 @@ void Score::write(Xml& xml, bool selectionOnly)
             }
 
       xml.stag("Score");
-      switch(_layoutMode) {
+      switch (_layoutMode) {
             case LayoutMode::PAGE:
             case LayoutMode::FLOAT:
             case LayoutMode::SYSTEM:
@@ -171,7 +171,7 @@ void Score::write(Xml& xml, bool selectionOnly)
 
       if (!selectionOnly) {
             xml.stag("PageList");
-            foreach(Page* page, _pages)
+            for (Page* page : _pages)
                   page->write(xml);
             xml.etag();
             }
@@ -198,7 +198,7 @@ void Score::write(Xml& xml, bool selectionOnly)
             measureEnd   = 0;
             }
 
-      foreach(const Part* part, _parts) {
+      for (const Part* part : _parts) {
             if (!selectionOnly || ((staffIdx(part) >= staffStart) && (staffEnd >= staffIdx(part) + part->nstaves())))
                   part->write(xml);
             }
@@ -503,7 +503,7 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
       xml.stag("rootfiles");
       xml.stag(QString("rootfile full-path=\"%1\"").arg(Xml::xmlString(fn)));
       xml.etag();
-      foreach(ImageStoreItem* ip, imageStore) {
+      for (ImageStoreItem* ip : imageStore) {
             if (!ip->isUsed(this))
                   continue;
             QString path = QString("Pictures/") + ip->hashName();
@@ -518,7 +518,7 @@ void Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
 
       // save images
       //uz.addDirectory("Pictures");
-      foreach (ImageStoreItem* ip, imageStore) {
+      for (ImageStoreItem* ip : imageStore) {
             if (!ip->isUsed(this))
                   continue;
             QString path = QString("Pictures/") + ip->hashName();
@@ -648,7 +648,7 @@ extern bool enableTestMode;
 
 void Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       {
-      if(!MScore::testMode)
+      if (!MScore::testMode)
             MScore::testMode = enableTestMode;
       Xml xml(f);
       xml.writeOmr = msczFormat;
@@ -741,7 +741,7 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
       // load images
       //
       if (!MScore::noImages) {
-            foreach(const QString& s, sl) {
+            for (const QString& s : sl) {
                   QByteArray dbuf = uz.fileData(s);
                   imageStore.add(s, dbuf);
                   }
@@ -751,7 +751,7 @@ Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
       if (dbuf.isEmpty()) {
 //            qDebug("root file <%s> is empty", qPrintable(rootfile));
             QList<MQZipReader::FileInfo> fil = uz.fileInfoList();
-            foreach(const MQZipReader::FileInfo& fi, fil) {
+            for (const MQZipReader::FileInfo& fi : fil) {
                   if (fi.filePath.endsWith(".mscx")) {
                         dbuf = uz.fileData(fi.filePath);
                         break;
@@ -918,7 +918,7 @@ Score::FileError Score::read1(XmlReader& e, bool ignoreVersionError)
             }
 
       int id = 1;
-      foreach (LinkedElements* le, _elinks)
+      for (LinkedElements* le : _elinks)
             le->setLid(this, id++);
       _elinks.clear();
 #if 0
@@ -1170,7 +1170,7 @@ bool Score::read(XmlReader& e)
       //
       //    sanity check for barLineSpan
       //
-      foreach(Staff* st, _staves) {
+      for (Staff* st : _staves) {
             int barLineSpan = st->barLineSpan();
             int idx = staffIdx(st);
             int n = nstaves();
@@ -1241,7 +1241,7 @@ void Score::print(QPainter* painter, int pageNo)
 
       QList<Element*> ell = page->items(fr);
       qStableSort(ell.begin(), ell.end(), elementLessThan);
-      foreach(const Element* e, ell) {
+      for (const Element* e : ell) {
             if (!e->visible())
                   continue;
             painter->save();
@@ -1269,7 +1269,7 @@ QByteArray Score::readCompressedToBuffer()
       //
       // load images
       //
-      foreach(const QString& s, images) {
+      for (const QString& s : images) {
             QByteArray dbuf = uz.fileData(s);
             imageStore.add(s, dbuf);
             }
@@ -1369,7 +1369,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                     }
                               }
                         }
-                  foreach (Element* e, segment->annotations()) {
+                  for (Element* e : segment->annotations()) {
                         if (e->track() != track || e->generated()
                            || (e->systemFlag() && !writeSystemElements)) {
                               continue;

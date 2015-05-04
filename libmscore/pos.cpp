@@ -361,7 +361,7 @@ void PosLen::dump(int n) const
       {
       Pos::dump(n);
       qDebug("  Len(");
-      switch(type()) {
+      switch (type()) {
             case TType::FRAMES:
                   qDebug("samples=%d)", _lenFrame);
                   break;
@@ -374,7 +374,7 @@ void PosLen::dump(int n) const
 void Pos::dump(int /*n*/) const
       {
       qDebug("Pos(%s, sn=%d, ", type() == TType::FRAMES ? "Frames" : "Ticks", sn);
-      switch(type()) {
+      switch (type()) {
             case TType::FRAMES:
                   qDebug("samples=%d)", _frame);
                   break;
@@ -477,7 +477,7 @@ Pos PosLen::end() const
       {
       Pos pos(*this);
       pos.invalidSn();
-      switch(type()) {
+      switch (type()) {
             case TType::FRAMES:
                   pos.setFrame(pos.frame() + _lenFrame);
                   break;
@@ -494,7 +494,7 @@ Pos PosLen::end() const
 
 void PosLen::setPos(const Pos& pos)
       {
-      switch(pos.type()) {
+      switch (pos.type()) {
             case TType::FRAMES:
                   setFrame(pos.frame());
                   break;
@@ -537,7 +537,7 @@ void Pos::msf(int* min, int* sec, int* fr, int* subFrame) const
       *min        = int(time) / 60;
       *sec        = int(time) % 60;
       double rest = time - ((*min) * 60 + (*sec));
-      switch(MScore::mtcType) {
+      switch (MScore::mtcType) {
             case 0:     // 24 frames sec
                   rest *= 24;
                   break;

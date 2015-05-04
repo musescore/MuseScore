@@ -361,7 +361,7 @@ bool MidiFile::write(QIODevice* f)
       writeShort(_format);          // format
       writeShort(_tracks.size());
       writeShort(_division);
-      foreach (const MidiTrack* t, _tracks) {
+      for (const MidiTrack* t : _tracks) {
             if (writeTrack(t))
                   return true;
             }

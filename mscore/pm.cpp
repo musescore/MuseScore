@@ -119,7 +119,7 @@ PortMidiDriver::~PortMidiDriver()
 bool PortMidiDriver::init()
       {
       inputId = getDeviceIn(preferences.portMidiInput);
-      if(inputId == -1)
+      if (inputId == -1)
         inputId  = Pm_GetDefaultInputDeviceID();
       outputId = Pm_GetDefaultOutputDeviceID();
 
@@ -252,7 +252,7 @@ QStringList PortMidiDriver::deviceInList() const
       int interf = Pm_CountDevices();
       for (PmDeviceID id = 0; id < interf; id++) {
             const PmDeviceInfo* info = Pm_GetDeviceInfo((PmDeviceID)id);
-            if(info->input)
+            if (info->input)
                 il.append(QString(info->interf) +","+ QString(info->name));
             }
       return il;

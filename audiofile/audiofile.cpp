@@ -79,7 +79,7 @@ int AudioFile::read(short* data, int frames)
 
 sf_count_t AudioFile::seek(sf_count_t offset, int whence)
       {
-      switch(whence) {
+      switch (whence) {
             case SEEK_SET:
                   idx = offset;
                   break;

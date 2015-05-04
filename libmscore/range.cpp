@@ -33,7 +33,7 @@ namespace Ms {
 
 static void cleanupTuplet(Tuplet* t)
       {
-      foreach(DurationElement* e, t->elements()) {
+      for (DurationElement* e : t->elements()) {
             if (e->type() == Element::Type::TUPLET)
                   cleanupTuplet(static_cast<Tuplet*>(e));
             delete e;
@@ -87,13 +87,13 @@ void TrackList::append(Element* e)
                         Tuplet* srcTuplet = static_cast<Tuplet*>(e);
                         Tuplet* dstTuplet = static_cast<Tuplet*>(element);
 
-                        foreach(const DurationElement* de, srcTuplet->elements())
+                        for (const DurationElement* de : srcTuplet->elements())
                               dstTuplet->add(de->clone());
                         }
                   else {
                         ChordRest* src = static_cast<ChordRest*>(e);
                         Segment* s = src->segment();
-                        foreach(Element* ee, s->annotations()) {
+                        for (Element* ee : s->annotations()) {
                               if (ee->track() == e->track())
                                     _range->annotations.push_back({ s->tick(), ee->clone() });
                               }
@@ -140,7 +140,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
       for (s = fs; s && (s != es); s = s->next1()) {
             Element* e = s->element(_track);
             if (!e || e->generated()) {
-                  foreach(Element* ee, s->annotations()) {
+                  for (Element* ee : s->annotations()) {
                         if (ee->track() == _track)
                               _range->annotations.push_back({ s->tick(), ee->clone() });
                         }
@@ -197,7 +197,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
             if (e->type() != Element::Type::CHORD)
                   continue;
             Chord* chord = static_cast<Chord*>(e);
-            foreach(Note* n1, chord->notes()) {
+            for (Note* n1 : chord->notes()) {
                   Tie* tie = n1->tieFor();
                   if (!tie)
                         continue;
@@ -207,7 +207,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
                               continue;
                         Chord* c2 = static_cast<Chord*>(ee);
                         bool found = false;
-                        foreach(Note* n2, c2->notes()) {
+                        for (Note* n2 : c2->notes()) {
                               if (n1->pitch() == n2->pitch()) {
                                     tie->setEndNote(n2);
                                     n2->setTieBack(tie);
@@ -231,7 +231,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* tuplet, Measure* measure, int tick) const
       {
       Tuplet* dt = tuplet->clone();
       dt->setParent(measure);
-      foreach (DurationElement* e, tuplet->elements()) {
+      for (DurationElement* e : tuplet->elements()) {
             if (e->isChordRest()) {
                   Element* ne = e->clone();
                   Segment::Type st = Segment::Type::ChordRest;
@@ -383,7 +383,7 @@ bool TrackList::write(Measure* measure) const
                                     duration -= d;
                                     rest     -= d;
                                     pos      += d;
-                                    foreach(Note* note, c->notes()) {
+                                    for (Note* note : c->notes()) {
                                           if (!duration.isZero() || note->tieFor()) {
                                                 Tie* tie = new Tie(score);
                                                 note->add(tie);
@@ -459,7 +459,7 @@ bool TrackList::write(Measure* measure) const
             Chord* chord = static_cast<Chord*>(s->element(_track));
             if (chord == 0 || chord->type() != Element::Type::CHORD)
                   continue;
-            foreach (Note* n, chord->notes()) {
+            for (Note* n : chord->notes()) {
                   Tie* tie = n->tieFor();
                   if (!tie)
                         continue;

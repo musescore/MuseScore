@@ -116,7 +116,7 @@ void ElementLayout::writeProperties(Xml& xml, const ElementLayout& l) const
 
       if (_offsetType != l._offsetType) {
             const char* p = 0;
-            switch(_offsetType) {
+            switch (_offsetType) {
                   case OffsetType::SPATIUM: p = "spatium"; break;
                   case OffsetType::ABS:     p = "absolute"; break;
                   }
@@ -154,7 +154,7 @@ void ElementLayout::writeProperties(Xml& xml) const
             }
 
       const char* p = 0;
-      switch(_offsetType) {
+      switch (_offsetType) {
             case OffsetType::SPATIUM: p = "spatium"; break;
             case OffsetType::ABS:     p = "absolute"; break;
             }

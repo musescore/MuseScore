@@ -66,7 +66,7 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
             return;
       QString baseName = np.baseName();
 
-      foreach(QString s, plugins) {
+      for (QString s : plugins) {
             QFileInfo fi(s);
             if (fi.baseName() == baseName) {
                   if (MScore::debugMode)
@@ -89,7 +89,7 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
       obj = component.create();
       if (obj == 0) {
             qDebug("creating component <%s> failed", qPrintable(pluginPath));
-            foreach(QQmlError e, component.errors()) {
+            for (QQmlError e : component.errors()) {
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
                   }
             return;
@@ -133,7 +133,7 @@ void MuseScore::unregisterPlugin(PluginDescription* plugin)
       QString baseName = np.baseName();
 
       bool found = false;
-      foreach(QString s, plugins) {
+      for (QString s : plugins) {
             QFileInfo fi(s);
             if (fi.baseName() == baseName) {
                   found = true;
@@ -171,7 +171,7 @@ void MuseScore::createMenuEntry(PluginDescription* plugin)
       QStringList ml;
       QString s;
       bool escape = false;
-      foreach (QChar c, menu) {
+      for (QChar c : menu) {
             if (escape) {
                   escape = false;
                   s += c;
@@ -196,11 +196,11 @@ void MuseScore::createMenuEntry(PluginDescription* plugin)
       int n            = ml.size();
       QWidget* curMenu = menuBar();
 
-      for(int i = 0; i < n; ++i) {
+      for (int i = 0; i < n; ++i) {
             QString m  = ml[i];
             bool found = false;
             QList<QObject*> ol = curMenu->children();
-            foreach(QObject* o, ol) {
+            for (QObject* o : ol) {
                   QMenu* menu = qobject_cast<QMenu*>(o);
                   if (!menu)
                         continue;
@@ -225,7 +225,7 @@ void MuseScore::createMenuEntry(PluginDescription* plugin)
                         if (sl.size() == 2) {
                               QList<QAction*> al = cm->actions();
                               QAction* ba = 0;
-                              foreach(QAction* ia, al) {
+                              for (QAction* ia : al) {
                                     if (ia->text() == sl[0]) {
                                           ba = ia;
                                           break;
@@ -261,7 +261,7 @@ void MuseScore::removeMenuEntry(PluginDescription* plugin)
       QStringList ml;
       QString s;
       bool escape = false;
-      foreach (QChar c, menu) {
+      for (QChar c : menu) {
             if (escape) {
                   escape = false;
                   s += c;
@@ -283,16 +283,16 @@ void MuseScore::removeMenuEntry(PluginDescription* plugin)
       if (!s.isEmpty())
             ml += s;
 
-      if(ml.isEmpty())
+      if (ml.isEmpty())
             return;
 
       int n            = ml.size();
       QWidget* curMenu = menuBar();
 
-      for(int i = 0; i < n-1; ++i) {
+      for (int i = 0; i < n-1; ++i) {
             QString m  = ml[i];
             QList<QObject*> ol = curMenu->children();
-            foreach(QObject* o, ol) {
+            for (QObject* o : ol) {
                   QMenu* menu = qobject_cast<QMenu*>(o);
                   if (!menu)
                         continue;
@@ -307,11 +307,11 @@ void MuseScore::removeMenuEntry(PluginDescription* plugin)
       QAction* a = plugin->shortcut.action();
       QMenu* cm = static_cast<QMenu*>(curMenu);
       cm->removeAction(a);
-      for(int i = n-2; i >= 0; --i) {
+      for (int i = n-2; i >= 0; --i) {
 
             QMenu* menu = qobject_cast<QMenu*>(cm->parent());
             if (cm->isEmpty())
-                  if(cm->isEmpty()) {
+                  if (cm->isEmpty()) {
                         delete cm;
                         }
             cm = menu;
@@ -326,7 +326,7 @@ int MuseScore::pluginIdxFromPath(QString pluginPath) {
       QFileInfo np(pluginPath);
       QString baseName = np.baseName();
       int idx = 0;
-      foreach(QString s, plugins) {
+      for (QString s : plugins) {
             QFileInfo fi(s);
             if (fi.baseName() == baseName)
                   return idx;
@@ -407,7 +407,7 @@ void MuseScore::pluginTriggered(int idx)
       component.loadUrl(QUrl::fromLocalFile(pp));
       QObject* obj = component.create();
       if (obj == 0) {
-            foreach(QQmlError e, component.errors())
+            for (QQmlError e : component.errors())
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
             return;
             }
@@ -467,7 +467,7 @@ void collectPluginMetaInformation(PluginDescription* d)
       QObject* obj = component.create();
       if (obj == 0) {
             qDebug("creating component <%s> failed", qPrintable(d->path));
-            foreach(QQmlError e, component.errors()) {
+            for (QQmlError e : component.errors()) {
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
                   }
             return;

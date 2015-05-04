@@ -411,7 +411,7 @@ void PageSettings::olmChanged(double val)
       if (mmUnit)
             val /= INCH;
 
-      if(twosided->isChecked()) {
+      if (twosided->isChecked()) {
             evenPageRightMargin->blockSignals(true);
             evenPageRightMargin->setValue(val * (mmUnit ? INCH : 1.0));
             evenPageRightMargin->blockSignals(false);
@@ -501,7 +501,7 @@ void PageSettings::elmChanged(double val)
       if (mmUnit)
             val /= INCH;
 
-      if(twosided->isChecked()) {
+      if (twosided->isChecked()) {
             oddPageRightMargin->blockSignals(true);
             oddPageRightMargin->setValue(val * (mmUnit ? INCH : 1.0));
             oddPageRightMargin->blockSignals(false);
@@ -629,7 +629,7 @@ void PageSettings::pageWidthChanged(double val)
 void PageSettings::updatePreview(int val)
       {
 //      updateValues();
-      switch(val) {
+      switch (val) {
             case 0:
                   preview->score()->doLayout();
                   break;

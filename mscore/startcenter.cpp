@@ -196,7 +196,7 @@ MyWebView::MyWebView(QWidget *parent):
 
       setZoomFactor(guiScaling);
 
-      if(!enableExperimental)
+      if (!enableExperimental)
             setContextMenuPolicy(Qt::NoContextMenu);
 
       //set cookie jar for persistent cookies
@@ -223,7 +223,7 @@ When this slot is called, call ignoreSslErrors method of QNetworkReply
 */
 void MyWebView::ignoreSSLErrors(QNetworkReply *reply, QList<QSslError> sslErrors)
       {
-      foreach (const QSslError &error, sslErrors)
+      for (const QSslError &error : sslErrors)
             qDebug("Ignore SSL error: %d %s", error.error(), qPrintable(error.errorString()));
       reply->ignoreSslErrors(sslErrors);
       }
@@ -312,7 +312,7 @@ void CookieJar::load()
             QList<QNetworkCookie> list;
             QByteArray line;
 
-            while(!(line = cookieFile.readLine()).isNull()) {
+            while (!(line = cookieFile.readLine()).isNull()) {
                   list.append(QNetworkCookie::parseCookies(line));
                   }
             setAllCookies(list);
@@ -348,14 +348,14 @@ void CookieJar::save()
             }
 
       QFile file(_file);
-      if(!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+      if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             if (MScore::debugMode)
                   qDebug() << "Can't open "<< _file << " to save cookies";
             return;
             }
 
       QTextStream out(&file);
-      for(int i = 0 ; i < cookieList.size() ; i++) {
+      for (int i = 0 ; i < cookieList.size() ; i++) {
             //get cookie data
             QNetworkCookie cookie = cookieList.at(i);
             if (!cookie.isSessionCookie()) {

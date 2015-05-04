@@ -877,7 +877,7 @@ void Slur::slurPos(SlurPos* sp)
             case SlurAnchor::NONE:
                   break;
             }
-      switch(sa2) {
+      switch (sa2) {
             case SlurAnchor::STEM: //ec can't be null
                   sp->p2 += ec->stemPos() - ec->pagePos() + ec->stem()->p2();
                   sp->p2 += QPointF(-0.35 * _spatium, 0.25 * _spatium);
@@ -897,7 +897,7 @@ void Slur::slurPos(SlurPos* sp)
       xo = hw * .5;                                                           // defaults to headWidth()
       if (note1)
             yo = note1->pos().y();
-      else if(_up)
+      else if (_up)
             yo = startCR()->bbox().top();
       else
             yo = startCR()->bbox().top() + startCR()->height();
@@ -924,7 +924,7 @@ void Slur::slurPos(SlurPos* sp)
                   if ((sc->up() != ecr->up()) && (sc->up() == _up)) {
                         Note* n1  = sc->up() ? sc->downNote() : sc->upNote();
                         Note* n2  = 0;
-                        if(ec)
+                        if (ec)
                               n2 = ec->up() ? ec->downNote() : ec->upNote();
                         qreal yd  = (n2 ? n2->pos().y() : endCR()->pos().y()) - n1->pos().y();
 
@@ -958,7 +958,7 @@ void Slur::slurPos(SlurPos* sp)
       xo = hw * .5;
       if (note2)
             yo = note2->pos().y();
-      else if(_up)
+      else if (_up)
             yo = endCR()->bbox().top();
       else
             yo = endCR()->bbox().top() + endCR()->height();
@@ -989,7 +989,7 @@ void Slur::slurPos(SlurPos* sp)
             //
             if ((scr->up() != ec->up()) && (ec->up() == _up)) {
                   Note* n1 = 0;
-                  if(sc)
+                  if (sc)
                         sc->up() ? sc->downNote() : sc->upNote();
                   Note* n2 = ec->up() ? ec->downNote() : ec->upNote();
                   qreal yd = n2->pos().y() - (n1 ? n1->pos().y() : startCR()->pos().y());
@@ -1026,10 +1026,10 @@ void Slur::slurPos(SlurPos* sp)
 void SlurTie::writeProperties(Xml& xml) const
       {
       Element::writeProperties(xml);
-      if(track() != track2() && track2() != -1)
+      if (track() != track2() && track2() != -1)
             xml.tag("track2", track2());
       int idx = 0;
-      foreach(const SpannerSegment* ss, spannerSegments())
+      for (const SpannerSegment* ss : spannerSegments())
             ((SlurSegment*)ss)->write(xml, idx++);
       if (_slurDirection != MScore::Direction::AUTO)
             xml.tag("up", int(_slurDirection));
@@ -1102,7 +1102,7 @@ void SlurTie::reset()
 
 QVariant SlurTie::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::LINE_TYPE:      return lineType();
             case P_ID::SLUR_DIRECTION: return int(slurDirection());
             default:
@@ -1116,7 +1116,7 @@ QVariant SlurTie::getProperty(P_ID propertyId) const
 
 bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::LINE_TYPE:      setLineType(v.toInt()); break;
             case P_ID::SLUR_DIRECTION: setSlurDirection(MScore::Direction(v.toInt())); break;
             default:
@@ -1148,7 +1148,7 @@ QVariant SlurTie::propertyDefault(P_ID id) const
 
 QVariant SlurSegment::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::LINE_TYPE:
             case P_ID::SLUR_DIRECTION:
                   return slurTie()->getProperty(propertyId);
@@ -1171,7 +1171,7 @@ QVariant SlurSegment::getProperty(P_ID propertyId) const
 
 bool SlurSegment::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::LINE_TYPE:
             case P_ID::SLUR_DIRECTION:
                   return slurTie()->setProperty(propertyId, v);
@@ -1489,7 +1489,7 @@ void Slur::layout()
 
 qreal SlurTie::firstNoteRestSegmentX(System* system)
       {
-      foreach(const MeasureBase* mb, system->measures()) {
+      for (const MeasureBase* mb : system->measures()) {
             if (mb->type() == Element::Type::MEASURE) {
                   const Measure* measure = static_cast<const Measure*>(mb);
                   for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
@@ -1526,7 +1526,7 @@ qreal SlurTie::firstNoteRestSegmentX(System* system)
 void Slur::setTrack(int n)
       {
       Element::setTrack(n);
-      foreach(SpannerSegment* ss, spannerSegments())
+      for (SpannerSegment* ss : spannerSegments())
             ss->setTrack(n);
       }
 
@@ -1571,7 +1571,7 @@ void SlurTie::startEdit(MuseScoreView* view, const QPointF& pt)
       editEndElement   = endElement();
 
       editUps.clear();
-      foreach (SpannerSegment* s, spannerSegments()) {
+      for (SpannerSegment* s : spannerSegments()) {
             SlurOffsets o;
             SlurSegment* ss = static_cast<SlurSegment*>(s);
             o.o[0] = ss->getProperty(P_ID::SLUR_UOFF1).toPointF();

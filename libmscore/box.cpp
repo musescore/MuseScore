@@ -55,7 +55,7 @@ Box::Box(Score* score)
 void Box::layout()
       {
       MeasureBase::layout();
-      foreach (Element* el, _el) {
+      for (Element* el : _el) {
             if (el->type() != Element::Type::LAYOUT_BREAK)
                   el->layout();
             }
@@ -194,7 +194,7 @@ void Box::writeProperties(Xml& xml) const
       writeProperty(xml, P_ID::BOTTOM_MARGIN);
 
       Element::writeProperties(xml);
-      foreach (const Element* el, _el)
+      for (const Element* el : _el)
             el->write(xml);
       }
 
@@ -338,7 +338,7 @@ void Box::add(Element* e)
 
 QVariant Box::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::BOX_HEIGHT:
                   return _boxHeight.val();
             case P_ID::BOX_WIDTH:
@@ -367,7 +367,7 @@ QVariant Box::getProperty(P_ID propertyId) const
 bool Box::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::BOX_HEIGHT:
                   _boxHeight = Spatium(v.toDouble());
                   break;
@@ -405,7 +405,7 @@ bool Box::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Box::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::BOX_HEIGHT:
             case P_ID::BOX_WIDTH:
             case P_ID::TOP_GAP:
@@ -499,7 +499,7 @@ bool Box::acceptDrop(const DropData& data) const
             case Element::Type::SYMBOL:
                   return true;
             case Element::Type::ICON:
-                  switch(static_cast<Icon*>(data.element)->iconType()) {
+                  switch (static_cast<Icon*>(data.element)->iconType()) {
                         case IconType::VFRAME:
                         case IconType::TFRAME:
                         case IconType::FFRAME:
@@ -522,9 +522,9 @@ bool Box::acceptDrop(const DropData& data) const
 Element* Box::drop(const DropData& data)
       {
       Element* e = data.element;
-      if(e->flag(ElementFlag::ON_STAFF))
+      if (e->flag(ElementFlag::ON_STAFF))
             return 0;
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::LAYOUT_BREAK:
                   {
                   LayoutBreak* lb = static_cast<LayoutBreak*>(e);
@@ -540,7 +540,7 @@ Element* Box::drop(const DropData& data)
                               delete lb;
                               break;
                               }
-                        foreach(Element* elem, _el) {
+                        for (Element* elem : _el) {
                               if (elem->type() == Element::Type::LAYOUT_BREAK) {
                                     score()->undoChangeElement(elem, e);
                                     break;
@@ -565,7 +565,7 @@ Element* Box::drop(const DropData& data)
                   }
 
             case Element::Type::ICON:
-                  switch(static_cast<Icon*>(e)->iconType()) {
+                  switch (static_cast<Icon*>(e)->iconType()) {
                         case IconType::VFRAME:
                               score()->insertMeasure(Element::Type::VBOX, this);
                               break;

@@ -52,7 +52,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
 
       EventMap events;
       score->renderMidi(&events);
-      if(events.size() == 0)
+      if (events.size() == 0)
             return false;
 
       MasterSynthesizer* synti = synthesizerFactory();
@@ -101,12 +101,12 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             //
             // init instruments
             //
-            foreach(Part* part, score->parts()) {
+            for (Part* part : score->parts()) {
                   const InstrumentList* il = part->instruments();
-                  for(auto i = il->begin(); i!= il->end(); i++) {
-                        foreach(const Channel* a, i->second->channel()) {
+                  for (auto i = il->begin(); i!= il->end(); i++) {
+                        for (const Channel* a : i->second->channel()) {
                               a->updateInitList();
-                              foreach(MidiCoreEvent e, a->init) {
+                              for (MidiCoreEvent e : a->init) {
                                     if (e.type() == ME_INVALID)
                                           continue;
                                     e.setChannel(a->channel);

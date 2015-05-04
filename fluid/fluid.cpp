@@ -108,13 +108,13 @@ void Fluid::init(float sampleRate)
 Fluid::~Fluid()
       {
       _state = FLUID_SYNTH_STOPPED;
-      foreach(Voice* v, activeVoices)
+      for (Voice* v : activeVoices)
             delete v;
-      foreach(Voice* v, freeVoices)
+      for (Voice* v : freeVoices)
             delete v;
-      foreach(SFont* sf, sfonts)
+      for (SFont* sf : sfonts)
             delete sf;
-      foreach(Channel* c, channel)
+      for (Channel* c : channel)
             delete c;
       }
 
@@ -152,7 +152,7 @@ void Fluid::play(const PlayEvent& event)
                   //
                   // process note off
                   //
-                  foreach (Voice* v, activeVoices) {
+                  for (Voice* v : activeVoices) {
                         if (v->ON() && (v->chan == ch) && (v->key == key))
                               v->noteoff();
                         }
@@ -172,7 +172,7 @@ void Fluid::play(const PlayEvent& event)
                    * several voice processes, for example a stereo sample.  Don't
                    * release those...
                    */
-                  foreach(Voice* v, activeVoices) {
+                  for (Voice* v : activeVoices) {
                         if (v->isPlaying() && (v->chan == ch) && (v->key == key) && (v->get_id() != noteid))
                               v->noteoff();
                         }
@@ -180,7 +180,7 @@ void Fluid::play(const PlayEvent& event)
                   }
             }
       else if (type == ME_CONTROLLER)  {
-            switch(event.dataA()) {
+            switch (event.dataA()) {
                   case CTRL_PROGRAM:
                         program_change(ch, event.dataB());
                         break;
@@ -205,7 +205,7 @@ void Fluid::play(const PlayEvent& event)
 
 void Fluid::damp_voices(int chan)
       {
-      foreach(Voice* v, activeVoices) {
+      for (Voice* v : activeVoices) {
             if ((v->chan == chan) && v->SUSTAINED())
                   v->noteoff();
             }
@@ -217,7 +217,7 @@ void Fluid::damp_voices(int chan)
 
 void Fluid::allNotesOff(int chan)
       {
-      foreach(Voice* v, activeVoices) {
+      for (Voice* v : activeVoices) {
             if (chan == -1 || v->chan == chan)
                   v->noteoff();
             }
@@ -231,7 +231,7 @@ void Fluid::allNotesOff(int chan)
 
 void Fluid::allSoundsOff(int chan)
       {
-      foreach(Voice* v, activeVoices) {
+      for (Voice* v : activeVoices) {
             if (chan == -1 || v->chan == chan)
                   v->off();
             }
@@ -246,9 +246,9 @@ void Fluid::allSoundsOff(int chan)
 
 void Fluid::system_reset()
       {
-      foreach(Voice* v, activeVoices)
+      for (Voice* v : activeVoices)
             v->off();
-      foreach(Channel* c, channel)
+      for (Channel* c : channel)
             c->reset();
       }
 
@@ -260,7 +260,7 @@ void Fluid::system_reset()
  */
 void Fluid::modulate_voices(int chan, bool is_cc, int ctrl)
       {
-      foreach(Voice* v, activeVoices) {
+      for (Voice* v : activeVoices) {
             if (v->chan == chan)
                   v->modulate(is_cc, ctrl);
             }
@@ -275,7 +275,7 @@ void Fluid::modulate_voices(int chan, bool is_cc, int ctrl)
  */
 void Fluid::modulate_voices_all(int chan)
       {
-      foreach(Voice* v, activeVoices) {
+      for (Voice* v : activeVoices) {
             if (v->chan == chan)
                   v->modulate_all();
             }
@@ -396,7 +396,7 @@ void Fluid::update_presets()
 void Fluid::process(unsigned len, float* out, float* effect1, float* effect2)
       {
       if (mutex.tryLock()) {
-            foreach (Voice* v, activeVoices)
+            for (Voice* v : activeVoices)
                   v->write(len, out, effect1, effect2);
             mutex.unlock();
             }
@@ -415,7 +415,7 @@ void Fluid::free_voice_by_kill()
       float this_voice_prio;
       Voice* best_voice = 0;
 
-      foreach(Voice* v, activeVoices) {
+      for (Voice* v : activeVoices) {
             /* Determine, how 'important' a voice is.
              * Start with an arbitrary number */
             this_voice_prio = 10000.;
@@ -531,7 +531,7 @@ void Fluid::start_voice(Voice* voice)
 
             /* Kill all notes on the same channel with the same exclusive class */
 
-            foreach(Voice* existing_voice, activeVoices) {
+            for (Voice* existing_voice : activeVoices) {
                   /* Existing voice does not play? Leave it alone. */
                   if (!existing_voice->isPlaying())
                         continue;
@@ -594,7 +594,7 @@ void Fluid::updatePatchList()
 QStringList Fluid::soundFonts() const
       {
       QStringList sf;
-      foreach (SFont* f, sfonts)
+      for (SFont* f : sfonts)
             sf.append(QFileInfo(f->get_name()).fileName());
       return sf;
       }
@@ -612,11 +612,11 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
             return true;
             }
       mutex.lock();
-      foreach(Voice* v, activeVoices)
+      for (Voice* v : activeVoices)
             v->off();
-      foreach(Channel* c, channel)
+      for (Channel* c : channel)
             c->reset();
-      foreach (SFont* sf, sfonts)
+      for (SFont* sf : sfonts)
             sfunload(sf->id());
       bool ok = true;
 
@@ -630,7 +630,7 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
             QString path;
             QFileInfo fis(s);
             QString fileName = fis.fileName();
-            foreach (const QFileInfo& fi, l) {
+            for (const QFileInfo& fi : l) {
                   if (fi.fileName() == fileName) {
                         path = fi.absoluteFilePath();
                         break;
@@ -672,7 +672,7 @@ bool Fluid::addSoundFont(const QString& s)
 bool Fluid::removeSoundFont(const QString& s)
       {
       mutex.lock();
-      foreach(Voice* v, activeVoices)
+      for (Voice* v : activeVoices)
             v->off();
       SFont* sf = get_sfont_by_name(s);
       sfunload(sf->id());
@@ -740,7 +740,7 @@ bool Fluid::sfunload(int id)
 
 SFont* Fluid::get_sfont_by_id(int id)
       {
-      foreach(SFont* sf, sfonts) {
+      for (SFont* sf : sfonts) {
             if (sf->id() == id)
                   return sf;
             }
@@ -753,7 +753,7 @@ SFont* Fluid::get_sfont_by_id(int id)
 
 SFont* Fluid::get_sfont_by_name(const QString& name)
       {
-      foreach(SFont* sf, sfonts) {
+      for (SFont* sf : sfonts) {
             if (QFileInfo(sf->get_name()).fileName() == name)
                   return sf;
             }
@@ -768,7 +768,7 @@ SFont* Fluid::get_sfont_by_name(const QString& name)
 
 void Fluid::set_interp_method(int chan, int interp_method)
       {
-      foreach(Channel* c, channel) {
+      for (Channel* c : channel) {
             if (chan < 0 || c->getNum() == chan)
                   c->setInterpMethod(interp_method);
             }
@@ -781,7 +781,7 @@ void Fluid::set_interp_method(int chan, int interp_method)
 void Fluid::set_gen(int chan, int param, float value)
       {
       channel[chan]->setGen(param, value, 0);
-      foreach(Voice* v, activeVoices) {
+      for (Voice* v : activeVoices) {
             if (v->chan == chan)
                   v->set_param(param, value, 0);
             }
@@ -815,7 +815,7 @@ void Fluid::set_gen2(int chan, int param, float value, int absolute, int normali
       float v = (normalized)? fluid_gen_scale(param, value) : value;
       channel[chan]->setGen(param, v, absolute);
 
-      foreach(Voice* vo, activeVoices) {
+      for (Voice* vo : activeVoices) {
             if (vo->chan == chan)
                   vo->set_param(param, v, absolute);
             }
@@ -840,7 +840,7 @@ SynthesizerGroup Fluid::state() const
       g.setName(name());
 
       QStringList sfl = soundFonts();
-      foreach (QString sf, sfl)
+      for (QString sf : sfl)
             g.push_back(IdValue(0, sf));
 
       return g;
@@ -869,7 +869,7 @@ bool Fluid::setState(const SynthesizerGroup& sp)
 static void collectFiles(QFileInfoList* l, const QString& path)
       {
       QDir dir(path);
-      foreach (const QFileInfo& s, dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot)) {
+      for (const QFileInfo& s : dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot)) {
             if (path == s.absoluteFilePath())
                   return;
 
@@ -893,7 +893,7 @@ QFileInfoList Fluid::sfFiles()
 
       QString path = preferences.sfPath;
       QStringList pl = path.split(";");
-      foreach (const QString& s, pl) {
+      for (const QString& s : pl) {
             QString ss(s);
             if (!s.isEmpty() && s[0] == '~')
                   ss = QDir::homePath() + s.mid(1);

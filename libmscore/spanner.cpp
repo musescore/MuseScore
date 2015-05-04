@@ -245,7 +245,7 @@ Spanner::Spanner(const Spanner& s)
 
 Spanner::~Spanner()
       {
-      foreach (SpannerSegment* ss, spannerSegments())
+      for (SpannerSegment* ss : spannerSegments())
             delete ss;
       }
 
@@ -365,7 +365,7 @@ void Spanner::scanElements(void* data, void (*func)(void*, Element*), bool all)
 void Spanner::setScore(Score* s)
       {
       Element::setScore(s);
-      foreach(SpannerSegment* seg, segments)
+      for (SpannerSegment* seg : segments)
             seg->setScore(s);
       }
 
@@ -381,7 +381,7 @@ void Spanner::startEdit(MuseScoreView*, const QPointF&)
 
       userOffsets.clear();
       userOffsets2.clear();
-      foreach (SpannerSegment* ss, spannerSegments()) {
+      for (SpannerSegment* ss : spannerSegments()) {
             userOffsets.push_back(ss->userOff());
             userOffsets2.push_back(ss->userOff2());
             }
@@ -450,7 +450,7 @@ QVariant Spanner::getProperty(P_ID propertyId) const
 
 bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SPANNER_TICK:
                   setTick(v.toInt());
                   break;
@@ -483,7 +483,7 @@ bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Spanner::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::ANCHOR:
                   return int(Anchor::SEGMENT);
             default:

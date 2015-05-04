@@ -30,7 +30,7 @@
 MenuEngineV1::MenuEngineV1( QObject* parent, MenuBaseEngine* other ):
       MenuBaseEngine( parent ) {
       if ( other ) {
-            foreach( QWidget * widget,  other->registeredWidgets() ) {
+            for ( QWidget * widget :  other->registeredWidgets() ) {
                   registerWidget( widget );
                   }
             }
@@ -71,7 +71,7 @@ BaseEngine::WidgetList MenuEngineV1::registeredWidgets( void ) const {
 
       // the typedef is needed to make Krazy happy
       typedef DataMap<MenuDataV1>::Value Value;
-      foreach( const Value & value, data_ ) {
+      for ( const Value & value : data_ ) {
             if ( value ) out.insert( value.data()->target().data() );
             }
 
@@ -84,7 +84,7 @@ MenuEngineV2::MenuEngineV2( QObject* parent, MenuBaseEngine* other ):
       MenuBaseEngine( parent ),
       followMouseDuration_( 150 ) {
       if ( other ) {
-            foreach( QWidget * widget, other->registeredWidgets() ) {
+            for ( QWidget * widget : other->registeredWidgets() ) {
                   registerWidget( widget );
                   }
             }
@@ -166,7 +166,7 @@ BaseEngine::WidgetList MenuEngineV2::registeredWidgets( void ) const {
 
       // the typedef is needed to make Krazy happy
       typedef DataMap<MenuDataV2>::Value Value;
-      foreach( const Value & value, data_ ) {
+      for ( const Value & value : data_ ) {
             if ( value ) out.insert( value.data()->target().data() );
             }
 

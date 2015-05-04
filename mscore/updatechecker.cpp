@@ -37,7 +37,7 @@ UpdateChecker::~UpdateChecker()
 
 void UpdateChecker::onRequestFinished(QNetworkReply* reply)
       {
-      if(reply->error() != QNetworkReply::NoError){
+      if (reply->error() != QNetworkReply::NoError){
             qDebug("Error while checking update [%s]", reply->errorString().toLatin1().constData());
             return;
             }
@@ -58,11 +58,11 @@ void UpdateChecker::onRequestFinished(QNetworkReply* reply)
 
       while (!reader.atEnd() && !reader.hasError()) {
             QXmlStreamReader::TokenType token = reader.readNext();
-            if(token == QXmlStreamReader::StartDocument) {
+            if (token == QXmlStreamReader::StartDocument) {
                   continue;
                   }
-            if(token == QXmlStreamReader::StartElement) {
-                  if(reader.name() == "version")
+            if (token == QXmlStreamReader::StartElement) {
+                  if (reader.name() == "version")
                         version = parseText(reader);
                   else if (reader.name() == "revision")
                         upgradeRevision = parseText(reader);
@@ -100,7 +100,7 @@ QString UpdateChecker::parseText(QXmlStreamReader& reader)
       {
       QString result;
       reader.readNext();
-      if(reader.tokenType() == QXmlStreamReader::Characters)
+      if (reader.tokenType() == QXmlStreamReader::Characters)
             result = reader.text().toString();
       return result;
       }
@@ -114,8 +114,8 @@ void UpdateChecker::check(QString currentVersion, bool m)
 #if defined(Q_OS_MAC)
       os = "mac";
 #endif
-      if(qApp->applicationName() == "MuseScore2") { //avoid nightly cymbals
-            if(MuseScore::unstable())
+      if (qApp->applicationName() == "MuseScore2") { //avoid nightly cymbals
+            if (MuseScore::unstable())
                   release = "pre";
             else
                   release = "stable";
@@ -125,7 +125,7 @@ void UpdateChecker::check(QString currentVersion, bool m)
             }
       if (MScore::debugMode)
             qDebug("release type: %s", release.toLatin1().constData());
-      if(!os.isEmpty() && !release.isEmpty() && release != "nightly"){
+      if (!os.isEmpty() && !release.isEmpty() && release != "nightly"){
             _currentVersion =  currentVersion;
             manager->get(QNetworkRequest(QUrl("http://update.musescore.org/update_"+os +"_" + release +".xml")));
             }
@@ -138,7 +138,7 @@ void UpdateChecker::check(QString currentVersion, bool m)
 int UpdateChecker::defaultPeriod()
       {
       int result = 24;
-      if(qApp->applicationName() == "MuseScore2"){ //avoid nightly cymbals
+      if (qApp->applicationName() == "MuseScore2"){ //avoid nightly cymbals
             if (MuseScore::unstable())
                   result = 24;
             else
@@ -153,7 +153,7 @@ int UpdateChecker::defaultPeriod()
 
 bool UpdateChecker::hasToCheck()
       {
-      if(!preferences.checkUpdateStartup)
+      if (!preferences.checkUpdateStartup)
             return false;
       QSettings s;
       s.beginGroup("Update");

@@ -304,11 +304,11 @@ class FiguredBass : public Text {
 //                                                }
 //      QDeclarativeListProperty<FiguredBassItem> qmlItems()
 //                                                {     QList<FiguredBassItem*> list;
-//                                                      foreach(FiguredBassItem item, items)
+//                                                      for (FiguredBassItem item : items)
 //                                                            list.append(&item);
 //                                                      return QDeclarativeListProperty<FiguredBassItem>(this, &items, qmlItemsAppend);
 //                                                }
-      qreal             lineLength(int idx) const     {   if(_lineLenghts.size() > idx)
+      qreal             lineLength(int idx) const     {   if (_lineLenghts.size() > idx)
                                                             return _lineLenghts.at(idx);
                                                           return 0;   }
       qreal             printedLineLength() const     { return _printedLineLength; }

@@ -183,7 +183,7 @@ void TransitionWidget::grabBackground(QPixmap& pixmap, QWidget* widget, QRect& r
             return;
 
       QWidgetList widgets;
-      if( widget->autoFillBackground() )
+      if ( widget->autoFillBackground() )
         { widgets.push_back( widget ); }
 
       QWidget* parent(0);

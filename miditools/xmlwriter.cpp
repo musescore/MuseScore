@@ -134,7 +134,7 @@ void XmlWriter::tag(const QString& name, QVariant data)
       QString ename(name.split(' ')[0]);
 
       putLevel();
-      switch(data.type()) {
+      switch (data.type()) {
             case QVariant::Bool:
             case QVariant::Char:
             case QVariant::Int:
@@ -201,7 +201,7 @@ QString XmlWriter::xmlString(const QString& s)
       escaped.reserve(s.size());
       for (int i = 0; i < s.size(); ++i) {
             QChar c = s.at(i);
-            switch(c.unicode()) {
+            switch (c.unicode()) {
                   case '<':
                         escaped.append(QLatin1String("&lt;"));
                         break;

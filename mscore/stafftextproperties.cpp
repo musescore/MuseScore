@@ -35,7 +35,7 @@ static void initChannelCombo(QComboBox* cb, StaffText* st)
       {
       Part* part = st->staff()->part();
       int tick = static_cast<Segment*>(st->parent())->tick();
-      foreach(const Channel* a, part->instrument(tick)->channel()) {
+      for (const Channel* a : part->instrument(tick)->channel()) {
             if (a->name.isEmpty() || a->name == "normal")
                   cb->addItem(QObject::tr("normal"));
             else
@@ -361,7 +361,7 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
       Channel* channel    = part->instrument(tick)->channel(channelIdx);
       QString channelName = channel->name;
 
-      foreach(const NamedEventList& e, part->instrument(tick)->midiActions()) {
+      for (const NamedEventList& e : part->instrument(tick)->midiActions()) {
             QTreeWidgetItem* item = new QTreeWidgetItem(actionList);
             if (e.name.isEmpty() || e.name == "normal")
                   item->setText(0, tr("normal"));
@@ -369,7 +369,7 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
                   item->setText(0, e.name);
             item->setText(1, e.descr);
             }
-      foreach(const NamedEventList& e, channel->midiActions) {
+      for (const NamedEventList& e : channel->midiActions) {
             QTreeWidgetItem* item = new QTreeWidgetItem(actionList);
             if (e.name.isEmpty() || e.name == "normal")
                   item->setText(0, tr("normal"));
@@ -377,11 +377,11 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
                   item->setText(0, e.name);
             item->setText(1, e.descr);
             }
-      foreach(const ChannelActions& ca, *_staffText->channelActions()) {
+      for (const ChannelActions& ca : *_staffText->channelActions()) {
             if (ca.channel == channelIdx) {
-                  foreach(QString s, ca.midiActionNames) {
+                  for (QString s : ca.midiActionNames) {
                         QList<QTreeWidgetItem*> items = actionList->findItems(s, Qt::MatchExactly);
-                        foreach(QTreeWidgetItem* item, items)
+                        for (QTreeWidgetItem* item : items)
                               item->setSelected(true);
                         }
                   }

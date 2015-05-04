@@ -197,7 +197,7 @@ void KeySig::layout()
       static const qreal sspread = 1.0;
       static const qreal fspread = 1.0;
 
-      switch(t1) {
+      switch (t1) {
             case 7:  addLayout(SymId::accidentalSharp, xo + 6.0 * sspread, lines[6]);
             case 6:  addLayout(SymId::accidentalSharp, xo + 5.0 * sspread, lines[5]);
             case 5:  addLayout(SymId::accidentalSharp, xo + 4.0 * sspread, lines[4]);
@@ -288,7 +288,7 @@ Element* KeySig::drop(const DropData& data)
             }
       else {
             // apply to all staves:
-            foreach(Staff* s, score()->rootScore()->staves())
+            for (Staff* s : score()->rootScore()->staves())
                   score()->undoChangeKeySig(s, tick(), k);
             }
       return this;
@@ -484,7 +484,7 @@ void KeySig::undoSetShowCourtesy(bool v)
 
 QVariant KeySig::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SHOW_COURTESY: return int(showCourtesy());
             default:
                   return Element::getProperty(propertyId);
@@ -497,7 +497,7 @@ QVariant KeySig::getProperty(P_ID propertyId) const
 
 bool KeySig::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SHOW_COURTESY:
                   if (generated())
                         return false;
@@ -519,7 +519,7 @@ bool KeySig::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant KeySig::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::SHOW_COURTESY:     return true;
             default:
                   return Element::propertyDefault(id);

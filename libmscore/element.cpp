@@ -708,7 +708,7 @@ bool Element::readProperties(XmlReader& e)
                   }
 #ifndef NDEBUG
             else {
-                  foreach(ScoreElement* eee, *_links) {
+                  for (ScoreElement* eee : *_links) {
                         Element* ee = static_cast<Element*>(eee);
                         if (ee->type() != type()) {
                               qFatal("link %s(%d) type mismatch %s linked to %s",
@@ -1074,7 +1074,7 @@ Compound::Compound(const Compound& c)
    : Element(c)
       {
       elements.clear();
-      foreach(Element* e, c.elements)
+      for (Element* e : c.elements)
             elements.append(e->clone());
       }
 
@@ -1084,7 +1084,7 @@ Compound::Compound(const Compound& c)
 
 void Compound::draw(QPainter* painter) const
       {
-      foreach(Element* e, elements) {
+      for (Element* e : elements) {
             QPointF pt(e->pos());
             painter->translate(pt);
             e->draw(painter);
@@ -1149,7 +1149,7 @@ void Compound::setVisible(bool f)
 
 void Compound::clear()
       {
-      foreach(Element* e, elements) {
+      for (Element* e : elements) {
             if (e->selected())
                   score()->deselect(e);
             delete e;
@@ -1273,7 +1273,7 @@ void Element::remove(Element* e)
 
 Element* Element::create(Element::Type type, Score* score)
       {
-      switch(type) {
+      switch (type) {
             case Element::Type::VOLTA:             return new Volta(score);
             case Element::Type::OTTAVA:            return new Ottava(score);
             case Element::Type::TEXTLINE:          return new TextLine(score);
@@ -1518,7 +1518,7 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Element::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::GENERATED:
                   return false;
             case P_ID::VISIBLE:
@@ -1830,7 +1830,7 @@ Element* Element::nextElement()
       while (p) {
             switch (p->type()) {
                   case Element::Type::NOTE:
-                        if(static_cast<Note*>(p)->chord()->isGrace())
+                        if (static_cast<Note*>(p)->chord()->isGrace())
                               break;
                         return p;
                   case Element::Type::REST:
@@ -1875,7 +1875,7 @@ Element* Element::prevElement()
       while (p) {
             switch (p->type()) {
                   case Element::Type::NOTE:
-                        if(static_cast<Note*>(p)->chord()->isGrace())
+                        if (static_cast<Note*>(p)->chord()->isGrace())
                               break;
                         return p;
                   case Element::Type::REST:

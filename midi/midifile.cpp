@@ -89,7 +89,7 @@ bool MidiFile::write(QIODevice* out)
 
 void MidiFile::writeEvent(const MidiEvent& event)
       {
-      switch(event.type()) {
+      switch (event.type()) {
             case ME_NOTEON:
                   writeStatus(ME_NOTEON, event.channel());
                   put(event.pitch());
@@ -103,7 +103,7 @@ void MidiFile::writeEvent(const MidiEvent& event)
                   break;
 
             case ME_CONTROLLER:
-                  switch(event.controller()) {
+                  switch (event.controller()) {
                         case CTRL_PROGRAM:
                               writeStatus(ME_PROGRAM, event.channel());
                               put(event.value() & 0x7f);

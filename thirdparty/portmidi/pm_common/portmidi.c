@@ -213,7 +213,7 @@ pm_fns_node pm_none_dictionary = {
 const char *Pm_GetErrorText( PmError errnum ) {
     const char *msg;
 
-    switch(errnum)
+    switch (errnum)
     {
     case pmNoError:                  
         msg = ""; 
@@ -324,11 +324,11 @@ int Pm_Read(PortMidiStream *stream, PmEvent *buffer, long length) {
     PmError err = pmNoError;
     pm_hosterror = FALSE;
     /* arg checking */
-    if(midi == NULL)
+    if (midi == NULL)
         err = pmBadPtr;
-    else if(!descriptors[midi->device_id].pub.opened)
+    else if (!descriptors[midi->device_id].pub.opened)
         err = pmBadPtr;
-    else if(!descriptors[midi->device_id].pub.input)
+    else if (!descriptors[midi->device_id].pub.input)
         err = pmBadPtr;    
     /* First poll for data in the buffer...
      * This either simply checks for data, or attempts first to fill the buffer
@@ -366,7 +366,7 @@ PmError Pm_Poll( PortMidiStream *stream )
 
     pm_hosterror = FALSE;
     /* arg checking */
-    if(midi == NULL)
+    if (midi == NULL)
         err = pmBadPtr;
     else if (!descriptors[midi->device_id].pub.opened)
         err = pmBadPtr;
@@ -418,11 +418,11 @@ PmError Pm_Write( PortMidiStream *stream, PmEvent *buffer, long length)
     
     pm_hosterror = FALSE;
     /* arg checking */
-    if(midi == NULL)
+    if (midi == NULL)
         err = pmBadPtr;
-    else if(!descriptors[midi->device_id].pub.opened)
+    else if (!descriptors[midi->device_id].pub.opened)
         err = pmBadPtr;
-    else if(!descriptors[midi->device_id].pub.output)
+    else if (!descriptors[midi->device_id].pub.output)
         err = pmBadPtr;
     else
         err = pmNoError;
@@ -647,7 +647,7 @@ PmError Pm_OpenInput(PortMidiStream** stream,
         err = pmInvalidDeviceId;
     else if (!descriptors[inputDevice].pub.input) 
         err =  pmBadPtr;
-    else if(descriptors[inputDevice].pub.opened)
+    else if (descriptors[inputDevice].pub.opened)
         err =  pmBadPtr;
     
     if (err != pmNoError) 

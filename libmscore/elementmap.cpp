@@ -24,7 +24,7 @@ namespace Ms {
 
 Tuplet* TupletMap::findNew(Tuplet* o)
       {
-      foreach(const Tuplet2& t2, map) {
+      for (const Tuplet2& t2 : map) {
             if (t2.o == o)
                   return t2.n;
             }

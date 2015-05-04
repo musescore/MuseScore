@@ -39,7 +39,7 @@ const TupletLimits& tupletLimits(int tupletNumber)
 
 const TupletInfo& tupletFromId(int id, const std::vector<TupletInfo> &tuplets)
       {
-      auto it = std::find_if(tuplets.begin(), tuplets.end(),
+      auto it = std::find_if (tuplets.begin(), tuplets.end(),
                              [=](const TupletInfo &t) { return t.id == id; });
 
       Q_ASSERT_X(it != tuplets.end(), "MidiTuplet::tupletFromId", "Tuplet not found from id");

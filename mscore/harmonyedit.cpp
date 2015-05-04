@@ -134,7 +134,7 @@ void ChordStyleEditor::loadChordDescriptionFile(const QString& s)
 void ChordStyleEditor::setChordList(ChordList* cl)
       {
       harmonyList->clear();
-      foreach (const ChordDescription& d, *cl) {
+      for (const ChordDescription& d : *cl) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>((void*)&d));
             item->setText(0, QString("%1").arg(d.id));
@@ -147,7 +147,7 @@ void ChordStyleEditor::setChordList(ChordList* cl)
       canvas->setChordDescription(0, 0);
 
       paletteTab->clear();
-      foreach(const ChordFont& f, chordList->fonts) {
+      for (const ChordFont& f : chordList->fonts) {
             // create symbol palette
             Palette* p = new Palette();
             PaletteScrollArea* accPalette = new PaletteScrollArea(p);
@@ -268,7 +268,7 @@ void HarmonyCanvas::paintEvent(QPaintEvent* event)
       p.drawLine(f.x(), 0.0, f.width(), 0.0);
       p.drawLine(0.0, f.y(), 0.0, f.height());
 
-      foreach(const TextSegment* ts, textList) {
+      for (const TextSegment* ts : textList) {
             p.setFont(ts->font);
             QPen pen(ts->select ? Qt::blue : palette().color(QPalette::Text));
             p.setPen(pen);
@@ -312,7 +312,7 @@ void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, dou
       QList<QFont> fontList;              // temp values used in render()
       const TextStyle* st = &gscore->textStyle(TextStyleType::HARMONY);
 
-      foreach(ChordFont cf, chordList->fonts) {
+      for (ChordFont cf : chordList->fonts) {
             if (cf.family.isEmpty() || cf.family == "default")
                   fontList.append(st->fontPx(_spatium * cf.mag));
             else {
@@ -324,7 +324,7 @@ void HarmonyCanvas::render(const QList<RenderAction>& renderList, double& x, dou
       if (fontList.isEmpty())
             fontList.append(st->fontPx(_spatium));
 
-      foreach(const RenderAction& a, renderList) {
+      for (const RenderAction& a : renderList) {
             if (a.type == RenderAction::RenderActionType::SET) {
                   TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
                   ChordSymbol cs = chordList->symbol(a.text);
@@ -398,7 +398,7 @@ void HarmonyCanvas::mousePressEvent(QMouseEvent* event)
       {
       startMove = imatrix.map(QPointF(event->pos()));
       moveElement = 0;
-      foreach(TextSegment* ts, textList) {
+      for (TextSegment* ts : textList) {
             QRectF r = ts->boundingRect().translated(ts->x, ts->y);
             ts->select = r.contains(startMove);
             if (ts->select)
@@ -440,7 +440,7 @@ void HarmonyCanvas::setChordDescription(ChordDescription* sd, ChordList* sl)
       chordDescription = sd;
       chordList = sl;
 
-      foreach(TextSegment* s, textList)
+      for (TextSegment* s : textList)
             delete s;
       textList.clear();
 
@@ -592,7 +592,7 @@ void HarmonyCanvas::updateChordDescription()
 
       int idx = 0;
       double x  = 0, y = 0;
-      foreach(const TextSegment* ts, textList) {
+      for (const TextSegment* ts : textList) {
             ++idx;
             if (idx == 1) {     // dont save base
                   x = ts->x + ts->width();

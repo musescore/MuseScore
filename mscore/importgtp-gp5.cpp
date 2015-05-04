@@ -99,10 +99,10 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
 
                   Arpeggio* a = new Arpeggio(score);
                   // representation is different in guitar pro 5 - the up/down order below is correct
-                  if( strokeup > 0 ) {
+                  if ( strokeup > 0 ) {
                         a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
                         }
-                  else if( strokedown > 0 ) {
+                  else if ( strokedown > 0 ) {
                         a->setArpeggioType(ArpeggioType::DOWN_STRAIGHT);
                         }
                   else {
@@ -110,7 +110,7 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
                         a = 0;
                         }
 
-                  if(a) {
+                  if (a) {
                         ChordRest* cr = new Chord(score);
                         cr->setTrack(track);
                         cr->add(a);
@@ -246,7 +246,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             else
                   cr->setDurationType(d);
 
-            if(!segment->cr(track))
+            if (!segment->cr(track))
                   segment->add(cr);
 
             Staff* staff = cr->staff();
@@ -634,7 +634,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             int grace_len = MScore::division/8;
             NoteType note_type =  NoteType::ACCIACCATURA;
 
-            if(gflags & NOTE_APPOGIATURA) //on beat
+            if (gflags & NOTE_APPOGIATURA) //on beat
                   note_type = NoteType::APPOGGIATURA;
 
             if (duration == 1)
@@ -663,7 +663,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
 
             TDuration d;
             d.setVal(grace_len);
-            if(grace_len == MScore::division/6)
+            if (grace_len == MScore::division/6)
                   d.setDots(1);
             gc->setDurationType(d);
             gc->setDuration(d.fraction());
@@ -675,7 +675,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             if (transition == 0) {
                   // no transition
                   }
-            else if(transition == 1){
+            else if (transition == 1){
                   //TODO: Add a 'slide' guitar effect when implemented
                   }
             else if (transition == 2 && note->fret()>=0 && note->fret()<=255 && note->fret()!=gn->fret()) {
@@ -756,7 +756,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             if (!note->score()->addArticulation(note, art))
                   delete art;
 
-            switch(period) {
+            switch (period) {
                   case 1:           // 16
                         break;
                   case 2:           // 32
@@ -903,7 +903,7 @@ bool GuitarPro5::readNote(int string, Note* note)
                   if (e) {
                         if (e->type() == Element::Type::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
-                              foreach(Note* note2, chord2->notes()) {
+                              for (Note* note2 : chord2->notes()) {
                                     if (note2->string() == string) {
                                           Tie* tie = new Tie(score);
                                           tie->setEndNote(note);
@@ -933,7 +933,7 @@ bool GuitarPro5::readNote(int string, Note* note)
 void GuitarPro5::readArtificialHarmonic()
       {
       int type = readChar();
-      switch(type) {
+      switch (type) {
             case 1:           // natural
                   break;
             case 2:           // artificial

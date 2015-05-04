@@ -36,7 +36,7 @@ Element* MuseScoreView::elementAt(const QPointF& p)
       QList<Element*> el = elementsAt(p);
 #if 0
       qDebug("elementAt");
-      foreach(const Element* e, el)
+      for (const Element* e : el)
             qDebug("  %s %d", e->name(), e->selected());
 #endif
       Element* e = el.value(0);
@@ -53,7 +53,7 @@ Page* MuseScoreView::point2page(const QPointF& p)
       {
       if (score()->layoutMode() == LayoutMode::LINE)
             return score()->pages().front();
-      foreach(Page* page, score()->pages()) {
+      for (Page* page : score()->pages()) {
             if (page->bbox().translated(page->pos()).contains(p))
                   return page;
             }

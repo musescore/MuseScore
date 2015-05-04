@@ -83,7 +83,7 @@ void TDuration::setVal(int ticks)
 int TDuration::ticks() const
       {
       int t;
-      switch(_val) {
+      switch (_val) {
             case DurationType::V_QUARTER:   t = MScore::division;        break;
             case DurationType::V_1024TH:    t = MScore::division / 256;  break;
             case DurationType::V_512TH:     t = MScore::division / 128;  break;
@@ -116,7 +116,7 @@ int TDuration::ticks() const
 
 QString TDuration::name() const
       {
-      switch(_val) {
+      switch (_val) {
             case DurationType::V_QUARTER:   return "quarter";
             case DurationType::V_EIGHTH:    return "eighth";
             case DurationType::V_1024TH:    return "1024th";
@@ -145,7 +145,7 @@ qDebug("TDuration::name(): invalid duration type %hhd", _val);
 NoteHead::Type TDuration::headType() const
       {
       NoteHead::Type headType = NoteHead::Type::HEAD_WHOLE;
-      switch(_val) {
+      switch (_val) {
             case DurationType::V_1024TH:
             case DurationType::V_512TH:
             case DurationType::V_256TH:
@@ -202,7 +202,7 @@ int TDuration::hooks() const
 
 bool TDuration::hasStem() const
       {
-      switch(_val) {
+      switch (_val) {
             case DurationType::V_1024TH:
             case DurationType::V_512TH:
             case DurationType::V_256TH:
@@ -354,7 +354,7 @@ Fraction TDuration::fraction() const
       {
       int z = 1;
       unsigned n;
-      switch(_val) {
+      switch (_val) {
             case DurationType::V_1024TH:    n = 1024;     break;
             case DurationType::V_512TH:     n = 512;      break;
             case DurationType::V_256TH:     n = 256;      break;
@@ -390,7 +390,7 @@ TDuration::TDuration(const Fraction& _f)
             _dots = 0;
             return;
             }
-      switch(f.denominator()) {
+      switch (f.denominator()) {
             case 1:     _val = DurationType::V_WHOLE; break;
             case 2:     _val = DurationType::V_HALF; break;
             case 4:     _val = DurationType::V_QUARTER; break;
@@ -407,7 +407,7 @@ TDuration::TDuration(const Fraction& _f)
 
       if (f.denominator() != 0) {
             int v = f.numerator() / f.denominator();
-            if(v == 4) {
+            if (v == 4) {
                   _val = DurationType::V_LONG;
                   return;
                   }
@@ -418,7 +418,7 @@ TDuration::TDuration(const Fraction& _f)
             }
 
       if (f.numerator() != 1) {
-            switch(f.numerator()) {
+            switch (f.numerator()) {
                   case 3:
                         _val = DurationType(int(_val) - 1);
                         _dots = 1;
@@ -519,7 +519,7 @@ QList<TDuration> toDurationList(Fraction l, bool useDots, int maxDots, bool prin
 QString TDuration::durationTypeUserName() const
       {
       QString s = QObject::tr("Custom");
-      switch(_val) {
+      switch (_val) {
             case DurationType::V_LONG:      s = QObject::tr("Long"   ); break;
             case DurationType::V_BREVE:     s = QObject::tr("Breve"  ); break;
             case DurationType::V_WHOLE:     s = QObject::tr("Whole"  ); break;

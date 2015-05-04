@@ -371,7 +371,7 @@ bool Arpeggio::acceptDrop(const DropData& data) const
 Element* Arpeggio::drop(const DropData& data)
       {
       Element* e = data.element;
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::ARPEGGIO:
                   {
                   Arpeggio* a = static_cast<Arpeggio*>(e);
@@ -395,7 +395,7 @@ Element* Arpeggio::drop(const DropData& data)
 
 QVariant Arpeggio::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::ARP_USER_LEN1:
                   return userLen1();
             case P_ID::ARP_USER_LEN2:
@@ -412,7 +412,7 @@ QVariant Arpeggio::getProperty(P_ID propertyId) const
 
 bool Arpeggio::setProperty(P_ID propertyId, const QVariant& val)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::ARP_USER_LEN1:
                   setUserLen1(val.toDouble());
                   break;

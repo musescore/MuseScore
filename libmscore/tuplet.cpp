@@ -139,7 +139,7 @@ void Tuplet::layout()
       //
       if (_direction == MScore::Direction::AUTO) {
             int up = 1;
-            foreach (const DurationElement* e, _elements) {
+            for (const DurationElement* e : _elements) {
                   if (e->type() == Element::Type::CHORD) {
                         const Chord* c = static_cast<const Chord*>(e);
                         if (c->stemDirection() != MScore::Direction::AUTO)
@@ -176,7 +176,7 @@ void Tuplet::layout()
       //
       if (_bracketType == BracketType::AUTO_BRACKET) {
             _hasBracket = false;
-            foreach (DurationElement* e, _elements) {
+            for (DurationElement* e : _elements) {
                   if (e->type() == Element::Type::TUPLET || e->type() == Element::Type::REST) {
                         _hasBracket = true;
                         break;
@@ -487,7 +487,7 @@ void Tuplet::layout()
             //
             if (cr1->beam() && cr2->beam() && cr1->beam() == cr2->beam()) {
                   const ChordRest* crr = static_cast<const ChordRest*>(cr1);
-                  if(_isUp == crr->up()) {
+                  if (_isUp == crr->up()) {
                         qreal deltax = cr2->pagePos().x() - cr1->pagePos().x();
                         x3 = xx1 + deltax * .5;
                         }
@@ -697,7 +697,7 @@ void Tuplet::read(XmlReader& e)
 void Tuplet::add(Element* e)
       {
 #ifndef NDEBUG
-      for(DurationElement* el : _elements) {
+      for (DurationElement* el : _elements) {
             if (el == e) {
                   qDebug("%p Tuplet::add: %p %s already there", this, e, e->name());
                   return;
@@ -705,7 +705,7 @@ void Tuplet::add(Element* e)
             }
 #endif
 
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::TEXT:
                   _number = static_cast<Text*>(e);
                   break;
@@ -746,7 +746,7 @@ void Tuplet::add(Element* e)
 
 void Tuplet::remove(Element* e)
       {
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::TEXT:
                   if (e == _number)
                         _number = 0;
@@ -865,7 +865,7 @@ void Tuplet::sortElements()
 Fraction Tuplet::elementsDuration()
       {
       Fraction f;
-      foreach(DurationElement* el, _elements)
+      for (DurationElement* el : _elements)
             f += el->duration();
       return f;
       }
@@ -877,7 +877,7 @@ Fraction Tuplet::elementsDuration()
 
 QVariant Tuplet::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::DIRECTION:
                   return int(_direction);
             case P_ID::NUMBER_TYPE:
@@ -905,7 +905,7 @@ QVariant Tuplet::getProperty(P_ID propertyId) const
 bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::DIRECTION:
                   setDirection(MScore::Direction(v.toInt()));
                   break;
@@ -941,7 +941,7 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Tuplet::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::DIRECTION:
                   return int(MScore::Direction::AUTO);
             case P_ID::NUMBER_TYPE:

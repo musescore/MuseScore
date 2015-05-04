@@ -54,7 +54,7 @@ void ScoreView::startDrag()
             staffUserDist = dragStaff->userDist();
             }
       else {
-            foreach(Element* e, _score->selection().elements())
+            for (Element* e : _score->selection().elements())
                   e->setStartDragPosition(e->userOff());
             }
       _score->end();
@@ -157,7 +157,7 @@ void ScoreView::endDrag()
             score()->undo(new ChangeStaffUserDist(dragStaff, userDist));
             }
       else {
-            foreach(Element* e, _score->selection().elements()) {
+            for (Element* e : _score->selection().elements()) {
                   e->endDrag();
                   e->score()->undoPropertyChanged(e, P_ID::USER_OFF, e->startDragPosition());
                   }

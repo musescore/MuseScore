@@ -176,7 +176,7 @@ bool InspectorBase::isDefault(const InspectorItem& ii)
 
 bool InspectorBase::dirty() const
       {
-      foreach(const InspectorItem& ii, iList) {
+      for (const InspectorItem& ii : iList) {
             Element* e = inspector->element();
             for (int i = 0; i < ii.parent; ++i)
                   e = e->parent();
@@ -192,7 +192,7 @@ bool InspectorBase::dirty() const
 
 void InspectorBase::setElement()
       {
-      foreach (const InspectorItem& ii, iList) {
+      for (const InspectorItem& ii : iList) {
             P_ID id    = ii.t;
             P_TYPE pt  = propertyType(id);
 
@@ -247,7 +247,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
             P_TYPE pt    = propertyType(id);
             QVariant val = getValue(ii);
 
-            foreach(Element* e, inspector->el()) {
+            for (Element* e : inspector->el()) {
                   for (int k = 0; k < ii.parent; ++k)
                         e = e->parent();
                   if (pt == P_TYPE::SIZE || pt == P_TYPE::SCALE || pt == P_TYPE::SIZE_MM) {
@@ -324,7 +324,7 @@ void InspectorBase::valueChanged(int idx, bool reset)
       Score* score  = inspector->element()->score();
 
       score->startCmd();
-      foreach (Element* e, inspector->el()) {
+      for (Element* e : inspector->el()) {
             for (int i = 0; i < ii.parent; ++i)
                   e = e->parent();
 
@@ -447,7 +447,7 @@ void InspectorBase::resetClicked(int i)
 void InspectorBase::mapSignals()
       {
       int i = 0;
-      foreach (const InspectorItem& ii, iList) {
+      for (const InspectorItem& ii : iList) {
             QToolButton* resetButton = ii.r;
             if (resetButton) {
                   connect(resetButton, SIGNAL(clicked()), resetMapper, SLOT(map()));

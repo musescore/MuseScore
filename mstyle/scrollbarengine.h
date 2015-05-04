@@ -93,7 +93,7 @@ class ScrollBarEngine: public BaseEngine {
                   are also used in non animated mode to store scrollbar arrows rect. However
                   do disable all contains DATA object, in order to prevent actual animations
                   */
-                  foreach( const DataMap<ScrollBarData>::Value data, data_ ) {
+                  for ( const DataMap<ScrollBarData>::Value data : data_ ) {
                         if ( data ) data.data()->setEnabled( value );
                         }
 

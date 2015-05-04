@@ -50,7 +50,7 @@ MeasureBase::MeasureBase(const MeasureBase& m)
       _pageBreak    = m._pageBreak;
       _sectionBreak = m._sectionBreak ? new LayoutBreak(*m._sectionBreak) : 0;
 
-      foreach(Element* e, m._el)
+      for (Element* e : m._el)
             add(e->clone());
       }
 
@@ -84,7 +84,7 @@ void MeasureBase::setScore(Score* score)
       Element::setScore(score);
       if (_sectionBreak)
             _sectionBreak->setScore(score);
-      foreach (Element* e, _el)
+      for (Element* e : _el)
             e->setScore(score);
       }
 
@@ -94,7 +94,7 @@ void MeasureBase::setScore(Score* score)
 
 MeasureBase::~MeasureBase()
       {
-      foreach(Element* e, _el)
+      for (Element* e : _el)
             delete e;
       }
 
@@ -105,7 +105,7 @@ MeasureBase::~MeasureBase()
 void MeasureBase::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       if (isMeasure()) {
-            foreach(Element* e, _el) {
+            for (Element* e : _el) {
                   if (score()->tagIsValid(e->tag())) {
                         if (e->staffIdx() >= score()->staves().size())
                               qDebug("MeasureBase::scanElements: bad staffIdx %d in element %s", e->staffIdx(), e->name());
@@ -115,7 +115,7 @@ void MeasureBase::scanElements(void* data, void (*func)(void*, Element*), bool a
                   }
             }
       else {
-            foreach(Element* e, _el) {
+            for (Element* e : _el) {
                   if (score()->tagIsValid(e->tag()))
                         e->scanElements(data, func, all);
                   }
@@ -133,7 +133,7 @@ void MeasureBase::add(Element* e)
       e->setParent(this);
       if (e->type() == Element::Type::LAYOUT_BREAK) {
             LayoutBreak* b = static_cast<LayoutBreak*>(e);
-            foreach (Element* ee, _el) {
+            for (Element* ee : _el) {
                   if (ee->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(ee)->layoutBreakType() == b->layoutBreakType()) {
                         if (MScore::debugMode)
                               qDebug("warning: layout break already set");
@@ -271,7 +271,7 @@ void MeasureBase::layout()
       {
       int breakCount = 0;
 
-      foreach (Element* element, _el) {
+      for (Element* element : _el) {
             if (!score()->tagIsValid(element->tag()))
                   continue;
             if (element->type() == Element::Type::LAYOUT_BREAK) {
@@ -311,7 +311,7 @@ MeasureBase* Score::last()  const
 
 QVariant MeasureBase::getProperty(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::BREAK_HINT:
                   return QVariant(_breakHint);
             default:
@@ -325,7 +325,7 @@ QVariant MeasureBase::getProperty(P_ID id) const
 
 bool MeasureBase::setProperty(P_ID id, const QVariant& property)
       {
-      switch(id) {
+      switch (id) {
             case P_ID::BREAK_HINT:
                   _breakHint = property.toBool();
                   break;
@@ -352,7 +352,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
             }
       else {
             // remove line break
-            foreach(Element* e, el()) {
+            for (Element* e : el()) {
                   if (e->type() == Element::Type::LAYOUT_BREAK && static_cast<LayoutBreak*>(e)->layoutBreakType() ==type) {
                         _score->undoRemoveElement(e);
                         break;
