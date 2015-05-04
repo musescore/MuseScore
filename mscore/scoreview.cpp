@@ -916,7 +916,7 @@ ScoreView::ScoreView(QWidget* parent)
 
       sm->start();
 
-      grabGesture(Qt::PinchGesture);      // laptop pad
+      grabGesture(Qt::PinchGesture);      // laptop pad (Mac) and touchscreen
 
       //-----------------------------------------------------------------------
 
@@ -2061,6 +2061,7 @@ void ScoreView::zoom(qreal _mag, const QPointF& pos)
 
 //---------------------------------------------------------
 //   gestureEvent
+//    fired on touchscreen gestures as well as Mac touchpad gestures
 //---------------------------------------------------------
 
 bool ScoreView::gestureEvent(QGestureEvent *event)
@@ -2070,13 +2071,17 @@ bool ScoreView::gestureEvent(QGestureEvent *event)
             QPinchGesture *pinch = static_cast<QPinchGesture *>(gesture);
 
             static qreal magStart = 1.0;
-
             if (pinch->state() == Qt::GestureStarted) {
                   magStart = mag();
                   }
             if (pinch->changeFlags() & QPinchGesture::ScaleFactorChanged) {
-                  qreal value = pinch->property("scaleFactor").toReal();
-                  zoom(magStart*value, pinch->startCenterPoint());
+                  // On Windows, totalScaleFactor() contains the net magnification.
+                  // On OS X, totalScaleFactor() is 1, and scaleFactor() contains the net magnification.
+                  qreal value = pinch->totalScaleFactor();
+                  if (value == 1) {
+                        value = pinch->scaleFactor();
+                        }
+                  zoom(magStart*value, pinch->centerPoint());
                   }
             }
       return true;
@@ -2122,7 +2127,7 @@ void ScoreView::wheelEvent(QWheelEvent* event)
             return;
             }
 
-      if (event->modifiers() & Qt::ControlModifier) {
+      if (event->modifiers() & Qt::ControlModifier) { // Windows touch pad pinches also execute this
             QApplication::sendPostedEvents(this, 0);
             zoomStep(nReal, event->pos());
             return;
