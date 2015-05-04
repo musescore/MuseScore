@@ -131,6 +131,7 @@ static bool startWithNewScore = false;
 double converterDpi = 0;
 double guiScaling = 1.0;
 int trimMargin = -1;
+bool noWebView = false;
 
 QString mscoreGlobalShare;
 
@@ -1276,6 +1277,7 @@ static void usage()
         "   -c dir    override config/settings folder\n"
         "   -t        set testMode flag for all files\n"
         "   -M file   specify MIDI import operations file\n"
+        "   -w        no web view in start center\n"
         );
 
       exit(-1);
@@ -4652,6 +4654,9 @@ int main(int argc, char* av[])
                         if (argv.size() - i < 2)
                               usage();
                         preferences.midiImportOperations.setOperationsFile(argv.takeAt(i + 1));
+                        break;
+                  case 'w':
+                        noWebView = true;
                         break;
                   default:
                         usage();
