@@ -52,9 +52,11 @@ Startcenter::Startcenter()
       setStyleSheet(QString("QPushButton { background-color: %1 }").arg(openScore->palette().color(QPalette::Base).name()));
 
       //init webview
-      MyWebView* _webView = new MyWebView(this);
-      _webView->setUrl(QUrl("https://connect2.musescore.com/"));
-      horizontalLayout->addWidget(_webView);
+      if (!noWebView) {
+            _webView = new MyWebView(this);
+            _webView->setUrl(QUrl("https://connect2.musescore.com/"));
+            horizontalLayout->addWidget(_webView);
+            }
 
       if (enableExperimental)
             QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
@@ -68,7 +70,8 @@ Startcenter::Startcenter()
 //---------------------------------------------------------
 
 Startcenter::~Startcenter() {
-      delete _webView;
+      if (_webView)
+            delete _webView;
       }
 
 //---------------------------------------------------------

@@ -34,6 +34,7 @@ extern bool pluginMode;
 extern double converterDpi;
 extern double guiScaling;
 extern int trimMargin;
+extern bool noWebView;
 
 //---------------------------------------------------------
 // MsWidget
