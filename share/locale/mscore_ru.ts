@@ -7206,6 +7206,10 @@ please choose a different name:</source>
         <source>Cannot write into %1</source>
         <translation>Невозможно записать %1</translation>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7405,6 +7409,10 @@ please choose a different name:</source>
     <message>
         <source>new Palette</source>
         <translation>новая палитра</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7609,6 +7617,17 @@ Save before closing?</source>
     <message>
         <source>Updated</source>
         <translation>Обновлено</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Голос: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Длительность: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10397,6 +10416,10 @@ failed: </source>
         <source>Check for new version of MuseScore</source>
         <translation>Проверить обновления MuseScore</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation>Фильтр</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10717,6 +10740,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>File corrupted %1</source>
         <translation>Файл повреждён: %1</translation>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10862,17 +10893,6 @@ Do you want to overwrite it?</source>
     <message>
         <source>Tab 2</source>
         <translation>Вкладка 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Голос: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Длительность: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -12173,7 +12193,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>By Key</source>
-        <translation>На тональность</translation>
+        <translation>В тональность</translation>
     </message>
     <message>
         <source>By Interval</source>
@@ -12181,7 +12201,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Transpose Diatonically</source>
-        <translation>Транспонирование диатонически</translation>
+        <translation>Транспонировать диатонически</translation>
     </message>
 </context>
 <context>
@@ -17248,10 +17268,6 @@ Measure is not empty</source>
     <message>
         <source>Shadow Note</source>
         <translation>Теневая нота</translation>
-    </message>
-    <message>
-        <source>Rubber Band</source>
-        <translation>Резинка</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>

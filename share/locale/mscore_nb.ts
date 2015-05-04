@@ -7196,6 +7196,10 @@ vennligst velg et annet navn:</translation>
         <source>Cannot write into %1</source>
         <translation>Kan ikke skrive til %1</translation>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7395,6 +7399,10 @@ vennligst velg et annet navn:</translation>
     <message>
         <source>new Palette</source>
         <translation>Ny palett</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7599,6 +7607,17 @@ Lagre endringene?</translation>
     <message>
         <source>Updated</source>
         <translation>Oppdatert</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Stemme: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Varighet: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10388,6 +10407,10 @@ feilet: </translation>
         <source>Check for new version of MuseScore</source>
         <translation>Sjekk etter ny versjon av MuseScore</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10708,6 +10731,14 @@ Besøk &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScores nettside&lt;/a&
         <source>File corrupted %1</source>
         <translation>Fil korrupt  %1</translation>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10854,17 +10885,6 @@ Vil du overskrive den?</translation>
     <message>
         <source>Tab 2</source>
         <translation>Tab 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Stemme: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Varighet: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -17241,10 +17261,6 @@ Takten er ikke tom</translation>
     <message>
         <source>Shadow Note</source>
         <translation>Skyggenote</translation>
-    </message>
-    <message>
-        <source>Rubber Band</source>
-        <translation>Strikk</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>

@@ -3,11 +3,11 @@
     <name>AboutBox</name>
     <message>
         <source>About MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Um MuseScore</translation>
     </message>
     <message>
         <source>Copy revision number</source>
-        <translation type="unfinished"/>
+        <translation>Rita av útgávutal</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -26,7 +26,7 @@ p, li { white-space: pre-wrap; }
     <name>AboutMusicXMLBox</name>
     <message>
         <source>About MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>Um MusicXML</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -41,34 +41,34 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>The MusicXML Public License:</source>
-        <translation type="unfinished"/>
+        <translation>Almannaloyvi MusicXML:</translation>
     </message>
 </context>
 <context>
     <name>AeolusGui</name>
     <message>
         <source>Azimuth</source>
-        <translation type="unfinished"/>
+        <translation>Breidd</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"/>
+        <translation>Breidd</translation>
     </message>
     <message>
         <source>Reflect</source>
-        <translation type="unfinished"/>
+        <translation>Spegla</translation>
     </message>
     <message>
         <source>Reverb</source>
-        <translation>Reverb</translation>
+        <translation>Snjella</translation>
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"/>
+        <translation>Seinkan</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>Stev</translation>
     </message>
     <message>
         <source>Direct</source>
@@ -92,7 +92,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Position</source>
-        <translation type="unfinished"/>
+        <translation>Støða</translation>
     </message>
 </context>
 <context>
@@ -111,19 +111,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Down</source>
-        <translation>Aşağı</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Yukarı</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>New</translation>
+        <translation>Nýtt</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation>Yükle</translation>
+        <translation>Laða</translation>
     </message>
     <message>
         <source>Print Album</source>
@@ -178,27 +178,27 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Auto</source>
-        <translation>auto</translation>
+        <translation>Sjálvvirkið</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Yukarı</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Aşağı</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>Anchor:</source>
-        <translation>Anchor:</translation>
+        <translation>Akker:</translation>
     </message>
     <message>
         <source>Channel</source>
-        <translation>Kanal</translation>
+        <translation>Rás</translation>
     </message>
     <message>
         <source>MIDI Action</source>
-        <translation>Midi hending</translation>
+        <translation>Midi-hending</translation>
     </message>
     <message>
         <source>Above Staff</source>
@@ -332,7 +332,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Load</source>
-        <translation>Yükle</translation>
+        <translation>Laða</translation>
     </message>
     <message>
         <source>ID</source>
@@ -343,7 +343,7 @@ p, li { white-space: pre-wrap; }
     <name>EditDrumset</name>
     <message>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation>Vanligt</translation>
     </message>
     <message>
         <source>Cross</source>
@@ -355,7 +355,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Triangle</source>
-        <translation>Triangle</translation>
+        <translation>Tríhyrningur</translation>
     </message>
     <message>
         <source>Mi</source>
@@ -394,15 +394,15 @@ p, li { white-space: pre-wrap; }
     <name>EditDrumsetBase</name>
     <message>
         <source>MuseScore: Edit Drumset</source>
-        <translation>MuseScore: Broyt Trummusett</translation>
+        <translation>MuseScore: Rætta trummusett</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation>Ad:</translation>
+        <translation>Navn:</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation>Yükle</translation>
+        <translation>Laða</translation>
     </message>
     <message>
         <source>Save</source>
@@ -426,15 +426,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Auto</source>
-        <translation>auto</translation>
+        <translation>Sjálvvirkið</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Yukarı</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Aşağı</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>1</source>
@@ -454,7 +454,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Shortcut:</source>
-        <translation>Kısayol:</translation>
+        <translation>Sniðvegur:</translation>
     </message>
     <message>
         <source>A</source>
@@ -490,46 +490,46 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staff line:</source>
-        <translation>Stave Line:</translation>
+        <translation>Stavstrika:</translation>
     </message>
     <message>
         <source>Stem direction:</source>
-        <translation>Stem Direction:</translation>
+        <translation>Leggjaætt nóta:</translation>
     </message>
     <message>
         <source>Default voice:</source>
-        <translation>Default Voice:</translation>
+        <translation>Rødd í sjálvgildi:</translation>
     </message>
     <message>
         <source>Note head:</source>
-        <translation>Note Head:</translation>
+        <translation>Nótahøvd:</translation>
     </message>
 </context>
 <context>
     <name>EditInstrumentBase</name>
     <message>
         <source>MuseScore: Edit Instrument Properties</source>
-        <translation>MuseScore: Edit Instrument Properties</translation>
+        <translation>MuseScore: Rætta hættir ljóðføra</translation>
     </message>
     <message>
         <source>Instrument Properties</source>
-        <translation>Instrument Properties</translation>
+        <translation>Hættir ljóðføra</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>TAMAM</translation>
+        <translation>Í lagi</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Vazgeç</translation>
+        <translation>Ógilda</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation>Ad:</translation>
+        <translation>Navn:</translation>
     </message>
     <message>
         <source>Pitch:</source>
-        <translation>Pitch:</translation>
+        <translation>Tónahædd:</translation>
     </message>
     <message>
         <source>Transpose:</source>
@@ -624,7 +624,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>B</source>
-        <translation>H</translation>
+        <translation>B</translation>
     </message>
     <message>
         <source>C 8</source>
@@ -924,7 +924,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>B♭</source>
-        <translation>H</translation>
+        <translation>B♭</translation>
     </message>
     <message>
         <source>C♯ 8</source>
@@ -1162,23 +1162,23 @@ p, li { white-space: pre-wrap; }
     <name>EditStaffBase</name>
     <message>
         <source>MuseScore: Edit Staff/Part Properties</source>
-        <translation>MuseScore: Edit Stave/Part Properties</translation>
+        <translation>MuseScore: Rætta hættir stava/tátta</translation>
     </message>
     <message>
         <source>Part Properties</source>
-        <translation>Part Properties</translation>
+        <translation>Hættir táttar</translation>
     </message>
     <message>
         <source>Change Instrument...</source>
-        <translation>Change Instrument…</translation>
+        <translation>Broyt ljóðføri...</translation>
     </message>
     <message>
         <source>Instrument:</source>
-        <translation>Instrument:</translation>
+        <translation>Ljóðføri:</translation>
     </message>
     <message>
         <source>Amateur:</source>
-        <translation>Amateur:</translation>
+        <translation>Leikmaður:</translation>
     </message>
     <message>
         <source>-</source>
@@ -1186,7 +1186,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Professional:</source>
-        <translation>Professional:</translation>
+        <translation>Yrkismaður:</translation>
     </message>
     <message>
         <source>0 - Perfect Unison</source>
@@ -1298,7 +1298,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staff Properties</source>
-        <translation>Stave Properties</translation>
+        <translation>Hættir stava</translation>
     </message>
     <message>
         <source>Invisible staff lines</source>
@@ -1322,11 +1322,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Long instrument name:</source>
-        <translation>Long Instrument Name:</translation>
+        <translation>Laða navn ljóðføris</translation>
     </message>
     <message>
         <source>Short instrument name:</source>
-        <translation>Short Instrument Name:</translation>
+        <translation>Stuttnevni ljóðføris:</translation>
     </message>
     <message>
         <source>Usable pitch range:</source>
@@ -1342,11 +1342,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Up</source>
-        <translation>Yukarı</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Aşağı</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>Edit String Data...</source>
@@ -1370,7 +1370,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Lines:</source>
-        <translation>Lines:</translation>
+        <translation>Strikur:</translation>
     </message>
     <message>
         <source>Line distance:</source>
@@ -1413,7 +1413,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Lines:</source>
-        <translation>Lines:</translation>
+        <translation>Strikur:</translation>
     </message>
     <message>
         <source>sp</source>
@@ -1425,7 +1425,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Stemless</source>
-        <translation>stemless</translation>
+        <translation>Leggleyst</translation>
     </message>
     <message>
         <source>Create a new staff type of current group.</source>
@@ -1437,11 +1437,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Font:</source>
-        <translation>Font:</translation>
+        <translation>Stavsnið:</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation>Size:</translation>
+        <translation>Stødd:</translation>
     </message>
     <message>
         <source>pt</source>
@@ -1453,7 +1453,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Numbers</source>
-        <translation>Numbers</translation>
+        <translation>Tøl</translation>
     </message>
     <message>
         <source>Letters</source>
@@ -1469,7 +1469,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Continuous</source>
-        <translation>Continue</translation>
+        <translation>Áhaldandi</translation>
     </message>
     <message>
         <source>Broken</source>
@@ -1485,7 +1485,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>None</source>
-        <translation>eingin</translation>
+        <translation>Eingi</translation>
     </message>
     <message>
         <source>Stems and beams</source>
@@ -1509,7 +1509,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Above</source>
-        <translation>Above</translation>
+        <translation>Fyri oman</translation>
     </message>
     <message>
         <source>Below</source>
@@ -1529,7 +1529,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Preview</source>
-        <translation>Preview</translation>
+        <translation>Undansýning</translation>
     </message>
     <message>
         <source>Line distance:</source>
@@ -1601,7 +1601,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Never</source>
-        <translation>Never</translation>
+        <translation>Aldrin</translation>
     </message>
     <message>
         <source>At new system</source>
@@ -1648,22 +1648,22 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Pitch</source>
-        <translation>Pitch</translation>
+        <translation>Tónahædd</translation>
     </message>
 </context>
 <context>
     <name>EditStyleBase</name>
     <message>
         <source>MuseScore: Edit Style</source>
-        <translation>MuseScore: Edit Style</translation>
+        <translation>MuseScore: Rætta hátt</translation>
     </message>
     <message>
         <source>Score</source>
-        <translation>Score</translation>
+        <translation>Raddskrá</translation>
     </message>
     <message>
         <source>Page</source>
-        <translation>Page</translation>
+        <translation>Síða</translation>
     </message>
     <message>
         <source>Header, Footer, Numbers</source>
@@ -1672,31 +1672,31 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>System</source>
         <extracomment>a music system, a line of music</extracomment>
-        <translation>System</translation>
+        <translation>Kervi</translation>
     </message>
     <message>
         <source>Measure</source>
-        <translation>Bar</translation>
+        <translation>Mál</translation>
     </message>
     <message>
         <source>Barlines</source>
-        <translation>Bar lines</translation>
+        <translation>Málstrikur</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notes</translation>
+        <translation>Nótar</translation>
     </message>
     <message>
         <source>Clefs</source>
-        <translation>Clefs</translation>
+        <translation>Lyklar</translation>
     </message>
     <message>
         <source>Arpeggios</source>
-        <translation>Arpeggios</translation>
+        <translation>Brotin ljómur</translation>
     </message>
     <message>
         <source>Beams</source>
-        <translation>Beams</translation>
+        <translation>Bogar</translation>
     </message>
     <message>
         <source>Slurs/Ties</source>
@@ -1704,7 +1704,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Sizes</source>
-        <translation>Sizes</translation>
+        <translation>Støddir</translation>
     </message>
     <message>
         <source>Hairpins, Volta, Ottava</source>
@@ -1720,19 +1720,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Articulations, Ornaments</source>
-        <translation>Articulations, Ornaments</translation>
+        <translation>Ljóðmyndan, prýði</translation>
     </message>
     <message>
         <source>Accidentals</source>
-        <translation>Accidentals</translation>
+        <translation>Fortekn</translation>
     </message>
     <message>
         <source>Tuplets</source>
-        <translation>Tuplets</translation>
+        <translation>Órádnir</translation>
     </message>
     <message>
         <source>Display in concert pitch</source>
-        <translation>Display in Concert Pitch</translation>
+        <translation>Sýn í sannari tónahædd</translation>
     </message>
     <message>
         <source>Minimum width of measure:</source>
@@ -1747,11 +1747,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Minimum number of empty measures:</source>
-        <translation>Minimum Number of empty bars:</translation>
+        <translation>Lágmark tómra mála:</translation>
     </message>
     <message>
         <source>Hide empty staves</source>
-        <translation>Hide Empty Staves</translation>
+        <translation>Fjal tómar stavir</translation>
     </message>
     <message>
         <source>Don&apos;t hide empty staves in first system</source>
@@ -1767,7 +1767,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Create clef for all systems</source>
-        <translation>Create clef for all systems</translation>
+        <translation>Ger lykil fyri allar skipanir</translation>
     </message>
     <message>
         <source>Music bottom margin:</source>
@@ -3196,7 +3196,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Position</source>
-        <translation type="unfinished"/>
+        <translation>Støða</translation>
     </message>
     <message>
         <source>Horizontal</source>
@@ -3585,7 +3585,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"/>
+        <translation>Breidd</translation>
     </message>
     <message>
         <source>Horizontal Frame Inspector</source>
@@ -3727,7 +3727,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"/>
+        <translation>Breidd</translation>
     </message>
     <message>
         <source>Scale Width</source>
@@ -3828,7 +3828,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Position</source>
-        <translation type="unfinished"/>
+        <translation>Støða</translation>
     </message>
     <message>
         <source>mm</source>
@@ -3852,7 +3852,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"/>
+        <translation>Breidd</translation>
     </message>
     <message>
         <source>Horizontal Position</source>
@@ -7154,6 +7154,10 @@ please choose a different name:</source>
         <source>Cannot write into %1</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7352,6 +7356,10 @@ please choose a different name:</source>
     </message>
     <message>
         <source>new Palette</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Single Palette</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7555,6 +7563,17 @@ Save before closing?</source>
     </message>
     <message>
         <source>Updated</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -10326,6 +10345,10 @@ failed: </source>
         <source>Check for new version of MuseScore</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10625,6 +10648,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>File corrupted %1</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10767,17 +10798,6 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Tab 2</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -17149,10 +17169,6 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Shadow Note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Rubber Band</source>
         <translation type="unfinished"/>
     </message>
     <message>

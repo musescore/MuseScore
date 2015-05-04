@@ -347,7 +347,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished"/>
+        <translation>Ielādēšana</translation>
     </message>
     <message>
         <source>ID</source>
@@ -413,11 +413,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nosaukums:</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished"/>
+        <translation>Ielādēšana</translation>
     </message>
     <message>
         <source>Save</source>
@@ -441,7 +441,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Auto</translation>
     </message>
     <message>
         <source>Up</source>
@@ -2546,7 +2546,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Instrument:</source>
-        <translation type="unfinished"/>
+        <translation>Instruments:</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -2677,7 +2677,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Atcelt</translation>
     </message>
 </context>
 <context>
@@ -2688,11 +2688,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>Skaidrs</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Atcelt</translation>
     </message>
     <message>
         <source>Insert empty measures</source>
@@ -2750,7 +2750,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished"/>
+        <translation>C</translation>
     </message>
     <message>
         <source>C♯</source>
@@ -2770,7 +2770,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>D</source>
-        <translation type="unfinished"/>
+        <translation>D</translation>
     </message>
     <message>
         <source>D♯</source>
@@ -2790,7 +2790,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>E</source>
-        <translation type="unfinished"/>
+        <translation>E</translation>
     </message>
     <message>
         <source>E♯</source>
@@ -2810,7 +2810,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>F</source>
-        <translation type="unfinished"/>
+        <translation>F</translation>
     </message>
     <message>
         <source>F♯</source>
@@ -2830,7 +2830,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>G</source>
-        <translation type="unfinished"/>
+        <translation>G</translation>
     </message>
     <message>
         <source>G♯</source>
@@ -2850,7 +2850,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>A</source>
-        <translation type="unfinished"/>
+        <translation>A</translation>
     </message>
     <message>
         <source>A♯</source>
@@ -2870,7 +2870,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>B</source>
-        <translation type="unfinished"/>
+        <translation>B</translation>
     </message>
     <message>
         <source>B♯</source>
@@ -2894,7 +2894,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Auto</translation>
     </message>
     <message>
         <source>Whole</source>
@@ -2990,11 +2990,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Mi</source>
@@ -3002,7 +3002,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>Sol</source>
@@ -3010,11 +3010,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Si</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
@@ -3061,7 +3061,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Auto</translation>
     </message>
     <message>
         <source>Up</source>
@@ -3073,11 +3073,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Above Staff</source>
-        <translation type="unfinished"/>
+        <translation>Virs nošu raksta</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation type="unfinished"/>
+        <translation>Zem nošu raksta</translation>
     </message>
     <message>
         <source>Above Chord</source>
@@ -3191,7 +3191,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Auto</translation>
     </message>
     <message>
         <source>Up</source>
@@ -3301,7 +3301,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Auto</translation>
     </message>
     <message>
         <source>Up</source>
@@ -4041,7 +4041,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Auto</translation>
     </message>
     <message>
         <source>Top</source>
@@ -4536,7 +4536,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Auto</translation>
     </message>
     <message>
         <source>Up</source>
@@ -4655,7 +4655,7 @@ space unit</extracomment>
     <name>InspectorVolta</name>
     <message>
         <source>Volta</source>
-        <translation type="unfinished"/>
+        <translation>Volta</translation>
     </message>
     <message>
         <source>Open</source>
@@ -4722,15 +4722,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>1</source>
-        <translation type="unfinished"/>
+        <translation>1</translation>
     </message>
     <message>
         <source>3</source>
-        <translation type="unfinished"/>
+        <translation>3</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>Instrument wizard</source>
@@ -4761,7 +4761,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished"/>
+        <translation>Ielādēšana</translation>
     </message>
     <message>
         <source>Save</source>
@@ -4769,11 +4769,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>Skaidrs</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Atcelt</translation>
     </message>
 </context>
 <context>
@@ -4910,19 +4910,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>1</source>
-        <translation type="unfinished"/>
+        <translation>1</translation>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>3</source>
-        <translation type="unfinished"/>
+        <translation>3</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>5</source>
@@ -5038,7 +5038,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>Apraksts</translation>
     </message>
 </context>
 <context>
@@ -5203,15 +5203,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>3</source>
-        <translation type="unfinished"/>
+        <translation>3</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>5</source>
@@ -5475,7 +5475,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Staff</source>
-        <translation type="unfinished"/>
+        <translation>Staff</translation>
     </message>
     <message>
         <source>Visible</source>
@@ -5507,15 +5507,15 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>1</source>
-        <translation type="unfinished"/>
+        <translation>1</translation>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>8</source>
@@ -5602,11 +5602,11 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>Skaidrs</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Atcelt</translation>
     </message>
     <message>
         <source>Append empty measures</source>
@@ -5906,7 +5906,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Pitch:</source>
-        <translation type="unfinished"/>
+        <translation>Augstums:</translation>
     </message>
     <message>
         <source>MuseScore: &lt;%1&gt; Staff: %2</source>
@@ -5970,11 +5970,11 @@ failed: </source>
     </message>
     <message>
         <source>Above Staff</source>
-        <translation type="unfinished"/>
+        <translation>Virs nošu raksta</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation type="unfinished"/>
+        <translation>Zem nošu raksta</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
@@ -6422,7 +6422,7 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Save changes to the score &quot;%1&quot;
@@ -7169,6 +7169,10 @@ please choose a different name:</source>
         <source>Cannot write into %1</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7369,6 +7373,10 @@ please choose a different name:</source>
         <source>new Palette</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Single Palette</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::PaletteBoxButton</name>
@@ -7431,7 +7439,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>untitled</source>
@@ -7574,6 +7582,17 @@ Save before closing?</source>
     </message>
 </context>
 <context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Ms::Score</name>
     <message>
         <source>The style file is not compatible with this version of MuseScore.</source>
@@ -7672,7 +7691,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Staff %1</source>
-        <translation type="unfinished"/>
+        <translation>Nošu raksts %1</translation>
     </message>
 </context>
 <context>
@@ -7790,7 +7809,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Change Instrument...</source>
-        <translation type="unfinished"/>
+        <translation>Mainīt instrumentu...</translation>
     </message>
     <message>
         <source>Glissando Properties...</source>
@@ -8291,7 +8310,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>Skaidrs</translation>
     </message>
 </context>
 <context>
@@ -8538,11 +8557,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>Skaidrs</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Atcelt</translation>
     </message>
     <message>
         <source>Two sided</source>
@@ -8802,7 +8821,7 @@ failed: </source>
     </message>
     <message>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nosaukums:</translation>
     </message>
     <message>
         <source>sp</source>
@@ -8837,7 +8856,7 @@ failed: </source>
     </message>
     <message>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nosaukums:</translation>
     </message>
     <message>
         <source>sp</source>
@@ -8998,7 +9017,7 @@ failed: </source>
     </message>
     <message>
         <source>Pitch:</source>
-        <translation type="unfinished"/>
+        <translation>Augstums:</translation>
     </message>
     <message>
         <source>OnTime:</source>
@@ -9161,7 +9180,7 @@ failed: </source>
     </message>
     <message>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nosaukums:</translation>
     </message>
     <message>
         <source>Shortcut:</source>
@@ -10339,6 +10358,10 @@ failed: </source>
         <source>Check for new version of MuseScore</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10360,7 +10383,7 @@ Please select a single note or lyrics and retry operation
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>No note or figured bass selected:
@@ -10638,6 +10661,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>File corrupted %1</source>
         <translation>Fails bojāts %1</translation>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10784,17 +10815,6 @@ Do you want to overwrite it?</source>
     </message>
 </context>
 <context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>ScorePreview</name>
     <message>
         <source>Form</source>
@@ -10810,7 +10830,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nosaukums:</translation>
     </message>
     <message>
         <source>Nothing selected</source>
@@ -10961,7 +10981,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Atcelt</translation>
     </message>
     <message>
         <source>Enter Shortcut Sequence</source>
@@ -10977,7 +10997,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>New shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Jauna saīsne</translation>
     </message>
     <message>
         <source>Type to set shortcut</source>
@@ -10988,7 +11008,7 @@ Do you want to overwrite it?</source>
     <name>SplitStaff</name>
     <message>
         <source>MuseScore: Edit Staff/Part Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: labot nošu raksta/daļas rekvizītus</translation>
     </message>
     <message>
         <source>Split Staff</source>
@@ -11022,19 +11042,19 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>1</source>
-        <translation type="unfinished"/>
+        <translation>1</translation>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>3</source>
-        <translation type="unfinished"/>
+        <translation>3</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>Channel:</source>
@@ -11046,7 +11066,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>Apraksts</translation>
     </message>
     <message>
         <source>Actions for selected channel:</source>
@@ -11058,7 +11078,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>III</source>
-        <translation type="unfinished"/>
+        <translation>III</translation>
     </message>
     <message>
         <source>Principal
@@ -11080,7 +11100,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>MIDI Action</source>
-        <translation type="unfinished"/>
+        <translation>MIDI darbība</translation>
     </message>
     <message>
         <source>Voice:</source>
@@ -11168,7 +11188,7 @@ Do you want to overwrite it?</source>
     <name>SymbolDialogBase</name>
     <message>
         <source>Font:</source>
-        <translation type="unfinished"/>
+        <translation>Fonts:</translation>
     </message>
     <message>
         <source>System flag</source>
@@ -11298,7 +11318,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Font:</source>
-        <translation type="unfinished"/>
+        <translation>Fonts:</translation>
     </message>
     <message>
         <source>Size:</source>
@@ -11592,7 +11612,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Volta</source>
-        <translation type="unfinished"/>
+        <translation>Volta</translation>
     </message>
     <message>
         <source>Frame</source>
@@ -11662,7 +11682,7 @@ Do you want to overwrite it?</source>
     <name>Time signature editor</name>
     <message>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>Skaidrs</translation>
     </message>
 </context>
 <context>
@@ -11681,15 +11701,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>1</source>
-        <translation type="unfinished"/>
+        <translation>1</translation>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>8</source>
@@ -11771,15 +11791,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>1</source>
-        <translation type="unfinished"/>
+        <translation>1</translation>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>8</source>
@@ -12403,7 +12423,7 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>SoundFont %1 already loaded</source>
@@ -12805,7 +12825,7 @@ failed: </source>
     </message>
     <message>
         <source>A</source>
-        <translation type="unfinished"/>
+        <translation>A</translation>
     </message>
     <message>
         <source>Enter note A</source>
@@ -12813,7 +12833,7 @@ failed: </source>
     </message>
     <message>
         <source>B</source>
-        <translation type="unfinished"/>
+        <translation>B</translation>
     </message>
     <message>
         <source>Enter note B</source>
@@ -12821,7 +12841,7 @@ failed: </source>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished"/>
+        <translation>C</translation>
     </message>
     <message>
         <source>Enter note C</source>
@@ -12829,7 +12849,7 @@ failed: </source>
     </message>
     <message>
         <source>D</source>
-        <translation type="unfinished"/>
+        <translation>D</translation>
     </message>
     <message>
         <source>Enter note D</source>
@@ -12837,7 +12857,7 @@ failed: </source>
     </message>
     <message>
         <source>E</source>
-        <translation type="unfinished"/>
+        <translation>E</translation>
     </message>
     <message>
         <source>Enter note E</source>
@@ -12845,7 +12865,7 @@ failed: </source>
     </message>
     <message>
         <source>F</source>
-        <translation type="unfinished"/>
+        <translation>F</translation>
     </message>
     <message>
         <source>Enter note F</source>
@@ -12853,7 +12873,7 @@ failed: </source>
     </message>
     <message>
         <source>G</source>
-        <translation type="unfinished"/>
+        <translation>G</translation>
     </message>
     <message>
         <source>Enter note G</source>
@@ -13457,7 +13477,7 @@ failed: </source>
     </message>
     <message>
         <source>1</source>
-        <translation type="unfinished"/>
+        <translation>1</translation>
     </message>
     <message>
         <source>Voice 1</source>
@@ -13465,7 +13485,7 @@ failed: </source>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>Voice 2</source>
@@ -13473,7 +13493,7 @@ failed: </source>
     </message>
     <message>
         <source>3</source>
-        <translation type="unfinished"/>
+        <translation>3</translation>
     </message>
     <message>
         <source>Voice 3</source>
@@ -13481,7 +13501,7 @@ failed: </source>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>Voice 4</source>
@@ -15492,7 +15512,7 @@ failed: </source>
     <name>addRemoveTimeSig</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Cannot rewrite measures:
@@ -15764,7 +15784,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished"/>
+        <translation>C</translation>
     </message>
     <message>
         <source>C#</source>
@@ -15772,43 +15792,43 @@ Measure is not empty</source>
     </message>
     <message>
         <source>D</source>
-        <translation type="unfinished"/>
+        <translation>D</translation>
     </message>
     <message>
         <source>D#</source>
-        <translation type="unfinished"/>
+        <translation>D#</translation>
     </message>
     <message>
         <source>E</source>
-        <translation type="unfinished"/>
+        <translation>E</translation>
     </message>
     <message>
         <source>F</source>
-        <translation type="unfinished"/>
+        <translation>F</translation>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"/>
+        <translation>F#</translation>
     </message>
     <message>
         <source>G</source>
-        <translation type="unfinished"/>
+        <translation>G</translation>
     </message>
     <message>
         <source>G#</source>
-        <translation type="unfinished"/>
+        <translation>G#</translation>
     </message>
     <message>
         <source>A</source>
-        <translation type="unfinished"/>
+        <translation>A</translation>
     </message>
     <message>
         <source>A#</source>
-        <translation type="unfinished"/>
+        <translation>A#</translation>
     </message>
     <message>
         <source>B</source>
-        <translation type="unfinished"/>
+        <translation>B</translation>
     </message>
 </context>
 <context>
@@ -16788,7 +16808,7 @@ Measure is not empty</source>
     <name>editstaff</name>
     <message>
         <source>C</source>
-        <translation type="unfinished"/>
+        <translation>C</translation>
     </message>
     <message>
         <source>C#</source>
@@ -16796,7 +16816,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>D</source>
-        <translation type="unfinished"/>
+        <translation>D</translation>
     </message>
     <message>
         <source>Eb</source>
@@ -16804,19 +16824,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>E</source>
-        <translation type="unfinished"/>
+        <translation>E</translation>
     </message>
     <message>
         <source>F</source>
-        <translation type="unfinished"/>
+        <translation>F</translation>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"/>
+        <translation>F#</translation>
     </message>
     <message>
         <source>G</source>
-        <translation type="unfinished"/>
+        <translation>G</translation>
     </message>
     <message>
         <source>Ab</source>
@@ -16824,7 +16844,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>A</source>
-        <translation type="unfinished"/>
+        <translation>A</translation>
     </message>
     <message>
         <source>Bb</source>
@@ -16832,14 +16852,14 @@ Measure is not empty</source>
     </message>
     <message>
         <source>B</source>
-        <translation type="unfinished"/>
+        <translation>B</translation>
     </message>
 </context>
 <context>
     <name>editstringdata</name>
     <message>
         <source>C</source>
-        <translation type="unfinished"/>
+        <translation>C</translation>
     </message>
     <message>
         <source>C#</source>
@@ -16847,7 +16867,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>D</source>
-        <translation type="unfinished"/>
+        <translation>D</translation>
     </message>
     <message>
         <source>Eb</source>
@@ -16855,19 +16875,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>E</source>
-        <translation type="unfinished"/>
+        <translation>E</translation>
     </message>
     <message>
         <source>F</source>
-        <translation type="unfinished"/>
+        <translation>F</translation>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"/>
+        <translation>F#</translation>
     </message>
     <message>
         <source>G</source>
-        <translation type="unfinished"/>
+        <translation>G</translation>
     </message>
     <message>
         <source>Ab</source>
@@ -16875,7 +16895,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>A</source>
-        <translation type="unfinished"/>
+        <translation>A</translation>
     </message>
     <message>
         <source>Bb</source>
@@ -16883,7 +16903,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>B</source>
-        <translation type="unfinished"/>
+        <translation>B</translation>
     </message>
 </context>
 <context>
@@ -16994,7 +17014,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Volta</source>
-        <translation type="unfinished"/>
+        <translation>Volta</translation>
     </message>
     <message>
         <source>Spacer</source>
@@ -17162,10 +17182,6 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Shadow Note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Rubber Band</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -17438,23 +17454,23 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Si</translation>
     </message>
     <message>
         <source>Sol</source>
@@ -17608,7 +17624,7 @@ Measure is not empty</source>
     <name>staff group header name</name>
     <message>
         <source>STANDARD STAFF</source>
-        <translation type="unfinished"/>
+        <translation>STANDARTA NOŠU RAKSTS</translation>
     </message>
     <message>
         <source>PERCUSSION STAFF</source>
@@ -17708,7 +17724,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished"/>
+        <translation>C</translation>
     </message>
     <message>
         <source>C#</source>

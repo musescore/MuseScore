@@ -386,19 +386,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>도</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>레</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>파</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>라</translation>
     </message>
     <message>
         <source>Ti</source>
@@ -2990,11 +2990,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>도</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>레</translation>
     </message>
     <message>
         <source>Mi</source>
@@ -3002,15 +3002,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>파</translation>
     </message>
     <message>
         <source>Sol</source>
-        <translation type="unfinished"/>
+        <translation>솔</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>라</translation>
     </message>
     <message>
         <source>Ti</source>
@@ -5356,7 +5356,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation type="unfinished"/>
+        <translation>꾸밈음</translation>
     </message>
     <message>
         <source>Clefs</source>
@@ -5396,7 +5396,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Dynamics</source>
-        <translation type="unfinished"/>
+        <translation>셈여림</translation>
     </message>
     <message>
         <source>Fingering</source>
@@ -7119,7 +7119,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>매뉴얼</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -7167,6 +7167,10 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Cannot write into %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7369,6 +7373,10 @@ please choose a different name:</source>
         <source>new Palette</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Single Palette</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::PaletteBoxButton</name>
@@ -7439,7 +7447,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>매뉴얼</translation>
     </message>
     <message>
         <source>MuseScore Plugin Creator</source>
@@ -7570,6 +7578,17 @@ Save before closing?</source>
     </message>
     <message>
         <source>Updated</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8573,7 +8592,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Dynamics</source>
-        <translation type="unfinished"/>
+        <translation>셈여림</translation>
     </message>
     <message>
         <source>Key Signatures</source>
@@ -8617,7 +8636,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation type="unfinished"/>
+        <translation>꾸밈음</translation>
     </message>
     <message>
         <source>Lines</source>
@@ -9118,7 +9137,7 @@ failed: </source>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>매뉴얼</translation>
     </message>
     <message>
         <source>Undo</source>
@@ -10339,6 +10358,10 @@ failed: </source>
         <source>Check for new version of MuseScore</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10634,6 +10657,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>File corrupted %1</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10776,17 +10807,6 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Tab 2</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -11532,7 +11552,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Dynamics</source>
-        <translation type="unfinished"/>
+        <translation>셈여림</translation>
     </message>
     <message>
         <source>Technique</source>
@@ -16565,7 +16585,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Sticks</source>
-        <translation type="unfinished"/>
+        <translation>스틱</translation>
     </message>
     <message>
         <source>Metronome Click</source>
@@ -16581,7 +16601,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Acoustic Snare</source>
-        <translation type="unfinished"/>
+        <translation>어쿠스틱 스네어</translation>
     </message>
     <message>
         <source>Hand Clap</source>
@@ -16637,7 +16657,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Cowbell</source>
-        <translation type="unfinished"/>
+        <translation>카우벨</translation>
     </message>
     <message>
         <source>Vibraslap</source>
@@ -17161,10 +17181,6 @@ Measure is not empty</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Rubber Band</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Tab Duration Symbol</source>
         <translation type="unfinished"/>
     </message>
@@ -17194,7 +17210,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Measure List</source>
-        <translation type="unfinished"/>
+        <translation>마디 목록</translation>
     </message>
     <message>
         <source>Horizontal Frame</source>
@@ -17284,7 +17300,7 @@ Measure is not empty</source>
     <name>images_directory</name>
     <message>
         <source>Images</source>
-        <translation type="unfinished"/>
+        <translation>이미지</translation>
     </message>
 </context>
 <context>
@@ -17434,19 +17450,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>도</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>레</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>파</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>라</translation>
     </message>
     <message>
         <source>Ti</source>
@@ -17454,7 +17470,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Sol</source>
-        <translation type="unfinished"/>
+        <translation>솔</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
@@ -17465,7 +17481,7 @@ Measure is not empty</source>
     <name>plugins_directory</name>
     <message>
         <source>Plugins</source>
-        <translation type="unfinished"/>
+        <translation>플러그인</translation>
     </message>
 </context>
 <context>
@@ -17510,7 +17526,7 @@ Measure is not empty</source>
     <name>selectionfilter</name>
     <message>
         <source>Dynamics</source>
-        <translation type="unfinished"/>
+        <translation>셈여림</translation>
     </message>
     <message>
         <source>Fingering</source>
@@ -17550,7 +17566,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation type="unfinished"/>
+        <translation>꾸밈음</translation>
     </message>
     <message>
         <source>Pedal Lines</source>
@@ -17597,7 +17613,7 @@ Measure is not empty</source>
     <name>soundfonts_directory</name>
     <message>
         <source>Soundfonts</source>
-        <translation type="unfinished"/>
+        <translation>사운드폰트</translation>
     </message>
 </context>
 <context>
@@ -17626,7 +17642,7 @@ Measure is not empty</source>
     <name>templates_directory</name>
     <message>
         <source>Templates</source>
-        <translation type="unfinished"/>
+        <translation>템플릿</translation>
     </message>
 </context>
 <context>

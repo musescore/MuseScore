@@ -1846,7 +1846,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Show first</source>
-        <translation>mostra il primo</translation>
+        <translation>Mostra il primo</translation>
     </message>
     <message>
         <source>Odd/Even</source>
@@ -5559,7 +5559,7 @@ il gruppo irregolare la attraversa</translation>
     </message>
     <message>
         <source>Layout stretch:</source>
-        <translation>Allarga impaginazione:</translation>
+        <translation>Larghezza battuta:</translation>
     </message>
     <message>
         <source>Measure number mode:</source>
@@ -5571,7 +5571,7 @@ il gruppo irregolare la attraversa</translation>
     </message>
     <message>
         <source>Actual:</source>
-        <translation>Corrente:</translation>
+        <translation>Reale:</translation>
     </message>
     <message>
         <source>Add to measure number:</source>
@@ -6787,7 +6787,7 @@ selezionare una battuta e riprovare</translation>
     </message>
     <message>
         <source>Concert Pitch</source>
-        <translation>Spartito in Do</translation>
+        <translation>Partitura in Do</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -7198,6 +7198,10 @@ scegli un nome diverso:</translation>
         <source>Cannot write into %1</source>
         <translation>Impossibile scrivere in %1</translation>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation>Questo spartito non può essere salvato online. Si prega di correggere le battute corrotte e riprovare.</translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7397,6 +7401,10 @@ scegli un nome diverso:</translation>
     <message>
         <source>new Palette</source>
         <translation>nuova tavolozza</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation>Singola tavolozza</translation>
     </message>
 </context>
 <context>
@@ -7601,6 +7609,17 @@ Salvare prima di chiudere?</translation>
     <message>
         <source>Updated</source>
         <translation>Aggiornato</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Voce: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Durata: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -8325,7 +8344,7 @@ scegli un nome diverso:</translation>
     <name>Ms::Workspace</name>
     <message>
         <source>Advanced</source>
-        <translation>Avanzato</translation>
+        <translation>Avanzata</translation>
     </message>
     <message>
         <source>Basic</source>
@@ -9097,7 +9116,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Actual tempo</source>
-        <translation>Tempo attuale</translation>
+        <translation>Tempo reale</translation>
     </message>
     <message>
         <source>120BPM</source>
@@ -10344,7 +10363,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Note Input</source>
-        <translation>Barra inserimento note</translation>
+        <translation>Inserimento note</translation>
     </message>
     <message>
         <source>Note input</source>
@@ -10389,6 +10408,10 @@ fallita: </translation>
     <message>
         <source>Check for new version of MuseScore</source>
         <translation>Controlla la presenza di nuove versioni di MuseScore</translation>
+    </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filtro</translation>
     </message>
 </context>
 <context>
@@ -10710,6 +10733,14 @@ Visita il &lt;a href=&quot;http://musescore.org&quot;&gt;sito MuseScore &lt;/a&g
         <source>File corrupted %1</source>
         <translation>File corrotto %1</translation>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation>MuseScore: Errore di caricamento</translation>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation>Vuoi provare a caricare questo file comunque?</translation>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10856,17 +10887,6 @@ Vuoi sovrascriverlo?</translation>
     <message>
         <source>Tab 2</source>
         <translation>Scheda 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Voce: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Durata: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -11833,7 +11853,7 @@ Vuoi sovrascriverlo?</translation>
     </message>
     <message>
         <source>Actual value:</source>
-        <translation>Valore corrente:</translation>
+        <translation>Valore reale:</translation>
     </message>
 </context>
 <context>
@@ -13856,7 +13876,7 @@ fallita: </translation>
     </message>
     <message>
         <source>Concert Pitch</source>
-        <translation>Spartito in Do</translation>
+        <translation>Partitura in Do</translation>
     </message>
     <message>
         <source>Display in concert pitch</source>
@@ -17244,10 +17264,6 @@ la battuta non è vuota</translation>
     <message>
         <source>Shadow Note</source>
         <translation>Nota Ombra</translation>
-    </message>
-    <message>
-        <source>Rubber Band</source>
-        <translation>Elastico</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>

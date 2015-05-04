@@ -3,11 +3,11 @@
     <name>AboutBox</name>
     <message>
         <source>About MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>O MuseScore</translation>
     </message>
     <message>
         <source>Copy revision number</source>
-        <translation type="unfinished"/>
+        <translation>Kopiraj serijski broj programa</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -48,11 +48,11 @@ p, li { white-space: pre-wrap; }
     <name>AeolusGui</name>
     <message>
         <source>Azimuth</source>
-        <translation type="unfinished"/>
+        <translation>Azimut</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"/>
+        <translation>Širina</translation>
     </message>
     <message>
         <source>Reflect</source>
@@ -64,7 +64,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"/>
+        <translation>Vremenski odmak</translation>
     </message>
     <message>
         <source>Time</source>
@@ -406,11 +406,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Save</source>
-        <translation>Spremi</translation>
+        <translation>Spremi kao</translation>
     </message>
     <message>
         <source>No.</source>
-        <translation type="unfinished"/>
+        <translation>Ne</translation>
     </message>
     <message>
         <source>Note</source>
@@ -628,19 +628,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>C 8</source>
-        <translation type="unfinished"/>
+        <translation>C8</translation>
     </message>
     <message>
         <source>D 8</source>
-        <translation type="unfinished"/>
+        <translation>D8</translation>
     </message>
     <message>
         <source>E 8</source>
-        <translation type="unfinished"/>
+        <translation>E8</translation>
     </message>
     <message>
         <source>F 8</source>
-        <translation type="unfinished"/>
+        <translation>F8</translation>
     </message>
     <message>
         <source>G 8</source>
@@ -1190,107 +1190,107 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>0 - Perfect Unison</source>
-        <translation type="unfinished"/>
+        <translation>0 - Čista prima</translation>
     </message>
     <message>
         <source>1 - Augmented Unison</source>
-        <translation type="unfinished"/>
+        <translation>1 - Povećana prima</translation>
     </message>
     <message>
         <source>0 - Diminished Second</source>
-        <translation type="unfinished"/>
+        <translation>0 - Smanjena sekunda</translation>
     </message>
     <message>
         <source>1 - Minor Second</source>
-        <translation type="unfinished"/>
+        <translation>1 - Mala sekunda</translation>
     </message>
     <message>
         <source>2 - Major Second</source>
-        <translation type="unfinished"/>
+        <translation>2 - Velika sekunda</translation>
     </message>
     <message>
         <source>3 - Augmented Second</source>
-        <translation type="unfinished"/>
+        <translation>3 - Povećana sekunda</translation>
     </message>
     <message>
         <source>2 - Diminished Third</source>
-        <translation type="unfinished"/>
+        <translation>2 - Smanjena terca</translation>
     </message>
     <message>
         <source>3 - Minor Third</source>
-        <translation type="unfinished"/>
+        <translation>3 - Mala terca</translation>
     </message>
     <message>
         <source>4 - Major Third</source>
-        <translation type="unfinished"/>
+        <translation>4 - Velika terca</translation>
     </message>
     <message>
         <source>5 - Augmented Third</source>
-        <translation type="unfinished"/>
+        <translation>5 - Povećana terca</translation>
     </message>
     <message>
         <source>4 - Diminished Fourth</source>
-        <translation type="unfinished"/>
+        <translation>4 - Smanjena kvarta</translation>
     </message>
     <message>
         <source>5 - Perfect Fourth</source>
-        <translation type="unfinished"/>
+        <translation>5 - Čista kvinta</translation>
     </message>
     <message>
         <source>6 - Augmented Fourth</source>
-        <translation type="unfinished"/>
+        <translation>6 - Povećana kvarta</translation>
     </message>
     <message>
         <source>6 - Diminished Fifth</source>
-        <translation type="unfinished"/>
+        <translation>6 - Smanjena kvinta</translation>
     </message>
     <message>
         <source>7 - Perfect Fifth</source>
-        <translation type="unfinished"/>
+        <translation>7 - Čista kvinta</translation>
     </message>
     <message>
         <source>8 - Augmented Fifth</source>
-        <translation type="unfinished"/>
+        <translation>8 - Povećana kvinta</translation>
     </message>
     <message>
         <source>7 - Diminished Sixth</source>
-        <translation type="unfinished"/>
+        <translation>7 - Smanjena seksta</translation>
     </message>
     <message>
         <source>8 - Minor Sixth</source>
-        <translation type="unfinished"/>
+        <translation>8 - Mala seksta</translation>
     </message>
     <message>
         <source>9 - Major Sixth</source>
-        <translation type="unfinished"/>
+        <translation>9 - Velika seksta</translation>
     </message>
     <message>
         <source>10 - Augmented Sixth</source>
-        <translation type="unfinished"/>
+        <translation>10 - Povećana seksta</translation>
     </message>
     <message>
         <source>9 - Diminished Seventh</source>
-        <translation type="unfinished"/>
+        <translation>9 - Smanjena septima</translation>
     </message>
     <message>
         <source>10 - Minor Seventh</source>
-        <translation type="unfinished"/>
+        <translation>10 - Mala septima</translation>
     </message>
     <message>
         <source>11 - Major Seventh</source>
-        <translation type="unfinished"/>
+        <translation>11 - Velika septima</translation>
     </message>
     <message>
         <source>12 - Augmented Seventh</source>
-        <translation type="unfinished"/>
+        <translation>12 - Povećana septima</translation>
     </message>
     <message>
         <source>11 - Diminished Octave</source>
-        <translation type="unfinished"/>
+        <translation>11 - Smanjena oktava</translation>
     </message>
     <message>
         <source>12 - Perfect Octave</source>
-        <translation type="unfinished"/>
+        <translation>12 - Čista oktava</translation>
     </message>
     <message>
         <source>Number of strings:</source>
@@ -1302,7 +1302,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Invisible staff lines</source>
-        <translation type="unfinished"/>
+        <translation>Nevidljive notne linije</translation>
     </message>
     <message>
         <source>Small staff</source>
@@ -1318,7 +1318,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Part name:</source>
-        <translation type="unfinished"/>
+        <translation>Naslov dijela</translation>
     </message>
     <message>
         <source>Long instrument name:</source>
@@ -3585,7 +3585,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"/>
+        <translation>Širina</translation>
     </message>
     <message>
         <source>Horizontal Frame Inspector</source>
@@ -3727,7 +3727,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"/>
+        <translation>Širina</translation>
     </message>
     <message>
         <source>Scale Width</source>
@@ -3852,7 +3852,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"/>
+        <translation>Širina</translation>
     </message>
     <message>
         <source>Horizontal Position</source>
@@ -7154,6 +7154,10 @@ please choose a different name:</source>
         <source>Cannot write into %1</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7352,6 +7356,10 @@ please choose a different name:</source>
     </message>
     <message>
         <source>new Palette</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Single Palette</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7555,6 +7563,17 @@ Save before closing?</source>
     </message>
     <message>
         <source>Updated</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8364,7 +8383,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Lyricist:</source>
-        <translation>Tekstopisac:</translation>
+        <translation>Tekstopisac</translation>
     </message>
     <message>
         <source>Copyright:</source>
@@ -8396,11 +8415,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"/>
+        <translation>Tekstopisac</translation>
     </message>
     <message>
         <source>Insert lyricist&apos;s name here</source>
-        <translation type="unfinished"/>
+        <translation>Umetni ime tekstopisca</translation>
     </message>
     <message>
         <source>Copyright</source>
@@ -10326,6 +10345,10 @@ failed: </source>
         <source>Check for new version of MuseScore</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10625,6 +10648,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>File corrupted %1</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10767,17 +10798,6 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Tab 2</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -11495,7 +11515,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"/>
+        <translation>Tekstopisac</translation>
     </message>
     <message>
         <source>Lyrics Odd Lines</source>
@@ -13604,11 +13624,11 @@ failed: </source>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"/>
+        <translation>Tekstopisac</translation>
     </message>
     <message>
         <source>Add lyricist text</source>
-        <translation type="unfinished"/>
+        <translation>Dodaj tekst tekstopisca</translation>
     </message>
     <message>
         <source>Rehearsal Mark</source>
@@ -17152,10 +17172,6 @@ Measure is not empty</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Rubber Band</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Tab Duration Symbol</source>
         <translation type="unfinished"/>
     </message>
@@ -17569,11 +17585,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Voice 1</source>
-        <translation type="unfinished"/>
+        <translation>1.glas</translation>
     </message>
     <message>
         <source>Voice 2</source>
-        <translation type="unfinished"/>
+        <translation>2. glas</translation>
     </message>
     <message>
         <source>Voice 3</source>

@@ -1438,7 +1438,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Stemless</source>
-        <translation>符幹無し</translation>
+        <translation>符幹なし</translation>
     </message>
     <message>
         <source>Create a new staff type of current group.</source>
@@ -1844,7 +1844,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Show first</source>
-        <translation>最初のページに表示</translation>
+        <translation>最初の小節に表示</translation>
     </message>
     <message>
         <source>Odd/Even</source>
@@ -3328,7 +3328,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Stemless</source>
-        <translation>符幹無し</translation>
+        <translation>符幹なし</translation>
     </message>
     <message>
         <source>Chord Inspector</source>
@@ -5602,7 +5602,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Break multimeasure rest</source>
-        <translation>多重小節休み区切り</translation>
+        <translation>長休符区切り</translation>
     </message>
 </context>
 <context>
@@ -6387,7 +6387,7 @@ failed: </source>
     </message>
     <message>
         <source>stemless</source>
-        <translation>符幹無し</translation>
+        <translation>符幹なし</translation>
     </message>
 </context>
 <context>
@@ -7194,6 +7194,10 @@ please choose a different name:</source>
         <source>Cannot write into %1</source>
         <translation>%1 に書き込むことができません</translation>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7393,6 +7397,10 @@ please choose a different name:</source>
     <message>
         <source>new Palette</source>
         <translation>新しいパレット</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation>シングルパレット</translation>
     </message>
 </context>
 <context>
@@ -7597,6 +7605,17 @@ Save before closing?</source>
     <message>
         <source>Updated</source>
         <translation>アップデート済</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>声部:%1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; 音価: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10385,6 +10404,10 @@ failed: </source>
         <source>Check for new version of MuseScore</source>
         <translation>新バージョンのチェック</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation>フィルタ</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10706,6 +10729,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>File corrupted %1</source>
         <translation>ファイル破損 %1</translation>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10852,17 +10883,6 @@ Do you want to overwrite it?</source>
     <message>
         <source>Tab 2</source>
         <translation>タブ 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>声部:%1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; 音価: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -12326,7 +12346,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Description</source>
-        <translation>定義</translation>
+        <translation>ユーザコメント</translation>
     </message>
     <message>
         <source>License</source>
@@ -13096,7 +13116,7 @@ failed: </source>
     </message>
     <message>
         <source>Diatonic pitch up</source>
-        <translation>全音単位で上へ</translation>
+        <translation>ダイアトニックに従って音高を上へ</translation>
     </message>
     <message>
         <source>Up Octave</source>
@@ -13140,7 +13160,7 @@ failed: </source>
     </message>
     <message>
         <source>Diatonic pitch down</source>
-        <translation>全音単位で下へ</translation>
+        <translation>ダイアトニックに従って音高を下へ</translation>
     </message>
     <message>
         <source>Pitch down octave</source>
@@ -13332,7 +13352,7 @@ failed: </source>
     </message>
     <message>
         <source>Insert Measures...</source>
-        <translation>小節挿入...</translation>
+        <translation>小節挿入（２小節以上）...</translation>
     </message>
     <message>
         <source>Insert measures</source>
@@ -13404,7 +13424,7 @@ failed: </source>
     </message>
     <message>
         <source>Longa</source>
-        <translation>ロンガ</translation>
+        <translation>四倍全音符</translation>
     </message>
     <message>
         <source>Double whole note</source>
@@ -14196,7 +14216,7 @@ failed: </source>
     </message>
     <message>
         <source>Longa (TAB)</source>
-        <translation>ロンガ(TAB)</translation>
+        <translation>四倍全音符(TAB)</translation>
     </message>
     <message>
         <source>Note duration: 16th (TAB)</source>
@@ -14600,7 +14620,7 @@ failed: </source>
     </message>
     <message>
         <source>Plugin Manager...</source>
-        <translation>プラグイン マネージャー...</translation>
+        <translation>プラグイン マネージャ...</translation>
     </message>
     <message>
         <source>Resource Manager...</source>
@@ -14820,7 +14840,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Longa</source>
-        <translation>音価: ロンガ</translation>
+        <translation>音価: 四倍全音符</translation>
     </message>
     <message>
         <source>Double Whole Note</source>
@@ -14828,7 +14848,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Double whole</source>
-        <translation>音価: 2全音符</translation>
+        <translation>音価: 倍全音符</translation>
     </message>
     <message>
         <source>Whole Note</source>
@@ -15296,7 +15316,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Longa (TAB)</source>
-        <translation>音価: ロンガ(TAB)</translation>
+        <translation>音価: 四倍全音符(TAB)</translation>
     </message>
     <message>
         <source>Double Whole Note (TAB)</source>
@@ -17240,10 +17260,6 @@ Measure is not empty</source>
     <message>
         <source>Shadow Note</source>
         <translation>隠れ音符</translation>
-    </message>
-    <message>
-        <source>Rubber Band</source>
-        <translation>輪ゴム</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>

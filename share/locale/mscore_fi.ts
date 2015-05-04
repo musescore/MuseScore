@@ -209,37 +209,37 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Above Staff</source>
-        <translation type="unfinished"/>
+        <translation>Viivaston yläpuolella</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation type="unfinished"/>
+        <translation>Viivaston alapuolella</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation type="unfinished"/>
+        <translation>Automaattinen sointu</translation>
     </message>
     <message>
         <source>Above Chord</source>
-        <translation type="unfinished"/>
+        <translation>Soinnun yläpuolella</translation>
     </message>
     <message>
         <source>Below Chord</source>
-        <translation type="unfinished"/>
+        <translation>Soinnun alapuolella</translation>
     </message>
 </context>
 <context>
     <name>Awl::ColorLabel</name>
     <message>
         <source>MuseScore: Select Color</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Valitse väri</translation>
     </message>
 </context>
 <context>
     <name>BarLineBase</name>
     <message>
         <source>custom subtype</source>
-        <translation type="unfinished"/>
+        <translation>oma alatyyppi</translation>
     </message>
     <message>
         <source>custom span</source>
@@ -285,38 +285,38 @@ p, li { white-space: pre-wrap; }
     <name>BreaksDialog</name>
     <message>
         <source>MuseScore: Add/Remove Line Breaks</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Lisää/Poista rivinvaihdot</translation>
     </message>
     <message>
         <source>Break lines every</source>
-        <translation type="unfinished"/>
+        <translation>Rivinvaihto joka</translation>
     </message>
     <message>
         <source>Number of measures</source>
-        <translation type="unfinished"/>
+        <translation>tahtien lukumäärä</translation>
     </message>
     <message>
         <source>measures</source>
-        <translation type="unfinished"/>
+        <translation>tahdit</translation>
     </message>
     <message>
         <source>Add line breaks at end of each system</source>
-        <translation type="unfinished"/>
+        <translation>Lisää rivin vaihto jokaisen osan loppuun</translation>
     </message>
     <message>
         <source>Remove current line breaks</source>
-        <translation type="unfinished"/>
+        <translation>Poista tämä rivin vaihto</translation>
     </message>
     <message>
         <source>Break lines every X measures</source>
-        <translation type="unfinished"/>
+        <translation>Vaihda riviä X tahdin jälkeen</translation>
     </message>
 </context>
 <context>
     <name>ChordBase</name>
     <message>
         <source>Glissando end</source>
-        <translation type="unfinished"/>
+        <translation>Glissandon loppu</translation>
     </message>
 </context>
 <context>
@@ -343,7 +343,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>ID</source>
-        <translation type="unfinished"/>
+        <translation>Tunnus</translation>
     </message>
 </context>
 <context>
@@ -354,11 +354,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Cross</source>
-        <translation type="unfinished"/>
+        <translation>ristiin</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation type="unfinished"/>
+        <translation>timantti</translation>
     </message>
     <message>
         <source>Triangle</source>
@@ -366,7 +366,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"/>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Slash</source>
@@ -378,23 +378,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Ti</translation>
     </message>
 </context>
 <context>
@@ -544,26 +544,26 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staves:</source>
-        <translation type="unfinished"/>
+        <translation>Viivastot</translation>
     </message>
     <message>
         <source>Short name:</source>
-        <translation type="unfinished"/>
+        <translation>Lyhyt nimi</translation>
     </message>
     <message>
         <source>MIDI program:</source>
-        <translation type="unfinished"/>
+        <translation>Midi-ohjelma</translation>
     </message>
 </context>
 <context>
     <name>EditPitchBase</name>
     <message>
         <source>Note Selection</source>
-        <translation type="unfinished"/>
+        <translation>Nuottien valinta</translation>
     </message>
     <message>
         <source>Select Note:</source>
-        <translation type="unfinished"/>
+        <translation>Valitse nuotti:</translation>
     </message>
     <message>
         <source>Octave 8</source>
@@ -1150,15 +1150,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>MuseScore: Edit Grid</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Ruudukon päivitys</translation>
     </message>
     <message>
         <source>Edit Grid</source>
-        <translation type="unfinished"/>
+        <translation>Muokkaa</translation>
     </message>
     <message>
         <source>Horizontal grid:</source>
-        <translation type="unfinished"/>
+        <translation>Vaakasuora ruudukko</translation>
     </message>
     <message>
         <source>Vertical  grid:</source>
@@ -1197,11 +1197,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>0 - Perfect Unison</source>
-        <translation type="unfinished"/>
+        <translation>Puhdas unisono</translation>
     </message>
     <message>
         <source>1 - Augmented Unison</source>
-        <translation type="unfinished"/>
+        <translation>Ylinouseva unisono</translation>
     </message>
     <message>
         <source>0 - Diminished Second</source>
@@ -1365,7 +1365,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Style group:</source>
-        <translation type="unfinished"/>
+        <translation>Tyyli ryhmä:</translation>
     </message>
     <message>
         <source>Show barlines</source>
@@ -1409,7 +1409,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Hide system barline</source>
-        <translation type="unfinished"/>
+        <translation>Piiloita järjestelmärivi</translation>
     </message>
 </context>
 <context>
@@ -1456,7 +1456,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Marks are:</source>
-        <translation type="unfinished"/>
+        <translation>Merkit ovat:</translation>
     </message>
     <message>
         <source>Numbers</source>
@@ -1464,7 +1464,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Letters</source>
-        <translation type="unfinished"/>
+        <translation>Kirjaimet</translation>
     </message>
     <message>
         <source>Marks are drawn:</source>
@@ -1480,15 +1480,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Broken</source>
-        <translation type="unfinished"/>
+        <translation>Rikki</translation>
     </message>
     <message>
         <source>Note Values</source>
-        <translation type="unfinished"/>
+        <translation>Tuottien arvot</translation>
     </message>
     <message>
         <source>Shown as:</source>
-        <translation type="unfinished"/>
+        <translation>Näytä:</translation>
     </message>
     <message>
         <source>None</source>
@@ -1524,7 +1524,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Half notes:</source>
-        <translation type="unfinished"/>
+        <translation>Puolinuotit:</translation>
     </message>
     <message>
         <source>As short stem</source>
@@ -1560,7 +1560,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>On lines</source>
-        <translation type="unfinished"/>
+        <translation>Viivoilla</translation>
     </message>
     <message>
         <source>Above lines</source>
@@ -1580,11 +1580,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Add to Templates</source>
-        <translation type="unfinished"/>
+        <translation>Lisää malliin</translation>
     </message>
     <message>
         <source>Template:</source>
-        <translation type="unfinished"/>
+        <translation>Malli:</translation>
     </message>
     <message>
         <source>Show key signature</source>
@@ -1604,7 +1604,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Repeat:</source>
-        <translation type="unfinished"/>
+        <translation>Toista</translation>
     </message>
     <message>
         <source>Never</source>
@@ -1612,15 +1612,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>At new system</source>
-        <translation type="unfinished"/>
+        <translation>Uudesta systeemistä</translation>
     </message>
     <message>
         <source>At new meas.</source>
-        <translation type="unfinished"/>
+        <translation>Uudesta tahd.</translation>
     </message>
     <message>
         <source>Always</source>
-        <translation type="unfinished"/>
+        <translation>Aina</translation>
     </message>
 </context>
 <context>
@@ -1674,7 +1674,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Header, Footer, Numbers</source>
-        <translation type="unfinished"/>
+        <translation>Otsikko, Alatunniste, Numerot</translation>
     </message>
     <message>
         <source>System</source>
@@ -1882,7 +1882,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Spacing (1=tight):</source>
-        <translation type="unfinished"/>
+        <translation>Välistys (1=tiivis)</translation>
     </message>
     <message>
         <source>Minimum measure width:</source>
@@ -1966,7 +1966,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Progression:</source>
-        <translation type="unfinished"/>
+        <translation>Eteneminen:</translation>
     </message>
     <message>
         <source>Shortest stem:</source>
@@ -2211,7 +2211,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Maximum slope:</source>
-        <translation type="unfinished"/>
+        <translation>Maksimi kaltevuus</translation>
     </message>
     <message>
         <source>Vertical distance from stem:</source>
@@ -2247,15 +2247,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Chord symbols style file:</source>
-        <translation type="unfinished"/>
+        <translation>Sointujen tyylitiedosto:</translation>
     </message>
     <message>
         <source>Capo</source>
-        <translation type="unfinished"/>
+        <translation>Da Capo</translation>
     </message>
     <message>
         <source>Vertical distance from note head:</source>
-        <translation type="unfinished"/>
+        <translation>Pystysuora etäisyys nuotin päästä:</translation>
     </message>
     <message>
         <source>Capo fret position:</source>
@@ -2271,7 +2271,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>A, B♭, B, C, C♯, ...</source>
-        <translation type="unfinished"/>
+        <translation>A, B♭, B, C, C♯, ... </translation>
     </message>
     <message>
         <source>Chord Symbols, Fretboard Diagrams</source>
@@ -2287,19 +2287,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Position:</source>
-        <translation type="unfinished"/>
+        <translation>Sijainti</translation>
     </message>
     <message>
         <source>Minimum tie length:</source>
-        <translation type="unfinished"/>
+        <translation>Minimi pituus</translation>
     </message>
     <message>
         <source>Interval:</source>
-        <translation type="unfinished"/>
+        <translation>Intervalli:</translation>
     </message>
     <message>
         <source>Hide instrument name if there is only 1 instrument</source>
-        <translation type="unfinished"/>
+        <translation>Piiloita soittimen nimi, jos on vain 1 soitin</translation>
     </message>
     <message>
         <source>Maximum barline distance:</source>
@@ -2319,7 +2319,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Pois</translation>
     </message>
     <message>
         <source>Eighth Note</source>
@@ -2327,7 +2327,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Sixteenth Note</source>
-        <translation type="unfinished"/>
+        <translation>Kuudestoistaosanuotti</translation>
     </message>
     <message>
         <source>%</source>
@@ -2363,23 +2363,23 @@ space unit</extracomment>
     </message>
     <message>
         <source>Show header also on first page</source>
-        <translation type="unfinished"/>
+        <translation>Näytä otsikot myös ensimmäisellä sivulla</translation>
     </message>
     <message>
         <source>Show footer also on first page</source>
-        <translation type="unfinished"/>
+        <translation>Näytä alatunnisteet myös ensimmäisellä sivulla</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
     <message>
         <source>Use odd/even page header</source>
-        <translation type="unfinished"/>
+        <translation>Käytä parittoman/parillisen sivun otsikkoa</translation>
     </message>
     <message>
         <source>Use odd/even page footer</source>
-        <translation type="unfinished"/>
+        <translation>Käytä parittoman/parillisen sivun alatunnistetta</translation>
     </message>
     <message>
         <source>System bracket thickness:</source>
@@ -2391,7 +2391,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Continue height:</source>
-        <translation type="unfinished"/>
+        <translation>Jatka korkeutta:</translation>
     </message>
     <message>
         <source>Continuous</source>
@@ -2415,15 +2415,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Numbers only</source>
-        <translation type="unfinished"/>
+        <translation>Vain numeroita</translation>
     </message>
     <message>
         <source>Header Text</source>
-        <translation type="unfinished"/>
+        <translation>Otsikon teksti</translation>
     </message>
     <message>
         <source>Footer Text</source>
-        <translation type="unfinished"/>
+        <translation>Alatunnisteen teksti</translation>
     </message>
     <message>
         <source>Measure Numbers</source>
@@ -2467,19 +2467,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>A, B♭, H, C, C♯, ...</source>
-        <translation type="unfinished"/>
+        <translation>A, B♭, H, C, C♯, ... </translation>
     </message>
     <message>
         <source>A, B, H, C, Cis</source>
-        <translation type="unfinished"/>
+        <translation>A, B, H, C, Cis </translation>
     </message>
     <message>
         <source>Full German</source>
-        <translation type="unfinished"/>
+        <translation>Kokonaan saksaksi</translation>
     </message>
     <message>
         <source>Do, Do♯, Re♭, Re, ...</source>
-        <translation type="unfinished"/>
+        <translation>Do, Do♯, Re♭, Re, ... </translation>
     </message>
     <message>
         <source>Do, Do♯, Ré♭, Ré, ...</source>
@@ -2487,7 +2487,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished"/>
+        <translation>ranska</translation>
     </message>
     <message>
         <source>Lower case bass notes</source>
@@ -2503,7 +2503,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Automatic Capitalization</source>
-        <translation type="unfinished"/>
+        <translation>Automaattisesti isot kirjaimet</translation>
     </message>
     <message>
         <source>Vertical frame upper margin</source>
@@ -2558,11 +2558,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Edit Part</source>
-        <translation type="unfinished"/>
+        <translation>Muokkaa osaa:</translation>
     </message>
     <message>
         <source>Select Part</source>
-        <translation type="unfinished"/>
+        <translation>Valise osa:</translation>
     </message>
 </context>
 <context>
@@ -2585,19 +2585,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore </translation>
     </message>
     <message>
         <source>Sound Fonts</source>
-        <translation type="unfinished"/>
+        <translation>Äänifontit</translation>
     </message>
     <message>
         <source>SoundFont %1 already loaded</source>
-        <translation type="unfinished"/>
+        <translation>Äänifontti %1 on jo ladattu</translation>
     </message>
     <message>
         <source>Cannot load SoundFont %1</source>
-        <translation type="unfinished"/>
+        <translation>Äänifontin %1 lataus ei onnistu</translation>
     </message>
 </context>
 <context>
@@ -2688,7 +2688,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Insert empty measures</source>
-        <translation type="unfinished"/>
+        <translation>Lisää tyhjiä tahteja:</translation>
     </message>
     <message>
         <source>Number of measures to insert:</source>
@@ -2715,7 +2715,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
 </context>
 <context>
@@ -2930,11 +2930,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Ambitus Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Ambituksen tarkistus</translation>
     </message>
     <message>
         <source>Oct</source>
-        <translation type="unfinished"/>
+        <translation>Oct.</translation>
     </message>
     <message>
         <source>Reset Has line value</source>
@@ -2962,11 +2962,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cross</source>
-        <translation type="unfinished"/>
+        <translation>ristiin</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation type="unfinished"/>
+        <translation>timantti</translation>
     </message>
     <message>
         <source>Triangle</source>
@@ -2982,19 +2982,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"/>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>Sol</source>
@@ -3002,11 +3002,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Ti</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
@@ -3018,7 +3018,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
     <message>
         <source>Reset Line thickness value</source>
@@ -3049,7 +3049,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation type="unfinished"/>
+        <translation>Automaattinen sointu</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -3065,19 +3065,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Above Staff</source>
-        <translation type="unfinished"/>
+        <translation>Viivaston yläpuolella</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation type="unfinished"/>
+        <translation>Viivaston alapuolella</translation>
     </message>
     <message>
         <source>Above Chord</source>
-        <translation type="unfinished"/>
+        <translation>Soinnun yläpuolella</translation>
     </message>
     <message>
         <source>Below Chord</source>
-        <translation type="unfinished"/>
+        <translation>Soinnun alapuolella</translation>
     </message>
     <message>
         <source>Time stretch</source>
@@ -3172,7 +3172,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
 </context>
 <context>
@@ -3354,7 +3354,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
 </context>
 <context>
@@ -3377,7 +3377,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
 </context>
 <context>
@@ -3420,7 +3420,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
     <message>
         <source>Dynamic range</source>
@@ -3498,7 +3498,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
     <message>
         <source>Reset Type value</source>
@@ -3600,7 +3600,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
     <message>
         <source>Right gap</source>
@@ -3699,7 +3699,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
     <message>
         <source>Reset Continue height value</source>
@@ -3824,7 +3824,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
 </context>
 <context>
@@ -3907,7 +3907,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
     <message>
         <source>Line thickness</source>
@@ -4141,7 +4141,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
     <message>
         <source>Reset Dot position value</source>
@@ -4204,7 +4204,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Numbers only</source>
-        <translation type="unfinished"/>
+        <translation>Vain numeroita</translation>
     </message>
     <message>
         <source>Ottava Inspector</source>
@@ -4220,7 +4220,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
     <message>
         <source>Above</source>
@@ -4255,7 +4255,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
 </context>
 <context>
@@ -4291,7 +4291,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
 </context>
 <context>
@@ -4318,7 +4318,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
     <message>
         <source>Continuous</source>
@@ -4385,7 +4385,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
     <message>
         <source>Reset Follow text value</source>
@@ -4412,7 +4412,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
     <message>
         <source>Reset Text to Style</source>
@@ -4450,7 +4450,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
 </context>
 <context>
@@ -4493,7 +4493,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
 </context>
 <context>
@@ -4548,7 +4548,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
     <message>
         <source>Reset Number type value</source>
@@ -4592,7 +4592,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
     <message>
         <source>Right margin</source>
@@ -4671,7 +4671,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjennä arvo</translation>
     </message>
 </context>
 <context>
@@ -5424,7 +5424,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Arpeggios &amp; Glissandi</source>
-        <translation type="unfinished"/>
+        <translation>Arpeggiot &amp; glissandot</translation>
     </message>
     <message>
         <source>Breaks &amp; Spacers</source>
@@ -5443,7 +5443,7 @@ Would you like to locate %2 now?</source>
     <name>MeasureProperties</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore </translation>
     </message>
     <message>
         <source>cannot change measure length:
@@ -5962,23 +5962,23 @@ failed: </source>
     </message>
     <message>
         <source>Above Staff</source>
-        <translation type="unfinished"/>
+        <translation>Viivaston yläpuolella</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation type="unfinished"/>
+        <translation>Viivaston alapuolella</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation type="unfinished"/>
+        <translation>Automaattinen sointu</translation>
     </message>
     <message>
         <source>Above Chord</source>
-        <translation type="unfinished"/>
+        <translation>Soinnun yläpuolella</translation>
     </message>
     <message>
         <source>Below Chord</source>
-        <translation type="unfinished"/>
+        <translation>Soinnun alapuolella</translation>
     </message>
     <message>
         <source>Special symbols in header/footer</source>
@@ -6414,7 +6414,7 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore </translation>
     </message>
     <message>
         <source>Save changes to the score &quot;%1&quot;
@@ -7165,6 +7165,10 @@ please choose a different name:</source>
         <source>Cannot write into %1</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7365,6 +7369,10 @@ please choose a different name:</source>
         <source>new Palette</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Single Palette</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::PaletteBoxButton</name>
@@ -7427,7 +7435,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore </translation>
     </message>
     <message>
         <source>untitled</source>
@@ -7567,6 +7575,17 @@ Save before closing?</source>
     <message>
         <source>Updated</source>
         <translation>Päivitetty</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7821,7 +7840,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Pianoroll Editor...</source>
-        <translation>Pianorulla editori ...</translation>
+        <translation>Pianorullaeditori ...</translation>
     </message>
     <message>
         <source>Split Staff...</source>
@@ -8698,7 +8717,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Arpeggios &amp;&amp; Glissandi</source>
-        <translation type="unfinished"/>
+        <translation>Arpeggiot &amp; glissandot</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
@@ -10340,6 +10359,10 @@ failed: </source>
         <source>Check for new version of MuseScore</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10363,7 +10386,7 @@ Please select a single note or lyrics and retry operation
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore </translation>
     </message>
     <message>
         <source>No note or figured bass selected:
@@ -10641,6 +10664,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>File corrupted %1</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10783,17 +10814,6 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Tab 2</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -11099,7 +11119,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Pois</translation>
     </message>
     <message>
         <source>Select swing ratio:</source>
@@ -12406,15 +12426,15 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore </translation>
     </message>
     <message>
         <source>SoundFont %1 already loaded</source>
-        <translation type="unfinished"/>
+        <translation>Äänifontti %1 on jo ladattu</translation>
     </message>
     <message>
         <source>Cannot load SoundFont %1</source>
-        <translation type="unfinished"/>
+        <translation>Äänifontin %1 lataus ei onnistu</translation>
     </message>
 </context>
 <context>
@@ -15495,7 +15515,7 @@ failed: </source>
     <name>addRemoveTimeSig</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore </translation>
     </message>
     <message>
         <source>Cannot rewrite measures:
@@ -17169,10 +17189,6 @@ Measure is not empty</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Rubber Band</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Tab Duration Symbol</source>
         <translation type="unfinished"/>
     </message>
@@ -17418,11 +17434,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Cross</source>
-        <translation type="unfinished"/>
+        <translation>ristiin</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation type="unfinished"/>
+        <translation>timantti</translation>
     </message>
     <message>
         <source>Triangle</source>
@@ -17430,7 +17446,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"/>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Slash</source>
@@ -17442,23 +17458,23 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Ti</translation>
     </message>
     <message>
         <source>Sol</source>

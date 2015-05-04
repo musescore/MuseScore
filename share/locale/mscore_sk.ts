@@ -3053,7 +3053,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Anchor</source>
-        <translation type="unfinished"/>
+        <translation>Ukotvenie:</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
@@ -3699,7 +3699,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Crescendo</source>
-        <translation type="unfinished"/>
+        <translation>Crescendo</translation>
     </message>
     <message>
         <source>Decrescendo</source>
@@ -3927,11 +3927,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dashed</source>
-        <translation type="unfinished"/>
+        <translation>čiarkovaný</translation>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>bodkovaný</translation>
     </message>
     <message>
         <source>Dash-dotted</source>
@@ -4045,11 +4045,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>Zhora</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"/>
+        <translation>Zdola</translation>
     </message>
     <message>
         <source>Whole</source>
@@ -4212,7 +4212,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Numbers only</source>
-        <translation type="unfinished"/>
+        <translation>Iba čísla</translation>
     </message>
     <message>
         <source>Ottava Inspector</source>
@@ -4334,11 +4334,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>bodkovaný</translation>
     </message>
     <message>
         <source>Dashed</source>
-        <translation type="unfinished"/>
+        <translation>čiarkovaný</translation>
     </message>
 </context>
 <context>
@@ -4481,7 +4481,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Trill Line</source>
-        <translation type="unfinished"/>
+        <translation>Trilková čiara</translation>
     </message>
     <message>
         <source>Up Prall</source>
@@ -6683,7 +6683,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>Breath</source>
-        <translation type="unfinished"/>
+        <translation>Nádych</translation>
     </message>
     <message>
         <source>Caesura</source>
@@ -7175,6 +7175,10 @@ please choose a different name:</source>
         <source>Cannot write into %1</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7374,6 +7378,10 @@ please choose a different name:</source>
     <message>
         <source>new Palette</source>
         <translation>nová paleta</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7577,6 +7585,17 @@ Save before closing?</source>
     <message>
         <source>Updated</source>
         <translation>Aktualizované</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -8795,7 +8814,7 @@ failed: </source>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Diagramy hmatníka</translation>
     </message>
 </context>
 <context>
@@ -8990,7 +9009,7 @@ failed: </source>
     </message>
     <message>
         <source>Cursor:</source>
-        <translation type="unfinished"/>
+        <translation>Kurzor:</translation>
     </message>
     <message>
         <source>Velocity:</source>
@@ -10347,6 +10366,10 @@ failed: </source>
         <source>Check for new version of MuseScore</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10393,7 +10416,7 @@ Please select a single note or rest and retry operation
     <name>QObject</name>
     <message>
         <source>Standard</source>
-        <translation type="unfinished"/>
+        <translation>Štandardný</translation>
     </message>
     <message>
         <source>Perc. 3 lines</source>
@@ -10642,6 +10665,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>File corrupted %1</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10785,17 +10816,6 @@ Do you want to overwrite it?</source>
     <message>
         <source>Tab 2</source>
         <translation>Karta 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -11007,7 +11027,7 @@ Do you want to overwrite it?</source>
     <name>Staff type group name</name>
     <message>
         <source>Standard</source>
-        <translation type="unfinished"/>
+        <translation>Štandardný</translation>
     </message>
     <message>
         <source>Percussion</source>
@@ -11092,15 +11112,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Swing Settings</source>
-        <translation type="unfinished"/>
+        <translation>Nastavenia Swingu</translation>
     </message>
     <message>
         <source>Swing:</source>
-        <translation type="unfinished"/>
+        <translation>Swing:</translation>
     </message>
     <message>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Vypnúť</translation>
     </message>
     <message>
         <source>Select swing ratio:</source>
@@ -11576,7 +11596,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Značka akordu</translation>
     </message>
     <message>
         <source>Rehearsal Mark</source>
@@ -13185,7 +13205,7 @@ failed: </source>
     </message>
     <message>
         <source>Crescendo</source>
-        <translation type="unfinished"/>
+        <translation>Crescendo</translation>
     </message>
     <message>
         <source>Add crescendo</source>
@@ -13413,7 +13433,7 @@ failed: </source>
     </message>
     <message>
         <source>Natural</source>
-        <translation type="unfinished"/>
+        <translation>Posuvka</translation>
     </message>
     <message>
         <source>Flat</source>
@@ -13421,7 +13441,7 @@ failed: </source>
     </message>
     <message>
         <source>Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Dvojtié béčko</translation>
     </message>
     <message>
         <source>Acciaccatura</source>
@@ -14265,7 +14285,7 @@ failed: </source>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Značka akordu</translation>
     </message>
     <message>
         <source>Add chord symbol</source>
@@ -16939,7 +16959,7 @@ Takt nie je prázdny</translation>
     </message>
     <message>
         <source>Breath</source>
-        <translation type="unfinished"/>
+        <translation>Nádych</translation>
     </message>
     <message>
         <source>Glissando</source>
@@ -17170,10 +17190,6 @@ Takt nie je prázdny</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Rubber Band</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Tab Duration Symbol</source>
         <translation type="unfinished"/>
     </message>
@@ -17358,7 +17374,7 @@ Takt nie je prázdny</translation>
     </message>
     <message>
         <source>Crescendo</source>
-        <translation type="unfinished"/>
+        <translation>Crescendo</translation>
     </message>
 </context>
 <context>
@@ -17579,7 +17595,7 @@ Takt nie je prázdny</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Diagramy hmatníka</translation>
     </message>
     <message>
         <source>Breath Marks</source>

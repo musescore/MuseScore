@@ -1600,7 +1600,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show ledger lines</source>
-        <translation>Mostrar linhas complementares</translation>
+        <translation>Mostrar linhas suplementares</translation>
     </message>
     <message>
         <source>Show Key signature</source>
@@ -7196,6 +7196,11 @@ por favor, escolha um nome diferente:</translation>
         <source>Cannot write into %1</source>
         <translation>Não foi possivel escrever em %1</translation>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation>Esta partitura não pode ser salva online. 
+Por favor, corrija os compassos corrompidos e tente novamente.</translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7395,6 +7400,10 @@ por favor, escolha um nome diferente:</translation>
     <message>
         <source>new Palette</source>
         <translation>nova paleta</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation>Palheta Simples</translation>
     </message>
 </context>
 <context>
@@ -7599,6 +7608,17 @@ Salvá-lo antes de fechar?</translation>
     <message>
         <source>Updated</source>
         <translation>Atualizado</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Voz: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Duração: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10388,6 +10408,10 @@ falhou: </translation>
         <source>Check for new version of MuseScore</source>
         <translation>Procurar por nova versão do MuseScore</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filtro</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10708,6 +10732,14 @@ Visite a &lt;a href=&quot;http://musescore.org&quot;&gt;página na internet Muse
         <source>File corrupted %1</source>
         <translation>Arquivo corrompido %1</translation>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation>MuseScore: Erro no envio</translation>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10855,17 +10887,6 @@ Deseja sobrescrevê-lo?
     <message>
         <source>Tab 2</source>
         <translation>Tab 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Voz: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Duração: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -17244,10 +17265,6 @@ O compasso não está vazio</translation>
     <message>
         <source>Shadow Note</source>
         <translation>Nota sombra</translation>
-    </message>
-    <message>
-        <source>Rubber Band</source>
-        <translation>Banda elástica</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>

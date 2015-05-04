@@ -1794,11 +1794,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Grand staff distance:</source>
-        <translation>Απόσταση κύριου πενταγράμμου-για πιάνο:</translation>
+        <translation>Απόσταση κύριου πενταγράμμου:</translation>
     </message>
     <message>
         <source>Min. system distance:</source>
-        <translation>Ελάχιστη απόσταση συστήματος:</translation>
+        <translation>Ελάχ. απόσταση συστήματος:</translation>
     </message>
     <message>
         <source>Lyrics top margin:</source>
@@ -2071,7 +2071,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Hairpins</source>
-        <translation>Φουρκέτες</translation>
+        <translation>Ψαλίδια Δυναμικής</translation>
     </message>
     <message>
         <source>Height:</source>
@@ -2183,7 +2183,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Bottom</source>
-        <translation>Κάτω μέρος</translation>
+        <translation>Βάση</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2328,15 +2328,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Off</source>
-        <translation>Απενεργό</translation>
+        <translation>Ανενεργό</translation>
     </message>
     <message>
         <source>Eighth Note</source>
-        <translation>Όγδοο </translation>
+        <translation>Νότα Ογδόου</translation>
     </message>
     <message>
         <source>Sixteenth Note</source>
-        <translation>Δεκατο έκτο</translation>
+        <translation>Νότα Δεκάτου-έκτου</translation>
     </message>
     <message>
         <source>%</source>
@@ -2747,139 +2747,139 @@ space unit</extracomment>
     </message>
     <message>
         <source>C♭</source>
-        <translation>C♭ /Ντο♭</translation>
+        <translation>Ντο♭</translation>
     </message>
     <message>
         <source>C</source>
-        <translation>C /Ντο</translation>
+        <translation>Ντο</translation>
     </message>
     <message>
         <source>C♯</source>
-        <translation>C♯ /Ντο♯</translation>
+        <translation>Ντο♯</translation>
     </message>
     <message>
         <source>C♯♯</source>
-        <translation>C♯♯ /Ντο♯♯</translation>
+        <translation>Ντο♯♯</translation>
     </message>
     <message>
         <source>D♭♭</source>
-        <translation>D♭♭ /Ρε♭♭</translation>
+        <translation>Ρε♭♭</translation>
     </message>
     <message>
         <source>D♭</source>
-        <translation>D♭ /Ρε♭</translation>
+        <translation>Ρε♭</translation>
     </message>
     <message>
         <source>D</source>
-        <translation>D /Ρε</translation>
+        <translation>Ρε</translation>
     </message>
     <message>
         <source>D♯</source>
-        <translation>D♯ /Ρε♯</translation>
+        <translation>Ρε♯</translation>
     </message>
     <message>
         <source>D♯♯</source>
-        <translation>D♯♯ /Ρε♯♯</translation>
+        <translation>Ρε♯♯</translation>
     </message>
     <message>
         <source>E♭♭</source>
-        <translation>E♭♭ /Μι♭♭</translation>
+        <translation>Μι♭♭</translation>
     </message>
     <message>
         <source>E♭</source>
-        <translation>E♭</translation>
+        <translation>Μι♭</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>E /Μι</translation>
+        <translation>Μι</translation>
     </message>
     <message>
         <source>E♯</source>
-        <translation>E♯ /Μι♯</translation>
+        <translation>Μι♯</translation>
     </message>
     <message>
         <source>E♯♯</source>
-        <translation>E♯♯ /Μι♯♯</translation>
+        <translation>Μι♯♯</translation>
     </message>
     <message>
         <source>F♭♭</source>
-        <translation>F♭♭ /Φα♭♭</translation>
+        <translation>Φα♭♭</translation>
     </message>
     <message>
         <source>F♭</source>
-        <translation>F♭ /Φα♭</translation>
+        <translation>Φα♭</translation>
     </message>
     <message>
         <source>F</source>
-        <translation>F /Φα</translation>
+        <translation>Φα</translation>
     </message>
     <message>
         <source>F♯</source>
-        <translation>F♯</translation>
+        <translation>Φα♯</translation>
     </message>
     <message>
         <source>F♯♯</source>
-        <translation>F♯♯ /Φα♯♯</translation>
+        <translation>Φα♯♯</translation>
     </message>
     <message>
         <source>G♭♭</source>
-        <translation>G♭♭ /Σολ♭♭</translation>
+        <translation>Σολ♭♭</translation>
     </message>
     <message>
         <source>G♭</source>
-        <translation>G♭ /Σολ♭</translation>
+        <translation>Σολ♭</translation>
     </message>
     <message>
         <source>G</source>
-        <translation>G /Σολ</translation>
+        <translation>Σολ</translation>
     </message>
     <message>
         <source>G♯</source>
-        <translation>G♯ /Σολ♯</translation>
+        <translation>Σολ♯</translation>
     </message>
     <message>
         <source>G♯♯</source>
-        <translation>G♯♯ /Σολ♯♯</translation>
+        <translation>Σολ♯♯</translation>
     </message>
     <message>
         <source>A♭♭</source>
-        <translation>A♭♭ /Λα♭♭</translation>
+        <translation>Λα♭♭</translation>
     </message>
     <message>
         <source>A♭</source>
-        <translation>A♭ /Λα♭</translation>
+        <translation>Λα♭</translation>
     </message>
     <message>
         <source>A</source>
-        <translation>Α /Λα</translation>
+        <translation>Λα</translation>
     </message>
     <message>
         <source>A♯</source>
-        <translation>A♯ /Λα♯</translation>
+        <translation>Λα♯</translation>
     </message>
     <message>
         <source>A♯♯</source>
-        <translation>A♯♯ /Λα♯♯</translation>
+        <translation>Λα♯♯</translation>
     </message>
     <message>
         <source>B♭♭</source>
-        <translation>B♭♭ /Σι♭♭</translation>
+        <translation>Σι♭♭</translation>
     </message>
     <message>
         <source>B♭</source>
-        <translation>B♭ /Σι♭</translation>
+        <translation>Σι♭</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>B /Σι</translation>
+        <translation>Σι</translation>
     </message>
     <message>
         <source>B♯</source>
-        <translation>B♯ /Σι♯</translation>
+        <translation>Σι♯</translation>
     </message>
     <message>
         <source>B♯♯</source>
-        <translation>B♯♯ /Σι♯♯</translation>
+        <translation>Σι♯♯</translation>
     </message>
     <message>
         <source>Oct </source>
@@ -3444,7 +3444,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Vertical offset</source>
-        <translation>Kατακόρυφη Mετατόπιση</translation>
+        <translation>Kατακόρυφη μετατόπιση</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3592,7 +3592,7 @@ space unit</extracomment>
     <name>InspectorHBox</name>
     <message>
         <source>Horizontal Frame</source>
-        <translation>Οριζόντιο πλαίσιο</translation>
+        <translation>Οριζόντιο Πλαίσιο</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3727,7 +3727,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Scale</source>
-        <translation>Κλίμακα:</translation>
+        <translation>Κλίμακα</translation>
     </message>
     <message>
         <source>Image Inspector</source>
@@ -3735,7 +3735,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Scale to frame size</source>
-        <translation>Κλίμακα στο Μέγεθος πλαισίου</translation>
+        <translation>Κλίμακα στο μέγεθος πλαισίου</translation>
     </message>
     <message>
         <source>Height</source>
@@ -5989,11 +5989,11 @@ failed: </source>
     </message>
     <message>
         <source>Above Staff</source>
-        <translation>Πάνω Πεντάγραμμο</translation>
+        <translation>Πάνω από Πεντάγραμμο</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation>Κάτω Πεντάγραμμο</translation>
+        <translation>Κάτω από Πεντάγραμμο</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
@@ -6065,11 +6065,11 @@ failed: </source>
     </message>
     <message>
         <source>last modification time</source>
-        <translation>τελευταία τροποποίηση χρόνου</translation>
+        <translation>τελευταία ώρα τροποποίησης</translation>
     </message>
     <message>
         <source>last modification date</source>
-        <translation>Τελευταία ημερομηνία τροποποίησης</translation>
+        <translation>τελευταία ημερομηνία τροποποίησης</translation>
     </message>
     <message>
         <source>page number, if there is more than one page</source>
@@ -6320,7 +6320,7 @@ failed: </source>
     </message>
     <message>
         <source>Unsuccessful login. Please try again.</source>
-        <translation>Αποτυχία εισόδου. Προσπαθήστε ξανά</translation>
+        <translation>Αποτυχία εισόδου. Παρακαλώ προσπαθήστε ξανά</translation>
     </message>
     <message>
         <source>Sorry, wrong email address, username or password. Please check again. &lt;a href=&quot;%1&quot;&gt;Have you forgotten your password&lt;/a&gt;?</source>
@@ -6344,7 +6344,7 @@ failed: </source>
     </message>
     <message>
         <source>An error occurred during the file transfer. Please try again</source>
-        <translation>Ένα συνέβη σφάλμα κατά τη μεταφορά του αρχείο. Παρακαλώ προσπαθήστε ξανά</translation>
+        <translation>Ένα σφάλμα συνέβη κατά τη μεταφορά του αρχείου. Παρακαλώ προσπαθήστε ξανά</translation>
     </message>
     <message>
         <source>Cannot upload: %1</source>
@@ -6364,7 +6364,7 @@ failed: </source>
     </message>
     <message>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
-        <translation>Η τοπική ώρα στη συσκευή σας δεν έχει ρυθμιστεί σωστά. Παρακαλώ ελέγξτε και ρυθμίστε την. Συνιστάται να βάλετε την ώρα/ζώνη ώρας στο αυτόματο. Άν ακόμα δεν μπορείται να συνδεθείτε, &lt;a href=&quot;%1&quot;&gt;επικοινωνήστε μαζί μας&lt;/a&gt;.</translation>
+        <translation>Η τοπική ώρα στη συσκευή σας δεν έχει ρυθμιστεί σωστά. Παρακαλώ ελέγξτε και ρυθμίστε. Συνιστάται να βάλετε την ώρα/ζώνη ώρας στο αυτόματο. Αν ακόμα δεν μπορείτε να συνδεθείτε, &lt;a href=&quot;%1&quot;&gt;επικοινωνήστε μαζί μας&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -6519,7 +6519,7 @@ before closing?</source>
     </message>
     <message>
         <source>Choose PDF Scan</source>
-        <translation>Επιλογή Σάρωσης-PDF</translation>
+        <translation>Επιλογή Σάρωσης PDF</translation>
     </message>
     <message>
         <source>MuseScore: Choose PDF Scan</source>
@@ -6797,7 +6797,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>Open &amp;Recent</source>
-        <translation>Άνοιγμα &amp;Πρόσφατο</translation>
+        <translation>Άνοιγμα &amp;Πρόσφατου</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
@@ -6817,7 +6817,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>&amp;Preferences...</source>
-        <translation>&amp;Επιλογές</translation>
+        <translation>&amp;Προτιμήσεις...</translation>
     </message>
     <message>
         <source>&amp;View</source>
@@ -7190,7 +7190,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Cannot determine file type</source>
-        <translation>Αδύνατος ο προσδιορισμός του τύπου αρχείου</translation>
+        <translation>Αδύνατος προσδιορισμός τύπου του αρχείου</translation>
     </message>
     <message>
         <source>MuseScore:</source>
@@ -7199,6 +7199,10 @@ please choose a different name:</source>
     <message>
         <source>Cannot write into %1</source>
         <translation>Αδύνατο γράψιμο στο %1</translation>
+    </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7399,6 +7403,10 @@ please choose a different name:</source>
     <message>
         <source>new Palette</source>
         <translation>νέα Παλέτα</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7603,6 +7611,17 @@ Save before closing?</source>
     <message>
         <source>Updated</source>
         <translation>Ενημερώθηκε</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Φωνή: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Διάρκεια: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10291,7 +10310,7 @@ failed: </source>
     </message>
     <message>
         <source>Default scale for new score views</source>
-        <translation type="unfinished"/>
+        <translation>Προεπιλεγμένη κλίμακα για νέες προβολές παρτιτούρων</translation>
     </message>
     <message>
         <source>Show play panel</source>
@@ -10359,7 +10378,7 @@ failed: </source>
     </message>
     <message>
         <source>Note input record</source>
-        <translation type="unfinished"/>
+        <translation>Εγγραφή εισαγωγής νοτών</translation>
     </message>
     <message>
         <source>Folders</source>
@@ -10392,6 +10411,10 @@ failed: </source>
     <message>
         <source>Check for new version of MuseScore</source>
         <translation>Έλεγχος για νέα έκδοση του MuseScore</translation>
+    </message>
+    <message>
+        <source>Filter</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -10711,6 +10734,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>File corrupted %1</source>
         <translation>Κατεστραμμένο αρχείο %1</translation>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10857,17 +10888,6 @@ Do you want to overwrite it?</source>
     <message>
         <source>Tab 2</source>
         <translation>Tab 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Φωνή: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Διάρκεια: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -11433,7 +11453,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Background color:</source>
-        <translation type="unfinished"/>
+        <translation>Χρώμα παρασκηνίου:</translation>
     </message>
     <message>
         <source>Alignment</source>
@@ -11825,7 +11845,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Other:</source>
-        <translation>Άλλο:</translation>
+        <translation>Άλλα:</translation>
     </message>
     <message>
         <source>Global value:</source>
@@ -11912,7 +11932,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Enter Number of Measures</source>
-        <translation type="unfinished"/>
+        <translation>Εισαγωγή Αριθμού Μέτρων</translation>
     </message>
     <message>
         <source>Measures</source>
@@ -12159,7 +12179,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Use Double Sharps and Flats</source>
-        <translation>Χρήση διπλών διέσεων και υφέσεων</translation>
+        <translation>Χρήση Διπλών Διέσεων και Υφέσεων</translation>
     </message>
     <message>
         <source>Transpose Chromatically</source>
@@ -12450,7 +12470,7 @@ failed: </source>
     </message>
     <message>
         <source>Invalid document.</source>
-        <translation type="unfinished"/>
+        <translation>Μη έγκυρο έγγραφο.</translation>
     </message>
     <message>
         <source>Expected </source>
@@ -12462,7 +12482,7 @@ failed: </source>
     </message>
     <message>
         <source>Unexpected &apos;</source>
-        <translation type="unfinished"/>
+        <translation>Μη αναμενόμενο&apos;</translation>
     </message>
     <message>
         <source>Expected character data.</source>
@@ -12883,59 +12903,59 @@ failed: </source>
     </message>
     <message>
         <source>A</source>
-        <translation>A (Λα)</translation>
+        <translation>Λα</translation>
     </message>
     <message>
         <source>Enter note A</source>
-        <translation>Εισαγωγή νότας A (Λα)</translation>
+        <translation>Εισαγωγή νότας Λα</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>B (Σι)</translation>
+        <translation>Σι</translation>
     </message>
     <message>
         <source>Enter note B</source>
-        <translation>Εισαγωγή Νότας Β (Σι)</translation>
+        <translation>Εισαγωγή Νότας Σι</translation>
     </message>
     <message>
         <source>C</source>
-        <translation>C (Ντο)</translation>
+        <translation>Ντο</translation>
     </message>
     <message>
         <source>Enter note C</source>
-        <translation>Εισαγωγή Νότας C (Ντο)</translation>
+        <translation>Εισαγωγή Νότας Ντο</translation>
     </message>
     <message>
         <source>D</source>
-        <translation>D (Ρε)</translation>
+        <translation>Ρε</translation>
     </message>
     <message>
         <source>Enter note D</source>
-        <translation>Εισαγωγή Νότας D (Ρε)</translation>
+        <translation>Εισαγωγή Νότας Ρε</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>E (Μι)</translation>
+        <translation>Μι</translation>
     </message>
     <message>
         <source>Enter note E</source>
-        <translation>Εισαγωγή Νότας Ε (Μι)</translation>
+        <translation>Εισαγωγή Νότας Μι</translation>
     </message>
     <message>
         <source>F</source>
-        <translation>F(Φα)</translation>
+        <translation>Φα</translation>
     </message>
     <message>
         <source>Enter note F</source>
-        <translation>Εισαγωγή Νότας F (Φα)</translation>
+        <translation>Εισαγωγή Νότας Φα</translation>
     </message>
     <message>
         <source>G</source>
-        <translation>G (Σολ)</translation>
+        <translation>Σολ</translation>
     </message>
     <message>
         <source>Enter note G</source>
-        <translation>Εισαγωγή Νότας G (Σολ)</translation>
+        <translation>Εισαγωγή Νότας Σολ</translation>
     </message>
     <message>
         <source>Add A</source>
@@ -12995,59 +13015,59 @@ failed: </source>
     </message>
     <message>
         <source>Insert A</source>
-        <translation>Εισαγωγή Α /Λα</translation>
+        <translation>Εισαγωγή Λα</translation>
     </message>
     <message>
         <source>Insert note A</source>
-        <translation>Εισαγωγή νότας Α /Λα</translation>
+        <translation>Εισαγωγή νότας Λα</translation>
     </message>
     <message>
         <source>Insert B</source>
-        <translation>Εισαγωγή Β /Σι</translation>
+        <translation>Εισαγωγή Σι</translation>
     </message>
     <message>
         <source>Insert note B</source>
-        <translation>Εισαγωγή νότας Β /Σι</translation>
+        <translation>Εισαγωγή νότας Σι</translation>
     </message>
     <message>
         <source>Insert C</source>
-        <translation>Εισαγωγή C /Ντο</translation>
+        <translation>Εισαγωγή Ντο</translation>
     </message>
     <message>
         <source>Insert note C</source>
-        <translation>Εισαγωγή νότας C /Ντο</translation>
+        <translation>Εισαγωγή νότας Ντο</translation>
     </message>
     <message>
         <source>Insert D</source>
-        <translation>Εισαγωγή D /Ρε</translation>
+        <translation>Εισαγωγή Ρε</translation>
     </message>
     <message>
         <source>Insert note D</source>
-        <translation>Εισαγωγή Νότας D /Ρε</translation>
+        <translation>Εισαγωγή νότας Ρε</translation>
     </message>
     <message>
         <source>Insert E</source>
-        <translation>Εισαγωγή Ε /Μι</translation>
+        <translation>Εισαγωγή Μι</translation>
     </message>
     <message>
         <source>Insert note E</source>
-        <translation>Εισαγωγή Νότας Ε /Μι</translation>
+        <translation>Εισαγωγή νότας Ε /Μι</translation>
     </message>
     <message>
         <source>Insert F</source>
-        <translation>Εισαγωγή F /Φα</translation>
+        <translation>Εισαγωγή Φα</translation>
     </message>
     <message>
         <source>Insert note F</source>
-        <translation>Εισαγωγή Νότας F /Φα</translation>
+        <translation>Εισαγωγή νότας Φα</translation>
     </message>
     <message>
         <source>Insert G</source>
-        <translation>Εισαγωγή G /Σολ</translation>
+        <translation>Εισαγωγή Σολ</translation>
     </message>
     <message>
         <source>Insert note G</source>
-        <translation>Εισαγωγή Νότας G /Σολ</translation>
+        <translation>Εισαγωγή νότας Σολ</translation>
     </message>
     <message>
         <source>Rest</source>
@@ -13467,11 +13487,11 @@ failed: </source>
     </message>
     <message>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Tελεία Επαυξήσεως</translation>
     </message>
     <message>
         <source>Double augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Τελεία διπλής επαύξησης</translation>
     </message>
     <message>
         <source>Tie</source>
@@ -14435,7 +14455,7 @@ failed: </source>
     </message>
     <message>
         <source>Select all similar elements in the range selection</source>
-        <translation type="unfinished"/>
+        <translation>Επιλογή όλων των ομοίων στοιχείων στην επιλογή εύρους</translation>
     </message>
     <message>
         <source>Add brackets to element</source>
@@ -14563,7 +14583,7 @@ failed: </source>
     </message>
     <message>
         <source>Start Center</source>
-        <translation type="unfinished"/>
+        <translation>Κέντρο Εκκίνησης </translation>
     </message>
     <message>
         <source>Toggle create multimeasure rest</source>
@@ -15019,7 +15039,7 @@ failed: </source>
     </message>
     <message>
         <source>Play next measure</source>
-        <translation type="unfinished"/>
+        <translation>Αναπαραγωγή επόμενου μέτρου</translation>
     </message>
     <message>
         <source>Player seek to begin</source>
@@ -15443,7 +15463,7 @@ failed: </source>
     </message>
     <message>
         <source>Start center</source>
-        <translation type="unfinished"/>
+        <translation>Κέντρο εκκίνησης</translation>
     </message>
     <message>
         <source>Longa Advance (F.B./Chord Symbol)</source>
@@ -16868,102 +16888,102 @@ Measure is not empty</source>
     <name>editstaff</name>
     <message>
         <source>C</source>
-        <translation>C /Ντο</translation>
+        <translation>Ντο</translation>
     </message>
     <message>
         <source>C#</source>
-        <translation>C# /Ντο#</translation>
+        <translation>Ντο#</translation>
     </message>
     <message>
         <source>D</source>
-        <translation>D /Ρε</translation>
+        <translation>Ρε</translation>
     </message>
     <message>
         <source>Eb</source>
-        <translation>Eb /Μιb</translation>
+        <translation>Μιb</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>E /Μι</translation>
+        <translation>Μι</translation>
     </message>
     <message>
         <source>F</source>
-        <translation>F /Φα</translation>
+        <translation>Φα</translation>
     </message>
     <message>
         <source>F#</source>
-        <translation>F# /Φα#</translation>
+        <translation>Φα#</translation>
     </message>
     <message>
         <source>G</source>
-        <translation>G /Σολ</translation>
+        <translation>Σολ</translation>
     </message>
     <message>
         <source>Ab</source>
-        <translation>Ab /Λαb</translation>
+        <translation>Λαb</translation>
     </message>
     <message>
         <source>A</source>
-        <translation>Α /Λα</translation>
+        <translation>Λα</translation>
     </message>
     <message>
         <source>Bb</source>
-        <translation>B /Σι</translation>
+        <translation>Σι</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>B /Σι</translation>
+        <translation>Σι</translation>
     </message>
 </context>
 <context>
     <name>editstringdata</name>
     <message>
         <source>C</source>
-        <translation>C /Ντο</translation>
+        <translation>Ντο</translation>
     </message>
     <message>
         <source>C#</source>
-        <translation>C# /Ντο#</translation>
+        <translation>Ντο#</translation>
     </message>
     <message>
         <source>D</source>
-        <translation>D /Ρε</translation>
+        <translation>Ρε</translation>
     </message>
     <message>
         <source>Eb</source>
-        <translation>Eb /Μιb</translation>
+        <translation>Μιb</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>E /Μι</translation>
+        <translation>Μι</translation>
     </message>
     <message>
         <source>F</source>
-        <translation>F /Φα</translation>
+        <translation>Φα</translation>
     </message>
     <message>
         <source>F#</source>
-        <translation>F# /Φα#</translation>
+        <translation>Φα#</translation>
     </message>
     <message>
         <source>G</source>
-        <translation>G /Σολ</translation>
+        <translation>Σολ</translation>
     </message>
     <message>
         <source>Ab</source>
-        <translation>Ab /Λαb</translation>
+        <translation>Λαb</translation>
     </message>
     <message>
         <source>A</source>
-        <translation>Α /Λα</translation>
+        <translation>Λα</translation>
     </message>
     <message>
         <source>Bb</source>
-        <translation>B /Σι</translation>
+        <translation>Σιb</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>B /Σι</translation>
+        <translation>Σι</translation>
     </message>
 </context>
 <context>
@@ -17146,7 +17166,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Instrument Name</source>
-        <translation>Όνομα οργάνου</translation>
+        <translation>Όνομα Οργάνου</translation>
     </message>
     <message>
         <source>Slur Segment</source>
@@ -17214,7 +17234,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Volta Segment</source>
-        <translation>Βόλτα</translation>
+        <translation>Τμήμα Volta</translation>
     </message>
     <message>
         <source>Pedal Segment</source>
@@ -17230,7 +17250,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ledger Line</source>
-        <translation type="unfinished"/>
+        <translation>Βοηθητική Γραμμή</translation>
     </message>
     <message>
         <source>Note Head</source>
@@ -17242,11 +17262,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Shadow Note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Rubber Band</source>
-        <translation type="unfinished"/>
+        <translation>Σκίαση Νότας</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>
@@ -17744,7 +17760,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>c#</source>
-        <translation>c#</translation>
+        <translation>ντο#</translation>
     </message>
     <message>
         <source>d</source>
@@ -17752,7 +17768,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>d#</source>
-        <translation>d#</translation>
+        <translation>ρε#</translation>
     </message>
     <message>
         <source>e</source>
@@ -17764,7 +17780,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>f#</source>
-        <translation>f#</translation>
+        <translation>φα#</translation>
     </message>
     <message>
         <source>g</source>
@@ -17772,7 +17788,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>g#</source>
-        <translation>g#</translation>
+        <translation>σολ#</translation>
     </message>
     <message>
         <source>a</source>
@@ -17780,59 +17796,59 @@ Measure is not empty</source>
     </message>
     <message>
         <source>a#</source>
-        <translation>a#</translation>
+        <translation>λα#</translation>
     </message>
     <message>
         <source>b</source>
-        <translation>b</translation>
+        <translation>σι</translation>
     </message>
     <message>
         <source>C</source>
-        <translation>C /Ντο</translation>
+        <translation>Ντο</translation>
     </message>
     <message>
         <source>C#</source>
-        <translation>C# /Ντο#</translation>
+        <translation>Ντο#</translation>
     </message>
     <message>
         <source>D</source>
-        <translation>D /Ρε</translation>
+        <translation>Ρε</translation>
     </message>
     <message>
         <source>D#</source>
-        <translation>D#</translation>
+        <translation>Ρε#</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>E /Μι</translation>
+        <translation>Μι</translation>
     </message>
     <message>
         <source>F</source>
-        <translation>F /Φα</translation>
+        <translation>Φα</translation>
     </message>
     <message>
         <source>F#</source>
-        <translation>F# /Φα#</translation>
+        <translation>Φα#</translation>
     </message>
     <message>
         <source>G</source>
-        <translation>G /Σολ</translation>
+        <translation>Σολ</translation>
     </message>
     <message>
         <source>G#</source>
-        <translation>G#</translation>
+        <translation>Σολ#</translation>
     </message>
     <message>
         <source>A</source>
-        <translation>Α /Λα</translation>
+        <translation>Λα</translation>
     </message>
     <message>
         <source>A#</source>
-        <translation>A#</translation>
+        <translation>Λα#</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>B /Σι</translation>
+        <translation>Σι</translation>
     </message>
 </context>
 </TS>

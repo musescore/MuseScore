@@ -4719,7 +4719,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add Linked Staff</source>
-        <translation>Přidat spojenou notovou osnovu</translation>
+        <translation>Přidat propojenou notovou osnovu</translation>
     </message>
     <message>
         <source>1</source>
@@ -4817,7 +4817,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add Linked Staff</source>
-        <translation>Přidat spojenou notovou osnovu</translation>
+        <translation>Přidat propojenou notovou osnovu</translation>
     </message>
     <message>
         <source>Staves</source>
@@ -4833,7 +4833,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Linked</source>
-        <translation>Spojeno</translation>
+        <translation>Propojeno</translation>
     </message>
     <message>
         <source>Staff type</source>
@@ -4857,7 +4857,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Staff linked to previous</source>
-        <translation>Notová osnova spojena s předchozí</translation>
+        <translation>Notová osnova propojena s předchozí</translation>
     </message>
 </context>
 <context>
@@ -6264,7 +6264,7 @@ se nezdařilo:</translation>
     </message>
     <message>
         <source>Linked</source>
-        <translation>Spojeno</translation>
+        <translation>Propojeno</translation>
     </message>
 </context>
 <context>
@@ -7200,6 +7200,10 @@ Vyberte, prosím, jiný název:</translation>
         <source>Cannot write into %1</source>
         <translation>Nelze zapisovat do %1</translation>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation>Tento notový zápis nelze uložit na internet. Opravte, prosím, poškozené takty a zkuste to znovu.</translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7399,6 +7403,10 @@ Vyberte, prosím, jiný název:</translation>
     <message>
         <source>new Palette</source>
         <translation>Nová paleta</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation>Jedna paleta</translation>
     </message>
 </context>
 <context>
@@ -7603,6 +7611,17 @@ Uložit před zavřením?</translation>
     <message>
         <source>Updated</source>
         <translation>Aktualizováno</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Hlas: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Doba trvání: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10394,6 +10413,10 @@ se nezdařil:</translation>
         <source>Check for new version of MuseScore</source>
         <translation>Podívat se po nové verzi MuseScore</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filtr</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10713,6 +10736,14 @@ Navštivte &lt;a href=&quot;http://musescore.org&quot;&gt;stránky MuseScore&lt;
         <source>File corrupted %1</source>
         <translation>Soubor poškozen %1</translation>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation>MuseScore: Chyba při nahrávání</translation>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation>Přesto se chcete pokusit o nahrání tohoto souboru?</translation>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10859,17 +10890,6 @@ Chcete ji nahradit?</translation>
     <message>
         <source>Tab 2</source>
         <translation>Tab 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Hlas: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Doba trvání: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -17247,10 +17267,6 @@ Takt není prázdný</translation>
     <message>
         <source>Shadow Note</source>
         <translation>Stínová nota</translation>
-    </message>
-    <message>
-        <source>Rubber Band</source>
-        <translation>Gumička</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>

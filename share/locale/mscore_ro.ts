@@ -7196,6 +7196,10 @@ alegeți un nume diferit:</translation>
         <source>Cannot write into %1</source>
         <translation>Nu se poate scrie în %1</translation>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7395,6 +7399,10 @@ alegeți un nume diferit:</translation>
     <message>
         <source>new Palette</source>
         <translation>Paletă Nouă</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7599,6 +7607,17 @@ Salvați înainte de a închide?</translation>
     <message>
         <source>Updated</source>
         <translation>Actualizat</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Vocea: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Durată: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10388,6 +10407,10 @@ a eșuat:</translation>
         <source>Check for new version of MuseScore</source>
         <translation>Verifică automat pentru noi versiuni MuseScore</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10708,6 +10731,14 @@ Vizitați &lt;a href=&quot;http://musescore.org&quot;&gt;website-ul MuseScore &l
         <source>File corrupted %1</source>
         <translation>Fișier corupt %1</translation>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10854,17 +10885,6 @@ Doriți să-l suprascrieți?</translation>
     <message>
         <source>Tab 2</source>
         <translation>Tabulator 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Vocea: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Durată: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -17242,10 +17262,6 @@ Măsura nu este vidă.</translation>
     <message>
         <source>Shadow Note</source>
         <translation>Notă Shadow</translation>
-    </message>
-    <message>
-        <source>Rubber Band</source>
-        <translation>Elastic de Cauciuc</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>

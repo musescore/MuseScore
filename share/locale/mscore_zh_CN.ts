@@ -3,7 +3,7 @@
     <name>AboutBox</name>
     <message>
         <source>About MuseScore</source>
-        <translation>关于MuseScore</translation>
+        <translation>关于 MuseScore</translation>
     </message>
     <message>
         <source>Copy revision number</source>
@@ -19,14 +19,22 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;浏览&lt;/span&gt; &lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 可获得新版本和更多信息。&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;通过&lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;捐赠&lt;/span&gt;&lt;/a&gt;支持 MuseScore&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;版权 &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer 等人。 &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;以 GPL 许可发布&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
     <name>AboutMusicXMLBox</name>
     <message>
         <source>About MusicXML</source>
-        <translation>关于MusicXML</translation>
+        <translation>关于 MusicXML</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -1631,7 +1639,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Strings Tuning:</source>
-        <translation type="unfinished"/>
+        <translation>弦乐调律</translation>
     </message>
     <message>
         <source>New String...</source>
@@ -1727,7 +1735,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Articulations, Ornaments</source>
-        <translation>装饰音和演奏记号</translation>
+        <translation>装饰音与演奏记号</translation>
     </message>
     <message>
         <source>Accidentals</source>
@@ -2403,7 +2411,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dotted</source>
-        <translation>附点</translation>
+        <translation>点线</translation>
     </message>
     <message>
         <source>Dash-dotted</source>
@@ -2910,7 +2918,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Update Range</source>
-        <translation type="unfinished"/>
+        <translation>更新范围</translation>
     </message>
     <message>
         <source>Direction</source>
@@ -2950,7 +2958,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Update range</source>
-        <translation type="unfinished"/>
+        <translation>更新范围</translation>
     </message>
     <message>
         <source>Reset Head type value</source>
@@ -3490,7 +3498,7 @@ space unit</extracomment>
     <name>InspectorFret</name>
     <message>
         <source>Ottava Inspector</source>
-        <translation type="unfinished"/>
+        <translation>八度记号查看器</translation>
     </message>
     <message>
         <source>Scale</source>
@@ -3556,7 +3564,7 @@ space unit</extracomment>
     <name>InspectorGroupElement</name>
     <message>
         <source>Element Group</source>
-        <translation type="unfinished"/>
+        <translation>元素组</translation>
     </message>
     <message>
         <source>Set Color</source>
@@ -3572,7 +3580,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Element Group Inspector</source>
-        <translation type="unfinished"/>
+        <translation>元素组查看器</translation>
     </message>
     <message>
         <source>Color</source>
@@ -3911,7 +3919,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line thickness</source>
-        <translation type="unfinished"/>
+        <translation>谱线宽度</translation>
     </message>
     <message>
         <source>Continuous</source>
@@ -3923,15 +3931,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dotted</source>
-        <translation>附点</translation>
+        <translation>点线</translation>
     </message>
     <message>
         <source>Dash-dotted</source>
-        <translation type="unfinished"/>
+        <translation>─‧─‧─‧ (虚线-点线组合)</translation>
     </message>
     <message>
         <source>Dash-dot-dotted</source>
-        <translation type="unfinished"/>
+        <translation>─‧‧─‧‧ (虚线、点线、点线组合)</translation>
     </message>
     <message>
         <source>Reset Line thickness value</source>
@@ -3974,7 +3982,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>To Coda</source>
-        <translation type="unfinished"/>
+        <translation>To Coda</translation>
     </message>
     <message>
         <source>Marker type</source>
@@ -4208,7 +4216,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Ottava Inspector</source>
-        <translation type="unfinished"/>
+        <translation>八度记号查看器</translation>
     </message>
     <message>
         <source>Reset Type value</source>
@@ -4314,7 +4322,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line type</source>
-        <translation type="unfinished"/>
+        <translation>线条类型</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4326,7 +4334,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dotted</source>
-        <translation>附点</translation>
+        <translation>点线</translation>
     </message>
     <message>
         <source>Dashed</source>
@@ -4560,11 +4568,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Number type</source>
-        <translation type="unfinished"/>
+        <translation>数字类型</translation>
     </message>
     <message>
         <source>Bracket type</source>
-        <translation type="unfinished"/>
+        <translation>括号类型</translation>
     </message>
 </context>
 <context>
@@ -4867,7 +4875,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add time signature to palette</source>
-        <translation type="unfinished"/>
+        <translation>将拍号添加到面板</translation>
     </message>
 </context>
 <context>
@@ -5096,15 +5104,15 @@ space unit</extracomment>
     <name>LoginDialog</name>
     <message>
         <source>Log in to MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>登录到 MuseScore</translation>
     </message>
     <message>
         <source>Username or email</source>
-        <translation type="unfinished"/>
+        <translation>用户名或电子邮件</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"/>
+        <translation>密码</translation>
     </message>
 </context>
 <context>
@@ -5344,7 +5352,7 @@ Would you like to locate %2 now?</source>
     <name>MasterPalette</name>
     <message>
         <source>MuseScore: Master Palette</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore：主面板</translation>
     </message>
     <message>
         <source>Grace Notes</source>
@@ -5380,7 +5388,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Articulations &amp; Ornaments</source>
-        <translation type="unfinished"/>
+        <translation>装饰音与演奏记号</translation>
     </message>
     <message>
         <source>Accidentals</source>
@@ -5432,7 +5440,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
-        <translation type="unfinished"/>
+        <translation>风笛装饰音</translation>
     </message>
     <message>
         <source>Repeats &amp; Jumps</source>
@@ -5575,11 +5583,11 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Go to previous measure</source>
-        <translation type="unfinished"/>
+        <translation>到上一小节</translation>
     </message>
     <message>
         <source>Go to next measure</source>
-        <translation type="unfinished"/>
+        <translation>到下一小节</translation>
     </message>
     <message>
         <source>Break multimeasure rest</source>
@@ -6309,11 +6317,11 @@ failed: </source>
     </message>
     <message>
         <source>Error while getting user info. Please try again</source>
-        <translation type="unfinished"/>
+        <translation>获取用户信息时出错。请再试一遍。</translation>
     </message>
     <message>
         <source>Error while getting user info: %1</source>
-        <translation type="unfinished"/>
+        <translation>获取用户信息时出错：%1</translation>
     </message>
     <message>
         <source>An error occurred during the file transfer. Please try again</source>
@@ -6333,11 +6341,11 @@ failed: </source>
     </message>
     <message>
         <source>Please check your Internet connection</source>
-        <translation type="unfinished"/>
+        <translation>请检查您的网络连接。</translation>
     </message>
     <message>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>您未正确设置您的设备的本地时间，请检查并将其设置好。我们建议您将时间/时区设为自动。如果您仍然无法登录，请&lt;a href=&quot;%1&quot;&gt;联系我们&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -6406,11 +6414,11 @@ failed: </source>
     </message>
     <message>
         <source>Unable to initialize MP3 stream</source>
-        <translation type="unfinished"/>
+        <translation>无法初始化MP3流</translation>
     </message>
     <message>
         <source>Unable to open target file for writing</source>
-        <translation type="unfinished"/>
+        <translation>无法打开目标文件进行写入</translation>
     </message>
     <message>
         <source>Error %1 returned from MP3 encoder</source>
@@ -6616,11 +6624,11 @@ Do you want to replace it?
     </message>
     <message>
         <source>MuseScore: Save Selection</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore：保存选区</translation>
     </message>
     <message>
         <source>MuseScore: Save Selected</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore：保存选中内容</translation>
     </message>
     <message>
         <source>Images (*.jpg *.jpeg *.png);;All (*)</source>
@@ -6858,7 +6866,7 @@ Restore session?</source>
     </message>
     <message>
         <source>Undo Changes</source>
-        <translation type="unfinished"/>
+        <translation>撤销更改</translation>
     </message>
     <message>
         <source>MuseScore: Read Workspace Name</source>
@@ -6867,7 +6875,8 @@ Restore session?</source>
     <message>
         <source>'%1' does already exist,
 please choose a different name:</source>
-        <translation type="unfinished"/>
+        <translation>&apos;%1&apos; 已经存在
+请使用一个不同的名字：</translation>
     </message>
     <message>
         <source>Ogg Audio File (*.ogg);;All (*)</source>
@@ -7009,7 +7018,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>System text</source>
-        <translation type="unfinished"/>
+        <translation>谱表组文字</translation>
     </message>
     <message>
         <source>Rehearsal mark</source>
@@ -7065,7 +7074,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore Styles (*.mss)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore 样式(*.mss)</translation>
     </message>
     <message>
         <source>MuseScore Plugin (*.qml)</source>
@@ -7121,19 +7130,19 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>手册</translation>
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation type="unfinished"/>
+        <translation>关于(&amp;A)...</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished"/>
+        <translation>关于 &amp;Qt...</translation>
     </message>
     <message>
         <source>About &amp;MusicXML...</source>
-        <translation type="unfinished"/>
+        <translation>关于 &amp;MusicXML...</translation>
     </message>
     <message>
         <source>Image Capture</source>
@@ -7169,6 +7178,10 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Cannot write into %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7273,7 +7286,7 @@ please choose a different name:</source>
     <name>Ms::NoEffectGui</name>
     <message>
         <source>No Plugin</source>
-        <translation type="unfinished"/>
+        <translation>无插件</translation>
     </message>
 </context>
 <context>
@@ -7369,6 +7382,10 @@ please choose a different name:</source>
     </message>
     <message>
         <source>new Palette</source>
+        <translation>新面板</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7376,11 +7393,11 @@ please choose a different name:</source>
     <name>Ms::PaletteBoxButton</name>
     <message>
         <source>Palette Properties...</source>
-        <translation type="unfinished"/>
+        <translation>面板属性...</translation>
     </message>
     <message>
         <source>Insert New Palette...</source>
-        <translation type="unfinished"/>
+        <translation>插入新面板...</translation>
     </message>
     <message>
         <source>Move Palette Up</source>
@@ -7396,11 +7413,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Save Palette</source>
-        <translation type="unfinished"/>
+        <translation>保存面板</translation>
     </message>
     <message>
         <source>Load Palette</source>
-        <translation type="unfinished"/>
+        <translation>装入面板</translation>
     </message>
     <message>
         <source>Delete Palette</source>
@@ -7441,7 +7458,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>手册</translation>
     </message>
     <message>
         <source>MuseScore Plugin Creator</source>
@@ -7560,7 +7577,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>No update</source>
-        <translation type="unfinished"/>
+        <translation>无更新</translation>
     </message>
     <message>
         <source>Updating</source>
@@ -7572,6 +7589,17 @@ Save before closing?</source>
     </message>
     <message>
         <source>Updated</source>
+        <translation>已更新</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>声部: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7869,7 +7897,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>System Text Properties...</source>
-        <translation type="unfinished"/>
+        <translation>谱表组文字属性...</translation>
     </message>
     <message>
         <source>Resolution (%1 DPI)...</source>
@@ -8022,7 +8050,7 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>MuseScore: System Text Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore：谱表组文字属性</translation>
     </message>
     <message>
         <source>MuseScore: Staff Text Properties</source>
@@ -8126,7 +8154,8 @@ Please select a range of measures to join and try again</source>
     <message>
         <source>'%1' does already exist,
 please choose a different name:</source>
-        <translation type="unfinished"/>
+        <translation>&apos;%1&apos; 已经存在
+请使用一个不同的名字：</translation>
     </message>
     <message>
         <source>Apply to all Parts</source>
@@ -8213,35 +8242,35 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Creative Commons Attribution</source>
-        <translation type="unfinished"/>
+        <translation>知识共享署名</translation>
     </message>
     <message>
         <source>Creative Commons Attribution Share Alike</source>
-        <translation type="unfinished"/>
+        <translation>知识共享署名-相同方式共享</translation>
     </message>
     <message>
         <source>Creative Commons Attribution No Derivative Works</source>
-        <translation type="unfinished"/>
+        <translation>知识共享署名-相同方式共享-禁止演绎</translation>
     </message>
     <message>
         <source>Creative Commons Attribution Noncommercial</source>
-        <translation type="unfinished"/>
+        <translation>知识共享署名-非商业性使用</translation>
     </message>
     <message>
         <source>Creative Commons Attribution Noncommercial Share Alike</source>
-        <translation type="unfinished"/>
+        <translation>知识共享署名-非商业性使用-相同方式共享</translation>
     </message>
     <message>
         <source>Creative Commons Attribution Noncommercial Non Derivate Works</source>
-        <translation type="unfinished"/>
+        <translation>知识共享署名-非商业性使用-禁止演绎</translation>
     </message>
     <message>
         <source>Public Domain</source>
-        <translation type="unfinished"/>
+        <translation>公有领域</translation>
     </message>
     <message>
         <source>Creative Commons Zero</source>
-        <translation type="unfinished"/>
+        <translation>知识共享-公有领域</translation>
     </message>
     <message>
         <source>Missing title</source>
@@ -8397,7 +8426,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert title here</source>
-        <translation type="unfinished"/>
+        <translation>在此插入标题</translation>
     </message>
     <message>
         <source>Subtitle</source>
@@ -8405,7 +8434,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert subtitle here</source>
-        <translation type="unfinished"/>
+        <translation>在此插入副标题</translation>
     </message>
     <message>
         <source>Composer</source>
@@ -8413,7 +8442,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert composer&apos;s name here</source>
-        <translation type="unfinished"/>
+        <translation>在此插入作曲者名</translation>
     </message>
     <message>
         <source>Lyricist</source>
@@ -8421,7 +8450,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert lyricist&apos;s name here</source>
-        <translation type="unfinished"/>
+        <translation>在此插入作词者名</translation>
     </message>
     <message>
         <source>Copyright</source>
@@ -8429,7 +8458,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert copyright here</source>
-        <translation type="unfinished"/>
+        <translation>在此插入版权信息</translation>
     </message>
 </context>
 <context>
@@ -8709,7 +8738,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
-        <translation type="unfinished"/>
+        <translation>风笛装饰音</translation>
     </message>
     <message>
         <source>Frames &amp;&amp; Measures</source>
@@ -8725,7 +8754,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore: Writing Palette File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore：写入面板文件</translation>
     </message>
     <message>
         <source>Writing Palette File
@@ -9126,7 +9155,7 @@ failed: </source>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>手册</translation>
     </message>
     <message>
         <source>Undo</source>
@@ -9146,7 +9175,7 @@ failed: </source>
     </message>
     <message>
         <source>Close Plugin Creator</source>
-        <translation type="unfinished"/>
+        <translation>关闭插件创建器</translation>
     </message>
 </context>
 <context>
@@ -9224,11 +9253,11 @@ failed: </source>
     </message>
     <message>
         <source>Icon size:</source>
-        <translation type="unfinished"/>
+        <translation>图标大小：</translation>
     </message>
     <message>
         <source>Animations</source>
-        <translation type="unfinished"/>
+        <translation>动画</translation>
     </message>
     <message>
         <source>Canvas</source>
@@ -9600,7 +9629,7 @@ failed: </source>
     </message>
     <message>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>附点</translation>
     </message>
     <message>
         <source>Tie</source>
@@ -9644,11 +9673,11 @@ failed: </source>
     </message>
     <message>
         <source>Shortest note:</source>
-        <translation type="unfinished"/>
+        <translation>最短音符：</translation>
     </message>
     <message>
         <source>Double augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>双附点</translation>
     </message>
     <message>
         <source>Save every:</source>
@@ -9797,7 +9826,7 @@ failed: </source>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the plugin folder</source>
-        <translation type="unfinished"/>
+        <translation>打开文件夹对话框，以选择插件文件夹</translation>
     </message>
     <message>
         <source>Image folder</source>
@@ -10129,11 +10158,11 @@ failed: </source>
     </message>
     <message>
         <source>Shortest note</source>
-        <translation type="unfinished"/>
+        <translation>最短音符</translation>
     </message>
     <message>
         <source>Choose the shortest note value</source>
-        <translation type="unfinished"/>
+        <translation>选择最短音符值</translation>
     </message>
     <message>
         <source>Export Tab</source>
@@ -10337,7 +10366,7 @@ failed: </source>
     </message>
     <message>
         <source>Plugins:</source>
-        <translation type="unfinished"/>
+        <translation>插件：</translation>
     </message>
     <message>
         <source>SoundFonts:</source>
@@ -10345,6 +10374,10 @@ failed: </source>
     </message>
     <message>
         <source>Check for new version of MuseScore</source>
+        <translation>检查 MuseScore 的新版本</translation>
+    </message>
+    <message>
+        <source>Filter</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -10648,6 +10681,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>File corrupted %1</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10665,7 +10706,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Save Album</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore：保存专辑</translation>
     </message>
     <message>
         <source>Write Album failed: </source>
@@ -10793,17 +10834,6 @@ Do you want to overwrite it?</source>
     <message>
         <source>Tab 2</source>
         <translation>Tab 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>声部: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -11448,7 +11478,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Enable text frame</source>
-        <translation type="unfinished"/>
+        <translation>允许文本框</translation>
     </message>
     <message>
         <source>Draw circled frame</source>
@@ -11600,7 +11630,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Repeat Text</source>
-        <translation>反复记号 文字</translation>
+        <translation>反复文字</translation>
     </message>
     <message>
         <source>Volta</source>
@@ -11685,7 +11715,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Value:</source>
-        <translation type="unfinished"/>
+        <translation>值：</translation>
     </message>
     <message>
         <source>/</source>
@@ -11729,7 +11759,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Add time signature to palette</source>
-        <translation type="unfinished"/>
+        <translation>将拍号添加到面板</translation>
     </message>
 </context>
 <context>
@@ -11764,11 +11794,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Global value:</source>
-        <translation type="unfinished"/>
+        <translation>全局值：</translation>
     </message>
     <message>
         <source>Actual value:</source>
-        <translation type="unfinished"/>
+        <translation>实际值：</translation>
     </message>
 </context>
 <context>
@@ -11863,7 +11893,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Hint: You can also add or remove measures after creation of the score.</source>
-        <translation type="unfinished"/>
+        <translation>提示：您也可以在创建乐谱后再添加或删除小节。</translation>
     </message>
 </context>
 <context>
@@ -12222,7 +12252,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Relation:</source>
-        <translation type="unfinished"/>
+        <translation>关系：</translation>
     </message>
     <message>
         <source>Relation</source>
@@ -12277,7 +12307,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Update the existing score </source>
-        <translation type="unfinished"/>
+        <translation>Update the existing score </translation>
     </message>
     <message>
         <source>Make this score private</source>
@@ -12577,7 +12607,7 @@ failed: </source>
     </message>
     <message>
         <source>Save Selection...</source>
-        <translation type="unfinished"/>
+        <translation>保存选区...</translation>
     </message>
     <message>
         <source>Save current selection as new score</source>
@@ -13209,19 +13239,19 @@ failed: </source>
     </message>
     <message>
         <source>Ottava 8va</source>
-        <translation type="unfinished"/>
+        <translation>高八度记号</translation>
     </message>
     <message>
         <source>Add ottava 8va</source>
-        <translation type="unfinished"/>
+        <translation>添加高八度记号</translation>
     </message>
     <message>
         <source>Ottava 8vb</source>
-        <translation type="unfinished"/>
+        <translation>低八度记号</translation>
     </message>
     <message>
         <source>Add ottava 8vb</source>
-        <translation type="unfinished"/>
+        <translation>添加低八度记号</translation>
     </message>
     <message>
         <source>Escape</source>
@@ -13281,11 +13311,11 @@ failed: </source>
     </message>
     <message>
         <source>Insert Text Frame</source>
-        <translation type="unfinished"/>
+        <translation>插入文本框</translation>
     </message>
     <message>
         <source>Append Text Frame</source>
-        <translation type="unfinished"/>
+        <translation>追加文本框</translation>
     </message>
     <message>
         <source>Insert Vertical Frame</source>
@@ -13401,11 +13431,11 @@ failed: </source>
     </message>
     <message>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>附点</translation>
     </message>
     <message>
         <source>Double augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>双附点</translation>
     </message>
     <message>
         <source>Tie</source>
@@ -13601,7 +13631,7 @@ failed: </source>
     </message>
     <message>
         <source>Add frame text</source>
-        <translation type="unfinished"/>
+        <translation>添加框文本</translation>
     </message>
     <message>
         <source>Title</source>
@@ -14097,11 +14127,11 @@ failed: </source>
     </message>
     <message>
         <source>Master Palette...</source>
-        <translation type="unfinished"/>
+        <translation>主面板...</translation>
     </message>
     <message>
         <source>Show master palette</source>
-        <translation type="unfinished"/>
+        <translation>显示主面板</translation>
     </message>
     <message>
         <source>Toggle View Mode</source>
@@ -14449,7 +14479,7 @@ failed: </source>
     </message>
     <message>
         <source>Insert text frame</source>
-        <translation type="unfinished"/>
+        <translation>插入文本框</translation>
     </message>
     <message>
         <source>Insert vertical frame</source>
@@ -14469,7 +14499,7 @@ failed: </source>
     </message>
     <message>
         <source>Save score on MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>在 MuseScore.com 上保存乐谱</translation>
     </message>
     <message>
         <source>Explode</source>
@@ -14533,11 +14563,11 @@ failed: </source>
     </message>
     <message>
         <source>Plugin Creator...</source>
-        <translation type="unfinished"/>
+        <translation>插件创建器...</translation>
     </message>
     <message>
         <source>Plugin Manager...</source>
-        <translation type="unfinished"/>
+        <translation>插件管理器...</translation>
     </message>
     <message>
         <source>Resource Manager...</source>
@@ -14545,7 +14575,7 @@ failed: </source>
     </message>
     <message>
         <source>Add/Remove Line Breaks...</source>
-        <translation type="unfinished"/>
+        <translation>添加/删除换行...</translation>
     </message>
     <message>
         <source>File: Open</source>
@@ -14565,7 +14595,7 @@ failed: </source>
     </message>
     <message>
         <source>Save selection</source>
-        <translation type="unfinished"/>
+        <translation>保存选区</translation>
     </message>
     <message>
         <source>File: Save a copy</source>
@@ -14741,7 +14771,7 @@ failed: </source>
     </message>
     <message>
         <source>Append text frame</source>
-        <translation type="unfinished"/>
+        <translation>追加文本框</translation>
     </message>
     <message>
         <source>Insert fretboard diagram frame</source>
@@ -14825,19 +14855,19 @@ failed: </source>
     </message>
     <message>
         <source>Augmentation Dot</source>
-        <translation type="unfinished"/>
+        <translation>附点</translation>
     </message>
     <message>
         <source>Note duration: Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>音符时长：附点</translation>
     </message>
     <message>
         <source>Double Augmentation Dot</source>
-        <translation type="unfinished"/>
+        <translation>双附点</translation>
     </message>
     <message>
         <source>Note duration: Double augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>音符时长：双附点</translation>
     </message>
     <message>
         <source>Note duration: Tie</source>
@@ -15157,11 +15187,11 @@ failed: </source>
     </message>
     <message>
         <source>Plugin creator</source>
-        <translation type="unfinished"/>
+        <translation>插件创建器</translation>
     </message>
     <message>
         <source>Plugin manager</source>
-        <translation type="unfinished"/>
+        <translation>插件管理器</translation>
     </message>
     <message>
         <source>Resource manager</source>
@@ -15369,7 +15399,7 @@ failed: </source>
     </message>
     <message>
         <source>Add/remove line breaks</source>
-        <translation type="unfinished"/>
+        <translation>添加/删除换行</translation>
     </message>
     <message>
         <source>Resequence rehearsal marks</source>
@@ -17177,10 +17207,6 @@ Measure is not empty</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Rubber Band</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Tab Duration Symbol</source>
         <translation type="unfinished"/>
     </message>
@@ -17222,7 +17248,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Text Frame</source>
-        <translation type="unfinished"/>
+        <translation>文本框</translation>
     </message>
     <message>
         <source>Fretboard Diagram Frame</source>
@@ -17230,7 +17256,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Bagpipe Embellishment</source>
-        <translation type="unfinished"/>
+        <translation>风笛装饰音</translation>
     </message>
     <message>
         <source>Fretboard Diagram</source>
@@ -17446,7 +17472,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>XCircle</source>
-        <translation type="unfinished"/>
+        <translation>圆圈带叉</translation>
     </message>
     <message>
         <source>Do</source>
@@ -17546,7 +17572,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Articulations</source>
-        <translation type="unfinished"/>
+        <translation>装饰音</translation>
     </message>
     <message>
         <source>Slurs</source>

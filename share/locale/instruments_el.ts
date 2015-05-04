@@ -2457,12 +2457,6 @@ Bass Huang Harmonica</extracomment>
         <translation>Ευφώνιο Μπάγκλ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="699"/>
-        <source>Eu. Bu.</source>
-        <extracomment>Euphonium Bugle</extracomment>
-        <translation>Eu. Bu.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="700"/>
         <source>Mellophone Bugle</source>
         <translation>Μελόφωνο Μπάγκλ</translation>
@@ -2641,11 +2635,6 @@ Congas</extracomment>
         <translation>Trb.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="751"/>
-        <source>Trombone (Treble Clef)</source>
-        <translation>Τρομπόνι. (Κλειδί του Σολ)</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="752"/>
         <source>Soprano Trombone</source>
         <translation>Σοπράνο Τρομπόνι</translation>
@@ -2718,11 +2707,50 @@ Congas</extracomment>
         <translation>Ευφώνιο </translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="777"/>
+        <source>Tuba</source>
+        <translation>Τούμπα</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1020"/>
+        <source>Tu.</source>
+        <extracomment>Tubo</extracomment>
+        <translation>Tu.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="780"/>
+        <source>F Tuba</source>
+        <translation>Φα Τούμπα</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4"/>
+        <source>Early music</source>
+        <translation>Παλαιά μουσική</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="61"/>
+        <location filename="../instruments/instrumentsxml.h" line="63"/>
+        <source>B♭ Fife</source>
+        <extracomment>B♭ Fife</extracomment>
+        <translation>B♭ Fife</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="699"/>
+        <source>Euph. Bu.</source>
+        <extracomment>Euphonium Bugle</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="751"/>
+        <source>Trombone (Treble Clef)</source>
+        <translation>Τρομπόνι. (Κλειδί του Σολ)</translation>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="772"/>
         <location filename="../instruments/instrumentsxml.h" line="775"/>
-        <source>Eu.</source>
+        <source>Euph.</source>
         <extracomment>Euphonium</extracomment>
-        <translation>Eu.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="776"/>
@@ -2730,23 +2758,10 @@ Congas</extracomment>
         <translation>Ευφώνιο (Κλειδί του Σολ)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="777"/>
-        <source>Tuba</source>
-        <translation>Τούμπα</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="779"/>
-        <location filename="../instruments/instrumentsxml.h" line="1020"/>
-        <source>Tu.</source>
-        <extracomment>Tuba
-----------
-Tubo</extracomment>
-        <translation>Tu.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="780"/>
-        <source>F Tuba</source>
-        <translation>Φα Τούμπα</translation>
+        <source>Tba.</source>
+        <extracomment>Tuba</extracomment>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="782"/>
@@ -4936,6 +4951,11 @@ Acoustic Guitar</extracomment>
         <translation>A. Lt.</translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="1438"/>
+        <source>Mandolin [Tablature]</source>
+        <translation>Μαντολίνο [Ταμπλατούρα]</translation>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="1484"/>
         <source>5-str. Electric Bass</source>
         <translation>5χορδο Ηλεκτρικό Μπάσο</translation>
@@ -4946,7 +4966,67 @@ Acoustic Guitar</extracomment>
         <translation>5χορδο Ηλεκτρικό Μπάσο [Ταμπλατούρα]</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1527"/>
+        <location filename="../instruments/instrumentsxml.h" line="1489"/>
+        <source>Erhu</source>
+        <translation>Erhu</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1491"/>
+        <source>Eh.</source>
+        <extracomment>Erhu</extracomment>
+        <translation>Eh.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1495"/>
+        <source>Violins</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1497"/>
+        <source>Vlns.</source>
+        <extracomment>Violins</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1501"/>
+        <source>Violas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1503"/>
+        <source>Vlas.</source>
+        <extracomment>Violas</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1507"/>
+        <source>Violoncellos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1509"/>
+        <source>Vlcs.</source>
+        <extracomment>Violoncellos</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1513"/>
+        <source>Contrabasses</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1515"/>
+        <source>Cbs.</source>
+        <extracomment>Contrabasses</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1517"/>
+        <source>Db.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1536"/>
         <source>Viola da gamba (Tablature)</source>
         <translation>Βιόλα ντα γκάμπα [Ταμπλατούρα]</translation>
     </message>
@@ -4954,18 +5034,6 @@ Acoustic Guitar</extracomment>
         <location filename="../instruments/instrumentsxml.h" line="1429"/>
         <source>Archlute</source>
         <translation>Archlute</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4"/>
-        <source>Early music</source>
-        <translation>Παλαιά μουσική</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="61"/>
-        <location filename="../instruments/instrumentsxml.h" line="63"/>
-        <source>B♭ Fife</source>
-        <extracomment>B♭ Fife</extracomment>
-        <translation>B♭ Fife</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1432"/>
@@ -4988,11 +5056,6 @@ Acoustic Guitar</extracomment>
         <source>Mdn.</source>
         <extracomment>Mandolin</extracomment>
         <translation>Mdn.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1438"/>
-        <source>Mandolin [Tablature]</source>
-        <translation>Μαντολίνο [Ταμπλατούρα]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1439"/>
@@ -5160,129 +5223,106 @@ Tenor Mandola</extracomment>
         <translation>Έγχορδα</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1489"/>
-        <source>Erhu</source>
-        <translation>Erhu</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1491"/>
-        <source>Eh.</source>
-        <extracomment>Erhu</extracomment>
-        <translation>Eh.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1492"/>
-        <location filename="../instruments/instrumentsxml.h" line="1495"/>
-        <source>String Section</source>
-        <translation>Ομάδα Εγχόρδων</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1494"/>
-        <source>Str.</source>
-        <extracomment>String Section</extracomment>
-        <translation>Str.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1496"/>
         <source>Violin</source>
         <translation>Βιολί</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1498"/>
+        <location filename="../instruments/instrumentsxml.h" line="1494"/>
         <source>Vln.</source>
         <extracomment>Violin</extracomment>
         <translation>Vln.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1499"/>
+        <location filename="../instruments/instrumentsxml.h" line="1498"/>
         <source>Viola</source>
         <translation>Βιόλα</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1501"/>
+        <location filename="../instruments/instrumentsxml.h" line="1500"/>
         <source>Vla.</source>
         <extracomment>Viola</extracomment>
         <translation>Vla.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1502"/>
+        <location filename="../instruments/instrumentsxml.h" line="1504"/>
         <source>Violoncello</source>
         <translation>Βιολοντσέλο</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1504"/>
+        <location filename="../instruments/instrumentsxml.h" line="1506"/>
         <source>Vlc.</source>
         <extracomment>Violoncello</extracomment>
         <translation>Vlc.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1505"/>
+        <location filename="../instruments/instrumentsxml.h" line="1510"/>
         <source>Contrabass</source>
         <translation>Κοντραμπάσο</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1507"/>
+        <location filename="../instruments/instrumentsxml.h" line="1512"/>
         <source>Cb.</source>
         <extracomment>Contrabass</extracomment>
         <translation>Cb.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1508"/>
+        <location filename="../instruments/instrumentsxml.h" line="1516"/>
         <source>Double Bass</source>
         <translation>Κοντραμπάσο</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1509"/>
+        <location filename="../instruments/instrumentsxml.h" line="1518"/>
         <source>Pardessus de viole</source>
         <translation>Βιόλα ντα γκάμπα Pardessus</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1511"/>
+        <location filename="../instruments/instrumentsxml.h" line="1520"/>
         <source>Pds. v.</source>
         <extracomment>Pardessus de viole</extracomment>
         <translation>Pds. v.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1512"/>
+        <location filename="../instruments/instrumentsxml.h" line="1521"/>
         <source>Treble Viol</source>
         <translation>Βιόλα ντα γκάμπα Σοπράνο</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1514"/>
+        <location filename="../instruments/instrumentsxml.h" line="1523"/>
         <source>Tr. vl.</source>
         <extracomment>Treble Viol</extracomment>
         <translation>Tr. vl.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1515"/>
+        <location filename="../instruments/instrumentsxml.h" line="1524"/>
         <source>Alto Viol</source>
         <translation>Βιόλα ντα γκάμπα Άλτο</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1517"/>
+        <location filename="../instruments/instrumentsxml.h" line="1526"/>
         <source>A. Vl.</source>
         <extracomment>Alto Viol</extracomment>
         <translation>A. Vl.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1518"/>
+        <location filename="../instruments/instrumentsxml.h" line="1527"/>
         <source>Tenor Viol</source>
         <translation>Βιόλα ντα γκάμπα Τενόρο</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1520"/>
+        <location filename="../instruments/instrumentsxml.h" line="1529"/>
         <source>T. Vl.</source>
         <extracomment>Tenor Viol</extracomment>
         <translation>T. Vl.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1521"/>
+        <location filename="../instruments/instrumentsxml.h" line="1530"/>
         <source>Viola da gamba</source>
         <translation>Βιόλα ντα γκάμπα </translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1523"/>
-        <location filename="../instruments/instrumentsxml.h" line="1526"/>
+        <location filename="../instruments/instrumentsxml.h" line="1532"/>
+        <location filename="../instruments/instrumentsxml.h" line="1535"/>
         <source>Vla. d. g.</source>
         <extracomment>Viola da gamba
 ----------
@@ -5290,18 +5330,18 @@ Viola da gamba (Tab)</extracomment>
         <translation>Vla. d. g.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1524"/>
+        <location filename="../instruments/instrumentsxml.h" line="1533"/>
         <source>Viola da gamba (Tab)</source>
         <translation>Βιόλα ντα γκάμπα (Tab)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1528"/>
+        <location filename="../instruments/instrumentsxml.h" line="1537"/>
         <source>Violone</source>
         <translation>Βιολόνε</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1530"/>
-        <location filename="../instruments/instrumentsxml.h" line="1533"/>
+        <location filename="../instruments/instrumentsxml.h" line="1539"/>
+        <location filename="../instruments/instrumentsxml.h" line="1542"/>
         <source>Vne.</source>
         <extracomment>Violone
 ----------
@@ -5309,7 +5349,7 @@ D Violone</extracomment>
         <translation>Vne.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1531"/>
+        <location filename="../instruments/instrumentsxml.h" line="1540"/>
         <source>D Violone</source>
         <translation>Ρε Βιολόνε</translation>
     </message>

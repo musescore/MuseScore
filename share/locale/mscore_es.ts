@@ -2287,7 +2287,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation>Diagramas de Acorde</translation>
+        <translation>Diagramas de acorde</translation>
     </message>
     <message>
         <source>Fret offset number font size:</source>
@@ -5456,7 +5456,7 @@ Solo tiene que hacer esto una vez.
     </message>
     <message>
         <source>Repeats &amp; Jumps</source>
-        <translation>Repeticiones y Saltos</translation>
+        <translation>Repeticiones y saltos</translation>
     </message>
 </context>
 <context>
@@ -7196,6 +7196,10 @@ escoja un nombre distinto:</translation>
         <source>Cannot write into %1</source>
         <translation>No se puede escribir en %1</translation>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation>Esta partitura no puede guardarse online. Por favor arregle los compases corruptos y pruebe de nuevo.</translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7395,6 +7399,10 @@ escoja un nombre distinto:</translation>
     <message>
         <source>new Palette</source>
         <translation>nueva paleta</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation>Panel individual</translation>
     </message>
 </context>
 <context>
@@ -7599,6 +7607,17 @@ Save before closing?</source>
     <message>
         <source>Updated</source>
         <translation>Actualizado</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Voz: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Duración: %2, %3</translation>
     </message>
 </context>
 <context>
@@ -8616,7 +8635,7 @@ elija un nombre distinto:</translation>
     <name>Palette</name>
     <message>
         <source>Beam Properties</source>
-        <translation>Propiedades de Agrupación</translation>
+        <translation>Propiedades de agrupación</translation>
     </message>
     <message>
         <source>Dynamics</source>
@@ -8800,7 +8819,7 @@ falló:</translation>
     </message>
     <message>
         <source>Repeats &amp;&amp; Jumps</source>
-        <translation>Repeticiones &amp;&amp; Saltos</translation>
+        <translation>Repeticiones y saltos</translation>
     </message>
     <message>
         <source>Normal barline</source>
@@ -8836,7 +8855,7 @@ falló:</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation>Diagramas de Acorde</translation>
+        <translation>Diagramas de acorde</translation>
     </message>
 </context>
 <context>
@@ -10388,6 +10407,10 @@ falló:</translation>
         <source>Check for new version of MuseScore</source>
         <translation>Buscar nuevas versiones de MuseScore</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filtro</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10708,6 +10731,14 @@ Visite el &lt;a href=&quot;http://musescore.org/es&quot;&gt;sitio web de MuseSco
         <source>File corrupted %1</source>
         <translation>Archivo corrupto %1</translation>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation>MuseScore : Error de carga</translation>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation>¿Desea abrir este archivo de todas formas?</translation>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10854,17 +10885,6 @@ Do you want to overwrite it?</source>
     <message>
         <source>Tab 2</source>
         <translation>Tablatura 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Voz: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Duración: %2, %3</translation>
     </message>
 </context>
 <context>
@@ -17244,10 +17264,6 @@ El compás no está vacio</translation>
         <translation>Nota fantasma</translation>
     </message>
     <message>
-        <source>Rubber Band</source>
-        <translation>Banda elástica</translation>
-    </message>
-    <message>
         <source>Tab Duration Symbol</source>
         <translation>Símbolo de duración de tablatura</translation>
     </message>
@@ -17653,7 +17669,7 @@ El compás no está vacio</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation>Diagramas de Acorde</translation>
+        <translation>Diagramas de acorde</translation>
     </message>
     <message>
         <source>Breath Marks</source>

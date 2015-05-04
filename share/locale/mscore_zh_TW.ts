@@ -5365,7 +5365,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Breaths &amp; Pauses</source>
-        <translation type="unfinished"/>
+        <translation>呼吸與停頓</translation>
     </message>
     <message>
         <source>Brackets</source>
@@ -5409,7 +5409,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Frames &amp; Measures</source>
-        <translation type="unfinished"/>
+        <translation>框架與小節</translation>
     </message>
     <message>
         <source>Symbols</source>
@@ -5417,11 +5417,11 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Arpeggios &amp; Glissandi</source>
-        <translation type="unfinished"/>
+        <translation>琶音與滑音</translation>
     </message>
     <message>
         <source>Breaks &amp; Spacers</source>
-        <translation type="unfinished"/>
+        <translation>換行與空白</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
@@ -5429,7 +5429,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Repeats &amp; Jumps</source>
-        <translation type="unfinished"/>
+        <translation>反覆與跳躍</translation>
     </message>
 </context>
 <context>
@@ -6741,11 +6741,11 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>Page View</source>
-        <translation type="unfinished"/>
+        <translation>分頁檢視</translation>
     </message>
     <message>
         <source>Continuous View</source>
-        <translation type="unfinished"/>
+        <translation>連續檢視</translation>
     </message>
     <message>
         <source>Concert Pitch</source>
@@ -6943,7 +6943,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>View Mode</source>
-        <translation type="unfinished"/>
+        <translation>檢視模式</translation>
     </message>
     <message>
         <source>Swing</source>
@@ -7157,6 +7157,10 @@ please choose a different name:</source>
         <source>Cannot write into %1</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7355,6 +7359,10 @@ please choose a different name:</source>
     </message>
     <message>
         <source>new Palette</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Single Palette</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7558,6 +7566,17 @@ Save before closing?</source>
     </message>
     <message>
         <source>Updated</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8268,11 +8287,11 @@ please choose a different name:</source>
     <name>Ms::Workspace</name>
     <message>
         <source>Advanced</source>
-        <translation type="unfinished"/>
+        <translation>進階</translation>
     </message>
     <message>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>基本</translation>
     </message>
 </context>
 <context>
@@ -8689,7 +8708,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Arpeggios &amp;&amp; Glissandi</source>
-        <translation type="unfinished"/>
+        <translation>琶音與滑音</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
@@ -9272,7 +9291,7 @@ failed: </source>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>檢視</translation>
     </message>
     <message>
         <source>default scale for new score views</source>
@@ -10331,6 +10350,10 @@ failed: </source>
         <source>Check for new version of MuseScore</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10632,6 +10655,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>File corrupted %1</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10774,17 +10805,6 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Tab 2</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -17159,10 +17179,6 @@ Measure is not empty</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Rubber Band</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Tab Duration Symbol</source>
         <translation type="unfinished"/>
     </message>
@@ -17463,7 +17479,7 @@ Measure is not empty</source>
     <name>plugins_directory</name>
     <message>
         <source>Plugins</source>
-        <translation type="unfinished"/>
+        <translation>外掛</translation>
     </message>
 </context>
 <context>

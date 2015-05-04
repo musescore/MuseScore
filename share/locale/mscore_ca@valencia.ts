@@ -19,7 +19,15 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Ves a&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; per vore noves versions i més informacio.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Apoya MuseScore en &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;la teua donacio&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Difòs baix la llicencia GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -289,7 +297,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Break lines every</source>
-        <translation>Traure tots els bots de llínea</translation>
+        <translation>Bots de llínea cada</translation>
     </message>
     <message>
         <source>Number of measures</source>
@@ -316,7 +324,7 @@ p, li { white-space: pre-wrap; }
     <name>ChordBase</name>
     <message>
         <source>Glissando end</source>
-        <translation type="unfinished"/>
+        <translation>Fi de glissando</translation>
     </message>
 </context>
 <context>
@@ -1135,7 +1143,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>»C</source>
-        <translation type="unfinished"/>
+        <translation>»Do</translation>
     </message>
 </context>
 <context>
@@ -1225,7 +1233,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>3 - Minor Third</source>
-        <translation>3 - Tercera menor</translation>
+        <translation>3 - Tercera Menor</translation>
     </message>
     <message>
         <source>4 - Major Third</source>
@@ -1301,11 +1309,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Number of strings:</source>
-        <translation>Número de compassos</translation>
+        <translation>Número de cordes:</translation>
     </message>
     <message>
         <source>Staff Properties</source>
-        <translation>Característiques de Pentagrama</translation>
+        <translation>Caracteristiques de Pentagrama</translation>
     </message>
     <message>
         <source>Invisible staff lines</source>
@@ -1313,7 +1321,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Small staff</source>
-        <translation>Pentagrama chicotet</translation>
+        <translation>Pentagrama chicotiu</translation>
     </message>
     <message>
         <source>sp</source>
@@ -1361,7 +1369,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show time signature</source>
-        <translation>Vore indicació de compas</translation>
+        <translation>Vore indicacio de compas</translation>
     </message>
     <message>
         <source>Style group:</source>
@@ -1385,7 +1393,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Extra distance above staff:</source>
-        <translation>Tret extra damunt del pentagrama</translation>
+        <translation>Text extra damunt del pentagrama</translation>
     </message>
     <message>
         <source>Never hide</source>
@@ -1484,7 +1492,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Note Values</source>
-        <translation>Valor de nota</translation>
+        <translation>Figures de Notes</translation>
     </message>
     <message>
         <source>Shown as:</source>
@@ -1496,7 +1504,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Stems and beams</source>
-        <translation>Pliques i barres de corchees</translation>
+        <translation>Pliques i barres de corchets</translation>
     </message>
     <message>
         <source>Stem style:</source>
@@ -1540,7 +1548,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Line distance:</source>
-        <translation>Lluntania de reglons</translation>
+        <translation>Lluntania de reglons:</translation>
     </message>
     <message>
         <source>Show clef</source>
@@ -1548,7 +1556,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show time signature</source>
-        <translation>Vore indicació de compas</translation>
+        <translation>Vore indicacio de compas</translation>
     </message>
     <message>
         <source>Show barlines</source>
@@ -1604,7 +1612,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Repeat:</source>
-        <translation type="unfinished"/>
+        <translation>Repetix:</translation>
     </message>
     <message>
         <source>Never</source>
@@ -1612,15 +1620,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>At new system</source>
-        <translation type="unfinished"/>
+        <translation>Al nou sistema</translation>
     </message>
     <message>
         <source>At new meas.</source>
-        <translation type="unfinished"/>
+        <translation>Al nou compas</translation>
     </message>
     <message>
         <source>Always</source>
-        <translation type="unfinished"/>
+        <translation>Sempre</translation>
     </message>
 </context>
 <context>
@@ -1703,7 +1711,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Beams</source>
-        <translation>Barra/Corchees</translation>
+        <translation>Barra de corchets</translation>
     </message>
     <message>
         <source>Slurs/Ties</source>
@@ -2046,11 +2054,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Small staff size:</source>
-        <translation>Tamany de pentagrama chicotet</translation>
+        <translation>Tamany de pentagrama chicotiu</translation>
     </message>
     <message>
         <source>Small note size:</source>
-        <translation>Tamany nota chicoteta</translation>
+        <translation>Tamany nota chicotiua</translation>
     </message>
     <message>
         <source>Grace note size:</source>
@@ -2102,7 +2110,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Standard</source>
-        <translation>Usual</translation>
+        <translation>Habitual</translation>
     </message>
     <message>
         <source>Jazz</source>
@@ -2118,7 +2126,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>German</source>
-        <translation>Alamà</translation>
+        <translation>Alemà</translation>
     </message>
     <message>
         <source>Solfeggio</source>
@@ -2223,15 +2231,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Distance before the stem of the first note:</source>
-        <translation>Lluntania abans de la plica de la primera nota:</translation>
+        <translation>Lluntania ans de la plica de la primera nota:</translation>
     </message>
     <message>
         <source>Distance before the head of the first note:</source>
-        <translation>Lluntania abans del cap de la primera nota:</translation>
+        <translation>Lluntania ans del cap de la primera nota:</translation>
     </message>
     <message>
         <source>Distance after the stem of the last note:</source>
-        <translation>Lluntanía darrere de la plica de l&apos;última nota</translation>
+        <translation>Lluntania darrere de la plica de l&apos;última nota</translation>
     </message>
     <message>
         <source>Distance after the head of the last note:</source>
@@ -2239,7 +2247,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Distance to fretboard diagram:</source>
-        <translation>Lluntanía al diagrama del diapasó</translation>
+        <translation>Lluntania al diagrama del diapasó</translation>
     </message>
     <message>
         <source>Chord Symbols</source>
@@ -2259,7 +2267,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Capo fret position:</source>
-        <translation>Pocició celleta en diapasó</translation>
+        <translation>Posició celleta en diapasó</translation>
     </message>
     <message>
         <source>Semitones offset</source>
@@ -2271,7 +2279,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>A, B♭, B, C, C♯, ...</source>
-        <translation>A, B♭, B, C, C♯, ...</translation>
+        <translation>A, Bb, B, C, C♯, ...</translation>
     </message>
     <message>
         <source>Chord Symbols, Fretboard Diagrams</source>
@@ -2375,7 +2383,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Use odd/even page header</source>
-        <translation>Utilisar capçañera en fulla par/impar</translation>
+        <translation>Utilisar capçalera en fulla par/impar</translation>
     </message>
     <message>
         <source>Use odd/even page footer</source>
@@ -2459,15 +2467,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Before key signature if changing to fewer sharps or flats</source>
-        <translation>Abans de l&apos;armadura si es reemplaça a manco sostinguts o bemols</translation>
+        <translation>Ans de l&apos;armadura si es reemplaça a manco sostinguts o bemols</translation>
     </message>
     <message>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
-        <translation>Enacabant de l&apos;armadura si es reemplaça a manco sostinguts o bemols. Abans si es reemplaça entre sostinguts i bemols</translation>
+        <translation>En acabant de l&apos;armadura si es reemplaça a manco sostinguts o bemols. Abans si es reemplaça entre sostinguts i bemols</translation>
     </message>
     <message>
         <source>A, B♭, H, C, C♯, ...</source>
-        <translation>A, B♭, H, C, C♯, ...</translation>
+        <translation>A, Bb, H, C, C♯, ...</translation>
     </message>
     <message>
         <source>A, B, H, C, Cis</source>
@@ -2479,11 +2487,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Do, Do♯, Re♭, Re, ...</source>
-        <translation>Do, Do♯, Re♭, Re, ...</translation>
+        <translation>Do, Do♯, Reb, Re, ...</translation>
     </message>
     <message>
         <source>Do, Do♯, Ré♭, Ré, ...</source>
-        <translation>Do, Do♯, Ré♭, Ré, ...</translation>
+        <translation>Do, Do♯, Réb, Ré, ...</translation>
     </message>
     <message>
         <source>French</source>
@@ -2503,7 +2511,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Automatic Capitalization</source>
-        <translation>Mayúscules Automàtiques</translation>
+        <translation>Mayuúscules Automatiques</translation>
     </message>
     <message>
         <source>Vertical frame upper margin</source>
@@ -2589,15 +2597,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Sound Fonts</source>
-        <translation type="unfinished"/>
+        <translation>Llibreria de Sons</translation>
     </message>
     <message>
         <source>SoundFont %1 already loaded</source>
-        <translation type="unfinished"/>
+        <translation>Llibreria de Sons %1 carregada</translation>
     </message>
     <message>
         <source>Cannot load SoundFont %1</source>
-        <translation type="unfinished"/>
+        <translation>No es pot carregar la Llibreria de Sons %1</translation>
     </message>
 </context>
 <context>
@@ -2734,11 +2742,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>C♭♭</source>
-        <translation>Do♭♭</translation>
+        <translation>Dobb</translation>
     </message>
     <message>
         <source>C♭</source>
-        <translation>Do♭</translation>
+        <translation>Dob</translation>
     </message>
     <message>
         <source>C</source>
@@ -2754,11 +2762,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>D♭♭</source>
-        <translation>Re♭♭</translation>
+        <translation>Rebb</translation>
     </message>
     <message>
         <source>D♭</source>
-        <translation>Re♭</translation>
+        <translation>Reb</translation>
     </message>
     <message>
         <source>D</source>
@@ -2774,11 +2782,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>E♭♭</source>
-        <translation>Mi♭♭</translation>
+        <translation>Mibb</translation>
     </message>
     <message>
         <source>E♭</source>
-        <translation>Mi ♭</translation>
+        <translation>Mi b</translation>
     </message>
     <message>
         <source>E</source>
@@ -2794,11 +2802,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>F♭♭</source>
-        <translation>Fa♭♭</translation>
+        <translation>Fabb</translation>
     </message>
     <message>
         <source>F♭</source>
-        <translation>Fa♭</translation>
+        <translation>Fab</translation>
     </message>
     <message>
         <source>F</source>
@@ -2814,11 +2822,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>G♭♭</source>
-        <translation>Sol♭♭</translation>
+        <translation>Solbb</translation>
     </message>
     <message>
         <source>G♭</source>
-        <translation>Sol♭</translation>
+        <translation>Solb</translation>
     </message>
     <message>
         <source>G</source>
@@ -2834,11 +2842,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>A♭♭</source>
-        <translation>La♭♭</translation>
+        <translation>Labb</translation>
     </message>
     <message>
         <source>A♭</source>
-        <translation>La ♭</translation>
+        <translation>La b</translation>
     </message>
     <message>
         <source>A</source>
@@ -2854,11 +2862,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>B♭♭</source>
-        <translation>Si♭♭</translation>
+        <translation>Sibb</translation>
     </message>
     <message>
         <source>B♭</source>
-        <translation>Si</translation>
+        <translation>Sib</translation>
     </message>
     <message>
         <source>B</source>
@@ -2914,7 +2922,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Direction</source>
-        <translation>Direcció</translation>
+        <translation>Direccio</translation>
     </message>
     <message>
         <source>Upright</source>
@@ -2946,7 +2954,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation>Restaura Valor de Direcció</translation>
+        <translation>Restaura Valor de Direccio</translation>
     </message>
     <message>
         <source>Update range</source>
@@ -2966,11 +2974,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Diamond</source>
-        <translation>diamant</translation>
+        <translation>Diamant</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation>Ferret</translation>
+        <translation>Triàngul</translation>
     </message>
     <message>
         <source>Slash</source>
@@ -3041,7 +3049,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Direction</source>
-        <translation>Direcció</translation>
+        <translation>Direccio</translation>
     </message>
     <message>
         <source>Anchor</source>
@@ -3077,7 +3085,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Below Chord</source>
-        <translation>Deavall del Acort</translation>
+        <translation>Devall del Acort</translation>
     </message>
     <message>
         <source>Time stretch</source>
@@ -3089,7 +3097,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation>Restaurar Valor de Direcció</translation>
+        <translation>Restaurar Valor de Direccio</translation>
     </message>
     <message>
         <source>Reset Anchor value</source>
@@ -3128,7 +3136,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Barline Inspector</source>
-        <translation>Inspector Barra de compàs</translation>
+        <translation>Inspector Barra de compas</translation>
     </message>
     <message>
         <source>Type</source>
@@ -3179,7 +3187,7 @@ space unit</extracomment>
     <name>InspectorBeam</name>
     <message>
         <source>Beam</source>
-        <translation>Barra de corchees</translation>
+        <translation>Barra de corchets</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -3195,7 +3203,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Direction</source>
-        <translation>Direcció</translation>
+        <translation>Direcci</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3211,7 +3219,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Beam Inspector</source>
-        <translation>Inspector Barra de corchees</translation>
+        <translation>Inspector Barra de corchets</translation>
     </message>
     <message>
         <source>Vertical position offset left</source>
@@ -3219,7 +3227,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation>Restaurar Valor de Direcció</translation>
+        <translation>Restaurar Valor de Direccio</translation>
     </message>
     <message>
         <source>Vertical position offset right</source>
@@ -3318,7 +3326,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Small</source>
-        <translation>Chicotiua</translation>
+        <translation>Chicotiu</translation>
     </message>
     <message>
         <source>Stemless</source>
@@ -3483,7 +3491,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Nothing selected</source>
-        <translation>No ne hi ha res elegit</translation>
+        <translation>No n&apos;hi ha res elegit</translation>
     </message>
 </context>
 <context>
@@ -3537,11 +3545,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Straight</source>
-        <translation>recte</translation>
+        <translation>Recte</translation>
     </message>
     <message>
         <source>Wavy</source>
-        <translation>ondulat</translation>
+        <translation>Aonat</translation>
     </message>
     <message>
         <source>Reset Show text value</source>
@@ -3549,7 +3557,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Show text</source>
-        <translation>vore text</translation>
+        <translation>Vore text</translation>
     </message>
 </context>
 <context>
@@ -3592,7 +3600,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Width</source>
-        <translation>Amplaria</translation>
+        <translation>Amplea</translation>
     </message>
     <message>
         <source>Horizontal Frame Inspector</source>
@@ -3734,11 +3742,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Width</source>
-        <translation>Amplaria</translation>
+        <translation>Amplea</translation>
     </message>
     <message>
         <source>Scale Width</source>
-        <translation>Escala Amplaria</translation>
+        <translation>Escala Amplea</translation>
     </message>
     <message>
         <source>Scale Height</source>
@@ -3758,7 +3766,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation>Lluntania entre dos reglons en un pentagrama de 5 reglons</translation>
+        <translation>Lluntania entre dos reglons en un pentagrama de 5 llínees</translation>
     </message>
     <message>
         <source>Size in staff space units</source>
@@ -3781,7 +3789,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Play until</source>
-        <translation>Reproduir hasda</translation>
+        <translation>Reproduïx hasda</translation>
     </message>
     <message>
         <source>Continue at</source>
@@ -3859,7 +3867,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Width</source>
-        <translation>Amplaria</translation>
+        <translation>Amplea</translation>
     </message>
     <message>
         <source>Horizontal Position</source>
@@ -4017,7 +4025,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Play</source>
-        <translation>Reproduix</translation>
+        <translation>Reproduïx</translation>
     </message>
     <message>
         <source>Tuning</source>
@@ -4137,7 +4145,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Play value</source>
-        <translation>Restaurar valor Reproduix</translation>
+        <translation>Restaurar valor Reproduïx</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4271,7 +4279,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Trailing space</source>
-        <translation>Espay de darrere</translation>
+        <translation>Espay darrere</translation>
     </message>
     <message>
         <source>Leading space</source>
@@ -4287,7 +4295,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Trailing space value</source>
-        <translation>Restaurar valor Espay de darrere</translation>
+        <translation>Restaurar valor Espay darrere</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4337,7 +4345,7 @@ space unit</extracomment>
     <name>InspectorSpacer</name>
     <message>
         <source>Spacer</source>
-        <translation>Espayador</translation>
+        <translation>Espayaor</translation>
     </message>
     <message>
         <source>Height</source>
@@ -4350,7 +4358,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Spacer Inspector</source>
-        <translation>Inspector Espayador</translation>
+        <translation>Inspector Espayaor</translation>
     </message>
     <message>
         <source>Reset Height value</source>
@@ -4377,7 +4385,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tempo Marking Inspector</source>
-        <translation>Inspector Indicació de Tempo</translation>
+        <translation>Inspector Indicacio de Tempo</translation>
     </message>
     <message>
         <source>Reset Tempo value</source>
@@ -4416,7 +4424,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Text to Style</source>
-        <translation type="unfinished"/>
+        <translation>Restaura Text a Estil inicial</translation>
     </message>
 </context>
 <context>
@@ -4434,7 +4442,7 @@ space unit</extracomment>
     <name>InspectorTimeSig</name>
     <message>
         <source>Time Signature</source>
-        <translation>Indicació de compas</translation>
+        <translation>Indicacio de compas</translation>
     </message>
     <message>
         <source>Show courtesy</source>
@@ -4442,7 +4450,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Time Signature Inspector</source>
-        <translation>Inspector Indicació de compas</translation>
+        <translation>Inspector Indicacio de compas</translation>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
@@ -4508,7 +4516,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Relation</source>
-        <translation>Relació</translation>
+        <translation>Relacio</translation>
     </message>
     <message>
         <source>Nothing</source>
@@ -4524,7 +4532,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Direction</source>
-        <translation>Direcció</translation>
+        <translation>Direccio</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -4532,11 +4540,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Up</source>
-        <translation>Pujar</translation>
+        <translation>Damunt</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Devallar</translation>
+        <translation>Avall</translation>
     </message>
     <message>
         <source>Tuplet Inspector</source>
@@ -4544,7 +4552,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation>Restaurar Valor de Direcció</translation>
+        <translation>Restaurar Valor de Direccio</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4564,7 +4572,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Bracket type</source>
-        <translation>Tipo Corchet</translation>
+        <translation>Tipo corchet</translation>
     </message>
 </context>
 <context>
@@ -5247,7 +5255,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Time signature</source>
-        <translation>Indicació de compas</translation>
+        <translation>Indicacio de compas</translation>
     </message>
     <message>
         <source>2x less
@@ -5319,7 +5327,8 @@ Compas d&apos;Anacrusis</translation>
     <message>
         <source>Show
 chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Vore
+símbols d&apos;acorts</translation>
     </message>
 </context>
 <context>
@@ -5344,7 +5353,11 @@ chord symbols</source>
 You only need to do this once.
 
 Would you like to locate %2 now?</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore no pot exportar archius MP3 de forma directa, en lloc d&apos;aixó usa
+la llibrería lliure LAME. Deus obtindre %1 a banda (per als detalls revisa el manual), i en acabant busca l&apos;archiu pera MuseScore.
+No més has de fer açó una volta.
+
+¿Vols buscar %2 ara mateixa?</translation>
     </message>
 </context>
 <context>
@@ -5367,7 +5380,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Time Signatures</source>
-        <translation>Indicació de compas</translation>
+        <translation>Indicacio de compas</translation>
     </message>
     <message>
         <source>Barlines</source>
@@ -5419,11 +5432,11 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Beam Properties</source>
-        <translation>Característiques de Barres de Corchees</translation>
+        <translation>Característiques de Barres de Corchets</translation>
     </message>
     <message>
         <source>Frames &amp; Measures</source>
-        <translation>Caixons &amp; compassos</translation>
+        <translation>Caixons i compassos</translation>
     </message>
     <message>
         <source>Symbols</source>
@@ -5443,7 +5456,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Repeats &amp; Jumps</source>
-        <translation type="unfinished"/>
+        <translation>Repeticions i Salts</translation>
     </message>
 </context>
 <context>
@@ -5543,11 +5556,11 @@ grup irregular traspassaria el compas</translation>
     </message>
     <message>
         <source>Repeat count:</source>
-        <translation>Repetix conte:</translation>
+        <translation>Número repeticions:</translation>
     </message>
     <message>
         <source>Layout stretch:</source>
-        <translation>Diseny amplea</translation>
+        <translation>Amplea</translation>
     </message>
     <message>
         <source>Measure number mode:</source>
@@ -5563,7 +5576,7 @@ grup irregular traspassaria el compas</translation>
     </message>
     <message>
         <source>Add to measure number:</source>
-        <translation>Afig a número de compas:</translation>
+        <translation>Afig al número de compas:</translation>
     </message>
     <message>
         <source>Do not count</source>
@@ -5809,7 +5822,7 @@ grup irregular traspassaria el compas</translation>
     </message>
     <message>
         <source>Quadruplet</source>
-        <translation>cuatreset</translation>
+        <translation>Quatreset</translation>
     </message>
     <message>
         <source>Sextuplet</source>
@@ -5921,7 +5934,7 @@ grup irregular traspassaria el compas</translation>
     </message>
     <message>
         <source>MuseScore: Open File</source>
-        <translation>MuseScore: Aubrir Archiu</translation>
+        <translation>MuseScore: Obrir Archiu</translation>
     </message>
     <message>
         <source>Write File failed: </source>
@@ -5988,7 +6001,7 @@ errat: </translation>
     </message>
     <message>
         <source>Below Chord</source>
-        <translation>Deavall del Acort</translation>
+        <translation>Devall del Acort</translation>
     </message>
     <message>
         <source>Special symbols in header/footer</source>
@@ -6107,7 +6120,7 @@ errat: </translation>
     <name>Ms::HelpQuery</name>
     <message>
         <source>Search for: </source>
-        <translation type="unfinished"/>
+        <translation>Burcant:</translation>
     </message>
 </context>
 <context>
@@ -6140,7 +6153,7 @@ errat: </translation>
     </message>
     <message>
         <source>Rests</source>
-        <translation type="unfinished"/>
+        <translation>Silencis</translation>
     </message>
 </context>
 <context>
@@ -6171,7 +6184,7 @@ errat: </translation>
     </message>
     <message>
         <source>Beam</source>
-        <translation>Barra de corchees</translation>
+        <translation>Barra de corchet</translation>
     </message>
     <message>
         <source>Tuplet</source>
@@ -6307,7 +6320,7 @@ erro: </translation>
     </message>
     <message>
         <source>Sorry, wrong email address, username or password. Please check again. &lt;a href=&quot;%1&quot;&gt;Have you forgotten your password&lt;/a&gt;?</source>
-        <translation>Disculpe, direcció correu electrónic, nom d&apos;usuari o contrasenya equivocats. Per favor verifica de nou. ¿&lt;a href=&quot;%1&quot;&gt;Has perdut la teua contrasenya&lt;/a&gt;?</translation>
+        <translation>Disculpe, correu electrónic, nom d&apos;usuari o contrasenya equivocats. Per favor verifica de nou. ¿&lt;a href=&quot;%1&quot;&gt;Has perdut la teua contrasenya&lt;/a&gt;?</translation>
     </message>
     <message>
         <source>This account has been blocked.</source>
@@ -6343,11 +6356,11 @@ erro: </translation>
     </message>
     <message>
         <source>Please check your Internet connection</source>
-        <translation type="unfinished"/>
+        <translation>Per favor verifica la teua conexio d&apos;internet</translation>
     </message>
     <message>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>L&apos;hora local del teu dispositiu no es la correcta. Per favor verificala i la definixes. Es recomanable establir l&apos;hora/espai horari en automatic. Si encara no pots iniciar sessio, &lt;a href=&quot;%1&quot;&gt;mos crida&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -6368,7 +6381,7 @@ erro: </translation>
     <name>Ms::MeasureProperties</name>
     <message>
         <source>MuseScore: Measure Properties for Measure %1</source>
-        <translation>MuseScore: Característiques de Compas per al compas %1</translation>
+        <translation>MuseScore: Caracteristiques de Compas per al compas %1</translation>
     </message>
     <message>
         <source>visible</source>
@@ -6433,8 +6446,8 @@ erro: </translation>
     <message>
         <source>Save changes to the score &quot;%1&quot;
 before closing?</source>
-        <translation>¿Guardar cambis a la partitura &quot;%1&quot;
-abans de tancar?</translation>
+        <translation>¿Guardar canvis a la partitura &quot;%1&quot;
+ans de tancar?</translation>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;</source>
@@ -6638,7 +6651,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>Repeat measure sign</source>
-        <translation>Senyal repetició de compassos</translation>
+        <translation>Repetició de compassos</translation>
     </message>
     <message>
         <source>Line break</source>
@@ -6646,7 +6659,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>Page break</source>
-        <translation>Bot de fulla</translation>
+        <translation>Bot de plana</translation>
     </message>
     <message>
         <source>Section break</source>
@@ -6654,11 +6667,11 @@ Do you want to replace it?
     </message>
     <message>
         <source>Staff spacer down</source>
-        <translation>Espayador pentagrama baix</translation>
+        <translation>Espayaor pentagrama devall</translation>
     </message>
     <message>
         <source>Staff spacer up</source>
-        <translation>Espayador pentagrama dalt</translation>
+        <translation>Espayaor pentagrama damunt</translation>
     </message>
     <message>
         <source>Fingering %1</source>
@@ -6714,7 +6727,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>4/4 common time</source>
-        <translation>4/4 temps comu</translation>
+        <translation>4/4</translation>
     </message>
     <message>
         <source>2/2 alla breve</source>
@@ -6981,7 +6994,7 @@ per favor elegix un atre nom:</translation>
     </message>
     <message>
         <source>Time Signatures</source>
-        <translation>Indicació de compas</translation>
+        <translation>Indicacio de compas</translation>
     </message>
     <message>
         <source>Symbols</source>
@@ -7041,7 +7054,7 @@ per favor elegix un atre nom:</translation>
     </message>
     <message>
         <source>Change staff type</source>
-        <translation>Cambiar tipo pentagrama</translation>
+        <translation>Canviar tipo pentagrama</translation>
     </message>
     <message>
         <source>Change instrument</source>
@@ -7125,7 +7138,7 @@ per favor elegix un atre nom:</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Reproduix</translation>
+        <translation>Reproduïx</translation>
     </message>
     <message>
         <source>Score locked</source>
@@ -7137,19 +7150,19 @@ per favor elegix un atre nom:</translation>
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation type="unfinished"/>
+        <translation>Al &amp;Voltant...</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished"/>
+        <translation>Al voltant de &amp;Qt...</translation>
     </message>
     <message>
         <source>About &amp;MusicXML...</source>
-        <translation type="unfinished"/>
+        <translation>Al voltant de &amp;MusicXML</translation>
     </message>
     <message>
         <source>Image Capture</source>
-        <translation type="unfinished"/>
+        <translation>Captura Image</translation>
     </message>
     <message>
         <source>Note Input</source>
@@ -7161,27 +7174,31 @@ per favor elegix un atre nom:</translation>
     </message>
     <message>
         <source>Drum input mode</source>
-        <translation type="unfinished"/>
+        <translation>Introduccio modo Percussio</translation>
     </message>
     <message>
         <source>TAB input mode</source>
-        <translation type="unfinished"/>
+        <translation>Introduccio modo TAB</translation>
     </message>
     <message>
         <source>Image capture mode</source>
-        <translation type="unfinished"/>
+        <translation>Modo Captura image</translation>
     </message>
     <message>
         <source>Cannot determine file type</source>
-        <translation type="unfinished"/>
+        <translation>No es pot determinar el tipo d&apos;archiu</translation>
     </message>
     <message>
         <source>MuseScore:</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore:</translation>
     </message>
     <message>
         <source>Cannot write into %1</source>
-        <translation type="unfinished"/>
+        <translation>No es pot escriure en %1</translation>
+    </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation>Esta partitura no es pot guardar on-line. Per favor corregix els compassos roins i fes de nou</translation>
     </message>
 </context>
 <context>
@@ -7296,7 +7313,7 @@ per favor elegix un atre nom:</translation>
     </message>
     <message>
         <source>Grace note after</source>
-        <translation>Notes d&apos;embelliment d&apos;enacabant</translation>
+        <translation>Notes d&apos;embelliment d&apos;en acabant</translation>
     </message>
     <message>
         <source>Grace note before</source>
@@ -7383,6 +7400,10 @@ per favor elegix un atre nom:</translation>
         <source>new Palette</source>
         <translation>nova Paleta</translation>
     </message>
+    <message>
+        <source>Single Palette</source>
+        <translation>Paleta única</translation>
+    </message>
 </context>
 <context>
     <name>Ms::PaletteBoxButton</name>
@@ -7463,7 +7484,7 @@ per favor elegix un atre nom:</translation>
         <source>Plugin &quot;%1&quot; has changes.
 Save before closing?</source>
         <translation>Plug-in &quot;%1&quot; té càmbits.
-¿Guardar abans de tancar?</translation>
+¿Guardar ans de tancar?</translation>
     </message>
     <message>
         <source>MuseScore: Save Plugin</source>
@@ -7471,7 +7492,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>Cannot determine file type</source>
-        <translation type="unfinished"/>
+        <translation>No es pot determinar el tipo d&apos;archiu</translation>
     </message>
 </context>
 <context>
@@ -7498,7 +7519,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>Choose Instrument List</source>
-        <translation>Elagix Llista Instruments</translation>
+        <translation>Elegix Llista Instruments</translation>
     </message>
     <message>
         <source>Instrument List (*.xml)</source>
@@ -7554,7 +7575,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>SoundFont Folders</source>
-        <translation type="unfinished"/>
+        <translation>Carpetes de les Llibreria de Sons</translation>
     </message>
 </context>
 <context>
@@ -7589,6 +7610,17 @@ Save before closing?</source>
     </message>
 </context>
 <context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Veu: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Dura: %2; %3</translation>
+    </message>
+</context>
+<context>
     <name>Ms::Score</name>
     <message>
         <source>The style file is not compatible with this version of MuseScore.</source>
@@ -7608,7 +7640,7 @@ Procura guardar en un atre puesto.</translation>
         <source>Open Temp File
 %1
 failed: %2</source>
-        <translation>Aubrir Archiu Temporal
+        <translation>Obrir Archiu Temporal
 %1
 erro: %2</translation>
     </message>
@@ -7660,11 +7692,11 @@ erro: %2</translation>
     </message>
     <message>
         <source>Measure %1 Staff %2 incomplete. Expected: %3; Found: %4</source>
-        <translation type="unfinished"/>
+        <translation>Compas %1 Pentagrama %2 incomplet. S&apos;aguarda: %3; Trobat: %4</translation>
     </message>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
-        <translation type="unfinished"/>
+        <translation>Compas %1, pentagrama %2, veu %3 massa llarga. S&apos;aguarda: %4; Trobat: %5</translation>
     </message>
 </context>
 <context>
@@ -7706,7 +7738,7 @@ erro: %2</translation>
     <name>Ms::ScoreBrowser</name>
     <message>
         <source>Choose Instruments</source>
-        <translation type="unfinished"/>
+        <translation>Elegix instruments</translation>
     </message>
     <message>
         <source>Create New Score</source>
@@ -7714,11 +7746,11 @@ erro: %2</translation>
     </message>
     <message>
         <source>Custom Templates</source>
-        <translation type="unfinished"/>
+        <translation>Plantilles Personalisaes</translation>
     </message>
     <message>
         <source>Getting Started</source>
-        <translation type="unfinished"/>
+        <translation>Escomençant</translation>
     </message>
 </context>
 <context>
@@ -7773,7 +7805,7 @@ erro: %2</translation>
     </message>
     <message>
         <source>Time Signature Properties...</source>
-        <translation>Característiques de Indicació de compas...</translation>
+        <translation>Caracteristiques de Indicacio de compas...</translation>
     </message>
     <message>
         <source>Line Properties...</source>
@@ -7797,7 +7829,7 @@ erro: %2</translation>
     </message>
     <message>
         <source>Measure</source>
-        <translation>Compàs</translation>
+        <translation>Compas</translation>
     </message>
     <message>
         <source>Measure Properties...</source>
@@ -7916,7 +7948,7 @@ Per favor selecciona el compas i ho fas de nou</translation>
     <message>
         <source>No chord/rest selected:
 Please select a chord/rest and try again</source>
-        <translation>No ne hi ha cap acort/silenci seleccionat:
+        <translation>No n&apos;hi ha cap acort/silenci seleccionat:
 Per favor selecciona el acort/silenci i ho fas de nou</translation>
     </message>
     <message>
@@ -7949,31 +7981,31 @@ Per favor selecciona el ranc de compassos a juntar i ho fas de nou</translation>
     </message>
     <message>
         <source>Image Capture</source>
-        <translation type="unfinished"/>
+        <translation>Captura image</translation>
     </message>
     <message>
         <source>Save As (Print Mode)...</source>
-        <translation type="unfinished"/>
+        <translation>Guardar com (Modo Impressora)...</translation>
     </message>
     <message>
         <source>Save As (Screenshot Mode)...</source>
-        <translation type="unfinished"/>
+        <translation>Guardar com (Modo Captura pantalla)...</translation>
     </message>
     <message>
         <source>Cannot determine file type</source>
-        <translation type="unfinished"/>
+        <translation>No es pot determinar el tipo d&apos;archiu</translation>
     </message>
     <message>
         <source>No destination to paste</source>
-        <translation type="unfinished"/>
+        <translation>Cap desti per apegar</translation>
     </message>
     <message>
         <source>Cannot paste into tuplet</source>
-        <translation type="unfinished"/>
+        <translation>No pots apegar dins del grup irregular</translation>
     </message>
     <message>
         <source>Tuplet cannot cross barlines</source>
-        <translation type="unfinished"/>
+        <translation>Grup múltiple no pot creuar les barres de compas</translation>
     </message>
     <message>
         <source>Transparent background</source>
@@ -8014,7 +8046,7 @@ Per favor selecciona el ranc de compassos a juntar i ho fas de nou</translation>
     </message>
     <message>
         <source>Use Tab and Backtab to move through the check boxes</source>
-        <translation type="unfinished"/>
+        <translation>Usa tecles Tab i Aixar arrere per moure&apos;s per les caselles de verificacio</translation>
     </message>
 </context>
 <context>
@@ -8291,19 +8323,19 @@ per favor elegix un atre nom:</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;%1&quot;&gt;What does this mean?&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&quot;%1&quot;&gt;¿Qué vol dir aixo?&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Respect the &lt;a href=&quot;%1&quot;&gt;community guidelines&lt;/a&gt;. Only make your scores accessible to anyone with permission from the right holders.</source>
-        <translation type="unfinished"/>
+        <translation>Obedix les &lt;a href=&quot;%1&quot;&gt;directrius de la comunitat&lt;/a&gt;. Fes les teues partitures accessibles per a tot lo mon no més en el permis dels titulars del seus drets.</translation>
     </message>
     <message>
         <source>Use a comma to separate the tags</source>
-        <translation type="unfinished"/>
+        <translation>Escriu coma per a divdir els rótuls</translation>
     </message>
     <message>
         <source>[&lt;a href=&quot;%1&quot;&gt;link&lt;/a&gt;]</source>
-        <translation type="unfinished"/>
+        <translation>[&lt;a href=&quot;%1&quot;&gt;enllaç&lt;/a&gt;]</translation>
     </message>
 </context>
 <context>
@@ -8356,7 +8388,7 @@ per favor elegix un atre nom:</translation>
     </message>
     <message>
         <source>A major, F# minor</source>
-        <translation>La M, F# m</translation>
+        <translation>La M, Fa# m</translation>
     </message>
     <message>
         <source>Db major, Bb minor</source>
@@ -8364,7 +8396,7 @@ per favor elegix un atre nom:</translation>
     </message>
     <message>
         <source>E major, C# minor</source>
-        <translation>Mi M, C# m</translation>
+        <translation>Mi M, Do# m</translation>
     </message>
     <message>
         <source>Ab major, F minor</source>
@@ -8372,7 +8404,7 @@ per favor elegix un atre nom:</translation>
     </message>
     <message>
         <source>B major, G# minor</source>
-        <translation>B M, G# m</translation>
+        <translation>Si M, Sol# m</translation>
     </message>
     <message>
         <source>Eb major, C minor</source>
@@ -8380,7 +8412,7 @@ per favor elegix un atre nom:</translation>
     </message>
     <message>
         <source>F# major, D# minor</source>
-        <translation>F# M, D# m</translation>
+        <translation>Fa# M, Re# m</translation>
     </message>
     <message>
         <source>Bb major, G minor</source>
@@ -8392,7 +8424,7 @@ per favor elegix un atre nom:</translation>
     </message>
     <message>
         <source>Open/Atonal</source>
-        <translation type="unfinished"/>
+        <translation>Obert/Atonal</translation>
     </message>
 </context>
 <context>
@@ -8536,7 +8568,7 @@ per favor elegix un atre nom:</translation>
     </message>
     <message>
         <source>Width:</source>
-        <translation>Amplaria:</translation>
+        <translation>Amplea:</translation>
     </message>
     <message>
         <source>Scaling</source>
@@ -8603,7 +8635,7 @@ per favor elegix un atre nom:</translation>
     <name>Palette</name>
     <message>
         <source>Beam Properties</source>
-        <translation>Característiques Barra de corchees</translation>
+        <translation>Barra de corchets</translation>
     </message>
     <message>
         <source>Dynamics</source>
@@ -8723,7 +8755,7 @@ per favor elegix un atre nom:</translation>
     </message>
     <message>
         <source>Time Signatures</source>
-        <translation>Indicació de compas</translation>
+        <translation>Indicacio de compas</translation>
     </message>
     <message>
         <source>Staff Changes</source>
@@ -8787,27 +8819,27 @@ erro: </translation>
     </message>
     <message>
         <source>Repeats &amp;&amp; Jumps</source>
-        <translation type="unfinished"/>
+        <translation>Repeticions &amp;&amp; Salts</translation>
     </message>
     <message>
         <source>Normal barline</source>
-        <translation type="unfinished"/>
+        <translation>Barra de compas simple</translation>
     </message>
     <message>
         <source>Dashed barline</source>
-        <translation type="unfinished"/>
+        <translation>Barra de compas a ralletes</translation>
     </message>
     <message>
         <source>Dotted barline</source>
-        <translation type="unfinished"/>
+        <translation>Barra de compas a puntets</translation>
     </message>
     <message>
         <source>End bar barline</source>
-        <translation type="unfinished"/>
+        <translation>Barra de compas final</translation>
     </message>
     <message>
         <source>Double barline</source>
-        <translation type="unfinished"/>
+        <translation>Barra de compas doble</translation>
     </message>
     <message>
         <source>Start repeat</source>
@@ -8885,7 +8917,7 @@ erro: </translation>
     </message>
     <message>
         <source>Width:</source>
-        <translation>Amplaria:</translation>
+        <translation>Amplea:</translation>
     </message>
     <message>
         <source>Height:</source>
@@ -8976,7 +9008,7 @@ erro: </translation>
     </message>
     <message>
         <source>Use arrows to modify</source>
-        <translation type="unfinished"/>
+        <translation>Usa flecha per a modificar</translation>
     </message>
     <message>
         <source>Sound</source>
@@ -9099,23 +9131,23 @@ erro: </translation>
     </message>
     <message>
         <source>Playback Position</source>
-        <translation type="unfinished"/>
+        <translation>Tanda de reproduccio</translation>
     </message>
     <message>
         <source>Relative Tempo to 120 beats per minute</source>
-        <translation type="unfinished"/>
+        <translation>Tempo Relatiu 120 colps per minuts </translation>
     </message>
     <message>
         <source>Use up and down arrows to change value</source>
-        <translation type="unfinished"/>
+        <translation>Usa fleches cap amunt i cap a baix per canviar el valor</translation>
     </message>
     <message>
         <source>Master Volume</source>
-        <translation type="unfinished"/>
+        <translation>Volum General</translation>
     </message>
     <message>
         <source>Relative tempo to 120 beats per minute</source>
-        <translation type="unfinished"/>
+        <translation>Tempo relatiu 120 colps per minuts</translation>
     </message>
 </context>
 <context>
@@ -9158,11 +9190,11 @@ erro: </translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Anterior</translation>
+        <translation>Desfer</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation>Següent</translation>
+        <translation>Refer</translation>
     </message>
     <message>
         <source>R</source>
@@ -9174,7 +9206,7 @@ erro: </translation>
     </message>
     <message>
         <source>Close Plugin Creator</source>
-        <translation type="unfinished"/>
+        <translation>Tanca Plug-in Creator</translation>
     </message>
 </context>
 <context>
@@ -9205,7 +9237,7 @@ erro: </translation>
     </message>
     <message>
         <source>Clear Shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Borrar Atall</translation>
     </message>
 </context>
 <context>
@@ -9288,7 +9320,7 @@ erro: </translation>
     </message>
     <message>
         <source>Play notes when editing</source>
-        <translation>Reproduir notes en edició</translation>
+        <translation>Reproduïr notes en edició</translation>
     </message>
     <message>
         <source>ms</source>
@@ -9296,7 +9328,7 @@ erro: </translation>
     </message>
     <message>
         <source>Color notes outside of usable pitch range</source>
-        <translation>Colorix notes mes alla de la seua tessitura utilisable</translation>
+        <translation>Coloreja notes mes alla de la seua tessitura utilisable</translation>
     </message>
     <message>
         <source>16th note</source>
@@ -9428,7 +9460,7 @@ erro: </translation>
     </message>
     <message>
         <source>Attention: Any changes on this page require a restart of MuseScore.</source>
-        <translation>¡Aguaita!: Qualsevol cambi en esta plana requerix el reinici de MuseScore</translation>
+        <translation>¡Aguaita!: Qualsevol canvi en esta plana requerix el reinici de MuseScore</translation>
     </message>
     <message>
         <source>Import</source>
@@ -9636,7 +9668,7 @@ erro: </translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Reproduix</translation>
+        <translation>Reproduïx</translation>
     </message>
     <message>
         <source>Stop</source>
@@ -9733,7 +9765,7 @@ erro: </translation>
     </message>
     <message>
         <source>The language will be changed once you restart MuseScore.</source>
-        <translation>L&apos;idioma cambiarà quant reinicies MuseScore</translation>
+        <translation>L&apos;idioma canviarà quant reinicies MuseScore</translation>
     </message>
     <message>
         <source>Start with score</source>
@@ -9749,7 +9781,7 @@ erro: </translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting the starting score</source>
-        <translation>Aubri diàlec d&apos;archiu per triar la partitura d&apos;inici</translation>
+        <translation>Obri diàlec d&apos;archiu per triar la partitura d&apos;inici</translation>
     </message>
     <message>
         <source>Select delay (in minutes) between auto saves</source>
@@ -9769,7 +9801,7 @@ erro: </translation>
     </message>
     <message>
         <source>Icon Width</source>
-        <translation>Amplaria Icon</translation>
+        <translation>Amplea Icon</translation>
     </message>
     <message>
         <source>Style folder</source>
@@ -9785,7 +9817,7 @@ erro: </translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the score folder</source>
-        <translation>Aubri diàlec de carpeta per triar la carpeta de partitura</translation>
+        <translation>Obri diàlec de carpeta per triar la carpeta de partitura</translation>
     </message>
     <message>
         <source>Choose style folder</source>
@@ -9793,7 +9825,7 @@ erro: </translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the style folder</source>
-        <translation>Aubri diàlec de carpeta per triar la carpeta d&apos;estil</translation>
+        <translation>Obri diàlec de carpeta per triar la carpeta d&apos;estil</translation>
     </message>
     <message>
         <source>Score folder</source>
@@ -9825,7 +9857,7 @@ erro: </translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the plugin folder</source>
-        <translation>Aubri diàlec de carpeta per triar la carpeta plug-in</translation>
+        <translation>Obri diàlec de carpeta per triar la carpeta plug-in</translation>
     </message>
     <message>
         <source>Image folder</source>
@@ -9841,11 +9873,11 @@ erro: </translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the template folder</source>
-        <translation>Aubri diàlec de carpeta per triar la carpeta plantilla</translation>
+        <translation>Obri diàlec de carpeta per triar la carpeta plantilla</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the image folder</source>
-        <translation>Aubri diàlec de carpeta per triar la carpeta image</translation>
+        <translation>Obri diàlec de carpeta per triar la carpeta image</translation>
     </message>
     <message>
         <source>Canvas Tab</source>
@@ -9873,7 +9905,7 @@ erro: </translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting the wallpaper file</source>
-        <translation>Aubri diàlec d&apos;archiu per triar el archiu de tipo de fondo</translation>
+        <translation>Obri diàlec d&apos;archiu per triar el archiu de tipo de fondo</translation>
     </message>
     <message>
         <source>Select background color</source>
@@ -9881,7 +9913,7 @@ erro: </translation>
     </message>
     <message>
         <source>Opens a dialog for selecting the background color</source>
-        <translation>Aubri diàlec per triar el color de fondo</translation>
+        <translation>Obri diàlec per triar el color de fondo</translation>
     </message>
     <message>
         <source>Paper wallpaper path</source>
@@ -9901,7 +9933,7 @@ erro: </translation>
     </message>
     <message>
         <source>Opens a dialog for selecting the paper color</source>
-        <translation>Aubri diàlec per triar el color del paper</translation>
+        <translation>Obri diàlec per triar el color del paper</translation>
     </message>
     <message>
         <source>Paper Wallpaper</source>
@@ -9981,7 +10013,7 @@ erro: </translation>
     </message>
     <message>
         <source>Play is active</source>
-        <translation>Reproduir esta actiu</translation>
+        <translation>Reproduïr esta actiu</translation>
     </message>
     <message>
         <source>Stop is active</source>
@@ -10025,7 +10057,7 @@ erro: </translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a instrument list file</source>
-        <translation>Aubri diàlec d&apos;archiu per triar el archiu de llista d&apos;instruments</translation>
+        <translation>Obri diàlec d&apos;archiu per triar el archiu de llista d&apos;instruments</translation>
     </message>
     <message>
         <source>Instrument list 1</source>
@@ -10045,7 +10077,7 @@ erro: </translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a style file</source>
-        <translation>Aubri diàlec d&apos;archiu per triar l&apos;archiu d&apos;estil</translation>
+        <translation>Obri diàlec d&apos;archiu per triar l&apos;archiu d&apos;estil</translation>
     </message>
     <message>
         <source>Style for part</source>
@@ -10061,7 +10093,7 @@ erro: </translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a style file for part</source>
-        <translation>Aubri diàlec d&apos;archiu per triar l&apos;archiu d&apos;estil per la part</translation>
+        <translation>Obri diàlec d&apos;archiu per triar l&apos;archiu d&apos;estil per la part</translation>
     </message>
     <message>
         <source>Instrument list 2</source>
@@ -10161,7 +10193,7 @@ erro: </translation>
     </message>
     <message>
         <source>Choose the shortest note value</source>
-        <translation>Elegix el valor de la nota més curta</translation>
+        <translation>Elegix la figura de la nota més curta</translation>
     </message>
     <message>
         <source>Export Tab</source>
@@ -10293,7 +10325,7 @@ erro: </translation>
     </message>
     <message>
         <source>Show start center</source>
-        <translation>Vore centre d&apos;inici</translation>
+        <translation>Vore finestra d&apos;inici</translation>
     </message>
     <message>
         <source>Undo is active</source>
@@ -10305,27 +10337,27 @@ erro: </translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Anterior</translation>
+        <translation>Desfer</translation>
     </message>
     <message>
         <source>Play whole chord when adding note</source>
-        <translation type="unfinished"/>
+        <translation>Reproduïr acort complet quant afiges notes</translation>
     </message>
     <message>
         <source>SoundFont folders</source>
-        <translation type="unfinished"/>
+        <translation>Carpetes de les Llibreries de Sons</translation>
     </message>
     <message>
         <source>Insert path to SoundFont folders</source>
-        <translation type="unfinished"/>
+        <translation>Insertar ruta carpetes de Llibreries de Sons</translation>
     </message>
     <message>
         <source>Opens a dialog for configuring the SoundFont folders</source>
-        <translation type="unfinished"/>
+        <translation>Obri diàlec per configurar les carpetes de les Llibreries de Sons</translation>
     </message>
     <message>
         <source>Note Input Tab</source>
-        <translation type="unfinished"/>
+        <translation>Introduccio notes Tab</translation>
     </message>
     <message>
         <source>Note Input</source>
@@ -10333,47 +10365,51 @@ erro: </translation>
     </message>
     <message>
         <source>Note input</source>
-        <translation type="unfinished"/>
+        <translation>Introducció de Notes</translation>
     </message>
     <message>
         <source>Note input is active</source>
-        <translation type="unfinished"/>
+        <translation>Introducció notes està actiu</translation>
     </message>
     <message>
         <source>Note input record</source>
-        <translation type="unfinished"/>
+        <translation>Grabar Inntroducció notes</translation>
     </message>
     <message>
         <source>Folders</source>
-        <translation type="unfinished"/>
+        <translation>Carpetes</translation>
     </message>
     <message>
         <source>Images:</source>
-        <translation type="unfinished"/>
+        <translation>Images:</translation>
     </message>
     <message>
         <source>Scores:</source>
-        <translation type="unfinished"/>
+        <translation>Partitures:</translation>
     </message>
     <message>
         <source>Styles:</source>
-        <translation type="unfinished"/>
+        <translation>Estils:</translation>
     </message>
     <message>
         <source>Templates:</source>
-        <translation type="unfinished"/>
+        <translation>Plantilles:</translation>
     </message>
     <message>
         <source>Plugins:</source>
-        <translation type="unfinished"/>
+        <translation>Plug-in:</translation>
     </message>
     <message>
         <source>SoundFonts:</source>
-        <translation type="unfinished"/>
+        <translation>Llibreria de Sons:</translation>
     </message>
     <message>
         <source>Check for new version of MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Verificar per nova versio de MuseScore</translation>
+    </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filtre</translation>
     </message>
 </context>
 <context>
@@ -10414,7 +10450,7 @@ Per favor puncha en una nota o baix sifrat i ho tornes a fer.
         <source>No note selected:
 Please select a single note and retry operation
 </source>
-        <translation>No ne hi ha cap nota seleccionat:
+        <translation>No n&apos;hi ha cap nota seleccionat:
 Per favor elegix una nota i fes l&apos;operació de nou
 </translation>
     </message>
@@ -10422,7 +10458,7 @@ Per favor elegix una nota i fes l&apos;operació de nou
         <source>No note or rest selected:
 Please select a single note or rest and retry operation
 </source>
-        <translation>No ne hi ha cap nota o acort seleccionat:
+        <translation>No n&apos;hi ha cap nota o acort seleccionat:
 Per favor elegix una nota o silenci i fes l&apos;operació de nou
 </translation>
     </message>
@@ -10473,7 +10509,7 @@ erro: %2</translation>
         <source>Cannot open tablature font description:
 %1
 %2</source>
-        <translation>No es pot obrir la descripció de la font de la tab:
+        <translation>No es pot obrir la descripció de la font tab:
 %1
 %2</translation>
     </message>
@@ -10693,6 +10729,14 @@ Ves a la &lt;a href=&quot;http://musescore.org&quot;&gt;website de MuseScore&lt;
     </message>
     <message>
         <source>File corrupted %1</source>
+        <translation>Archiu corrupte %1</translation>
+    </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation>MuseScore: Erro de càrrega</translation>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -10790,19 +10834,19 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Install SoundFont</source>
-        <translation type="unfinished"/>
+        <translation>Instalar Llibreria de Sons</translation>
     </message>
     <message>
         <source>Do you want to install the SoundFont %1?</source>
-        <translation type="unfinished"/>
+        <translation>¿Vols instalar la Llibreria de Sons %1?</translation>
     </message>
     <message>
         <source>SoundFont installed</source>
-        <translation type="unfinished"/>
+        <translation>Llibreria de Sons instalat</translation>
     </message>
     <message>
         <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
-        <translation type="unfinished"/>
+        <translation>Llibreria de Sons instalat. Per favor ves a Vore &gt; Sintetisaor per afegirles i Vore &gt; Mesclaor per elegir el so d&apos;instrument.</translation>
     </message>
 </context>
 <context>
@@ -10844,17 +10888,6 @@ Do you want to overwrite it?</source>
     </message>
 </context>
 <context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Veu: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Dura: %2; %3</translation>
-    </message>
-</context>
-<context>
     <name>ScorePreview</name>
     <message>
         <source>Form</source>
@@ -10874,7 +10907,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Nothing selected</source>
-        <translation>No ne hi ha res elegit</translation>
+        <translation>No n&apos;hi ha res elegit</translation>
     </message>
 </context>
 <context>
@@ -10944,7 +10977,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Search in selection</source>
-        <translation>Sesburga en la seleccio</translation>
+        <translation>Desburga en la seleccio</translation>
     </message>
     <message>
         <source>Subtract from selection</source>
@@ -10982,7 +11015,7 @@ Do you want to overwrite it?</source>
     <name>SfListDialog</name>
     <message>
         <source>SoundFont Files</source>
-        <translation type="unfinished"/>
+        <translation>Archius Llibreria de Sons</translation>
     </message>
 </context>
 <context>
@@ -11025,7 +11058,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Enter Shortcut Sequence</source>
-        <translation>Introduix nova seqüencia de teclat</translation>
+        <translation>Introduïx nova seqüencia de teclat</translation>
     </message>
     <message>
         <source>Press up to four keys to enter shortcut sequence</source>
@@ -11056,7 +11089,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Split point:</source>
-        <translation>Punt de diivisió</translation>
+        <translation>Punt de divisio</translation>
     </message>
 </context>
 <context>
@@ -11215,11 +11248,11 @@ Do you want to overwrite it?</source>
     <name>Startcenter</name>
     <message>
         <source>Start Center</source>
-        <translation>Centre d&apos;inici</translation>
+        <translation>Finestra d&apos;inici</translation>
     </message>
     <message>
         <source>Open a score...</source>
-        <translation type="unfinished"/>
+        <translation>Obri a partitura...</translation>
     </message>
     <message>
         <source>Close</source>
@@ -11306,27 +11339,27 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Use up and down arrows to modify</source>
-        <translation type="unfinished"/>
+        <translation>Usa fleches cap amunt i cap a baix per modificar</translation>
     </message>
     <message>
         <source>Metronome gain</source>
-        <translation type="unfinished"/>
+        <translation>Increment metronom</translation>
     </message>
     <message>
         <source>Effect A</source>
-        <translation type="unfinished"/>
+        <translation>Efecte A</translation>
     </message>
     <message>
         <source>Effect B</source>
-        <translation type="unfinished"/>
+        <translation>Efecte B</translation>
     </message>
     <message>
         <source>Hertz</source>
-        <translation type="unfinished"/>
+        <translation>Hertzi</translation>
     </message>
     <message>
         <source>Master tuning</source>
-        <translation type="unfinished"/>
+        <translation>Templat general</translation>
     </message>
 </context>
 <context>
@@ -11551,7 +11584,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Align baseline of text to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Allinea llínea base del text al punt de referencia</translation>
     </message>
 </context>
 <context>
@@ -11706,7 +11739,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Pedal</source>
-        <translation type="unfinished"/>
+        <translation>Pedal</translation>
     </message>
 </context>
 <context>
@@ -11786,7 +11819,7 @@ Do you want to overwrite it?</source>
     <name>TimeSigProperties</name>
     <message>
         <source>Time Signature Properties</source>
-        <translation>Característiques de Indicació de compas</translation>
+        <translation>Caracteristiques de Indicacio de compas</translation>
     </message>
     <message>
         <source>/</source>
@@ -11825,7 +11858,7 @@ Do you want to overwrite it?</source>
     <name>TimesigWizard</name>
     <message>
         <source>Enter Time Signature:</source>
-        <translation>Introduix indicació de compas:</translation>
+        <translation>Introduïx indicacio de compas:</translation>
     </message>
     <message>
         <source>/</source>
@@ -11885,7 +11918,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Time Signature Wizard</source>
-        <translation>Assistent Indicació de compas</translation>
+        <translation>Assistent Indicacio de compas</translation>
     </message>
     <message>
         <source>Beat unit</source>
@@ -11897,7 +11930,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Enter Number of Measures</source>
-        <translation>Introduix el número de compassos</translation>
+        <translation>Introduïx el número de compassos</translation>
     </message>
     <message>
         <source>Measures</source>
@@ -12068,7 +12101,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Fourth</source>
-        <translation>Cuart</translation>
+        <translation>Quart</translation>
     </message>
     <message>
         <source>Fifth</source>
@@ -12096,27 +12129,27 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>C♭ major / A♭ minor</source>
-        <translation>Do♭ M / La♭ m</translation>
+        <translation>Dob M / Lab m</translation>
     </message>
     <message>
         <source>G♭ major / E♭ minor</source>
-        <translation>Sol♭ M / Mi♭ m</translation>
+        <translation>Solb M / Mib m</translation>
     </message>
     <message>
         <source>D♭ major / B♭ minor</source>
-        <translation>Re♭ M / Si♭ m</translation>
+        <translation>Reb M / Sib m</translation>
     </message>
     <message>
         <source>A♭ major / F minor</source>
-        <translation>La♭ M / Fa m</translation>
+        <translation>Lab M / Fa m</translation>
     </message>
     <message>
         <source>E♭ major / C minor</source>
-        <translation>Mi♭ M / Do m</translation>
+        <translation>Mib M / Do m</translation>
     </message>
     <message>
         <source>B♭ major / G minor</source>
-        <translation>Si♭ M / Sol m</translation>
+        <translation>Sib M / Sol m</translation>
     </message>
     <message>
         <source>A major / F♯ minor</source>
@@ -12331,7 +12364,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Make this score private</source>
-        <translation type="unfinished"/>
+        <translation>Fer esta partitura privat</translation>
     </message>
 </context>
 <context>
@@ -12432,7 +12465,7 @@ erro: </translation>
     </message>
     <message>
         <source>Premature end of document.</source>
-        <translation>Fi de document abans d&apos;hora.</translation>
+        <translation>Fi de document ans d&apos;hora.</translation>
     </message>
     <message>
         <source>Invalid document.</source>
@@ -12471,11 +12504,11 @@ erro: </translation>
     </message>
     <message>
         <source>SoundFont %1 already loaded</source>
-        <translation type="unfinished"/>
+        <translation>Llibreria de Sons %1 carregada</translation>
     </message>
     <message>
         <source>Cannot load SoundFont %1</source>
-        <translation type="unfinished"/>
+        <translation>No es pot carregar la Llibreria de Sons %1</translation>
     </message>
 </context>
 <context>
@@ -12502,7 +12535,7 @@ erro: </translation>
     </message>
     <message>
         <source>Natural</source>
-        <translation>Natural</translation>
+        <translation>Bequadro</translation>
     </message>
     <message>
         <source>Flat-slash</source>
@@ -12693,7 +12726,7 @@ erro: </translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Anterior</translation>
+        <translation>Desfer</translation>
     </message>
     <message>
         <source>Undo last change</source>
@@ -12701,7 +12734,7 @@ erro: </translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation>Següent</translation>
+        <translation>Refer</translation>
     </message>
     <message>
         <source>Redo last undo</source>
@@ -13041,7 +13074,7 @@ erro: </translation>
     </message>
     <message>
         <source>Enter rest</source>
-        <translation>Introduix silenci</translation>
+        <translation>Introduïx silenci</translation>
     </message>
     <message>
         <source>Staccato</source>
@@ -13073,7 +13106,7 @@ erro: </translation>
     </message>
     <message>
         <source>Flip direction</source>
-        <translation>Invertir direcció</translation>
+        <translation>Alternar direccio</translation>
     </message>
     <message>
         <source>Up</source>
@@ -13233,7 +13266,7 @@ erro: </translation>
     </message>
     <message>
         <source>Add staff below to selection</source>
-        <translation>Afig pentagrama deavall de la seleccio</translation>
+        <translation>Afig pentagrama devall de la seleccio</translation>
     </message>
     <message>
         <source>Slur</source>
@@ -13361,7 +13394,7 @@ erro: </translation>
     </message>
     <message>
         <source>Quadruplet</source>
-        <translation>cuatreset</translation>
+        <translation>Quatreset</translation>
     </message>
     <message>
         <source>Quintuplet</source>
@@ -13473,7 +13506,7 @@ erro: </translation>
     </message>
     <message>
         <source>Natural</source>
-        <translation>Natural</translation>
+        <translation>Bequadro</translation>
     </message>
     <message>
         <source>Flat</source>
@@ -13705,7 +13738,7 @@ erro: </translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Reproduix</translation>
+        <translation>Reproduïx</translation>
     </message>
     <message>
         <source>Player play</source>
@@ -13745,7 +13778,7 @@ erro: </translation>
     </message>
     <message>
         <source>Rewind to start position</source>
-        <translation>Tirar arrere a la posició inicial</translation>
+        <translation>Tirar a la posició inicial</translation>
     </message>
     <message>
         <source>Player Seek to End</source>
@@ -13753,7 +13786,7 @@ erro: </translation>
     </message>
     <message>
         <source>Play repeats</source>
-        <translation>Eixecutar de nou</translation>
+        <translation>Reproduir en iteracions</translation>
     </message>
     <message>
         <source>Toggle repeats playback</source>
@@ -13769,7 +13802,7 @@ erro: </translation>
     </message>
     <message>
         <source>Pan score during playback</source>
-        <translation>Partitura sancera en la reproducció</translation>
+        <translation>Moure la partitura en la reproducció</translation>
     </message>
     <message>
         <source>Load Style...</source>
@@ -13817,27 +13850,27 @@ erro: </translation>
     </message>
     <message>
         <source>Exchange Voice 1-2</source>
-        <translation>Baratar veu 1-2</translation>
+        <translation>Trocar veu 1-2</translation>
     </message>
     <message>
         <source>Exchange Voice 1-3</source>
-        <translation>Baratar Veu 1-3</translation>
+        <translation>Trocar Veu 1-3</translation>
     </message>
     <message>
         <source>Exchange Voice 1-4</source>
-        <translation>Baratar Veu 1-4</translation>
+        <translation>Trocar Veu 1-4</translation>
     </message>
     <message>
         <source>Exchange Voice 2-3</source>
-        <translation>Baratar Veu 2-3</translation>
+        <translation>Trocar Veu 2-3</translation>
     </message>
     <message>
         <source>Exchange Voice 2-4</source>
-        <translation>Baratar Veu 2-4</translation>
+        <translation>Trocar Veu 2-4</translation>
     </message>
     <message>
         <source>Exchange Voice 3-4</source>
-        <translation>Baratar Veu 3-4</translation>
+        <translation>Trocar Veu 3-4</translation>
     </message>
     <message>
         <source>Concert Pitch</source>
@@ -13865,7 +13898,7 @@ erro: </translation>
     </message>
     <message>
         <source>Toggle Page Break</source>
-        <translation>Commuta bot de fulla</translation>
+        <translation>Commuta bot de plana</translation>
     </message>
     <message>
         <source>Toggle Section Break</source>
@@ -13961,7 +13994,7 @@ erro: </translation>
     </message>
     <message>
         <source>All Similar Elements in Same Staff</source>
-        <translation>Tots els Elements Pareguts dins del Mateix Pentagrama</translation>
+        <translation>Tots els Elements Semblants dins del Mateix Pentagrama</translation>
     </message>
     <message>
         <source>Select all similar elements in same staff</source>
@@ -14121,7 +14154,7 @@ erro: </translation>
     </message>
     <message>
         <source>Play metronome during playback</source>
-        <translation>Sonar metrónom en la reproduccio</translation>
+        <translation>Escoltar metrónom en la reproduccio</translation>
     </message>
     <message>
         <source>Toggle count-in playback</source>
@@ -14145,7 +14178,7 @@ erro: </translation>
     </message>
     <message>
         <source>Transpose Down</source>
-        <translation>Transportar Davall</translation>
+        <translation>Transportar Devall</translation>
     </message>
     <message>
         <source>Master Palette...</source>
@@ -14413,7 +14446,7 @@ erro: </translation>
     </message>
     <message>
         <source>Add 32nd grace note after</source>
-        <translation>Afig enacabant una nota d&apos;embelliment fusa</translation>
+        <translation>Afig enacabant nota d&apos;embelliment fusa</translation>
     </message>
     <message>
         <source>All Similar Elements in Range Selection</source>
@@ -14425,7 +14458,7 @@ erro: </translation>
     </message>
     <message>
         <source>Add brackets to element</source>
-        <translation>Afig corchets a l&apos;element</translation>
+        <translation>Afig corchets a l&apos;alteració</translation>
     </message>
     <message>
         <source>Selection Filter</source>
@@ -14437,7 +14470,7 @@ erro: </translation>
     </message>
     <message>
         <source>Add Eighth grace note after</source>
-        <translation>Afig enacabant una nota d&apos;embelliment corchea</translation>
+        <translation>Afig enacabant nota d&apos;embelliment corchea</translation>
     </message>
     <message>
         <source>Beam 16th sub</source>
@@ -14461,11 +14494,11 @@ erro: </translation>
     </message>
     <message>
         <source>Time Signatures...</source>
-        <translation>Indicació de compas...</translation>
+        <translation>Indicacio de compas...</translation>
     </message>
     <message>
         <source>Show time signature palette</source>
-        <translation>Vore paleta indicació de compas</translation>
+        <translation>Vore paleta indicacio de compas</translation>
     </message>
     <message>
         <source>Symbols...</source>
@@ -14493,7 +14526,7 @@ erro: </translation>
     </message>
     <message>
         <source>Insert one measure</source>
-        <translation>Insertar Compas: u</translation>
+        <translation>Insertar Compas</translation>
     </message>
     <message>
         <source>Insert horizontal frame</source>
@@ -14549,7 +14582,7 @@ erro: </translation>
     </message>
     <message>
         <source>Start Center</source>
-        <translation>Centre d&apos;inici</translation>
+        <translation>Finestra d&apos;inici</translation>
     </message>
     <message>
         <source>Toggle create multimeasure rest</source>
@@ -14561,287 +14594,287 @@ erro: </translation>
     </message>
     <message>
         <source>Increase Stretch</source>
-        <translation type="unfinished"/>
+        <translation>Aumentar Espansio</translation>
     </message>
     <message>
         <source>Increase stretch</source>
-        <translation type="unfinished"/>
+        <translation>Aumentar espansio</translation>
     </message>
     <message>
         <source>Increase stretch of selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Aumentar espansio dels compassos seleccionats</translation>
     </message>
     <message>
         <source>Decrease Stretch</source>
-        <translation type="unfinished"/>
+        <translation>Reduïx Espansio</translation>
     </message>
     <message>
         <source>Decrease stretch</source>
-        <translation type="unfinished"/>
+        <translation>Redüix espansio</translation>
     </message>
     <message>
         <source>Decrease stretch of selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Redüix espansio dels compassos seleccionats</translation>
     </message>
     <message>
         <source>Plugin Creator...</source>
-        <translation type="unfinished"/>
+        <translation>Plug-in Creator...</translation>
     </message>
     <message>
         <source>Plugin Manager...</source>
-        <translation type="unfinished"/>
+        <translation>Organisador de Plug-in...</translation>
     </message>
     <message>
         <source>Resource Manager...</source>
-        <translation type="unfinished"/>
+        <translation>Organisador de Recursos...</translation>
     </message>
     <message>
         <source>Add/Remove Line Breaks...</source>
-        <translation type="unfinished"/>
+        <translation>Afig/Trau Bots de Llínea...</translation>
     </message>
     <message>
         <source>File: Open</source>
-        <translation type="unfinished"/>
+        <translation>Archiu: Aubrir</translation>
     </message>
     <message>
         <source>File: Save</source>
-        <translation type="unfinished"/>
+        <translation>Archiu: Guardar</translation>
     </message>
     <message>
         <source>File: Save online</source>
-        <translation type="unfinished"/>
+        <translation>Archiu: Guardar on-line</translation>
     </message>
     <message>
         <source>File: Save as</source>
-        <translation type="unfinished"/>
+        <translation>Archiu: Guardar com</translation>
     </message>
     <message>
         <source>Save selection</source>
-        <translation type="unfinished"/>
+        <translation>Guardar seleccio</translation>
     </message>
     <message>
         <source>File: Save a copy</source>
-        <translation type="unfinished"/>
+        <translation>Archiu: Guardar una còpia</translation>
     </message>
     <message>
         <source>Export parts</source>
-        <translation type="unfinished"/>
+        <translation>Exportar parts</translation>
     </message>
     <message>
         <source>File: Close</source>
-        <translation type="unfinished"/>
+        <translation>Archiu: Tancar</translation>
     </message>
     <message>
         <source>File: New</source>
-        <translation type="unfinished"/>
+        <translation>Archiu: Nou</translation>
     </message>
     <message>
         <source>Note input</source>
-        <translation type="unfinished"/>
+        <translation>Introducció notes</translation>
     </message>
     <message>
         <source>Respell pitches</source>
-        <translation type="unfinished"/>
+        <translation>Torna nomenar To</translation>
     </message>
     <message>
         <source>Flip Direction</source>
-        <translation type="unfinished"/>
+        <translation>Alternar Direccio</translation>
     </message>
     <message>
         <source>Diatonic Up</source>
-        <translation type="unfinished"/>
+        <translation>Pujar Diatonic</translation>
     </message>
     <message>
         <source>Move Up</source>
-        <translation type="unfinished"/>
+        <translation>Moure Amunt</translation>
     </message>
     <message>
         <source>Diatonic Down</source>
-        <translation type="unfinished"/>
+        <translation>Baixar Diatonic</translation>
     </message>
     <message>
         <source>Down Octave</source>
-        <translation type="unfinished"/>
+        <translation>Baixar octava</translation>
     </message>
     <message>
         <source>Next Element</source>
-        <translation type="unfinished"/>
+        <translation>Següent Element</translation>
     </message>
     <message>
         <source>Accessibility: Next element</source>
-        <translation type="unfinished"/>
+        <translation>Accessibilitat: Proxim element</translation>
     </message>
     <message>
         <source>Previous Element</source>
-        <translation type="unfinished"/>
+        <translation>Element Previ</translation>
     </message>
     <message>
         <source>Accessibility: Previous element</source>
-        <translation type="unfinished"/>
+        <translation>accessibilitat: Element previ</translation>
     </message>
     <message>
         <source>First Element</source>
-        <translation type="unfinished"/>
+        <translation>Primer Element</translation>
     </message>
     <message>
         <source>Last Element</source>
-        <translation type="unfinished"/>
+        <translation>L&apos;últim element</translation>
     </message>
     <message>
         <source>Move Down</source>
-        <translation type="unfinished"/>
+        <translation>Moure Avall</translation>
     </message>
     <message>
         <source>Previous Chord</source>
-        <translation type="unfinished"/>
+        <translation>Acort Previ</translation>
     </message>
     <message>
         <source>Previous Measure</source>
-        <translation type="unfinished"/>
+        <translation>Compas Previ</translation>
     </message>
     <message>
         <source>Previous Staff or Voice</source>
-        <translation type="unfinished"/>
+        <translation>Pentagrama o Veu Previ</translation>
     </message>
     <message>
         <source>Next Chord</source>
-        <translation type="unfinished"/>
+        <translation>Acort Següent</translation>
     </message>
     <message>
         <source>Next Measure</source>
-        <translation type="unfinished"/>
+        <translation>Compas Següent</translation>
     </message>
     <message>
         <source>Next Staff or Voice</source>
-        <translation type="unfinished"/>
+        <translation>Pentagrama o Veu Següent</translation>
     </message>
     <message>
         <source>Add Previous Chord to Selection</source>
-        <translation type="unfinished"/>
+        <translation>Afig Acort Previ a la Selecció</translation>
     </message>
     <message>
         <source>Select to Beginning of Measure</source>
-        <translation type="unfinished"/>
+        <translation>Selecció Hasda Inici de Compas</translation>
     </message>
     <message>
         <source>Add Next Chord to Selection</source>
-        <translation type="unfinished"/>
+        <translation>Afig Acort Próxim a la Selecció</translation>
     </message>
     <message>
         <source>Select section</source>
-        <translation type="unfinished"/>
+        <translation>Eleccio Seccio</translation>
     </message>
     <message>
         <source>Move Chord/Rest Right</source>
-        <translation type="unfinished"/>
+        <translation>Moure Acort/Silenci a la dreta</translation>
     </message>
     <message>
         <source>Move Chord/Rest left</source>
-        <translation type="unfinished"/>
+        <translation>Moure Acort/Silenci esquerra</translation>
     </message>
     <message>
         <source>Select to Beginning of Line</source>
-        <translation type="unfinished"/>
+        <translation>Selecció hasda Inici de Llínea</translation>
     </message>
     <message>
         <source>Select to End of Line</source>
-        <translation type="unfinished"/>
+        <translation>Selecció hasda Fi de Llínea</translation>
     </message>
     <message>
         <source>Select to Beginning of Score</source>
-        <translation type="unfinished"/>
+        <translation>Selecció hasda Inici de Partitura</translation>
     </message>
     <message>
         <source>Select to End of Score</source>
-        <translation type="unfinished"/>
+        <translation>Selecció hasda Fi de Partitura</translation>
     </message>
     <message>
         <source>Add Staff Above to Selection</source>
-        <translation type="unfinished"/>
+        <translation>Afix Pentagrama Damunt de la Seleccio</translation>
     </message>
     <message>
         <source>Add Staff Below to Selection</source>
-        <translation type="unfinished"/>
+        <translation>Afig Pentagrama Devall de la Seleccio</translation>
     </message>
     <message>
         <source>Page: Previous</source>
-        <translation type="unfinished"/>
+        <translation>Plana: Anterior</translation>
     </message>
     <message>
         <source>Page: Next</source>
-        <translation type="unfinished"/>
+        <translation>Plana: Ppróxima</translation>
     </message>
     <message>
         <source>Page: Top</source>
-        <translation type="unfinished"/>
+        <translation>Plana:. Inici</translation>
     </message>
     <message>
         <source>Page: End</source>
-        <translation type="unfinished"/>
+        <translation>Plana: Fi</translation>
     </message>
     <message>
         <source>Full measure rest</source>
-        <translation type="unfinished"/>
+        <translation>Silenci de compas sancer</translation>
     </message>
     <message>
         <source>Delete selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Suprimir compas seleccionat</translation>
     </message>
     <message>
         <source>Append one measure</source>
-        <translation type="unfinished"/>
+        <translation>Afegir u unic compas</translation>
     </message>
     <message>
         <source>Append text frame</source>
-        <translation type="unfinished"/>
+        <translation>Anexa caixó text</translation>
     </message>
     <message>
         <source>Insert fretboard diagram frame</source>
-        <translation type="unfinished"/>
+        <translation>Insertar taula del diapasó</translation>
     </message>
     <message>
         <source>Append horizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>Anexa caixo horisontal</translation>
     </message>
     <message>
         <source>Append vertical frame</source>
-        <translation type="unfinished"/>
+        <translation>Anexa caixo vertical</translation>
     </message>
     <message>
         <source>Note duration: Longa</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: Longa</translation>
     </message>
     <message>
         <source>Double Whole Note</source>
-        <translation type="unfinished"/>
+        <translation>Nota Breu</translation>
     </message>
     <message>
         <source>Note duration: Double whole</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: Bbreu</translation>
     </message>
     <message>
         <source>Whole Note</source>
-        <translation type="unfinished"/>
+        <translation>Redona</translation>
     </message>
     <message>
         <source>Note duration: Whole</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: Redona</translation>
     </message>
     <message>
         <source>Half Note</source>
-        <translation type="unfinished"/>
+        <translation>Blanca</translation>
     </message>
     <message>
         <source>Note duration: Half</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: Blanca</translation>
     </message>
     <message>
         <source>Quarter Note</source>
-        <translation type="unfinished"/>
+        <translation>Negra</translation>
     </message>
     <message>
         <source>Note duration: Quarter</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: Negra</translation>
     </message>
     <message>
         <source>Eighth Note</source>
@@ -14849,91 +14882,91 @@ erro: </translation>
     </message>
     <message>
         <source>Note duration: Eighth</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: Corchea</translation>
     </message>
     <message>
         <source>16th Note</source>
-        <translation type="unfinished"/>
+        <translation>Semicorchea</translation>
     </message>
     <message>
         <source>32nd Note</source>
-        <translation type="unfinished"/>
+        <translation>Fusa</translation>
     </message>
     <message>
         <source>64th Note</source>
-        <translation type="unfinished"/>
+        <translation>Semifusa</translation>
     </message>
     <message>
         <source>128th Note</source>
-        <translation type="unfinished"/>
+        <translation>Garrapatea</translation>
     </message>
     <message>
         <source>Increase Active Duration</source>
-        <translation type="unfinished"/>
+        <translation>Aumenta la Dura Activa</translation>
     </message>
     <message>
         <source>Decrease Active Duration</source>
-        <translation type="unfinished"/>
+        <translation>Devalla la Dura Aactiva</translation>
     </message>
     <message>
         <source>Augmentation Dot</source>
-        <translation type="unfinished"/>
+        <translation>Puntet</translation>
     </message>
     <message>
         <source>Note duration: Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: Puntet</translation>
     </message>
     <message>
         <source>Double Augmentation Dot</source>
-        <translation type="unfinished"/>
+        <translation>Doble puntet</translation>
     </message>
     <message>
         <source>Note duration: Double augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: Doble puntet</translation>
     </message>
     <message>
         <source>Note duration: Tie</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: Lligatura</translation>
     </message>
     <message>
         <source>Note input: Rest</source>
-        <translation type="unfinished"/>
+        <translation>Introducció nota: Silenci</translation>
     </message>
     <message>
         <source>Double Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Doble Sostingut</translation>
     </message>
     <message>
         <source>Note input: Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Intorducció nota: Doble sostingut</translation>
     </message>
     <message>
         <source>Note input: Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Intorducció nota: Sostingut</translation>
     </message>
     <message>
         <source>Note input: Natural</source>
-        <translation type="unfinished"/>
+        <translation>Intorducció nota: Bequadro</translation>
     </message>
     <message>
         <source>Note input: Flat</source>
-        <translation type="unfinished"/>
+        <translation>Intorducció nota: Bemol</translation>
     </message>
     <message>
         <source>Double Flat</source>
-        <translation type="unfinished"/>
+        <translation>Doble bemol</translation>
     </message>
     <message>
         <source>Note input: Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Intorducció nota: Doble bemol</translation>
     </message>
     <message>
         <source>Grace: Quarter</source>
-        <translation type="unfinished"/>
+        <translation>Embelliment: Negra</translation>
     </message>
     <message>
         <source>Grace: Eighth after</source>
-        <translation type="unfinished"/>
+        <translation>Embelliment: Enacabant corchea</translation>
     </message>
     <message>
         <source>MIDI Input</source>
@@ -14941,39 +14974,39 @@ erro: </translation>
     </message>
     <message>
         <source>Beam Start</source>
-        <translation type="unfinished"/>
+        <translation>Escomençament de la Barra</translation>
     </message>
     <message>
         <source>Beam Middle</source>
-        <translation type="unfinished"/>
+        <translation>Mig de la Barra</translation>
     </message>
     <message>
         <source>No Beam</source>
-        <translation type="unfinished"/>
+        <translation>Sense Barra</translation>
     </message>
     <message>
         <source>Beam 16th Sub</source>
-        <translation type="unfinished"/>
+        <translation>Barra d&apos;unió en Semicorchea</translation>
     </message>
     <message>
         <source>Beam 32nd Sub</source>
-        <translation type="unfinished"/>
+        <translation>Barra d&apos;unió en Fusa</translation>
     </message>
     <message>
         <source>Auto Beam</source>
-        <translation type="unfinished"/>
+        <translation>Barra de corchets auto</translation>
     </message>
     <message>
         <source>Feathered Beam, Slower</source>
-        <translation type="unfinished"/>
+        <translation>Barra en àngul, Més calmós</translation>
     </message>
     <message>
         <source>Feathered Beam, Faster</source>
-        <translation type="unfinished"/>
+        <translation>Barra en àngul, Més rapit</translation>
     </message>
     <message>
         <source>Play panel</source>
-        <translation type="unfinished"/>
+        <translation>Panel de reproduccio</translation>
     </message>
     <message>
         <source>Selection filter</source>
@@ -14981,287 +15014,287 @@ erro: </translation>
     </message>
     <message>
         <source>MIDI import panel</source>
-        <translation type="unfinished"/>
+        <translation>Panel d&apos;importació MIDI</translation>
     </message>
     <message>
         <source>Status bar</source>
-        <translation type="unfinished"/>
+        <translation>Barra d&apos;estat</translation>
     </message>
     <message>
         <source>Zoom Canvas</source>
-        <translation type="unfinished"/>
+        <translation>Encaixar Amplaria</translation>
     </message>
     <message>
         <source>Play previous chord</source>
-        <translation type="unfinished"/>
+        <translation>Eixecuta acort previ</translation>
     </message>
     <message>
         <source>Play previous measure</source>
-        <translation type="unfinished"/>
+        <translation>Eixecuta compas previ</translation>
     </message>
     <message>
         <source>Play next chord</source>
-        <translation type="unfinished"/>
+        <translation>Eixecuta acort següent</translation>
     </message>
     <message>
         <source>Play next measure</source>
-        <translation type="unfinished"/>
+        <translation>Eixecuta següent compas</translation>
     </message>
     <message>
         <source>Player seek to begin</source>
-        <translation type="unfinished"/>
+        <translation>Cursor del reproductor a l&apos;escomençament</translation>
     </message>
     <message>
         <source>Player seek to end</source>
-        <translation type="unfinished"/>
+        <translation>Cursor del reproductor a la fi</translation>
     </message>
     <message>
         <source>Play Repeats</source>
-        <translation type="unfinished"/>
+        <translation>Reproduir en Iteracions</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>Elegix tot</translation>
     </message>
     <message>
         <source>Exchange voice 1-2</source>
-        <translation type="unfinished"/>
+        <translation>Trocar veu 1-2</translation>
     </message>
     <message>
         <source>Exchange voice 1-3</source>
-        <translation type="unfinished"/>
+        <translation>Trocar veu 1-3</translation>
     </message>
     <message>
         <source>Exchange voice 1-4</source>
-        <translation type="unfinished"/>
+        <translation>Trocar veu 1-4</translation>
     </message>
     <message>
         <source>Exchange voice 2-3</source>
-        <translation type="unfinished"/>
+        <translation>Trocar veu 2-3</translation>
     </message>
     <message>
         <source>Exchange voice 2-4</source>
-        <translation type="unfinished"/>
+        <translation>Trocar veu 2-4</translation>
     </message>
     <message>
         <source>Exchange voice 3-4</source>
-        <translation type="unfinished"/>
+        <translation>Trocar veu 3-4</translation>
     </message>
     <message>
         <source>Repeat Last Command</source>
-        <translation type="unfinished"/>
+        <translation>Repetix última orde</translation>
     </message>
     <message>
         <source>Toggle system break</source>
-        <translation type="unfinished"/>
+        <translation>Commuta bot de sistema</translation>
     </message>
     <message>
         <source>Toggle page break</source>
-        <translation type="unfinished"/>
+        <translation>Commuta bot de plana</translation>
     </message>
     <message>
         <source>Toggle section break</source>
-        <translation type="unfinished"/>
+        <translation>Commuta bot de secció</translation>
     </message>
     <message>
         <source>Edit element</source>
-        <translation type="unfinished"/>
+        <translation>Modifica element</translation>
     </message>
     <message>
         <source>Show invisible</source>
-        <translation type="unfinished"/>
+        <translation>Vore invisible</translation>
     </message>
     <message>
         <source>Show unprintable</source>
-        <translation type="unfinished"/>
+        <translation>Vore lo no-imprimible</translation>
     </message>
     <message>
         <source>Show frames</source>
-        <translation type="unfinished"/>
+        <translation>Vore caixons</translation>
     </message>
     <message>
         <source>Show page margins</source>
-        <translation type="unfinished"/>
+        <translation>Vore marge de planes</translation>
     </message>
     <message>
         <source>Insert special characters</source>
-        <translation type="unfinished"/>
+        <translation>Insertar lletres especials</translation>
     </message>
     <message>
         <source>Whole Rest</source>
-        <translation type="unfinished"/>
+        <translation>Silenci de Redona</translation>
     </message>
     <message>
         <source>Note input: Whole rest</source>
-        <translation type="unfinished"/>
+        <translation>Intorducció notes: Silenci de redona</translation>
     </message>
     <message>
         <source>Half Rest</source>
-        <translation type="unfinished"/>
+        <translation>Silenci de Blanca</translation>
     </message>
     <message>
         <source>Note input: Half rest</source>
-        <translation type="unfinished"/>
+        <translation>Introducció notes: Silenci de blanca</translation>
     </message>
     <message>
         <source>Quarter Rest</source>
-        <translation type="unfinished"/>
+        <translation>Silenci de Negra</translation>
     </message>
     <message>
         <source>Note input: Quarter rest</source>
-        <translation type="unfinished"/>
+        <translation>Introducció de notes: Silenci de negra</translation>
     </message>
     <message>
         <source>Eighth Rest</source>
-        <translation type="unfinished"/>
+        <translation>Silenci de Corchea</translation>
     </message>
     <message>
         <source>Note input: Eighth rest</source>
-        <translation type="unfinished"/>
+        <translation>Introducció de notes: Silenci de corchea</translation>
     </message>
     <message>
         <source>Zoom in</source>
-        <translation type="unfinished"/>
+        <translation>Acostar</translation>
     </message>
     <message>
         <source>Zoom out</source>
-        <translation type="unfinished"/>
+        <translation>Alluntar</translation>
     </message>
     <message>
         <source>Mirror Note Head</source>
-        <translation type="unfinished"/>
+        <translation>Invertix Cap de Nota</translation>
     </message>
     <message>
         <source>Double Duration</source>
-        <translation type="unfinished"/>
+        <translation>Doble Dura</translation>
     </message>
     <message>
         <source>Half Duration</source>
-        <translation type="unfinished"/>
+        <translation>Dura Mitat</translation>
     </message>
     <message>
         <source>Repeat Selection</source>
-        <translation type="unfinished"/>
+        <translation>Repetix Seleccio</translation>
     </message>
     <message>
         <source>Enharmonic Up</source>
-        <translation type="unfinished"/>
+        <translation>Enarmmonic Damunt</translation>
     </message>
     <message>
         <source>Enharmonic Down</source>
-        <translation type="unfinished"/>
+        <translation>Enarmonic Devall</translation>
     </message>
     <message>
         <source>Create New Revision</source>
-        <translation type="unfinished"/>
+        <translation>Crear Nova Revisió</translation>
     </message>
     <message>
         <source>Toggle Image Capture</source>
-        <translation type="unfinished"/>
+        <translation>Commuta Captura Image</translation>
     </message>
     <message>
         <source>Toggle image capture</source>
-        <translation type="unfinished"/>
+        <translation>Commuta Captura image</translation>
     </message>
     <message>
         <source>Show OMR Image</source>
-        <translation type="unfinished"/>
+        <translation>Vore Image OMR</translation>
     </message>
     <message>
         <source>Full screen</source>
-        <translation type="unfinished"/>
+        <translation>Pantalla plena</translation>
     </message>
     <message>
         <source>Enable Snap to Horizontal Grid</source>
-        <translation type="unfinished"/>
+        <translation>Habilitar Imant a Reixa Horisontal</translation>
     </message>
     <message>
         <source>Enable Snap to Vertical Grid</source>
-        <translation type="unfinished"/>
+        <translation>Habilitar Imant a Reixa Vertical</translation>
     </message>
     <message>
         <source>Configure Grid</source>
-        <translation type="unfinished"/>
+        <translation>Configurar Reixa</translation>
     </message>
     <message>
         <source>Piano keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Teclat piano</translation>
     </message>
     <message>
         <source>Split measure</source>
-        <translation type="unfinished"/>
+        <translation>Dividir compas</translation>
     </message>
     <message>
         <source>Join measures</source>
-        <translation type="unfinished"/>
+        <translation>Unir compassos</translation>
     </message>
     <message>
         <source>Page settings</source>
-        <translation type="unfinished"/>
+        <translation>Ajusts de plana</translation>
     </message>
     <message>
         <source>Next score</source>
-        <translation type="unfinished"/>
+        <translation>Següent partitura</translation>
     </message>
     <message>
         <source>Previous score</source>
-        <translation type="unfinished"/>
+        <translation>Anterior Partitura</translation>
     </message>
     <message>
         <source>Plugin creator</source>
-        <translation type="unfinished"/>
+        <translation>Plug-in creator</translation>
     </message>
     <message>
         <source>Plugin manager</source>
-        <translation type="unfinished"/>
+        <translation>Organisador de plug-in</translation>
     </message>
     <message>
         <source>Resource manager</source>
-        <translation type="unfinished"/>
+        <translation>Organisador de recursos</translation>
     </message>
     <message>
         <source>Show OMR panel</source>
-        <translation type="unfinished"/>
+        <translation>Vore panel OMR</translation>
     </message>
     <message>
         <source>Loop In</source>
-        <translation type="unfinished"/>
+        <translation>Inici Bucle</translation>
     </message>
     <message>
         <source>Loop Out</source>
-        <translation type="unfinished"/>
+        <translation>Eixida Bucle</translation>
     </message>
     <message>
         <source>Set loop out position</source>
-        <translation type="unfinished"/>
+        <translation>Establix lloc eixida bucle</translation>
     </message>
     <message>
         <source>Count-In</source>
-        <translation type="unfinished"/>
+        <translation>Conte d&apos;inici</translation>
     </message>
     <message>
         <source>Transpose up</source>
-        <translation type="unfinished"/>
+        <translation>Transportar amunt</translation>
     </message>
     <message>
         <source>Transpose down</source>
-        <translation type="unfinished"/>
+        <translation>Transportar devall</translation>
     </message>
     <message>
         <source>Toggle view mode</source>
-        <translation type="unfinished"/>
+        <translation>Commuta modo vista</translation>
     </message>
     <message>
         <source>Next Syllable</source>
-        <translation type="unfinished"/>
+        <translation>Sílaba Següent</translation>
     </message>
     <message>
         <source>Previous Syllable</source>
-        <translation type="unfinished"/>
+        <translation>Sílaba Previa</translation>
     </message>
     <message>
         <source>Toggle Visibility</source>
-        <translation type="unfinished"/>
+        <translation>Conmuta Visibilitat</translation>
     </message>
     <message>
         <source>Set Visible</source>
@@ -15273,119 +15306,119 @@ erro: </translation>
     </message>
     <message>
         <source>Note Anchored Textline</source>
-        <translation type="unfinished"/>
+        <translation>Ancorar Nota a Regló de text</translation>
     </message>
     <message>
         <source>Note anchored textline</source>
-        <translation type="unfinished"/>
+        <translation>Ancorar nota a regló de text</translation>
     </message>
     <message>
         <source>Lock score</source>
-        <translation type="unfinished"/>
+        <translation>Bloquejar partitura</translation>
     </message>
     <message>
         <source>Note duration: Longa (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: Longa (TAB)</translation>
     </message>
     <message>
         <source>Double Whole Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nota Breu (TAB)</translation>
     </message>
     <message>
         <source>Note duration: Double whole (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: Breu (TAB)</translation>
     </message>
     <message>
         <source>Whole Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Redona (TAB)</translation>
     </message>
     <message>
         <source>Note duration: Whole (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: Redona (TAB)</translation>
     </message>
     <message>
         <source>Half Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Blanca (TAB)</translation>
     </message>
     <message>
         <source>Note duration: Half (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: Blanca (TAB)</translation>
     </message>
     <message>
         <source>Quarter Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Negra (TAB)</translation>
     </message>
     <message>
         <source>Note duration: Quarter (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: negra (TAB)</translation>
     </message>
     <message>
         <source>Eighth Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Nota corchea (TAB)</translation>
     </message>
     <message>
         <source>Note duration: Eighth (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Dura nota: Corchea (TAB)</translation>
     </message>
     <message>
         <source>16th Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Semicorchea (TAB)</translation>
     </message>
     <message>
         <source>32nd Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Fusa (TAB)</translation>
     </message>
     <message>
         <source>64th Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Semifusa (TAB)</translation>
     </message>
     <message>
         <source>128th Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Garrapatea (TAB)</translation>
     </message>
     <message>
         <source>Increase Active Duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Aumenta la Dura Activa (TAB)</translation>
     </message>
     <message>
         <source>Decrease Active Duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Devalla la Dura Activa (TAB)</translation>
     </message>
     <message>
         <source>Note input: Rest (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Introducció nota: Silenci (TAB)</translation>
     </message>
     <message>
         <source>String Above (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Cadena damunt (TAB)</translation>
     </message>
     <message>
         <source>String Below (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Cadena devall (TAB)</translation>
     </message>
     <message>
         <source>Previous Beat (Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Pols Previ (Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Next Beat (Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Pols següent (Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Add Brackets to Element</source>
-        <translation type="unfinished"/>
+        <translation>Afig Corchets a l&apos;Alteració</translation>
     </message>
     <message>
         <source>Toggle Create Multimeasure Rest</source>
-        <translation type="unfinished"/>
+        <translation>Conmuta Crear Silencis Multicompas</translation>
     </message>
     <message>
         <source>Bold Face</source>
-        <translation type="unfinished"/>
+        <translation>Traça de la Negreta</translation>
     </message>
     <message>
         <source>Bold face</source>
-        <translation type="unfinished"/>
+        <translation>Traça de la negreta</translation>
     </message>
     <message>
         <source>Italic</source>
@@ -15397,159 +15430,159 @@ erro: </translation>
     </message>
     <message>
         <source>Move Word Left</source>
-        <translation type="unfinished"/>
+        <translation>Moure Paraula Esquerra</translation>
     </message>
     <message>
         <source>Move word left</source>
-        <translation type="unfinished"/>
+        <translation>Moure paraula esquerra</translation>
     </message>
     <message>
         <source>Move Word Right</source>
-        <translation type="unfinished"/>
+        <translation>Moure Paraula Dreta</translation>
     </message>
     <message>
         <source>Move word right</source>
-        <translation type="unfinished"/>
+        <translation>Moure paraula dreta</translation>
     </message>
     <message>
         <source>Fill with slashes</source>
-        <translation type="unfinished"/>
+        <translation>Ompli en barres de gaidó</translation>
     </message>
     <message>
         <source>Toggle rhythmic slash notation</source>
-        <translation type="unfinished"/>
+        <translation>Conmuta notacio ritme slash</translation>
     </message>
     <message>
         <source>Add/remove line breaks</source>
-        <translation type="unfinished"/>
+        <translation>Afig/Trau bots de llínea</translation>
     </message>
     <message>
         <source>Resequence rehearsal marks</source>
-        <translation type="unfinished"/>
+        <translation>Tornar numerar punts d&apos;ensaig</translation>
     </message>
     <message>
         <source>Start center</source>
-        <translation type="unfinished"/>
+        <translation>Finestra d&apos;inici</translation>
     </message>
     <message>
         <source>Longa Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar Llonga (B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Advance of a longa (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar una Llonga (assoles B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Breve Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar Breu (B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Advance of a double whole note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar una Breu (assoles B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Whole Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar Redona (B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Advance of a whole note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar una Redona (assoles B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Half Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar Blanca (B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Advance of a half note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar una Blanca (assoles B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Quarter Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar Negra (B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Advance of a quarter note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar una Negra (assoles B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Eighth Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar Corchea (B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Advance of an eighth note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar una Corchea (assoles B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>16th Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar Semicorchea (B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Advance of a 16th note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar una Semicorchea (assoles B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>32nd Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar Fusa (B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Advance of a 32nd note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar una Fusa (assoles B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>64th Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar Semifusa (B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Advance of a 64th note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Desplaçar una Semufusa (assoles B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Previous Measure (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Compas previ (B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Previous measure (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Compas previ (assoles B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Next Measure (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Compas següent (B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Next measure (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Compas següent (assoles B.S./Simbol d&apos;acort)</translation>
     </message>
     <message>
         <source>Toggle staccato</source>
-        <translation type="unfinished"/>
+        <translation>Commuta staccato</translation>
     </message>
     <message>
         <source>Toggle tenuto</source>
-        <translation type="unfinished"/>
+        <translation>Commuta tenuto</translation>
     </message>
     <message>
         <source>Toggle trill</source>
-        <translation type="unfinished"/>
+        <translation>Commuta trinat</translation>
     </message>
     <message>
         <source>Toggle marcato</source>
-        <translation type="unfinished"/>
+        <translation>Commuta marcato</translation>
     </message>
     <message>
         <source>Import PDF...</source>
-        <translation type="unfinished"/>
+        <translation>Importar PDF...</translation>
     </message>
     <message>
         <source>Import PDF</source>
-        <translation type="unfinished"/>
+        <translation>Importar PDF</translation>
     </message>
     <message>
         <source>Import a PDF file with an experimental service on musescore.com</source>
-        <translation type="unfinished"/>
+        <translation>Importar el archiu PDF d&apos;un servici experimental en musescore.com</translation>
     </message>
     <message>
         <source>Set loop in position</source>
-        <translation type="unfinished"/>
+        <translation>Establix lloc inici bucle</translation>
     </message>
 </context>
 <context>
@@ -15567,7 +15600,8 @@ grup irregular traspassaria el compas</translation>
     <message>
         <source>Cannot change local time signature:
 Measure is not empty</source>
-        <translation type="unfinished"/>
+        <translation>No es pot canviar l&apos;indicacio del compas local:
+El compas no esta buit</translation>
     </message>
 </context>
 <context>
@@ -15690,27 +15724,27 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Prall</source>
-        <translation type="unfinished"/>
+        <translation>Mordent invertit</translation>
     </message>
     <message>
         <source>Mordent</source>
-        <translation>Mordent</translation>
+        <translation>Mordent directe</translation>
     </message>
     <message>
         <source>Prall prall</source>
-        <translation type="unfinished"/>
+        <translation>Doble mordent descendent</translation>
     </message>
     <message>
         <source>Prall mordent</source>
-        <translation type="unfinished"/>
+        <translation>Grupet</translation>
     </message>
     <message>
         <source>Up prall</source>
-        <translation type="unfinished"/>
+        <translation>Trinat preparació ascendent</translation>
     </message>
     <message>
         <source>Down prall</source>
-        <translation type="unfinished"/>
+        <translation>Trinat preparació descendent</translation>
     </message>
     <message>
         <source>Up mordent</source>
@@ -15722,15 +15756,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Prall down</source>
-        <translation type="unfinished"/>
+        <translation>Trinat resolució descendent</translation>
     </message>
     <message>
         <source>Prall up</source>
-        <translation type="unfinished"/>
+        <translation>Trinat resolució ascendent</translation>
     </message>
     <message>
         <source>Line prall</source>
-        <translation type="unfinished"/>
+        <translation>Llínea trinat</translation>
     </message>
     <message>
         <source>Schleifer</source>
@@ -15920,131 +15954,131 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Half doubling on low G</source>
-        <translation>Semi-doble sobre Sol greu</translation>
+        <translation>Mig &quot;doubling&quot; en Sol greu</translation>
     </message>
     <message>
         <source>Half doubling on low A</source>
-        <translation>Semi-doble sobre La greu</translation>
+        <translation>Mig &quot;doubling&quot; en La greu</translation>
     </message>
     <message>
         <source>Half doubling on B</source>
-        <translation>Semi-doble sobre Si</translation>
+        <translation>Mig &quot;doubling&quot; en Si</translation>
     </message>
     <message>
         <source>Half doubling on C</source>
-        <translation>Semi-doble sobre Do</translation>
+        <translation>Mig &quot;doubling&quot; en Do</translation>
     </message>
     <message>
         <source>Half doubling on D</source>
-        <translation>Semi-doble sobre Re</translation>
+        <translation>Mig &quot;doubling&quot; en Re</translation>
     </message>
     <message>
         <source>Half doubling on E</source>
-        <translation>Semi-doble sobre Mi</translation>
+        <translation>Mig &quot;doubling&quot; en Mi</translation>
     </message>
     <message>
         <source>Half doubling on F</source>
-        <translation>Semi-doble sobre Fa</translation>
+        <translation>Mig &quot;doubling&quot; en Fa</translation>
     </message>
     <message>
         <source>Doubling on high G</source>
-        <translation>Doble sobre Sol agut</translation>
+        <translation>&quot;Doubling&quot; en Sol agut</translation>
     </message>
     <message>
         <source>Doubling on high A</source>
-        <translation>Doble sobre La agut</translation>
+        <translation>&quot;Doubling&quot; en La agut</translation>
     </message>
     <message>
         <source>Half strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;strike&quot; en La greu</translation>
     </message>
     <message>
         <source>Half strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;strike&quot; en Si</translation>
     </message>
     <message>
         <source>Half strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;strike&quot; en Do</translation>
     </message>
     <message>
         <source>Half strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;strike&quot; en Re</translation>
     </message>
     <message>
         <source>Half strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;strike&quot; en Mi</translation>
     </message>
     <message>
         <source>Half strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;strike&quot; en Fa</translation>
     </message>
     <message>
         <source>Half strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;strike&quot; en Sol agut</translation>
     </message>
     <message>
         <source>Grip</source>
-        <translation type="unfinished"/>
+        <translation>Grip</translation>
     </message>
     <message>
         <source>Half D throw</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;throw&quot; de Re </translation>
     </message>
     <message>
         <source>Doubling on low G</source>
-        <translation>Doble sobre Sol greu</translation>
+        <translation>&quot;Doubling&quot; en Sol greu</translation>
     </message>
     <message>
         <source>Doubling on low A</source>
-        <translation>Doble sobre La greu</translation>
+        <translation>&quot;Doubling&quot; en La greu</translation>
     </message>
     <message>
         <source>Doubling on B</source>
-        <translation>Doble sobre Si</translation>
+        <translation>&quot;Doubling&quot; en Si</translation>
     </message>
     <message>
         <source>Doubling on C</source>
-        <translation>Doble sobre Do</translation>
+        <translation>&quot;Doubling&quot; en Do</translation>
     </message>
     <message>
         <source>Doubling on D</source>
-        <translation>Doble sobre Re</translation>
+        <translation>&quot;Doubling&quot; en Re</translation>
     </message>
     <message>
         <source>Doubling on E</source>
-        <translation>Doble sobre Mi</translation>
+        <translation>&quot;Doubling&quot; en Mi</translation>
     </message>
     <message>
         <source>Doubling on F</source>
-        <translation>Doble sobre Fa</translation>
+        <translation>&quot;Doubling&quot; en Fa</translation>
     </message>
     <message>
         <source>Thumb doubling on low G</source>
-        <translation>Doblar dit gros sobre Sol greu</translation>
+        <translation>&quot;Doubling&quot; de dit gros en Sol greu</translation>
     </message>
     <message>
         <source>Thumb doubling on low A</source>
-        <translation>Doblar dit gros sobre La greu</translation>
+        <translation>&quot;Doubling&quot; de dit gros en La greu</translation>
     </message>
     <message>
         <source>Thumb doubling on B</source>
-        <translation>Doblar dit gros sobre Si</translation>
+        <translation>&quot;Doubling&quot; de dit gros en Si</translation>
     </message>
     <message>
         <source>Thumb doubling on C</source>
-        <translation>Doblar dit gros sobre Do</translation>
+        <translation>&quot;Doubling&quot; de dit gros en Do</translation>
     </message>
     <message>
         <source>Thumb doubling on D</source>
-        <translation>Doblar dit gros sobre Re</translation>
+        <translation>&quot;Doubling&quot; de dit gros en Re</translation>
     </message>
     <message>
         <source>Thumb doubling on E</source>
-        <translation>Doblar dit gros sobre Mi</translation>
+        <translation>&quot;Doubling&quot; de dit gros en Mi</translation>
     </message>
     <message>
         <source>Thumb doubling on F</source>
-        <translation>Doblar dit gros sobre Fa</translation>
+        <translation>&quot;Doubling&quot; de dit gros en Fa</translation>
     </message>
     <message>
         <source>G grace note on low A</source>
@@ -16072,451 +16106,451 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; en La greu</translation>
     </message>
     <message>
         <source>Double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; en Si</translation>
     </message>
     <message>
         <source>Double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; en Do</translation>
     </message>
     <message>
         <source>Double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; en Re</translation>
     </message>
     <message>
         <source>Double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; en Mi</translation>
     </message>
     <message>
         <source>Double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; en Fa</translation>
     </message>
     <message>
         <source>Double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; en Sol agut</translation>
     </message>
     <message>
         <source>Double strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; en La agut</translation>
     </message>
     <message>
         <source>Thumb strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Strike&quot; de dit gros en La greu</translation>
     </message>
     <message>
         <source>Thumb strike on B</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Strike&quot; de dit gros en Si</translation>
     </message>
     <message>
         <source>Thumb strike on C</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Strike&quot; de dit gros en Do</translation>
     </message>
     <message>
         <source>Thumb strike on D</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Strike&quot; de dit gros en Re</translation>
     </message>
     <message>
         <source>Thumb strike on E</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Strike&quot; de dit gros en Mi</translation>
     </message>
     <message>
         <source>Thumb strike on F</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Strike&quot; de dit gros en Fa</translation>
     </message>
     <message>
         <source>Thumb strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Strike&quot; de dit gros en Sol agut</translation>
     </message>
     <message>
         <source>Birl</source>
-        <translation type="unfinished"/>
+        <translation>Birl</translation>
     </message>
     <message>
         <source>D throw</source>
-        <translation type="unfinished"/>
+        <translation>Throw de Re</translation>
     </message>
     <message>
         <source>Half heavy D throw</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;heavy throw&quot; en Re</translation>
     </message>
     <message>
         <source>Taorluath</source>
-        <translation type="unfinished"/>
+        <translation>Taorluath</translation>
     </message>
     <message>
         <source>Bubly</source>
-        <translation type="unfinished"/>
+        <translation>Bubly</translation>
     </message>
     <message>
         <source>Heavy D throw</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Heavy throw&quot; en Re</translation>
     </message>
     <message>
         <source>Half double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Mig doble &quot;strike&quot; en La greu</translation>
     </message>
     <message>
         <source>Half double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Mig doble &quot;strike&quot; en Si</translation>
     </message>
     <message>
         <source>Half double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Mig doble &quot;strike&quot; en Do</translation>
     </message>
     <message>
         <source>Half double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Mig doble &quot;strike&quot; en Re</translation>
     </message>
     <message>
         <source>Half double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Mig doble &quot;strike&quot; en Mi</translation>
     </message>
     <message>
         <source>Half double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Mig doble &quot;strike&quot; en Fa</translation>
     </message>
     <message>
         <source>Half double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Mig doble &quot;strike&quot; en Sol agut</translation>
     </message>
     <message>
         <source>Half double strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Mig doble &quot;strike&quot; en La agut</translation>
     </message>
     <message>
         <source>Half grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;grip&quot; en La greu</translation>
     </message>
     <message>
         <source>Half grip on B</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;grip&quot; en Si</translation>
     </message>
     <message>
         <source>Half grip on C</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;grip&quot; en Do</translation>
     </message>
     <message>
         <source>Half grip on D</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;grip&quot; en Re</translation>
     </message>
     <message>
         <source>Half grip on E</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;grip&quot; en Mi</translation>
     </message>
     <message>
         <source>Half grip on F</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;grip&quot; en Fa</translation>
     </message>
     <message>
         <source>Half grip on high G</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;grip&quot; en Sol agut</translation>
     </message>
     <message>
         <source>Half grip on high A</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;grip&quot; en La agut</translation>
     </message>
     <message>
         <source>Half pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;pele&quot; en La greu</translation>
     </message>
     <message>
         <source>Half pele on B</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;pele&quot; en Si</translation>
     </message>
     <message>
         <source>Half pele on C</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;pele&quot; en Do</translation>
     </message>
     <message>
         <source>Half pele on D</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;pele&quot; en Re</translation>
     </message>
     <message>
         <source>Half pele on E</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;pele&quot; en Mi</translation>
     </message>
     <message>
         <source>Half pele on F</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;pele&quot; en Fa</translation>
     </message>
     <message>
         <source>Half pele on high G</source>
-        <translation type="unfinished"/>
+        <translation>Mig &quot;pele&quot; en Sol agut</translation>
     </message>
     <message>
         <source>G grace note grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment &quot;grip&quot; Sol sobre La greu</translation>
     </message>
     <message>
         <source>G grace note grip on B</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment &quot;grip&quot; Sol sobre Si</translation>
     </message>
     <message>
         <source>G grace note grip on C</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment &quot;grip&quot; Sol sobre Do</translation>
     </message>
     <message>
         <source>G grace note grip on D</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment &quot;grip&quot; Sol sobre Re</translation>
     </message>
     <message>
         <source>G grace note grip on E</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment &quot;grip&quot; Sol sobre Mi</translation>
     </message>
     <message>
         <source>G grace note grip on F</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment &quot;grip&quot; Sol sobre Fa</translation>
     </message>
     <message>
         <source>Thumb grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment &quot;grip&quot; Sol sobre La greu</translation>
     </message>
     <message>
         <source>Thumb grip on B</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Grip&quot; de dit gros en Si</translation>
     </message>
     <message>
         <source>Thumb grip on C</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Grip&quot; de dit gros en Do</translation>
     </message>
     <message>
         <source>Thumb grip on D</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Grip&quot; de dit gros en Re</translation>
     </message>
     <message>
         <source>Thumb grip on E</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Grip&quot; de dit gros en Mi</translation>
     </message>
     <message>
         <source>Thumb grip on F</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Grip&quot; de dit gros en Fa</translation>
     </message>
     <message>
         <source>Thumb grip on high G</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Grip&quot; de dit gros en Sol agut</translation>
     </message>
     <message>
         <source>Pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Pele&quot; en La greu</translation>
     </message>
     <message>
         <source>Pele on B</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Pele&quot; en Si</translation>
     </message>
     <message>
         <source>Pele on C</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Pele&quot; en Do</translation>
     </message>
     <message>
         <source>Pele on D</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Pele&quot; en Re</translation>
     </message>
     <message>
         <source>Pele on E</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Pele&quot; en Mi</translation>
     </message>
     <message>
         <source>Pele on F</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Pele&quot; en Fa</translation>
     </message>
     <message>
         <source>Thumb grace note pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment &quot;pele&quot; de dit gros sobre La greu</translation>
     </message>
     <message>
         <source>Thumb grace note pele on B</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment &quot;pele&quot; de dit gros sobre Si</translation>
     </message>
     <message>
         <source>Thumb grace note pele on C</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment &quot;pele&quot; de dit gros sobre Do</translation>
     </message>
     <message>
         <source>Thumb grace note pele on D</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment &quot;pele&quot; de dit gros sobre Re</translation>
     </message>
     <message>
         <source>Thumb grace note pele on E</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment &quot;pele&quot; de dit gros sobre Mi</translation>
     </message>
     <message>
         <source>Thumb grace note pele on F</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment &quot;pele&quot; de dit gros sobre Fa</translation>
     </message>
     <message>
         <source>Thumb grace note pele on high G</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment &quot;pele&quot; de dit gros sobre Sol agut</translation>
     </message>
     <message>
         <source>G grace note double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment doble &quot;strike&quot; Sol sobre La greu</translation>
     </message>
     <message>
         <source>G grace note double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment doble &quot;strike&quot; Sol sobre Si</translation>
     </message>
     <message>
         <source>G grace note double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment doble &quot;strike&quot; Sol sobre Do</translation>
     </message>
     <message>
         <source>G grace note double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment doble &quot;strike&quot; Sol sobre Re</translation>
     </message>
     <message>
         <source>G grace note double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment doble &quot;strike&quot; Sol sobre Mi</translation>
     </message>
     <message>
         <source>G grace note double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment doble &quot;strike&quot; Sol sobre Fa</translation>
     </message>
     <message>
         <source>Thumb double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; de dit gros sobre La greu</translation>
     </message>
     <message>
         <source>Thumb double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; de dit gros sobre Si</translation>
     </message>
     <message>
         <source>Thumb double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; de dit gros sobre Do</translation>
     </message>
     <message>
         <source>Thumb double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; de dit gros sobre Re</translation>
     </message>
     <message>
         <source>Thumb double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; de dit gros sobre Mi</translation>
     </message>
     <message>
         <source>Thumb double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; de dit gros sobre Fa</translation>
     </message>
     <message>
         <source>Thumb double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Doble &quot;strike&quot; de dit gros sobre Sol agut</translation>
     </message>
     <message>
         <source>Triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; en La greu</translation>
     </message>
     <message>
         <source>Triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; en Si</translation>
     </message>
     <message>
         <source>Triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; en Do</translation>
     </message>
     <message>
         <source>Triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; en Re</translation>
     </message>
     <message>
         <source>Triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; en Mi</translation>
     </message>
     <message>
         <source>Triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; en Fa</translation>
     </message>
     <message>
         <source>Triple strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; en Sol agut</translation>
     </message>
     <message>
         <source>Triple strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; en La agut</translation>
     </message>
     <message>
         <source>Half triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Mig triple &quot;strike&quot; en La greu</translation>
     </message>
     <message>
         <source>Half triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Mig triple &quot;strike&quot; en Si</translation>
     </message>
     <message>
         <source>Half triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Mig triple &quot;strike&quot; en Do</translation>
     </message>
     <message>
         <source>Half triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Mig triple &quot;strike&quot; en Re</translation>
     </message>
     <message>
         <source>Half triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Mig triple &quot;strike&quot; en Mi</translation>
     </message>
     <message>
         <source>Half triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Mig triple &quot;strike&quot; en Fa</translation>
     </message>
     <message>
         <source>Half triple strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Mig triple &quot;strike&quot; en Sol agut</translation>
     </message>
     <message>
         <source>Half triple strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Mig triple &quot;strike&quot; en La agut</translation>
     </message>
     <message>
         <source>G grace note triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment Sol triple &quot;strike&quot; sobre La greu</translation>
     </message>
     <message>
         <source>G grace note triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment Sol triple &quot;strike&quot; sobre Si</translation>
     </message>
     <message>
         <source>G grace note triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment Sol triple &quot;strike&quot; sobre Do</translation>
     </message>
     <message>
         <source>G grace note triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment Sol triple &quot;strike&quot; sobre Re</translation>
     </message>
     <message>
         <source>G grace note triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment Sol triple &quot;strike&quot; sobre Mi</translation>
     </message>
     <message>
         <source>G grace note triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Nota d&apos;embelliment Sol triple &quot;strike&quot; sobre Fa</translation>
     </message>
     <message>
         <source>Thumb triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; de dit gros en La greu</translation>
     </message>
     <message>
         <source>Thumb triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; de dit gros en Si</translation>
     </message>
     <message>
         <source>Thumb triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; de dit gros en Do</translation>
     </message>
     <message>
         <source>Thumb triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; de dit gros en Re</translation>
     </message>
     <message>
         <source>Thumb triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; de dit gros en Mi</translation>
     </message>
     <message>
         <source>Thumb triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; de dit gros en Fa</translation>
     </message>
     <message>
         <source>Thumb triple strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Triple &quot;strike&quot; de dit gros en Sol agut</translation>
     </message>
 </context>
 <context>
@@ -16555,23 +16589,23 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Subbass clef</source>
-        <translation>Clau de Fa 8va Greu</translation>
+        <translation>Clau de Fa en quint</translation>
     </message>
     <message>
         <source>Soprano clef</source>
-        <translation>Clau de Do en primer</translation>
+        <translation>Clau de Do en primer, Soprano</translation>
     </message>
     <message>
         <source>Mezzo-soprano clef</source>
-        <translation>Clau de Do en segon</translation>
+        <translation>Clau de Do en segon, Mezzo</translation>
     </message>
     <message>
         <source>Alto clef</source>
-        <translation>Clau de Do en tercer</translation>
+        <translation>Clau de Do en tercer, Alt</translation>
     </message>
     <message>
         <source>Tenor clef</source>
-        <translation>Clau de do en quart</translation>
+        <translation>Clau de Do en quart, Tenor</translation>
     </message>
     <message>
         <source>Tablature</source>
@@ -16583,7 +16617,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Baritone clef (C clef)</source>
-        <translation>Clau de Do en quint</translation>
+        <translation>Clau de Do en quint, Baríton</translation>
     </message>
     <message>
         <source>French violin clef</source>
@@ -16606,11 +16640,11 @@ Measure is not empty</source>
     <name>drumset</name>
     <message>
         <source>Acoustic Bass Drum</source>
-        <translation type="unfinished"/>
+        <translation>Bombo acustic</translation>
     </message>
     <message>
         <source>Side Stick</source>
-        <translation type="unfinished"/>
+        <translation>Side Stick</translation>
     </message>
     <message>
         <source>Tambourine</source>
@@ -16634,7 +16668,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Sticks</source>
-        <translation type="unfinished"/>
+        <translation>Claus</translation>
     </message>
     <message>
         <source>Metronome Click</source>
@@ -16762,11 +16796,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Short Guiro</source>
-        <translation>Guiro curt</translation>
+        <translation>Güiro curt</translation>
     </message>
     <message>
         <source>Long Guiro</source>
-        <translation>Guiro llarc</translation>
+        <translation>Güiro llarc</translation>
     </message>
     <message>
         <source>Claves</source>
@@ -16865,7 +16899,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Eb</source>
-        <translation>Mi ♭</translation>
+        <translation>Mi b</translation>
     </message>
     <message>
         <source>E</source>
@@ -16885,7 +16919,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ab</source>
-        <translation>La ♭</translation>
+        <translation>La b</translation>
     </message>
     <message>
         <source>A</source>
@@ -16916,7 +16950,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Eb</source>
-        <translation>Mi ♭</translation>
+        <translation>Mi b</translation>
     </message>
     <message>
         <source>E</source>
@@ -16936,7 +16970,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ab</source>
-        <translation>La ♭</translation>
+        <translation>La b</translation>
     </message>
     <message>
         <source>A</source>
@@ -17063,7 +17097,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Spacer</source>
-        <translation>Espayador</translation>
+        <translation>Espayaor</translation>
     </message>
     <message>
         <source>Tremolo</source>
@@ -17071,7 +17105,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Measure</source>
-        <translation>Compàs</translation>
+        <translation>Compas</translation>
     </message>
     <message>
         <source>Selection</source>
@@ -17127,7 +17161,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ossia</source>
-        <translation type="unfinished"/>
+        <translation>Ossia</translation>
     </message>
     <message>
         <source>Instrument Name</source>
@@ -17155,7 +17189,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Time Signature</source>
-        <translation>Indicació de compas</translation>
+        <translation>Indicacio de compas</translation>
     </message>
     <message>
         <source>Repeat Measure</source>
@@ -17211,7 +17245,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Staff State</source>
-        <translation type="unfinished"/>
+        <translation>Estat Pentagrama</translation>
     </message>
     <message>
         <source>Ledger Line</source>
@@ -17227,15 +17261,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Shadow Note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Rubber Band</source>
-        <translation type="unfinished"/>
+        <translation>Nota Ombra</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Símbol de la Dura Tab</translation>
     </message>
     <message>
         <source>Font Symbol</source>
@@ -17307,7 +17337,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Glissando Segment</source>
-        <translation type="unfinished"/>
+        <translation>Segment Glissando</translation>
     </message>
     <message>
         <source>Melisma Line Segment</source>
@@ -17399,15 +17429,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>D.S. al Coda</source>
-        <translation>D.S. al Coda</translation>
+        <translation>Da Segno al Coda</translation>
     </message>
     <message>
         <source>D.S. al Fine</source>
-        <translation>D.S. al Fine</translation>
+        <translation>Da Segno al Fine</translation>
     </message>
     <message>
         <source>D.S.</source>
-        <translation>D.S.</translation>
+        <translation>Da Segno</translation>
     </message>
 </context>
 <context>
@@ -17425,7 +17455,7 @@ Measure is not empty</source>
     <name>magTable</name>
     <message>
         <source>Page Width</source>
-        <translation>Amplaria de full</translation>
+        <translation>Amplea de full</translation>
     </message>
     <message>
         <source>Whole Page</source>
@@ -17483,11 +17513,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Diamond</source>
-        <translation>diamant</translation>
+        <translation>Diamant</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation>Ferret</translation>
+        <translation>Triàngul</translation>
     </message>
     <message>
         <source>Mi</source>
@@ -17643,23 +17673,23 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Breath Marks</source>
-        <translation type="unfinished"/>
+        <translation>Marques de respiracio</translation>
     </message>
     <message>
         <source>Voice 1</source>
-        <translation type="unfinished"/>
+        <translation>Veu 1</translation>
     </message>
     <message>
         <source>Voice 2</source>
-        <translation type="unfinished"/>
+        <translation>Veu 2</translation>
     </message>
     <message>
         <source>Voice 3</source>
-        <translation type="unfinished"/>
+        <translation>Veu 3</translation>
     </message>
     <message>
         <source>Voice 4</source>
-        <translation type="unfinished"/>
+        <translation>Veu 4</translation>
     </message>
 </context>
 <context>
@@ -17706,15 +17736,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Upprall line</source>
-        <translation type="unfinished"/>
+        <translation>Regló mordent ascendent</translation>
     </message>
     <message>
         <source>Downprall line</source>
-        <translation type="unfinished"/>
+        <translation>Regló mordent descendent</translation>
     </message>
     <message>
         <source>Prallprall line</source>
-        <translation type="unfinished"/>
+        <translation>Regló mordent doble</translation>
     </message>
     <message>
         <source>Wavy line</source>

@@ -5718,7 +5718,7 @@ Grupa niemiarowa przekracza takt.</translation>
     </message>
     <message>
         <source>Version: </source>
-        <translation>Wersja:</translation>
+        <translation>Wersja: </translation>
     </message>
     <message>
         <source>Revision: %1</source>
@@ -7194,6 +7194,10 @@ Wybierz inną nazwę:</translation>
         <source>Cannot write into %1</source>
         <translation>Nie można zapisać w %1</translation>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation>Ta partytura nie może być zapisana online. Usuń uszkodzone takty i spróbuj ponownie.</translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7393,6 +7397,10 @@ Wybierz inną nazwę:</translation>
     <message>
         <source>new Palette</source>
         <translation>Nowa paleta</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation>Pojedyncza paleta</translation>
     </message>
 </context>
 <context>
@@ -7597,6 +7605,17 @@ Zapisać przed zamknięciem?</translation>
     <message>
         <source>Updated</source>
         <translation>Zaktualizowany</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Głos: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Długość: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10386,6 +10405,10 @@ zakończony niepowodzeniem: </translation>
         <source>Check for new version of MuseScore</source>
         <translation>Sprawdź dostępność nowej wersji MuseScore</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filtr</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10707,6 +10730,14 @@ Odwiedź &lt;a href=&quot;http://musescore.org&quot;&gt;stronę internetową Mus
         <source>File corrupted %1</source>
         <translation>Plik uszkodzony %1</translation>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation>Błąd przesyłania</translation>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation>Chcesz spróbować załadować ten plik?</translation>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10806,7 +10837,7 @@ Chcesz go zastąpić?</translation>
     </message>
     <message>
         <source>Do you want to install the SoundFont %1?</source>
-        <translation>Czy chcesz zainstalować SoundFont %1?</translation>
+        <translation>Chcesz zainstalować SoundFont %1?</translation>
     </message>
     <message>
         <source>SoundFont installed</source>
@@ -10853,17 +10884,6 @@ Chcesz go zastąpić?</translation>
     <message>
         <source>Tab 2</source>
         <translation>Tab 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Głos: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Długość: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -17241,10 +17261,6 @@ Takt nie jest pusty.</translation>
     <message>
         <source>Shadow Note</source>
         <translation>Cień nuty</translation>
-    </message>
-    <message>
-        <source>Rubber Band</source>
-        <translation>Gumka</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>

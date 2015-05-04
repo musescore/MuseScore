@@ -1600,7 +1600,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show ledger lines</source>
-        <translation>Show ledger lines</translation>
+        <translation>Show leger lines</translation>
     </message>
     <message>
         <source>Show Key signature</source>
@@ -1998,11 +1998,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Ledger line thickness:</source>
-        <translation>Ledger line thickness:</translation>
+        <translation>Leger line thickness:</translation>
     </message>
     <message>
         <source>Ledger line length:</source>
-        <translation>Ledger line length:</translation>
+        <translation>Leger line length:</translation>
     </message>
     <message>
         <source>Stem thickness:</source>
@@ -7196,6 +7196,10 @@ please choose a different name:</translation>
         <source>Cannot write into %1</source>
         <translation>Cannot write into %1</translation>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation>This score cannot be saved online. Please fix the corrupted bars and try again.</translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7395,6 +7399,10 @@ please choose a different name:</translation>
     <message>
         <source>new Palette</source>
         <translation>new Palette</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation>Single Palette</translation>
     </message>
 </context>
 <context>
@@ -7599,6 +7607,17 @@ Save before closing?</translation>
     <message>
         <source>Updated</source>
         <translation>Updated</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Voice: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Duration: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -10388,6 +10407,10 @@ failed: </translation>
         <source>Check for new version of MuseScore</source>
         <translation>Check for new version of MuseScore</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filter</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10708,6 +10731,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>File corrupted %1</source>
         <translation>File corrupted %1</translation>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation>MuseScore: Upload Error</translation>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation>Do you want to try to load this file anyway?</translation>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10854,17 +10885,6 @@ Do you want to overwrite it?</translation>
     <message>
         <source>Tab 2</source>
         <translation>Tab 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Voice: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Duration: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -17230,7 +17250,7 @@ Bar is not empty</translation>
     </message>
     <message>
         <source>Ledger Line</source>
-        <translation>Ledger Line</translation>
+        <translation>Leger Line</translation>
     </message>
     <message>
         <source>Note Head</source>
@@ -17243,10 +17263,6 @@ Bar is not empty</translation>
     <message>
         <source>Shadow Note</source>
         <translation>Shadow Note</translation>
-    </message>
-    <message>
-        <source>Rubber Band</source>
-        <translation>Rubber Band</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>

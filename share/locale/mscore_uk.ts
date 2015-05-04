@@ -1365,7 +1365,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Edit String Data...</source>
-        <translation>Редагувати параметри струн</translation>
+        <translation>Редагувати параметри струн…</translation>
     </message>
     <message>
         <source>Show time signature</source>
@@ -1890,7 +1890,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Spacing (1=tight):</source>
-        <translation>Інтервал (1=щільно)</translation>
+        <translation>Інтервал (1=щільно):</translation>
     </message>
     <message>
         <source>Minimum measure width:</source>
@@ -6360,7 +6360,7 @@ failed: </source>
     </message>
     <message>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
-        <translation>Місцевий час на Вашому пристрої не встановлений правильно. Будь ласка, перевірте його і налаштуйте. Рекомендується встановити час/часовий пояс на автоматичне налаштування. Якщо ви все ще не можете увійти, &lt;a href=&quot;%1&quot;&gt;зв&apos;яжіться з нами&lt;/a&gt; .</translation>
+        <translation>Місцевий час на Вашому пристрої не встановлений правильно. Будь ласка, перевірте його і налаштуйте. Рекомендується встановити час/часовий пояс на автоматичне налаштування. Якщо ви все ще не можете увійти, &lt;a href=&quot;%1&quot;&gt;зв&apos;яжіться з нами&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -7110,7 +7110,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>All Supported Files (*.svg *.jpg *.jpeg *.png);;Scalable Vector Graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</source>
-        <translation>Всі файли, що підтримуються (*.svg *.jpg *.jpeg *.png);; Векторна графіка (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</translation>
+        <translation>Всі файли, що підтримуються (*.svg *.jpg *.jpeg *.png);;Векторна графіка (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
@@ -7195,6 +7195,10 @@ please choose a different name:</source>
     <message>
         <source>Cannot write into %1</source>
         <translation>Неможливий запис в %1</translation>
+    </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7345,11 +7349,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Beat Slash</source>
-        <translation type="unfinished"/>
+        <translation>Риска біта</translation>
     </message>
     <message>
         <source>Rhythm Slash</source>
-        <translation type="unfinished"/>
+        <translation>Риска ритму</translation>
     </message>
 </context>
 <context>
@@ -7395,6 +7399,10 @@ please choose a different name:</source>
     <message>
         <source>new Palette</source>
         <translation>Нова палітра</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation>Одиночна палітра</translation>
     </message>
 </context>
 <context>
@@ -7599,6 +7607,17 @@ Save before closing?</source>
     <message>
         <source>Updated</source>
         <translation>Оновлено</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Голос: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Тривалість: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -8016,7 +8035,7 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>Annotations:</source>
-        <translation>Анотації: </translation>
+        <translation>Анотації:</translation>
     </message>
 </context>
 <context>
@@ -8308,7 +8327,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Respect the &lt;a href=&quot;%1&quot;&gt;community guidelines&lt;/a&gt;. Only make your scores accessible to anyone with permission from the right holders.</source>
-        <translation>Поважайте &lt;a href=&quot;%1&quot;&gt;принципи спільноти&lt;/a&gt;. Робіть ваші партитури доступними тільки для тих, хто має згоду правовласника на це. </translation>
+        <translation>Поважайте &lt;a href=&quot;%1&quot;&gt;принципи спільноти&lt;/a&gt;. Робіть ваші партитури доступними тільки для тих, хто має згоду правовласника на це.</translation>
     </message>
     <message>
         <source>Use a comma to separate the tags</source>
@@ -8405,7 +8424,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Open/Atonal</source>
-        <translation type="unfinished"/>
+        <translation>Відкритий/атональний</translation>
     </message>
 </context>
 <context>
@@ -9051,7 +9070,7 @@ failed: </source>
     </message>
     <message>
         <source>OnTime:</source>
-        <translation type="unfinished"/>
+        <translation>Час початку:</translation>
     </message>
     <message>
         <source>Len:</source>
@@ -10388,6 +10407,10 @@ failed: </source>
         <source>Check for new version of MuseScore</source>
         <translation>Перевіряти наявність нової версії MuseScore</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation>Фільтр</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10708,6 +10731,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
         <source>File corrupted %1</source>
         <translation>Файл пошкоджено %1</translation>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10854,17 +10885,6 @@ Do you want to overwrite it?</source>
     <message>
         <source>Tab 2</source>
         <translation>Вкладка 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Голос: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Тривалість: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -11136,12 +11156,14 @@ Do you want to overwrite it?</source>
     <message>
         <source>Principal
 8</source>
-        <translation type="unfinished"/>
+        <translation>Принципал
+8</translation>
     </message>
     <message>
         <source>Gemshorn
 8</source>
-        <translation type="unfinished"/>
+        <translation>Гемсхорн
+8</translation>
     </message>
     <message>
         <source>PushButton</source>
@@ -11230,7 +11252,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Open a score...</source>
-        <translation>Відкрити партитуру</translation>
+        <translation>Відкрити партитуру…</translation>
     </message>
     <message>
         <source>Close</source>
@@ -12095,7 +12117,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Keep degree alterations</source>
-        <translation type="unfinished"/>
+        <translation>Зберігати альтерацію</translation>
     </message>
     <message>
         <source>Options</source>
@@ -12221,19 +12243,19 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Dip</source>
-        <translation type="unfinished"/>
+        <translation>Спад</translation>
     </message>
     <message>
         <source>Dive</source>
-        <translation type="unfinished"/>
+        <translation>Нирок</translation>
     </message>
     <message>
         <source>Inverted Dip</source>
-        <translation type="unfinished"/>
+        <translation>Зворотний спад</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="unfinished"/>
+        <translation>Группетто</translation>
     </message>
     <message>
         <source>MuseScore: Tremolo Bar Properties</source>
@@ -12241,11 +12263,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Release(Up)</source>
-        <translation type="unfinished"/>
+        <translation>Відпустити (угорі)</translation>
     </message>
     <message>
         <source>Release(Down)</source>
-        <translation type="unfinished"/>
+        <translation>Відпустити (знизу)</translation>
     </message>
 </context>
 <context>
@@ -13288,7 +13310,7 @@ failed: </source>
     </message>
     <message>
         <source>Escape</source>
-        <translation type="unfinished"/>
+        <translation>Вийти з режиму введення</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -13588,11 +13610,11 @@ failed: </source>
     </message>
     <message>
         <source>Feathered beam, slower</source>
-        <translation type="unfinished"/>
+        <translation>Звуження в’язок, уповільнення</translation>
     </message>
     <message>
         <source>Feathered beam, faster</source>
-        <translation type="unfinished"/>
+        <translation>Розширення в’язок, прискорення</translation>
     </message>
     <message>
         <source>Palette</source>
@@ -13928,7 +13950,7 @@ failed: </source>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="unfinished"/>
+        <translation>Вернути назад</translation>
     </message>
     <message>
         <source>Find</source>
@@ -13996,15 +14018,15 @@ failed: </source>
     </message>
     <message>
         <source>Pan piano roll</source>
-        <translation type="unfinished"/>
+        <translation>Панорама матричного редактора</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
-        <translation type="unfinished"/>
+        <translation>Включити/виключити рух по нотах в матричному редакторі</translation>
     </message>
     <message>
         <source>Pan roll during playback</source>
-        <translation type="unfinished"/>
+        <translation>Пересувати при відтворенні</translation>
     </message>
     <message>
         <source>Documents Side by Side</source>
@@ -14032,11 +14054,11 @@ failed: </source>
     </message>
     <message>
         <source>Enharmonic up</source>
-        <translation type="unfinished"/>
+        <translation>Енгармонічне підвищення</translation>
     </message>
     <message>
         <source>Enharmonic down</source>
-        <translation type="unfinished"/>
+        <translation>Енгармонічне пониження</translation>
     </message>
     <message>
         <source>Create new revision</source>
@@ -14052,7 +14074,7 @@ failed: </source>
     </message>
     <message>
         <source>Re-Pitch Mode</source>
-        <translation type="unfinished"/>
+        <translation>Режим перерахунку висоти</translation>
     </message>
     <message>
         <source>Replace pitches without changing rhythms</source>
@@ -14608,7 +14630,7 @@ failed: </source>
     </message>
     <message>
         <source>Add/Remove Line Breaks...</source>
-        <translation>Додати/видалити розриви рядків</translation>
+        <translation>Додати/видалити розриви рядків…</translation>
     </message>
     <message>
         <source>File: Open</source>
@@ -14976,11 +14998,11 @@ failed: </source>
     </message>
     <message>
         <source>Feathered Beam, Slower</source>
-        <translation type="unfinished"/>
+        <translation>Звуження в’язок, уповільнення</translation>
     </message>
     <message>
         <source>Feathered Beam, Faster</source>
-        <translation type="unfinished"/>
+        <translation>Розширення в’язок, прискорення</translation>
     </message>
     <message>
         <source>Play panel</source>
@@ -15444,91 +15466,91 @@ failed: </source>
     </message>
     <message>
         <source>Longa Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Просування на лонгу (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Advance of a longa (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Просунутися на лонгу (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Breve Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Просування на подвійну ноту (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Advance of a double whole note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Просунутися на подвійну ноту (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Whole Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Просування на цілу (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Advance of a whole note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Просунутися на цілу (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Half Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Просування на половинну (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Advance of a half note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Просунутися на половинну (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Quarter Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Просування на чверть (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Advance of a quarter note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Просунутися на чверть (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Eighth Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Просування на восьму (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Advance of an eighth note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Просунутися на восьму (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>16th Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Просування на 16-у (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Advance of a 16th note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Просунутися на 16-у (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>32nd Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Просування на 32-у (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Advance of a 32nd note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Просунутися на 32-у (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>64th Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Просування на 64-у (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Advance of a 64th note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Просунутися на 64-у (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Previous Measure (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Попередній такт (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Previous measure (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Попередній такт (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Next Measure (F.B./Chord Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Наступний такт (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Next measure (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"/>
+        <translation>Наступний такт (цифровий бас / акорди)</translation>
     </message>
     <message>
         <source>Toggle staccato</source>
@@ -15590,19 +15612,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Slide out down</source>
-        <translation type="unfinished"/>
+        <translation>Гліссандо після ноти вниз</translation>
     </message>
     <message>
         <source>Slide out up</source>
-        <translation type="unfinished"/>
+        <translation>Гліссандо після ноти вгору</translation>
     </message>
     <message>
         <source>Slide in below</source>
-        <translation type="unfinished"/>
+        <translation>Гліссандо до ноти знизу</translation>
     </message>
     <message>
         <source>Slide in above</source>
-        <translation type="unfinished"/>
+        <translation>Гліссандо до ноти зверху</translation>
     </message>
     <message>
         <source>Fermata</source>
@@ -15658,19 +15680,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Wiggle sawtooth</source>
-        <translation type="unfinished"/>
+        <translation>Пилкоподібне вібрато</translation>
     </message>
     <message>
         <source>Wiggle sawtooth wide</source>
-        <translation type="unfinished"/>
+        <translation>Пилкоподібне широке вібрато</translation>
     </message>
     <message>
         <source>Wiggle vibrato large faster</source>
-        <translation type="unfinished"/>
+        <translation>Широке вібрато швидше</translation>
     </message>
     <message>
         <source>Wiggle vibrato large slowest</source>
-        <translation type="unfinished"/>
+        <translation>Широке вібрато повільніше</translation>
     </message>
     <message>
         <source>Ouvert</source>
@@ -15678,7 +15700,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Stopped/Pizzicato left hand</source>
-        <translation type="unfinished"/>
+        <translation>Затиснута нота / Піццикато лівою рукою</translation>
     </message>
     <message>
         <source>Up bow</source>
@@ -15726,11 +15748,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Up mordent</source>
-        <translation type="unfinished"/>
+        <translation>Верхній мордент</translation>
     </message>
     <message>
         <source>Down mordent</source>
-        <translation type="unfinished"/>
+        <translation>Нижній мордент</translation>
     </message>
     <message>
         <source>Prall down</source>
@@ -15750,11 +15772,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Snap pizzicato</source>
-        <translation type="unfinished"/>
+        <translation>Клацальне піццикато</translation>
     </message>
     <message>
         <source>Tapping</source>
-        <translation>Теппінг </translation>
+        <translation>Теппінг</translation>
     </message>
     <message>
         <source>Slapping</source>
@@ -15770,19 +15792,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Lute thumb fing.</source>
-        <translation type="unfinished"/>
+        <translation>Лютня вел. палець</translation>
     </message>
     <message>
         <source>Lute 1 fing.</source>
-        <translation type="unfinished"/>
+        <translation>Лютня 1 пал.</translation>
     </message>
     <message>
         <source>Lute 2 fing.</source>
-        <translation type="unfinished"/>
+        <translation>Лютня 2 пал.</translation>
     </message>
     <message>
         <source>Lute 3 fing.</source>
-        <translation type="unfinished"/>
+        <translation>Лютня 3 пал.</translation>
     </message>
     <message>
         <source>Tremolo bar</source>
@@ -15932,603 +15954,603 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Half doubling on low G</source>
-        <translation type="unfinished"/>
+        <translation>Напів-подвоєння на нижній Соль</translation>
     </message>
     <message>
         <source>Half doubling on low A</source>
-        <translation type="unfinished"/>
+        <translation>Напів-подвоєння на нижній Ля</translation>
     </message>
     <message>
         <source>Half doubling on B</source>
-        <translation type="unfinished"/>
+        <translation>Напів-подвоєння на Сі</translation>
     </message>
     <message>
         <source>Half doubling on C</source>
-        <translation type="unfinished"/>
+        <translation>Напів-подвоєння на До</translation>
     </message>
     <message>
         <source>Half doubling on D</source>
-        <translation type="unfinished"/>
+        <translation>Напів-подвоєння на Ре</translation>
     </message>
     <message>
         <source>Half doubling on E</source>
-        <translation type="unfinished"/>
+        <translation>Напів-подвоєння на Мі</translation>
     </message>
     <message>
         <source>Half doubling on F</source>
-        <translation type="unfinished"/>
+        <translation>Напів-подвоєння на Фа</translation>
     </message>
     <message>
         <source>Doubling on high G</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння на верхній Соль</translation>
     </message>
     <message>
         <source>Doubling on high A</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння на верхній Ля</translation>
     </message>
     <message>
         <source>Half strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Напівудар на нижній Ля</translation>
     </message>
     <message>
         <source>Half strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Напівудар на Сі</translation>
     </message>
     <message>
         <source>Half strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Напівудар на До</translation>
     </message>
     <message>
         <source>Half strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Напівудар на Ре</translation>
     </message>
     <message>
         <source>Half strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Напівудар на Мі</translation>
     </message>
     <message>
         <source>Half strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Напівудар на Фа</translation>
     </message>
     <message>
         <source>Half strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Напівудар на верхній Соль</translation>
     </message>
     <message>
         <source>Grip</source>
-        <translation type="unfinished"/>
+        <translation>Затиск</translation>
     </message>
     <message>
         <source>Half D throw</source>
-        <translation type="unfinished"/>
+        <translation>Напів-кидок на Ре</translation>
     </message>
     <message>
         <source>Doubling on low G</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння на нижній Соль</translation>
     </message>
     <message>
         <source>Doubling on low A</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння на нижній Ля</translation>
     </message>
     <message>
         <source>Doubling on B</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння на Сі</translation>
     </message>
     <message>
         <source>Doubling on C</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння на До</translation>
     </message>
     <message>
         <source>Doubling on D</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння на Ре</translation>
     </message>
     <message>
         <source>Doubling on E</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння на Мі</translation>
     </message>
     <message>
         <source>Doubling on F</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння на Фа</translation>
     </message>
     <message>
         <source>Thumb doubling on low G</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння великим пальцем на нижній Соль</translation>
     </message>
     <message>
         <source>Thumb doubling on low A</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння великим пальцем на нижній Ля</translation>
     </message>
     <message>
         <source>Thumb doubling on B</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння великим пальцем на Сі</translation>
     </message>
     <message>
         <source>Thumb doubling on C</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння великим пальцем на До</translation>
     </message>
     <message>
         <source>Thumb doubling on D</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння великим пальцем на Ре</translation>
     </message>
     <message>
         <source>Thumb doubling on E</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння великим пальцем на Мі</translation>
     </message>
     <message>
         <source>Thumb doubling on F</source>
-        <translation type="unfinished"/>
+        <translation>Подвоєння великим пальцем на Фа</translation>
     </message>
     <message>
         <source>G grace note on low A</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ на нижню Ля</translation>
     </message>
     <message>
         <source>G grace note on B</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ на Сі</translation>
     </message>
     <message>
         <source>G grace note on C</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ на До</translation>
     </message>
     <message>
         <source>G grace note on D</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ на Ре</translation>
     </message>
     <message>
         <source>G grace note on E</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ на Мі</translation>
     </message>
     <message>
         <source>G grace note on F</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаг на Фа</translation>
     </message>
     <message>
         <source>Double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання на нижній Ля</translation>
     </message>
     <message>
         <source>Double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання на Сі</translation>
     </message>
     <message>
         <source>Double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання на До</translation>
     </message>
     <message>
         <source>Double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання на Ре</translation>
     </message>
     <message>
         <source>Double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання на Мі</translation>
     </message>
     <message>
         <source>Double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання на Фа</translation>
     </message>
     <message>
         <source>Double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання на верхній Соль</translation>
     </message>
     <message>
         <source>Double strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання на верхній Ля</translation>
     </message>
     <message>
         <source>Thumb strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Великий палець на нижній Ля</translation>
     </message>
     <message>
         <source>Thumb strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Великий палець на Сі</translation>
     </message>
     <message>
         <source>Thumb strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Великий палець на До</translation>
     </message>
     <message>
         <source>Thumb strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Великий палець на Ре</translation>
     </message>
     <message>
         <source>Thumb strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Великий палець на Мі</translation>
     </message>
     <message>
         <source>Thumb strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Великий палець на Фа</translation>
     </message>
     <message>
         <source>Thumb strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Великий палець на верхній Соль</translation>
     </message>
     <message>
         <source>Birl</source>
-        <translation type="unfinished"/>
+        <translation>Бірл</translation>
     </message>
     <message>
         <source>D throw</source>
-        <translation type="unfinished"/>
+        <translation>Кидок на Re</translation>
     </message>
     <message>
         <source>Half heavy D throw</source>
-        <translation type="unfinished"/>
+        <translation>Напівважкий кидок на Re</translation>
     </message>
     <message>
         <source>Taorluath</source>
-        <translation type="unfinished"/>
+        <translation>Тарлуа</translation>
     </message>
     <message>
         <source>Bubly</source>
-        <translation type="unfinished"/>
+        <translation>Баблі</translation>
     </message>
     <message>
         <source>Heavy D throw</source>
-        <translation type="unfinished"/>
+        <translation>Важкий кидок на Ре</translation>
     </message>
     <message>
         <source>Half double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Подвійний напівудар на нижній Ля</translation>
     </message>
     <message>
         <source>Half double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Подвійний напівудар на Сі</translation>
     </message>
     <message>
         <source>Half double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Подвійний напівудар на До</translation>
     </message>
     <message>
         <source>Half double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Подвійний напівудар на Ре</translation>
     </message>
     <message>
         <source>Half double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Подвійний напівудар на Мі</translation>
     </message>
     <message>
         <source>Half double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Подвійний напівудар на Фа</translation>
     </message>
     <message>
         <source>Half double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Подвійний напівудар на верхній Соль</translation>
     </message>
     <message>
         <source>Half double strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Подвійний напівудар на верхній Ля</translation>
     </message>
     <message>
         <source>Half grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>Напів-затиск на нижній Ля</translation>
     </message>
     <message>
         <source>Half grip on B</source>
-        <translation type="unfinished"/>
+        <translation>Напів-затиск на Сі</translation>
     </message>
     <message>
         <source>Half grip on C</source>
-        <translation type="unfinished"/>
+        <translation>Напів-затиск на До</translation>
     </message>
     <message>
         <source>Half grip on D</source>
-        <translation type="unfinished"/>
+        <translation>Напів-затиск на Ре</translation>
     </message>
     <message>
         <source>Half grip on E</source>
-        <translation type="unfinished"/>
+        <translation>Напів-затиск на Мі</translation>
     </message>
     <message>
         <source>Half grip on F</source>
-        <translation type="unfinished"/>
+        <translation>Напів-затиск на Фа</translation>
     </message>
     <message>
         <source>Half grip on high G</source>
-        <translation type="unfinished"/>
+        <translation>Напів-затиск на верхній Соль</translation>
     </message>
     <message>
         <source>Half grip on high A</source>
-        <translation type="unfinished"/>
+        <translation>Напів-затиск на верхній Ля</translation>
     </message>
     <message>
         <source>Half pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>Напівпеле на нижній Ля</translation>
     </message>
     <message>
         <source>Half pele on B</source>
-        <translation type="unfinished"/>
+        <translation>Напівпеле на Сі</translation>
     </message>
     <message>
         <source>Half pele on C</source>
-        <translation type="unfinished"/>
+        <translation>Напівпеле на До</translation>
     </message>
     <message>
         <source>Half pele on D</source>
-        <translation type="unfinished"/>
+        <translation>Напівпеле на Ре</translation>
     </message>
     <message>
         <source>Half pele on E</source>
-        <translation type="unfinished"/>
+        <translation>Напівпеле на Мі</translation>
     </message>
     <message>
         <source>Half pele on F</source>
-        <translation type="unfinished"/>
+        <translation>Напівпеле на Фа</translation>
     </message>
     <message>
         <source>Half pele on high G</source>
-        <translation type="unfinished"/>
+        <translation>Напівпеле на верхній Соль</translation>
     </message>
     <message>
         <source>G grace note grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ із затиском на нижній Ля</translation>
     </message>
     <message>
         <source>G grace note grip on B</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ із затиском на Сі</translation>
     </message>
     <message>
         <source>G grace note grip on C</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ із затиском на До</translation>
     </message>
     <message>
         <source>G grace note grip on D</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ із затиском на Ре</translation>
     </message>
     <message>
         <source>G grace note grip on E</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ із затиском на Мі</translation>
     </message>
     <message>
         <source>G grace note grip on F</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ із затиском на Фа</translation>
     </message>
     <message>
         <source>Thumb grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>Затиск великим пальцем на нижній Ля</translation>
     </message>
     <message>
         <source>Thumb grip on B</source>
-        <translation type="unfinished"/>
+        <translation>Затиск великим пальцем на Сі</translation>
     </message>
     <message>
         <source>Thumb grip on C</source>
-        <translation type="unfinished"/>
+        <translation>Затиск великим пальцем на До</translation>
     </message>
     <message>
         <source>Thumb grip on D</source>
-        <translation type="unfinished"/>
+        <translation>Затиск великим пальцем на Ре</translation>
     </message>
     <message>
         <source>Thumb grip on E</source>
-        <translation type="unfinished"/>
+        <translation>Затиск великим пальцем на Мі</translation>
     </message>
     <message>
         <source>Thumb grip on F</source>
-        <translation type="unfinished"/>
+        <translation>Затиск великим пальцем на Фа</translation>
     </message>
     <message>
         <source>Thumb grip on high G</source>
-        <translation type="unfinished"/>
+        <translation>Затиск великим пальцем на верхній Соль</translation>
     </message>
     <message>
         <source>Pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>Пеле на нижній Ля</translation>
     </message>
     <message>
         <source>Pele on B</source>
-        <translation type="unfinished"/>
+        <translation>Пеле на Сі</translation>
     </message>
     <message>
         <source>Pele on C</source>
-        <translation type="unfinished"/>
+        <translation>Пеле на До</translation>
     </message>
     <message>
         <source>Pele on D</source>
-        <translation type="unfinished"/>
+        <translation>Пеле на Ре</translation>
     </message>
     <message>
         <source>Pele on E</source>
-        <translation type="unfinished"/>
+        <translation>Пеле на Мі</translation>
     </message>
     <message>
         <source>Pele on F</source>
-        <translation type="unfinished"/>
+        <translation>Пеле на Фа</translation>
     </message>
     <message>
         <source>Thumb grace note pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>Форшлаґ-пеле великим пальцем на нижній Ля</translation>
     </message>
     <message>
         <source>Thumb grace note pele on B</source>
-        <translation type="unfinished"/>
+        <translation>Форшлаґ-пеле великим пальцем на Сі</translation>
     </message>
     <message>
         <source>Thumb grace note pele on C</source>
-        <translation type="unfinished"/>
+        <translation>Форшлаґ-пеле великим пальцем на До</translation>
     </message>
     <message>
         <source>Thumb grace note pele on D</source>
-        <translation type="unfinished"/>
+        <translation>Форшлаґ-пеле великим пальцем на Ре</translation>
     </message>
     <message>
         <source>Thumb grace note pele on E</source>
-        <translation type="unfinished"/>
+        <translation>Форшлаґ-пеле великим пальцем на Мі</translation>
     </message>
     <message>
         <source>Thumb grace note pele on F</source>
-        <translation type="unfinished"/>
+        <translation>Форшлаґ-пеле великим пальцем на Фа</translation>
     </message>
     <message>
         <source>Thumb grace note pele on high G</source>
-        <translation type="unfinished"/>
+        <translation>Форшлаґ-пеле великим пальцем на верхній Соль</translation>
     </message>
     <message>
         <source>G grace note double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ з подвійним натисканням на нижній Ля</translation>
     </message>
     <message>
         <source>G grace note double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ з подвійним натисканням на Сі</translation>
     </message>
     <message>
         <source>G grace note double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ з подвійним натисканням на До</translation>
     </message>
     <message>
         <source>G grace note double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ з подвійним натисканням на Ре</translation>
     </message>
     <message>
         <source>G grace note double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ з подвійним натисканням на Мі</translation>
     </message>
     <message>
         <source>G grace note double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ з подвійним натисканням на Фа</translation>
     </message>
     <message>
         <source>Thumb double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання великим пальцем на нижній Ля</translation>
     </message>
     <message>
         <source>Thumb double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання великим пальцем на Сі</translation>
     </message>
     <message>
         <source>Thumb double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання великим пальцем на До</translation>
     </message>
     <message>
         <source>Thumb double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання великим пальцем на Ре</translation>
     </message>
     <message>
         <source>Thumb double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання великим пальцем на Мі</translation>
     </message>
     <message>
         <source>Thumb double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання великим пальцем на Фа</translation>
     </message>
     <message>
         <source>Thumb double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Подвійне натискання великим пальцем на верхній Соль</translation>
     </message>
     <message>
         <source>Triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання на нижній Ля</translation>
     </message>
     <message>
         <source>Triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання на Сі</translation>
     </message>
     <message>
         <source>Triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання на До</translation>
     </message>
     <message>
         <source>Triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання на Ре</translation>
     </message>
     <message>
         <source>Triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання на Мі</translation>
     </message>
     <message>
         <source>Triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання на Фа</translation>
     </message>
     <message>
         <source>Triple strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання на верхній Соль</translation>
     </message>
     <message>
         <source>Triple strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання на верхній Ля</translation>
     </message>
     <message>
         <source>Half triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Потрійний напівудар на нижній Ля</translation>
     </message>
     <message>
         <source>Half triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Потрійний напівудар на Сі</translation>
     </message>
     <message>
         <source>Half triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Потрійний напівудар на До</translation>
     </message>
     <message>
         <source>Half triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Потрійний напівудар на Ре</translation>
     </message>
     <message>
         <source>Half triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Потрійний напівудар на Мі</translation>
     </message>
     <message>
         <source>Half triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Потрійний напівудар на Фа</translation>
     </message>
     <message>
         <source>Half triple strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Потрійний напівудар на верхній Соль</translation>
     </message>
     <message>
         <source>Half triple strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>Потрійний напівудар на верхній Ля</translation>
     </message>
     <message>
         <source>G grace note triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ з потрійним натисканням на нижній Ля</translation>
     </message>
     <message>
         <source>G grace note triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ з потрійним натисканням на Сі</translation>
     </message>
     <message>
         <source>G grace note triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ з потрійним натисканням на До</translation>
     </message>
     <message>
         <source>G grace note triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ з потрійним натисканням на Ре</translation>
     </message>
     <message>
         <source>G grace note triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ з потрійним натисканням на Мі</translation>
     </message>
     <message>
         <source>G grace note triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Соль-форшлаґ з потрійним натисканням на Фа</translation>
     </message>
     <message>
         <source>Thumb triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання великим пальцем на нижній Ля</translation>
     </message>
     <message>
         <source>Thumb triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання великим пальцем на Сі</translation>
     </message>
     <message>
         <source>Thumb triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання великим пальцем на До</translation>
     </message>
     <message>
         <source>Thumb triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання великим пальцем на Ре</translation>
     </message>
     <message>
         <source>Thumb triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання великим пальцем на Мі</translation>
     </message>
     <message>
         <source>Thumb triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання великим пальцем на Фа</translation>
     </message>
     <message>
         <source>Thumb triple strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>Потрійне натискання великим пальцем на верхній Соль</translation>
     </message>
 </context>
 <context>
@@ -16622,7 +16644,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Side Stick</source>
-        <translation type="unfinished"/>
+        <translation>Обід (м.бар)</translation>
     </message>
     <message>
         <source>Tambourine</source>
@@ -16630,19 +16652,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>High Q</source>
-        <translation type="unfinished"/>
+        <translation>Висока якість</translation>
     </message>
     <message>
         <source>Slap</source>
-        <translation type="unfinished"/>
+        <translation>Ляпанець</translation>
     </message>
     <message>
         <source>Scratch Push</source>
-        <translation type="unfinished"/>
+        <translation>Скретч від себе</translation>
     </message>
     <message>
         <source>Scratch Pull</source>
-        <translation type="unfinished"/>
+        <translation>Скретч до себе</translation>
     </message>
     <message>
         <source>Sticks</source>
@@ -16674,47 +16696,47 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Low Floor Tom</source>
-        <translation type="unfinished"/>
+        <translation>Низький підлоговий том</translation>
     </message>
     <message>
         <source>Closed Hi-Hat</source>
-        <translation type="unfinished"/>
+        <translation>Закритий хет</translation>
     </message>
     <message>
         <source>High Floor Tom</source>
-        <translation type="unfinished"/>
+        <translation>Високий підлоговий том</translation>
     </message>
     <message>
         <source>Pedal Hi-Hat</source>
-        <translation type="unfinished"/>
+        <translation>Педальний хай-хета</translation>
     </message>
     <message>
         <source>Low Tom</source>
-        <translation type="unfinished"/>
+        <translation>Низький том</translation>
     </message>
     <message>
         <source>Open Hi-Hat</source>
-        <translation type="unfinished"/>
+        <translation>Відкритий хет</translation>
     </message>
     <message>
         <source>Low-Mid Tom</source>
-        <translation type="unfinished"/>
+        <translation>Низький-середній том</translation>
     </message>
     <message>
         <source>Hi-Mid Tom</source>
-        <translation type="unfinished"/>
+        <translation>Високий-середній том</translation>
     </message>
     <message>
         <source>Crash Cymbal 1</source>
-        <translation type="unfinished"/>
+        <translation>Акцентна тарілка 1</translation>
     </message>
     <message>
         <source>High Tom</source>
-        <translation type="unfinished"/>
+        <translation>Високий том</translation>
     </message>
     <message>
         <source>Ride Bell</source>
-        <translation type="unfinished"/>
+        <translation>Верх тарілки</translation>
     </message>
     <message>
         <source>Cowbell</source>
@@ -16722,7 +16744,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Vibraslap</source>
-        <translation type="unfinished"/>
+        <translation>Вібраслеп</translation>
     </message>
     <message>
         <source>Low Bongo</source>
@@ -16750,11 +16772,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>High Agogo</source>
-        <translation type="unfinished"/>
+        <translation>Високий Агого</translation>
     </message>
     <message>
         <source>Low Agogo</source>
-        <translation type="unfinished"/>
+        <translation>Низький Агого</translation>
     </message>
     <message>
         <source>Cabasa</source>
@@ -16786,19 +16808,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Hi Wood Block</source>
-        <translation type="unfinished"/>
+        <translation>Висока коробочка</translation>
     </message>
     <message>
         <source>Low Wood Block</source>
-        <translation type="unfinished"/>
+        <translation>Низька коробочка</translation>
     </message>
     <message>
         <source>Mute Cuica</source>
-        <translation type="unfinished"/>
+        <translation>Приглушена куїка</translation>
     </message>
     <message>
         <source>Open Cuica</source>
-        <translation type="unfinished"/>
+        <translation>Відкрита куїка</translation>
     </message>
     <message>
         <source>Mute Triangle</source>
@@ -16818,15 +16840,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Mute Surdo</source>
-        <translation type="unfinished"/>
+        <translation>Приглушений сурдо</translation>
     </message>
     <message>
         <source>Open Surdo</source>
-        <translation type="unfinished"/>
+        <translation>Відкритий сурдо</translation>
     </message>
     <message>
         <source>Ride Cymbal 1</source>
-        <translation type="unfinished"/>
+        <translation>Тарілка-райд 1</translation>
     </message>
     <message>
         <source>Chinese Cymbal</source>
@@ -16838,11 +16860,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Crash Cymbal 2</source>
-        <translation type="unfinished"/>
+        <translation>Акцентна тарілка 2</translation>
     </message>
     <message>
         <source>Ride Cymbal 2</source>
-        <translation type="unfinished"/>
+        <translation>Тарілка-райд 2</translation>
     </message>
     <message>
         <source>Castanets</source>
@@ -16850,7 +16872,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Square Click</source>
-        <translation type="unfinished"/>
+        <translation>Електронний метроном</translation>
     </message>
     <message>
         <source>Hi Bongo</source>
@@ -16858,7 +16880,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Sleigh Bell</source>
-        <translation type="unfinished"/>
+        <translation>Бубончики</translation>
     </message>
 </context>
 <context>
@@ -17119,7 +17141,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Compound</source>
-        <translation type="unfinished"/>
+        <translation>Компаунд</translation>
     </message>
     <message>
         <source>Chord</source>
@@ -17240,10 +17262,6 @@ Measure is not empty</source>
     <message>
         <source>Shadow Note</source>
         <translation>Тіньова нота</translation>
-    </message>
-    <message>
-        <source>Rubber Band</source>
-        <translation>Резинова стрічка</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>
