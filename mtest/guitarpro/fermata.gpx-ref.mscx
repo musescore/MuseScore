@@ -222,21 +222,22 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>24</lid>
+          <lid>25</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>fermata</subtype>
+            <lid>24</lid>
             </Articulation>
           </Rest>
         <Chord>
-          <lid>26</lid>
+          <lid>27</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>fermata</subtype>
-            <lid>25</lid>
+            <lid>26</lid>
             </Articulation>
           <Note>
-            <lid>27</lid>
+            <lid>28</lid>
             <Accidental>
               <subtype>sharp</subtype>
               </Accidental>
@@ -247,20 +248,20 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>28</lid>
+          <lid>29</lid>
           <durationType>quarter</durationType>
           </Rest>
         </Measure>
       <Measure number="4">
         <Chord>
-          <lid>31</lid>
+          <lid>32</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>fermata</subtype>
-            <lid>30</lid>
+            <lid>31</lid>
             </Articulation>
           <Note>
-            <lid>32</lid>
+            <lid>33</lid>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <fret>12</fret>
@@ -268,15 +269,15 @@
             </Note>
           </Chord>
         <Rest>
-          <lid>33</lid>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
           <lid>34</lid>
           <durationType>quarter</durationType>
           </Rest>
         <Rest>
           <lid>35</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <lid>36</lid>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
@@ -528,21 +529,22 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>24</lid>
+            <lid>25</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>fermata</subtype>
+              <lid>24</lid>
               </Articulation>
             </Rest>
           <Chord>
-            <lid>26</lid>
+            <lid>27</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>fermata</subtype>
-              <lid>25</lid>
+              <lid>26</lid>
               </Articulation>
             <Note>
-              <lid>27</lid>
+              <lid>28</lid>
               <Accidental>
                 <subtype>sharp</subtype>
                 </Accidental>
@@ -553,20 +555,20 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>28</lid>
+            <lid>29</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="4">
           <Chord>
-            <lid>31</lid>
+            <lid>32</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>fermata</subtype>
-              <lid>30</lid>
+              <lid>31</lid>
               </Articulation>
             <Note>
-              <lid>32</lid>
+              <lid>33</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>12</fret>
@@ -574,15 +576,15 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>33</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
             <lid>34</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
             <lid>35</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>36</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
@@ -681,21 +683,22 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>24</lid>
+            <lid>25</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>fermata</subtype>
+              <lid>24</lid>
               </Articulation>
             </Rest>
           <Chord>
-            <lid>26</lid>
+            <lid>27</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>fermata</subtype>
-              <lid>25</lid>
+              <lid>26</lid>
               </Articulation>
             <Note>
-              <lid>27</lid>
+              <lid>28</lid>
               <pitch>49</pitch>
               <tpc>21</tpc>
               <fret>4</fret>
@@ -703,20 +706,20 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>28</lid>
+            <lid>29</lid>
             <durationType>quarter</durationType>
             </Rest>
           </Measure>
         <Measure number="4">
           <Chord>
-            <lid>31</lid>
+            <lid>32</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>fermata</subtype>
-              <lid>30</lid>
+              <lid>31</lid>
               </Articulation>
             <Note>
-              <lid>32</lid>
+              <lid>33</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>12</fret>
@@ -724,15 +727,15 @@
               </Note>
             </Chord>
           <Rest>
-            <lid>33</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
             <lid>34</lid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
             <lid>35</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <lid>36</lid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
