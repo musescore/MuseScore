@@ -1847,7 +1847,7 @@ Element* Element::nextElement()
                         }
                   case Element::Type::MEASURE: {
                         Measure* m = static_cast<Measure*>(p);
-                        return m->nextElement(staffIdx());
+                        return m->nextElementStaff(staffIdx());
                         }
                   case Element::Type::SYSTEM: {
                         System* sys = static_cast<System*>(p);
@@ -1892,7 +1892,7 @@ Element* Element::prevElement()
                         }
                   case Element::Type::MEASURE: {
                         Measure* m = static_cast<Measure*>(p);
-                        return m->prevElement(staffIdx());
+                        return m->prevElementStaff(staffIdx());
                         }
                   case Element::Type::SYSTEM: {
                         System* sys = static_cast<System*>(p);

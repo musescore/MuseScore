@@ -20,7 +20,7 @@
 
 
 class AgentList;
-class Event;
+struct Event;
 
 class AgentParameters
       {

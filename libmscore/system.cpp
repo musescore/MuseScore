@@ -119,7 +119,7 @@ void System::removeStaff(int idx)
 //    width of this box.
 //---------------------------------------------------------
 
-void System::layout(qreal xo1)
+void System::layoutSystem(qreal xo1)
       {
       if (isVbox())                 // ignore vbox
             return;

@@ -117,7 +117,7 @@ class System : public Element {
 
       Page* page() const                 { return (Page*)parent(); }
 
-      virtual void layout(qreal xoffset);
+      virtual void layoutSystem(qreal xoffset);
       void layout2();                     ///< Called after Measure layout.
       void clear();                       ///< Clear measure list.
 

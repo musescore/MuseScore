@@ -1756,6 +1756,9 @@ public:
       void setOctaveShiftType(OctaveShiftType type);
       OctaveShiftType getOctaveShiftType() const;
 
+      void setOctaveShiftPosition(OctaveShiftPosition position);
+      OctaveShiftPosition getOctaveShiftPosition() const;
+
       int getNoteShift() const;
 
       void setEndTick(int tick);

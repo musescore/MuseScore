@@ -54,7 +54,7 @@ class Rest : public ChordRest {
       Rest &operator=(const Rest&) = delete;
 
       virtual Rest* clone() const override        { return new Rest(*this, false); }
-      virtual Rest* linkedClone() const           { return new Rest(*this, true); }
+      virtual Element* linkedClone()              { return new Rest(*this, true); }
       virtual Measure* measure() const override   { return parent() ? (Measure*)(parent()->parent()) : 0; }
       virtual qreal mag() const override;
       virtual void draw(QPainter*) const override;

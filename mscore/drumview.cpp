@@ -52,19 +52,19 @@ static int pitch2y(int pitch)
 //---------------------------------------------------------
 
 DrumItem::DrumItem(Note* n)
-   : QGraphicsPolygonItem(), note(n)
+   : QGraphicsPolygonItem(), _note(n)
       {
       setFlags(flags() | QGraphicsItem::ItemIsSelectable);
-      int pitch = n->pitch();
+      int pitch = _note->pitch();
       QPolygonF p;
       double h2 = keyHeight/2;
       p << QPointF(0, -h2) << QPointF(h2, 0.0) << QPointF(0.0, h2) << QPointF(-h2, 0.0);
       setPolygon(p);
       setBrush(QBrush());
-      setSelected(n->selected());
-      setData(0, QVariant::fromValue<void*>(n));
+      setSelected(_note->selected());
+      setData(0, QVariant::fromValue<void*>(_note));
 
-      setPos(n->chord()->tick() + 480, pitch2y(pitch) + keyHeight / 4);
+      setPos(_note->chord()->tick() + 480, pitch2y(pitch) + keyHeight / 4);
       setFlag(QGraphicsItem::ItemIgnoresTransformations, true);
       }
 

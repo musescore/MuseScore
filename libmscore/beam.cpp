@@ -142,7 +142,25 @@ QPointF Beam::canvasPos() const
 //   add
 //---------------------------------------------------------
 
-void Beam::add(ChordRest* a)
+void Beam::add(Element* e) {
+      if (e && e->isChordRest())
+            addChordRest(static_cast<ChordRest*>(e));
+      }
+
+//---------------------------------------------------------
+//   remove
+//---------------------------------------------------------
+
+void Beam::remove(Element* e) {
+      if (e && e->isChordRest())
+            removeChordRest(static_cast<ChordRest*>(e));
+      }
+
+//---------------------------------------------------------
+//   addChordRest
+//---------------------------------------------------------
+
+void Beam::addChordRest(ChordRest* a)
       {
       a->setBeam(this);
       if (!_elements.contains(a)) {
@@ -166,10 +184,10 @@ void Beam::add(ChordRest* a)
       }
 
 //---------------------------------------------------------
-//   remove
+//   removeChordRest
 //---------------------------------------------------------
 
-void Beam::remove(ChordRest* a)
+void Beam::removeChordRest(ChordRest* a)
       {
       if (!_elements.removeOne(a))
             qDebug("Beam::remove(): cannot find ChordRest");

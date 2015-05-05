@@ -86,7 +86,7 @@ class SlurSegment : public SpannerSegment {
       virtual int subtype() const         { return static_cast<int>(spanner()->type()); }
       virtual QString subtypeName() const { return name(spanner()->type()); }
 
-      void layout(const QPointF& p1, const QPointF& p2);
+      void layoutSegment(const QPointF& p1, const QPointF& p2);
       virtual QPainterPath shape() const { return shapePath; }
       virtual void draw(QPainter*) const;
 
@@ -110,7 +110,7 @@ class SlurSegment : public SpannerSegment {
 
       SlurTie* slurTie() const { return (SlurTie*)spanner(); }
 
-      void write(Xml& xml, int no) const;
+      void writeSlur(Xml& xml, int no) const;
       void read(XmlReader&);
       virtual void reset();
       void setSlurOffset(Grip i, const QPointF& val) { _ups[int(i)].off = val;  }
