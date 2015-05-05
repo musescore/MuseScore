@@ -20,6 +20,7 @@
 
 class QPainter;
 
+
 namespace Ms {
 
 class TextStyle;
@@ -2528,6 +2529,32 @@ class Sym {
       };
 
 //---------------------------------------------------------
+//   GlyphKey
+//---------------------------------------------------------
+
+struct GlyphKey {
+      SymId id;
+      qreal mag;
+      QColor color;
+
+   public:
+      GlyphKey(SymId _id, qreal m, QColor c) : id(_id), mag(m), color(c) {}
+      bool operator==(const GlyphKey&) const;
+      };
+
+
+struct GlyphPixmap {
+      QPixmap pm;
+      int xo, yo;
+      };
+
+inline uint qHash(const GlyphKey& k)
+      {
+      return (int(k.id) << 16) + int(k.mag*1000);
+      }
+
+
+//---------------------------------------------------------
 //   ScoreFont
 //---------------------------------------------------------
 
@@ -2539,6 +2566,7 @@ class ScoreFont {
       QString _fontPath;
       QString _filename;
       QByteArray fontImage;
+      QCache<GlyphKey, GlyphPixmap>* cache { 0 };
 
       static QVector<ScoreFont> _scoreFonts;
       const Sym& sym(SymId id) const { return _symbols[int(id)]; }
@@ -2546,7 +2574,7 @@ class ScoreFont {
       void computeMetrics(Sym* sym, int code);
 
    public:
-      ScoreFont();
+      ScoreFont() {}
       ScoreFont(const char* n, const char* f, const char* p, const char* fn)
          : _name(n), _family(f), _fontPath(p), _filename(fn) {
             _symbols = QVector<Sym>(int(SymId::lastSym) + 1);
@@ -2586,5 +2614,6 @@ class ScoreFont {
 extern void initScoreFonts();
 
 }     // namespace Ms
+
 #endif
 
