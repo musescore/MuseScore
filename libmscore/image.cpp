@@ -63,9 +63,9 @@ Image::Image(const Image& img)
             _storeItem->reference(this);
       _linkPath        = img._linkPath;
       _linkIsValid     = img._linkIsValid;
-      if (imageType == ImageType::RASTER)
+      if (imageType == ImageType::RASTER && img.rasterDoc)
             rasterDoc = new QImage(*img.rasterDoc);
-      else if (imageType == ImageType::SVG)
+      else if (imageType == ImageType::SVG && img.svgDoc)
             svgDoc = new QSvgRenderer(img.svgDoc);
       setZ(img.z());
       }
