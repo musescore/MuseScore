@@ -25,6 +25,7 @@ static FT_Library ftlib;
 
 namespace Ms {
 
+
 //---------------------------------------------------------
 //   scoreFonts
 //    this is the list of available score fonts
@@ -5177,18 +5178,23 @@ SymId Sym::userName2id(const QString& s)
       return (val == -1) ? SymId::noSym : (SymId)(val);
       }
 
+bool GlyphKey::operator==(const GlyphKey& k) const
+      {
+      return id == k.id && mag == k.mag && color == k.color;
+      }
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& _pos) const
       {
-      if (!isValid(id))
-            return;
       if (!sym(id).symList().isEmpty()) {  // is this a compound symbol?
             draw(sym(id).symList(), painter, mag, _pos);
             return;
             }
+      if (!isValid(id))
+            return;
       int rv = FT_Load_Glyph(face, sym(id).index(), FT_LOAD_DEFAULT);
       if (rv) {
             qDebug("load glyph id %d, failed: 0x%x", int(id), rv);
@@ -5196,39 +5202,56 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& _pos
             }
 
       qreal m = mag * 0x10000 * .1;
-      FT_Matrix matrix;
-      matrix.xx = lrint(painter->worldTransform().m11() * m);
-      matrix.yy = lrint(painter->worldTransform().m22() * m);
-      matrix.xy = 0;
-      matrix.yx = 0;
-
-      FT_Glyph glyph;
-      FT_Get_Glyph(face->glyph, &glyph);
-      FT_Glyph_Transform(glyph, &matrix, 0);
-      rv = FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1);
-      if (rv) {
-            qDebug("glyph to bitmap failed: 0x%x", rv);
-            return;
-            }
-
-      FT_BitmapGlyph gb = (FT_BitmapGlyph)glyph;
-      FT_Bitmap* bm = &gb->bitmap;
-
-      QImage img(QSize(bm->width, bm->rows), QImage::Format_ARGB32);
-      img.fill(Qt::transparent);
       QColor color(painter->pen().color());
-      for (unsigned y = 0; y < bm->rows; ++y) {
-            for (unsigned x = 0; x < bm->width; ++x) {
-                  unsigned val = *(((unsigned char*)bm->buffer) + bm->pitch * y + x);
-                  color.setAlpha(val);
-                  img.setPixel(x, y, color.rgba());
+
+      const QTransform& tf = painter->worldTransform();
+      GlyphKey gk(id, tf.m11() * m, color);
+      GlyphPixmap* pm = cache->object(gk);
+      if (!pm) {
+            FT_Matrix matrix {
+                  lrint(tf.m11() * m), 0,
+                  0,                   lrint(tf.m22() * m),
+                  };
+
+            FT_Glyph glyph;
+            FT_Get_Glyph(face->glyph, &glyph);
+            FT_Glyph_Transform(glyph, &matrix, 0);
+            rv = FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1);
+            if (rv) {
+                  qDebug("glyph to bitmap failed: 0x%x", rv);
+                  return;
                   }
+
+            FT_BitmapGlyph gb = (FT_BitmapGlyph)glyph;
+            FT_Bitmap* bm     = &gb->bitmap;
+
+            QImage img(QSize(bm->width, bm->rows), QImage::Format_ARGB32);
+            img.fill(Qt::transparent);
+
+            for (unsigned y = 0; y < bm->rows; ++y) {
+                  unsigned* dst      = (unsigned*)img.scanLine(y);
+                  unsigned char* src = (unsigned char*)(bm->buffer) + bm->pitch * y;
+                  for (unsigned x = 0; x < bm->width; ++x) {
+                        unsigned val = *src++;
+                        color.setAlpha(val);
+                        *dst++ = color.rgba();
+                        }
+                  }
+            QPixmap _pm = QPixmap::fromImage(img, Qt::NoFormatConversion);
+            pm = new GlyphPixmap;
+            pm->pm = _pm;
+            pm->yo = gb->top;
+            pm->xo = gb->left;
+            cache->insert(gk, pm);
+            FT_Done_Glyph(glyph);
             }
       painter->setWorldMatrixEnabled(false);
-      QPointF pos = painter->worldTransform().map(_pos);
-      pos.ry() -= gb->top;
-      pos.rx() += gb->left;
-      painter->drawPixmap(pos, QPixmap::fromImage(img, Qt::NoFormatConversion));
+      QPointF pos = tf.map(_pos);
+
+      pos.ry() -= pm->yo;
+      pos.rx() += pm->xo;
+
+      painter->drawPixmap(pos, pm->pm);
       painter->setWorldMatrixEnabled(true);
       }
 
@@ -5342,6 +5365,7 @@ void ScoreFont::load()
             qDebug("freetype: cannot create face <%s>: %d", qPrintable(facePath), rval);
             return;
             }
+      cache = new QCache<GlyphKey, GlyphPixmap>(100);
 
       qreal pixelSize = 200.0 * MScore::DPI/PPI;
       FT_Set_Pixel_Sizes(face, 0, int(pixelSize+.5));
@@ -5644,11 +5668,10 @@ qreal ScoreFont::width(const QList<SymId>& s, qreal mag) const
 //   ScoreFont
 //---------------------------------------------------------
 
-ScoreFont::ScoreFont()
-      {
-      }
-
 ScoreFont::~ScoreFont()
       {
+      delete cache;
       }
 }
+
+
