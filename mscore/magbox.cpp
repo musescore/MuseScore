@@ -82,7 +82,7 @@ void MagBox::indexChanged(int idx)
 
 double MagBox::getMag(ScoreView* canvas)
       {
-      switch(MagIdx(currentIndex())) {
+      switch (MagIdx(currentIndex())) {
             case MagIdx::MAG_25:      return 0.25;
             case MagIdx::MAG_50:      return 0.5;
             case MagIdx::MAG_75:      return 0.75;
@@ -103,7 +103,7 @@ double MagBox::getMag(ScoreView* canvas)
       if (score == 0)
             return 1.0;
       const PageFormat* pf = score->pageFormat();
-      switch(MagIdx(currentIndex())) {
+      switch (MagIdx(currentIndex())) {
             case MagIdx::MAG_PAGE_WIDTH:      // page width
                   nmag *= cw / (pf->width() * MScore::DPI);
                   break;

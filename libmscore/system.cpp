@@ -515,7 +515,7 @@ void System::layout2()
 void System::clear()
       {
       ml.clear();
-      foreach (SpannerSegment* ss, _spannerSegments) {
+      for (SpannerSegment* ss : _spannerSegments) {
             // qDebug("System::clear %s", ss->name());
             if (ss->system() == this)
                   ss->setParent(0);       // assume parent() is System
@@ -542,7 +542,7 @@ void System::setInstrumentNames(bool longName)
               || (score()->styleB(StyleIdx::hideInstrumentNameIfOneInstrument) && score()->parts().size() == 1)) {
             for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
                   SysStaff* staff = _staves[staffIdx];
-                  foreach(InstrumentName* t, staff->instrumentNames)
+                  for (InstrumentName* t : staff->instrumentNames)
                         score()->removeElement(t);
                   }
             return;
@@ -553,7 +553,7 @@ void System::setInstrumentNames(bool longName)
             SysStaff* staff = _staves[staffIdx];
             Staff* s        = score()->staff(staffIdx);
             if (!s->isTop() || !s->show()) {
-                  foreach(InstrumentName* t, staff->instrumentNames)
+                  for (InstrumentName* t : staff->instrumentNames)
                         score()->removeElement(t);
                   continue;
                   }
@@ -562,7 +562,7 @@ void System::setInstrumentNames(bool longName)
             const QList<StaffName>& names = longName? part->longNames(tick) : part->shortNames(tick);
 
             int idx = 0;
-            foreach(const StaffName& sn, names) {
+            for (const StaffName& sn : names) {
                   InstrumentName* iname = staff->instrumentNames.value(idx);
                   if (iname == 0) {
                         iname = new InstrumentName(score());
@@ -598,7 +598,7 @@ int System::y2staff(qreal y) const
       y -= pos().y();
       int idx = 0;
       qreal margin = spatium() * 2;
-      foreach (SysStaff* s, _staves) {
+      for (SysStaff* s : _staves) {
             qreal y1 = s->bbox().top()    - margin;
             qreal y2 = s->bbox().bottom() + margin;
             if (y >= y1 && y < y2)
@@ -617,7 +617,7 @@ void System::add(Element* el)
 // qDebug("%p System::add: %p %s", this, el, el->name());
 
       el->setParent(this);
-      switch(el->type()) {
+      switch (el->type()) {
             case Element::Type::INSTRUMENT_NAME:
 // qDebug("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
                   _staves[el->staffIdx()]->instrumentNames.append(static_cast<InstrumentName*>(el));
@@ -634,7 +634,7 @@ void System::add(Element* el)
                   int level    = b->level();
                   if (level == -1) {
                         level = 0;
-                        foreach(Bracket* bb, _brackets) {
+                        for (Bracket* bb : _brackets) {
                               if (staffIdx >= bb->firstStaff() && staffIdx <= bb->lastStaff())
                                     ++level;
                               }
@@ -762,7 +762,7 @@ void System::change(Element* o, Element* n)
 
 int System::snap(int tick, const QPointF p) const
       {
-      foreach(const MeasureBase* m, ml) {
+      for (const MeasureBase* m : ml) {
             if (p.x() < m->x() + m->width())
                   return ((Measure*)m)->snap(tick, p - m->pos()); //TODO: MeasureBase
             }
@@ -775,7 +775,7 @@ int System::snap(int tick, const QPointF p) const
 
 int System::snapNote(int tick, const QPointF p, int staff) const
       {
-      foreach(const MeasureBase* m, ml) {
+      for (const MeasureBase* m : ml) {
             if (p.x() < m->x() + m->width())
                   return ((Measure*)m)->snapNote(tick, p - m->pos(), staff);  //TODO: MeasureBase
             }

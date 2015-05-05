@@ -41,12 +41,12 @@ EditStringData::EditStringData(QWidget *parent, QList<instrString> * strings, in
       stringList->setRowCount(numOfStrings);
       // if any string, insert into string list control and select the first one
 
-      if(numOfStrings > 0) {
+      if (numOfStrings > 0) {
             int   i;
             instrString strg;
             // insert into local working copy and into string list dlg control
             // IN REVERSED ORDER
-            for(i=0; i < numOfStrings; i++) {
+            for (i=0; i < numOfStrings; i++) {
                   strg = (*_strings)[numOfStrings - i - 1];
                   _stringsLoc.append(strg);
                   QTableWidgetItem *newCheck = new QTableWidgetItem();
@@ -147,7 +147,7 @@ void EditStringData::newStringClicked()
       if ( (newCode=ep->exec()) != -1) {
             // add below selected string or at the end if no selected string
             i = stringList->currentRow() + 1;
-            if(i <= 0)
+            if (i <= 0)
                   i = stringList->rowCount();
             // insert in local string list and in dlg list control
             instrString strg = {newCode, 0};
@@ -175,17 +175,17 @@ void EditStringData::accept()
       {
       // store data back into original variables
       // string tunings are copied in reversed order (from lowest to highest)
-      if(_modified) {
+      if (_modified) {
             _strings->clear();
-            for(int i=_stringsLoc.size()-1; i >= 0; i--)
+            for (int i=_stringsLoc.size()-1; i >= 0; i--)
                   _strings->append(_stringsLoc[i]);
             }
-      if(*_frets != numOfFrets->value()) {
+      if (*_frets != numOfFrets->value()) {
             *_frets = numOfFrets->value();
             _modified = true;
             }
 
-      if(_modified)
+      if (_modified)
             QDialog::accept();
       else
             QDialog::reject();            // if no data change, no need to trigger changes downward the caller chain

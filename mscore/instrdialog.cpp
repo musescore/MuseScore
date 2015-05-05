@@ -100,9 +100,9 @@ void InstrumentsDialog::on_saveButton_clicked()
       Xml xml(&f);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
-      foreach(InstrumentGroup* g, instrumentGroups) {
+      for (InstrumentGroup* g : instrumentGroups) {
             xml.stag(QString("InstrumentGroup name=\"%1\" extended=\"%2\"").arg(g->name).arg(g->extended));
-            foreach(InstrumentTemplate* t, g->instrumentTemplates)
+            for (InstrumentTemplate* t : g->instrumentTemplates)
                   t->write(xml);
             xml.etag();
             }
@@ -389,7 +389,7 @@ void MuseScore::editInstrList()
       QList<int> dl;
       int idx2 = 0;
       bool sort = false;
-      for(Staff* staff : dst) {
+      for (Staff* staff : dst) {
             int idx = rootScore->staves().indexOf(staff);
             if (idx == -1)
                   qDebug("staff in dialog(%p) not found in score", staff);
@@ -431,7 +431,7 @@ void MuseScore::editInstrList()
             if (excpt->partScore()->staves().size() == 0)
                   toDelete.append(excpt->partScore());
             }
-      for(Score* s: toDelete)
+      for (Score* s: toDelete)
             rootScore->undo(new RemoveExcerpt(s));
 
       rootScore->setLayoutAll(true);

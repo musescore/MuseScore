@@ -152,7 +152,7 @@ const Groups& Groups::endings(const Fraction& f)
       noteGroups.push_back(g);
 
       int pos = 0;
-      switch(f.denominator()) {
+      switch (f.denominator()) {
             case 2:     pos = 16; break;
             case 4:     pos = 8; break;
             case 8:     pos = 4; break;

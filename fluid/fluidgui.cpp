@@ -178,7 +178,7 @@ void FluidGui::soundFontAddClicked()
       QFileInfoList l = FluidS::Fluid::sfFiles();
 
       SfListDialog ld(this);
-      foreach (const QFileInfo& fi, l)
+      for (const QFileInfo& fi : l)
             ld.add(fi.fileName(), fi.absoluteFilePath());
       if (!ld.exec())
             return;

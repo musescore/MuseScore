@@ -47,7 +47,7 @@ void HairpinSegment::layout()
 
       drawCircledTip =  hairpin()->hairpinCircledTip();
       circledTipRadius = 0;
-      if( drawCircledTip )
+      if ( drawCircledTip )
         circledTipRadius  = 0.6 * _spatium * .5;
       if (hairpin()->hairpinType() == Hairpin::Type::CRESCENDO) {
             // crescendo
@@ -69,7 +69,7 @@ void HairpinSegment::layout()
             }
       else {
             // decrescendo
-            switch(spannerSegmentType()) {
+            switch (spannerSegmentType()) {
                   case SpannerSegmentType::SINGLE:
                   case SpannerSegmentType::END:
                         l1.setLine(.0,  h1, len - circledTipRadius*2, 0.0);
@@ -88,7 +88,7 @@ void HairpinSegment::layout()
 // Do Coord rotation
       l1 = t.map(l1);
       l2 = t.map(l2);
-      if( drawCircledTip )
+      if ( drawCircledTip )
         circledTip = t.map(circledTip);
 
 
@@ -124,10 +124,10 @@ void HairpinSegment::updateGrips(Grip* defaultGrip, QVector<QRectF>& grip) const
       doRotation.rotateRadians( asin(y/len) );
       qreal lineApertureX;
       qreal offsetX = 10;                               // Horizontal offset for x Grip
-      if(len < offsetX * 3 )                            // For small hairpin, offset = 30% of len
+      if (len < offsetX * 3 )                            // For small hairpin, offset = 30% of len
           offsetX = len/3;                              // else offset is fixed to 10
 
-      if( hairpin()->hairpinType() == Hairpin::Type::CRESCENDO )
+      if ( hairpin()->hairpinType() == Hairpin::Type::CRESCENDO )
             lineApertureX = len - offsetX;              // End of CRESCENDO - Offset
         else
             lineApertureX = offsetX;                    // Begin of DECRESCENDO + Offset
@@ -176,7 +176,7 @@ void HairpinSegment::draw(QPainter* painter) const
       painter->setPen(pen);
       painter->drawLine(l1);
       painter->drawLine(l2);
-      if( drawCircledTip ) {
+      if ( drawCircledTip ) {
           painter->setBrush(Qt::NoBrush);
           painter->drawEllipse( circledTip,circledTipRadius,circledTipRadius );
       }
@@ -345,7 +345,7 @@ void Hairpin::write(Xml& xml) const
 
 void Hairpin::read(XmlReader& e)
       {
-      foreach(SpannerSegment* seg, spannerSegments())
+      for (SpannerSegment* seg : spannerSegments())
             delete seg;
       spannerSegments().clear();
 

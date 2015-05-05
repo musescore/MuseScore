@@ -127,7 +127,7 @@ void ExampleView::drawBackground(QPainter*, const QRectF&) const
 
 void ExampleView::drawElements(QPainter& painter, const QList<Element*>& el)
       {
-      foreach (Element* e, el) {
+      for (Element* e : el) {
             e->itemDiscovered = 0;
             QPointF pos(e->pagePos());
             painter.translate(pos);
@@ -228,7 +228,7 @@ void ExampleView::dragMoveEvent(QDragMoveEvent* event)
       QPointF pos(imatrix.map(QPointF(event->pos())));
       QList<Element*> el = elementsAt(pos);
       bool found = false;
-      foreach(const Element* e, el) {
+      for (const Element* e : el) {
             if (e->type() == Element::Type::NOTE) {
                   setDropTarget(const_cast<Element*>(e));
                   found = true;
@@ -285,7 +285,7 @@ void ExampleView::dropEvent(QDropEvent* event)
             dragElement = 0;
             return;
             }
-      foreach (Element* e, elementsAt(pos)) {
+      for (Element* e : elementsAt(pos)) {
             if (e->type() == Element::Type::NOTE) {
                   Icon* icon = static_cast<Icon*>(dragElement);
                   Chord* chord = static_cast<Note*>(e)->chord();
@@ -322,7 +322,7 @@ void ExampleView::dropEvent(QDropEvent* event)
 void ExampleView::mousePressEvent(QMouseEvent* event)
       {
       QPointF pos(imatrix.map(QPointF(event->pos())));
-      foreach (Element* e, elementsAt(pos)) {
+      for (Element* e : elementsAt(pos)) {
             if (e->type() == Element::Type::NOTE) {
                   emit noteClicked(static_cast<Note*>(e));
                   break;

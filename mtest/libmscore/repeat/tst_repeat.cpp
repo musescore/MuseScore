@@ -84,7 +84,7 @@ void TestRepeat::repeat(const char* f1, const QString & ref)
       QVERIFY(score);
       score->updateRepeatList(true);
       QStringList sl;
-      foreach (const RepeatSegment* rs, *score->repeatList()) {
+      for (const RepeatSegment* rs : *score->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len;
             for (Measure* m = score->tick2measure(startTick); m; m = m->nextMeasure()) {

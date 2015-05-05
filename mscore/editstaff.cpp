@@ -195,7 +195,7 @@ void EditStaff::updateInterval(const Interval& iv)
 void EditStaff::bboxClicked(QAbstractButton* button)
       {
       QDialogButtonBox::ButtonRole br = buttonBox->buttonRole(button);
-      switch(br) {
+      switch (br) {
             case QDialogButtonBox::ApplyRole:
                   apply();
                   break;

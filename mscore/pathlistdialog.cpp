@@ -45,7 +45,7 @@ void PathListDialog::addClicked()
          QString("%1/%2").arg(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)).arg(QCoreApplication::applicationName()));
       if (!newPath.isEmpty()) {
             newPath = QDir(newPath).absolutePath();
-            if(files->findItems(newPath, Qt::MatchExactly).size() == 0)
+            if (files->findItems(newPath, Qt::MatchExactly).size() == 0)
                   files->addItem(newPath);
             }
       }

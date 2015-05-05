@@ -215,7 +215,7 @@ bool Rest::acceptDrop(const DropData& data) const
          ) {
             return true;
             }
-      if(type == Element::Type::REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)
+      if (type == Element::Type::REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)
             return true;
       return false;
       }
@@ -286,7 +286,7 @@ Element* Rest::drop(const DropData& data)
 SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoffset)
       {
       *yoffset = 2;
-      switch(type) {
+      switch (type) {
             case TDuration::DurationType::V_LONG:
                   return SymId::restLonga;
             case TDuration::DurationType::V_BREVE:
@@ -380,13 +380,13 @@ void Rest::layout()
             // if no rests or no duration symbols, delete any dur. symbol and chain into standard staff mngmt
             // this is to ensure horiz space is reserved for rest, even if they are not diplayed
             // Rest::draw() will skip their drawing, if not needed
-            if(_tabDur) {
+            if (_tabDur) {
                   delete _tabDur;
                   _tabDur = 0;
                   }
             }
 
-      switch(durationType().type()) {
+      switch (durationType().type()) {
             case TDuration::DurationType::V_64TH:
             case TDuration::DurationType::V_32ND:
                   dotline = -3;
@@ -492,7 +492,7 @@ int Rest::computeLineOffset()
       if (offsetVoices) {
             // move rests in a multi voice context
             bool up = (voice() == 0) || (voice() == 2);       // TODO: use style values
-            switch(durationType().type()) {
+            switch (durationType().type()) {
                   case TDuration::DurationType::V_LONG:
                         lineOffset = up ? -3 : 5;
                         break;
@@ -537,7 +537,7 @@ int Rest::computeLineOffset()
                   }
             }
       else {
-            switch(durationType().type()) {
+            switch (durationType().type()) {
                   case TDuration::DurationType::V_LONG:
                   case TDuration::DurationType::V_BREVE:
                   case TDuration::DurationType::V_MEASURE:
@@ -750,7 +750,7 @@ void Rest::add(Element* e)
       e->setParent(this);
       e->setTrack(track());
 
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::SYMBOL:
             case Element::Type::IMAGE:
                   _el.push_back(e);
@@ -767,7 +767,7 @@ void Rest::add(Element* e)
 
 void Rest::remove(Element* e)
       {
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::SYMBOL:
             case Element::Type::IMAGE:
                   if (!_el.remove(e))

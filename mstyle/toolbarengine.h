@@ -94,7 +94,7 @@ class ToolBarEngine: public BaseEngine {
             //! duration
             virtual void setFollowMouseDuration( int duration ) {
                   followMouseDuration_ = duration;
-                  foreach( const DataMap<ToolBarData>::Value & value, data_.values() ) {
+                  for ( const DataMap<ToolBarData>::Value & value : data_.values() ) {
                         if ( value ) value.data()->setFollowMouseDuration( duration );
                         }
                   }

@@ -163,7 +163,7 @@ void TempoText::textChanged()
                         qreal nt = qreal(sl[1].toDouble()) * pa.f;
                         if (nt != _tempo) {
                               _tempo = qreal(sl[1].toDouble()) * pa.f;
-                              if(segment())
+                              if (segment())
                                     score()->setTempo(segment(), _tempo);
                               score()->setPlaylistDirty();
                               }
@@ -197,7 +197,7 @@ void TempoText::undoSetFollowText(bool v)
 
 QVariant TempoText::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::TEMPO:             return _tempo;
             case P_ID::TEMPO_FOLLOW_TEXT: return _followText;
             default:
@@ -211,7 +211,7 @@ QVariant TempoText::getProperty(P_ID propertyId) const
 
 bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::TEMPO:
                   _tempo = v.toDouble();
                   score()->setTempo(segment(), _tempo);
@@ -234,7 +234,7 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant TempoText::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::TEMPO:             return 2.0;
             case P_ID::TEMPO_FOLLOW_TEXT: return false;
             case P_ID::PLACEMENT:         return int(Element::Placement::ABOVE);

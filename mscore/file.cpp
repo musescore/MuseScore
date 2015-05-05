@@ -113,7 +113,7 @@ extern MasterSynthesizer* synti;
 
 static void paintElements(QPainter& p, const QList<const Element*>& el)
       {
-      foreach (const Element* e, el) {
+      for (const Element* e : el) {
             if (!e->visible())
                   continue;
             QPointF pos(e->pagePos());
@@ -158,7 +158,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
       QString msg = QObject::tr("Cannot read file %1:\n").arg(name);
       QString detailedMsg;
       bool canIgnore = false;
-      switch(error) {
+      switch (error) {
             case Score::FileError::FILE_NO_ERROR:
                   return false;
             case Score::FileError::FILE_BAD_FORMAT:
@@ -446,7 +446,7 @@ QString MuseScore::createDefaultName() const
                   tmpName = name;
             else
                   tmpName = QString("%1-%2").arg(name).arg(n);
-            foreach(Score* s, scoreList) {
+            for (Score* s : scoreList) {
                   if (s->name() == tmpName) {
                         nameExists = true;
                         break;
@@ -622,7 +622,7 @@ void MuseScore::newFile()
                               if (!dList.isEmpty()) {
                                     int ltick = tick;
                                     int k = 0;
-                                    foreach (TDuration d, dList) {
+                                    for (TDuration d : dList) {
                                           if (k < puRests.count() && staff->linkedStaves())
                                                 rest = static_cast<Rest*>(puRests[k]->linkedClone());
                                           else {
@@ -1655,12 +1655,12 @@ bool MuseScore::exportParts()
       QString confirmReplaceMessage = tr("\"%1\" already exists.\nDo you want to replace it?\n");
       QString replaceMessage = tr("Replace");
       QString skipMessage = tr("Skip");
-      foreach (Excerpt* e, thisScore->excerpts())  {
+      for (Excerpt* e : thisScore->excerpts())  {
             Score* pScore = e->partScore();
             QString partfn = fi.absolutePath() + QDir::separator() + fi.baseName() + "-" + createDefaultFileName(pScore->name()) + "." + ext;
             QFileInfo fip(partfn);
-            if(fip.exists() && !overwrite) {
-                  if(noToAll)
+            if (fip.exists() && !overwrite) {
+                  if (noToAll)
                         continue;
                   QMessageBox msgBox( QMessageBox::Question, confirmReplaceTitle,
                         confirmReplaceMessage.arg(QDir::toNativeSeparators(partfn)),
@@ -1670,7 +1670,7 @@ bool MuseScore::exportParts()
                   msgBox.setButtonText(QMessageBox::YesToAll, tr("Replace All"));
                   msgBox.setButtonText(QMessageBox::NoToAll, tr("Skip All"));
                   int sb = msgBox.exec();
-                  if(sb == QMessageBox::YesToAll) {
+                  if (sb == QMessageBox::YesToAll) {
                         overwrite = true;
                         }
                   else if (sb == QMessageBox::NoToAll) {
@@ -1688,12 +1688,12 @@ bool MuseScore::exportParts()
       if (ext.toLower() == "pdf") {
             QList<Score*> scores;
             scores.append(thisScore);
-            foreach(Excerpt* e, thisScore->excerpts())  {
+            for (Excerpt* e : thisScore->excerpts())  {
                   scores.append(e->partScore());
                   }
             QString partfn(fi.absolutePath() + QDir::separator() + fi.baseName() + "-" + createDefaultFileName(tr("Score_and_Parts")) + ".pdf");
             QFileInfo fip(partfn);
-            if(fip.exists() && !overwrite) {
+            if (fip.exists() && !overwrite) {
                   if (!noToAll) {
                         QMessageBox msgBox( QMessageBox::Question, confirmReplaceTitle,
                               confirmReplaceMessage.arg(QDir::toNativeSeparators(partfn)),
@@ -1701,7 +1701,7 @@ bool MuseScore::exportParts()
                         msgBox.setButtonText(QMessageBox::Yes, replaceMessage);
                         msgBox.setButtonText(QMessageBox::No, skipMessage);
                         int sb = msgBox.exec();
-                        if(sb == QMessageBox::Yes) {
+                        if (sb == QMessageBox::Yes) {
                               if (!savePdf(scores, partfn))
                                     return false;
                               }
@@ -1710,7 +1710,7 @@ bool MuseScore::exportParts()
             else if (!savePdf(scores, partfn))
                   return false;
       }
-      if(!noToAll)
+      if (!noToAll)
             QMessageBox::information(this, tr("MuseScore: Export Parts"), tr("Parts were successfully exported"));
       return true;
       }
@@ -2187,7 +2187,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
 bool MuseScore::saveSelection(Score* cs)
       {
       if (!cs->selection().isRange()) {
-            if(!MScore::noGui) QMessageBox::warning(mscore, tr("MuseScore: Save Selection"), tr("Please select one or more measures"));
+            if (!MScore::noGui) QMessageBox::warning(mscore, tr("MuseScore: Save Selection"), tr("Please select one or more measures"));
             return false;
             }
       QStringList fl;
@@ -2382,8 +2382,8 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
             fileName += QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
             if (!converterMode) {
                   QFileInfo fip(fileName);
-                  if(fip.exists() && !overwrite) {
-                        if(noToAll)
+                  if (fip.exists() && !overwrite) {
+                        if (noToAll)
                               continue;
                         QMessageBox msgBox( QMessageBox::Question, tr("Confirm Replace"),
                               tr("\"%1\" already exists.\nDo you want to replace it?\n").arg(QDir::toNativeSeparators(fileName)),
@@ -2393,7 +2393,7 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
                         msgBox.setButtonText(QMessageBox::YesToAll, tr("Replace All"));
                         msgBox.setButtonText(QMessageBox::NoToAll, tr("Skip All"));
                         int sb = msgBox.exec();
-                        if(sb == QMessageBox::YesToAll) {
+                        if (sb == QMessageBox::YesToAll) {
                               overwrite = true;
                               }
                         else if (sb == QMessageBox::NoToAll) {
@@ -2542,7 +2542,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       if (trimMargin >= 0 && score->npages() == 1)
             p.translate(-r.topLeft());
 
-      foreach (Page* page, score->pages()) {
+      for (Page* page : score->pages()) {
             QList<const Element*> pel = page->elements();
             qStableSort(pel.begin(), pel.end(), elementLessThan);
             paintElements(p, pel);

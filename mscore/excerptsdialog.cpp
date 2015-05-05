@@ -68,11 +68,11 @@ ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
       if (score->parentScore())
             score = score->parentScore();
 
-      foreach(Excerpt* e, score->excerpts()) {
+      for (Excerpt* e : score->excerpts()) {
             ExcerptItem* ei = new ExcerptItem(e);
             excerptList->addItem(ei);
             }
-      foreach(Part* p, score->parts()) {
+      for (Part* p : score->parts()) {
             PartItem* item = new PartItem(p);
             partList->addItem(item);
             }
@@ -261,7 +261,7 @@ void ExcerptsDialog::partClicked(QListWidgetItem* item)
 
       PartItem* pi = static_cast<PartItem*>(item);
       if (item->checkState() == Qt::Checked) {
-            foreach(Part* p, excerpt->parts()) {
+            for (Part* p : excerpt->parts()) {
                   if (p == pi->part())
                         return;
                   }

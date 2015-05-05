@@ -86,7 +86,7 @@ std::string table::make()
                  ++span_row)
             {
                cell_def_2=
-                   std::find_if((*span_row)->CellDefs->begin(),
+                   std::find_if ((*span_row)->CellDefs->begin(),
                                 (*span_row)->CellDefs->end(),
                                 std::bind2nd(
                                    std::mem_fun(&table_cell_def::right_equals),
@@ -137,7 +137,7 @@ std::string table::make()
             for (row2=row; row2!=span_row; ++row2)
             {
                cell_def_2=
-                   std::find_if((*row2)->CellDefs->begin(),
+                   std::find_if ((*row2)->CellDefs->begin(),
                                 (*row2)->CellDefs->end(),
                                 std::bind2nd(
                                    std::mem_fun(&table_cell_def::right_equals),
@@ -147,7 +147,7 @@ std::string table::make()
                   bleft=bleft && (*cell_def_2)->BorderRight;
                }
                cell_def_2=
-                   std::find_if((*row2)->CellDefs->begin(),
+                   std::find_if ((*row2)->CellDefs->begin(),
                                 (*row2)->CellDefs->end(),
                                 std::bind2nd(
                                    std::mem_fun(&table_cell_def::left_equals),

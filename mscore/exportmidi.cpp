@@ -37,7 +37,7 @@ void ExportMidi::writeHeader()
 #if 0 // TODO
       MeasureBase* measure  = cs->first();
 
-      foreach (const Element* e, *measure->el()) {
+      for (const Element* e : *measure->el()) {
             if (e->type() == Element::TEXT) {
                   const Text* text = (const Text*)(e);
                   QString str = text->getText();
@@ -82,7 +82,7 @@ void ExportMidi::writeHeader()
       //--------------------------------------------
 
       TimeSigMap* sigmap = cs->sigmap();
-      foreach(const RepeatSegment* rs, *cs->repeatList()) {
+      for (const RepeatSegment* rs : *cs->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len;
             int tickOffset = rs->utick - rs->tick;
@@ -132,7 +132,7 @@ void ExportMidi::writeHeader()
             Staff* staff  = cs->staff(staffIdx);
             KeyList* keys = staff->keyList();
 
-            foreach(const RepeatSegment* rs, *cs->repeatList()) {
+            for (const RepeatSegment* rs : *cs->repeatList()) {
                   int startTick  = rs->tick;
                   int endTick    = startTick + rs->len;
                   int tickOffset = rs->utick - rs->tick;
@@ -176,7 +176,7 @@ void ExportMidi::writeHeader()
 
       TempoMap* tempomap = cs->tempomap();
       int relTempo = tempomap->relTempo();
-      foreach(const RepeatSegment* rs, *cs->repeatList()) {
+      for (const RepeatSegment* rs : *cs->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len;
             int tickOffset = rs->utick - rs->tick;
@@ -242,11 +242,11 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
 
             // Pass throught the all instruments in the part
             const InstrumentList* il = part->instruments();
-            for(auto j = il->begin(); j!= il->end(); j++) {
+            for (auto j = il->begin(); j!= il->end(); j++) {
                   // Pass throught the all channels of the instrument
                   // "normal", "pizzicato", "tremolo" for Strings,
                   // "normal", "mute" for Trumpet
-                  foreach(const Channel* ch, j->second->channel()) {
+                  for (const Channel* ch : j->second->channel()) {
                         char port    = part->score()->midiPort(ch->channel);
                         char channel = part->score()->midiChannel(ch->channel);
 

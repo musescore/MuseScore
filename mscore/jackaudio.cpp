@@ -81,7 +81,7 @@ void JackAudio::updateOutPortCount(int maxport)
             }
       else if (maxport < midiOutputPorts.size()) {
             rememberMidiConnections();
-            for(int i = midiOutputPorts.size() - 1; i >= maxport; --i) {
+            for (int i = midiOutputPorts.size() - 1; i >= maxport; --i) {
                   unregisterPort(midiOutputPorts[i]);
                   midiOutputPorts.removeAt(i);
                   }
@@ -342,7 +342,7 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
       {
       JackAudio* audio = (JackAudio*)p;
       // Prevent from crash if score not opened yet
-      if(!audio->seq->score())
+      if (!audio->seq->score())
             return 0;
 
       float* l;
@@ -356,11 +356,11 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
             r = 0;
             }
       if (preferences.useJackMidi) {
-            foreach(jack_port_t* port, audio->midiOutputPorts) {
+            for (jack_port_t* port : audio->midiOutputPorts) {
                   void* portBuffer = jack_port_get_buffer(port, frames);
                   jack_midi_clear_buffer(portBuffer);
                   }
-            foreach(jack_port_t* port, audio->midiInputPorts) {
+            for (jack_port_t* port : audio->midiInputPorts) {
                   void* portBuffer = jack_port_get_buffer(port, frames);
                   if (portBuffer) {
                         jack_nframes_t n = jack_midi_get_event_count(portBuffer);
@@ -561,7 +561,7 @@ void JackAudio::putEvent(const NPlayEvent& e, unsigned framePos)
                   framePos = _segmentSize - 1;
             }
 
-      switch(e.type()) {
+      switch (e.type()) {
             case ME_NOTEON:
             case ME_NOTEOFF:
             case ME_POLYAFTER:
@@ -753,7 +753,7 @@ void JackAudio::rememberAudioConnections()
       settings.setValue(QString("audio-0-connections"), 0);
       settings.setValue(QString("audio-1-connections"), 0);
       int port = 0;
-      foreach(jack_port_t* mp, ports) {
+      for (jack_port_t* mp : ports) {
             const char** cc = jack_port_get_connections(mp);
             const char** c = cc;
             int idx = 0;
@@ -831,7 +831,7 @@ void JackAudio::rememberMidiConnections()
             qDebug("Saving midi connections...");
       QSettings settings;
       int port = 0;
-      foreach(jack_port_t* mp, midiOutputPorts) {
+      for (jack_port_t* mp : midiOutputPorts) {
             const char** cc = jack_port_get_connections(mp);
             const char** c = cc;
             int idx = 0;
@@ -848,7 +848,7 @@ void JackAudio::rememberMidiConnections()
             }
 
       port = 0;
-      foreach(jack_port_t* mp, midiInputPorts) {
+      for (jack_port_t* mp : midiInputPorts) {
             const char** cc = jack_port_get_connections(mp);
             const char** c = cc;
             int idx = 0;
@@ -931,7 +931,7 @@ void JackAudio::hotPlug()
                   }
             }
       else if (!preferences.useJackAudio) {
-            foreach(jack_port_t* p, ports) {
+            for (jack_port_t* p : ports) {
                   unregisterPort(p);
                   ports.removeOne(p);
                   }

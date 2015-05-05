@@ -574,7 +574,7 @@ void QmlEdit::delWord()
       QTextCursor c = textCursor();
       int i = c.position();
       if (document()->characterAt(i) == QChar(' ')) {
-            while(document()->characterAt(i) == QChar(' '))
+            while (document()->characterAt(i) == QChar(' '))
                   c.deleteChar();
             }
       else {
@@ -584,7 +584,7 @@ void QmlEdit::delWord()
                         break;
                   c.deleteChar();
                   }
-            while(document()->characterAt(i) == QChar(' '))
+            while (document()->characterAt(i) == QChar(' '))
                   c.deleteChar();
             }
       }

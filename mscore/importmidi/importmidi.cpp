@@ -308,7 +308,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
             case META_TITLE:
                   {
                   Text* text = new Text(cs);
-                  switch(mm.metaType()) {
+                  switch (mm.metaType()) {
                         case META_COMPOSER:
                               text->setTextStyleType(TextStyleType::COMPOSER);
                               break;

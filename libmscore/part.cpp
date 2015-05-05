@@ -98,7 +98,7 @@ void Part::read(XmlReader& e)
 void Part::write(Xml& xml) const
       {
       xml.stag("Part");
-      foreach(const Staff* staff, _staves)
+      for (const Staff* staff : _staves)
             staff->write(xml);
       if (!_show)
             xml.tag("show", _show);

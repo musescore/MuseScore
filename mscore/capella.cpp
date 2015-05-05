@@ -139,7 +139,7 @@ static void SetCapGraceDuration(Chord* chord,ChordObj* o)
 static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int track, ChordRest* cr)
       {
       Score* score = s->score();
-      foreach(BasicDrawObj* oo, objects) {
+      for (BasicDrawObj* oo : objects) {
             switch (oo->type) {
                   case CapellaType::SIMPLE_TEXT:
                         {
@@ -412,7 +412,7 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
       int graceNumber1 = 0;
       bool foundcr1 = false;
       int tick2 = tick;
-      foreach(NoteObj* nobj, objects) {
+      for (NoteObj* nobj : objects) {
             BasicDurationalObj* d = 0;
             if (nobj->type() == CapellaNoteObjectType::REST) {
                   d = static_cast<BasicDurationalObj*>(static_cast<RestObj*>(nobj));
@@ -462,7 +462,7 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
             if (cr) {
                   if (graceNumber1 > 0) { // the spanner is starting from a grace note
                         Chord* chord = static_cast<Chord*>(cr);
-                        foreach(Chord* cc, chord->graceNotes()) {
+                        for (Chord* cc : chord->graceNotes()) {
                               --graceNumber1;
                               if ((graceNumber1 == 0) && (!cr1))
                                     cr1 = static_cast<ChordRest*>(cc); // found first ChordRest
@@ -479,7 +479,7 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
             if (cr) {
                   if ((graceNumber > 0) && (cr->type() == Element::Type::CHORD)) { // the spanner is ending on a grace note
                         Chord* chord = static_cast<Chord*>(cr);
-                        foreach(Chord* cc, chord->graceNotes()) {
+                        for (Chord* cc : chord->graceNotes()) {
                               --graceNumber;
                               if ((graceNumber == 0) && (!cr2))
                                     cr2 = static_cast<ChordRest*>(cc); // found 2nd ChordRest
@@ -523,7 +523,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
 
       qDebug("    read voice: tick %d track: %d)", tick, track);
       QList<Chord*> graceNotes;
-      foreach(NoteObj* no, cvoice->objects) {
+      for (NoteObj* no : cvoice->objects) {
             switch (no->type()) {
                   case CapellaNoteObjectType::REST:
                         {
@@ -678,7 +678,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               int ii = -1;
                               for (ii = graceNotes.size() - 1; ii >= 0; ii--) {
                                     Chord* gc = graceNotes[ii];
-                                    if(gc->voice() == chord->voice()){
+                                    if (gc->voice() == chord->voice()){
                                           chord->add(gc);
                                           }
                                     }
@@ -715,7 +715,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               };
                         off += keyOffsets[int(key) + 7];
 
-                        foreach(CNote n, o->notes) {
+                        for (CNote n : o->notes) {
                               Note* note = new Note(score);
                               int pitch = 0;
                               // .cap import: pitch contains the diatonic note number relative to clef and key
@@ -750,7 +750,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     note->setTieFor(tie);
                                     }
                               }
-                        foreach(Verse v, o->verse) {
+                        for (Verse v : o->verse) {
                               Lyrics* l = new Lyrics(score);
                               l->setTrack(track);
                               l->setPlainText(v.text);
@@ -770,7 +770,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               case 6:   addArticulationText(score, chord, track, QString("marcato")); break;
                               case 7:   // "weak beat"
                               case 8:   // "strong beat"
-                              default:  if(o->articulation) qDebug("Articulation # %d not implemented", o->articulation); break;
+                              default:  if (o->articulation) qDebug("Articulation # %d not implemented", o->articulation); break;
                               }
 
                         if (tuplet) {
@@ -899,7 +899,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
       // pass II
       //
       tick = startTick;
-      foreach(NoteObj* no, cvoice->objects) {
+      for (NoteObj* no : cvoice->objects) {
             BasicDurationalObj* d = 0;
             if (no->type() == CapellaNoteObjectType::REST)
                   d = static_cast<BasicDurationalObj*>(static_cast<RestObj*>(no));
@@ -907,7 +907,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                   d = static_cast<BasicDurationalObj*>(static_cast<ChordObj*>(no));
             if (!d)
                   continue;
-            foreach(BasicDrawObj* o, d->objects) {
+            for (BasicDrawObj* o : d->objects) {
                   switch (o->type) {
                         case CapellaType::SIMPLE_TEXT:
                               // qDebug("simple text at %d", tick);
@@ -1080,7 +1080,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
 static bool needPart(const int prevInst, const int currInst, const int staffIdx, QList<CapBracket> const& bracketList)
       {
       // qDebug("needPart(prevInst %d, currInst %d, staffIdx %d)", prevInst, currInst, staffIdx);
-      foreach(CapBracket cb, bracketList) {
+      for (CapBracket cb : bracketList) {
             // qDebug("needPart bracket %d-%d curly %d", cb.from, cb.to, cb.curly);
             if (prevInst == currInst && cb.from < staffIdx && staffIdx <= cb.to && cb.curly) {
                   // qDebug("needPart found brace, continue part");
@@ -1107,9 +1107,9 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       // score->style()->set(StyleIdx::hideEmptyStaves, true);
 
 #if 1
-      foreach(CapSystem* csys, cap->systems) {
+      for (CapSystem* csys : cap->systems) {
             qDebug("System:");
-            foreach(CapStaff* cstaff, csys->staves) {
+            for (CapStaff* cstaff : csys->staves) {
                   CapStaffLayout* cl = cap->staffLayout(cstaff->iLayout);
                   qDebug("  Staff layout <%s><%s><%s><%s><%s> %d  barline %d-%d mode %d",
                          qPrintable(cl->descr), qPrintable(cl->name), qPrintable(cl->abbrev),
@@ -1123,7 +1123,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       // find out the maximum number of staves
       //
       int staves = 0;
-      foreach(CapSystem* csys, cap->systems) {
+      for (CapSystem* csys : cap->systems) {
             staves = qMax(staves, csys->staves.size());
             }
       //
@@ -1193,7 +1193,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       if (bstaff)
             bstaff->setBarLineSpan(span);
 
-      foreach(CapBracket cb, cap->brackets) {
+      for (CapBracket cb : cap->brackets) {
             qDebug("Bracket %d-%d curly %d", cb.from, cb.to, cb.curly);
             Staff* staff = score->staves().value(cb.from);
             if (staff == 0) {
@@ -1204,7 +1204,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             staff->setBracketSpan(0, cb.to - cb.from + 1);
             }
 
-      foreach(BasicDrawObj* o, cap->backgroundChord->objects) {
+      for (BasicDrawObj* o : cap->backgroundChord->objects) {
             switch (o->type) {
                   case CapellaType::SIMPLE_TEXT:
                         {
@@ -1247,7 +1247,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             }
 
       int systemTick = 0;
-      foreach(CapSystem* csys, cap->systems) {
+      for (CapSystem* csys : cap->systems) {
             qDebug("readCapSystem");
             /*
             if (csys->explLeftIndent > 0) {
@@ -1258,7 +1258,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   }
             */
             int mtick = 0;
-            foreach(CapStaff* cstaff, csys->staves) {
+            for (CapStaff* cstaff : csys->staves) {
                   //
                   // assumption: layout index is mscore staffIdx
                   //    which means that there is a 1:1 relation between layout/staff
@@ -1267,7 +1267,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   qDebug("  ReadCapStaff %d/%d", cstaff->numerator, 1 << cstaff->log2Denom);
                   int staffIdx = cstaff->iLayout;
                   int voice = 0;
-                  foreach(CapVoice* cvoice, cstaff->voices) {
+                  for (CapVoice* cvoice : cstaff->voices) {
                         int tick = readCapVoice(score, cvoice, staffIdx, systemTick, capxMode);
                         ++voice;
                         if (tick > mtick)
@@ -2638,7 +2638,7 @@ void Capella::read(QFile* fp)
 Score::FileError importCapella(Score* score, const QString& name)
       {
       QFile fp(name);
-      if(!fp.exists())
+      if (!fp.exists())
             return Score::FileError::FILE_NOT_FOUND;
       if (!fp.open(QIODevice::ReadOnly))
             return Score::FileError::FILE_OPEN_ERROR;

@@ -120,7 +120,7 @@ QPointF Breath::pagePos() const
 
 QVariant Breath::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::PAUSE:
                   return _pause;
             default:
@@ -134,7 +134,7 @@ QVariant Breath::getProperty(P_ID propertyId) const
 
 bool Breath::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::PAUSE:
                   setPause(v.toDouble());
                   score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
@@ -155,7 +155,7 @@ bool Breath::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Breath::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::PAUSE:
                   return 0.0;
             default:

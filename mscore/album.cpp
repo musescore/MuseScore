@@ -78,7 +78,7 @@ void Album::print()
       if (_scores[0]->score)
             pageOffset = _scores[0]->score->pageNumberOffset();
 
-      foreach(AlbumItem* item, _scores) {
+      for (AlbumItem* item : _scores) {
             Score* score = item->score;
             if (score == 0)
                   continue;
@@ -99,7 +99,7 @@ void Album::print()
                   QRectF fr = page->abbox();
                   QList<Element*> ell = page->items(fr);
                   qStableSort(ell.begin(), ell.end(), elementLessThan);
-                  foreach(const Element* e, ell) {
+                  for (const Element* e : ell) {
                         e->itemDiscovered = 0;
                         if (!e->visible())
                               continue;
@@ -110,7 +110,7 @@ void Album::print()
                         }
                   }
             pageOffset += pages;
-            if(item != _scores.last())
+            if (item != _scores.last())
                   printer.newPage();
             score->setPrinting(false);
             score->setPageNumberOffset(oldPageOffset);
@@ -131,7 +131,7 @@ bool Album::createScore(const QString& fn)
             return false;
       firstScore->doLayout();
       Score* score = firstScore->clone();
-      foreach (AlbumItem* item, _scores) {
+      for (AlbumItem* item : _scores) {
             if (item->score == 0 || item->score == firstScore)
                   continue;
             item->score->doLayout();
@@ -229,7 +229,7 @@ void Album::load(XmlReader& e)
 
 void Album::loadScores()
       {
-      foreach(AlbumItem* item, _scores) {
+      for (AlbumItem* item : _scores) {
             if (item->path.isEmpty())
                   continue;
             QString ip = item->path;
@@ -252,7 +252,7 @@ void Album::save(Xml& xml)
       {
       xml.stag("Album");
       xml.tag("name", _name);
-      foreach(AlbumItem* item, _scores) {
+      for (AlbumItem* item : _scores) {
             xml.stag("Score");
             xml.tag("name", item->name);
             xml.tag("path", item->path);

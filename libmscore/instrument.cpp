@@ -32,7 +32,7 @@ void NamedEventList::write(Xml& xml, const QString& n) const
       xml.stag(QString("%1 name=\"%2\"").arg(n).arg(name));
       if (!descr.isEmpty())
             xml.tag("descr", descr);
-      foreach(const MidiCoreEvent& e, events)
+      for (const MidiCoreEvent& e : events)
             e.write(xml);
       xml.etag();
       }
@@ -237,9 +237,9 @@ void Instrument::write(Xml& xml) const
 
       if (!(_stringData == StringData()))
             _stringData.write(xml);
-      foreach(const NamedEventList& a, _midiActions)
+      for (const NamedEventList& a : _midiActions)
             a.write(xml, "MidiAction");
-      foreach(const MidiArticulation& a, _articulation)
+      for (const MidiArticulation& a : _articulation)
             a.write(xml);
       for (const Channel* a : _channel)
             a->write(xml);
@@ -394,12 +394,12 @@ NamedEventList* Instrument::midiAction(const QString& s, int channelIdx) const
       {
       // first look in channel list
 
-      foreach(const NamedEventList& a, _channel[channelIdx]->midiActions) {
+      for (const NamedEventList& a : _channel[channelIdx]->midiActions) {
             if (s == a.name)
                   return const_cast<NamedEventList*>(&a);
             }
 
-      foreach(const NamedEventList& a, _midiActions) {
+      for (const NamedEventList& a : _midiActions) {
             if (s == a.name)
                   return const_cast<NamedEventList*>(&a);
             }
@@ -412,7 +412,7 @@ NamedEventList* Instrument::midiAction(const QString& s, int channelIdx) const
 
 Channel::Channel()
       {
-      for(int i = 0; i < int(A::INIT_COUNT); ++i)
+      for (int i = 0; i < int(A::INIT_COUNT); ++i)
             init.push_back(MidiCoreEvent());
       synti    = "Fluid";     // default synthesizer
       channel  = -1;
@@ -441,7 +441,7 @@ void Channel::write(Xml& xml) const
       if (!descr.isEmpty())
             xml.tag("descr", descr);
       updateInitList();
-      foreach(const MidiCoreEvent& e, init) {
+      for (const MidiCoreEvent& e : init) {
             if (e.type() == ME_INVALID)
                   continue;
             if (e.type() == ME_CONTROLLER) {
@@ -468,9 +468,9 @@ void Channel::write(Xml& xml) const
             xml.tag("mute", mute);
       if (solo)
             xml.tag("solo", solo);
-      foreach(const NamedEventList& a, midiActions)
+      for (const NamedEventList& a : midiActions)
             a.write(xml, "MidiAction");
-      foreach(const MidiArticulation& a, articulation)
+      for (const MidiArticulation& a : articulation)
             a.write(xml);
       xml.etag();
       }
@@ -654,7 +654,7 @@ void MidiArticulation::read(XmlReader& e)
 
 void Instrument::updateVelocity(int* velocity, int /*channelIdx*/, const QString& name)
       {
-      foreach(const MidiArticulation& a, _articulation) {
+      for (const MidiArticulation& a : _articulation) {
             if (a.name == name) {
                   *velocity = *velocity * a.velocity / 100;
                   break;
@@ -668,7 +668,7 @@ void Instrument::updateVelocity(int* velocity, int /*channelIdx*/, const QString
 
 void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const QString& name)
       {
-      foreach(const MidiArticulation& a, _articulation) {
+      for (const MidiArticulation& a : _articulation) {
             if (a.name == name) {
                   *gateTime = a.gateTime;
                   break;

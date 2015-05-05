@@ -58,19 +58,19 @@ BaseEngine::WidgetList WidgetStateEngine::registeredWidgets( AnimationModes mode
       typedef DataMap<WidgetStateData>::Value Value;
 
       if ( mode & AnimationHover ) {
-            foreach( const Value & value, hoverData_ ) {
+            for ( const Value & value : hoverData_ ) {
                   if ( value ) out.insert( value.data()->target().data() );
                   }
             }
 
       if ( mode & AnimationFocus ) {
-            foreach( const Value & value, focusData_ ) {
+            for ( const Value & value : focusData_ ) {
                   if ( value ) out.insert( value.data()->target().data() );
                   }
             }
 
       if ( mode & AnimationEnable ) {
-            foreach( const Value & value, enableData_ ) {
+            for ( const Value & value : enableData_ ) {
                   if ( value ) out.insert( value.data()->target().data() );
                   }
             }

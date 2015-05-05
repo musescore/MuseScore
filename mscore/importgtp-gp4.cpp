@@ -116,10 +116,10 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
             int strokedown = readUChar();            // down stroke length
 
             Arpeggio* a = new Arpeggio(score);
-            if( strokeup > 0 ) {
+            if ( strokeup > 0 ) {
                   a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
                   }
-            else if( strokedown > 0 ) {
+            else if ( strokedown > 0 ) {
                   a->setArpeggioType(ArpeggioType::DOWN_STRAIGHT);
                   }
             else {
@@ -127,7 +127,7 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
                   a = 0;
                   }
 
-            if(a) {
+            if (a) {
                   ChordRest* cr = new Chord(score);
                   cr->setTrack(track);
                   cr->add(a);
@@ -298,7 +298,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
 
                   TDuration d;
                   d.setVal(grace_len);
-                  if(grace_len == MScore::division/6)
+                  if (grace_len == MScore::division/6)
                         d.setDots(1);
                   gc->setDurationType(d);
                   gc->setDuration(d.fraction());
@@ -310,7 +310,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                   if (transition == 0) {
                         // no transition
                         }
-                  else if(transition == 1){
+                  else if (transition == 1){
                         //TODO: Add a 'slide' guitar effect when implemented
                         }
                   else if (transition == 2 && fretNumber>=0 && fretNumber<=255 && fretNumber!=gn->fret()) {
@@ -421,7 +421,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                   if (e) {
                         if (e->type() == Element::Type::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
-                              foreach(Note* note2, chord2->notes()) {
+                              for (Note* note2 : chord2->notes()) {
                                     if (note2->string() == string) {
                                           Tie* tie = new Tie(score);
                                           tie->setEndNote(note);
@@ -750,7 +750,7 @@ void GuitarPro4::read(QFile* fp)
                         ChordRest* cr = segment->cr(track);
 
                         if (strings == 0) {
-                              if(segment->cr(track)){
+                              if (segment->cr(track)){
                                     segment->remove(segment->cr(track));
                                     delete cr;
                                     cr = 0;
@@ -758,7 +758,7 @@ void GuitarPro4::read(QFile* fp)
                               cr = new Rest(score);
                               }
                         else {
-                              if(!segment->cr(track))
+                              if (!segment->cr(track))
                                     cr = new Chord(score);
                               }
 
@@ -795,7 +795,7 @@ void GuitarPro4::read(QFile* fp)
                               }
                         else
                               cr->setDurationType(d);
-                        if(!segment->cr(track))
+                        if (!segment->cr(track))
                               segment->add(cr);
                         Staff* staff = cr->staff();
                         int numStrings = staff->part()->instrument()->stringData()->strings();

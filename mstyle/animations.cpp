@@ -153,7 +153,7 @@ void Animations::setupEngines( void ) {
                   toolBarEngine_->setEnabled( animationsEnabled && toolBarAnimationType == MgStyleConfigData::TB_FOLLOW_MOUSE );
 
                   // unregister all toolbuttons that belong to a toolbar
-                  foreach( QWidget * widget, widgetStateEngine_->registeredWidgets( AnimationHover | AnimationFocus ) ) {
+                  for ( QWidget * widget : widgetStateEngine_->registeredWidgets( AnimationHover | AnimationFocus ) ) {
                         if ( qobject_cast<QToolButton*>( widget ) && qobject_cast<QToolBar*>( widget->parentWidget() ) ) {
                               widgetStateEngine_->unregisterWidget( widget );
                               }
@@ -167,9 +167,9 @@ void Animations::setupEngines( void ) {
 
                   // retrieve all registered toolbars
                   BaseEngine::WidgetList widgets( toolBarEngine_->registeredWidgets() );
-                  foreach( QWidget * widget, widgets ) {
+                  for ( QWidget * widget : widgets ) {
                         // get all toolbuttons
-                        foreach( QObject * child, widget->children() ) {
+                        for ( QObject * child : widget->children() ) {
                               if ( QToolButton* toolButton = qobject_cast<QToolButton*>( child ) ) {
                                     widgetStateEngine_->registerWidget( toolButton, AnimationHover );
                                     }
@@ -351,7 +351,7 @@ void Animations::unregisterWidget( QWidget* widget ) const {
       // the following allows some optimization of widget unregistration
       // it assumes that a widget can be registered atmost in one of the
       // engines stored in the list.
-      foreach( const BaseEngine::Pointer & engine, engines_ ) {
+      for ( const BaseEngine::Pointer & engine : engines_ ) {
             if ( engine && engine.data()->unregisterWidget( widget ) ) break;
             }
 

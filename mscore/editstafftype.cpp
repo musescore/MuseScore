@@ -73,11 +73,11 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 
       // tab page configuration
       QList<QString> fontNames = StaffType::fontNames(false);
-      foreach (const QString& name, fontNames)   // fill fret font name combo
+      for (const QString& name : fontNames)   // fill fret font name combo
             fretFontName->addItem(name);
       fretFontName->setCurrentIndex(0);
       fontNames = StaffType::fontNames(true);
-      foreach(const QString& name, fontNames)   // fill duration font name combo
+      for (const QString& name : fontNames)   // fill duration font name combo
             durFontName->addItem(name);
       durFontName->setCurrentIndex(0);
 
@@ -452,7 +452,7 @@ void EditStaffType::tabStemsCompatibility(bool checked)
 void EditStaffType::tabMinimShortCompatibility(bool checked)
       {
       if (checked) {
-            if(stemThroughRadio->isChecked()) {
+            if (stemThroughRadio->isChecked()) {
                   stemThroughRadio->setChecked(false);
                   stemBesideRadio->setChecked(true);
                   }
@@ -472,7 +472,7 @@ void EditStaffType::tabMinimShortCompatibility(bool checked)
 void EditStaffType::tabStemThroughCompatibility(bool checked)
       {
       if (checked) {
-            if(minimShortRadio->isChecked()) {
+            if (minimShortRadio->isChecked()) {
                   minimShortRadio->setChecked(false);
                   minimSlashedRadio->setChecked(true);
                   }

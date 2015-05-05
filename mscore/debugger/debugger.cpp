@@ -110,7 +110,7 @@ ElementItem::ElementItem(QTreeWidgetItem* ei, Element* e)
 void ElementItem::init()
       {
       QString s;
-      switch(el->type()) {
+      switch (el->type()) {
             case Element::Type::PAGE:
                   {
                   QString no;
@@ -233,7 +233,7 @@ static void addSymbol(ElementItem* parent, BSymbol* bs)
       const QList<Element*>el = bs->leafs();
       ElementItem* i = new ElementItem(parent, bs);
       if (!el.isEmpty()) {
-            foreach(Element* g, el)
+            for (Element* g : el)
                   addSymbol(i, static_cast<BSymbol*>(g));
             }
       }
@@ -244,7 +244,7 @@ static void addSymbol(ElementItem* parent, BSymbol* bs)
 
 static void addMeasureBaseToList(ElementItem* mi, MeasureBase* mb)
       {
-      foreach(Element* e, mb->el()) {
+      for (Element* e : mb->el()) {
             ElementItem* mmi = new ElementItem(mi, e);
             if (e->type() == Element::Type::HBOX || e->type() == Element::Type::VBOX)
                   addMeasureBaseToList(mmi, static_cast<MeasureBase*>(e));
@@ -267,7 +267,7 @@ void Debugger::showEvent(QShowEvent*)
 static void addBSymbol(ElementItem* item, BSymbol* e)
       {
       ElementItem* si = new ElementItem(item, e);
-      foreach(Element* ee, e->leafs())
+      for (Element* ee : e->leafs())
             addBSymbol(si, static_cast<BSymbol*>(ee));
       }
 
@@ -358,7 +358,7 @@ void Debugger::addMeasure(ElementItem* mi, Measure* measure)
       {
       int staves = cs->nstaves();
       int tracks = staves * VOICES;
-      foreach (MStaff* ms, *measure->staffList()) {
+      for (MStaff* ms : *measure->staffList()) {
             if (ms->_vspacerUp)
                   new ElementItem(mi, ms->_vspacerUp);
             if (ms->_vspacerDown)
@@ -379,7 +379,7 @@ void Debugger::addMeasure(ElementItem* mi, Measure* measure)
                         ChordRest* cr = static_cast<ChordRest*>(e);
                         if (cr->beam() && cr->beam()->elements().front() == cr)
                               new ElementItem(sei, cr->beam());
-                        foreach(Lyrics* lyrics, cr->lyricsList()) {
+                        for (Lyrics* lyrics : cr->lyricsList()) {
                               if (lyrics)
                                     new ElementItem(sei, lyrics);
                               }
@@ -391,7 +391,7 @@ void Debugger::addMeasure(ElementItem* mi, Measure* measure)
                         }
                   }
 
-            foreach(Element* s, segment->annotations()) {
+            for (Element* s : segment->annotations()) {
                   if (s->type() == Element::Type::SYMBOL || s->type() == Element::Type::IMAGE)
                         addBSymbol(segItem, static_cast<BSymbol*>(s));
                   else if (s->type() == Element::Type::FRET_DIAGRAM) {
@@ -435,10 +435,10 @@ void Debugger::updateList(Score* s)
                   }
             }
 
-      foreach (Page* page, cs->pages()) {
+      for (Page* page : cs->pages()) {
             ElementItem* pi = new ElementItem(list, page);
 
-            foreach (System* system, *page->systems()) {
+            for (System* system : *page->systems()) {
                   ElementItem* si = new ElementItem(pi, system);
                   if (system->barLine())
                         new ElementItem(si, system->barLine());
@@ -446,8 +446,8 @@ void Debugger::updateList(Score* s)
                         new ElementItem(si, b);
                   for (SpannerSegment* ss : system->spannerSegments())
                         new ElementItem(si, ss);
-                  foreach(SysStaff* ss, *system->staves()) {
-                        foreach(InstrumentName* in, ss->instrumentNames)
+                  for (SysStaff* ss : *system->staves()) {
+                        for (InstrumentName* in : ss->instrumentNames)
                               new ElementItem(si, in);
                         }
 
@@ -769,7 +769,7 @@ void MeasureView::setElement(Element* e)
       mb.len->setText(m->len().print());
       mb.tick->setValue(m->tick());
       mb.sel->clear();
-      foreach(const Element* e, m->el()) {
+      for (const Element* e : m->el()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
             item->setText(0, e->name());
 //            item->setText(1, QString("%1").arg(e->subtype()));
@@ -846,7 +846,7 @@ void SegmentView::setElement(Element* e)
       for (int i = 0; i < cs->nstaves(); ++i) {
             const LyricsList* ll = s->lyricsList(i);
             if (ll) {
-                  foreach(Lyrics* l, *ll) {
+                  for (Lyrics* l : *ll) {
                         QString s;
                         s.setNum(qptrdiff(l), 16);
                         QListWidgetItem* item = new QListWidgetItem(s, 0, long(l));
@@ -858,7 +858,7 @@ void SegmentView::setElement(Element* e)
       sb.spannerFor->clear();
       sb.spannerBack->clear();
       sb.annotations->clear();
-      foreach(Element* sp, s->annotations()) {
+      for (Element* sp : s->annotations()) {
             QString s;
             s.setNum(qptrdiff(sp), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -948,7 +948,7 @@ void ChordDebug::setElement(Element* e)
       cb.stemDirection->setCurrentIndex(int(chord->stemDirection()));
 
       crb.attributes->clear();
-      foreach(Articulation* a, chord->articulations()) {
+      for (Articulation* a : chord->articulations()) {
             QString s;
             s.setNum(qptrdiff(a), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -956,7 +956,7 @@ void ChordDebug::setElement(Element* e)
             crb.attributes->addItem(item);
             }
       crb.lyrics->clear();
-      foreach(Lyrics* lyrics, chord->lyricsList()) {
+      for (Lyrics* lyrics : chord->lyricsList()) {
             QString s;
             s.setNum(qptrdiff(lyrics), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -964,7 +964,7 @@ void ChordDebug::setElement(Element* e)
             crb.lyrics->addItem(item);
             }
       cb.notes->clear();
-      foreach(Element* n, chord->notes()) {
+      for (Element* n : chord->notes()) {
             QString s;
             s.setNum(qptrdiff(n), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -1246,7 +1246,7 @@ void RestView::setElement(Element* e)
       crb.spaceR->setValue(rest->space().rw());
 
       crb.attributes->clear();
-      foreach(Articulation* a, rest->articulations()) {
+      for (Articulation* a : rest->articulations()) {
             QString s;
             s.setNum(qptrdiff(a), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -1254,7 +1254,7 @@ void RestView::setElement(Element* e)
             crb.attributes->addItem(item);
             }
       crb.lyrics->clear();
-      foreach(Lyrics* lyrics, rest->lyricsList()) {
+      for (Lyrics* lyrics : rest->lyricsList()) {
             QString s;
             s.setNum(qptrdiff(lyrics), 16);
             QListWidgetItem* item = new QListWidgetItem(s);
@@ -1489,7 +1489,7 @@ void SpannerView::setElement(Element* e)
       sp.track2->setValue(spanner->track2());
 
       sp.segments->clear();
-      foreach(const Element* e, spanner->spannerSegments()) {
+      for (const Element* e : spanner->spannerSegments()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
             item->setText(0, e->name());
             void* p = (void*) e;
@@ -1665,7 +1665,7 @@ void TupletView::setElement(Element* e)
       tb.number->setEnabled(tuplet->number());
       tb.tuplet->setEnabled(tuplet->tuplet());
       tb.elements->clear();
-      foreach(DurationElement* e, tuplet->elements()) {
+      for (DurationElement* e : tuplet->elements()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
             item->setText(0, e->name());
             item->setText(1, QString("%1").arg(e->tick()));
@@ -2041,7 +2041,7 @@ void VoltaView::setElement(Element* e)
 
       sp.segments->clear();
       const QList<SpannerSegment*>& el = volta->spannerSegments();
-      foreach(const SpannerSegment* e, el) {
+      for (const SpannerSegment* e : el) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
             item->setText(0, QString("%1").arg((quintptr)e, 8, 16));
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>((void*)e));
@@ -2236,7 +2236,7 @@ void BeamView::setElement(Element* e)
 
       bb.up->setValue(b->up());
       bb.elements->clear();
-      foreach (ChordRest* cr, b->elements()) {
+      for (ChordRest* cr : b->elements()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
             item->setText(0, QString("%1").arg((quintptr)cr, 8, 16));
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>((void*)cr));
@@ -2651,7 +2651,7 @@ void SystemView::setElement(Element* e)
       System* vs = (System*)e;
       ShowElementBase::setElement(e);
       mb.spanner->clear();
-      foreach(const Element* e, vs->spannerSegments()) {
+      for (const Element* e : vs->spannerSegments()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
             item->setText(0, e->name());
             void* p = (void*) e;

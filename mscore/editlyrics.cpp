@@ -138,7 +138,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       _score->startCmd();
 
       if (fromLyrics && !moveOnly) {
-            switch(toLyrics->syllabic()) {
+            switch (toLyrics->syllabic()) {
                   // as we arrived at toLyrics by a [Space], it can be the beginning
                   // of a multi-syllable, but cannot have syllabic dashes before
                   case Lyrics::Syllabic::SINGLE:
@@ -153,7 +153,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
                   }
             // as we moved away from fromLyrics by a [Space], it can be
             // the end of a multi-syllable, but cannot have syllabic dashes after
-            switch(fromLyrics->syllabic()) {
+            switch (fromLyrics->syllabic()) {
                   case Lyrics::Syllabic::SINGLE:
                   case Lyrics::Syllabic::END:
                         break;
@@ -249,7 +249,7 @@ void ScoreView::lyricsMinus()
       if (fromLyrics) {
             // as we moved away from fromLyrics by a dash,
             // it can have syll. dashes before and after but cannot be isolated or terminal
-            switch(fromLyrics->syllabic()) {
+            switch (fromLyrics->syllabic()) {
                   case Lyrics::Syllabic::BEGIN:
                   case Lyrics::Syllabic::MIDDLE:
                         break;
@@ -327,7 +327,7 @@ void ScoreView::lyricsUnderscore()
 
       if (nextSegment == 0) {
             if (fromLyrics) {
-                  switch(fromLyrics->syllabic()) {
+                  switch (fromLyrics->syllabic()) {
                         case Lyrics::Syllabic::SINGLE:
                         case Lyrics::Syllabic::END:
                               break;
@@ -369,7 +369,7 @@ void ScoreView::lyricsUnderscore()
       if (fromLyrics) {
             // as we moved away from fromLyrics by an underscore,
             // it can be isolated or terminal but cannot have dashes after
-            switch(fromLyrics->syllabic()) {
+            switch (fromLyrics->syllabic()) {
                   case Lyrics::Syllabic::SINGLE:
                   case Lyrics::Syllabic::END:
                         break;

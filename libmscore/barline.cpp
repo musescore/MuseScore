@@ -356,7 +356,7 @@ void BarLine::draw(QPainter* painter) const
       QPen pen(curColor(), lw, Qt::SolidLine, Qt::FlatCap);
       painter->setPen(pen);
 
-      switch(barLineType()) {
+      switch (barLineType()) {
             case BarLineType::BROKEN:
                   pen.setStyle(Qt::DashLine);
                   painter->setPen(pen);
@@ -502,7 +502,7 @@ void BarLine::write(Xml& xml) const
       // if no custom value, output _span only (as in previous code)
       else
             xml.tag("span", _span);
-      foreach(const Element* e, _el)
+      for (const Element* e : _el)
             e->write(xml);
       Element::writeProperties(xml);
       xml.etag();
@@ -936,7 +936,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
       qreal dw = score->styleS(StyleIdx::barWidth).val() * _spatium;
 
       qreal dotwidth = score->scoreFont()->width(SymId::repeatDot, mag);
-      switch(type) {
+      switch (type) {
             case BarLineType::DOUBLE:
                   dw  = (score->styleS(StyleIdx::doubleBarWidth) * 2
                      + score->styleS(StyleIdx::doubleBarDistance)).val() * _spatium;
@@ -1024,7 +1024,7 @@ void BarLine::layout()
             }
 
       // in any case, lay out attached elements
-      foreach (Element* e, _el) {
+      for (Element* e : _el) {
             e->layout();
             if (e->type() == Element::Type::ARTICULATION) {
                   Articulation* a       = static_cast<Articulation*>(e);
@@ -1110,7 +1110,7 @@ void BarLine::scanElements(void* data, void (*func)(void*, Element*), bool all)
       if (width() == 0.0 && !all)
             return;
       func(data, this);
-      foreach(Element* e, _el)
+      for (Element* e : _el)
             e->scanElements(data, func, all);
       }
 
@@ -1125,7 +1125,7 @@ void BarLine::add(Element* e)
             return;
             }
       e->setParent(this);
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::ARTICULATION:
                   _el.push_back(e);
                   setGenerated(false);
@@ -1145,7 +1145,7 @@ void BarLine::add(Element* e)
 
 void BarLine::remove(Element* e)
       {
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::ARTICULATION:
                   if (!_el.remove(e))
                         qDebug("BarLine::remove(): cannot find %s", e->name());
@@ -1284,7 +1284,7 @@ QVariant BarLine::getProperty(P_ID id) const
 
 bool BarLine::setProperty(P_ID id, const QVariant& v)
       {
-      switch(id) {
+      switch (id) {
             case P_ID::SUBTYPE:
                   setBarLineType(BarLineType(v.toInt()));
                   break;
@@ -1310,7 +1310,7 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
 
 QVariant BarLine::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SUBTYPE:
                   // default subtype is the subtype of the measure, if any
                   if (parent() && parent()->type() == Element::Type::SEGMENT && static_cast<Segment*>(parent())->measure() )
@@ -1383,12 +1383,12 @@ QString BarLine::accessibleExtraInfo()
             Segment* seg = static_cast<Segment*>(parent());
             QString rez = "";
 
-            foreach (Element* e, *el()) {
+            for (Element* e : *el()) {
                   if (!score()->selectionFilter().canSelect(e)) continue;
                   rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
 
-            foreach (Element* e, seg->annotations()) {
+            for (Element* e : seg->annotations()) {
                   if (!score()->selectionFilter().canSelect(e)) continue;
                   if (e->track() == track())
                         rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
@@ -1397,7 +1397,7 @@ QString BarLine::accessibleExtraInfo()
 
             if (m) {
                   //jumps
-                  foreach (Element* e, m->el()) {
+                  for (Element* e : m->el()) {
                         if (!score()->selectionFilter().canSelect(e)) continue;
                         if (e->type() == Element::Type::JUMP)
                               rez= QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
@@ -1411,7 +1411,7 @@ QString BarLine::accessibleExtraInfo()
                   //markers
                   Measure* nextM = m->nextMeasureMM();
                   if (nextM) {
-                        foreach (Element* e, nextM->el()) {
+                        for (Element* e : nextM->el()) {
                               if (!score()->selectionFilter().canSelect(e)) continue;
                               if (e->type() == Element::Type::MARKER)
                                     if (static_cast<Marker*>(e)->markerType() == Marker::Type::FINE)

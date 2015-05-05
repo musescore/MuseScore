@@ -50,7 +50,7 @@ BaseEngine::WidgetList ToolBarEngine::registeredWidgets( void ) const {
 
       // the typedef is needed to make Krazy happy
       typedef DataMap<ToolBarData>::Value Value;
-      foreach( const Value & value, data_ ) {
+      for ( const Value & value : data_ ) {
             if ( value ) out.insert( value.data()->target().data() );
             }
       return out;

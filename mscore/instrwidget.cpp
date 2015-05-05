@@ -389,7 +389,7 @@ void populateGenreCombo(QComboBox* combo)
       combo->addItem(qApp->translate("InstrumentsDialog", "All instruments"), "all");
       int i = 1;
       int defaultIndex = 0;
-      foreach (InstrumentGenre *ig, instrumentGenres) {
+      for (InstrumentGenre *ig : instrumentGenres) {
             combo->addItem(ig->name, ig->id);
             if (ig->id == "common")
                   defaultIndex = i;
@@ -406,10 +406,10 @@ void populateInstrumentList(QTreeWidget* instrumentList)
       {
       instrumentList->clear();
       // TODO: memory leak
-      foreach(InstrumentGroup* g, instrumentGroups) {
+      for (InstrumentGroup* g : instrumentGroups) {
             InstrumentTemplateListItem* group = new InstrumentTemplateListItem(g->name, instrumentList);
             group->setFlags(Qt::ItemIsEnabled);
-            foreach(InstrumentTemplate* t, g->instrumentTemplates) {
+            for (InstrumentTemplate* t : g->instrumentTemplates) {
                   new InstrumentTemplateListItem(t, group);
                   }
             }
@@ -435,7 +435,7 @@ void InstrumentsWidget::buildTemplateList()
 
 void InstrumentsWidget::expandOrCollapse(const QModelIndex &model)
       {
-      if(instrumentList->isExpanded(model))
+      if (instrumentList->isExpanded(model))
             instrumentList->collapse(model);
       else
             instrumentList->expand(model);
@@ -449,10 +449,10 @@ void InstrumentsWidget::genPartList(Score* cs)
       {
       partiturList->clear();
 
-      foreach(Part* p, cs->parts()) {
+      for (Part* p : cs->parts()) {
             PartListItem* pli = new PartListItem(p, partiturList);
             pli->setVisible(p->show());
-            foreach (Staff* s, *p->staves()) {
+            for (Staff* s : *p->staves()) {
                   StaffListItem* sli = new StaffListItem(pli);
                   sli->setStaff(s);
                   sli->setClefType(s->clefType(0));
@@ -461,7 +461,7 @@ void InstrumentsWidget::genPartList(Score* cs)
                   const LinkedStaves* ls = s->linkedStaves();
                   bool bLinked = false;
                   if (ls && !ls->isEmpty()) {
-                        foreach(Staff* ps, ls->staves()) {
+                        for (Staff* ps : ls->staves()) {
                               if (ps != s && ps->score() == s->score()) {
                                     bLinked = true;
                                     break;
@@ -510,7 +510,7 @@ void InstrumentsWidget::on_partiturList_itemSelectionChanged()
       int count = 0; // item can be hidden
       QTreeWidgetItem* it = 0;
       QList<QTreeWidgetItem*> witems;
-      if(item->type() == PART_LIST_ITEM) {
+      if (item->type() == PART_LIST_ITEM) {
             for (int idx = 0; (it = partiturList->topLevelItem(idx)); ++idx) {
                   if (!it->isHidden()) {
                         count++;
@@ -554,7 +554,7 @@ void InstrumentsWidget::on_instrumentList_itemDoubleClicked(QTreeWidgetItem*, in
 
 void InstrumentsWidget::on_addButton_clicked()
       {
-      foreach(QTreeWidgetItem* i, instrumentList->selectedItems()) {
+      for (QTreeWidgetItem* i : instrumentList->selectedItems()) {
             InstrumentTemplateListItem* item = static_cast<InstrumentTemplateListItem*>(i);
             const InstrumentTemplate* it     = item->instrumentTemplate();
             if (it == 0)
@@ -638,7 +638,7 @@ void InstrumentsWidget::on_removeButton_clicked()
                   plusIdx++;
                   nextParent = partiturList->topLevelItem(idx + plusIdx);
                   }
-            if(!nextParent) { // could find after, check before
+            if (!nextParent) { // could find after, check before
                   plusIdx = 1;
                   nextParent = partiturList->topLevelItem(idx - plusIdx);
                   while (nextParent && nextParent->isHidden()) {
@@ -919,13 +919,13 @@ void InstrumentsWidget::filterInstrumentsByGenre(QTreeWidget *instrumentList, QS
             InstrumentTemplateListItem* itli = static_cast<InstrumentTemplateListItem*>(*iList);
             InstrumentTemplate *it=itli->instrumentTemplate();
 
-            if(it) {
+            if (it) {
                   if (genre == "all" || it->genreMember(genre)) {
                         (*iList)->setHidden(false);
 
                         QTreeWidgetItem *iParent = (*iList)->parent();
-                        while(iParent) {
-                              if(!iParent->isHidden())
+                        while (iParent) {
+                              if (!iParent->isHidden())
                                     break;
 
                               iParent->setHidden(false);

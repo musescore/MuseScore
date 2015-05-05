@@ -407,7 +407,7 @@ void PageFormat::read(XmlReader& e, Score* score)
                   _size.rwidth() = e.readDouble() * .5 / PPI;
             else if (tag == "page-offset") {           // obsolete, moved to Score
                   QString val(e.readElementText());
-                  if(score)
+                  if (score)
                         score->setPageNumberOffset(val.toInt());
                   }
             else
@@ -530,7 +530,7 @@ QString Page::replaceTextMacros(const QString& s) const
             QChar c = s[i];
             if (c == '$' && (i < (n-1))) {
                   QChar c = s[i+1];
-                  switch(c.toLatin1()) {
+                  switch (c.toLatin1()) {
                         case 'p': // not on first page 1
                               if (_no) // FALLTHROUGH
                         case 'N': // on page 1 only if there are multiple pages
@@ -627,7 +627,7 @@ bool Page::isOdd() const
 void Page::write(Xml& xml) const
       {
       xml.stag("Page");
-      foreach(System* system, _systems) {
+      for (System* system : _systems) {
             system->write(xml);
             }
       xml.etag();
@@ -702,9 +702,9 @@ Measure* Page::searchMeasure(const QPointF& p) const
       if (systems.isEmpty())
             return 0;
 
-      foreach(System* system, systems) {
+      for (System* system : systems) {
             qreal x = p.x() - system->pagePos().x();
-            foreach(MeasureBase* mb, system->measures()) {
+            for (MeasureBase* mb : system->measures()) {
                   if (mb->type() != Element::Type::MEASURE)
                         continue;
                   if (x < (mb->x() + mb->bbox().width()))
@@ -807,8 +807,8 @@ MeasureBase* Page::pos2measure(const QPointF& p, int* rst, int* pitch,
 QList<const Element*> Page::elements()
       {
       QList<const Element*> el;
-      foreach (System* s, _systems) {
-            foreach(MeasureBase* m, s->measures())
+      for (System* s : _systems) {
+            for (MeasureBase* m : s->measures())
                   m->scanElements(&el, collectElements, false);
             }
       scanElements(&el, collectElements, false);

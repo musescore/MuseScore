@@ -364,7 +364,7 @@ Palette* MuseScore::newRepeatsPalette()
       sp->append(rm, tr("Repeat measure sign"));
 
       for (int i = 0; i < markerTypeTableSize(); i++) {
-            if(markerTypeTable[i].type == Marker::Type::CODETTA) //not in smufl
+            if (markerTypeTable[i].type == Marker::Type::CODETTA) //not in smufl
                   continue;
 
             Marker* mk = new Marker(gscore);
@@ -1210,7 +1210,7 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       frames->addAction(getAction("insert-hbox"));
       frames->addAction(getAction("insert-vbox"));
       frames->addAction(getAction("insert-textframe"));
-      if(enableExperimental)
+      if (enableExperimental)
             frames->addAction(getAction("insert-fretframe"));
       frames->addSeparator();
       frames->addAction(getAction("append-hbox"));
@@ -1269,25 +1269,25 @@ void MuseScore::addTempo()
                   text = "<sym>unicodeNoteQuarterUp</sym> = 80";
                   break;
             case 8:
-                  if(f.numerator() % 3 == 0)
+                  if (f.numerator() % 3 == 0)
                         text = "<sym>unicodeNoteQuarterUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80";
                   else
                         text = "<sym>unicodeNote8thUp</sym> = 80";
                   break;
             case 16:
-                  if(f.numerator() % 3 == 0)
+                  if (f.numerator() % 3 == 0)
                         text = text = "<sym>unicodeNote8thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
                   else
                         text = "<sym>unicodeNote16thUp</sym> = 80";
                   break;
             case 32:
-                  if(f.numerator() % 3 == 0)
+                  if (f.numerator() % 3 == 0)
                         text = "<sym>unicodeNote16thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
                   else
                         text = "<sym>unicodeNote32thUp</sym> = 80";
                   break;
             case 64:
-                  if(f.numerator() % 3 == 0)
+                  if (f.numerator() % 3 == 0)
                         text = "<sym>unicodeNote32thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
                   else
                         text = "<sym>unicodeNote64thUp</sym> = 80";

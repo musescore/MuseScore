@@ -138,7 +138,7 @@ void InspectorImage::valueChanged(int idx)
       else if (idx == ImageControl::SCALE_W) {
             if (b.lockAspectRatio->isChecked()) {
 /* ImageControl::LOCK_RATIO keeps original ratio:
-//      NEEDS case "else if(idx == ImageControl::LOCK_RATIO) ..." to restore original ratio on checking ImageControl::LOCK_RATIO
+//      NEEDS case "else if (idx == ImageControl::LOCK_RATIO) ..." to restore original ratio on checking ImageControl::LOCK_RATIO
                   b4->blockSignals(true);
                   b4->setValue(b3->value());
                   b4->blockSignals(false);*/
@@ -156,7 +156,7 @@ void InspectorImage::valueChanged(int idx)
       else if (idx == SCALE_H) {
             if (b.lockAspectRatio->isChecked()) {
 /* ImageControl::LOCK_RATIO keeps original ratio:
-//      NEEDS case "else if(idx == ImageControl::LOCK_RATIO) ..." to restore original ratio on checking ImageControl::LOCK_RATIO
+//      NEEDS case "else if (idx == ImageControl::LOCK_RATIO) ..." to restore original ratio on checking ImageControl::LOCK_RATIO
                   b3->blockSignals(true);
                   b3->setValue(b4->value());
                   b3->blockSignals(false);*/

@@ -385,7 +385,7 @@ void Score::undoChangeProperty(ScoreElement* e, P_ID t, const QVariant& st, Prop
 void Score::undoPropertyChanged(Element* e, P_ID t, const QVariant& st)
       {
       if (propertyLink(t) && e->links()) {
-            foreach (ScoreElement* ee, *e->links()) {
+            for (ScoreElement* ee : *e->links()) {
                   if (ee == e) {
                         if (ee->getProperty(t) != st)
                               undo()->push1(new ChangeProperty(ee, t, st));
@@ -469,7 +469,7 @@ void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int 
 void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
       {
       KeySig* lks = 0;
-      foreach (Staff* staff, ostaff->staffList()) {
+      for (Staff* staff : ostaff->staffList()) {
             if (staff->isDrumStaff())
                   continue;
 
@@ -521,7 +521,7 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
       bool firstSeg = seg->measure()->first() == seg;
 
       Clef* gclef = 0;
-      foreach (Staff* staff, ostaff->staffList()) {
+      for (Staff* staff : ostaff->staffList()) {
             if (staff->staffType()->group() != ClefInfo::staffGroup(st))
                   continue;
 
@@ -875,10 +875,10 @@ void Score::undoAddElement(Element* element)
          || (et == Element::Type::TEMPO_TEXT)
          || (et == Element::Type::VOLTA)
          ) {
-            foreach(Score* s, scoreList())
+            for (Score* s : scoreList())
                   staffList.append(s->staff(0));
 
-            foreach (Staff* staff, staffList) {
+            for (Staff* staff : staffList) {
                   Score* score = staff->score();
                   int staffIdx = score->staffIdx(staff);
                   Element* ne;
@@ -948,7 +948,7 @@ void Score::undoAddElement(Element* element)
                   else if (element->type() == Element::Type::CHORD) {
 #ifndef QT_NO_DEBUG
                         for (Note* n : static_cast<Chord*>(element)->notes()) {
-                        //      if(n->tpc() == Tpc::TPC_INVALID)
+                        //      if (n->tpc() == Tpc::TPC_INVALID)
                         //            n->setTpcFromPitch();
                               Q_ASSERT(n->tpc() != Tpc::TPC_INVALID);
                               }
@@ -956,7 +956,7 @@ void Score::undoAddElement(Element* element)
                         }
                   return;
                   }
-            foreach (ScoreElement* ee, *links) {
+            for (ScoreElement* ee : *links) {
                   Element* e = static_cast<Element*>(ee);
                   Element* ne;
                   if (e == parent)
@@ -996,7 +996,7 @@ void Score::undoAddElement(Element* element)
             LayoutBreak* lb = static_cast<LayoutBreak*>(element);
             if (lb->layoutBreakType() == LayoutBreak::Type::SECTION) {
                   Measure* m = lb->measure();
-                  foreach(Score* s, scoreList()) {
+                  for (Score* s : scoreList()) {
                         if (s == lb->score())
                               undo(new AddElement(lb));
                         else {
@@ -1038,7 +1038,7 @@ void Score::undoAddElement(Element* element)
             return;
             }
 
-      foreach (Staff* staff, ostaff->staffList()) {
+      for (Staff* staff : ostaff->staffList()) {
             Score* score = staff->score();
             int staffIdx = score->staffIdx(staff);
             Element* ne;
@@ -1259,7 +1259,7 @@ void Score::undoAddElement(Element* element)
                   // create tie
                   Tie* ntie = static_cast<Tie*>(ne);
                   QList<SpannerSegment*>& segments = ntie->spannerSegments();
-                  foreach (SpannerSegment* segment, segments)
+                  for (SpannerSegment* segment : segments)
                         delete segment;
                   segments.clear();
                   ntie->setTrack(c1->track());
@@ -1315,7 +1315,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
       Segment::Type segmentType = Segment::Type::ChordRest;
 
       Tuplet* t = cr->tuplet();
-      foreach (Staff* staff, ostaff->staffList()) {
+      for (Staff* staff : ostaff->staffList()) {
             Score* score = staff->score();
             Measure* m   = (score == this) ? measure : score->tick2measure(tick);
             Segment* seg = m->undoGetSegment(segmentType, tick);
@@ -1334,7 +1334,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
             if (newcr->type() == Element::Type::CHORD) {
                   Chord* chord = static_cast<Chord*>(newcr);
                   // setTpcFromPitch needs to know the note tick position
-                  foreach(Note* note, chord->notes()) {
+                  for (Note* note : chord->notes()) {
                         // if (note->tpc() == Tpc::TPC_INVALID)
                         //      note->setTpcFromPitch();
                         Q_ASSERT(note->tpc() != Tpc::TPC_INVALID);
@@ -1663,7 +1663,7 @@ void RemoveElement::undo()
       if (element->isChordRest()) {
             if (element->type() == Element::Type::CHORD) {
                   Chord* chord = static_cast<Chord*>(element);
-                  foreach(Note* note, chord->notes()) {
+                  for (Note* note : chord->notes()) {
                         if (note->tieBack())
                               note->tieBack()->setEndNote(note);
                         if (note->tieFor() && note->tieFor()->endNote())
@@ -1686,7 +1686,7 @@ void RemoveElement::redo()
             undoRemoveTuplet(static_cast<ChordRest*>(element));
             if (element->type() == Element::Type::CHORD) {
                   Chord* chord = static_cast<Chord*>(element);
-                  foreach(Note* note, chord->notes()) {
+                  for (Note* note : chord->notes()) {
                         if (note->tieFor() && note->tieFor()->endNote()) {
                               note->tieFor()->endNote()->setTieBack(0);
                               }
@@ -1863,7 +1863,7 @@ SortStaves::SortStaves(Score* s, QList<int> l)
       {
       score = s;
 
-      for(int i=0 ; i < l.size(); i++) {
+      for (int i=0 ; i < l.size(); i++) {
             rlist.append(l.indexOf(i));
             }
       list  = l;
@@ -3023,7 +3023,7 @@ void InsertRemoveMeasures::insertMeasures()
                   Chord* chord = static_cast<Chord*>(seg->element(track));
                   if (chord == 0 || chord->type() != Element::Type::CHORD)
                         continue;
-                  foreach (Note* n, chord->notes()) {
+                  for (Note* n : chord->notes()) {
                         Tie* tie = n->tieFor();
                         if (!tie)
                               continue;
@@ -3175,11 +3175,11 @@ void ChangeNoteEvents::flip()
 
 void Score::undoChangeBarLine(Measure* m, BarLineType barType)
       {
-      foreach(Score* s, scoreList()) {
+      for (Score* s : scoreList()) {
             Measure* measure = s->tick2measure(m->tick());
             Measure* nm      = m->nextMeasure();
             Repeat flags = measure->repeatFlags();
-            switch(barType) {
+            switch (barType) {
                   case BarLineType::END:
                   case BarLineType::NORMAL:
                   case BarLineType::DOUBLE:

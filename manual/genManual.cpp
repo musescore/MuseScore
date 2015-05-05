@@ -112,7 +112,7 @@ static void parseClass(const QString& name, const QString& in)
 
       bool parseClassDescription = true;
 
-      foreach(const QString& s, sl) {
+      for (const QString& s : sl) {
             if (re.indexIn(s, 0) != -1) {             //@P
                   parseClassDescription = false;
                   Prop p;
@@ -221,14 +221,14 @@ static void scanFile(const QString& in)
 
 static void writeOutput()
       {
-      foreach(const Class& cl, classes) {
+      for (const Class& cl : classes) {
             QString out;
             addHeader(out);
             out += QString("<h3>%1</h3>\n").arg(cl.name);
 
             if (!cl.parent.isEmpty()) {
                   // show parent only if its part of the exported classes
-                  foreach(const Class& lcl, classes) {
+                  for (const Class& lcl : classes) {
                         if (lcl.name == cl.parent) {
                               QString path = cl.parent.toLower();
                               out += QString("<div class=\"class-inherit\">inherits <a href=\"%1.html\">%2</a></div>\n").arg(path).arg(cl.parent);
@@ -238,7 +238,7 @@ static void writeOutput()
                   }
             if (!cl.description.isEmpty()) {
                   out += "<div class=\"class-description\">\n";
-                  foreach(const QString& s, cl.description) {
+                  for (const QString& s : cl.description) {
                         out += s.simplified().replace("\\brief ", "");
                         out += "\n";
                         }
@@ -250,14 +250,14 @@ static void writeOutput()
             if (!cl.procs.isEmpty()) {
                   out += "<h4>Methods</h4>\n";
                   out += "<div class=\"methods\">\n";
-                  foreach(const Proc& p, cl.procs) {
+                  for (const Proc& p : cl.procs) {
                         out += "<div class=\"method\">\n";
 
                         QString type(p.type);
                         bool found = false;
                         if (type.endsWith("*")) {
                               type = type.left(type.size()-1);
-                              foreach(const Class& cl, classes) {
+                              for (const Class& cl : classes) {
                                     if (cl.name == type) {
                                           found = true;
                                           break;
@@ -280,7 +280,7 @@ static void writeOutput()
                         out += "</div>\n";
                         if (!p.description.isEmpty()) {
                               out += "<div class=\"method-description\">\n";
-                              foreach(const QString& s, p.description) {
+                              for (const QString& s : p.description) {
                                     out += s.simplified();
                                     out += "<br/>\n";
                                     }
@@ -294,7 +294,7 @@ static void writeOutput()
                   out += "<div class=\"properties\">\n";
                   out += "<table>\n";
                   int count = 1;
-                  foreach(const Prop& m, cl.props) {
+                  for (const Prop& m : cl.props) {
                         out += QString("<tr class=\"prop-%1\">") .arg( (count & 1) ? "odd" : "even");
                         out += QString("<td class=\"prop-name\">%1</td>"
                                "<td class=\"prop-type\">%2</td>"
@@ -325,7 +325,7 @@ static void writeOutput()
       out += "<h2>Score Elements</h2>\n"
              "<ul>\n";
       qSort(classes);
-      foreach(const Class& s, classes) {
+      for (const Class& s : classes) {
             out += QString("<li><a href=\"%1\">%2</a></li>\n")
                     .arg(s.name.toLower() + ".html").arg(s.name);
             }
@@ -423,10 +423,10 @@ int main(int argc, char* argv[])
       filter << "*.h";
       QStringList fl = libdir.entryList(filter, QDir::Files);
 
-      foreach(QString f, fl)
+      for (QString f : fl)
             files << "libmscore/" + f;
 
-      foreach(const QString& s, files) {
+      for (const QString& s : files) {
             QString infile = srcPath + "/" + s;
             QFile inFile(infile);
             if (!inFile.open(QIODevice::ReadOnly)) {

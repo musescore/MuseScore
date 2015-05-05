@@ -105,7 +105,7 @@ void Accidental::read(XmlReader& e)
                         _hasBracket = i & 0x8000;
                         i &= ~0x8000;
                         AccidentalType at;
-                        switch(i) {
+                        switch (i) {
                                case 0:
                                      at = AccidentalType::NONE;
                                      break;
@@ -360,7 +360,7 @@ void Accidental::layout()
 
 AccidentalType Accidental::value2subtype(AccidentalVal v)
       {
-      switch(v) {
+      switch (v) {
             case AccidentalVal::NATURAL: return AccidentalType::NONE;
             case AccidentalVal::SHARP:   return AccidentalType::SHARP;
             case AccidentalVal::SHARP2:  return AccidentalType::SHARP2;
@@ -384,7 +384,7 @@ void Accidental::draw(QPainter* painter) const
             return;
             }
       painter->setPen(curColor());
-      foreach(const SymElement& e, el)
+      for (const SymElement& e : el)
             score()->scoreFont()->draw(e.sym, painter, magS(), QPointF(e.x, 0.0));
       }
 
@@ -405,7 +405,7 @@ bool Accidental::acceptDrop(const DropData& data) const
 Element* Accidental::drop(const DropData& data)
       {
       Element* e = data.element;
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::ICON :
                   if (static_cast<Icon*>(e)->iconType() == IconType::BRACKETS && !_hasBracket)
                         undoSetHasBracket(true);

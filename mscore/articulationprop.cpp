@@ -55,19 +55,19 @@ ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent
 //      const QList<MidiArticulation>& articulation() const;
 //      const QList<Channel>& channel() const;
 
-            foreach(const Channel* a, instrument->channel()) {
+            for (const Channel* a : instrument->channel()) {
                   if (a->name.isEmpty() || a->name == "normal")
                         channelList->addItem(tr("normal"));
                   else
                         channelList->addItem(a->name);
                   }
-            foreach(const NamedEventList& el, instrument->midiActions()) {
+            for (const NamedEventList& el : instrument->midiActions()) {
                   midiActionList->addItem(el.name);
                   }
             }
 
 #if 0
-      foreach(const NamedEventList& e, instrument->midiActions)
+      for (const NamedEventList& e : instrument->midiActions)
             midiActionList->addItem(e.name);
       articulationChange->setChecked(!articulation->articulationName().isEmpty());
       midiAction->setChecked(!articulation->midiActionName().isEmpty());

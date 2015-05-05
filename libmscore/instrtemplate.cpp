@@ -32,7 +32,7 @@ QList<InstrumentGenre*> instrumentGenres;
 
 static InstrumentGenre * searchInstrumentGenre(const QString& genre)
       {
-      foreach(InstrumentGenre* ig, instrumentGenres) {
+      for (InstrumentGenre* ig : instrumentGenres) {
             if (ig->id == genre)
                   return ig;
             }
@@ -45,7 +45,7 @@ static InstrumentGenre * searchInstrumentGenre(const QString& genre)
 
 static InstrumentGroup* searchInstrumentGroup(const QString& name)
       {
-      foreach(InstrumentGroup* g, instrumentGroups) {
+      for (InstrumentGroup* g : instrumentGroups) {
             if (g->id == name)
                   return g;
             }
@@ -268,13 +268,13 @@ void InstrumentTemplate::write(Xml& xml) const
             xml.tag("drumset", int(useDrumset));
       if (drumset)
             drumset->save(xml);
-      foreach(const NamedEventList& a, midiActions)
+      for (const NamedEventList& a : midiActions)
             a.write(xml, "MidiAction");
-      foreach(const Channel& a, channel)
+      for (const Channel& a : channel)
             a.write(xml);
-      foreach(const MidiArticulation& ma, articulation) {
+      for (const MidiArticulation& ma : articulation) {
             bool isGlobal = false;
-            foreach(const MidiArticulation& ga, Ms::articulation) {
+            for (const MidiArticulation& ga : Ms::articulation) {
                   if (ma == ga) {
                         isGlobal = true;
                         break;
@@ -426,7 +426,7 @@ void InstrumentTemplate::read(XmlReader& e)
                   a.read(e);
                   int n = articulation.size();
                   int i;
-                  for(i = 0; i < n; ++i) {
+                  for (i = 0; i < n; ++i) {
                         if (articulation[i].name == a.name) {
                               articulation[i] = a;
                               break;
@@ -548,18 +548,18 @@ bool saveInstrumentTemplates(const QString& instrTemplates)
       Xml xml(&qf);
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
       xml.stag("museScore");
-      foreach(const InstrumentGenre* genre, instrumentGenres)
+      for (const InstrumentGenre* genre : instrumentGenres)
             genre->write(xml);
       xml << "\n";
-      foreach(const MidiArticulation& a, articulation)
+      for (const MidiArticulation& a : articulation)
             a.write(xml);
       xml << "\n";
-      foreach(InstrumentGroup* group, instrumentGroups) {
+      for (InstrumentGroup* group : instrumentGroups) {
             xml.stag(QString("InstrumentGroup id=\"%1\"").arg(group->id));
             xml.tag("name", group->name);
             if (group->extended)
                   xml.tag("extended", group->extended);
-            foreach(InstrumentTemplate* it, group->instrumentTemplates) {
+            for (InstrumentTemplate* it : group->instrumentTemplates) {
                   it->write(xml);
                   xml << "\n";
                   }
@@ -585,12 +585,12 @@ bool saveInstrumentTemplates1(const QString& instrTemplates)
       Xml xml(&qf);
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
       xml.stag("museScore");
-      foreach(const InstrumentGenre* genre, instrumentGenres)
+      for (const InstrumentGenre* genre : instrumentGenres)
             genre->write1(xml);
-      foreach(InstrumentGroup* group, instrumentGroups) {
+      for (InstrumentGroup* group : instrumentGroups) {
             xml.stag(QString("InstrumentGroup id=\"%1\"").arg(group->id));
             xml.tag("name", group->name);
-            foreach(InstrumentTemplate* it, group->instrumentTemplates) {
+            for (InstrumentTemplate* it : group->instrumentTemplates) {
                   it->write1(xml);
                   xml << "\n";
                   }
@@ -658,8 +658,8 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
 
 InstrumentTemplate* searchTemplate(const QString& name)
       {
-      foreach(InstrumentGroup* g, instrumentGroups) {
-            foreach(InstrumentTemplate* it, g->instrumentTemplates) {
+      for (InstrumentGroup* g : instrumentGroups) {
+            for (InstrumentTemplate* it : g->instrumentTemplates) {
                   if (it->id == name)
                         return it;
                   }
@@ -689,14 +689,14 @@ void InstrumentTemplate::linkGenre(const QString& genre)
 
 bool InstrumentTemplate::genreMember(const QString& name)
       {
-            bool rVal=false;
-            foreach(InstrumentGenre *instrumentGenre, genres ) {
-                if(instrumentGenre->id == name) {
-                      rVal = true;
-                      break;
-                }
+      bool rVal=false;
+      for (InstrumentGenre *instrumentGenre : genres ) {
+            if (instrumentGenre->id == name) {
+                  rVal = true;
+                  break;
+                  }
             }
-            return rVal;
+      return rVal;
       }
 
 void InstrumentGenre::write(Xml& xml) const

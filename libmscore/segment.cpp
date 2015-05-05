@@ -51,7 +51,7 @@ const char* Segment::subTypeName() const
 
 const char* Segment::subTypeName(Type t)
       {
-      switch(t) {
+      switch (t) {
             case Type::Invalid:              return "Invalid";
             case Type::Clef:                 return "Clef";
             case Type::KeySig:               return "Key Signature";
@@ -142,13 +142,13 @@ Segment::Segment(const Segment& s)
       _extraLeadingSpace  = s._extraLeadingSpace;
       _extraTrailingSpace = s._extraTrailingSpace;
 
-      foreach (Element* e, s._annotations) {
+      for (Element* e : s._annotations) {
             Element* ne = e->clone();
             add(ne);
             }
 
       _elist.reserve(s._elist.size());
-      foreach (Element* e, s._elist) {
+      for (Element* e : s._elist) {
             Element* ne = 0;
             if (e) {
                   ne = e->clone();
@@ -172,17 +172,17 @@ void Segment::setSegmentType(Type t)
 void Segment::setScore(Score* score)
       {
       Element::setScore(score);
-      foreach(Element* e, _elist) {
+      for (Element* e : _elist) {
             if (e)
                   e->setScore(score);
             }
-      foreach(Element* e, _annotations)
+      for (Element* e : _annotations)
             e->setScore(score);
       }
 
 Segment::~Segment()
       {
-      foreach(Element* e, _elist) {
+      for (Element* e : _elist) {
             if (!e)
                   continue;
             if (e->type() == Element::Type::TIMESIG)
@@ -382,7 +382,7 @@ void Segment::insertStaff(int staff)
             _elist.insert(track, 0);
       _dotPosX.insert(staff, 0.0);
 
-      foreach(Element* e, _annotations) {
+      for (Element* e : _annotations) {
             int staffIdx = e->staffIdx();
             if (staffIdx >= staff && !e->systemFlag())
                   e->setTrack(e->track() + VOICES);
@@ -400,7 +400,7 @@ void Segment::removeStaff(int staff)
       _elist.erase(_elist.begin() + track, _elist.begin() + track + VOICES);
       _dotPosX.removeAt(staff);
 
-      foreach(Element* e, _annotations) {
+      for (Element* e : _annotations) {
             int staffIdx = e->staffIdx();
             if (staffIdx > staff && !e->systemFlag())
                   e->setTrack(e->track() - VOICES);
@@ -558,7 +558,7 @@ void Segment::remove(Element* el)
 
       int track = el->track();
 
-      switch(el->type()) {
+      switch (el->type()) {
             case Element::Type::CHORD:
             case Element::Type::REST:
                   {
@@ -708,8 +708,8 @@ void Segment::sortStaves(QList<int>& dst)
       for (int k = 0; k < dst.size(); ++k) {
             map.insert(dst[k], k);
             }
-      foreach (Element* e, _annotations) {
-            if(!e->systemFlag())
+      for (Element* e : _annotations) {
+            if (!e->systemFlag())
                   e->setTrack(map[e->staffIdx()] * VOICES + e->voice());
             }
       fixStaffIdx();
@@ -722,7 +722,7 @@ void Segment::sortStaves(QList<int>& dst)
 void Segment::fixStaffIdx()
       {
       int track = 0;
-      foreach(Element* e, _elist) {
+      for (Element* e : _elist) {
             if (e)
                   e->setTrack(track);
             ++track;
@@ -740,7 +740,7 @@ void Segment::checkEmpty() const
             return;
             }
       empty = true;
-      foreach(const Element* e, _elist) {
+      for (const Element* e : _elist) {
             if (e) {
                   empty = false;
                   break;
@@ -841,7 +841,7 @@ void Segment::read(XmlReader& e)
 
 QVariant Segment::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::LEADING_SPACE:   return extraLeadingSpace().val();
             case P_ID::TRAILING_SPACE:  return extraTrailingSpace().val();
             default:
@@ -855,7 +855,7 @@ QVariant Segment::getProperty(P_ID propertyId) const
 
 QVariant Segment::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::LEADING_SPACE:   return 0.0;
             case P_ID::TRAILING_SPACE:  return 0.0;
             default:
@@ -869,7 +869,7 @@ QVariant Segment::propertyDefault(P_ID propertyId) const
 
 bool Segment::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::LEADING_SPACE: setExtraLeadingSpace(Spatium(v.toDouble())); break;
             case P_ID::TRAILING_SPACE: setExtraTrailingSpace(Spatium(v.toDouble())); break;
             default:
@@ -1026,7 +1026,7 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
                         continue;
                   e->scanElements(data, func, all);
                   }
-      foreach(Element* e, annotations()) {
+      for (Element* e : annotations()) {
             if (all || e->systemFlag() || measure()->visible(e->staffIdx()))
                   e->scanElements(data,  func, all);
             }
@@ -1209,9 +1209,9 @@ QString Segment::accessibleExtraInfo()
       QString rez = "";
       if (!this->annotations().empty()) {
             QString temp = "";
-            foreach (Element* a, this->annotations()) {
+            for (Element* a : this->annotations()) {
                   if (!score()->selectionFilter().canSelect(a)) continue;
-                  switch(a->type()) {
+                  switch (a->type()) {
                         case Element::Type::DYNAMIC:
                               //they are added in the chordrest, because they are for only one staff
                                break;
@@ -1219,7 +1219,7 @@ QString Segment::accessibleExtraInfo()
                                temp = temp + " " + a->accessibleInfo();
                         }
                   }
-            if(!temp.isEmpty())
+            if (!temp.isEmpty())
                   rez = rez + tr("Annotations:") + temp;
             }
 

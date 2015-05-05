@@ -129,7 +129,7 @@ void LayoutBreak::layout0()
       QRectF rect(0.0, 0.0, w, h);
       path.addRect(rect);
 
-      switch(layoutBreakType()) {
+      switch (layoutBreakType()) {
             case Type::LINE:
                   path2.moveTo(w * .8, h * .3);
                   path2.lineTo(w * .8, h * .6);
@@ -220,7 +220,7 @@ Element* LayoutBreak::drop(const DropData& data)
 
 QVariant LayoutBreak::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::LAYOUT_BREAK:
                   return int(_layoutBreakType);
             case P_ID::PAUSE:
@@ -236,7 +236,7 @@ QVariant LayoutBreak::getProperty(P_ID propertyId) const
 
 bool LayoutBreak::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::LAYOUT_BREAK:
                   setLayoutBreakType(Type(v.toInt()));
                   break;
@@ -260,7 +260,7 @@ bool LayoutBreak::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant LayoutBreak::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::LAYOUT_BREAK:
                   return QVariant(); // LAYOUT_BREAK_LINE;
             case P_ID::PAUSE:

@@ -51,7 +51,7 @@ namespace Ms {
 Articulation* ChordRest::hasArticulation(const Articulation* aa)
       {
       ArticulationType idx = aa->articulationType();
-      foreach(Articulation* a, _articulations) {
+      for (Articulation* a : _articulations) {
             if (idx == a->articulationType())
                   return a;
             }
@@ -133,9 +133,9 @@ void ChordRest::undoUnlink()
 
 ChordRest::~ChordRest()
       {
-      foreach (Articulation* a,  _articulations)
+      for (Articulation* a :  _articulations)
             delete a;
-      foreach (Lyrics* l, _lyricsList)
+      for (Lyrics* l : _lyricsList)
             delete l;
       if (_tabDur)
             delete _tabDur;
@@ -150,9 +150,9 @@ void ChordRest::scanElements(void* data, void (*func)(void*, Element*), bool all
       if (_beam && (_beam->elements().front() == this)
        && !measure()->slashStyle(staffIdx()))
             _beam->scanElements(data, func, all);
-      foreach(Articulation* a, _articulations)
+      for (Articulation* a : _articulations)
             func(data, a);
-      foreach(Lyrics* l, _lyricsList) {
+      for (Lyrics* l : _lyricsList) {
             if (l)
                   l->scanElements(data, func, all);
             }
@@ -181,7 +181,7 @@ void ChordRest::writeProperties(Xml& xml) const
       if ((type() == Element::Type::REST && _beamMode != Beam::Mode::NONE)
          || (type() == Element::Type::CHORD && _beamMode != Beam::Mode::AUTO)) {
             QString s;
-            switch(_beamMode) {
+            switch (_beamMode) {
                   case Beam::Mode::AUTO:    s = "auto"; break;
                   case Beam::Mode::BEGIN:   s = "begin"; break;
                   case Beam::Mode::MID:     s = "mid"; break;
@@ -205,7 +205,7 @@ void ChordRest::writeProperties(Xml& xml) const
          || (actualDurationType().fraction() != duration())))
             xml.fTag("duration", duration());
 
-      foreach(const Articulation* a, _articulations)
+      for (const Articulation* a : _articulations)
             a->write(xml);
 #ifndef NDEBUG
       if (_beam && (MScore::testMode || !_beam->generated()))
@@ -214,7 +214,7 @@ void ChordRest::writeProperties(Xml& xml) const
       if (_beam && !_beam->generated())
             xml.tag("Beam", _beam->id());
 #endif
-      foreach(Lyrics* lyrics, _lyricsList) {
+      for (Lyrics* lyrics : _lyricsList) {
             if (lyrics)
                   lyrics->write(xml);
             }
@@ -934,7 +934,7 @@ Element* ChordRest::drop(const DropData& data)
 
             case Element::Type::ICON:
                   {
-                  switch(static_cast<Icon*>(e)->iconType()) {
+                  switch (static_cast<Icon*>(e)->iconType()) {
                         case IconType::SBEAM:
                               score()->undoChangeProperty(this, P_ID::BEAM_MODE, int(Beam::Mode::BEGIN));
                               break;
@@ -1043,7 +1043,7 @@ QString ChordRest::durationUserName()
                   }
             }
       QString dotString = "";
-      if(!tupletType.isEmpty())
+      if (!tupletType.isEmpty())
           dotString += " ";
 
       switch (dots()) {
@@ -1068,16 +1068,16 @@ QString ChordRest::durationUserName()
 
 void ChordRest::setTrack(int val)
       {
-      foreach(Articulation* a, _articulations)
+      for (Articulation* a : _articulations)
             a->setTrack(val);
       Element::setTrack(val);
       if (type() == Element::Type::CHORD) {
-            foreach(Note* n, static_cast<Chord*>(this)->notes())
+            for (Note* n : static_cast<Chord*>(this)->notes())
                   n->setTrack(val);
             }
       if (_beam)
             _beam->setTrack(val);
-      foreach(Lyrics* l, _lyricsList) {
+      for (Lyrics* l : _lyricsList) {
             if (l)
                   l->setTrack(val);
             }
@@ -1111,7 +1111,7 @@ void ChordRest::add(Element* e)
       {
       e->setParent(this);
       e->setTrack(track());
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::ARTICULATION:
                   {
                   Articulation* a = static_cast<Articulation*>(e);
@@ -1206,7 +1206,7 @@ void ChordRest::undoSetBeamMode(Beam::Mode mode)
 
 QVariant ChordRest::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SMALL:      return QVariant(small());
             case P_ID::BEAM_MODE:  return int(beamMode());
             case P_ID::STAFF_MOVE: return staffMove();
@@ -1221,7 +1221,7 @@ QVariant ChordRest::getProperty(P_ID propertyId) const
 
 bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SMALL:      setSmall(v.toBool()); break;
             case P_ID::BEAM_MODE:  setBeamMode(Beam::Mode(v.toInt())); break;
             case P_ID::STAFF_MOVE: setStaffMove(v.toInt()); break;
@@ -1245,7 +1245,7 @@ bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant ChordRest::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::SMALL:      return false;
             case P_ID::BEAM_MODE:  return int(Beam::Mode::AUTO);
             case P_ID::STAFF_MOVE: return 0;
@@ -1345,12 +1345,12 @@ Element* ChordRest::prevElement()
 QString ChordRest::accessibleExtraInfo()
       {
       QString rez = "";
-      foreach (Articulation* a, articulations()) {
+      for (Articulation* a : articulations()) {
             if (!score()->selectionFilter().canSelect(a)) continue;
             rez = QString("%1 %2").arg(rez).arg(a->screenReaderInfo());
             }
 
-      foreach (Element* l, lyricsList()) {
+      for (Element* l : lyricsList()) {
             if (!l)
                   continue;
             if (!score()->selectionFilter().canSelect(l)) continue;
@@ -1358,7 +1358,7 @@ QString ChordRest::accessibleExtraInfo()
             }
 
       if (segment()) {
-            foreach (Element* e, segment()->annotations()) {
+            for (Element* e : segment()->annotations()) {
                   if (!score()->selectionFilter().canSelect(e)) continue;
                   if (e->staffIdx() == staffIdx() )
                         rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());

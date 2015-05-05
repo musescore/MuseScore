@@ -93,7 +93,7 @@ Note* Chord::downNote() const
       if (!staff())
             return result;
       if (staff()->isDrumStaff()) {
-            foreach(Note*n, _notes) {
+            for (Note*n : _notes) {
                   if (n->line() > result->line()) {
                         result = n;
                         }
@@ -144,7 +144,7 @@ int Chord::downLine() const
 int Chord::upString() const
       {
       // if no staff or staff not a TAB, return 0 (=topmost line)
-      if(!staff() || !staff()->isTabStaff())
+      if (!staff() || !staff()->isTabStaff())
             return 0;
       StaffType* tab = staff()->staffType();
       int       line = tab->lines() - 1;      // start at bottom line
@@ -401,7 +401,7 @@ void Chord::add(Element* e)
       {
       e->setParent(this);
       e->setTrack(track());
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::NOTE:
                   {
                   Note* note = static_cast<Note*>(e);
@@ -493,7 +493,7 @@ void Chord::add(Element* e)
 
 void Chord::remove(Element* e)
       {
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::NOTE:
                   {
                   Note* note = static_cast<Note*>(e);
@@ -945,7 +945,7 @@ void Chord::write(Xml& xml) const
             _hook->write(xml);
       if (_stemSlash && _stemSlash->isUserModified())
             _stemSlash->write(xml);
-      switch(_stemDirection) {
+      switch (_stemDirection) {
             case MScore::Direction::UP:   xml.tag("StemDirection", QVariant("up")); break;
             case MScore::Direction::DOWN: xml.tag("StemDirection", QVariant("down")); break;
             case MScore::Direction::AUTO: break;
@@ -1089,8 +1089,8 @@ void Chord::read(XmlReader& e)
                         n->setUserOff(QPoint());
                         n->setReadPos(QPoint());
                         }
-                  else if(!n->userOff().isNull()) {
-                        if(!_stem) {
+                  else if (!n->userOff().isNull()) {
+                        if (!_stem) {
                               _stem = new Stem(score());
                               add(_stem);
                               }
@@ -1356,7 +1356,7 @@ void Chord::layoutStem()
             qreal shortest(score()->styleS(StyleIdx::shortestStem).val());
 
             qreal normalStemLen = small() ? 2.5 : 3.5;
-            switch(hookIdx) {
+            switch (hookIdx) {
                   case 3: normalStemLen += small() ? .5  : 0.75; break; //32nd notes
                   case 4: normalStemLen += small() ? 1.0 : 1.5;  break; //64th notes
                   case 5: normalStemLen += small() ? 1.5 : 2.25; break; //128th notes
@@ -1474,19 +1474,19 @@ void Chord::layoutStem()
 
 bool Chord::underBeam() const
       {
-      if(_noteType == NoteType::NORMAL)
+      if (_noteType == NoteType::NORMAL)
           return false;
       const Chord* cr = static_cast<Chord*>(parent());
       Beam* beam = cr->beam();
-      if(!beam || !cr->beam()->up())
+      if (!beam || !cr->beam()->up())
             return false;
       int s = beam->elements().count();
-      if(isGraceBefore()){
-            if(beam->elements()[0] != cr)
+      if (isGraceBefore()){
+            if (beam->elements()[0] != cr)
                 return true;
             }
-      if(isGraceAfter()){
-            if(beam->elements()[s - 1] != cr)
+      if (isGraceAfter()){
+            if (beam->elements()[s - 1] != cr)
                 return true;
             }
       return false;
@@ -2212,7 +2212,7 @@ void Chord::layoutTablature()
                   delete _tabDur;
                   _tabDur = 0;
                   }
-            }                 // end of if(duration_symbols)
+            }                 // end of if (duration_symbols)
 
       if (_arpeggio) {
             qreal headHeight = upnote->headHeight();
@@ -2238,7 +2238,7 @@ void Chord::layoutTablature()
       if (_hook) {
             if (beam())
                   score()->undoRemoveElement(_hook);
-            else if(tab == 0) {
+            else if (tab == 0) {
                   _hook->layout();
                   if (up()) {
                         // hook position is not set yet
@@ -2351,17 +2351,17 @@ void Chord::crossMeasureSetup(bool on)
       if (_crossMeasure == CrossMeasure::UNKNOWN) {
             CrossMeasure tempCross = CrossMeasure::NONE;  // assume no cross-measure modification
             // if chord has only one note and note is tied forward
-            if(notes().size() == 1 && _notes[0]->tieFor()) {
+            if (notes().size() == 1 && _notes[0]->tieFor()) {
                   Chord* tiedChord = _notes[0]->tieFor()->endNote()->chord();
                   // if tied note belongs to another measure and to a single-note chord
-                  if(tiedChord->measure() != measure() && tiedChord->notes().size() == 1) {
+                  if (tiedChord->measure() != measure() && tiedChord->notes().size() == 1) {
                         // get total duration
                         QList<TDuration> durList = toDurationList(
                                     actualDurationType().fraction() +
                                     tiedChord->actualDurationType().fraction(), true);
                         // if duration can be expressed as a single duration
                         // apply cross-measure modification
-                        if(durList.size() == 1) {
+                        if (durList.size() == 1) {
                               _crossMeasure = tempCross = CrossMeasure::FIRST;
                               _crossMeasureTDur = durList[0];
                               layoutStem1();
@@ -2533,7 +2533,7 @@ qreal Chord::dotPosX() const
 
 QVariant Chord::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::NO_STEM:        return noStem();
             case P_ID::SMALL:          return small();
             case P_ID::STEM_DIRECTION: return int(stemDirection());
@@ -2548,7 +2548,7 @@ QVariant Chord::getProperty(P_ID propertyId) const
 
 QVariant Chord::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::NO_STEM:        return false;
             case P_ID::SMALL:          return false;
             case P_ID::STEM_DIRECTION: return int(MScore::Direction::AUTO);
@@ -2563,7 +2563,7 @@ QVariant Chord::propertyDefault(P_ID propertyId) const
 
 bool Chord::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::NO_STEM:
                   setNoStem(v.toBool());
                   score()->setLayoutAll(true);
@@ -2775,7 +2775,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
             }
 
       qreal dist;                               // distance between occupied area and articulation
-      switch(st) {
+      switch (st) {
             case ArticulationType::Marcato:        dist = 1.0 * _spStaff; break;
             case ArticulationType::Sforzatoaccent: dist = 1.5 * _spStaff; break;
             default: dist = score()->styleS(StyleIdx::propertyDistance).val() * _spStaff;
@@ -3060,9 +3060,9 @@ QString Chord::accessibleExtraInfo()
       QString rez = "";
 
       if (!isGrace()) {
-            foreach (Chord* c, graceNotes()) {
+            for (Chord* c : graceNotes()) {
                   if (!score()->selectionFilter().canSelect(c)) continue;
-                  foreach (Note* n, c->notes()) {
+                  for (Note* n : c->notes()) {
                         rez = QString("%1 %2").arg(rez).arg(n->screenReaderInfo());
                         }
                   }
@@ -3077,7 +3077,7 @@ QString Chord::accessibleExtraInfo()
 //      if (glissando() && score()->selectionFilter().canSelect(glissando()))
 //            rez = QString("%1 %2").arg(rez).arg(glissando()->screenReaderInfo());
 
-      foreach (Element* e, el()) {
+      for (Element* e : el()) {
             if (!score()->selectionFilter().canSelect(e)) continue;
             rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
             }

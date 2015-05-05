@@ -142,7 +142,7 @@ void SynthControl::showEvent(QShowEvent* e)
 
 bool SynthControl::eventFilter(QObject* obj, QEvent* e)
       {
-      if(enablePlay->eventFilter(obj, e))
+      if (enablePlay->eventFilter(obj, e))
             return true;
       return QWidget::eventFilter(obj, e);
       }

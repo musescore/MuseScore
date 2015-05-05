@@ -173,7 +173,7 @@ Measure::Measure(const Measure& m)
       _repeatFlags           = m._repeatFlags;
 
       staves.reserve(m.staves.size());
-      foreach(MStaff* ms, m.staves)
+      for (MStaff* ms : m.staves)
             staves.append(new MStaff(*ms));
 
       _minWidth1             = m._minWidth1;
@@ -645,7 +645,7 @@ void Measure::layout2()
                               Tie* tie = note->tieFor();
                               if (tie)
                                     tie->layout();
-                              foreach (Spanner* sp, note->spannerFor())
+                              for (Spanner* sp : note->spannerFor())
                                     sp->layout();
                               }
                         }
@@ -882,7 +882,7 @@ void Measure::remove(Element* el)
       Q_ASSERT(el->score() == score());
 
       setDirty();
-      switch(el->type()) {
+      switch (el->type()) {
             case Element::Type::TEXT:
                   staves[el->staffIdx()]->setNoText(static_cast<Text*>(0));
                   break;
@@ -946,7 +946,7 @@ void Measure::change(Element* o, Element* n)
       {
       if (o->type() == Element::Type::TUPLET) {
             Tuplet* t = static_cast<Tuplet*>(n);
-            foreach(DurationElement* e, t->elements()) {
+            for (DurationElement* e : t->elements()) {
                   e->setTuplet(t);
                   }
             }
@@ -991,7 +991,7 @@ void Measure::removeStaves(int sStaff, int eStaff)
                   s->removeStaff(staff);
                   }
             }
-      foreach (Element* e, _el) {
+      for (Element* e : _el) {
             if (e->track() == -1)
                   continue;
             int voice = e->voice();
@@ -1009,7 +1009,7 @@ void Measure::removeStaves(int sStaff, int eStaff)
 
 void Measure::insertStaves(int sStaff, int eStaff)
       {
-      foreach (Element* e, _el) {
+      for (Element* e : _el) {
             if (e->track() == -1)
                   continue;
             int staffIdx = e->staffIdx();
@@ -1042,7 +1042,7 @@ void Measure::cmdRemoveStaves(int sStaff, int eStaff)
                         _score->undo(new RemoveElement(el));
                         }
                   }
-            foreach (Element* e, s->annotations()) {
+            for (Element* e : s->annotations()) {
                   int staffIdx = e->staffIdx();
                   if ((staffIdx >= sStaff) && (staffIdx < eStaff) && !e->systemFlag()) {
                         e->undoUnlink();
@@ -1050,7 +1050,7 @@ void Measure::cmdRemoveStaves(int sStaff, int eStaff)
                         }
                   }
             }
-      foreach (Element* e, _el) {
+      for (Element* e : _el) {
             if (e->track() == -1)
                   continue;
             int staffIdx = e->staffIdx();
@@ -1266,7 +1266,7 @@ bool Measure::acceptDrop(const DropData& data) const
                   return true;
 
             case Element::Type::ICON:
-                  switch(static_cast<Icon*>(e)->iconType()) {
+                  switch (static_cast<Icon*>(e)->iconType()) {
                         case IconType::VFRAME:
                         case IconType::HFRAME:
                         case IconType::TFRAME:
@@ -1306,7 +1306,7 @@ Element* Measure::drop(const DropData& data)
 #endif
       Staff* staff = score()->staff(staffIdx);
 
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::MEASURE_LIST:
 qDebug("drop measureList or StaffList");
                   delete e;
@@ -1349,8 +1349,8 @@ qDebug("drop staffList");
                   Bracket* b = static_cast<Bracket*>(e);
                   int level = 0;
                   int firstStaff = 0;
-                  foreach (Staff* s, score()->staves()) {
-                        foreach (const BracketItem& bi, s->brackets()) {
+                  for (Staff* s : score()->staves()) {
+                        for (const BracketItem& bi : s->brackets()) {
                               int lastStaff = firstStaff + bi._bracketSpan - 1;
                               if (staffIdx >= firstStaff && staffIdx <= lastStaff)
                                     ++level;
@@ -1379,7 +1379,7 @@ qDebug("drop staffList");
                         }
                   else {
                         // apply to all staves:
-                        foreach(Staff* s, score()->staves())
+                        for (Staff* s : score()->staves())
                               score()->undoChangeKeySig(s, tick(), k);
                         }
 
@@ -1407,7 +1407,7 @@ qDebug("drop staffList");
                         }
                   // make sure there is only LayoutBreak::Type::LINE or LayoutBreak::Type::PAGE
                   if ((lb->layoutBreakType() != LayoutBreak::Type::SECTION) && (_pageBreak || _lineBreak)) {
-                        foreach(Element* le, _el) {
+                        for (Element* le : _el) {
                               if (le->type() == Element::Type::LAYOUT_BREAK
                                  && (static_cast<LayoutBreak*>(le)->layoutBreakType() == LayoutBreak::Type::LINE
                                   || static_cast<LayoutBreak*>(le)->layoutBreakType() == LayoutBreak::Type::PAGE)) {
@@ -1458,7 +1458,7 @@ qDebug("drop staffList");
                   return cmdInsertRepeatMeasure(staffIdx);
                   }
             case Element::Type::ICON:
-                  switch(static_cast<Icon*>(e)->iconType()) {
+                  switch (static_cast<Icon*>(e)->iconType()) {
                         case IconType::VFRAME:
                               score()->insertMeasure(Element::Type::VBOX, this);
                               break;
@@ -1516,7 +1516,7 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
       rm->setTrack(staffIdx * VOICES);
       rm->setParent(seg);
       _score->undoAddCR(rm, this, tick());
-      foreach (Element* el, _el) {
+      for (Element* el : _el) {
             if (el->type() == Element::Type::SLUR && el->staffIdx() == staffIdx)
                   _score->undoRemoveElement(el);
             }
@@ -1648,7 +1648,7 @@ void Measure::adjustToLen(Fraction nf)
             //
             //  CHECK: do not remove all slurs
             //
-            foreach(Element* e, m->el()) {
+            for (Element* e : m->el()) {
                   if (e->type() == Element::Type::SLUR)
                         s->undoRemoveElement(e);
                   }
@@ -1704,7 +1704,7 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
 
       int strack = staff * VOICES;
       int etrack = strack + VOICES;
-      foreach (const Element* el, _el) {
+      for (const Element* el : _el) {
             if (!el->generated() && ((el->staffIdx() == staff) || (el->systemFlag() && writeSystemElements))) {
                   el->write(xml);
                   }
@@ -2359,7 +2359,7 @@ void Measure::read(XmlReader& e, int staffIdx)
 
                   }
             }
-      foreach (Tuplet* tuplet, e.tuplets()) {
+      for (Tuplet* tuplet : e.tuplets()) {
             if (tuplet->elements().isEmpty()) {
                   // this should not happen and is a sign of input file corruption
                   qDebug("Measure:read(): empty tuplet id %d (%p), input file corrupted?",
@@ -2569,7 +2569,7 @@ bool Measure::createEndBarLines()
                         spanFrom    = cbl->spanFrom();
                         spanTo      = cbl->spanTo();
                         // if bar span values == staff span values, set bar as not custom
-                        if(span == staff->barLineSpan() && spanFrom == staff->barLineFrom()
+                        if (span == staff->barLineSpan() && spanFrom == staff->barLineFrom()
                            && spanTo == staff->barLineTo())
                               cbl->setCustomSpan(false);
                         }
@@ -2672,7 +2672,7 @@ bool Measure::createEndBarLines()
                               bl->setSpan(aspan);
                               bl->setSpanFrom(spanFrom);
                               // if current actual span < target span, set spanTo to full staff height
-                              if(aspan < spanTot)
+                              if (aspan < spanTot)
                                     bl->setSpanTo((staff->lines()-1)*2);
                               // if we reached target span, set spanTo to intended value
                               else
@@ -2713,7 +2713,7 @@ void Measure::setEndBarLineType(BarLineType val, bool g, bool visible, QColor co
 void Measure::sortStaves(QList<int>& dst)
       {
       QList<MStaff*> ms;
-      foreach (int idx, dst)
+      for (int idx : dst)
             ms.push_back(staves[idx]);
       staves = ms;
 
@@ -2724,7 +2724,7 @@ void Measure::sortStaves(QList<int>& dst)
       for (Segment* s = first(); s; s = s->next())
             s->sortStaves(dst);
 
-      foreach (Element* e, _el) {
+      for (Element* e : _el) {
             if (e->track() == -1 || e->systemFlag())
                   continue;
             int voice    = e->voice();
@@ -3317,7 +3317,7 @@ void Measure::layoutX(qreal stretch)
                               }
 
                         // add spacing for chord symbols
-                        foreach (const Element* e, s->annotations()) {
+                        for (const Element* e : s->annotations()) {
                               if (e->type() != Element::Type::HARMONY || e->track() < track || e->track() >= track+VOICES)
                                     continue;
                               const Harmony* h = static_cast<const Harmony*>(e);
@@ -3842,7 +3842,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
       m->_repeatCount = _repeatCount;
       m->_repeatFlags = _repeatFlags;
 
-      foreach(MStaff* ms, staves)
+      for (MStaff* ms : staves)
             m->staves.append(new MStaff(*ms));
 
       m->_no                    = _no;
@@ -3875,7 +3875,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
             m->_segments.push_back(s);
             for (int track = 0; track < tracks; ++track) {
                   Element* oe = oseg->element(track);
-                  foreach (Element* e, oseg->annotations()) {
+                  for (Element* e : oseg->annotations()) {
                         if (e->generated() || e->track() != track)
                               continue;
                         Element* ne = e->clone();
@@ -3935,7 +3935,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
                   s->add(ne);
                   }
             }
-      foreach(Element* e, el()) {
+      for (Element* e : el()) {
             Element* ne = e->clone();
             ne->setScore(sc);
             ne->setUserOff(e->userOff());
@@ -3994,7 +3994,7 @@ int Measure::snapNote(int /*tick*/, const QPointF p, int staff) const
 
 QVariant Measure::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::TIMESIG_NOMINAL:
                   return QVariant::fromValue(_timesig);
             case P_ID::TIMESIG_ACTUAL:
@@ -4026,7 +4026,7 @@ QVariant Measure::getProperty(P_ID propertyId) const
 
 bool Measure::setProperty(P_ID propertyId, const QVariant& value)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::TIMESIG_NOMINAL:
                   _timesig = value.value<Fraction>();
                   break;
@@ -4070,7 +4070,7 @@ bool Measure::setProperty(P_ID propertyId, const QVariant& value)
 
 QVariant Measure::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::TIMESIG_NOMINAL:
             case P_ID::TIMESIG_ACTUAL:
                   return QVariant();

@@ -3526,7 +3526,7 @@ void Shortcut::write(Xml& xml) const
       xml.tag("key", _key.data());
       if (_standardKey != QKeySequence::UnknownKey)
             xml.tag("std", QString("%1").arg(_standardKey));
-      foreach(QKeySequence ks, _keys)
+      for (QKeySequence ks : _keys)
             xml.tag("seq", Shortcut::keySeqToString(ks, QKeySequence::PortableText));
       xml.etag();
       }
@@ -3595,7 +3595,7 @@ void Shortcut::load()
                                           }
                                     else if (tag == "std") {
                                           int i = e.readInt();
-                                          if(sc)
+                                          if (sc)
                                                 sc->_standardKey = QKeySequence::StandardKey(i);
                                           }
                                     else if (tag == "seq") {
@@ -3769,7 +3769,7 @@ QKeySequence Shortcut::keySeqFromString(const QString& str, QKeySequence::Sequen
       i = 0;
       for (const QString& s : strList) {
             QString keyStr = s.trimmed();
-            if( keyStr.startsWith(numPadPrefix, Qt::CaseInsensitive) ) {
+            if ( keyStr.startsWith(numPadPrefix, Qt::CaseInsensitive) ) {
                   code[i] += Qt::KeypadModifier;
                   keyStr.remove(0, NUMPADPREFIX_SIZE);
                   }

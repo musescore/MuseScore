@@ -212,12 +212,12 @@ void Mixer::patchListChanged()
       int idx = 0;
       QList<MidiMapping>* mm = cs->midiMapping();
       const QList<MidiPatch*> pl = synti->getPatchInfo();
-      foreach (const MidiMapping& m, *mm) {
+      for (const MidiMapping& m : *mm) {
             QWidgetItem* wi  = (QWidgetItem*)(vb->itemAt(idx));
             PartEdit* pe     = (PartEdit*)(wi->widget());
             bool drum        = m.part->instrument()->useDrumset();
             pe->patch->clear();
-            foreach(const MidiPatch* p, pl) {
+            for (const MidiPatch* p : pl) {
                   if (p->drum == drum)
                         pe->patch->addItem(p->name, QVariant::fromValue<void*>((void*)p));
                   }
@@ -366,7 +366,7 @@ void PartEdit::soloToggled(bool val)
                         }
                   }
             if (!found){
-                  foreach(Part* p, part->score()->parts()) {
+                  for (Part* p : part->score()->parts()) {
                         const InstrumentList* il = p->instruments();
                         for (auto i = il->begin(); i != il->end(); ++i) {
                               const Instrument* instr = i->second;

@@ -100,7 +100,7 @@ void QOscBase::oscMessageParseArgs( const QVariant& data, QString& argtypes, QBy
 	}
 	if ( data.type() == QVariant::List ) {
 		QList<QVariant> list = data.toList();
-		foreach( QVariant v, list )
+      for (QVariant v : list )
 			oscMessageParseArgs( v, argtypes, arguments );
 	}
 }

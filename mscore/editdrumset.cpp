@@ -178,7 +178,7 @@ void EditDrumset::shortcutChanged()
 void EditDrumset::bboxClicked(QAbstractButton* button)
       {
       QDialogButtonBox::ButtonRole br = buttonBox->buttonRole(button);
-      switch(br) {
+      switch (br) {
             case QDialogButtonBox::ApplyRole:
                   apply();
                   break;
@@ -262,7 +262,7 @@ void EditDrumset::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previou
 
 void EditDrumset::valueChanged()
       {
-      if(!pitchList->currentItem())
+      if (!pitchList->currentItem())
             return;
       int pitch = pitchList->currentItem()->data(Column::PITCH, Qt::UserRole).toInt();
       nDrumset.drum(pitch).name          = name->text();

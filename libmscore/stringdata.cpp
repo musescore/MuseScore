@@ -42,7 +42,7 @@ StringData::StringData(int numFrets, QList<instrString>& strings)
       _frets = numFrets;
 
       stringTable.clear();
-      foreach(instrString i, strings)
+      for (instrString i : strings)
             stringTable.append(i);
       }
 
@@ -76,7 +76,7 @@ void StringData::write(Xml& xml) const
       {
       xml.stag("StringData");
       xml.tag("frets", _frets);
-      foreach(instrString strg, stringTable) {
+      for (instrString strg : stringTable) {
             if (strg.open)
                   xml.tag("string open=\"1\"", strg.pitch);
             else
@@ -144,13 +144,13 @@ void StringData::fretChords(Chord * chord) const
       int   nFret, minFret, maxFret, nNewFret, nTempFret;
       int   nString, nNewString, nTempString;
 
-      if(bFretting)
+      if (bFretting)
             return;
       bFretting = true;
 
       // we need to keep track of string allocation
       int bUsed[strings()];                    // initially all strings are available
-      for(nString=0; nString<strings(); nString++)
+      for (nString=0; nString<strings(); nString++)
             bUsed[nString] = 0;
       // we also need the notes sorted in order of string (from highest to lowest) and then pitch
       QMap<int, Note *> sortedNotes;
@@ -169,7 +169,7 @@ void StringData::fretChords(Chord * chord) const
             int trk;
             int trkFrom = (chord->track() / VOICES) * VOICES;
             int trkTo   = trkFrom + VOICES;
-            for(trk = trkFrom; trk < trkTo; ++trk) {
+            for (trk = trkFrom; trk < trkTo; ++trk) {
                   Element* ch = seg->elist().at(trk);
                   if (ch && ch->type() == Element::Type::CHORD)
                         sortChordNotes(sortedNotes, static_cast<Chord*>(ch), pitchOffset, &count);
@@ -178,7 +178,7 @@ void StringData::fretChords(Chord * chord) const
       // determine used range of frets
       minFret = INT32_MAX;
       maxFret = INT32_MIN;
-      foreach(Note* note, sortedNotes) {
+      for (Note* note : sortedNotes) {
             if (note->string() != STRING_NONE)
                   bUsed[note->string()]++;
             if (note->fret() != FRET_NONE && note->fret() < minFret)
@@ -188,7 +188,7 @@ void StringData::fretChords(Chord * chord) const
       }
 
       // scan chord notes from highest, matching with strings from the highest
-      foreach(Note * note, sortedNotes) {
+      for (Note * note : sortedNotes) {
             nString     = nNewString    = note->string();
             nFret       = nNewFret      = note->fret();
             note->setFretConflict(false);       // assume no conflicts on this note
@@ -237,7 +237,7 @@ void StringData::fretChords(Chord * chord) const
             }
 
       // check for any remaining fret conflict
-      foreach(Note * note, sortedNotes)
+      for (Note * note : sortedNotes)
             if (bUsed[note->string()] > 1)
                   note->setFretConflict(true);
 
@@ -287,7 +287,7 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
       pitch += pitchOffset;
 
       // if above max fret on highest string, fret on first string, but return failure
-      if(pitch > stringTable.at(strings-1).pitch + _frets) {
+      if (pitch > stringTable.at(strings-1).pitch + _frets) {
             *string = 0;
             *fret   = 0;
             return false;
@@ -298,7 +298,7 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
       // the interval between any fretted string and the next
       for (int i = strings-1; i >=0; i--) {
             instrString strg = stringTable.at(i);
-            if(pitch >= strg.pitch) {
+            if (pitch >= strg.pitch) {
                   if (pitch == strg.pitch || !strg.open)
                   *string = strings - i - 1;
                   *fret   = pitch - strg.pitch;
@@ -368,7 +368,7 @@ void StringData::sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord *cho
 {
       int   key, string, fret;
 
-      foreach(Note * note, chord->notes()) {
+      for (Note * note : chord->notes()) {
             string      = note->string();
             fret        = note->fret();
             // if note not fretted yet or current fretting no longer valid,

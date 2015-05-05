@@ -121,7 +121,7 @@ void Harmony::resolveDegreeList()
 
       // try to find the chord in chordList
       const ChordList* cl = score()->style()->chordList();
-      foreach(const ChordDescription& cd, *cl) {
+      for (const ChordDescription& cd : *cl) {
             if ((cd.chord == hc) && !cd.names.isEmpty()) {
 qDebug("ResolveDegreeList: found in table as %s", qPrintable(cd.names.front()));
                   _id = cd.id;
@@ -165,7 +165,7 @@ Harmony::Harmony(const Harmony& h)
       _parsedForm = h._parsedForm ? new ParsedChord(*h._parsedForm) : 0;
       _textName   = h._textName;
       _userName   = h._userName;
-      foreach(const TextSegment* s, h.textList) {
+      for (const TextSegment* s : h.textList) {
             TextSegment* ns = new TextSegment();
             ns->set(s->text, s->font, s->x, s->y);
             textList.append(ns);
@@ -178,7 +178,7 @@ Harmony::Harmony(const Harmony& h)
 
 Harmony::~Harmony()
       {
-      foreach(const TextSegment* ts, textList)
+      for (const TextSegment* ts : textList)
             delete ts;
       if (_parsedForm)
             delete _parsedForm;
@@ -225,7 +225,7 @@ void Harmony::write(Xml& xml) const
                   if (_baseCase != NoteCaseType::CAPITAL)
                         xml.tag("baseCase", static_cast<int>(_baseCase));
                   }
-            foreach(const HDegree& hd, _degreeList) {
+            for (const HDegree& hd : _degreeList) {
                   HDegreeType tp = hd.type();
                   if (tp == HDegreeType::ADD || tp == HDegreeType::ALTER || tp == HDegreeType::SUBTRACT) {
                         xml.stag("degree");
@@ -542,7 +542,7 @@ static int convertNote(const QString& s, NoteSpellingType noteSpelling, NoteCase
             }
       int r;
       if (useGerman) {
-            switch(s[0].toLower().toLatin1()) {
+            switch (s[0].toLower().toLatin1()) {
                   case 'c':   r = 0; break;
                   case 'd':   r = 1; break;
                   case 'e':   r = 2; break;
@@ -584,7 +584,7 @@ static int convertNote(const QString& s, NoteSpellingType noteSpelling, NoteCase
                   return Tpc::TPC_INVALID;
             }
       else {
-            switch(s[0].toLower().toLatin1()) {
+            switch (s[0].toLower().toLatin1()) {
                   case 'c':   r = 0; break;
                   case 'd':   r = 1; break;
                   case 'e':   r = 2; break;
@@ -733,7 +733,7 @@ void Harmony::endEdit()
       Text::endEdit();
       layout();
       if (links()) {
-            foreach(ScoreElement* e, *links()) {
+            for (ScoreElement* e : *links()) {
                   if (e == this)
                         continue;
                   Harmony* h = static_cast<Harmony*>(e);
@@ -792,7 +792,7 @@ void Harmony::setHarmony(const QString& s)
             }
       else {
             // unparseable chord, render as plain text
-            foreach(const TextSegment* s, textList)
+            for (const TextSegment* s : textList)
                   delete s;
             textList.clear();
             setRootTpc(Tpc::TPC_INVALID);
@@ -820,14 +820,14 @@ QString HDegree::text() const
       if (_type == HDegreeType::UNDEF)
             return QString();
       const char* d = 0;
-      switch(_type) {
+      switch (_type) {
             case HDegreeType::UNDEF: break;
             case HDegreeType::ADD:         d= "add"; break;
             case HDegreeType::ALTER:       d= "alt"; break;
             case HDegreeType::SUBTRACT:    d= "sub"; break;
             }
       QString degree(d);
-      switch(_alter) {
+      switch (_alter) {
             case -1:          degree += "b"; break;
             case 1:           degree += "#"; break;
             default:          break;
@@ -847,12 +847,12 @@ const ChordDescription* Harmony::fromXml(const QString& kind, const QList<HDegre
       {
       QStringList degrees;
 
-      foreach(const HDegree& d, dl)
+      for (const HDegree& d : dl)
             degrees.append(d.text());
 
       QString lowerCaseKind = kind.toLower();
       const ChordList* cl = score()->style()->chordList();
-      foreach(const ChordDescription& cd, *cl) {
+      for (const ChordDescription& cd : *cl) {
             QString k     = cd.xmlKind;
             QString lowerCaseK = k.toLower(); // required for xmlKind Tristan
             QStringList d = cd.xmlDegrees;
@@ -874,7 +874,7 @@ const ChordDescription* Harmony::fromXml(const QString& kind)
       {
       QString lowerCaseKind = kind.toLower();
       const ChordList* cl = score()->style()->chordList();
-      foreach(const ChordDescription& cd, *cl) {
+      for (const ChordDescription& cd : *cl) {
             if (lowerCaseKind == cd.xmlKind)
                   return &cd;
             }
@@ -920,12 +920,12 @@ const ChordDescription* Harmony::descr(const QString& name, const ParsedChord* p
       const ChordList* cl = score()->style()->chordList();
       const ChordDescription* match = 0;
       if (cl) {
-            foreach (const ChordDescription& cd, *cl) {
-                  foreach (const QString& s, cd.names) {
+            for (const ChordDescription& cd : *cl) {
+                  for (const QString& s : cd.names) {
                         if (s == name)
                               return &cd;
                         else if (pc) {
-                              foreach (const ParsedChord& sParsed, cd.parsedChords) {
+                              for (const ParsedChord& sParsed : cd.parsedChords) {
                                     if (sParsed == *pc)
                                           match = &cd;
                                     }
@@ -1122,7 +1122,7 @@ void Harmony::calculateBoundingRect()
       else {
             // textStyle().layout(this);
             QRectF bb, tbb;
-            foreach(const TextSegment* ts, textList) {
+            for (const TextSegment* ts : textList) {
                   bb |= ts->boundingRect().translated(ts->x, ts->y);
                   tbb |= ts->tightBoundingRect().translated(ts->x, ts->y);
                   }
@@ -1175,7 +1175,7 @@ void Harmony::draw(QPainter* painter) const
       painter->setBrush(Qt::NoBrush);
       QColor color = textColor();
       painter->setPen(color);
-      foreach(const TextSegment* ts, textList) {
+      for (const TextSegment* ts : textList) {
             painter->setFont(ts->font);
             painter->drawText(QPointF(ts->x, ts->y), ts->text);
             }
@@ -1202,7 +1202,7 @@ qreal TextSegment::width() const
       return fm.width(text);
 #else
       qreal w = 0.0;
-      foreach(QChar c, text) {
+      for (QChar c : text) {
             // if we calculate width by character, at least skip high surrogates
             if (c.isHighSurrogate())
                   continue;
@@ -1251,7 +1251,7 @@ void TextSegment::set(const QString& s, const QFont& f, qreal _x, qreal _y)
 void Harmony::render(const QString& s, qreal& x, qreal& y)
       {
       int fontIdx = 0;
-      if(!s.isEmpty()) {
+      if (!s.isEmpty()) {
             TextSegment* ts = new TextSegment(s, fontList[fontIdx], x, y);
             textList.append(ts);
             x += ts->width();
@@ -1270,7 +1270,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
       qreal _spatium = spatium();
       qreal mag = (MScore::DPI / PPI) * (_spatium / (SPATIUM20 * MScore::DPI));
 
-      foreach(const RenderAction& a, renderList) {
+      for (const RenderAction& a : renderList) {
             if (a.type == RenderAction::RenderActionType::SET) {
                   TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
                   ChordSymbol cs = chordList->symbol(a.text);
@@ -1360,7 +1360,7 @@ void Harmony::render(const TextStyle* st)
       ChordList* chordList = score()->style()->chordList();
 
       fontList.clear();
-      foreach(ChordFont cf, chordList->fonts) {
+      for (ChordFont cf : chordList->fonts) {
             if (cf.family.isEmpty() || cf.family == "default")
                   fontList.append(st->fontPx(spatium() * cf.mag));
             else {
@@ -1372,7 +1372,7 @@ void Harmony::render(const TextStyle* st)
       if (fontList.isEmpty())
             fontList.append(st->fontPx(spatium()));
 
-      foreach(const TextSegment* s, textList)
+      for (const TextSegment* s : textList)
             delete s;
       textList.clear();
       qreal x = 0.0, y = 0.0;
@@ -1627,8 +1627,8 @@ QString Harmony::screenReaderInfo()
             aux = aux.replace("#", tr("sharp")).replace("<", "");
             QString extension = "";
 
-            foreach (QString s, aux.split(">", QString::SkipEmptyParts)) {
-                  if(!s.contains("blues"))
+            for (QString s : aux.split(">", QString::SkipEmptyParts)) {
+                  if (!s.contains("blues"))
                         s.replace("b", tr("flat"));
                   extension += s + " ";
                   }

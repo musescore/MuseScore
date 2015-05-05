@@ -274,7 +274,7 @@ void Preferences::write()
       s.setValue("layoutBreakColor",   MScore::layoutBreakColor);
       s.setValue("frameMarginColor",   MScore::frameMarginColor);
       s.setValue("antialiasedDrawing", antialiasedDrawing);
-      switch(sessionStart) {
+      switch (sessionStart) {
             case SessionStart::EMPTY:  s.setValue("sessionStart", "empty"); break;
             case SessionStart::LAST:   s.setValue("sessionStart", "last"); break;
             case SessionStart::NEW:    s.setValue("sessionStart", "new"); break;
@@ -292,7 +292,7 @@ void Preferences::write()
       s.setValue("musicxmlImportLayout",  musicxmlImportLayout);
       s.setValue("musicxmlImportBreaks",  musicxmlImportBreaks);
       s.setValue("musicxmlExportLayout",  musicxmlExportLayout);
-      switch(musicxmlExportBreaks) {
+      switch (musicxmlExportBreaks) {
             case MusicxmlExportBreaks::ALL:     s.setValue("musicxmlExportBreaks", "all"); break;
             case MusicxmlExportBreaks::MANUAL:  s.setValue("musicxmlExportBreaks", "manual"); break;
             case MusicxmlExportBreaks::NO:      s.setValue("musicxmlExportBreaks", "no"); break;
@@ -481,7 +481,7 @@ void Preferences::read()
       dir.mkpath(myImagesPath);
       dir.mkpath(myTemplatesPath);
       dir.mkpath(myPluginsPath);
-      foreach (QString path, sfPath.split(";"))
+      for (QString path : sfPath.split(";"))
             dir.mkpath(path);
 
       MScore::setHRaster(s.value("hraster", MScore::hRaster()).toInt());
@@ -706,7 +706,7 @@ void PreferenceDialog::languageChanged(int /*val*/)
 
 void PreferenceDialog::recordButtonClicked(int val)
       {
-      foreach(QAbstractButton* b, recordButtons->buttons()) {
+      for (QAbstractButton* b : recordButtons->buttons()) {
             b->setChecked(recordButtons->id(b) == val);
             }
       mscore->setMidiRecordId(val);
@@ -820,7 +820,7 @@ void PreferenceDialog::updateValues()
 
       alsaFragments->setValue(prefs.alsaFragments);
       drawAntialiased->setChecked(prefs.antialiasedDrawing);
-      switch(prefs.sessionStart) {
+      switch (prefs.sessionStart) {
             case SessionStart::EMPTY:  emptySession->setChecked(true); break;
             case SessionStart::LAST:   lastSession->setChecked(true); break;
             case SessionStart::NEW:    newSession->setChecked(true); break;
@@ -834,7 +834,7 @@ void PreferenceDialog::updateValues()
       importLayout->setChecked(prefs.musicxmlImportLayout);
       importBreaks->setChecked(prefs.musicxmlImportBreaks);
       exportLayout->setChecked(prefs.musicxmlExportLayout);
-      switch(prefs.musicxmlExportBreaks) {
+      switch (prefs.musicxmlExportBreaks) {
             case MusicxmlExportBreaks::ALL:     exportAllBreaks->setChecked(true); break;
             case MusicxmlExportBreaks::MANUAL:  exportManualBreaks->setChecked(true); break;
             case MusicxmlExportBreaks::NO:      exportNoBreaks->setChecked(true); break;
@@ -861,7 +861,7 @@ void PreferenceDialog::updateValues()
       //
       qDeleteAll(localShortcuts);
       localShortcuts.clear();
-      foreach(const Shortcut* s, Shortcut::shortcuts())
+      for (const Shortcut* s : Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       updateSCListView();
 
@@ -885,11 +885,11 @@ void PreferenceDialog::updateValues()
                   connect(portaudioApi, SIGNAL(activated(int)), SLOT(portaudioApiActivated(int)));
 #ifdef USE_PORTMIDI
                   PortMidiDriver* midiDriver = static_cast<PortMidiDriver*>(audio->mididriver());
-                  if(midiDriver){
+                  if (midiDriver){
                         QStringList midiInputs = midiDriver->deviceInList();
                         int curMidiInIdx = 0;
                         portMidiInput->clear();
-                        for(int i = 0; i < midiInputs.size(); ++i) {
+                        for (int i = 0; i < midiInputs.size(); ++i) {
                               portMidiInput->addItem(midiInputs.at(i), i);
                               if (midiInputs.at(i) == prefs.portMidiInput)
                                     curMidiInIdx = i;
@@ -914,7 +914,7 @@ void PreferenceDialog::updateValues()
       importStyleFile->setText(prefs.importStyleFile);
       int shortestNoteIndex = 2;
       int nn = (prefs.shortestNote * 16)/MScore::division;
-      switch(nn) {
+      switch (nn) {
             case 16: shortestNoteIndex = 0; break;
             case 8:  shortestNoteIndex = 1; break;
             case 4:  shortestNoteIndex = 2; break;
@@ -930,7 +930,7 @@ void PreferenceDialog::updateValues()
       int idx = 0;
       importCharsetListOve->clear();
       importCharsetListGP->clear();
-      foreach (QByteArray charset, charsets) {
+      for (QByteArray charset : charsets) {
             importCharsetListOve->addItem(charset);
             importCharsetListGP->addItem(charset);
             if (charset == prefs.importCharsetOve)
@@ -945,7 +945,7 @@ void PreferenceDialog::updateValues()
       language->blockSignals(true);
       language->clear();
       int curIdx = 0;
-      for(int i = 0; i < mscore->languages().size(); ++i) {
+      for (int i = 0; i < mscore->languages().size(); ++i) {
             language->addItem(mscore->languages().at(i).name, i);
             if (mscore->languages().at(i).key == prefs.language)
                   curIdx = i;
@@ -1018,7 +1018,7 @@ bool ShortcutItem::operator<(const QTreeWidgetItem& item) const
 void PreferenceDialog::updateSCListView()
       {
       shortcutList->clear();
-      foreach (Shortcut* s, localShortcuts) {
+      for (Shortcut* s : localShortcuts) {
             if (!s)
                   continue;
             ShortcutItem* newItem = new ShortcutItem;
@@ -1088,10 +1088,10 @@ void PreferenceDialog::clearShortcutClicked()
 void  PreferenceDialog::filterShortcutsTextChanged(const QString &query )
     {
     QTreeWidgetItem *item;
-    for(int i = 0; i < shortcutList->topLevelItemCount(); i++) {
+    for (int i = 0; i < shortcutList->topLevelItemCount(); i++) {
         item = shortcutList->topLevelItem(i);
 
-        if(item->text(0).toLower().contains(query.toLower()))
+        if (item->text(0).toLower().contains(query.toLower()))
             item->setHidden(false);
         else
             item->setHidden(true);
@@ -1232,7 +1232,7 @@ void PreferenceDialog::bgClicked(bool id)
 
 void PreferenceDialog::buttonBoxClicked(QAbstractButton* button)
       {
-      switch(buttonBox->standardButton(button)) {
+      switch (buttonBox->standardButton(button)) {
             case QDialogButtonBox::Apply:
                   apply();
                   break;
@@ -1393,7 +1393,7 @@ void PreferenceDialog::apply()
 
       if (shortcutsChanged) {
             shortcutsChanged = false;
-            foreach(const Shortcut* s, localShortcuts) {
+            for (const Shortcut* s : localShortcuts) {
                   Shortcut* os = Shortcut::getShortcut(s->key());
                   if (os) {
                         if (!os->compareKeys(*s))
@@ -1421,7 +1421,7 @@ void PreferenceDialog::apply()
             prefs.importStyleFile.clear();
 
       int ticks = MScore::division/4;
-      switch(shortestNote->currentIndex()) {
+      switch (shortestNote->currentIndex()) {
             case 0: ticks = MScore::division;    break;
             case 1: ticks = MScore::division/2;  break;
             case 2: ticks = MScore::division/4;  break;
@@ -1499,7 +1499,7 @@ void PreferenceDialog::resetAllValues()
       qDeleteAll(localShortcuts);
       localShortcuts.clear();
       Shortcut::resetToDefault();
-      foreach(const Shortcut* s, Shortcut::shortcuts())
+      for (const Shortcut* s : Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       updateSCListView();
       }
@@ -1672,7 +1672,7 @@ void PreferenceDialog::changeSoundfontPaths()
       PathListDialog pld(this);
       pld.setWindowTitle(tr("SoundFont Folders"));
       pld.setPath(sfPath->text());
-      if(pld.exec())
+      if (pld.exec())
             sfPath->setText(pld.path());
       }
 
@@ -1777,7 +1777,7 @@ void Preferences::writePluginList()
       Xml xml(&f);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
-      foreach(const PluginDescription& d, pluginList) {
+      for (const PluginDescription& d : pluginList) {
             xml.stag("Plugin");
             xml.tag("path", d.path);
             xml.tag("load", d.load);
@@ -1810,7 +1810,7 @@ static void updatePluginList(QList<QString>& pluginPathList, const QString& plug
             if (fi.isFile()) {
                   if (path.endsWith(".qml")) {
                         bool alreadyInList = false;
-                        foreach (const PluginDescription& p, pluginList) {
+                        for (const PluginDescription& p : pluginList) {
                               if (p.path == path) {
                                     alreadyInList = true;
                                     break;
@@ -1839,7 +1839,7 @@ void Preferences::updatePluginList()
       pluginPathList.append(mscoreGlobalShare + "plugins");
       pluginPathList.append(myPluginsPath);
 
-      foreach(QString pluginPath, pluginPathList) {
+      for (QString pluginPath : pluginPathList) {
             Ms::updatePluginList(pluginPathList, pluginPath, pluginList);
             }
       //remove non existing files

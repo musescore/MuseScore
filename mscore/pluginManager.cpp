@@ -46,7 +46,7 @@ void PluginManager::init()
       //
       qDeleteAll(localShortcuts);
       localShortcuts.clear();
-      foreach(const Shortcut* s, Shortcut::shortcuts())
+      for (const Shortcut* s : Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       shortcutsChanged = false;
 
@@ -81,7 +81,7 @@ void PluginManager::accept()
       {
       if (shortcutsChanged) {
             shortcutsChanged = false;
-            foreach(const Shortcut* s, localShortcuts) {
+            for (const Shortcut* s : localShortcuts) {
                   Shortcut* os = Shortcut::getShortcut(s->key());
                   if (os) {
                         if (!os->compareKeys(*s))

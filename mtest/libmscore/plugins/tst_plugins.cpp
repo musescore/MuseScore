@@ -62,7 +62,7 @@ void TestPlugins::plugins01()
       //QVERIFY(object != 0);
       if (object == 0) {
             qDebug("creating component <%s> failed", qPrintable(path));
-            foreach(QQmlError e, component.errors())
+            for (QQmlError e : component.errors())
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
             }
       else {
@@ -88,7 +88,7 @@ void TestPlugins::plugins02()
       //QVERIFY(object != 0);
       if (object == 0) {
             qDebug("creating component <%s> failed", qPrintable(path));
-            foreach(QQmlError e, component.errors())
+            for (QQmlError e : component.errors())
                   qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
             }
       else {

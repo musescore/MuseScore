@@ -42,7 +42,7 @@ QList<int> VoltaProperties::getEndings() const
       QList<int> il;
       QString s = repeat->text();
       QStringList sl = s.split(",", QString::SkipEmptyParts);
-      foreach(const QString& l, sl) {
+      for (const QString& l : sl) {
             int i = l.simplified().toInt();
             il.append(i);
             }
@@ -56,7 +56,7 @@ QList<int> VoltaProperties::getEndings() const
 void VoltaProperties::setEndings(const QList<int>& l)
       {
       QString s;
-      foreach(int i, l) {
+      for (int i : l) {
             if (!s.isEmpty())
                   s += ", ";
             s += QString("%1").arg(i);

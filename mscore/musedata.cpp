@@ -50,12 +50,12 @@ namespace Ms {
 void MuseData::musicalAttribute(QString s, Part* part)
       {
       QStringList al = s.mid(3).split(" ", QString::SkipEmptyParts);
-      foreach(QString item, al) {
+      for (QString item : al) {
             if (item.startsWith("K:")) {
                   int key = item.mid(2).toInt();
                   KeySigEvent ke;
                   ke.setKey(Key(key));
-                  foreach(Staff* staff, *(part->staves()))
+                  for (Staff* staff : *(part->staves()))
                         staff->setKey(curTick, ke);
                   }
             else if (item.startsWith("Q:")) {
@@ -91,7 +91,7 @@ void MuseData::musicalAttribute(QString s, Part* part)
                   staffIdx -= 1;
 /*                  int clef = item.mid(col).toInt();
                   ClefType mscoreClef = ClefType::G;
-                  switch(clef) {
+                  switch (clef) {
                         case 4:  mscoreClef = ClefType::G; break;
                         case 22: mscoreClef = ClefType::F; break;
                         case 13: mscoreClef = ClefType::C3; break;
@@ -399,7 +399,7 @@ void MuseData::readNote(Part* part, const QString& s)
       if (!txt.isEmpty()) {
             QStringList sl = txt.split("|");
             int no = 0;
-            foreach(QString w, sl) {
+            for (QString w : sl) {
                   w = diacritical(w);
                   Lyrics* l = new Lyrics(score);
                   l->setPlainText(w);
@@ -529,7 +529,7 @@ Measure* MuseData::createMeasure()
       measure->setTick(curTick);
 
 #if 0
-      foreach(Staff* s, score->staves()) {
+      for (Staff* s : score->staves()) {
             if (s->isTop()) {
                   BarLine* barLine = new BarLine(score);
                   barLine->setStaff(s);
@@ -569,7 +569,7 @@ void MuseData::readPart(QStringList sl, Part* part)
             s = sl[line];
 // qDebug("%6d: <%s>", curTick, qPrintable(s));
             char c = s[0].toLatin1();
-            switch(c) {
+            switch (c) {
                   case 'A':
                   case 'B':
                   case 'C':
@@ -622,7 +622,7 @@ int MuseData::countStaves(const QStringList& sl)
       for (int i = 10; i < sl.size(); ++i) {
             QString s = sl[i];
             char c = s[0].toLatin1();
-            switch(c) {
+            switch (c) {
                   case 'A':
                   case 'B':
                   case 'C':
@@ -694,7 +694,7 @@ bool MuseData::read(const QString& name)
                               }
                         }
                   score->appendPart(mpart);
-                  if(part.size() > 8)
+                  if (part.size() > 8)
                         mpart->setPlainLongName(part[8]);
                   part.clear();
                   continue;
@@ -744,7 +744,7 @@ void MuseData::convert()
 
 Score::FileError importMuseData(Score* score, const QString& name)
       {
-      if(!QFileInfo(name).exists())
+      if (!QFileInfo(name).exists())
             return Score::FileError::FILE_NOT_FOUND;
       MuseData md(score);
       if (!md.read(name))

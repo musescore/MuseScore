@@ -71,7 +71,7 @@ void ChordLine::layout()
       if (!modified) {
             qreal x2 = 0;
             qreal y2 = 0;
-            switch(_chordLineType) {
+            switch (_chordLineType) {
                   case ChordLineType::NOTYPE:
                         break;
                   case ChordLineType::FALL:
@@ -159,7 +159,7 @@ void ChordLine::read(XmlReader& e)
                               int type = e.intAttribute("type");
                               qreal x  = e.doubleAttribute("x");
                               qreal y  = e.doubleAttribute("y");
-                              switch(QPainterPath::ElementType(type)) {
+                              switch (QPainterPath::ElementType(type)) {
                                     case QPainterPath::MoveToElement:
                                           path.moveTo(x, y);
                                           break;
@@ -311,7 +311,7 @@ void ChordLine::editDrag(const EditData& ed)
                   x += dx;
                   y += dy;
                   }
-            switch(e.type) {
+            switch (e.type) {
                   case QPainterPath::CurveToDataElement:
                         break;
                   case QPainterPath::MoveToElement:
@@ -395,7 +395,7 @@ int ChordLine::grips() const
 QString ChordLine::accessibleInfo()
       {
       QString rez = Element::accessibleInfo();
-      if(chordLineType() != ChordLineType::NOTYPE)
+      if (chordLineType() != ChordLineType::NOTYPE)
             rez = QString("%1: %2").arg(rez).arg(scorelineNames[static_cast<int>(chordLineType()) - 1]);
       return rez;
       }

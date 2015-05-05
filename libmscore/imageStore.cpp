@@ -55,7 +55,7 @@ void ImageStoreItem::reference(Image* image)
 
 bool ImageStoreItem::isUsed(Score* score) const
       {
-      foreach(Image* image, _references) {
+      for (Image* image : _references) {
             if (image->score() == score)
                   return true;
             }
@@ -150,7 +150,7 @@ ImageStoreItem* ImageStore::getImage(const QString& path) const
             //
             // some limited support for backward compatibility
             //
-            foreach(ImageStoreItem* item, *this) {
+            for (ImageStoreItem* item : *this) {
                   if (item->path() == path)
                         return item;
                   }
@@ -165,7 +165,7 @@ ImageStoreItem* ImageStore::getImage(const QString& path) const
       for (int i = 0; i < 16; ++i) {
             hash[i] = toInt(s[i * 2].toLatin1()) * 16 + toInt(s[i * 2 + 1].toLatin1());
             }
-      foreach(ImageStoreItem* item, *this) {
+      for (ImageStoreItem* item : *this) {
             if (item->hash() == hash)
                   return item;
             }
@@ -182,7 +182,7 @@ ImageStoreItem* ImageStore::add(const QString& path, const QByteArray& ba)
       QCryptographicHash h(QCryptographicHash::Md4);
       h.addData(ba);
       QByteArray hash = h.result();
-      foreach(ImageStoreItem* item, *this) {
+      for (ImageStoreItem* item : *this) {
             if (item->hash() == hash)
                   return item;
             }

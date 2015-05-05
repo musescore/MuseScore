@@ -69,7 +69,7 @@ void LedgerLine::layout()
 
 void LedgerLine::draw(QPainter* painter) const
       {
-      if(chord()->crossMeasure() == CrossMeasure::SECOND)
+      if (chord()->crossMeasure() == CrossMeasure::SECOND)
             return;
       Line::draw(painter);
       }

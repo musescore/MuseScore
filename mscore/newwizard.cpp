@@ -266,7 +266,7 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
       templateFileBrowser->setStripNumbers(true);
       QDir dir(mscoreGlobalShare + "/templates");
       QFileInfoList fil = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name);
-      if(fil.isEmpty()){
+      if (fil.isEmpty()){
           fil.append(QFileInfo(QFile(":data/Empty_Score.mscz")));
           }
       
@@ -436,7 +436,7 @@ NewWizard::NewWizard(QWidget* parent)
 
 int NewWizard::nextId() const
       {
-      switch(Page(currentId())) {
+      switch (Page(currentId())) {
             case Page::Type:
                   return int(Page::Template);
             case Page::Template: {

@@ -77,7 +77,7 @@ Beam::Beam(const Beam& b)
       {
       _elements     = b._elements;
       _id           = b._id;
-      foreach(QLineF* bs, b.beamSegments)
+      for (QLineF* bs : b.beamSegments)
             beamSegments.append(new QLineF(*bs));
       _direction       = b._direction;
       _up              = b._up;
@@ -86,7 +86,7 @@ Beam::Beam(const Beam& b)
       _userModified[1] = b._userModified[1];
       _grow1           = b._grow1;
       _grow2           = b._grow2;
-      foreach(BeamFragment* f, b.fragments)
+      for (BeamFragment* f : b.fragments)
             fragments.append(new BeamFragment(*f));
       minMove          = b.minMove;
       maxMove          = b.maxMove;
@@ -107,7 +107,7 @@ Beam::~Beam()
       //
       // delete all references from chords
       //
-      foreach(ChordRest* cr, _elements)
+      for (ChordRest* cr : _elements)
             cr->setBeam(0);
       qDeleteAll(beamSegments);
       qDeleteAll(fragments);
@@ -185,7 +185,7 @@ void Beam::draw(QPainter* painter) const
       painter->setBrush(QBrush(curColor()));
       painter->setPen(Qt::NoPen);
       qreal lw2 = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
-      foreach (const QLineF* bs, beamSegments) {
+      for (const QLineF* bs : beamSegments) {
             QPolygonF pg;
                pg << QPointF(bs->x1(), bs->y1()-lw2)
                   << QPointF(bs->x2(), bs->y2()-lw2)
@@ -202,7 +202,7 @@ void Beam::draw(QPainter* painter) const
 void Beam::move(qreal x, qreal y)
       {
       Element::move(x, y);
-      foreach (QLineF* bs, beamSegments)
+      for (QLineF* bs : beamSegments)
             bs->translate(x, y);
       }
 
@@ -268,7 +268,7 @@ void Beam::layout1()
             slope = 0.0;
             _cross = false;
             minMove = maxMove = 0;              // no cross-beaming in TAB's!
-            foreach (ChordRest* cr, _elements) {
+            for (ChordRest* cr : _elements) {
                   if (cr->type() == Element::Type::CHORD) {
                         // set members maxDuration, c1, c2
                         if (!maxDuration.isValid() || (maxDuration < cr->durationType()))
@@ -284,7 +284,7 @@ void Beam::layout1()
                   _up = _direction == MScore::Direction::UP;
                   }
             else {
-                  foreach (ChordRest* cr, _elements) {
+                  for (ChordRest* cr : _elements) {
                         if (cr->type() == Element::Type::CHORD) {
                               c2 = static_cast<Chord*>(cr);
                               _up = c2->up();
@@ -306,7 +306,7 @@ void Beam::layout1()
             int mDown   = 0;
             int upDnLimit = staff()->lines() - 1;           // was '4' hard-coded in following code
 
-            foreach (ChordRest* cr, _elements) {
+            for (ChordRest* cr : _elements) {
                   qreal m = cr->small() ? score()->styleD(StyleIdx::smallNoteMag) : 1.0;
                   mag = qMax(mag, m);
                   if (cr->type() == Element::Type::CHORD) {
@@ -388,7 +388,7 @@ void Beam::layoutGraceNotes()
       qreal graceMag   = score()->styleD(StyleIdx::graceNoteMag);
       setMag(graceMag);
 
-      foreach (ChordRest* cr, _elements) {
+      for (ChordRest* cr : _elements) {
             c2 = static_cast<Chord*>(cr);
             if (c1 == 0)
                   c1 = c2;
@@ -427,7 +427,7 @@ void Beam::layoutGraceNotes()
       slope   = 0.0;
 
       if (!_userModified[idx]) {
-            foreach(ChordRest* cr, _elements)
+            for (ChordRest* cr : _elements)
                   cr->setUp(_up);
             }
       }
@@ -444,7 +444,7 @@ void Beam::layout()
       QList<ChordRest*> crl;
 
       int n = 0;
-      foreach(ChordRest* cr, _elements) {
+      for (ChordRest* cr : _elements) {
             if (cr->measure()->system() != system) {
                   SpannerSegmentType st;
                   if (n == 0)
@@ -473,7 +473,7 @@ void Beam::layout()
 
       setbbox(QRectF());
       qreal lw2 = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
-      foreach(const QLineF* bs, beamSegments) {
+      for (const QLineF* bs : beamSegments) {
             QPolygonF a(4);
             a[0] = QPointF(bs->x1(), bs->y1()-lw2);
             a[1] = QPointF(bs->x2(), bs->y2()-lw2);
@@ -491,7 +491,7 @@ QPainterPath Beam::shape() const
       {
       QPainterPath pp;
       qreal lw2 = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
-      foreach(const QLineF* bs, beamSegments) {
+      for (const QLineF* bs : beamSegments) {
             QPolygonF a(5);
             a[0] = QPointF(bs->x1(), bs->y1()-lw2);
             a[1] = QPointF(bs->x2(), bs->y2()-lw2);
@@ -547,7 +547,7 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
       //
       // return true if beam spans a rest
       //
-      for(const ChordRest* cr : cl) {
+      for (const ChordRest* cr : cl) {
             if (cr->type() != Element::Type::CHORD)
                   return true;
             }
@@ -1874,7 +1874,7 @@ qDebug("create stem in layout beam, track %d", c->track());
             qreal fuzz = _spatium * .1;
 
             qreal by = y2 < y1 ? -1000000 : 1000000;
-            foreach (const QLineF* l, beamSegments) {
+            for (const QLineF* l : beamSegments) {
                   if ((x2+fuzz) >= l->x1() && (x2-fuzz) <= l->x2()) {
                         qreal y = (x2 - l->x1()) * slope + l->y1();
                         by = y2 < y1 ? qMax(by, y) : qMin(by, y);
@@ -1939,7 +1939,7 @@ void Beam::spatiumChanged(qreal oldValue, qreal newValue)
       int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       if (_userModified[idx]) {
             qreal diff = newValue / oldValue;
-            foreach(BeamFragment* f, fragments) {
+            for (BeamFragment* f : fragments) {
                   f->py1[idx] = f->py1[idx] * diff;
                   f->py2[idx] = f->py2[idx] * diff;
                   }
@@ -1966,7 +1966,7 @@ void Beam::write(Xml& xml) const
       int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       if (_userModified[idx]) {
             qreal _spatium = spatium();
-            foreach(BeamFragment* f, fragments) {
+            for (BeamFragment* f : fragments) {
                   xml.stag("Fragment");
                   xml.tag("y1", f->py1[idx] / _spatium);
                   xml.tag("y2", f->py2[idx] / _spatium);
@@ -1980,7 +1980,7 @@ void Beam::write(Xml& xml) const
       //
       if (MScore::testMode) {
             qreal _spatium4 = spatium() * .25;
-            foreach(BeamFragment* f, fragments) {
+            for (BeamFragment* f : fragments) {
                   xml.tag("l1", int(lrint(f->py1[idx] / _spatium4)));
                   xml.tag("l2", int(lrint(f->py2[idx] / _spatium4)));
                   }
@@ -2165,7 +2165,7 @@ void Beam::startEdit(MuseScoreView*, const QPointF& p)
       int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
       int i = 0;
       editFragment = 0;
-      foreach (BeamFragment* f, fragments) {
+      for (BeamFragment* f : fragments) {
             qreal d = fabs(f->py1[idx] - pt.y());
             if (d < ydiff) {
                   ydiff = d;
@@ -2284,7 +2284,7 @@ void Beam::setUserModified(bool val)
 
 QVariant Beam::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::STEM_DIRECTION: return int(beamDirection());
             case P_ID::DISTRIBUTE:     return distribute();
             case P_ID::GROW_LEFT:      return growLeft();
@@ -2303,7 +2303,7 @@ QVariant Beam::getProperty(P_ID propertyId) const
 
 bool Beam::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::STEM_DIRECTION:
                   setBeamDirection(MScore::Direction(v.toInt()));
                   break;
@@ -2343,7 +2343,7 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Beam::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::STEM_DIRECTION: return int(MScore::Direction::AUTO);
             case P_ID::DISTRIBUTE:     return false;
             case P_ID::GROW_LEFT:      return 1.0;

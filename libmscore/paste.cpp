@@ -288,13 +288,13 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               Segment* seg = m->undoGetSegment(Segment::Type::ChordRest, tick);
                               if (seg->findAnnotationOrElement(Element::Type::HARMONY, e.track(), e.track())) {
                                     QList<Element*> elements;
-                                    foreach (Element* el, seg->annotations()) {
+                                    for (Element* el : seg->annotations()) {
                                           if (el->type() == Element::Type::HARMONY
                                               && el->track() == e.track()) {
                                                 elements.append(el);
                                                 }
                                           }
-                                    foreach (Element* el, elements)
+                                    for (Element* el : elements)
                                           undoRemoveElement(el);
                               }
 
@@ -367,7 +367,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               }
                         }
 
-                  foreach (Tuplet* tuplet, e.tuplets()) {
+                  for (Tuplet* tuplet : e.tuplets()) {
                         if (tuplet->elements().isEmpty()) {
                               // this should not happen and is a sign of input file corruption
                               qDebug("Measure:pasteStaff(): empty tuplet");
@@ -381,7 +381,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                         }
                   }
             }
-      foreach (Score* s, scoreList())     // for all parts
+      for (Score* s : scoreList())     // for all parts
             s->connectTies();
 
       if (pasted) {                       //select only if we pasted something
@@ -411,7 +411,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                   s = s->next1MM();
                   }
 
-            foreach(MuseScoreView* v, viewer)
+            for (MuseScoreView* v : viewer)
                   v->adjustCanvasPosition(e, false);
             if (!selection().isRange())
                   _selection.setState(SelState::RANGE);
@@ -686,7 +686,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                                 // in any case, look for a f.b. in annotations:
                                                 // if there is a f.b. element in the right track,
                                                 // this is an (actual) f.b. location
-                                                foreach (Element* a, prevSegm->annotations()) {
+                                                for (Element* a : prevSegm->annotations()) {
                                                       if (a->type() == Element::Type::FIGURED_BASS && a->track() == destTrack) {
                                                             onNoteFB = static_cast<FiguredBass*>(a);
                                                             done = true;
@@ -724,7 +724,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                           ticks = static_cast<ChordRest*>(currSegm->element(destTrack))->duration().ticks();
                                     // in both cases, look for an existing f.b. element in segment and remove it, if found
                                     FiguredBass* oldFB = nullptr;
-                                    foreach (Element* a, currSegm->annotations()) {
+                                    for (Element* a : currSegm->annotations()) {
                                           if (a->type() == Element::Type::FIGURED_BASS && a->track() == destTrack) {
                                                 oldFB = static_cast<FiguredBass*>(a);
                                                 break;
@@ -908,7 +908,7 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
       else {
             qDebug("cannot paste selState %hhd staffList %s",
                _selection.state(), (ms->hasFormat(mimeStaffListFormat))? "true" : "false");
-            foreach(const QString& s, ms->formats())
+            for (const QString& s : ms->formats())
                   qDebug("  format %s", qPrintable(s));
             }
       return PasteStatus::PS_NO_ERROR;

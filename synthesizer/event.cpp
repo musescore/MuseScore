@@ -23,7 +23,7 @@ namespace Ms {
 
 void MidiCoreEvent::write(Xml& xml) const
       {
-      switch(_type) {
+      switch (_type) {
             case ME_NOTEON:
                   xml.tagE(QString("note-on  channel=\"%1\" pitch=\"%2\" velo=\"%3\"")
                      .arg(_channel).arg(_a).arg(_b));
@@ -156,7 +156,7 @@ void Event::dump() const
 
 bool MidiCoreEvent::isChannelEvent() const
       {
-      switch(_type) {
+      switch (_type) {
             case ME_NOTEOFF:
             case ME_NOTEON:
             case ME_POLYAFTER:
@@ -179,7 +179,7 @@ bool MidiCoreEvent::isChannelEvent() const
 
 void Event::write(Xml& xml) const
       {
-      switch(_type) {
+      switch (_type) {
             case ME_NOTE:
                   xml.tagE(QString("note  tick=\"%1\" channel=\"%2\" len=\"%3\" pitch=\"%4\" velo=\"%5\"")
                      .arg(_ontime).arg(_channel).arg(_duration).arg(_a).arg(_b));
@@ -224,7 +224,7 @@ void Event::write(Xml& xml) const
                   break;
 
             case ME_META:
-                  switch(metaType()) {
+                  switch (metaType()) {
                         case META_TRACK_NAME:
                               xml.tag(QString("TrackName tick=\"%1\"").arg(ontime()), QString((char*)(edata())));
                               break;

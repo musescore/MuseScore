@@ -61,7 +61,7 @@ QList< QPair<QString, QString> > KQOAuthManagerPrivate::createQueryParams(const 
     QList<QString> requestValues = requestParams.values();
 
     QList< QPair<QString, QString> > result;
-    for(int i=0; i<requestKeys.size(); i++) {
+    for (int i=0; i<requestKeys.size(); i++) {
         result.append( qMakePair(requestKeys.at(i),
                                  requestValues.at(i))
                       );
@@ -75,7 +75,7 @@ QMultiMap<QString, QString> KQOAuthManagerPrivate::createTokensFromResponse(QByt
     QString replyString(reply);
 
     QStringList parameterPairs = replyString.split('&', QString::SkipEmptyParts);
-    foreach (const QString &parameterPair, parameterPairs) {
+    for (const QString &parameterPair : parameterPairs) {
         QStringList parameter = parameterPair.split('=');
         result.insert(parameter.value(0), parameter.value(1));
     }
@@ -198,7 +198,7 @@ void KQOAuthManager::executeRequest(KQOAuthRequest *request) {
     QByteArray authHeader;
 
     bool first = true;
-    foreach (const QByteArray header, requestHeaders) {
+    for (const QByteArray header : requestHeaders) {
         if (!first) {
             authHeader.append(", ");
         } else {
@@ -294,7 +294,7 @@ void KQOAuthManager::executeAuthorizedRequest(KQOAuthRequest *request, int id) {
     QByteArray authHeader;
 
     bool first = true;
-    foreach (const QByteArray header, requestHeaders) {
+    for (const QByteArray header : requestHeaders) {
         if (!first) {
             authHeader.append(", ");
         } else {
@@ -573,7 +573,7 @@ void KQOAuthManager::onRequestReplyReceived() {
     QByteArray networkReply = reply->readAll();
 
     d->r = d->requestMap.key(reply);
-    if( d->r ) {
+    if ( d->r ) {
         d->requestMap.remove(d->r);
         disconnect(d->r, SIGNAL(requestTimedout()),
                 this, SLOT(requestTimeout()));
@@ -585,7 +585,7 @@ void KQOAuthManager::onRequestReplyReceived() {
     QVariant v = reply->header(QNetworkRequest::SetCookieHeader);
     
     /*QList<QNetworkCookie> c = qvariant_cast<QList<QNetworkCookie> >(v);
-    foreach (QNetworkCookie cookie , c)
+    for (QNetworkCookie cookie : c)
             qDebug() << cookie.name() << cookie.value();*/
 
     // We need to emit the signal even if we got an error.
@@ -597,7 +597,7 @@ void KQOAuthManager::onRequestReplyReceived() {
     }
 
     // Just don't do anything if we didn't get anything useful.
-    if(networkReply.isEmpty()) {
+    if (networkReply.isEmpty()) {
         reply->deleteLater();
         return;
     }
@@ -665,7 +665,7 @@ void KQOAuthManager::onAuthorizedRequestReplyReceived() {
 
     int id = d->requestIds.take(reply);
     d->r = d->requestMap.key(reply);
-    if( d->r ) {
+    if ( d->r ) {
         d->requestMap.remove(d->r);
         disconnect(d->r, SIGNAL(requestTimedout()),
                 this, SLOT(requestTimeout()));
@@ -676,7 +676,7 @@ void KQOAuthManager::onAuthorizedRequestReplyReceived() {
     }
 
     // Just don't do anything if we didn't get anything useful.
-    if(networkReply.isEmpty()) {
+    if (networkReply.isEmpty()) {
         reply->deleteLater();
         return;
     }
@@ -749,7 +749,7 @@ void KQOAuthManager::slotError(QNetworkReply::NetworkError error) {
     //qDebug() << "STATUS" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
     d->r = d->requestMap.key(reply);
     d->currentRequestType = d->r->requestType();
-    if( d->requestIds.contains(reply) ) {
+    if ( d->requestIds.contains(reply) ) {
         int id = d->requestIds.value(reply);
         emit authorizedRequestReady(emptyResponse, id);
         reply->deleteLater();
@@ -774,7 +774,7 @@ void KQOAuthManager::slotError(QNetworkReply::NetworkError error) {
 void KQOAuthManager::requestTimeout() {
     Q_D(KQOAuthManager);
     KQOAuthRequest *request = qobject_cast<KQOAuthRequest *>(sender());
-    if( d->requestMap.contains(request)) {
+    if ( d->requestMap.contains(request)) {
         qWarning() << "KQOAuthManager::requestTimeout: Calling abort";
         d->requestMap.value(request)->abort();
     }

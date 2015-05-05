@@ -135,7 +135,7 @@ void RepeatList::update()
       int utick = 0;
       qreal t  = 0;
 
-      for(RepeatSegment* s : *this) {
+      for (RepeatSegment* s : *this) {
             s->utick      = utick;
             s->utime      = t;
             qreal ct      = tl->tick2time(s->tick);
@@ -228,7 +228,7 @@ void RepeatList::dump() const
       {
 #if 0
       qDebug("==Dump Repeat List:==");
-      foreach(const RepeatSegment* s, *this) {
+      for (const RepeatSegment* s : *this) {
             qDebug("%p  tick: %3d(%d) %3d(%d) len %d(%d) beats  %f + %f", s,
                s->utick / MScore::division,
                s->utick / MScore::division / 4,
@@ -344,7 +344,7 @@ void RepeatList::unwind()
                   }
             if (doJump && !isGoto) {
                   Jump* s = 0;
-                  foreach(Element* e, m->el()) {
+                  for (Element* e : m->el()) {
                         if (e->type() == Element::Type::JUMP) {
                               s = static_cast<Jump*>(e);
                               break;

@@ -53,7 +53,7 @@ ToolBarData::ToolBarData( QObject* parent, QWidget* target, int duration ):
       progressAnimation().data()->setEasingCurve( QEasingCurve::Linear );
 
       // add all children widgets to event handler
-      foreach( QObject * child, target->children() ) {
+      for ( QObject * child : target->children() ) {
             if ( qobject_cast<QToolButton*>( child ) ) childAddedEvent( child );
             }
 

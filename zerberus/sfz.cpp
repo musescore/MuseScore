@@ -339,7 +339,7 @@ bool ZInstrument::loadSfz(const QString& s)
             if (ba.isEmpty() || ba.startsWith("//"))
                   continue;
             QList<QByteArray> bal = ba.split(' ');
-            foreach(const QByteArray& bb, bal) {
+            for (const QByteArray& bb : bal) {
                   if (bb == "<group>") {
                         if (!groupMode && !r.isEmpty())
                               addRegion(r);

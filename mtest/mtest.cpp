@@ -37,7 +37,7 @@ static void process(const QString& cmd)
 static void scanDir(QDir d)
       {
       QFileInfoList l = d.entryInfoList(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs);
-      foreach(const QFileInfo& fi, l) {
+      for (const QFileInfo& fi : l) {
             if (fi.isDir()) {
                   scanDir(QDir(fi.filePath()));
                   }

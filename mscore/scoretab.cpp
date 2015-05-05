@@ -71,7 +71,7 @@ ScoreTab::ScoreTab(QList<Score*>* sl, QWidget* parent)
       layout->addWidget(tab2);
       layout->addLayout(stack);
 
-      foreach(Score* s, *sl)
+      for (Score* s : *sl)
             insertTab(s);
 
       connect(tab, SIGNAL(currentChanged(int)), this, SLOT(setCurrent(int)));
@@ -209,7 +209,7 @@ void ScoreTab::setCurrent(int n)
             if (!excerpts.isEmpty()) {
                   tab2->blockSignals(true);
                   tab2->addTab(score->name().replace("&","&&"));
-                  foreach(const Excerpt* excerpt, excerpts) {
+                  for (const Excerpt* excerpt : excerpts) {
                         tab2->addTab(excerpt->partScore()->name().replace("&","&&"));
                         }
                   tab2->setCurrentIndex(tsv->part);
@@ -257,7 +257,7 @@ void ScoreTab::updateExcerpts()
       if (!excerpts.isEmpty()) {
             tab2->blockSignals(true);
             tab2->addTab(score->name().replace("&","&&"));
-            foreach(const Excerpt* excerpt, excerpts)
+            for (const Excerpt* excerpt : excerpts)
                   tab2->addTab(excerpt->partScore()->name().replace("&","&&"));
             tab2->blockSignals(false);
             tab2->setVisible(true);
@@ -371,7 +371,7 @@ void ScoreTab::removeTab(int idx)
                   break;
                   }
             }
-      foreach (Excerpt* excerpt, score->excerpts()) {
+      for (Excerpt* excerpt : score->excerpts()) {
             Score* sc = excerpt->partScore();
             for (int i = 0; i < stack->count(); ++i) {
                   QSplitter* vs = static_cast<QSplitter*>(stack->widget(i));
@@ -402,7 +402,7 @@ void ScoreTab::initScoreView(int idx, double mag, MagIdx magIdx, double xoffset,
       if (!v)  {
             v = new ScoreView;
             Score* sc = scoreList->value(idx);
-            if( sc != 0 )
+            if ( sc != 0 )
                   v->setScore(sc);
             else {
                   delete v;

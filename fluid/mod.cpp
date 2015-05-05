@@ -328,7 +328,7 @@ void Mod::dump() const
             printf("MIDI CC=%i",src1);
             }
       else {
-            switch(src1){
+            switch (src1){
                   case FLUID_MOD_NONE:
                         printf("None");
                         break;
@@ -363,7 +363,7 @@ void Mod::dump() const
       else
             printf("unip ");
       printf("-> ");
-      switch(dest){
+      switch (dest){
             case GEN_FILTERQ:
                   printf("Q");
                   break;

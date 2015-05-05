@@ -399,7 +399,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
       if (name == 0)
             return;
 
-      switch(propertyType(id)) {
+      switch (propertyType(id)) {
             case P_TYPE::BOOL:
             case P_TYPE::SUBTYPE:
             case P_TYPE::INT:
@@ -414,7 +414,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                   break;
 
             case P_TYPE::DIRECTION:
-                  switch(MScore::Direction(data.toInt())) {
+                  switch (MScore::Direction(data.toInt())) {
                         case MScore::Direction::UP:
                               tag(name, QVariant("up"));
                               break;
@@ -426,7 +426,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                         }
                   break;
             case P_TYPE::DIRECTION_H:
-                  switch(MScore::DirectionH(data.toInt())) {
+                  switch (MScore::DirectionH(data.toInt())) {
                         case MScore::DirectionH::LEFT:
                               tag(name, QVariant("left"));
                               break;
@@ -438,7 +438,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                         }
                   break;
             case P_TYPE::LAYOUT_BREAK:
-                  switch(LayoutBreak::Type(data.toInt())) {
+                  switch (LayoutBreak::Type(data.toInt())) {
                         case LayoutBreak::Type::LINE:
                               tag(name, QVariant("line"));
                               break;
@@ -451,7 +451,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                         }
                   break;
             case P_TYPE::VALUE_TYPE:
-                  switch(Note::ValueType(data.toInt())) {
+                  switch (Note::ValueType(data.toInt())) {
                         case Note::ValueType::OFFSET_VAL:
                               tag(name, QVariant("offset"));
                               break;
@@ -461,7 +461,7 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
                         }
                   break;
             case P_TYPE::PLACEMENT:
-                  switch(Element::Placement(data.toInt())) {
+                  switch (Element::Placement(data.toInt())) {
                         case Element::Placement::ABOVE:
                               tag(name, QVariant("above"));
                               break;
@@ -494,7 +494,7 @@ void Xml::tag(const QString& name, QVariant data)
       QString ename(name.split(' ')[0]);
 
       putLevel();
-      switch(data.type()) {
+      switch (data.type()) {
             case QVariant::Bool:
             case QVariant::Char:
             case QVariant::Int:
@@ -563,7 +563,7 @@ void Xml::tag(const char* name, const QWidget* g)
 
 QString Xml::xmlString(ushort c)
       {
-      switch(c) {
+      switch (c) {
             case '<':
                   return QLatin1String("&lt;");
             case '>':
@@ -635,7 +635,7 @@ void XmlReader::htmlToString(int level, QString* s)
       ++level;
       for (;;) {
             XmlStreamReader::TokenType t = readNext();
-            switch(t) {
+            switch (t) {
                   case XmlStreamReader::StartElement:
                         htmlToString(level, s);
                         break;
@@ -668,7 +668,7 @@ QString XmlReader::readXml()
       int level = 1;
       for (;;) {
             XmlStreamReader::TokenType t = readNext();
-            switch(t) {
+            switch (t) {
                   case XmlStreamReader::StartElement:
                         htmlToString(level, &s);
                         break;

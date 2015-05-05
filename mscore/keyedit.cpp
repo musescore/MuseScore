@@ -63,7 +63,7 @@ KeyCanvas::KeyCanvas(QWidget* parent)
 
 void KeyCanvas::deleteElement()
       {
-      foreach(Accidental* a, accidentals) {
+      for (Accidental* a : accidentals) {
             if (a->selected()) {
                   accidentals.removeOne(a);
                   delete a;
@@ -79,7 +79,7 @@ void KeyCanvas::deleteElement()
 
 void KeyCanvas::clear()
       {
-      foreach(Accidental* a, accidentals)
+      for (Accidental* a : accidentals)
             delete a;
       accidentals.clear();
       update();
@@ -128,7 +128,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
             dragElement->draw(&painter);
             painter.restore();
             }
-      foreach(Accidental* a, accidentals) {
+      for (Accidental* a : accidentals) {
             painter.save();
             painter.translate(a->pagePos());
             a->draw(&painter);
@@ -148,7 +148,7 @@ void KeyCanvas::mousePressEvent(QMouseEvent* event)
       {
       startMove = imatrix.map(QPointF(event->pos() - base));
       moveElement = 0;
-      foreach(Accidental* a, accidentals) {
+      for (Accidental* a : accidentals) {
             QRectF r = a->abbox();
             if (r.contains(startMove)) {
                   a->setSelected(true);
@@ -214,7 +214,7 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
       else {
             if (MScore::debugMode) {
                   qDebug("KeyCanvas::dragEnterEvent: formats:");
-                  foreach(const QString& s, event->mimeData()->formats())
+                  for (const QString& s : event->mimeData()->formats())
                         qDebug("   %s", qPrintable(s));
                   }
             }
@@ -240,7 +240,7 @@ void KeyCanvas::dragMoveEvent(QDragMoveEvent* event)
 
 void KeyCanvas::dropEvent(QDropEvent*)
       {
-      foreach(Accidental* a, accidentals)
+      for (Accidental* a : accidentals)
             a->setSelected(false);
       dragElement->setSelected(true);
       accidentals.append(dragElement);

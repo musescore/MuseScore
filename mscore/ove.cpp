@@ -480,7 +480,7 @@ int OveSong::getTrackBarCount() const {
 Track* OveSong::getTrack(int part, int staff) const {
       int trackId = partStaffToTrack(part, staff);
 
-      if( trackId >=0 && trackId < (int)tracks_.size() ) {
+      if ( trackId >=0 && trackId < (int)tracks_.size() ) {
             return tracks_[trackId];
             }
 
@@ -497,7 +497,7 @@ int OveSong::getPageCount() const {
       }
 
 Page* OveSong::getPage(int idx) {
-      if( idx>=0 && idx<(int)pages_.size() ) {
+      if ( idx>=0 && idx<(int)pages_.size() ) {
             return pages_[idx];
             }
 
@@ -513,7 +513,7 @@ int OveSong::getLineCount() const {
       }
 
 Line* OveSong::getLine(int idx) const {
-      if( idx >=0 && idx<(int)lines_.size() ) {
+      if ( idx >=0 && idx<(int)lines_.size() ) {
             return lines_[idx];
             }
 
@@ -529,7 +529,7 @@ int OveSong::getMeasureCount(void) const {
       }
 
 Measure* OveSong::getMeasure(int bar) const {
-      if( bar >= 0 && bar < (int)measures_.size() ) {
+      if ( bar >= 0 && bar < (int)measures_.size() ) {
             return measures_[bar];
             }
 
@@ -548,10 +548,10 @@ MeasureData* OveSong::getMeasureData(int part, int staff/*=0*/, int bar) const {
       int trackId = partStaffToTrack(part, staff);
       int trackBarCount = getTrackBarCount();
 
-      if( bar >= 0 && bar < trackBarCount ) {
+      if ( bar >= 0 && bar < trackBarCount ) {
             int measureId = trackBarCount * trackId + bar;
 
-            if( measureId >=0 && measureId < (int)measureDatas_.size() ) {
+            if ( measureId >=0 && measureId < (int)measureDatas_.size() ) {
                   return measureDatas_[measureId];
                   }
             }
@@ -562,7 +562,7 @@ MeasureData* OveSong::getMeasureData(int part, int staff/*=0*/, int bar) const {
 MeasureData* OveSong::getMeasureData(int track, int bar) const {
       int id = trackBarCount_*track + bar;
 
-      if( id >=0 && id < (int)measureDatas_.size() ) {
+      if ( id >=0 && id < (int)measureDatas_.size() ) {
             return measureDatas_[id];
             }
 
@@ -571,7 +571,7 @@ MeasureData* OveSong::getMeasureData(int track, int bar) const {
 
 void OveSong::setPartStaffCounts(const QList<int>& partStaffCounts) {
       //partStaffCounts_.assign(partStaffCounts.begin(), partStaffCounts.end());
-      for(int i=0; i<partStaffCounts.size(); ++i) {
+      for (int i=0; i<partStaffCounts.size(); ++i) {
             partStaffCounts_.push_back(partStaffCounts[i]);
             }
       }
@@ -581,7 +581,7 @@ int OveSong::getPartCount() const {
       }
 
 int OveSong::getStaffCount(int part) const {
-      if( part>=0 && part<(int)partStaffCounts_.size() ) {
+      if ( part>=0 && part<(int)partStaffCounts_.size() ) {
             return partStaffCounts_[part];
             }
 
@@ -597,8 +597,8 @@ QPair<int, int> OveSong::trackToPartStaff(int track) const {
       int i;
       int staffCount = 0;
 
-      for( i=0; i<partStaffCounts_.size(); ++i ) {
-            if( staffCount + partStaffCounts_[i] > track ) {
+      for ( i=0; i<partStaffCounts_.size(); ++i ) {
+            if ( staffCount + partStaffCounts_[i] > track ) {
                   return qMakePair((int)i, track-staffCount);
                   }
 
@@ -612,11 +612,11 @@ int OveSong::partStaffToTrack(int part, int staff) const {
       int i;
       unsigned int staffCount = 0;
 
-      for( i=0; i<partStaffCounts_.size(); ++i ) {
-            if( part == (int)i && staff>=0 && staff<(int)partStaffCounts_[i] ) {
+      for ( i=0; i<partStaffCounts_.size(); ++i ) {
+            if ( part == (int)i && staff>=0 && staff<(int)partStaffCounts_[i] ) {
                   int trackId = staffCount + staff;
 
-                  if( trackId >=0 && trackId < (int)tracks_.size() ) {
+                  if ( trackId >=0 && trackId < (int)tracks_.size() ) {
                         return trackId;
                         }
                   }
@@ -662,19 +662,19 @@ void OveSong::clear(void)
       writers_.clear();
 
       // deleteVector(tracks_);
-      for(int i=0; i<tracks_.size(); ++i){
+      for (int i=0; i<tracks_.size(); ++i){
             delete tracks_[i];
             }
-      for(int i=0; i<pages_.size(); ++i){
+      for (int i=0; i<pages_.size(); ++i){
             delete pages_[i];
             }
-      for(int i=0; i<lines_.size(); ++i){
+      for (int i=0; i<lines_.size(); ++i){
             delete lines_[i];
             }
-      for(int i=0; i<measures_.size(); ++i){
+      for (int i=0; i<measures_.size(); ++i){
             delete measures_[i];
             }
-      for(int i=0; i<measureDatas_.size(); ++i){
+      for (int i=0; i<measureDatas_.size(); ++i){
             delete measureDatas_[i];
             }
       tracks_.clear();
@@ -1026,7 +1026,7 @@ void Track::clear(void) {
 
       part_ = 0;
 
-      for(int i=0; i<voices_.size(); ++i){
+      for (int i=0; i<voices_.size(); ++i){
             delete voices_[i];
             }
       voices_.clear();
@@ -1167,7 +1167,7 @@ Line::Line() {
       }
 
 Line::~Line() {
-      for(int i=0; i<staffs_.size(); ++i){
+      for (int i=0; i<staffs_.size(); ++i){
             delete staffs_[i];
             }
       staffs_.clear();
@@ -1722,10 +1722,10 @@ NoteContainer::NoteContainer() {
       }
 
 NoteContainer::~NoteContainer(){
-      for(int i=0; i<notes_.size(); ++i){
+      for (int i=0; i<notes_.size(); ++i){
             delete notes_[i];
             }
-      for(int i=0; i<articulations_.size(); ++i){
+      for (int i=0; i<articulations_.size(); ++i){
             delete articulations_[i];
             }
       notes_.clear();
@@ -1880,7 +1880,7 @@ int NoteContainer::getNoteShift() const {
       }
 
 int NoteContainer::getOffsetStaff() const {
-      if(getIsRest())
+      if (getIsRest())
             return 0;
 
       int staffMove = 0;
@@ -3255,7 +3255,7 @@ MeasureData::MeasureData() {
 
 MeasureData::~MeasureData(){
       int i;
-      for(i=0; i<musicDatas_.size(); ++i){
+      for (i=0; i<musicDatas_.size(); ++i){
             delete musicDatas_[i];
             }
       musicDatas_.clear();
@@ -3264,14 +3264,14 @@ MeasureData::~MeasureData(){
       noteContainers_.clear();
 
       // only delete at element start
-      for(i=0; i<crossMeasureElements_.size(); ++i){
-            if(crossMeasureElements_[i].second){
+      for (i=0; i<crossMeasureElements_.size(); ++i){
+            if (crossMeasureElements_[i].second){
                   delete crossMeasureElements_[i].first;
                   }
             }
       crossMeasureElements_.clear();
 
-      for(i=0; i<midiDatas_.size(); ++i){
+      for (i=0; i<midiDatas_.size(); ++i){
             delete midiDatas_[i];
             }
       midiDatas_.clear();
@@ -3396,7 +3396,7 @@ void Block::resize(unsigned int count) {
 
 void Block::doResize(unsigned int count) {
       data_.clear();
-      for(unsigned int i=0; i<count; ++i) {
+      for (unsigned int i=0; i<count; ++i) {
             data_.push_back('\0');
             }
       //data_.resize(count);
@@ -3549,7 +3549,7 @@ NameBlock::NameBlock() :
  {
  unsigned int i;
 
- for( i=0; i<size() && *(name+i)!='\0'; ++i )
+ for ( i=0; i<size() && *(name+i)!='\0'; ++i )
  {
  *(data()+i) = *(name+i);
  }
@@ -3581,7 +3581,7 @@ CountBlock::CountBlock() :
  unsigned int i;
  unsigned int SIZE = sizeof(unsigned short);
 
- for( i=0; i<SIZE; ++i )
+ for ( i=0; i<SIZE; ++i )
  {
  data()[SIZE-1-i] = count % 256;
  count /= 256;
@@ -3661,13 +3661,13 @@ unsigned int getLowNibble(unsigned int byte) {
 int oveKeyToKey(int oveKey) {
       int key = 0;
 
-      if( oveKey == 0 ) {
+      if ( oveKey == 0 ) {
             key = 0;
             }
-      else if( oveKey > 7 ) {
+      else if ( oveKey > 7 ) {
             key = oveKey - 7;
             }
-      else if( oveKey <= 7 ) {
+      else if ( oveKey <= 7 ) {
             key = oveKey * (-1);
             }
 
@@ -3760,13 +3760,13 @@ bool OvscParse::parse() {
       QString str = QString("This file is created by Overture ") + (version4 ? "4" : "3") + "\n";
       messageOut(str);
 
-      if( !jump(6) ) { return false; }
+      if ( !jump(6) ) { return false; }
 
       // show page margin
       if (!readBuffer(placeHolder, 1)) { return false; }
       ove_->setShowPageMargin(placeHolder.toBoolean());
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // transpose track
       if (!readBuffer(placeHolder, 1)) { return false; }
@@ -3779,10 +3779,10 @@ bool OvscParse::parse() {
       // play style
       if (!readBuffer(placeHolder, 1)) { return false; }
       OveSong::PlayStyle style = OveSong::PlayStyle::Record;
-      if(placeHolder.toUnsignedInt() == 1){
+      if (placeHolder.toUnsignedInt() == 1){
             style = OveSong::PlayStyle::Swing;
             }
-      else if(placeHolder.toUnsignedInt() == 2){
+      else if (placeHolder.toUnsignedInt() == 2){
             style = OveSong::PlayStyle::Notation;
             }
       ove_->setPlayStyle(style);
@@ -3826,148 +3826,148 @@ bool TrackParse::parse() {
       ove_->addTrack(oveTrack);
 
       // 2 32bytes long track name buffer
-      if( !readBuffer(placeHolder, 32) ) { return false; }
+      if ( !readBuffer(placeHolder, 32) ) { return false; }
       oveTrack->setName(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
 
-      if( !readBuffer(placeHolder, 32) ) { return false; }
+      if ( !readBuffer(placeHolder, 32) ) { return false; }
       oveTrack->setBriefName(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
 
-      if( !jump(8) ) { return false; } //0x fffa0012 fffa0012
-      if( !jump(1) ) { return false; }
+      if ( !jump(8) ) { return false; } //0x fffa0012 fffa0012
+      if ( !jump(1) ) { return false; }
 
       // patch
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       unsigned int thisByte = placeHolder.toInt();
       oveTrack->setPatch(thisByte&0x7f);
 
       // show name
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setShowName(placeHolder.toBoolean());
 
       // show brief name
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setShowBriefName(placeHolder.toBoolean());
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // show transpose
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setShowTranspose(placeHolder.toBoolean());
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // mute
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setMute(placeHolder.toBoolean());
 
       // solo
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setSolo(placeHolder.toBoolean());
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // show key each line
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setShowKeyEachLine(placeHolder.toBoolean());
 
       // voice count
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setVoiceCount(placeHolder.toUnsignedInt());
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // transpose value [-127, 127]
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setTranspose(placeHolder.toInt());
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // start clef
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setStartClef(placeHolder.toUnsignedInt());
 
       // transpose celf
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setTransposeClef(placeHolder.toUnsignedInt());
 
       // start key
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setStartKey(placeHolder.toUnsignedInt());
 
       // display percent
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setDisplayPercent(placeHolder.toUnsignedInt());
 
       // show leger line
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setShowLegerLine(placeHolder.toBoolean());
 
       // show clef
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setShowClef(placeHolder.toBoolean());
 
       // show time signature
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setShowTimeSignature(placeHolder.toBoolean());
 
       // show key signature
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setShowKeySignature(placeHolder.toBoolean());
 
       // show barline
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setShowBarline(placeHolder.toBoolean());
 
       // fill with rest
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setFillWithRest(placeHolder.toBoolean());
 
       // flat tail
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setFlatTail(placeHolder.toBoolean());
 
       // show clef each line
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       oveTrack->setShowClefEachLine(placeHolder.toBoolean());
 
-      if( !jump(12) ) { return false; }
+      if ( !jump(12) ) { return false; }
 
       // 8 voices
       int i;
       QList<Voice*> voices;
-      for( i=0; i<8; ++i ) {
+      for ( i=0; i<8; ++i ) {
             Voice* voicePtr = new Voice();
 
-            if( !jump(5) ) { return false; }
+            if ( !jump(5) ) { return false; }
 
             // channel
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             voicePtr->setChannel(placeHolder.toUnsignedInt());
 
             // volume
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             voicePtr->setVolume(placeHolder.toInt());
 
             // pitch shift
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             voicePtr->setPitchShift(placeHolder.toInt());
 
             // pan
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             voicePtr->setPan(placeHolder.toInt());
 
-            if( !jump(6) ) { return false; }
+            if ( !jump(6) ) { return false; }
 
             // patch
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             voicePtr->setPatch(placeHolder.toInt());
 
             voices.push_back(voicePtr);
             }
 
       // stem type
-      for( i=0; i<8; ++i ) {
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+      for ( i=0; i<8; ++i ) {
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             voices[i]->setStemType(placeHolder.toUnsignedInt());
 
             oveTrack->addVoice(voices[i]);
@@ -3975,42 +3975,42 @@ bool TrackParse::parse() {
 
       // percussion define
       QList<Track::DrumNode> nodes;
-      for(i=0; i<16; ++i) {
+      for (i=0; i<16; ++i) {
             nodes.push_back(Track::DrumNode());
             }
 
       // line
-      for( i=0; i<16; ++i ) {
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+      for ( i=0; i<16; ++i ) {
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             nodes[i].line_ = placeHolder.toInt();
             }
 
       // head type
-      for( i=0; i<16; ++i ) {
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+      for ( i=0; i<16; ++i ) {
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             nodes[i].headType_ = placeHolder.toUnsignedInt();
             }
 
       // pitch
-      for( i=0; i<16; ++i ) {
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+      for ( i=0; i<16; ++i ) {
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             nodes[i].pitch_ = placeHolder.toUnsignedInt();
             }
 
       // voice
-      for( i=0; i<16; ++i ) {
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+      for ( i=0; i<16; ++i ) {
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             nodes[i].voice_ = placeHolder.toUnsignedInt();
             }
 
-      for( i=0; i<nodes.size(); ++i ) {
+      for ( i=0; i<nodes.size(); ++i ) {
             oveTrack->addDrum(nodes[i]);
             }
 
-      /* if( !Jump(17) ) { return false; }
+      /* if ( !Jump(17) ) { return false; }
 
    // voice 0 channel
-   if( !ReadBuffer(placeHolder, 1) ) { return false; }
+   if ( !ReadBuffer(placeHolder, 1) ) { return false; }
    oveTrack->setChannel(placeHolder.toUnsignedInt());
 
    // to be continued. if anything important...*/
@@ -4049,16 +4049,16 @@ void PageGroupParse::addPage(SizeChunk* chunk) {
       }
 
 bool PageGroupParse::parse() {
-      if( pageChunks_.isEmpty() ) {
+      if ( pageChunks_.isEmpty() ) {
             return false;
             }
 
       int i;
-      for( i=0; i<pageChunks_.size(); ++i ) {
+      for ( i=0; i<pageChunks_.size(); ++i ) {
             Page* page = new Page();
             ove_->addPage(page);
 
-            if( !parsePage(pageChunks_[i], page) ) { return false; }
+            if ( !parsePage(pageChunks_[i], page) ) { return false; }
             }
 
       return true;
@@ -4071,57 +4071,57 @@ bool PageGroupParse::parsePage(SizeChunk* chunk, Page* page) {
       handle_ = &handle;
 
       // begin line
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       page->setBeginLine(placeHolder.toUnsignedInt());
 
       // line count
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       page->setLineCount(placeHolder.toUnsignedInt());
 
-      if( !jump(4) ) { return false; }
+      if ( !jump(4) ) { return false; }
 
       // staff interval
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       page->setStaffInterval(placeHolder.toUnsignedInt());
 
       // line interval
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       page->setLineInterval(placeHolder.toUnsignedInt());
 
       // staff inline interval
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       page->setStaffInlineInterval(placeHolder.toUnsignedInt());
 
       // line bar count
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       page->setLineBarCount(placeHolder.toUnsignedInt());
 
       // page line count
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       page->setPageLineCount(placeHolder.toUnsignedInt());
 
       // left margin
-      if( !readBuffer(placeHolder, 4) ) { return false; }
+      if ( !readBuffer(placeHolder, 4) ) { return false; }
       page->setLeftMargin(placeHolder.toUnsignedInt());
 
       // top margin
-      if( !readBuffer(placeHolder, 4) ) { return false; }
+      if ( !readBuffer(placeHolder, 4) ) { return false; }
       page->setTopMargin(placeHolder.toUnsignedInt());
 
       // right margin
-      if( !readBuffer(placeHolder, 4) ) { return false; }
+      if ( !readBuffer(placeHolder, 4) ) { return false; }
       page->setRightMargin(placeHolder.toUnsignedInt());
 
       // bottom margin
-      if( !readBuffer(placeHolder, 4) ) { return false; }
+      if ( !readBuffer(placeHolder, 4) ) { return false; }
       page->setBottomMargin(placeHolder.toUnsignedInt());
 
       // page width
-      if( !readBuffer(placeHolder, 4) ) { return false; }
+      if ( !readBuffer(placeHolder, 4) ) { return false; }
       page->setPageWidth(placeHolder.toUnsignedInt());
 
       // page height
-      if( !readBuffer(placeHolder, 4) ) { return false; }
+      if ( !readBuffer(placeHolder, 4) ) { return false; }
       page->setPageHeight(placeHolder.toUnsignedInt());
 
       handle_ = NULL;
@@ -4140,10 +4140,10 @@ unsigned int StaffCountGetter::getStaffCount(SizeChunk* chunk) {
 
       handle_ = &handle;
 
-      if( !jump(6) ) { return false; }
+      if ( !jump(6) ) { return false; }
 
       // staff count
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       return placeHolder.toUnsignedInt();
       }
 
@@ -4171,25 +4171,25 @@ void LineGroupParse::addStaff(SizeChunk* chunk) {
       }
 
 bool LineGroupParse::parse() {
-      if( lineChunks_.isEmpty() || staffChunks_.size() % lineChunks_.size() != 0 ) { return false; }
+      if ( lineChunks_.isEmpty() || staffChunks_.size() % lineChunks_.size() != 0 ) { return false; }
 
       int i;
       unsigned int j;
       unsigned int lineStaffCount = staffChunks_.size() / lineChunks_.size();
 
-      for( i=0; i<lineChunks_.size(); ++i ) {
+      for ( i=0; i<lineChunks_.size(); ++i ) {
             Line* linePtr = new Line();
 
             ove_->addLine(linePtr);
 
-            if( !parseLine(lineChunks_[i], linePtr) ) { return false; }
+            if ( !parseLine(lineChunks_[i], linePtr) ) { return false; }
 
-            for( j=lineStaffCount*i; j<lineStaffCount*(i+1); ++j ) {
+            for ( j=lineStaffCount*i; j<lineStaffCount*(i+1); ++j ) {
                   Staff* staffPtr = new Staff();
 
                   linePtr->addStaff(staffPtr);
 
-                  if( !parseStaff(staffChunks_[j], staffPtr) ) { return false; }
+                  if ( !parseStaff(staffChunks_[j], staffPtr) ) { return false; }
                   }
             }
 
@@ -4203,31 +4203,31 @@ bool LineGroupParse::parseLine(SizeChunk* chunk, Line* line) {
 
       handle_ = &handle;
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // begin bar
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       line->setBeginBar(placeHolder.toUnsignedInt());
 
       // bar count
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       line->setBarCount(placeHolder.toUnsignedInt());
 
-      if( !jump(6) ) { return false; }
+      if ( !jump(6) ) { return false; }
 
       // y offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       line->setYOffset(placeHolder.toInt());
 
       // left x offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       line->setLeftXOffset(placeHolder.toInt());
 
       // right x offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       line->setRightXOffset(placeHolder.toInt());
 
-      if( !jump(4) ) { return false; }
+      if ( !jump(4) ) { return false; }
 
       handle_ = NULL;
 
@@ -4241,43 +4241,43 @@ bool LineGroupParse::parseStaff(SizeChunk* chunk, Staff* staff) {
 
       handle_ = &handle;
 
-      if( !jump(7) ) { return false; }
+      if ( !jump(7) ) { return false; }
 
       // clef
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       staff->setClefType(placeHolder.toUnsignedInt());
 
       // key
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       staff->setKeyType(oveKeyToKey(placeHolder.toUnsignedInt()));
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // visible
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       staff->setVisible(placeHolder.toBoolean());
 
-      if( !jump(12) ) { return false; }
+      if ( !jump(12) ) { return false; }
 
       // y offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       staff->setYOffset(placeHolder.toInt());
 
       int jumpAmount = ove_->getIsVersion4() ? 26 : 18;
-      if( !jump(jumpAmount) ) { return false; }
+      if ( !jump(jumpAmount) ) { return false; }
 
       // group type
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       GroupType groupType = GroupType::None;
-      if(placeHolder.toUnsignedInt() == 1) {
+      if (placeHolder.toUnsignedInt() == 1) {
             groupType = GroupType::Brace;
-            } else if(placeHolder.toUnsignedInt() == 2) {
+            } else if (placeHolder.toUnsignedInt() == 2) {
             groupType = GroupType::Bracket;
             }
       staff->setGroupType(groupType);
 
       // group staff count
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       staff->setGroupStaffCount(placeHolder.toUnsignedInt());
 
       handle_ = NULL;
@@ -4316,7 +4316,7 @@ bool BarsParse::parse() {
       QList<Measure*> measures;
       QList<MeasureData*> measureDatas;
 
-      if( measureChunks_.isEmpty() ||
+      if ( measureChunks_.isEmpty() ||
           measureChunks_.size() != conductChunks_.size() ||
           (int)bdatChunks_.size() != measureDataCount ) {
             return false;
@@ -4337,11 +4337,11 @@ bool BarsParse::parse() {
             ove_->addMeasureData(oveMeasureData);
             }
 
-      for( i=0; i<(int)measureChunks_.size(); ++i ) {
+      for ( i=0; i<(int)measureChunks_.size(); ++i ) {
             Measure* measure = measures[i];
 
             // MEAS
-            if( !parseMeas(measure, measureChunks_[i]) ) {
+            if ( !parseMeas(measure, measureChunks_[i]) ) {
                   QString ss = QString("failed in parse MEAS %1\n").arg(i);
                   messageOut(ss);
 
@@ -4349,9 +4349,9 @@ bool BarsParse::parse() {
                   }
             }
 
-      for( i=0; i<(int)conductChunks_.size(); ++i ) {
+      for ( i=0; i<(int)conductChunks_.size(); ++i ) {
             // COND
-            if( !parseCond(measures[i], measureDatas[i], conductChunks_[i]) ) {
+            if ( !parseCond(measures[i], measureDatas[i], conductChunks_[i]) ) {
                   QString ss = QString("failed in parse COND %1\n").arg(i);
                   messageOut(ss);
 
@@ -4359,18 +4359,18 @@ bool BarsParse::parse() {
                   }
             }
 
-      for( i=0; i<(int)bdatChunks_.size(); ++i ) {
+      for ( i=0; i<(int)bdatChunks_.size(); ++i ) {
             int measId = i % trackMeasureCount;
 
             // BDAT
-            if( !parseBdat(measures[measId], measureDatas[i], bdatChunks_[i]) ) {
+            if ( !parseBdat(measures[measId], measureDatas[i], bdatChunks_[i]) ) {
                   QString ss = QString("failed in parse BDAT %1\n").arg(i);
                   messageOut(ss);
 
                   return false;
                   }
 
-            if( notify_ != NULL ) {
+            if ( notify_ != NULL ) {
                   int measureID = i % trackMeasureCount;
                   int trackID = i / trackMeasureCount;
 
@@ -4392,47 +4392,47 @@ bool BarsParse::parseMeas(Measure* measure, SizeChunk* chunk) {
 
       handle_ = &measureHandle;
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // multi-measure rest
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       measure->setIsMultiMeasureRest(placeHolder.toBoolean());
 
       // pickup
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       measure->setIsPickup(placeHolder.toBoolean());
 
-      if( !jump(4) ) { return false; }
+      if ( !jump(4) ) { return false; }
 
       // left barline
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       measure->setLeftBarline(placeHolder.toUnsignedInt());
 
       // right barline
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       measure->setRightBarline(placeHolder.toUnsignedInt());
 
       // tempo
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       double tempo = ((double)placeHolder.toUnsignedInt());
-      if( ove_->getIsVersion4() ) {
+      if ( ove_->getIsVersion4() ) {
             tempo /= 100.0;
             }
       measure->setTypeTempo(tempo);
 
       // bar length(tick)
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       measure->setLength(placeHolder.toUnsignedInt());
 
-      if( !jump(6) ) { return false; }
+      if ( !jump(6) ) { return false; }
 
       // bar number offset
-      if( !parseOffsetElement(measure->getBarNumber()) ) { return false; }
+      if ( !parseOffsetElement(measure->getBarNumber()) ) { return false; }
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // multi-measure rest count
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       measure->setMultiMeasureRestCount(placeHolder.toUnsignedInt());
 
       handle_ = NULL;
@@ -4448,23 +4448,23 @@ bool BarsParse::parseCond(Measure* measure, MeasureData* measureData, SizeChunk*
       handle_ = &handle;
 
       // item count
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       unsigned int cnt = placeHolder.toUnsignedInt();
 
-      if( !parseTimeSignature(measure, 36) ) { return false; }
+      if ( !parseTimeSignature(measure, 36) ) { return false; }
 
-      for( unsigned int i=0; i<cnt; ++i ) {
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+      for ( unsigned int i=0; i<cnt; ++i ) {
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             unsigned int twoByte = placeHolder.toUnsignedInt();
             unsigned int oldBlockSize = twoByte - 11;
             unsigned int newBlockSize = twoByte - 7;
 
             // type id
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             unsigned int thisByte = placeHolder.toUnsignedInt();
             CondType type;
 
-            if( !getCondElementType(thisByte, type) ) { return false; }
+            if ( !getCondElementType(thisByte, type) ) { return false; }
 
             switch (type) {
                   case CondType::Bar_Number: {
@@ -4541,81 +4541,81 @@ bool BarsParse::parseTimeSignature(Measure* measure, int /*length*/) {
       TimeSignature* timeSignature = measure->getTime();
 
       // numerator
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setNumerator(placeHolder.toUnsignedInt());
 
       // denominator
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setDenominator(placeHolder.toUnsignedInt());
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // beat length
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       timeSignature->setBeatLength(placeHolder.toUnsignedInt());
 
       // bar length
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       timeSignature->setBarLength(placeHolder.toUnsignedInt());
 
-      if( !jump(4) ) { return false; }
+      if ( !jump(4) ) { return false; }
 
       // is symbol
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setIsSymbol(placeHolder.toBoolean());
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // replace font
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setReplaceFont(placeHolder.toBoolean());
 
       // color
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setColor(placeHolder.toUnsignedInt());
 
       // show
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setShow(placeHolder.toBoolean());
 
       // show beat group
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setShowBeatGroup(placeHolder.toBoolean());
 
-      if( !jump(6) ) { return false; }
+      if ( !jump(6) ) { return false; }
 
       // numerator 1, 2, 3
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setGroupNumerator1(placeHolder.toUnsignedInt());
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setGroupNumerator2(placeHolder.toUnsignedInt());
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setGroupNumerator3(placeHolder.toUnsignedInt());
 
       // denominator
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setGroupDenominator1(placeHolder.toUnsignedInt());
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setGroupDenominator2(placeHolder.toUnsignedInt());
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setGroupDenominator3(placeHolder.toUnsignedInt());
 
       // beam group 1~4
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setBeamGroup1(placeHolder.toUnsignedInt());
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setBeamGroup2(placeHolder.toUnsignedInt());
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setBeamGroup3(placeHolder.toUnsignedInt());
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->setBeamGroup4(placeHolder.toUnsignedInt());
 
       // beam 16th
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->set16thBeamCount(placeHolder.toUnsignedInt());
 
       // beam 32th
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       timeSignature->set32thBeamCount(placeHolder.toUnsignedInt());
 
       return true;
@@ -4626,30 +4626,30 @@ bool BarsParse::parseTimeSignatureParameters(Measure* measure, int length) {
       TimeSignature* ts = measure->getTime();
 
       int cursor = ove_->getIsVersion4() ? 10 : 8;
-      if( !jump(cursor) ) { return false; }
+      if ( !jump(cursor) ) { return false; }
 
       // numerator
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       unsigned int numerator = placeHolder.toUnsignedInt();
 
       cursor = ove_->getIsVersion4() ? 11 : 9;
-      if( ( length - cursor ) % 8 != 0 || (length - cursor) / 8 != (int)numerator ) {
+      if ( ( length - cursor ) % 8 != 0 || (length - cursor) / 8 != (int)numerator ) {
             return false;
             }
 
-      for( unsigned int i =0; i<numerator; ++i ) {
+      for ( unsigned int i =0; i<numerator; ++i ) {
             // beat start unit
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             int beatStart = placeHolder.toUnsignedInt();
 
             // beat length unit
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             int beatLength = placeHolder.toUnsignedInt();
 
-            if( !jump(2) ) { return false; }
+            if ( !jump(2) ) { return false; }
 
             // beat start tick
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             int beatStartTick = placeHolder.toUnsignedInt();
 
             ts->addBeat(beatStart, beatLength, beatStartTick);
@@ -4664,15 +4664,15 @@ bool BarsParse::parseBarlineParameters(Measure* measure, int /*length*/) {
       Block placeHolder;
 
       int cursor = ove_->getIsVersion4() ? 12 : 10;
-      if( !jump(cursor) ) { return false; }
+      if ( !jump(cursor) ) { return false; }
 
       // repeat count
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       int repeatCount = placeHolder.toUnsignedInt();
 
       measure->setBackwardRepeatCount(repeatCount);
 
-      if( !jump(6) ) { return false; }
+      if ( !jump(6) ) { return false; }
 
       return true;
       }
@@ -4683,59 +4683,59 @@ bool BarsParse::parseNumericEndings(MeasureData* measureData, int /*length*/) {
       NumericEnding* numeric = new NumericEnding();
       measureData->addCrossMeasureElement(numeric, true);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(numeric) ) { return false; }
+      if ( !parseCommonBlock(numeric) ) { return false; }
 
-      if( !jump(6) ) { return false; }
+      if ( !jump(6) ) { return false; }
 
       // measure count
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       //int offsetMeasure = placeHolder.toUnsignedInt() - 1;
       int offsetMeasure = placeHolder.toUnsignedInt();
       numeric->stop()->setMeasure(offsetMeasure);
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // left x offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       numeric->getLeftShoulder()->setXOffset(placeHolder.toInt());
 
       // height
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       numeric->setHeight(placeHolder.toUnsignedInt());
 
       // left x offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       numeric->getRightShoulder()->setXOffset(placeHolder.toInt());
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // y offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       numeric->getLeftShoulder()->setYOffset(placeHolder.toInt());
       numeric->getRightShoulder()->setYOffset(placeHolder.toInt());
 
       // number offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       numeric->getNumericHandle()->setXOffset(placeHolder.toInt());
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       numeric->getNumericHandle()->setYOffset(placeHolder.toInt());
 
-      if( !jump(6) ) { return false; }
+      if ( !jump(6) ) { return false; }
 
       // text size
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       unsigned int size = placeHolder.toUnsignedInt();
 
       // text : size maybe a huge value
-      if( !readBuffer(placeHolder, size) ) { return false; }
+      if ( !readBuffer(placeHolder, size) ) { return false; }
       numeric->setText(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
 
       // fix for wedding march.ove
-      if( size % 2 == 0 ) {
-            if( !jump(1) ) { return false; }
+      if ( size % 2 == 0 ) {
+            if ( !jump(1) ) { return false; }
             }
 
       return true;
@@ -4747,12 +4747,12 @@ bool BarsParse::parseTempo(MeasureData* measureData, int /*length*/) {
 
       Tempo* tempo = new Tempo();
       measureData->addMusicData(tempo);
-      if( !jump(3) )
+      if ( !jump(3) )
             return false;
       // common
-      if( !parseCommonBlock(tempo) )
+      if ( !parseCommonBlock(tempo) )
             return false;
-      if( !readBuffer(placeHolder, 1) )
+      if ( !readBuffer(placeHolder, 1) )
             return false;
       thisByte = placeHolder.toUnsignedInt();
       // show tempo
@@ -4765,35 +4765,35 @@ bool BarsParse::parseTempo(MeasureData* measureData, int /*length*/) {
       tempo->setLeftNoteType( getLowNibble(thisByte) );
       // left note dot
       tempo->setLeftNoteDot((getHighNibble(thisByte) & 0x2 ) == 0x2 );
-      if( !jump(1) )  // dimension of the note symbol
+      if ( !jump(1) )  // dimension of the note symbol
             return false;
-      if( ove_->getIsVersion4() ) {
-            if( !jump(2) )
+      if ( ove_->getIsVersion4() ) {
+            if ( !jump(2) )
                   return false;
             // tempo
-            if( !readBuffer(placeHolder, 2) )
+            if ( !readBuffer(placeHolder, 2) )
                   return false;
             tempo->setTypeTempo(((double)placeHolder.toUnsignedInt())/100.0);
             }
       else {
             // tempo
-            if( !readBuffer(placeHolder, 2) )
+            if ( !readBuffer(placeHolder, 2) )
                   return false;
             tempo->setTypeTempo((double)placeHolder.toUnsignedInt());
-            if( !jump(2) )
+            if ( !jump(2) )
                   return false;
             }
       // offset
-      if( !parseOffsetElement(tempo) )
+      if ( !parseOffsetElement(tempo) )
             return false;
-      if( !jump(16) )
+      if ( !jump(16) )
             return false;
       // 31 bytes left text
-      if( !readBuffer(placeHolder, 31) )
+      if ( !readBuffer(placeHolder, 31) )
             return false;
       tempo->setLeftText(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
 
-      if( !readBuffer(placeHolder, 1) )
+      if ( !readBuffer(placeHolder, 1) )
             return false;
       thisByte = placeHolder.toUnsignedInt();
       // swing eighth
@@ -4805,11 +4805,11 @@ bool BarsParse::parseTempo(MeasureData* measureData, int /*length*/) {
       // right note type
       tempo->setRightNoteType(getLowNibble(thisByte));
       // right text
-      if( ove_->getIsVersion4() ) {
-            if( !readBuffer(placeHolder, 31) )
+      if ( ove_->getIsVersion4() ) {
+            if ( !readBuffer(placeHolder, 31) )
                   return false;
             tempo->setRightText(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
-            if( !readBuffer(placeHolder, 1) )
+            if ( !readBuffer(placeHolder, 1) )
                   return false;
             // 00 -> float      03 -> integer(floor)     01 -> notetype    02 -> text
             tempo->setRightSideType(placeHolder.toInt());
@@ -4823,36 +4823,36 @@ bool BarsParse::parseBarNumber(Measure* measure, int /*length*/) {
 
       BarNumber* barNumber = measure->getBarNumber();
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // show on paragraph start
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       barNumber->setShowOnParagraphStart(getLowNibble(placeHolder.toUnsignedInt())==8);
 
       unsigned int blankSize = ove_->getIsVersion4() ? 9 : 7;
-      if( !jump(blankSize) ) { return false; }
+      if ( !jump(blankSize) ) { return false; }
 
       // text align
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       barNumber->setAlign(placeHolder.toUnsignedInt());
 
-      if( !jump(4) ) { return false; }
+      if ( !jump(4) ) { return false; }
 
       // show flag
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       barNumber->setShowFlag(placeHolder.toUnsignedInt());
 
-      if( !jump(10) ) { return false; }
+      if ( !jump(10) ) { return false; }
 
       // bar range
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       barNumber->setShowEveryBarCount(placeHolder.toUnsignedInt());
 
       // prefix
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       barNumber->setPrefix(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
 
-      if( !jump(18) ) { return false; }
+      if ( !jump(18) ) { return false; }
 
       return true;
       }
@@ -4863,13 +4863,13 @@ bool BarsParse::parseText(MeasureData* measureData, int length) {
       Text* text = new Text();
       measureData->addMusicData(text);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(text) ) { return false; }
+      if ( !parseCommonBlock(text) ) { return false; }
 
       // type
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       unsigned int thisByte = placeHolder.toUnsignedInt();
       bool includeLineBreak = ( (getHighNibble(thisByte)&0x2) != 0x2 );
       unsigned int id = getLowNibble(thisByte);
@@ -4886,74 +4886,74 @@ bool BarsParse::parseText(MeasureData* measureData, int length) {
 
       text->setTextType(textType);
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // x offset
-      if( !readBuffer(placeHolder, 4) ) { return false; }
+      if ( !readBuffer(placeHolder, 4) ) { return false; }
       text->setXOffset(placeHolder.toInt());
 
       // y offset
-      if( !readBuffer(placeHolder, 4) ) { return false; }
+      if ( !readBuffer(placeHolder, 4) ) { return false; }
       text->setYOffset(placeHolder.toInt());
 
       // width
-      if( !readBuffer(placeHolder, 4) ) { return false; }
+      if ( !readBuffer(placeHolder, 4) ) { return false; }
       text->setWidth(placeHolder.toUnsignedInt());
 
       // height
-      if( !readBuffer(placeHolder, 4) ) { return false; }
+      if ( !readBuffer(placeHolder, 4) ) { return false; }
       text->setHeight(placeHolder.toUnsignedInt());
 
-      if( !jump(7) ) { return false; }
+      if ( !jump(7) ) { return false; }
 
       // horizontal margin
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       text->setHorizontalMargin(placeHolder.toUnsignedInt());
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // vertical margin
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       text->setVerticalMargin(placeHolder.toUnsignedInt());
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // line thick
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       text->setLineThick(placeHolder.toUnsignedInt());
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // text size
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       unsigned int size = placeHolder.toUnsignedInt();
 
       // text string, maybe huge
-      if( !readBuffer(placeHolder, size) ) { return false; }
+      if ( !readBuffer(placeHolder, size) ) { return false; }
       text->setText(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
 
-      if( !includeLineBreak ) {
-            if( !jump(6) ) { return false; }
+      if ( !includeLineBreak ) {
+            if ( !jump(6) ) { return false; }
             } else {
             unsigned int cursor = ove_->getIsVersion4() ? 43 : 41;
             cursor += size;
 
             // multi lines of text
-            for( unsigned int i=0; i<2; ++i ) {
-                  if( (int)cursor < length ) {
+            for ( unsigned int i=0; i<2; ++i ) {
+                  if ( (int)cursor < length ) {
                         // line parameters count
-                        if( !readBuffer(placeHolder, 2) ) { return false; }
+                        if ( !readBuffer(placeHolder, 2) ) { return false; }
                         unsigned int lineCount = placeHolder.toUnsignedInt();
 
-                        if( i==0 && int(cursor + 2 + 8*lineCount) > length ) {
+                        if ( i==0 && int(cursor + 2 + 8*lineCount) > length ) {
                               return false;
                               }
 
-                        if( i==1 && int(cursor + 2 + 8*lineCount) != length ) {
+                        if ( i==1 && int(cursor + 2 + 8*lineCount) != length ) {
                               return false;
                               }
 
-                        if( !jump(8*lineCount) ) { return false; }
+                        if ( !jump(8*lineCount) ) { return false; }
 
                         cursor += 2 + 8*lineCount;
                         }
@@ -4969,33 +4969,33 @@ bool BarsParse::parseRepeatSymbol(MeasureData* measureData, int /*length*/) {
       RepeatSymbol* repeat = new RepeatSymbol();
       measureData->addMusicData(repeat);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(repeat) ) { return false; }
+      if ( !parseCommonBlock(repeat) ) { return false; }
 
       // RepeatType
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       repeat->setRepeatType(placeHolder.toUnsignedInt());
 
-      if( !jump(13) ) { return false; }
+      if ( !jump(13) ) { return false; }
 
       // offset
-      if( !parseOffsetElement(repeat) ) { return false; }
+      if ( !parseOffsetElement(repeat) ) { return false; }
 
-      if( !jump(15) ) { return false; }
+      if ( !jump(15) ) { return false; }
 
       // size
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       unsigned int size = placeHolder.toUnsignedInt();
 
       // text, maybe huge
-      if( !readBuffer(placeHolder, size) ) { return false; }
+      if ( !readBuffer(placeHolder, size) ) { return false; }
       repeat->setText(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
 
       // last 0
-      if( size % 2 == 0 ) {
-            if( !jump(1) ) { return false; }
+      if ( size % 2 == 0 ) {
+            if ( !jump(1) ) { return false; }
             }
 
       return true;
@@ -5008,111 +5008,111 @@ bool BarsParse::parseBdat(Measure* /*measure*/, MeasureData* measureData, SizeCh
       handle_ = &handle;
 
       // parse here
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       unsigned int cnt = placeHolder.toUnsignedInt();
 
-      for( unsigned int i=0; i<cnt; ++i ) {
+      for ( unsigned int i=0; i<cnt; ++i ) {
             // 0x0028 or 0x0016 or 0x002C
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             unsigned int count = placeHolder.toUnsignedInt() - 7;
 
             // type id
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             unsigned int thisByte = placeHolder.toUnsignedInt();
             BdatType type;
 
-            if( !getBdatElementType(thisByte, type) ) { return false; }
+            if ( !getBdatElementType(thisByte, type) ) { return false; }
 
-            switch( type ) {
+            switch ( type ) {
                   case BdatType::Raw_Note :
                   case BdatType::Rest :
                   case BdatType::Note : {
-                        if( !parseNoteRest(measureData, count, type) ) { return false; }
+                        if ( !parseNoteRest(measureData, count, type) ) { return false; }
                         break;
                         }
                   case BdatType::Beam : {
-                        if( !parseBeam(measureData, count) ) { return false; }
+                        if ( !parseBeam(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Harmony : {
-                        if( !parseHarmony(measureData, count) ) { return false; }
+                        if ( !parseHarmony(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Clef : {
-                        if( !parseClef(measureData, count) ) { return false; }
+                        if ( !parseClef(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Dynamics : {
-                        if( !parseDynamics(measureData, count) ) { return false; }
+                        if ( !parseDynamics(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Wedge : {
-                        if( !parseWedge(measureData, count) ) { return false; }
+                        if ( !parseWedge(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Glissando : {
-                        if( !parseGlissando(measureData, count) ) { return false; }
+                        if ( !parseGlissando(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Decorator : {
-                        if( !parseDecorators(measureData, count) ) { return false; }
+                        if ( !parseDecorators(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Key : {
-                        if( !parseKey(measureData, count) ) { return false; }
+                        if ( !parseKey(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Lyric : {
-                        if( !parseLyric(measureData, count) ) { return false; }
+                        if ( !parseLyric(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Octave_Shift: {
-                        if( !parseOctaveShift(measureData, count) ) { return false; }
+                        if ( !parseOctaveShift(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Slur : {
-                        if( !parseSlur(measureData, count) ) { return false; }
+                        if ( !parseSlur(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Text : {
-                        if( !parseText(measureData, count) ) { return false; }
+                        if ( !parseText(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Tie : {
-                        if( !parseTie(measureData, count) ) { return false; }
+                        if ( !parseTie(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Tuplet : {
-                        if( !parseTuplet(measureData, count) ) { return false; }
+                        if ( !parseTuplet(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Guitar_Bend :
                   case BdatType::Guitar_Barre : {
-                        if( !parseSizeBlock(count) ) { return false; }
+                        if ( !parseSizeBlock(count) ) { return false; }
                         break;
                         }
                   case BdatType::Pedal: {
-                        if( !parsePedal(measureData, count) ) { return false; }
+                        if ( !parsePedal(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::KuoHao: {
-                        if( !parseKuohao(measureData, count) ) { return false; }
+                        if ( !parseKuohao(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Expressions: {
-                        if( !parseExpressions(measureData, count) ) { return false; }
+                        if ( !parseExpressions(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Harp_Pedal: {
-                        if( !parseHarpPedal(measureData, count) ) { return false; }
+                        if ( !parseHarpPedal(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Multi_Measure_Rest: {
-                        if( !parseMultiMeasureRest(measureData, count) ) { return false; }
+                        if ( !parseMultiMeasureRest(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Harmony_GuitarFrame: {
-                        if( !parseHarmonyGuitarFrame(measureData, count) ) { return false; }
+                        if ( !parseHarmonyGuitarFrame(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Graphics_40:
@@ -5122,27 +5122,27 @@ bool BarsParse::parseBdat(Measure* /*measure*/, MeasureData* measureData, SizeCh
                   case BdatType::Graphics_Line:
                   case BdatType::Graphics_Curve:
                   case BdatType::Graphics_WedgeSymbol: {
-                        if( !parseSizeBlock(count) ) { return false; }
+                        if ( !parseSizeBlock(count) ) { return false; }
                         break;
                         }
                   case BdatType::Midi_Controller : {
-                        if( !parseMidiController(measureData, count) ) { return false; }
+                        if ( !parseMidiController(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Midi_Program_Change : {
-                        if( !parseMidiProgramChange(measureData, count) ) { return false; }
+                        if ( !parseMidiProgramChange(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Midi_Channel_Pressure : {
-                        if( !parseMidiChannelPressure(measureData, count) ) { return false; }
+                        if ( !parseMidiChannelPressure(measureData, count) ) { return false; }
                         break;
                         }
                   case BdatType::Midi_Pitch_Wheel : {
-                        if( !parseMidiPitchWheel(measureData, count) ) { return false; }
+                        if ( !parseMidiPitchWheel(measureData, count) ) { return false; }
                         break;
                         }
                   default: {
-                        if( !jump(count) ) { return false; }
+                        if ( !jump(count) ) { return false; }
                         break;
                         }
                   }
@@ -5158,7 +5158,7 @@ bool BarsParse::parseBdat(Measure* /*measure*/, MeasureData* measureData, SizeCh
 int getInt(int byte, int bits) {
       int num = 0;
 
-      if( bits > 0 ) {
+      if ( bits > 0 ) {
             int factor = int(pow(2.0, bits-1));
             num = (byte % (factor*2));
 
@@ -5182,13 +5182,13 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
       container->setIsRest(type==BdatType::Rest);
       container->setIsRaw(type==BdatType::Raw_Note);
 
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       thisByte = placeHolder.toUnsignedInt();
       container->setIsGrace( thisByte == 0x3C00 );
       container->setIsCue( thisByte == 0x4B40 || thisByte == 0x3240 );
 
       // show / hide
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       thisByte = placeHolder.toUnsignedInt();
       container->setShow(getLowNibble(thisByte)!=0x8);
 
@@ -5196,18 +5196,18 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
       container->setVoice(getLowNibble(thisByte)&0x7);
 
       // common
-      if( !parseCommonBlock(container) ) { return false; }
+      if ( !parseCommonBlock(container) ) { return false; }
 
       // tuplet
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       container->setTuplet(placeHolder.toUnsignedInt());
 
       // space
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       container->setSpace(placeHolder.toUnsignedInt());
 
       // in beam
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       thisByte = placeHolder.toUnsignedInt();
       bool inBeam = ( getHighNibble(thisByte) & 0x1 ) == 0x1;
       container->setInBeam(inBeam);
@@ -5219,28 +5219,28 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
       container->setDot(getLowNibble(thisByte)&0x03);
 
       // NoteType
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       thisByte = placeHolder.toUnsignedInt();
       container->setNoteType((NoteType)getLowNibble(thisByte));
 
       int cursor = 0;
 
-      if( type == BdatType::Rest ) {
+      if ( type == BdatType::Rest ) {
             Note* restPtr = new Note();
             container->addNoteRest(restPtr);
             restPtr->setIsRest(true);
 
             // line
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             restPtr->setLine(placeHolder.toInt());
 
-            if( !jump(1) ) { return false; }
+            if ( !jump(1) ) { return false; }
 
             cursor = ove_->getIsVersion4() ? 16 : 14;
             } else // type == Bdat_Note || type == Bdat_Raw_Note
             {
             // stem up 0x80, stem down 0x00
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             thisByte = placeHolder.toUnsignedInt();
             container->setStemUp((getHighNibble(thisByte)&0x8)==0x8);
 
@@ -5249,26 +5249,26 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
             container->setStemLength(getInt(stemOffset, 7)+7/*3.5 line span*/);
 
             // show stem 0x00, hide stem 0x40
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             bool hideStem = getHighNibble(thisByte)==0x4;
             container->setShowStem(!hideStem);
 
-            if( !jump(1) ) { return false; }
+            if ( !jump(1) ) { return false; }
 
             // note count
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             unsigned int noteCount = placeHolder.toUnsignedInt();
             unsigned int i;
 
             // each note 16 bytes
-            for( i=0; i<noteCount; ++i ) {
+            for ( i=0; i<noteCount; ++i ) {
                   Note* notePtr = new Note();
                   notePtr->setIsRest(false);
 
                   container->addNoteRest(notePtr);
 
                   // note show / hide
-                  if( !readBuffer(placeHolder, 1) ) { return false; }
+                  if ( !readBuffer(placeHolder, 1) ) { return false; }
                   thisByte = placeHolder.toUnsignedInt();
                   notePtr->setShow((thisByte&0x80) != 0x80);
 
@@ -5276,57 +5276,57 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
                   notePtr->setHeadType(thisByte&0x7f);
 
                   // tie pos
-                  if( !readBuffer(placeHolder, 1) ) { return false; }
+                  if ( !readBuffer(placeHolder, 1) ) { return false; }
                   thisByte = placeHolder.toUnsignedInt();
                   notePtr->setTiePos(getHighNibble(thisByte));
 
                   // offset staff, in {-1, 0, 1}
-                  if( !readBuffer(placeHolder, 1) ) { return false; }
+                  if ( !readBuffer(placeHolder, 1) ) { return false; }
                   thisByte = getLowNibble(placeHolder.toUnsignedInt());
                   int offsetStaff = 0;
-                  if( thisByte == 1 ) { offsetStaff = 1; }
-                  if( thisByte == 7 ) { offsetStaff = -1; }
+                  if ( thisByte == 1 ) { offsetStaff = 1; }
+                  if ( thisByte == 7 ) { offsetStaff = -1; }
                   notePtr->setOffsetStaff(offsetStaff);
 
                   // accidental
-                  if( !readBuffer(placeHolder, 1) ) { return false; }
+                  if ( !readBuffer(placeHolder, 1) ) { return false; }
                   thisByte = placeHolder.toUnsignedInt();
                   notePtr->setAccidental(getLowNibble(thisByte));
                   // accidental 0: influenced by key, 4: influenced by previous accidental in measure
                   bool notShow = ( getHighNibble(thisByte) == 0 ) || ( getHighNibble(thisByte) == 4 );
                   notePtr->setShowAccidental(!notShow);
 
-                  if( !jump(1) ) { return false; }
+                  if ( !jump(1) ) { return false; }
 
                   // line
-                  if( !readBuffer(placeHolder, 1) ) { return false; }
+                  if ( !readBuffer(placeHolder, 1) ) { return false; }
                   notePtr->setLine(placeHolder.toInt());
 
-                  if( !jump(1) ) { return false; }
+                  if ( !jump(1) ) { return false; }
 
                   // note
-                  if( !readBuffer(placeHolder, 1) ) { return false; }
+                  if ( !readBuffer(placeHolder, 1) ) { return false; }
                   unsigned int note = placeHolder.toUnsignedInt();
                   notePtr->setNote(note);
 
                   // note on velocity
-                  if( !readBuffer(placeHolder, 1) ) { return false; }
+                  if ( !readBuffer(placeHolder, 1) ) { return false; }
                   unsigned int onVelocity = placeHolder.toUnsignedInt();
                   notePtr->setOnVelocity(onVelocity);
 
                   // note off velocity
-                  if( !readBuffer(placeHolder, 1) ) { return false; }
+                  if ( !readBuffer(placeHolder, 1) ) { return false; }
                   unsigned int offVelocity = placeHolder.toUnsignedInt();
                   notePtr->setOffVelocity(offVelocity);
 
-                  if( !jump(2) ) { return false; }
+                  if ( !jump(2) ) { return false; }
 
                   // length (tick)
-                  if( !readBuffer(placeHolder, 2) ) { return false; }
+                  if ( !readBuffer(placeHolder, 2) ) { return false; }
                   container->setLength(placeHolder.toUnsignedInt());
 
                   // offset tick
-                  if( !readBuffer(placeHolder, 2) ) { return false; }
+                  if ( !readBuffer(placeHolder, 2) ) { return false; }
                   notePtr->setOffsetTick(placeHolder.toInt());
                   }
 
@@ -5340,76 +5340,76 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
             container->addArticulation(art);
 
             // block size
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             int blockSize = placeHolder.toUnsignedInt();
 
             // articulation type
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             art->setArtType(placeHolder.toUnsignedInt());
 
             // placement
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             art->setPlacementAbove(placeHolder.toUnsignedInt()!=0x00); //0x00:below, 0x30:above
 
             // offset
-            if( !parseOffsetElement(art) ) { return false; }
+            if ( !parseOffsetElement(art) ) { return false; }
 
-            if( !ove_->getIsVersion4() ) {
-                  if( blockSize - 8 > 0 ) {
-                        if( !jump(blockSize-8) ) { return false; }
+            if ( !ove_->getIsVersion4() ) {
+                  if ( blockSize - 8 > 0 ) {
+                        if ( !jump(blockSize-8) ) { return false; }
                         }
                   } else {
                   // setting
-                  if( !readBuffer(placeHolder, 1) ) { return false; }
+                  if ( !readBuffer(placeHolder, 1) ) { return false; }
                   thisByte = placeHolder.toUnsignedInt();
                   const bool changeSoundEffect = ( ( thisByte & 0x1 ) == 0x1 );
                   const bool changeLength = ( ( thisByte & 0x2 ) == 0x2 );
                   const bool changeVelocity = ( ( thisByte & 0x4 ) == 0x4 );
                   //const bool changeExtraLength = ( ( thisByte & 0x20 ) == 0x20 );
 
-                  if( !jump(8) ) { return false; }
+                  if ( !jump(8) ) { return false; }
 
                   // velocity type
-                  if( !readBuffer(placeHolder, 1) ) { return false; }
+                  if ( !readBuffer(placeHolder, 1) ) { return false; }
                   thisByte = placeHolder.toUnsignedInt();
-                  if( changeVelocity ) {
+                  if ( changeVelocity ) {
                         art->setVelocityType((Articulation::VelocityType)thisByte);
                         }
 
-                  if( !jump(14) ) { return false; }
+                  if ( !jump(14) ) { return false; }
 
                   // sound effect
-                  if( !readBuffer(placeHolder, 2) ) { return false; }
+                  if ( !readBuffer(placeHolder, 2) ) { return false; }
                   int from = placeHolder.toInt();
-                  if( !readBuffer(placeHolder, 2) ) { return false; }
+                  if ( !readBuffer(placeHolder, 2) ) { return false; }
                   int to = placeHolder.toInt();
-                  if( changeSoundEffect ) {
+                  if ( changeSoundEffect ) {
                         art->setSoundEffect(from, to);
                         }
 
-                  if( !jump(1) ) { return false; }
+                  if ( !jump(1) ) { return false; }
 
                   // length percentage
-                  if( !readBuffer(placeHolder, 1) ) { return false; }
-                  if( changeLength ) {
+                  if ( !readBuffer(placeHolder, 1) ) { return false; }
+                  if ( changeLength ) {
                         art->setLengthPercentage(placeHolder.toUnsignedInt());
                         }
 
                   // velocity
-                  if( !readBuffer(placeHolder, 2) ) { return false; }
-                  if( changeVelocity ) {
+                  if ( !readBuffer(placeHolder, 2) ) { return false; }
+                  if ( changeVelocity ) {
                         art->setVelocityValue(placeHolder.toInt());
                         }
 
-                  if( Articulation::isTrill(art->getArtType()) ) {
-                        if( !jump(8) ) { return false; }
+                  if ( Articulation::isTrill(art->getArtType()) ) {
+                        if ( !jump(8) ) { return false; }
 
                         // trill note length
-                        if( !readBuffer(placeHolder, 1) ) { return false; }
+                        if ( !readBuffer(placeHolder, 1) ) { return false; }
                         art->setTrillNoteLength(placeHolder.toUnsignedInt());
 
                         // trill rate
-                        if( !readBuffer(placeHolder, 1) ) { return false; }
+                        if ( !readBuffer(placeHolder, 1) ) { return false; }
                         thisByte = placeHolder.toUnsignedInt();
                         NoteType trillNoteType = NoteType::Note_Sixteen;
                         switch ( getHighNibble(thisByte) ) {
@@ -5436,20 +5436,20 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
                         // accelerate type
                         art->setAccelerateType(thisByte&0xf);
 
-                        if( !jump(1) ) { return false; }
+                        if ( !jump(1) ) { return false; }
 
                         // auxiliary first
-                        if( !readBuffer(placeHolder, 1) ) { return false; }
+                        if ( !readBuffer(placeHolder, 1) ) { return false; }
                         art->setAuxiliaryFirst(placeHolder.toBoolean());
 
-                        if( !jump(1) ) { return false; }
+                        if ( !jump(1) ) { return false; }
 
                         // trill interval
-                        if( !readBuffer(placeHolder, 1) ) { return false; }
+                        if ( !readBuffer(placeHolder, 1) ) { return false; }
                         art->setTrillInterval(placeHolder.toUnsignedInt());
                         } else {
-                        if( blockSize > 40 ) {
-                              if( !jump( blockSize - 40 ) ) { return false; }
+                        if ( blockSize > 40 ) {
+                              if ( !jump( blockSize - 40 ) ) { return false; }
                               }
                         }
                   }
@@ -5463,7 +5463,7 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
 int tupletToSpace(int tuplet) {
       int a(1);
 
-      while( a*2 < tuplet ) {
+      while ( a*2 < tuplet ) {
             a *= 2;
             }
 
@@ -5483,50 +5483,50 @@ bool BarsParse::parseBeam(MeasureData* measureData, int length) {
       Tuplet* tuplet = new Tuplet();
 
       // is grace
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       beam->setIsGrace(placeHolder.toBoolean());
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // voice
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       beam->setVoice(getLowNibble(placeHolder.toUnsignedInt())&0x7);
 
       // common
-      if( !parseCommonBlock(beam) ) { return false; }
+      if ( !parseCommonBlock(beam) ) { return false; }
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // beam count
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       int beamCount = placeHolder.toUnsignedInt();
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // left line
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       beam->getLeftLine()->setLine(placeHolder.toInt());
 
       // right line
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       beam->getRightLine()->setLine(placeHolder.toInt());
 
-      if( ove_->getIsVersion4() ) {
-            if( !jump(8) ) { return false; }
+      if ( ove_->getIsVersion4() ) {
+            if ( !jump(8) ) { return false; }
             }
 
       int currentCursor = ove_->getIsVersion4() ? 23 : 13;
       int count = (length - currentCursor)/16;
 
-      if( count != beamCount ) { return false; }
+      if ( count != beamCount ) { return false; }
 
-      for( i=0; i<count; ++i ) {
-            if( !jump(1) ) { return false; }
+      for ( i=0; i<count; ++i ) {
+            if ( !jump(1) ) { return false; }
 
             // tuplet
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             int tupletCount = placeHolder.toUnsignedInt();
-            if( tupletCount > 0 ) {
+            if ( tupletCount > 0 ) {
                   createTuplet = true;
                   tuplet->setTuplet(tupletCount);
                   tuplet->setSpace(tupletToSpace(tupletCount));
@@ -5537,42 +5537,42 @@ bool BarsParse::parseBeam(MeasureData* measureData, int length) {
             MeasurePos startMp;
             MeasurePos stopMp;
 
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             startMp.setMeasure(placeHolder.toUnsignedInt());
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             stopMp.setMeasure(placeHolder.toUnsignedInt());
 
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             startMp.setOffset(placeHolder.toInt());
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             stopMp.setOffset(placeHolder.toInt());
 
             beam->addLine(startMp, stopMp);
 
-            if( stopMp.getOffset() > maxEndUnit ) {
+            if ( stopMp.getOffset() > maxEndUnit ) {
                   maxEndUnit = stopMp.getOffset();
                   }
 
-            if( i == 0 ) {
-                  if( !jump(4) ) { return false; }
+            if ( i == 0 ) {
+                  if ( !jump(4) ) { return false; }
 
                   // left offset up+4, down-4
-                  if( !readBuffer(placeHolder, 2) ) { return false; }
+                  if ( !readBuffer(placeHolder, 2) ) { return false; }
                   beam->getLeftShoulder()->setYOffset(placeHolder.toInt());
 
                   // right offset up+4, down-4
-                  if( !readBuffer(placeHolder, 2) ) { return false; }
+                  if ( !readBuffer(placeHolder, 2) ) { return false; }
                   beam->getRightShoulder()->setYOffset(placeHolder.toInt());
                   } else {
-                  if( !jump(8) ) { return false; }
+                  if ( !jump(8) ) { return false; }
                   }
             }
 
       const QList<QPair<MeasurePos, MeasurePos> > lines = beam->getLines();
       MeasurePos offsetMp;
 
-      for( i=0; i<lines.size(); ++i ) {
-            if( lines[i].second > offsetMp ) {
+      for ( i=0; i<lines.size(); ++i ) {
+            if ( lines[i].second > offsetMp ) {
                   offsetMp = lines[i].second;
                   }
             }
@@ -5581,7 +5581,7 @@ bool BarsParse::parseBeam(MeasureData* measureData, int length) {
       beam->stop()->setOffset(offsetMp.getOffset());
 
       // a case that Tuplet block don't exist, and hide inside beam
-      if( createTuplet ) {
+      if ( createTuplet ) {
             tuplet->copyCommonBlock(*beam);
             tuplet->getLeftLine()->setLine(beam->getLeftLine()->getLine());
             tuplet->getRightLine()->setLine(beam->getRightLine()->getLine());
@@ -5602,31 +5602,31 @@ bool BarsParse::parseTie(MeasureData* measureData, int /*length*/) {
       Tie* tie = new Tie();
       measureData->addCrossMeasureElement(tie, true);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // start common
-      if( !parseCommonBlock(tie) ) { return false; }
+      if ( !parseCommonBlock(tie) ) { return false; }
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // note
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       tie->setNote(placeHolder.toUnsignedInt());
 
       // pair lines
-      if( !parsePairLinesBlock(tie) ) { return false; }
+      if ( !parsePairLinesBlock(tie) ) { return false; }
 
       // offset common
-      if( !parseOffsetCommonBlock(tie) ) { return false; }
+      if ( !parseOffsetCommonBlock(tie) ) { return false; }
 
       // left shoulder offset
-      if( !parseOffsetElement(tie->getLeftShoulder()) ) { return false; }
+      if ( !parseOffsetElement(tie->getLeftShoulder()) ) { return false; }
 
       // right shoulder offset
-      if( !parseOffsetElement(tie->getRightShoulder()) ) { return false; }
+      if ( !parseOffsetElement(tie->getRightShoulder()) ) { return false; }
 
       // height
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       tie->setHeight(placeHolder.toUnsignedInt());
 
       return true;
@@ -5638,174 +5638,174 @@ bool BarsParse::parseTuplet(MeasureData* measureData, int /*length*/) {
       Tuplet* tuplet = new Tuplet();
       measureData->addCrossMeasureElement(tuplet, true);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(tuplet) ) { return false; }
+      if ( !parseCommonBlock(tuplet) ) { return false; }
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // pair lines
-      if( !parsePairLinesBlock(tuplet) ) { return false; }
+      if ( !parsePairLinesBlock(tuplet) ) { return false; }
 
       // offset common
-      if( !parseOffsetCommonBlock(tuplet) ) { return false; }
+      if ( !parseOffsetCommonBlock(tuplet) ) { return false; }
 
       // left shoulder offset
-      if( !parseOffsetElement(tuplet->getLeftShoulder()) ) { return false; }
+      if ( !parseOffsetElement(tuplet->getLeftShoulder()) ) { return false; }
 
       // right shoulder offset
-      if( !parseOffsetElement(tuplet->getRightShoulder()) ) { return false; }
+      if ( !parseOffsetElement(tuplet->getRightShoulder()) ) { return false; }
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // height
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       tuplet->setHeight(placeHolder.toUnsignedInt());
 
       // tuplet
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       tuplet->setTuplet(placeHolder.toUnsignedInt());
 
       // space
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       tuplet->setSpace(placeHolder.toUnsignedInt());
 
       // mark offset
-      if( !parseOffsetElement(tuplet->getMarkHandle()) ) { return false; }
+      if ( !parseOffsetElement(tuplet->getMarkHandle()) ) { return false; }
 
       return true;
       }
 
 HarmonyType binaryToHarmonyType(int bin) {
       HarmonyType type = HarmonyType::H_maj;
-      if( bin == 0x0091 ) {
+      if ( bin == 0x0091 ) {
             type = HarmonyType::H_maj;
-            } else if( bin == 0x0089 ) {
+            } else if ( bin == 0x0089 ) {
             type = HarmonyType::H_min;
-            } else if( bin == 0x0489 ) {
+            } else if ( bin == 0x0489 ) {
             type = HarmonyType::H_min7;
-            } else if( bin == 0x0491 ) {
+            } else if ( bin == 0x0491 ) {
             type = HarmonyType::H_7;
-            } else if( bin == 0x0495 ) {
+            } else if ( bin == 0x0495 ) {
             type = HarmonyType::H_9;
-            } else if( bin == 0x0449 ) {
+            } else if ( bin == 0x0449 ) {
             type = HarmonyType::H_min7b5;
-            } else if( bin == 0x04A1 ) {
+            } else if ( bin == 0x04A1 ) {
             type = HarmonyType::H_7sus4;
-            } else if( bin == 0x00A1 ) {
+            } else if ( bin == 0x00A1 ) {
             type = HarmonyType::H_sus4;
-            } else if( bin == 0x0049 ) {
+            } else if ( bin == 0x0049 ) {
             type = HarmonyType::H_dim;
-            } else if( bin == 0x0249 ) {
+            } else if ( bin == 0x0249 ) {
             type = HarmonyType::H_dim7;
-            } else if( bin == 0x0111 ) {
+            } else if ( bin == 0x0111 ) {
             type = HarmonyType::H_aug;
-            } else if( bin == 0x0511 ) {
+            } else if ( bin == 0x0511 ) {
             type = HarmonyType::H_aug7;
-            } else if( bin == 0x044D ) {
+            } else if ( bin == 0x044D ) {
             type = HarmonyType::H_min9_b5;
-            } else if( bin == 0x0499 ) {
+            } else if ( bin == 0x0499 ) {
             type = HarmonyType::H_7s9;
-            } else if( bin == 0x0615 ) {
+            } else if ( bin == 0x0615 ) {
             type = HarmonyType::H_13;
-            } else if( bin == 0x0289 ) {
+            } else if ( bin == 0x0289 ) {
             type = HarmonyType::H_min6;
-            } else if( bin == 0x0291 ) {
+            } else if ( bin == 0x0291 ) {
             type = HarmonyType::H_6;
-            } else if( bin == 0x0295 ) {
+            } else if ( bin == 0x0295 ) {
             type = HarmonyType::H_6;         //6add9
-            } else if( bin == 0x0095 ) {
+            } else if ( bin == 0x0095 ) {
             type = HarmonyType::H_min;       //minor add9
-            } else if( bin == 0x008D ) {
+            } else if ( bin == 0x008D ) {
             type = HarmonyType::H_maj7;
-            } else if( bin == 0x0891 ) {
+            } else if ( bin == 0x0891 ) {
             type = HarmonyType::H_maj7;
-            } else if( bin == 0x0881 ) {
+            } else if ( bin == 0x0881 ) {
             type = HarmonyType::H_maj7_s5;   //maj7#5
-            } else if( bin == 0x0911 ) {
+            } else if ( bin == 0x0911 ) {
             type = HarmonyType::H_maj7_s5;   //maj7#5
-            } else if( bin == 0x0991 ) {
+            } else if ( bin == 0x0991 ) {
             type = HarmonyType::H_maj7_s11;  //maj7#11
-            } else if( bin == 0x0851 ) {
+            } else if ( bin == 0x0851 ) {
             type = HarmonyType::H_maj7_s11;  //maj7#11
-            } else if( bin == 0x08D1 ) {
+            } else if ( bin == 0x08D1 ) {
             type = HarmonyType::H_maj9;
-            } else if( bin == 0x0895 ) {
+            } else if ( bin == 0x0895 ) {
             type = HarmonyType::H_maj9_s5;   //maj9#5
-            } else if( bin == 0x0995 ) {
+            } else if ( bin == 0x0995 ) {
             type = HarmonyType::H_maj13_s11; //maj9#11
-            } else if( bin == 0x0855 ) {
+            } else if ( bin == 0x0855 ) {
             type = HarmonyType::H_maj9_s11;  //maj9#11
-            } else if( bin == 0x08D5 ) {
+            } else if ( bin == 0x08D5 ) {
             type = HarmonyType::H_maj13;
-            } else if( bin == 0x0A95 ) {
+            } else if ( bin == 0x0A95 ) {
             type = HarmonyType::H_maj13_s11; //maj13#11
-            } else if( bin == 0x0A55 ) {
+            } else if ( bin == 0x0A55 ) {
             type = HarmonyType::H_maj13;     //maj13(no3)
-            } else if( bin == 0x0A85 ) {
+            } else if ( bin == 0x0A85 ) {
             type = HarmonyType::H_maj9_s5;   //maj13#5#11(no4)
-            } else if( bin == 0x0B45 ) {
+            } else if ( bin == 0x0B45 ) {
             type = HarmonyType::H_7b9;
-            } else if( bin == 0x0493 ) {
+            } else if ( bin == 0x0493 ) {
             type = HarmonyType::H_7b5;
-            } else if( bin == 0x0451 ) {
+            } else if ( bin == 0x0451 ) {
             type = HarmonyType::H_9b5;
-            } else if( bin == 0x0455 ) {
+            } else if ( bin == 0x0455 ) {
             type = HarmonyType::H_7s9;       //7#5#9
-            } else if( bin == 0x0519 ) {
+            } else if ( bin == 0x0519 ) {
             type = HarmonyType::H_7b9;       //7#5b9
-            } else if( bin == 0x0513 ) {
+            } else if ( bin == 0x0513 ) {
             type = HarmonyType::H_aug7;      //aug9
-            } else if( bin == 0x0515 ) {
+            } else if ( bin == 0x0515 ) {
             type = HarmonyType::H_sus4;      //sus9
-            } else if( bin == 0x04A5 ) {
+            } else if ( bin == 0x04A5 ) {
             type = HarmonyType::H_13b9;
-            } else if( bin == 0x0613 ) {
+            } else if ( bin == 0x0613 ) {
             type = HarmonyType::H_13b9;      //13b9#11
-            } else if( bin == 0x0611 ) {
+            } else if ( bin == 0x0611 ) {
             type = HarmonyType::H_13;
-            } else if( bin == 0x0653 ) {
+            } else if ( bin == 0x0653 ) {
             type = HarmonyType::H_min;       //m(natural7)
-            } else if( bin == 0x0889 ) {
+            } else if ( bin == 0x0889 ) {
             type = HarmonyType::H_min9;      //m9(natural7)
-            } else if( bin == 0x088D ) {
+            } else if ( bin == 0x088D ) {
             type = HarmonyType::H_min11;
-            } else if( bin == 0x04AD ) {
+            } else if ( bin == 0x04AD ) {
             type = HarmonyType::H_9s11;
-            } else if( bin == 0x04D5 ) {
+            } else if ( bin == 0x04D5 ) {
             type = HarmonyType::H_7sus4;     //sus7
-            } else if( bin == 0x0421 ) {
+            } else if ( bin == 0x0421 ) {
             type = HarmonyType::H_min11;
-            } else if( bin == 0x04A9 ) {
+            } else if ( bin == 0x04A9 ) {
             type = HarmonyType::H_min9;
-            } else if( bin == 0x048D ) {
+            } else if ( bin == 0x048D ) {
             type = HarmonyType::H_7b5b9;
-            } else if( bin == 0x0453 ) {
+            } else if ( bin == 0x0453 ) {
             type = HarmonyType::H_maj;       //(no5)
-            } else if( bin == 0x0011 ) {
+            } else if ( bin == 0x0011 ) {
             type = HarmonyType::H_maj7;      //(no3)
-            } else if( bin == 0x0081 ) {
+            } else if ( bin == 0x0081 ) {
             type = HarmonyType::H_7;         //7(no3)
-            } else if( bin == 0x0481 ) {
+            } else if ( bin == 0x0481 ) {
             type = HarmonyType::H_7;         //7(no5)
-            } else if( bin == 0x0411 ) {
+            } else if ( bin == 0x0411 ) {
             type = HarmonyType::H_6;
-            } else if( bin == 0x0291 ) {
+            } else if ( bin == 0x0291 ) {
             type = HarmonyType::H_sus4;      //sus(add9)
-            } else if( bin == 0x00A5 ) {
+            } else if ( bin == 0x00A5 ) {
             type = HarmonyType::H_13s9;      //13#9b5
-            } else if( bin == 0x0659 ) {
+            } else if ( bin == 0x0659 ) {
             type = HarmonyType::H_sus4;      //sus(no5)
-            } else if( bin == 0x0021 ) {
+            } else if ( bin == 0x0021 ) {
             type = HarmonyType::H_7b5b9;     //7b5b9#9
-            } else if( bin == 0x045B ) {
+            } else if ( bin == 0x045B ) {
             type = HarmonyType::H_13b5;      //13b5b9#9
-            } else if( bin == 0x065B ) {
+            } else if ( bin == 0x065B ) {
             type = HarmonyType::H_13b9;      //13b9#9
-            } else if( bin == 0x061B ) {
+            } else if ( bin == 0x061B ) {
             type = HarmonyType::H_7b9s9;     //7b9#9
-            } else if( bin == 0x04B5 ) {
+            } else if ( bin == 0x04B5 ) {
             type = HarmonyType::H_7;
             }
 
@@ -5818,43 +5818,43 @@ bool BarsParse::parseHarmony(MeasureData* measureData, int /*length*/) {
       Harmony* harmony = new Harmony();
       measureData->addMusicData(harmony);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(harmony) ) { return false; }
+      if ( !parseCommonBlock(harmony) ) { return false; }
 
       // bass on bottom
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       harmony->setBassOnBottom((getHighNibble(placeHolder.toUnsignedInt())==0x4));
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // y offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       harmony->setYOffset(placeHolder.toInt());
 
       // harmony type
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       harmony->setHarmonyType(binaryToHarmonyType(placeHolder.toUnsignedInt()));
 
       // root
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       harmony->setRoot(placeHolder.toInt());
 
       // bass
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       harmony->setBass(placeHolder.toInt());
 
       // angle
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       harmony->setAngle(placeHolder.toInt());
 
-      if( ove_->getIsVersion4() ) {
+      if ( ove_->getIsVersion4() ) {
             // length (tick)
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             harmony->setLength(placeHolder.toUnsignedInt());
 
-            if( !jump(4) ) { return false; }
+            if ( !jump(4) ) { return false; }
             }
 
       return true;
@@ -5866,20 +5866,20 @@ bool BarsParse::parseClef(MeasureData* measureData, int /*length*/) {
       Clef* clef = new Clef();
       measureData->addMusicData(clef);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(clef) ) { return false; }
+      if ( !parseCommonBlock(clef) ) { return false; }
 
       // clef type
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       clef->setClefType(placeHolder.toUnsignedInt());
 
       // line
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       clef->setLine(placeHolder.toInt());
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       return true;
       }
@@ -5890,28 +5890,28 @@ bool BarsParse::parseLyric(MeasureData* measureData, int length) {
       Lyric* lyric = new Lyric();
       measureData->addMusicData(lyric);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(lyric) ) { return false; }
+      if ( !parseCommonBlock(lyric) ) { return false; }
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // offset
-      if( !parseOffsetElement(lyric) ) { return false; }
+      if ( !parseOffsetElement(lyric) ) { return false; }
 
-      if( !jump(7) ) { return false; }
+      if ( !jump(7) ) { return false; }
 
       // verse
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       lyric->setVerse(placeHolder.toUnsignedInt());
 
-      if( ove_->getIsVersion4() ) {
-            if( !jump(6) ) { return false; }
+      if ( ove_->getIsVersion4() ) {
+            if ( !jump(6) ) { return false; }
 
             // lyric
-            if( length > 29 ) {
-                  if( !readBuffer(placeHolder, length-29) ) { return false; }
+            if ( length > 29 ) {
+                  if ( !readBuffer(placeHolder, length-29) ) { return false; }
                   lyric->setLyric(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
                   }
             }
@@ -5925,47 +5925,47 @@ bool BarsParse::parseSlur(MeasureData* measureData, int /*length*/) {
       Slur* slur = new Slur();
       measureData->addCrossMeasureElement(slur, true);
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // voice
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       slur->setVoice(getLowNibble(placeHolder.toUnsignedInt())&0x7);
 
       // common
-      if( !parseCommonBlock(slur) ) { return false; }
+      if ( !parseCommonBlock(slur) ) { return false; }
 
       // show on top
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       slur->setShowOnTop(getHighNibble(placeHolder.toUnsignedInt())==0x8);
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // pair lines
-      if( !parsePairLinesBlock(slur) ) { return false; }
+      if ( !parsePairLinesBlock(slur) ) { return false; }
 
       // offset common
-      if( !parseOffsetCommonBlock(slur) ) { return false; }
+      if ( !parseOffsetCommonBlock(slur) ) { return false; }
 
       // handle 1
-      if( !parseOffsetElement(slur->getLeftShoulder()) ) { return false; }
+      if ( !parseOffsetElement(slur->getLeftShoulder()) ) { return false; }
 
       // handle 4
-      if( !parseOffsetElement(slur->getRightShoulder()) ) { return false; }
+      if ( !parseOffsetElement(slur->getRightShoulder()) ) { return false; }
 
       // handle 2
-      if( !parseOffsetElement(slur->getHandle2()) ) { return false; }
+      if ( !parseOffsetElement(slur->getHandle2()) ) { return false; }
 
       // handle 3
-      if( !parseOffsetElement(slur->getHandle3()) ) { return false; }
+      if ( !parseOffsetElement(slur->getHandle3()) ) { return false; }
 
-      if( ove_->getIsVersion4() ) {
-            if( !jump(3) ) { return false; }
+      if ( ove_->getIsVersion4() ) {
+            if ( !jump(3) ) { return false; }
 
             // note time percent
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             slur->setNoteTimePercent(placeHolder.toUnsignedInt());
 
-            if( !jump(36) ) { return false; }
+            if ( !jump(36) ) { return false; }
             }
 
       return true;
@@ -5977,44 +5977,44 @@ bool BarsParse::parseGlissando(MeasureData* measureData, int /*length*/) {
       Glissando* glissando = new Glissando();
       measureData->addCrossMeasureElement(glissando, true);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(glissando) ) { return false; }
+      if ( !parseCommonBlock(glissando) ) { return false; }
 
       // straight or wavy
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       unsigned int thisByte = placeHolder.toUnsignedInt();
       glissando->setStraightWavy(getHighNibble(thisByte)==4);
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // pair lines
-      if( !parsePairLinesBlock(glissando) ) { return false; }
+      if ( !parsePairLinesBlock(glissando) ) { return false; }
 
       // offset common
-      if( !parseOffsetCommonBlock(glissando) ) { return false; }
+      if ( !parseOffsetCommonBlock(glissando) ) { return false; }
 
       // left shoulder
-      if( !parseOffsetElement(glissando->getLeftShoulder()) ) { return false; }
+      if ( !parseOffsetElement(glissando->getLeftShoulder()) ) { return false; }
 
       // right shoulder
-      if( !parseOffsetElement(glissando->getRightShoulder()) ) { return false; }
+      if ( !parseOffsetElement(glissando->getRightShoulder()) ) { return false; }
 
-      if( ove_->getIsVersion4() ) {
-            if( !jump(1) ) { return false; }
+      if ( ove_->getIsVersion4() ) {
+            if ( !jump(1) ) { return false; }
 
             // line thick
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             glissando->setLineThick(placeHolder.toUnsignedInt());
 
-            if( !jump(12) ) { return false; }
+            if ( !jump(12) ) { return false; }
 
             // text 32 bytes
-            if( !readBuffer(placeHolder, 32) ) { return false; }
+            if ( !readBuffer(placeHolder, 32) ) { return false; }
             glissando->setText(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
 
-            if( !jump(6) ) { return false; }
+            if ( !jump(6) ) { return false; }
             }
 
       return true;
@@ -6222,21 +6222,21 @@ bool BarsParse::parseDecorators(MeasureData* measureData, int length) {
       Block placeHolder;
       MusicData* musicData = new MusicData();
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(musicData) ) { return false; }
+      if ( !parseCommonBlock(musicData) ) { return false; }
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // y offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       musicData->setYOffset(placeHolder.toInt());
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // measure repeat | piano pedal | dotted barline | articulation
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       unsigned int thisByte = placeHolder.toUnsignedInt();
 
       Decorator::Type decoratorType;
@@ -6246,7 +6246,7 @@ bool BarsParse::parseDecorators(MeasureData* measureData, int length) {
 
       getDecoratorType(thisByte, isMeasureRepeat, decoratorType, isSingleRepeat, artType);
 
-      if( isMeasureRepeat ) {
+      if ( isMeasureRepeat ) {
             MeasureRepeat* measureRepeat = new MeasureRepeat();
             measureData->addCrossMeasureElement(measureRepeat, true);
 
@@ -6266,7 +6266,7 @@ bool BarsParse::parseDecorators(MeasureData* measureData, int length) {
             }
 
       int cursor = ove_->getIsVersion4() ? 16 : 14;
-      if( !jump(length-cursor) ) { return false; }
+      if ( !jump(length-cursor) ) { return false; }
 
       return true;
       }
@@ -6275,13 +6275,13 @@ bool BarsParse::parseWedge(MeasureData* measureData, int length) {
       Block placeHolder;
       Wedge* wedge = new Wedge();
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(wedge) ) { return false; }
+      if ( !parseCommonBlock(wedge) ) { return false; }
 
       // wedge type
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       WedgeType wedgeType = WedgeType::Cres_Line;
       bool wedgeOrExpression = true;
       unsigned int highHalfByte = getHighNibble(placeHolder.toUnsignedInt());
@@ -6313,33 +6313,33 @@ bool BarsParse::parseWedge(MeasureData* measureData, int length) {
             }
 
       // 0xb | 0x8(ove3) , else 3, 0(ove3)
-      if( (lowHalfByte & 0x8) == 0x8 ) {
+      if ( (lowHalfByte & 0x8) == 0x8 ) {
             wedgeType = WedgeType::Double_Line;
             wedgeOrExpression = true;
             }
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // y offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       wedge->setYOffset(placeHolder.toInt());
 
       // wedge
-      if( wedgeOrExpression ) {
+      if ( wedgeOrExpression ) {
             measureData->addCrossMeasureElement(wedge, true);
             wedge->setWedgeType(wedgeType);
 
-            if( !jump(2) ) { return false; }
+            if ( !jump(2) ) { return false; }
 
             // height
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             wedge->setHeight(placeHolder.toUnsignedInt());
 
             // offset common
-            if( !parseOffsetCommonBlock(wedge) ) { return false; }
+            if ( !parseOffsetCommonBlock(wedge) ) { return false; }
 
             int cursor = ove_->getIsVersion4() ? 21 : 19;
-            if( !jump(length-cursor) ) { return false; }
+            if ( !jump(length-cursor) ) { return false; }
             }
       // expression : cresc, decresc
       else {
@@ -6349,24 +6349,24 @@ bool BarsParse::parseWedge(MeasureData* measureData, int length) {
             express->copyCommonBlock(*wedge);
             express->setYOffset(wedge->getYOffset());
 
-            if( !jump(4) ) { return false; }
+            if ( !jump(4) ) { return false; }
 
             // offset common
-            if( !parseOffsetCommonBlock(express) ) { return false; }
+            if ( !parseOffsetCommonBlock(express) ) { return false; }
 
-            if( ove_->getIsVersion4() ) {
-                  if( !jump(18) ) { return false; }
+            if ( ove_->getIsVersion4() ) {
+                  if ( !jump(18) ) { return false; }
 
                   // words
-                  if( length > 39 ) {
-                        if( !readBuffer(placeHolder, length-39) ) { return false; }
+                  if ( length > 39 ) {
+                        if ( !readBuffer(placeHolder, length-39) ) { return false; }
                         express->setText(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
                         }
                   } else {
                   QString str = wedgeType==WedgeType::Cres ? "cresc" : "decresc";
                   express->setText(str);
 
-                  if( !jump(8) ) { return false; }
+                  if ( !jump(8) ) { return false; }
                   }
             }
 
@@ -6379,32 +6379,32 @@ bool BarsParse::parseDynamics(MeasureData* measureData, int /*length*/) {
       Dynamics* dynamics = new Dynamics();
       measureData->addMusicData(dynamics);
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // is playback
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       dynamics->setIsPlayback(getHighNibble(placeHolder.toUnsignedInt())!=0x4);
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // common
-      if( !parseCommonBlock(dynamics) ) { return false; }
+      if ( !parseCommonBlock(dynamics) ) { return false; }
 
       // y offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       dynamics->setYOffset(placeHolder.toInt());
 
       // dynamics type
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       dynamics->setDynamicsType(getLowNibble(placeHolder.toUnsignedInt()));
 
       // velocity
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       dynamics->setVelocity(placeHolder.toUnsignedInt());
 
       int cursor = ove_->getIsVersion4() ? 4 : 2;
 
-      if( !jump(cursor) ) { return false; }
+      if ( !jump(cursor) ) { return false; }
 
       return true;
       }
@@ -6414,23 +6414,23 @@ bool BarsParse::parseKey(MeasureData* measureData, int /*length*/) {
       Key* key = measureData->getKey();
       int cursor = ove_->getIsVersion4() ? 9 : 7;
 
-      if( !jump(cursor) ) { return false; }
+      if ( !jump(cursor) ) { return false; }
 
       // key
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       key->setKey(oveKeyToKey(placeHolder.toUnsignedInt()));
 
       // previous key
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       key->setPreviousKey(oveKeyToKey(placeHolder.toUnsignedInt()));
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // symbol count
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       key->setSymbolCount(placeHolder.toUnsignedInt());
 
-      if( !jump(4) ) { return false; }
+      if ( !jump(4) ) { return false; }
 
       return true;
       }
@@ -6442,46 +6442,46 @@ bool BarsParse::parsePedal(MeasureData* measureData, int length) {
       //measureData->addMusicData(pedal); //can't remember why
       measureData->addCrossMeasureElement(pedal, true);
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // is playback
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       pedal->setIsPlayback(getHighNibble(placeHolder.toUnsignedInt())!=4);
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // common
-      if( !parseCommonBlock(pedal) ) { return false; }
+      if ( !parseCommonBlock(pedal) ) { return false; }
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // pair lines
-      if( !parsePairLinesBlock(pedal) ) { return false; }
+      if ( !parsePairLinesBlock(pedal) ) { return false; }
 
       // offset common
-      if( !parseOffsetCommonBlock(pedal) ) { return false; }
+      if ( !parseOffsetCommonBlock(pedal) ) { return false; }
 
       // left shoulder
-      if( !parseOffsetElement(pedal->getLeftShoulder()) ) { return false; }
+      if ( !parseOffsetElement(pedal->getLeftShoulder()) ) { return false; }
 
       // right shoulder
-      if( !parseOffsetElement(pedal->getRightShoulder()) ) { return false; }
+      if ( !parseOffsetElement(pedal->getRightShoulder()) ) { return false; }
 
       int cursor = ove_->getIsVersion4() ? 0x45 : 0x23;
       int blankCount = ove_->getIsVersion4() ? 42 : 10;
 
       pedal->setHalf( length > cursor );
 
-      if( !jump(blankCount) ) { return false; }
+      if ( !jump(blankCount) ) { return false; }
 
-      if( length > cursor ) {
-            if( !jump(2) ) { return false; }
+      if ( length > cursor ) {
+            if ( !jump(2) ) { return false; }
 
             // handle x offset
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             pedal->getPedalHandle()->setXOffset(placeHolder.toInt());
 
-            if( !jump(6) ) { return false; }
+            if ( !jump(6) ) { return false; }
             }
 
       return true;
@@ -6493,34 +6493,34 @@ bool BarsParse::parseKuohao(MeasureData* measureData, int /*length*/) {
       KuoHao* kuoHao = new KuoHao();
       measureData->addMusicData(kuoHao);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(kuoHao) ) { return false; }
+      if ( !parseCommonBlock(kuoHao) ) { return false; }
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // pair lines
-      if( !parsePairLinesBlock(kuoHao) ) { return false; }
+      if ( !parsePairLinesBlock(kuoHao) ) { return false; }
 
-      if( !jump(4) ) { return false; }
+      if ( !jump(4) ) { return false; }
 
       // left shoulder
-      if( !parseOffsetElement(kuoHao->getLeftShoulder()) ) { return false; }
+      if ( !parseOffsetElement(kuoHao->getLeftShoulder()) ) { return false; }
 
       // right shoulder
-      if( !parseOffsetElement(kuoHao->getRightShoulder()) ) { return false; }
+      if ( !parseOffsetElement(kuoHao->getRightShoulder()) ) { return false; }
 
       // kuohao type
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       kuoHao->setKuohaoType(placeHolder.toUnsignedInt());
 
       // height
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       kuoHao->setHeight(placeHolder.toUnsignedInt());
 
       int jumpAmount = ove_->getIsVersion4() ? 40 : 8;
-      if( !jump(jumpAmount) ) { return false; }
+      if ( !jump(jumpAmount) ) { return false; }
 
       return true;
       }
@@ -6531,37 +6531,37 @@ bool BarsParse::parseExpressions(MeasureData* measureData, int length) {
       Expressions* expressions = new Expressions();
       measureData->addMusicData(expressions);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common00
-      if( !parseCommonBlock(expressions) ) { return false; }
+      if ( !parseCommonBlock(expressions) ) { return false; }
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // y offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       expressions->setYOffset(placeHolder.toInt());
 
       // range bar offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       //int barOffset = placeHolder.toUnsignedInt();
 
-      if( !jump(10) ) { return false; }
+      if ( !jump(10) ) { return false; }
 
       // tempo 1
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       //double tempo1 = ((double)placeHolder.toUnsignedInt()) / 100.0;
 
       // tempo 2
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       //double tempo2 = ((double)placeHolder.toUnsignedInt()) / 100.0;
 
-      if( !jump(6) ) { return false; }
+      if ( !jump(6) ) { return false; }
 
       // text
       int cursor = ove_->getIsVersion4() ? 35 : 33;
-      if( length > cursor ) {
-            if( !readBuffer(placeHolder, length-cursor) ) { return false; }
+      if ( length > cursor ) {
+            if ( !readBuffer(placeHolder, length-cursor) ) { return false; }
             expressions->setText(ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
             }
 
@@ -6574,26 +6574,26 @@ bool BarsParse::parseHarpPedal(MeasureData* measureData, int /*length*/) {
       HarpPedal* harpPedal = new HarpPedal();
       measureData->addMusicData(harpPedal);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(harpPedal) ) { return false; }
+      if ( !parseCommonBlock(harpPedal) ) { return false; }
 
-      if( !jump(2) ) { return false; }
+      if ( !jump(2) ) { return false; }
 
       // y offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       harpPedal->setYOffset(placeHolder.toInt());
 
       // show type
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       harpPedal->setShowType(placeHolder.toUnsignedInt());
 
       // show char flag
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       harpPedal->setShowCharFlag(placeHolder.toUnsignedInt());
 
-      if( !jump(8) ) { return false; }
+      if ( !jump(8) ) { return false; }
 
       return true;
       }
@@ -6603,12 +6603,12 @@ bool BarsParse::parseMultiMeasureRest(MeasureData* measureData, int /*length*/) 
       MultiMeasureRest* measureRest = new MultiMeasureRest();
       measureData->addMusicData(measureRest);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(measureRest) ) { return false; }
+      if ( !parseCommonBlock(measureRest) ) { return false; }
 
-      if( !jump(6) ) { return false; }
+      if ( !jump(6) ) { return false; }
 
       return true;
       }
@@ -6619,25 +6619,25 @@ bool BarsParse::parseHarmonyGuitarFrame(MeasureData* measureData, int length) {
       Harmony* harmony = new Harmony();
       measureData->addMusicData(harmony);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(harmony) ) { return false; }
+      if ( !parseCommonBlock(harmony) ) { return false; }
 
       // root
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       harmony->setRoot(placeHolder.toUnsignedInt());
 
       // type
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       harmony->setHarmonyType((HarmonyType)placeHolder.toUnsignedInt());
 
       // bass
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       harmony->setBass(placeHolder.toUnsignedInt());
 
       int jumpAmount = ove_->getIsVersion4() ? length - 12 : length - 10;
-      if( !jump(jumpAmount) ) { return false; }
+      if ( !jump(jumpAmount) ) { return false; }
 
       return true;
       }
@@ -6743,13 +6743,13 @@ bool BarsParse::parseOctaveShift(MeasureData* measureData, int /*length*/) {
       OctaveShift* octave = new OctaveShift();
       measureData->addCrossMeasureElement(octave, true);
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // common
-      if( !parseCommonBlock(octave) ) { return false; }
+      if ( !parseCommonBlock(octave) ) { return false; }
 
       // octave
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       unsigned int type = getLowNibble(placeHolder.toUnsignedInt());
       OctaveShiftType octaveShiftType = OctaveShiftType::OS_8;
       QList<OctaveShiftPosition> positions;
@@ -6757,20 +6757,20 @@ bool BarsParse::parseOctaveShift(MeasureData* measureData, int /*length*/) {
 
       octave->setOctaveShiftType(octaveShiftType);
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // y offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       octave->setYOffset(placeHolder.toInt());
 
-      if( !jump(4) ) { return false; }
+      if ( !jump(4) ) { return false; }
 
       // length
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       octave->setLength(placeHolder.toUnsignedInt());
 
       // end tick
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       octave->setEndTick(placeHolder.toUnsignedInt());
 
       // start & stop maybe appear in same measure
@@ -6785,12 +6785,12 @@ bool BarsParse::parseOctaveShift(MeasureData* measureData, int /*length*/) {
             octavePoint->setEndTick(octave->getEndTick());
 
             // stop
-            if( i==0 && position == OctaveShiftPosition::Stop ) {
+            if ( i==0 && position == OctaveShiftPosition::Stop ) {
                   octavePoint->start()->setOffset(octave->start()->getOffset()+octave->getLength());
                   }
 
             // end point
-            if( i>0 ) {
+            if ( i>0 ) {
                   octavePoint->start()->setOffset(octave->start()->getOffset()+octave->getLength());
                   octavePoint->setTick(octave->getEndTick());
                   }
@@ -6807,15 +6807,15 @@ bool BarsParse::parseMidiController(MeasureData* measureData, int /*length*/) {
       parseMidiCommon(controller);
 
       // value [0, 128)
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       controller->setValue(placeHolder.toUnsignedInt());
 
       // controller number
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       controller->setController(placeHolder.toUnsignedInt());
 
-      if( ove_->getIsVersion4() ) {
-            if( !jump(2) ) { return false; }
+      if ( ove_->getIsVersion4() ) {
+            if ( !jump(2) ) { return false; }
             }
 
       return true;
@@ -6828,14 +6828,14 @@ bool BarsParse::parseMidiProgramChange(MeasureData* measureData, int /*length*/)
 
       parseMidiCommon(program);
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // patch
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       program->setPatch(placeHolder.toUnsignedInt());
 
-      if( ove_->getIsVersion4() ) {
-            if( !jump(2) ) { return false; }
+      if ( ove_->getIsVersion4() ) {
+            if ( !jump(2) ) { return false; }
             }
 
       return true;
@@ -6848,15 +6848,15 @@ bool BarsParse::parseMidiChannelPressure(MeasureData* measureData, int /*length*
 
       parseMidiCommon(pressure);
 
-      if( !jump(1) ) { return false; }
+      if ( !jump(1) ) { return false; }
 
       // pressure
-      if( !readBuffer(placeHolder, 1) ) { return false; }
+      if ( !readBuffer(placeHolder, 1) ) { return false; }
       pressure->setPressure(placeHolder.toUnsignedInt());
 
-      if( ove_->getIsVersion4() )
+      if ( ove_->getIsVersion4() )
             {
-            if( !jump(2) ) { return false; }
+            if ( !jump(2) ) { return false; }
             }
 
       return true;
@@ -6870,19 +6870,19 @@ bool BarsParse::parseMidiPitchWheel(MeasureData* measureData, int /*length*/) {
       parseMidiCommon(wheel);
 
       // pitch wheel
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       int value = placeHolder.toUnsignedInt();
       wheel->setValue(value);
 
-      if( ove_->getIsVersion4() ) {
-            if( !jump(2) ) { return false; }
+      if ( ove_->getIsVersion4() ) {
+            if ( !jump(2) ) { return false; }
             }
 
       return true;
       }
 
 bool BarsParse::parseSizeBlock(int length) {
-      if( !jump(length) ) { return false; }
+      if ( !jump(length) ) { return false; }
 
       return true;
       }
@@ -6890,10 +6890,10 @@ bool BarsParse::parseSizeBlock(int length) {
 bool BarsParse::parseMidiCommon(MidiData* ptr) {
       Block placeHolder;
 
-      if( !jump(3) ) { return false; }
+      if ( !jump(3) ) { return false; }
 
       // start position
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       ptr->setTick(placeHolder.toUnsignedInt());
 
       return true;
@@ -6903,19 +6903,19 @@ bool BarsParse::parseCommonBlock(MusicData* ptr) {
       Block placeHolder;
 
       // start tick
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       ptr->setTick(placeHolder.toInt());
 
       // start unit
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       ptr->start()->setOffset(placeHolder.toInt());
 
-      if( ove_->getIsVersion4() ) {
+      if ( ove_->getIsVersion4() ) {
             // color
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             ptr->setColor(placeHolder.toUnsignedInt());
 
-            if( !jump(1) ) { return false; }
+            if ( !jump(1) ) { return false; }
             }
 
       return true;
@@ -6925,11 +6925,11 @@ bool BarsParse::parseOffsetCommonBlock(MusicData* ptr) {
       Block placeHolder;
 
       // offset measure
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       ptr->stop()->setMeasure(placeHolder.toUnsignedInt());
 
       // end unit
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       ptr->stop()->setOffset(placeHolder.toInt());
 
       return true;
@@ -6939,11 +6939,11 @@ bool BarsParse::parsePairLinesBlock(PairEnds* ptr) {
       Block placeHolder;
 
       // left line
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       ptr->getLeftLine()->setLine(placeHolder.toInt());
 
       // right line
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       ptr->getRightLine()->setLine(placeHolder.toInt());
 
       return true;
@@ -6953,18 +6953,18 @@ bool BarsParse::parseOffsetElement(OffsetElement* ptr) {
       Block placeHolder;
 
       // x offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       ptr->setXOffset(placeHolder.toInt());
 
       // y offset
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       ptr->setYOffset(placeHolder.toInt());
 
       return true;
       }
 
 bool BarsParse::getCondElementType(unsigned int byteData, CondType& type) {
-      if( byteData == 0x09 ) {
+      if ( byteData == 0x09 ) {
             type = CondType::Time_Parameters;
             } else if (byteData == 0x0A) {
             type = CondType::Bar_Number;
@@ -7090,80 +7090,80 @@ bool LyricChunkParse::parse() {
 
       handle_ = &handle;
 
-      if( !jump(4) ) { return false; }
+      if ( !jump(4) ) { return false; }
 
       // Lyric count
-      if( !readBuffer(placeHolder, 2) ) { return false; }
+      if ( !readBuffer(placeHolder, 2) ) { return false; }
       unsigned int count = placeHolder.toUnsignedInt();
 
-      for( i=0; i<count; ++i ) {
+      for ( i=0; i<count; ++i ) {
             LyricInfo info;
 
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             //unsigned int size = placeHolder.toUnsignedInt();
 
             // 0x0D00
-            if( !jump(2) ) { return false; }
+            if ( !jump(2) ) { return false; }
 
             // voice
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             info.voice_ = placeHolder.toUnsignedInt();
 
             // verse
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             info.verse_ = placeHolder.toUnsignedInt();
 
             // track
-            if( !readBuffer(placeHolder, 1) ) { return false; }
+            if ( !readBuffer(placeHolder, 1) ) { return false; }
             info.track_ = placeHolder.toUnsignedInt();
 
-            if( !jump(1) ) { return false; }
+            if ( !jump(1) ) { return false; }
 
             // measure
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             info.measure_ = placeHolder.toUnsignedInt();
 
             // word count
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             info.wordCount_ = placeHolder.toUnsignedInt();
 
             // lyric size
-            if( !readBuffer(placeHolder, 2) ) { return false; }
+            if ( !readBuffer(placeHolder, 2) ) { return false; }
             info.lyricSize_ = placeHolder.toUnsignedInt();
 
-            if( !jump(6) ) { return false; }
+            if ( !jump(6) ) { return false; }
 
             // name
-            if( !readBuffer(placeHolder, 32) ) { return false; }
+            if ( !readBuffer(placeHolder, 32) ) { return false; }
             info.name_ = ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray());
 
-            if( info.lyricSize_ > 0 ) {
+            if ( info.lyricSize_ > 0 ) {
                   // lyric
-                  if( info.lyricSize_ > 0 ) {
-                        if( !readBuffer(placeHolder, info.lyricSize_) ) { return false; }
+                  if ( info.lyricSize_ > 0 ) {
+                        if ( !readBuffer(placeHolder, info.lyricSize_) ) { return false; }
                         info.lyric_ = ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray());
                         }
 
-                  if( !jump(4) ) { return false; }
+                  if ( !jump(4) ) { return false; }
 
                   // font
-                  if( !readBuffer(placeHolder, 2) ) { return false; }
+                  if ( !readBuffer(placeHolder, 2) ) { return false; }
                   info.font_ = placeHolder.toUnsignedInt();
 
-                  if( !jump(1) ) { return false; }
+                  if ( !jump(1) ) { return false; }
 
                   // font size
-                  if( !readBuffer(placeHolder, 1) ) { return false; }
+                  if ( !readBuffer(placeHolder, 1) ) { return false; }
                   info.fontSize_ = placeHolder.toUnsignedInt();
 
                   // font style
-                  if( !readBuffer(placeHolder, 1) ) { return false; }
+                  if ( !readBuffer(placeHolder, 1) ) { return false; }
                   info.fontStyle_ = placeHolder.toUnsignedInt();
 
-                  if( !jump(1) ) { return false; }
+                  if ( !jump(1) ) { return false; }
 
-                  for( int j=0; j<info.wordCount_; ++j ) {
-                        if( !jump(8) ) { return false; }
+                  for ( int j=0; j<info.wordCount_; ++j ) {
+                        if ( !jump(8) ) { return false; }
                         }
                   }
 
@@ -7189,30 +7189,30 @@ void LyricChunkParse::processLyricInfo(const LyricInfo& info) {
       QStringList words = info.lyric_.split(" ", QString::SkipEmptyParts);
 
       while ( index < words.size() && measureId+1 < trackMeasureCount ) {
-            if( changeMeasure ) {
+            if ( changeMeasure ) {
                   ++measureId;
                   measureData = ove_->getMeasureData(info.track_, measureId);
                   changeMeasure = false;
                   }
 
-            if( measureData == 0 ) { return; }
+            if ( measureData == 0 ) { return; }
             QList<NoteContainer*> containers = measureData->getNoteContainers();
             QList<MusicData*> lyrics = measureData->getMusicDatas(MusicDataType::Lyric);
 
-            for( i=0; i<containers.size() && index<words.size(); ++i ) {
-                  if( containers[i]->getIsRest() ) {
+            for ( i=0; i<containers.size() && index<words.size(); ++i ) {
+                  if ( containers[i]->getIsRest() ) {
                         continue;
                         }
 
-                  for( j=0; j<lyrics.size(); ++j ) {
+                  for ( j=0; j<lyrics.size(); ++j ) {
                         Lyric* lyric = dynamic_cast<Lyric*>(lyrics[j]);
 
-                        if( containers[i]->start()->getOffset() == lyric->start()->getOffset() &&
+                        if ( containers[i]->start()->getOffset() == lyric->start()->getOffset() &&
                             (int)containers[i]->getVoice() == info.voice_ &&
                             lyric->getVerse() == info.verse_ ) {
-                              if(index<words.size()) {
+                              if (index<words.size()) {
                                     QString l = words[index].trimmed();
-                                    if(!l.isEmpty()) {
+                                    if (!l.isEmpty()) {
                                           lyric->setLyric(l);
                                           lyric->setVoice(info.voice_);
                                           }
@@ -7259,33 +7259,33 @@ bool TitleChunkParse::parse() {
 
       handle_ = &handle;
 
-      if( !readBuffer(typeBlock, 4) ) { return false; }
+      if ( !readBuffer(typeBlock, 4) ) { return false; }
 
       titleType = typeBlock.toUnsignedInt();
 
-      if( titleType == titleType_ || titleType == annotateType_ || titleType == writerType_ || titleType == copyrightType_ ) {
+      if ( titleType == titleType_ || titleType == annotateType_ || titleType == writerType_ || titleType == copyrightType_ ) {
             Block offsetBlock;
 
-            if( !readBuffer(offsetBlock, 4) ) { return false; }
+            if ( !readBuffer(offsetBlock, 4) ) { return false; }
 
             const unsigned int itemCount = 4;
             unsigned int i;
 
-            for( i=0; i<itemCount; ++i ) {
-                  if( i>0 ) {
+            for ( i=0; i<itemCount; ++i ) {
+                  if ( i>0 ) {
                         //0x 00 AB 00 0C 00 00
-                        if( !jump(6) ) { return false; }
+                        if ( !jump(6) ) { return false; }
                         }
 
                   Block countBlock;
-                  if( !readBuffer(countBlock, 2) ) { return false; }
+                  if ( !readBuffer(countBlock, 2) ) { return false; }
                   unsigned int titleSize = countBlock.toUnsignedInt();
 
                   Block dataBlock;
-                  if( !readBuffer(dataBlock, titleSize) ) { return false; }
+                  if ( !readBuffer(dataBlock, titleSize) ) { return false; }
 
                   QByteArray array = getByteArray(dataBlock);
-                  if(!array.isEmpty()) {
+                  if (!array.isEmpty()) {
                         addToOve(ove_->getCodecString(array), titleType);
                         }
                   }
@@ -7293,21 +7293,21 @@ bool TitleChunkParse::parse() {
             return true;
             }
 
-      if( titleType == headerType_ || titleType == footerType_ ) {
-            if( !jump(10) ) { return false; }
+      if ( titleType == headerType_ || titleType == footerType_ ) {
+            if ( !jump(10) ) { return false; }
 
             Block countBlock;
-            if( !readBuffer(countBlock, 2) ) { return false; }
+            if ( !readBuffer(countBlock, 2) ) { return false; }
             unsigned int titleSize = countBlock.toUnsignedInt();
 
             Block dataBlock;
-            if( !readBuffer(dataBlock, titleSize) ) { return false; }
+            if ( !readBuffer(dataBlock, titleSize) ) { return false; }
 
             QByteArray array = getByteArray(dataBlock);
             addToOve(ove_->getCodecString(array), titleType);
 
             //0x 00 AB 00 0C 00 00
-            if( !jump(6) ) { return false; }
+            if ( !jump(6) ) { return false; }
 
             return true;
             }
@@ -7316,7 +7316,7 @@ bool TitleChunkParse::parse() {
       }
 
 void TitleChunkParse::addToOve(const QString& str, unsigned int titleType) {
-      if( str.isEmpty() ) { return; }
+      if ( str.isEmpty() ) { return; }
 
       if (titleType == titleType_) {
             ove_->addTitle(str);
@@ -7349,7 +7349,7 @@ OveOrganizer::OveOrganizer(OveSong* ove) {
       }
 
 void OveOrganizer::organize() {
-      if(ove_ == NULL) {
+      if (ove_ == NULL) {
             return;
             }
 
@@ -7364,34 +7364,34 @@ void OveOrganizer::organizeAttributes() {
       int k;
 
       // key
-      if(ove_->getLineCount() > 0) {
+      if (ove_->getLineCount() > 0) {
             Line* line = ove_->getLine(0);
             int partBarCount = ove_->getPartBarCount();
             int lastKey = 0;
 
-            if(line != 0){
-                  for(i=0; i<line->getStaffCount(); ++i) {
+            if (line != 0){
+                  for (i=0; i<line->getStaffCount(); ++i) {
                         QPair<int, int> partStaff = ove_->trackToPartStaff(i);
                         Staff* staff = line->getStaff(i);
                         lastKey = staff->getKeyType();
 
-                        for(j=0; j<partBarCount; ++j) {
+                        for (j=0; j<partBarCount; ++j) {
                               MeasureData* measureData = ove_->getMeasureData(partStaff.first, partStaff.second, j);
 
-                              if(measureData != 0) {
+                              if (measureData != 0) {
                                     Key* key = measureData->getKey();
 
-                                    if( j==0 ) {
+                                    if ( j==0 ) {
                                           key->setKey(lastKey);
                                           key->setPreviousKey(lastKey);
                                           }
 
-                                    if( !key->getSetKey() ) {
+                                    if ( !key->getSetKey() ) {
                                           key->setKey(lastKey);
                                           key->setPreviousKey(lastKey);
                                           }
                                     else {
-                                          if( key->getKey() != lastKey ) {
+                                          if ( key->getKey() != lastKey ) {
                                                 lastKey = key->getKey();
                                                 }
                                           }
@@ -7402,27 +7402,27 @@ void OveOrganizer::organizeAttributes() {
             }
 
       // clef
-      if( ove_->getLineCount() > 0 ) {
+      if ( ove_->getLineCount() > 0 ) {
             Line* line = ove_->getLine(0);
             int partBarCount = ove_->getPartBarCount();
             ClefType lastClefType = ClefType::Treble;
 
-            if(line != 0){
-                  for( i=0; i<line->getStaffCount(); ++i ) {
+            if (line != 0){
+                  for ( i=0; i<line->getStaffCount(); ++i ) {
                         QPair<int, int> partStaff = ove_->trackToPartStaff(i);
                         Staff* staff = line->getStaff(i);
                         lastClefType = staff->getClefType();
 
-                        for( j=0; j<partBarCount; ++j ) {
+                        for ( j=0; j<partBarCount; ++j ) {
                               MeasureData* measureData = ove_->getMeasureData(partStaff.first, partStaff.second, j);
 
-                              if(measureData != 0) {
+                              if (measureData != 0) {
                                     Clef* clefPtr = measureData->getClef();
                                     clefPtr->setClefType((int)lastClefType);
 
                                     const QList<MusicData*>& clefs = measureData->getMusicDatas(MusicDataType::Clef);
 
-                                    for( k=0; k<clefs.size(); ++k ) {
+                                    for ( k=0; k<clefs.size(); ++k ) {
                                           Clef* clef = dynamic_cast<Clef*>(clefs[k]);
                                           lastClefType = clef->getClefType();
                                           }
@@ -7436,7 +7436,7 @@ void OveOrganizer::organizeAttributes() {
 Staff* getStaff(OveSong* ove, int track) {
       if (ove->getLineCount() > 0) {
             Line* line = ove->getLine(0);
-            if(line != 0 && line->getStaffCount() > 0) {
+            if (line != 0 && line->getStaffCount() > 0) {
                   Staff* staff = line->getStaff(track);
                   return staff;
                   }
@@ -7451,20 +7451,20 @@ void OveOrganizer::organizeTracks() {
       QList<Track*> tracks = ove_->getTracks();
       QList<bool> comboStaveStarts;
 
-      for( i=0; i<tracks.size(); ++i ) {
+      for ( i=0; i<tracks.size(); ++i ) {
             comboStaveStarts.push_back(false);
             }
 
-      for( i=0; i<tracks.size(); ++i ) {
+      for ( i=0; i<tracks.size(); ++i ) {
             Staff* staff = getStaff(ove_, i);
-            if(staff != 0) {
-                  if(staff->getGroupType() == GroupType::Brace && staff->getGroupStaffCount() == 1 ) {
+            if (staff != 0) {
+                  if (staff->getGroupType() == GroupType::Brace && staff->getGroupStaffCount() == 1 ) {
                         comboStaveStarts[i] = true;
                         }
                   }
 
-            /*if( i < tracks.size() - 1 ) {
-         if( tracks[i]->getStartClef() == ClefType::Treble &&
+            /*if ( i < tracks.size() - 1 ) {
+         if ( tracks[i]->getStartClef() == ClefType::Treble &&
             tracks[i+1]->getStartClef() == ClefType::Bass &&
             tracks[i]->getChannel() == tracks[i+1]->get_channel() ) {
          }
@@ -7474,10 +7474,10 @@ void OveOrganizer::organizeTracks() {
       int trackId = 0;
       QList<int> partStaffCounts;
 
-      while( trackId < (int)tracks.size() ) {
+      while ( trackId < (int)tracks.size() ) {
             int partTrackCount = 1;
 
-            if( comboStaveStarts[trackId] ) {
+            if ( comboStaveStarts[trackId] ) {
                   partTrackCount = 2;
                   }
 
@@ -7491,11 +7491,11 @@ void OveOrganizer::organizeTracks() {
 void OveOrganizer::organizeMeasures() {
       int trackBarCount = ove_->getTrackBarCount();
 
-      for( int i=0; i<ove_->getPartCount(); ++i ) {
+      for ( int i=0; i<ove_->getPartCount(); ++i ) {
             int partStaffCount = ove_->getStaffCount(i);
 
-            for( int j=0; j<partStaffCount; ++j ) {
-                  for( int k=0; k<trackBarCount; ++k ) {
+            for ( int j=0; j<partStaffCount; ++j ) {
+                  for ( int k=0; k<trackBarCount; ++k ) {
                         Measure* measure = ove_->getMeasure(k);
                         MeasureData* measureData = ove_->getMeasureData(i, j, k);
 
@@ -7517,8 +7517,8 @@ void OveOrganizer::organizeMeasure(int part, int track, Measure* measure, Measur
       }
 
 void addToList(QList<int>& list, int number) {
-      for(int i=0; i<list.size(); ++i){
-            if(list[i] == number){
+      for (int i=0; i<list.size(); ++i){
+            if (list[i] == number){
                   return;
                   }
             }
@@ -7533,9 +7533,9 @@ void OveOrganizer::organizeContainers(int /*part*/, int /*track*/,
       int barUnits = measure->getTime()->getUnits();
       QList<int> voices;
 
-      for(i=0; i<containers.size(); ++i){
+      for (i=0; i<containers.size(); ++i){
             int endUnit = barUnits;
-            if( i < containers.size() - 1 ) {
+            if ( i < containers.size() - 1 ) {
                   endUnit = containers[i+1]->start()->getOffset();
                   }
 
@@ -7549,7 +7549,7 @@ void OveOrganizer::organizeContainers(int /*part*/, int /*track*/,
       for (i = 0; i < voices.size(); ++i) {
             int voice = voices[i];
             // voice -> i
-            for(int j=0; j<(int)containers.size(); ++j) {
+            for (int j=0; j<(int)containers.size(); ++j) {
                   int avoice = containers[j]->getVoice();
                   if ( avoice == voice && avoice != i ) {
                         containers[j]->setVoice(i);
@@ -7563,7 +7563,7 @@ void OveOrganizer::organizeMusicDatas(int /*part*/, int /*track*/, Measure* meas
       int barIndex = measure->getBarNumber()->getIndex();
       QList<MusicData*> datas = measureData->getMusicDatas(MusicDataType::None);
 
-      for(i=0; i<datas.size(); ++i) {
+      for (i=0; i<datas.size(); ++i) {
             datas[i]->start()->setMeasure(barIndex);
             }
       }
@@ -7572,7 +7572,7 @@ void OveOrganizer::organizeCrossMeasureElements(int part, int track, Measure* me
       int i;
       QList<MusicData*> pairs = measureData->getCrossMeasureElements(MusicDataType::None, MeasureData::PairType::Start);
 
-      for(i=0; i<pairs.size(); ++i) {
+      for (i=0; i<pairs.size(); ++i) {
             MusicData* pair = pairs[i];
 
             switch ( pair->getMusicDataType() ) {
@@ -7616,30 +7616,30 @@ void OveOrganizer::organizePairElement(
 
       data->start()->setMeasure(bar1Index);
 
-      if(measureData2 != 0 && measureData != measureData2) {
+      if (measureData2 != 0 && measureData != measureData2) {
             measureData2->addCrossMeasureElement(data, false);
             }
 
-      if( data->getMusicDataType() == MusicDataType::Tuplet ){
+      if ( data->getMusicDataType() == MusicDataType::Tuplet ){
             Tuplet* tuplet = dynamic_cast<Tuplet*>(data);
             const QList<NoteContainer*> containers = measureData->getNoteContainers();
 
-            for(int i=0; i<containers.size(); ++i){
-                  if(containers[i]->getTick() > tuplet->getTick()){
+            for (int i=0; i<containers.size(); ++i){
+                  if (containers[i]->getTick() > tuplet->getTick()){
                         break;
                         }
 
-                  if(containers[i]->getTick() == tuplet->getTick()){
+                  if (containers[i]->getTick() == tuplet->getTick()){
                         tuplet->setNoteType(containers[i]->getNoteType());
                         }
                   }
 
             int tupletTick = NoteTypeToTick(tuplet->getNoteType(), ove_->getQuarter())*tuplet->getSpace();
-            if( tuplet->getTick() % tupletTick != 0 ) {
+            if ( tuplet->getTick() % tupletTick != 0 ) {
                   int newStartTick = (tuplet->getTick() / tupletTick) * tupletTick;
 
-                  for(int i=0; i<containers.size(); ++i){
-                        if( containers[i]->getTick() == newStartTick &&
+                  for (int i=0; i<containers.size(); ++i){
+                        if ( containers[i]->getTick() == newStartTick &&
                             containers[i]->getTuplet() == tuplet->getTuplet()) {
                               tuplet->setTick(containers[i]->getTick());
                               tuplet->start()->setOffset(containers[i]->start()->getOffset());
@@ -7660,11 +7660,11 @@ void OveOrganizer::organizeOctaveShift(
 
       octave->start()->setMeasure(barIndex);
 
-      for(i=0; i<containers.size(); ++i) {
+      for (i=0; i<containers.size(); ++i) {
             int noteShift = octave->getNoteShift();
             int containerTick = containers[i]->getTick();
 
-            if( octave->getTick() <= containerTick && octave->getEndTick() > containerTick ) {
+            if ( octave->getTick() <= containerTick && octave->getEndTick() > containerTick ) {
                   containers[i]->setNoteShift(noteShift);
                   }
             }
@@ -7681,21 +7681,21 @@ bool getMiddleUnit(
       int bar2Index = measure2->getBarNumber()->getIndex();
       int sumUnit = 0;
 
-      for( int j=bar1Index; j<=bar2Index; ++j ) {
+      for ( int j=bar1Index; j<=bar2Index; ++j ) {
             Measure* measure = ove->getMeasure(j);
             barUnits.push_back(measure->getTime()->getUnits());
             sumUnit += measure->getTime()->getUnits();
             }
 
       int currentSumUnit = 0;
-      for( i=0; i<barUnits.size(); ++i ) {
+      for ( i=0; i<barUnits.size(); ++i ) {
             int barUnit = barUnits[i];
 
-            if( i==0 ) {
+            if ( i==0 ) {
                   barUnit = barUnits[i] - unit1;
                   }
 
-            if( currentSumUnit + barUnit < sumUnit/2 ) {
+            if ( currentSumUnit + barUnit < sumUnit/2 ) {
                   currentSumUnit += barUnit;
                   }
             else {
@@ -7703,7 +7703,7 @@ bool getMiddleUnit(
                   }
             }
 
-      if( i < barUnits.size() ) {
+      if ( i < barUnits.size() ) {
             int barMiddleIndex = bar1Index + i;
             middleMeasure = ove->getMeasure(barMiddleIndex);
             middleUnit = sumUnit/2 - currentSumUnit;
@@ -7720,7 +7720,7 @@ void OveOrganizer::organizeWedge(Wedge* wedge, int part, int track, Measure* mea
       MeasureData* measureData2 = ove_->getMeasureData(part, track, bar2Index);
       WedgeType wedgeType = wedge->getWedgeType();
 
-      if( wedge->getWedgeType() == WedgeType::Double_Line ) {
+      if ( wedge->getWedgeType() == WedgeType::Double_Line ) {
             wedgeType = WedgeType::Cres_Line;
             }
 
@@ -7743,11 +7743,11 @@ void OveOrganizer::organizeWedge(Wedge* wedge, int part, int track, Measure* mea
       stopPoint->setWedgeType(wedgeType);
       stopPoint->setHeight(wedge->getHeight());
 
-      if(measureData2 != 0) {
+      if (measureData2 != 0) {
             measureData2->addMusicData(stopPoint);
             }
 
-      if( wedge->getWedgeType() == WedgeType::Double_Line ) {
+      if ( wedge->getWedgeType() == WedgeType::Double_Line ) {
             Measure* middleMeasure = NULL;
             int middleUnit = 0;
 
@@ -7757,7 +7757,7 @@ void OveOrganizer::organizeWedge(Wedge* wedge, int part, int track, Measure* mea
                               wedge->start()->getOffset(), wedge->stop()->getOffset(),
                               middleMeasure, middleUnit);
 
-            if( middleMeasure != 0 ) {
+            if ( middleMeasure != 0 ) {
                   WedgeEndPoint* midStopPoint = new WedgeEndPoint();
                   measureData->addMusicData(midStopPoint);
 
@@ -7923,7 +7923,7 @@ OveSerialize::OveSerialize() :
       }
 
 OveSerialize::~OveSerialize() {
-      if(streamHandle_ != 0) {
+      if (streamHandle_ != 0) {
             delete streamHandle_;
             streamHandle_ = 0;
             }
@@ -7954,10 +7954,10 @@ void OveSerialize::messageOut(const QString& str) {
       }
 
 bool OveSerialize::load(void) {
-      if(streamHandle_ == 0)
+      if (streamHandle_ == 0)
             return false;
 
-      if( !readHeader() ) {
+      if ( !readHeader() ) {
             messageOutError();
             return false;
             }
@@ -7966,7 +7966,7 @@ bool OveSerialize::load(void) {
       QMap<ChunkType, int> chunkTimes;
       //bool firstEnter = true;
 
-      for( i=(int)ChunkType::OVSC; i<(int)ChunkType::NONE; ++i ) {
+      for ( i=(int)ChunkType::OVSC; i<(int)ChunkType::NONE; ++i ) {
             chunkTimes[(ChunkType)i] = 0;
             }
 
@@ -7976,13 +7976,13 @@ bool OveSerialize::load(void) {
             NameBlock nameBlock;
             SizeChunk sizeChunk;
 
-            if( !readNameBlock(nameBlock) ) { return false; }
+            if ( !readNameBlock(nameBlock) ) { return false; }
 
             chunkType = nameToChunkType(nameBlock);
             ++chunkTimes[chunkType];
             int maxTime = chunkTypeToMaxTimes(chunkType);
 
-            if( maxTime > 0 && chunkTimes[chunkType] > maxTime ) {
+            if ( maxTime > 0 && chunkTimes[chunkType] > maxTime ) {
                   messageOut("format not support, chunk appear more than accept.\n");
                   return false;
                   }
@@ -7990,7 +7990,7 @@ bool OveSerialize::load(void) {
             switch (chunkType) {
                   /*case ChunkType::OVSC :
        {
-       if( !readHeadData(&sizeChunk) )
+       if ( !readHeadData(&sizeChunk) )
        {
        messageOut_error();
        return false;
@@ -8083,7 +8083,7 @@ bool OveSerialize::load(void) {
                         break;
                         }
                   default:
-                        /*if( firstEnter )
+                        /*if ( firstEnter )
           {
           QString info = "Not compatible file, try to load and save with newer version, Overture 4 is recommended.\n";
           messageOut(info);
@@ -8099,7 +8099,7 @@ bool OveSerialize::load(void) {
             }
       while ( chunkType != ChunkType::NONE );
 
-      // if( !readOveEnd() ) { return false; }
+      // if ( !readOveEnd() ) { return false; }
 
       // organize OveData
       OVE::OveOrganizer organizer(ove_);

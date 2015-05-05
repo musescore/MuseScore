@@ -124,7 +124,7 @@ void FrameShadowFactory::removeShadows( QWidget* widget ) {
       widget->removeEventFilter(this);
 
       const QList<QObject* > children = widget->children();
-      foreach(QObject * child, children) {
+      for (QObject * child : children) {
             if (FrameShadowBase* shadow = qobject_cast<FrameShadowBase*>(child)) {
                   shadow->hide();
                   shadow->setParent(0);
@@ -164,7 +164,7 @@ bool FrameShadowFactory::eventFilter( QObject* object, QEvent* event ) {
 
 void FrameShadowFactory::updateShadowsGeometry(QObject* object) const {
       const QList<QObject*> children = object->children();
-      foreach(QObject * child, children) {
+      for (QObject * child : children) {
             if (FrameShadowBase* shadow = qobject_cast<FrameShadowBase*>(child)) {
                   shadow->updateGeometry();
                   }
@@ -177,7 +177,7 @@ void FrameShadowFactory::updateShadowsGeometry(QObject* object) const {
 
 void FrameShadowFactory::raiseShadows(QObject* object) const {
       const QList<QObject*> children = object->children();
-      foreach(QObject * child, children) {
+      for (QObject * child : children) {
             if (FrameShadowBase* shadow = qobject_cast<FrameShadowBase*>(child)) {
                   shadow->raise();
                   }
@@ -190,7 +190,7 @@ void FrameShadowFactory::raiseShadows(QObject* object) const {
 
 void FrameShadowFactory::update( QObject* object ) const {
       const QList<QObject* > children = object->children();
-      foreach( QObject * child, children ) {
+      for ( QObject * child : children ) {
             if (FrameShadowBase* shadow = qobject_cast<FrameShadowBase*>(child)) {
                   shadow->update();
                   }
@@ -203,7 +203,7 @@ void FrameShadowFactory::update( QObject* object ) const {
 
 void FrameShadowFactory::updateState(const QWidget* widget, bool focus, bool hover, qreal opacity, AnimationMode mode) const {
       const QList<QObject*> children = widget->children();
-      foreach (QObject * child, children) {
+      for  (QObject * child : children) {
             if (FrameShadowBase* shadow = qobject_cast<FrameShadowBase*>(child)) {
                   shadow->updateState( focus, hover, opacity, mode );
                   }

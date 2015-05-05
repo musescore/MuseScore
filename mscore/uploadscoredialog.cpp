@@ -110,7 +110,7 @@ void UploadScoreDialog::upload(int nid)
            }
      Score* score = mscore->currentScore()->rootScore();
      QString path = QDir::tempPath() + "/temp.mscz";
-     if(mscore->saveAs(score, true, path, "mscz")) {
+     if (mscore->saveAs(score, true, path, "mscz")) {
            QString licenseString = license->currentData().toString();
            QString privateString = cbPrivate->isChecked() ? "1" : "0";
             _loginManager->upload(path, nid, title->text(), description->toPlainText(), privateString, licenseString, tags->text());

@@ -348,7 +348,7 @@ void Piano::paintEvent(QPaintEvent* event)
       if (curPitch != -1) {
             int y = pitch2y(curPitch);
             QPixmap* pm;
-            switch(curPitch % 12) {
+            switch (curPitch % 12) {
                   case 0:
                   case 5:
                         pm = mk3;

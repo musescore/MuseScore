@@ -925,7 +925,7 @@ bool MQZipReader::extractAll(const QString &destinationDir) const
 
     // create directories first
     QList<FileInfo> allFiles = fileInfoList();
-    foreach (FileInfo fi, allFiles) {
+    for (FileInfo fi : allFiles) {
         const QString absPath = destinationDir + QDir::separator() + fi.filePath;
         if (fi.isDir) {
             if (!baseDir.mkpath(fi.filePath))
@@ -936,7 +936,7 @@ bool MQZipReader::extractAll(const QString &destinationDir) const
     }
 
     // set up symlinks
-    foreach (FileInfo fi, allFiles) {
+    for (FileInfo fi : allFiles) {
         const QString absPath = destinationDir + QDir::separator() + fi.filePath;
         if (fi.isSymLink) {
             QString destination = QFile::decodeName(fileData(fi.filePath));
@@ -954,7 +954,7 @@ bool MQZipReader::extractAll(const QString &destinationDir) const
         }
     }
 
-    foreach (FileInfo fi, allFiles) {
+    for (FileInfo fi : allFiles) {
         const QString absPath = destinationDir + QDir::separator() + fi.filePath;
         if (fi.isFile) {
             QFile f(absPath);

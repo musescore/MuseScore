@@ -282,7 +282,7 @@ void Part::read114(XmlReader& e)
             _partName = instrument()->trackName();
 
       if (instrument()->useDrumset()) {
-            foreach(Staff* staff, _staves) {
+            for (Staff* staff : _staves) {
                   int lines = staff->lines();
                   int bf    = staff->barLineFrom();
                   int bt    = staff->barLineTo();
@@ -654,7 +654,7 @@ Score::FileError Score::read114(XmlReader& e)
                               continue;
                         ChordRest* cr = static_cast<ChordRest*>(s->element(track));
                         if (cr) {
-                              if(cr->type() == Element::Type::REST) {
+                              if (cr->type() == Element::Type::REST) {
                                     Rest* r = static_cast<Rest*>(cr);
                                     if (!r->userOff().isNull()) {
                                           int lineOffset = r->computeLineOffset();
@@ -662,8 +662,8 @@ Score::FileError Score::read114(XmlReader& e)
                                           r->rUserYoffset() -= (lineOffset * .5 * lineDist * r->spatium());
                                           }
                                     }
-                              if(!first) {
-                                    switch(cr->beamMode()) {
+                              if (!first) {
+                                    switch (cr->beamMode()) {
                                           case Beam::Mode::AUTO:
                                           case Beam::Mode::BEGIN:
                                           case Beam::Mode::END:
@@ -700,7 +700,7 @@ Score::FileError Score::read114(XmlReader& e)
       //
       //    sanity check for barLineSpan and update ottavas
       //
-      foreach(Staff* staff, _staves) {
+      for (Staff* staff : _staves) {
             int barLineSpan = staff->barLineSpan();
             int idx = staffIdx(staff);
             int n = nstaves();
@@ -754,7 +754,7 @@ Score::FileError Score::read114(XmlReader& e)
 
       // create excerpts
 
-      foreach (Excerpt* excerpt, _excerpts) {
+      for (Excerpt* excerpt : _excerpts) {
             if (excerpt->parts().isEmpty()) {         // ignore empty parts
                   _excerpts.removeOne(excerpt);
                   continue;

@@ -210,7 +210,7 @@ static void create_segments()
 static void fill_segments()
       {
       for (int s = 0; s < segment.size(); ++s) {
-            foreach (const Event& n, note) {
+            for (const Event& n : note) {
                   int ontime  = n.ontime();
                   int offtime = n.offtime();
                   int start   = segment[s].start;
@@ -275,7 +275,7 @@ static void count_segment_notes()
                         total_dur += segment[s].snote[n].duration();
                   for (int y=0; y<28; ++y) {
                         if (segment[s].snote[n].tpc() == y) {
-                              if(seg_prof[y][s]==0)
+                              if (seg_prof[y][s]==0)
                                     pc_tally[s]++;
                               /* This keeps track of how many different pc's the segment contains. This counts TPCs, not NPCs! */
                               /* If scoring_mode is > 1, set array value to 1. If 0, add the note's duration to the
@@ -289,8 +289,8 @@ static void count_segment_notes()
                         }
                   }
 
-            if(scoring_mode == 0) {
-                  if(pc_tally[s]==0)
+            if (scoring_mode == 0) {
+                  if (pc_tally[s]==0)
                         segment[s].average_dur = 0.0;
                   segment[s].average_dur = total_dur / 12.0;
                   /* qDebug("Segment %d total dur = %6.3f, average dur = %6.3f", s, total_dur, segment[s].average_dur); */
@@ -299,7 +299,7 @@ static void count_segment_notes()
             if (verbosity>=2) {
                   qDebug("Segment %d: ", s);
                   for (int y=0; y<28; ++y) {
-                        if(npc_or_tpc_profile == 0 && (y<9 || y>20))
+                        if (npc_or_tpc_profile == 0 && (y<9 || y>20))
                               continue;
                         qDebug("%d ", seg_prof[y][s]);
                         }
@@ -335,7 +335,7 @@ static void prepare_profiles()
 
       if (verbosity > 2) {
             qDebug("Adjusted major profile: ");
-            for(int i = 0; i < 12; i++)
+            for (int i = 0; i < 12; i++)
                   qDebug("%6.3f ", major_profile[i]);
             qDebug("Adjusted minor profile: ");
             for (int i = 0; i < 12; i++)
@@ -360,7 +360,7 @@ static void generate_tpc_profiles()
       float minp[12];
 
       /* First we rearrange the key profile values (inputted in pitch height order) into lof order, C = 5 */
-      for(i=0; i<12; i++) {
+      for (i=0; i<12; i++) {
             majp[((((i * 7) % 12) + 5) % 12)] = major_profile[i];
             minp[((((i * 7) % 12) + 5) % 12)] = minor_profile[i];
             }
@@ -388,8 +388,8 @@ static void generate_tpc_profiles()
             }
 /*
       This routine just prints out the key profiles
-      for(key=0; key<56; ++key) {
-            for(tpc=0; tpc<28; ++tpc) {
+      for (key=0; key<56; ++key) {
+            for (tpc=0; tpc<28; ++tpc) {
                   qDebug("%1.2f ", key_profile[key][tpc]);
                   }
             }
@@ -416,12 +416,12 @@ static void generate_npc_profiles()
       float minp[12];
 
       /* First we rearrange the key profile values (inputted in pitch height order) into lof order, C = 5 */
-      for(i=0; i<12; i++) {
+      for (i=0; i<12; i++) {
             majp[((((i * 7) % 12) + 5) % 12)] = major_profile[i];
             minp[((((i * 7) % 12) + 5) % 12)] = minor_profile[i];
             }
       for (key=0; key<56; ++key) {
-            for(tpc=0; tpc<28; ++tpc) {
+            for (tpc=0; tpc<28; ++tpc) {
                   key_profile[key][tpc]=0;
                   }
             }
@@ -431,9 +431,9 @@ static void generate_npc_profiles()
                   /* tpc_to_use is the profile slot to use for a given value of the key-profile. In this way we keep
                      all profile slots within the 9-to-20 range
                   */
-                  if(tpc<9)
+                  if (tpc<9)
                         tpc_to_use=tpc+12;
-                  else if(tpc>20)
+                  else if (tpc>20)
                         tpc_to_use=tpc-12;
                   else
                         tpc_to_use = tpc;
@@ -463,8 +463,8 @@ static void generate_npc_profiles()
             }
 
 /*
-      for(key = 0; key < 56; ++key) {
-            for(tpc=0; tpc<28; ++tpc) {
+      for (key = 0; key < 56; ++key) {
+            for (tpc=0; tpc<28; ++tpc) {
                   qDebug("%1.2f ", key_profile[key][tpc]);
                   }
             }
@@ -497,9 +497,9 @@ static void match_profiles()
       if (scoring_mode==0) {
             major_sumsq = 0.0;
             minor_sumsq = 0.0;
-            for(i=0; i<12; i++)
+            for (i=0; i<12; i++)
                   major_sumsq += major_profile[i]*major_profile[i];
-            for(i=0; i<12; i++)
+            for (i=0; i<12; i++)
                   minor_sumsq += minor_profile[i]*minor_profile[i];
             if (verbosity==3)
                   qDebug("major_sumsq = %6.3f, minor_sumsq = %6.3f", major_sumsq, minor_sumsq);
@@ -551,30 +551,30 @@ static void match_profiles()
              degree)
           */
 
-                        if(scoring_mode == 0) {
-                              if(tpc<9 || tpc>20)
+                        if (scoring_mode == 0) {
+                              if (tpc<9 || tpc>20)
                                     continue;
                               /* calculate numerator */
                               key_score[key][s] += key_profile[key][tpc] * (seg_prof[tpc][s]-segment[s].average_dur);
                               /* qDebug("x-X=%6.3f, y-Y=%6.3f, product=%6.3f, new total=%6.3f", key_profile[key][tpc], seg_prof[tpc][s]-segment[s].average_dur, key_profile[key][tpc] * (seg_prof[tpc][s]-segment[s].average_dur), key_score[key][s]); */
                               }
 
-                        if(scoring_mode==1 || scoring_mode==2)
+                        if (scoring_mode==1 || scoring_mode==2)
                               key_score[key][s] += (key_profile[key][tpc] * seg_prof[tpc][s]);
 
-                        if(scoring_mode == 3) {
-                              /* if(tpc>11) continue; */
-                              /* if(tpc<9 || tpc>20) continue; */
+                        if (scoring_mode == 3) {
+                              /* if (tpc>11) continue; */
+                              /* if (tpc<9 || tpc>20) continue; */
 
-                              if(seg_prof[tpc][s]==0) {
+                              if (seg_prof[tpc][s]==0) {
                                     key_score[key][s] += log(1.000 - key_profile[key][tpc]);
                               /* qDebug("kp value = %6.3f: log(1-p) = %6.3f: score = %6.3f", key_profile[key][tpc], log(1.000 - key_profile[key][tpc]), key_score[key][s]); */
-                                    if(tpc>=9 && tpc<=20)
+                                    if (tpc>=9 && tpc<=20)
                                           kprob[key] *= (1.000 - key_profile[key][tpc]);
                                     }
                               else {
                                     key_score[key][s] += log(key_profile[key][tpc]);
-                                    if(tpc>=9 && tpc<=20)
+                                    if (tpc>=9 && tpc<=20)
                                           kprob[key] *= key_profile[key][tpc];
                                     }
 
@@ -582,35 +582,35 @@ static void match_profiles()
                               }
                         }
 
-                  if(scoring_mode == 0) {
+                  if (scoring_mode == 0) {
                         /* qDebug("sqrt(major_sumsq * input_sumsq) = %6.3f", sqrt(major_sumsq * input_sumsq)); */
                         /* calculate denominator */
-                        if(key<28)
+                        if (key<28)
                               key_score[key][s] = key_score[key][s] / sqrt(major_sumsq * input_sumsq);
                         else
                               key_score[key][s] = key_score[key][s] / sqrt(minor_sumsq * input_sumsq);
                         }
-                  if(scoring_mode == 2) {
-                        if(pc_tally[s] == 0)
+                  if (scoring_mode == 2) {
+                        if (pc_tally[s] == 0)
                               key_score[key][s] = 0;
                         else
                               key_score[key][s] = key_score[key][s] / pc_tally[s];
                         }
 
-                  /* if(s==0) qDebug("local score for key %d on segment %d: %6.3f", key, s, key_score[key][s]); */
+                  /* if (s==0) qDebug("local score for key %d on segment %d: %6.3f", key, s, key_score[key][s]); */
                   if (key_score[key][s] > key_score[best_key][s])
                         best_key = key;
                   }
 
-            if(verbosity>=2) {
+            if (verbosity>=2) {
                   qDebug("The best local key for segment %d at time %d is ", s, segment[s].start);
                   print_keyname(best_key);
                   qDebug("with score %6.3f", key_score[best_key][s]);
                   }
 
-            if(scoring_mode==3) {
+            if (scoring_mode==3) {
                   total_prob[s]=0.0;
-                  for(key=0; key<56; key++) {
+                  for (key=0; key<56; key++) {
                         total_prob[s] += kprob[key] / 24.0;
                         /* qDebug("  Prob of segment %d given key %d: %6.8f", s, key, kprob[key]);  */
                         }
@@ -671,15 +671,15 @@ static void make_first_table(int seg)
             seg_factor = seglength;
             }
 
-      for(s = 0; s <= segtotal; s++) {
-            for(i = 0; i < 56; ++i) {
-                  for(j = 0; j < 56; ++j)
+      for (s = 0; s <= segtotal; s++) {
+            for (i = 0; i < 56; ++i) {
+                  for (j = 0; j < 56; ++j)
                         analysis[i][j].append(-1000.0);
                   }
             }
 
-      for(i = 0; i < 56; ++i) {
-            for(j = 0; j < 56; ++j) {
+      for (i = 0; i < 56; ++i) {
+            for (j = 0; j < 56; ++j) {
                   if (j != i)
                         analysis[i][j][1] = ((key_score[i][0] + key_score[j][1]) * seg_factor) + mod_factor;
                   else
@@ -713,8 +713,8 @@ static void make_tables()
 
       for (int seg = 2; seg <= segtotal; ++seg) {
             /* qDebug("mod_factor = %6.6f; ; nomod_factor = %6.6f", mod_factor, nomod_factor);  */
-            for(int j = 0; j < 56; ++j) {
-                  for(int i = 0; i < 56; ++i) {
+            for (int j = 0; j < 56; ++j) {
+                  for (int i = 0; i < 56; ++i) {
                         int n = best[i][seg-1];
                         if (j != i)
                               analysis[i][j][seg] = analysis[n][i][seg-1] + (key_score[j][seg] * seg_factor) + mod_factor;
@@ -735,7 +735,7 @@ static void best_key_analysis()
       int n, m, f, tie1=-1, tie2=-1;
       int s = segtotal;
       int k = 0;
-      for(int j = 0; j < 56; ++j) {
+      for (int j = 0; j < 56; ++j) {
             n = best[j][s];
             m = best[k][s];
 
@@ -765,7 +765,7 @@ static void best_key_analysis()
 
       // Here's where we take the best key choices and put them into final[s]
 
-      for(s = segtotal; s >= 1; --s) {
+      for (s = segtotal; s >= 1; --s) {
             final[s-1] = best[k][s];
             k = final[s-1];
             }
@@ -774,7 +774,7 @@ static void best_key_analysis()
             qDebug("Segment 0: key choice %d; total score %6.3f; segment score %6.3f", final[0], key_score[final[0]][0],
                key_score[final[0]][0]);
             qDebug("Segment 1: key choice %d; total score %6.3f; segment score %6.3f", final[1], analysis[final[0]][final[1]][1], analysis[final[0]][final[1]][1] - key_score[final[0]][0]);
-            for(s = 2; s <= segtotal; s++) {
+            for (s = 2; s <= segtotal; s++) {
                   qDebug("Segment %d: key choice %d; total score %6.3f; segment score %6.3f", s, final[s], analysis[final[s-1]][final[s]][s], analysis[final[s-1]][final[s]][s] - analysis[final[s-2]][final[s-1]][s-1]);
                   }
             }
@@ -819,7 +819,7 @@ int findKey(MidiTrack* mt, TimeSigMap* sigmap)
       int lastTick = 0;
       const EventList el = mt->events();
 
-      foreach (Event e, el) {
+      for (Event e : el) {
             if (e.type() != ME_NOTE)
                   continue;
             if (e.offtime() > lastTick)

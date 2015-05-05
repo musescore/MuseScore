@@ -139,7 +139,7 @@ int Voice::dsp_float_interpolate_none(unsigned n)
 
       end_index = looping ? voice->loopend - 1 : voice->end;
 
-      while(1) {
+      while (1) {
             dsp_phase_index = dsp_phase.index_round();      // round to nearest point
 
             /* interpolate sequence of sample points */

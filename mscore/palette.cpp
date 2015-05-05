@@ -56,7 +56,7 @@ static bool needsStaff(Element* e)
       {
       if (e == 0)
             return false;
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::CHORD:
             case Element::Type::BAR_LINE:
             case Element::Type::CLEF:
@@ -94,7 +94,7 @@ Palette::Palette(QWidget* parent)
 
 Palette::~Palette()
       {
-      foreach(PaletteCell* cell, cells)
+      for (PaletteCell* cell : cells)
             delete cell;
       }
 
@@ -343,7 +343,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                         qDebug("nowhere to place drum note");
                   }
             else {
-                  foreach(Element* e, sel.elements())
+                  for (Element* e : sel.elements())
                         applyDrop(score, viewer, e, element);
                   }
             }
@@ -369,7 +369,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                                     continue;
                               if (e->type() == Element::Type::CHORD) {
                                     Chord* chord = static_cast<Chord*>(e);
-                                    foreach(Note* n, chord->notes()) {
+                                    for (Note* n : chord->notes()) {
                                           applyDrop(score, viewer, n, element);
                                           if (element->type() == Element::Type::SLUR || element->type() == Element::Type::HAIRPIN) {
                                                 stop = true;
@@ -379,7 +379,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                                     }
                               else {
                                     // do not apply articulation to barline in a range selection
-                                    if(e->type() != Element::Type::BAR_LINE || element->type() != Element::Type::ARTICULATION)
+                                    if (e->type() != Element::Type::BAR_LINE || element->type() != Element::Type::ARTICULATION)
                                           applyDrop(score, viewer, e, element);
                                     }
                               if (stop) break;
@@ -810,7 +810,7 @@ void Palette::dragEnterEvent(QDragEnterEvent* event)
       else {
             if (MScore::debugMode) {
                   qDebug("dragEnterEvent: formats:");
-                  foreach(const QString& s, event->mimeData()->formats())
+                  for (const QString& s : event->mimeData()->formats())
                         qDebug("   %s", s.toLatin1().data());
                   }
             }
@@ -1082,7 +1082,7 @@ bool Palette::read(const QString& p)
       //
       // load images
       //
-      foreach(const QString& s, images)
+      for (const QString& s : images)
             imageStore.add(s, f.fileData(s));
 
       if (rootfile.isEmpty()) {
@@ -1166,7 +1166,7 @@ void Palette::write(const QString& p)
       xml.stag("rootfiles");
       xml.stag(QString("rootfile full-path=\"%1\"").arg(Xml::xmlString("palette.xml")));
       xml.etag();
-      foreach (ImageStoreItem* ip, images) {
+      for (ImageStoreItem* ip : images) {
             QString path = QString("Pictures/") + ip->hashName();
             xml.tag("file", path);
             }
@@ -1178,7 +1178,7 @@ void Palette::write(const QString& p)
       f.addFile("META-INF/container.xml", cbuf.data());
 
       // save images
-      foreach(ImageStoreItem* ip, images) {
+      for (ImageStoreItem* ip : images) {
             QString path = QString("Pictures/") + ip->hashName();
             f.addFile(path, ip->buffer());
             }
@@ -1275,7 +1275,7 @@ void Palette::read(XmlReader& e)
 
 void Palette::clear()
       {
-      foreach(PaletteCell* cell, cells)
+      for (PaletteCell* cell : cells)
             delete cell;
       cells.clear();
       }

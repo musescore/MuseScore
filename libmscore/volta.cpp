@@ -220,7 +220,7 @@ void Volta::read(XmlReader& e)
                   QString s = e.readElementText();
                   QStringList sl = s.split(",", QString::SkipEmptyParts);
                   _endings.clear();
-                  foreach(const QString& l, sl) {
+                  for (const QString& l : sl) {
                         int i = l.simplified().toInt();
                         _endings.append(i);
                         }
@@ -248,7 +248,7 @@ void Volta::write(Xml& xml) const
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
       TextLine::writeProperties(xml);
       QString s;
-      foreach(int i, _endings) {
+      for (int i : _endings) {
             if (!s.isEmpty())
                   s += ", ";
             s += QString("%1").arg(i);
@@ -272,7 +272,7 @@ LineSegment* Volta::createLineSegment()
 
 bool Volta::hasEnding(int repeat) const
       {
-      foreach (int ending, endings()) {
+      for (int ending : endings()) {
             if (ending == repeat)
                   return true;
             }
@@ -335,7 +335,7 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
 
 QVariant Volta::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::LINE_STYLE:
                   return score()->styleI(StyleIdx::voltaLineStyle);
 

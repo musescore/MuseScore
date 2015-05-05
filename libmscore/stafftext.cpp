@@ -42,9 +42,9 @@ void StaffText::write(Xml& xml) const
       if (!xml.canWrite(this))
             return;
       xml.stag("StaffText");
-      foreach(ChannelActions s, _channelActions) {
+      for (ChannelActions s : _channelActions) {
             int channel = s.channel;
-            foreach(QString name, s.midiActionNames)
+            for (QString name : s.midiActionNames)
                   xml.tagE(QString("MidiAction channel=\"%1\" name=\"%2\"").arg(channel).arg(name));
             }
       for (int voice = 0; voice < VOICES; ++voice) {

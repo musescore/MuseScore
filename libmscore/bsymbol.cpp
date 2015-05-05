@@ -33,7 +33,7 @@ BSymbol::BSymbol(const BSymbol& s)
       {
       _z          = s._z;
       _systemFlag = s._systemFlag;
-      foreach(Element* e, s._leafs) {
+      for (Element* e : s._leafs) {
             Element* ee = e->clone();
             ee->setParent(this);
             _leafs.append(ee);
@@ -48,7 +48,7 @@ void BSymbol::writeProperties(Xml& xml) const
       {
       if (_systemFlag)
             xml.tag("systemFlag", _systemFlag);
-      foreach(const Element* e, leafs())
+      for (const Element* e : leafs())
             e->write(xml);
       Element::writeProperties(xml);
       }
@@ -120,7 +120,7 @@ void BSymbol::remove(Element* e)
 void BSymbol::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       func(data, this);
-      foreach (Element* e, _leafs)
+      for (Element* e : _leafs)
             e->scanElements(data, func, all);
       }
 
@@ -171,7 +171,7 @@ void BSymbol::layout()
 QRectF BSymbol::drag(EditData* data)
       {
       QRectF r(canvasBoundingRect());
-      foreach(const Element* e, _leafs)
+      for (const Element* e : _leafs)
             r |= e->canvasBoundingRect();
 
       qreal x = data->delta.x();
@@ -192,7 +192,7 @@ QRectF BSymbol::drag(EditData* data)
       setUserOff(QPointF(x, y));
 
       r |= canvasBoundingRect();
-      foreach(const Element* e, _leafs)
+      for (const Element* e : _leafs)
             r |= e->canvasBoundingRect();
       return r;
       }

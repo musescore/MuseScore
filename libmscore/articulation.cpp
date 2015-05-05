@@ -546,7 +546,7 @@ QLineF Articulation::dragAnchor() const
 
 QVariant Articulation::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::DIRECTION:           return int(direction());
             case P_ID::ARTICULATION_ANCHOR: return int(anchor());
             case P_ID::TIME_STRETCH:        return timeStretch();
@@ -603,7 +603,7 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Articulation::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::DIRECTION:
                   return int(MScore::Direction::AUTO);
 

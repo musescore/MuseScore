@@ -1144,7 +1144,7 @@ void ExportMusicXml::credits(Xml& xml)
 
       // write the credits
       if (measure) {
-            foreach(const Element* element, measure->el()) {
+            for (const Element* element : measure->el()) {
                   if (element->type() == Element::Type::TEXT) {
                         const Text* text = (const Text*)element;
                         const double ph = getTenthsFromDots(parentHeight(text));
@@ -1369,7 +1369,7 @@ static void ending(Xml& xml, Volta* v, bool left)
       {
       QString number = "";
       QString type = "";
-      foreach(int i, v->endings()) {
+      for (int i : v->endings()) {
             if (!number.isEmpty())
                   number += ", ";
             number += QString("%1").arg(i);
@@ -1580,11 +1580,11 @@ void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool 
 
             // first put the KeySyms in a map
             QMap<qreal, KeySym> map;
-            foreach(const KeySym& ksym, keysyms) {
+            for (const KeySym& ksym : keysyms) {
                   map.insert(ksym.spos.x(), ksym);
                   }
             // then write them (automatically sorted on key)
-            foreach(const KeySym& ksym, map) {
+            for (const KeySym& ksym : map) {
                   int line = static_cast<int>(round(2 * ksym.spos.y()));
                   int step = (po - line) % 7;
                   //qDebug(" keysym sym %d spos %g,%g pos %g,%g -> line %d step %d",
@@ -1783,7 +1783,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
       {
       const QList<Articulation*>& na = chord->articulations();
       // first output the fermatas
-      foreach (const Articulation* a, na) {
+      for (const Articulation* a : na) {
             ArticulationType at = a->articulationType();
             if (at == ArticulationType::Fermata
                 || at == ArticulationType::Shortfermata
@@ -1805,7 +1805,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 
       // then the attributes whose elements are children of <articulations>
       Articulations articulations;
-      foreach (const Articulation* a, na) {
+      for (const Articulation* a : na) {
             switch (a->articulationType()) {
                   case ArticulationType::Fermata:
                   case ArticulationType::Shortfermata:
@@ -1897,7 +1897,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                   xml.tagE("caesura");
             }
 
-      foreach(Element* e, chord->el()) {
+      for (Element* e : chord->el()) {
             qDebug("chordAttributes: el %p type %hhd (%s)", e, e->type(), e->name());
             if (e->type() == Element::Type::CHORDLINE) {
                   ChordLine const* const cl = static_cast<ChordLine const* const>(e);
@@ -1930,7 +1930,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 
       // then the attributes whose elements are children of <ornaments>
       Ornaments ornaments;
-      foreach (const Articulation* a, na) {
+      for (const Articulation* a : na) {
             switch (a->articulationType()) {
                   case ArticulationType::Fermata:
                   case ArticulationType::Shortfermata:
@@ -2067,7 +2067,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
       ornaments.etag(xml);
 
       // and finally the attributes whose elements are children of <technical>
-      foreach (const Articulation* a, na) {
+      for (const Articulation* a : na) {
             switch (a->articulationType()) {
                   case ArticulationType::Plusstop:
                         {
@@ -2285,7 +2285,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
              chord, chord->parent(), chord->isGrace(), chord->graceNotes().size(), chord->graceIndex());
       qDebug("track %d tick %d part %p nr %d instr %p nr %d",
              chord->track(), chord->tick(), part, partNr, part->instrument(tick), instNr);
-      foreach(Element* e, chord->el())
+      for Element* e : chord->el())
             qDebug("chord %p el %p", chord, e);
        */
       QList<Note*> nl = chord->notes();
@@ -2303,7 +2303,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
       const double pageHeight  = getTenthsFromInches(pf->size().height());
       // const double pageWidth  = getTenthsFromInches(pf->size().width());
 
-      foreach(Note* note, nl) {
+      for (Note* note : nl) {
             QString val;
 
             attr.doAttr(xml, false);
@@ -2559,7 +2559,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   chordAttributes(chord, notations, technical, trillStart, trillStop);
                   }
 
-            foreach (const Element* e, note->el()) {
+            for (const Element* e : note->el()) {
                   if (e->type() == Element::Type::FINGERING) {
                         Text* f = (Text*)e;
                         notations.tag(xml);
@@ -3493,7 +3493,7 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
 
 void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
       {
-      foreach(const Lyrics* l, *ll) {
+      for (const Lyrics* l : *ll) {
             if (l && !l->xmlText().isEmpty()) {
                   if ((l)->track() == trk) {
                         xml.stag(QString("lyric number=\"%1\"").arg((l)->no() + 1));
@@ -3521,7 +3521,7 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
                         /*
                          Temporarily disabled because it doesn't work yet (and thus breaks the regression test).
                          See MusicXml::xmlLyric: "// TODO-WS      l->setTick(tick);"
-                        if((l)->endTick() > 0)
+                        if ((l)->endTick() > 0)
                               xml.tagE("extend");
                         */
                         xml.etag();
@@ -3826,7 +3826,7 @@ static void measureStyle(Xml& xml, Attributes& attr, Measure* m)
 static const FretDiagram* findFretDiagram(int strack, int etrack, int track, Segment* seg)
       {
       if (seg->segmentType() == Segment::Type::ChordRest) {
-            foreach(const Element* e, seg->annotations()) {
+            for (const Element* e : seg->annotations()) {
 
                   int wtrack = -1; // track to write annotation
 
@@ -3855,7 +3855,7 @@ static void annotations(ExportMusicXml* exp, Xml&, int strack, int etrack, int t
             const FretDiagram* fd = findFretDiagram(strack, etrack, track, seg);
             // if (fd) qDebug("annotations seg %p found fretboard diagram %p", seg, fd);
 
-            foreach(const Element* e, seg->annotations()) {
+            for (const Element* e : seg->annotations()) {
 
                   int wtrack = -1; // track to write annotation
 
@@ -3896,7 +3896,7 @@ static void annotations(ExportMusicXml* exp, Xml&, int strack, int etrack, int t
                                     break;
                               }
                         }
-                  } // foreach
+                  } // for
             if (fd)
                   // found fd but no harmony, cannot write (MusicXML would be invalid)
                   qDebug("annotations seg %p found fretboard diagram %p w/o harmony: cannot write",
@@ -3912,7 +3912,7 @@ static void figuredBass(Xml& xml, int strack, int etrack, int track, const Chord
       {
       Segment* seg = cr->segment();
       if (seg->segmentType() == Segment::Type::ChordRest) {
-            foreach(const Element* e, seg->annotations()) {
+            for (const Element* e : seg->annotations()) {
 
                   int wtrack = -1; // track to write annotation
 
@@ -3939,7 +3939,7 @@ static void figuredBass(Xml& xml, int strack, int etrack, int track, const Chord
 
                               // Check for changing figures under a single note (each figure stored in a separate segment)
                               for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL; segNext = segNext->next()) {
-                                    foreach (Element* annot, segNext->annotations()) {
+                                    for (Element* annot : segNext->annotations()) {
                                           if (annot->type() == Element::Type::FIGURED_BASS && annot->track() == track) {
                                                 const FiguredBass* fb = static_cast<const FiguredBass*>(annot);
                                                 fb->writeMusicXML(xml, true, 0, 0, true, divisions);
@@ -4128,7 +4128,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
                   }
             else {
                   // staff-specific keysigs
-                  foreach(int st, keysigs.keys())
+                  for (int st : keysigs.keys())
                   keysig(keysigs.value(st)->keySigEvent(), p->staff(st)->clef(m->tick()), st + 1, keysigs.value(st)->visible());
                   }
             }
@@ -4164,7 +4164,7 @@ static void identification(Xml& xml, Score const* const score)
       QStringList creators;
       // the creator types commonly found in MusicXML
       creators << "arranger" << "composer" << "lyricist" << "poet" << "translator";
-      foreach (QString type, creators) {
+      for (QString type : creators) {
             QString creator = score->metaTag(type);
             if (!creator.isEmpty())
                   xml.tag(QString("creator type=\"%1\"").arg(type), creator);
@@ -4287,7 +4287,7 @@ typedef QMap<int, const Instrument*> MxmlReverseInstrumentMap;
 static void initReverseInstrMap(MxmlReverseInstrumentMap& rim, const MxmlInstrumentMap& im)
       {
       rim.clear();
-      foreach (const Instrument* i, im.keys()) {
+      for (const Instrument* i : im.keys()) {
             int instNr = im.value(i);
             rim.insert(instNr, i);
             }
@@ -4421,10 +4421,10 @@ void ExportMusicXml::write(QIODevice* dev)
             else {
                   MxmlReverseInstrumentMap rim;
                   initReverseInstrMap(rim, instrMap);
-                  foreach(int instNr, rim.keys()) {
+                  for (int instNr : rim.keys()) {
                         scoreInstrument(xml, idx + 1, instNr + 1, MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()));
                         }
-                  foreach(int instNr, rim.keys()) {
+                  for (int instNr : rim.keys()) {
                         xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 1)).arg(part->midiPort() + 1), "");
                         midiInstrument(xml, idx + 1, instNr + 1, rim.value(instNr), _score);
                         }
@@ -4772,7 +4772,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                                 Element* el1 = seg1->element(st);
                                                 if (el1) // found a ChordRest, next harmony will be attach to this one
                                                       break;
-                                                foreach (Element* annot, seg1->annotations()) {
+                                                for (Element* annot : seg1->annotations()) {
                                                       if (annot->type() == Element::Type::HARMONY && annot->track() == st)
                                                             harmony(static_cast<Harmony*>(annot), 0, (seg1->tick() - seg->tick()) / div);
                                                       }
@@ -5020,7 +5020,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                   xml.tag(s, h->xmlKind());
                   QStringList l = h->xmlDegrees();
                   if (!l.isEmpty()) {
-                        foreach(QString tag, l) {
+                        for (QString tag : l) {
                               QString degreeText;
                               if (h->xmlKind().startsWith("suspended")
                                   && tag.startsWith("add") && tag[3].isDigit()

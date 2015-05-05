@@ -194,7 +194,7 @@ int transposeTpcDiatonicByKey(int tpc, int steps, Key key, bool keepAlteredDegre
       int newTpc = step2tpcByKey(step, key);
 
       // if required, apply alteration to new tpc
-      if(keepAlteredDegrees)
+      if (keepAlteredDegrees)
             newTpc += alter * TPC_DELTA_SEMITONE;
 
       // check results are in ranges
@@ -202,9 +202,9 @@ int transposeTpcDiatonicByKey(int tpc, int steps, Key key, bool keepAlteredDegre
       while (newTpc < Tpc::TPC_MIN)      newTpc   += TPC_DELTA_ENHARMONIC;
 
       // if required, reduce double alterations
-      if(!useDoubleSharpsFlats) {
-            if(newTpc >= Tpc::TPC_F_SS)  newTpc   -= TPC_DELTA_ENHARMONIC;
-            if(newTpc <= Tpc::TPC_B_BB)  newTpc   += TPC_DELTA_ENHARMONIC;
+      if (!useDoubleSharpsFlats) {
+            if (newTpc >= Tpc::TPC_F_SS)  newTpc   -= TPC_DELTA_ENHARMONIC;
+            if (newTpc <= Tpc::TPC_B_BB)  newTpc   += TPC_DELTA_ENHARMONIC;
             }
 
       return newTpc;
@@ -283,7 +283,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             }
 
       if (_selection.isList()) {
-            foreach (Element* e, _selection.uniqueElements()) {
+            for (Element* e : _selection.uniqueElements()) {
                   if (e->staff()->staffType()->group() == StaffGroup::PERCUSSION)
                         continue;
                   if (e->type() == Element::Type::NOTE) {
@@ -413,7 +413,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         }
                   }
             if (transposeChordNames) {
-                  foreach (Element* e, segment->annotations()) {
+                  for (Element* e : segment->annotations()) {
                         if ((e->type() != Element::Type::HARMONY) || (!tracks.contains(e->track())))
                               continue;
                         Harmony* h  = static_cast<Harmony*>(e);

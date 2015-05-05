@@ -178,7 +178,7 @@ void StaffType::setLines(int val)
       {
       _lines = val;
       if (_group != StaffGroup::TAB) {
-            switch(_lines) {
+            switch (_lines) {
                   case 1:
                         _stepOffset = 0;
                         break;
@@ -326,7 +326,7 @@ void StaffType::read(XmlReader& e)
 
 qreal StaffType::doty1() const
       {
-      switch(_lines) {
+      switch (_lines) {
             case 1:
                   return -_lineDistance.val() * .5;
             case 2:
@@ -353,7 +353,7 @@ qreal StaffType::doty1() const
 
 qreal StaffType::doty2() const
       {
-      switch(_lines) {
+      switch (_lines) {
             case 1:
                   return _lineDistance.val() * .5;
             case 2:
@@ -618,13 +618,13 @@ QString StaffType::fretString(int fret, bool ghost) const
             return _fretFonts[_fretFontIdx].ghostChar;
       else {
             if (_useNumbers) {
-                  if(fret >= NUM_OF_DIGITFRETS)
+                  if (fret >= NUM_OF_DIGITFRETS)
                         return unknownFret;
                   else
                         return _fretFonts[_fretFontIdx].displayDigit[fret];
                   }
            else {
-                  if(fret >= NUM_OF_LETTERFRETS)
+                  if (fret >= NUM_OF_LETTERFRETS)
                         return unknownFret;
                   else
                         return _fretFonts[_fretFontIdx].displayLetter[fret];
@@ -635,7 +635,7 @@ QString StaffType::fretString(int fret, bool ghost) const
 QString StaffType::durationString(TDuration::DurationType type, int dots) const
       {
       QString s = _durationFonts[_durationFontIdx].displayValue[int(type)];
-      for(int count=0; count < dots; count++)
+      for (int count=0; count < dots; count++)
             s.append(_durationFonts[_durationFontIdx].displayDot);
       return s;
       }
@@ -715,7 +715,7 @@ TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
 
 void TabDurationSymbol::layout()
       {
-      if(!_tab) {
+      if (!_tab) {
             setbbox(QRectF());
             return;
             }
@@ -724,7 +724,7 @@ void TabDurationSymbol::layout()
       qreal w = fm.width(_text);
       qreal y = _tab->durationBoxY();
       // with rests, move symbol down by half its displacement from staff
-      if(parent() && parent()->type() == Element::Type::REST)
+      if (parent() && parent()->type() == Element::Type::REST)
             y += TAB_RESTSYMBDISPL * spatium();
       bbox().setRect(0.0, y * mags, w * mags, _tab->durationBoxH() * mags);
       }
@@ -735,7 +735,7 @@ void TabDurationSymbol::layout()
 
 void TabDurationSymbol::draw(QPainter* painter) const
       {
-      if(!_tab)
+      if (!_tab)
             return;
       qreal mag = magS();
       qreal imag = 1.0 / mag;
@@ -744,7 +744,7 @@ void TabDurationSymbol::draw(QPainter* painter) const
       painter->scale(mag, mag);
       painter->setFont(_tab->durationFont());
       qreal y = _tab->durationFontYOffset();
-      if(parent() && parent()->type() == Element::Type::REST)
+      if (parent() && parent()->type() == Element::Type::REST)
             y += TAB_RESTSYMBDISPL * spatium();
       painter->drawText(QPointF(0.0, y), _text);
       painter->scale(imag, imag);
@@ -927,11 +927,11 @@ bool StaffType::readConfigFile(const QString& fileName)
 QList<QString> StaffType::fontNames(bool bDuration)
       {
       QList<QString> names;
-      if(bDuration)
-            foreach(const TablatureDurationFont& f, _durationFonts)
+      if (bDuration)
+            for (const TablatureDurationFont& f : _durationFonts)
                   names.append(f.displayName);
       else
-            foreach(const TablatureFretFont& f, _fretFonts)
+            for (const TablatureFretFont& f : _fretFonts)
                   names.append(f.displayName);
       return names;
       }

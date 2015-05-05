@@ -1131,7 +1131,7 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
       Beam::Mode bm = Beam::Mode::AUTO;
       QList<Chord*> graceNotes = after ? mainNote->graceNotesAfter() : mainNote->graceNotesBefore();
 
-      foreach (ChordRest* cr, graceNotes) {
+      for (ChordRest* cr : graceNotes) {
             bm = Groups::endBeam(cr);
             if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == Beam::Mode::NONE)) {
                   if (beam) {
@@ -1623,7 +1623,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
 
       int tick = m->tick();
       int i    = 0;
-      foreach (Staff* staff, _staves) {
+      for (Staff* staff : _staves) {
             // At this time we don't know which staff is visible or not...
             // but let's not create the key/clef if there were no visible before this layout
             // sometimes we will be right, other time it will take another layout to be right...
@@ -1803,7 +1803,7 @@ static bool breakMultiMeasureRest(Measure* m)
       if (m->breakMultiMeasureRest())
             return true;
       auto sl = m->score()->spannerMap().findOverlapping(m->tick(), m->endTick());
-      foreach (auto i, sl) {
+      for (auto i : sl) {
             Spanner* s = i.value;
             if (s->type() == Element::Type::VOLTA && (s->tick() == m->tick() || s->tick2() == m->tick()))
                   return true;
@@ -2219,7 +2219,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                   if (!isFirstMeasure) {
                         // try to put another system on current row
                         // if not a line break
-                        switch(_layoutMode) {
+                        switch (_layoutMode) {
                               case LayoutMode::FLOAT:
                                     break;
                               case LayoutMode::LINE:
@@ -2359,7 +2359,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
       int staffIdx = 0;
       bool systemIsEmpty = true;
 
-      foreach (Staff* staff, _staves) {
+      for (Staff* staff : _staves) {
             SysStaff* s  = system->staff(staffIdx);
             bool oldShow = s->show();
             if (styleB(StyleIdx::hideEmptyStaves)
@@ -2368,7 +2368,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                && !staff->neverHide()
                ) {
                   bool hideStaff = true;
-                  foreach(MeasureBase* m, system->measures()) {
+                  for (MeasureBase* m : system->measures()) {
                         if (m->type() != Element::Type::MEASURE)
                               continue;
                         Measure* measure = static_cast<Measure*>(m);
@@ -2385,7 +2385,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                         for (int i = 0; i < part->nstaves(); ++i) {
                               int st = idx + i;
 
-                              foreach(MeasureBase* mb, system->measures()) {
+                              for (MeasureBase* mb : system->measures()) {
                                     if (mb->type() != Element::Type::MEASURE)
                                           continue;
                                     Measure* m = static_cast<Measure*>(mb);
@@ -2419,7 +2419,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                   }
 
             if (oldShow != s->show()) {
-                  foreach (MeasureBase* mb, system->measures()) {
+                  for (MeasureBase* mb : system->measures()) {
                         if (mb->type() != Element::Type::MEASURE)
                               continue;
                         static_cast<Measure*>(mb)->createEndBarLines();
@@ -2428,7 +2428,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
             ++staffIdx;
             }
       if (systemIsEmpty) {
-            foreach (Staff* staff, _staves) {
+            for (Staff* staff : _staves) {
                   SysStaff* s  = system->staff(staff->idx());
                   if (staff->showIfEmpty() && !s->show()) {
                         s->setShow(true);
@@ -2475,7 +2475,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
                   if (!isFirstMeasure) {
                         // try to put another system on current row
                         // if not a line break
-                        switch(_layoutMode) {
+                        switch (_layoutMode) {
                               case LayoutMode::FLOAT:
                                     break;
                               case LayoutMode::LINE:
@@ -2799,7 +2799,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
 
       bool needRelayout = false;
 
-      foreach (System* system, sl) {
+      for (System* system : sl) {
             // set system initial bar line type here, as in System::layout...() methods
             // it is either too early (in System::layout() measures are not added to the system yet)
             // or too late (in System::layout2(), horizontal spacing has already been done
@@ -2969,8 +2969,8 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
       minWidth          = 0.0;
       qreal totalWeight = 0.0;
 
-      foreach(System* system, sl) {
-            foreach (MeasureBase* mb, system->measures()) {
+      for (System* system : sl) {
+            for (MeasureBase* mb : system->measures()) {
                   if (mb->type() == Element::Type::HBOX)
                         minWidth += point(((Box*)mb)->boxWidth());
                   else if (mb->type() == Element::Type::MEASURE) {
@@ -3001,11 +3001,11 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
       qreal xx   = 0.0;
       qreal y    = 0.0;
 
-      foreach(System* system, sl) {
+      for (System* system : sl) {
             QPointF pos;
 
             bool firstMeasure = true;
-            foreach(MeasureBase* mb, system->measures()) {
+            for (MeasureBase* mb : system->measures()) {
                   qreal ww = 0.0;
                   if (mb->type() == Element::Type::MEASURE) {
                         if (firstMeasure) {
@@ -3029,7 +3029,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
             qreal w = pos.x();
             system->setWidth(w);
             system->layout2();
-            foreach(MeasureBase* mb, system->measures()) {
+            for (MeasureBase* mb : system->measures()) {
                   if (mb->type() == Element::Type::HBOX) {
                         mb->setHeight(system->height());
                         }
@@ -3058,7 +3058,7 @@ void Score::layoutSystems()
             if (t == Element::Type::VBOX || t == Element::Type::TBOX || t == Element::Type::FBOX) {
                   System* system = getNextSystem(false, true);
                   system->setSameLine(false);
-                  foreach(SysStaff* ss, *system->staves())
+                  for (SysStaff* ss : *system->staves())
                         delete ss;
                   system->staves()->clear();
 
@@ -3154,7 +3154,7 @@ void Score::layoutLinear()
 
       QPointF pos(0.0, 0.0);
       bool isFirstMeasure = true;
-      foreach (MeasureBase* mb, system->measures()) {
+      for (MeasureBase* mb : system->measures()) {
             qreal w = 0.0;
             if (mb->type() == Element::Type::MEASURE) {
                   if (isFirstMeasure)
@@ -3233,7 +3233,7 @@ struct SystemRow {
 
       qreal height() const {
             qreal h = 0.0;
-            foreach(System* s, systems) {
+            for (System* s : systems) {
                   if (s->height() > h)
                         h = s->height();
                   }
@@ -3250,7 +3250,7 @@ struct SystemRow {
             }
       qreal tm() const {
             qreal v = 0.0;
-            foreach(System* s, systems) {
+            for (System* s : systems) {
                   if (!s->staves()->isEmpty())
                         v = qMax(s->distanceUp(0), v);
                   }
@@ -3258,7 +3258,7 @@ struct SystemRow {
             }
       qreal bm() const {
             qreal v = 0.0;
-            foreach(System* s, systems) {
+            for (System* s : systems) {
                   int staffIdx = s->staves()->size() - 1;
                   if (staffIdx >= 0)
                         v = qMax(s->distanceDown(staffIdx), v);
@@ -3267,8 +3267,8 @@ struct SystemRow {
             }
       qreal extraDistance(int i) const {
             qreal v = 0.0;
-            foreach(System* s, systems) {
-                  foreach(MeasureBase* mb, s->measures())
+            for (System* s : systems) {
+                  for (MeasureBase* mb : s->measures())
                         v = qMax(mb->distanceDown(i), v);
                   }
             return v;
@@ -3574,7 +3574,7 @@ void Score::layoutPage(const PageContext& pC, qreal d)
 
 void Score::doLayoutSystems()
       {
-      foreach(System* system, _systems)
+      for (System* system : _systems)
             system->layout2();
       if (layoutMode() != LayoutMode::LINE)
             layoutPages();
@@ -3595,7 +3595,7 @@ void Score::doLayoutPages()
       layoutPages();
       rebuildBspTree();
       _updateAll = true;
-      foreach(MuseScoreView* v, viewer)
+      for (MuseScoreView* v : viewer)
             v->layoutChanged();
       }
 
@@ -3858,7 +3858,7 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                                     naSpace.max(segRelSpace);
 
                               // lyrics
-                              foreach (Lyrics* l, cr->lyricsList()) {
+                              for (Lyrics* l : cr->lyricsList()) {
                                     if (!l)
                                           continue;
                                     l->layout();      // need to create layout even if empty
@@ -3876,7 +3876,7 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                               space.max(Space(llw, rrw));
 
                         // add spacing for chord symbols
-                        foreach (Element* e, s->annotations()) {
+                        for (Element* e : s->annotations()) {
                               if (e->type() != Element::Type::HARMONY || e->track() < track || e->track() >= track+VOICES)
                                     continue;
                               Harmony* h = static_cast<Harmony*>(e);
@@ -4039,35 +4039,35 @@ void Score::updateBarLineSpans(int idx, int linesOld, int linesNew)
       // a barLineFrom/To from/to the bottom half of the staff is linked to staff bottom line;
       // this ensures plainchant and mensurstrich special bar lines keep their relationships to the staff lines.
       // 1-line staves are traited as a special case.
-      for(int sIdx = 0; sIdx < nStaves; sIdx++) {
+      for (int sIdx = 0; sIdx < nStaves; sIdx++) {
             _staff = staff(sIdx);
             // if this is the modified staff
-            if(sIdx == idx) {
+            if (sIdx == idx) {
                   // if it has no bar line, set barLineTo to a default value
-                  if(_staff->barLineSpan() == 0)
+                  if (_staff->barLineSpan() == 0)
                         _staff->setBarLineTo( (linesNew-1) * 2);
                   // if new line count is 1, set default From for 1-line staves
-                  else if(linesNew == 1)
+                  else if (linesNew == 1)
                         _staff->setBarLineFrom(BARLINE_SPAN_1LINESTAFF_FROM);
                   // if old line count was 1, set default From for normal staves
                   else if (linesOld == 1)
                         _staff->setBarLineFrom(0);
                   // if barLineFrom was below the staff middle position
                   // raise or lower it to account for new number of lines
-                  else if(_staff->barLineFrom() > linesOld - 1)
+                  else if (_staff->barLineFrom() > linesOld - 1)
                         _staff->setBarLineFrom(_staff->barLineFrom() + (linesNew - linesOld)*2);
             }
 
             // if the modified staff is the destination of the current staff bar span:
-            if(sIdx + _staff->barLineSpan() - 1 == idx) {
+            if (sIdx + _staff->barLineSpan() - 1 == idx) {
                   // if new line count is 1, set default To for 1-line staves
-                  if(linesNew == 1)
+                  if (linesNew == 1)
                         _staff->setBarLineTo(BARLINE_SPAN_1LINESTAFF_TO);
                   // if old line count was 1, set default To for normal staves
                   else if (linesOld == 1)
                         _staff->setBarLineTo((linesNew - 1) * 2);
                   // if barLineTo was below its middle position, raise or lower it
-                  else if(_staff->barLineTo() > linesOld - 1)
+                  else if (_staff->barLineTo() > linesOld - 1)
                         _staff->setBarLineTo(_staff->barLineTo() + (linesNew - linesOld)*2);
                   }
             }

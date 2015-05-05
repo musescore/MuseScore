@@ -63,7 +63,7 @@ void SelectInstrument::buildTemplateList()
 
 void SelectInstrument::expandOrCollapse(const QModelIndex &model)
       {
-      if(instrumentList->isExpanded(model))
+      if (instrumentList->isExpanded(model))
             instrumentList->collapse(model);
       else
             instrumentList->expand(model);
@@ -87,7 +87,7 @@ void SelectInstrument::on_instrumentList_itemSelectionChanged()
 void SelectInstrument::on_instrumentList_itemDoubleClicked(QTreeWidgetItem*, int)
       {
       QList<QTreeWidgetItem*> wi = instrumentList->selectedItems();
-      if(!wi.isEmpty())
+      if (!wi.isEmpty())
           done(true);
       }
 
@@ -149,13 +149,13 @@ void SelectInstrument::filterInstrumentsByGenre(QTreeWidget *instrumentList, QSt
             InstrumentTemplateListItem* itli = static_cast<InstrumentTemplateListItem*>(*iList);
             InstrumentTemplate *it=itli->instrumentTemplate();
 
-            if(it) {
+            if (it) {
                   if (genre == "all" || it->genreMember(genre)) {
                         (*iList)->setHidden(false);
 
                         QTreeWidgetItem *iParent = (*iList)->parent();
-                        while(iParent) {
-                              if(!iParent->isHidden())
+                        while (iParent) {
+                              if (!iParent->isHidden())
                                     break;
 
                               iParent->setHidden(false);

@@ -121,9 +121,9 @@ void PluginCreator::setState(PCState newState)
       {
       if (state == newState)
             return;
-      switch(state) {
+      switch (state) {
             case PCState::INIT:
-                  switch(newState) {
+                  switch (newState) {
                         case PCState::INIT:
                               break;
                         case PCState::EMPTY:
@@ -139,7 +139,7 @@ void PluginCreator::setState(PCState newState)
                         }
                   break;
             case PCState::EMPTY:
-                  switch(newState) {
+                  switch (newState) {
                         case PCState::INIT:
                         case PCState::EMPTY:
                               break;
@@ -153,7 +153,7 @@ void PluginCreator::setState(PCState newState)
                         }
                   break;
             case PCState::CLEAN:
-                  switch(newState) {
+                  switch (newState) {
                         case PCState::INIT:
                         case PCState::EMPTY:
                         case PCState::CLEAN:
@@ -164,7 +164,7 @@ void PluginCreator::setState(PCState newState)
                         }
                   break;
             case PCState::DIRTY:
-                  switch(newState) {
+                  switch (newState) {
                         case PCState::INIT:
                         case PCState::EMPTY:
                         case PCState::CLEAN:
@@ -250,7 +250,7 @@ void PluginCreator::closeEvent(QCloseEvent* ev)
 static void qmlMsgHandler(QtMsgType type, const char* msg)
       {
       QString s;
-      switch(type) {
+      switch (type) {
             case QtDebugMsg:
                   s = QString("Debug: %1\n").arg(msg);
                   break;
@@ -288,7 +288,7 @@ void PluginCreator::runClicked()
       QObject* obj = component.create();
       if (obj == 0) {
             msg("creating component failed\n");
-            foreach(QQmlError e, component.errors())
+            for (QQmlError e : component.errors())
                   msg(QString("   line %1: %2\n").arg(e.line()).arg(e.description()));
             stop->setEnabled(false);
             return;
@@ -420,7 +420,7 @@ void PluginCreator::savePlugin()
             }
       QFile f(path);
       QFileInfo fi(f);
-      if(fi.suffix() != "qml" ) {
+      if (fi.suffix() != "qml" ) {
             QMessageBox::critical(mscore, tr("MuseScore: Save Plugin"), tr("Cannot determine file type"));
             return;
       }
@@ -493,7 +493,7 @@ void PluginCreator::textChanged()
 
 void PluginCreator::qmlWarnings(const QList<QQmlError>& el)
       {
-      foreach(const QQmlError& e, el)
+      for (const QQmlError& e : el)
             msg(QString("%1:%2: %3\n").arg(e.line()).arg(e.column()).arg(e.description()));
       }
 

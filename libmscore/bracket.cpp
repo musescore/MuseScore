@@ -188,7 +188,7 @@ void Bracket::draw(QPainter* painter) const
 
 void Bracket::write(Xml& xml) const
       {
-      switch(bracketType()) {
+      switch (bracketType()) {
             case BracketType::BRACE:
                   xml.stag("Bracket type=\"Brace\"");
                   break;

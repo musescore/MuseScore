@@ -309,7 +309,7 @@ void Navigator::paintEvent(QPaintEvent* ev)
       p.setTransform(matrix);
       QRectF fr = matrix.inverted().mapRect(QRectF(r));
 
-      foreach (Page* page, _score->pages()) {
+      for (Page* page : _score->pages()) {
             QPointF pos(page->pos());
             QRectF pr(page->abbox().translated(pos));
             if (pr.right() < fr.left())
@@ -319,8 +319,8 @@ void Navigator::paintEvent(QPaintEvent* ev)
 
             p.fillRect(pr, Qt::white);
             p.translate(pos);
-            foreach(System* s, *page->systems()) {
-                  foreach(MeasureBase* m, s->measures())
+            for (System* s : *page->systems()) {
+                  for (MeasureBase* m : s->measures())
                         m->scanElements(&p, paintElement, false);
                   }
             page->scanElements(&p, paintElement, false);

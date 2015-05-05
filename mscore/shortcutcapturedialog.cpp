@@ -86,7 +86,7 @@ bool ShortcutCaptureDialog::eventFilter(QObject* /*o*/, QEvent* e)
       {
       if (e->type() == QEvent::KeyPress) {
             QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
-            if(keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab){
+            if (keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab){
                   QWidget::keyPressEvent(keyEvent);
                   return true;
                   }
@@ -120,7 +120,7 @@ void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
             qDebug() << k;
             }
 
-      switch(key.count()) {
+      switch (key.count()) {
             case 0: key = QKeySequence(k); break;
             case 1: key = QKeySequence(key[0], k); break;
             case 2: key = QKeySequence(key[0], key[1], k); break;
@@ -134,12 +134,12 @@ void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
       bool conflict = false;
       QString msgString;
 
-      foreach (Shortcut* ss, localShortcuts) {
+      for (Shortcut* ss : localShortcuts) {
             if (s == ss)
                   continue;
             if (!(s->state() & ss->state()))    // no conflict if states do not overlap
                   continue;
-            foreach(const QKeySequence& ks, ss->keys()) {
+            for (const QKeySequence& ks : ss->keys()) {
                   if (ks == key) {
                         msgString = tr("Shortcut conflicts with ") + ss->descr();
                         conflict = true;

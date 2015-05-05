@@ -432,7 +432,7 @@ static void setStaffTypePercussion(Part* part, Drumset* drumset)
 static QString findDeleteStaffText(Segment* s, int track)
       {
       //qDebug("findDeleteWords(s %p track %d)", s, track);
-      foreach (Element* e, s->annotations()) {
+      for (Element* e : s->annotations()) {
             //qDebug("findDeleteWords e %p type %hhd track %d", e, e->type(), e->track());
             if (e->type() != Element::Type::STAFF_TEXT || e->track() < track || e->track() >= track+VOICES)
                   continue;
@@ -850,7 +850,7 @@ static void determineTupletTypeAndCount(Tuplet* t, int& tupletType, int& tupletC
       {
       int elemCount   = 0; // number of tuplet elements handled
 
-      foreach (DurationElement* de, t->elements()) {
+      for (DurationElement* de : t->elements()) {
             if (de->type() == Element::Type::CHORD || de->type() == Element::Type::REST) {
                   ChordRest* cr = static_cast<ChordRest*>(de);
                   if (elemCount == 0) {
@@ -1032,7 +1032,7 @@ void addTupletToChord(ChordRest* cr, Tuplet*& tuplet,
                   tuplet->setBaseLen(td);
                   // TODO determine usefulness of following check
                   int totalDuration = 0;
-                  foreach (DurationElement* de, tuplet->elements()) {
+                  for (DurationElement* de : tuplet->elements()) {
                         if (de->type() == Element::Type::CHORD || de->type() == Element::Type::REST) {
                               totalDuration+=de->globalDuration().ticks();
                               }
@@ -1807,7 +1807,7 @@ static void markUserAccidentals(const int firstStaff,
                   if (!e || e->type() != Ms::Element::Type::CHORD)
                         continue;
                   Chord* chord = static_cast<Chord*>(e);
-                  foreach (Note* nt, chord->notes()) {
+                  for (Note* nt : chord->notes()) {
                         if (alterMap.contains(nt)) {
                               int alter = alterMap.value(nt);
                               int ln  = absStep(nt->tpc(), nt->pitch());
@@ -2251,13 +2251,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
 
       // handle the elems
-      foreach( auto elem, _elems) {
+      for ( auto elem : _elems) {
             // TODO (?) if (_hasDefaultY) elem->setYoff(_defaultY);
             addElemOffset(elem, track, placement, measure, tick);
             }
 
       // handle the spanner stops first
-      foreach (auto desc, stops) {
+      for (auto desc : stops) {
             SLine* sp = _pass2.getSpanner(desc);
             if (sp) {
                   handleSpannerStop(sp, track, tick, spanners);
@@ -2268,7 +2268,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
 
       // then handle the spanner starts
-      foreach (auto desc, starts) {
+      for (auto desc : starts) {
             SLine* sp = _pass2.getSpanner(desc);
             if (!sp) {
                   _pass2.addSpanner(desc);
@@ -3018,7 +3018,7 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure,
                   QStringList sl = number.split(",", QString::SkipEmptyParts);
                   QList<int> iEndingNumbers;
                   bool unsupported = false;
-                  foreach(const QString &s, sl) {
+                  for (const QString &s : sl) {
                         int iEndingNumber = s.toInt();
                         if (iEndingNumber <= 0) {
                               unsupported = true;
@@ -4264,7 +4264,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       // add figured bass element
       if (!fbl.isEmpty()) {
             int sTick = noteStartTime.ticks();        // starting tick
-            foreach (FiguredBass* fb, fbl) {
+            for (FiguredBass* fb : fbl) {
                   fb->setTrack(msTrack);
                   // No duration tag defaults ticks() to 0; set to note value
                   if (fb->ticks() == 0)
@@ -5106,7 +5106,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                         if (_slur[slurNo].isStart()) {
                               // slur stop when slur already started: wrap up
                               Slur* newSlur = _slur[slurNo].slur();
-                              if(!(cr->isGrace())){
+                              if (!(cr->isGrace())){
                                     newSlur->setTick2(tick);
                                     newSlur->setTrack2(track);
                                     }
@@ -5119,7 +5119,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                         else {
                               // slur stop for new slur: init
                               Slur* newSlur = new Slur(_score);
-                              if(!(cr->isGrace())){
+                              if (!(cr->isGrace())){
                                     newSlur->setTick2(tick);
                                     newSlur->setTrack2(track);
                                     }

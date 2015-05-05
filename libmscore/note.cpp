@@ -580,7 +580,7 @@ void Note::add(Element* e)
       e->setParent(this);
       e->setTrack(track());
 
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::NOTEDOT:
                   {
                   NoteDot* dot = static_cast<NoteDot*>(e);
@@ -629,7 +629,7 @@ void Note::add(Element* e)
 
 void Note::remove(Element* e)
       {
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::NOTEDOT:
                   for (int i = 0; i < MAX_DOTS; ++i) {
                         if (_dots[i] == e) {
@@ -709,7 +709,7 @@ void Note::draw(QPainter* painter) const
                   QRectF bb = QRectF(bbox().x()-d, tab->fretMaskY()*magS(), bbox().width() + 2*d, tab->fretMaskH()*magS());
                   // we do not know which viewer did this draw() call
                   // so update all:
-                  foreach(MuseScoreView* view, score()->getViewer())
+                  for (MuseScoreView* view : score()->getViewer())
                         view->drawBackground(painter, bb);
 
                   if (fretConflict()) {          //on fret conflict, draw on red background
@@ -783,7 +783,7 @@ void Note::write(Xml& xml) const
             }
       if ((chord() == 0 || chord()->playEventType() != PlayEventType::Auto) && !_playEvents.isEmpty()) {
             xml.stag("Events");
-            foreach(const NoteEvent& e, _playEvents)
+            for (const NoteEvent& e : _playEvents)
                   e.write(xml);
             xml.etag();
             }
@@ -807,9 +807,9 @@ void Note::write(Xml& xml) const
       writeProperty(xml, P_ID::FIXED);
       writeProperty(xml, P_ID::FIXED_LINE);
 
-      foreach (Spanner* e, _spannerFor)
+      for (Spanner* e : _spannerFor)
             e->write(xml);
-      foreach (Spanner* e, _spannerBack)
+      for (Spanner* e : _spannerBack)
             xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(e)));
 
       xml.etag();
@@ -945,7 +945,7 @@ void Note::read(XmlReader& e)
                         bool bracket = k & 0x8000;
                         k &= 0xfff;
                         AccidentalType at = AccidentalType::NONE;
-                        switch(k) {
+                        switch (k) {
                               case 0: at = AccidentalType::NONE; break;
                               case 1: at = AccidentalType::SHARP; break;
                               case 2: at = AccidentalType::FLAT; break;
@@ -1333,7 +1333,7 @@ Element* Note::drop(const DropData& data)
       bool fromPalette = (e->track() == -1);
 
       Chord* ch = chord();
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::REHEARSAL_MARK:
                   return ch->drop(data);
 
@@ -1401,7 +1401,7 @@ Element* Note::drop(const DropData& data)
 
                   if (group != _headGroup) {
                         if (links()) {
-                              foreach(ScoreElement* e, *links()) {
+                              for (ScoreElement* e : *links()) {
                                     e->score()->undoChangeProperty(e, P_ID::HEAD_GROUP, int(group));
                                     Note* note = static_cast<Note*>(e);
                                     if (note->staff() && note->staff()->isTabStaff()
@@ -1419,7 +1419,7 @@ Element* Note::drop(const DropData& data)
 
             case Element::Type::ICON:
                   {
-                  switch(static_cast<Icon*>(e)->iconType()) {
+                  switch (static_cast<Icon*>(e)->iconType()) {
                         case IconType::ACCIACCATURA:
                               score()->setGraceNote(ch, pitch(), NoteType::ACCIACCATURA, MScore::division/2);
                               break;
@@ -1915,7 +1915,7 @@ void Note::setTrack(int val)
       Element::setTrack(val);
       if (_tieFor) {
             _tieFor->setTrack(val);
-            foreach(SpannerSegment* seg, _tieFor->spannerSegments())
+            for (SpannerSegment* seg : _tieFor->spannerSegments())
                   seg->setTrack(val);
             }
       for (Spanner* s : _spannerFor) {
@@ -1924,7 +1924,7 @@ void Note::setTrack(int val)
       for (Spanner* s : _spannerBack) {
             s->setTrack2(val);
             }
-      foreach (Element* e, _el)
+      for (Element* e : _el)
             e->setTrack(val);
       if (_accidental)
             _accidental->setTrack(val);
@@ -2144,7 +2144,7 @@ void Note::setNval(const NoteVal& nval, int tick)
 
 QVariant Note::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::PITCH:
                   return pitch();
             case P_ID::TPC1:
@@ -2194,7 +2194,7 @@ QVariant Note::getProperty(P_ID propertyId) const
 bool Note::setProperty(P_ID propertyId, const QVariant& v)
       {
       Measure* m = chord() ? chord()->measure() : nullptr;
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::PITCH:
                   setPitch(v.toInt());
                   score()->setPlaylistDirty();
@@ -2397,7 +2397,7 @@ void Note::undoSetHeadType(NoteHead::Type val)
 
 QVariant Note::propertyDefault(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::GHOST:
             case P_ID::SMALL:
                   return false;
@@ -2510,7 +2510,7 @@ QString Note::accessibleExtraInfo()
             rez = QString("%1 %2").arg(rez).arg(accidental()->screenReaderInfo());
             }
       if (!el().isEmpty()) {
-            foreach (Element* e, el()) {
+            for (Element* e : el()) {
                   if (!score()->selectionFilter().canSelect(e)) continue;
                   rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   }
@@ -2522,13 +2522,13 @@ QString Note::accessibleExtraInfo()
             rez = tr("%1 End of %2").arg(rez).arg(tieBack()->screenReaderInfo());
 
       if (!spannerFor().isEmpty()) {
-            foreach (Spanner* s, spannerFor()) {
+            for (Spanner* s : spannerFor()) {
                   if (!score()->selectionFilter().canSelect(s)) continue;
                   rez = tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
                   }
             }
       if (!spannerBack().isEmpty()) {
-            foreach (Spanner* s, spannerBack()) {
+            for (Spanner* s : spannerBack()) {
                   if (!score()->selectionFilter().canSelect(s)) continue;
                   rez = tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
                   }

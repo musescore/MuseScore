@@ -113,7 +113,7 @@ static void collectFiles(QFileInfoList* l, const QString& path)
       // printf("collect files <%s>\n", qPrintable(path));
 
       QDir dir(path);
-      foreach (const QFileInfo& s, dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot)) {
+      for (const QFileInfo& s : dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot)) {
             if (path == s.absoluteFilePath())
                   return;
 
@@ -136,7 +136,7 @@ QFileInfoList Zerberus::sfzFiles()
 
       QString path = Ms::preferences.sfPath;
       QStringList pl = path.split(";");
-      foreach (const QString& s, pl) {
+      for (const QString& s : pl) {
             QString ss(s);
             if (!s.isEmpty() && s[0] == '~')
                   ss = QDir::homePath() + s.mid(1);
@@ -154,7 +154,7 @@ void ZerberusGui::addClicked()
       QFileInfoList l = Zerberus::sfzFiles();
 
       SfzListDialog ld(this);
-      foreach (const QFileInfo& fi, l)
+      for (const QFileInfo& fi : l)
             ld.add(fi.fileName(), fi.absoluteFilePath());
       if (!ld.exec())
             return;

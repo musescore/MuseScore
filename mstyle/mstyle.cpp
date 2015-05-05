@@ -80,7 +80,7 @@ bool MgStyle::drawMenuBarItem(const QStyleOption* option, QPainter* painter,
       const QRect& r(option->rect);
       const QPalette& palette(option->palette);
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if (enabled) {
@@ -141,7 +141,7 @@ bool MgStyle::drawMenuBarItem(const QStyleOption* option, QPainter* painter,
 //---------------------------------------------------------
 
 int MgStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget ) const {
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       switch (metric) {
@@ -365,7 +365,7 @@ QSize MgStyle::expandSize(const QSize& size, int main, int left, int top, int ri
 
 QSize MgStyle::sizeFromContents(ContentsType element, const QStyleOption* option,
                                 const QSize& size, const QWidget* widget) const {
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       switch (element) {
@@ -477,7 +477,7 @@ QSize MgStyle::menuItemSizeFromContents(const QStyleOption* option, const QSize&
       if ( !menuItemOption)
             return contentsSize;
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // First, we calculate the intrinsic size of the item.
@@ -575,7 +575,7 @@ QSize MgStyle::pushButtonSizeFromContents(const QStyleOption* option, const QSiz
 QSize MgStyle::tabBarTabSizeFromContents(const QStyleOption* option, const QSize& contentsSize, const QWidget* widget) const {
       const QStyleOptionTab* tabOpt( qstyleoption_cast<const QStyleOptionTab*>(option) );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       QSize size;
@@ -634,7 +634,7 @@ QSize MgStyle::toolButtonSizeFromContents(const QStyleOption* option, const QSiz
             size.rheight() -= 5;
             }
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // We want to avoid super-skiny buttons, for things like "up" when icons + text
@@ -684,7 +684,7 @@ bool MgStyle::isVerticalTab( const QTabBar::Shape& shape ) const {
 
 void MgStyle::polish(QWidget* widget) {
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if (!widget)
@@ -988,7 +988,7 @@ void MgStyle::polishScrollArea( QAbstractScrollArea* scrollArea ) const {
       // do the same for children if the background role is QPalette::Window
       viewport->setAutoFillBackground( false );
       QList<QWidget*> children( viewport->findChildren<QWidget*>() );
-      foreach( QWidget * child, children ) {
+      for ( QWidget * child : children ) {
             if ( child->parent() == viewport && child->backgroundRole() == QPalette::Window ) {
                   child->setAutoFillBackground( false );
                   }
@@ -1004,7 +1004,7 @@ void MgStyle::drawPrimitive(PrimitiveElement element, const QStyleOption* option
       painter->save();
       StylePrimitive fcn(0);
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       switch (element) {
@@ -1232,7 +1232,7 @@ bool MgStyle::drawFramePrimitive( const QStyleOption* option, QPainter* painter,
       }
 
 bool MgStyle::drawFrameFocusRectPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const {
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if ( !widget ) return true;
@@ -1277,7 +1277,7 @@ bool MgStyle::drawFrameFocusRectPrimitive( const QStyleOption* option, QPainter*
 //---------------------------------------------------------
 
 bool MgStyle::drawFrameGroupBoxPrimitive(const QStyleOption* option, QPainter* painter, const QWidget* widget) const {
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // cast option and check
@@ -1321,7 +1321,7 @@ bool MgStyle::drawFrameGroupBoxPrimitive(const QStyleOption* option, QPainter* p
 bool MgStyle::drawFrameMenuPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget) const {
       // only draw frame for (expanded) toolbars
       // do nothing for other cases
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if ( qobject_cast<const QToolBar*>(widget) ) {
@@ -1575,7 +1575,7 @@ bool MgStyle::drawFrameTabWidgetPrimitive( const QStyleOption* option, QPainter*
             }
 
       // render registered slabs
-      foreach( const SlabRect & slab, slabs ) {
+      for ( const SlabRect & slab : slabs ) {
             renderSlab( painter, slab, palette.color(QPalette::Window), NoFill );
             }
 
@@ -1626,7 +1626,7 @@ bool MgStyle::drawIndicatorHeaderArrowPrimitive( const QStyleOption* option, QPa
       const QStyleOptionHeader* headerOpt = qstyleoption_cast<const QStyleOptionHeader*>(option);
       const State& flags( option->state );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // arrow orientation
@@ -1681,7 +1681,7 @@ bool MgStyle::drawIndicatorHeaderArrowPrimitive( const QStyleOption* option, QPa
 
 bool MgStyle::drawPanelButtonCommandPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const
       {
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       const State& flags( option->state );
@@ -1797,7 +1797,7 @@ bool MgStyle::drawPanelButtonToolPrimitive( const QStyleOption* option, QPainter
       However one needs to draw the window background, because the button rect might
       overlap with some tab below. (this is a Qt bug)
       */
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       bool isInTabBar(widget && qobject_cast<const QTabBar*>( widget->parent()));
@@ -2093,7 +2093,7 @@ bool MgStyle::drawPanelLineEditPrimitive( const QStyleOption* option, QPainter* 
       const QBrush inputBrush( enabled ? palette.base() : palette.window() );
       const int lineWidth(panel->lineWidth);
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if ( lineWidth > 0) {
@@ -2125,7 +2125,7 @@ bool MgStyle::drawPanelLineEditPrimitive( const QStyleOption* option, QPainter* 
 bool MgStyle::drawPanelMenuPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget) const {
       // do nothing if menu is embedded in another widget
       // this corresponds to having a transparent background
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if (widget && !widget->isWindow())
@@ -2161,7 +2161,7 @@ bool MgStyle::drawPanelScrollAreaCornerPrimitive( const QStyleOption*, QPainter*
       // which does not work for windows that have gradients.
       // unfortunately, this does not work when scrollbars are children of QWebView,
       // in which case, false is returned, in order to fall back to the parent style implementation
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       return !( widget && widget->inherits( "QWebView" ) );
@@ -2288,7 +2288,7 @@ bool MgStyle::drawIndicatorButtonDropDownPrimitive( const QStyleOption* option, 
       const bool autoRaise( flags & State_AutoRaise );
       const bool sunken(enabled && (flags & State_Sunken));
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // match button color to window background
@@ -2482,7 +2482,7 @@ bool MgStyle::drawIndicatorCheckBoxPrimitive( const QStyleOption* option, QPaint
       else if ( flags & State_On ) state = CheckOn;
       else state = CheckOff;
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // match button color to window background
@@ -2529,7 +2529,7 @@ bool MgStyle::drawIndicatorRadioButtonPrimitive(const QStyleOption* option, QPai
       if ( mouseOver ) opts |= Hover;
       if ( hasFocus ) opts |= Focus;
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // match button color to window background
@@ -2572,7 +2572,7 @@ bool MgStyle::drawIndicatorTabTearPrimitive( const QStyleOption* option, QPainte
       const QStyleOptionTabV3* tabOptV3( qstyleoption_cast<const QStyleOptionTabV3*>(option) );
       bool documentMode( tabOptV3 ? tabOptV3->documentMode : false );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       const QTabWidget* tabWidget = (widget && widget->parentWidget()) ? qobject_cast<const QTabWidget*>(widget->parentWidget()) : NULL;
@@ -2686,7 +2686,7 @@ bool MgStyle::drawIndicatorToolBarSeparatorPrimitive( const QStyleOption* option
 
 bool MgStyle::drawWidgetPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget) const {
       // check widget and attributes
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if (!widget || !widget->testAttribute(Qt::WA_StyledBackground) || widget->testAttribute(Qt::WA_NoSystemBackground))
@@ -2714,7 +2714,7 @@ void MgStyle::renderSplitter( const QStyleOption* option, QPainter* painter, con
       bool animated( false );
       qreal opacity( AnimationData::OpacityInvalid );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if ( enabled ) {
@@ -3146,7 +3146,7 @@ QColor MgStyle::scrollBarArrowColor( const QStyleOption* option, const SubContro
       const bool enabled( option->state & State_Enabled );
       if ( !enabled ) return color;
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       const bool hover( animations().scrollBarEngine().isHovered( widget, control ) );
@@ -3182,7 +3182,7 @@ QColor MgStyle::scrollBarArrowColor( const QStyleOption* option, const SubContro
 
 void MgStyle::renderSliderTickmarks( QPainter* painter, const QStyleOptionSlider* option,  const QWidget* widget ) const {
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       const int& ticks( option->tickPosition );
@@ -3609,7 +3609,7 @@ void MgStyle::fillTab( QPainter* painter, const QRect& r, const QColor& color, Q
 void MgStyle::drawControl(ControlElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const {
       painter->save();
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       StyleControl fcn(0);
@@ -3724,7 +3724,7 @@ void MgStyle::drawControl(ControlElement element, const QStyleOption* option, QP
 void MgStyle::drawComplexControl(ComplexControl element, const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget) const {
       painter->save();
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       StyleComplexControl fcn(0);
@@ -3825,7 +3825,7 @@ bool MgStyle::drawComboBoxComplexControl(const QStyleOptionComplex* option, QPai
       const bool& editable( cb->editable );
       const bool& hasFrame( cb->frame );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // frame
@@ -4011,7 +4011,7 @@ bool MgStyle::drawDialComplexControl( const QStyleOptionComplex* option, QPainte
       if ( hasFocus ) opts |= Focus;
       if ( mouseOver ) opts |= Hover;
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // mouseOver has precedence over focus
@@ -4083,7 +4083,7 @@ bool MgStyle::drawSliderComplexControl( const QStyleOptionComplex* option, QPain
       const bool mouseOver(enabled && (flags & State_MouseOver));
       const bool hasFocus( flags & State_HasFocus );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if ( slider->subControls & SC_SliderTickmarks ) {
@@ -4135,7 +4135,7 @@ bool MgStyle::drawSpinBoxComplexControl(const QStyleOptionComplex* option, QPain
       const bool hasFocus( flags & State_HasFocus );
       const QColor inputColor( palette.color( enabled ? QPalette::Base : QPalette::Window ) );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if ( sb->subControls & SC_SpinBoxFrame) {
@@ -4190,7 +4190,7 @@ bool MgStyle::drawTitleBarComplexControl( const QStyleOptionComplex* option, QPa
       const bool enabled( flags & State_Enabled );
       const bool active( enabled && (tb->titleBarState & Qt::WindowActive ) );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // draw title text
@@ -4261,7 +4261,7 @@ bool MgStyle::drawTitleBarComplexControl( const QStyleOptionComplex* option, QPa
 //---------------------------------------------------------
 
 bool MgStyle::drawToolButtonComplexControl( const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const {
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // check autoRaise state
@@ -4358,14 +4358,14 @@ bool MgStyle::drawToolButtonComplexControl( const QStyleOptionComplex* option, Q
       }
 
 bool MgStyle::eventFilterComboBoxContainer( QWidget* widget, QEvent* event ) {
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       switch (event->type()) {
 
             case QEvent::Show:
             case QEvent::Resize: {
-                  if(widget) {
+                  if (widget) {
                         if ( !_helper.hasAlphaChannel(widget) ) widget->setMask(_helper.roundedMask( widget->rect() ));
                         else widget->clearMask();
                   }
@@ -4497,7 +4497,7 @@ bool MgStyle::eventFilterMdiSubWindow( QMdiSubWindow* subWindow, QEvent* event )
 
 bool MgStyle::eventFilterScrollBar( QWidget* widget, QEvent* event ) {
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if ( event->type() == QEvent::Paint ) {
@@ -4510,7 +4510,7 @@ bool MgStyle::eventFilterScrollBar( QWidget* widget, QEvent* event ) {
       }
 
 bool MgStyle::eventFilterTabBar( QWidget* widget, QEvent* event ) {
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if ( event->type() == QEvent::Paint && tabBarData().locks( widget ) ) {
@@ -4627,7 +4627,7 @@ bool MgStyle::eventFilterToolBox( QToolBox* toolBox, QEvent* event ) {
 
 bool MgStyle::drawCapacityBarControl( const QStyleOption* option, QPainter* painter, const QWidget* widget) const {
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // cast option
@@ -4653,7 +4653,7 @@ bool MgStyle::drawCapacityBarControl( const QStyleOption* option, QPainter* pain
 
 bool MgStyle::drawComboBoxLabelControl( const QStyleOption* option, QPainter* painter, const QWidget* widget) const {
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       //same as CommonStyle, except for filling behind icon
@@ -4708,7 +4708,7 @@ bool MgStyle::drawDockWidgetTitleControl( const QStyleOption* option, QPainter* 
       const bool enabled( flags & State_Enabled );
       const bool reverseLayout( option->direction == Qt::RightToLeft );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // cast to v2 to check vertical bar
@@ -4773,7 +4773,7 @@ bool MgStyle::drawHeaderEmptyAreaControl( const QStyleOption* option, QPainter* 
       // use the same background as in drawHeaderPrimitive
       QPalette palette( option->palette );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if ( widget && animations().widgetEnabilityEngine().isAnimated( widget, AnimationEnable ) ) {
@@ -4830,7 +4830,7 @@ bool MgStyle::drawHeaderSectionControl( const QStyleOption* option, QPainter* pa
       const bool isFirst( horizontal && ( headerOpt->position == QStyleOptionHeader::Beginning ) );
       const bool isCorner( widget && widget->inherits( "QTableCornerButton" ) );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // corner header lines
@@ -4882,7 +4882,7 @@ bool MgStyle::drawMenuBarItemControl( const QStyleOption* option, QPainter* pain
       const QRect& r( option->rect );
       const QPalette& palette( option->palette );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if ( enabled ) {
@@ -4969,7 +4969,7 @@ bool MgStyle::drawMenuItemControl(const QStyleOption* option, QPainter* painter,
       const bool hasFocus( enabled && (flags & State_HasFocus));
       const bool mouseOver( enabled && (flags & State_MouseOver) );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       //First of all,render the background.
@@ -5185,7 +5185,7 @@ bool MgStyle::drawProgressBarControl( const QStyleOption* option, QPainter* pain
 
       if ( const QStyleOptionProgressBar* pb = qstyleoption_cast<const QStyleOptionProgressBar*>(option)) {
 
-            if(!widget)
+            if (!widget)
                   widget = QApplication::activeWindow();
 
             // same as QCommonStyle::drawControl, except that it handles animations
@@ -5487,7 +5487,7 @@ bool MgStyle::drawScrollBarSliderControl( const QStyleOption* option, QPainter* 
       const bool enabled( flags & State_Enabled );
       const bool mouseOver( enabled && (flags & State_MouseOver) );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // enable animation state
@@ -5527,7 +5527,7 @@ bool MgStyle::drawScrollBarAddLineControl( const QStyleOption* option, QPainter*
       // adjust rect, based on number of buttons to be drawn
       const QRect r( scrollBarInternalSubControlRect( slOpt, SC_ScrollBarAddLine ) );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // draw the end of the scrollbar groove
@@ -5629,7 +5629,7 @@ bool MgStyle::drawScrollBarSubLineControl( const QStyleOption* option, QPainter*
       const QPalette& palette( option->palette );
       const QColor background( palette.color( QPalette::Window ) );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // adjust rect, based on number of buttons to be drawn
@@ -5766,7 +5766,7 @@ bool MgStyle::drawTabBarTabLabelControl( const QStyleOption* option, QPainter* p
       const bool selected( option->state & State_Selected );
       QStyleOptionTabV3 tabOptV3( *tabOpt );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // add extra offset for selected tas
@@ -5817,7 +5817,7 @@ bool MgStyle::drawTabBarTabShapeControl_Single(const QStyleOption* option, QPain
       const bool selected(flags & State_Selected);
       const bool reverseLayout(option->direction == Qt::RightToLeft);
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // this is needed to complete the base frame when there are widgets in tabbar
@@ -6276,7 +6276,7 @@ bool MgStyle::drawTabBarTabShapeControl_Single(const QStyleOption* option, QPain
                                  insideMargin( tabWidget->rect(), -GlowWidth ).translated( -widget->geometry().topLeft() ) :
                                  QRect() );
 
-      foreach( SlabRect slab, slabs ) { // krazy:exclude=foreach
+      for ( SlabRect slab : slabs ) { // krazy:exclude=foreach
             adjustSlabRect( slab, tabWidgetRect, documentMode, verticalTabs );
             if (selected || !animated )
                   renderSlab( painter, slab, color, slabOptions );
@@ -6330,7 +6330,7 @@ bool MgStyle::drawTabBarTabShapeControl_Plain( const QStyleOption* option, QPain
       const bool selected( flags & State_Selected );
       const bool reverseLayout( option->direction == Qt::RightToLeft );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // tab position and flags
@@ -6902,7 +6902,7 @@ bool MgStyle::drawTabBarTabShapeControl_Plain( const QStyleOption* option, QPain
                                  insideMargin( tabWidget->rect(), -GlowWidth ).translated( -widget->geometry().topLeft() ) :
                                  QRect() );
 
-      foreach( SlabRect slab, slabs ) { // krazy:exclude=foreach
+      for ( SlabRect slab : slabs ) { // krazy:exclude=foreach
             adjustSlabRect( slab, tabWidgetRect, documentMode, verticalTabs );
             renderSlab( painter, slab, color, NoFill );
             }
@@ -6970,7 +6970,7 @@ void MgStyle::TabBarData::drawTabBarBaseControl( const QStyleOptionTab* tabOpt, 
       // check parent
       if ( !_style ) return;
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // make sure widget is locked
@@ -7078,7 +7078,7 @@ bool MgStyle::drawToolBarControl( const QStyleOption* option, QPainter* painter,
 
       const QRect& r( option->rect );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // when timeLine is running draw border event if not hovered
@@ -7101,7 +7101,7 @@ bool MgStyle::drawToolBoxTabLabelControl( const QStyleOption* option, QPainter* 
       const bool enabled( toolBoxOption->state & State_Enabled );
       const bool selected( toolBoxOption->state & State_Selected );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
       QPixmap pm(
             toolBoxOption->icon.pixmap( pixelMetric(QStyle::PM_SmallIconSize, toolBoxOption, widget),
@@ -7149,7 +7149,7 @@ bool MgStyle::drawToolBoxTabShapeControl( const QStyleOption* option, QPainter* 
       const bool mouseOver( enabled && !selected && (flags & State_MouseOver) );
       const bool reverseLayout( option->direction == Qt::RightToLeft );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
 
@@ -7227,7 +7227,7 @@ bool MgStyle::drawToolBoxTabShapeControl( const QStyleOption* option, QPainter* 
       // paint
       painter->setRenderHint(QPainter::Antialiasing, true);
       painter->translate(0, 2);
-      foreach( const QColor & color, colors ) {
+      for ( const QColor & color : colors ) {
             painter->setPen(color);
             painter->drawPath(path);
             painter->translate(0, -1);
@@ -7237,7 +7237,7 @@ bool MgStyle::drawToolBoxTabShapeControl( const QStyleOption* option, QPainter* 
       painter->save();
       painter->setRenderHint(QPainter::Antialiasing, false);
       painter->translate(0, 2);
-      foreach( const QColor & color, colors ) {
+      for ( const QColor & color : colors ) {
             painter->setPen( color );
             if ( reverseLayout) {
                   painter->drawLine(r.left() + 50 - 1, r.top(), r.right(), r.top());
@@ -7273,7 +7273,7 @@ bool MgStyle::drawToolButtonLabelControl(const QStyleOption* option, QPainter* p
       if (!toolButtonOpt)
             return true;
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       QStyleOptionToolButton localOption(*toolButtonOpt);
@@ -7287,7 +7287,7 @@ bool MgStyle::drawToolButtonLabelControl(const QStyleOption* option, QPainter* p
 QRect MgStyle::groupBoxSubControlRect( const QStyleOptionComplex* option, SubControl subControl, const QWidget* widget ) const {
       QRect r = option->rect;
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       switch (subControl) {
@@ -7330,7 +7330,7 @@ QRect MgStyle::groupBoxSubControlRect( const QStyleOptionComplex* option, SubCon
 
                   const bool isFlat( gbOpt->features & QStyleOptionFrameV2::Flat );
                   QFontMetrics fontMetrics = gbOpt->QStyleOption::fontMetrics;
-                  if(widget) {
+                  if (widget) {
                         QFont font = widget->font();
 
                         // calculate text width assuming bold text in flat group boxes
@@ -7375,7 +7375,7 @@ QRect MgStyle::groupBoxSubControlRect( const QStyleOptionComplex* option, SubCon
 QRect MgStyle::comboBoxSubControlRect( const QStyleOptionComplex* option, SubControl subControl, const QWidget* widget ) const {
       const QRect& r( option->rect );
       const QStyleOptionComboBox* cb = qstyleoption_cast<const QStyleOptionComboBox*>(option);
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if ( !cb ) return QCommonStyle::subControlRect( CC_ComboBox, option, subControl, widget );
@@ -7472,7 +7472,7 @@ QRect MgStyle::scrollBarInternalSubControlRect( const QStyleOptionComplex* optio
       }
 
 QRect MgStyle::sliderSubControlRect( const QStyleOptionComplex* option, SubControl subControl, const QWidget* widget ) const {
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       switch ( subControl ) {
@@ -7523,7 +7523,7 @@ QRect MgStyle::scrollBarSubControlRect( const QStyleOptionComplex* option, SubCo
       const State& flags( option->state );
       const bool horizontal( flags & State_Horizontal );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       switch (subControl) {
@@ -7628,7 +7628,7 @@ QRect MgStyle::spinBoxSubControlRect(const QStyleOptionComplex* option, SubContr
       int bmb = bm + SpinBox_ButtonMargin_Bottom;
       int bs = 0 ;
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if (!sb->frame) {
@@ -7668,7 +7668,7 @@ QRect MgStyle::spinBoxSubControlRect(const QStyleOptionComplex* option, SubContr
 void MgStyle::renderMenuItemBackground( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const {
       const QRect& r( option->rect );
       const QPalette& palette( option->palette );
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       const QRect animatedRect( animations().menuEngine().animatedRect( widget ) );
@@ -7774,7 +7774,7 @@ void MgStyle::renderMenuItemRect( const QStyleOption* opt, const QRect& r, const
       }
 
 void MgStyle::renderHeaderBackground( const QRect& r, const QPalette& palette, QPainter* painter, const QWidget* widget, bool horizontal, bool reverse ) const {
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       // use window background for the background
@@ -7849,7 +7849,7 @@ void MgStyle::renderHeaderLines( const QRect& r, const QPalette& palette, QPaint
 
 void MgStyle::renderTitleBarButton( QPainter* painter, const QStyleOptionTitleBar* option, const QWidget* widget, const SubControl& subControl ) const {
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       const QRect r = subControlRect(CC_TitleBar, option, subControl, widget );
@@ -7992,7 +7992,7 @@ void MgStyle::renderSpinBoxArrow( QPainter* painter, const QStyleOptionSpinBox* 
       const bool subControlHover( enabled && mouseOver && (option->activeSubControls & subControl) );
       animations().spinBoxEngine().updateState( widget, subControl, subControlHover );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       const bool animated( enabled && animations().spinBoxEngine().isAnimated( widget, subControl ) );
@@ -8037,7 +8037,7 @@ void MgStyle::renderSpinBoxArrow( QPainter* painter, const QStyleOptionSpinBox* 
 QRegion MgStyle::tabBarClipRegion( const QTabBar* tabBar ) const {
       // need to mask-out arrow buttons, if visible.
       QRegion mask( tabBar->rect() );
-      foreach( const QObject * child, tabBar->children() ) {
+      for ( const QObject * child : tabBar->children() ) {
             const QToolButton* toolButton( qobject_cast<const QToolButton*>( child ) );
             if ( toolButton && toolButton->isVisible() ) mask -= toolButton->geometry();
             }
@@ -8051,7 +8051,7 @@ int MgStyle::styleHint(StyleHint hint, const QStyleOption* option, const QWidget
       // to avoid warning at compilation
       /* ws: KDE specific?
             if (hint == SH_KCustomStyleElement ) {
-                  if( widget )
+                  if ( widget )
                         return _styleElements.value(widget->objectName(), 0);
                   else
                         return 0;
@@ -8061,7 +8061,7 @@ int MgStyle::styleHint(StyleHint hint, const QStyleOption* option, const QWidget
       special cases, that cannot be registered in styleHint map,
       because of conditional statements
       */
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       switch ( hint ) {
@@ -8157,7 +8157,7 @@ int MgStyle::styleHint(StyleHint hint, const QStyleOption* option, const QWidget
       }
 
 QRect MgStyle::subElementRect(SubElement element, const QStyleOption* option, const QWidget* widget) const {
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       switch ( element ) {
@@ -8220,7 +8220,7 @@ QRect MgStyle::subElementRect(SubElement element, const QStyleOption* option, co
 //---------------------------------------------------------
 
 QRect MgStyle::subControlRect(ComplexControl element, const QStyleOptionComplex* option, SubControl subControl, const QWidget* widget ) const {
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       switch (element) {
@@ -8249,7 +8249,7 @@ QRect MgStyle::tabWidgetTabContentsRect( const QStyleOption* option, const QWidg
 
       QRect r( option->rect );
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
 
@@ -8314,7 +8314,7 @@ QRect MgStyle::tabWidgetLeftCornerRect( const QStyleOption* option, const QWidge
       const QStyleOptionTabWidgetFrame* tabOpt = qstyleoption_cast<const QStyleOptionTabWidgetFrame*>(option);
       if (!tabOpt) return QRect();
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       QRect r( option->rect );
@@ -8372,7 +8372,7 @@ QRect MgStyle::tabWidgetRightCornerRect( const QStyleOption* option, const QWidg
       const QStyleOptionTabWidgetFrame* tabOpt = qstyleoption_cast<const QStyleOptionTabWidgetFrame*>(option);
       if (!tabOpt) return QRect();
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       QRect r( option->rect );
@@ -8425,7 +8425,7 @@ QRect MgStyle::tabWidgetRightCornerRect( const QStyleOption* option, const QWidg
       }
 
 QStyle::SubControl MgStyle::hitTestComplexControl(ComplexControl control, const QStyleOptionComplex* option, const QPoint& point, const QWidget* widget) const {
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       switch ( control ) {
@@ -8474,7 +8474,7 @@ QRect MgStyle::tabBarTabButtonRect( SubElement element, const QStyleOption* opti
       const QStyleOptionTab* tabOpt( qstyleoption_cast<const QStyleOptionTab*>(option) );
       if (!tabOpt) return QRect();
 
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       QRect r( QCommonStyle::subElementRect( element, option, widget ) );
@@ -8598,7 +8598,7 @@ QIcon MgStyle::standardIcon(StandardPixmap standardIcon,
       // get button color ( unfortunately option and widget might not be set )
       QColor buttonColor;
       QColor iconColor;
-      if(!widget)
+      if (!widget)
             widget = QApplication::activeWindow();
 
       if (option) {

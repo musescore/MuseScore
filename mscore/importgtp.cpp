@@ -158,7 +158,7 @@ QString GuitarPro::readPascalString(int n)
       read(s, l);
       s[l] = 0;
       skip(n - l);
-      if(_codec)
+      if (_codec)
             return _codec->toUnicode(s);
       else
             return QString(s);
@@ -174,7 +174,7 @@ QString GuitarPro::readWordPascalString()
       char c[l+1];
       read(c, l);
       c[l] = 0;
-      if(_codec)
+      if (_codec)
             return _codec->toUnicode(c);
       else
             return QString::fromLocal8Bit(c);
@@ -190,7 +190,7 @@ QString GuitarPro::readBytePascalString()
       char c[l+1];
       read(c, l);
       c[l] = 0;
-      if(_codec)
+      if (_codec)
             return  _codec->toUnicode(c);
       else
             return QString::fromLocal8Bit(c);
@@ -209,7 +209,7 @@ QString GuitarPro::readDelphiString()
       char c[l + 1];
       read(c, l);
       c[l] = 0;
-      if(_codec)
+      if (_codec)
             return  _codec->toUnicode(c);
       else
             return QString::fromLatin1(c);
@@ -393,7 +393,7 @@ void GuitarPro::addTextToNote(QString string, TextStyle textStyle, Note* note)
 
 void GuitarPro::setTuplet(Tuplet* tuplet, int tuple)
       {
-      switch(tuple) {
+      switch (tuple) {
             case 3:
                   tuplet->setRatio(Fraction(3,2));
                   break;
@@ -664,7 +664,7 @@ void GuitarPro::readChannels()
 Fraction GuitarPro::len2fraction(int len)
       {
       Fraction l;
-      switch(len) {
+      switch (len) {
             case -2: l.set(1, 1);    break;
             case -1: l.set(1, 2);    break;
             case  0: l.set(1, 4);    break;
@@ -1593,7 +1593,7 @@ void GuitarPro1::readNote(int string, Note* note)
 
                   TDuration d;
                   d.setVal(grace_len);
-                  if(grace_len == MScore::division/6)
+                  if (grace_len == MScore::division/6)
                         d.setDots(1);
                   gc->setDurationType(d);
                   gc->setDuration(d.fraction());
@@ -1605,7 +1605,7 @@ void GuitarPro1::readNote(int string, Note* note)
                   if (transition == 0) {
                         // no transition
                         }
-                  else if(transition == 1){
+                  else if (transition == 1){
                         //TODO: Add a 'slide' guitar effect when implemented
                         }
                   else if (transition == 2 && fretNumber>=0 && fretNumber<=255 && fretNumber!=gn->fret()) {
@@ -1696,7 +1696,7 @@ void GuitarPro1::readNote(int string, Note* note)
                   if (e) {
                         if (e->type() == Element::Type::CHORD) {
                               Chord* chord2 = static_cast<Chord*>(e);
-                              foreach(Note* note2, chord2->notes()) {
+                              for (Note* note2 : chord2->notes()) {
                                     if (note2->string() == string) {
                                           Tie* tie = new Tie(score);
                                           tie->setEndNote(note);
@@ -1725,7 +1725,7 @@ int GuitarPro1::readBeatEffects(int, Segment*)
       uchar fxBits1 = readUChar();
       if (fxBits1 & BEAT_EFFECT) {
             uchar num = readUChar();
-            switch(num) {
+            switch (num) {
                   case 0:           // tremolo bar
                         readInt();
                         break;
@@ -2055,12 +2055,12 @@ void GuitarPro3::read(QFile* fp)
                         ChordRest* cr = segment->cr(track);
                         // if (!pause || strings)
                         if (strings) {
-                              if(!segment->cr(track))
+                              if (!segment->cr(track))
                                     cr = new Chord(score);
                               }
                         else
                               {
-                              if(segment->cr(track)){
+                              if (segment->cr(track)){
                                     segment->remove(segment->cr(track));
                                     delete cr;
                                     cr = 0;
@@ -2102,7 +2102,7 @@ void GuitarPro3::read(QFile* fp)
                         else
                               cr->setDurationType(d);
 
-                        if(!segment->cr(track))
+                        if (!segment->cr(track))
                               segment->add(cr);
 
                         Staff* staff = cr->staff();
@@ -2158,10 +2158,10 @@ int GuitarPro3::readBeatEffects(int track, Segment* segment)
             int strokedown = readUChar();            // down stroke length
 
             Arpeggio* a = new Arpeggio(score);
-            if( strokeup > 0 ) {
+            if ( strokeup > 0 ) {
                   a->setArpeggioType(ArpeggioType::UP);
                   }
-            else if( strokedown > 0 ) {
+            else if ( strokedown > 0 ) {
                   a->setArpeggioType(ArpeggioType::DOWN);
                   }
             else {
@@ -2169,7 +2169,7 @@ int GuitarPro3::readBeatEffects(int track, Segment* segment)
                   a = 0;
                   }
 
-            if(a) {
+            if (a) {
                   ChordRest* cr = new Chord(score);
                   cr->setTrack(track);
                   cr->add(a);
@@ -2239,7 +2239,7 @@ void GuitarPro::createCrecDim(int staffIdx, int track, int tick, bool crec)
 Score::FileError importGTP(Score* score, const QString& name)
       {
       QFile fp(name);
-      if(!fp.exists())
+      if (!fp.exists())
             return Score::FileError::FILE_NOT_FOUND;
       if (!fp.open(QIODevice::ReadOnly))
             return Score::FileError::FILE_OPEN_ERROR;
@@ -2367,7 +2367,7 @@ Score::FileError importGTP(Score* score, const QString& name)
       //
       // create parts (excerpts)
       //
-      foreach(Part* part, score->parts()) {
+      for (Part* part : score->parts()) {
             Score* pscore = new Score(score);
             pscore->style()->set(StyleIdx::createMultiMeasureRests, true);
 

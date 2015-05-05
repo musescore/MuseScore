@@ -179,7 +179,7 @@ static void xmlSetPitch(Note* n, char step, int alter, int octave, Ottava* (&ott
       // ensure sane values
       pitch = limit(pitch, 0, 127);
 
-      for(int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
+      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
             if (ottavas[i] != 0 && ottavas[i]->track() == track)
                   pitch -= ottavas[i]->pitchShift();
             }
@@ -1240,7 +1240,7 @@ static QString decodeEntities( const QString& src )
       re.setMinimal(true);
 
       int pos = 0;
-      while( (pos = re.indexIn(src, pos)) != -1 ) {
+      while ( (pos = re.indexIn(src, pos)) != -1 ) {
             ret = ret.replace(re.cap(0), QChar(re.cap(1).toInt(0,10)));
             pos += re.matchedLength();
             }
@@ -1614,7 +1614,7 @@ void MusicXml::scorePartwise(QDomElement ee)
 
       // handle the implicit brackets:
       // multi-staff parts w/o explicit brackets get a brace
-      foreach(Part const* const p, il) {
+      for (Part const* const p : il) {
             if (p->nstaves() > 1 && !partSet.contains(p)) {
                   p->staff(0)->addBracket(BracketItem(BracketType::BRACE, p->nstaves()));
                   p->staff(0)->setBarLineSpan(p->nstaves());
@@ -1763,7 +1763,7 @@ void MusicXml::xmlPartList(QDomElement e)
 void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
       {
       Part* part = 0;
-      foreach(Part* p, score->parts()) {
+      for (Part* p : score->parts()) {
             if (p->id() == id) {
                   part = p;
                   parts++;
@@ -2058,7 +2058,7 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
 static QString findDeleteStaffText(Segment* s, int track)
       {
       //qDebug("findDeleteWords(s %p track %d)", s, track);
-      foreach (Element* e, s->annotations()) {
+      for (Element* e : s->annotations()) {
             //qDebug("findDeleteWords e %p type %hhd track %d", e, e->type(), e->track());
             if (e->type() != Element::Type::STAFF_TEXT || e->track() < track || e->track() >= track+VOICES)
                   continue;
@@ -2089,7 +2089,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             return;
             }
       Part* part = 0;
-      foreach(Part* p, score->parts()) {
+      for (Part* p : score->parts()) {
             if (p->id() == id) {
                   part = p;
                   break;
@@ -2455,7 +2455,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
       int alt = -10;                    // any number outside range of xml-tag "alter"
       QList<bool> accTmp;
       int i = 0;
-      while(i < 74){                    // number of lines per stave rsp. length of array AccidentalState (no constant found)
+      while (i < 74){                    // number of lines per stave rsp. length of array AccidentalState (no constant found)
           accTmp.append(false);
           i++;
       }
@@ -2517,9 +2517,9 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                   xmlAttributes(measure, staff, e.firstChildElement(), currKeySig);
             else if (e.tagName() == "note") {
                   Note* note = xmlNote(measure, staff, part->id(), beam, cv, e, graceNotes, alt);
-                  if(note) {
-                        if(note->accidental()){
-                              if(note->accidental()->accidentalType() != AccidentalType::NONE){
+                  if (note) {
+                        if (note->accidental()){
+                              if (note->accidental()->accidentalType() != AccidentalType::NONE){
                                     courtAccNotes.append(note);
                                     alterList.append(alt);
                                     }
@@ -2671,7 +2671,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                               QStringList sl = endingNumber.split(",", QString::SkipEmptyParts);
                               QList<int> iEndingNumbers;
                               bool unsupported = false;
-                              foreach(const QString &s, sl) {
+                              for (const QString &s : sl) {
                                     int iEndingNumber = s.toInt();
                                     if (iEndingNumber <= 0) {
                                           unsupported = true;
@@ -2745,7 +2745,7 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                   domError(e);
             }
        // grace notes appearing at the end of a measure are added as grace notes after to the last Chord
-      foreach (Chord* gc, graceNotes){
+      for (Chord* gc : graceNotes){
            addGraceNoteAfter(gc, measure->last());
            graceNotes.clear();
            }
@@ -2781,9 +2781,9 @@ Measure* MusicXml::xmlMeasure(Part* part, QDomElement e, int number, Fraction me
                    if (!e || e->type() != Ms::Element::Type::CHORD)
                          continue;
                    Chord* chord = static_cast<Chord*>(e);
-                   foreach (Note* nt, chord->notes()){
+                   for (Note* nt : chord->notes()){
                          int i = courtAccNotes.indexOf(nt);
-                         if(i > -1){
+                         if (i > -1){
                                int alter = alterList.value(i);
                                int ln  = absStep(nt->tpc(), nt->pitch());
                                AccidentalVal currAccVal = currAcc.accidentalVal(ln);
@@ -4313,7 +4313,7 @@ static void determineTupletTypeAndCount(Tuplet* t, int& tupletType, int& tupletC
       {
       int elemCount   = 0; // number of tuplet elements handled
 
-      foreach (DurationElement* de, t->elements()) {
+      for (DurationElement* de : t->elements()) {
             if (de->type() == Element::Type::CHORD || de->type() == Element::Type::REST) {
                   ChordRest* cr = static_cast<ChordRest*>(de);
                   if (elemCount == 0) {
@@ -4555,7 +4555,7 @@ void xmlTuplet(Tuplet*& tuplet, ChordRest* cr, int ticks, QDomElement e)
                   tuplet->setBaseLen(td);
                   // TODO determine usefulness of following check
                   int totalDuration = 0;
-                  foreach (DurationElement* de, tuplet->elements()) {
+                  for (DurationElement* de : tuplet->elements()) {
                         if (de->type() == Element::Type::CHORD || de->type() == Element::Type::REST) {
                               totalDuration+=de->globalDuration().ticks();
                               }
@@ -4817,7 +4817,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                         else {
                               // slur start for new slur: init
                               Slur* newSlur = new Slur(score);
-                              if(cr->isGrace())
+                              if (cr->isGrace())
                                     newSlur->setAnchor(Spanner::Anchor::CHORD);
                               if (lineType == "dotted")
                                     newSlur->setLineType(1);
@@ -4840,7 +4840,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                         if (slur[slurNo].isStart()) {
                               // slur stop when slur already started: wrap up
                               Slur* newSlur = slur[slurNo].slur();
-                              if(!(cr->isGrace())){
+                              if (!(cr->isGrace())){
                                     newSlur->setTick2(tick);
                                     newSlur->setTrack2(track);
                                     }
@@ -4853,7 +4853,7 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                         else {
                               // slur stop for new slur: init
                               Slur* newSlur = new Slur(score);
-                              if(!(cr->isGrace())){
+                              if (!(cr->isGrace())){
                                     newSlur->setTick2(tick);
                                     newSlur->setTrack2(track);
                                     }
@@ -5260,7 +5260,7 @@ static FiguredBass* findLastFiguredBass(int track, Segment* seg)
       // qDebug("findLastFiguredBass(track %d seg %p)", track, seg);
       while ((seg = seg->prev1(Segment::Type::ChordRest))) {
             // qDebug("findLastFiguredBass seg %p", seg);
-            foreach(Element* e, seg->annotations()) {
+            for (Element* e : seg->annotations()) {
                   if (e->track() == track && e->type() == Element::Type::FIGURED_BASS) {
                         FiguredBass* fb = static_cast<FiguredBass*>(e);
                         // qDebug("findLastFiguredBass found fb %p at seg %p", fb, seg);
@@ -5726,20 +5726,20 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                         // check whether grace is slured with prev. main note, then handle all grace
                         // notes until this as after
                         bool found = false;
-                        if(!notations.empty()) {
-                              foreach(QDomElement de, notations) {
+                        if (!notations.empty()) {
+                              for (QDomElement de : notations) {
                                     for (QDomElement ee = de.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                                           if (ee.tagName() == "slur") {
                                                 int slurNo   = ee.attribute(QString("number"), "1").toInt() - 1;
                                                 QString slurType = ee.attribute(QString("type"));
                                                 if (slurType == "stop") {
                                                      QDomElement eLastNote = org_e.previousSiblingElement("note");
-                                                      while(!eLastNote.isNull()){
+                                                      while (!eLastNote.isNull()){
                                                             if (eLastNote.elementsByTagName("grace").isEmpty()){
                                                                   QList<QDomElement> eSlurs = findSlurElements(eLastNote);
-                                                                  foreach (QDomElement es, eSlurs){
+                                                                  for (QDomElement es : eSlurs){
                                                                        if (!es.isNull() && slurNo == es.attribute(QString("number"), "1").toInt() - 1 && es.attribute(QString("type")) == "start"){
-                                                                             foreach (Chord* cg, graceNotes)
+                                                                             for (Chord* cg : graceNotes)
                                                                                    cg->toGraceAfter();
                                                                              found = true;
                                                                              break;
@@ -5778,34 +5778,34 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
                   // append grace notes
                   // first excerpt grace notes after
                   QList<Chord*> toRemove;
-                  if(graceNotes.length()){
-                        for(int i =  0; i < graceNotes.length(); i++){
+                  if (graceNotes.length()){
+                        for (int i =  0; i < graceNotes.length(); i++){
                               // grace notes from voice before, upcoming here must be grace after
-                              if(graceNotes[i]->voice() != cr->voice()){
+                              if (graceNotes[i]->voice() != cr->voice()){
                                     addGraceNoteAfter(graceNotes[i], measure->last());
                                     toRemove.append(graceNotes[i]);
                                     }
-                              else if(graceNotes[i]->isGraceAfter()){
+                              else if (graceNotes[i]->isGraceAfter()){
                                     addGraceNoteAfter(graceNotes[i],  cr->segment()->prev());
                                     toRemove.append(graceNotes[i]);
                                     }
                               }
                         }
-                  foreach(Chord* cRem, toRemove)
+                  for (Chord* cRem : toRemove)
                         graceNotes.removeOne(cRem);
                   toRemove.clear();
                   // append grace notes before
                   int ii = -1;
                   for (ii = graceNotes.size() - 1; ii >= 0; ii--) {
                         Chord* gc = graceNotes[ii];
-                        if(gc->voice() == cr->voice()){
+                        if (gc->voice() == cr->voice()){
                              cr->add(gc);
                              }
                         }
                   graceNotes.clear();
                   }
 
-            if(cr)
+            if (cr)
                   cr->setStaffMove(move);
 
             char c = step[0].toLatin1();
@@ -5856,7 +5856,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             // qDebug("staff for new note: %p (staff=%d, relStaff=%d)",
             //        score->staff(staff + relStaff), staff, relStaff);
 
-            if(accidental != AccidentalType::NONE){
+            if (accidental != AccidentalType::NONE){
                   Accidental* a = new Accidental(score);
                   a->setAccidentalType(accidental);
                    if (editorial || cautionary || parentheses) {
@@ -5928,7 +5928,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
             xmlTuplet(tuplets[voice + relStaff * VOICES], cr, ticks, org_e);
             }
 
-      foreach(QDomElement de, notations) {
+      for (QDomElement de : notations) {
             xmlNotations(note, cr, trk, loc_tick, ticks, de);
             }
 
@@ -5938,7 +5938,7 @@ Note* MusicXml::xmlNote(Measure* measure, int staff, const QString& partId, Beam
       // add figured bass element
       if (!figBassList.isEmpty()) {
             int sTick = tick;  // starting tick
-            foreach (FiguredBass* fb, figBassList) {
+            for (FiguredBass* fb : figBassList) {
                   fb->setTrack(trk);
                   // No duration tag defaults ticks() to 0; set to note value
                   if (fb->ticks() == 0)
@@ -6299,7 +6299,7 @@ QList<QDomElement> MusicXml::findSlurElements(QDomElement e)
       for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             QString tag(e.tagName());
             if (tag == "notations"){
-                  for(e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
+                  for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
                         if (e.tagName() == "slur")
                               slurs.append(e);
                   }
@@ -6313,7 +6313,7 @@ QList<QDomElement> MusicXml::findSlurElements(QDomElement e)
 
 void MusicXml::addGraceNoteAfter(Chord* graceNote, Segment* segm)
       {
-      if(segm){
+      if (segm){
             graceNote->toGraceAfter();
             Element* el = segm->element(graceNote->track());
             if (el && el->type() == Element::Type::CHORD) {

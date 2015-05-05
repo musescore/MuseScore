@@ -527,7 +527,7 @@ bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant TimeSig::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::SHOW_COURTESY:      return true;
             case P_ID::NUMERATOR_STRING:   return QString();
             case P_ID::DENOMINATOR_STRING: return QString();

@@ -493,7 +493,7 @@ void PianoView::setStaff(Staff* s, Pos* l)
       //
       QList<QGraphicsItem*> items = scene()->selectedItems();
       QRectF boundingRect;
-      foreach (QGraphicsItem* item, items) {
+      for (QGraphicsItem* item : items) {
             if (item->type() == PianoItemType)
                   boundingRect |= item->mapToScene(item->boundingRect()).boundingRect();
             }

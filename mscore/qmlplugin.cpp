@@ -60,7 +60,7 @@ QQmlListProperty<Score> QmlPlugin::scores()
 
 bool QmlPlugin::writeScore(Score* s, const QString& name, const QString& ext)
       {
-      if(!s)
+      if (!s)
             return false;
       return msc->saveAs(s, true, name, ext);
       }

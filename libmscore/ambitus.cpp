@@ -568,7 +568,7 @@ void Ambitus::updateRange()
                   if ( (chord=static_cast<Chord*>(segm->element(trk))) != nullptr
                               && chord->type() == Element::Type::CHORD) {
                         // update pitch range (with associated tpc's)
-                        foreach (Note* n, chord->notes()) {
+                        for (Note* n : chord->notes()) {
                               int pitch = n->ppitch();
                               if (pitch > pitchTop) {
                                     pitchTop = pitch;
@@ -597,7 +597,7 @@ void Ambitus::updateRange()
 
 QVariant Ambitus::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::HEAD_GROUP:
                   return int(noteHeadGroup());
             case P_ID::HEAD_TYPE:
@@ -634,7 +634,7 @@ bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
       bool  rv = true;
 
       score()->addRefresh(canvasBoundingRect());
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::HEAD_GROUP:
                   setNoteHeadGroup( NoteHead::Group(v.toInt()) );
                   break;
@@ -683,7 +683,7 @@ bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Ambitus::propertyDefault(P_ID id) const
       {
-      switch(id) {
+      switch (id) {
             case P_ID::HEAD_GROUP:      return int(NOTEHEADGROUP_DEFAULT);
             case P_ID::HEAD_TYPE:       return int(NOTEHEADTYPE_DEFAULT);
             case P_ID::MIRROR_HEAD:     return int(DIR_DEFAULT);
