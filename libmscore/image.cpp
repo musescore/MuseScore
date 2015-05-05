@@ -35,6 +35,7 @@ Image::Image(Score* s)
    : BSymbol(s)
       {
       imageType        = ImageType::NONE;
+      rasterDoc        = 0;
       _size            = QSizeF(0, 0);
       _storeItem       = 0;
       _dirty           = false;
@@ -63,10 +64,10 @@ Image::Image(const Image& img)
             _storeItem->reference(this);
       _linkPath        = img._linkPath;
       _linkIsValid     = img._linkIsValid;
-      if (imageType == ImageType::RASTER && img.rasterDoc)
-            rasterDoc = new QImage(*img.rasterDoc);
-      else if (imageType == ImageType::SVG && img.svgDoc)
-            svgDoc = new QSvgRenderer(img.svgDoc);
+      if (imageType == ImageType::RASTER)
+            rasterDoc = img.rasterDoc ? new QImage(*img.rasterDoc) : 0;
+      else if (imageType == ImageType::SVG)
+            svgDoc = img.svgDoc ? new QSvgRenderer(img.svgDoc) : 0;
       setZ(img.z());
       }
 
