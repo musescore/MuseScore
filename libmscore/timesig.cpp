@@ -293,13 +293,13 @@ void TimeSig::layout1()
       if (sigType ==  TimeSigType::FOUR_FOUR) {
             pz = QPointF(0.0, yoff);
             setbbox(symBbox(SymId::timeSigCommon).translated(pz));
-            _numeratorString = score()->scoreFont()->toString(SymId::timeSigCommon);
+            _numeratorString = "C";
             _denominatorString.clear();
             }
       else if (sigType == TimeSigType::ALLA_BREVE) {
             pz = QPointF(0.0, yoff);
             setbbox(symBbox(SymId::timeSigCutCommon).translated(pz));
-            _numeratorString = score()->scoreFont()->toString(SymId::timeSigCutCommon);
+            _numeratorString = "\xA2";
             _denominatorString.clear();
             }
       else {
@@ -307,17 +307,13 @@ void TimeSig::layout1()
                   _numeratorString   = QString("%1").arg(_sig.numerator());   // build numerator string
                   _denominatorString = QString("%1").arg(_sig.denominator()); // build denominator string
                   }
-            QString ns = toTimeSigString(_numeratorString);
-            QString ds = toTimeSigString(_denominatorString);
-#if 0 //TODOxxxx
-            QFont font = score()->scoreFont()->font();
-            QFontMetricsF fm(font);
+            QList<SymId> ns = toTimeSigString(_numeratorString);
+            QList<SymId> ds = toTimeSigString(_denominatorString);
+
+            ScoreFont* font = score()->scoreFont();
             qreal mag = magS();
-            QRectF numRect = fm.tightBoundingRect(ns);          // get 'tight' bounding boxes for strings
-            QRectF denRect = fm.tightBoundingRect(ds);
-            // really Qt does not provide a QRectF::scale() method?!!
-            numRect = QRect(numRect.x()*mag, numRect.y()*mag, fm.width(ns)*mag, numRect.height()*mag);
-            denRect = QRect(denRect.x()*mag, denRect.y()*mag, fm.width(ds)*mag, denRect.height()*mag);
+            QRectF numRect = font->bbox(ns, mag);
+            QRectF denRect = font->bbox(ds, mag);
 
             // position numerator and denominator; vertical displacement:
             // number of lines is odd: 0.0 (strings are directly above and below the middle line)
@@ -351,7 +347,6 @@ void TimeSig::layout1()
                   addbbox(QRect(pointLargeLeftParen.x(), pointLargeLeftParen.y() - denRect.height(), _spatium / 2, numRect.height() + denRect.height()));
                   addbbox(QRect(pointLargeRightParen.x(), pointLargeRightParen.y() - denRect.height(),  _spatium / 2, numRect.height() + denRect.height()));
                   }
-#endif
             }
 
       _needLayout = false;
@@ -366,8 +361,8 @@ void TimeSig::draw(QPainter* painter) const
       if (staff() && !staff()->staffType()->genTimesig())
             return;
       painter->setPen(curColor());
-      QString ns = toTimeSigString(_numeratorString);
-      QString ds = toTimeSigString(_denominatorString);
+      QList<SymId> ns = toTimeSigString(_numeratorString);
+      QList<SymId> ds = toTimeSigString(_denominatorString);
 
       drawSymbols(ns, painter, pz);
       drawSymbols(ds, painter, pn);

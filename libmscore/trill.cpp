@@ -31,7 +31,7 @@ const TrillTableItem trillTable[] = {
       { Trill::Type::DOWNPRALL_LINE,  "downprall",  QT_TRANSLATE_NOOP("trillType", "Downprall line")      },
       { Trill::Type::PRALLPRALL_LINE, "prallprall", QT_TRANSLATE_NOOP("trillType", "Prallprall line")     },
       { Trill::Type::PURE_LINE      , "pure",       QT_TRANSLATE_NOOP("trillType", "Wavy line")           }
-};
+      };
 
 int trillTableSize() {
       return sizeof(trillTable)/sizeof(TrillTableItem);
@@ -85,12 +85,12 @@ void TrillSegment::symbolLine(SymId start, SymId fill)
       ScoreFont* f = score()->scoreFont();
 
       _symbols.clear();
-      _symbols.append(f->toString(start));
+      _symbols.append(start);
       qreal w1 = f->bbox(start, mag).width();
       qreal w2 = f->width(fill, mag);
       int n    = lrint((w - w1) / w2);
       for (int i = 0; i < n; ++i)
-           _symbols.append(f->toString(fill));
+           _symbols.append(fill);
       QRectF r(f->bbox(_symbols, mag));
       setbbox(r);
       }
@@ -104,14 +104,14 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
       ScoreFont* f = score()->scoreFont();
 
       _symbols.clear();
-      _symbols.append(f->toString(start));
-      _symbols.append(f->toString(end));
+      _symbols.append(start);
+      _symbols.append(end);
       qreal w1 = f->bbox(start, mag).width();
       qreal w2 = f->width(fill, mag);
       qreal w3 = f->width(end, mag);
       int n    = lrint((w - w1 - w3) / w2);
       for (int i = 0; i < n; ++i)
-           _symbols.insert(1, f->toString(fill));
+           _symbols.insert(1, fill);
       QRectF r(f->bbox(_symbols, mag));
       setbbox(r);
       }

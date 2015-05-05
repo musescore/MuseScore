@@ -703,8 +703,6 @@ extern QAction* getAction(const char*);
 extern Shortcut* midiActionMap[128];
 extern void loadTranslation(QString fileName, QString localeName);
 extern void setMscoreLocale(QString localeName);
-extern QPixmap sym2pixmap(const Sym* s, qreal mag);
-
 extern bool saveMxl(Score*, const QString& name);
 extern bool saveXml(Score*, const QString& name);
 

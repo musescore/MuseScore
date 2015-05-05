@@ -559,18 +559,18 @@ class Element : public QObject, public ScoreElement {
 
       void drawSymbol(SymId id, QPainter* p, const QPointF& o = QPointF()) const;
       void drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const;
-      void drawSymbols(const QString&, QPainter* p, const QPointF& o = QPointF()) const;
+      void drawSymbols(const QList<SymId>&, QPainter* p, const QPointF& o = QPointF()) const;
       qreal symHeight(SymId id) const;
       qreal symWidth(SymId id) const;
-      qreal symWidth(const QString&) const;
+      qreal symWidth(const QList<SymId>&) const;
       QRectF symBbox(SymId id) const;
-      QRectF symBbox(const QString&) const;
+      QRectF symBbox(const QList<SymId>&) const;
       QPointF symAttach(SymId id) const;
       QPointF symCutOutNE(SymId id) const;
       QPointF symCutOutNW(SymId id) const;
       QPointF symCutOutSE(SymId id) const;
       QPointF symCutOutSW(SymId id) const;
-      QString toTimeSigString(const QString& s) const;
+      QList<SymId> toTimeSigString(const QString& s) const;
       bool symIsValid(SymId id) const;
 
       virtual Element* nextElement();  //< Used for navigation

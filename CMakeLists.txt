@@ -174,6 +174,8 @@ SET(QT_USE_QTHELP        TRUE)
 
 #find_package(Qt5 COMPONENTS Widgets Xml Svg Network Designer WebKit Declarative)
 
+find_package(Freetype REQUIRED)
+
 
 ##
 ## alsa >= 1.0.0
@@ -444,6 +446,7 @@ include_directories(
    ${VORBIS_INCDIR}
    ${SNDFILE_INCDIR}
    ${LAME_INCLUDE_DIR}
+   ${FREETYPE_INCLUDE_DIRS}
 )
 
 ##

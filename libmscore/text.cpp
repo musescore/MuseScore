@@ -450,11 +450,7 @@ int TextBlock::column(qreal x, Text* t) const
                   if (c.isHighSurrogate())
                         continue;
                   QFontMetricsF fm(f.font(t));
-                  qreal xo;
-                  if (f.format.type() == CharFormatType::TEXT)
-                        xo = fm.width(f.text.left(idx));
-                  else
-                        xo = t->symWidth(f.text.left(idx));
+                  qreal xo = fm.width(f.text.left(idx));
                   if (x <= f.pos.x() + px + (xo-px)*.5)
                         return col;
                   ++col;

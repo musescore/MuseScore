@@ -115,7 +115,7 @@ void Rest::draw(QPainter* painter) const
 
 //            painter->setFont(score()->scoreFont()->font());
 //            QFontMetricsF fm(score()->scoreFont()->font());
-            QString s = toTimeSigString(QString("%1").arg(n));
+            QList<SymId> s = toTimeSigString(QString("%1").arg(n));
             y  = -_spatium * 1.5 - staff()->height() *.5;
             qreal x = center(x1, x2);
             x -= symBbox(s).width() * .5;
