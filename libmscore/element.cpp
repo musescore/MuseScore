@@ -1691,7 +1691,7 @@ void Element::drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const
       score()->scoreFont()->draw(id, p, magS(), o, n);
       }
 
-void Element::drawSymbols(const QString& s, QPainter* p, const QPointF& o) const
+void Element::drawSymbols(const QList<SymId>& s, QPainter* p, const QPointF& o) const
       {
       score()->scoreFont()->draw(s, p, magS(), o);
       }
@@ -1713,7 +1713,7 @@ qreal Element::symWidth(SymId id) const
       {
       return score()->scoreFont()->width(id, magS());
       }
-qreal Element::symWidth(const QString& s) const
+qreal Element::symWidth(const QList<SymId>& s) const
       {
       return score()->scoreFont()->width(s, magS());
       }
@@ -1727,7 +1727,7 @@ QRectF Element::symBbox(SymId id) const
       return score()->scoreFont()->bbox(id, magS());
       }
 
-QRectF Element::symBbox(const QString& s) const
+QRectF Element::symBbox(const QList<SymId>& s) const
       {
       return score()->scoreFont()->bbox(s, magS());
       }
@@ -1778,30 +1778,29 @@ bool Element::symIsValid(SymId id) const
 //   toTimeSigString
 //---------------------------------------------------------
 
-QString Element::toTimeSigString(const QString& s) const
+QList<SymId> Element::toTimeSigString(const QString& s) const
       {
-      QString d;
-      ScoreFont* f = score()->scoreFont();
+      QList<SymId> d;
       for (int i = 0; i < s.size(); ++i) {
             switch (s[i].toLatin1()) {
-                  case '+': d += f->toString(SymId::timeSigPlusSmall); break;
-                  case '0': d += f->toString(SymId::timeSig0); break;
-                  case '1': d += f->toString(SymId::timeSig1); break;
-                  case '2': d += f->toString(SymId::timeSig2); break;
-                  case '3': d += f->toString(SymId::timeSig3); break;
-                  case '4': d += f->toString(SymId::timeSig4); break;
-                  case '5': d += f->toString(SymId::timeSig5); break;
-                  case '6': d += f->toString(SymId::timeSig6); break;
-                  case '7': d += f->toString(SymId::timeSig7); break;
-                  case '8': d += f->toString(SymId::timeSig8); break;
-                  case '9': d += f->toString(SymId::timeSig9); break;
-                  case 'C': d += f->toString(SymId::timeSigCommon); break;
-                  case 'O': d += f->toString(SymId::mensuralProlation2); break;
-                  case '(': d += f->toString(SymId::timeSigParensLeftSmall); break;
-                  case ')': d += f->toString(SymId::timeSigParensRightSmall); break;
-                  case '\xA2': d += f->toString(SymId::timeSigCutCommon); break;    // '¢'
-                  case '\xD8': d += f->toString(SymId::mensuralProlation3); break;  // 'Ø'
-                  default:  d += s[i]; break;
+                  case '+': d += SymId::timeSigPlusSmall; break;
+                  case '0': d += SymId::timeSig0; break;
+                  case '1': d += SymId::timeSig1; break;
+                  case '2': d += SymId::timeSig2; break;
+                  case '3': d += SymId::timeSig3; break;
+                  case '4': d += SymId::timeSig4; break;
+                  case '5': d += SymId::timeSig5; break;
+                  case '6': d += SymId::timeSig6; break;
+                  case '7': d += SymId::timeSig7; break;
+                  case '8': d += SymId::timeSig8; break;
+                  case '9': d += SymId::timeSig9; break;
+                  case 'C': d += SymId::timeSigCommon; break;
+                  case 'O': d += SymId::mensuralProlation2; break;
+                  case '(': d += SymId::timeSigParensLeftSmall; break;
+                  case ')': d += SymId::timeSigParensRightSmall; break;
+                  case '\xA2': d += SymId::timeSigCutCommon; break;    // '¢'
+                  case '\xD8': d += SymId::mensuralProlation3; break;  // 'Ø'
+                  default:  break;  // d += s[i]; break;
                   }
             }
       return d;

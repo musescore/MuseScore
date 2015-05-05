@@ -100,15 +100,14 @@ void Arpeggio::symbolLine(SymId end, SymId fill)
       qreal w   = y2 - y1;
       qreal mag = magS();
       ScoreFont* f = score()->scoreFont();
-      const QString& fillString = f->toString(fill);
 
       symbols.clear();
-      symbols.append(f->toString(end));
+      symbols.append(end);
       qreal w1 = f->bbox(end, mag).width();
       qreal w2 = f->width(fill, mag);
       int n    = lrint((w - w1) / w2);
       for (int i = 0; i < n; ++i)
-           symbols.prepend(fillString);
+           symbols.prepend(fill);
       }
 
 //---------------------------------------------------------

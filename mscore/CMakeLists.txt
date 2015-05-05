@@ -26,6 +26,7 @@ include_directories(
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
+      ${FREETYPE_INCLUDE_DIRS}
       )
 
 if (SCRIPT_INTERFACE)
@@ -296,6 +297,7 @@ target_link_libraries(mscore
       qzip
       beatroot
       kqoauth
+      ${FREETYPE_LIBRARIES}
       )
 
 if (MINGW)

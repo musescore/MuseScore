@@ -17,6 +17,7 @@ enable_testing()
 include_directories(
       ${PROJECT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
+      ${FREETYPE_INCLUDE_DIRS}
       )
 
 if (OMR)

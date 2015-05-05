@@ -15,6 +15,9 @@
 
 #include "config.h"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 class QPainter;
 
 namespace Ms {
@@ -2467,32 +2470,40 @@ enum class SymId {
 
 class Sym {
    protected:
-      quint32 _index { 0xffffffff };
-      QString _string;
-      QPointF _attach;
-      qreal _width;                       // cached width
-      QRectF _bbox;                       // cached bbox
+      int _code = -1;
+      FT_UInt _index;
+      QRectF _bbox;
+      qreal _advance;
 
+      QPointF _attach;
       QPointF _cutOutNE;
       QPointF _cutOutNW;
       QPointF _cutOutSE;
       QPointF _cutOutSW;
+      QList<SymId> _ids;            // not empty if this is a compound symbol
 
    public:
       Sym() { }
 
-      const QString& string() const              { return _string;   }
-      void setString(const QString& s)           { _string = s;      }
-      int index() const                          { return _index;    }
-      void setIndex(int i)                       { _index = i; }
+      bool isValid() const                       { return _code != -1; }
 
-      bool isValid() const                       { return _index != 0xffffffff; }
-      QPointF attach() const                     { return _attach;   }
-      void setAttach(const QPointF& r)           { _attach = r;      }
-      qreal width() const                        { return _width;    }
-      void setWidth(qreal val)                   { _width = val;     }
+      void setSymList(const QList<SymId>& sl)    { _ids = sl;        }
+      const QList<SymId>& symList() const        { return _ids;      }
+
+      FT_UInt index() const                      { return _index;    }
+      void setIndex(FT_UInt i)                   { _index = i; }
+
+      int code() const                           { return _code;     }
+      void setCode(int val)                      { _code = val;      }
+
       QRectF bbox() const                        { return _bbox;     }
       void setBbox(QRectF val)                   { _bbox = val;      }
+
+      qreal advance() const                      { return _advance;  }
+      void setAdvance(qreal val)                 { _advance = val;   }
+
+      QPointF attach() const                     { return _attach;   }
+      void setAttach(const QPointF& r)           { _attach = r;      }
       QPointF cutOutNE() const                   { return _cutOutNE; }
       void setCutOutNE(const QPointF& r)         { _cutOutNE = r;    }
       QPointF cutOutNW() const                   { return _cutOutNW; }
@@ -2507,8 +2518,7 @@ class Sym {
       static const char* id2name(SymId id);
 
       static QString id2userName(SymId id)       { return symUserNames[int(id)]; }
-      static SymId userName2id(const QString& s) { int val = symUserNames.indexOf(s);
-                                                   return (val == -1) ? SymId::noSym : (SymId)(val); }
+      static SymId userName2id(const QString& s);
 
       static QVector<const char*> symNames;
       static QVector<QString> symUserNames;
@@ -2522,57 +2532,55 @@ class Sym {
 //---------------------------------------------------------
 
 class ScoreFont {
-      QRawFont* _font = 0;
+      FT_Face face = 0;
       QVector<Sym> _symbols;
       QString _name;
       QString _family;
       QString _fontPath;
       QString _filename;
-      QString _textFace;
-      bool loaded = false;
+      QByteArray fontImage;
 
       static QVector<ScoreFont> _scoreFonts;
       const Sym& sym(SymId id) const { return _symbols[int(id)]; }
       void load();
+      void computeMetrics(Sym* sym, int code);
 
    public:
-      ScoreFont() {}
+      ScoreFont();
       ScoreFont(const char* n, const char* f, const char* p, const char* fn)
          : _name(n), _family(f), _fontPath(p), _filename(fn) {
             _symbols = QVector<Sym>(int(SymId::lastSym) + 1);
             }
       ~ScoreFont();
 
-      const QString& name() const           { return _name;           }
+      const QString& name() const           { return _name;   }
+      const QString& family() const         { return _family; }
 
       static ScoreFont* fontFactory(QString);
       static ScoreFont* fallbackFont();
       static const char* fallbackTextFont();
       static const QVector<ScoreFont>& scoreFonts() { return _scoreFonts; }
 
-      const QRawFont& font() const { return *_font; }
-      const QString& toString(SymId id) const { return _symbols[int(id)].string(); }
-      const quint32* index(SymId id) const    { return &_symbols[int(id)]._index; }
-
-      QPixmap sym2pixmap(SymId, qreal) { return QPixmap(); }
+      QString toString(SymId) const;
+      QPixmap sym2pixmap(SymId, qreal) { return QPixmap(); }      // TODOxxxx
 
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos = QPointF()) const;
-      void draw(const QString&, QPainter*, qreal mag, const QPointF& pos = QPointF()) const;
+      void draw(const QList<SymId>&, QPainter*, qreal mag, const QPointF& pos = QPointF()) const;
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const;
 
-      qreal height(SymId id, qreal mag) const         { return _symbols[int(id)].bbox().height() * mag; }
-      qreal width(SymId id, qreal mag) const          { return _symbols[int(id)].width() * mag;  }
-      qreal width(const QString&, qreal mag) const;
+      qreal height(SymId id, qreal mag) const         { return sym(id).bbox().height() * mag; }
+      qreal width(SymId id, qreal mag) const          { return sym(id).bbox().width() * mag;  }
+      qreal width(const QList<SymId>&, qreal mag) const;
 
       const QRectF bbox(SymId id, qreal mag) const;
-      const QRectF bbox(const QString& s, qreal mag) const;
-      QPointF attach(SymId id, qreal mag) const       { return _symbols[int(id)].attach() * mag;   }
-      QPointF cutOutNE(SymId id, qreal mag) const     { return _symbols[int(id)].cutOutNE() * mag; }
-      QPointF cutOutNW(SymId id, qreal mag) const     { return _symbols[int(id)].cutOutNW() * mag; }
-      QPointF cutOutSE(SymId id, qreal mag) const     { return _symbols[int(id)].cutOutSE() * mag; }
-      QPointF cutOutSW(SymId id, qreal mag) const     { return _symbols[int(id)].cutOutSW() * mag; }
-      bool isValid(SymId id) const                    { return _symbols[int(id)].isValid(); }
-      const QString& family() const                   { return _family; }
+      const QRectF bbox(const QList<SymId>& s, qreal mag) const;
+      QPointF attach(SymId id, qreal mag) const       { return sym(id).attach() * mag;   }
+      QPointF cutOutNE(SymId id, qreal mag) const     { return sym(id).cutOutNE() * mag; }
+      QPointF cutOutNW(SymId id, qreal mag) const     { return sym(id).cutOutNW() * mag; }
+      QPointF cutOutSE(SymId id, qreal mag) const     { return sym(id).cutOutSE() * mag; }
+      QPointF cutOutSW(SymId id, qreal mag) const     { return sym(id).cutOutSW() * mag; }
+
+      bool isValid(SymId id) const                    { return sym(id).isValid(); }
       };
 
 extern void initScoreFonts();

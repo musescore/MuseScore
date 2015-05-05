@@ -17,6 +17,12 @@
 #include "xml.h"
 #include "mscore.h"
 
+#include FT_GLYPH_H
+#include FT_IMAGE_H
+#include FT_BBOX_H
+
+static FT_Library ftlib;
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -26,7 +32,7 @@ namespace Ms {
 
 static const int FALLBACK_FONT = 2;       // Bravura
 
-QVector<ScoreFont> ScoreFont::_scoreFonts = {
+QVector<ScoreFont> ScoreFont::_scoreFonts {
       ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",   "mscore.ttf"   ),
       ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf" ),
       ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",  "Bravura.otf"  )
@@ -5162,49 +5168,85 @@ QVector<oldName> oldNames = {
 };
 
 //---------------------------------------------------------
+//   userName2id
+//---------------------------------------------------------
+
+SymId Sym::userName2id(const QString& s)
+      {
+      int val = symUserNames.indexOf(s);
+      return (val == -1) ? SymId::noSym : (SymId)(val);
+      }
+
+//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
-void ScoreFont::draw(const QString& s, QPainter* painter, qreal mag, const QPointF& pos) const
+void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& _pos) const
       {
-      qreal imag = 1.0 / mag;
-      painter->scale(mag, mag);
-      QGlyphRun glyphs;
-      glyphs.setRawFont(font());
+      if (!isValid(id))
+            return;
+      if (!sym(id).symList().isEmpty()) {  // is this a compound symbol?
+            draw(sym(id).symList(), painter, mag, _pos);
+            return;
+            }
+      int rv = FT_Load_Glyph(face, sym(id).index(), FT_LOAD_DEFAULT);
+      if (rv) {
+            qDebug("load glyph id %d, failed: 0x%x", int(id), rv);
+            return;
+            }
 
-      QVector<quint32> indexes;
-      indexes << (font().glyphIndexesForString(s));
-      glyphs.setGlyphIndexes(indexes);
+      qreal m = mag * 0x10000 * .1;
+      FT_Matrix matrix;
+      matrix.xx = lrint(painter->worldTransform().m11() * m);
+      matrix.yy = lrint(painter->worldTransform().m22() * m);
+      matrix.xy = 0;
+      matrix.yx = 0;
 
-      QVector<QPointF> positions;
-      positions << QPointF();
-      glyphs.setPositions(positions);
+      FT_Glyph glyph;
+      FT_Get_Glyph(face->glyph, &glyph);
+      FT_Glyph_Transform(glyph, &matrix, 0);
+      rv = FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1);
+      if (rv) {
+            qDebug("glyph to bitmap failed: 0x%x", rv);
+            return;
+            }
 
-      painter->drawGlyphRun(pos * imag, glyphs);
-      painter->scale(imag, imag);
-      }
+      FT_BitmapGlyph gb = (FT_BitmapGlyph)glyph;
+      FT_Bitmap* bm = &gb->bitmap;
 
-void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos) const
-      {
-      qreal imag = 1.0 / mag;
-      painter->scale(mag, mag);
-
-      QGlyphRun glyphs;
-      glyphs.setRawFont(font());
-      QPointF pt;
-      glyphs.setRawData(index(id), &pt, 1);
-
-      painter->drawGlyphRun(pos * imag, glyphs);
-      painter->scale(imag, imag);
+      QImage img(QSize(bm->width, bm->rows), QImage::Format_ARGB32);
+      img.fill(Qt::transparent);
+      QColor color(painter->pen().color());
+      for (unsigned y = 0; y < bm->rows; ++y) {
+            for (unsigned x = 0; x < bm->width; ++x) {
+                  unsigned val = *(((unsigned char*)bm->buffer) + bm->pitch * y + x);
+                  color.setAlpha(val);
+                  img.setPixel(x, y, color.rgba());
+                  }
+            }
+      painter->setWorldMatrixEnabled(false);
+      QPointF pos = painter->worldTransform().map(_pos);
+      pos.ry() -= gb->top;
+      pos.rx() += gb->left;
+      painter->drawPixmap(pos, QPixmap::fromImage(img, Qt::NoFormatConversion));
+      painter->setWorldMatrixEnabled(true);
       }
 
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const
       {
-      QString s = toString(id);
-      QString d;
+      QList<SymId> d;
       for (int i = 0; i < n; ++i)
-            d += s;
+            d += id;
       draw(d, painter, mag, pos);
+      }
+
+void ScoreFont::draw(const QList<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos) const
+      {
+      QPointF pos(_pos);
+      for (SymId id : ids) {
+            draw(id, p, mag, pos);
+            pos.rx() += (sym(id).advance() * mag);
+            }
       }
 
 //---------------------------------------------------------
@@ -5223,10 +5265,13 @@ const char* Sym::id2name(SymId id)
 
 void initScoreFonts()
       {
+      int error = FT_Init_FreeType(&ftlib);
+      if (!ftlib || error)
+            qFatal("init freetype library failed");
+      qDebug("initScoreFonts %p", ftlib);
       int index = 0;
       for (auto i : Sym::symNames)
             Sym::lnhash.insert(i, SymId(index++));
-      ScoreFont::fontFactory("Bravura");       // load reference font
       for (oldName i : oldNames)
             Sym::lonhash.insert(i.name, SymId(i.symId));
       QFont::insertSubstitution("MScore Text",    "Bravura Text");
@@ -5252,24 +5297,31 @@ static QString codeToString(int code)
       }
 
 //---------------------------------------------------------
+//   toString
+//---------------------------------------------------------
+
+QString ScoreFont::toString(SymId id) const
+      {
+      return codeToString(sym(id).code());
+      }
+
+//---------------------------------------------------------
 //   computeMetrics
 //---------------------------------------------------------
 
-static void computeMetrics(Sym* sym, QRawFont* _font, int code)
+void ScoreFont::computeMetrics(Sym* sym, int code)
       {
-      sym->setString(codeToString(code));
-
-      quint32 index;
-      QChar c(code);
-      int n = 1;
-      _font->glyphIndexesForChars(&c, 1, &index, &n);
+      FT_UInt index = FT_Get_Char_Index(face, code);
       sym->setIndex(index);
+      sym->setCode(code);
 
-      QRectF bbox(_font->boundingRect(index));
+      FT_Load_Glyph(face, index, FT_LOAD_DEFAULT);
+      FT_BBox bb;
+      FT_Outline_Get_BBox(&face->glyph->outline, &bb);
+      QRectF bbox;
+      bbox.setCoords(bb.xMin/640.0, -bb.yMax/640.0, bb.xMax/640.0, -bb.yMin/640.0);
       sym->setBbox(bbox);
-      QPointF w;
-      _font->advancesForGlyphIndexes(&index, &w, 1);
-      sym->setWidth(w.x());
+      sym->setAdvance(face->glyph->linearHoriAdvance / 655360.0);
       }
 
 //---------------------------------------------------------
@@ -5278,7 +5330,21 @@ static void computeMetrics(Sym* sym, QRawFont* _font, int code)
 
 void ScoreFont::load()
       {
-      _font = new QRawFont(_fontPath + filename, 20.0 * MScore::DPI/PPI, QFont::PreferVerticalHinting);
+      QString facePath = _fontPath + _filename;
+      QFile f(facePath);
+      if (!f.open(QIODevice::ReadOnly)) {
+            qDebug("ScoreFont::load(): open failed <%s>", qPrintable(facePath));
+            return;
+            }
+      fontImage = f.readAll();
+      int rval = FT_New_Memory_Face(ftlib, (FT_Byte*)fontImage.data(), fontImage.size(), 0, &face);
+      if (rval) {
+            qDebug("freetype: cannot create face <%s>: %d", qPrintable(facePath), rval);
+            return;
+            }
+
+      qreal pixelSize = 200.0 * MScore::DPI/PPI;
+      FT_Set_Pixel_Sizes(face, 0, int(pixelSize+.5));
 
       QFile fi(_fontPath + "glyphnames.json");
       if (!fi.open(QIODevice::ReadOnly))
@@ -5297,7 +5363,7 @@ void ScoreFont::load()
             if (Sym::lnhash.contains(i)) {
                   SymId symId = Sym::lnhash.value(i);
                   Sym* sym = &_symbols[int(symId)];
-                  computeMetrics(sym, _font, code);
+                  computeMetrics(sym, code);
                   }
             //else
             //      qDebug("unknown glyph: %s", qPrintable(i));
@@ -5426,11 +5492,11 @@ void ScoreFont::load()
       for (const Composed& c : composed) {
             if (!_symbols[int(c.id)].isValid()) {
                   Sym* sym = &_symbols[int(c.id)];
-                  QString s;
+                  QList<SymId> s;
                   for (SymId id : c.rids)
-                        s += _symbols[int(id)].string();
-                  sym->setString(s);
-//TODOxxxx                  sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
+                        s += id;
+                  sym->setSymList(s);
+                  sym->setBbox(bbox(s, 1.0));
                   }
             }
 
@@ -5462,19 +5528,17 @@ void ScoreFont::load()
                   // locate the relevant altKey in alternate array
                   for (auto j : oaa) {
                         QJsonObject jo = j.toObject();
-                        if(jo.value("name") == c.altKey) {
+                        if (jo.value("name") == c.altKey) {
                               Sym* sym = &_symbols[int(c.id)];
                               int code = jo.value("codepoint").toString().mid(2).toInt(&ok, 16);
-                              if (ok) {
-                                    QString s = codeToString(code);
-                                    sym->setString(s);
-//TODOxxxx                                    sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
-                                    }
+                              if (ok)
+                                    computeMetrics(sym, code);
                               break;
                               }
                         }
                   }
             }
+
       // Unicode
       struct UnicodeAlternate {
             SymId       id;
@@ -5495,20 +5559,18 @@ void ScoreFont::load()
 
       for (const UnicodeAlternate& unicode : unicodes) {
             Sym* sym = &_symbols[int(unicode.id)];
-            sym->setString(unicode.string);
-//TODOxxxx            sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
+            computeMetrics(sym, 0);             // TODO: compute unicode!
             }
 
       // add space symbol
       Sym* sym = &_symbols[int(SymId::space)];
-      computeMetrics(sym, _font, 32);
+      computeMetrics(sym, 32);
 
       /*for (int i = 1; i < int(SymId::lastSym); ++i) {
             Sym sym = _symbols[i];
             if (!sym.isValid())
                   qDebug("invalid symbol %s", Sym::id2name(SymId(i)));
             }*/
-      loaded = true;
       }
 
 //---------------------------------------------------------
@@ -5526,7 +5588,7 @@ ScoreFont* ScoreFont::fontFactory(QString s)
             }
       Q_ASSERT(f);
 
-      if (!f->loaded)
+      if (!f->face)
             f->load();
       return f;
       }
@@ -5538,7 +5600,7 @@ ScoreFont* ScoreFont::fontFactory(QString s)
 ScoreFont* ScoreFont::fallbackFont()
       {
       ScoreFont* f = &_scoreFonts[FALLBACK_FONT];
-      if (!f->loaded)
+      if (!f->face)
             f->load();
       return f;
       }
@@ -5562,22 +5624,29 @@ const QRectF ScoreFont::bbox(SymId id, qreal mag) const
       return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
       }
 
-const QRectF ScoreFont::bbox(const QString& s, qreal mag) const
+const QRectF ScoreFont::bbox(const QList<SymId>& s, qreal mag) const
       {
-//TODOxxxx      QRectF r(_fm->tightBoundingRect(s));
       QRectF r;
-      return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
+      QPointF pos;
+      for (SymId id : s) {
+            r |= bbox(id, mag).translated(pos);
+            pos.rx() += sym(id).advance() * mag;
+            }
+      return r;
       }
 
-qreal ScoreFont::width(const QString&, qreal mag) const
+qreal ScoreFont::width(const QList<SymId>& s, qreal mag) const
       {
-//TODOxxxx
-      return 0.0 * mag;
+      return bbox(s, mag).width();
       }
 
 //---------------------------------------------------------
-//   ~ScoreFont
+//   ScoreFont
 //---------------------------------------------------------
+
+ScoreFont::ScoreFont()
+      {
+      }
 
 ScoreFont::~ScoreFont()
       {
