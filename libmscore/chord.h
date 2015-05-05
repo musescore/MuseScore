@@ -112,7 +112,7 @@ class Chord : public ChordRest {
       Chord &operator=(const Chord&) = delete;
 
       virtual Chord* clone() const       { return new Chord(*this, false); }
-      virtual Chord* linkedClone()       { return new Chord(*this, true); }
+      virtual Element* linkedClone()     { return new Chord(*this, true); }
       virtual void undoUnlink() override;
 
       virtual void setScore(Score* s);

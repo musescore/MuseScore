@@ -291,7 +291,9 @@ class Text : public Element {
 
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
-      void writeProperties(Xml&, bool = true, bool = true) const;
+      virtual void writeProperties(Xml& xml) const { writeProperties(xml, true, true); }
+      void writeProperties(Xml& xml, bool writeText) const { writeProperties(xml, writeText, true); }
+      void writeProperties(Xml&, bool, bool) const;
       bool readProperties(XmlReader&);
 
       void spellCheckUnderline(bool) {}

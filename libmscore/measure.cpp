@@ -452,7 +452,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
 ///   Note: minWidth = width - stretch
 //---------------------------------------------------------
 
-void Measure::layout(qreal width)
+void Measure::layoutWidth(qreal width)
       {
       int nstaves = _score->nstaves();
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
@@ -4154,7 +4154,7 @@ qreal Measure::userStretch() const
       return (score()->layoutMode() == LayoutMode::FLOAT ? 1.0 : _userStretch);
       }
 
-Element* Measure::nextElement(int staff)
+Element* Measure::nextElementStaff(int staff)
       {
       Segment* firstSeg = segments()->first();
       if (firstSeg)
@@ -4162,7 +4162,7 @@ Element* Measure::nextElement(int staff)
       return score()->firstElement();
       }
 
-Element* Measure::prevElement(int staff)
+Element* Measure::prevElementStaff(int staff)
       {
       Measure* prevM = prevMeasureMM();
       if (prevM) {

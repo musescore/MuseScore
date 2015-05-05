@@ -2187,7 +2187,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
             xo = point(static_cast<Box*>(curMeasure)->boxWidth());
 
       system->setInstrumentNames(longName);
-      system->layout(xo);
+      system->layoutSystem(xo);
 
       qreal minMeasureWidth = point(styleS(StyleIdx::minMeasureWidth));
       minWidth              = system->leftMargin();
@@ -2452,7 +2452,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
             xo = point(static_cast<Box*>(curMeasure)->boxWidth());
 
       system->setInstrumentNames(longName);
-      system->layout(xo);
+      system->layoutSystem(xo);
 
       qreal minMeasureWidth = point(styleS(StyleIdx::minMeasureWidth));
       minWidth              = system->leftMargin();
@@ -3016,7 +3016,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                         Measure* m    = static_cast<Measure*>(mb);
                         qreal weight = m->ticks() * m->userStretch();
                         ww           = m->minWidth2() + rest * weight;
-                        m->layout(ww);
+                        m->layoutWidth(ww);
                         }
                   else if (mb->type() == Element::Type::HBOX) {
                         mb->setPos(pos);
@@ -3127,7 +3127,7 @@ void Score::layoutLinear()
                   xo += point(static_cast<Box*>(m)->boxWidth());
             }
 
-      system->layout(xo);
+      system->layoutSystem(xo);
       system->setPos(0.0, spatium() * 10.0);
       curPage = 0;
       Page* page = getEmptyPage();
@@ -3187,7 +3187,7 @@ void Score::layoutLinear()
                   qreal minMeasureWidth = point(styleS(StyleIdx::minMeasureWidth));
                   if (w < minMeasureWidth)
                         w = minMeasureWidth;
-                  m->layout(w);
+                  m->layoutWidth(w);
                   isFirstMeasure = false;
                   }
             else {

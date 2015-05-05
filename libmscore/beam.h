@@ -68,6 +68,8 @@ class Beam : public Element {
       void computeStemLen(const QList<ChordRest*>& crl, qreal& py1, int beamLevels);
       bool slopeZero(const QList<ChordRest*>& crl);
       bool hasNoSlope();
+      void addChordRest(ChordRest* a);
+      void removeChordRest(ChordRest* a);
 
    public:
       enum class Mode : signed char {
@@ -106,8 +108,8 @@ class Beam : public Element {
       void clear()                        { _elements.clear(); }
       bool isEmpty() const                { return _elements.isEmpty(); }
 
-      void add(ChordRest* a);
-      void remove(ChordRest* a);
+      virtual void add(Element*) override;
+      virtual void remove(Element*) override;
 
       virtual void move(qreal, qreal) override;
       virtual void draw(QPainter*) const override;

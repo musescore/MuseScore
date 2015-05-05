@@ -579,7 +579,7 @@ static void createMeasures(Score* score, const QVector<Fraction>& ml, const QVec
 static void determineMeasureStart(const QVector<Fraction>& ml, QVector<Fraction>& ms)
       {
       ms.resize(ml.size());
-      if (!ms.size() > 0)
+      if (!(ms.size() > 0))
             return;  // no parts read
 
       // first measure starts at t = 0

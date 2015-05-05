@@ -168,6 +168,7 @@ class Measure : public MeasureBase {
 
       void read(XmlReader&, int idx);
       void read(XmlReader& d) { read(d, 0); }
+      virtual void write(Xml&) const override {}
       void write(Xml&, int, bool writeSystemElements) const;
       void writeBox(Xml&) const;
       void readBox(XmlReader&);
@@ -222,7 +223,7 @@ class Measure : public MeasureBase {
       void setUserStretch(qreal v)              { _userStretch = v;    }
 
       void layoutX(qreal stretch);
-      void layout(qreal width);
+      void layoutWidth(qreal width);
       void layout2();
 
       Chord* findChord(int tick, int track);
@@ -322,8 +323,8 @@ class Measure : public MeasureBase {
       Measure* mmRestFirst() const;
       Measure* mmRestLast() const;
 
-      Element* nextElement(int staff);
-      Element* prevElement(int staff);
+      Element* nextElementStaff(int staff);
+      Element* prevElementStaff(int staff);
       virtual QString accessibleInfo() override;
       };
 

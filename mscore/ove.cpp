@@ -2516,6 +2516,14 @@ int OctaveShift::getEndTick() const {
       return endTick_;
       }
 
+void OctaveShift::setOctaveShiftPosition(OctaveShiftPosition position) {
+      octaveShiftPosition_ = position;
+      }
+
+OctaveShiftPosition OctaveShift::getOctaveShiftPosition() const {
+      return octaveShiftPosition_;
+      }
+
 ///////////////////////////////////////////////////////////////////////////////
 OctaveShiftEndPoint::OctaveShiftEndPoint() {
       musicDataType_ = MusicDataType::OctaveShift_EndPoint;
