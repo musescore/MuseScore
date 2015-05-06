@@ -233,7 +233,7 @@ add_executable ( ${ExecutableName}
       tupletdialog.cpp glissandoproperties.cpp
       articulationprop.cpp textprop.cpp
       fretproperties.cpp sectionbreakprop.cpp
-      bendproperties.cpp tremolobarprop.cpp file.cpp keyb.cpp osc.cpp
+      bendproperties.cpp tremolobarprop.cpp file.cpp svgc.cpp keyb.cpp osc.cpp
       layer.cpp selectdialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
       inspector/inspector.cpp dragelement.cpp svggenerator.cpp
       inspector/inspectorBase.cpp inspector/inspectorBeam.cpp masterpalette.cpp

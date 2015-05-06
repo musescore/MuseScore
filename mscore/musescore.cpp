@@ -136,6 +136,7 @@ bool noWebView = false;
 QString mscoreGlobalShare;
 
 static QString outFileName;
+static QString partsFileName;
 static QString audioDriver;
 static QString pluginName;
 static QString styleFile;
@@ -638,7 +639,7 @@ MuseScore::MuseScore()
       for (auto i : {
             "", "file-save", "file-save-as", "file-save-a-copy",
             "file-save-selection", "file-save-online", "file-export", "file-part-export", "file-import-pdf",
-            "", "file-close", "", "parts", "album" }) {
+            "", "linearize", "", "file-close", "", "parts", "album" }) {
             if (!*i)
                   _fileMenu->addSeparator();
             else
@@ -2138,6 +2139,12 @@ static bool processNonGui()
                   return mscore->savePng(cs, fn);
             if (fn.endsWith(".svg"))
                   return mscore->saveSvg(cs, fn);
+            if (fn.endsWith("svc")) {
+                  return mscore->saveSvgCollection(cs, fn, true, partsFileName);
+            }
+            if (fn.endsWith("json")) {
+                  return mscore->getPartsDescriptions(cs, fn);
+            }
 #ifdef HAS_AUDIOFILE
             if (fn.endsWith(".wav") || fn.endsWith(".ogg") || fn.endsWith(".flac"))
                   return mscore->saveAudio(cs, fn);
@@ -2506,7 +2513,7 @@ void MuseScore::changeState(ScoreState val)
             getAction("join-measure")->setEnabled(cs && cs->rootScore()->excerpts().size() == 0);
       if (getAction("split-measure")->isEnabled())
             getAction("split-measure")->setEnabled(cs && cs->rootScore()->excerpts().size() == 0);
-      
+
       //getAction("split-measure")->setEnabled(cs->rootScore()->excerpts().size() == 0);
 
       // disabling top level menu entries does not
@@ -4010,8 +4017,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "file-save-a-copy")
             saveAs(cs, true);
       else if (cmd == "file-new")
-            newFile();
-      else if (cmd == "quit")
+            newFile();      
+      else if (cmd == "linearize")
+            newLinearized(cs);
+      else if (cmd == "quit") 
             close();
       else if (cmd == "masterpalette")
             showMasterPalette();
@@ -4594,6 +4603,12 @@ int main(int argc, char* av[])
                               usage();
                         outFileName = argv.takeAt(i + 1);
                         break;
+                  case 'P':
+                        MScore::noGui = true;
+                        if (argv.size() - i < 2)
+                              usage();
+                        partsFileName = argv.takeAt(i + 1);
+                        break;
                   case 'p':
                         pluginMode = true;
                         MScore::noGui = true;
@@ -4601,9 +4616,9 @@ int main(int argc, char* av[])
                               usage();
                         pluginName = argv.takeAt(i + 1);
                         break;
-                  case 'P':
-                        MScore::saveTemplateMode = true;
-                        break;
+                  //case 'P':
+                  //      MScore::saveTemplateMode = true;
+                  //      break;
                   case 'r':
                         if (argv.size() - i < 2)
                               usage();
