@@ -723,7 +723,7 @@ void EditStyle::setValues()
 
       QString mfont(lstyle.value(StyleIdx::MusicalSymbolFont).toString());
       int idx = 0;
-      for (auto i : ScoreFont::scoreFonts()) {
+      for (const auto& i : ScoreFont::scoreFonts()) {
             if (i.name().toLower() == mfont.toLower()) {
                   musicalSymbolFont->setCurrentIndex(idx);
                   break;
