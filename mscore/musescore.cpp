@@ -4510,33 +4510,31 @@ int main(int argc, char* av[])
 
       parser.addHelpOption(); // -?, -h, --help
       parser.addVersionOption(); // -v, --version
-      parser.addOptions({
-                //{{"v", "version"}, "Print version"}, // see above
-                  {     "long-version", "Print detailed version information"},
-                  {{"d", "debug"}, "Debug mode"},
-                  {{"L", "layout-debug"}, "Layout debug"},
-                  {{"s", "no-synthesizer"}, "No internal synthesizer"},
-                  {{"m", "no-midi"}, "No midi"},
-                  {{"a", "use-audio"}, "Use audio driver: jack, alsa, pulse, or portaudio", "driver"},
-                  {{"n", "new-score"}, "Start with new score"},
-                  {{"I", "dump-midi-in"}, "Dump midi input"},
-                  {{"O", "dump-midi-out"}, "Dump midi output"},
-                  {{"o", "export-to"}, "Export to 'file'; format depends on file extension", "file"},
-                  {{"r", "image-resolution"}, "Set output resolution for image export", "dpi"},
-                  {{"T", "trim-image"}, "Trim exported image with specified margin (in pixels)", "margin"},
-                  {{"x", "gui-scaling"}, "Set scaling factor for GUI elements", "factor"},
-                  {{"S", "style"}, "Load style file", "style"},
-                  {{"p", "plugin"}, "Execure named plugin", "name"},
-                  {     "template-mode","Save template mode, no page size"},
-                  {{"F", "factory-settings"}, "Use factory settings"},
-                  {{"R", "revert-settings"}, "Revert to default preferences"},
-                  {{"i", "load-icons"}, "Load icons from INSTALLPATH/icons"},
-                  {{"e", "experimental"}, "Enable experimental features"},
-                  {{"c", "config-folder"}, "Override config/settings folder", "dir"},
-                  {{"t", "test-mode"}, "Set testMode flag for all files"},
-                  {{"M", "midi-operations"}, "Specify MIDI import operations file", "file"},
-                  {{"w", "no-webview"}, "No web view in start center"},
-            });
+    //parser.addOption(QCommandLineOption({"v", "version"}, "Print version")); // see above
+      parser.addOption(QCommandLineOption(      "long-version", "Print detailed version information"));
+      parser.addOption(QCommandLineOption({"d", "debug"}, "Debug mode"));
+      parser.addOption(QCommandLineOption({"L", "layout-debug"}, "Layout debug"));
+      parser.addOption(QCommandLineOption({"s", "no-synthesizer"}, "No internal synthesizer"));
+      parser.addOption(QCommandLineOption({"m", "no-midi"}, "No midi"));
+      parser.addOption(QCommandLineOption({"a", "use-audio"}, "Use audio driver: jack, alsa, pulse, or portaudio", "driver"));
+      parser.addOption(QCommandLineOption({"n", "new-score"}, "Start with new score"));
+      parser.addOption(QCommandLineOption({"I", "dump-midi-in"}, "Dump midi input"));
+      parser.addOption(QCommandLineOption({"O", "dump-midi-out"}, "Dump midi output"));
+      parser.addOption(QCommandLineOption({"o", "export-to"}, "Export to 'file'; format depends on file extension", "file"));
+      parser.addOption(QCommandLineOption({"r", "image-resolution"}, "Set output resolution for image export", "dpi"));
+      parser.addOption(QCommandLineOption({"T", "trim-image"}, "Trim exported image with specified margin (in pixels)", "margin"));
+      parser.addOption(QCommandLineOption({"x", "gui-scaling"}, "Set scaling factor for GUI elements", "factor"));
+      parser.addOption(QCommandLineOption({"S", "style"}, "Load style file", "style"));
+      parser.addOption(QCommandLineOption({"p", "plugin"}, "Execure named plugin", "name"));
+      parser.addOption(QCommandLineOption(      "template-mode", "Save template mode, no page size"));
+      parser.addOption(QCommandLineOption({"F", "factory-settings"}, "Use factory settings"));
+      parser.addOption(QCommandLineOption({"R", "revert-settings"}, "Revert to default preferences"));
+      parser.addOption(QCommandLineOption({"i", "load-icons"}, "Load icons from INSTALLPATH/icons"));
+      parser.addOption(QCommandLineOption({"e", "experimental"}, "Enable experimental features"));
+      parser.addOption(QCommandLineOption({"c", "config-folder"}, "Override config/settings folder", "dir"));
+      parser.addOption(QCommandLineOption({"t", "test-mode"}, "Set testMode flag for all files"));
+      parser.addOption(QCommandLineOption({"M", "midi-operations"}, "Specify MIDI import operations file", "file"));
+      parser.addOption(QCommandLineOption({"w", "no-webview"}, "No web view in start center"));
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
       parser.process(QCoreApplication::arguments());
