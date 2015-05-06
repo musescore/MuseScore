@@ -218,12 +218,11 @@ QString getSharePath()
 
 static void printVersion(const char* prog)
       {
-#ifdef MSCORE_UNSTABLE
-      fprintf(stderr, "%s: Music Score Editor\nUnstable Prerelease for Version %s; Build %s\n",
+      if (MuseScore::unstable())
+            fprintf(stderr, "%s: Music Score Editor\nUnstable Prerelease for Version %s; Build %s\n",
          prog, VERSION, qPrintable(revision));
-#else
-      fprintf(stderr, "%s: Music Score Editor; Version %s; Build %s\n", prog, VERSION, qPrintable(revision));
-#endif
+      else
+            fprintf(stderr, "%s: Music Score Editor; Version %s; Build %s\n", prog, VERSION, qPrintable(revision));
       }
 
 static const int RECENT_LIST_SIZE = 20;
@@ -1238,48 +1237,6 @@ void MuseScore::updateTabNames()
                         tab2->setTabText(i, view->score()->name());
                   }
             }
-      }
-
-//---------------------------------------------------------
-//   usage
-//---------------------------------------------------------
-
-static void usage()
-      {
-      printVersion("MuseScore");
-#if defined(Q_OS_WIN)
-      fprintf(stderr, "Usage: MuseScore.exe flags scorefile\n"
-#else
-      fprintf(stderr, "Usage: mscore flags scorefile\n"
-#endif
-        "   Flags:\n"
-        "   -v        print version\n"
-        "   -d        debug mode\n"
-        "   -L        layout debug\n"
-        "   -s        no internal synthesizer\n"
-        "   -m        no midi\n"
-        "   -a driver use audio driver: jack alsa pulse portaudio\n"
-        "   -n        start with new score\n"
-        "   -I        dump midi input\n"
-        "   -O        dump midi output\n"
-        "   -o file   export to 'file'; format depends on file extension\n"
-        "   -r dpi    set output resolution for image export\n"
-        "   -T margin trim exported image with specified margin (in pixels)\n"
-        "   -x factor set scaling factor for GUI elements\n"
-        "   -S style  load style file\n"
-        "   -p name   execute named plugin\n"
-        "   -P        save template mode, no page size\n"
-        "   -F        use factory settings\n"
-        "   -R        revert to default preferences\n"
-        "   -i        load icons from INSTALLPATH/icons\n"
-        "   -e        enable experimental features\n"
-        "   -c dir    override config/settings folder\n"
-        "   -t        set testMode flag for all files\n"
-        "   -M file   specify MIDI import operations file\n"
-        "   -w        no web view in start center\n"
-        );
-
-      exit(-1);
       }
 
 //---------------------------------------------------------
@@ -2850,11 +2807,10 @@ AboutBoxDialog::AboutBoxDialog()
       museLogo->setPixmap(QPixmap(preferences.globalStyle == MuseScoreStyleType::DARK ?
             ":/data/musescore-logo-transbg-m.png" : ":/data/musescore_logo_full.png"));
 
-#ifdef MSCORE_UNSTABLE
-      versionLabel->setText(tr("Unstable Prerelease for Version: ") + VERSION);
-#else
-      versionLabel->setText(tr("Version: ") + VERSION);
-#endif
+      if (MuseScore::unstable())
+            versionLabel->setText(tr("Unstable Prerelease for Version: ") + VERSION);
+      else
+            versionLabel->setText(tr("Version: ") + VERSION);
       revisionLabel->setText(tr("Revision: %1").arg(revision));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -4528,11 +4484,17 @@ int main(int argc, char* av[])
       revision = QString(f.readAll()).trimmed();
       f.close();
 
-      MuseScoreApplication* app = new MuseScoreApplication("mscore-dev", argc, av);
-
+      MuseScoreApplication* app;
+      if (MuseScore::unstable()) {
+            app = new MuseScoreApplication("mscore-dev", argc, av);
+            QCoreApplication::setApplicationName("MuseScoreDevelopment");
+            }
+      else {
+            app = new MuseScoreApplication("mscore2", argc, av);
+            QCoreApplication::setApplicationName("MuseScore2");
+            }
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
-      QCoreApplication::setApplicationName("MuseScoreDevelopment");
       QCoreApplication::setApplicationVersion(VERSION);
       QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
       QAccessible::installFactory(AccessibleSearchBox::SearchBoxFactory);
@@ -4544,124 +4506,120 @@ int main(int argc, char* av[])
       QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
 
-      QStringList argv =  QCoreApplication::arguments();
-      argv.removeFirst();
+      QCommandLineParser parser;
 
-      for (int i = 0; i < argv.size();) {
-            QString s = argv[i];
-            if (s[0] != '-') {
-                  ++i;
-                  continue;
-                  }
-            switch (s[1].toLatin1()) {
-                  case 'v':
-                        printVersion("MuseScore");
-                        return 0;
-                  case 'd':
-                        MScore::debugMode = true;
-                        break;
-                  case 'L':
-                        MScore::layoutDebug = true;
-                        break;
-                  case 's':
-                        noSeq = true;
-                        break;
-                  case 'm':
-                        noMidi = true;
-                        break;
-                  case 'a':
-                        if (argv.size() - i < 2)
-                              usage();
-                        audioDriver = argv.takeAt(i + 1);
-                        break;
-                  case 'n':
-                        startWithNewScore = true;
-                        break;
-                  case 'i':
-                        externalIcons = true;
-                        break;
-                  case 'I':
-                        midiInputTrace = true;
-                        break;
-                  case 'O':
-                        midiOutputTrace = true;
-                        break;
-                  case 'o':
-                        converterMode = true;
-                        MScore::noGui = true;
-                        if (argv.size() - i < 2)
-                              usage();
-                        outFileName = argv.takeAt(i + 1);
-                        break;
-                  case 'p':
-                        pluginMode = true;
-                        MScore::noGui = true;
-                        if (argv.size() - i < 2)
-                              usage();
-                        pluginName = argv.takeAt(i + 1);
-                        break;
-                  case 'P':
-                        MScore::saveTemplateMode = true;
-                        break;
-                  case 'r':
-                        if (argv.size() - i < 2)
-                              usage();
-                        converterDpi = argv.takeAt(i + 1).toDouble();
-                        break;
-                  case 'T':
-                        if (argv.size() - i < 2)
-                              usage();
-                        trimMargin = argv.takeAt(i + 1).toInt();
-                        break;
-                  case 'x':
-                        if (argv.size() - i < 2)
-                              usage();
-                        guiScaling = argv.takeAt(i + 1).toDouble();
-                        break;
-                  case 'S':
-                        if (argv.size() - i < 2)
-                              usage();
-                        styleFile = argv.takeAt(i + 1);
-                        break;
-                  case 'F':
-                        useFactorySettings = true;
-                        deletePreferences = true;
-                        break;
-                  case 'R':
-                        useFactorySettings = true;
-                        break;
-                  case 'e':
-                        enableExperimental = true;
-                        break;
-                  case 'c':
-                        {
-                        if (argv.size() - i < 2)
-                              usage();
-                        QString path = argv.takeAt(i + 1);
-                        QDir dir;
-                        if (dir.exists(path)) {
-                              QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, path);
-                              QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, path);
-                              dataPath = path;
-                              }
-                        }
-                        break;
-                  case 't':
-                        enableTestMode = true;
-                        break;
-                  case 'M':
-                        if (argv.size() - i < 2)
-                              usage();
-                        preferences.midiImportOperations.setOperationsFile(argv.takeAt(i + 1));
-                        break;
-                  case 'w':
-                        noWebView = true;
-                        break;
-                  default:
-                        usage();
-                  }
-            argv.removeAt(i);
+      parser.addHelpOption(); // -?, -h, --help
+      parser.addVersionOption(); // -v, --version
+      parser.addOptions({
+                //{{"v", "version"}, "Print version"}, // see above
+                  {{     "long-version"}, "Print detailed version information"},
+                  {{"d", "debug"}, "Debug mode"},
+                  {{"L", "layout-debug"}, "Layout debug"},
+                  {{"s", "no-synthesizer"}, "No internal synthesizer"},
+                  {{"m", "no-midi"}, "No midi"},
+                  {{"a", "use-audio"}, "Use audio driver: jack, alsa, pulse, or portaudio", "driver"},
+                  {{"n", "new-score"}, "Start with new score"},
+                  {{"I", "dump-midi-in"}, "Dump midi input"},
+                  {{"O", "dump-midi-out"}, "Dump midi output"},
+                  {{"o", "export-to"}, "Export to 'file'; format depends on file extension", "file"},
+                  {{"r", "image-resolution"}, "Set output resolution for image export", "dpi"},
+                  {{"T", "trim-image"}, "Trim exported image with specified margin (in pixels)", "margin"},
+                  {{"x", "gui-scaling"}, "Set scaling factor for GUI elements", "factor"},
+                  {{"S", "style"}, "Load style file", "style"},
+                  {{"p", "plugin"}, "Execure named plugin", "name"},
+                  {{     "template-mode"},"Save template mode, no page size"},
+                  {{"F", "factory-settings"}, "Use factory settings"},
+                  {{"R", "revert-settings"}, "Revert to default preferences"},
+                  {{"i", "load-icons"}, "Load icons from INSTALLPATH/icons"},
+                  {{"e", "experimental"}, "Enable experimental features"},
+                  {{"c", "config-folder"}, "Override config/settings folder", "dir"},
+                  {{"t", "test-mode"}, "Set testMode flag for all files"},
+                  {{"M", "midi-operations"}, "Specify MIDI import operations file", "file"},
+                  {{"w", "no-webview"}, "No web view in start center"},
+            });
+      parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
+
+      parser.process(QCoreApplication::arguments());
+
+    //if (parser.isSet("v")) parser.showVersion(); // a) needs Qt >= 5.4 , b) instead we use addVersionOption()
+      if (parser.isSet("long-version")) {
+            printVersion("MuseScore");
+            return EXIT_SUCCESS;
             }
+      MScore::debugMode = parser.isSet("d");
+      MScore::layoutDebug = parser.isSet("L");
+      noSeq = parser.isSet("s");
+      noMidi = parser.isSet("m");
+      if (parser.isSet("a")) {
+            audioDriver = parser.value("a");
+            if (audioDriver.isEmpty())
+                  parser.showHelp(EXIT_FAILURE);
+            }
+      startWithNewScore = parser.isSet("n");
+      externalIcons = parser.isSet("i");
+      midiInputTrace = parser.isSet("I");
+      midiOutputTrace = parser.isSet("O");
+      if ((converterMode = parser.isSet("o"))) {
+            MScore::noGui = true;
+            outFileName = parser.value("o");
+            if (outFileName.isEmpty())
+                  parser.showHelp(EXIT_FAILURE);
+            }
+      if ((pluginMode = parser.isSet("p"))) {
+            MScore::noGui = true;
+            pluginName = parser.value("p");
+            if (pluginName.isEmpty())
+                  parser.showHelp(EXIT_FAILURE);
+            }
+      MScore::saveTemplateMode = parser.isSet("template-mode");
+      if (parser.isSet("r")) {
+            QString temp = parser.value("r");
+            if (temp.isEmpty())
+                   parser.showHelp(EXIT_FAILURE);
+            converterDpi = temp.toDouble();
+            }
+      if (parser.isSet("T")) {
+            QString temp = parser.value("T");
+            if (temp.isEmpty())
+                   parser.showHelp(EXIT_FAILURE);
+            trimMargin = temp.toInt(); // ToDo: check whether conversion went OK, set to -1 if not
+           }
+      if (parser.isSet("x")) {
+            QString temp = parser.value("x");
+            if (temp.isEmpty())
+                   parser.showHelp(EXIT_FAILURE);
+            guiScaling = temp.toDouble(); // ToDo: check whether conversion went OK, set to 1.0 if not
+            }
+      if (parser.isSet("S")) {
+            styleFile = parser.value("S");
+            if (styleFile.isEmpty())
+                  parser.showHelp(EXIT_FAILURE);
+            }
+      useFactorySettings = parser.isSet("F");
+      deletePreferences = (useFactorySettings || parser.isSet("R"));
+      enableExperimental = parser.isSet("e");
+      if (parser.isSet("c")) {
+            QString path = parser.value("c");
+            if (path.isEmpty())
+                  parser.showHelp(EXIT_FAILURE);
+            QDir dir;
+            if (dir.exists(path)) {
+                  QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, path);
+                  QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, path);
+                  dataPath = path;
+                  }
+            }
+      enableTestMode = parser.isSet("t");
+      if (parser.isSet("M")) {
+            QString temp = parser.value("M");
+            if (temp.isEmpty())
+                  parser.showHelp(EXIT_FAILURE);
+            preferences.midiImportOperations.setOperationsFile(temp);
+            }
+      noWebView = parser.isSet("w");
+
+      QStringList argv = parser.positionalArguments();
+
       mscoreGlobalShare = getSharePath();
       iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
 
@@ -4954,7 +4912,7 @@ int main(int argc, char* av[])
             qApp->processEvents();
 #endif
             loadScores(argv);
-            exit(processNonGui() ? 0 : -1);
+            exit(processNonGui() ? 0 : EXIT_FAILURE);
             }
       else {
             mscore->readSettings();
