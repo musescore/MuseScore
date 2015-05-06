@@ -51,6 +51,9 @@ class Excerpt : public QObject {
       bool operator!=(const Excerpt&) const;
       QString title() const           { return _title; }
       void setTitle(const QString& s) { _title = s;    }
+      
+      static QList<Excerpt*> createAllExcerpt(Score* score);
+      static QString createName(const QString& partName, QList<Excerpt*>);
       };
 
 extern void createExcerpt(Excerpt*);
