@@ -903,5 +903,34 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
             }
       }
 
-}
+QList<Excerpt*> Excerpt::createAllExcerpt(Score *score) {
+      QList<Excerpt*> all;
+      for (Part* part : score->parts()) {
+            Excerpt* e   = new Excerpt(score);
+            e->parts().append(part);
+            QString name = createName(part->partName(), all);
+            e->setTitle(name);
+            all.append(e);
+            }
+      return all;
+      }
 
+QString Excerpt::createName(const QString& partName, QList<Excerpt*> excerptList) {
+      QString n = partName.simplified();
+      QString name;
+      int count = excerptList.count();
+      for (int i = 0;; ++i) {
+            name = i ? QString("%1-%2").arg(n).arg(i) : QString("%1").arg(n);
+            Excerpt* ee = 0;
+            for (int k = 0; k < count; ++k) {
+                  ee = excerptList[k];
+                  if (ee->title() == name)
+                        break;
+                  }
+            if ((ee == 0) || (ee->title() != name))
+                  break;
+            }
+      return name;
+      }
+
+}

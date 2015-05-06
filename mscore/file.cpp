@@ -1942,14 +1942,50 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
                   s->doLayout();
                   }
             s->setPrinting(true);
-            //
-            // here we ignore the configured page offset
-            //
+            
+            // we ignore the configured page offset
+            // we display page footer on all pages
+            // we display page number on all pages
             int oldPageOffset = s->pageNumberOffset();
             s->setPageNumberOffset(pageOffset);
-            bool oldFirstPageNumber = s->style(StyleIdx::footerFirstPage).toBool();
+            bool footerFirstPage = s->style(StyleIdx::footerFirstPage).toBool();
             s->style()->set(StyleIdx::footerFirstPage, true);
+            
+            QString evenFooterL = s->style()->value(StyleIdx::evenFooterL).toString();
+            QString tmp = evenFooterL;
+            tmp.replace("$p", "$P");
+            s->style()->set(StyleIdx::evenFooterL, tmp);
+            
+            QString evenFooterC = s->style()->value(StyleIdx::evenFooterC).toString();
+            tmp = evenFooterC;
+            tmp.replace("$p", "$P");
+            s->style()->set(StyleIdx::evenFooterC, tmp);
+            
+            QString evenFooterR = s->style()->value(StyleIdx::evenFooterR).toString();
+            tmp = evenFooterR;
+            tmp.replace("$p", "$P");
+            s->style()->set(StyleIdx::evenFooterR, tmp);
+            
+            QString oddFooterL = s->style()->value(StyleIdx::oddFooterL).toString();
+            tmp = oddFooterL;
+            tmp.replace("$p", "$P");
+            s->style()->set(StyleIdx::oddFooterL, tmp);
+            
+            QString oddFooterC = s->style()->value(StyleIdx::oddFooterC).toString();
+            tmp = oddFooterC;
+            tmp.replace("$p", "$P");
+            s->style()->set(StyleIdx::oddFooterC, tmp);
+            
+            QString oddFooterR = s->style()->value(StyleIdx::oddFooterR).toString();
+            tmp = oddFooterR;
+            tmp.replace("$p", "$P");
+            s->style()->set(StyleIdx::oddFooterR, tmp);
+            
+            if (layoutMode == LayoutMode::PAGE)
+                  s->startCmd();
             s->doLayout();
+            if (layoutMode == LayoutMode::PAGE)
+                  s->endCmd(true);
 
             const PageFormat* pf = s->pageFormat();
             printerDev.setPaperSize(pf->size(), QPrinter::Inch);
@@ -1967,8 +2003,19 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             //reset score
             s->setPrinting(false);
             s->setPageNumberOffset(oldPageOffset);
-            s->style()->set(StyleIdx::footerFirstPage, oldFirstPageNumber);
+            s->style()->set(StyleIdx::footerFirstPage, footerFirstPage);
+            s->style()->set(StyleIdx::evenFooterL, evenFooterL);
+            s->style()->set(StyleIdx::evenFooterC, evenFooterC);
+            s->style()->set(StyleIdx::evenFooterR, evenFooterR);
+            s->style()->set(StyleIdx::oddFooterL, oddFooterL);
+            s->style()->set(StyleIdx::oddFooterC, oddFooterC);
+            s->style()->set(StyleIdx::oddFooterR, oddFooterR);
+            
+            if (layoutMode == LayoutMode::PAGE)
+                  s->startCmd();
             s->doLayout();
+            if (layoutMode == LayoutMode::PAGE)
+                  s->endCmd(true);
             if (layoutMode != s->layoutMode())
                   s->endCmd(true);       // rollback
             }
