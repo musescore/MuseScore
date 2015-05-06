@@ -5201,11 +5201,13 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& _pos
             return;
             }
 
-      qreal m = mag * 0x10000 * .1;
+      int pixelRatio = painter->device()->devicePixelRatio();;
+      qreal m = mag * 0x10000 * .1 * pixelRatio;
       QColor color(painter->pen().color());
 
       const QTransform& tf = painter->worldTransform();
       GlyphKey gk(id, tf.m11() * m, color);
+
       GlyphPixmap* pm = cache->object(gk);
       if (!pm) {
             FT_Matrix matrix {
@@ -5226,6 +5228,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& _pos
             FT_Bitmap* bm     = &gb->bitmap;
 
             QImage img(QSize(bm->width, bm->rows), QImage::Format_ARGB32);
+            img.setDevicePixelRatio(pixelRatio);
             img.fill(Qt::transparent);
 
             for (int y = 0; y < int(bm->rows); ++y) {
@@ -5238,6 +5241,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& _pos
                         }
                   }
             QPixmap _pm = QPixmap::fromImage(img, Qt::NoFormatConversion);
+            _pm.setDevicePixelRatio(pixelRatio);      // needed?
             pm = new GlyphPixmap;
             pm->pm = _pm;
             pm->yo = gb->top;
