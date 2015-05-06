@@ -5244,8 +5244,8 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& _pos
             _pm.setDevicePixelRatio(pixelRatio);      // needed?
             pm = new GlyphPixmap;
             pm->pm = _pm;
-            pm->yo = gb->top * pixelRatio;
-            pm->xo = gb->left * pixelRatio;
+            pm->yo = gb->top / pixelRatio;
+            pm->xo = gb->left / pixelRatio;
             if (!cache->insert(gk, pm))
                   qDebug("cannot cache glyph");
             FT_Done_Glyph(glyph);
