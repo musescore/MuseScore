@@ -3903,6 +3903,10 @@ void Score::changeVoice(int voice)
                   if (note->tieFor() || note->tieBack())
                         continue;
 
+                  // move grace notes with main chord only
+                  if (chord->isGrace())
+                        continue;
+
                   if (chord->voice() != voice) {
                         Segment* s       = chord->segment();
                         Measure* m       = s->measure();
@@ -3990,6 +3994,14 @@ void Score::changeVoice(int voice)
                                     r->setDuration(chord->duration());
                                     r->setTuplet(chord->tuplet());
                                     r->setParent(s);
+                                    // if there were grace notes, move them
+                                    for (Chord* gc : chord->graceNotes()) {
+                                          Chord* ngc = new Chord(*gc);
+                                          undoRemoveElement(gc);
+                                          ngc->setParent(dstChord);
+                                          ngc->setTrack(dstChord->track());
+                                          undoAddElement(ngc);
+                                          }
                                     // remove chord, replace with rest
                                     undoRemoveElement(chord);
                                     undoAddCR(r, m, s->tick());
