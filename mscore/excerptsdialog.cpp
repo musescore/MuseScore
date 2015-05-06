@@ -146,21 +146,13 @@ void ExcerptsDialog::deleteClicked()
 
 QString ExcerptsDialog::createName(const QString& partName)
       {
-      QString n = partName.simplified();
-      QString name;
-      for (int i = 0;; ++i) {
-            name = i ? QString("%1-%2").arg(n).arg(i) : QString("%1").arg(n);
-            Excerpt* ee = 0;
-            int n = excerptList->count();
-            for (int k = 0; k < n; ++k) {
-                  ee = static_cast<ExcerptItem*>(excerptList->item(k))->excerpt();
-                  if (ee->title() == name)
-                        break;
-                  }
-            if ((ee == 0) || (ee->title() != name))
-                  break;
+      int count = excerptList->count();
+      QList<Excerpt*> excerpts;
+      for (int i = 0; i < count; ++i) {
+            Excerpt* ee = static_cast<ExcerptItem*>(excerptList->item(i))->excerpt();
+            excerpts.append(ee);
             }
-      return name;
+      return Excerpt::createName(partName, excerpts);
       }
 
 //---------------------------------------------------------
@@ -184,15 +176,11 @@ void ExcerptsDialog::newClicked()
 
 void ExcerptsDialog::newAllClicked()
       {
-      int n = partList->count();
+      QList<Excerpt*> excerpts = Excerpt::createAllExcerpt(score);
       ExcerptItem* ei = 0;
-      for (int i = 0; i < n; ++i) {
-            Excerpt* e   = new Excerpt(score);
-            PartItem* pi = static_cast<PartItem*>(partList->item(i));
-            e->parts().append(pi->part());
-            QString name = createName(pi->part()->partName());
-            e->setTitle(name);
-            excerptList->addItem(new ExcerptItem(e));
+      for (Excerpt* e : excerpts) {
+            ei = new ExcerptItem(e);
+            excerptList->addItem(ei);
             }
       if (ei) {
             excerptList->selectionModel()->clearSelection();

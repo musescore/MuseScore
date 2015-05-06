@@ -89,6 +89,7 @@
 #include "libmscore/chordlist.h"
 #include "libmscore/volta.h"
 #include "libmscore/lasso.h"
+#include "libmscore/excerpt.h"
 
 #include "driver.h"
 
@@ -131,6 +132,7 @@ double converterDpi = 0;
 double guiScaling = 1.0;
 int trimMargin = -1;
 bool noWebView = false;
+bool exportScoreParts = false;
 
 QString mscoreGlobalShare;
 
@@ -2088,8 +2090,31 @@ static bool processNonGui()
                   return saveMxl(cs, fn);
             if (fn.endsWith(".mid"))
                   return mscore->saveMidi(cs, fn);
-            if (fn.endsWith(".pdf"))
-                  return mscore->savePdf(fn);
+            if (fn.endsWith(".pdf")) {
+                  if (!exportScoreParts)
+                        return mscore->savePdf(fn);
+                  else {
+                        if (cs->excerpts().size() == 0) {
+                              QList<Excerpt*> exceprts = Excerpt::createAllExcerpt(cs);
+                              
+                              foreach(Excerpt* e, exceprts) {
+                                    Score* nscore = new Score(e->oscore());
+                                    e->setPartScore(nscore);
+                                    nscore->setName(e->title()); // needed before AddExcerpt
+                                    nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
+                                    cs->startCmd();
+                                    cs->undo(new AddExcerpt(nscore));
+                                    createExcerpt(e);
+                                    cs->endCmd();
+                                    }
+                              }
+                        QList<Score*> scores;
+                        scores.append(cs);
+                        foreach(Excerpt* e, cs->excerpts())
+                              scores.append(e->partScore());
+                        return mscore->savePdf(scores, fn);
+                        }
+                  }
             if (fn.endsWith(".png"))
                   return mscore->savePng(cs, fn);
             if (fn.endsWith(".svg"))
@@ -4510,6 +4535,7 @@ int main(int argc, char* av[])
 
       parser.addHelpOption(); // -?, -h, --help
       parser.addVersionOption(); // -v, --version
+
     //parser.addOption(QCommandLineOption({"v", "version"}, "Print version")); // see above
       parser.addOption(QCommandLineOption(      "long-version", "Print detailed version information"));
       parser.addOption(QCommandLineOption({"d", "debug"}, "Debug mode"));
@@ -4535,6 +4561,8 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"t", "test-mode"}, "Set testMode flag for all files"));
       parser.addOption(QCommandLineOption({"M", "midi-operations"}, "Specify MIDI import operations file", "file"));
       parser.addOption(QCommandLineOption({"w", "no-webview"}, "No web view in start center"));
+      parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "used with -o <file>.pdf, export score + parts"));
+
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
       parser.process(QCoreApplication::arguments());
@@ -4615,6 +4643,9 @@ int main(int argc, char* av[])
             preferences.midiImportOperations.setOperationsFile(temp);
             }
       noWebView = parser.isSet("w");
+      exportScoreParts = parser.isSet("export-score-parts");
+      if (exportScoreParts && !converterMode)
+            parser.showHelp(EXIT_FAILURE);
 
       QStringList argv = parser.positionalArguments();
 
