@@ -4512,7 +4512,7 @@ int main(int argc, char* av[])
       parser.addVersionOption(); // -v, --version
       parser.addOptions({
                 //{{"v", "version"}, "Print version"}, // see above
-                  {{     "long-version"}, "Print detailed version information"},
+                  {     "long-version", "Print detailed version information"},
                   {{"d", "debug"}, "Debug mode"},
                   {{"L", "layout-debug"}, "Layout debug"},
                   {{"s", "no-synthesizer"}, "No internal synthesizer"},
@@ -4527,7 +4527,7 @@ int main(int argc, char* av[])
                   {{"x", "gui-scaling"}, "Set scaling factor for GUI elements", "factor"},
                   {{"S", "style"}, "Load style file", "style"},
                   {{"p", "plugin"}, "Execure named plugin", "name"},
-                  {{     "template-mode"},"Save template mode, no page size"},
+                  {     "template-mode","Save template mode, no page size"},
                   {{"F", "factory-settings"}, "Use factory settings"},
                   {{"R", "revert-settings"}, "Revert to default preferences"},
                   {{"i", "load-icons"}, "Load icons from INSTALLPATH/icons"},
