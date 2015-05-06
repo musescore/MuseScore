@@ -5244,9 +5244,10 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& _pos
             _pm.setDevicePixelRatio(pixelRatio);      // needed?
             pm = new GlyphPixmap;
             pm->pm = _pm;
-            pm->yo = gb->top;
-            pm->xo = gb->left;
-            cache->insert(gk, pm);
+            pm->yo = gb->top * pixelRatio;
+            pm->xo = gb->left * pixelRatio;
+            if (!cache->insert(gk, pm))
+                  qDebug("cannot cache glyph");
             FT_Done_Glyph(glyph);
             }
       painter->setWorldMatrixEnabled(false);
@@ -5671,6 +5672,19 @@ qreal ScoreFont::width(const QList<SymId>& s, qreal mag) const
 //---------------------------------------------------------
 //   ScoreFont
 //---------------------------------------------------------
+
+ScoreFont::ScoreFont(const ScoreFont& f)
+      {
+      face = 0;
+      _symbols  = f._symbols;
+      _name     = f._name;
+      _family   = f._family;
+      _fontPath = f._fontPath;
+      _filename = f._filename;
+
+      // fontImage;
+      cache = 0;
+      }
 
 ScoreFont::~ScoreFont()
       {

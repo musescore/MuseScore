@@ -2575,6 +2575,7 @@ class ScoreFont {
 
    public:
       ScoreFont() {}
+      ScoreFont(const ScoreFont&);
       ScoreFont(const char* n, const char* f, const char* p, const char* fn)
          : _name(n), _family(f), _fontPath(p), _filename(fn) {
             _symbols = QVector<Sym>(int(SymId::lastSym) + 1);
