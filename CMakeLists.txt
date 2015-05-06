@@ -175,23 +175,21 @@ SET(QT_USE_QTHELP        TRUE)
 #find_package(Qt5 COMPONENTS Widgets Xml Svg Network Designer WebKit Declarative)
 
 ##
-## alsa >= 1.0.0
+## freetype2 >= 2.5.2
 ##
 
-if (NOT MINGW)
-    if (NOT FREETYPE_INCLUDE_DIRS)
-        message("find_package: Freetype not detected")
-        PKGCONFIG (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
-        if (FREETYPE_INCLUDE_DIRS)
-            STRING(REGEX REPLACE  "\"" "" FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
-            STRING(REGEX REPLACE  "\"" "" FREETYPE_LIBDIR ${FREETYPE_LIBDIR})
-            message("freetype2 detected ${FREETYPE_INCLUDE_DIRS} ${FREETYPE_LIBDIR} ${FREETYPE_LIBRARIES}")
-        else (FREETYPE_INCLUDE_DIRS)
-            message("freetype2 not found\n")
-        endif (FREETYPE_INCLUDE_DIRS)
-    endif (NOT FREETYPE_INCLUDE_DIRS)
-endif (NOT MINGW)
-
+if (APPLE)
+      PKGCONFIG (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
+      if (FREETYPE_INCLUDE_DIRS)
+          STRING(REGEX REPLACE  "\"" "" FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
+          STRING(REGEX REPLACE  "\"" "" FREETYPE_LIBDIR ${FREETYPE_LIBDIR})
+          message("freetype2 detected ${FREETYPE_INCLUDE_DIRS} ${FREETYPE_LIBDIR} ${FREETYPE_LIBRARIES}")
+      else (FREETYPE_INCLUDE_DIRS)
+          message(FATAL_ERROR "freetype >= 2.5.2 is required\n")
+      endif (FREETYPE_INCLUDE_DIRS)
+else (APPLE)
+    find_package(Freetype REQUIRED)
+endif (APPLE)
 
 ##
 ## alsa >= 1.0.0
