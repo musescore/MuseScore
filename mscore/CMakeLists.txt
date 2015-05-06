@@ -126,7 +126,7 @@ QT5_WRAP_UI (ui_headers
       )
 
 if (APPLE)
-      QT5_ADD_RESOURCES (qrc_files musescore.qrc)
+      QT5_ADD_RESOURCES (qrc_files musescore.qrc musescorefonts-Mac.qrc)
 else (APPLE)
       QT5_ADD_RESOURCES (qrc_files musescore.qrc
             musescorefonts-MScore.qrc
