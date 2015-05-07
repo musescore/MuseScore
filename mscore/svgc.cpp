@@ -269,16 +269,18 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
         }
       }
 
-      int ei = 0;
-      QString prefix = QString::number(ei++)+'/';
-      createSvgCollection(&uz, cs, prefix, tick2time, do_linearize);
+      if (partsinfo.contains("excerpts")) {
+        int ei = 0;
+        QString prefix = QString::number(ei++)+'/';
+        createSvgCollection(&uz, cs, prefix, tick2time, do_linearize);
 
-	    foreach (Excerpt* e, thisScore->excerpts())  {
-	    	Score * tScore = e->partScore();
+  	    foreach (Excerpt* e, thisScore->excerpts())  {
+  	    	Score * tScore = e->partScore();
 
-        prefix = QString::number(ei++)+'/';
-	    	createSvgCollection(&uz, tScore, prefix, tick2time, do_linearize);
-	    }
+          prefix = QString::number(ei++)+'/';
+  	    	createSvgCollection(&uz, tScore, prefix, tick2time, do_linearize);
+  	    }
+      }
 	}
 
   uz.close();
