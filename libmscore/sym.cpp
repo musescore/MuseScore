@@ -5588,7 +5588,8 @@ void ScoreFont::load()
 
       for (const UnicodeAlternate& unicode : unicodes) {
             Sym* sym = &_symbols[int(unicode.id)];
-            computeMetrics(sym, 0);             // TODO: compute unicode!
+            uint code = QChar::surrogateToUcs4(unicode.string[0], unicode.string[1]);
+            computeMetrics(sym, code);
             }
 
       // add space symbol
