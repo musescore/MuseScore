@@ -266,7 +266,7 @@ TileSet* StyleHelper::hole(const QColor& color, qreal shade, int size, bool outl
 
                   p.setBrush( Qt::NoBrush );
                   p.setPen( QPen( blend, 1 ) );
-                  p.drawEllipse( 3, 3.5, 8, 7 );
+                  p.drawEllipse( QPointF(3, 3.5), 8, 7 );
                   p.setPen( Qt::NoPen );
                   }
 
@@ -446,8 +446,8 @@ TileSet* StyleHelper::scrollHole(const QColor& color, Qt::Orientation orientatio
             const QColor shadow( calcShadowColor(color) );
 
             // use space for white border
-            const QRect r( QRect(0, 0, 15, 15) );
-            const QRect rect( r.adjusted(1, 0, -1, -1) );
+            const QRectF r( QRect(0, 0, 15, 15) );
+            const QRectF rect( r.adjusted(1, 0, -1, -1) );
             int shadowWidth(0);
             if ( smallShadow )
                   shadowWidth = (orientation == Qt::Horizontal) ? 2 : 1;
@@ -478,7 +478,7 @@ TileSet* StyleHelper::scrollHole(const QColor& color, Qt::Orientation orientatio
             l1.setColorAt(0.5, alphaColor(shadow, orientation == Qt::Horizontal ? 0.1 : 0.1));
             l1.setColorAt(1.0, Qt::transparent);
             p.setBrush(l1);
-            p.drawRoundedRect(QRect(rect.topLeft(), rect.bottomLeft() + QPoint(shadowWidth, 0)), 4.5, 4.5);
+            p.drawRoundedRect(QRectF(rect.topLeft(), rect.bottomLeft() + QPoint(shadowWidth, 0)), 4.5, 4.5);
 
             // right
             l1 = QLinearGradient(rect.topRight(), rect.topRight() - QPoint(shadowWidth, 0));
@@ -486,14 +486,14 @@ TileSet* StyleHelper::scrollHole(const QColor& color, Qt::Orientation orientatio
             l1.setColorAt(0.5, alphaColor(shadow, orientation == Qt::Horizontal ? 0.1 : 0.1));
             l1.setColorAt(1.0, Qt::transparent);
             p.setBrush(l1);
-            p.drawRoundedRect(QRect(rect.topRight() - QPoint(shadowWidth, 0), rect.bottomRight()), 4.5, 4.5);
+            p.drawRoundedRect(QRectF(rect.topRight() - QPoint(shadowWidth, 0), rect.bottomRight()), 4.5, 4.5);
 
             //top
             l1 = QLinearGradient(rect.topLeft(), rect.topLeft() + QPoint(0, 3));
             l1.setColorAt(0.0, alphaColor(shadow, 0.3));
             l1.setColorAt(1.0, Qt::transparent);
             p.setBrush(l1);
-            p.drawRoundedRect(QRect(rect.topLeft(), rect.topRight() + QPoint(0, 3)), 4.5, 4.5);
+            p.drawRoundedRect(QRectF(rect.topLeft(), rect.topRight() + QPoint(0, 3)), 4.5, 4.5);
 
             // light border
             QLinearGradient borderGradient(r.topLeft() + QPoint(0, r.height() / 2 - 1), r.bottomLeft());
@@ -1867,7 +1867,7 @@ TileSet* StyleHelper::dockFrame(const QColor& color, int w) {
             p.setRenderHints(QPainter::Antialiasing);
             p.setBrush(Qt::NoBrush);
             p.translate(0.5, 0.5);
-            QRect rect(0.5, 0.5, w - 0.5, h - 0.);
+            QRectF rect(0.5, 0.5, w - 0.5, h - 0.);
 
             QColor light = calcLightColor(color);
             QColor dark = calcDarkColor(color);
