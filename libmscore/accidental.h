@@ -200,8 +200,11 @@ class Accidental : public Element {
 
 }     // namespace Ms
 
+#ifdef SCRIPT_INTERFACE
 Q_DECLARE_METATYPE(Ms::Accidental::QmlAccidentalRole);
 Q_DECLARE_METATYPE(Ms::Accidental::QmlAccidentalType);
+#endif // SCRIPT_INTERFACE
+
 Q_DECLARE_METATYPE(Ms::AccidentalRole);
 Q_DECLARE_METATYPE(Ms::AccidentalType);
 
