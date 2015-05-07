@@ -86,8 +86,10 @@ void TrillSegment::symbolLine(SymId start, SymId fill)
 
       _symbols.clear();
       _symbols.append(start);
-      qreal w1 = f->bbox(start, mag).width();
-      qreal w2 = f->width(fill, mag);
+//      qreal w1 = f->bbox(start, mag).width();
+//      qreal w2 = f->width(fill, mag);
+      qreal w1 = f->advance(start, mag);
+      qreal w2 = f->advance(fill, mag);
       int n    = lrint((w - w1) / w2);
       for (int i = 0; i < n; ++i)
            _symbols.append(fill);
