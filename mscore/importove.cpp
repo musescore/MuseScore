@@ -1827,7 +1827,7 @@ void OveToMScore::convertArticulation(
             case OVE::ArticulationType::Pause :{
                   Breath* b = new Breath(score_);
                   b->setTrack(track);
-                  Segment* seg = measure->getSegment(Segment::Type::Breath, (absTick + cr) ? cr->actualTicks() : 0);
+                  Segment* seg = measure->getSegment(Segment::Type::Breath, absTick + (cr ? cr->actualTicks() : 0));
                   seg->add(b);
                   break;
                   }
