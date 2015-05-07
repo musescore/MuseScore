@@ -73,8 +73,10 @@ ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
             excerptList->addItem(ei);
             }
       foreach(Part* p, score->parts()) {
-            PartItem* item = new PartItem(p);
-            partList->addItem(item);
+            if (p->show()) {
+                  PartItem* item = new PartItem(p);
+                  partList->addItem(item);
+                  }
             }
 
       connect(newButton, SIGNAL(clicked()), SLOT(newClicked()));
