@@ -5202,7 +5202,8 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& _pos
             }
 
       int pixelRatio = painter->device()->devicePixelRatio();;
-      qreal m = mag * 0x10000 * .1 * pixelRatio;
+      qreal m        = mag * 6553.6 * qreal(pixelRatio);
+
       QColor color(painter->pen().color());
 
       const QTransform& tf = painter->worldTransform();
