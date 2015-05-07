@@ -111,6 +111,10 @@ class FractionWrapper : public QObject {
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Fraction);
+
+#ifdef SCRIPT_INTERFACE
 Q_DECLARE_METATYPE(Ms::FractionWrapper);
+#endif
+
 #endif
 
