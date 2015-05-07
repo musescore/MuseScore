@@ -2553,7 +2553,6 @@ inline uint qHash(const GlyphKey& k)
       return (int(k.id) << 16) + int(k.mag*1000);
       }
 
-
 //---------------------------------------------------------
 //   ScoreFont
 //---------------------------------------------------------
@@ -2599,6 +2598,7 @@ class ScoreFont {
 
       qreal height(SymId id, qreal mag) const         { return sym(id).bbox().height() * mag; }
       qreal width(SymId id, qreal mag) const          { return sym(id).bbox().width() * mag;  }
+      qreal advance(SymId id, qreal mag) const        { return sym(id).advance() * mag;  }
       qreal width(const QList<SymId>&, qreal mag) const;
 
       const QRectF bbox(SymId id, qreal mag) const;
