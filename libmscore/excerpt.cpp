@@ -906,11 +906,13 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
 QList<Excerpt*> Excerpt::createAllExcerpt(Score *score) {
       QList<Excerpt*> all;
       for (Part* part : score->parts()) {
-            Excerpt* e   = new Excerpt(score);
-            e->parts().append(part);
-            QString name = createName(part->partName(), all);
-            e->setTitle(name);
-            all.append(e);
+            if (part->show()) {
+                  Excerpt* e   = new Excerpt(score);
+                  e->parts().append(part);
+                  QString name = createName(part->partName(), all);
+                  e->setTitle(name);
+                  all.append(e);
+                  }
             }
       return all;
       }
