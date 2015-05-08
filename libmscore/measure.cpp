@@ -2117,7 +2117,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   int curTick = e.tick();
                   if (!ks->isCustom() && ks->key() == Key::C && curTick == 0) {
                         // ignore empty key signature
-                        qDebug("remove keysig c at tick 0");
+                        //qDebug("remove keysig c at tick 0");
                         delete ks;
                         }
                   else {

@@ -781,7 +781,6 @@ void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
       onset_obj["beg_time"] = tempomap->tick2time(firstNonRest[key]);
       onset_obj["end_time"] = tempomap->tick2time(lastNonRest[key]);
 
-
       jsonobj[key] = onset_obj;
     }
 
