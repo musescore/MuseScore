@@ -2534,23 +2534,23 @@ class Sym {
 
 struct GlyphKey {
       SymId id;
-      qreal mag;
+      int mag;
       QColor color;
 
    public:
-      GlyphKey(SymId _id, qreal m, QColor c) : id(_id), mag(m), color(c) {}
+      GlyphKey(SymId _id, int m, QColor c) : id(_id), mag(m), color(c) {}
       bool operator==(const GlyphKey&) const;
       };
 
 
 struct GlyphPixmap {
       QPixmap pm;
-      int xo, yo;
+      QPointF offset;
       };
 
 inline uint qHash(const GlyphKey& k)
       {
-      return (int(k.id) << 16) + int(k.mag*1000);
+      return (int(k.id) << 16) + k.mag;
       }
 
 //---------------------------------------------------------
@@ -2592,8 +2592,10 @@ class ScoreFont {
       QString toString(SymId) const;
       QPixmap sym2pixmap(SymId, qreal) { return QPixmap(); }      // TODOxxxx
 
-      void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos = QPointF()) const;
-      void draw(const QList<SymId>&, QPainter*, qreal mag, const QPointF& pos = QPointF()) const;
+      void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, qreal scale) const;
+      void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos) const;
+      void draw(const QList<SymId>&, QPainter*, qreal mag, const QPointF& pos) const;
+      void draw(const QList<SymId>&, QPainter*, qreal mag, const QPointF& pos, qreal scale) const;
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const;
 
       qreal height(SymId id, qreal mag) const         { return sym(id).bbox().height() * mag; }

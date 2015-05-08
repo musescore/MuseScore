@@ -3473,7 +3473,7 @@ void Score::layoutPage(const PageContext& pC, qreal d)
                   int n = page->systems()->size();
                   for (int i = 0; i < n; ++i) {
                         System* system = page->systems()->at(i);
-                        system->move(0, y);
+                        system->move(QPointF(0.0, y));
                         }
                   }
             return;
@@ -3560,7 +3560,7 @@ void Score::layoutPage(const PageContext& pC, qreal d)
       qreal y = 0.0;
 
       for (System* system : *page->systems()) {
-            system->move(0, y);
+            system->move(QPointF(0.0, y));
             if (system->addStretch())
                   y += system->stretchDistance();
             }

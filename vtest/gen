@@ -93,5 +93,5 @@ echo "  </body>" >> $F
 echo "</html>" >> $F
 
 
-# $BROWSER $F
+$BROWSER $F
 

@@ -217,11 +217,11 @@ void Beam::draw(QPainter* painter) const
 //   move
 //---------------------------------------------------------
 
-void Beam::move(qreal x, qreal y)
+void Beam::move(const QPointF& offset)
       {
-      Element::move(x, y);
+      Element::move(offset);
       foreach (QLineF* bs, beamSegments)
-            bs->translate(x, y);
+            bs->translate(offset);
       }
 
 //---------------------------------------------------------

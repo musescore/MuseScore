@@ -259,7 +259,7 @@ void Stem::editDrag(const EditData& ed)
       layout();
       Chord* c = static_cast<Chord*>(parent());
       if (c->hook())
-            c->hook()->move(0.0, ed.delta.y());
+            c->hook()->move(QPointF(0.0, ed.delta.y()));
       }
 
 //---------------------------------------------------------

@@ -76,6 +76,7 @@ void GlissandoSegment::draw(QPainter* painter) const
       qreal h     = pos2().y();
       qreal l     = sqrt(w * w + h * h);
       qreal wi = asin(-h / l) * 180.0 / M_PI;
+      qreal scale = painter->worldTransform().m11();
       painter->rotate(-wi);
 
       if (glissando()->glissandoType() == Glissando::Type::STRAIGHT) {
@@ -83,11 +84,13 @@ void GlissandoSegment::draw(QPainter* painter) const
             }
       else if (glissando()->glissandoType() == Glissando::Type::WAVY) {
             QRectF b = symBbox(SymId::wiggleTrill);
-//            qreal h  = symHeight(SymId::wiggleTrill);     // DEBUG
-            qreal w  = symWidth(SymId::wiggleTrill);
+            qreal w  = symAdvance(SymId::wiggleTrill);
             int n    = (int)(l / w);      // always round down (truncate) to avoid overlap
             qreal x  = (l - n*w) * 0.5;   // centre line in available space
-            drawSymbol(SymId::wiggleTrill, painter, QPointF(x, b.height()*.70), n);
+            QList<SymId> ids;
+            for (int i = 0; i < n; ++i)
+                  ids.append(SymId::wiggleTrill);
+            score()->scoreFont()->draw(ids, painter, magS(), QPointF(x, b.height() * .7), scale);
             }
       if (glissando()->showText()) {
             const TextStyle& st = score()->textStyle(TextStyleType::GLISSANDO);
@@ -97,7 +100,7 @@ void GlissandoSegment::draw(QPainter* painter) const
             if (r.width() < l) {
                   qreal yOffset = r.height() + r.y();       // find text descender height
                   // raise text slightly above line and slightly more with WAVY than with STRAIGHT
-                  yOffset += _spatium * (glissando()->glissandoType() == Glissando::Type::WAVY ? 0.5 : 0.1);
+                  yOffset += _spatium * (glissando()->glissandoType() == Glissando::Type::WAVY ? 0.8 : 0.1);
                   painter->setFont(f);
                   qreal x = (l - r.width()) * 0.5;
                   painter->drawText(QPointF(x, -yOffset), glissando()->text());

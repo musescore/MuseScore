@@ -111,7 +111,7 @@ class Beam : public Element {
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
 
-      virtual void move(qreal, qreal) override;
+      virtual void move(const QPointF&) override;
       virtual void draw(QPainter*) const override;
 
       bool up() const                     { return _up; }
