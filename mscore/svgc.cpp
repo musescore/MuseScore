@@ -712,7 +712,8 @@ void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
 
     QMap<QString,int> plt;
 
-    QMap<QString,QList<int>> ponsets; 
+    QMap<QString,QList<int>> ponsets;
+    QMap<QString,QList<bool>> pisrest;
 
     QMap<QString,int> firstNonRest, lastNonRest;
 
@@ -729,14 +730,18 @@ void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
 
           if (!plt.contains(pid))  {
             ponsets[pid] = QList<int>();
+            pisrest[pid] = QList<bool>();
             plt[pid] = -1;
           }
 
           if (tick > plt[pid]) {
              ponsets[pid].push_back(tick);
 
+             pisrest[pid].push_back(e->type() == Element::Type::REST);
+
              // Update the bounds for actual audio
              if (e->type() == Element::Type::NOTE) {
+
               if (!firstNonRest.contains(pid) || tick<firstNonRest[pid]) 
                 firstNonRest[pid] = tick;
 
@@ -757,13 +762,22 @@ void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
     foreach(QString key,ponsets.keys()) {
       QJsonObject onset_obj = QJsonObject();
 
-      QJsonArray tar, ar;
-      foreach(int tick, ponsets[key]) {
+      QJsonArray tar, ar, nrar;
+
+      QList<int> consets = ponsets[key];
+      QList<bool> cisrest = pisrest[key]; 
+
+      for(int i=0;i<consets.size();i++) {
+        int tick = consets[i];
         tar.push_back(tick);
         ar.push_back(tempomap->tick2time(tick));
+        if (!cisrest[i])
+          nrar.push_back(tempomap->tick2time(tick));
       }
+
       onset_obj["ticks"] = tar;
       onset_obj["times"] = ar;
+      onset_obj["nonrest_times"] = nrar;
       onset_obj["beg_time"] = tempomap->tick2time(firstNonRest[key]);
       onset_obj["end_time"] = tempomap->tick2time(lastNonRest[key]);
 
