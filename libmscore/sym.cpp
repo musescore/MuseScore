@@ -5210,8 +5210,11 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
             }
 
       QColor color(painter->pen().color());
-      qreal pixelRatio = qreal(painter->device()->devicePixelRatio());
-      int scale16      = lrint(worldScale * 6553.6 * pixelRatio * mag);
+
+      int pr           = painter->device()->devicePixelRatio();
+      qreal pixelRatio = qreal(pr > 0 ? pr : 1);
+      worldScale      *= pixelRatio;
+      int scale16      = lrint(worldScale * 6553.6 * mag);
 
       GlyphKey gk(id, scale16, color);
       GlyphPixmap* pm = cache->object(gk);
@@ -5248,7 +5251,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
                   }
             pm = new GlyphPixmap;
             pm->pm = QPixmap::fromImage(img, Qt::NoFormatConversion);
-            pm->pm.setDevicePixelRatio(worldScale * pixelRatio);
+            pm->pm.setDevicePixelRatio(worldScale);
             pm->offset = QPointF(qreal(gb->left), -qreal(gb->top)) / worldScale;
             if (!cache->insert(gk, pm))
                   qDebug("cannot cache glyph");
