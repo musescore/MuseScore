@@ -1848,19 +1848,16 @@ bool MuseScore::savePdf(const QString& saveName)
 bool MuseScore::savePdf(Score* cs, const QString& saveName)
       {
       cs->setPrinting(true);
-      QPrinter printerDev(QPrinter::HighResolution);
+
+      QPdfWriter printerDev(saveName);
+      printerDev.setResolution(preferences.exportPdfDpi);
       const PageFormat* pf = cs->pageFormat();
-      printerDev.setPaperSize(pf->size(), QPrinter::Inch);
+      printerDev.setPageSize(QPageSize(pf->size(), QPageSize::Inch));
 
       printerDev.setCreator("MuseScore Version: " VERSION);
-      printerDev.setFullPage(true);
       if (!printerDev.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
-      printerDev.setColorMode(QPrinter::Color);
-      printerDev.setDocName(cs->name());
-      printerDev.setOutputFormat(QPrinter::PdfFormat);
-
-      printerDev.setOutputFileName(saveName);
+      printerDev.setTitle(cs->name());
 
       QPainter p;
       if (!p.begin(&printerDev))
@@ -1872,25 +1869,12 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
 
       const QList<Page*> pl = cs->pages();
       int pages    = pl.size();
-      int offset   = cs->pageNumberOffset();
-      int fromPage = printerDev.fromPage() - 1 - offset;
-      int toPage   = printerDev.toPage() - 1 - offset;
-      if (fromPage < 0)
-            fromPage = 0;
-      if ((toPage < 0) || (toPage >= pages))
-            toPage = pages - 1;
-
-      for (int copy = 0; copy < printerDev.numCopies(); ++copy) {
-            bool firstPage = true;
-            for (int n = fromPage; n <= toPage; ++n) {
-                  if (!firstPage)
-                        printerDev.newPage();
-                  firstPage = false;
-
-                  cs->print(&p, n);
-                  if ((copy + 1) < printerDev.numCopies())
-                        printerDev.newPage();
-                  }
+      bool firstPage = true;
+      for (int n = 0; n < pages; ++n) {
+            if (!firstPage)
+                  printerDev.newPage();
+            firstPage = false;
+            cs->print(&p, n);
             }
       p.end();
       cs->setPrinting(false);
@@ -1942,7 +1926,7 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
                   s->doLayout();
                   }
             s->setPrinting(true);
-            
+
             // we ignore the configured page offset
             // we display page footer on all pages
             // we display page number on all pages
@@ -1950,37 +1934,37 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             s->setPageNumberOffset(pageOffset);
             bool footerFirstPage = s->style(StyleIdx::footerFirstPage).toBool();
             s->style()->set(StyleIdx::footerFirstPage, true);
-            
+
             QString evenFooterL = s->style()->value(StyleIdx::evenFooterL).toString();
             QString tmp = evenFooterL;
             tmp.replace("$p", "$P");
             s->style()->set(StyleIdx::evenFooterL, tmp);
-            
+
             QString evenFooterC = s->style()->value(StyleIdx::evenFooterC).toString();
             tmp = evenFooterC;
             tmp.replace("$p", "$P");
             s->style()->set(StyleIdx::evenFooterC, tmp);
-            
+
             QString evenFooterR = s->style()->value(StyleIdx::evenFooterR).toString();
             tmp = evenFooterR;
             tmp.replace("$p", "$P");
             s->style()->set(StyleIdx::evenFooterR, tmp);
-            
+
             QString oddFooterL = s->style()->value(StyleIdx::oddFooterL).toString();
             tmp = oddFooterL;
             tmp.replace("$p", "$P");
             s->style()->set(StyleIdx::oddFooterL, tmp);
-            
+
             QString oddFooterC = s->style()->value(StyleIdx::oddFooterC).toString();
             tmp = oddFooterC;
             tmp.replace("$p", "$P");
             s->style()->set(StyleIdx::oddFooterC, tmp);
-            
+
             QString oddFooterR = s->style()->value(StyleIdx::oddFooterR).toString();
             tmp = oddFooterR;
             tmp.replace("$p", "$P");
             s->style()->set(StyleIdx::oddFooterR, tmp);
-            
+
             if (layoutMode == LayoutMode::PAGE)
                   s->startCmd();
             s->doLayout();
@@ -2010,7 +1994,7 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             s->style()->set(StyleIdx::oddFooterL, oddFooterL);
             s->style()->set(StyleIdx::oddFooterC, oddFooterC);
             s->style()->set(StyleIdx::oddFooterR, oddFooterR);
-            
+
             if (layoutMode == LayoutMode::PAGE)
                   s->startCmd();
             s->doLayout();

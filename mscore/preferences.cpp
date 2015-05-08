@@ -214,10 +214,10 @@ void Preferences::init()
 #else
       nativeDialogs           = false;    // don't use system native file dialogs
 #endif
-
       exportAudioSampleRate   = exportAudioSampleRates[0];
 
       workspace               = "Basic";
+      exportPdfDpi            = 300;
       };
 
 //---------------------------------------------------------
@@ -341,6 +341,7 @@ void Preferences::write()
       s.setValue("exportAudioSampleRate", exportAudioSampleRate);
 
       s.setValue("workspace", workspace);
+      s.setValue("exportPdfDpi", exportPdfDpi);
 
       //update
       s.setValue("checkUpdateStartup", checkUpdateStartup);
@@ -491,6 +492,7 @@ void Preferences::read()
       exportAudioSampleRate = s.value("exportAudioSampleRate", exportAudioSampleRate).toInt();
 
       workspace          = s.value("workspace", workspace).toString();
+      exportPdfDpi       = s.value("exportPdfDpi", exportPdfDpi).toInt();
 
       checkUpdateStartup = s.value("checkUpdateStartup", checkUpdateStartup).toBool();
 
@@ -979,6 +981,7 @@ void PreferenceDialog::updateValues()
       if (idx == n)     // if not found in table
             idx = 0;
       exportAudioSampleRate->setCurrentIndex(idx);
+      exportPdfDpi->setValue(prefs.exportPdfDpi);
 
       sfChanged = false;
       }
@@ -1390,6 +1393,7 @@ void PreferenceDialog::apply()
       prefs.pngResolution      = pngResolution->value();
       prefs.pngTransparent     = pngTransparent->isChecked();
       converterDpi             = prefs.pngResolution;
+      prefs.exportPdfDpi       = exportPdfDpi->value();
 
       if (shortcutsChanged) {
             shortcutsChanged = false;
