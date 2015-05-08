@@ -103,8 +103,8 @@ void Arpeggio::symbolLine(SymId end, SymId fill)
 
       symbols.clear();
       symbols.append(end);
-      qreal w1 = f->bbox(end, mag).width();
-      qreal w2 = f->width(fill, mag);
+      qreal w1 = f->advance(end, mag);
+      qreal w2 = f->advance(fill, mag);
       int n    = lrint((w - w1) / w2);
       for (int i = 0; i < n; ++i)
            symbols.prepend(fill);
@@ -180,8 +180,6 @@ void Arpeggio::draw(QPainter* p) const
       {
       qreal _spatium = spatium();
 
-      p->setPen(curColor());
-
       qreal y1 = -_userLen1;
       qreal y2 = _height + _userLen2;
 
@@ -189,23 +187,24 @@ void Arpeggio::draw(QPainter* p) const
          score()->styleS(StyleIdx::ArpeggioLineWidth).val() * _spatium,
          Qt::SolidLine, Qt::RoundCap));
 
+      p->save();
       switch (arpeggioType()) {
             case ArpeggioType::NORMAL:
             case ArpeggioType::UP:
                   {
                   QRectF r(symBbox(symbols));
+                  qreal scale = p->worldTransform().m11();
                   p->rotate(-90.0);
-                  drawSymbols(symbols, p, QPointF(-r.right() - y1, -r.bottom() + r.height()));
-                  p->rotate(90.0);
+                  score()->scoreFont()->draw(symbols, p, magS(), QPointF(-r.right() - y1, -r.bottom() + r.height()), scale);
                   }
                   break;
 
             case ArpeggioType::DOWN:
                   {
                   QRectF r(symBbox(symbols));
+                  qreal scale = p->worldTransform().m11();
                   p->rotate(90.0);
-                  drawSymbols(symbols, p, QPointF(-r.left() + y1, -r.top() - r.height()));
-                  p->rotate(-90.0);
+                  score()->scoreFont()->draw(symbols, p, magS(), QPointF(-r.left() + y1, -r.top() - r.height()), scale);
                   }
                   break;
 
@@ -239,6 +238,7 @@ void Arpeggio::draw(QPainter* p) const
                   }
                   break;
             }
+      p->restore();
       }
 
 //---------------------------------------------------------

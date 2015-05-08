@@ -5187,33 +5187,38 @@ bool GlyphKey::operator==(const GlyphKey& k) const
 //   draw
 //---------------------------------------------------------
 
-void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& _pos) const
+void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos) const
+      {
+      qreal worldScale = painter->worldTransform().m11();
+      draw(id, painter, mag, pos, worldScale);
+      }
+
+void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, qreal worldScale) const
       {
       if (!sym(id).symList().isEmpty()) {  // is this a compound symbol?
-            draw(sym(id).symList(), painter, mag, _pos);
+            draw(sym(id).symList(), painter, mag, pos);
             return;
             }
-      if (!isValid(id))
+      if (!isValid(id)) {
+            qDebug("ScoreFont::draw: invalid sym %d\n", int(id));
             return;
+            }
       int rv = FT_Load_Glyph(face, sym(id).index(), FT_LOAD_DEFAULT);
       if (rv) {
             qDebug("load glyph id %d, failed: 0x%x", int(id), rv);
             return;
             }
 
-      int pixelRatio = painter->device()->devicePixelRatio();;
-      qreal m        = mag * 6553.6 * qreal(pixelRatio);
-
       QColor color(painter->pen().color());
+      qreal pixelRatio = qreal(painter->device()->devicePixelRatio());
+      int scale16      = lrint(worldScale * 6553.6 * pixelRatio * mag);
 
-      const QTransform& tf = painter->worldTransform();
-      GlyphKey gk(id, tf.m11() * m, color);
-
+      GlyphKey gk(id, scale16, color);
       GlyphPixmap* pm = cache->object(gk);
       if (!pm) {
             FT_Matrix matrix {
-                  lrint(tf.m11() * m), 0,
-                  0,                   lrint(tf.m22() * m),
+                  scale16, 0,
+                  0,       scale16
                   };
 
             FT_Glyph glyph;
@@ -5241,24 +5246,15 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& _pos
                         *dst++ = color.rgba();
                         }
                   }
-            QPixmap _pm = QPixmap::fromImage(img, Qt::NoFormatConversion);
-            _pm.setDevicePixelRatio(pixelRatio);      // needed?
             pm = new GlyphPixmap;
-            pm->pm = _pm;
-            pm->yo = gb->top / pixelRatio;
-            pm->xo = gb->left / pixelRatio;
+            pm->pm = QPixmap::fromImage(img, Qt::NoFormatConversion);
+            pm->pm.setDevicePixelRatio(worldScale * pixelRatio);
+            pm->offset = QPointF(qreal(gb->left), -qreal(gb->top)) / worldScale;
             if (!cache->insert(gk, pm))
                   qDebug("cannot cache glyph");
             FT_Done_Glyph(glyph);
             }
-      painter->setWorldMatrixEnabled(false);
-      QPointF pos = tf.map(_pos);
-
-      pos.ry() -= pm->yo;
-      pos.rx() += pm->xo;
-
-      painter->drawPixmap(pos, pm->pm);
-      painter->setWorldMatrixEnabled(true);
+      painter->drawPixmap(pos + pm->offset, pm->pm);
       }
 
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const
@@ -5269,13 +5265,18 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
       draw(d, painter, mag, pos);
       }
 
-void ScoreFont::draw(const QList<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos) const
+void ScoreFont::draw(const QList<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos, qreal scale) const
       {
       QPointF pos(_pos);
       for (SymId id : ids) {
-            draw(id, p, mag, pos);
+            draw(id, p, mag, pos, scale);
             pos.rx() += (sym(id).advance() * mag);
             }
+      }
+void ScoreFont::draw(const QList<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos) const
+      {
+      qreal scale = p->worldTransform().m11();
+      draw(ids, p, mag, _pos, scale);
       }
 
 //---------------------------------------------------------

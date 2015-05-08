@@ -347,7 +347,6 @@ class Element : public QObject, public ScoreElement {
       void setPos(const QPointF& p)           { _pos = p;                }
       qreal& rxpos()                          { return _pos.rx();        }
       qreal& rypos()                          { return _pos.ry();        }
-      virtual void move(qreal xd, qreal yd)   { _pos += QPointF(xd, yd); }
       virtual void move(const QPointF& s)     { _pos += s;               }
 
       virtual QPointF pagePos() const;          ///< position in page coordinates
@@ -570,6 +569,7 @@ class Element : public QObject, public ScoreElement {
       QPointF symCutOutNW(SymId id) const;
       QPointF symCutOutSE(SymId id) const;
       QPointF symCutOutSW(SymId id) const;
+      qreal symAdvance(SymId id) const;
       QList<SymId> toTimeSigString(const QString& s) const;
       bool symIsValid(SymId id) const;
 
