@@ -170,6 +170,7 @@ struct Preferences {
       int exportAudioSampleRate;
 
       QString workspace;
+      int exportPdfDpi;
 
       bool dirty;
 
@@ -178,6 +179,7 @@ struct Preferences {
       bool readPluginList();
       void writePluginList();
       void updatePluginList();
+
 
       Preferences();
       void write();

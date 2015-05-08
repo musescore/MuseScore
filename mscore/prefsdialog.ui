@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>712</width>
-    <height>538</height>
+    <width>842</width>
+    <height>578</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,65 +22,7 @@
   <property name="accessibleName">
    <string>MuseScore Preferences</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3">
-   <item row="3" column="0">
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="resetToDefault">
-       <property name="accessibleName">
-        <string>Reset All Preferences to Default</string>
-       </property>
-       <property name="text">
-        <string>Reset All Preferences to Default</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>131</width>
-         <height>31</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="focusPolicy">
-        <enum>Qt::StrongFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>Apply</string>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
+  <layout class="QGridLayout" name="gridLayout_10">
    <item row="0" column="0">
     <widget class="QTabWidget" name="General">
      <property name="sizePolicy">
@@ -96,7 +38,7 @@
       <string>Preferences Tab Manager</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -177,7 +119,7 @@
              <string>Start empty</string>
             </property>
             <property name="text">
-             <string>Start empty</string>
+             <string>&amp;Start empty</string>
             </property>
            </widget>
           </item>
@@ -195,7 +137,7 @@
                <string>Start with score:</string>
               </property>
               <property name="text">
-               <string>Start with score:</string>
+               <string>S&amp;tart with score:</string>
               </property>
              </widget>
             </item>
@@ -250,7 +192,7 @@
              <string>Continue last session</string>
             </property>
             <property name="text">
-             <string>Continue last session</string>
+             <string>&amp;Continue last session</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -633,7 +575,7 @@
           <string>OSC remote control</string>
          </property>
          <property name="title">
-          <string>OSC Remote Control</string>
+          <string>OSC Remote Contro&amp;l</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -814,7 +756,7 @@
              <string>Background Wallpaper</string>
             </property>
             <property name="text">
-             <string>Wallpaper</string>
+             <string>Wa&amp;llpaper</string>
             </property>
            </widget>
           </item>
@@ -1018,7 +960,7 @@
              <string>Paper Wallpaper</string>
             </property>
             <property name="text">
-             <string>Wallpaper</string>
+             <string>Wall&amp;paper</string>
             </property>
            </widget>
           </item>
@@ -1150,7 +1092,7 @@
              <string>Play notes when editing</string>
             </property>
             <property name="title">
-             <string>Play notes when editing</string>
+             <string>&amp;Play notes when editing</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -1249,7 +1191,7 @@
           <string>MIDI remote control</string>
          </property>
          <property name="title">
-          <string>MIDI Remote Control</string>
+          <string>MIDI Remote Contro&amp;l</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -2256,7 +2198,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>PulseAudio</string>
+          <string>&amp;PulseAudio</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -2396,7 +2338,7 @@
           <string>ALSA audio</string>
          </property>
          <property name="title">
-          <string>ALSA audio</string>
+          <string>A&amp;LSA audio</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -2592,7 +2534,7 @@
           <string>JACK audio server</string>
          </property>
          <property name="title">
-          <string>JACK audio server</string>
+          <string>&amp;JACK audio server</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -2785,7 +2727,7 @@
              <string>Build in style</string>
             </property>
             <property name="text">
-             <string>Built in style</string>
+             <string>Bui&amp;lt in style</string>
             </property>
            </widget>
           </item>
@@ -3018,8 +2960,21 @@
       <attribute name="title">
        <string>Export</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_7">
-       <item>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="4" column="0">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_9">
          <property name="title">
           <string>PNG/SVG</string>
@@ -3028,6 +2983,13 @@
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_8">
+          <item row="0" column="3">
+           <widget class="QCheckBox" name="checkBox">
+            <property name="text">
+             <string>CheckBox</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
@@ -3080,7 +3042,7 @@
          </layout>
         </widget>
        </item>
-       <item>
+       <item row="1" column="0">
         <widget class="QGroupBox" name="groupBox_8">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -3111,7 +3073,7 @@
          </layout>
         </widget>
        </item>
-       <item>
+       <item row="1" column="1">
         <widget class="QGroupBox" name="groupBox_16">
          <property name="accessibleName">
           <string>Audio</string>
@@ -3163,7 +3125,7 @@
          </layout>
         </widget>
        </item>
-       <item>
+       <item row="3" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_22">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -3187,7 +3149,7 @@
              <string>Export layout</string>
             </property>
             <property name="title">
-             <string>Export layout</string>
+             <string>Export &amp;layout</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -3199,7 +3161,7 @@
                 <string>Export all system and page breaks</string>
                </property>
                <property name="text">
-                <string>Export all system and page breaks</string>
+                <string>Export all system and &amp;page breaks</string>
                </property>
               </widget>
              </item>
@@ -3232,18 +3194,34 @@
          </layout>
         </widget>
        </item>
-       <item>
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>PDF</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+         <layout class="QGridLayout" name="gridLayout_11">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Resolution DPI:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="exportPdfDpi">
+            <property name="minimum">
+             <number>75</number>
+            </property>
+            <property name="maximum">
+             <number>2400</number>
+            </property>
+            <property name="value">
+             <number>300</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -3470,6 +3448,64 @@
       </layout>
      </widget>
     </widget>
+   </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout">
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="resetToDefault">
+       <property name="accessibleName">
+        <string>Reset All Preferences to Default</string>
+       </property>
+       <property name="text">
+        <string>Reset All Preferences to Default</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>131</width>
+         <height>31</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Apply</string>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
