@@ -4139,7 +4139,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                         note->setTpc(pitch2tpc(pitch, Key::C, Prefer::NEAREST)); // TODO: necessary ?
                         }
                   else {
-                        qDebug("disp step %d oct %d", displayStep, displayOctave);
+                        //qDebug("disp step %d oct %d", displayStep, displayOctave);
                         xmlSetPitch(note, displayStep, 0, displayOctave, 0, _pass1.getPart(partId)->instrument());
                         }
                   }
@@ -4302,7 +4302,6 @@ static Fraction calcTicks(const QString& text, int divs)
       else
             qDebug("illegal or uninitialized divisions (%d)", divs);       // TODO
 
-      qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
       return dura;
       }
 
