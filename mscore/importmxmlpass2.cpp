@@ -4297,14 +4297,10 @@ static Fraction calcTicks(const QString& text, int divs)
       Fraction dura(0, 0);        // invalid unless set correctly
 
       int intDura = text.toInt();
-      if (intDura > 0) {
-            if (divs > 0)
-                  dura.set(intDura, 4 * divs);
-            else
-                  qDebug("illegal or uninitialized divisions (%d)", divs);       // TODO
-            }
+      if (divs > 0)
+            dura.set(intDura, 4 * divs);
       else
-            qDebug("illegal duration '%s'", qPrintable(text));       // TODO
+            qDebug("illegal or uninitialized divisions (%d)", divs);       // TODO
 
       qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
       return dura;
