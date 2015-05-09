@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>842</width>
-    <height>578</height>
+    <width>712</width>
+    <height>538</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -38,7 +38,7 @@
       <string>Preferences Tab Manager</string>
      </property>
      <property name="currentIndex">
-      <number>6</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -119,7 +119,7 @@
              <string>Start empty</string>
             </property>
             <property name="text">
-             <string>&amp;Start empty</string>
+             <string>Start empty</string>
             </property>
            </widget>
           </item>
@@ -137,7 +137,7 @@
                <string>Start with score:</string>
               </property>
               <property name="text">
-               <string>S&amp;tart with score:</string>
+               <string>Start with score:</string>
               </property>
              </widget>
             </item>
@@ -192,7 +192,7 @@
              <string>Continue last session</string>
             </property>
             <property name="text">
-             <string>&amp;Continue last session</string>
+             <string>Continue last session</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -575,7 +575,7 @@
           <string>OSC remote control</string>
          </property>
          <property name="title">
-          <string>OSC Remote Contro&amp;l</string>
+          <string>OSC Remote Control</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -756,7 +756,7 @@
              <string>Background Wallpaper</string>
             </property>
             <property name="text">
-             <string>Wa&amp;llpaper</string>
+             <string>Wallpaper</string>
             </property>
            </widget>
           </item>
@@ -960,7 +960,7 @@
              <string>Paper Wallpaper</string>
             </property>
             <property name="text">
-             <string>Wall&amp;paper</string>
+             <string>Wallpaper</string>
             </property>
            </widget>
           </item>
@@ -1092,7 +1092,7 @@
              <string>Play notes when editing</string>
             </property>
             <property name="title">
-             <string>&amp;Play notes when editing</string>
+             <string>Play notes when editing</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -1191,7 +1191,7 @@
           <string>MIDI remote control</string>
          </property>
          <property name="title">
-          <string>MIDI Remote Contro&amp;l</string>
+          <string>MIDI Remote Control</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -2198,7 +2198,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>&amp;PulseAudio</string>
+          <string>PulseAudio</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -2338,7 +2338,7 @@
           <string>ALSA audio</string>
          </property>
          <property name="title">
-          <string>A&amp;LSA audio</string>
+          <string>ALSA audio</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -2534,7 +2534,7 @@
           <string>JACK audio server</string>
          </property>
          <property name="title">
-          <string>&amp;JACK audio server</string>
+          <string>JACK audio server</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -2727,7 +2727,7 @@
              <string>Build in style</string>
             </property>
             <property name="text">
-             <string>Bui&amp;lt in style</string>
+             <string>Built in style</string>
             </property>
            </widget>
           </item>
@@ -2983,13 +2983,6 @@
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_8">
-          <item row="0" column="3">
-           <widget class="QCheckBox" name="checkBox">
-            <property name="text">
-             <string>CheckBox</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
@@ -3021,7 +3014,7 @@
            </spacer>
           </item>
           <item row="0" column="1">
-           <widget class="QDoubleSpinBox" name="pngResolution">
+           <widget class="QSpinBox" name="pngResolution">
             <property name="accessibleName">
              <string>Resolution DPI</string>
             </property>
@@ -3029,13 +3022,13 @@
              <string>Choose resolution DPI</string>
             </property>
             <property name="minimum">
-             <double>32.000000000000000</double>
+             <number>32</number>
             </property>
             <property name="maximum">
-             <double>5000.000000000000000</double>
+             <number>5000</number>
             </property>
             <property name="value">
-             <double>300.000000000000000</double>
+             <number>300</number>
             </property>
            </widget>
           </item>
@@ -3149,7 +3142,7 @@
              <string>Export layout</string>
             </property>
             <property name="title">
-             <string>Export &amp;layout</string>
+             <string>Export layout</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -3161,7 +3154,7 @@
                 <string>Export all system and page breaks</string>
                </property>
                <property name="text">
-                <string>Export all system and &amp;page breaks</string>
+                <string>Export all system and page breaks</string>
                </property>
               </widget>
              </item>
@@ -3209,6 +3202,12 @@
           </item>
           <item row="1" column="1">
            <widget class="QSpinBox" name="exportPdfDpi">
+            <property name="accessibleName">
+             <string>Resolution DPI</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose resolution DPI</string>
+            </property>
             <property name="minimum">
              <number>75</number>
             </property>
