@@ -917,15 +917,15 @@ void Score::cmdAddPitch(int step, bool addFlag)
 void Score::addPitch(int step, bool addFlag)
       {
       Position pos;
-      pos.segment   = inputState().segment();
-      pos.staffIdx  = inputState().track() / VOICES;
-      ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
-      pos.line      = relStep(step, clef);
-
       if (addFlag) {
             Element* el = selection().element();
             if (el && el->type() == Element::Type::NOTE) {
-                Chord* chord = static_cast<Note*>(el)->chord();
+                  Note* selectedNote = static_cast<Note*>(el);
+                  pos.segment   = selectedNote->chord()->segment();
+                  pos.staffIdx  = selectedNote->track() / VOICES;
+                  ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
+                  pos.line      = relStep(step, clef);
+                  Chord* chord = static_cast<Note*>(el)->chord();
                   bool error;
                   NoteVal nval = noteValForPosition(pos, error);
                   if (error)
@@ -935,7 +935,12 @@ void Score::addPitch(int step, bool addFlag)
                   return;
                   }
             }
-
+      
+      pos.segment   = inputState().segment();
+      pos.staffIdx  = inputState().track() / VOICES;
+      ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
+      pos.line      = relStep(step, clef);
+      
       if (inputState().repitchMode())
             repitchNote(pos, !addFlag);
       else
