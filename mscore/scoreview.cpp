@@ -5857,7 +5857,7 @@ void ScoreView::cmdAddRemoveBreaks()
             return;
       Segment* endSegment = _score->selection().endSegment();
       Measure* startMeasure = startSegment->measure();
-      Measure* endMeasure = endSegment ? endSegment->measure() : _score->lastMeasure();
+      Measure* endMeasure = endSegment ? endSegment->measure() : _score->lastMeasureMM();
 
       BreaksDialog bd;
       if (!bd.exec())
@@ -5868,16 +5868,23 @@ void ScoreView::cmdAddRemoveBreaks()
       bool remove = bd.remove;
 
       // loop through measures in selection
+      // count mmrests as a single measure
       int count = 0;
-      for (Measure* m = startMeasure; m; m = m->nextMeasure()) {
+      for (Measure* mm = startMeasure; mm; mm = mm->nextMeasureMM()) {
+
+            // even though we are counting mmrests as a single measure,
+            // we need to find last real measure within mmrest for the actual break
+            Measure* m = mm->isMMRest() ? mm->mmRestLast() : mm;
+
             if (lock) {
                   // skip if it already has a break
                   if (m->lineBreak() || m->pageBreak())
                         continue;
                   // add break if last measure of system
-                  if (m == m->system()->lastMeasure())
+                  if (mm->system() && mm->system()->lastMeasure() == mm)
                         m->undoSetLineBreak(true);
                   }
+
             else {
                   if (remove) {
                         // remove line break if present
@@ -5885,11 +5892,10 @@ void ScoreView::cmdAddRemoveBreaks()
                              m->undoSetLineBreak(false);
                         }
                   else {
-                        // skip last measure in score (even if in selection)
                         if (++count == interval) {
                               // found place for break; add if not already one present
                               // but skip last measure in score (even if in selection)
-                              if (!(m->lineBreak() || m->pageBreak() || m == m->system()->lastMeasure()))
+                              if (!(m->lineBreak() || m->pageBreak() || mm == _score->lastMeasureMM()))
                                     m->undoSetLineBreak(true);
                               // reset count
                               count = 0;
@@ -5900,7 +5906,8 @@ void ScoreView::cmdAddRemoveBreaks()
                               }
                         }
                   }
-            if (m == endMeasure)
+
+            if (mm == endMeasure)
                   break;
             }
 
