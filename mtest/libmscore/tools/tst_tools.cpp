@@ -32,6 +32,9 @@ class TestTools : public QObject, public MTest
 
    private slots:
       void initTestCase();
+      void undoAddLineBreaks();
+      void undoLockLineBreaks();
+      void undoRemoveLineBreaks();
       void undoExplode();
       void undoImplode();
       void undoImplodeVoice();
@@ -51,6 +54,105 @@ class TestTools : public QObject, public MTest
 void TestTools::initTestCase()
       {
       initMTest();
+      }
+
+//---------------------------------------------------------
+//   undoAddLineBreaks
+//---------------------------------------------------------
+
+void TestTools::undoAddLineBreaks()
+      {
+      QString readFile(DIR + "undoAddLineBreaks.mscx");
+      QString writeFile1("undoAddLineBreaks01-test.mscx");
+      QString reference1(DIR  + "undoAddLineBreaks01-ref.mscx");
+      QString writeFile2("undoAddLineBreaks02-test.mscx");
+      QString reference2(DIR  + "undoAddLineBreaks02-ref.mscx");
+
+      Score* score = readScore(readFile);
+      score->doLayout();
+
+      // select all
+      score->startCmd();
+      score->cmdSelectAll();
+      score->endCmd();
+
+      // do
+      score->startCmd();
+      score->addRemoveBreaks(4, false);
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, writeFile1, reference1));
+
+      // undo
+      score->undo()->undo();
+      QVERIFY(saveCompareScore(score, writeFile2, reference2));
+
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoAddLineBreaks
+//---------------------------------------------------------
+
+void TestTools::undoLockLineBreaks()
+      {
+      QString readFile(DIR + "undoLockLineBreaks.mscx");
+      QString writeFile1("undoLockLineBreaks01-test.mscx");
+      QString reference1(DIR  + "undoLockLineBreaks01-ref.mscx");
+      QString writeFile2("undoLockLineBreaks02-test.mscx");
+      QString reference2(DIR  + "undoLockLineBreaks02-ref.mscx");
+
+      Score* score = readScore(readFile);
+      score->doLayout();
+
+      // select all
+      score->startCmd();
+      score->cmdSelectAll();
+      score->endCmd();
+
+      // do
+      score->startCmd();
+      score->addRemoveBreaks(0, true);
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, writeFile1, reference1));
+
+      // undo
+      score->undo()->undo();
+      QVERIFY(saveCompareScore(score, writeFile2, reference2));
+
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   undoRemoveLineBreaks
+//---------------------------------------------------------
+
+void TestTools::undoRemoveLineBreaks()
+      {
+      QString readFile(DIR + "undoRemoveLineBreaks.mscx");
+      QString writeFile1("undoRemoveLineBreaks01-test.mscx");
+      QString reference1(DIR  + "undoRemoveLineBreaks01-ref.mscx");
+      QString writeFile2("undoRemoveLineBreaks02-test.mscx");
+      QString reference2(DIR  + "undoRemoveLineBreaks02-ref.mscx");
+
+      Score* score = readScore(readFile);
+      score->doLayout();
+
+      // select all
+      score->startCmd();
+      score->cmdSelectAll();
+      score->endCmd();
+
+      // do
+      score->startCmd();
+      score->addRemoveBreaks(0, false);
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, writeFile1, reference1));
+
+      // undo
+      score->undo()->undo();
+      QVERIFY(saveCompareScore(score, writeFile2, reference2));
+
+      delete score;
       }
 
 //---------------------------------------------------------
