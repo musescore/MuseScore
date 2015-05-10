@@ -21,6 +21,7 @@
 #include "score.h"
 #include "volta.h"
 #include "note.h"
+#include "glissando.h"
 #include "instrument.h"
 #include "part.h"
 #include "chord.h"
@@ -821,22 +822,70 @@ void renderArpeggio(Chord *chord, bool &gateEvents, QList<NoteEventList> & ell) 
         j++;
     }
 }
+
+    
+int articulationExcursion (Note *noteL, Note *noteR, int deltastep) {
+    // noteL is the note to measure the deltastep from, i.e., ornaments are w.r.t. this note
+    // noteR is the note to search backward from to find accidentals.
+    //    for ornament calcuation noteL and noteR are the same, but for glissando they are
+    //     the start end end note of glissando.
+    // deltastep is the number of diatonic steps between the base note and this articulation step.
+    if ( 0 == deltastep )
+        return 0;
+    Chord *chordL = noteL->chord();
+    Chord *chordR = noteR->chord();
+    int pitchL = noteL->pitch();
+    int tickL = chordL->tick();
+    int tickR = chordR->tick();
+    Staff * staffL = chordL->staff();
+    Staff * staffR = chordR->staff();
+    ClefType clefL = staffL->clef(tickL);
+    ClefType clefR = staffR->clef(tickR);
+    // line represents the ledger line of the staff.  0 is the top line, 1, is the space between the top 2 lines,
+    //  ... 8 is the bottom line.
+    int lineL     = noteL->line();
+    // we use line - deltastep, because lines are oriented from top to bottom, while step is oriented from bottom to top.
+    int lineL2    = lineL - deltastep;
+    int lineR2    = lineL2; // start with the same line, but this will change in the calculation below.
+    auto measureR = chordR->segment()->measure();
+    //AccidentalVal acciv2 = measureL->findAccidental(chordL->segment(), chordL->staff()->idx(), lineL2);
+    
+    // find the line in staffR corresponding to lineL2 in staffL.
+    {
+        int goalpitch = line2pitch(lineL2, clefL, Key::C);
+        while ( line2pitch(lineR2, clefR, Key::C) > goalpitch )
+            lineR2++;
+        while ( line2pitch(lineR2, clefR, Key::C) < goalpitch )
+            lineR2--;
+    }
+    AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->staff()->idx(), lineR2);
+    // FLAT2 --> -2
+    // FLAT  --> -1
+    // NATURAL --> 0
+    // SHARP --> 1
+    // SHARP2 --> 2
+    int acci2 = int(acciv2);
+    int pitchL2_C = line2pitch(lineL-deltastep, clefL, Key::C);
+    
+    int pitchL2   = pitchL2_C + acci2;
+    int halfsteps = pitchL2 - pitchL;
+    
+    return halfsteps ;
+};
     
 void renderNoteArticulation(NoteEventList* events,
-                        Chord *chord,
-                        Note * note,
-                        int pitch,
-                        int tickspernote, // number of ticks, either _16h or _32nd, i.e., MScore::division/4 or MScore::division/8
-                        const vector<int> & prefix,
-                        const vector<int> & body,
-                        bool repeatp, // repeatp=true means repeat the body as many times as possible to fill the time slice.
-                        bool sustainp, // stretchp=true means the last note of the body is sustained to fill remaining time slice
-                        const vector<int> & suffix
-                        )
+                            Note * note,
+                            bool chromatic,
+                            int tickspernote, // number of ticks, either _16h or _32nd, i.e., MScore::division/4 or MScore::division/8
+                            const vector<int> & prefix,
+                            const vector<int> & body,
+                            bool repeatp, // repeatp=true means repeat the body as many times as possible to fill the time slice.
+                            bool sustainp, // stretchp=true means the last note of the body is sustained to fill remaining time slice
+                            const vector<int> & suffix
+                            )
 {
     events->clear();
-    
-    Key key       = chord->staff()->key(chord->segment()->tick());
+    Chord *chord = note->chord();
     int space   = 1000 * chord->actualTicks();
     int maxticks = chord->actualTicks();
     int numrepeat = 1;
@@ -883,40 +932,11 @@ void renderNoteArticulation(NoteEventList* events,
         }
         return duration;
     };
-    auto accidentalDelta = [chord] (int line) {
-        auto measure = chord->segment()->measure();
-        AccidentalVal acci = measure->findAccidental(chord->segment(), chord->staff()->idx(), line);
-        // FLAT2 --> -1
-        // FLAT  --> -1
-        // NATURAL --> 0
-        // SHARP --> 1
-        // SHARP2 --> 2
-        return int(acci);
-    };
-    // local function:
-    auto articulationExcursion = [key, pitch, chord, note, accidentalDelta] (int deltastep) {
-        if ( 0 == deltastep )
-            return 0;
-        // deltastep is the number of diatonic steps between the base note and this articulation step.
-        int tick = chord->tick();
-        Staff * staff = chord->staff();
-        ClefType clef = staff->clef(tick);
-        // line represents the ledger line of the staff.  0 is the top line, 1, is the space between the top 2 lines,
-        //  ... 8 is the bottom line.
-        int line     = note->line();
-        
-        // we use line - deltastep, because lines are oriented from top to bottom, while step is oriented from bottom to top.
-        int line2    = line - deltastep;
-        int acci2    = accidentalDelta(line2);
-        int pitch2_C = line2pitch(line-deltastep, clef, Key::C);
-        int pitch2   = pitch2_C + acci2;
-        int halfsteps = pitch2 - pitch;
 
-        return halfsteps ;
-    };
+
     // local function:
-    auto makeEvent = [chord,events,articulationExcursion] (int pitch, int ontime, int duration) {
-        events->append( NoteEvent(articulationExcursion(pitch),
+    auto makeEvent = [note,chord,chromatic,events] (int pitch, int ontime, int duration) {
+        events->append( NoteEvent(chromatic ? pitch : articulationExcursion(note,note,pitch),
                                   ontime/chord->actualTicks(),
                                   duration/chord->actualTicks()));
         return ontime+duration;
@@ -952,7 +972,90 @@ void renderNoteArticulation(NoteEventList* events,
         ontime = makeEvent(suffix[j], ontime, tieForward(j,suffix));
     }
 }
-
+  
+bool noteHasGlissandop (Note *note) {
+    for (Spanner* spanner : note->spannerFor()) {
+        if ( (spanner->type() == Element::Type::GLISSANDO)
+            && spanner->endElement()
+            && ( Element::Type::NOTE == spanner->endElement()->type()))
+            return true;
+    }
+    return false;
+}
+    
+void renderGlissando(NoteEventList* events, Note *notestart) {
+    vector<int> empty = {};
+    int Cnote = 60; // pitch of middle C
+    int pitchstart = notestart->epitch();
+    int linestart = notestart->line();
+    auto signum = [] (int n) {
+        if (0 == n)       return 0;
+        else if ( n > 0 ) return 1;
+        else              return -1;    };
+    
+    set<int> blacknotes = {  1,  3,    6, 8, 10};
+    set<int> whitenotes = {0,  2, 4, 5, 7,  9, 11};
+    auto choose = [Cnote, whitenotes, blacknotes] (int p, MScore::GlissandoStyle glissandoStyle) {
+        int mod = (p - Cnote) % 12;
+        while( mod < 0 )
+            mod += 12;
+        switch ( glissandoStyle ) {
+            case MScore::GlissandoStyle::CHROMATIC:
+                return true;
+            case MScore::GlissandoStyle::WHITE_KEYS: // white note
+                return ( whitenotes.find(mod) != whitenotes.end());
+            case MScore::GlissandoStyle::BLACK_KEYS: // black note
+                return ( blacknotes.find(mod) != blacknotes.end());
+            default:
+                return false;
+        }
+    };
+    
+    for (Spanner* spanner : notestart->spannerFor())
+        if (spanner->type() == Element::Type::GLISSANDO) {
+            Glissando *glissando = static_cast<Glissando *>(spanner);
+            MScore::GlissandoStyle glissandoStyle = glissando->glissandoStyle();
+            Element* ee = spanner->endElement();
+            if ( glissando->playGlissando()  // don't play because play button is set to false
+                     && Element::Type::NOTE == ee->type() // only consider glissando connnected to NOTE.
+                ) {
+                vector<int> body;
+                Note *noteend = static_cast<Note *>(ee);
+                int pitchend   = noteend->epitch();
+                int direction= signum(pitchend - pitchstart);
+                auto inrange = [direction, pitchend] (int p) {
+                    if ( direction > 0 )
+                        return p < pitchend;
+                    else if ( direction < 0)
+                        return p > pitchend;
+                    else
+                        return false;
+                };
+                if ( 0 == direction )
+                    continue; // next spanner
+                if (glissandoStyle == MScore::GlissandoStyle::DIATONIC) { // scale obeying accidentals
+                    int line;
+                    int p;
+                    for ( line = linestart, p = pitchstart; inrange(p); line -= direction ){
+                        int halfsteps = articulationExcursion(notestart, noteend, linestart - line );
+                        p = pitchstart + halfsteps;
+                        if ( inrange(p))
+                            body.push_back(halfsteps);
+                    }
+                }
+                else
+                    for( int p = pitchstart ; inrange(p); p += direction) {
+                        if ( choose(p,glissandoStyle) ) {
+                            body.push_back(p - pitchstart);
+                        }
+                    }
+                renderNoteArticulation(events, notestart, true, MScore::division,
+                                       empty, body, false, true, empty);
+                
+            }
+        }
+}
+    
 void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gateTime) {
     // This struct specifies how to render an articulation.
     //   atype - the articulation type to implement, such as ArticulationType::Turn
@@ -1030,24 +1133,29 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
     
     // [2] In some cases, the example from [1] does not preserve the timing.
     // For example, illustrates 2+1/4 counts per half note.
-    
-    for (Articulation* a : chord->articulations()) {
-        if ( false == a->playArticulation())
-            continue;
-        for (int k = 0; k < chord->notes().size(); ++k) {
-            NoteEventList* events = &ell[k];
-            int pitch   = chord->notes()[k]->epitch();
-            auto oe = find_if(excursions.cbegin(), excursions.cend(),
-                                 [a](OrnamentExcursion oe) {return  ( oe.atype == a->articulationType()
-                                                                    && ( 0 == oe.ostyles.size()
-                                                                        || oe.ostyles.end() != oe.ostyles.find(a->ornamentStyle())));
-                                 });
-            if ( oe != excursions.cend()) {
-                renderNoteArticulation(events, chord, chord->notes()[k], pitch, oe->duration,
-                                       oe->prefix, oe->body, oe->repeatp, oe->sustainp, oe->suffix);
-            } else {
-                instr->updateGateTime(&gateTime, channel, a->subtypeName());
-            }
+    for (int k = 0; k < chord->notes().size(); ++k) {
+        NoteEventList* events = &ell[k];
+        Note *note = chord->notes()[k];
+        if ( noteHasGlissandop(note)) {
+            renderGlissando(events, note);
+        }
+        else
+            for (Articulation* a : chord->articulations()) {
+                
+                if ( false == a->playArticulation())
+                    continue;
+                
+                auto oe = find_if(excursions.cbegin(), excursions.cend(),
+                                  [a](OrnamentExcursion oe) {return  ( oe.atype == a->articulationType()
+                                                                      && ( 0 == oe.ostyles.size()
+                                                                          || oe.ostyles.end() != oe.ostyles.find(a->ornamentStyle())));
+                                  });
+                if ( oe != excursions.cend()) {
+                    renderNoteArticulation(events, note, false, oe->duration,
+                                           oe->prefix, oe->body, oe->repeatp, oe->sustainp, oe->suffix);
+                } else {
+                    instr->updateGateTime(&gateTime, channel, a->subtypeName());
+                }
         }
     }
 }
@@ -1076,11 +1184,9 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       else if (chord->arpeggio()) {
           renderArpeggio(chord, gateEvents, ell);
       }
-
-      if (!chord->articulations().isEmpty() && !chord->arpeggio()) {
+      else  {
           renderChordArticulation(chord, ell, gateTime);
       }
-
       //
       //    apply gateTime
       //
