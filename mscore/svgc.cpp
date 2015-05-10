@@ -192,7 +192,7 @@ QString checkSafety(Score * score) {
 	return QString();
 }
 
-bool createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal> t2t, const bool do_linearize);
+void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal> t2t, const bool do_linearize);
 
 bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const bool do_linearize, const QString& partsName) {
 
@@ -208,7 +208,7 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
       scale_tempo = partsinfo["scale_tempo"].toDouble();
   }
 
-  qreal rel_tempo = cs->tempomap()->relTempo();
+  //qreal rel_tempo = cs->tempomap()->relTempo();
   cs->tempomap()->setRelTempo(scale_tempo);
 
   // Safety check - done after tempo change just in case. 
@@ -225,18 +225,18 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
     Score* thisScore = cs->rootScore();
     if (partsinfo.isEmpty()) {
 
-		/*
-		// Convert to tab (list of types in stafftype.h)
-		foreach( Staff * staff, cs->staves())
-			staff->setStaffType(StaffType::preset(StaffTypes::TAB_6COMMON));
-		*/
+    	/*
+    	// Convert to tab (list of types in stafftype.h)
+    	foreach( Staff * staff, cs->staves())
+    		staff->setStaffType(StaffType::preset(StaffTypes::TAB_6COMMON));
+    	*/
+
+      // Add midifile
+      QString tname("1.mid");
+      saveMidi(cs,tname);
+      addFileToZip(&uz, tname, tname);
 
     	createSvgCollection(&uz, cs, QString("0/"), tick2time, do_linearize);
-
-    	// Add midifile
-        QString tname("1.mid");
-        saveMidi(cs,tname);
-        addFileToZip(&uz, tname, tname);
     }
     else {
 
@@ -282,17 +282,17 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
   	    }
       }
 	}
-
   uz.close();
 
-  cs->tempomap()->setRelTempo(rel_tempo);
+  // This causes segfaults on rare occasions
+  //cs->tempomap()->setRelTempo(rel_tempo);
 
 	return true;
 }
 
 QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal> t2t, QString basename);
 
-bool createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal> t2t, const bool do_linearize) {
+void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal> t2t, const bool do_linearize) {
 
       score->repeatList()->unwind();
       if (score->repeatList()->size()>1) {
@@ -305,7 +305,7 @@ bool createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, 
          else {
             QMessageBox::critical(0, QObject::tr("SVC export Failed"),
                QObject::tr("Score contains repeats. Please linearize!"));
-            return false;
+            return;
          }
       }
 
@@ -352,14 +352,12 @@ bool createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, 
 
       qts["csystem"] = createSvgs(score,uz,t2t,prefix+QString("Line"))[0];
 
-      score->setPrinting(false);
-
       score->undo(new ChangeLayoutMode(score, layout_mode));
       score->doLayout();
 
-      uz->addFile(prefix+"metainfo.json",QJsonDocument(qts).toJson());
+      score->setPrinting(false);
 
-      return true;
+      uz->addFile(prefix+"metainfo.json",QJsonDocument(qts).toJson());
    }
 
 QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal> t2t, QString basename) {
@@ -866,7 +864,8 @@ void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
       obj["onsets"] = getPartsOnsets(score);
 
       Measure* lastm = score->lastMeasure();
-      obj["total_duration"] = score->tempomap()->tick2time(lastm->tick()+lastm->ticks());
+      obj["total_ticks"] = lastm->tick()+lastm->ticks();
+      obj["total_time"] = score->tempomap()->tick2time(lastm->tick()+lastm->ticks());
 
       // Time Signature
       QJsonObject tso = QJsonObject();
