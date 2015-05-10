@@ -62,6 +62,8 @@ class TestRepeat : public QObject, public MTest
       // complex roadmap
       void repeat23() { repeat("repeat23.mscx", "1;2;1;2;3;2;3;4;5;6;7;6;7;8;9;10;11;9;10;12;12;13;14;13;14;15;16;13;14"); }
       
+      void repeat24() { repeat("repeat24.mscx", "1;2;3;4;2;3;4;5;3;4;5;6"); } // imbricated DS and ||: :||
+      
       };
 
 //---------------------------------------------------------

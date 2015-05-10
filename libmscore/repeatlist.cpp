@@ -353,7 +353,8 @@ void RepeatList::unwind()
                   // jump only once
                   if (jumps.contains(s)) {
                         m = m->nextMeasure();
-                        endRepeat = 0;
+                        if (endRepeat == _score->searchLabel(s->playUntil()))
+                              endRepeat = 0;
                         continue;
                         }
                   jumps.append(s);
