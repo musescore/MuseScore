@@ -480,7 +480,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void checkForUpdate();
       QMenu* fileMenu() const  { return _fileMenu; }
       void midiNoteReceived(int channel, int pitch, int velo);
-      void midiNoteReceived(int pitch, bool ctrl);
+      void midiNoteReceived(int pitch, bool ctrl, int velo);
       void instrumentChanged();
       void showMasterPalette(const QString& = 0);
       void selectionChanged(SelState);

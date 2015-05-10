@@ -265,7 +265,7 @@ void PianoKeyItem::mousePressEvent(QGraphicsSceneMouseEvent*)
       _pressed = true;
       update();
       bool ctrl = qApp->keyboardModifiers() & Qt::ControlModifier;
-      emit piano->keyPressed(_pitch, ctrl);
+      emit piano->keyPressed(_pitch, ctrl, 80);
       }
 
 //---------------------------------------------------------
@@ -276,6 +276,7 @@ void PianoKeyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent*)
       {
       _pressed = false;
       update();
+      emit piano->keyReleased(_pitch, false, 0);
       }
 
 //---------------------------------------------------------
@@ -314,7 +315,8 @@ PianoTools::PianoTools(QWidget* parent)
       _piano->setFocusPolicy(Qt::ClickFocus);
       setWidget(_piano);
 
-      connect(_piano, SIGNAL(keyPressed(int, bool)), SIGNAL(keyPressed(int, bool)));
+      connect(_piano, SIGNAL(keyPressed(int, bool, int)), SIGNAL(keyPressed(int, bool, int)));
+      connect(_piano, SIGNAL(keyReleased(int, bool, int)), SIGNAL(keyReleased(int, bool, int)));
       }
 
 //---------------------------------------------------------
