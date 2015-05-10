@@ -1306,7 +1306,7 @@ void Chord::layoutStem()
                         int   hookIdx = durationType().hooks();
                         if (!up())
                               hookIdx = -hookIdx;
-                        if (hookIdx) {
+                        if (hookIdx && _hook) {
                               _hook->setHookType(hookIdx);
                               qreal x = _stem->pos().x() + _stem->lineWidth() * .5;;
                               qreal y = _stem->pos().y();
@@ -2139,9 +2139,10 @@ void Chord::layoutTablature()
       if (segment())
             segment()->setDotPosX(staffIdx(), headWidth);
       // if tab type is stemless or chord is stemless (possible when imported from MusicXML)
+      // or measure is stemless
       // or duration longer than half (if halves have stems) or duration longer than crochet
       // remove stems
-      if (tab->slashStyle() || _noStem || durationType().type() <
+      if (tab->slashStyle() || _noStem || measure()->slashStyle(staffIdx()) || durationType().type() <
          (tab->minimStyle() != TablatureMinimStyle::NONE ? TDuration::DurationType::V_HALF : TDuration::DurationType::V_QUARTER) ) {
             // delete _stem;
             // delete _hook;
