@@ -3485,7 +3485,8 @@ void MuseScore::showPianoKeyboard(bool on)
             QAction* a = getAction("toggle-piano");
             _pianoTools = new PianoTools(this);
             addDockWidget(Qt::BottomDockWidgetArea, _pianoTools);
-            connect(_pianoTools, SIGNAL(keyPressed(int, bool)), SLOT(midiNoteReceived(int, bool)));
+            connect(_pianoTools, SIGNAL(keyPressed(int, bool, int)), SLOT(midiNoteReceived(int, bool, int)));
+            connect(_pianoTools, SIGNAL(keyReleased(int, bool, int)), SLOT(midiNoteReceived(int, bool, int)));
             connect(_pianoTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
             }
       if (on) {
@@ -3564,10 +3565,10 @@ PaletteBox* MuseScore::getPaletteBox()
 //   midiNoteReceived
 //---------------------------------------------------------
 
-void MuseScore::midiNoteReceived(int pitch, bool ctrl)
+void MuseScore::midiNoteReceived(int pitch, bool ctrl, int vel)
       {
       if (cv)
-            cv->midiNoteReceived(pitch, ctrl, 80);
+            cv->midiNoteReceived(pitch, ctrl, vel);
       }
 
 //---------------------------------------------------------
