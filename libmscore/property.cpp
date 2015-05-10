@@ -171,6 +171,7 @@ static const PropertyData propertyList[] = {
       { P_ID::TIME_STRETCH,        false, 0,               P_TYPE::REAL     },
       { P_ID::ORNAMENT_STYLE,      false, "ornamentStyle", P_TYPE::ORNAMENT_STYLE},
       { P_ID::PLAY_ARTICULATION,   false, "playArticulation", P_TYPE::BOOL},
+
       { P_ID::TIMESIG,             false, 0,               P_TYPE::FRACTION },
       { P_ID::TIMESIG_GLOBAL,      false, 0,               P_TYPE::FRACTION },
       { P_ID::TIMESIG_STRETCH,     false, 0,               P_TYPE::FRACTION },
@@ -227,6 +228,8 @@ static const PropertyData propertyList[] = {
       { P_ID::ROLE,                false, "role",                  P_TYPE::INT },
       { P_ID::TRACK,               false, 0,                       P_TYPE::INT },
 
+      { P_ID::GLISSANDO_STYLE,     false, "glissandoStyle",        P_TYPE::GLISSANDO_STYLE},
+      { P_ID::PLAY_GLISSANDO,      false, "playGlissando",         P_TYPE::BOOL},
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };
 
@@ -236,7 +239,9 @@ static const PropertyData propertyList[] = {
 
 P_TYPE propertyType(P_ID id)
       {
-      return propertyList[int(id)].type;
+          Q_ASSERT( propertyList[int(id)].id == id);
+
+          return propertyList[int(id)].type;
       }
 
 //---------------------------------------------------------
@@ -245,7 +250,8 @@ P_TYPE propertyType(P_ID id)
 
 bool propertyLink(P_ID id)
       {
-      return propertyList[int(id)].link;
+          Q_ASSERT( propertyList[int(id)].id == id);
+          return propertyList[int(id)].link;
       }
 
 //---------------------------------------------------------
@@ -254,7 +260,8 @@ bool propertyLink(P_ID id)
 
 const char* propertyName(P_ID id)
       {
-      return propertyList[int(id)].name;
+          Q_ASSERT( propertyList[int(id)].id == id);
+          return propertyList[int(id)].name;
       }
 
 //---------------------------------------------------------
@@ -285,6 +292,18 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   return QVariant(e.readSize());
             case P_TYPE::STRING:
                   return QVariant(e.readElementText());
+            case P_TYPE::GLISSANDO_STYLE: {
+                QString value(e.readElementText());
+                if ( value == "White keys")
+                    return QVariant(int(MScore::GlissandoStyle::WHITE_KEYS));
+                else if ( value == "Black keys")
+                    return QVariant(int(MScore::GlissandoStyle::BLACK_KEYS));
+                else if ( value == "Diatonic")
+                    return QVariant(int(MScore::GlissandoStyle::DIATONIC));
+                else // e.g., normally "Chromatic"
+                    return QVariant(int(MScore::GlissandoStyle::CHROMATIC));
+            }
+              break;
             case P_TYPE::ORNAMENT_STYLE:
                   {
                       QString value(e.readElementText());

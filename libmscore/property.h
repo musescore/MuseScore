@@ -222,6 +222,8 @@ enum class P_ID : unsigned char {
       ROLE,
       TRACK,
 
+      GLISSANDO_STYLE,
+      PLAY_GLISSANDO,
       END
       };
 
@@ -252,7 +254,8 @@ enum class P_TYPE : char {
       GROUPS,
       SYMID,
       TEXT_STYLE,
-      INT_LIST
+      INT_LIST,
+      GLISSANDO_STYLE
       };
 
 extern QVariant getProperty(P_ID type, XmlReader& e);
