@@ -5852,64 +5852,13 @@ void ScoreView::cmdAddRemoveBreaks()
       else if (!_score->selection().isRange())
             return;
 
-      Segment* startSegment = _score->selection().startSegment();
-      if (!startSegment) // empty score?
-            return;
-      Segment* endSegment = _score->selection().endSegment();
-      Measure* startMeasure = startSegment->measure();
-      Measure* endMeasure = endSegment ? endSegment->measure() : _score->lastMeasureMM();
-
       BreaksDialog bd;
       if (!bd.exec())
             return;
 
-      int interval = bd.interval;
-      bool lock = bd.lock;
-      bool remove = bd.remove;
+      int interval = bd.remove || bd.lock ? 0 : bd.interval;
 
-      // loop through measures in selection
-      // count mmrests as a single measure
-      int count = 0;
-      for (Measure* mm = startMeasure; mm; mm = mm->nextMeasureMM()) {
-
-            // even though we are counting mmrests as a single measure,
-            // we need to find last real measure within mmrest for the actual break
-            Measure* m = mm->isMMRest() ? mm->mmRestLast() : mm;
-
-            if (lock) {
-                  // skip if it already has a break
-                  if (m->lineBreak() || m->pageBreak())
-                        continue;
-                  // add break if last measure of system
-                  if (mm->system() && mm->system()->lastMeasure() == mm)
-                        m->undoSetLineBreak(true);
-                  }
-
-            else {
-                  if (remove) {
-                        // remove line break if present
-                        if (m->lineBreak())
-                             m->undoSetLineBreak(false);
-                        }
-                  else {
-                        if (++count == interval) {
-                              // found place for break; add if not already one present
-                              // but skip last measure in score (even if in selection)
-                              if (!(m->lineBreak() || m->pageBreak() || mm == _score->lastMeasureMM()))
-                                    m->undoSetLineBreak(true);
-                              // reset count
-                              count = 0;
-                              }
-                        else if (m->lineBreak()) {
-                              // remove line break if present in wrong place
-                              m->undoSetLineBreak(false);
-                              }
-                        }
-                  }
-
-            if (mm == endMeasure)
-                  break;
-            }
+      _score->addRemoveBreaks(interval, bd.lock);
 
       if (noSelection)
              _score->deselectAll();

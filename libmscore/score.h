@@ -512,6 +512,8 @@ class Score : public QObject {
       void cmdAddOttava(Ottava::Type);
       void cmdAddStretch(qreal);
 
+      void addRemoveBreaks(int interval, bool lock);
+
       bool transpose(Note* n, Interval, bool useSharpsFlats);
       void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&);
       bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
