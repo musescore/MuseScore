@@ -51,7 +51,7 @@ TextStyleDialog::TextStyleDialog(QWidget* parent, Score* score)
       for (int i = 0, n = styles.size(); i < n; ++i) {
             if ( (styles.at(i).hidden() & TextStyleHidden::IN_EDITOR) == 0) {
                   int count = textNames->count();
-                  textNames->addItem(qApp->translate("TextStyle", styles.at(i).name().toLatin1().data()));
+                  textNames->addItem(qApp->translate("TextStyle", styles.at(i).name().toUtf8().data()));
                   textNames->item(count)->setData(Qt::UserRole, i);
                   }
             }
