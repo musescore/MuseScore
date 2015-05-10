@@ -3,7 +3,8 @@
 BUILD=../../../build.debug
 #BUILD=../../../../MuseScore-build
 
-for a in undoExplode undoImplode undoImplodeVoice undoSlashFill \
+for a in undoAddLineBreaks undoLockLineBreaks undoRemoveLineBreaks \
+   undoExplode undoImplode undoImplodeVoice undoSlashFill \
    undoSlashRhythm undoResequenceAlpha undoResequenceNumeric \
    undoChangeVoice undoResequencePart \
    undoResequenceMeasure; do
