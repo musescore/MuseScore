@@ -1891,6 +1891,7 @@ void PreferenceDialog::printShortcutsClicked()
       qreal y;
       qreal lh = QFontMetricsF(p.font()).lineSpacing();
 
+      // get max width for description
       QMapIterator<QString, Shortcut*> isc(localShortcuts);
       qreal col1Width = 0.0;
       while (isc.hasNext()) {
@@ -1900,9 +1901,8 @@ void PreferenceDialog::printShortcutsClicked()
             }
 
       int idx = 0;
-      isc = QMapIterator<QString, Shortcut*>(localShortcuts);
-      while (isc.hasNext()) {
-            isc.next();
+      QTreeWidgetItem* item = shortcutList->topLevelItem(0);
+      while (item) {
             if (idx == 0 || y >= (ph - bm)) {
                   y = tm;
                   if (idx)
@@ -1919,11 +1919,11 @@ void PreferenceDialog::printShortcutsClicked()
                         y += 5 * dpmm;
                         }
                   }
-            Shortcut* s = isc.value();
-            p.drawText(lm, y, s->descr());
-            p.drawText(col1Width + lm + 5 * dpmm, y, s->keysToString());
+            p.drawText(lm, y, item->text(0));
+            p.drawText(col1Width + lm + 5 * dpmm, y, item->text(1));
             y += lh;
             ++idx;
+            item = shortcutList->itemBelow(item);
             }
       p.end();
       }
