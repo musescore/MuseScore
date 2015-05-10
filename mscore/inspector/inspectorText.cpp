@@ -51,7 +51,7 @@ void InspectorText::setElement()
       int n = ts.size();
       for (int i = 0; i < n; ++i) {
             if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
-                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toLatin1().data()), i);
+                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toUtf8().data()), i);
             }
       t.style->blockSignals(false);
       InspectorBase::setElement();

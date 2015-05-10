@@ -85,7 +85,7 @@ void TextProp::setScore(bool onlyStyle, Score* score)
       for (int i = 0, n = scoreStyles.size(); i < n; ++i) {
             // if style not hidden in this context, add to combo with index in score style list as userData
             if ( !(scoreStyles.at(i).hidden() & TextStyleHidden::IN_LISTS) )
-                  styles->addItem(qApp->translate("TextStyle", scoreStyles.at(i).name().toLatin1().data()), i);
+                  styles->addItem(qApp->translate("TextStyle", scoreStyles.at(i).name().toUtf8().data()), i);
             }
       styles->blockSignals(false);
       }
