@@ -1848,7 +1848,7 @@ bool MuseScore::savePdf(const QString& saveName)
 bool MuseScore::savePdf(Score* cs, const QString& saveName)
       {
       cs->setPrinting(true);
-
+      MScore::pdfPrinting = true;
       QPdfWriter printerDev(saveName);
       printerDev.setResolution(preferences.exportPdfDpi);
       const PageFormat* pf = cs->pageFormat();
@@ -1878,6 +1878,7 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
             }
       p.end();
       cs->setPrinting(false);
+      MScore::pdfPrinting = false;
       return true;
       }
 
@@ -1926,6 +1927,7 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
                   s->doLayout();
                   }
             s->setPrinting(true);
+            MScore::pdfPrinting = true;
 
             // we ignore the configured page offset
             // we display page footer on all pages
@@ -1986,6 +1988,8 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
 
             //reset score
             s->setPrinting(false);
+            MScore::pdfPrinting = false;
+
             s->setPageNumberOffset(oldPageOffset);
             s->style()->set(StyleIdx::footerFirstPage, footerFirstPage);
             s->style()->set(StyleIdx::evenFooterL, evenFooterL);
@@ -2565,6 +2569,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       printer.setViewBox(QRectF(0.0, 0.0, w * mag, h * mag));
 
       score->setPrinting(true);
+      MScore::pdfPrinting = true;
 
       QPainter p(&printer);
       p.setRenderHint(QPainter::Antialiasing, true);
@@ -2581,6 +2586,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
             }
 
       score->setPrinting(false);
+      MScore::pdfPrinting = false;
       p.end();
       return true;
       }

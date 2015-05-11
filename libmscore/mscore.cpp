@@ -95,6 +95,7 @@ int     MScore::mtcType;
 
 bool    MScore::noExcerpts = false;
 bool    MScore::noImages = false;
+bool    MScore::pdfPrinting = false;
 
 #ifdef SCRIPT_INTERFACE
 QQmlEngine* MScore::_qml = 0;

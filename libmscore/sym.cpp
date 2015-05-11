@@ -5209,6 +5209,31 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
             return;
             }
 
+      if (MScore::pdfPrinting) {
+            if (font == 0) {
+                  QString s(_fontPath+_filename);
+                  if (-1 == QFontDatabase::addApplicationFont(s)) {
+                        qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(s));
+                        return;
+                        }
+                  printf("load <%s> <%s>\n", qPrintable(s), qPrintable(_family));
+                  font = new QFont;
+                  font->setWeight(QFont::Normal);
+                  font->setItalic(false);
+                  font->setFamily(_family);
+                  font->setStyleStrategy(QFont::NoFontMerging);
+                  font->setHintingPreference(QFont::PreferVerticalHinting);
+                  qreal size = 20.0 * MScore::DPI / PPI;
+                  font->setPixelSize(lrint(size));
+                  }
+            qreal imag = 1.0 / mag;
+            painter->scale(mag, mag);
+            painter->setFont(*font);
+            painter->drawText(pos * imag, toString(id));
+            painter->scale(imag, imag);
+            return;
+            }
+
       QColor color(painter->pen().color());
 
       int pr           = painter->device()->devicePixelRatio();
