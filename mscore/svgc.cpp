@@ -732,21 +732,20 @@ void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
             plt[pid] = -1;
           }
 
+
+          // Update the bounds for actual audio
+          if (e->type() == Element::Type::NOTE) {
+            if (!firstNonRest.contains(pid) || tick<firstNonRest[pid]) 
+              firstNonRest[pid] = tick;
+            int dur = cr->durationTypeTicks();
+            if (!lastNonRest.contains(pid) || tick+dur > lastNonRest[pid]) 
+              lastNonRest[pid] = tick+dur;
+          }
+
           if (tick > plt[pid]) {
              ponsets[pid].push_back(tick);
 
              pisrest[pid].push_back(e->type() == Element::Type::REST);
-
-             // Update the bounds for actual audio
-             if (e->type() == Element::Type::NOTE) {
-
-              if (!firstNonRest.contains(pid) || tick<firstNonRest[pid]) 
-                firstNonRest[pid] = tick;
-
-              int dur = cr->durationTypeTicks();
-              if (!lastNonRest.contains(pid) || tick+dur > lastNonRest[pid]) 
-                lastNonRest[pid] = tick+dur;
-             }
 
              plt[pid] = tick;
           }
