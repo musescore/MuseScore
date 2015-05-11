@@ -407,6 +407,8 @@ class MScore : public QObject {
       static bool noExcerpts;
       static bool noImages;
 
+      static bool pdfPrinting;
+
 #ifdef SCRIPT_INTERFACE
       static QQmlEngine* qml();
 #endif

@@ -2566,6 +2566,7 @@ class ScoreFont {
       QString _filename;
       QByteArray fontImage;
       QCache<GlyphKey, GlyphPixmap>* cache { 0 };
+      mutable QFont* font { 0 };
 
       static QVector<ScoreFont> _scoreFonts;
       const Sym& sym(SymId id) const { return _symbols[int(id)]; }
