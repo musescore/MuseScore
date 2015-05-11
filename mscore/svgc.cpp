@@ -750,6 +750,9 @@ void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
 
              plt[pid] = tick;
           }
+          else if (tick == plt[pid]) {
+            pisrest[pid].last() = pisrest[pid].last() && (e->type() == Element::Type::REST);
+          } 
 
        }
     }
