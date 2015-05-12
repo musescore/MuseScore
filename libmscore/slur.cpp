@@ -1354,7 +1354,7 @@ void Slur::layout()
             return;
             }
 
-      if (startCR() == 0) {
+      if (startCR() == 0 || startCR()->measure() == 0) {
             qDebug("Slur::layout(): track %d-%d  %p - %p tick %d-%d null start anchor",
                track(), track2(), startCR(), endCR(), tick(), tick2());
             return;
