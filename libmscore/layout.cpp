@@ -2545,6 +2545,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
 
 void Score::removeGeneratedElements(Measure* sm, Measure* em)
       {
+      Measure* sectionStart = sm;
       for (Measure* m = sm; m; m = m->nextMeasureMM()) {
             //
             // remove generated elements from all measures in [sm;em]
@@ -2552,6 +2553,8 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
             //    - do not remove end bar lines
             //    - set size of clefs to small
             //
+            if (m->sectionBreak() && m->nextMeasureMM())
+                  sectionStart = m->nextMeasureMM();
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                   Segment::Type st = seg->segmentType();
                   if (st == Segment::Type::EndBarLine)
@@ -2569,9 +2572,9 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                               continue;
 
                         // courtesy time sigs and key sigs: remove if not in last measure (generated or not!)
-                        // clefs & keysig: remove if generated and not at beginning of first measure
+                        // clefs & keysig: remove if generated and not at beginning of first measure of a section
                         if ( ((st == Segment::Type::TimeSigAnnounce || st == Segment::Type::KeySigAnnounce) && m != em)
-                              || ((el->type() == Element::Type::CLEF || el->type() == Element::Type::KEYSIG) && el->generated() && seg->tick() != sm->tick())
+                              || ((el->type() == Element::Type::CLEF || el->type() == Element::Type::KEYSIG) && el->generated() && seg->tick() != sectionStart->tick())
                         )
                               {
                               undoRemoveElement(el);
@@ -3134,9 +3137,8 @@ void Score::layoutLinear()
       page->appendSystem(system);
 
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
-            Element::Type t = curMeasure->type();
+            Element::Type t = mb->type();
             if (t == Element::Type::VBOX || t == Element::Type::TBOX || t == Element::Type::FBOX) {
-                  curMeasure = curMeasure->next();
                   continue;
                   }
             if (styleB(StyleIdx::createMultiMeasureRests) && mb->type() == Element::Type::MEASURE) {
