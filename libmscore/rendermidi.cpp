@@ -822,8 +822,47 @@ void renderArpeggio(Chord *chord, bool &gateEvents, QList<NoteEventList> & ell) 
         j++;
     }
 }
-
     
+// visit each note of each chord at the tick of the given segment, excluding grace notes,
+// and excluding notes which are tied to a previous note.
+// The given function, visit, is caled on each note until it returns true, terminating the iteration.
+// If visit() never returns true, then finally elsevisit is called with no argument.
+void visitNotes(Segment *segment, Staff *staff, std::function<bool(Note *)> visit, std::function<void()> elsevisit) {
+   int staffIdx = staff->idx();
+   int startTrack = staffIdx * VOICES;
+   int endTrack   = startTrack + VOICES;
+   for (int track = startTrack; track < endTrack; ++track) {
+       Element *e = segment->element(track);
+       if (!e || e->type() != Element::Type::CHORD)
+            continue;
+       Chord* chord = static_cast<Chord*>(e);
+       for (Note* note : chord->notes()) {
+           if (note->tieBack())
+                continue;
+           if ( visit(note) )
+                return;
+        }
+        elsevisit();
+    }
+}
+
+// find the line in clefF corresponding to lineL2 in clefR.
+int convertLine (int lineL2, ClefType clefL, ClefType clefR) {
+   int lineR2 = lineL2;
+   int goalpitch = line2pitch(lineL2, clefL, Key::C);
+   while ( line2pitch(lineR2, clefR, Key::C) > goalpitch )
+       lineR2++;
+   while ( line2pitch(lineR2, clefR, Key::C) < goalpitch )
+       lineR2--;
+   return lineR2;
+};
+
+int convertLine(int lineL2, Note *noteL, Note *noteR) {
+    return convertLine(lineL2,
+                       noteL->chord()->staff()->clef(noteL->chord()->tick()),
+                       noteR->chord()->staff()->clef(noteR->chord()->tick()));
+}
+
 int articulationExcursion (Note *noteL, Note *noteR, int deltastep) {
     // noteL is the note to measure the deltastep from, i.e., ornaments are w.r.t. this note
     // noteR is the note to search backward from to find accidentals.
@@ -836,41 +875,46 @@ int articulationExcursion (Note *noteL, Note *noteR, int deltastep) {
     Chord *chordR = noteR->chord();
     int pitchL = noteL->pitch();
     int tickL = chordL->tick();
-    int tickR = chordR->tick();
     Staff * staffL = chordL->staff();
-    Staff * staffR = chordR->staff();
     ClefType clefL = staffL->clef(tickL);
-    ClefType clefR = staffR->clef(tickR);
     // line represents the ledger line of the staff.  0 is the top line, 1, is the space between the top 2 lines,
     //  ... 8 is the bottom line.
     int lineL     = noteL->line();
     // we use line - deltastep, because lines are oriented from top to bottom, while step is oriented from bottom to top.
     int lineL2    = lineL - deltastep;
-    int lineR2    = lineL2; // start with the same line, but this will change in the calculation below.
     auto measureR = chordR->segment()->measure();
-    //AccidentalVal acciv2 = measureL->findAccidental(chordL->segment(), chordL->staff()->idx(), lineL2);
     
-    // find the line in staffR corresponding to lineL2 in staffL.
-    {
-        int goalpitch = line2pitch(lineL2, clefL, Key::C);
-        while ( line2pitch(lineR2, clefR, Key::C) > goalpitch )
-            lineR2++;
-        while ( line2pitch(lineR2, clefR, Key::C) < goalpitch )
-            lineR2--;
-    }
-    AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->staff()->idx(), lineR2);
-    // FLAT2 --> -2
-    // FLAT  --> -1
-    // NATURAL --> 0
-    // SHARP --> 1
-    // SHARP2 --> 2
-    int acci2 = int(acciv2);
-    int pitchL2_C = line2pitch(lineL-deltastep, clefL, Key::C);
-    
-    int pitchL2   = pitchL2_C + acci2;
-    int halfsteps = pitchL2 - pitchL;
-    
-    return halfsteps ;
+    Segment *S = noteL->chord()->segment();
+    int lineR2 = convertLine(lineL2, noteL, noteR);
+    // is there another note in this segment on the same line?
+    // if so, use its pitch exactly.
+    int halfsteps;
+    visitNotes( S, staffL,
+               [&](Note *v) -> bool {
+                   auto mod7 = [] (int n) {
+                       n = n % 7;
+                       while ( n < 0) n += 7;
+                       return n;
+                   };
+                   if ( mod7(lineL2) == mod7(v->line())) {
+                       // e.g., if there is an F# note at this staff/tick, then force every F to be F#.
+                       int octaves = (v->line() - lineL2) / 7;
+                       halfsteps = v->pitch() + 12*octaves - pitchL;
+                       return true;
+                   }
+                   return false;
+               },
+               [&](){
+                   AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->staff()->idx(), lineR2);
+                   // FLAT2 --> -2
+                   // FLAT  --> -1
+                   // NATURAL --> 0
+                   // SHARP --> 1
+                   // SHARP2 --> 2
+                   int acci2 = int(acciv2);
+                   halfsteps = line2pitch(lineL-deltastep, clefL, Key::C) + acci2 - pitchL;
+               });
+    return halfsteps;
 };
     
 void renderNoteArticulation(NoteEventList* events,
@@ -932,7 +976,6 @@ void renderNoteArticulation(NoteEventList* events,
         }
         return duration;
     };
-
 
     // local function:
     auto makeEvent = [note,chord,chromatic,events] (int pitch, int ontime, int duration) {
@@ -1035,12 +1078,16 @@ void renderGlissando(NoteEventList* events, Note *notestart) {
                     continue; // next spanner
                 if (glissandoStyle == MScore::GlissandoStyle::DIATONIC) { // scale obeying accidentals
                     int line;
+                    int lineend = convertLine(noteend->line(), noteend, notestart);
                     int p;
-                    for ( line = linestart, p = pitchstart; inrange(p); line -= direction ){
+                    for ( line = linestart, p = pitchstart;
+                         (direction>0)?(line>lineend):(line<lineend);
+                         (direction>0)?line--:line++ ){
                         int halfsteps = articulationExcursion(notestart, noteend, linestart - line );
                         p = pitchstart + halfsteps;
-                        if ( inrange(p))
+                        if ( inrange(p)) {
                             body.push_back(halfsteps);
+                        }
                     }
                 }
                 else
@@ -1051,7 +1098,6 @@ void renderGlissando(NoteEventList* events, Note *notestart) {
                     }
                 renderNoteArticulation(events, notestart, true, MScore::division,
                                        empty, body, false, true, empty);
-                
             }
         }
 }
