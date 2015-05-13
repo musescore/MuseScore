@@ -3152,6 +3152,11 @@ void Score::layoutLinear()
       if (system->measures().isEmpty())
             return;
       addSystemHeader(firstMeasureMM(), true);
+      // also add a system header after a section break
+      for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
+            if (m->sectionBreak() && m->nextMeasureMM())
+                  addSystemHeader(m->nextMeasureMM(), true);
+            }
       removeGeneratedElements(firstMeasureMM(), lastMeasureMM());
 
       QPointF pos(0.0, 0.0);
