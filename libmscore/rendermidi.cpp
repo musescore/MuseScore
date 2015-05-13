@@ -912,7 +912,8 @@ int articulationExcursion (Note *noteL, Note *noteR, int deltastep) {
                    // SHARP --> 1
                    // SHARP2 --> 2
                    int acci2 = int(acciv2);
-                   halfsteps = line2pitch(lineL-deltastep, clefL, Key::C) + acci2 - pitchL;
+                   // we have to add ( note->ppitch() - noteL->epitch() ) which is the delta for transposing instruments.
+                   halfsteps = line2pitch(lineL-deltastep, clefL, Key::C) + noteL->ppitch() - noteL->epitch() + acci2 - pitchL;
                });
     return halfsteps;
 };
