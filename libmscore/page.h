@@ -53,6 +53,7 @@ extern const PaperSize* getPaperSize(const qreal wi, const qreal hi);
 //   @P twosided          bool
 //---------------------------------------------------------
 
+#ifdef SCRIPT_INTERFACE
 class PageFormat : public QObject {
       Q_OBJECT
       Q_PROPERTY(QSizeF size             READ size             WRITE setSize)
@@ -64,6 +65,9 @@ class PageFormat : public QObject {
       Q_PROPERTY(qreal  evenBottomMargin READ evenBottomMargin WRITE setEvenBottomMargin)
       Q_PROPERTY(qreal  oddBottomMargin  READ oddBottomMargin  WRITE setOddBottomMargin )
       Q_PROPERTY(bool   twosided         READ twosided         WRITE setTwosided        )
+#else
+class PageFormat {
+#endif
 
       QSizeF _size;
       qreal _printableWidth;        // _width - left margin - right margin

@@ -149,6 +149,7 @@ QList<Element*> Page::items(const QRectF& r)
       QList<Element*> el = bspTree.items(r);
       return el;
 #else
+      Q_UNUSED(r)
       return QList<Element*>();
 #endif
       }
