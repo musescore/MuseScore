@@ -273,6 +273,11 @@ int TempoMap::time2tick(qreal time, int* sn) const
       delta = 0.0;
       tempo = 2.0;
       for (auto e = begin(); e != end(); ++e) {
+            // if in a pause period, wait on previous tick
+            if ((time <= e->second.time) && (time > e->second.time - e->second.pause)) {
+                  delta = (time - (e->second.time - e->second.pause) + delta);
+                  break;
+                  }
             if (e->second.time >= time)
                   break;
             delta = e->second.time;
