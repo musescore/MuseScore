@@ -1236,6 +1236,7 @@ bool Score::read(XmlReader& e)
 void Score::print(QPainter* painter, int pageNo)
       {
       _printing  = true;
+      MScore::pdfPrinting = true;
       Page* page = pages().at(pageNo);
       QRectF fr  = page->abbox();
 
@@ -1249,6 +1250,7 @@ void Score::print(QPainter* painter, int pageNo)
             e->draw(painter);
             painter->restore();
             }
+      MScore::pdfPrinting = false;
       _printing = false;
       }
 
