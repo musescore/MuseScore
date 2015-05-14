@@ -1160,6 +1160,7 @@ bool Score::read(XmlReader& e)
             qDebug("%s: xml read error at line %lld col %lld: %s",
                qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
                e.name().toUtf8().data());
+            MScore::lastError = tr("XML read error at line %1 column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(e.name().toString());
             return false;
             }
 
