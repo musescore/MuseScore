@@ -712,7 +712,7 @@ void Note::draw(QPainter* painter) const
                   foreach(MuseScoreView* view, score()->getViewer())
                         view->drawBackground(painter, bb);
 
-                  if (fretConflict()) {          //on fret conflict, draw on red background
+                  if (fretConflict() && !score()->printing()) {          //on fret conflict, draw on red background
                         painter->save();
                         painter->setPen(Qt::red);
                         painter->setBrush(QBrush(QColor(Qt::red)));
