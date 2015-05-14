@@ -311,12 +311,7 @@ void Articulation::write(Xml& xml) const
       if (_timeStretch != 1.0)
             xml.tag("timeStretch", _timeStretch);
       writeProperty(xml, P_ID::PLAY_ARTICULATION);
-      // avoid writing an integer for ornamentStyle, write a string instead.
-      if ( ornamentStyle() == MScore::OrnamentStyle::DEFAULT) {
-          ; // do nothing
-      } else if ( ornamentStyle() == MScore::OrnamentStyle::BAROQUE ) {
-          xml.tag("ornamentStyle", "Baroque");
-      }
+      writeProperty(xml, P_ID::ORNAMENT_STYLE);
       Element::writeProperties(xml);
       if (anchorStyle == PropertyStyle::UNSTYLED)
             xml.tag("anchor", int(_anchor));
@@ -681,9 +676,9 @@ void Articulation::resetProperty(P_ID id)
       switch (id) {
             case P_ID::DIRECTION:
             case P_ID::TIME_STRETCH:
-            case P_ID::ORNAMENT_STYLE: // TODO not sure whether ornament style needs resetProperty handling.
+            case P_ID::ORNAMENT_STYLE:
+                  setProperty(id, propertyDefault(id));
                   return;
-
             case P_ID::ARTICULATION_ANCHOR:
                   setProperty(id, propertyDefault(id));
                   anchorStyle = PropertyStyle::STYLED;

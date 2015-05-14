@@ -381,20 +381,7 @@ void Glissando::write(Xml& xml) const
             xml.tag("text", _text);
       xml.tag("subtype", int(_glissandoType));
       writeProperty(xml, P_ID::PLAY_GLISSANDO);
-      switch ( glissandoStyle()) {
-          case MScore::GlissandoStyle::BLACK_KEYS:
-              xml.tag("glissandoStyle", "Black keys");
-              break;
-          case MScore::GlissandoStyle::WHITE_KEYS:
-              xml.tag("glissandoStyle", "White keys");
-              break;
-          case MScore::GlissandoStyle::DIATONIC:
-              xml.tag("glissandoStyle", "Diatonic");
-              break;
-          default:
-              //xml.tag("glissandoStyle", "Chromatic");
-              break;
-      }
+      writeProperty(xml, P_ID::GLISSANDO_STYLE);
       SLine::writeProperties(xml);
       xml.etag();
       }
@@ -420,9 +407,9 @@ void Glissando::read(XmlReader& e)
                   _glissandoType = Type(e.readInt());
             else if (tag == "glissandoStyle") {
                 QString s = e.readElementText();
-                if ( "Black keys" == s )
+                if ( "BlackKeys" == s || "Black keys" == s)
                     setGlissandoStyle(MScore::GlissandoStyle::BLACK_KEYS);
-                else if ( "White keys" == s)
+                else if ( "WhiteKeys" == s || "White keys" == s)
                     setGlissandoStyle(MScore::GlissandoStyle::WHITE_KEYS);
                 else if ( "Diatonic" == s)
                     setGlissandoStyle(MScore::GlissandoStyle::DIATONIC);
@@ -431,9 +418,6 @@ void Glissando::read(XmlReader& e)
             } else if ( tag == "playGlissando") {
                 setPlayGlissando(e.readBool());
             }
-            //else if ( tag == "irregular") {
-            // don't know what to do here, need to check.
-            //}
             else if (!SLine::readProperties(e))
                   e.unknown();
             }
