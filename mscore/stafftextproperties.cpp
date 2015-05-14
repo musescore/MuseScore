@@ -62,25 +62,47 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
 	tabWidget->removeTab(2);
 #endif
 
+      const char* vbsh { "QToolButton:checked, QToolButton:pressed { color: white; background:%1;}" };
+
+      QString voice1ss = QString(vbsh).arg(MScore::selectColor[0].name());
       vb[0][0] = voice1_1;
+      voice1_1->setStyleSheet(voice1ss);
       vb[0][1] = voice1_2;
+      voice1_2->setStyleSheet(voice1ss);
       vb[0][2] = voice1_3;
+      voice1_3->setStyleSheet(voice1ss);
       vb[0][3] = voice1_4;
+      voice1_4->setStyleSheet(voice1ss);
 
+      QString voice2ss = QString(vbsh).arg(MScore::selectColor[1].name());
       vb[1][0] = voice2_1;
+      voice2_1->setStyleSheet(voice2ss);
       vb[1][1] = voice2_2;
+      voice2_2->setStyleSheet(voice2ss);
       vb[1][2] = voice2_3;
+      voice2_3->setStyleSheet(voice2ss);
       vb[1][3] = voice2_4;
+      voice2_4->setStyleSheet(voice2ss);
 
+      QString voice3ss = QString(vbsh).arg(MScore::selectColor[2].name());
       vb[2][0] = voice3_1;
+      voice3_1->setStyleSheet(voice3ss);
       vb[2][1] = voice3_2;
+      voice3_2->setStyleSheet(voice3ss);
       vb[2][2] = voice3_3;
+      voice3_3->setStyleSheet(voice3ss);
       vb[2][3] = voice3_4;
+      voice3_4->setStyleSheet(voice3ss);
 
+      QString voice4ss = QString(vbsh).arg(MScore::selectColor[3].name());
       vb[3][0] = voice4_1;
+      voice4_1->setStyleSheet(voice4ss);
       vb[3][1] = voice4_2;
+      voice4_2->setStyleSheet(voice4ss);
       vb[3][2] = voice4_3;
+      voice4_3->setStyleSheet(voice4ss);
       vb[3][3] = voice4_4;
+      voice4_4->setStyleSheet(voice4ss);
 
       channelCombo[0] = channelCombo1;
       channelCombo[1] = channelCombo2;
