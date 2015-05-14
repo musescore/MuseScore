@@ -4711,12 +4711,16 @@ static NoteHead::Group convertNotehead(QString mxmlName)
 
 static void addTextToNote(QString txt, TextStyleType style, Score* score, Note* note)
       {
-      if (!txt.isEmpty()) {
-            Text* t = new Fingering(score);
-            t->setTextStyleType(style);
-            t->setXmlText(txt);
-            note->add(t);
+      if (note) {
+            if (!txt.isEmpty()) {
+                  Text* t = new Fingering(score);
+                  t->setTextStyleType(style);
+                  t->setXmlText(txt);
+                  note->add(t);
+                  }
             }
+      else
+            qDebug("no note for text");
       }
 
 //---------------------------------------------------------
@@ -4768,6 +4772,9 @@ static void xmlFermata(ChordRest* cr, QDomElement e)
 
 /**
  Read MusicXML notations.
+ Note that some notations attach to notes only in MuseScore,
+ which means trying to attach them to a rest will crash,
+ as in that case note is 0.
  */
 
 void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ticks, QDomElement e)
@@ -4991,16 +4998,26 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                               // and (plucked) strings (style TextStyleType::LH_GUITAR_FINGERING)
                               addTextToNote(eee.text(), TextStyleType::FINGERING, score, note);
                         else if (eee.tagName() == "fret") {
-                              if (note->staff()->isTabStaff())
-                                    note->setFret(eee.text().toInt());
+                              int fret = eee.text().toInt();
+                              if (note) {
+                                    if (note->staff()->isTabStaff())
+                                          note->setFret(fret);
+                                    }
+                              else
+                                    qDebug("no note for fret");
                               }
                         else if (eee.tagName() == "pluck")
                               addTextToNote(eee.text(), TextStyleType::RH_GUITAR_FINGERING, score, note);
                         else if (eee.tagName() == "string") {
-                              if (note->staff()->isTabStaff())
-                                    note->setString(eee.text().toInt() - 1);
+                              QString txt = eee.text();
+                              if (note) {
+                                    if (note->staff()->isTabStaff())
+                                          note->setString(txt.toInt() - 1);
+                                    else
+                                          addTextToNote(txt, TextStyleType::STRING_NUMBER, score, note);
+                                    }
                               else
-                                    addTextToNote(eee.text(), TextStyleType::STRING_NUMBER, score, note);
+                                    qDebug("no note for string");
                               }
                         else if (eee.tagName() == "pull-off")
                               domNotImplemented(eee);
@@ -5027,6 +5044,11 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                               delete gliss;
                               gliss = 0;
                               }
+                        else if (!note) {
+                              qDebug("no note for glissando/slide %d start", n+1);
+                              delete gliss;
+                              gliss = 0;
+                        }
                         else {
                               gliss = new Glissando(score);
                               gliss->setAnchor(Spanner::Anchor::NOTE);
@@ -5047,6 +5069,9 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
                         if (!gliss) {
                               qDebug("glissando/slide %d stop without start", n+1);
                               }
+                        else if (!note) {
+                              qDebug("no note for glissando/slide %d stop", n+1);
+                        }
                         else {
                               spanners[gliss].second = tick + ticks;
                               gliss->setEndElement(note);
@@ -5221,16 +5246,20 @@ void MusicXml::xmlNotations(Note* note, ChordRest* cr, int trk, int tick, int ti
             }
 
       if (chordLineType != "") {
-            ChordLine* cl = new ChordLine(score);
-            if (chordLineType == "falloff")
-                  cl->setChordLineType(ChordLineType::FALL);
-            if (chordLineType == "doit")
-                  cl->setChordLineType(ChordLineType::DOIT);
-            if (chordLineType == "plop")
-                  cl->setChordLineType(ChordLineType::PLOP);
-            if (chordLineType == "scoop")
-                  cl->setChordLineType(ChordLineType::SCOOP);
-            note->chord()->add(cl);
+            if (note) {
+                  ChordLine* cl = new ChordLine(score);
+                  if (chordLineType == "falloff")
+                        cl->setChordLineType(ChordLineType::FALL);
+                  if (chordLineType == "doit")
+                        cl->setChordLineType(ChordLineType::DOIT);
+                  if (chordLineType == "plop")
+                        cl->setChordLineType(ChordLineType::PLOP);
+                  if (chordLineType == "scoop")
+                        cl->setChordLineType(ChordLineType::SCOOP);
+                  note->chord()->add(cl);
+                  }
+            else
+                  qDebug("no note for %s", qPrintable(chordLineType));
             }
 
       // more than one dynamic ???
