@@ -163,6 +163,7 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
                   return false;
             case Score::FileError::FILE_BAD_FORMAT:
                   msg +=  QObject::tr("bad format");
+                  detailedMsg = MScore::lastError;
                   break;
             case Score::FileError::FILE_UNKNOWN_TYPE:
                   msg += QObject::tr("unknown type");
@@ -200,20 +201,25 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
             fprintf(stderr, "%s\n", qPrintable(msg));
             return rv;
             }
+      QMessageBox msgBox;
+      msgBox.setWindowTitle(QObject::tr("MuseScore: Load Error"));
+      msgBox.setText(msg);
+      msgBox.setDetailedText(detailedMsg);
+      msgBox.setTextFormat(Qt::RichText);
       if (canIgnore && ask)  {
-            QMessageBox msgBox;
-            msgBox.setWindowTitle(QObject::tr("MuseScore: Load Error"));
-            msgBox.setText(msg);
-            msgBox.setDetailedText(detailedMsg);
-            msgBox.setTextFormat(Qt::RichText);
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setStandardButtons(
                QMessageBox::Cancel | QMessageBox::Ignore
                );
             return msgBox.exec() == QMessageBox::Ignore;
             }
-      else
-            QMessageBox::critical(0, QObject::tr("MuseScore: Load Error"), msg);
+      else {
+            msgBox.setIcon(QMessageBox::Critical);
+            msgBox.setStandardButtons(
+               QMessageBox::Ok
+               );
+            msgBox.exec();
+            }
       return rv;
       }
 
