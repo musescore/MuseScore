@@ -119,6 +119,7 @@ private slots:
       void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
       void overlappingSpanners() { mxmlIoTest("testOverlappingSpanners"); }
       void repeatCounts() { mxmlIoTest("testRepeatCounts"); }
+      void restNotations() { mxmlIoTestRef("testRestNotations"); }
       void restsNoType() { mxmlIoTestRef("testRestsNoType"); }
       void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
       void slurs() { mxmlIoTest("testSlurs"); }
