@@ -504,8 +504,15 @@ void ScoreView::dropEvent(QDropEvent* event)
                               if (el && el->type() == Element::Type::MEASURE) {
                                     dragElement->setTrack(staffIdx * VOICES);
                                     dragElement->setParent(seg);
-                                    if (applyUserOffset)
+                                    if (applyUserOffset) {
                                           dragElement->setUserOff(pos - seg->canvasPos());
+                                          Measure* m = static_cast<Measure*>(el);
+                                          if (m->system()) {
+                                                SysStaff* staff = m->system()->staff(staffIdx);
+                                                qreal yoff = staff ? staff->y() : 0.0;
+                                                dragElement->rUserYoffset() -= yoff;
+                                                }
+                                          }
                                     score()->undoAddElement(dragElement);
                                     }
                               else {
