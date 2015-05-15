@@ -1186,14 +1186,18 @@ static NoteHead::Group convertNotehead(QString mxmlName)
  Add Text to Note.
  */
 
-static void addTextToNote(QString txt, TextStyleType style, Score* score, Note* note)
+static void addTextToNote(int l, int c, QString txt, TextStyleType style, Score* score, Note* note)
       {
-      if (!txt.isEmpty()) {
-            Text* t = new Fingering(score);
-            t->setTextStyleType(style);
-            t->setPlainText(txt);
-            note->add(t);
+      if (note) {
+            if (!txt.isEmpty()) {
+                  Text* t = new Fingering(score);
+                  t->setTextStyleType(style);
+                  t->setPlainText(txt);
+                  note->add(t);
+                  }
             }
+      else
+            qDebug("%s", qPrintable(QString("Error at line %1 col %2: no note for text").arg(l).arg(c)));       // TODO
       }
 
 //---------------------------------------------------------
@@ -4139,7 +4143,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                         note->setTpc(pitch2tpc(pitch, Key::C, Prefer::NEAREST)); // TODO: necessary ?
                         }
                   else {
-                        qDebug("disp step %d oct %d", displayStep, displayOctave);
+                        //qDebug("disp step %d oct %d", displayStep, displayOctave);
                         xmlSetPitch(note, displayStep, 0, displayOctave, 0, _pass1.getPart(partId)->instrument());
                         }
                   }
@@ -4297,16 +4301,11 @@ static Fraction calcTicks(const QString& text, int divs)
       Fraction dura(0, 0);        // invalid unless set correctly
 
       int intDura = text.toInt();
-      if (intDura > 0) {
-            if (divs > 0)
-                  dura.set(intDura, 4 * divs);
-            else
-                  qDebug("illegal or uninitialized divisions (%d)", divs);       // TODO
-            }
+      if (divs > 0)
+            dura.set(intDura, 4 * divs);
       else
-            qDebug("illegal duration '%s'", qPrintable(text));       // TODO
+            qDebug("illegal or uninitialized divisions (%d)", divs);       // TODO
 
-      qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
       return dura;
       }
 
@@ -5025,6 +5024,9 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
 
 /**
  Parse the /score-partwise/part/measure/note/notations node.
+ Note that some notations attach to notes only in MuseScore,
+ which means trying to attach them to a rest will crash,
+ as in that case note is 0.
  */
 
 void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
@@ -5106,7 +5108,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                         if (_slur[slurNo].isStart()) {
                               // slur stop when slur already started: wrap up
                               Slur* newSlur = _slur[slurNo].slur();
-                              if(!(cr->isGrace())){
+                              if (!(cr->isGrace())) {
                                     newSlur->setTick2(tick);
                                     newSlur->setTrack2(track);
                                     }
@@ -5119,7 +5121,7 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                         else {
                               // slur stop for new slur: init
                               Slur* newSlur = new Slur(_score);
-                              if(!(cr->isGrace())){
+                              if (!(cr->isGrace())) {
                                     newSlur->setTick2(tick);
                                     newSlur->setTrack2(track);
                                     }
@@ -5285,7 +5287,6 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                   }
             else if (_e.name() == "technical") {
                   while (_e.readNextStartElement()) {
-                        // TODO: check for missing readNext in this loop
                         if (addMxmlArticulationToChord(cr, _e.name().toString())) {
                               _e.readNext();
                               continue;
@@ -5293,19 +5294,31 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                         else if (_e.name() == "fingering")
                               // TODO: distinguish between keyboards (style TextStyleType::FINGERING)
                               // and (plucked) strings (style TextStyleType::LH_GUITAR_FINGERING)
-                              addTextToNote(_e.readElementText(), TextStyleType::FINGERING, _score, note);
+                              addTextToNote(_e.lineNumber(), _e.columnNumber(), _e.readElementText(),
+                                            TextStyleType::FINGERING, _score, note);
                         else if (_e.name() == "fret") {
-                              if (note->staff()->isTabStaff())
-                                    note->setFret(_e.readElementText().toInt());
-                              else _e.skipCurrentElement();
+                              int fret = _e.readElementText().toInt();
+                              if (note) {
+                                    if (note->staff()->isTabStaff())
+                                          note->setFret(fret);
+                                    }
+                              else
+                                    logError("no note for fret");
                               }
                         else if (_e.name() == "pluck")
-                              addTextToNote(_e.readElementText(), TextStyleType::RH_GUITAR_FINGERING, _score, note);
+                              addTextToNote(_e.lineNumber(), _e.columnNumber(), _e.readElementText(),
+                                            TextStyleType::RH_GUITAR_FINGERING, _score, note);
                         else if (_e.name() == "string") {
-                              if (note->staff()->isTabStaff())
-                                    note->setString(_e.readElementText().toInt() - 1);
+                              QString txt = _e.readElementText();
+                              if (note) {
+                                    if (note->staff()->isTabStaff())
+                                          note->setString(txt.toInt() - 1);
+                                    else
+                                          addTextToNote(_e.lineNumber(), _e.columnNumber(), txt,
+                                                        TextStyleType::STRING_NUMBER, _score, note);
+                                    }
                               else
-                                    addTextToNote(_e.readElementText(), TextStyleType::STRING_NUMBER, _score, note);
+                                    logError("no note for string");
                               }
                         else if (_e.name() == "pull-off")
                               skipLogCurrElem();
@@ -5331,8 +5344,15 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                   //                  QString lineType  = ee.attribute(QString("line-type"), "solid");
                   Glissando*& gliss = _glissandi[n][tag];
                   if (spannerType == "start") {
+                        QColor color(_e.attributes().value("color").toString());
+                        QString glissText = _e.readElementText();
                         if (gliss) {
                               logError(QString("overlapping glissando/slide %1").arg(n+1));
+                              delete gliss;
+                              gliss = 0;
+                              }
+                        else if (!note) {
+                              logError(QString("no note for glissando/slide %1 start").arg(n+1));
                               delete gliss;
                               gliss = 0;
                               }
@@ -5343,10 +5363,9 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                               gliss->setTick(tick);
                               gliss->setTrack(track);
                               gliss->setParent(note);
-                              QColor color(_e.attributes().value("color").toString());
                               if (color.isValid())
                                     gliss->setColor(color);
-                              gliss->setText(_e.readElementText());
+                              gliss->setText(glissText);
                               gliss->setGlissandoType(tag == 0 ? Glissando::Type::STRAIGHT : Glissando::Type::WAVY);
                               _spanners[gliss] = QPair<int, int>(tick, -1);
                               // qDebug("glissando/slide=%p inserted at first tick %d", gliss, tick);
@@ -5355,6 +5374,9 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                   else if (spannerType == "stop") {
                         if (!gliss) {
                               logError(QString("glissando/slide %1 stop without start").arg(n+1));
+                              }
+                        else if (!note) {
+                              logError(QString("no note for glissando/slide %1 stop").arg(n+1));
                               }
                         else {
                               _spanners[gliss].second = tick + ticks;
@@ -5481,16 +5503,20 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
             }
 
       if (chordLineType != "") {
-            ChordLine* cl = new ChordLine(_score);
-            if (chordLineType == "falloff")
-                  cl->setChordLineType(ChordLineType::FALL);
-            if (chordLineType == "doit")
-                  cl->setChordLineType(ChordLineType::DOIT);
-            if (chordLineType == "plop")
-                  cl->setChordLineType(ChordLineType::PLOP);
-            if (chordLineType == "scoop")
-                  cl->setChordLineType(ChordLineType::SCOOP);
-            note->chord()->add(cl);
+            if (note) {
+                  ChordLine* cl = new ChordLine(_score);
+                  if (chordLineType == "falloff")
+                        cl->setChordLineType(ChordLineType::FALL);
+                  if (chordLineType == "doit")
+                        cl->setChordLineType(ChordLineType::DOIT);
+                  if (chordLineType == "plop")
+                        cl->setChordLineType(ChordLineType::PLOP);
+                  if (chordLineType == "scoop")
+                        cl->setChordLineType(ChordLineType::SCOOP);
+                  note->chord()->add(cl);
+                  }
+            else
+                  logError(QString("no note for %1").arg(chordLineType));
             }
 
       // more than one dynamic ???
