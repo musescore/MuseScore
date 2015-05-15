@@ -583,6 +583,7 @@ int BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, int len, int
       TDuration d;
       d.setVal(len);
       chord->setDurationType(d);
+      chord->setDuration(d.fraction());
       Segment* s = measure->getSegment(chord, tick);
       s->add(chord);
 
