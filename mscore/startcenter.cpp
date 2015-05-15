@@ -168,7 +168,6 @@ QNetworkReply* MyNetworkAccessManager::createRequest(Operation op,
                                           QIODevice * outgoingData)
       {
       QNetworkRequest new_req(req);
-      new_req.setRawHeader("User-Agent",  QString("MuseScore %1").arg(VERSION).toAscii());
       new_req.setRawHeader("Accept-Language",  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toAscii());
       return QNetworkAccessManager::createRequest(op, new_req, outgoingData);
       }
