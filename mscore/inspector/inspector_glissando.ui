@@ -118,6 +118,50 @@
        </property>
       </widget>
      </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Style</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QToolButton" name="resetGlissandoStyle">
+       <property name="accessibleName">
+        <string>Reset Style value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QComboBox" name="glissandoStyle">
+       <property name="accessibleName">
+        <string>Play Style</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Chromatic</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>White keys</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Black keys</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Diatonic</string>
+        </property>
+       </item>
+      </widget>
+     </item>
      <item row="0" column="1">
       <widget class="QComboBox" name="type">
        <property name="accessibleName">
@@ -162,6 +206,26 @@
        </property>
        <property name="text">
         <string>Show text</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QCheckBox" name="playGlissando">
+       <property name="text">
+        <string>Play</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QToolButton" name="resetPlayGlissando">
+       <property name="accessibleName">
+        <string>Reset Play value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>

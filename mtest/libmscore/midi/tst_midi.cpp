@@ -83,7 +83,14 @@ void TestMidi::events_data()
       QTest::newRow("testSwingTexts") <<  "testSwingTexts";
       // ornaments
       QTest::newRow("testMordents") <<  "testMordents";
+      QTest::newRow("testBaroqueOrnaments") << "testBaroqueOrnaments";
+      QTest::newRow("testOrnamentAccidentals") << "testOrnamentAccidentals";
       QTest::newRow("testGraceBefore") <<  "testGraceBefore";
+      QTest::newRow("testKantataBWV140Excerpts") <<  "testKantataBWV140Excerpts";
+      QTest::newRow("testTrillTransposingInstrument") <<  "testTrillTransposingInstrument";
+      // glissando
+      QTest::newRow("testGlissando") << "testGlissando";
+      QTest::newRow("testGlissandoAcrossStaffs") << "testGlissandoAcrossStaffs";
       // pedal
       QTest::newRow("testPedal") <<  "testPedal";
       }

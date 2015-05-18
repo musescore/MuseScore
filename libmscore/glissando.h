@@ -73,6 +73,8 @@ class Glissando : public SLine {
       Type _glissandoType;
       QString _text;
       bool _showText;
+      MScore::GlissandoStyle _glissandoStyle;
+      bool _playGlissando;
 
    protected:
       // make glissando non-editable, until proper support is added for anchor selection
@@ -101,6 +103,10 @@ class Glissando : public SLine {
       // Glissando specific methods
       Type glissandoType() const          { return _glissandoType;}
       void setGlissandoType(Type v)       { _glissandoType = v;   }
+      MScore::GlissandoStyle glissandoStyle() const { return _glissandoStyle;}
+      void setGlissandoStyle(MScore::GlissandoStyle s) { _glissandoStyle = s; }
+      bool playGlissando() const          { return _playGlissando;}
+      void setPlayGlissando(bool v)       { _playGlissando = v; }
       QString text() const                { return _text;         }
       void setText(const QString& t)      { _text = t;            }
       bool showText() const               { return _showText;     }
