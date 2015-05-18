@@ -42,6 +42,7 @@
 #include "libmscore/lyrics.h"
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
+#include "libmscore/accidental.h"
 #include "libmscore/ottava.h"
 #include "libmscore/part.h"
 #include "libmscore/pedal.h"
@@ -1456,10 +1457,11 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                   for (j = 0; j < notes.size(); ++j) {
                         OVE::Note* notePtr = notes[j];
                         if(!isRestDefaultLine(notePtr, container->getNoteType()) && notePtr->getLine() != 0) {
-                              double yOffset = -((double)notePtr->getLine()/2.0 * score_->spatium());
+                              double yOffset = -(double)(notePtr->getLine());
                               int stepOffset = cr->staff()->staffType()->stepOffset();
                               int lineOffset = static_cast<Ms::Rest*>(cr)->computeLineOffset();
-                              yOffset -= (qreal(lineOffset + stepOffset) * .5) * score_->spatium();
+                              yOffset -= qreal(lineOffset + stepOffset);
+                              yOffset *= score_->spatium()/2.0;
                               cr->setUserYoffset(yOffset);
                               }
                         }
@@ -1522,6 +1524,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                         }
 
                   cr->setVisible(container->getShow());
+                  cr->setSmall(container->getIsCue());
                   for (j = 0; j < notes.size(); ++j) {
                         OVE::Note* oveNote = notes[j];
                         Note* note = new Note(score_);
@@ -1530,7 +1533,6 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                         //note->setTrack(noteTrack);
                         note->setVeloType(Note::ValueType::USER_VAL);
                         note->setVeloOffset(oveNote->getOnVelocity());
-                        //note->setUserAccidental(OveAccidental_to_Accidental(notePtr->getAccidental()));
                         note->setPitch(pitch);
 
                         // tpc
@@ -1558,6 +1560,8 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               int clefMiddleOctave;
                               getMiddleToneOctave(clefType, clefMiddleTone, clefMiddleOctave);
                               int absLine = (int) clefMiddleTone + clefMiddleOctave * OCTAVE + oveNote->getLine();
+                              if ((partStaffCount == 2) && oveNote->getOffsetStaff())
+                                    absLine += 2 * (oveNote->getOffsetStaff());
                               int tone = absLine % OCTAVE;
                               int alter = accidentalToAlter(oveNote->getAccidental());
                               NoteVal nv(pitch);
@@ -1565,12 +1569,26 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               note->setNval(nv, tick);
                               // note->setTpcFromPitch();
                               note->setTpc(step2tpc(tone, AccidentalVal(alter)));
-
+                              if (oveNote->getShowAccidental()) {
+                                    Ms::Accidental* a = new Accidental(score_);
+                                    bool bracket = (int)(oveNote->getAccidental()) & 0x8;
+                                    AccidentalType at = Ms::AccidentalType::NONE;
+                                    switch(alter) {
+                                          case 0: at = Ms::AccidentalType::NATURAL; break;
+                                          case 1: at = Ms::AccidentalType::SHARP; break;
+                                          case -1: at = Ms::AccidentalType::FLAT; break;
+                                          case 2: at = Ms::AccidentalType::SHARP2; break;
+                                          case -2: at = Ms::AccidentalType::FLAT2; break;
+                                          }
+                                    a->setAccidentalType(at);
+                                    a->setHasBracket(bracket);
+                                    a->setRole(Ms::AccidentalRole::USER);
+                                    note->add(a);
+                                    }
                               note->setHeadGroup(getHeadGroup(oveNote->getHeadType()));
-                              if ((oveNote->getHeadType() == OVE::NoteHeadType::Invisible) || !(oveNote->getShow()))
-                                    note->setVisible(false);
                               }
-
+                        if ((oveNote->getHeadType() == OVE::NoteHeadType::Invisible) || !(oveNote->getShow()))
+                              note->setVisible(false);
                         // tie
                         if ((int(oveNote->getTiePos()) & int(OVE::TiePos::LeftEnd)) == int(OVE::TiePos::LeftEnd)) {
                               Tie* tie = new Tie(score_);
@@ -1640,7 +1658,8 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               tuplet->setTrack(noteTrack);
                               tuplet->setRatio(Fraction(container->getTuplet(), container->getSpace()));
                               tuplet->setTick(tick);
-                              measure->add(tuplet);
+                              tuplet->setParent(measure);
+                              //measure->add(tuplet);
                               }
                         }
 
@@ -1904,7 +1923,7 @@ void OveToMScore::convertArticulation(
                   }
             case OVE::ArticulationType::Fermata_Inverted :{
                   Articulation* a = new Articulation(score_);
-                  a->setUp(false);
+                  a->setDirection(MScore::Direction::DOWN);
                   a->setArticulationType(ArticulationType::Fermata);
                   cr->add(a);
                   break;
