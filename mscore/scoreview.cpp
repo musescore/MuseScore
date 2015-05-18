@@ -1089,9 +1089,8 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       int staffIdx;
       int pitch;
       Segment* seg;
-      QPointF offset;
 
-      if (!_score->pos2measure(data.startMove, &staffIdx, &pitch, &seg, &offset))
+      if (!_score->pos2measure(data.startMove, &staffIdx, &pitch, &seg, 0))
             return;
       if (staffIdx == -1) {
             qDebug("ScoreView::measurePopup: staffIdx == -1!");
