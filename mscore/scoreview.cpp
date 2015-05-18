@@ -2960,7 +2960,12 @@ void ScoreView::cmd(const QAction* a)
                   if (e->type() == Element::Type::NOTE)
                         e = static_cast<Note*>(e)->chord();
                   ChordRest* cr = static_cast<ChordRest*>(e);
-                  if (cr->segment()->splitsTuplet()) {
+                  if (cr->segment()->rtick() == 0) {
+                        QMessageBox::warning(0, "MuseScore",
+                           tr("Cannot split measure here:\n"
+                           "First beat of measure"));
+                        }
+                  else if (cr->segment()->splitsTuplet()) {
                         QMessageBox::warning(0, "MuseScore",
                            tr("Cannot split measure here:\n"
                            "Cannot split tuplet"));
