@@ -299,7 +299,7 @@ void TimeSig::layout1()
       else if (sigType == TimeSigType::ALLA_BREVE) {
             pz = QPointF(0.0, yoff);
             setbbox(symBbox(SymId::timeSigCutCommon).translated(pz));
-            _numeratorString = "\xA2";
+            _numeratorString = '\xA2';
             _denominatorString.clear();
             }
       else {
