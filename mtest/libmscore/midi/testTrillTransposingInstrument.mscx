@@ -311,7 +311,7 @@
           <durationType>16th</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>63</pitch>

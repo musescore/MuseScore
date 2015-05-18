@@ -136,7 +136,7 @@
             <Glissando id="2">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Diatonic</glissandoStyle>
+              <glissandoStyle>diatonic</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -159,7 +159,7 @@
             <Glissando id="3">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Diatonic</glissandoStyle>
+              <glissandoStyle>diatonic</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -196,7 +196,7 @@
             <Glissando id="5">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Black keys</glissandoStyle>
+              <glissandoStyle>blackkeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -275,7 +275,7 @@
             <Glissando id="4">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>White keys</glissandoStyle>
+              <glissandoStyle>whitekeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>

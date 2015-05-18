@@ -310,7 +310,7 @@
       <Measure number="8">
         <RehearsalMark>
           <pos x="2.04609" y="-2.8"/>
-          <text>Black keys</text>
+          <text>blackkeys</text>
           </RehearsalMark>
         <Chord>
           <durationType>half</durationType>
@@ -320,7 +320,7 @@
             <Glissando id="9">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Black keys</glissandoStyle>
+              <glissandoStyle>blackkeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -345,7 +345,7 @@
             <Glissando id="10">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Black keys</glissandoStyle>
+              <glissandoStyle>blackkeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -370,7 +370,7 @@
             <Glissando id="11">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Black keys</glissandoStyle>
+              <glissandoStyle>blackkeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -398,7 +398,7 @@
             <Glissando id="12">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Black keys</glissandoStyle>
+              <glissandoStyle>blackkeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -426,7 +426,7 @@
             <Glissando id="13">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Black keys</glissandoStyle>
+              <glissandoStyle>blackkeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -451,7 +451,7 @@
             <Glissando id="14">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Black keys</glissandoStyle>
+              <glissandoStyle>blackkeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -482,7 +482,7 @@
             <Glissando id="15">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Black keys</glissandoStyle>
+              <glissandoStyle>blackkeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -501,7 +501,7 @@
       <Measure number="15">
         <RehearsalMark>
           <pos x="3.04609" y="-3.6"/>
-          <text>White keys</text>
+          <text>whitekeys</text>
           </RehearsalMark>
         <Chord>
           <durationType>half</durationType>
@@ -511,7 +511,7 @@
             <Glissando id="16">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>White keys</glissandoStyle>
+              <glissandoStyle>whitekeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -533,10 +533,10 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
-            <Glissando id="17">
+            <Glissando id="17">·
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>White keys</glissandoStyle>
+              <glissandoStyle>whitekeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -561,7 +561,7 @@
             <Glissando id="18">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>White keys</glissandoStyle>
+              <glissandoStyle>whitekeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -589,7 +589,7 @@
             <Glissando id="19">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>White keys</glissandoStyle>
+              <glissandoStyle>whitekeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -617,7 +617,7 @@
             <Glissando id="20">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>White keys</glissandoStyle>
+              <glissandoStyle>whitekeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -642,7 +642,7 @@
             <Glissando id="21">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>White keys</glissandoStyle>
+              <glissandoStyle>whitekeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -673,7 +673,7 @@
             <Glissando id="22">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>White keys</glissandoStyle>
+              <glissandoStyle>whitekeys</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -692,7 +692,7 @@
       <Measure number="22">
         <RehearsalMark>
           <pos x="-0.753913" y="-2.8"/>
-          <text>Diatonic</text>
+          <text>diatonic</text>
           </RehearsalMark>
         <Chord>
           <durationType>half</durationType>
@@ -702,7 +702,7 @@
             <Glissando id="23">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Diatonic</glissandoStyle>
+              <glissandoStyle>diatonic</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -727,7 +727,7 @@
             <Glissando id="24">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Diatonic</glissandoStyle>
+              <glissandoStyle>diatonic</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -752,7 +752,7 @@
             <Glissando id="25">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Diatonic</glissandoStyle>
+              <glissandoStyle>diatonic</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -780,7 +780,7 @@
             <Glissando id="26">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Diatonic</glissandoStyle>
+              <glissandoStyle>diatonic</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -808,7 +808,7 @@
             <Glissando id="27">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Diatonic</glissandoStyle>
+              <glissandoStyle>diatonic</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -833,7 +833,7 @@
             <Glissando id="28">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Diatonic</glissandoStyle>
+              <glissandoStyle>diatonic</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -864,7 +864,7 @@
             <Glissando id="29">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Diatonic</glissandoStyle>
+              <glissandoStyle>diatonic</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -899,7 +899,7 @@
             <Glissando id="30">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Diatonic</glissandoStyle>
+              <glissandoStyle>diatonic</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -949,7 +949,7 @@
             <Glissando id="31">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Diatonic</glissandoStyle>
+              <glissandoStyle>diatonic</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -972,7 +972,7 @@
             <Glissando id="32">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Diatonic</glissandoStyle>
+              <glissandoStyle>diatonic</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -1003,7 +1003,7 @@
             <Glissando id="33">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Diatonic</glissandoStyle>
+              <glissandoStyle>diatonic</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>
@@ -1026,7 +1026,7 @@
             <Glissando id="34">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <glissandoStyle>Diatonic</glissandoStyle>
+              <glissandoStyle>diatonic</glissandoStyle>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>

@@ -269,19 +269,12 @@ void Articulation::read(XmlReader& e)
                   _anchor = ArticulationAnchor(e.readInt());
                   anchorStyle = PropertyStyle::UNSTYLED;
                   }
-            else if (tag == "direction") {
+            else if (tag == "direction")
                   setProperty(P_ID::DIRECTION, Ms::getProperty(P_ID::DIRECTION, e));
-                  }
-            else if ( tag == "ornamentStyle") {
-                auto text = e.readElementText();
-                if ( text == "Baroque" || text == "1")
-                    setOrnamentStyle(MScore::OrnamentStyle::BAROQUE);
-                else
-                    setOrnamentStyle(MScore::OrnamentStyle::DEFAULT);
-            }
+            else if ( tag == "ornamentStyle")
+                  setProperty(P_ID::ORNAMENT_STYLE, Ms::getProperty(P_ID::ORNAMENT_STYLE, e));
             else if ( tag == "playArticulation")
-                //_playArticulation = e.readBool();
-                setPlayArticulation(e.readBool());
+                  setPlayArticulation(e.readBool());
             else if (tag == "timeStretch")
                   _timeStretch = e.readDouble();
             else if (tag == "offset") {
