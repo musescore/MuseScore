@@ -1795,6 +1795,14 @@ void Score::scanElementsInRange(void* data, void (*func)(void*, Element*), bool 
                         mmr->scanElements(data, func, all);
                   }
             }
+      for (Element* e : _selection.elements()) {
+            if (e->isSpanner()) {
+                  Spanner* spanner = static_cast<Spanner*>(e);
+                  for (SpannerSegment* ss : spanner->spannerSegments()) {
+                        ss->scanElements(data, func, all);
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------
