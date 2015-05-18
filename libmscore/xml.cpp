@@ -410,9 +410,34 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
             case P_TYPE::POINT:
             case P_TYPE::SIZE:
             case P_TYPE::COLOR:
-                  tag(name, data);
-                  break;
-
+              tag(name, data);
+              break;
+            case P_TYPE::ORNAMENT_STYLE:
+                  switch ( MScore::OrnamentStyle(data.toInt())) {
+                        case MScore::OrnamentStyle::BAROQUE:
+                            tag(name, QVariant("Baroque"));
+                            break;
+                        default:
+                           // tag(name, QVariant("default"));
+                           break;
+                        }
+              break;
+            case P_TYPE::GLISSANDO_STYLE:
+                  switch ( MScore::GlissandoStyle(data.toInt())) {
+                        case MScore::GlissandoStyle::BLACK_KEYS:
+                            tag(name, QVariant("BlackKeys"));
+                            break;
+                        case MScore::GlissandoStyle::WHITE_KEYS:
+                            tag(name, QVariant("WhiteKeys"));
+                            break;
+                        case MScore::GlissandoStyle::DIATONIC:
+                            tag(name, QVariant("Diatonic"));
+                            break;
+                        default:
+                           //tag(name, QVariant("Chromatic"));
+                           break;
+                       }
+              break;
             case P_TYPE::DIRECTION:
                   switch(MScore::Direction(data.toInt())) {
                         case MScore::Direction::UP:

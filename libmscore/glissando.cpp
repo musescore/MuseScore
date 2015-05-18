@@ -120,6 +120,8 @@ QVariant GlissandoSegment::getProperty(P_ID id) const
             case P_ID::GLISS_TYPE:
             case P_ID::GLISS_TEXT:
             case P_ID::GLISS_SHOW_TEXT:
+            case P_ID::GLISSANDO_STYLE:
+            case P_ID::PLAY_GLISSANDO:
                   return glissando()->getProperty(id);
             default:
                   return LineSegment::getProperty(id);
@@ -136,6 +138,8 @@ bool GlissandoSegment::setProperty(P_ID id, const QVariant& v)
             case P_ID::GLISS_TYPE:
             case P_ID::GLISS_TEXT:
             case P_ID::GLISS_SHOW_TEXT:
+            case P_ID::GLISSANDO_STYLE:
+            case P_ID::PLAY_GLISSANDO:
                   return glissando()->setProperty(id, v);
             default:
                   return LineSegment::setProperty(id, v);
@@ -152,6 +156,8 @@ QVariant GlissandoSegment::propertyDefault(P_ID id) const
       case P_ID::GLISS_TYPE:
       case P_ID::GLISS_TEXT:
       case P_ID::GLISS_SHOW_TEXT:
+      case P_ID::GLISSANDO_STYLE:
+      case P_ID::PLAY_GLISSANDO:
                   return glissando()->propertyDefault(id);
             default:
                   return LineSegment::propertyDefault(id);
@@ -171,6 +177,8 @@ Glissando::Glissando(Score* s)
       _text          = "gliss.";
       _showText      = true;
       setDiagonal(true);
+      setGlissandoStyle(MScore::GlissandoStyle::CHROMATIC);
+      setPlayGlissando(true);
       setLineWidth(Spatium(GLISS_DEFAULT_LINE_TICKNESS));
       setAnchor(Spanner::Anchor::NOTE);
       }
@@ -179,6 +187,8 @@ Glissando::Glissando(const Glissando& g)
    : SLine(g)
       {
       _glissandoType = g._glissandoType;
+      _glissandoStyle = g._glissandoStyle;
+      _playGlissando = g._playGlissando;
       _text          = g._text;
       _showText      = g._showText;
       }
@@ -370,6 +380,8 @@ void Glissando::write(Xml& xml) const
       if (_showText && !_text.isEmpty())
             xml.tag("text", _text);
       xml.tag("subtype", int(_glissandoType));
+      writeProperty(xml, P_ID::PLAY_GLISSANDO);
+      writeProperty(xml, P_ID::GLISSANDO_STYLE);
       SLine::writeProperties(xml);
       xml.etag();
       }
@@ -393,6 +405,19 @@ void Glissando::read(XmlReader& e)
                   }
             else if (tag == "subtype")
                   _glissandoType = Type(e.readInt());
+            else if (tag == "glissandoStyle") {
+                QString s = e.readElementText();
+                if ( "BlackKeys" == s || "Black keys" == s)
+                    setGlissandoStyle(MScore::GlissandoStyle::BLACK_KEYS);
+                else if ( "WhiteKeys" == s || "White keys" == s)
+                    setGlissandoStyle(MScore::GlissandoStyle::WHITE_KEYS);
+                else if ( "Diatonic" == s)
+                    setGlissandoStyle(MScore::GlissandoStyle::DIATONIC);
+                else
+                    setGlissandoStyle(MScore::GlissandoStyle::CHROMATIC);
+            } else if ( tag == "playGlissando") {
+                setPlayGlissando(e.readBool());
+            }
             else if (!SLine::readProperties(e))
                   e.unknown();
             }
@@ -719,6 +744,10 @@ QVariant Glissando::getProperty(P_ID propertyId) const
                   return text();
             case P_ID::GLISS_SHOW_TEXT:
                   return showText();
+            case P_ID::GLISSANDO_STYLE:
+                  return int(glissandoStyle());
+            case P_ID::PLAY_GLISSANDO:
+                  return bool(playGlissando());
             default:
                   break;
             }
@@ -741,6 +770,12 @@ bool Glissando::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::GLISS_SHOW_TEXT:
                   setShowText(v.toBool());
                   break;
+            case P_ID::GLISSANDO_STYLE:
+                 setGlissandoStyle(MScore::GlissandoStyle(v.toInt()));
+                 break;
+            case P_ID::PLAY_GLISSANDO:
+                 setPlayGlissando(v.toBool());
+                 break;
             default:
                   if (!SLine::setProperty(propertyId, v))
                         return false;
@@ -763,11 +798,14 @@ QVariant Glissando::propertyDefault(P_ID propertyId) const
                   return "gliss.";
             case P_ID::GLISS_SHOW_TEXT:
                   return true;
+            case P_ID::GLISSANDO_STYLE:
+                  return int(MScore::GlissandoStyle::CHROMATIC);
+            case P_ID::PLAY_GLISSANDO:
+                  return true;
             default:
                   break;
             }
       return SLine::propertyDefault(propertyId);
       }
-
 }
 
