@@ -500,12 +500,13 @@ void ScoreView::dropEvent(QDropEvent* event)
                         if (el == 0 || el->type() == Element::Type::MEASURE) {
                               int staffIdx;
                               Segment* seg;
-                              el = _score->pos2measure(pos, &staffIdx, 0, &seg, 0);
+                              QPointF offset;
+                              el = _score->pos2measure(pos, &staffIdx, 0, &seg, &offset);
                               if (el && el->type() == Element::Type::MEASURE) {
                                     dragElement->setTrack(staffIdx * VOICES);
                                     dragElement->setParent(seg);
                                     if (applyUserOffset)
-                                          dragElement->setUserOff(pos - seg->canvasPos());
+                                          dragElement->setUserOff(offset);
                                     score()->undoAddElement(dragElement);
                                     }
                               else {
