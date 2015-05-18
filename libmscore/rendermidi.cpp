@@ -1147,7 +1147,7 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
       vector<int> emptypattern = {};
       set<MScore::OrnamentStyle> baroque  = {MScore::OrnamentStyle::BAROQUE};
       set<MScore::OrnamentStyle> defstyle = {MScore::OrnamentStyle::DEFAULT};
-      set<MScore::OrnamentStyle> any      = {}; // empty set has the special meaning of any-style, rather than no-styles.
+      set<MScore::OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
       vector<OrnamentExcursion> excursions = {
             //  articulation type           set of  duration       body         repeatp      suffix
             //                              styles          prefix                    sustainp
