@@ -252,7 +252,7 @@
        </property>
        <item>
         <property name="text">
-         <string>default</string>
+         <string>Default</string>
         </property>
        </item>
        <item>
@@ -308,8 +308,6 @@
   <tabstop>playArticulation</tabstop>
   <tabstop>resetPlayArticulation</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
