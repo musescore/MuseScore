@@ -410,34 +410,34 @@ void Xml::tag(P_ID id, QVariant data, QVariant defaultData)
             case P_TYPE::POINT:
             case P_TYPE::SIZE:
             case P_TYPE::COLOR:
-              tag(name, data);
-              break;
+                  tag(name, data);
+                  break;
             case P_TYPE::ORNAMENT_STYLE:
                   switch ( MScore::OrnamentStyle(data.toInt())) {
                         case MScore::OrnamentStyle::BAROQUE:
-                            tag(name, QVariant("Baroque"));
-                            break;
+                              tag(name, QVariant("baroque"));
+                              break;
                         default:
-                           // tag(name, QVariant("default"));
-                           break;
-                        }
-              break;
+                             // tag(name, QVariant("default"));
+                             break;
+                             }
+                  break;
             case P_TYPE::GLISSANDO_STYLE:
                   switch ( MScore::GlissandoStyle(data.toInt())) {
                         case MScore::GlissandoStyle::BLACK_KEYS:
-                            tag(name, QVariant("BlackKeys"));
-                            break;
+                              tag(name, QVariant("blackkeys"));
+                              break;
                         case MScore::GlissandoStyle::WHITE_KEYS:
-                            tag(name, QVariant("WhiteKeys"));
-                            break;
+                              tag(name, QVariant("whitekeys"));
+                              break;
                         case MScore::GlissandoStyle::DIATONIC:
-                            tag(name, QVariant("Diatonic"));
-                            break;
+                              tag(name, QVariant("diatonic"));
+                              break;
                         default:
-                           //tag(name, QVariant("Chromatic"));
-                           break;
-                       }
-              break;
+                             //tag(name, QVariant("Chromatic"));
+                             break;
+                             }
+                  break;
             case P_TYPE::DIRECTION:
                   switch(MScore::Direction(data.toInt())) {
                         case MScore::Direction::UP:

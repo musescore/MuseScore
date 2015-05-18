@@ -283,7 +283,7 @@
           <durationType>16th</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>63</pitch>
@@ -404,7 +404,7 @@
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>62</pitch>
@@ -511,7 +511,7 @@
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Slur type="start" id="6"/>
           <Note>
@@ -597,7 +597,7 @@
           <durationType>16th</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Slur type="start" id="8"/>
           <Note>
@@ -675,7 +675,7 @@
           <durationType>16th</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Slur type="start" id="10"/>
           <Note>
@@ -742,7 +742,7 @@
           <durationType>16th</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>63</pitch>
@@ -858,7 +858,7 @@
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>62</pitch>
@@ -1034,7 +1034,7 @@
           <durationType>16th</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>63</pitch>
@@ -1150,7 +1150,7 @@
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>62</pitch>
@@ -1322,7 +1322,7 @@
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>58</pitch>
@@ -1358,7 +1358,7 @@
           <durationType>16th</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Slur type="start" id="18"/>
           <Note>
@@ -1523,7 +1523,7 @@
           <durationType>16th</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <endSpanner id="20"/>
@@ -1639,7 +1639,7 @@
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Slur type="start" id="21"/>
           <Note>

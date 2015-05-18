@@ -406,15 +406,7 @@ void Glissando::read(XmlReader& e)
             else if (tag == "subtype")
                   _glissandoType = Type(e.readInt());
             else if (tag == "glissandoStyle") {
-                QString s = e.readElementText();
-                if ( "BlackKeys" == s || "Black keys" == s)
-                    setGlissandoStyle(MScore::GlissandoStyle::BLACK_KEYS);
-                else if ( "WhiteKeys" == s || "White keys" == s)
-                    setGlissandoStyle(MScore::GlissandoStyle::WHITE_KEYS);
-                else if ( "Diatonic" == s)
-                    setGlissandoStyle(MScore::GlissandoStyle::DIATONIC);
-                else
-                    setGlissandoStyle(MScore::GlissandoStyle::CHROMATIC);
+                setProperty(P_ID::GLISSANDO_STYLE, Ms::getProperty(P_ID::GLISSANDO_STYLE, e));
             } else if ( tag == "playGlissando") {
                 setPlayGlissando(e.readBool());
             }

@@ -294,11 +294,11 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   return QVariant(e.readElementText());
             case P_TYPE::GLISSANDO_STYLE: {
                 QString value(e.readElementText());
-                if ( value == "White keys")
+                if ( value == "whitekeys")
                     return QVariant(int(MScore::GlissandoStyle::WHITE_KEYS));
-                else if ( value == "Black keys")
+                else if ( value == "blackkeys")
                     return QVariant(int(MScore::GlissandoStyle::BLACK_KEYS));
-                else if ( value == "Diatonic")
+                else if ( value == "diatonic")
                     return QVariant(int(MScore::GlissandoStyle::DIATONIC));
                 else // e.g., normally "Chromatic"
                     return QVariant(int(MScore::GlissandoStyle::CHROMATIC));
@@ -307,7 +307,7 @@ QVariant getProperty(P_ID id, XmlReader& e)
             case P_TYPE::ORNAMENT_STYLE:
                   {
                       QString value(e.readElementText());
-                      if ( value == "Baroque")
+                      if ( value == "baroque")
                           return QVariant(int(MScore::OrnamentStyle::BAROQUE));
                       
                       return QVariant(int(MScore::OrnamentStyle::DEFAULT));

@@ -160,7 +160,7 @@
           <Articulation>
             <subtype>trill</subtype>
             <timeStretch>2</timeStretch>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -356,7 +356,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -370,7 +370,7 @@
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -564,7 +564,7 @@
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -581,7 +581,7 @@
           <durationType>16th</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -663,7 +663,7 @@
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -680,7 +680,7 @@
           <durationType>16th</durationType>
           <Articulation>
             <subtype>trill</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -793,7 +793,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>plusstop</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -993,7 +993,7 @@
           <durationType>whole</durationType>
           <Articulation>
             <subtype>turn</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -1058,7 +1058,7 @@
           <durationType>whole</durationType>
           <Articulation>
             <subtype>reverseturn</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -1123,7 +1123,7 @@
           <durationType>whole</durationType>
           <Articulation>
             <subtype>prall</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -1171,7 +1171,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>prall</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -1224,7 +1224,7 @@
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>prall</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -1284,7 +1284,7 @@
           <durationType>whole</durationType>
           <Articulation>
             <subtype>mordent</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -1332,7 +1332,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>mordent</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -1385,7 +1385,7 @@
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>mordent</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -1445,7 +1445,7 @@
           <durationType>whole</durationType>
           <Articulation>
             <subtype>prallprall</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -1499,7 +1499,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>prallprall</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -1559,7 +1559,7 @@
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>prallprall</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -1823,7 +1823,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>upprall</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -1928,7 +1928,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>upprall</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -2005,7 +2005,7 @@
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>upprall</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -2107,7 +2107,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>upmordent</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -2212,7 +2212,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>upmordent</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -2289,7 +2289,7 @@
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>upmordent</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -2396,7 +2396,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>downprall</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -2488,7 +2488,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>downprall</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -2557,7 +2557,7 @@
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>downprall</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -2664,7 +2664,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>downmordent</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -2756,7 +2756,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>downmordent</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -2820,7 +2820,7 @@
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>downmordent</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -2927,7 +2927,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>prallup</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -3032,7 +3032,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>prallup</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -3109,7 +3109,7 @@
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>prallup</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -3211,7 +3211,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>pralldown</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -3322,7 +3322,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>pralldown</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -3405,7 +3405,7 @@
           <durationType>eighth</durationType>
           <Articulation>
             <subtype>pralldown</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -3512,7 +3512,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>schleifer</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -3541,7 +3541,7 @@
           <durationType>half</durationType>
           <Articulation>
             <subtype>schleifer</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
@@ -3569,7 +3569,7 @@
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>schleifer</subtype>
-            <ornamentStyle>Baroque</ornamentStyle>
+            <ornamentStyle>baroque</ornamentStyle>
             </Articulation>
           <Note>
             <pitch>71</pitch>
