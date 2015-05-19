@@ -173,8 +173,8 @@ void InspectorNote::setElement()
       bool nograce = !note->chord()->isGrace();
       s.leadingSpace->setEnabled(nograce);
       s.trailingSpace->setEnabled(nograce);
-      s.resetTrailingSpace->setEnabled(nograce);
-      s.resetLeadingSpace->setEnabled(nograce);
+      s.resetTrailingSpace->setEnabled(nograce && s.trailingSpace->value());
+      s.resetLeadingSpace->setEnabled(nograce && s.leadingSpace->value());
       }
 
 //---------------------------------------------------------
