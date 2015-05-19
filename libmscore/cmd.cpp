@@ -1561,18 +1561,18 @@ void Score::resetUserStretch()
       Segment* s2 = _selection.endSegment();
       // if either segment is not returned by the selection
       // (for instance, no selection) fall back to first/last measure
-      if(!s1)
-            m1 = firstMeasure();
+      if (!s1)
+            m1 = firstMeasureMM();
       else
             m1 = s1->measure();
-      if(!s2)
-            m2 = lastMeasure();
+      if (!s2)
+            m2 = lastMeasureMM();
       else
             m2 = s2->measure();
-      if(!m1 || !m2)                // should not happen!
+      if (!m1 || !m2)               // should not happen!
             return;
 
-      for (Measure* m = m1; m; m = m->nextMeasure()) {
+      for (Measure* m = m1; m; m = m->nextMeasureMM()) {
             undo(new ChangeStretch(m, 1.0));
             if (m == m2)
                   break;
