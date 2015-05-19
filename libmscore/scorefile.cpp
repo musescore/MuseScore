@@ -723,14 +723,9 @@ QString readRootFile(MQZipReader* uz, QList<QString>& images)
 //    return false on error
 //---------------------------------------------------------
 
-Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
+Score::FileError Score::loadCompressedMsc(QIODevice* io, bool ignoreVersionError)
       {
-      MQZipReader uz(name);
-      if (!uz.exists()) {
-            qDebug("loadCompressedMsc: <%s> not found", qPrintable(name));
-            MScore::lastError = tr("file not found");
-            return FileError::FILE_NOT_FOUND;
-            }
+      MQZipReader uz(io);
 
       QList<QString> sl;
       QString rootfile = readRootFile(&uz, sl);
@@ -801,18 +796,30 @@ Score::FileError Score::loadMsc(QString name, bool ignoreVersionError)
       {
       info.setFile(name);
 
-      if (name.endsWith(".mscz"))
-            return loadCompressedMsc(name, ignoreVersionError);
-
       QFile f(name);
       if (!f.open(QIODevice::ReadOnly)) {
             MScore::lastError = f.errorString();
             return FileError::FILE_OPEN_ERROR;
             }
 
-      XmlReader xml(&f);
-      FileError retval = read1(xml, ignoreVersionError);
-      return retval;
+      if (name.endsWith(".mscz"))
+            return loadCompressedMsc(&f, ignoreVersionError);
+      else {
+            XmlReader r(&f);
+            return read1(r, ignoreVersionError);
+            }
+      }
+
+Score::FileError Score::loadMsc(QString name, QIODevice* io, bool ignoreVersionError)
+      {
+      info.setFile(name);
+
+      if (name.endsWith(".mscz"))
+            return loadCompressedMsc(io, ignoreVersionError);
+      else {
+            XmlReader r(io);
+            return read1(r, ignoreVersionError);
+            }
       }
 
 //---------------------------------------------------------

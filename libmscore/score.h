@@ -477,6 +477,9 @@ class Score : public QObject {
 
       QQmlListProperty<Ms::Part> qmlParts() { return QQmlListProperty<Ms::Part>(this, _parts); }
       QQmlListProperty<Ms::Excerpt> qmlExcerpts() { return QQmlListProperty<Ms::Excerpt>(this, _excerpts); }
+      FileError loadCompressedMsc(QIODevice*, bool ignoreVersionError);
+      FileError read114(XmlReader&);
+      FileError read1(XmlReader&, bool ignoreVersionError);
 
    protected:
       void createPlayEvents(Chord*);
@@ -527,9 +530,6 @@ class Score : public QObject {
 
       void write(Xml&, bool onlySelection);
       bool read(XmlReader&);
-      FileError read114(XmlReader&);
-      FileError read1(XmlReader&, bool ignoreVersionError);
-      FileError loadCompressedMsc(QString name, bool ignoreVersionError);
 
       QList<Staff*>& staves()                { return _staves; }
       const QList<Staff*>& staves() const    { return _staves; }
@@ -667,6 +667,7 @@ class Score : public QObject {
       void setShowVBox(bool v)            { _showVBox = v;            }
 
       FileError loadMsc(QString name, bool ignoreVersionError);
+      FileError loadMsc(QString name, QIODevice*, bool ignoreVersionError);
 
       bool saveFile(QFileInfo& info);
       void saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false);
