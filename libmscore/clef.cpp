@@ -185,7 +185,7 @@ void Clef::layout()
                   Measure* meas = clefSeg->measure();
                   showClef =                    // show this clef if:
                         // it is not a courtesy clef (not at the end of the last measure of the system)
-                        (meas != meas->system()->lastMeasure()) || (clefSeg->tick() != meas->endTick())
+                        ((meas->system() && meas != meas->system()->lastMeasure())) || (clefSeg->tick() != meas->endTick())
                         // if courtesy clef: show if score has courtesy clefs on
                         || ( score()->styleB(StyleIdx::genCourtesyClef)
                               // AND measure is not at the end of a repeat or of a section
