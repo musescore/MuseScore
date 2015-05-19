@@ -799,11 +799,9 @@ void renderTremolo(Chord *chord, QList<NoteEventList> & ell)
 //   renderArpeggio
 //---------------------------------------------------------
 
-void renderArpeggio(Chord *chord, bool &gateEvents, QList<NoteEventList> & ell)
+void renderArpeggio(Chord *chord, QList<NoteEventList> & ell)
       {
       int notes = chord->notes().size();
-
-      gateEvents = false;     // dont apply gateTime to arpeggio events
       int l = 64;
       while (l * notes > chord->upNote()->playTicks())
             l = 2*l / 3 ;
@@ -1215,23 +1213,20 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       for (int i = 0; i < notes; ++i)
             ell.append(NoteEventList());
 
-      bool gateEvents = true;
-
       if (chord->tremolo()) {
-          renderTremolo(chord, ell);
+            renderTremolo(chord, ell);
 
       }
       else if (chord->arpeggio()) {
-          renderArpeggio(chord, gateEvents, ell);
+            renderArpeggio(chord, ell);
+	    return ell;  // dont apply gateTime to arpeggio events
       }
       else  {
-          renderChordArticulation(chord, ell, gateTime);
+            renderChordArticulation(chord, ell, gateTime);
       }
       //
       //    apply gateTime
       //
-      if (!gateEvents)
-            return ell;
       for (int i = 0; i < notes; ++i) {
             NoteEventList* el = &ell[i];
             int nn = el->size();
