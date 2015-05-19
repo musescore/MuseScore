@@ -101,6 +101,8 @@ bool Portaudio::init(bool)
       if (di == nullptr)
             di = Pa_GetDeviceInfo(Pa_GetDefaultOutputDevice());
 
+      if (!di)
+            return false;    // Portaudio is not properly initialized; disable audio
       _sampleRate = int(di->defaultSampleRate);
 
       /* Open an audio I/O stream. */
