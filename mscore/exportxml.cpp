@@ -618,6 +618,22 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, Xml& xml)
       }
 
 //---------------------------------------------------------
+//   color2xml
+//---------------------------------------------------------
+
+/**
+ Return \a el color.
+ */
+
+static QString color2xml(const Element* el)
+      {
+      if (el->color() != MScore::defaultColor)
+            return QString(" color=\"%1\"").arg(el->color().name().toUpper());
+      else
+            return "";
+      }
+
+//---------------------------------------------------------
 //   glissando
 //---------------------------------------------------------
 
@@ -646,8 +662,7 @@ static void glissando(const Glissando* gli, int number, bool start, Notations& n
                   break;
             }
       tagName += QString(" number=\"%1\" type=\"%2\"").arg(number).arg(start ? "start" : "stop");
-      if (gli->color() != MScore::defaultColor)
-            tagName += " color=\"" + gli->color().name().toUpper() + "\"";
+      tagName += color2xml(gli);
       notations.tag(xml);
       if (start && gli->showText() && gli->text() != "")
             xml.tag(tagName, gli->text());
@@ -2483,9 +2498,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   }
 
             QString noteheadTagname = QString("notehead");
-            QColor noteheadColor = note->color();
-            if (noteheadColor != MScore::defaultColor)
-                  noteheadTagname += " color=\"" + noteheadColor.name().toUpper() + "\"";
+            noteheadTagname += color2xml(note);
             bool leftParenthesis, rightParenthesis = false;
             for (Element* elem : note->el()) {
                   if (elem->type() == Element::Type::SYMBOL) {
@@ -2522,7 +2535,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bo
                   xml.tag(noteheadTagname, "ti");
             else if (note->headGroup() == NoteHead::Group::HEAD_SOL)
                   xml.tag(noteheadTagname, "so");
-            else if (noteheadColor != MScore::defaultColor)
+            else if (note->color() != MScore::defaultColor)
                   xml.tag(noteheadTagname, "normal");
             else if (rightParenthesis && leftParenthesis)
                   xml.tag(noteheadTagname, "normal");
@@ -5003,10 +5016,11 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
       //      }
       int rootTpc = h->rootTpc();
       if (rootTpc != Tpc::TPC_INVALID) {
-            if (h->textStyle().hasFrame())
-                  xml.stag(QString("harmony print-frame=\"yes\""));     // .append(relative));
-            else
-                  xml.stag(QString("harmony print-frame=\"no\""));      // .append(relative));
+            QString tagName = "harmony";
+            bool frame = h->textStyle().hasFrame();
+            tagName += QString(" print-frame=\"%1\"").arg(frame ? "yes" : "no"); // .append(relative));
+            tagName += color2xml(h);
+            xml.stag(tagName);
             xml.stag("root");
             xml.tag("root-step", tpc2stepName(rootTpc));
             int alter = int(tpc2alter(rootTpc));
