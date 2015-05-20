@@ -140,6 +140,7 @@ struct Preferences {
       QString language;
 
       double mag;
+      bool showMidiControls;
 
       //update
       bool checkUpdateStartup;

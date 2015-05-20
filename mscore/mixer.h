@@ -82,6 +82,7 @@ class Mixer : public QScrollArea
 
    public slots:
       void patchListChanged();
+      void midiPrefsChanged(bool showMidiControls);
 
    signals:
       void closed(bool);

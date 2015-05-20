@@ -26,10 +26,21 @@
 #include "libmscore/undo.h"
 #include "synthcontrol.h"
 #include "synthesizer/msynthesizer.h"
+#include "preferences.h"
 
 namespace Ms {
 
 extern bool useFactorySettings;
+
+#define _setValue(__x, __y) \
+      __x->blockSignals(true); \
+      __x->setValue(__y); \
+      __x->blockSignals(false);
+
+#define _setChecked(__x, __y) \
+      __x->blockSignals(true); \
+      __x->setChecked(__y); \
+      __x->blockSignals(false);
 
 //---------------------------------------------------------
 //   PartEdit
@@ -47,6 +58,16 @@ PartEdit::PartEdit(QWidget* parent)
       connect(mute,     SIGNAL(toggled(bool)),            SLOT(muteChanged(bool)));
       connect(solo,     SIGNAL(toggled(bool)),            SLOT(soloToggled(bool)));
       connect(drumset,  SIGNAL(toggled(bool)),            SLOT(drumsetToggled(bool)));
+
+      channelLabel  ->setVisible(preferences.showMidiControls);
+      portLabel     ->setVisible(preferences.showMidiControls);
+      channelSpinBox->setVisible(preferences.showMidiControls);
+      portSpinBox   ->setVisible(preferences.showMidiControls);
+
+      if (!preferences.showMidiControls)
+            hboxLayout->setSpacing(20);
+      else
+            hboxLayout->setSpacing(5);
       }
 
 //---------------------------------------------------------
@@ -90,6 +111,9 @@ void PartEdit::setPart(Part* p, Channel* a)
       drumset->blockSignals(true);
       drumset->setChecked(p->instrument()->useDrumset());
       drumset->blockSignals(false);
+
+      _setValue(portSpinBox,    part->score()->midiMapping(a->channel)->port + 1);
+      _setValue(channelSpinBox, part->score()->midiMapping(a->channel)->channel + 1);
       }
 
 //---------------------------------------------------------
@@ -227,6 +251,29 @@ void Mixer::patchListChanged()
                   }
             pe->setPart(m.part, m.articulation);
             idx++;
+            }
+      }
+
+//---------------------------------------------------------
+//   midiPrefsChanged
+//---------------------------------------------------------
+
+void Mixer::midiPrefsChanged(bool showMidiControls)
+      {
+      if (!cs)
+            return;
+      for (int i = 0; i < vb->count(); i++ ){
+            QWidgetItem* wi = (QWidgetItem*)(vb->itemAt(i));
+            PartEdit* pe    = (PartEdit*)(wi->widget());
+            pe->channelLabel  ->setVisible(showMidiControls);
+            pe->portLabel     ->setVisible(showMidiControls);
+            pe->channelSpinBox->setVisible(showMidiControls);
+            pe->portSpinBox   ->setVisible(showMidiControls);
+
+            if (!showMidiControls)
+                  pe->hboxLayout->setSpacing(20);
+            else
+                  pe->hboxLayout->setSpacing(5);
             }
       }
 

@@ -487,6 +487,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void selectionChanged(SelState);
       void createNewWorkspace();
       void changeWorkspace(Workspace* p);
+      void mixerPreferencesChanged(bool showMidiControls);
 
    public:
       MuseScore();
