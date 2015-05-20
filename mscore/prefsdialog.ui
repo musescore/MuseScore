@@ -2221,7 +2221,7 @@
          </layout>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="3" column="0">
         <spacer name="verticalSpacer_7">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -2233,6 +2233,13 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="showMidiControls">
+         <property name="text">
+          <string>Show MIDI controls in Mixer</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

@@ -4416,6 +4416,16 @@ void MuseScore::instrumentChanged()
       }
 
 //---------------------------------------------------------
+//   mixerPreferencesChanged
+//---------------------------------------------------------
+
+void MuseScore::mixerPreferencesChanged(bool showMidiControls)
+      {
+      if (mixer)
+            mixer->midiPrefsChanged(showMidiControls);
+      }
+
+//---------------------------------------------------------
 //   changeScore
 //    switch current score
 //    step = 1    switch to next score

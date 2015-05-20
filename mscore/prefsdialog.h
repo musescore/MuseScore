@@ -81,6 +81,7 @@ class PreferenceDialog : public QDialog, private Ui::PrefsDialogBase {
 
    signals:
       void preferencesChanged();
+      void mixerPreferencesChanged(bool showMidiControls);
 
    public:
       PreferenceDialog(QWidget* parent);
