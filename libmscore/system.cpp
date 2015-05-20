@@ -43,11 +43,30 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   y
+//---------------------------------------------------------
+
+qreal SysStaff::y() const
+      {
+      return _bbox.y() + _yOff;
+      }
+
+//---------------------------------------------------------
+//   setYOff
+//---------------------------------------------------------
+
+void SysStaff::setYOff(qreal offset)
+      {
+      _yOff = offset;
+      }
+
+//---------------------------------------------------------
 //   SysStaff
 //---------------------------------------------------------
 
 SysStaff::SysStaff()
       {
+      _yOff = 0.0;
       idx   = 0;
       _show = true;
       }
@@ -368,8 +387,9 @@ void System::layout2()
                   }
             qreal sHeight = staff->height();
             qreal dup = staffIdx == 0 ? 0.0 : s->distanceUp();
-            if (staff->lines() == 1)
-                  dup -= _spatium * staff->mag();
+            // one-line staves get additional padding for their bbox
+            qreal off = staff->lines() == 1 ? _spatium * staff->mag() : 0.0;
+            s->setYOff(off);
             s->bbox().setRect(_leftMargin, y + dup, width() - _leftMargin, sHeight);
             y += dup + sHeight + s->distanceDown();
             lastStaffIdx = staffIdx;
