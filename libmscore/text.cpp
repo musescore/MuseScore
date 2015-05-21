@@ -1128,39 +1128,39 @@ void Text::createLayout()
             else if (state == 1) {
                   if (c == '>') {
                         state = 0;
-                        if (token == "b")
+                        if (token.toLower() == "b")
                               cursor.format()->setBold(true);
-                        else if (token == "/b")
+                        else if (token.toLower() == "/b")
                               cursor.format()->setBold(false);
-                        else if (token == "i")
+                        else if (token.toLower() == "i")
                               cursor.format()->setItalic(true);
-                        else if (token == "/i")
+                        else if (token.toLower() == "/i")
                               cursor.format()->setItalic(false);
-                        else if (token == "u")
+                        else if (token.toLower() == "u")
                               cursor.format()->setUnderline(true);
-                        else if (token == "/u")
+                        else if (token.toLower() == "/u")
                               cursor.format()->setUnderline(false);
-                        else if (token == "sub")
+                        else if (token.toLower() == "sub")
                               cursor.format()->setValign(VerticalAlignment::AlignSubScript);
-                        else if (token == "/sub")
+                        else if (token.toLower() == "/sub")
                               cursor.format()->setValign(VerticalAlignment::AlignNormal);
-                        else if (token == "sup")
+                        else if (token.toLower() == "sup")
                               cursor.format()->setValign(VerticalAlignment::AlignSuperScript);
-                        else if (token == "/sup")
+                        else if (token.toLower() == "/sup")
                               cursor.format()->setValign(VerticalAlignment::AlignNormal);
-                        else if (token == "sym") {
+                        else if (token.toLower() == "sym") {
                               symState = true;
                               sym.clear();
                               }
-                        else if (token == "/sym") {
+                        else if (token.toLower() == "/sym") {
                               symState = false;
                               insert(&cursor, Sym::name2id(sym));
                               }
-                        else if (token.startsWith("font ")) {
+                        else if (token.toLower().startsWith("font ")) {
                               token = token.mid(5);
-                              if (token.startsWith("size=\""))
+                              if (token.toLower().startsWith("size=\""))
                                     cursor.format()->setFontSize(parseNumProperty(token.mid(6)));
-                              else if (token.startsWith("face=\"")) {
+                              else if (token.toLower().startsWith("face=\"")) {
                                     QString face = parseStringProperty(token.mid(6));
                                     cursor.format()->setFontFamily(face);
                                     }
