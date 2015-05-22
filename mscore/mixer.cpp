@@ -58,6 +58,8 @@ PartEdit::PartEdit(QWidget* parent)
       connect(mute,     SIGNAL(toggled(bool)),            SLOT(muteChanged(bool)));
       connect(solo,     SIGNAL(toggled(bool)),            SLOT(soloToggled(bool)));
       connect(drumset,  SIGNAL(toggled(bool)),            SLOT(drumsetToggled(bool)));
+      connect(portSpinBox,    SIGNAL(valueChanged(int)),  SLOT(midiChannelChanged(int)));
+      connect(channelSpinBox, SIGNAL(valueChanged(int)),  SLOT(midiChannelChanged(int)));
 
       channelLabel  ->setVisible(preferences.showMidiControls);
       portLabel     ->setVisible(preferences.showMidiControls);
@@ -108,10 +110,7 @@ void PartEdit::setPart(Part* p, Channel* a)
                   break;
                   }
             }
-      drumset->blockSignals(true);
-      drumset->setChecked(p->instrument()->useDrumset());
-      drumset->blockSignals(false);
-
+      _setChecked(drumset, p->instrument()->useDrumset());
       _setValue(portSpinBox,    part->score()->midiMapping(a->channel)->port + 1);
       _setValue(channelSpinBox, part->score()->midiMapping(a->channel)->channel + 1);
       }
@@ -487,6 +486,55 @@ void Mixer::writeSettings()
       settings.setValue("size", size());
       settings.setValue("pos", pos());
       settings.endGroup();
+      }
+
+//---------------------------------------------------------
+//   midiChannelChanged
+//   handles MIDI port & channel change
+//---------------------------------------------------------
+
+void PartEdit::midiChannelChanged(int)
+      {
+      if (part == 0)
+            return;
+      seq->stopNotes(channel->channel);
+      int p =    portSpinBox->value() - 1;
+      int c = channelSpinBox->value() - 1;
+      if (c == 16) {
+            c = 0;
+            p++;
+            }
+
+      int newChannel = p*16+c;
+      if (part->instrument()->useDrumset())
+            newChannel = p*16+9; // Port 9 is special for drums
+
+      qDebug()<<"midiChannelChanged, new port: "<<p<<", new channel: "<<c<<endl;
+
+      // Set new channel
+      part->score()->midiMapping(channel->channel)->channel = newChannel % 16;
+      part->score()->midiMapping(channel->channel)->port    = newChannel / 16;
+
+      // Update midi controls. Block signals to prevent looping
+      _setValue(channelSpinBox, newChannel % 16 + 1);
+      _setValue(portSpinBox,    newChannel / 16 + 1);
+
+      // TODO: Sync to control with the same port and channel
+
+      // Update MIDI Out ports
+      int maxPort = max(p, part->score()->midiPortCount());
+      part->score()->setMidiPortCount(maxPort);
+
+      if (seq->driver() && (preferences.useJackMidi || preferences.useAlsaAudio))
+            seq->driver()->updateOutPortCount(maxPort + 1);
+
+      // Initializing an instrument with new channel
+      foreach(const MidiCoreEvent& e, channel->init) {
+            if (e.type() == ME_INVALID)
+                  continue;
+            NPlayEvent event(e.type(), channel->channel, e.dataA(), e.dataB());
+            seq->sendEvent(event);
+            }
       }
 }
 
