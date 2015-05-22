@@ -3303,6 +3303,17 @@ Shortcut Shortcut::_sc[] = {
          Qt::WindowShortcut,
          ShortcutFlags::A_CMD
          },
+    {
+          MsWidget::SCORE_TAB,
+          STATE_NORMAL,
+          "realize-figured-bass",
+          QT_TRANSLATE_NOOP("action","Realize Figured Bass"),
+          QT_TRANSLATE_NOOP("action","Realize Figured Bass"),
+          0,
+          Icons::Invalid_ICON,
+          Qt::WindowShortcut,
+          ShortcutFlags::A_CMD
+      },
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL,

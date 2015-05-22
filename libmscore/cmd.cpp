@@ -29,6 +29,7 @@
 #include "rest.h"
 #include "chord.h"
 #include "text.h"
+#include "figuredbass.h"
 #include "sig.h"
 #include "staff.h"
 #include "part.h"
@@ -2516,8 +2517,10 @@ void Score::cmd(const QAction* a)
             cmdSlashRhythm();
       else if (cmd == "resequence-rehearsal-marks")
             cmdResequenceRehearsalMarks();
+      else if (cmd == "realize-figured-bass")
+            cmdRealizeFiguredBass();
       else
-            qDebug("unknown cmd <%s>", qPrintable(cmd));
+            qDebug("unknown cmd <%s>. See function Score::cmd(const QAction* a)", qPrintable(cmd));
       }
 
 //---------------------------------------------------------
@@ -2958,6 +2961,13 @@ void Score::cmdSlashRhythm()
       setLayoutAll();
       }
 
+    
+void Score::cmdRealizeFiguredBass() {
+      Score *score = selection().score();
+      if ( score )
+            FiguredBass::realizeFiguredBass(score);
+}
+    
 //---------------------------------------------------------
 //   cmdResequenceRehearsalMarks
 ///   resequences rehearsal marks within a range selection

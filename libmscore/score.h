@@ -1060,7 +1060,8 @@ class Score : public QObject, public ScoreElement {
       void cmdSlashFill();
       void cmdSlashRhythm();
       void cmdResequenceRehearsalMarks();
-
+      void cmdRealizeFiguredBass();
+    
       void setAccessibleInfo(QString s)   { accInfo = s.remove(":").remove(";"); }
       QString accessibleInfo() const      { return accInfo;          }
 

@@ -21,6 +21,7 @@
 #include "volta.h"
 #include "note.h"
 #include "glissando.h"
+#include "figuredbass.h"
 #include "instrument.h"
 #include "part.h"
 #include "chord.h"
@@ -861,7 +862,6 @@ void renderArpeggio(Chord *chord, QList<NoteEventList> & ell)
 //   convertLine
 // find the line in clefF corresponding to lineL2 in clefR
 //---------------------------------------------------------
-
 int convertLine (int lineL2, ClefType clefL, ClefType clefR) {
       int lineR2 = lineL2;
       int goalpitch = line2pitch(lineL2, clefL, Key::C);
@@ -943,7 +943,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
                         bool error = false;
                         AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->staff()->idx(), lineR2, error);
                         int acci2 = int(acciv2);
-                        // we have to add ( note->ppitch() - noteL->epitch() ) which is the delta for transposing instruments.
+                        // we have to add ( noteL->ppitch() - noteL->epitch() ) which is the delta for transposing instruments.
                         halfsteps = line2pitch(lineL-deltastep, clefL, Key::C) + noteL->ppitch() - noteL->epitch() + acci2 - pitchL;
                         }
                   else {
@@ -1343,7 +1343,7 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
                         if (! renderNoteArticulation(events, note, false, a->articulationType(), a->ornamentStyle()))
                               instr->updateGateTime(&gateTime, channel, a->subtypeName());
                         }
-                  }
+                 }
             }
       }
 
@@ -1383,7 +1383,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
                   e.setLen(e.len() * gateTime / 100);
             }
       return ell;
-      }
+}
 
 void Score::createGraceNotesPlayEvents(QVector<Chord*> gnb, int tick, Chord* chord, int &ontime)
       {
@@ -1489,7 +1489,7 @@ void Score::createPlayEvents(Chord* chord)
             }
       // dont change event list if type is PlayEventType::User
       }
-
+    
 void Score::createPlayEvents()
       {
       int etrack = nstaves() * VOICES;

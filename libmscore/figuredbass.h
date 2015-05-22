@@ -15,6 +15,7 @@
 
 #include "segment.h"
 #include "text.h"
+#include "chord.h"
 //#include "libmscore/figuredbass.h"
 #include <vector>
 
@@ -144,7 +145,7 @@ class FiguredBassItem : public Element {
       int               ord;                    // the line ordinal of this element in the FB stack
       // the parts making a FiguredBassItem up
       Modifier          _prefix;                // the accidental coming before the body
-      int               _digit;                 // the main digit (if present)
+      int               _digit;                 // the main digit (if present) FBIDigitNone if no digit present
       Modifier          _suffix;                // the accidental coming after the body
       ContLine          _contLine;              // whether the item has continuation line or not
       Parenthesis       parenth[5];             // each of the parenthesis: before, between and after parts
@@ -277,6 +278,8 @@ class FiguredBass : public Text {
       static bool       fontData(int nIdx, QString *pFamily, QString *pDisplayName,
                               qreal * pSize, qreal * pLineHeight);
 
+      virtual std::vector<FiguredBassItem*> getFiguredBaseItems() { return items; };
+
       // standard re-implemented virtual functions
       virtual FiguredBass*    clone() const override     { return new FiguredBass(*this); }
       virtual Element::Type   type() const override      { return Element::Type::FIGURED_BASS; }
@@ -327,6 +330,11 @@ class FiguredBass : public Text {
       virtual QVariant  propertyDefault(P_ID) const override;
 
       void appendItem(FiguredBassItem* item) {  items.push_back(item); }
+      
+      static bool calcFiguredBass(Chord *chord, std::vector<int> & harmony);
+      static void realizeFiguredBass(Segment *segment);
+      static void realizeFiguredBass(Measure *measure);
+      static void realizeFiguredBass(Score *score);
       };
 
 

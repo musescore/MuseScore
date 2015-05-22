@@ -17,10 +17,13 @@
 #include "system.h"
 #include "segment.h"
 #include "chord.h"
+#include "staff.h"
 #include "rest.h"
 #include "score.h"
 #include "sym.h"
 #include "xml.h"
+#include "utils.h"
+#include "mscore/scoreview.h"
 
 // trying to do without it
 //#include <QQmlEngine>
@@ -1757,8 +1760,6 @@ void FiguredBass::writeMusicXML(Xml& xml, bool isOriginalFigure, int crEndTick, 
 //   Score::addFiguredBass
 //    called from Keyboard Accelerator & menus
 //---------------------------------------------------------
-
-
 FiguredBass* Score::addFiguredBass()
       {
       Element* el = selection().element();
@@ -1794,6 +1795,315 @@ FiguredBass* Score::addFiguredBass()
       select(fb, SelectType::SINGLE, 0);
       return fb;
       }
+      
+//---------------------------------------------------------
+//
+// METHODS relating to realizing the figured bass
+//
+//
+//---------------------------------------------------------
+      
+// find any track number which contains a FiguredBass annotation, in the final version, this will be user
+// selectable, but for the moment we just find one, and assume there is only one.
+// return -1 if no FiguredBass annotation is found.
+int findFiguredBassTrack(Score *score)
+      {
+      for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+            const Segment::Type st = Segment::Type::ChordRest;
+            for (Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
+                  for ( auto annotation : segment->annotations()) {
+                        if (annotation->type() == Element::Type::FIGURED_BASS) {
+                              return annotation->track();
+                              }
+                        }
+                  }
+            }
+      return -1;
+      }
+      
+void FiguredBass::realizeFiguredBass(Score *score)
+      {
+      Q_ASSERT(score);
+      // find which track, if any has a Figured Bass
+      int fb_track = findFiguredBassTrack(score);
+      if (fb_track == -1)
+            return;
+      for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+            const Segment::Type st = Segment::Type::ChordRest;
+            for (Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
+                  Element *element = segment->element(fb_track);
+                  if ( element == 0)
+                        continue;
+                  if ( element->type() != Element::Type::CHORD)
+                        continue;
+                  vector<int> harmonys;
+                  Chord *chord = static_cast<Chord*>(element);
+                  if ( calcFiguredBass(chord, harmonys) ) {
+                        for (int pitch : harmonys) {
+                              NoteVal *nval = new NoteVal(pitch);
+                              chord->score()->addNote(chord,*nval);
+                              }
+                        for( Note *n : chord->notes()) {
+                              // addNote() does not set _line correctly, thus note->line() returns 0, as if the note is sitting on the top line of the staff :-(
+                              if(0==n->line())
+                                    n->updateLine();
+                              }
+                        }
+                  else {
+                        //qDebug("no figured bass on chord on track %d", chord->track());
+                        }
+                  }
+            }
+      }
+  
+// given two lines from the same staff and same clef, determine whether they both represent notes which are separated by a whole number of octaves.
+// E.g., middle C and C on line=3 of the G clef
+bool linesEvenOctaves(int line1, int line2)
+      {
+            int delta = abs(line2 - line1);
+            return 0 == (delta % 7);
+      }
+   
+int normalizeFbDigit(int digit) {
+            // a modifier with no digit always references the 3rd
+            return (digit == FBIDigitNone ) ? 3 : digit;
+      }
 
+Note* findAntecedent(Chord *chord, int harmony_line)
+      {
+      // Here we must apply the accidental seen earlier in the measure if there is one, even if in a different octave.
+      // Find the note with maximum tick, but <= note->tick() whose line % 7 == native_pitch->line%7.
+      // Take its accidental.
+      const Segment::Type st = Segment::Type::ChordRest;
+      Note* antecedent = nullptr;
+      for (Segment* segment = chord->measure()->first(st); segment; segment = segment->next(st)) {
+            // loop over segments in this measure
+            int track = chord->track();
+            if (segment->tick() > chord->tick())
+                  continue;
+            Element *element = segment->element(track);
+            if (element == 0)
+                  continue; // next track
+            if (false == element->staff()->isPitchedStaff())
+                  continue; // next track
+            if (element->type() != Element::Type::CHORD)
+                  continue; // next track
+            
+            Chord* ch = static_cast<Chord*>(element);
+            
+            for (Note *n : ch->notes()) {
+                  if (!linesEvenOctaves(n->line(), harmony_line) ) // skip note if it is not same line or +/- octaves
+                        continue; // next n
+                  if (nullptr == antecedent)
+                        antecedent = n;
+                        if (n->chord()->tick() < antecedent->chord()->tick())
+                              continue; // next n
+                  antecedent = n;
+                  }
+            }
+            return antecedent;
+      }
+      
+      
+void renderFbHarmony(Chord *chord, vector<int> & harmonys, FiguredBassItem::Modifier modifier, int relpitch, bool obey_accidental)
+      {
+      obey_accidental = obey_accidental || (FiguredBassItem::Modifier::NONE==modifier);
+      auto segment = chord->segment();
+      Note *note = chord->notes()[0];
+      int octave = 0; // 0, or 12 if we want the harmony 1 octave up
+
+      relpitch = normalizeFbDigit(relpitch);
+      ClefType clef = chord->staff()->clef(segment->tick());
+      
+      // calculate native pitch for line adjusted for transposing instrument.
+      // in doing so we have to SUBTRACT(relpitch-1) because lines are oriented from top to bottom, and
+      // pitches are oriented from bottom to top.  The 1 is because chord harmonies are noted as 1,3,5 (for a normal triad)
+      // rather than (0,2,4).
+      int harmony_line = note->line() - relpitch + 1;
+      int native_pitch = line2pitch(harmony_line, clef, Key::C) + note->ppitch() - note->epitch();
+      
+      AccidentalVal acciv = segment->measure()->findAccidental(segment, chord->staff()->idx(), harmony_line);
+      int harmony;
+      int diatonic = diatonicUpDown(chord->staff()->key(chord->tick()), note->ppitch(), relpitch-1);
+      switch ( modifier ) {
+            case FiguredBassItem::Modifier::NONE: {
+                  if ( false == obey_accidental ) {
+                        harmony = diatonic;
+                        break;
+                  }
+                  Note *antecedent = findAntecedent(chord, harmony_line);
+                  if (nullptr == antecedent) {  // if no antecedent found.
+                        harmony = native_pitch + int(acciv);
+                        }
+                  else {
+                        // harmony should be close to native_pitch +/- 4 half steps
+                        harmony = antecedent->ppitch();
+                        while (harmony > native_pitch + 2) // double sharp
+                              harmony -= 12;
+                        while (harmony < native_pitch - 2) // double flat
+                              harmony += 12;
+                  }
+                  break;
+            }
+            case FiguredBassItem::Modifier::DOUBLEFLAT:
+                  qDebug("Figured Bass modifier double-flat is not supported");
+                  return;
+            case FiguredBassItem::Modifier::FLAT:
+                  harmony = diatonic - 1;
+                  break;
+            case FiguredBassItem::Modifier::NATURAL:
+                  harmony = native_pitch;
+                  break;
+            case FiguredBassItem::Modifier::SHARP:
+                  harmony = diatonic + 1;
+                  break;
+            case FiguredBassItem::Modifier::DOUBLESHARP:
+                  qDebug("Figured Bass modifier double-sharp is not supported");
+                  return;
+            case FiguredBassItem::Modifier::CROSS:
+            case FiguredBassItem::Modifier::BACKSLASH:
+                  harmony = native_pitch + int(acciv) + 1; // adding 1 semi tone, flat->natural, natural->sharp, etc.
+                  break;
+            case FiguredBassItem::Modifier::SLASH:
+            case FiguredBassItem::Modifier::NUMOF:
+            default:
+                  qDebug("measure #%d Modifier = %hhd not yet implemented", segment->measure()->no(), modifier);
+                  return;
+            }
+      // if the same FB annotation occurs twice, we want to ignore it the 2nd time.
+      if( harmonys.cend() == find(harmonys.cbegin(), harmonys.cend(), harmony+octave))
+            harmonys.push_back(harmony+octave);
+}
+
+FiguredBassItem::Modifier combineFbModifiers(FiguredBassItem::Modifier prefix, FiguredBassItem::Modifier suffix)
+      {
+      if (suffix == FiguredBassItem::Modifier::NONE)
+            return prefix;
+      return suffix;
+      }
+      
+// populate the given harmonys vector with the pitches of the harmony notes implied by the figured base on the given chord
+bool FiguredBass::calcFiguredBass(Chord *chord, vector<int> & harmonys)
+      {
+      Q_ASSERT(harmonys.size() == 0);
+      Segment *segment = chord->segment();
+      FiguredBassItem::Modifier none = FiguredBassItem::Modifier::NONE;
+      
+      if ( chord->notes().size() == 0 ) {
+            return false; // no notes in the chord, not sure if this is possible?
+            }
+      if ( chord->notes().size() != 1 ) {
+            qDebug("measure #%d, cannot render Figured Base on a multi-note chord", segment->measure()->no());
+            return false;
+            }
+            
+      auto render_harmony = [&] (FiguredBassItem::Modifier modifier, int relpitch, bool obey_accidental){
+            renderFbHarmony(chord, harmonys, modifier, relpitch, obey_accidental);
+            };
+
+      if (find_if(segment->annotations().cbegin(),
+                  segment->annotations().cend(),
+                  [chord](Element *e) {
+                        return ( e->type() == Element::Type::FIGURED_BASS
+                                && e->track() == chord->track());
+                  }) == segment->annotations().cend())
+            {
+            render_harmony(none, 3, true);
+            render_harmony(none, 5, true);
+            return true; // no figured base to annotate
+            }
+      for (Element* e : segment->annotations())
+            {
+            if ( chord->track() != e->track() )
+                  continue;
+            if (e->type() != Element::Type::FIGURED_BASS )
+                  continue;
+
+            FiguredBass *fb = static_cast<FiguredBass*>(e);
+            std::vector<int> harmony;
+            std::vector<FiguredBassItem*> items = fb->getFiguredBaseItems();
+            sort( items.begin(), items.end(), [&](FiguredBassItem *i1, FiguredBassItem *i2) {
+                  return normalizeFbDigit(i1->digit()) < normalizeFbDigit(i2->digit());
+                  });
+            FiguredBassItem::Modifier modifier = combineFbModifiers(items[0]->prefix(), items[0]->suffix());
+            switch ( items.size() ) {
+                  case 0:
+                        render_harmony(none, 3, true);
+                        render_harmony(none, 5, true);
+                        break;
+                  case 1: {
+                        // a single figured bass missing a number, just with a symbol, implies the digit 3.
+                        int digit = normalizeFbDigit(items[0]->digit());
+                        int offset = 0;
+                        // 8 --> 1
+                        // 9 --> 2
+                        while (digit > 7 ) {
+                              digit -= 7;
+                              offset += 7;
+                        }
+                        switch (digit)
+                        {
+                              case 1:
+                                    // this normally means the digit was 8.
+                                    render_harmony(modifier,1+offset,false);
+                                    break;
+                              case 2:
+                                    // render_relative({2,4,6});
+                                    render_harmony(modifier,2+offset,false);
+                                    render_harmony(none, 4+offset, true);
+                                    render_harmony(none, 6+offset, true);
+                                    break;
+                              case 3:
+                                    // render_relative({3,5});
+                                    render_harmony(modifier,3+offset,false);
+                                    render_harmony(none,5+offset,true); // 5 is being calculated as 6 for note=D
+                                    break;
+                                    //case 4:
+                              case 5:
+                                    // render_relative({3,5});
+                                    render_harmony(none,3+offset,true);
+                                    render_harmony(modifier,5+offset,false);
+                                    break;
+                              case 6:
+                                    // render_relative({3,6});
+                                    render_harmony(none,3+offset, true);
+                                    render_harmony(modifier,6+offset, false);
+                                    break;
+                              case 7:
+                                    // render_relative({3,5,7});
+                                    qDebug("   case 7 offset=%d", offset);
+                                    render_harmony(none,3+offset,true);
+                                    render_harmony(none,5+offset, true);
+                                    render_harmony(modifier, 7+offset, false);
+                                    qDebug("   finished with case 7");
+                                    break;
+                              default:
+                                    render_harmony(modifier, digit+offset, false);
+                                    qDebug("(1315) measure #%d, cannot completely render single digit %d Figured Bass with modifier=%hhd",
+                                           segment->measure()->no(), digit+offset, modifier);
+                        }
+                  }
+                        break;
+                  case 2:
+                  {
+                        Q_ASSERT(normalizeFbDigit(items[0]->digit()) < normalizeFbDigit(items[1]->digit()));
+                        render_harmony(combineFbModifiers(items[0]->prefix(),items[0]->suffix()),items[0]->digit(),false);
+                        render_harmony(combineFbModifiers(items[1]->prefix(),items[1]->suffix()),items[1]->digit(),false);
+                        if (   ( items[0]->digit() == 2 && items[1]->digit()== 4)
+                            || ( items[0]->digit() == 4 && items[1]->digit()== 2)) {
+                              // 2 4 --> 2 4 6
+                              render_harmony(none, 6, true);
+                        }
+                        break;
+                  }
+                  default:
+                        for ( auto fbi : items) {
+                              render_harmony(combineFbModifiers(fbi->prefix(), fbi->suffix()), fbi->digit(), false);
+                        }
+                        break;
+                  }
+            }
+      return true;
+      }
 }
 
