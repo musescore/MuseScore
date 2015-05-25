@@ -964,12 +964,12 @@ Palette* MuseScore::newTempoPalette()
       sp->setDrawGrid(true);
 
       static const TempoPattern tp[] = {
-            TempoPattern("<sym>unicodeNoteHalfUp</sym> = 80", 80.0/30.0),                        // 1/2
-            TempoPattern("<sym>unicodeNoteQuarterUp</sym> = 80", 80.0/60.0),                     // 1/4
-            TempoPattern("<sym>unicodeNote8thUp</sym> = 80", 80.0/120.0),                    // 1/8
-            TempoPattern("<sym>unicodeNoteHalfUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
-            TempoPattern("<sym>unicodeNoteQuarterUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
-            TempoPattern("<sym>unicodeNote8thUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80", 120/120.0),   // dotted 1/8
+            TempoPattern("<sym>metNoteHalfUp</sym> = 80", 80.0/30.0),                    // 1/2
+            TempoPattern("<sym>metNoteQuarterUp</sym> = 80", 80.0/60.0),                 // 1/4
+            TempoPattern("<sym>metNote8thUp</sym> = 80", 80.0/120.0),                    // 1/8
+            TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
+            TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
+            TempoPattern("<sym>metNote8thUp</sym><sym>metAugmentationDot</sym> = 80", 120/120.0),       // dotted 1/8
             };
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
             TempoText* tt = new TempoText(gscore);
