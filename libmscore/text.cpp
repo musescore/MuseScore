@@ -2153,7 +2153,7 @@ void Text::deleteSelectedText()
                   qSwap(c1, c2);
             }
       int rows = _layout.size();
-      QList<TextBlock> toDelete;
+
       for (int row = 0; row < rows; ++row) {
             TextBlock& t = _layout[row];
             if (row >= r1 && row <= r2) {
@@ -2163,22 +2163,14 @@ void Text::deleteSelectedText()
                         t.remove(c1, t.columns() - c1);
                   else if (row == r2)
                         t.remove(0, c2);
-                  else {
-                        toDelete.append(t);
-                        }
                   }
             }
       if (r1 != r2) {
-            TextBlock& l1 = _layout[r1];
+            TextBlock& l1       = _layout[r1];
             const TextBlock& l2 = _layout[r2];
             for (const TextFragment& f : l2.fragments())
                   l1.fragments().append(f);
-            _layout.removeAt(r2);
-            QMutableListIterator<TextBlock> i(_layout);
-            while (i.hasNext()) {
-                  if (toDelete.contains(i.next()))
-                        i.remove();
-                  }
+            _layout.erase(_layout.begin() + r1 + 1, _layout.begin() + r2 + 1);
             if (_layout.last() == l1)
                   l1.setEol(false);
             }
