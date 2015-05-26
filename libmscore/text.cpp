@@ -2538,7 +2538,7 @@ void Text::paste()
                         if (symState)
                               sym += c;
                         else
-                              insertText(c);
+                              insert(&_cursor, c);
                         }
                   }
             else if (state == 1) {
