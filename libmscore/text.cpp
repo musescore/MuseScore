@@ -635,6 +635,8 @@ void TextBlock::simplify()
 
 QString TextBlock::remove(int start, int n)
       {
+      if (n == 0)
+            return QString();
       int col = 0;
       QString s;
       for (auto i = _text.begin(); i != _text.end();) {
