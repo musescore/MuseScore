@@ -28,7 +28,7 @@ namespace Ms {
 
 static const qreal subScriptSize   = 0.6;
 static const qreal subScriptOffset = 0.5;       // of x-height
-static const qreal superScriptOffset = -0.5;       // of x-height
+static const qreal superScriptOffset = -.9;      // of x-height
 
 //static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
 
