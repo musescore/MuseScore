@@ -1327,7 +1327,6 @@ void ScoreView::moveCursor(int tick)
       Measure* measure = score()->tick2measureMM(tick);
       if (measure == 0)
             return;
-      int offset = 0;
 
       qreal x;
       Segment* s;
@@ -1350,8 +1349,6 @@ void ScoreView::moveCursor(int tick)
                   else
                         x2 = measure->canvasPos().x() + measure->width(); //safety, should not happen
                   }
-            t1 += offset;
-            t2 += offset;
             if (tick >= t1 && tick < t2) {
                   int   dt = t2 - t1;
                   qreal dx = x2 - x1;
@@ -1388,7 +1385,7 @@ void ScoreView::moveCursor(int tick)
             SysStaff* ss = system->staff(i);
             if (!ss->show() || !_score->staff(i)->show())
                   continue;
-            y2 = ss->y() + ss->bbox().height();
+            y2 = ss->bbox().bottom();
             }
       h += y2;
       x -= _spatium;
@@ -1529,7 +1526,6 @@ void ScoreView::setLoopCursor(PositionCursor *curLoop, int tick, bool isInPos)
       if (measure == 0)
             return;
       qreal x;
-      int offset = 0;
 
       Segment* s;
       for (s = measure->first(Segment::Type::ChordRest); s;) {
@@ -1546,8 +1542,6 @@ void ScoreView::setLoopCursor(PositionCursor *curLoop, int tick, bool isInPos)
                   t2 = measure->endTick();
                   x2 = measure->canvasPos().x() + measure->width();
                   }
-            t1 += offset;
-            t2 += offset;
             if (tick >= t1 && tick < t2) {
                   int   dt = t2 - t1;
                   qreal dx = x2 - x1;
