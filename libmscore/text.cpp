@@ -1046,7 +1046,9 @@ void Text::insert(TextCursor* cursor, QChar c)
             deleteSelectedText();
       if (cursor->line() >= _layout.size())
             _layout.append(TextBlock());
-      if (c == QChar::LineFeed) {
+      if (c == QChar::Tabulation)
+            c = QChar::Space;
+      else if (c == QChar::LineFeed) {
             _layout[cursor->line()].setEol(true);
             cursor->setLine(cursor->line() + 1);
             cursor->setColumn(0);
@@ -1729,6 +1731,7 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                         s.clear();
                         break;
 
+                  case Qt::Key_Tab:
                   case Qt::Key_Space:
                         s = " ";
                         modifiers = 0;
