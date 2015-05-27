@@ -5487,16 +5487,19 @@ QString ScoreFont::toString(SymId id) const
 void ScoreFont::computeMetrics(Sym* sym, int code)
       {
       FT_UInt index = FT_Get_Char_Index(face, code);
-      sym->setIndex(index);
-      sym->setCode(code);
-
-      FT_Load_Glyph(face, index, FT_LOAD_DEFAULT);
-      FT_BBox bb;
-      FT_Outline_Get_BBox(&face->glyph->outline, &bb);
-      QRectF bbox;
-      bbox.setCoords(bb.xMin/640.0, -bb.yMax/640.0, bb.xMax/640.0, -bb.yMin/640.0);
-      sym->setBbox(bbox);
-      sym->setAdvance(face->glyph->linearHoriAdvance / 655360.0);
+      if (index != 0) {
+            if (FT_Load_Glyph(face, index, FT_LOAD_DEFAULT) == 0) {
+                  FT_BBox bb;
+                  if (FT_Outline_Get_BBox(&face->glyph->outline, &bb) == 0) {
+                        QRectF bbox;
+                        bbox.setCoords(bb.xMin/640.0, -bb.yMax/640.0, bb.xMax/640.0, -bb.yMin/640.0);
+                        sym->setIndex(index);
+                        sym->setCode(code);
+                        sym->setBbox(bbox);
+                        sym->setAdvance(face->glyph->linearHoriAdvance / 655360.0);
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------

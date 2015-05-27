@@ -49,6 +49,8 @@ void SymbolDialog::createSymbols()
       {
       int currentIndex = fontList->currentIndex();
       const ScoreFont* f = &ScoreFont::scoreFonts()[currentIndex];
+      // init the font if not done yet
+      ScoreFont::fontFactory(f->name());
       sp->clear();
       for (int i = 0; i < int(SymId::lastSym); ++i) {
             if (f->isValid(SymId(i))) {
