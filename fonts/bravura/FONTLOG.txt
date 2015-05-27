@@ -10,7 +10,7 @@ Basic font information
 ----------------------
 Bravura is a Unicode typeface designed by Steinberg for its in-development music notation and scoring application.
 
-It is compliant with version 1.12 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
+It is compliant with version 1.18 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
 
 More information about Steinberg's scoring application can be found at:
 
@@ -276,3 +276,34 @@ Changelog
 – Improved metadata for flat-like accidentals, adding 'cutOutSE' points for more of them.
 – Added new 'noteheadOrigin' point to metadata to assist in the alignment of noteheads of different rhythmic values, e.g. the double whole note (breve) with two vertical lines to either side of the oval notehead.
 – Added new 'opticalCenter' point to metadata for dynamics glyphs, to assist in their correct alignment with noteheads and stems.
+
+26 February 2015 (Daniel Spreadbury) Bravura 1.15
+– Improved U+EB2A (elecPowerOnOff) so that it more closely matches the standard appearance of the IEEE 5009 symbol.
+– Improved consistency of registration of U+EB2E–U+EB33 (elecVolumeLevel...) glyphs.
+– Corrected typo in metadata for dynamicSforzadoFF glyph.
+– Improved U+E26A (accidentalParensLeft) and U+E26B (accidentalParensRight).
+– Fixed contour direction for many glyphs; this may have resulted in incorrect appearance of some glyphs in some display contexts, and when printed on some printers.
+– Resized all notehead glyphs, except for those in the 'Note name noteheads' (U+E150–U+E1AF), 'Individual notes' (U+E1D0–U+E1EF), and 'Beamed groups of notes' (U+E1F0–U+E20F) ranges, such that they are exactly 0.25 em (equivalent to one staff space) in height; previously, many of the notehead glyphs had been optically sized and were taller.
+– Added a new stylistic set (ss05) containing optically-sized versions of the most common noteheads (double whole, square double whole, whole, half, and black). These glyphs are oversized, and are designed to be the largest possible noteheads that will work with staff lines of the thickness recommended in the Bravura font-specific metadata.
+– Many glyphs have small improvements to outline quality (via 'checkOutlines -i -e' from the Adobe FDK).
+
+14 April 2015 (Daniel Spreadbury) Bravura 1.16
+– Improved versions of bold dynamics characters; thanks to Tucker Meyers.
+– Improved versions of keyboard pedalling characters; thanks to Tucker Meyers.
+– Improved versions of trill, turn etc. characters; thanks to Tucker Meyers.
+– Improved symmetry of the whole note name noteheads; removed counters from noteWholeEmpty and noteHalfEmpty, since these are designed to be printed in white underneath note name noteheads, so that stave lines and ledger lines are blanked out, making the note names in the counters of the note name noteheads clearer to read.
+– Corrected side-bearings on Sagittal accidentals.
+– Corrected registration of glyphs designed to be combined with stems (descriptions ending '...for stem'), now consistently visually centered around both x=0 and y=0.
+– Corrected vertical registration of precomposed square (U+E120, U+E121), round (U+E122, U+E123), and diamond (U+E138–U+E13B) cluster noteheads, so they are consistent with the cluster notehead components in the same range.
+
+29 April 2015 (Daniel Spreadbury) Bravura 1.17
+– Added new 'Metronome marks' for notes with 2.75sp stems to balance with text.
+– Reverted notes in 'Individual notes' range to have 3.5sp stems.
+– Added separate glyphs for v, b, a, m, both superscript and on the baseline, to 'Octaves supplement' range.
+– Added marcato-tenuto above and below to 'Articulations' range.
+– Added 6 with slashed stem (figbass6Raised2) to 'Figured bass' range.
+
+18 May 2015 (Daniel Spreadbury) Bravura 1.18
+– Added side-bearings to figured bass digits, function symbols, and tuplet digits.
+– Corrected triangular clefs at U+E06F–U+E072 to match the actual usage by the Polish composer Schäffer.
+– Added z-style quarter (crotchet) rest.
