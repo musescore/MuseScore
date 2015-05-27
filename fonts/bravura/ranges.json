@@ -73,7 +73,9 @@
             "analyticsThemeRetrogradeInversion", 
             "analyticsThemeInversion", 
             "analyticsTheme1", 
-            "analyticsInversion1"
+            "analyticsInversion1", 
+            "analyticsChoralmelodie", 
+            "analyticsHauptrhythmus"
         ], 
         "range_end": "U+E86F", 
         "range_start": "U+E860"
@@ -178,7 +180,9 @@
             "articUnstressAbove", 
             "articUnstressBelow", 
             "articLaissezVibrerAbove", 
-            "articLaissezVibrerBelow"
+            "articLaissezVibrerBelow", 
+            "articMarcatoTenutoAbove", 
+            "articMarcatoTenutoBelow"
         ], 
         "range_end": "U+E4BF", 
         "range_start": "U+E4A0"
@@ -478,7 +482,10 @@
             "brassHarmonMuteClosed", 
             "brassHarmonMuteStemHalfLeft", 
             "brassHarmonMuteStemHalfRight", 
-            "brassHarmonMuteStemOpen"
+            "brassHarmonMuteStemOpen", 
+            "brassLiftSmoothShort", 
+            "brassLiftSmoothMedium", 
+            "brassLiftSmoothLong"
         ], 
         "range_end": "U+E5EF", 
         "range_start": "U+E5D0"
@@ -567,10 +574,10 @@
             "semipitchedPercussionClef2", 
             "6stringTabClef", 
             "4stringTabClef", 
-            "cClefTriangular", 
-            "fClefTriangular", 
-            "cClefTriangularToFClef", 
-            "fClefTriangularToCClef", 
+            "schaefferClef", 
+            "schaefferPreviousClef", 
+            "schaefferGClefToFClef", 
+            "schaefferFClefToGClef", 
             "gClefReversed", 
             "gClefTurned", 
             "cClefReversed", 
@@ -980,7 +987,8 @@
             "figbassParensRight", 
             "figbassPlus", 
             "figbassCombiningRaising", 
-            "figbassCombiningLowering"
+            "figbassCombiningLowering", 
+            "figbass6Raised2"
         ], 
         "range_end": "U+EA6F", 
         "range_start": "U+EA50"
@@ -1240,7 +1248,9 @@
             "harpTuningKeyHandle", 
             "harpTuningKeyShank", 
             "harpTuningKeyGlissando", 
-            "harpStringNoiseStem"
+            "harpStringNoiseStem", 
+            "harpSalzedoAeolianAscending", 
+            "harpSalzedoAeolianDescending"
         ], 
         "range_end": "U+E69F", 
         "range_start": "U+E680"
@@ -1782,6 +1792,37 @@
         "range_end": "U+E70F", 
         "range_start": "U+E700"
     }, 
+    "metronomeMarks": {
+        "description": "Metronome marks", 
+        "glyphs": [
+            "metNoteDoubleWhole", 
+            "metNoteDoubleWholeSquare", 
+            "metNoteWhole", 
+            "metNoteHalfUp", 
+            "metNoteHalfDown", 
+            "metNoteQuarterUp", 
+            "metNoteQuarterDown", 
+            "metNote8thUp", 
+            "metNote8thDown", 
+            "metNote16thUp", 
+            "metNote16thDown", 
+            "metNote32ndUp", 
+            "metNote32ndDown", 
+            "metNote64thUp", 
+            "metNote64thDown", 
+            "metNote128thUp", 
+            "metNote128thDown", 
+            "metNote256thUp", 
+            "metNote256thDown", 
+            "metNote512thUp", 
+            "metNote512thDown", 
+            "metNote1024thUp", 
+            "metNote1024thDown", 
+            "metAugmentationDot"
+        ], 
+        "range_end": "U+ECBF", 
+        "range_start": "U+ECA0"
+    }, 
     "miscellaneousPercussionInstrumentPictograms": {
         "description": "Miscellaneous percussion instrument pictograms", 
         "glyphs": [
@@ -1806,7 +1847,7 @@
             "metricModulationArrowLeft", 
             "metricModulationArrowRight"
         ], 
-        "range_end": "U+EC6F", 
+        "range_end": "U+EC7F", 
         "range_start": "U+EC60"
     }, 
     "multiSegmentLines": {
@@ -2180,10 +2221,30 @@
             "ventiduesimaAlta", 
             "ventiduesimaBassa", 
             "octaveParensLeft", 
-            "octaveParensRight"
+            "octaveParensRight", 
+            "ottavaBassaVb", 
+            "quindicesimaBassaMb", 
+            "ventiduesimaBassaMb", 
+            "octaveBassa"
         ], 
         "range_end": "U+E51F", 
         "range_start": "U+E510"
+    }, 
+    "octavesSupplement": {
+        "description": "Octaves supplement", 
+        "glyphs": [
+            "octaveLoco", 
+            "octaveBaselineA", 
+            "octaveSuperscriptA", 
+            "octaveBaselineB", 
+            "octaveSuperscriptB", 
+            "octaveBaselineM", 
+            "octaveSuperscriptM", 
+            "octaveBaselineV", 
+            "octaveSuperscriptV"
+        ], 
+        "range_end": "U+EC9F", 
+        "range_start": "U+EC90"
     }, 
     "olympianSagittalExtensionExtremePrecisionAccidentalDiacritics": {
         "description": "Olympian Sagittal extension (extreme precision) accidental diacritics", 
@@ -2344,11 +2405,11 @@
             "ornamentPrecompPortDeVoixMordent", 
             "ornamentPrecompTrillWithMordent", 
             "ornamentPrecompCadence", 
-            "ornamentPrecompCadenceWithTurn ", 
+            "ornamentPrecompCadenceWithTurn", 
             "ornamentPrecompDoubleCadenceLowerPrefix", 
-            "ornamentPrecompCadenceUpperPrefix ", 
+            "ornamentPrecompCadenceUpperPrefix", 
             "ornamentPrecompCadenceUpperPrefixTurn", 
-            "ornamentPrecompDoubleCadenceUpperPrefix ", 
+            "ornamentPrecompDoubleCadenceUpperPrefix", 
             "ornamentPrecompDoubleCadenceUpperPrefixTurn", 
             "ornamentPrecompMordentRelease", 
             "ornamentPrecompMordentUpperPrefix", 
@@ -2535,7 +2596,8 @@
             "restQuarterOld", 
             "restDoubleWholeLegerLine", 
             "restWholeLegerLine", 
-            "restHalfLegerLine"
+            "restHalfLegerLine", 
+            "restQuarterZ"
         ], 
         "range_end": "U+E4FF", 
         "range_start": "U+E4E0"
@@ -2621,7 +2683,9 @@
             "smnHistoryDoubleSharp", 
             "smnHistoryFlat", 
             "smnHistoryDoubleFlat", 
-            "smnNatural"
+            "smnNatural", 
+            "smnSharpDown", 
+            "smnSharpWhiteDown"
         ], 
         "range_end": "U+EC5F", 
         "range_start": "U+EC50"
@@ -2896,6 +2960,19 @@
         ], 
         "range_end": "U+E09F", 
         "range_start": "U+E080"
+    }, 
+    "timeSignaturesSupplement": {
+        "description": "Time signatures supplement", 
+        "glyphs": [
+            "timeSigBracketLeft", 
+            "timeSigBracketRight", 
+            "timeSigBracketLeftSmall", 
+            "timeSigBracketRightSmall", 
+            "timeSigSlash", 
+            "timeSigCut2"
+        ], 
+        "range_end": "U+EC8F", 
+        "range_start": "U+EC80"
     }, 
     "tremolos": {
         "description": "Tremolos", 
