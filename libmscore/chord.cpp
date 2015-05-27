@@ -2901,6 +2901,34 @@ void Chord::setSlash(bool flag, bool stemless)
       }
 
 //---------------------------------------------------------
+//   removeMarkings
+//    - this is normally called after cloning a chord to tie a note over the barline
+//    - there is no special undo handling; the assumption is that undo will simply remove the cloned chord
+//    - two note tremolos are converted into simple notes
+//    - single note tremolos are optionally retained
+//---------------------------------------------------------
+
+void Chord::removeMarkings(bool keepTremolo)
+      {
+      if (tremolo() && !keepTremolo)
+            remove(tremolo());
+      if (arpeggio())
+            remove(arpeggio());
+      for (Element* e : el())
+            remove(e);
+      for (Element* e : articulations())
+            remove(e);
+      for (Element* e : lyricsList())
+            remove(e);
+      for (Element* e : graceNotes())
+            remove(e);
+      for (Note* n : notes()) {
+            for (Element* e : n->el())
+                  n->remove(e);
+            }
+      }
+
+//---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 

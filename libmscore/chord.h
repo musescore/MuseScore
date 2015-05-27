@@ -160,6 +160,7 @@ class Chord : public ChordRest {
       StemSlash* stemSlash() const           { return _stemSlash; }
       bool slash();
       void setSlash(bool flag, bool stemless);
+      void removeMarkings(bool keepTremolo = false);
 
       const QList<Chord*>& graceNotes() const { return _graceNotes; }
       QList<Chord*>& graceNotes()             { return _graceNotes; }
