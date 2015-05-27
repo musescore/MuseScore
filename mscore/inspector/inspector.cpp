@@ -722,7 +722,10 @@ void InspectorTempoText::setElement()
 
 void InspectorTempoText::postInit()
       {
-      tt.tempo->setDisabled(tt.followText->isChecked());
+      bool followText = tt.followText->isChecked();
+      //tt.resetFollowText->setDisabled(followText);
+      tt.tempo->setDisabled(followText);
+      tt.resetTempo->setDisabled(followText);
       }
 
 //---------------------------------------------------------
