@@ -303,12 +303,10 @@ void TextBlock::layout(Text* t)
                   QFontMetricsF fm(f.font(t));
                   if (f.format.valign() != VerticalAlignment::AlignNormal) {
                         qreal voffset = fm.xHeight() / subScriptSize;   // use original height
-                        if (f.format.valign() != VerticalAlignment::AlignNormal) {
-                              if (f.format.valign() == VerticalAlignment::AlignSubScript)
-                                    voffset *= subScriptOffset;
-                              else
-                                    voffset *= superScriptOffset;
-                              }
+                        if (f.format.valign() == VerticalAlignment::AlignSubScript)
+                              voffset *= subScriptOffset;
+                        else
+                              voffset *= superScriptOffset;
                         f.pos.setY(voffset);
                         }
                   else
