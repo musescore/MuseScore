@@ -66,6 +66,7 @@
 #include "synthesizer/msynthesizer.h"
 #include "svggenerator.h"
 #include "libmscore/tiemap.h"
+#include "libmscore/tie.h"
 #include "libmscore/measurebase.h"
 
 #include "importmidi/importmidi_instrument.h"
@@ -192,7 +193,7 @@ QString checkSafety(Score * score) {
 	return QString();
 }
 
-void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal> t2t, const bool do_linearize);
+void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal>& t2t, const bool do_linearize);
 
 bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const bool do_linearize, const QString& partsName) {
 
@@ -290,9 +291,9 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 	return true;
 }
 
-QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal> t2t, QString basename);
+QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t, QString basename);
 
-void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal> t2t, const bool do_linearize) {
+void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal>& t2t, const bool do_linearize) {
 
       score->repeatList()->unwind();
       if (score->repeatList()->size()>1) {
@@ -334,8 +335,13 @@ void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, 
 
       // Total ticks/time to end.
       Measure* lastm = score->lastMeasure();
-      qts["total_ticks"] = lastm->tick()+lastm->ticks();
-      qts["total_time"] = score->tempomap()->tick2time(lastm->tick()+lastm->ticks());
+
+      int total_ticks = lastm->tick()+lastm->ticks();
+      qts["total_ticks"] = total_ticks;
+      qts["total_time"] = t2t.isEmpty()?
+                            score->tempomap()->tick2time(total_ticks):
+                            t2t.value(total_ticks, // Provide a linear approximation as default (important for old exercises)
+                              t2t.first() + (t2t.last()-t2t.first())*total_ticks/(t2t.lastKey()-t2t.firstKey()));
 
       score->setPrinting(true);
 
@@ -360,55 +366,106 @@ void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, 
       uz->addFile(prefix+"metainfo.json",QJsonDocument(qts).toJson());
    }
 
-QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal> t2t, QString basename) {
+QSet<Note *> * mark_tie_ends(QList<const Element*> const &elems) {
+    QSet<Note*>* res = new QSet<Note*>; 
+    foreach(const Element * e, elems) {
+      //qDebug()<<e->name();
+      if (e->type() == Element::Type::SLUR_SEGMENT) {
+        SlurSegment * ss = (SlurSegment *)e;
+        if (ss->slurTie()->type() == Element::Type::TIE) {
+          //qDebug() << "TIE FOUND";
+          res->insert( ((Tie *)ss->slurTie())->endNote() );
+        }
+      }
+    }
 
-      Measure * measure = NULL;
+    return res;
+}
+
+
+qreal * find_margins(Score * score) {
+
+    qreal max_tm=0.0, max_bm=0.0;
+
+    foreach( Page* page, score->pages() ) {
+      foreach( System* sys, *(page->systems()) ) {
+
+        QRectF sys_rect = sys->pageBoundingRect();
+        qreal sys_top = sys_rect.top();
+        qreal sys_bot = sys_rect.bottom();
+        //qDebug() << "SYSTEM: " << sys_top << " " << sys_bot << endl;
+
+        qreal max_top = sys_top, max_bot = sys_bot;
+
+        QList<const Element*> elems;
+        foreach(MeasureBase *m, sys->measures())
+           m->scanElements(&elems, collectElements, false);
+        sys->scanElements(&elems, collectElements, false);
+
+        foreach(const Element * e, elems) {
+          QRectF rect = e->pageBoundingRect();
+          qreal top = rect.top();
+          qreal bot = rect.bottom();
+
+          if (!e->visible()) continue;
+
+          if (top<max_top)  {
+            max_top = top;
+            //qDebug() << "T" << sys_top-max_top << " " << e->name() << e->height();
+          }
+          if (bot>max_bot) {
+            max_bot = bot;
+            //qDebug() << "B" << max_bot-sys_bot << " " << e->name() << e->height();
+          }
+        }
+    
+        //qDebug() << sys_top-max_top << " " << max_bot-sys_bot << endl;
+
+        if (sys_top-max_top>max_tm) max_tm = sys_top-max_top;
+        if (max_bot-sys_bot>max_bm) max_bm = max_bot-sys_bot;
+      }
+    }
+
+    //qDebug() << "MARGINS: "<< max_tm << " " << max_bm << " " << score->styleP(StyleIdx::minSystemDistance)/2 << endl;
+
+    qreal * res = new qreal[2];
+    res[0] = max_tm; res[1] = max_bm;
+    return res;
+}
+
+QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t, QString basename) {
+
       QPainter * p = NULL;
       QBuffer * svgbuf=NULL;
 
       qreal w=1.0, h=1.0;
       uint count = 1;
 
-      int ticksFromBeg = 0;
-
       int firstNonRest = 0, lastNonRest = 0;
 
-      double mag = converterDpi / MScore::DPI;
+      qreal mag = converterDpi / MScore::DPI;
 
       QString svgname = "";
+
+      qreal * margins =  find_margins(score);
+      qreal top_margin = margins[0]+0.5;
+      qreal bot_margin = margins[1]+0.5;
+      qreal h_margin = score->styleP(StyleIdx::staffDistance);
+      if (top_margin<bot_margin) bot_margin = top_margin;
+      delete [] margins;
+
+      QSet<Note *> * tie_ends = NULL; 
 
       QJsonArray result;
 
       foreach( Page* page, score->pages() ) {
-
-      	 qreal staff_dist = score->styleP(StyleIdx::minSystemDistance);
-
          foreach( System* sys, *(page->systems()) ) {
             QJsonObject sobj;
-            QJsonArray ticks, positions, barlines;
 
-         	// These are values you can manually edit under style->general->Page
-            qreal top_margin = score->styleP(StyleIdx::staffUpperBorder);
-            qreal bot_margin = score->styleP(StyleIdx::staffLowerBorder);
-            qreal h_margin = score->styleP(StyleIdx::staffDistance); 
-
-            if (sys->isVbox()) { // Non-staff things - heading, for instance
-               //qDebug("VB %f %f, %f %f %f %f", mtop, mbot, top_margin,sys->vbox()->topGap(),bot_margin, sys->vbox()->bottomGap());
-               top_margin  = sys->vbox()->topGap();
-               bot_margin = sys->vbox()->bottomGap();
-            }
-
-            //qDebug("TOP %f BOT %f FALLBACK %f",top_margin,bot_margin,staff_dist/2);//score->styleP(StyleIdx::minSystemDistance));
-
-            top_margin = qMax(staff_dist/2,top_margin);
-            bot_margin = qMax(staff_dist/2,bot_margin);
-
-            //qDebug("Margins: %f %f",top_margin,bot_margin);
-
-            w = sys->width() + 2*h_margin;
-            h = sys->height() + top_margin + bot_margin;
+            QRectF sys_rect = sys->pageBoundingRect();
+            w = sys_rect.width() + 2*h_margin;
+            h = sys_rect.height() + top_margin + bot_margin;
  
-
             svgname = basename + QString::number(count++)+".svg";
             sobj["img"] = svgname;
             sobj["width"] = w*mag;
@@ -428,8 +485,10 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal> t2t,
             svgbuf = new QBuffer();
             svgbuf->open(QIODevice::ReadWrite);
 
+            qreal dx = -(sys_rect.left()-h_margin), 
+                  dy = -(sys_rect.top()-top_margin);
             p = getSvgPainter(svgbuf,w,h,mag);
-            p->translate(-(sys->pagePos().rx()-h_margin), -(sys->staffYpage(0)-top_margin) );
+            p->translate(dx,dy);
 
             // Collect together all elements belonging to this system!
             QList<const Element*> elems;
@@ -438,18 +497,12 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal> t2t,
             sys->scanElements(&elems, collectElements, false);
 
             qreal end_pos = -1.0;
-            int last_tick = -1;
-            float last_pos = 0.0;
-
-            QSet<Note *> notes;
-            QSet<Note *> ongoing;
-
+            QJsonArray barlines;
+            QMap<int,qreal> tick2pos;
+            QMap<int,int> just_tied; // just the end of tied note
+            QMap<int,int> is_rest;
+            tie_ends = mark_tie_ends(elems);
             foreach(const Element * e, elems) {
-
-               if (e->type() == Element::Type::MEASURE) {
-                  if (measure!=NULL) ticksFromBeg+=measure->ticks();
-                  measure = (Measure *)e;
-               }
 
                if (!e->visible())
                      continue;
@@ -458,7 +511,10 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal> t2t,
                p->translate(pos);
                e->draw(p);
 
-               QTransform world = p->worldTransform(); // Get global translation i.e. page+element
+               QRectF bb = e->pageBoundingRect();
+               qreal lpos = (bb.left()+dx)/w;
+
+
 
                if (e->type() == Element::Type::NOTE || 
                    e->type() == Element::Type::REST) {
@@ -468,64 +524,34 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal> t2t,
 
                   int tick = cr->segment()->tick();
 
-                  if (tick > last_tick) {
+                  if (!tick2pos.contains(tick) || tick2pos[tick]>lpos)
+                    tick2pos[tick] = lpos;
 
-                     if (last_tick>=0) {
-                        //note_row(qts,last_tick,last_pos,&notes,&ongoing,tempomap);
-                        ticks.push_back(last_tick); positions.push_back(last_pos);
-                     }
+                  // NB! ar[17] = !ar.contains(17); would not work as expected...
+                  just_tied.insert(tick,just_tied.value(tick,true) && 
+                                  (e->type() == Element::Type::NOTE && 
+                                    tie_ends->contains((Note*)e)));
+                  is_rest.insert(tick,is_rest.value(tick,true) && 
+                                  (e->type() == Element::Type::REST));
 
-                     // Update the bounds for actual audio
-                     if (e->type() == Element::Type::NOTE) {
-                      if (firstNonRest<0 || tick<firstNonRest) firstNonRest = tick;
-                      int dur = cr->durationTypeTicks();
-                      if (tick+dur > lastNonRest) lastNonRest = tick+dur;
-                     }
-
-                     last_tick = tick;
-
-                     last_pos = world.m31()/(w*mag);
-                  }
-                  /*else if (tick!=last_tick) { // SHOULD NOT HAPPEN
-                     (*qts) << "# Omitted " << tick << ',' << last_tick << ' ';
-                     (*qts) << last_pos << ' ' << world.m31()/(w*mag) << endl; 
-                  }*/
-                  else {
-                     if (world.m31()/(w*mag)<last_pos) // correct for long rests
-                       last_pos = world.m31()/(w*mag);
-                  }
-
+                  // Update the bounds for actual audio
                   if (e->type() == Element::Type::NOTE) {
-                     notes << ((Note*)e);
+                    if (firstNonRest<0 || tick<firstNonRest) firstNonRest = tick;
+                    int dur = cr->durationTypeTicks();
+                    if (tick+dur > lastNonRest) lastNonRest = tick+dur;
                   }
 
                }
                else if (e->type() == Element::Type::MEASURE) {
-                  
-                  if (last_tick>=0) {
-                     //note_row(qts,last_tick,last_pos,&notes,&ongoing,tempomap);
-                     ticks.push_back(last_tick); positions.push_back(last_pos);
-
-                     last_tick = -1;
-                  }
-
-                  last_pos = world.m31()/(w*mag);
-                  barlines.push_back(world.m31()/(w*mag));
-
-                  end_pos = (world.m31() + mag*e->bbox().width())/(w*mag);
+                  barlines.push_back(lpos);
+                  end_pos = bb.right();
                }
 
                p->translate(-pos);
             }
 
-            if (end_pos>0) {
-               if (last_tick>=0) {
-                  //note_row(qts,last_tick,last_pos,&notes,&ongoing,tempomap);
-                  ticks.push_back(last_tick); positions.push_back(last_pos);
-               }
-                     
+            if (end_pos>0)                     
                barlines.push_back(end_pos);
-            }
 
 
             p->end();
@@ -534,24 +560,28 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal> t2t,
             uz->addFile(svgname,svgbuf->data());
             svgbuf->close();
           
-            delete p; delete svgbuf;
+            delete p; delete svgbuf; delete tie_ends;
+
+            QJsonArray ticks, times, positions, change, rest;
+
+            bool use_t2t = !t2t.isEmpty();
+            TempoMap * tempomap = score->tempomap();
+
+            foreach(int tick, tick2pos.keys()){
+              ticks.push_back(tick);
+              times.push_back(use_t2t?t2t[tick]:tempomap->tick2time(tick));
+              positions.push_back(tick2pos[tick]);
+
+              change.push_back(int(!(just_tied[tick] || (rest.last().toInt() && is_rest[tick]))));
+              rest.push_back(int(is_rest[tick]));
+            }
 
             sobj["notes"] = positions;
             sobj["ticks"] = ticks;
             sobj["blines"] = barlines;
-
-
-
-            QJsonArray times;
-            TempoMap * tempomap = score->tempomap();
-            if (t2t.isEmpty())
-              foreach(QJsonValue tick, ticks)
-                times.push_back(tempomap->tick2time(tick.toInt()));
-            else
-              foreach(QJsonValue tick, ticks)
-                times.push_back(t2t[tick.toInt()]);
-
             sobj["times"] = times;
+            sobj["is_change"] = change;
+            sobj["is_rest"] = rest;
 
             result.push_back(sobj);
          }
