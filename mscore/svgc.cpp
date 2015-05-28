@@ -372,10 +372,27 @@ QSet<Note *> * mark_tie_ends(QList<const Element*> const &elems) {
       //qDebug()<<e->name();
       if (e->type() == Element::Type::SLUR_SEGMENT) {
         SlurSegment * ss = (SlurSegment *)e;
-        if (ss->slurTie()->type() == Element::Type::TIE) {
+
+        bool same = ss->slurTie()->type() == Element::Type::TIE;
+        if (!same) { // Not formally a tie
+          // However, Mscore allows a slur to be put 
+          // where it actually is a tie, so check
+          Spanner * span = ss->spanner();
+          Chord *beg = (Chord*)span->startElement(), 
+                *end = (Chord*)span->endElement();
+
+          same = beg->notes().size() == end->notes().size();
+          if (same) {
+            for(int i = 0; i< beg->notes().size(); i++)
+              same = same && (beg->notes()[i]->ppitch() == end->notes()[i]->ppitch());
+          }
+        }
+
+        if (same) {
           //qDebug() << "TIE FOUND";
           res->insert( ((Tie *)ss->slurTie())->endNote() );
         }
+        //else qDebug() << "SLUR FOUND";
       }
     }
 
@@ -544,7 +561,7 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
                }
                else if (e->type() == Element::Type::MEASURE) {
                   barlines.push_back(lpos);
-                  end_pos = bb.right();
+                  end_pos = (bb.right()+dx)/w;
                }
 
                p->translate(-pos);
