@@ -2693,6 +2693,11 @@ void Score::connectTies(bool silent)
                               else {
                                     nc->setTremolo(tremolo);
                                     tremolo->setChords(c, nc);
+                                    // cross-measure tremolos are not supported
+                                    // but can accidentally result from copy & paste
+                                    // remove them now
+                                    if (c->measure() != nc->measure())
+                                          c->remove(tremolo);
                                     }
                               break;
                               }
