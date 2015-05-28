@@ -59,16 +59,16 @@ ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent
                   if (a->name.isEmpty() || a->name == "normal")
                         channelList->addItem(tr("normal"));
                   else
-                        channelList->addItem(a->name);
+                        channelList->addItem(qApp->translate("InstrumentsXML", a->name.toUtf8().data()));
                   }
             foreach(const NamedEventList& el, instrument->midiActions()) {
-                  midiActionList->addItem(el.name);
+                  midiActionList->addItem(qApp->translate("InstrumentsXML", el.name.toUtf8().data()));
                   }
             }
 
 #if 0
       foreach(const NamedEventList& e, instrument->midiActions)
-            midiActionList->addItem(e.name);
+            midiActionList->addItem(qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
       articulationChange->setChecked(!articulation->articulationName().isEmpty());
       midiAction->setChecked(!articulation->midiActionName().isEmpty());
 
