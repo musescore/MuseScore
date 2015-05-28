@@ -333,6 +333,7 @@ bool TrackList::write(Measure* measure) const
                   // split note/rest
                   //
 
+                  bool firstpart = true;
                   while (duration.numerator() > 0) {
                         if ((e->type() == Element::Type::REST || e->type() == Element::Type::REPEAT_MEASURE)
                            && (duration >= rest || e == back())
@@ -375,6 +376,8 @@ bool TrackList::write(Measure* measure) const
                               else if (e->type() == Element::Type::CHORD) {
                                     segment = m->getSegment(e, m->tick() + pos.ticks());
                                     Chord* c = static_cast<Chord*>(e)->clone();
+                                    if (!firstpart)
+                                          c->removeMarkings(true);
                                     c->setScore(score);
                                     c->setTrack(_track);
                                     c->setDuration(d);
@@ -428,6 +431,7 @@ bool TrackList::write(Measure* measure) const
                                           }
                                     }
                               }
+                        firstpart = false;
                         }
                   }
             else if (e->type() == Element::Type::BAR_LINE) {
