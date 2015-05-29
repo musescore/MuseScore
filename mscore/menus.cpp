@@ -1257,40 +1257,40 @@ void MuseScore::addTempo()
 
       SigEvent event = cs->sigmap()->timesig(cr->tick());
       Fraction f = event.nominal();
-      QString text("<sym>unicodeNoteQuarterUp</sym> = 80");
+      QString text("<sym>metNoteQuarterUp</sym> = 80");
       switch (f.denominator()) {
             case 1:
-                  text = "<sym>unicodeNoteWhole</sym> = 80";
+                  text = "<sym>metNoteWhole</sym> = 80";
                   break;
             case 2:
-                  text = "<sym>unicodeNoteHalfUp</sym> = 80";
+                  text = "<sym>metNoteHalfUp</sym> = 80";
                   break;
             case 4:
-                  text = "<sym>unicodeNoteQuarterUp</sym> = 80";
+                  text = "<sym>metNoteQuarterUp</sym> = 80";
                   break;
             case 8:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>unicodeNoteQuarterUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80";
+                        text = "<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>unicodeNote8thUp</sym> = 80";
+                        text = "<sym>metNote8thUp</sym> = 80";
                   break;
             case 16:
                   if(f.numerator() % 3 == 0)
-                        text = text = "<sym>unicodeNote8thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
+                        text = text = "<sym>metNote8thUp</sym><sym>metAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>unicodeNote16thUp</sym> = 80";
+                        text = "<sym>metNote16thUp</sym> = 80";
                   break;
             case 32:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>unicodeNote16thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
+                        text = "<sym>metNote16thUp</sym><sym>metAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>unicodeNote32thUp</sym> = 80";
+                        text = "<sym>metNote32thUp</sym> = 80";
                   break;
             case 64:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>unicodeNote32thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
+                        text = "<sym>metNote32thUp</sym><sym>metAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>unicodeNote64thUp</sym> = 80";
+                        text = "<sym>metNote64thUp</sym> = 80";
                   break;
             default:
                   break;
