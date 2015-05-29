@@ -59,7 +59,10 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
       _staffText = static_cast<StaffText*>(st->clone());
 
 #ifndef AEOLUS
-	tabWidget->removeTab(2);
+      tabWidget->removeTab(2);
+#endif
+#ifndef MIDIACTIONS // ToDo: not yet implemented
+      tabWidget->removeTab(1);
 #endif
 
       const char* vbsh { "QToolButton:checked, QToolButton:pressed { color: white; background:%1;}" };
