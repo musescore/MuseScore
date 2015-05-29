@@ -732,7 +732,7 @@ void MuseScore::newFile()
       if (newWizard->createTempo()) {
             double tempo = newWizard->tempo();
             TempoText* tt = new TempoText(score);
-            tt->setXmlText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(tempo));
+            tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempo));
             tempo /= 60;      // bpm -> bps
 
             tt->setTempo(tempo);

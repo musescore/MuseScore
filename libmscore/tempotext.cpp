@@ -73,7 +73,7 @@ void TempoText::read(XmlReader& e)
             }
       // check sanity
       if (xmlText().isEmpty()) {
-            setXmlText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(lrint(60 * _tempo)));
+            setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(lrint(60 * _tempo)));
             setVisible(false);
             }
       }
