@@ -95,32 +95,32 @@
         <Tempo>
           <tempo>1.2</tempo>
           <lid>4</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 72</text>
+          <text><sym>metNoteQuarterUp</sym> = 72</text>
           </Tempo>
         <Tempo>
           <tempo>1.2</tempo>
           <lid>5</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 72</text>
+          <text><sym>metNoteQuarterUp</sym> = 72</text>
           </Tempo>
         <Tempo>
           <tempo>1.2</tempo>
           <lid>6</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 72</text>
+          <text><sym>metNoteQuarterUp</sym> = 72</text>
           </Tempo>
         <Tempo>
           <tempo>1.2</tempo>
           <lid>7</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 72</text>
+          <text><sym>metNoteQuarterUp</sym> = 72</text>
           </Tempo>
         <Tempo>
           <tempo>1.2</tempo>
           <lid>8</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 72</text>
+          <text><sym>metNoteQuarterUp</sym> = 72</text>
           </Tempo>
         <Tempo>
           <tempo>1.2</tempo>
           <lid>9</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 72</text>
+          <text><sym>metNoteQuarterUp</sym> = 72</text>
           </Tempo>
         <Rest>
           <lid>10</lid>
@@ -322,32 +322,32 @@
           <Tempo>
             <tempo>1.2</tempo>
             <lid>4</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 72</text>
+            <text><sym>metNoteQuarterUp</sym> = 72</text>
             </Tempo>
           <Tempo>
             <tempo>1.2</tempo>
             <lid>5</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 72</text>
+            <text><sym>metNoteQuarterUp</sym> = 72</text>
             </Tempo>
           <Tempo>
             <tempo>1.2</tempo>
             <lid>6</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 72</text>
+            <text><sym>metNoteQuarterUp</sym> = 72</text>
             </Tempo>
           <Tempo>
             <tempo>1.2</tempo>
             <lid>7</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 72</text>
+            <text><sym>metNoteQuarterUp</sym> = 72</text>
             </Tempo>
           <Tempo>
             <tempo>1.2</tempo>
             <lid>8</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 72</text>
+            <text><sym>metNoteQuarterUp</sym> = 72</text>
             </Tempo>
           <Tempo>
             <tempo>1.2</tempo>
             <lid>9</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 72</text>
+            <text><sym>metNoteQuarterUp</sym> = 72</text>
             </Tempo>
           <Rest>
             <lid>10</lid>

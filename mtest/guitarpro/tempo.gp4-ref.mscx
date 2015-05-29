@@ -95,27 +95,27 @@
         <Tempo>
           <tempo>4.16667</tempo>
           <lid>4</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 250</text>
+          <text><sym>metNoteQuarterUp</sym> = 250</text>
           </Tempo>
         <Tempo>
           <tempo>4.16667</tempo>
           <lid>5</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 250</text>
+          <text><sym>metNoteQuarterUp</sym> = 250</text>
           </Tempo>
         <Tempo>
           <tempo>4.16667</tempo>
           <lid>6</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 250</text>
+          <text><sym>metNoteQuarterUp</sym> = 250</text>
           </Tempo>
         <Tempo>
           <tempo>4.16667</tempo>
           <lid>7</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 250</text>
+          <text><sym>metNoteQuarterUp</sym> = 250</text>
           </Tempo>
         <Tempo>
           <tempo>4.16667</tempo>
           <lid>8</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 250</text>
+          <text><sym>metNoteQuarterUp</sym> = 250</text>
           </Tempo>
         <Chord>
           <lid>9</lid>
@@ -212,7 +212,7 @@
         <Tempo>
           <tempo>1.33333</tempo>
           <lid>27</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 80</text>
+          <text><sym>metNoteQuarterUp</sym> = 80</text>
           </Tempo>
         <Chord>
           <lid>28</lid>
@@ -389,27 +389,27 @@
           <Tempo>
             <tempo>4.16667</tempo>
             <lid>4</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 250</text>
+            <text><sym>metNoteQuarterUp</sym> = 250</text>
             </Tempo>
           <Tempo>
             <tempo>4.16667</tempo>
             <lid>5</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 250</text>
+            <text><sym>metNoteQuarterUp</sym> = 250</text>
             </Tempo>
           <Tempo>
             <tempo>4.16667</tempo>
             <lid>6</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 250</text>
+            <text><sym>metNoteQuarterUp</sym> = 250</text>
             </Tempo>
           <Tempo>
             <tempo>4.16667</tempo>
             <lid>7</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 250</text>
+            <text><sym>metNoteQuarterUp</sym> = 250</text>
             </Tempo>
           <Tempo>
             <tempo>4.16667</tempo>
             <lid>8</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 250</text>
+            <text><sym>metNoteQuarterUp</sym> = 250</text>
             </Tempo>
           <Chord>
             <lid>9</lid>
@@ -506,7 +506,7 @@
           <Tempo>
             <tempo>1.33333</tempo>
             <lid>27</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 80</text>
+            <text><sym>metNoteQuarterUp</sym> = 80</text>
             </Tempo>
           <Chord>
             <lid>28</lid>
