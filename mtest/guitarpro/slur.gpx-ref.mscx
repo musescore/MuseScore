@@ -133,7 +133,7 @@
         <Tempo>
           <tempo>2</tempo>
           <lid>5</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+          <text><sym>metNoteQuarterUp</sym> = 120</text>
           </Tempo>
         <Slur id="2">
           <lid>16</lid>
@@ -350,7 +350,7 @@
           <Tempo>
             <tempo>2</tempo>
             <lid>5</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Slur id="3">
             <lid>16</lid>
