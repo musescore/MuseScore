@@ -2219,7 +2219,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             //----------------------------------------------------
             else if (tag == "stretch")
-                  _userStretch = e.readDouble();
+                  _userStretch = e.readDouble(0.001, 99.99);
             else if (tag == "LayoutBreak") {
                   LayoutBreak* lb = new LayoutBreak(score());
                   lb->read(e);
