@@ -2839,17 +2839,18 @@ void Score::selectRange(Element* e, int staffIdx)
                         int oetick = cr->segment()->tick();
                         if (tick < oetick) {
                               _selection.setStartSegment(m->tick2segment(tick));
+                              _selection.setActiveSegment(_selection.startSegment());
                               if (etick >= oetick)
                                     _selection.setEndSegment(m->last());
                               else
                                     _selection.setEndSegment(cr->nextSegmentAfterCR(Segment::Type::ChordRest
                                                                                     | Segment::Type::EndBarLine
                                                                                     | Segment::Type::Clef));
-
                               }
                         else {
                               _selection.setStartSegment(cr->segment());
                               _selection.setEndSegment(m->last());
+                              _selection.setActiveSegment(_selection.endSegment());
                               }
 
                         _selection.setStaffStart(staffIdx);
@@ -2858,6 +2859,7 @@ void Score::selectRange(Element* e, int staffIdx)
                               _selection.setStaffStart(cr->staffIdx());
                         else if (cr->staffIdx() >= _selection.staffEnd())
                               _selection.setStaffEnd(cr->staffIdx() + 1);
+                        _selection.setState(SelState::RANGE);
                         }
                   else {
                         deselectAll();
