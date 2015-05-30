@@ -2841,7 +2841,7 @@ void Score::selectRange(Element* e, int staffIdx)
                         Segment* endSegment = m->last();
                         if (tick < oetick) {
                               startSegment = m->tick2segment(tick);
-                              if (etick < oetick)
+                              if (etick <= oetick)
                                     endSegment = cr->nextSegmentAfterCR(Segment::Type::ChordRest
                                                                                     | Segment::Type::EndBarLine
                                                                                     | Segment::Type::Clef);
