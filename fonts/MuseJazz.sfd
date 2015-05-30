@@ -22,7 +22,7 @@ OS2Version: 3
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1271071127
-ModificationTime: 1428078558
+ModificationTime: 1432999827
 PfmFamily: 65
 TTFWeight: 400
 TTFWidth: 5
@@ -90,7 +90,7 @@ Grid
   Named: "x-height" 
 EndSplineSet
 TeXData: 1 0 0 250880 125440 83626 530944 -1048576 83626 783286 444596 497025 792723 393216 433062 380633 303038 157286 324010 404750 52429 2506097 1059062 262144
-BeginChars: 1114112 302
+BeginChars: 1114112 308
 
 StartChar: parenleft
 Encoding: 40 40 0
@@ -15477,6 +15477,66 @@ SplineSet
  15.4145 1259.3 15.4145 1259.3 38 1325 c 24,48,49
  53.8676 1371.16 53.8676 1371.16 110 1388 c 24,0,1
 EndSplineSet
+EndChar
+
+StartChar: uniECA2
+Encoding: 60578 60578 302
+Width: 1228
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+Refer: 287 119133 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniECA3
+Encoding: 60579 60579 303
+Width: 1034
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+Refer: 288 119134 S 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniECA5
+Encoding: 60581 60581 304
+Width: 1034
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+Refer: 289 119135 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniECA7
+Encoding: 60583 60583 305
+Width: 1464
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+Refer: 290 119136 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniECA9
+Encoding: 60585 60585 306
+Width: 1479
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+Refer: 291 119137 N 1 0 0 1 0 0 2
+EndChar
+
+StartChar: uniECB7
+Encoding: 60599 60599 307
+Width: 379
+VWidth: 0
+Flags: W
+LayerCount: 2
+Fore
+Refer: 292 119149 N 1 0 0 1 0 0 2
 EndChar
 EndChars
 EndSplineFont
