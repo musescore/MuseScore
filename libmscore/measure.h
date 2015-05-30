@@ -220,7 +220,7 @@ class Measure : public MeasureBase {
       SegmentList* segments()                   { return &_segments; }
 
       qreal userStretch() const;
-      void setUserStretch(qreal v)              { _userStretch = v;    }
+      void setUserStretch(qreal v)              { _userStretch = (v < 0.001)? 0.001: v; }
 
       void layoutX(qreal stretch);
       void layoutWidth(qreal width);
