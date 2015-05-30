@@ -1652,6 +1652,8 @@ void Score::cmdAddStretch(qreal val)
                   break;
             qreal stretch = m->userStretch();
             stretch += val;
+            if (stretch < 0)
+                  stretch = 0;
             undo(new ChangeStretch(m, stretch));
             }
       _layoutAll = true;
@@ -2884,7 +2886,7 @@ void Score::cmdResequenceRehearsalMarks()
             }
 
       if (noSelection)
-             deselectAll();
+            deselectAll();
       }
 
 //---------------------------------------------------------
@@ -2926,7 +2928,7 @@ void Score::addRemoveBreaks(int interval, bool lock)
                   if (interval == 0) {
                         // remove line break if present
                         if (m->lineBreak())
-                             m->undoSetLineBreak(false);
+                              m->undoSetLineBreak(false);
                         }
                   else {
                         if (++count == interval) {
