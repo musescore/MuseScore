@@ -55,20 +55,27 @@ ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent
 //      const QList<MidiArticulation>& articulation() const;
 //      const QList<Channel>& channel() const;
 
-            foreach(const Channel* a, instrument->channel()) {
-                  if (a->name.isEmpty() || a->name == "normal")
+            for (const Channel* a : instrument->channel()) {
+                  if (a->name.isEmpty() || a->name == "normal") {
                         channelList->addItem(tr("normal"));
-                  else
+                        channelList->item(channelList->count())->setData(Qt::UserRole, "normal");
+                        }
+                  else {
                         channelList->addItem(qApp->translate("InstrumentsXML", a->name.toUtf8().data()));
+                        channelList->item(channelList->count())->setData(Qt::UserRole, a->name);
+                        }
                   }
-            foreach(const NamedEventList& el, instrument->midiActions()) {
+            for (const NamedEventList& el : instrument->midiActions()) {
                   midiActionList->addItem(qApp->translate("InstrumentsXML", el.name.toUtf8().data()));
+                  midiActionList->item(midiActionList->count())->setData(Qt::UserRole, el.name);
                   }
             }
 
 #if 0
-      foreach(const NamedEventList& e, instrument->midiActions)
+      for (const NamedEventList& e : instrument->midiActions) {
             midiActionList->addItem(qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
+            midiActionList->item(midiActionList->count())->setData(Qt::UserRole, e.name);
+            }
       articulationChange->setChecked(!articulation->articulationName().isEmpty());
       midiAction->setChecked(!articulation->midiActionName().isEmpty());
 
@@ -102,12 +109,12 @@ void ArticulationProperties::saveValues()
       if (articulationChange->isChecked()) {
             QListWidgetItem* i = articulationList->currentItem();
             if (i)
-                  staffText->setChannelName(i->text());
+                  staffText->setChannelName(i->data(Qt::UserRole));
             }
       if (midiAction->isChecked()) {
             QListWidgetItem* i = midiActionList->currentItem();
             if (i)
-                  staffText->setMidiActionName(i->text());
+                  staffText->setMidiActionName(i->data(Qt::UserRole));
             }
 #endif
       if (int(articulation->direction()) != direction->currentIndex())

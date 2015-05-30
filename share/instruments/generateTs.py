@@ -29,18 +29,40 @@ for child in root:
         for instrument in instruments:
             longName = instrument.find("longName")
             if longName is not None:
-                print "longName " +longName.text
+                print "longName " + longName.text
                 addMessage(f, longName.text)
                 previousLongName = longName.text
+            
             shortName = instrument.find("shortName")
             if shortName is not None:
-                print "shortName " +shortName.text
+                print "shortName " + shortName.text
                 addMessage(f, shortName.text, previousLongName)
                 previousLongName = ""
+            
             trackName = instrument.find("trackName")
             if trackName is not None:
                 print "trackName " + trackName.text
                 addMessage(f, trackName.text)
                 previousLongName = ""
+
+            channels = instrument.findall("Channel")
+            for channel in channels:
+                channelName = channel.get("name")
+                if channelName is not None:
+                    print "Channel name :" + channelName
+                    addMessage(f, channelName)
+                cMidiActions = channel.findall("MidiAction")
+                for cma in cMidiActions:
+                    cmaName = cma.get("name")
+                    if cmaName is not None:
+                        print "Channel, MidiAction name :" + cmaName
+                        addMessage(f, cma)
+
+            iMidiActions = instrument.findall("MidiAction")
+            for ima in iMidiActions:
+                imaName = ima.get("name")
+                if imaName is not None:
+                    print "Instrument, MidiAction name :" + imaName
+                    addMessage(f, ima)
 
 f.close() 

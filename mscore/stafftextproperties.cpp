@@ -35,7 +35,7 @@ static void initChannelCombo(QComboBox* cb, StaffText* st)
       {
       Part* part = st->staff()->part();
       int tick = static_cast<Segment*>(st->parent())->tick();
-      foreach(const Channel* a, part->instrument(tick)->channel()) {
+      for (const Channel* a : part->instrument(tick)->channel()) {
             if (a->name.isEmpty() || a->name == "normal")
                   cb->addItem(QObject::tr("normal"));
             else
@@ -60,9 +60,6 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
 
 #ifndef AEOLUS
       tabWidget->removeTab(2);
-#endif
-#ifndef MIDIACTIONS // ToDo: not yet implemented
-      tabWidget->removeTab(1);
 #endif
 
       const char* vbsh { "QToolButton:checked, QToolButton:pressed { color: white; background:%1;}" };
@@ -386,28 +383,40 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
       Channel* channel    = part->instrument(tick)->channel(channelIdx);
       QString channelName = channel->name;
 
-      foreach(const NamedEventList& e, part->instrument(tick)->midiActions()) {
+      for (const NamedEventList& e : part->instrument(tick)->midiActions()) {
             QTreeWidgetItem* item = new QTreeWidgetItem(actionList);
-            if (e.name.isEmpty() || e.name == "normal")
+            if (e.name.isEmpty() || e.name == "normal") {
                   item->setText(0, tr("normal"));
-            else
+                  item->setData(0, Qt::UserRole, "normal");
+                  }
+            else {
                   item->setText(0, qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
+                  item->setData(0, Qt::UserRole, e.name);
+                  }
             item->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
             }
-      foreach(const NamedEventList& e, channel->midiActions) {
+      for (const NamedEventList& e : channel->midiActions) {
             QTreeWidgetItem* item = new QTreeWidgetItem(actionList);
-            if (e.name.isEmpty() || e.name == "normal")
+            if (e.name.isEmpty() || e.name == "normal") {
                   item->setText(0, tr("normal"));
-            else
+                  item->setData(0, Qt::UserRole, "normal");
+                  }
+            else {
                   item->setText(0, qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
+                  item->setData(0, Qt::UserRole, e.name);
+                  }
             item->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
             }
-      foreach(const ChannelActions& ca, *_staffText->channelActions()) {
+      for (const ChannelActions& ca : *_staffText->channelActions()) {
             if (ca.channel == channelIdx) {
-                  foreach(QString s, ca.midiActionNames) {
-                        QList<QTreeWidgetItem*> items = actionList->findItems(s, Qt::MatchExactly);
-                        foreach(QTreeWidgetItem* item, items)
-                              item->setSelected(true);
+                  for (QString s : ca.midiActionNames) {
+                        QList<QTreeWidgetItem*> items;
+                        for (int i = 0; i < actionList->topLevelItemCount(); i++) {
+                              QTreeWidgetItem* item = actionList->topLevelItem(i);
+                              if (item->data(0, Qt::UserRole) == s) {
+                                    item->setSelected(true);
+                                    }
+                              }
                         }
                   }
             }
