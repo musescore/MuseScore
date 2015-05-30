@@ -39,7 +39,7 @@ static void initChannelCombo(QComboBox* cb, StaffText* st)
             if (a->name.isEmpty() || a->name == "normal")
                   cb->addItem(QObject::tr("normal"));
             else
-                  cb->addItem(a->name);
+                  cb->addItem(qApp->translate("InstrumentsXML", a->name.toUtf8().data()));
             }
       }
 
@@ -59,7 +59,10 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
       _staffText = static_cast<StaffText*>(st->clone());
 
 #ifndef AEOLUS
-	tabWidget->removeTab(2);
+      tabWidget->removeTab(2);
+#endif
+#ifndef MIDIACTIONS // ToDo: not yet implemented
+      tabWidget->removeTab(1);
 #endif
 
       const char* vbsh { "QToolButton:checked, QToolButton:pressed { color: white; background:%1;}" };
@@ -186,8 +189,8 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
             if (a->name.isEmpty() || a->name == "normal")
                   item->setText(0, tr("normal"));
             else
-                  item->setText(0, a->name);
-            item->setText(1, a->descr);
+                  item->setText(0, qApp->translate("InstrumentsXML", a->name.toUtf8().data()));
+            item->setText(1, qApp->translate("InstrumentsXML", a->descr.toUtf8().data()));
             if (i == 0)
                   selectedItem = item;
             }
@@ -388,16 +391,16 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
             if (e.name.isEmpty() || e.name == "normal")
                   item->setText(0, tr("normal"));
             else
-                  item->setText(0, e.name);
-            item->setText(1, e.descr);
+                  item->setText(0, qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
+            item->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
             }
       foreach(const NamedEventList& e, channel->midiActions) {
             QTreeWidgetItem* item = new QTreeWidgetItem(actionList);
             if (e.name.isEmpty() || e.name == "normal")
                   item->setText(0, tr("normal"));
             else
-                  item->setText(0, e.name);
-            item->setText(1, e.descr);
+                  item->setText(0, qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
+            item->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
             }
       foreach(const ChannelActions& ca, *_staffText->channelActions()) {
             if (ca.channel == channelIdx) {
