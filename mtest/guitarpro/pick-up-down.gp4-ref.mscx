@@ -95,7 +95,7 @@
         <Tempo>
           <tempo>2</tempo>
           <lid>4</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+          <text><sym>metNoteQuarterUp</sym> = 120</text>
           </Tempo>
         <Dynamic>
           <subtype>mf</subtype>
@@ -105,17 +105,17 @@
         <Tempo>
           <tempo>2</tempo>
           <lid>6</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+          <text><sym>metNoteQuarterUp</sym> = 120</text>
           </Tempo>
         <Tempo>
           <tempo>2</tempo>
           <lid>7</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+          <text><sym>metNoteQuarterUp</sym> = 120</text>
           </Tempo>
         <Tempo>
           <tempo>2</tempo>
           <lid>8</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+          <text><sym>metNoteQuarterUp</sym> = 120</text>
           </Tempo>
         <Chord>
           <lid>10</lid>
@@ -291,7 +291,7 @@
           <Tempo>
             <tempo>2</tempo>
             <lid>4</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Dynamic>
             <subtype>mf</subtype>
@@ -301,17 +301,17 @@
           <Tempo>
             <tempo>2</tempo>
             <lid>6</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Tempo>
             <tempo>2</tempo>
             <lid>7</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Tempo>
             <tempo>2</tempo>
             <lid>8</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
             <lid>10</lid>

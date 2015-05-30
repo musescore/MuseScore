@@ -138,7 +138,7 @@
         <Tempo>
           <tempo>2</tempo>
           <lid>6</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+          <text><sym>metNoteQuarterUp</sym> = 120</text>
           </Tempo>
         <TremoloBar>
           <point time="0" pitch="0" vibrato="0"/>
@@ -470,7 +470,7 @@
           <Tempo>
             <tempo>2</tempo>
             <lid>6</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <TremoloBar>
             <point time="0" pitch="0" vibrato="0"/>
