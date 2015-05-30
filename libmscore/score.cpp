@@ -2837,27 +2837,23 @@ void Score::selectRange(Element* e, int staffIdx)
 
                         ChordRest* cr = static_cast<ChordRest*>(oe);
                         int oetick = cr->segment()->tick();
+                        Segment* startSegment = cr->segment();
+                        Segment* endSegment = m->last();
                         if (tick < oetick) {
-                              _selection.setStartSegment(m->tick2segment(tick));
-                              if (etick >= oetick)
-                                    _selection.setEndSegment(m->last());
-                              else
-                                    _selection.setEndSegment(cr->nextSegmentAfterCR(Segment::Type::ChordRest
+                              startSegment = m->tick2segment(tick);
+                              if (etick < oetick)
+                                    endSegment = cr->nextSegmentAfterCR(Segment::Type::ChordRest
                                                                                     | Segment::Type::EndBarLine
-                                                                                    | Segment::Type::Clef));
+                                                                                    | Segment::Type::Clef);
 
                               }
-                        else {
-                              _selection.setStartSegment(cr->segment());
-                              _selection.setEndSegment(m->last());
-                              }
-
-                        _selection.setStaffStart(staffIdx);
-                        _selection.setStaffEnd(staffIdx + 1);
-                        if (_selection.staffStart() > cr->staffIdx())
-                              _selection.setStaffStart(cr->staffIdx());
-                        else if (cr->staffIdx() >= _selection.staffEnd())
-                              _selection.setStaffEnd(cr->staffIdx() + 1);
+                        int staffStart = staffIdx;
+                        int endStaff = staffIdx + 1;
+                        if (staffStart > cr->staffIdx())
+                              staffStart = cr->staffIdx();
+                        else if (cr->staffIdx() >= endStaff)
+                              endStaff = cr->staffIdx() + 1;
+                        _selection.setRange(startSegment, endSegment, staffStart, endStaff);
                         }
                   else {
                         deselectAll();
@@ -2876,7 +2872,6 @@ void Score::selectRange(Element* e, int staffIdx)
             if (e->type() == Element::Type::NOTE)
                   e = e->parent();
             ChordRest* cr = static_cast<ChordRest*>(e);
-
 
             if (_selection.isNone()
                 || (_selection.isList() && !_selection.isSingle())) {
@@ -2905,7 +2900,6 @@ void Score::selectRange(Element* e, int staffIdx)
                                             endSeg,
                                             oe->staffIdx(),
                                             oe->staffIdx() + 1);
-
                         _selection.extendRangeSelection(cr);
 
                         }
