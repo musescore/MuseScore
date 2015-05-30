@@ -1028,7 +1028,7 @@ void GuitarPro::setTempo(int tempo, Measure* measure)
       {
       TempoText* tt = new TempoText(score);
       tt->setTempo(double(tempo)/60.0);
-      tt->setXmlText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(tempo));
+      tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempo));
 
       tt->setTrack(0);
       Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
