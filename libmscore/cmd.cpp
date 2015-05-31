@@ -1772,16 +1772,27 @@ bool Score::processMidiInput()
 Element* Score::move(const QString& cmd)
       {
       ChordRest* cr;
+      bool keepSelection = false;
       if (noteEntryMode()) {
             // if selection exists and is grace note, use it
-            // otherwise use chord/rest at input position
             // also use it if we are moving to next chord
             // to catch up with the cursor and not move the selection by 2 positions
-            cr = selection().cr();
-            if (cr && (cr->isGrace() || cmd == "next-chord"))
-                  ;
-            else
-                  cr = inputState().cr();
+            // otherwise use chord/rest at input position
+            ChordRest* selectedCR = selection().cr();
+            ChordRest* isCR = inputState().cr();
+            if (selectedCR && (selectedCR->isGrace() || cmd == "next-chord"))
+                  cr = selectedCR;
+            else if (isCR)
+                  cr = isCR;
+            else {
+                  // when there is no cr at input position for current voice,
+                  // this is a sign that input cursor has advanced into a gap / empty measure
+                  // use selected chord if present,
+                  // but prev-chord command should just return the cursor here
+                  cr = selectedCR;
+                  if (cmd == "prev-chord")
+                        keepSelection = true;
+                  }
             }
       else if (selection().activeCR())
             cr = selection().activeCR();
@@ -1863,6 +1874,9 @@ Element* Score::move(const QString& cmd)
             if (noteEntryMode())
                   _is.moveToNextInputPos();
             el = nextChordRest(cr);
+            // keep same element selected if no next cr
+            if (!el)
+                  el = cr;
             }
       else if (cmd == "prev-chord") {
             if (noteEntryMode() && _is.segment()) {
@@ -1888,7 +1902,7 @@ Element* Score::move(const QString& cmd)
                         s = m->first(Segment::Type::ChordRest);
                   _is.moveInputPos(s);
                   }
-            el = prevChordRest(cr);
+            el = keepSelection ? cr : prevChordRest(cr);
             }
       else if (cmd == "next-measure") {
             el = nextMeasure(cr);
