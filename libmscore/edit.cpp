@@ -1189,7 +1189,10 @@ void Score::putNote(const QPointF& pos, bool replace)
             qDebug("cannot put note here, get position failed");
             return;
             }
-      putNote(p, replace);
+      if (inputState().repitchMode())
+            repitchNote(p, replace);
+      else
+            putNote(p, replace);
       }
 
 void Score::putNote(const Position& p, bool replace)
