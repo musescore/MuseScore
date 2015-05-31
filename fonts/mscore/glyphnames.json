@@ -284,6 +284,10 @@
     "gClef8vb": {
         "codepoint": "U+e1d7"
     },
+    "gClef8vbParens": {
+        "codepoint": "U+e19e",
+        "description": "fake G clef, optionally ottava bassa"
+    },
     "graceNoteSlashStemDown": {
         "codepoint": "U+e196"
     },
