@@ -179,7 +179,7 @@ void Fluid::play(const PlayEvent& event)
                   err = !cp->preset()->noteon(this, noteid++, ch, key, vel, event.tuning());
                   }
             }
-      else if (type == ME_CONTROLLER)  {
+      else if (type == ME_CONTROLLER) {
             switch(event.dataA()) {
                   case CTRL_PROGRAM:
                         program_change(ch, event.dataB());
@@ -193,6 +193,10 @@ void Fluid::play(const PlayEvent& event)
                         cp->setcc(event.dataA(), event.dataB());
                         break;
                   }
+            }
+      else if (type == ME_PITCHBEND){
+            int midiPitch = event.dataB() * 128 + event.dataA();  // msb * 128 + lsb
+            cp->pitchBend(midiPitch);
             }
       if (err)
             qWarning("FluidSynth error: event 0x%2x channel %d: %s",
