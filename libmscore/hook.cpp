@@ -26,6 +26,7 @@ Hook::Hook(Score* s)
   : Symbol(s)
       {
       setFlag(ElementFlag::MOVABLE, false);
+      setZ(int(type()) * 100);
       }
 
 //---------------------------------------------------------
