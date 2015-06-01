@@ -130,6 +130,7 @@ Page::Page(Score* s)
    : Element(s),
    _no(0)
       {
+      setFlags(0);
       bspTreeValid = false;
       }
 

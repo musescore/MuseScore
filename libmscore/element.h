@@ -202,7 +202,6 @@ class Element : public QObject, public ScoreElement {
             BAR_LINE,
             STEM_SLASH,
             LINE,
-            BRACKET,
 
             ARPEGGIO,
             ACCIDENTAL,
@@ -269,6 +268,8 @@ class Element : public QObject, public ScoreElement {
             NOTELINE,
             LYRICSLINE,
             GLISSANDO,
+            BRACKET,
+
             SEGMENT,
             SYSTEM,
             COMPOUND,
