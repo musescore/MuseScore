@@ -672,8 +672,8 @@ ScoreView::ScoreView(QWidget* parent)
       curElement  = 0;
       _bgColor    = Qt::darkBlue;
       _fgColor    = Qt::white;
-      fgPixmap    = 0;
-      bgPixmap    = 0;
+      _fgPixmap    = 0;
+      _bgPixmap    = 0;
       curGrip     = Grip::NO_GRIP;
       defaultGrip = Grip::NO_GRIP;
       lasso       = new Lasso(_score);
@@ -990,8 +990,8 @@ ScoreView::~ScoreView()
       delete _continuousPanel;
       delete _curLoopIn;
       delete _curLoopOut;
-      delete bgPixmap;
-      delete fgPixmap;
+      delete _bgPixmap;
+      delete _fgPixmap;
       delete shadowNote;
       }
 
@@ -1276,15 +1276,15 @@ void ScoreView::setEditPos(const QPointF& pt)
 
 void ScoreView::setBackground(QPixmap* pm)
       {
-      delete bgPixmap;
-      bgPixmap = pm;
+      delete _bgPixmap;
+      _bgPixmap = pm;
       update();
       }
 
 void ScoreView::setBackground(const QColor& color)
       {
-      delete bgPixmap;
-      bgPixmap = 0;
+      delete _bgPixmap;
+      _bgPixmap = 0;
       _bgColor = color;
       update();
       }
@@ -1295,15 +1295,15 @@ void ScoreView::setBackground(const QColor& color)
 
 void ScoreView::setForeground(QPixmap* pm)
       {
-      delete fgPixmap;
-      fgPixmap = pm;
+      delete _fgPixmap;
+      _fgPixmap = pm;
       update();
       }
 
 void ScoreView::setForeground(const QColor& color)
       {
-      delete fgPixmap;
-      fgPixmap = 0;
+      delete _fgPixmap;
+      _fgPixmap = 0;
       _fgColor = color;
       update();
       }
@@ -1739,10 +1739,10 @@ void ScoreView::drawBackground(QPainter* p, const QRectF& r) const
             p->fillRect(r, Qt::white);
             return;
             }
-      if (fgPixmap == 0 || fgPixmap->isNull())
+      if (_fgPixmap == 0 || _fgPixmap->isNull())
             p->fillRect(r, _fgColor);
       else {
-            p->drawTiledPixmap(r, *fgPixmap, r.topLeft()
+            p->drawTiledPixmap(r, *_fgPixmap, r.topLeft()
                - QPoint(lrint(_matrix.dx()), lrint(_matrix.dy())));
             }
       }
@@ -1854,10 +1854,10 @@ void ScoreView::paintPageBorder(QPainter& p, Page* page)
 void ScoreView::paint(const QRect& r, QPainter& p)
       {
       p.save();
-      if (fgPixmap == 0 || fgPixmap->isNull())
+      if (_fgPixmap == 0 || _fgPixmap->isNull())
             p.fillRect(r, _fgColor);
       else {
-            p.drawTiledPixmap(r, *fgPixmap, r.topLeft()
+            p.drawTiledPixmap(r, *_fgPixmap, r.topLeft()
                - QPoint(lrint(_matrix.dx()), lrint(_matrix.dy())));
             }
 
@@ -1995,10 +1995,10 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       p.setMatrixEnabled(false);
       if ((_score->layoutMode() != LayoutMode::LINE) && !r1.isEmpty()) {
             p.setClipRegion(r1);  // only background
-            if (bgPixmap == 0 || bgPixmap->isNull())
+            if (_bgPixmap == 0 || _bgPixmap->isNull())
                   p.fillRect(r, _bgColor);
             else
-                  p.drawTiledPixmap(r, *bgPixmap, r.topLeft() - QPoint(_matrix.m31(), _matrix.m32()));
+                  p.drawTiledPixmap(r, *_bgPixmap, r.topLeft() - QPoint(_matrix.m31(), _matrix.m32()));
             }
       p.restore();
       }
