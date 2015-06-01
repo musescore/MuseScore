@@ -159,6 +159,10 @@ if (USE_PORTMIDI)
       set (AUDIO ${AUDIO} pm.cpp)
 endif (USE_PORTMIDI)
 
+if (USE_LAME)
+      set (AUDIO ${AUDIO} exportmp3.cpp)
+endif (USE_LAME)
+
 if (USE_JACK)
       set (AUDIO ${AUDIO} jackaudio.cpp jackweakapi.cpp)
 endif (USE_JACK)
@@ -229,7 +233,7 @@ add_executable ( ${ExecutableName}
       importgtp.cpp importgtp-gp4.cpp importgtp-gp5.cpp importgtp-gp6.cpp fotomode.cpp drumtools.cpp
       selinstrument.cpp texteditor.cpp editstafftype.cpp texttools.cpp
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
-      workspace.cpp exportmp3.cpp chordview.cpp
+      workspace.cpp chordview.cpp
       album.cpp albummanager.cpp
       textstyle.cpp
       lineproperties.cpp stafftextproperties.cpp splitstaff.cpp

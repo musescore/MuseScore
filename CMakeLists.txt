@@ -50,7 +50,6 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
 include (UsePkgConfig1)
 include (TargetDoc)
 include (FindPulseAudio)
-include (FindLame)
 include (GetCompilerVersion)
 include (CreatePrecompiledHeader)
 
@@ -71,8 +70,9 @@ option(OMR           "enable PDF import"  OFF)                 # OMR - optical m
 # for installation see: http://ubuntuforums.org/showthread.php?t=1647350
 option(OCR           "enable OCR, requires OMR" OFF)           # requires tesseract 3.0, needs work on mac/win
 option(SOUNDFONT3    "ogg vorbis compressed fonts" ON)         # enable ogg vorbis compressed fonts, require ogg & vorbis
-option(HAS_AUDIOFILE "enable audio export" ON)               # requires libsndfile
+option(HAS_AUDIOFILE "enable audio export" ON)                 # requires libsndfile
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
+option(BUILD_LAME    "enable mp3 export" ON)                   # requires libmp3lame
 
 SET(JACK_LONGNAME "jack (jack audio connection kit)")
 SET(JACK_MIN_VERSION "0.98.0")
@@ -226,6 +226,21 @@ else (APPLE OR MINGW)
       endif (PULSEAUDIO_FOUND)
 endif (APPLE OR MINGW)
 
+##
+## lame
+##
+IF (BUILD_LAME)
+      include (FindLame)
+      IF (LAME_FOUND)
+            set(USE_LAME 1)
+            MESSAGE("LAME found.")
+      ELSE (LAME_FOUND)
+            set(USE_LAME 0)
+            MESSAGE("LAME not found.")
+      ENDIF (LAME_FOUND)
+ELSE (BUILD_LAME)
+      MESSAGE(STATUS "LAME mp3 support disabled")
+ENDIF (BUILD_LAME)
 
 ##
 ## find jack >= JACK_MIN_VERSION
