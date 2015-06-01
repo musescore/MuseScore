@@ -1551,6 +1551,19 @@
                         <program value="71"/>
                   </Channel>
             </Instrument>
+            <Instrument id="c-clarinet">
+                  <longName>C Clarinet</longName>
+                  <shortName>C Cl.</shortName>
+                  <description>C Clarinet</description>
+                  <musicXMLid>wind.reed.clarinet</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>52-89</aPitchRange>
+                  <pPitchRange>52-94</pPitchRange>
+                  <Channel>
+                        <program value="71"/>
+                  </Channel>
+            </Instrument>
             <Instrument id="d-clarinet">
                   <longName>D Clarinet</longName>
                   <shortName>D Cl.</shortName>
