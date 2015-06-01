@@ -2123,8 +2123,10 @@ static bool processNonGui()
             if (fn.endsWith(".wav") || fn.endsWith(".ogg") || fn.endsWith(".flac"))
                   return mscore->saveAudio(cs, fn);
 #endif
+#ifdef USE_LAME
             if (fn.endsWith(".mp3"))
                   return mscore->saveMp3(cs, fn);
+#endif
             if (fn.endsWith(".spos"))
                   return savePositions(cs, fn, true);
             if (fn.endsWith(".mpos"))
