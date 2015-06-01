@@ -1547,7 +1547,9 @@ void MuseScore::exportFile()
       fl.append(tr("FLAC Audio (*.flac)"));
       fl.append(tr("Ogg Vorbis Audio (*.ogg)"));
 #endif
+#ifdef USE_LAME
       fl.append(tr("MP3 Audio (*.mp3)"));
+#endif
       fl.append(tr("Standard MIDI File (*.mid)"));
       fl.append(tr("MusicXML File (*.xml)"));
       fl.append(tr("Compressed MusicXML File (*.mxl)"));
@@ -1611,7 +1613,9 @@ bool MuseScore::exportParts()
       fl.append(tr("FLAC Audio (*.flac)"));
       fl.append(tr("Ogg Vorbis Audio (*.ogg)"));
 #endif
+#ifdef USE_LAME
       fl.append(tr("MP3 Audio (*.mp3)"));
+#endif
       fl.append(tr("Standard MIDI File (*.mid)"));
       fl.append(tr("MusicXML File (*.xml)"));
       fl.append(tr("Compressed MusicXML File (*.mxl)"));
@@ -1807,8 +1811,10 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
       else if (ext == "wav" || ext == "flac" || ext == "ogg")
             rv = saveAudio(cs, fn);
 #endif
+#ifdef USE_LAME
       else if (ext == "mp3")
             rv = saveMp3(cs, fn);
+#endif
       else if (ext == "spos") {
             // save positions of segments
             rv = savePositions(cs, fn, true);
