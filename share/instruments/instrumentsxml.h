@@ -325,6 +325,9 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "P. Cl."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Soprano Clarinet"),
 //: Soprano Clarinet
 QT_TRANSLATE_NOOP("InstrumentsXML", "S. Cl."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "C Clarinet"),
+//: C Clarinet
+QT_TRANSLATE_NOOP("InstrumentsXML", "C Cl."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "D Clarinet"),
 //: D Clarinet
 QT_TRANSLATE_NOOP("InstrumentsXML", "D Cl."),
