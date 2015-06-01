@@ -1313,9 +1313,18 @@ void Score::repitchNote(const Position& p, bool replace)
             nval.tpc2 = step2tpc(step % 7, acci);
             }
 
+      if (!_is.segment())
+            return;
+
       Chord* chord;
-      if (_is.cr()->type() == Element::Type::REST) { //skip rests
-            ChordRest* next = nextChordRest(_is.cr());
+      ChordRest* cr = _is.cr();
+      if (!cr) {
+            cr = _is.segment()->nextChordRest(_is.track());
+            if (!cr)
+                  return;
+            }
+      if (cr->type() == Element::Type::REST) { //skip rests
+            ChordRest* next = nextChordRest(cr);
             while(next && next->type() != Element::Type::CHORD)
                   next = nextChordRest(next);
             if (next)
@@ -1323,7 +1332,7 @@ void Score::repitchNote(const Position& p, bool replace)
             return;
             }
       else {
-            chord = static_cast<Chord*>(_is.cr());
+            chord = static_cast<Chord*>(cr);
             }
       Note* note = new Note(this);
       note->setParent(chord);
