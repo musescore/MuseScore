@@ -230,7 +230,10 @@ endif (APPLE OR MINGW)
 ## lame
 ##
 if (APPLE OR MINGW)
-      set (USE_LAME 1)
+      IF (BUILD_LAME)
+            include (FindLame)
+            set (USE_LAME 1)
+      ENDIF (BUILD_LAME)
 else (APPLE OR MINGW)
       IF (BUILD_LAME)
             include (FindLame)
