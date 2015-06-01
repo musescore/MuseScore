@@ -402,6 +402,40 @@ if (NOT MINGW AND NOT APPLE)
     set (CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath=${_qt5Core_install_prefix}/lib")
     # install desktop file
     install( FILES build/mscore.desktop DESTINATION share/applications)
+    # compress man pages if gzip is installed (don't on OpenBSD)
+    # note: compressing man pages is normal on Linux but not OpenBSD
+    set(MAN_TARGET ${PROJECT_SOURCE_DIR}/build/mscore.1)
+    find_program( GZIP_EXECUTABLE gzip DOC "A tool for compressing manpages (optional)." )
+    if (GZIP_EXECUTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
+        message(STATUS "Found gzip. Man pages will be compressed.")
+        set(MAN_BUILD ${PROJECT_BINARY_DIR}/mscore.1.gz)
+        add_custom_command(
+            OUTPUT ${MAN_BUILD}
+            DEPENDS ${MAN_TARGET}
+            COMMAND ${GZIP_EXECUTABLE} < ${MAN_TARGET} > ${MAN_BUILD}
+            )
+        add_custom_target(manpages
+            DEPENDS ${MAN_BUILD}
+            COMMAND echo "Man pages have been compressed ready for installation."
+            VERBATIM
+            )
+        set(MAN_TARGET ${MAN_BUILD})
+    else (GZIP_EXECUTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
+        if (CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
+            message(STATUS "System is OpenBSD: Man pages will not be compressed.")
+        else (CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
+            message(STATUS "gzip not found (it is optional). Man pages will not be compressed.")
+        endif (CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
+        add_custom_target(manpages
+            COMMAND echo "Man pages will be installed uncompressed."
+            VERBATIM
+            )
+    endif (GZIP_EXECUTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
+    # install man pages in either compressed or uncompressed form
+    install( FILES ${MAN_TARGET} DESTINATION share/man/man1 COMPONENT doc)
+    # add .MSCZ and .MSCX to MIME database (informs system that filetypes .MSCZ & .MSCX are MuseScore files)
+    install( FILES ${PROJECT_SOURCE_DIR}/build/musescore.xml DESTINATION share/mime/packages COMPONENT doc)
+    # Note: must now run "update-mime-database" to apply changes. This is done in the Makefile.
 endif (NOT MINGW AND NOT APPLE)
 
 #
