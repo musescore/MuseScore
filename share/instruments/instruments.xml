@@ -9311,6 +9311,12 @@
                   <Channel>
                         <program value="40"/>
                   </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="treble-viol">
@@ -9333,6 +9339,12 @@
                   <pPitchRange>50-91</pPitchRange>
                   <Channel>
                         <program value="40"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -9357,6 +9369,12 @@
                   <Channel>
                         <program value="41"/>
                   </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="tenor-viol">
@@ -9380,6 +9398,12 @@
                   <Channel>
                         <program value="41"/>
                   </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="viola-da-gamba">
@@ -9402,6 +9426,12 @@
                   <pPitchRange>33-79</pPitchRange>
                   <Channel>
                         <program value="42"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -9437,6 +9467,12 @@
                   <Channel>
                         <program value="43"/>
                   </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="d-violone">
@@ -9459,6 +9495,12 @@
                   <pPitchRange>26-59</pPitchRange>
                   <Channel>
                         <program value="43"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
