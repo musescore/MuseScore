@@ -122,6 +122,7 @@ struct Preferences {
       MidiRemote midiRemote[MIDI_REMOTES];
 
       bool midiExpandRepeats;
+      bool midiExportRPNs;
       QString instrumentList1; // file path of instrument templates
       QString instrumentList2;
 
