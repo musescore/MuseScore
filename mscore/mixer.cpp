@@ -61,7 +61,7 @@ void PartEdit::setPart(Part* p, Channel* a)
       QString s = part->partName();
       if (!a->name.isEmpty()) {
             s += "-";
-            if (a->name != "normal")
+            if (a->name == "normal")
                   s += tr("normal");
             else
                   s += qApp->translate("InstrumentsXML", a->name.toUtf8().data());
