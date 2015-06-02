@@ -60,11 +60,10 @@ void PartEdit::setPart(Part* p, Channel* a)
       part    = p;
       QString s = part->partName();
       if (!a->name.isEmpty()) {
-            s += "-";
-            if (a->name == "normal")
-                  s += tr("normal");
-            else
+            if (a->name != "normal") {
+                  s += "-";
                   s += qApp->translate("InstrumentsXML", a->name.toUtf8().data());
+                  }
             }
       partName->setText(s);
       mute->setChecked(a->mute);
