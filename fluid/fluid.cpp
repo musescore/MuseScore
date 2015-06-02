@@ -184,9 +184,6 @@ void Fluid::play(const PlayEvent& event)
                   case CTRL_PROGRAM:
                         program_change(ch, event.dataB());
                         break;
-                  case CTRL_PITCH:
-                        cp->pitchBend(event.dataB());
-                        break;
                   case CTRL_PRESS:
                         break;
                   default:

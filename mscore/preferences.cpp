@@ -152,6 +152,7 @@ void Preferences::init()
             midiRemote[i].type = MIDI_REMOTE_TYPE_INACTIVE;
 
       midiExpandRepeats        = true;
+      midiExportRPNs           = false;
       MScore::playRepeats      = true;
       MScore::panPlayback      = true;
       instrumentList1          = ":/data/instruments.xml";
@@ -284,6 +285,7 @@ void Preferences::write()
       s.setValue("defaultStyle",       defaultStyleFile);
 
       s.setValue("midiExpandRepeats",  midiExpandRepeats);
+      s.setValue("midiExportRPNs",     midiExportRPNs);
       s.setValue("playRepeats",        MScore::playRepeats);
       s.setValue("panPlayback",        MScore::panPlayback);
       s.setValue("instrumentList",     instrumentList1);
@@ -426,6 +428,7 @@ void Preferences::read()
       defaultStyleFile         = s.value("defaultStyle", defaultStyleFile).toString();
 
       midiExpandRepeats        = s.value("midiExpandRepeats", midiExpandRepeats).toBool();
+      midiExportRPNs           = s.value("midiExportRPNs", midiExportRPNs).toBool();
       MScore::playRepeats      = s.value("playRepeats", MScore::playRepeats).toBool();
       MScore::panPlayback      = s.value("panPlayback", MScore::panPlayback).toBool();
       alternateNoteEntryMethod = s.value("alternateNoteEntry", alternateNoteEntryMethod).toBool();
@@ -830,6 +833,7 @@ void PreferenceDialog::updateValues()
             }
       sessionScore->setText(prefs.startScore);
       expandRepeats->setChecked(prefs.midiExpandRepeats);
+      exportRPNs->setChecked(prefs.midiExportRPNs);
       instrumentList1->setText(prefs.instrumentList1);
       instrumentList2->setText(prefs.instrumentList2);
 
@@ -1374,6 +1378,7 @@ void PreferenceDialog::apply()
       prefs.exportAudioSampleRate = exportAudioSampleRates[idx];
 
       prefs.midiExpandRepeats  = expandRepeats->isChecked();
+      prefs.midiExportRPNs     = exportRPNs->isChecked();
       prefs.instrumentList1    = instrumentList1->text();
       prefs.instrumentList2    = instrumentList2->text();
 
