@@ -108,6 +108,7 @@ void MuseScore::createNewWorkspace()
          tr("Workspace name:"));
       if (s.isEmpty())
             return;
+      s = s.replace( QRegExp( "[" + QRegExp::escape( "\\/:*?\"<>|" ) + "]" ), "_" ); //FAT/NTFS special chars
       for (;;) {
             bool notFound = true;
             foreach(Workspace* p, Workspace::workspaces()) {
@@ -124,6 +125,7 @@ void MuseScore::createNewWorkspace()
                      );
                   if (s.isEmpty())
                         return;
+                  s = s.replace( QRegExp( "[" + QRegExp::escape( "\\/:*?\"<>|" ) + "]" ), "_" ); //FAT/NTFS special chars
                   }
             else
                   break;
