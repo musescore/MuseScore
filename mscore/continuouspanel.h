@@ -40,7 +40,6 @@ class ContinuousPanel {
       qreal _newWidth;        // New panel width
       qreal _measureWidth;
       qreal _height;
-      qreal _lineWidthName;
       qreal _widthClef;
       qreal _widthKeySig;
       qreal _widthTimeSig;

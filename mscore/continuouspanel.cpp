@@ -46,7 +46,6 @@ ContinuousPanel::ContinuousPanel(ScoreView* sv)
       _offsetPanel            = 0.0;
       _x                      = 0.0;
       _y                      = 0.0;
-      _lineWidthName         = 0.0;
       _widthClef              = 0.0;
       _widthKeySig            = 0.0;
       _widthTimeSig           = 0.0;
@@ -174,7 +173,7 @@ void ContinuousPanel::paint(const QRect& /*r*/, QPainter& p)
 
 void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
       // The first pass serves to get the maximum width for each elements
-      _lineWidthName = 0;
+      qreal lineWidthName = 0;
       _widthClef = 0;
       _widthKeySig = 0;
       _widthTimeSig = 0;
@@ -202,6 +201,9 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   newName->setParent(parent);
                   newName->setTrack(e->track());
                   newName->textStyle().setFamily("FreeSans");
+                  newName->textStyle().setSizeIsSpatiumDependent(true);
+                  newName->layout();
+                  newName->setPlainText(newName->plainText());
                   newName->layout();
 
                   // Find maximum width for the current Clef
@@ -236,8 +238,8 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
                   newTs->setTrack(e->track());
                   newTs->layout();
 
-                  if ((newName->width() > _lineWidthName) && (newName->xmlText() != ""))
-                        _lineWidthName = newName->width();
+                  if ((newName->width() > lineWidthName) && (newName->xmlText() != ""))
+                        lineWidthName = newName->width();
 
                   if (newClef->width() > _widthClef)
                         _widthClef = newClef->width();
@@ -262,9 +264,9 @@ void ContinuousPanel::findElementWidths(const QList<Element*>& el) {
       _newWidth = _widthClef + _widthKeySig + _widthTimeSig + _leftMarginTotal + _panelRightPadding;
       _xPosMeasure -= _offsetPanel;
 
-      _lineWidthName += _score->spatium() * 2;
-      if (_newWidth < _lineWidthName) {
-            _newWidth = _lineWidthName;
+      lineWidthName += _score->spatium() + _score->styleP(StyleIdx::clefLeftMargin) + _widthClef;
+      if (_newWidth < lineWidthName) {
+            _newWidth = lineWidthName;
             _oldWidth = 0;
             }
       if (_oldWidth == 0) {
@@ -333,9 +335,10 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
       newElement->setFlag(ElementFlag::MOVABLE, false);
       newElement->setXmlText(text);
       newElement->textStyle().setFamily("FreeSans");
+      newElement->textStyle().setSizeIsSpatiumDependent(true);
       newElement->setColor(color);
       newElement->sameLayout();
-      pos = QPointF(_score->spatium(), _y + newElement->height());
+      pos = QPointF(_score->styleP(StyleIdx::clefLeftMargin) + _widthClef, _y + newElement->height());
       painter.translate(pos);
       newElement->draw(&painter);
       pos += QPointF(_offsetPanel, 0);
@@ -394,10 +397,13 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
                   newName->setTrack(e->track());
                   newName->setColor(color);
                   newName->textStyle().setFamily("FreeSans");
+                  newName->textStyle().setSizeIsSpatiumDependent(true);
+                  newName->layout();
+                  newName->setPlainText(newName->plainText());
                   newName->layout();
                   if (currentStaff->part()->staff(0) == currentStaff) {
                         double _spatium = _score->spatium();
-                        pos = QPointF (_spatium, 0 - _spatium * 2);
+                        pos = QPointF (_score->styleP(StyleIdx::clefLeftMargin) + _widthClef, 0 - _spatium * 2);
                         painter.translate(pos);
                         newName->draw(&painter);
                         painter.translate(-pos);
