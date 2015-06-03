@@ -3531,7 +3531,7 @@ void Measure::layoutX(qreal stretch)
                   if (stt->slashStyle())        // if no stems
                         distAbove = stt->genDurations() ? -stt->durationBoxY() : 0.0;
                   else {                        // if stems
-                        if (stt->stemsDown())
+                        if (stt->stemsDown() && !mstaff(staffIdx)->hasVoices)
                               distBelow = (STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_DEFAULTSTEMDIST_UP)*_spatium;
                         else
                               distAbove = (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN + STAFFTYPE_TAB_DEFAULTSTEMDIST_DN)*_spatium;
