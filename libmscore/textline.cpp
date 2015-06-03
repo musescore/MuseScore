@@ -180,6 +180,7 @@ void TextLineSegment::setText(Text* t)
                   _text = new Text(*t);
                   _text->setFlag(ElementFlag::MOVABLE, false);
                   _text->setParent(this);
+                  _text->setTrack(track());
                   }
             else {
                   _text->setTextStyleType(t->textStyleType());
@@ -222,6 +223,7 @@ void TextLineSegment::layout1()
                   _endText = new Text(*tl->_endText);
                   _endText->setFlag(ElementFlag::MOVABLE, false);
                   _endText->setParent(this);
+                  _endText->setTrack(track());
                   }
             else {
                   _endText->setTextStyleType(tl->_endText->textStyleType());
