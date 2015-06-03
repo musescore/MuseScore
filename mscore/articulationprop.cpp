@@ -58,23 +58,23 @@ ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent
             for (const Channel* a : instrument->channel()) {
                   if (a->name.isEmpty() || a->name == "normal") {
                         channelList->addItem(tr("normal"));
-                        channelList->item(channelList->count())->setData(Qt::UserRole, "normal");
+                        channelList->item(channelList->count() - 1)->setData(Qt::UserRole, "normal");
                         }
                   else {
                         channelList->addItem(qApp->translate("InstrumentsXML", a->name.toUtf8().data()));
-                        channelList->item(channelList->count())->setData(Qt::UserRole, a->name);
+                        channelList->item(channelList->count() - 1)->setData(Qt::UserRole, a->name);
                         }
                   }
             for (const NamedEventList& el : instrument->midiActions()) {
                   midiActionList->addItem(qApp->translate("InstrumentsXML", el.name.toUtf8().data()));
-                  midiActionList->item(midiActionList->count())->setData(Qt::UserRole, el.name);
+                  midiActionList->item(midiActionList->count() - 1)->setData(Qt::UserRole, el.name);
                   }
             }
 
 #if 0
       for (const NamedEventList& e : instrument->midiActions) {
             midiActionList->addItem(qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
-            midiActionList->item(midiActionList->count())->setData(Qt::UserRole, e.name);
+            midiActionList->item(midiActionList->count() - 1)->setData(Qt::UserRole, e.name);
             }
       articulationChange->setChecked(!articulation->articulationName().isEmpty());
       midiAction->setChecked(!articulation->midiActionName().isEmpty());
