@@ -4329,7 +4329,9 @@ void ScoreView::cmdAddHairpin(bool decrescendo)
             _score->endCmd();
             _score->startCmd();
             }
-      else {
+      else if (selection.isRange() || selection.isSingle()) {
+            // for single staff range selection, or single selection,
+            // find start & end elements elements
             ChordRest* cr1;
             ChordRest* cr2;
             _score->getSelectedChordRest2(&cr1, &cr2);
@@ -4356,6 +4358,11 @@ void ScoreView::cmdAddHairpin(bool decrescendo)
                   else
                         _score->endCmd();
                   }
+            }
+      else {
+            // do not attempt for list selection
+            // or we will keep adding hairpins to the same chordrests
+            return;
             }
       }
 
