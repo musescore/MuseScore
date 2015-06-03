@@ -2532,7 +2532,8 @@ class Sym {
       QRectF _bbox;
       qreal _advance;
 
-      QPointF _attach;
+      QPointF _stemDownNW;
+      QPointF _stemUpSE;
       QPointF _cutOutNE;
       QPointF _cutOutNW;
       QPointF _cutOutSE;
@@ -2559,8 +2560,10 @@ class Sym {
       qreal advance() const                      { return _advance;  }
       void setAdvance(qreal val)                 { _advance = val;   }
 
-      QPointF attach() const                     { return _attach;   }
-      void setAttach(const QPointF& r)           { _attach = r;      }
+      QPointF stemDownNW() const                 { return _stemDownNW;   }
+      void setStemDownNW(const QPointF& r)       { _stemDownNW = r;      }
+      QPointF stemUpSE() const                   { return _stemUpSE;   }
+      void setStemUpSE(const QPointF& r)         { _stemUpSE = r;      }
       QPointF cutOutNE() const                   { return _cutOutNE; }
       void setCutOutNE(const QPointF& r)         { _cutOutNE = r;    }
       QPointF cutOutNW() const                   { return _cutOutNW; }
@@ -2662,7 +2665,8 @@ class ScoreFont {
 
       const QRectF bbox(SymId id, qreal mag) const;
       const QRectF bbox(const QList<SymId>& s, qreal mag) const;
-      QPointF attach(SymId id, qreal mag) const       { return sym(id).attach() * mag;   }
+      QPointF stemDownNW(SymId id, qreal mag) const   { return sym(id).stemDownNW() * mag;   }
+      QPointF stemUpSE(SymId id, qreal mag) const     { return sym(id).stemUpSE() * mag;   }
       QPointF cutOutNE(SymId id, qreal mag) const     { return sym(id).cutOutNE() * mag; }
       QPointF cutOutNW(SymId id, qreal mag) const     { return sym(id).cutOutNW() * mag; }
       QPointF cutOutSE(SymId id, qreal mag) const     { return sym(id).cutOutSE() * mag; }

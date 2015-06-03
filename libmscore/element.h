@@ -565,7 +565,8 @@ class Element : public QObject, public ScoreElement {
       qreal symWidth(const QList<SymId>&) const;
       QRectF symBbox(SymId id) const;
       QRectF symBbox(const QList<SymId>&) const;
-      QPointF symAttach(SymId id) const;
+      QPointF symStemDownNW(SymId id) const;
+      QPointF symStemUpSE(SymId id) const;
       QPointF symCutOutNE(SymId id) const;
       QPointF symCutOutNW(SymId id) const;
       QPointF symCutOutSE(SymId id) const;
