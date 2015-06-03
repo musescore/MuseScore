@@ -1742,12 +1742,21 @@ QRectF Element::symBbox(const QList<SymId>& s) const
       }
 
 //---------------------------------------------------------
-//   symAttach
+//   symStemDownNW
 //---------------------------------------------------------
 
-QPointF Element::symAttach(SymId id) const
+QPointF Element::symStemDownNW(SymId id) const
       {
-      return score()->scoreFont()->attach(id, magS());
+      return score()->scoreFont()->stemDownNW(id, magS());
+      }
+
+//---------------------------------------------------------
+//   symStemUpSE
+//---------------------------------------------------------
+
+QPointF Element::symStemUpSE(SymId id) const
+      {
+      return score()->scoreFont()->stemUpSE(id, magS());
       }
 
 //---------------------------------------------------------

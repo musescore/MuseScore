@@ -266,7 +266,8 @@ class Note : public Element {
       qreal headHeight() const;
       qreal tabHeadWidth(StaffType* tab = 0) const;
       qreal tabHeadHeight(StaffType* tab = 0) const;
-      QPointF attach() const;
+      QPointF stemDownNW() const;
+      QPointF stemUpSE() const;
 
       SymId noteHead() const;
       NoteHead::Group headGroup() const   { return _headGroup; }

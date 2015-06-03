@@ -515,12 +515,21 @@ qreal Note::tabHeadHeight(StaffType* tab) const
       }
 
 //---------------------------------------------------------
-//   attach
+//   stemDownNW
 //---------------------------------------------------------
 
-QPointF Note::attach() const
+QPointF Note::stemDownNW() const
       {
-      return symAttach(noteHead());
+      return symStemDownNW(noteHead());
+      }
+
+//---------------------------------------------------------
+//   stemUpSE
+//---------------------------------------------------------
+
+QPointF Note::stemUpSE() const
+      {
+      return symStemUpSE(noteHead());
       }
 
 //---------------------------------------------------------

@@ -5570,13 +5570,14 @@ void ScoreFont::load()
             Sym* sym = &_symbols[int(symId)];
             for (auto i : ooo.keys()) {
                   if (i == "stemDownNW") {
-                        //qreal x = ooo.value(i).toArray().at(0).toDouble();
-                        //qreal y = ooo.value(i).toArray().at(1).toDouble();
+                        qreal x = ooo.value(i).toArray().at(0).toDouble();
+                        qreal y = ooo.value(i).toArray().at(1).toDouble();
+                        sym->setStemDownNW(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
                         }
                   else if (i == "stemUpSE") {
                         qreal x = ooo.value(i).toArray().at(0).toDouble();
                         qreal y = ooo.value(i).toArray().at(1).toDouble();
-                        sym->setAttach(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
+                        sym->setStemUpSE(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
                         }
                   else if (i == "cutOutNE") {
                         qreal x = ooo.value(i).toArray().at(0).toDouble() * scale;
