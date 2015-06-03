@@ -977,6 +977,23 @@ void Seq::initInstruments(bool realTime)
                   else
                         sendEvent(event);
                   }
+            // Setting pitch bend sensitivity to 12 semitones for external synthesizers
+            if ((preferences.useJackMidi || preferences.useAlsaAudio) && mm.channel != 9) {
+                  if (realTime) {
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 0));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 0));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HDATA,12));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 127));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 127));
+                        }
+                  else {
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 0));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 0));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HDATA,12));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 127));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 127));
+                        }
+                  }
             }
       }
 
@@ -1177,11 +1194,15 @@ void Seq::stopNotes(int channel, bool realTime)
             for(int ch = 0; ch < cs->midiMapping()->size(); ch++) {
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_ALL_NOTES_OFF, 0));
+                  if (cs->midiChannel(ch) != 9)
+                        send(NPlayEvent(ME_PITCHBEND,  ch, 0, 64));
                   }
             }
       else {
             send(NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0));
             send(NPlayEvent(ME_CONTROLLER, channel, CTRL_ALL_NOTES_OFF, 0));
+            if (cs->midiChannel(channel) != 9)
+                  send(NPlayEvent(ME_PITCHBEND,  channel, 0, 64));
             }
       if (preferences.useAlsaAudio || preferences.useJackAudio || preferences.usePulseAudio || preferences.usePortaudioAudio)
             _synti->allNotesOff(channel);
