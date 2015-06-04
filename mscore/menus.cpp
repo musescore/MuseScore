@@ -253,7 +253,9 @@ Palette* MuseScore::newKeySigPalette(bool basic)
       if (!basic) {
             // atonal key signature
             KeySigEvent nke;
+            nke.setKey(Key::C);
             nke.setCustom(true);
+            nke.setMode(KeyMode::NONE);
             KeySig* nk = new KeySig(gscore);
             nk->setKeySigEvent(nke);
             sp->append(nk, qApp->translate("MuseScore", keyNames[15]));

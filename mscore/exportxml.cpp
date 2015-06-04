@@ -1572,7 +1572,7 @@ void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool 
       xml.stag(tg);
 
       const QList<KeySym> keysyms = kse.keySymbols();
-      if (kse.custom() && keysyms.size() > 0) {
+      if (kse.custom() && !kse.isAtonal() && keysyms.size() > 0) {
 
             // non-traditional key signature
             // MusicXML order is left-to-right order, while KeySims in keySymbols()
@@ -1597,10 +1597,16 @@ void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool 
       else {
             // traditional key signature
             xml.tag("fifths", static_cast<int>(kse.key()));
-            if (kse.custom())
-                  xml.tag("mode", "none");
+            switch (kse.mode()) {
+                  case KeyMode::NONE:     xml.tag("mode", "none"); break;
+                  case KeyMode::MAJOR:    xml.tag("mode", "major"); break;
+                  case KeyMode::MINOR:    xml.tag("mode", "minor"); break;
+                  case KeyMode::UNKNOWN:
+                  default:
+                        if (kse.custom())
+                              xml.tag("mode", "none");
+                  }
             }
-
       xml.etag();
       }
 

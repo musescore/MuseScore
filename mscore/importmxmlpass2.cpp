@@ -3172,7 +3172,7 @@ static void addKey(const KeySigEvent key, const bool printObj, Score* score, Mea
       {
       Key oldkey = score->staff(staffIdx)->key(tick);
       // TODO only if different custom key ?
-      if (oldkey != key.key() || key.custom()) {
+      if (oldkey != key.key() || key.custom() || key.isAtonal()) {
             // new key differs from key in effect at this tick
             KeySig* keysig = new KeySig(score);
             keysig->setTrack((staffIdx) * VOICES);
@@ -3258,8 +3258,20 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const int
             if (_e.name() == "fifths")
                   key.setKey(Key(_e.readElementText().toInt()));
             else if (_e.name() == "mode") {
-                  if (_e.readElementText() == "none")
+                  QString m = _e.readElementText();
+                  if (m == "none") {
                         key.setCustom(true);
+                        key.setMode(KeyMode::NONE);
+                        }
+                  else if (m == "major") {
+                        key.setMode(KeyMode::MAJOR);
+                        }
+                  else if (m == "minor") {
+                        key.setMode(KeyMode::MINOR);
+                        }
+                  else {
+                        skipLogCurrElem();
+                        }
                   }
             else if (_e.name() == "cancel")
                   skipLogCurrElem();  // TODO ??
