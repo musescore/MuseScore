@@ -487,7 +487,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
             Interval interval = staff->part()->instrument()->transpose();
             KeySigEvent nkey = key;
             bool concertPitch = score->styleB(StyleIdx::concertPitch);
-            if (interval.chromatic && !concertPitch && !nkey.custom()) {
+            if (interval.chromatic && !concertPitch && !nkey.custom() && !nkey.isAtonal()) {
                   interval.flip();
                   nkey.setKey(transposeKey(key.key(), interval));
                   }

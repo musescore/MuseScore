@@ -1663,7 +1663,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             bool needKeysig =        // keep key sigs in TABs: TABs themselves should hide them
                isFirstSystem || styleB(StyleIdx::genKeysig);
 
-            if (needKeysig && !keysig && ((keyIdx.key() != Key::C) || keyIdx.custom())) {
+            if (needKeysig && !keysig && ((keyIdx.key() != Key::C) || keyIdx.custom() || keyIdx.isAtonal())) {
                   //
                   // create missing key signature
                   //

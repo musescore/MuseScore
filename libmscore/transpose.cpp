@@ -320,7 +320,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         }
                   else if ((e->type() == Element::Type::KEYSIG) && mode != TransposeMode::DIATONICALLY && trKeys) {
                         KeySig* ks     = static_cast<KeySig*>(e);
-                        if (!ks->isCustom()) {
+                        if (!ks->isCustom() && !ks->isAtonal()) {
                               Key key        = st->key(ks->tick());
                               KeySigEvent ke = ks->keySigEvent();
                               ke.setKey(key);
@@ -403,7 +403,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         QList<ScoreElement*> ll = e->linkList();
                         for (ScoreElement* e : ll) {
                               KeySig* ks = static_cast<KeySig*>(e);
-                              if (!ks->isCustom()) {
+                              if (!ks->isCustom() && !ks->isAtonal()) {
                                     Key nKey = transposeKey(ks->key(), interval);
                                     KeySigEvent ke = ks->keySigEvent();
                                     ke.setKey(nKey);
@@ -488,7 +488,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                         continue;
                   if (s->tick() == 0)
                         createKey = false;
-                  if (!ks->isCustom()) {
+                  if (!ks->isCustom() && !ks->isAtonal()) {
                         Key key  = st->key(s->tick());
                         Key nKey = transposeKey(key, interval);
                         // remove initial C major key signatures

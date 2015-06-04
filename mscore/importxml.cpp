@@ -3917,10 +3917,19 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         if (ee.tagName() == "fifths")
                               key.setKey(Key(ee.text().toInt()));
                         else if (ee.tagName() == "mode") {
-                              if (ee.text() == "none")
+                              if (ee.text() == "none") {
                                     key.setCustom(true);
-                              else
+                                    key.setMode(KeyMode::NONE);
+                                    }
+                              else if (ee.text() == "major") {
+                                    key.setMode(KeyMode::MAJOR);
+                                    }
+                              else if (ee.text() == "minor") {
+                                    key.setMode(KeyMode::MINOR);
+                                    }
+                              else {
                                     domNotImplemented(ee);
+                                    }
                               }
                         else if (ee.tagName() == "cancel")
                               domNotImplemented(ee); // TODO
@@ -3946,7 +3955,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         for (int i = 0; i < staves; ++i) {
                               Key oldkey = score->staff(staffIdx+i)->key(tick);
                               // TODO only if different custom key ?
-                              if (oldkey != key.key() || key.custom()) {
+                              if (oldkey != key.key() || key.custom() || key.isAtonal()) {
                                     // new key differs from key in effect at this tick
                                     KeySig* keysig = new KeySig(score);
                                     keysig->setTrack((staffIdx + i) * VOICES);
@@ -3964,7 +3973,7 @@ void MusicXml::xmlAttributes(Measure* measure, int staff, QDomElement e, KeySig*
                         //
                         Key oldkey = score->staff(staffIdx)->key(tick);
                         // TODO only if different custom key ?
-                        if (oldkey != key.key() || key.custom()) {
+                        if (oldkey != key.key() || key.custom() || key.isAtonal()) {
                               // new key differs from key in effect at this tick
                               KeySig* keysig = new KeySig(score);
                               keysig->setTrack(staffIdx * VOICES);
