@@ -2446,7 +2446,7 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
                   KeySigEvent oKey = i->second;
                   KeySigEvent nKey = oKey;
                   int diff = -staff->part()->instrument()->transpose().chromatic;
-                  if (diff != 0 && !styleB(StyleIdx::concertPitch) && !oKey.custom())
+                  if (diff != 0 && !styleB(StyleIdx::concertPitch) && !oKey.custom() && !oKey.isAtonal())
                         nKey.setKey(transposeKey(nKey.key(), diff));
                   staff->setKey(tick, nKey);
                   KeySig* keysig = new KeySig(this);
@@ -3767,7 +3767,7 @@ int Score::keysig()
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             Staff* st = staff(staffIdx);
             Key key = st->key(0);
-            if (st->staffType()->group() == StaffGroup::PERCUSSION || st->keySigEvent(0).custom())      // ignore percussion and custom key
+            if (st->staffType()->group() == StaffGroup::PERCUSSION || st->keySigEvent(0).custom() || st->keySigEvent(0).isAtonal())       // ignore percussion and custom / atonal key
                   continue;
             result = key;
             int diff = st->part()->instrument()->transpose().chromatic;
