@@ -1284,11 +1284,11 @@ void MuseScore::addTempo()
                   if(f.numerator() % 3 == 0)
                         text = "<sym>metNote16thUp</sym><sym>metAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>metNote32thUp</sym> = 80";
+                        text = "<sym>metNote32ndUp</sym> = 80";
                   break;
             case 64:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>metNote32thUp</sym><sym>metAugmentationDot</sym> = 80";
+                        text = "<sym>metNote32ndUp</sym><sym>metAugmentationDot</sym> = 80";
                   else
                         text = "<sym>metNote64thUp</sym> = 80";
                   break;
