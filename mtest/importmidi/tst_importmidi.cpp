@@ -398,6 +398,9 @@ class TestImportMidi : public QObject, public MTest
       void instrument3StaffOrgan() { mf("instrument_3staff_organ"); }
       void instrumentClef() { noTempoText("instrument_clef"); }
 
+      // lyrics
+      void lyricsTime0() { noTempoText("lyrics_time_0"); }
+
       // gui - tracks model
       void testGuiTracksModel();
       };
