@@ -135,26 +135,28 @@ BestTrack findBestTrack(
       return bestTrack;
       }
 
-void addTitle(Score *score, const QString &string, int *textCounter)
+bool isTitlePrefix(const QString &text)
       {
-      if (string.left(TEXT_PREFIX.size()) == QString::fromStdString(TEXT_PREFIX)) {
-            ++*textCounter;
-            Text* text = new Text(score);
-            if (*textCounter == 1)
-                  text->setTextStyleType(TextStyleType::TITLE);
-            else if (*textCounter == 2)
-                  text->setTextStyleType(TextStyleType::COMPOSER);
-            text->setPlainText(string.right(string.size() - TEXT_PREFIX.size()));
+      return (text.left(TEXT_PREFIX.size()) == QString::fromStdString(TEXT_PREFIX));
+      }
 
-            MeasureBase* measure = score->first();
-            if (measure->type() != Element::Type::VBOX) {
-                  measure = new VBox(score);
-                  measure->setTick(0);
-                  measure->setNext(score->first());
-                  score->measures()->add(measure);
-                  }
-            measure->add(text);
+void addTitleToScore(Score *score, const QString &string, int textCounter)
+      {
+      Text* text = new Text(score);
+      if (textCounter == 1)
+            text->setTextStyleType(TextStyleType::TITLE);
+      else if (textCounter == 2)
+            text->setTextStyleType(TextStyleType::COMPOSER);
+      text->setPlainText(string.right(string.size() - TEXT_PREFIX.size()));
+
+      MeasureBase* measure = score->first();
+      if (measure->type() != Element::Type::VBOX) {
+            measure = new VBox(score);
+            measure->setTick(0);
+            measure->setNext(score->first());
+            score->measures()->add(measure);
             }
+      measure->add(text);
       }
 
 // remove slashes in kar format
@@ -176,19 +178,28 @@ std::string removeSlashes(const std::string &text)
       return str;
       }
 
+void addTitleIfAny(const std::multimap<ReducedFraction, std::string> &lyricTrack, Score *score)
+      {
+      int textCounter = 0;
+      for (const auto &lyric: lyricTrack) {
+            if (lyric.first == ReducedFraction(0, 1)) {
+                  QString text = MidiCharset::convertToCharset(lyric.second);
+                  if (isTitlePrefix(text)) {
+                        ++textCounter;
+                        addTitleToScore(score, text, textCounter);
+                        }
+                  }
+            }
+      }
+
 void addLyricsToScore(
             const std::multimap<ReducedFraction, std::string> &lyricTrack,
             const std::vector<std::pair<ReducedFraction, ReducedFraction>> &matchedLyricTimes,
             const Staff *staffAddTo)
       {
       Score *score = staffAddTo->score();
-      int textCounter = 0;
-      for (const auto &lyric: lyricTrack) {
-            if (lyric.first == ReducedFraction(0, 1)) {
-                  QString text = MidiCharset::convertToCharset(lyric.second);
-                  addTitle(score, text, &textCounter);
-                  }
-            }
+
+      addTitleIfAny(lyricTrack, score);
 
       for (const auto &timePair: matchedLyricTimes) {
             const auto quantizedTime = timePair.first;
@@ -198,9 +209,10 @@ void addLyricsToScore(
             Q_ASSERT_X(it != lyricTrack.end(),
                        "MidiLyrics::addLyricsToScore", "Lyric time not found");
 
-            if (originalTime != ReducedFraction(0, 1)) {     // not title
-                  QString text = MidiCharset::convertToCharset(it->second);
-                  score->addLyrics(quantizedTime.ticks(), staffAddTo->idx(), removeSlashes(text));
+            QString text = MidiCharset::convertToCharset(it->second);
+            if (originalTime != ReducedFraction(0, 1) || !isTitlePrefix(text)) { // not title
+                  score->addLyrics(quantizedTime.ticks(), staffAddTo->idx(),
+                                   removeSlashes(text));
                   }
             }
       }
