@@ -288,9 +288,9 @@ class ExportMusicXml {
       int findTrill(const Trill* tl) const;
       void chord(Chord* chord, int staff, const QList<Lyrics*>* ll, bool useDrumset);
       void rest(Rest* chord, int staff);
-      void clef(int staff, ClefType clef);
+      void clef(int staff, const Clef* clef);
       void timesig(TimeSig* tsig);
-      void keysig(const KeySigEvent ks, ClefType ct, int staff = 0, bool visible = true);
+      void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
       void barlineLeft(Measure* m);
       void barlineRight(Measure* m);
       void lyrics(const QList<Lyrics*>* ll, const int trk);
@@ -413,6 +413,22 @@ void Technical::etag(Xml& xml)
       if (technicalPrinted)
             xml.etag();
       technicalPrinted = false;
+      }
+      
+//---------------------------------------------------------
+//   color2xml
+//---------------------------------------------------------
+
+/**
+ Return \a el color.
+ */
+
+static QString color2xml(const Element* el)
+      {
+      if (el->color() != MScore::defaultColor)
+            return QString(" color=\"%1\"").arg(el->color().name().toUpper());
+      else
+            return "";
       }
 
 //---------------------------------------------------------
@@ -556,17 +572,20 @@ void SlurHandler::doSlurStart(const Slur* s, Notations& notations, Xml& xml)
       {
       // check if on slur list (i.e. stop already seen)
       int i = findSlur(s);
-      //define line type
-      QString rest = slurTieLineStyle(s);
+      // compose tag
+      QString tagName = "slur";
+      tagName += slurTieLineStyle(s); // define line type
+      tagName += color2xml(s);
+      tagName += QString(" type=\"start\"%1")
+                  .arg(s->slurDirection() == MScore::Direction::UP ? " placement=\"above\"" : "");
+
       if (i >= 0) {
             // remove from list and print start
             slur[i] = 0;
             started[i] = false;
             notations.tag(xml);
-            xml.tagE(QString("slur%1 type=\"start\"%2 number=\"%3\"")
-                     .arg(rest)
-                     .arg(s->slurDirection() == MScore::Direction::UP ? " placement=\"above\"" : "")
-                     .arg(i + 1));
+            tagName += QString(" number=\"%1\"").arg(i + 1);
+            xml.tagE(tagName);
             }
       else {
             // find free slot to store it
@@ -575,7 +594,8 @@ void SlurHandler::doSlurStart(const Slur* s, Notations& notations, Xml& xml)
                   slur[i] = s;
                   started[i] = true;
                   notations.tag(xml);
-                  xml.tagE(QString("slur%1 type=\"start\" number=\"%2\"").arg(rest).arg(i + 1));
+                  tagName += QString(" number=\"%1\"").arg(i + 1);
+                  xml.tagE(tagName);
                   }
             else
                   qDebug("no free slur slot");
@@ -615,22 +635,6 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, Xml& xml)
             notations.tag(xml);
             xml.tagE(QString("slur type=\"stop\" number=\"%1\"").arg(i + 1));
             }
-      }
-
-//---------------------------------------------------------
-//   color2xml
-//---------------------------------------------------------
-
-/**
- Return \a el color.
- */
-
-static QString color2xml(const Element* el)
-      {
-      if (el->color() != MScore::defaultColor)
-            return QString(" color=\"%1\"").arg(el->color().name().toUpper());
-      else
-            return "";
       }
 
 //---------------------------------------------------------
@@ -1527,12 +1531,13 @@ void ExportMusicXml::timesig(TimeSig* tsig)
       QString ns = tsig->numeratorString();
 
       attr.doAttr(xml, true);
+      QString tagName = "time";
       if (st == TimeSigType::FOUR_FOUR)
-            xml.stag("time symbol=\"common\"");
+            tagName += " symbol=\"common\"";
       else if (st == TimeSigType::ALLA_BREVE)
-            xml.stag("time symbol=\"cut\"");
-      else
-            xml.stag("time");
+            tagName += " symbol=\"cut\"";
+      tagName += color2xml(tsig);
+      xml.stag(tagName);
 
       QRegExp rx("^\\d+(\\+\\d+)+$"); // matches a compound numerator
       if (rx.exactMatch(ns))
@@ -1571,21 +1576,23 @@ static double accSymId2alter(SymId id)
 //   keysig
 //---------------------------------------------------------
 
-void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool visible)
+void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, int staff, bool visible)
       {
       static char table2[]  = "CDEFGAB";
       int po = ClefInfo::pitchOffset(ct); // actually 7 * oct + step for topmost staff line
       //qDebug("keysig st %d key %d custom %d ct %hhd st %d", staff, kse.key(), kse.custom(), ct, staff);
       //qDebug(" pitch offset clef %d stp %d oct %d ", po, po % 7, po / 7);
 
-      QString tg = "key";
+      QString tagName = "key";
       if (staff)
-            tg += QString(" number=\"%1\"").arg(staff);
+            tagName += QString(" number=\"%1\"").arg(staff);
       if (!visible)
-            tg += " print-object=\"no\"";
+            tagName += " print-object=\"no\"";
+      tagName += color2xml(ks);
       attr.doAttr(xml, true);
-      xml.stag(tg);
+      xml.stag(tagName);
 
+      const KeySigEvent kse = ks->keySigEvent();
       const QList<KeySym> keysyms = kse.keySymbols();
       if (kse.custom() && !kse.isAtonal() && keysyms.size() > 0) {
 
@@ -1629,21 +1636,24 @@ void ExportMusicXml::keysig(const KeySigEvent kse, ClefType ct, int staff, bool 
 //   clef
 //---------------------------------------------------------
 
-void ExportMusicXml::clef(int staff, ClefType clef)
+void ExportMusicXml::clef(int staff, const Clef* clef)
       {
-      clefDebug("ExportMusicXml::clef(staff %d, clef %d)", staff, clef);
+      ClefType ct = clef->clefType();
+      clefDebug("ExportMusicXml::clef(staff %d, clef %d)", staff, ct);
 
-      attr.doAttr(xml, true);
+      QString tagName = "clef";
       if (staff)
-            xml.stag(QString("clef number=\"%1\"").arg(staff));
-      else
-            xml.stag("clef");
-      QString sign = ClefInfo::sign(clef);
-      int line   = ClefInfo::line(clef);
+            tagName += QString(" number=\"%1\"").arg(staff);
+      tagName += color2xml(clef);
+      attr.doAttr(xml, true);
+      xml.stag(tagName);
+
+      QString sign = ClefInfo::sign(ct);
+      int line   = ClefInfo::line(ct);
       xml.tag("sign", sign);
       xml.tag("line", line);
-      if (ClefInfo::octChng(clef))
-            xml.tag("clef-octave-change", ClefInfo::octChng(clef));
+      if (ClefInfo::octChng(ct))
+            xml.tag("clef-octave-change", ClefInfo::octChng(ct));
       xml.etag();
       }
 
@@ -1724,7 +1734,10 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
                   notations.tag(xml);
                   ornaments.tag(xml);
                   xml.tagE("trill-mark");
-                  xml.tagE(QString("wavy-line type=\"start\" number=\"%1\"").arg(n + 1));
+                  QString tagName = "wavy-line type=\"start\"";
+                  tagName += QString(" number=\"%1\"").arg(n + 1);
+                  tagName += color2xml(tr);
+                  xml.tagE(tagName);
                   trillStart.remove(chord);
                   }
             }
@@ -1789,7 +1802,11 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
             if (type != "" && count > 0) {
                   notations.tag(xml);
                   ornaments.tag(xml);
-                  xml.tag(QString("tremolo type=\"%1\"").arg(type), count);
+                  QString tagName = "tremolo";
+                  tagName += QString(" type=\"%1\"").arg(type);
+                  if (type == "single" || type == "start")
+                        tagName += color2xml(tr);
+                  xml.tag(tagName, count);
                   }
             }
       }
@@ -1811,16 +1828,18 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                 || at == ArticulationType::Longfermata
                 || at == ArticulationType::Verylongfermata) {
                   notations.tag(xml);
-                  QString type = a->up() ? "upright" : "inverted";
+                  QString tagName = "fermata";
+                  tagName += QString(" type=\"%1\"").arg(a->up() ? "upright" : "inverted");
+                  tagName += color2xml(a);
                   if (at == ArticulationType::Fermata)
-                        xml.tagE(QString("fermata type=\"%1\"").arg(type));
+                        xml.tagE(tagName);
                   else if (at == ArticulationType::Shortfermata)
-                        xml.tag(QString("fermata type=\"%1\"").arg(type), "angled");
+                        xml.tag(tagName, "angled");
                   // MusicXML does not support the very long fermata,
                   // export as long fermata (better than not exporting at all)
                   else if (at == ArticulationType::Longfermata
                            || at == ArticulationType::Verylongfermata)
-                        xml.tag(QString("fermata type=\"%1\"").arg(type), "square");
+                        xml.tag(tagName, "square");
                   }
             }
 
@@ -4143,20 +4162,23 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
             //qDebug(" singleKey %d", singleKey);
             if (singleKey) {
                   // keysig applies to all staves
-                  keysig(keysigs.value(0)->keySigEvent(), p->staff(0)->clef(m->tick()), 0, keysigs.value(0)->visible());
+                  keysig(keysigs.value(0), p->staff(0)->clef(m->tick()), 0, keysigs.value(0)->visible());
                   }
             else {
                   // staff-specific keysigs
                   foreach(int st, keysigs.keys())
-                  keysig(keysigs.value(st)->keySigEvent(), p->staff(st)->clef(m->tick()), st + 1, keysigs.value(st)->visible());
+                  keysig(keysigs.value(st), p->staff(st)->clef(m->tick()), st + 1, keysigs.value(st)->visible());
                   }
             }
       else {
             // always write a keysig at tick = 0
             if (m->tick() == 0) {
-                  KeySigEvent kse;
-                  kse.setKey(Key::C);
-                  keysig(kse, p->staff(0)->clef(m->tick()));
+                  //KeySigEvent kse;
+                  //kse.setKey(Key::C);
+                  KeySig* ks = new KeySig(_score);
+                  ks->setKey(Key::C);
+                  keysig(ks, p->staff(0)->clef(m->tick()));
+                  delete ks;
                   }
             }
 
@@ -4691,7 +4713,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                           // exception: at tick=0, export clef anyway
                                           if (tick == 0 || !cle->generated()) {
                                                 clefDebug("exportxml: clef exported");
-                                                clef(sstaff, ct);
+                                                clef(sstaff, cle);
                                                 }
                                           else {
                                                 clefDebug("exportxml: clef not exported");
@@ -4811,7 +4833,8 @@ void ExportMusicXml::write(QIODevice* dev)
                                           // these have already been output
                                           // also ignore clefs at the end of a measure
                                           //
-                                          ClefType ct = ((Clef*)el)->clefType();
+                                          Clef* cle = static_cast<Clef*>(el);
+                                          ClefType ct = cle->clefType();
                                           int ti = seg->tick();
                                           clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, ct, el->generated());
                                           if (el->generated()) {
@@ -4819,7 +4842,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                                 break;
                                                 }
                                           if (!el->generated() && ti != m->tick() && ti != m->endTick())
-                                                clef(sstaff, ct);
+                                                clef(sstaff, cle);
                                           else {
                                                 clefDebug("exportxml: clef not exported");
                                                 }
