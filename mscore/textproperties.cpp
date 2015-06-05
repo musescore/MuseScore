@@ -79,7 +79,7 @@ TextProperties::TextProperties(Text* t, QWidget* parent)
 
 void TextProperties::resetToStyle()
       {
-      text->setPlainText(text->plainText());
+      text->setXmlText(text->plainText());
       }
 
 //---------------------------------------------------------
