@@ -189,6 +189,9 @@ void addTitleIfAny(const std::multimap<ReducedFraction, std::string> &lyricTrack
                         addTitleToScore(score, text, textCounter);
                         }
                   }
+            else if (lyric.first > ReducedFraction(0, 1)) {
+                  break;
+                  }
             }
       }
 
