@@ -400,6 +400,7 @@ class TestImportMidi : public QObject, public MTest
 
       // lyrics
       void lyricsTime0() { noTempoText("lyrics_time_0"); }
+      void lyricsVoice1() { noTempoText("lyrics_voice_1"); }
 
       // gui - tracks model
       void testGuiTracksModel();
