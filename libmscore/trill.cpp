@@ -20,6 +20,7 @@
 #include "score.h"
 #include "accidental.h"
 #include "segment.h"
+#include "staff.h"
 
 namespace Ms {
 
@@ -124,6 +125,8 @@ void TrillSegment::layout()
       {
       if (parent())
             rypos() += score()->styleS(StyleIdx::trillY).val() * spatium();
+      if (staff())
+            setMag(staff()->mag());
       if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN) {
             Accidental* a = trill()->accidental();
             if (a) {

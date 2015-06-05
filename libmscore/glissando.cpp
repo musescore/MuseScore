@@ -50,6 +50,8 @@ static const qreal      GLISS_PALETTE_HEIGHT          = 4.0;
 
 void GlissandoSegment::layout()
       {
+      if (staff())
+            setMag(staff()->mag());
       QRectF r = QRectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
       qreal lw = spatium() * glissando()->lineWidth().val() * .5;
       setbbox(r.adjusted(-lw, -lw, lw, lw));

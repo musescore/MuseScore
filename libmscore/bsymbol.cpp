@@ -13,6 +13,7 @@
 #include "score.h"
 #include "image.h"
 #include "xml.h"
+#include "staff.h"
 
 namespace Ms {
 
@@ -159,6 +160,8 @@ Element* BSymbol::drop(const DropData& data)
 
 void BSymbol::layout()
       {
+      if (staff())
+            setMag(staff()->mag());
       for (Element* e : _leafs)
             e->layout();
       adjustReadPos();
