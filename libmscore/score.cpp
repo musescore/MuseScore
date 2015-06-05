@@ -3136,17 +3136,23 @@ void Score::addLyrics(int tick, int staffIdx, const QString& txt)
                qPrintable(txt), tick);
             return;
             }
-      int track = staffIdx * VOICES;
-      ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
-      if (cr) {
-            Lyrics* l = new Lyrics(this);
-            l->setXmlText(txt);
-            l->setTrack(track);
-            cr->add(l);
+
+      bool lyricsAdded = false;
+      for (int voice = 0; voice < VOICES; ++voice) {
+            int track = staffIdx * VOICES + voice;
+            ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
+            if (cr) {
+                  Lyrics* l = new Lyrics(this);
+                  l->setXmlText(txt);
+                  l->setTrack(track);
+                  cr->add(l);
+                  lyricsAdded = true;
+                  break;
+                  }
             }
-      else {
+      if (!lyricsAdded) {
             qDebug("no chord/rest for lyrics<%s> at tick %d, staff %d",
-               qPrintable(txt), tick, staffIdx);
+                   qPrintable(txt), tick, staffIdx);
             }
       }
 
