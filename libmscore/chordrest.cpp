@@ -158,7 +158,7 @@ void ChordRest::scanElements(void* data, void (*func)(void*, Element*), bool all
             }
       DurationElement* de = this;
       while (de->tuplet() && de->tuplet()->elements().front() == de) {
-            func(data, de->tuplet());
+            de->tuplet()->scanElements(data, func, all);
             de = de->tuplet();
             }
       if (_tabDur)
