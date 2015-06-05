@@ -180,7 +180,6 @@ void TextLineSegment::setText(Text* t)
                   _text = new Text(*t);
                   _text->setFlag(ElementFlag::MOVABLE, false);
                   _text->setParent(this);
-                  _text->setTrack(track());
                   }
             else {
                   _text->setTextStyleType(t->textStyleType());
@@ -223,7 +222,6 @@ void TextLineSegment::layout1()
                   _endText = new Text(*tl->_endText);
                   _endText->setFlag(ElementFlag::MOVABLE, false);
                   _endText->setParent(this);
-                  _endText->setTrack(track());
                   }
             else {
                   _endText->setTextStyleType(tl->_endText->textStyleType());
@@ -236,10 +234,14 @@ void TextLineSegment::layout1()
             _endText = 0;
             }
 
-      if (_text)
+      if (_text) {
+            _text->setTrack(track());
             _text->layout();
-      if (_endText)
+            }
+      if (_endText) {
+            _endText->setTrack(track());
             _endText->layout();
+            }
 
       QPointF pp1;
       QPointF pp2(pos2());
