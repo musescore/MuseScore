@@ -416,7 +416,7 @@ void TestTools::undoChangeVoice()
       for (Segment* s = score->firstSegment(Segment::Type::ChordRest); s; s = s->next1()) {
             ChordRest* cr = static_cast<ChordRest*>(s->element(0));
             if (cr && cr->type() == Element::Type::CHORD) {
-                  Chord* c = static_cast<Chord*>(cr);
+                  Ms::Chord* c = static_cast<Ms::Chord*>(cr);
                   score->select(c->downNote(), SelectType::ADD);
                   }
             }

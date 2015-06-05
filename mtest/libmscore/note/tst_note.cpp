@@ -316,12 +316,12 @@ void TestNote::grace()
       {
       Score* score = readScore(DIR + "grace.mscx");
       score->doLayout();
-      Chord* chord = score->firstMeasure()->findChord(0, 0);
+      Ms::Chord* chord = score->firstMeasure()->findChord(0, 0);
       Note* note = chord->upNote();
 
       // create
       score->setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, MScore::division/2);
-      Chord* gc = chord->graceNotes().first();
+      Ms::Chord* gc = chord->graceNotes().first();
       Note* gn = gc->notes().first();
 //      Note* n = static_cast<Note*>(writeReadElement(gn));
 //      QCOMPARE(n->noteType(), NoteType::APPOGGIATURA);
@@ -342,7 +342,7 @@ void TestNote::grace()
       tr->setTrack(gc->track());
       score->undoAddElement(tr);
       score->endCmd();
-//      Chord* c = static_cast<Chord*>(writeReadElement(gc));
+//      Ms::Chord* c = static_cast<Ms::Chord*>(writeReadElement(gc));
 //      QVERIFY(c->tremolo() != 0);
 //      delete c;
 
@@ -354,7 +354,7 @@ void TestNote::grace()
       ar->setTrack(gc->track());
       score->undoAddElement(ar);
       score->endCmd();
-//      c = static_cast<Chord*>(writeReadElement(gc));
+//      c = static_cast<Ms::Chord*>(writeReadElement(gc));
 //      QVERIFY(c->articulations().size() == 1);
 //      delete c;
 
