@@ -969,7 +969,7 @@ Palette* MuseScore::newTempoPalette()
             TempoPattern("<sym>metNote8thUp</sym> = 80", 80.0/120.0),                    // 1/8
             TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
             TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
-            TempoPattern("<sym>metNote8thUp</sym><sym>metAugmentationDot</sym> = 80", 120/120.0),       // dotted 1/8
+            TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/120.0),       // dotted 1/8
             };
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
             TempoText* tt = new TempoText(gscore);
