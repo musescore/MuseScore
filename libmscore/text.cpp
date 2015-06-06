@@ -2217,8 +2217,19 @@ void Text::writeProperties(Xml& xml, bool writeText, bool writeStyle) const
                   xml.tag("style", textStyle().name());
             _textStyle.writeProperties(xml, score()->textStyle(_styleIndex));
             }
-      if (writeText)
-            xml.writeXml("text", xmlText());
+      if (writeText) {
+            // Make sure we don't write met* symbol, they are not supported in 2.0, 2.0.1
+            QString t = xmlText();
+            t.replace("<sym>metNoteWhole</sym>",       "<sym>unicodeNoteWhole</sym>");
+            t.replace("<sym>metNoteHalfUp</sym>",      "<sym>unicodeNoteHalfUp</sym>");
+            t.replace("<sym>metNoteQuarterUp</sym>",   "<sym>unicodeNoteQuarterUp</sym>");
+            t.replace("<sym>metNote8thUp</sym>",       "<sym>unicodeNote8thUp</sym>");
+            t.replace("<sym>metNote16thUp</sym>",      "<sym>unicodeNote16thUp</sym>");
+            t.replace("<sym>metNote32ndUp</sym>",      "<sym>unicodeNote32ndUp</sym>");
+            t.replace("<sym>metNote64thUp</sym>",      "<sym>unicodeNote64thUp</sym>");
+            t.replace("<sym>metAugmentationDot</sym>", "<sym>unicodeAugmentationDot</sym>");
+            xml.writeXml("text", t);
+            }
       }
 
 //---------------------------------------------------------
