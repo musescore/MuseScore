@@ -56,7 +56,11 @@ void SymbolDialog::createSymbols()
             if (f->isValid(SymId(i))) {
                   Symbol* s = new Symbol(gscore);
                   s->setSym(SymId(i), f);
-                  sp->append(s, Sym::id2userName(SymId(i)));
+                  bool match = true;
+                  if (!search->text().isEmpty())
+                        match = Sym::id2userName(SymId(i)).contains(search->text(), Qt::CaseInsensitive);
+                  if (match)
+                        sp->append(s, Sym::id2userName(SymId(i)));
                   }
             }
       }
@@ -117,6 +121,17 @@ void SymbolDialog::systemFlagChanged(int state)
 
 void SymbolDialog::systemFontChanged(int)
       {
+      createSymbols();
+      }
+
+void SymbolDialog::on_search_textChanged(const QString &searchPhrase)
+      {
+      createSymbols();
+      }
+
+void SymbolDialog::on_clearSearch_clicked()
+      {
+      search->clear();
       createSymbols();
       }
 
