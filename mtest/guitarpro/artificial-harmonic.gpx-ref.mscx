@@ -133,7 +133,7 @@
         <Tempo>
           <tempo>2</tempo>
           <lid>5</lid>
-          <text><sym>metNoteQuarterUp</sym> = 120</text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
           </Tempo>
         <Chord>
           <lid>6</lid>
@@ -524,7 +524,7 @@
           <Tempo>
             <tempo>2</tempo>
             <lid>5</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
+            <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
             <lid>6</lid>

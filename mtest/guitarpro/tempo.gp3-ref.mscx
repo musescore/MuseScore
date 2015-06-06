@@ -93,7 +93,7 @@
         <Tempo>
           <tempo>4.16667</tempo>
           <lid>3</lid>
-          <text><sym>metNoteQuarterUp</sym> = 250</text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 250</text>
           </Tempo>
         <Chord>
           <lid>4</lid>
@@ -190,7 +190,7 @@
         <Tempo>
           <tempo>1.33333</tempo>
           <lid>22</lid>
-          <text><sym>metNoteQuarterUp</sym> = 80</text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 80</text>
           </Tempo>
         <Chord>
           <lid>23</lid>
@@ -365,7 +365,7 @@
           <Tempo>
             <tempo>4.16667</tempo>
             <lid>3</lid>
-            <text><sym>metNoteQuarterUp</sym> = 250</text>
+            <text><sym>unicodeNoteQuarterUp</sym> = 250</text>
             </Tempo>
           <Chord>
             <lid>4</lid>
@@ -462,7 +462,7 @@
           <Tempo>
             <tempo>1.33333</tempo>
             <lid>22</lid>
-            <text><sym>metNoteQuarterUp</sym> = 80</text>
+            <text><sym>unicodeNoteQuarterUp</sym> = 80</text>
             </Tempo>
           <Chord>
             <lid>23</lid>

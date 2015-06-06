@@ -206,7 +206,7 @@
           </TimeSig>
         <Tempo>
           <tempo>2</tempo>
-          <text><sym>metNoteQuarterUp</sym> = 120</text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 120</text>
           </Tempo>
         <Rest>
           <durationType>eighth</durationType>

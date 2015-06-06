@@ -106,7 +106,7 @@
         <Tempo>
           <tempo>3.16667</tempo>
           <lid>5</lid>
-          <text><sym>metNoteQuarterUp</sym> = 190</text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 190</text>
           </Tempo>
         <Chord>
           <lid>8</lid>
@@ -465,7 +465,7 @@
           <Tempo>
             <tempo>3.16667</tempo>
             <lid>5</lid>
-            <text><sym>metNoteQuarterUp</sym> = 190</text>
+            <text><sym>unicodeNoteQuarterUp</sym> = 190</text>
             </Tempo>
           <Chord>
             <lid>8</lid>

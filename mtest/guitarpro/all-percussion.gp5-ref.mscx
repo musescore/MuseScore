@@ -534,7 +534,7 @@
         <Tempo>
           <tempo>2.4</tempo>
           <lid>5</lid>
-          <text><sym>metNoteQuarterUp</sym> = 144</text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 144</text>
           </Tempo>
         <Beam id="1">
           <l1>17</l1>
@@ -1828,7 +1828,7 @@
           <Tempo>
             <tempo>2.4</tempo>
             <lid>5</lid>
-            <text><sym>metNoteQuarterUp</sym> = 144</text>
+            <text><sym>unicodeNoteQuarterUp</sym> = 144</text>
             </Tempo>
           <Beam id="2">
             <l1>17</l1>
