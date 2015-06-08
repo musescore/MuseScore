@@ -290,7 +290,7 @@ class Measure : public MeasureBase {
       bool hasVoice(int track) const;
       bool isMeasureRest(int staffIdx);
       bool isFullMeasureRest();
-      bool isRepeatMeasure(Part* part);
+      bool isRepeatMeasure(Staff* staff);
       bool visible(int staffIdx) const;
       bool slashStyle(int staffIdx) const;
 
