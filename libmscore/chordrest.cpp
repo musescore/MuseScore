@@ -906,7 +906,7 @@ Element* ChordRest::drop(const DropData& data)
                   //f->setTextStyleType(st);
                   if (st >= TextStyleType::DEFAULT && fromPalette)
                         t->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
-                  if (e->type() == Element::Type::REHEARSAL_MARK)
+                  if (e->type() == Element::Type::REHEARSAL_MARK && fromPalette)
                         t->setXmlText(score()->createRehearsalMarkText(static_cast<RehearsalMark*>(e)));
                   }
                   score()->undoAddElement(e);
