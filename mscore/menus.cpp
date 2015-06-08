@@ -964,9 +964,11 @@ Palette* MuseScore::newTempoPalette()
       sp->setDrawGrid(true);
 
       static const TempoPattern tp[] = {
+            TempoPattern("<sym>metNoteWhole</sym> = 80", 80.0/15.0),                     // 1
             TempoPattern("<sym>metNoteHalfUp</sym> = 80", 80.0/30.0),                    // 1/2
             TempoPattern("<sym>metNoteQuarterUp</sym> = 80", 80.0/60.0),                 // 1/4
             TempoPattern("<sym>metNote8thUp</sym> = 80", 80.0/120.0),                    // 1/8
+            TempoPattern("<sym>metNoteWhole</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120.0/15.0),      // dotted 1
             TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
             TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
             TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/120.0),       // dotted 1/8

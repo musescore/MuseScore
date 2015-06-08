@@ -102,6 +102,8 @@ static const TempoPattern tp[] = {
       TempoPattern("<sym>unicodeNoteQuarterUp</sym>",                                       1.0/60.0,  TDuration::DurationType::V_QUARTER),    // 1/4
       TempoPattern("<sym>unicodeNote8thUp</sym>",                                           1.0/120.0, TDuration::DurationType::V_EIGHTH),     // 1/8
       // keep the above for backward compatibility
+      TempoPattern("<sym>metNoteWhole</sym>\\s*<sym>metAugmentationDot</sym>",              1.5/15.0, TDuration::DurationType::V_WHOLE, 1),    // dotted whole
+      TempoPattern("<sym>metNoteWhole</sym><sym>space</sym><sym>metAugmentationDot</sym>",  1.5/15.0, TDuration::DurationType::V_WHOLE, 1),    // dotted whole
       TempoPattern("<sym>metNoteHalfUp</sym>\\s*<sym>metAugmentationDot</sym>\\s*<sym>metAugmentationDot</sym>",                         1.75/30.0, TDuration::DurationType::V_HALF, 1), // double dotted 1/2
       TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym><sym>space</sym><sym>metAugmentationDot</sym>", 1.75/30.0, TDuration::DurationType::V_HALF, 1), // double dotted 1/2
       TempoPattern("<sym>metNoteHalfUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5/30.0,  TDuration::DurationType::V_HALF, 1),    // dotted 1/2
@@ -114,6 +116,7 @@ static const TempoPattern tp[] = {
       TempoPattern("<sym>metNote8thUp</sym><sym>metAugmentationDot</sym><sym>space</sym><sym>metAugmentationDot</sym>", 1.75/120.0, TDuration::DurationType::V_EIGHTH, 1), // double dotted 1/8
       TempoPattern("<sym>metNote8thUp</sym>\\s*<sym>metAugmentationDot</sym>",              1.5/120.0, TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
       TempoPattern("<sym>metNote8thUp</sym><sym>metAugmentationDot</sym>",                  1.5/120.0, TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
+      TempoPattern("<sym>metNoteWhole</sym>",                                               1.0/15.0, TDuration::DurationType::V_WHOLE, 1),    // whole
       TempoPattern("<sym>metNoteHalfUp</sym>",                                              1.0/30.0,  TDuration::DurationType::V_HALF),       // 1/2
       TempoPattern("<sym>metNoteQuarterUp</sym>",                                           1.0/60.0,  TDuration::DurationType::V_QUARTER),    // 1/4
       TempoPattern("<sym>metNote8thUp</sym>",                                               1.0/120.0, TDuration::DurationType::V_EIGHTH),     // 1/8
