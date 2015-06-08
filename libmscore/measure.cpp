@@ -412,7 +412,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
       for (Segment* segment = first(st); segment; segment = segment->next(st)) {
-            if (segment == s) {
+            if (segment == s && staff->isPitchedStaff()) {
                   ClefType clef = staff->clef(s->tick());
                   int l = relStep(line, clef);
                   return tversatz.accidentalVal(l);
@@ -2865,12 +2865,11 @@ bool Measure::isFullMeasureRest()
 //   isRepeatMeasure
 //---------------------------------------------------------
 
-bool Measure::isRepeatMeasure(Part* part)
+bool Measure::isRepeatMeasure(Staff* staff)
       {
-      int firstStaffIdx = score()->staffIdx(part);
-      int nextStaffIdx  = firstStaffIdx + part->nstaves();
-      int strack        = firstStaffIdx * VOICES;
-      int etrack        = nextStaffIdx * VOICES;
+      int staffIdx = score()->staffIdx(staff);
+      int strack        = staffIdx * VOICES;
+      int etrack        = (staffIdx + 1) * VOICES;
       Segment* s        = first(Segment::Type::ChordRest);
 
       if (s == 0)

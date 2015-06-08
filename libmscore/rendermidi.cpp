@@ -609,7 +609,7 @@ void Score::renderStaff(EventMap* events, Staff* staff)
             int endTick    = startTick + rs->len;
             int tickOffset = rs->utick - rs->tick;
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
-                  if (lastMeasure && m->isRepeatMeasure(staff->part())) {
+                  if (lastMeasure && m->isRepeatMeasure(staff)) {
                         int offset = m->tick() - lastMeasure->tick();
                         collectMeasureEvents(events, lastMeasure, staff, tickOffset + offset);
                         }
