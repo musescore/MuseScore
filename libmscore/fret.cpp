@@ -106,6 +106,17 @@ QPointF FretDiagram::pagePos() const
 
 QLineF FretDiagram::dragAnchor() const
       {
+      qreal xp = 0.0;
+      for (Element* e = parent(); e; e = e->parent())
+            xp += e->x();
+      qreal yp;
+      if (parent()->type() == Element::Type::SEGMENT)
+            yp = static_cast<Segment*>(parent())->measure()->system()->staffYpage(staffIdx());
+      else
+            yp = parent()->canvasPos().y();
+      QPointF p1(xp, yp);
+      return QLineF(p1, abbox().topLeft());
+#if 0 // TODOxx
       if (parent()->type() == Element::Type::SEGMENT) {
             Segment* s     = static_cast<Segment*>(parent());
             Measure* m     = s->measure();
@@ -116,7 +127,6 @@ QLineF FretDiagram::dragAnchor() const
 
             qreal x  = 0.0;
             qreal y  = 0.0;
-#if 0 // TODOxx
             qreal tw = width();
             qreal th = height();
             if (_align & AlignmentFlags::BOTTOM)
@@ -129,10 +139,10 @@ QLineF FretDiagram::dragAnchor() const
                   x = tw;
             else if (_align & AlignmentFlags::HCENTER)
                   x = (tw * .5);
-#endif
             return QLineF(p1, abbox().topLeft() + QPointF(x, y));
             }
       return QLineF(parent()->pagePos(), abbox().topLeft());
+#endif
       }
 
 //---------------------------------------------------------
