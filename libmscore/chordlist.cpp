@@ -437,7 +437,7 @@ void ParsedChord::configure(const ChordList* cl)
       lower << "b" << "-" << "dim";
       raise << "#" << "+" << "aug";
       mod1 << "sus" << "alt";
-      mod2 << "sus" << "add" << "no" << "omit";
+      mod2 << "sus" << "add" << "no" << "omit" << "^";
       symbols << "t" << "^" << "-" << "+" << "o" << "0";
       }
 
