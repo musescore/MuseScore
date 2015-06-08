@@ -335,6 +335,8 @@ void RepeatList::unwind()
                               }
                         }
                   else if (endRepeat == 0) {
+                        if (m->playbackCount() >= m->repeatCount())
+                             break;
                         endRepeat   = m;
                         repeatCount = m->repeatCount();
                         loop        = 1;
