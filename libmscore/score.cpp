@@ -3817,17 +3817,22 @@ QString Score::createRehearsalMarkText(RehearsalMark* current) const
       QString s2 = after ? after->xmlText()  : "";
       if (s1.isEmpty())
             return s;
-      s = nextRehearsalMarkText(before, current);                       // try to sequence
-      if (!s2.isEmpty()) {
-            if (s != s2 && s != current->xmlText())
-                  return s;                                             // found something between before & after
-            else if (s1.size() == 2)
-                  s = s1[0] + QChar::fromLatin1(s1[1].toLatin1() + 1);  // B1 -> B2, BB -> BC, etc
-            else if (s1[0].isLetter())
-                  s = s1 + QChar::fromLatin1('1');                      // B -> B1, Bridge -> Bridge1, etc
+      s = nextRehearsalMarkText(before, current);     // try to sequence
+      if (s == current->xmlText()) {
+            // no sequence detected (or current happens to be correct)
+            return s;
             }
-      else if (s == current->xmlText()) {
-            s = s1 + QChar::fromLatin1('1');                            // B -> B1, Bridge -> Bridge1, etc
+      else if (s == s2) {
+            // next in sequence already present
+            if (s1[0].isLetter()) {
+                  if (s1.size() == 2)
+                        s = s1[0] + QChar::fromLatin1(s1[1].toLatin1() + 1);  // BB, BC, CC
+                  else
+                        s = s1 + QChar::fromLatin1('1');                      // B, B1, C
+                  }
+            else {
+                  s = s1 + QChar::fromLatin1('A');                            // 2, 2A, 3
+                  }
             }
       return s;
       }
