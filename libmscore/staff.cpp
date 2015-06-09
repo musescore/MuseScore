@@ -1036,7 +1036,8 @@ void Staff::insertTime(int tick, int len)
             m = m->prevMeasure();
             Segment* s = m->findSegment(Segment::Type::Clef, tick);
             if (s) {
-                  Clef* clef = static_cast<Clef*>(s->element(idx()));
+                  int track = idx() * VOICES;
+                  Clef* clef = static_cast<Clef*>(s->element(track));
                   if (clef)
                         setClef(clef);
                   }
