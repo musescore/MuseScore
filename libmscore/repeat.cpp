@@ -77,7 +77,7 @@ void RepeatMeasure::layout()
 Fraction RepeatMeasure::duration() const
       {
       if (measure())
-            return measure()->len();
+            return measure()->stretchedLen(staff());
       return Fraction(0, 1);
       }
 
