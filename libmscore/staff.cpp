@@ -1027,7 +1027,23 @@ void Staff::insertTime(int tick, int len)
             cl2.setClef(tick + len, ctl);
             }
       clefs.insert(cl2.begin(), cl2.end());
+
+      // check if there is a clef at the end of measure
+      // before tick: do not remove from clefs list
+
+      Measure* m = _score->tick2measure(tick);
+      if (m && (m->tick() == tick) && (m->prevMeasure())) {
+            m = m->prevMeasure();
+            Segment* s = m->findSegment(Segment::Type::Clef, tick);
+            if (s) {
+                  Clef* clef = static_cast<Clef*>(s->element(idx()));
+                  if (clef)
+                        setClef(clef);
+                  }
+            }
+
       updateOttava();
+//      dumpClefs("  insertTime");
       }
 
 //---------------------------------------------------------
