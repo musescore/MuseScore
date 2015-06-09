@@ -183,9 +183,9 @@
       <Measure number="2">
         <RepeatMeasure>
           <lid>15</lid>
+          <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </RepeatMeasure>
-        <tick>3840</tick>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
@@ -396,9 +396,9 @@
         <Measure number="2">
           <RepeatMeasure>
             <lid>15</lid>
+            <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </RepeatMeasure>
-          <tick>3840</tick>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
@@ -459,9 +459,9 @@
         <Measure number="2">
           <RepeatMeasure>
             <lid>15</lid>
+            <durationType>measure</durationType>
             <duration z="4" n="4"/>
             </RepeatMeasure>
-          <tick>3840</tick>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
