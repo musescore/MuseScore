@@ -1515,6 +1515,8 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
       RepeatMeasure* rm = new RepeatMeasure(_score);
       rm->setTrack(staffIdx * VOICES);
       rm->setParent(seg);
+      rm->setDurationType(TDuration::DurationType::V_MEASURE);
+      rm->setDuration(stretchedLen(_score->staff(staffIdx)));
       _score->undoAddCR(rm, this, tick());
       foreach (Element* el, _el) {
             if (el->type() == Element::Type::SLUR && el->staffIdx() == staffIdx)
