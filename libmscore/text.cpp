@@ -2818,20 +2818,20 @@ QString Text::convertFromHtml(const QString& ss) const
             }
 
       if (score() && score()->mscVersion() <= 114) {
-            s.replace(QChar(0xe10e), QString("<sym>accidentalNatural</sym>"));    //natural
+            s.replace(QChar(0xe10e), QString("<sym>accidentalNatural</sym>"));  //natural
             s.replace(QChar(0xe10c), QString("<sym>accidentalSharp</sym>"));    // sharp
-            s.replace(QChar(0xe10d), QString("<sym>accidentalFlat</sym>"));    // flat
-            s.replace(QChar(0xe104), QString("<sym>unicodeNoteHalfUp</sym>")),    // note2_Sym
-            s.replace(QChar(0xe105), QString("<sym>unicodeNoteQuarterUp</sym>"));    // note4_Sym
-            s.replace(QChar(0xe106), QString("<sym>unicodeNote8thUp</sym>"));    // note8_Sym
-            s.replace(QChar(0xe107), QString("<sym>unicodeNote16thUp</sym>"));    // note16_Sym
-            s.replace(QChar(0xe108), QString("<sym>unicodeNote32ndUp</sym>"));    // note32_Sym
-            s.replace(QChar(0xe109), QString("<sym>unicodeNote64thUp</sym>"));    // note64_Sym
-            s.replace(QChar(0xe10a), QString("<sym>unicodeAugmentationDot</sym>"));    // dot
-            s.replace(QChar(0xe10b), QString("<sym>unicodeAugmentationDot</sym> <sym>unicodeAugmentationDot</sym>"));    // dotdot
-            s.replace(QChar(0xe167), QString("<sym>segno</sym>"));    // segno
-            s.replace(QChar(0xe168), QString("<sym>coda</sym>"));    // coda
-            s.replace(QChar(0xe169), QString("<sym>codaSquare</sym>"));    // varcoda
+            s.replace(QChar(0xe10d), QString("<sym>accidentalFlat</sym>"));     // flat
+            s.replace(QChar(0xe104), QString("<sym>metNoteHalfUp</sym>")),      // note2_Sym
+            s.replace(QChar(0xe105), QString("<sym>metNoteQuarterUp</sym>"));   // note4_Sym
+            s.replace(QChar(0xe106), QString("<sym>metNote8thUp</sym>"));       // note8_Sym
+            s.replace(QChar(0xe107), QString("<sym>metNote16thUp</sym>"));      // note16_Sym
+            s.replace(QChar(0xe108), QString("<sym>metNote32ndUp</sym>"));      // note32_Sym
+            s.replace(QChar(0xe109), QString("<sym>metNote64thUp</sym>"));      // note64_Sym
+            s.replace(QChar(0xe10a), QString("<sym>metAugmentationDot</sym>")); // dot
+            s.replace(QChar(0xe10b), QString("<sym>metAugmentationDot</sym><sym>space</sym><sym>metAugmentationDot</sym>"));    // dotdot
+            s.replace(QChar(0xe167), QString("<sym>segno</sym>"));              // segno
+            s.replace(QChar(0xe168), QString("<sym>coda</sym>"));               // coda
+            s.replace(QChar(0xe169), QString("<sym>codaSquare</sym>"));         // varcoda
             }
       return s;
       }
