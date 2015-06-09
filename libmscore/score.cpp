@@ -888,54 +888,135 @@ void Score::appendPart(Part* p)
 
 //---------------------------------------------------------
 //   rebuildMidiMapping
+//   1. Remove mappings to deleted instruments
+//   2. Add mappings to new instruments
+//   3. Set mappings in order you see in Add->Instruments
 //---------------------------------------------------------
 
 void Score::rebuildMidiMapping()
       {
-      _midiMapping.clear();
-      int port        = 0;
-      int drumPort    = 0;
-      int midiChannel = 0;
-      int idx         = 0;
-      int maxport     = 0;
+      // 1. Remove mappings to deleted instruments
+      int removeOffset = 0;
+      int mappingSize = _midiMapping.size();
+      for (int index = 0; index < mappingSize; index++) {
+            MidiMapping* mm = midiMapping(index);
+            Part* p = mm->part;
+            if (!_parts.contains(p)) {
+                  removeOffset++;
+                  continue;
+                  }
+            // Not all channels could exist
+            bool channelExists = false;
+            const InstrumentList* il = p->instruments();
+            for (auto i = il->begin(); i != il->end() && !channelExists; ++i) {
+                  const Instrument* instr = i->second;
+                  if (_midiMapping[index].articulation->channel != -1
+                        && instr->channel().contains(_midiMapping[index].articulation))
+                        channelExists = true;
+                  }
+            if (!channelExists) {
+                  removeOffset++;
+                  continue;
+                  }
+
+            // Let's do a left shift by 'removeOffset' items if necessary
+            if (index != 0 && removeOffset != 0) {
+                  _midiMapping[index-removeOffset] = _midiMapping[index];
+                  _midiMapping[index-removeOffset].articulation->channel -= removeOffset;
+                  }
+            }
+      // We have 'removeOffset' deleted instruments, let's remove their mappings
+      for (int index = 0; index < removeOffset; index++)
+            _midiMapping.removeLast();
+
+      // 2.  Add mappings to new instruments
+      int maxport = 0;
+      QSet<int> occupiedMidiChannels; // each entry is port*16+channel
+      occupiedMidiChannels.reserve(_midiMapping.size()); // Bringing down the complexity of insertion to amortized O(1)
+
+      for(MidiMapping mm :_midiMapping) {
+            occupiedMidiChannels.insert((int)(mm.port)*16+(int)mm.channel);
+            if (maxport < mm.port)
+                  maxport = mm.port;
+            }
+
+      int startFrom = 0;
       for (Part* part : _parts) {
             const InstrumentList* il = part->instruments();
             for (auto i = il->begin(); i != il->end(); ++i) {
                   const Instrument* instr = i->second;
-                  bool drum         = instr->useDrumset();
+                  bool drum = instr->useDrumset();
 
                   for (Channel* channel : instr->channel()) {
+                        bool channelExists = false;
+                        for (MidiMapping mapping: _midiMapping) {
+                              if (channel == mapping.articulation && channel->channel != -1) {
+                                    channelExists = true;
+                                    break;
+                                    }
+                              }
+                        // Channel could already exist, so we need to add only missing Channels
+                        if (channelExists)
+                              continue;
+
                         MidiMapping mm;
-                        if (port > maxport)
-                              maxport = port;
-                        if (drumPort > maxport)
-                              maxport = drumPort;
                         if (drum) {
-                              mm.port    = drumPort;
-                              mm.channel = 9;
-                              drumPort++;
+                              for (int i = 0;; i++) {
+                                    if (!occupiedMidiChannels.contains(i*16+9)) {
+                                          occupiedMidiChannels.insert(i*16+9);
+                                          mm.port = i;
+                                          mm.channel = 9;
+                                          break;
+                                          }
+                                    }
                               }
                         else {
-                              mm.port    = port;
-                              mm.channel = midiChannel;
-                              if (midiChannel == 15) {
-                                    midiChannel = 0;
-                                    ++port;
-                                    }
-                              else {
-                                    ++midiChannel;
-                                    if (midiChannel == 9)   // skip drum channel
-                                          ++midiChannel;
+                              for (;;startFrom++) {
+                                    // skipping drum port
+                                    if (startFrom % 16 == 9)
+                                          continue;
+                                    if (!occupiedMidiChannels.contains(startFrom)) {
+                                          occupiedMidiChannels.insert(startFrom);
+                                          mm.port = startFrom / 16;
+                                          mm.channel = startFrom % 16;
+                                          break;
+                                          }
                                     }
                               }
+
+                        if (mm.port > maxport)
+                              maxport = mm.port;
+
                         mm.part         = part;
                         mm.articulation = channel;
+
                         _midiMapping.append(mm);
-                        channel->channel = idx;
-                        ++idx;
+                        channel->channel = _midiMapping.size()-1;
                         }
                   }
             }
+
+      // 3. Set mappings in order you see in Add->Instruments
+      int sequenceNumber = 0;
+      for (Part* part : _parts) {
+            const InstrumentList* il = part->instruments();
+            for (auto i = il->begin(); i != il->end(); ++i) {
+                  const Instrument* instr = i->second;
+                  for (Channel* channel : instr->channel()) {
+                        if (!(_midiMapping[sequenceNumber].part == part
+                              && _midiMapping[sequenceNumber].articulation == channel)) {
+                              // Should swap
+                              int shouldBe = channel->channel;
+                              _midiMapping.swap(sequenceNumber, shouldBe);
+                              _midiMapping[sequenceNumber].articulation->channel = sequenceNumber;
+                              channel->channel = sequenceNumber;
+                              _midiMapping[shouldBe].articulation->channel = shouldBe;
+                              }
+                        sequenceNumber++;
+                        }
+                  }
+            }
+
       setMidiPortCount(maxport);
       }
 
