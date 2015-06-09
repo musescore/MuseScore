@@ -3053,6 +3053,22 @@ void InsertRemoveMeasures::removeMeasures()
       score->fixTicks();
       if (fm->type() == Element::Type::MEASURE) {
             score->setPlaylistDirty();
+
+            // check if there is a clef at the end of last measure
+            // remove clef from staff cleflist
+
+            if (lm->type() == Element::Type::MEASURE) {
+                  Measure* m = static_cast<Measure*>(lm);
+                  Segment* s = m->findSegment(Segment::Type::Clef, tick2);
+                  if (s) {
+                        for (int staffIdx = 0; staffIdx <= score->nstaves(); ++staffIdx) {
+                              Clef* clef = static_cast<Clef*>(s->element(staffIdx * VOICES));
+                              if (clef)
+                                    score->staff(staffIdx)->removeClef(clef);
+                              }
+                        }
+                  }
+
             score->insertTime(tick1, -(tick2 - tick1));
             score->setLayoutAll(true);
             for (Spanner* sp : score->unmanagedSpanners())
