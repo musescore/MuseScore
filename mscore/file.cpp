@@ -608,12 +608,12 @@ void MuseScore::newFile()
                                     // transpose key
                                     //
                                     KeySigEvent nKey = ks;
-                                    if (!nKey.custom() && part->instrument()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
+                                    if (!nKey.custom() && !nKey.isAtonal() && part->instrument()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
                                           int diff = -part->instrument()->transpose().chromatic;
                                           nKey.setKey(transposeKey(nKey.key(), diff));
                                           }
-                                    // do not create empty, invisible keysig
-                                    if (nKey.custom() || nKey.key() != Key::C) {
+                                    // do not create empty keysig unless custom or atonal
+                                    if (nKey.custom() || nKey.isAtonal() || nKey.key() != Key::C) {
                                           staff->setKey(0, nKey);
                                           KeySig* keysig = new KeySig(score);
                                           keysig->setTrack(staffIdx * VOICES);

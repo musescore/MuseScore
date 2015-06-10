@@ -35,6 +35,11 @@ enum class Key {
       DELTA_ENHARMONIC = 12
       };
 
+enum class KeyMode {
+      UNKNOWN = -1,
+      NONE, MAJOR, MINOR
+      };
+
 static inline bool operator<  (Key a, Key b) { return int(a) < int(b); }
 static inline bool operator>  (Key a, Key b) { return int(a) > int(b); }
 static inline bool operator>  (Key a, int b) { return int(a) > b; }
@@ -63,6 +68,7 @@ struct KeySym {
 
 class KeySigEvent {
       Key _key            { Key::INVALID };          // -7 -> +7
+      KeyMode _mode       { KeyMode::UNKNOWN };
       bool _custom        { false };
       QList<KeySym> _keySymbols;
 
@@ -78,9 +84,12 @@ class KeySigEvent {
       void print() const;
 
       Key key() const            { return _key;                    }
+      KeyMode mode() const       { return _mode;                   }
+      void setMode(KeyMode m)    { _mode = m;                      }
       bool custom() const        { return _custom;                 }
       void setCustom(bool val)   { _custom = val; _key = Key::C;   }
       bool isValid() const       { return _key != Key::INVALID;    }
+      bool isAtonal() const      { return _mode == KeyMode::NONE;  }
       void initFromSubtype(int);    // for backward compatibility
       void initLineList(char*);
       QList<KeySym>& keySymbols()             { return _keySymbols; }

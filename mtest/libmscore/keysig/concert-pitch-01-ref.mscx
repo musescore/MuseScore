@@ -41,6 +41,8 @@
     <metaTag name="workTitle"></metaTag>
     <PageList>
       <Page>
+        <System>
+          </System>
         </Page>
       </PageList>
     <Part>
@@ -163,7 +165,7 @@
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="1">
+      <Measure number="2">
         <KeySig>
           <accidental>-4</accidental>
           </KeySig>
@@ -172,9 +174,28 @@
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="1">
+      <Measure number="3">
         <KeySig>
           <accidental>0</accidental>
+          </KeySig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <KeySig>
+          <accidental>-1</accidental>
+          </KeySig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="5">
+        <KeySig>
+          <custom>1</custom>
+          <mode>none</mode>
           </KeySig>
         <Rest>
           <durationType>measure</durationType>
@@ -198,7 +219,7 @@
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="1">
+      <Measure number="2">
         <KeySig>
           <accidental>-4</accidental>
           </KeySig>
@@ -207,9 +228,28 @@
           <duration z="4" n="4"/>
           </Rest>
         </Measure>
-      <Measure number="1">
+      <Measure number="3">
         <KeySig>
           <accidental>0</accidental>
+          </KeySig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <KeySig>
+          <accidental>-1</accidental>
+          </KeySig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="5">
+        <KeySig>
+          <custom>1</custom>
+          <mode>none</mode>
           </KeySig>
         <Rest>
           <durationType>measure</durationType>

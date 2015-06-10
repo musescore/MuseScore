@@ -91,7 +91,7 @@ void KeySig::layout()
       qreal _spatium = spatium();
       setbbox(QRectF());
 
-      if (isCustom()) {
+      if (isCustom() && !isAtonal()) {
             for (KeySym& ks: _sig.keySymbols()) {
                   ks.pos = ks.spos * _spatium;
                   addbbox(symBbox(ks.sym).translated(ks.pos));
@@ -252,8 +252,8 @@ void KeySig::draw(QPainter* p) const
       p->setPen(curColor());
       for (const KeySym& ks: _sig.keySymbols())
             drawSymbol(ks.sym, p, QPointF(ks.pos.x(), ks.pos.y()));
-      if (!parent() && isCustom() && _sig.keySymbols().isEmpty()) {
-            // atonal key signature - draw something for palette
+      if (!parent() && (isAtonal() || isCustom()) && _sig.keySymbols().isEmpty()) {
+            // empty custom or atonal key signature - draw something for palette
             p->setPen(Qt::gray);
             drawSymbol(SymId::timeSigX, p, QPointF(symWidth(SymId::timeSigX) * -0.5, 2.0 * spatium()));
             }
@@ -322,7 +322,10 @@ void KeySig::write(Xml& xml) const
       {
       xml.stag(name());
       Element::writeProperties(xml);
-      if (_sig.custom()) {
+      if (_sig.isAtonal()) {
+            xml.tag("custom", 1);
+            }
+      else if (_sig.custom()) {
             xml.tag("custom", 1);
             for (const KeySym& ks : _sig.keySymbols()) {
                   xml.stag("KeySym");
@@ -333,6 +336,14 @@ void KeySig::write(Xml& xml) const
             }
       else {
             xml.tag("accidental", int(_sig.key()));
+            }
+      switch (_sig.mode()) {
+            case KeyMode::NONE:     xml.tag("mode", "none"); break;
+            case KeyMode::MAJOR:    xml.tag("mode", "major"); break;
+            case KeyMode::MINOR:    xml.tag("mode", "minor"); break;
+            case KeyMode::UNKNOWN:
+            default:
+                  ;
             }
       if (!_showCourtesy)
             xml.tag("showCourtesySig", _showCourtesy);
@@ -387,13 +398,27 @@ void KeySig::read(XmlReader& e)
                   e.readInt();
                   _sig.setCustom(true);
                   }
+            else if (tag == "mode") {
+                  QString m(e.readElementText());
+                  if (m == "none")
+                        _sig.setMode(KeyMode::NONE);
+                  else if (m == "major")
+                        _sig.setMode(KeyMode::MAJOR);
+                  else if (m == "minor")
+                        _sig.setMode(KeyMode::MINOR);
+                  else
+                        _sig.setMode(KeyMode::UNKNOWN);
+                  }
             else if (tag == "subtype")
                   subtype = e.readInt();
             else if (!Element::readProperties(e))
                   e.unknown();
             }
+      // for backward compatibility
       if (!_sig.isValid())
-            _sig.initFromSubtype(subtype);     // for backward compatibility
+            _sig.initFromSubtype(subtype);
+      if (_sig.custom() && _sig.keySymbols().isEmpty())
+            _sig.setMode(KeyMode::NONE);
       }
 
 //---------------------------------------------------------
@@ -551,12 +576,10 @@ Element* KeySig::prevElement()
 QString KeySig::accessibleInfo()
       {
       QString keySigType;
-      if (isCustom()) {
-            if (keySigEvent().keySymbols().isEmpty())
-                  return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("MuseScore", keyNames[15]));
-            else
-                  return tr("%1: Custom").arg(Element::accessibleInfo());
-            }
+      if (isAtonal())
+            return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("MuseScore", keyNames[15]));
+      else if (isCustom())
+            return tr("%1: Custom").arg(Element::accessibleInfo());
 
       if (key() == Key::C)
             return QString("%1: %2").arg(Element::accessibleInfo()).arg(qApp->translate("MuseScore", keyNames[14]));
