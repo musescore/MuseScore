@@ -807,6 +807,7 @@ Element* ChordRest::drop(const DropData& data)
                   {
                   BarLine* bl = static_cast<BarLine*>(e);
                   bl->setTrack(staffIdx() * VOICES);
+                  bl->setGenerated(false);
 
                   if (tick() == m->tick())
                         return m->drop(data);
