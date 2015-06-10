@@ -69,7 +69,7 @@ void InstrumentChange::setInstrument(const Instrument& i)
 void InstrumentChange::write(Xml& xml) const
       {
       xml.stag("InstrumentChange");
-      _instrument->write(xml);
+      _instrument->write(xml, part());
       Text::writeProperties(xml);
       xml.etag();
       }
@@ -83,7 +83,7 @@ void InstrumentChange::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Instrument")
-                  _instrument->read(e);
+                  _instrument->read(e, part());
             else if (!Text::readProperties(e))
                   e.unknown();
             }
