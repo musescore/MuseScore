@@ -1741,7 +1741,7 @@ void Score::deleteItem(Element* el)
                   removeChordRest(rm, false);
                   Rest* rest = new Rest(this);
                   rest->setDurationType(TDuration::DurationType::V_MEASURE);
-                  rest->setDuration(rm->measure()->len());
+                  rest->setDuration(rm->measure()->stretchedLen(rm->staff()));
                   rest->setTrack(rm->track());
                   rest->setParent(rm->parent());
                   Segment* segment = rm->segment();
