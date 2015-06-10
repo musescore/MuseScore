@@ -701,7 +701,7 @@ Palette* MuseScore::newClefsPalette(bool basic)
             ClefType::G,   ClefType::F, ClefType::C3, ClefType::C4
             };
       static std::vector<ClefType> clefs2  {
-            ClefType::G,   ClefType::G1,    ClefType::G2,     ClefType::G3,  ClefType::G4,
+            ClefType::G,   ClefType::G1,    ClefType::G2,     ClefType::G3,  ClefType::G5,  ClefType::G4,
             ClefType::C1,  ClefType::C2,    ClefType::C3,     ClefType::C4,  ClefType::C5,
             ClefType::F,   ClefType::F_8VA, ClefType::F_15MA, ClefType::F8,  ClefType::F15,
             ClefType::F_B, ClefType::F_C,   ClefType::PERC,   ClefType::TAB, ClefType::TAB2

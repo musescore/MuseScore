@@ -4005,8 +4005,8 @@
         "description": "G clef ottava bassa (old style)"
     }, 
     "gClef8vbParens": {
-        "codepoint": "U+E057", 
-        "description": "G clef, optionally ottava bassa"
+        "codepoint": "U+E050", 
+        "description": "fake G clef, optionally ottava bassa"
     }, 
     "gClefArrowDown": {
         "codepoint": "U+E05B", 
