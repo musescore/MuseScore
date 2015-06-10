@@ -54,6 +54,7 @@ const ClefInfo ClefInfo::clefTable[] = {
 { "F15ma","F",         4,  2, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, QT_TRANSLATE_NOOP("clefTable", "Bass clef 15ma"),         StaffGroup::STANDARD  }, // F_15MA
 { "PERC2","percussion",2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Percussion"),             StaffGroup::PERCUSSION}, // PERC2 placeholder
 { "TAB2", "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Tablature2"),             StaffGroup::TAB       },
+{ "G8vbp","G",         2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Treble clef optional 8vb"),StaffGroup::STANDARD }, // G5
       };
 
 
@@ -315,6 +316,10 @@ void Clef::layout1()
             case ClefType::F_15MA:                         // F clef 15ma on penultimate line
                   symbol->setSym(SymId::fClef15ma);
                   yoff = 1.0 * curLineDist;
+                  break;
+            case ClefType::G5:                              // G clef on 2nd line
+                  symbol->setSym(SymId::gClef8vbParens);
+                  yoff = 3.0 * curLineDist;
                   break;
             case ClefType::INVALID:
             case ClefType::MAX:
