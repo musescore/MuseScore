@@ -239,59 +239,62 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                   off += tieLen;
             playNote(events, note, channel, p, velo, on, off);
             }
-#if 0
-      if (note->bend()) {
-            Bend* bend = note->bend();
-            int ticks = note->playTicks();
+
+      // Bends
+      for (Element* e: note->el()) {
+            if (e == 0 || e->type() != Element::Type::BEND)
+                  continue;
+            Bend* bend = static_cast<Bend*>(e);
             const QList<PitchValue>& points = bend->points();
+            int pitchSize = points.size();
 
-            // transform into midi values
-            //    pitch is in 1/100 semitones
-            //    midi pitch is 12/16384 semitones
-            //
-            //    time is in noteDuration/60
+            double noteLen = note->playTicks();
+            int lastPointTick = tick1;
+            for(int pitchIndex = 0; pitchIndex < pitchSize-1; pitchIndex++) {
+                  PitchValue pitchValue = points[pitchIndex];
+                  PitchValue nextPitch  = points[pitchIndex+1];
+                  int nextPointTick = tick1 + nextPitch.time / 60.0 * noteLen;
+                  int pitch = pitchValue.pitch;
 
-            int n = points.size();
-            int tick1 = 0;
-            for (int pt = 0; pt < n; ++pt) {
-                  int pitch = points[pt].pitch;
-
-                  if ((pt == 0) && (pitch == points[pt+1].pitch)) {
-                        Event ev(ME_CONTROLLER);
-                        ev.setChannel(channel);
-                        ev.setController(CTRL_PITCH);
-                        int midiPitch = (pitch * 16384) / 300;
-                        ev.setValue(midiPitch);
-                        events->insertMulti(tick, ev);
+                  if (pitchIndex == 0 && (pitch == nextPitch.pitch)) {
+                        int midiPitch = (pitch * 16384) / 1200 + 8192;
+                        int msb = midiPitch / 128;
+                        int lsb = midiPitch % 128;
+                        NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
+                        events->insert(std::pair<int, NPlayEvent>(lastPointTick, ev));
+                        lastPointTick = nextPointTick;
+                        continue;
                         }
-                  if (pitch != points[pt+1].pitch) {
-                        int pitchDelta = points[pt+1].pitch - pitch;
-                        int tick2      = (points[pt+1].time * ticks) / 60;
-                        int dt = points[pt+1].time - points[pt].time;
-                        for (int tick3 = tick1; tick3 < tick2; tick3 += 16) {
-                              Event ev(ME_CONTROLLER);
-                              ev.setChannel(channel);
-                              ev.setController(CTRL_PITCH);
-
-                              int dx = ((tick3-tick1) * 60) / ticks;
-                              int p  = pitch + dx * pitchDelta / dt;
-
-                              int midiPitch = (p * 16384) / 1200;
-                              ev.setValue(midiPitch);
-                              events->insertMulti(tick + tick3, ev);
-                              }
-                        tick1 = tick2;
+                  if (pitch == nextPitch.pitch && !(pitchIndex == 0 && pitch != 0)) {
+                        lastPointTick = nextPointTick;
+                        continue;
                         }
-                  if (pt == (n-2))
-                        break;
+
+                  double pitchDelta = nextPitch.pitch - pitch;
+                  double tickDelta  = nextPitch.time - pitchValue.time;
+                 /*         B
+                           /.                   pitch is 1/100 semitones
+                   bend   / .  pitchDelta       time is in noteDuration/60
+                         /  .                   midi pitch is 12/16384 semitones
+                        A....
+                      tickDelta   */
+                  for (int i = lastPointTick; i <= nextPointTick; i += 16) {
+                        double dx = ((i-lastPointTick) * 60) / noteLen;
+                        int p = pitch + dx * pitchDelta / tickDelta;
+
+                        // We don't support negative pitch, but Midi does. Let's center by adding 8192.
+                        int midiPitch = (p * 16384) / 1200 + 8192;
+                        // Representing pitch as two bytes
+                        int msb = midiPitch / 128;
+                        int lsb = midiPitch % 128;
+                        NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
+                        events->insert(std::pair<int, NPlayEvent>(i, ev));
+                        }
+                  lastPointTick = nextPointTick;
                   }
-            Event ev(ME_CONTROLLER);
-            ev.setChannel(channel);
-            ev.setController(CTRL_PITCH);
-            ev.setValue(0);
-            events->insertMulti(tick + ticks, ev);
+            NPlayEvent ev(ME_PITCHBEND, channel, 0, 64); // 0:64 is 8192 - no pitch bend
+            events->insert(std::pair<int, NPlayEvent>(tick1+noteLen, ev));
             }
-#endif
       }
 
 //---------------------------------------------------------
