@@ -272,12 +272,12 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
 
                   double pitchDelta = nextPitch.pitch - pitch;
                   double tickDelta  = nextPitch.time - pitchValue.time;
-                 /*         B
-                           /.                   pitch is 1/100 semitones
-                   bend   / .  pitchDelta       time is in noteDuration/60
-                         /  .                   midi pitch is 12/16384 semitones
-                        A....
-                      tickDelta   */
+                  /*         B
+                            /.                   pitch is 1/100 semitones
+                    bend   / .  pitchDelta       time is in noteDuration/60
+                          /  .                   midi pitch is 12/16384 semitones
+                         A....
+                       tickDelta   */
                   for (int i = lastPointTick; i <= nextPointTick; i += 16) {
                         double dx = ((i-lastPointTick) * 60) / noteLen;
                         int p = pitch + dx * pitchDelta / tickDelta;
@@ -353,7 +353,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
 
                   foreach (Articulation* a, chord->articulations()) {
                         instr->updateVelocity(&velocity,channel, a->subtypeName());
-                  }
+                        }
 
                   for (Chord* c : chord->graceNotesBefore()) {
                         for (const Note* note : c->notes())
@@ -465,15 +465,13 @@ void Score::updateHairpin(Hairpin* h)
       //
 
       int endVelo = velo;
-      if (h->hairpinType() == Hairpin::Type::CRESCENDO)
-            {
+      if (h->hairpinType() == Hairpin::Type::CRESCENDO) {
             if (incr == 0 && velo < st->velocities().nextVelo(tick2-1))
                   endVelo = st->velocities().nextVelo(tick2-1);
             else
                   endVelo += incr;
             }
-      else
-            {
+      else {
             if (incr == 0 && velo > st->velocities().nextVelo(tick2-1))
                   endVelo = st->velocities().nextVelo(tick2-1);
             else
@@ -665,7 +663,7 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                   if (s->tick2() >= tick1 && s->tick2() <= tick2) {
                         int t = s->tick2() + tickOffset + 1;
                         if (t > repeatList()->last()->utick + repeatList()->last()->len)
-                             t = repeatList()->last()->utick + repeatList()->last()->len;
+                              t = repeatList()->last()->utick + repeatList()->last()->len;
                         channelPedalEvents.at(channel).push_back(std::pair<int, bool>(t, false));
                         }
                   }
@@ -696,12 +694,12 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
       MeasureBase* pm = cm->prev();
       Element::Type pt = pm ? pm->type() : Element::Type::INVALID;
       if (!pm || pm->lineBreak() || pm->pageBreak() || pm->sectionBreak()
-            || pt == Element::Type::VBOX || pt == Element::Type::HBOX
-            || pt == Element::Type::FBOX || pt == Element::Type::TBOX) {
+         || pt == Element::Type::VBOX || pt == Element::Type::HBOX
+         || pt == Element::Type::FBOX || pt == Element::Type::TBOX) {
             int offset = (cm->timesig() - cm->len()).ticks();
             if (offset > 0)
                   tick += offset;
-           }
+            }
 
       int swingBeat = swingUnit * 2;
       qreal ticksDuration = (qreal)chord->actualTicks();
@@ -715,10 +713,10 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
                   ontime = ontime + swingActualAdjust;
                   }
             }
-            int endTick = tick + ticksDuration;
-            if ((endTick % swingBeat == swingUnit) && (!isSubdivided(ncr,swingUnit))) {
-                  gateTime = gateTime + (swingActualAdjust/10);
-                  }
+      int endTick = tick + ticksDuration;
+      if ((endTick % swingBeat == swingUnit) && (!isSubdivided(ncr,swingUnit))) {
+            gateTime = gateTime + (swingActualAdjust/10);
+            }
       }
 
 //---------------------------------------------------------
@@ -833,7 +831,7 @@ void renderArpeggio(Chord *chord, QList<NoteEventList> & ell)
       int notes = chord->notes().size();
       int l = 64;
       while (l * notes > chord->upNote()->playTicks())
-            l = 2*l / 3 ;
+            l = 2*l / 3;
       int start, end, step;
       bool up = chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN;
       if (up) {
@@ -879,8 +877,8 @@ int convertLine (int lineL2, ClefType clefL, ClefType clefR) {
 int convertLine(int lineL2, Note *noteL, Note *noteR)
       {
       return convertLine(lineL2,
-                       noteL->chord()->staff()->clef(noteL->chord()->tick()),
-                       noteR->chord()->staff()->clef(noteR->chord()->tick()));
+         noteL->chord()->staff()->clef(noteL->chord()->tick()),
+         noteR->chord()->staff()->clef(noteR->chord()->tick()));
       }
 
 //---------------------------------------------------------
@@ -892,9 +890,9 @@ int convertLine(int lineL2, Note *noteL, Note *noteR)
 // deltastep is the number of diatonic steps between the base note and this articulation step.
 //---------------------------------------------------------
 
-int articulationExcursion (Note *noteL, Note *noteR, int deltastep)
+int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
       {
-      if ( 0 == deltastep )
+      if (0 == deltastep)
             return 0;
       Chord *chordL = noteL->chord();
       Chord *chordR = noteR->chord();
@@ -908,7 +906,7 @@ int articulationExcursion (Note *noteL, Note *noteR, int deltastep)
       // we use line - deltastep, because lines are oriented from top to bottom, while step is oriented from bottom to top.
       int lineL2    = lineL - deltastep;
       Measure* measureR = chordR->segment()->measure();
-    
+
       Segment* segment = noteL->chord()->segment();
       int lineR2 = convertLine(lineL2, noteL, noteR);
       // is there another note in this segment on the same line?
@@ -954,8 +952,8 @@ int articulationExcursion (Note *noteL, Note *noteR, int deltastep)
 //---------------------------------------------------------
 
 void renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, int tickspernote,
-                            const vector<int> & prefix, const vector<int> & body,
-                            bool repeatp, bool sustainp, const vector<int> & suffix)
+   const vector<int> & prefix, const vector<int> & body,
+   bool repeatp, bool sustainp, const vector<int> & suffix)
       {
       events->clear();
       Chord *chord = note->chord();
@@ -968,7 +966,7 @@ void renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
       int p = prefix.size();
       int b = body.size();
       int s = suffix.size();
-    
+
       if (p + b + s <= 0 )
             return;
 
@@ -987,32 +985,32 @@ void renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
       else if ( tickspernote == mintickspernote )
             return; // the ornament is impossible to implement respecting the minimum duration and all the notes it contains
       else
-            tickspernote = maxticks / (p + b + s) ; // integer division ignoring remainder
+            tickspernote = maxticks / (p + b + s);  // integer division ignoring remainder
 
-      int millespernote = space * tickspernote / maxticks ; // rescale duration into per mille
-    
+      int millespernote = space * tickspernote / maxticks;  // rescale duration into per mille
+
       // local function:
       // look ahead in the given vector to see if the current note is the same pitch as the next note or next several notes.
       // If so, increment the duration by the appropriate note duration, and increment the index, j, to the next note index
       // of a different pitch.
       // The total duration of the tied note is returned, and the index is modified.
       auto tieForward = [millespernote] (int & j, const vector<int> & vec) {
-            int size = vec.size();
-            int duration = millespernote;
-            while ( j < size-1 && vec[j] == vec[j+1] ) {
-                  duration += millespernote;
-                  j++;
-                  }
-            return duration;
-            };
+               int size = vec.size();
+               int duration = millespernote;
+               while ( j < size-1 && vec[j] == vec[j+1] ) {
+                     duration += millespernote;
+                     j++;
+                     }
+               return duration;
+               };
 
       // local function:
       auto makeEvent = [note,chord,chromatic,events] (int pitch, int ontime, int duration) {
-            events->append( NoteEvent(chromatic ? pitch : articulationExcursion(note,note,pitch),
-                                  ontime/chord->actualTicks(),
-                                  duration/chord->actualTicks()));
-            return ontime + duration;
-            };
+               events->append( NoteEvent(chromatic ? pitch : articulationExcursion(note,note,pitch),
+                  ontime/chord->actualTicks(),
+                  duration/chord->actualTicks()));
+               return ontime + duration;
+               };
 
       // calculate the number of times to repeat the body, and sustain the last note of the body
       // 1000 = P + numrepeat*B+sustain + S
@@ -1026,7 +1024,7 @@ void renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
 
       if (b > 0) {
             // render the body, but not the final repetion
-            for (int r = 0; r < numrepeat-1; r++){
+            for (int r = 0; r < numrepeat-1; r++) {
                   for (int j=0; j < b; j++)
                         ontime = makeEvent(body[j], ontime, millespernote);
                   }
@@ -1039,7 +1037,7 @@ void renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
       // render the suffix
       for (int j = 0; j < s; j++)
             ontime = makeEvent(suffix[j], ontime, tieForward(j,suffix));
-}
+      }
 
 //---------------------------------------------------------
 //   noteHasGlissando
@@ -1050,8 +1048,8 @@ bool noteHasGlissando(Note *note)
       {
       for (Spanner* spanner : note->spannerFor()) {
             if ((spanner->type() == Element::Type::GLISSANDO)
-                  && spanner->endElement()
-                  && (Element::Type::NOTE == spanner->endElement()->type()))
+               && spanner->endElement()
+               && (Element::Type::NOTE == spanner->endElement()->type()))
                   return true;
             }
       return false;
@@ -1070,7 +1068,7 @@ void renderGlissando(NoteEventList* events, Note *notestart)
 
       set<int> blacknotes = {  1,  3,    6, 8, 10};
       set<int> whitenotes = {0,  2, 4, 5, 7,  9, 11};
-    
+
       for (Spanner* spanner : notestart->spannerFor()) {
             if (spanner->type() == Element::Type::GLISSANDO) {
                   Glissando *glissando = static_cast<Glissando *>(spanner);
@@ -1089,7 +1087,7 @@ void renderGlissando(NoteEventList* events, Note *notestart)
                               int lineend = convertLine(noteend->line(), noteend, notestart);
                               int p = pitchstart;
                               for (line = linestart; (direction) ? (line>lineend) : (line<lineend);
-                                 (direction) ? line-- : line++){
+                                 (direction) ? line-- : line++) {
                                     int halfsteps = articulationExcursion(notestart, noteend, linestart - line);
                                     p = pitchstart + halfsteps;
                                     if (direction ? p < pitchend : p > pitchend)
@@ -1097,7 +1095,7 @@ void renderGlissando(NoteEventList* events, Note *notestart)
                                     }
                               }
                         else {
-                              for (int p = pitchstart ; direction ? p < pitchend : p > pitchend; p += (direction ? 1 : -1)) {
+                              for (int p = pitchstart; direction ? p < pitchend : p > pitchend; p += (direction ? 1 : -1)) {
                                     bool choose = false;
                                     int mod = ((p - Cnote) + 1200) % 12;
                                     switch (glissandoStyle) {
@@ -1126,7 +1124,7 @@ void renderGlissando(NoteEventList* events, Note *notestart)
 //---------------------------------------------------------
 //   renderChordArticulation
 //---------------------------------------------------------
-    
+
 void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gateTime)
       {
       // This struct specifies how to render an articulation.
@@ -1178,7 +1176,7 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
       vector<OrnamentExcursion> excursions = {
             //  articulation type           set of  duration       body         repeatp      suffix
             //                              styles          prefix                    sustainp
-             {ArticulationType::Turn,        any,     _32nd, {},    {1,0,-1,0},   false, true, {}}
+               {ArticulationType::Turn,        any,     _32nd, {},    {1,0,-1,0},   false, true, {}}
             ,{ArticulationType::Reverseturn, any,     _32nd, {},    {-1,0,1,0},   false, true, {}}
             ,{ArticulationType::Trill,       baroque, _32nd, {1,0}, {1,0},        true,  true, {}}
             ,{ArticulationType::Trill,       defstyle,_32nd, {0,1}, {0,1},        true,  true, {}}
@@ -1187,19 +1185,19 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
             ,{ArticulationType::Prall,       any,     _32nd, {},    {0,1,0},      false, true, {}} // inverted mordent
             ,{ArticulationType::PrallPrall,  any,     _32nd, {1,0}, {1,0},        false, true, {}}
             ,{ArticulationType::PrallMordent,any,     _32nd, {},    {1,0,-1,0},   false, true, {}}
-            ,{ArticulationType::UpPrall,     any,     _16th, {-1,0},{1,0},        true,  true, {1,0}} // p 144 Ex 152 [1]
-            ,{ArticulationType::UpMordent,   any,     _16th, {-1,0},{1,0},        true,  true, {-1,0}} // p 144 Ex 152 [1]
+            ,{ArticulationType::UpPrall,     any,     _16th, {-1,0},{1,0},        true,  true, {1,0}} // p144 Ex 152 [1]
+            ,{ArticulationType::UpMordent,   any,     _16th, {-1,0},{1,0},        true,  true, {-1,0}} // p144 Ex 152 [1]
             ,{ArticulationType::DownPrall,   any,     _16th, {1,1,1,0}, {1,0},        true,  true, {}} // p136 Cadence Appuyee [1] [2]
             ,{ArticulationType::DownMordent, any,     _16th, {1,1,1,0}, {1,0},        true, true, {-1, 0}} // p136 Cadence Appuyee + mordent [1] [2]
-           ,{ArticulationType::PrallUp,      any,     _16th, {1,0}, {1,0},        true, true, {-1,0}} // p136 Double Cadence [1]
-           ,{ArticulationType::PrallDown,    any,     _16th, {1,0}, {1,0},        true,  true, {-1,0,0,0}} // p144 ex 153 [1]
-           ,{ArticulationType::Schleifer,    any,     _32nd, {},    {0},          false, true, {}}
-       };
-    
+            ,{ArticulationType::PrallUp,      any,     _16th, {1,0}, {1,0},        true, true, {-1,0}}// p136 Double Cadence [1]
+            ,{ArticulationType::PrallDown,    any,     _16th, {1,0}, {1,0},        true,  true, {-1,0,0,0}}// p144 ex 153 [1]
+            ,{ArticulationType::Schleifer,    any,     _32nd, {},    {0},          false, true, {}}
+            };
+
       // [1] Some of the articulations/ornaments in the excursions table above come from
       // Baroque Music, Style and Performance A Handbook, by Robert Donington,(c) 1982
       // ISBN 0-393-30052-8, W. W. Norton & Company, Inc.
-    
+
       // [2] In some cases, the example from [1] does not preserve the timing.
       // For example, illustrates 2+1/4 counts per half note.
       for (int k = 0; k < chord->notes().size(); ++k) {
@@ -1211,22 +1209,23 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
                   for (Articulation* a : chord->articulations()) {
                         if ( false == a->playArticulation())
                               continue;
-                
+
                         auto oe = find_if(excursions.cbegin(), excursions.cend(),
-                                  [a](OrnamentExcursion oe) {return  ( oe.atype == a->articulationType()
-                                                                      && ( 0 == oe.ostyles.size()
-                                                                          || oe.ostyles.end() != oe.ostyles.find(a->ornamentStyle())));
-                                  });
+                           [a](OrnamentExcursion oe) {
+                                    return  (oe.atype == a->articulationType()
+                                    && (0 == oe.ostyles.size()
+                                    || oe.ostyles.end() != oe.ostyles.find(a->ornamentStyle())));
+                                    });
                         if ( oe != excursions.cend())
                               renderNoteArticulation(events, note, false, oe->duration,
-                                           oe->prefix, oe->body, oe->repeatp, oe->sustainp, oe->suffix);
+                                 oe->prefix, oe->body, oe->repeatp, oe->sustainp, oe->suffix);
                         else
                               instr->updateGateTime(&gateTime, channel, a->subtypeName());
                         }
-                 }
+                  }
             }
       }
-    
+
 //---------------------------------------------------------
 //   renderChord
 //    ontime in 1/1000 of duration
@@ -1236,7 +1235,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       {
       QList<NoteEventList> ell;
       if (chord->notes().isEmpty())
-           return ell;
+            return ell;
 
       int notes = chord->notes().size();
       for (int i = 0; i < notes; ++i)
@@ -1245,14 +1244,14 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       if (chord->tremolo()) {
             renderTremolo(chord, ell);
 
-      }
+            }
       else if (chord->arpeggio()) {
             renderArpeggio(chord, ell);
-	    return ell;  // dont apply gateTime to arpeggio events
-      }
-      else  {
+            return ell;  // dont apply gateTime to arpeggio events
+            }
+      else {
             renderChordArticulation(chord, ell, gateTime);
-      }
+            }
       //
       //    apply gateTime
       //
@@ -1271,7 +1270,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       return ell;
       }
 
-    
+
 void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord, int &ontime)
       {
       int n = gnb.size();
@@ -1302,7 +1301,7 @@ void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord
                   ontime = 500;
 
             int graceDuration = ontime / n;
-        
+
             int on = 0;
             for (int i = 0; i < n; ++i) {
                   QList<NoteEventList> el;
@@ -1313,7 +1312,7 @@ void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord
                         nel.append(NoteEvent(0, on, graceDuration));
                         el.append(nel);
                         }
-            
+
                   if (gc->playEventType() == PlayEventType::InvalidUser)
                         gc->score()->undo(new ChangeEventList(gc, el));
                   else if (gc->playEventType() == PlayEventType::Auto) {
@@ -1324,7 +1323,7 @@ void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord
                   }
             }
       }
-    
+
 //---------------------------------------------------------
 //   createPlayEvents
 //    create default play events
@@ -1350,18 +1349,18 @@ void Score::createPlayEvents(Chord* chord)
             Instrument* instr = chord->part()->instrument(tick);
             instr->updateGateTime(&gateTime, 0, "");
             }
-          
+
       int ontime = 0;
 
       Score::createGraceNotesPlayEvents(chord->graceNotesBefore(), tick, chord, ontime);
-     
+
       SwingParameters st = chord->staff()->swing(tick);
       int unit = st.swingUnit;
       int ratio = st.swingRatio;
       // Check if swing needs to be applied
       if (unit) {
             swingAdjustParams(chord, gateTime, ontime, unit, ratio);
-      }
+            }
       //
       //    render normal (and articulated) chords
       //
@@ -1397,6 +1396,69 @@ void Score::createPlayEvents()
       }
 
 //---------------------------------------------------------
+//   renderMetronome
+//---------------------------------------------------------
+
+int Score::renderMetronome(EventMap* events, Measure* m, int playPos, int tickOffset, bool countIn)
+      {
+      int msrTick = m->tick();
+      qreal tempo       = tempomap()->tempo(msrTick);
+      Fraction timeSig     = sigmap()->timesig(msrTick).nominal();
+      int numerator   = timeSig.numerator();
+      int denominator = timeSig.denominator();
+      int clickTicks  = MScore::division * 4 / denominator;
+      bool triplets = false;
+      // COMPOUND METER: if time sig is 3*n/d, convert to 3d units
+      // note: 3/8, 3/16, ... are NOT considered compound
+      if (numerator > 3 && numerator % 3 == 0) {
+            // if denominator longer than 1/8 OR tempo for compound unit slower than 60MM
+            // (i.e. each denom. unit slower than 180MM = tempo 3.0)
+            // then do not count as compound, but beat click-clack-clack triplets
+            if (denominator < 8 || tempo * denominator / 4 < 3.0)
+                  triplets = true;
+            // otherwise, count as compound meter (one beat every 3 denominator units)
+            else {
+                  numerator   /= 3;
+                  clickTicks  *= 3;
+                  }
+            }
+
+      // NUMBER OF TICKS
+      int numOfClicks = numerator;                          // default to a full measure of 'clicks'
+      int lastPause   = clickTicks;                         // the number of ticks to wait after the last 'click'
+      // if not at the beginning of a measure, add clicks for the initial measure part
+      if (msrTick < playPos) {
+            int delta    = playPos - msrTick;
+            int addClick = (delta + clickTicks - 1) / clickTicks;     // round num. of clicks up
+            numOfClicks += addClick;
+            lastPause    = delta - (addClick - 1) * clickTicks;       // anything after last click time is final pause
+            }
+      // or if measure not complete (anacrusis), add clicks for the missing measure part
+      else if (m->ticks() < clickTicks * numerator) {
+            int delta    = clickTicks * numerator - m->ticks();
+            int addClick = (delta + clickTicks - 1) / clickTicks;
+            numOfClicks += addClick;
+            lastPause    = delta - (addClick - 1) * clickTicks;
+            }
+/*
+      // MIN_CLICKS: be sure to have at least MIN_CLICKS clicks: if less, add full measures
+      while (numOfClicks < MIN_CLICKS)
+            numOfClicks += numerator;
+*/
+      // click-clack-clack triplets
+      if (triplets)
+            numerator = 3;
+      int tick = 0;
+      NPlayEvent event;
+      for (int i = 0; i < numOfClicks; i++) {
+            tick = (countIn ? 0 : m->tick()) + i * clickTicks + tickOffset;
+            event.setType((i % numerator) == 0 ? ME_TICK1 : ME_TICK2);
+            events->insert(std::pair<int,NPlayEvent>(tick, event));
+            }
+      return tick + lastPause;
+      }
+
+//---------------------------------------------------------
 //   renderMidi
 //    export score to event list
 //---------------------------------------------------------
@@ -1428,15 +1490,7 @@ void Score::renderMidi(EventMap* events)
             //    add metronome tick events
             //
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
-                  Fraction ts = sigmap()->timesig(m->tick()).timesig();
-
-                  int tw = MScore::division * 4 / ts.denominator();
-                  for (int i = 0; i < ts.numerator(); i++) {
-                        int tick = m->tick() + i * tw + tickOffset;
-                        NPlayEvent event;
-                        event.setType(i == 0 ? ME_TICK1 : ME_TICK2);
-                        events->insert(std::pair<int,NPlayEvent>(tick, event));
-                        }
+                  renderMetronome(events, m, m->tick(), tickOffset, false);
                   if (m->tick() + m->ticks() >= endTick)
                         break;
                   }

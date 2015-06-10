@@ -778,6 +778,7 @@ class Score : public QObject {
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
       void renderSpanners(EventMap* events, int staffIdx);
+      int renderMetronome(EventMap* events, Measure* m, int playPos, int tickOffset, bool countIn);
 
       int mscVersion() const    { return _mscVersion; }
       void setMscVersion(int v) { _mscVersion = v; }
