@@ -203,6 +203,9 @@ void BarLine::getY(qreal* y1, qreal* y2) const
             int staffIdx1    = staffIdx();
             int staffIdx2    = staffIdx1 + _span - 1;
             if (staffIdx2 >= score()->nstaves()) {
+                  // this can happen on read
+                  // as we may be laying out a barline that spans multiple staves
+                  // before we have read the staves it spans
                   qDebug("BarLine: bad _span %d", _span);
                   staffIdx2 = score()->nstaves() - 1;
                   }
@@ -557,7 +560,7 @@ void BarLine::read(XmlReader& e)
                   _span     = e.readInt();
 
                   if (_spanTo == UNKNOWN_BARLINE_TO)
-                        _spanTo = staff() ? (staff()->lines() -1) * _span : 4 * _span;
+                        _spanTo = staff() ? (staff()->lines() - 1) * 2 : 8;
 
                   // WARNING: following statements assume staff and staff bar line spans are correctly set
                   // ws: _spanTo can be UNKNOWN_BARLINE_TO
