@@ -60,6 +60,7 @@ class KeySig : public Element {
       //@ -7 (flats) -- +7 (sharps)
       Q_INVOKABLE Key key() const         { return _sig.key(); }
       bool isCustom() const               { return _sig.custom(); }
+      bool isAtonal() const               { return _sig.isAtonal(); }
       KeySigEvent keySigEvent() const     { return _sig; }
       bool operator==(const KeySig&) const;
       void changeKeySigEvent(const KeySigEvent&);
