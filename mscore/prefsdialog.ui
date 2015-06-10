@@ -23,6 +23,64 @@
    <string>MuseScore Preferences</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_10">
+   <item row="1" column="0">
+    <layout class="QHBoxLayout">
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="resetToDefault">
+       <property name="accessibleName">
+        <string>Reset All Preferences to Default</string>
+       </property>
+       <property name="text">
+        <string>Reset All Preferences to Default</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>131</width>
+         <height>31</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Apply</string>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="0" column="0">
     <widget class="QTabWidget" name="General">
      <property name="sizePolicy">
@@ -3063,6 +3121,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QCheckBox" name="exportRPNs">
+            <property name="text">
+             <string>Export RPNs</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -3461,64 +3526,6 @@
      </widget>
     </widget>
    </item>
-   <item row="1" column="0">
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="resetToDefault">
-       <property name="accessibleName">
-        <string>Reset All Preferences to Default</string>
-       </property>
-       <property name="text">
-        <string>Reset All Preferences to Default</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>131</width>
-         <height>31</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="focusPolicy">
-        <enum>Qt::StrongFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>Apply</string>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
   </layout>
  </widget>
  <pixmapfunction>getPixmap</pixmapfunction>
@@ -3661,7 +3668,6 @@
   <tabstop>shortestNote</tabstop>
   <tabstop>pngResolution</tabstop>
   <tabstop>pngTransparent</tabstop>
-  <tabstop>expandRepeats</tabstop>
   <tabstop>exportAudioSampleRate</tabstop>
   <tabstop>exportLayout</tabstop>
   <tabstop>exportAllBreaks</tabstop>

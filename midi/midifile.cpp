@@ -102,19 +102,17 @@ void MidiFile::writeEvent(const MidiEvent& event)
                   put(event.velo());
                   break;
 
+            case ME_PITCHBEND:
+                  writeStatus(ME_PITCHBEND, event.channel());
+                  put(event.dataA());
+                  put(event.dataB());
+                  break;
+
             case ME_CONTROLLER:
                   switch(event.controller()) {
                         case CTRL_PROGRAM:
                               writeStatus(ME_PROGRAM, event.channel());
                               put(event.value() & 0x7f);
-                              break;
-                        case CTRL_PITCH:
-                              {
-                              writeStatus(ME_PITCHBEND, event.channel());
-                              int v = event.value() + 8192;
-                              put(v & 0x7f);
-                              put((v >> 7) & 0x7f);
-                              }
                               break;
                         case CTRL_PRESS:
                               writeStatus(ME_AFTERTOUCH, event.channel());
@@ -599,9 +597,8 @@ bool MidiFile::readEvent(MidiEvent* event)
                   event->setValue(b & 0x7f);
                   break;
             case ME_PITCHBEND:        // pitch bend
-                  event->setType(ME_CONTROLLER);
-                  event->setController(CTRL_PITCH);
-                  event->setValue(((((b & 0x80) ? 0 : b) << 7) + a) - 8192);
+                  event->setDataA(a & 0x7f);
+                  event->setDataB(b & 0x7f);
                   break;
             case ME_PROGRAM:
                   event->setValue(a & 0x7f);

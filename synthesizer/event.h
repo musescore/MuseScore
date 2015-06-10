@@ -124,7 +124,7 @@ enum {
       // controller
       //
       CTRL_PROGRAM   = 0x81,
-      CTRL_PITCH     = 0x82,
+      /*             = 0x82,*/
       CTRL_PRESS     = 0x83,
       CTRL_POLYAFTER = 0x84
       };
