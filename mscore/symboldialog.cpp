@@ -126,6 +126,7 @@ void SymbolDialog::systemFontChanged(int)
 
 void SymbolDialog::on_search_textChanged(const QString &searchPhrase)
       {
+      Q_UNUSED(searchPhrase);
       createSymbols();
       }
 
