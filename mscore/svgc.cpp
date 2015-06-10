@@ -82,6 +82,31 @@ namespace Ms {
 //   saveSvgCollection
 //---------------------------------------------------------
 
+// Check if the file might be a clever construction that would take ages to parse
+QString checkSafety(Score * score) {
+
+  if (score->rootScore()->excerpts().size() > 20) return QString("Too many parts");
+
+  score->repeatList()->unwind();
+  if (score->repeatList()->size() > 100) return QString("Too many repeats");
+
+  RepeatSegment * rs = score->repeatList()->last();
+  int endTick= rs->tick + rs->len;
+  qreal endtime = score->tempomap()->tick2time(endTick);
+
+  if (endtime>60*10) return QString("Piece lasts too long");
+
+  // Empty string to signify 'no complaints'
+  return QString();
+}
+
+QString getInstrumentName(Instrument * in) {
+   QString iname = in->trackName();
+   if (!iname.isEmpty())
+      return iname;
+   
+   return MidiInstr::instrumentName(MidiType::GM,in->channel(0)->program,in->useDrumset());
+}
 
 QPainter * getSvgPainter(QIODevice * device, qreal width, qreal height, qreal scale) 
    {
@@ -104,51 +129,6 @@ QPainter * getSvgPainter(QIODevice * device, qreal width, qreal height, qreal sc
 
       return p;
    }
-
-/*
-void note_row(QTextStream * qts, int tick, float pos, QSet<Note *> * notes, QSet<Note *> * ongoing, TempoMap * tempomap) {
-   (*qts) << (notes->isEmpty()?"R ":"N ") << tempomap->tick2time(tick) << ',' << pos;
-
-   // Notes still sounding from before
-   QSetIterator<Note *> i(*ongoing);
-   while (i.hasNext()) {
-      Note * cur = i.next();
-      int end = cur->chord()->tick() + cur->chord()->actualTicks();
-      if (end<=tick) ongoing->remove(cur);
-      else (*qts) << ' ' << cur->pitch();
-   }
-
-   // New notes 
-   if (!notes->isEmpty()) {
-      (*qts) << ';';
-      QSetIterator<Note *> j(*notes);
-      while (j.hasNext()) {
-         Note * cur = j.next();
-        (*qts) << ' ' << cur->pitch();
-        (*ongoing) << cur;
-      }
-      notes->clear();
-   }
-
-   (*qts) << endl;
-}*/
-
-QString getInstrumentName(Instrument * in) {
-   QString iname = in->trackName();
-   if (!iname.isEmpty())
-      return iname;
-   
-   return MidiInstr::instrumentName(MidiType::GM,in->channel(0)->program,in->useDrumset());
-}
-
-
-/*bool MuseScore::saveMultipartSvgC(Score * cs, const QString& saveName, const bool do_linearize, const QString& partsName) {
-      Score* thisScore = cs->rootScore();
-      foreach (Excerpt* e, thisScore->excerpts())  {
-	      	Score * pScore = e->partScore();
-	      	saveSvgCollection(pScore, ???? ,do_linearize, partsName);
-	      }
-}*/
 
 void createAudioTrack(QJsonArray plist, Score * cs, const QString& midiname) {
   	// Mute the parts in the current excerpt
@@ -173,24 +153,6 @@ void addFileToZip(MQZipWriter * uz, const QString& filename, const QString & zip
     file.open(QIODevice::ReadOnly);
     uz->addFile(zippath,&file);
     file.remove();
-}
-
-// Check if the file might be a clever construction that would take ages to parse
-QString checkSafety(Score * score) {
-
-	if (score->rootScore()->excerpts().size() > 20) return QString("Too many parts");
-
-	score->repeatList()->unwind();
-	if (score->repeatList()->size() > 100) return QString("Too many repeats");
-
-	RepeatSegment * rs = score->repeatList()->last();
-	int endTick= rs->tick + rs->len;
-	qreal endtime = score->tempomap()->tick2time(endTick);
-
-	if (endtime>60*10) return QString("Piece lasts too long");
-
-	// Empty string to signify 'no complaints'
-	return QString();
 }
 
 void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal>& t2t, const bool do_linearize);
@@ -608,327 +570,5 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
       //(*qts) << "AA " << tempomap->tick2time(firstNonRest) << ',' << tempomap->tick2time(lastNonRest) << endl;
 
       return result;
-}
-
-
-void appendCopiesOfMeasures(Score * score,Measure * fm,Measure * lm) {
-
-      Score * fscore = fm->score();
-
-      fscore->select(fm,SelectType::SINGLE,0);
-      fscore->select(lm,SelectType::RANGE,score->nstaves()-1);
-      QString mimeType = fscore->selection().mimeType();
-      QMimeData* mimeData = new QMimeData;
-      mimeData->setData(mimeType, fscore->selection().mimeData());
-      fscore->deselectAll();
-
-
-      Measure * last = 0;
-      last = static_cast<Measure*>(score->insertMeasure(Element::Type::MEASURE,0,false));
-
-      score->select(last);
-      score->startCmd();
-      score->cmdPaste(mimeData,0);
-      score->endCmd();
-      score->deselectAll();
-   }
-
-   Score * MuseScore::linearize(Score* old_score)
-      {
-
-      Score* score = old_score->clone();
-      
-      //old_score->deselectAll(); 
-      // Figure out repeat structure and traverse it
-      old_score->repeatList()->unwind();
-      old_score->setPlaylistDirty();
-
-      bool copy=false;
-      foreach (const RepeatSegment* rs, *(old_score->repeatList()) ) {
-         int startTick  = rs->tick;
-         int endTick    = startTick + rs->len;
-
-         qDebug("Segment %i-%i",startTick,endTick);
-
-         Measure * mf = old_score->tick2measure(startTick);
-         Measure * ml = ml;
-
-
-         if (!copy && startTick==0) ml = score->tick2measure(startTick);
-
-         for (ml=mf; ml; ml = ml->nextMeasure()) {
-            if (ml->tick() + ml->ticks() >= endTick) break;
-         }
-
-         // First segment can be done in-place
-         if (!copy) {
-            if (startTick==0) // keep first segment in place
-               ml = ml?ml->nextMeasure():ml;
-            else { // remove everything and copy things over
-               copy=true;
-               ml = score->firstMeasure();
-            }
-
-            // Remove all measures past the first jump
-            if (ml) {  
-               score->select(ml,SelectType::SINGLE);
-               score->select(score->lastMeasure(),SelectType::RANGE);
-               score->startCmd();
-               score->cmdDeleteSelectedMeasures();
-               score->endCmd(); 
-            }
-         }
-         
-         if (copy) appendCopiesOfMeasures(score,mf,ml);
-
-         copy = true;;
-      }
-
-      
-      // Remove volta markers
-      for (const std::pair<int,Spanner*>& p : score->spannerMap().map()) {
-         Spanner* s = p.second;
-         if (s->type() != Element::Type::VOLTA) continue;
-         //qDebug("VOLTA!");
-         score->removeSpanner(s);
-      }
-
-      for(Measure * m = score->firstMeasure(); m; m=m->nextMeasure()) {
-         // Remove repeats
-         if (m->repeatFlags()!=Repeat::NONE) {
-
-
-            m->setRepeatFlags(Repeat::NONE);
-            m->setRepeatCount(0);
-         }
-         // Remove coda/fine labels and jumps
-         for (auto e : m->el())
-            if (e->type() == Element::Type::MARKER || 
-               e->type() == Element::Type::JUMP) {
-               //qDebug("JUMP? %s",qPrintable(e->userName()));
-               score->deleteItem(e);
-            }
-      }
-
-      score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
-      
-      // score->deselectAll();
-      //old_score->deselectAll();
-
-      // Postprocessing stuff
-      score->setLayoutAll(true);
-      score->fixTicks();
-      score->doLayout();
-
-      return score;
-   }
-
-   bool MuseScore::newLinearized(Score* old_score)
-   {
-      Score * score = linearize(old_score);
-      setCurrentScoreView(appendScore(score));
-
-      return true;
-      }
-
-
-
-  QJsonArray stavesToJson(Score * score) {
-    QJsonArray s_ar = QJsonArray();
-      foreach( Staff * staff, score->staves()) {
-        QJsonObject sobj = QJsonObject();
-
-        sobj["type"] = staff->isPitchedStaff()?"standard":(
-                staff->isDrumStaff()?"percussion":(
-                 staff->isTabStaff()?"tab":"unknown"));
-
-        s_ar.append(sobj);
-      }
-
-      return s_ar;
   }
-
-
-  QJsonObject getPartsOnsets(Score* score) {
-
-    // Collect together all elements belonging to this system!
-    QList<const Element*> elems;
-    score->scanElements(&elems, collectElements, true);
-
-    QMap<QString,int> plt;
-
-    QMap<QString,QList<int>> ponsets;
-    QMap<QString,QList<bool>> pisrest;
-
-    QMap<QString,int> firstNonRest, lastNonRest;
-
-    foreach(const Element * e, elems) {
-       if (e->type() == Element::Type::NOTE || 
-           e->type() == Element::Type::REST) {
-
-          ChordRest * cr = (e->type()==Element::Type::NOTE?
-                         (ChordRest*)( ((Note*)e)->chord()):(ChordRest*)e);
-
-          int tick = cr->segment()->tick();
-
-          QString pid = cr->part()->id();
-
-          if (!plt.contains(pid))  {
-            ponsets[pid] = QList<int>();
-            pisrest[pid] = QList<bool>();
-            plt[pid] = -1;
-          }
-
-
-          // Update the bounds for actual audio
-          if (e->type() == Element::Type::NOTE) {
-            if (!firstNonRest.contains(pid) || tick<firstNonRest[pid]) 
-              firstNonRest[pid] = tick;
-            int dur = cr->durationTypeTicks();
-            if (!lastNonRest.contains(pid) || tick+dur > lastNonRest[pid]) 
-              lastNonRest[pid] = tick+dur;
-          }
-
-          if (tick > plt[pid]) {
-             ponsets[pid].push_back(tick);
-
-             pisrest[pid].push_back(e->type() == Element::Type::REST);
-
-             plt[pid] = tick;
-          }
-          else if (tick == plt[pid]) {
-            pisrest[pid].last() = pisrest[pid].last() && (e->type() == Element::Type::REST);
-          } 
-
-       }
-    }
-
-    TempoMap * tempomap = score->tempomap();
-    QJsonObject jsonobj = QJsonObject();
-
-    foreach(QString key,ponsets.keys()) {
-      QJsonObject onset_obj = QJsonObject();
-
-      QJsonArray tar, ar, nrar;
-
-      QList<int> consets = ponsets[key];
-      QList<bool> cisrest = pisrest[key]; 
-
-      for(int i=0;i<consets.size();i++) {
-        int tick = consets[i];
-        tar.push_back(tick);
-        ar.push_back(tempomap->tick2time(tick));
-        if (!cisrest[i])
-          nrar.push_back(tempomap->tick2time(tick));
-      }
-
-      onset_obj["ticks"] = tar;
-      onset_obj["times"] = ar;
-      onset_obj["nonrest_times"] = nrar;
-      onset_obj["beg_time"] = tempomap->tick2time(firstNonRest[key]);
-      onset_obj["end_time"] = tempomap->tick2time(lastNonRest[key]);
-
-      jsonobj[key] = onset_obj;
-    }
-
-    return jsonobj;
-  }
-
-  bool MuseScore::getPartsDescriptions(Score* score, const QString& saveName) {
-
-      qreal rel_tempo = score->tempomap()->relTempo();
-      score->tempomap()->setRelTempo(1.0);
-
-      QString safe = checkSafety(score);
-      if (!safe.isEmpty()) {
-        qDebug() << safe << endl;
-        return false;
-      }
-
-      // Linearize the score (for getting all the onsets)
-      Score * nscore = mscore->linearize(score);
-      delete score;
-      score = nscore;
-
-      QFile file(saveName);
-      file.open(QIODevice::WriteOnly | QIODevice::Text);
-      
-      QJsonObject obj = QJsonObject();
-
-      // List all parts
-      QJsonArray p_ar;
-      int pi = 1;
-      foreach( Part * part, score->parts()) {
-        part->setId(QString::number(pi++));
-
-        QJsonObject pobj = QJsonObject();
-        pobj["id"] = part->id();
-        pobj["instrument"] = getInstrumentName(part->instrument());
-        pobj["name"] = part->partName();
-          p_ar.append(pobj);
-      }
-      obj["parts"] = p_ar;
-
-
-      // List all excerpts
-
-      QJsonArray e_ar;
-      int ei = 0;
-
-      // Create the "Full" excerpt
-
-      QJsonObject eobj = QJsonObject();
-
-      eobj["id"] = QString::number(ei++);
-      eobj["title"] = "Full";
-      eobj["staves"] = stavesToJson(score);
-
-      QJsonArray ep_ar;
-      foreach(Part * part, score->parts()) {
-        ep_ar.append(part->id());
-      }
-      eobj["parts"] = ep_ar;
-
-      e_ar.append(eobj);
-
-      // Create the other excerpt objects
-
-      foreach (Excerpt* e, score->rootScore()->excerpts())  {
-        eobj = QJsonObject();
-
-        eobj["id"] = QString::number(ei++);
-        eobj["title"] = e->title();
-        eobj["staves"] = stavesToJson(e->partScore());
-
-        ep_ar = QJsonArray();
-        foreach(Part * part, e->parts().toSet()) {
-          ep_ar.append(part->id());
-        }
-        eobj["parts"] = ep_ar;
-
-        e_ar.append(eobj);
-      }
-      obj["excerpts"] = e_ar;
-
-      obj["onsets"] = getPartsOnsets(score);
-
-      Measure* lastm = score->lastMeasure();
-      obj["total_ticks"] = lastm->tick()+lastm->ticks();
-      obj["total_time"] = score->tempomap()->tick2time(lastm->tick()+lastm->ticks());
-
-      // Time Signature
-      QJsonObject tso = QJsonObject();
-      Fraction ts = score->firstMeasure()->timesig();
-      tso["numerator"] = ts.numerator();
-      tso["denominator"] = ts.denominator();
-      tso["unit_duration"] = score->tempomap()->tick2time(1920/ts.denominator())-score->tempomap()->tick2time(0); // 480 ticks per quarter note
-      obj["timesig"] = tso;
-
-      file.write(QJsonDocument(obj).toJson());
-      file.close();
-
-      score->tempomap()->setRelTempo(rel_tempo);
-
-      return true;
-    }
 }

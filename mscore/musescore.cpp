@@ -2142,6 +2142,9 @@ static bool processNonGui()
             if (fn.endsWith("svc")) {
                   return mscore->saveSvgCollection(cs, fn, true, partsFileName);
             }
+            if (fn.endsWith("mld")) {
+                  return mscore->saveMLData(cs, fn, partsFileName);
+            }
             if (fn.endsWith("json")) {
                   return mscore->getPartsDescriptions(cs, fn);
             }

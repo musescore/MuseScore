@@ -616,6 +616,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveSvg(Score*, const QString& name);
       bool saveSvgCollection(Score*, const QString& name, const bool do_linearize, const QString& partsName);
       bool getPartsDescriptions(Score*, const QString& name);
+      bool saveMLData(Score*, const QString& name, const QString& partsName);
       bool savePng(Score*, const QString& name);
 //      bool saveLilypond(Score*, const QString& name);
       bool saveMidi(Score* score, const QString& name);
