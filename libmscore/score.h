@@ -335,6 +335,8 @@ class Score : public QObject {
 
       QQueue<MidiInputEvent> midiInputQueue;
       QList<MidiMapping> _midiMapping;
+      bool isSimpleMidiMaping; // midi mapping is simple if all ports and channels
+                               // don't decrease and don't have gaps
 
       RepeatList* _repeatList;
       TimeSigMap* _sigmap;
@@ -801,6 +803,8 @@ class Score : public QObject {
       QList<MidiMapping>* midiMapping()       { return &_midiMapping;          }
       MidiMapping* midiMapping(int channel)   { return &_midiMapping[channel]; }
       void rebuildMidiMapping();
+      void checkMidiMapping();
+      bool exportMidiMapping() { return !isSimpleMidiMaping; }
       void updateChannel();
       void updateSwing();
       void createPlayEvents();

@@ -73,7 +73,7 @@ void Part::read(XmlReader& e)
                   }
             else if (tag == "Instrument") {
                   Instrument* instr = new Instrument;
-                  instr->read(e);
+                  instr->read(e, this);
                   setInstrument(instr, -1);
                   }
             else if (tag == "name")
@@ -103,7 +103,7 @@ void Part::write(Xml& xml) const
       if (!_show)
             xml.tag("show", _show);
       xml.tag("trackName", _partName);
-      instrument()->write(xml);
+      instrument()->write(xml, const_cast<Part*>(this)); // Safe, we do not write anything to it
       xml.etag();
       }
 
@@ -304,12 +304,43 @@ int Part::midiPort() const
 
 //---------------------------------------------------------
 //   setMidiChannel
-//    called from importmusicxml
+//   called from importmusicxml, importMidi and importGtp*
+//   Usage:
+//   setMidiChannel(channel)       to set channel
+//   setMidiChannel(-1, port)      to set port
+//   setMidiChannel(channel, port) to set both
 //---------------------------------------------------------
 
-void Part::setMidiChannel(int) const
+void Part::setMidiChannel(int ch, int port)
       {
-      // TODO
+      Channel* channel = instrument()->channel(0);
+      if (channel->channel == -1) {
+            // Add new mapping
+            MidiMapping mm;
+            mm.part = this;
+            mm.articulation = channel;
+            mm.channel = 0;
+            mm.port = 0;
+            if (ch != -1)
+                  mm.channel = ch;
+            if (port != -1)
+                  mm.port = port;
+            channel->channel = score()->midiMapping()->size();
+            score()->midiMapping()->append(mm);
+            }
+      else {
+            // Update existing mapping
+            if (channel->channel >= score()->midiMapping()->size()) {
+                  qDebug()<<"Can't' set midi channel: midiMapping is empty!";
+                  return;
+                  }
+
+            if (ch != -1)
+                  score()->midiMapping(channel->channel)->channel = ch;
+            if (port != -1)
+                  score()->midiMapping(channel->channel)->port = port;
+            score()->midiMapping(channel->channel)->part = this;
+            }
       }
 
 //---------------------------------------------------------

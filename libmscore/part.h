@@ -123,7 +123,7 @@ class Part : public QObject, public ScoreElement {
 
       int midiChannel() const;
       int midiPort() const;
-      void setMidiChannel(int) const;
+      void setMidiChannel(int ch, int port = -1);
 
       void insertStaff(Staff*, int idx);
       void removeStaff(Staff*);

@@ -1021,6 +1021,55 @@ void Score::rebuildMidiMapping()
       }
 
 //---------------------------------------------------------
+//   checkMidiMapping
+//   midi mapping is simple if all ports and channels
+//   don't decrease and don't have 'holes' except drum tracks
+//---------------------------------------------------------
+
+void Score::checkMidiMapping()
+      {
+      isSimpleMidiMaping = true;
+      rebuildMidiMapping();
+
+      QList<bool> drum;
+      drum.reserve(_midiMapping.size());
+      for (Part* part : _parts) {
+            const InstrumentList* il = part->instruments();
+            for (auto i = il->begin(); i != il->end(); ++i) {
+                  const Instrument* instr = i->second;
+                  for (int j = 0; j < instr->channel().size(); ++j)
+                        drum.append(instr->useDrumset());
+                  }
+            }
+      int lastChannel  = -1; // port*16+channel
+      int lastDrumPort = -1;
+      int index = 0;
+      for (MidiMapping m : _midiMapping) {
+            if (index >= drum.size()) {
+                  qDebug()<<"checkMidiMapping error: wrong mapping, index: "<<index<<", drum.size: "<<drum.size();
+                  break;
+                  }
+            if (drum[index]) {
+                  lastDrumPort++;
+                  if (m.port != lastDrumPort) {
+                        isSimpleMidiMaping = false;
+                        return;
+                        }
+                  }
+            else {
+                  lastChannel++;
+                  int p = lastChannel / 16;
+                  int c = lastChannel % 16;
+                  if (m.port != p || m.channel != c) {
+                        isSimpleMidiMaping = false;
+                        return;
+                        }
+                  }
+            index++;
+            }
+      }
+
+//---------------------------------------------------------
 //   midiPortCount
 //---------------------------------------------------------
 

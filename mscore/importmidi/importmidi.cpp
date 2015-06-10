@@ -344,7 +344,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
             case META_TIME_SIGNATURE:
                   break;                        // added earlier
             case META_PORT_CHANGE:
-                  // TODO
+                  staff->part()->setMidiChannel(-1, (int)data[0]);
                   break;
             default:
                   if (MScore::debugMode)
