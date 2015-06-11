@@ -1682,29 +1682,32 @@ void Note::layout2()
             qreal d  = score()->point(score()->styleS(StyleIdx::dotNoteDistance)) * mag();
             qreal dd = score()->point(score()->styleS(StyleIdx::dotDotDistance)) * mag();
             qreal x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
-
+            bool layoutDots = true;
             // if TAB and stems through staff
             if (staff()->isTabStaff()) {
                   StaffType* tab = staff()->staffType();
-                  if (!tab->stemThrough())            // if !stemThrough, there are no dots at all:
-                        return;                       // stop here
+                  if (tab->stemThrough()) {
+                        // with TAB's, dot Y is not calculated during layoutChords3(),
+                        // as layoutChords3() is not even called for TAB's;
+                        // setDotY() actually also manages creation/deletion of NoteDot's
+                        setDotY(MScore::Direction::AUTO);
 
-                  // with TAB's, dot Y is not calculated during layoutChords3(),
-                  // as layoutChords3() is not even called for TAB's;
-                  // setDotY() actually also manages creation/deletion of NoteDot's
-                  setDotY(MScore::Direction::AUTO);
-
-                  // use TAB default note-to-dot spacing
-                  dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * spatium();
-                  d = dd * 0.5;
+                        // use TAB default note-to-dot spacing
+                        dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * spatium();
+                        d = dd * 0.5;
+                        }
+                  else {
+                        layoutDots = false; // if !stemThrough, there are no dots at all
+                        }
                   }
-
-            // apply to dots
-            for (int i = 0; i < dots; ++i) {
-                  NoteDot* dot = _dots[i];
-                  if (dot) {
-                        dot->rxpos() = x + d + dd * i;
-                        _dots[i]->adjustReadPos();
+            if (layoutDots) {
+                  // apply to dots
+                  for (int i = 0; i < dots; ++i) {
+                        NoteDot* dot = _dots[i];
+                        if (dot) {
+                              dot->rxpos() = x + d + dd * i;
+                              _dots[i]->adjustReadPos();
+                              }
                         }
                   }
             }
