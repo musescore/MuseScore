@@ -94,7 +94,7 @@
           <tempo>2.25</tempo>
           <xoffset>0</xoffset>
           <yoffset>-2</yoffset>
-          <text><sym>metNoteQuarterUp</sym> = 135</text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 135</text>
           </Tempo>
         <Rest>
           <durationType>measure</durationType>

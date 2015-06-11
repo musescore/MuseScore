@@ -93,7 +93,7 @@
           <visible>0</visible>
           <xoffset>0</xoffset>
           <yoffset>-2</yoffset>
-          <text><sym>metNoteQuarterUp</sym> = 96</text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 96</text>
           </Tempo>
         <Rest>
           <durationType>half</durationType>
