@@ -203,9 +203,6 @@ void BarLine::getY(qreal* y1, qreal* y2) const
             int staffIdx1    = staffIdx();
             int staffIdx2    = staffIdx1 + _span - 1;
             if (staffIdx2 >= score()->nstaves()) {
-                  // this can happen on read
-                  // as we may be laying out a barline that spans multiple staves
-                  // before we have read the staves it spans
                   qDebug("BarLine: bad _span %d", _span);
                   staffIdx2 = score()->nstaves() - 1;
                   }
@@ -740,6 +737,13 @@ void BarLine::endEdit()
       // if bar line belongs to a system (system-initial bar line), edit is local
       if (parent() && parent()->type() == Element::Type::SYSTEM)
             ctrlDrag = true;
+      // for mid-measure barlines, edit is local
+      bool midMeasure = false;
+      if (parent()->type() == Element::Type::SEGMENT
+          && static_cast<Segment*>(parent())->segmentType() == Segment::Type::BarLine) {
+            ctrlDrag = true;
+            midMeasure = true;
+            }
 
       if (ctrlDrag) {                      // if single bar line edit
             ctrlDrag = false;
@@ -750,6 +754,55 @@ void BarLine::endEdit()
             _span             = _origSpan;      // restore original span values
             _spanFrom         = _origSpanFrom;
             _spanTo           = _origSpanTo;
+            // for mid-measure barline in root score, update parts
+            if (midMeasure && score()->parentScore() == nullptr && score()->excerpts().size() > 0) {
+                  int currIdx = staffIdx();
+                  Measure* m = static_cast<Segment*>(parent())->measure();
+                  // change linked barlines as necessary
+                  int lastIdx = currIdx + qMax(_span, newSpan);
+                  for (int idx = currIdx; idx < lastIdx; ++idx) {
+                        Staff* staff = score()->staff(idx);
+                        LinkedStaves* ls = staff->linkedStaves();
+                        if (ls) {
+                              for (Staff* lstaff : ls->staves()) {
+                                    Score* lscore = lstaff->score();
+                                    // don't change barlines in root score
+                                    if (lscore == staff->score())
+                                          continue;
+                                    // change barline only in top staff of part
+                                    if (lstaff != lscore->staff(0))
+                                          continue;
+                                    int spannedStaves = qMax(currIdx + newSpan - idx, 0);
+                                    int lNewSpan = qMin(spannedStaves, lscore->nstaves());
+                                    Measure* lm = lscore->tick2measure(m->tick());
+                                    Segment* lseg = lm->undoGetSegment(Segment::Type::BarLine, tick());
+                                    BarLine* lbl = static_cast<BarLine*>(lseg->element(0));
+                                    if (lbl) {
+                                          // already a barline here
+                                          if (lNewSpan > 0) {
+                                                // keep barline, but update span if necessary
+                                                if (lbl->span() != lNewSpan)
+                                                      lbl->undoChangeProperty(P_ID::BARLINE_SPAN, lNewSpan);
+                                                }
+                                          else {
+                                                // remove barline
+                                                lbl->unlink();
+                                                lbl->score()->undoRemoveElement(lbl);
+                                                }
+                                          }
+                                    else {
+                                          // new barline needed
+                                          lbl = static_cast<BarLine*>(linkedClone());
+                                          lbl->setSpan(lNewSpan);
+                                          lbl->setTrack(lstaff->idx() * VOICES);
+                                          lbl->setScore(lscore);
+                                          lbl->setParent(lseg);
+                                          lscore->undoAddElement(lbl);
+                                          }
+                                    }
+                              }
+                        }
+                  }
             score()->undoChangeSingleBarLineSpan(this, newSpan, newSpanFrom, newSpanTo);
             return;
             }

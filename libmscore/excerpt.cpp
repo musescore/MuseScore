@@ -39,6 +39,7 @@
 #include "beam.h"
 #include "utils.h"
 #include "tremolo.h"
+#include "barline.h"
 #include "undo.h"
 
 namespace Ms {
@@ -393,6 +394,37 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     continue;
 
                               Element* oe = oseg->element(srcTrack);
+                              int adjustedBarlineSpan = 0;
+                              if (srcTrack % VOICES == 0 && oseg->segmentType() == Segment::Type::BarLine) {
+                                    // mid-measure barline segment
+                                    // may need to clone barline from a previous staff and/or adjust span
+                                    int oIdx = srcTrack / VOICES;
+                                    if (!oe) {
+                                          // no barline on this staff in original score,
+                                          // but check previous staves
+                                          for (int i = oIdx - 1; i >= 0; --i) {
+                                                oe = oseg->element(i * VOICES);
+                                                if (oe)
+                                                      break;
+                                                }
+                                          }
+                                    if (oe) {
+                                          // barline found, now check span
+                                          BarLine* bl = static_cast<BarLine*>(oe);
+                                          int oSpan1 = bl->staff()->idx();
+                                          int oSpan2 = oSpan1 + bl->span();
+                                          if (oSpan1 <= oIdx && oIdx < oSpan2) {
+                                                // this staff is within span
+                                                // calculate adjusted span for excerpt
+                                                int oSpan = oSpan2 - oIdx;
+                                                adjustedBarlineSpan = qMin(oSpan, score->nstaves());
+                                                }
+                                          else {
+                                                // this staff is not within span
+                                                oe = nullptr;
+                                                }
+                                          }
+                                    }
                               if (oe == 0)
                                     continue;
                               Element* ne;
@@ -403,7 +435,11 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               ne->setTrack(track);
                               ne->scanElements(score, localSetScore);   //necessary?
                               ne->setScore(score);
-                              if (oe->isChordRest()) {
+                              if (oe->type() == Element::Type::BAR_LINE && adjustedBarlineSpan) {
+                                    BarLine* nbl = static_cast<BarLine*>(ne);
+                                    nbl->setSpan(adjustedBarlineSpan);
+                                    }
+                              else if (oe->isChordRest()) {
                                     ChordRest* ocr = static_cast<ChordRest*>(oe);
                                     ChordRest* ncr = static_cast<ChordRest*>(ne);
 
