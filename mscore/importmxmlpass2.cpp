@@ -3581,40 +3581,70 @@ void MusicXMLParserPass2::divisions()
       }
 
 //---------------------------------------------------------
-//   setDuration
+//   determineDuration
+//---------------------------------------------------------
+
+/**
+ * Determine duration for a note or rest.
+ * This includes whole measure rest detection.
+ */
+
+static TDuration determineDuration(const bool rest, const QString& type, const int dots, const Fraction dura, const Fraction mDura)
+      {
+      //qDebug("determineDuration rest %d type '%s' dots %d dura %s mDura %s",
+      //       rest, qPrintable(type), dots, qPrintable(dura.print()), qPrintable(mDura.print()));
+
+      TDuration res;
+      if (rest) {
+            // By convention, whole measure rests do not have a "type" element
+            // As of MusicXML 3.0, this can be indicated by an attribute "measure",
+            // but for backwards compatibility the "old" convention still has to be supported.
+            // Also verify the rest fits exactly in the measure, as some programs
+            // (e.g. Cakewalk SONAR X2 Studio [Version: 19.0.0.306]) leave out
+            // the type for all rests.
+            // Sibelius calls all whole-measure rests "whole", even if the duration != 4/4
+            if ((type == "" && dura == mDura)
+                || (type == "whole" && dura == mDura && dura != Fraction(1, 1)))
+                  res.setType(TDuration::DurationType::V_MEASURE);
+            else if (type == "" && dura != mDura) {
+                  // If no type, set duration type based on duration.
+                  res = TDuration(dura); // TODO check tuplet handling
+                  }
+            else {
+                  res.setType(type);
+                  res.setDots(dots);
+                  }
+            }
+      else {
+            res.setType(type);
+            res.setDots(dots);
+            if (res.type() == TDuration::DurationType::V_INVALID)
+                  res.setType(TDuration::DurationType::V_QUARTER);  // default, TODO: use dura ?
+            }
+
+      //qDebug("-> dur %hhd (%s) dots %d ticks %s",
+      //       res.type(), qPrintable(res.name()), res.dots(), qPrintable(dura.print()));
+
+      return res;
+      }
+
+//---------------------------------------------------------
+//   setChordRestDuration
 //---------------------------------------------------------
 
 /**
  * Set \a cr duration
  */
 
-static void setDuration(ChordRest* cr, bool rest, bool wholeMeasure, TDuration duration, const Fraction dura)
+static void setChordRestDuration(ChordRest* cr, TDuration duration, const Fraction dura)
       {
-      //qDebug("setduration dur %s ticks %s", qPrintable(duration.name()), qPrintable(dura.print()));
-
-      if (rest) {
-            // By convention, whole measure rests do not have a "type" element
-            // As of MusicXML 3.0, this can be indicated by an attribute "measure",
-            // but for backwards compatibility the "old" convention still has to be supported.
-            if (duration.type() == TDuration::DurationType::V_INVALID) {
-                  if (wholeMeasure)
-                        duration.setType(TDuration::DurationType::V_MEASURE);
-                  else
-                        duration.setVal(dura.ticks());
-                  cr->setDurationType(duration);
-                  cr->setDuration(dura);
-                  }
-            else {
-                  cr->setDurationType(duration);
-                  cr->setDuration(cr->durationType().fraction());
-                  }
+      if (duration.type() == TDuration::DurationType::V_MEASURE) {
+            cr->setDurationType(duration);
+            cr->setDuration(dura);
             }
       else {
-            if (duration.type() == TDuration::DurationType::V_INVALID)
-                  duration.setType(TDuration::DurationType::V_QUARTER);
             cr->setDurationType(duration);
             cr->setDuration(cr->durationType().fraction());
-            //cr->setDuration(dura); // this breaks tuplets and slurs
             }
       }
 
@@ -3642,14 +3672,8 @@ static Rest* addRest(Score* score, Measure* m,
             return 0;
             }
 
-      // Verify the rest fits exactly in the measure, as some programs
-      // (e.g. Cakewalk SONAR X2 Studio [Version: 19.0.0.306]) leave out
-      // the type for all rests.
-      bool wholeMeasure = (tick == m->tick() && dura.ticks() == m->ticks());
-      //qDebug("tick %d mtick %d ticks %d mticks %d", tick, m->tick(), ticks, m->ticks());
-
       Rest* cr = new Rest(score);
-      setDuration(cr, true, wholeMeasure, duration, dura);
+      setChordRestDuration(cr, duration, dura);
       cr->setTrack(track);
       cr->setStaffMove(move);
       s->add(cr);
@@ -3679,7 +3703,7 @@ static Chord* findOrCreateChord(Score* score, Measure* m,
             c->setBeamMode(bm);
             c->setTrack(track);
 
-            setDuration(c, false, false, duration, dura);
+            setChordRestDuration(c, duration, dura);
             Segment* s = m->getSegment(c, tick);
             s->add(c);
             }
@@ -3727,7 +3751,7 @@ static Chord* createGraceChord(Score* score, const int track,
       c->setNoteType(graceNoteType(duration, slash));
       c->setTrack(track);
       // note grace notes have no durations, use default fraction 0/1
-      setDuration(c, false, false, duration, Fraction());
+      setChordRestDuration(c, duration, Fraction());
       return c;
       }
 
@@ -4042,11 +4066,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       else {
             }
 
-      TDuration duration;
-      if (type != "") {
-            duration.setType(type);
-            duration.setDots(dots);
-            }
+      TDuration duration = determineDuration(bRest, type, dots, dura, Fraction::fromTicks(measure->ticks()));
 
       ChordRest* cr = 0;
       Note* note = 0;

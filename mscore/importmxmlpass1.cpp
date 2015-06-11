@@ -2592,7 +2592,7 @@ void MusicXMLParserPass1::note(const QString& partId,
       int dots = 0;
       bool grace = false;
       //int octave = -1;
-      //bool bRest = false;
+      bool bRest = false;
       int staff = 1;
       //int step = 0;
       Fraction timeMod(1, 1);
@@ -2622,7 +2622,7 @@ void MusicXMLParserPass1::note(const QString& partId,
             else if (_e.name() == "pitch")
                   _e.skipCurrentElement();  // skip but don't log
             else if (_e.name() == "rest") {
-                  //bRest = true;
+                  bRest = true;
                   rest();
                   }
             else if (_e.name() == "staff") {
@@ -2678,10 +2678,16 @@ void MusicXMLParserPass1::note(const QString& partId,
             if (dura != calcDura) {
                   errorStr = "calculated duration not equal to specified duration";
 
-                  const int maxDiff = 3; // maximum difference considered a rounding error
-                  if (qAbs(calcDura.ticks() - dura.ticks()) <= maxDiff) {
-                        errorStr += " -> assuming rounding error";
-                        dura = calcDura;
+                  if (bRest && type == "whole" && dura.isValid()) {
+                        // Sibelius whole measure rest
+                        errorStr += " -> whole measure rest";
+                        }
+                  else {
+                        const int maxDiff = 3; // maximum difference considered a rounding error
+                        if (qAbs(calcDura.ticks() - dura.ticks()) <= maxDiff) {
+                              errorStr += " -> assuming rounding error";
+                              dura = calcDura;
+                              }
                         }
                   }
             }
