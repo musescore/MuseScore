@@ -311,7 +311,7 @@ void Lyrics::layout1()
       // 2) at least one other character (indicating start of actual lyric)
       // 3) string of non-word characters at end of syllable
       //QRegularExpression leadingPattern("(^[\\d\\W]+)([^\\d\\W]+)");
-      QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)");
+      QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)", QRegularExpression::UseUnicodePropertiesOption);
       QRegularExpressionMatch punctuationMatch = punctuationPattern.match(s);
       if (punctuationMatch.hasMatch()) {
             // leading and trailing punctuation
