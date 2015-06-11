@@ -4465,7 +4465,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   foreach(int instNr, rim.keys()) {
                         scoreInstrument(xml, idx + 1, instNr + 1, MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()));
                         }
-                  for (MxmlReverseInstrumentMap::const_iterator ii = rim.constBegin(); ii != rim.constEnd(); ii++) {
+                  for (auto ii = rim.constBegin(); ii != rim.constEnd(); ii++) {
                         int instNr = ii.key();
                         int midiPort = part->midiPort() + 1;
                         if (ii.value()->channel().size() > 0)

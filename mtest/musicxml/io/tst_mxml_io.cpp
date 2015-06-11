@@ -39,6 +39,7 @@ class TestMxmlIO : public QObject, public MTest
 
       void mxmlIoTest(const char* file);
       void mxmlIoTestRef(const char* file);
+      void mxmlMscxExportTestRef(const char* file);
       void mxmlReadTestCompr(const char* file);
       void mxmlReadWriteTestCompr(const char* file);
 
@@ -92,6 +93,7 @@ private slots:
       void helloReadWriteCompr() { mxmlReadWriteTestCompr("testHello"); }
       void implicitMeasure1() { mxmlIoTest("testImplicitMeasure1"); }
       void incorrectStaffNumber() { mxmlIoTestRef("testIncorrectStaffNumber"); }
+      void instrumentChangeMIDIportExport() { mxmlMscxExportTestRef("testInstrumentChangeMIDIportExport"); }
       void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
       void keysig1() { mxmlIoTest("testKeysig1"); }
       void keysig2() { mxmlIoTest("testKeysig2"); }
@@ -244,6 +246,25 @@ void TestMxmlIO::mxmlIoTestRef(const char* file)
       preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
       preferences.musicxmlImportBreaks = true;
       Score* score = readScore(DIR + file + ".xml");
+      QVERIFY(score);
+      fixupScore(score);
+      score->doLayout();
+      QVERIFY(saveMusicXml(score, QString(file) + ".xml"));
+      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", DIR + file + "_ref.xml"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   mxmlMscxExportTestRef
+//   read a MuseScore mscx file, write to a MusicXML file and verify against reference
+//---------------------------------------------------------
+
+void TestMxmlIO::mxmlMscxExportTestRef(const char* file)
+      {
+      MScore::debugMode = true;
+      preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
+      preferences.musicxmlExportLayout = false;
+      Score* score = readScore(DIR + file + ".mscx");
       QVERIFY(score);
       fixupScore(score);
       score->doLayout();
