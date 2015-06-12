@@ -24,6 +24,7 @@
 #include "libmscore/note.h"
 #include "libmscore/keysig.h"
 #include "mscore/exportmidi.h"
+#include "mscore/preferences.h"
 #include <QIODevice>
 
 #include "libmscore/mcursor.h"
@@ -43,6 +44,7 @@ using namespace Ms;
 class TestMidi : public QObject, public MTest
       {
       Q_OBJECT
+      void midiExportTestRef(const QString& file);
 
    private slots:
       void initTestCase();
@@ -51,6 +53,7 @@ class TestMidi : public QObject, public MTest
       void midi03();
       void events_data();
       void events();
+      void midiPortExport() { midiExportTestRef("testMidiPort"); }
       };
 
 //---------------------------------------------------------
@@ -369,6 +372,24 @@ void TestMidi::events()
       QVERIFY(score);
       QVERIFY(compareFiles(writeFile, reference));
      // QVERIFY(saveCompareScore(score, writeFile, reference));
+      }
+
+//---------------------------------------------------------
+//   midiExportTest
+//   read a MuseScore mscx file, write to a MIDI file and verify against reference
+//---------------------------------------------------------
+
+void TestMidi::midiExportTestRef(const QString& file)
+      {
+      MScore::debugMode = true;
+      preferences.midiExportRPNs = true;
+      Score* score = readScore(DIR + file + ".mscx");
+      QVERIFY(score);
+      score->doLayout();
+      score->rebuildMidiMapping();
+      QVERIFY(saveMidi(score, QString(file) + ".mid"));
+      QVERIFY(compareFiles(QString(file) + ".mid", DIR + QString(file) + "-ref.mid"));
+      delete score;
       }
 
 QTEST_MAIN(TestMidi)
