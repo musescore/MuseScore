@@ -4451,7 +4451,9 @@ void ExportMusicXml::write(QIODevice* dev)
                         if (di.notehead != NoteHead::Group::HEAD_INVALID)
                               scoreInstrument(xml, idx + 1, i + 1, di.name);
                         }
-                  xml.tag(QString("midi-device port=\"%1\"").arg(part->midiPort() + 1), "");
+                  int midiPort = part->midiPort() + 1;
+                  if (midiPort >= 1 && midiPort <= 16)
+                        xml.tag(QString("midi-device port=\"%1\"").arg(midiPort), "");
 
                   for (int i = 0; i < 128; ++i) {
                         DrumInstrument di = drumset->drum(i);
@@ -4470,8 +4472,10 @@ void ExportMusicXml::write(QIODevice* dev)
                         int midiPort = part->midiPort() + 1;
                         if (ii.value()->channel().size() > 0)
                               midiPort = score()->midiMapping(ii.value()->channel(0)->channel)->port + 1;
-
-                        xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 1)).arg(midiPort), "");
+                        if (midiPort >= 1 && midiPort <= 16)
+                              xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 1)).arg(midiPort), "");
+                        else
+                              xml.tag(QString("midi-device %1").arg(instrId(idx+1, instNr + 1)), "");
                         midiInstrument(xml, idx + 1, instNr + 1, rim.value(instNr), _score);
                         }
                   }
