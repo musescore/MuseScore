@@ -3415,15 +3415,14 @@ void Measure::layoutX(qreal stretch)
                         rest2[staffIdx] = true;
 
                   // space chord symbols separately from segments
-                  if (hFound || eFound) {
+                  if (hFound || spaceHarmony) {
                         qreal sp = 0.0;
 
                         // space chord symbols unless they miss each other vertically
                         if (hFound && hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top())
                               sp = hRest[staffIdx] + minHarmonyDistance + hSpace.lw();
-
                         // barline: limit space to maxHarmonyBarDistance
-                        else if (eFound && spaceHarmony)
+                        else if (spaceHarmony)
                               sp = qMin(hRest[staffIdx], maxHarmonyBarDistance);
 
                         hLastBbox[staffIdx] = hBbox;
