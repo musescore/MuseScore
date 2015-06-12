@@ -894,6 +894,7 @@ void Score::rebuildMidiMapping()
       {
       _midiMapping.clear();
       int port        = 0;
+      int drumPort    = 0;
       int midiChannel = 0;
       int idx         = 0;
       int maxport     = 0;
@@ -907,9 +908,12 @@ void Score::rebuildMidiMapping()
                         MidiMapping mm;
                         if (port > maxport)
                               maxport = port;
+                        if (drumPort > maxport)
+                              maxport = drumPort;
                         if (drum) {
-                              mm.port    = port;
+                              mm.port    = drumPort;
                               mm.channel = 9;
+                              drumPort++;
                               }
                         else {
                               mm.port    = port;
