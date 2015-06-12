@@ -4707,8 +4707,7 @@ void ExportMusicXml::write(QIODevice* dev)
 
                                     Clef* cle = static_cast<Clef*>(seg->element(st));
                                     if (cle) {
-                                          ClefType ct = cle->clefType();
-                                          clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick, int(ct), cle->generated());
+                                          clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick, int(cle->clefType()), cle->generated());
                                           // output only clef changes, not generated clefs at line beginning
                                           // exception: at tick=0, export clef anyway
                                           if (tick == 0 || !cle->generated()) {
@@ -4834,9 +4833,8 @@ void ExportMusicXml::write(QIODevice* dev)
                                           // also ignore clefs at the end of a measure
                                           //
                                           Clef* cle = static_cast<Clef*>(el);
-                                          ClefType ct = cle->clefType();
                                           int ti = seg->tick();
-                                          clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, ct, el->generated());
+                                          clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, int(cle->clefType()), el->generated());
                                           if (el->generated()) {
                                                 clefDebug("exportxml: generated clef not exported");
                                                 break;
