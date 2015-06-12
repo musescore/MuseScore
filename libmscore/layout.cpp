@@ -3929,8 +3929,8 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                               }
                         if ((segType == Segment::Type::Clef) && (pt != Segment::Type::ChordRest))
                               minDistance = styleP(StyleIdx::clefLeftMargin);
-                        else if (segType == Segment::Type::StartRepeatBarLine)
-                              minDistance = .5 * _spatium;
+                        else if (segType == Segment::Type::StartRepeatBarLine && pSeg)
+                              minDistance = .5 * _spatium;  // TODO: make style parameter
                         else if (segType == Segment::Type::TimeSig && pt == Segment::Type::Clef) {
                               // missing key signature, but allocate default margin anyhow
                               minDistance = styleP(StyleIdx::keysigLeftMargin);
@@ -3974,12 +3974,12 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                         qreal sp = 0.0;
 
                         // space chord symbols unless they miss each other vertically
-                        if (eFound || (hFound && hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top()))
+                        if (hFound && hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top())
                               sp = hRest[staffIdx] + minHarmonyDistance + hSpace.lw();
 
                         // barline: limit space to maxHarmonyBarDistance
-                        if (eFound && !hFound && spaceHarmony)
-                              sp = qMin(sp, maxHarmonyBarDistance);
+                        else if (eFound && !hFound && spaceHarmony)
+                              sp = qMin(hRest[staffIdx], maxHarmonyBarDistance);
 
                         hLastBbox[staffIdx] = hBbox;
                         hRest[staffIdx] = hSpace.rw();
