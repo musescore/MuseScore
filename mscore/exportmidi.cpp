@@ -281,14 +281,16 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
                               }
 
                         // Export port to MIDI META event
-                        MidiEvent ev;
-                        ev.setType(ME_META);
-                        ev.setMetaType(META_PORT_CHANGE);
-                        ev.setLen(1);
-                        unsigned char* data = new unsigned char[1];
-                        data[0] = int(track.outPort());
-                        ev.setEData(data);
-                        track.insert(0, ev);
+                        if (track.outPort() >= 0 && track.outPort() <= 127) {
+                              MidiEvent ev;
+                              ev.setType(ME_META);
+                              ev.setMetaType(META_PORT_CHANGE);
+                              ev.setLen(1);
+                              unsigned char* data = new unsigned char[1];
+                              data[0] = int(track.outPort());
+                              ev.setEData(data);
+                              track.insert(0, ev);
+                              }
 
                         for (auto i = events.begin(); i != events.end(); ++i) {
                               NPlayEvent event(i->second);
