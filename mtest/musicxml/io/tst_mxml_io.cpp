@@ -103,6 +103,7 @@ private slots:
       void lyricsVoice2b() { mxmlIoTestRef("testLyricsVoice2b"); }
       void manualBreaks() { mxmlIoTest("testManualBreaks"); }
       void measureLength() { mxmlIoTestRef("testMeasureLength"); }
+      void midiPortExport() { mxmlMscxExportTestRef("testMidiPortExport"); }
       void multiInstrumentPart1() { mxmlIoTest("testMultiInstrumentPart1"); }
       //void multiInstrumentPart2() { mxmlIoTest("testMultiInstrumentPart2"); } must also fix exportxml.cpp
       void multiMeasureRest1() { mxmlIoTestRef("testMultiMeasureRest1"); }
