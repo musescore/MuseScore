@@ -2679,8 +2679,8 @@ void MusicXMLParserPass1::note(const QString& partId,
                   errorStr = "calculated duration not equal to specified duration";
 
                   if (bRest && type == "whole" && dura.isValid()) {
-                        // Sibelius whole measure rest
-                        errorStr += " -> whole measure rest";
+                        // Sibelius whole measure rest (not an error)
+                        errorStr = "";
                         }
                   else {
                         const int maxDiff = 3; // maximum difference considered a rounding error
@@ -2691,8 +2691,11 @@ void MusicXMLParserPass1::note(const QString& partId,
                         }
                   }
             }
-      else if (dura.isValid())
-            errorStr = "calculated duration invalid, using specified duration";
+      else if (dura.isValid()) {
+            // do not report an error for typeless (whole measure) rests
+            if (!(bRest && type == ""))
+                  errorStr = "calculated duration invalid, using specified duration";
+            }
       else if (calcDura.isValid()) {
             if (!grace) {
                   errorStr = "specified duration invalid, using calculated duration";
