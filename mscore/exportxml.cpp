@@ -4465,8 +4465,13 @@ void ExportMusicXml::write(QIODevice* dev)
                   foreach(int instNr, rim.keys()) {
                         scoreInstrument(xml, idx + 1, instNr + 1, MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()));
                         }
-                  foreach(int instNr, rim.keys()) {
-                        xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 1)).arg(part->midiPort() + 1), "");
+                  for (auto ii = rim.constBegin(); ii != rim.constEnd(); ii++) {
+                        int instNr = ii.key();
+                        int midiPort = part->midiPort() + 1;
+                        if (ii.value()->channel().size() > 0)
+                              midiPort = score()->midiMapping(ii.value()->channel(0)->channel)->port + 1;
+
+                        xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 1)).arg(midiPort), "");
                         midiInstrument(xml, idx + 1, instNr + 1, rim.value(instNr), _score);
                         }
                   }
