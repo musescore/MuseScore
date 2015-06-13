@@ -23,7 +23,7 @@
 using namespace Ms;
 
 //---------------------------------------------------------
-//   TestSpanners
+//   TestEarlymusic
 //---------------------------------------------------------
 
 class TestEarlymusic : public QObject, public MTest
