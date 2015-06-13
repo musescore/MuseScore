@@ -345,7 +345,7 @@ void Part::removeInstrument(int tick)
       }
 
 //---------------------------------------------------------
-//   instr
+//   instrument
 //---------------------------------------------------------
 
 Instrument* Part::instrument(int tick)
@@ -354,7 +354,7 @@ Instrument* Part::instrument(int tick)
       }
 
 //---------------------------------------------------------
-//   instr
+//   instrument
 //---------------------------------------------------------
 
 const Instrument* Part::instrument(int tick) const

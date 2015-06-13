@@ -28,7 +28,7 @@
 using namespace Ms;
 
 //---------------------------------------------------------
-//   TestChordSymbol
+//   TestInstrumentChange
 //---------------------------------------------------------
 
 class TestInstrumentChange : public QObject, public MTest {

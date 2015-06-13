@@ -156,7 +156,7 @@ void MeasureBaseList::add(MeasureBase* e)
       }
 
 //---------------------------------------------------------
-//   erase
+//   remove
 //---------------------------------------------------------
 
 void MeasureBaseList::remove(MeasureBase* el)
