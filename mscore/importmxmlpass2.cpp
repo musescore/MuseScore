@@ -3581,6 +3581,37 @@ void MusicXMLParserPass2::divisions()
       }
 
 //---------------------------------------------------------
+//   isWholeMeasureRest
+//---------------------------------------------------------
+
+/**
+ * Determine whole measure rest.
+ */
+
+// By convention, whole measure rests do not have a "type" element
+// As of MusicXML 3.0, this can be indicated by an attribute "measure",
+// but for backwards compatibility the "old" convention still has to be supported.
+// Also verify the rest fits exactly in the measure, as some programs
+// (e.g. Cakewalk SONAR X2 Studio [Version: 19.0.0.306]) leave out
+// the type for all rests.
+// Sibelius calls all whole-measure rests "whole", even if the duration != 4/4
+
+static bool isWholeMeasureRest(const bool rest, const QString& type, const Fraction dura, const Fraction mDura)
+      {
+      if (!rest)
+            return false;
+
+      if (!dura.isValid())
+            return false;
+
+      if (!mDura.isValid())
+            return false;
+
+      return ((type == "" && dura == mDura)
+              || (type == "whole" && dura == mDura && dura != Fraction(1, 1)));
+      }
+
+//---------------------------------------------------------
 //   determineDuration
 //---------------------------------------------------------
 
@@ -3596,17 +3627,9 @@ static TDuration determineDuration(const bool rest, const QString& type, const i
 
       TDuration res;
       if (rest) {
-            // By convention, whole measure rests do not have a "type" element
-            // As of MusicXML 3.0, this can be indicated by an attribute "measure",
-            // but for backwards compatibility the "old" convention still has to be supported.
-            // Also verify the rest fits exactly in the measure, as some programs
-            // (e.g. Cakewalk SONAR X2 Studio [Version: 19.0.0.306]) leave out
-            // the type for all rests.
-            // Sibelius calls all whole-measure rests "whole", even if the duration != 4/4
-            if ((type == "" && dura == mDura)
-                || (type == "whole" && dura == mDura && dura != Fraction(1, 1)))
+            if (isWholeMeasureRest(rest, type, dura, mDura))
                   res.setType(TDuration::DurationType::V_MEASURE);
-            else if (type == "" && dura != mDura) {
+            else if (type == "") {
                   // If no type, set duration type based on duration.
                   res = TDuration(dura); // TODO check tuplet handling
                   }
@@ -3993,8 +4016,10 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                    .arg(fraction.print()).arg(fraction.isValid())
                    );
        */
+      bool wholeMeasureRest = isWholeMeasureRest(bRest, type, dura, Fraction::fromTicks(measure->ticks()));
       if (dura.isValid() && calcDura.isValid()) {
-            if (dura != calcDura) {
+            // do not report an error for whole measure rests
+            if (dura != calcDura && !wholeMeasureRest) {
                   errorStr = QString("calculated duration (%1) not equal to specified duration (%2)")
                         .arg(calcDura.print()).arg(dura.print());
 
@@ -4017,8 +4042,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                         }
                   }
             }
-      else if (dura.isValid())
-            errorStr = QString("calculated duration invalid, using specified duration (%1)").arg(dura.print());
+      else if (dura.isValid()) {
+            // do not report an error for typeless (whole measure) rests
+            if (!wholeMeasureRest)
+                  errorStr = QString("calculated duration invalid, using specified duration (%1)").arg(dura.print());
+            }
       else if (calcDura.isValid()) {
             if (!grace) {
                   errorStr = QString("specified duration invalid, using calculated duration (%1)").arg(calcDura.print());
