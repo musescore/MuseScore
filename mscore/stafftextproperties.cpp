@@ -272,7 +272,7 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   StaffTextProperties
+//   ~StaffTextProperties
 //---------------------------------------------------------
 
 StaffTextProperties::~StaffTextProperties()
@@ -281,7 +281,7 @@ StaffTextProperties::~StaffTextProperties()
       }
 
 //---------------------------------------------------------
-//   setSwingParameters
+//   setSwingControls
 //---------------------------------------------------------
 
 void StaffTextProperties::setSwingControls(bool checked)

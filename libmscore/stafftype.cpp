@@ -384,7 +384,7 @@ void StaffType::setOnLines(bool val)
       }
 
 //---------------------------------------------------------
-//   set metrics
+//   setDurationMetrics
 //    checks whether the internally computed metrics are is still valid and re-computes them, if not
 //---------------------------------------------------------
 
@@ -918,7 +918,7 @@ bool StaffType::readConfigFile(const QString& fileName)
       }
 
 //---------------------------------------------------------
-//   Get Font Names
+//   fontNames
 //
 //    returns a list of display names for the fonts  configured to work with Tablatures;
 //    the index of a name in the list can be used to retrieve the font data with fontData()
@@ -937,7 +937,7 @@ QList<QString> StaffType::fontNames(bool bDuration)
       }
 
 //---------------------------------------------------------
-//   Get Font Data
+//   fontData
 //
 //    retrieves data about a Tablature font.
 //    returns: true if idx is valid | false if it is not

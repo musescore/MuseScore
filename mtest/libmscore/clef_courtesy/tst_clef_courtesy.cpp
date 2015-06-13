@@ -22,7 +22,7 @@
 using namespace Ms;
 
 //---------------------------------------------------------
-//   TestClef
+//   TestClefCourtesy
 //---------------------------------------------------------
 
 class TestClefCourtesy : public QObject, public MTest

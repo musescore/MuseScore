@@ -19,7 +19,7 @@
 using namespace Ms;
 
 //---------------------------------------------------------
-//   TestClef
+//   TestAlbum
 //---------------------------------------------------------
 
 class TestAlbum : public QObject, public MTest

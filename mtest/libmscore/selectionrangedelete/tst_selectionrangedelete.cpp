@@ -23,7 +23,7 @@
 using namespace Ms;
 
 //---------------------------------------------------------
-//   SelectionRangeDelete
+//   TestSelectionRangeDelete
 //---------------------------------------------------------
 
 class TestSelectionRangeDelete : public QObject, public MTest
