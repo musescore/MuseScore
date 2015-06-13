@@ -69,7 +69,7 @@
       <score-instrument id="P2-I64">
         <instrument-name>open high conga</instrument-name>
         </score-instrument>
-      <midi-device port="1"></midi-device>
+      <midi-device port="2"></midi-device>
       <midi-instrument id="P2-I64">
         <midi-channel>10</midi-channel>
         <midi-program>1</midi-program>
@@ -84,7 +84,7 @@
       <score-instrument id="P3-I39">
         <instrument-name>Acoustic Snare</instrument-name>
         </score-instrument>
-      <midi-device port="1"></midi-device>
+      <midi-device port="3"></midi-device>
       <midi-instrument id="P3-I39">
         <midi-channel>10</midi-channel>
         <midi-program>1</midi-program>
