@@ -389,6 +389,11 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>down</stem>
+        <notations>
+          <articulations>
+            <breath-mark>comma</breath-mark>
+            </articulations>
+          </notations>
         </note>
       </measure>
     <measure number="7">
