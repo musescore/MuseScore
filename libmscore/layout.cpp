@@ -2792,16 +2792,29 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
 
       qreal ww = rowWidth;
       qreal minWidth;
+      bool firstInRow = true;
       for (bool a = true; a;) {
             a = layoutSystem(minWidth, ww, isFirstSystem, useLongName);
-            sl.append(_systems[curSystem]);
-            ++curSystem;
-            ww -= minWidth;
+            if ((0.0 < minWidth && minWidth <= ww) || firstInRow) {
+                  // system fits on this row, or we need to take it anyhow
+                  sl.append(_systems[curSystem]);
+                  ++curSystem;
+                  ww -= minWidth;
+                  }
+            else {
+                  // system does not fit on this row, and we don't need it to
+                  // reset to add to next row
+                  if (curMeasure)
+                        curMeasure = curMeasure->prev();
+                  else
+                        curMeasure = lastMeasure();
+                  }
+            firstInRow = false;
             }
       //
-      // dont stretch last system row, if minWidth is <= lastSystemFillLimit
+      // dont stretch last system row, if accumulated minWidth is <= lastSystemFillLimit
       //
-      if (curMeasure == 0 && ((minWidth / rowWidth) <= styleD(StyleIdx::lastSystemFillLimit)))
+      if (curMeasure == 0 && (((rowWidth - ww) / rowWidth) <= styleD(StyleIdx::lastSystemFillLimit)))
             raggedRight = true;
 
       //-------------------------------------------------------
