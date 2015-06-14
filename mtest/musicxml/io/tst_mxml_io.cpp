@@ -124,6 +124,7 @@ private slots:
       void repeatCounts() { mxmlIoTest("testRepeatCounts"); }
       void restNotations() { mxmlIoTestRef("testRestNotations"); }
       void restsNoType() { mxmlIoTestRef("testRestsNoType"); }
+      void restsTypeWhole() { mxmlIoTestRef("testRestsTypeWhole"); }
       void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
       void slurs() { mxmlIoTest("testSlurs"); }
       //void slurs2() { mxmlIoTest("testSlurs2"); } OK in DOM parser, fails in pull parser
