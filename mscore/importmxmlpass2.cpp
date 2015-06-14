@@ -5264,7 +5264,8 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                               }
                         else if (_e.name() == "breath-mark") {
                               breath = 0;
-                              _e.readNext();
+                              _e.readElementText();
+                              // TODO: handle value read (note: encoding unknown, only "comma" found)
                               }
                         else if (_e.name() == "caesura") {
                               breath = 3;
