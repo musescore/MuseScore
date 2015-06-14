@@ -2897,7 +2897,7 @@ void Score::selectRange(Element* e, int staffIdx)
                               oe = oe->parent();
                         ChordRest* ocr = static_cast<ChordRest*>(oe);
 
-                        Segment* endSeg = tick2segment(ocr->segment()->tick() + ocr->actualTicks());
+                        Segment* endSeg = tick2segmentMM(ocr->segment()->tick() + ocr->actualTicks());
                         if (!endSeg)
                               endSeg = ocr->segment()->next();
 
