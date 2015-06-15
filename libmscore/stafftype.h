@@ -117,19 +117,11 @@ struct TablatureDurationFont {
 
       bool read(XmlReader&);
       };
-
-// ready-made staff types:
-
-enum class StaffTypes : char {
-      STANDARD,
-      PERC_1LINE, PERC_3LINE, PERC_5LINE,
-      TAB_6SIMPLE, TAB_6COMMON, TAB_6FULL,
-            TAB_4SIMPLE, TAB_4COMMON, TAB_4FULL,
-            TAB_UKULELE, TAB_BALALAJKA, TAB_ITALIAN, TAB_FRENCH,
-      STAFF_TYPES,
-      // some usefull shorthands:
-            PERC_DEFAULT = StaffTypes::PERC_5LINE,
-            TAB_DEFAULT = StaffTypes::TAB_6COMMON
+      
+enum class ShapeNoteStyle : char {
+      NONE,
+      FOUR,
+      SEVEN
       };
 
 static const int  STAFF_GROUP_NAME_MAX_LENGTH   = 32;
@@ -197,6 +189,8 @@ class StaffType {
       bool  _fretMetricsValid = false;    // whether fret font metrics are valid or not
       qreal _refDPI = 0.0;                // reference value used to last computed metrics and to see if they are still valid
 
+      ShapeNoteStyle _shapeNoteStyle = ShapeNoteStyle::NONE; // For "shape note" systems like Sacred Harp & Aiken
+
       // the array of configured fonts
       static QList<TablatureFretFont> _fretFonts;
       static QList<TablatureDurationFont> _durationFonts;
@@ -256,8 +250,9 @@ class StaffType {
 
       // static function to deal with presets
       static const StaffType* getDefaultPreset(StaffGroup grp);
-      static const StaffType* preset(StaffTypes idx);
+      static const StaffType* preset(int idx);
       static const StaffType* presetFromXmlName(QString& xmlName);
+      static const int defaultPreset[STAFF_GROUP_MAX];
 
       void setGenKeysig(bool val)              { _genKeysig = val;          }
       bool genKeysig() const                   { return _genKeysig;         }
@@ -282,6 +277,8 @@ class StaffType {
       qreal durationFontYOffset()         { setDurationMetrics(); return _durationYOffset + _durationFontUserY * MScore::DPI*SPATIUM20; }
       qreal fretBoxH()                    { setFretMetrics(); return _fretBoxH; }
       qreal fretBoxY()                    { setFretMetrics(); return _fretBoxY + _fretFontUserY * MScore::DPI*SPATIUM20; }
+      
+      ShapeNoteStyle shapeNoteStyle() const {  return _shapeNoteStyle; }
 
       // 2 methods to return the size of a box masking lines under a fret mark
       qreal fretMaskH()                   { return _lineDistance.val() * MScore::DPI*SPATIUM20; }
@@ -320,6 +317,7 @@ class StaffType {
       void  setStemsThrough(bool val)     { _stemsThrough = val;        }
       void  setUpsideDown(bool val)       { _upsideDown = val;          }
       void  setUseNumbers(bool val)       { _useNumbers = val; _fretMetricsValid = false; }
+      void  setShapeNoteStyle(ShapeNoteStyle val) { _shapeNoteStyle = val; };
 
       // utility functions for tab specially managed elements
       QPointF chordStemPos(const Chord*) const;

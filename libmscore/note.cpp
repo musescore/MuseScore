@@ -446,12 +446,73 @@ SymId Note::noteHead() const
       if (_headType != NoteHead::Type::HEAD_AUTO)
             ht = _headType;
 
-      SymId t = noteHead(up, _headGroup, ht);
+      NoteHead::Group headGroup;
+      if (staff()->staffType()->shapeNoteStyle() != ShapeNoteStyle::NONE) {
+            headGroup = shapeNoteHeadGroup();
+            }
+      else {
+            headGroup = _headGroup;
+            }
+
+      SymId t = noteHead(up, headGroup, ht);
       if (t == SymId::noSym) {
             qDebug("invalid note head %hhd/%hhd", _headGroup, ht);
             t = noteHead(up, NoteHead::Group::HEAD_NORMAL, ht);
             }
       return t;
+      }
+      
+//---------------------------------------------------------
+//   shapeNoteHeadGroup
+//---------------------------------------------------------
+
+NoteHead::Group Note::shapeNoteHeadGroup() const
+      {
+      static const char tpcNames[7]  = {'F', 'C', 'G', 'D', 'A', 'E', 'B'};
+      static const char noteNames[7] = {'C', 'D', 'E', 'F', 'G', 'A', 'B'};
+      static const char scales[15]   = {'C', 'G', 'D', 'A', 'E', 'B', 'F', 'C', 'G', 'D', 'A', 'E', 'B', 'F', 'C'};
+      
+      static const NoteHead::Group degreesFourShapes[7]  = { NoteHead::Group::HEAD_FA,
+                                                             NoteHead::Group::HEAD_SOL,
+                                                             NoteHead::Group::HEAD_LA,
+                                                             NoteHead::Group::HEAD_FA,
+                                                             NoteHead::Group::HEAD_SOL,
+                                                             NoteHead::Group::HEAD_LA,
+                                                             NoteHead::Group::HEAD_MI };
+
+      static const NoteHead::Group degreesSevenShapes[7] = { NoteHead::Group::HEAD_DO,
+                                                             NoteHead::Group::HEAD_RE,
+                                                             NoteHead::Group::HEAD_MI,
+                                                             NoteHead::Group::HEAD_FA,
+                                                             NoteHead::Group::HEAD_SOL,
+                                                             NoteHead::Group::HEAD_LA,
+                                                             NoteHead::Group::HEAD_TI };
+      char name = tpcNames[(tpc() + 1) % 7];
+      Key curKey = staff()->key(chord()->tick());
+      char scale = scales[int(curKey) + 7];
+
+      int indexOfScale = 0;
+      for (int i = 0; i < 7; i++) {
+            if (noteNames[i] == scale) {
+                  indexOfScale = i;
+                  break;
+                  }
+            }
+
+      int indexOfName = 0;
+      for (int i = 0; i < 7; i++) {
+            if (noteNames[i] == name) {
+                  indexOfName = i;
+                  break;
+                  }
+            }
+      int degreeIndex = (indexOfName - indexOfScale + 28) % 7;
+
+      ShapeNoteStyle style = staff()->staffType()->shapeNoteStyle();
+      if (style == ShapeNoteStyle::FOUR)
+            return degreesFourShapes[degreeIndex];
+      else //style == ShapeNoteStyle::FOUR
+            return degreesSevenShapes[degreeIndex];
       }
 
 //---------------------------------------------------------

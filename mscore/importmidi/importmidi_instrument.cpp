@@ -398,7 +398,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
 
             if (part->nstaves() == 1) {
                   if (track.mtrack->drumTrack()) {
-                        part->staff(0)->setStaffType(StaffType::preset(StaffTypes::PERC_DEFAULT));
+                        part->staff(0)->setStaffType(StaffType::getDefaultPreset(StaffGroup::PERCUSSION));
                         if (!instr) {
                               part->instrument()->setDrumset(smDrumset);
                               }

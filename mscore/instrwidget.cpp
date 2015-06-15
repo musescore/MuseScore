@@ -175,7 +175,7 @@ void StaffListItem::setStaffType(const StaffType* st)
       else {
             // if staff type given, look into combo box item data for a preset equal to staff type
             for (int i = 0; i < _staffTypeCombo->count(); ++i) {
-                  const StaffType* _st = StaffType::preset(StaffTypes(_staffTypeCombo->itemData(i).toInt()));
+                  const StaffType* _st = StaffType::preset(_staffTypeCombo->itemData(i).toInt());
                   if (*_st == *st) {
                         _staffTypeCombo->setCurrentIndex(i);
                         return;
@@ -183,7 +183,7 @@ void StaffListItem::setStaffType(const StaffType* st)
                   }
             // try harder
             for (int i = 0; i < _staffTypeCombo->count(); ++i) {
-                  const StaffType* _st = StaffType::preset(StaffTypes(_staffTypeCombo->itemData(i).toInt()));
+                  const StaffType* _st = StaffType::preset(_staffTypeCombo->itemData(i).toInt());
                   if (_st->isSameStructure(*st)) {
                         _staffTypeCombo->setCurrentIndex(i);
                         return;
@@ -211,7 +211,7 @@ void StaffListItem::setStaffType(int idx)
 
 const StaffType* StaffListItem::staffType() const
       {
-      return StaffType::preset(StaffTypes((staffTypeIdx())));
+      return StaffType::preset((staffTypeIdx()));
       }
 
 //---------------------------------------------------------
@@ -231,12 +231,12 @@ void StaffListItem::staffTypeChanged(int idx)
       {
       // check current clef matches new staff type
       int staffTypeIdx = _staffTypeCombo->itemData(idx).toInt();
-      const StaffType* stfType = StaffType::preset(StaffTypes(staffTypeIdx));
+      const StaffType* stfType = StaffType::preset(staffTypeIdx);
 
       PartListItem* pli = static_cast<PartListItem*>(QTreeWidgetItem::parent());
       pli->updateClefs();
 
-      if (_staff && _staff->staffType()->name() != stfType->name()) {
+      if (_staff && !(*(_staff->staffType()) == *stfType)) {
             if (_op != ListItemOp::I_DELETE && _op != ListItemOp::ADD)
                   _op = ListItemOp::UPDATE;
             }
@@ -268,7 +268,7 @@ void PartListItem::updateClefs()
       {
       for (int i = 0; i < childCount(); ++i) {
             StaffListItem* sli = static_cast<StaffListItem*>(child(i));
-            const StaffType* stfType = StaffType::preset(StaffTypes(sli->staffTypeIdx()));
+            const StaffType* stfType = StaffType::preset(sli->staffTypeIdx());
 
             ClefTypeList clefType;
             switch (stfType->group()) {
