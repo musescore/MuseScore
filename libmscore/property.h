@@ -224,6 +224,7 @@ enum class P_ID : unsigned char {
 
       GLISSANDO_STYLE,
       PLAY_GLISSANDO,
+      PLAY_BEND,
       END
       };
 

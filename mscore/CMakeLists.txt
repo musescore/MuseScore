@@ -122,6 +122,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_empty.ui
       inspector/inspector_fret.ui
       inspector/inspector_break.ui
+      inspector/inspector_bend.ui
       ${SCRIPT_UI}
       )
 

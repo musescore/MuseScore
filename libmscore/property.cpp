@@ -230,6 +230,7 @@ static const PropertyData propertyList[] = {
 
       { P_ID::GLISSANDO_STYLE,     false, "glissandoStyle",        P_TYPE::GLISSANDO_STYLE},
       { P_ID::PLAY_GLISSANDO,      false, "playGlissando",         P_TYPE::BOOL},
+      { P_ID::PLAY_BEND,           false, "playBend",              P_TYPE::BOOL},
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };
 
