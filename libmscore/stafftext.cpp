@@ -122,7 +122,7 @@ void StaffText::read(XmlReader& e)
                         e.readNext();
                   _setAeolusStops = true;
                   }
-          else if (tag == "swing") {
+            else if (tag == "swing") {
                   QString swingUnit = e.attribute("unit","");
                   int unit = 0;
                   if (swingUnit == TDuration(TDuration::DurationType::V_EIGHTH).name())
