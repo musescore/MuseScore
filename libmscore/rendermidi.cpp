@@ -245,6 +245,8 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
             if (e == 0 || e->type() != Element::Type::BEND)
                   continue;
             Bend* bend = static_cast<Bend*>(e);
+            if (!bend->playBend())
+                  break;
             const QList<PitchValue>& points = bend->points();
             int pitchSize = points.size();
 

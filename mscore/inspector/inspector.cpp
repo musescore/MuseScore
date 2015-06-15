@@ -242,6 +242,9 @@ void Inspector::setElements(const QList<Element*>& l)
                         case Element::Type::LAYOUT_BREAK:
                               ie = new InspectorBreak(this);
                               break;
+                        case Element::Type::BEND:
+                              ie = new InspectorBend(this);
+                              break;
                         default:
                               if (_element->isText())
                                     ie = new InspectorText(this);
@@ -603,6 +606,23 @@ InspectorAccidental::InspectorAccidental(QWidget* parent)
             { P_ID::USER_OFF,     1, 0, e.offsetY,     e.resetY           },
             { P_ID::SMALL,        0, 0, a.small,       a.resetSmall       }
             };
+      mapSignals();
+      }
+
+//---------------------------------------------------------
+//   InspectorBend
+//---------------------------------------------------------
+
+InspectorBend::InspectorBend(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      e.setupUi(addWidget());
+      g.setupUi(addWidget());
+
+      iList = {
+            { P_ID::PLAY_BEND, 0, 0, g.playBend, g.resetPlayBend }
+            };
+
       mapSignals();
       }
 
