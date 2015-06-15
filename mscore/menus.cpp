@@ -1212,7 +1212,7 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       frames->addAction(getAction("insert-hbox"));
       frames->addAction(getAction("insert-vbox"));
       frames->addAction(getAction("insert-textframe"));
-      if(enableExperimental)
+      if (enableExperimental)
             frames->addAction(getAction("insert-fretframe"));
       frames->addSeparator();
       frames->addAction(getAction("append-hbox"));

@@ -23,6 +23,7 @@
 #include "libmscore/stafftext.h"
 #include "libmscore/system.h"
 #include "libmscore/staff.h"
+#include "globals.h"
 
 namespace Ms {
 
@@ -51,16 +52,22 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
-      if (st->systemFlag())
+      if (st->systemFlag()) {
             setWindowTitle(tr("MuseScore: System Text Properties"));
-      else
+            tabWidget->removeTab(2); // Aeolus settings  for staff text only
+            //if (!enableExperimental) tabWidget->removeTab(1); // MIDI action
+            tabWidget->removeTab(0); // Channel switching  for staff text only
+            }
+      else {
             setWindowTitle(tr("MuseScore: Staff Text Properties"));
+            //tabWidget->removeTab(3); // Swing settings for system text only, could be disabled here, if desired
+#ifndef AEOLUS
+            tabWidget->removeTab(2);
+#endif
+            //if (!enableExperimental) tabWidget->removeTab(1); // MIDI action
+            }
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       _staffText = static_cast<StaffText*>(st->clone());
-
-#ifndef AEOLUS
-      tabWidget->removeTab(2);
-#endif
 
       const char* vbsh { "QToolButton:checked, QToolButton:pressed { color: white; background:%1;}" };
 
