@@ -5290,9 +5290,14 @@ SymId Sym::userName2id(const QString& s)
       return (val == -1) ? SymId::noSym : (SymId)(val);
       }
 
+//---------------------------------------------------------
+//   GlyphKey operator==
+//---------------------------------------------------------
+
 bool GlyphKey::operator==(const GlyphKey& k) const
       {
-      return id == k.id && mag == k.mag && color == k.color;
+      return (face == k.face) && (id == k.id)
+         && (mag == k.mag) && (worldScale == k.worldScale) && (color == k.color);
       }
 
 //---------------------------------------------------------
@@ -5328,7 +5333,6 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
                         qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(s));
                         return;
                         }
-                  printf("load <%s> <%s>\n", qPrintable(s), qPrintable(_family));
                   font = new QFont;
                   font->setWeight(QFont::Normal);
                   font->setItalic(false);
@@ -5355,7 +5359,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
             worldScale = 1.0;
       int scale16      = lrint(worldScale * 6553.6 * mag);
 
-      GlyphKey gk(id, scale16, color);
+      GlyphKey gk(face, id, mag, worldScale, color);
       GlyphPixmap* pm = cache->object(gk);
       if (!pm) {
             FT_Matrix matrix {

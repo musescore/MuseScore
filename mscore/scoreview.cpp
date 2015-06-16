@@ -2316,7 +2316,7 @@ void ScoreView::drawElements(QPainter& painter, const QList<Element*>& el)
 
 void ScoreView::setMag(qreal nmag)
       {
-      qreal m = mag();
+      qreal m = _matrix.m11();
 
       if (nmag == m)
             return;
