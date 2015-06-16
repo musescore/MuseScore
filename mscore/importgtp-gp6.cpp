@@ -383,7 +383,13 @@ void GuitarPro6::readTracks(QDomNode* track)
                   // this is a typo is guitar pro - 'defaut' is correct here
                   else if (nodeName == "SystemsDefautLayout") {}
                   else if (nodeName == "RSE") {}
-                  else if (nodeName == "GeneralMidi") {}
+                  else if (nodeName == "GeneralMidi") {
+                        if (currentNode.toElement().hasChildNodes()) {
+                              int midiPort = currentNode.firstChildElement("Port").text().toInt();
+                              int midiChannel = currentNode.firstChildElement("PrimaryChannel").text().toInt();
+                              part->setMidiChannel(midiChannel, midiPort);
+                              }
+                        }
                   else if (nodeName == "PlaybackState") {}
                   else if (nodeName == "PlayingStyle") {}
                   else if (nodeName == "PageSetup") {}
