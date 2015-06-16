@@ -3631,7 +3631,8 @@ static TDuration determineDuration(const bool rest, const QString& type, const i
                   res.setType(TDuration::DurationType::V_MEASURE);
             else if (type == "") {
                   // If no type, set duration type based on duration.
-                  res = TDuration(dura); // TODO check tuplet handling
+                  // Note that sometimes unusual duration (e.g. 261/256) are found.
+                  res.setVal(dura.ticks());
                   }
             else {
                   res.setType(type);
