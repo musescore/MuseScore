@@ -2592,12 +2592,15 @@ class Sym {
 //---------------------------------------------------------
 
 struct GlyphKey {
+      FT_Face face;
       SymId id;
-      int mag;
+      qreal mag;
+      qreal worldScale;
       QColor color;
 
    public:
-      GlyphKey(SymId _id, int m, QColor c) : id(_id), mag(m), color(c) {}
+      GlyphKey(FT_Face _f, SymId _id, float m, float s, QColor c)
+         : face(_f), id(_id), mag(m), worldScale(s), color(c) {}
       bool operator==(const GlyphKey&) const;
       };
 

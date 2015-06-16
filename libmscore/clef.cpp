@@ -348,7 +348,7 @@ void Clef::draw(QPainter* painter) const
             return;
       QColor color(curColor());
       foreach(Element* e, elements) {
-            e->setColor(color);
+            e->setColor(color);           //??
             QPointF pt(e->pos());
             painter->translate(pt);
             e->draw(painter);
