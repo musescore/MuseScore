@@ -935,10 +935,16 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
                         }
                   }
             if (!done) {
-                  AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->staff()->idx(), lineR2);
-                  int acci2 = int(acciv2);
-                  // we have to add ( note->ppitch() - noteL->epitch() ) which is the delta for transposing instruments.
-                  halfsteps = line2pitch(lineL-deltastep, clefL, Key::C) + noteL->ppitch() - noteL->epitch() + acci2 - pitchL;
+                  if (staffL->isPitchedStaff()) {
+                        AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->staff()->idx(), lineR2);
+                        int acci2 = int(acciv2);
+                        // we have to add ( note->ppitch() - noteL->epitch() ) which is the delta for transposing instruments.
+                        halfsteps = line2pitch(lineL-deltastep, clefL, Key::C) + noteL->ppitch() - noteL->epitch() + acci2 - pitchL;
+                        }
+                  else {
+                        // cannot rely on accidentals or key signatures
+                        halfsteps = deltastep;
+                        }
                   }
             }
       return halfsteps;
