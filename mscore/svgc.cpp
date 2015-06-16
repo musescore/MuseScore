@@ -130,6 +130,25 @@ QPainter * getSvgPainter(QIODevice * device, qreal width, qreal height, qreal sc
       return p;
    }
 
+void stretchAudio(Score * score, const QMap<int,qreal>& t2t) {
+  int ptick = -1;
+  TempoMap * tempomap = score->tempomap();
+
+  foreach(int tick, t2t.keys()) {
+    if (ptick<0) {
+      ptick = tick;
+      continue;
+    }
+
+    qreal tempo = ((tick-ptick) / (t2t[tick]-t2t[ptick])) / 
+                    (MScore::division * tempomap->relTempo());
+
+    tempomap->setTempo(ptick,tempo);
+
+    ptick = tick;
+  }
+}
+
 void createAudioTrack(QJsonArray plist, Score * cs, const QString& midiname) {
   	// Mute the parts in the current excerpt
     foreach( Part * part, cs->parts()){
@@ -221,6 +240,7 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
       //qWarning() << "JSON HAS " << partsinfo.size() << " PARTS" << endl;
 
       QJsonObject atracks = partsinfo["audiotracks"].toObject();
+      stretchAudio(cs, tick2time);
       foreach ( QString key, atracks.keys()) {
         // Synthesize the described track
         QJsonObject atobj = atracks[key].toObject();

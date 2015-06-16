@@ -194,16 +194,10 @@ QJsonObject collectMLData(Score* score, const QMap<int,qreal>& t2t) {
       }
       qts["instruments"] = iar;
 
-      // Total ticks/time to end.
+      // Total ticks
       Measure* lastm = score->lastMeasure();
-
       int total_ticks = lastm->tick()+lastm->ticks();
-      qts["total_ticks"] = total_ticks;
-      qts["total_time"] = t2t.isEmpty()?
-                            score->tempomap()->tick2time(total_ticks):
-                            t2t.value(total_ticks, // Provide a linear approximation as default (important for old exercises)
-                              t2t.first() + (t2t.last()-t2t.first())*total_ticks/(t2t.lastKey()-t2t.firstKey()));
-
+   
       QSet<Note *> * tie_ends = NULL; 
 
       QMap<int,int> just_tied; // just the end of tied note
@@ -283,6 +277,14 @@ QJsonObject collectMLData(Score* score, const QMap<int,qreal>& t2t) {
 
         sound.push_back(csound);
       }
+
+      samples.push_back((int)
+        ((22050.0*8/4096)*
+        (t2t.isEmpty()?score->tempomap()->tick2time(total_ticks):
+         t2t.value(total_ticks, // Provide a linear approximation as default (important for old exercises)
+              t2t.first() + (t2t.last()-t2t.first())*total_ticks/(t2t.lastKey()-t2t.firstKey()))))
+        );
+
 
       qts["pitches"] = sound;
       //qts["times"] = times;
