@@ -1573,7 +1573,7 @@ void Score::resetUserStretch()
             return;
 
       for (Measure* m = m1; m; m = m->nextMeasureMM()) {
-            undo(new ChangeStretch(m, 1.0));
+            m->undoChangeProperty(P_ID::USER_STRETCH, 1.0);
             if (m == m2)
                   break;
             }
@@ -1654,7 +1654,7 @@ void Score::cmdAddStretch(qreal val)
             stretch += val;
             if (stretch < 0)
                   stretch = 0;
-            undo(new ChangeStretch(m, stretch));
+            m->undoChangeProperty(P_ID::USER_STRETCH, stretch);
             }
       _layoutAll = true;
       }
