@@ -2987,7 +2987,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   if (mb->type() == Element::Type::HBOX)
                         minWidth += point(((Box*)mb)->boxWidth());
                   else if (mb->type() == Element::Type::MEASURE) {
-                        Measure* m = (Measure*)mb;
+                        Measure* m = static_cast<Measure*>(mb);
                         if (needRelayout)
                               m->setDirty();
                         minWidth    += m->minWidth2();
@@ -2996,6 +2996,20 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   }
             minWidth += system->leftMargin();
             }
+      bool zeroStretch;
+      if (totalWeight < 0.01) {
+            zeroStretch = true;
+            foreach(System* system, sl) {
+                  foreach (MeasureBase* mb, system->measures()) {
+                        if (mb->type() == Element::Type::MEASURE) {
+                              Measure* m = static_cast<Measure*>(mb);
+                              totalWeight += m->ticks();
+                              }
+                        }
+                  }
+            }
+      else
+            zeroStretch = false;
 
       // stretch incomplete row
       qreal rest;
@@ -3027,7 +3041,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               }
                         mb->setPos(pos);
                         Measure* m    = static_cast<Measure*>(mb);
-                        qreal weight = m->ticks() * m->userStretch();
+                        qreal weight = m->ticks() * (zeroStretch ? 1.0 : m->userStretch());
                         ww           = m->minWidth2() + rest * weight;
                         m->layoutWidth(ww);
                         }
