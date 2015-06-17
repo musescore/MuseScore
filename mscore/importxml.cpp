@@ -108,6 +108,7 @@
 #include "importxmlfirstpass.h"
 #include "libmscore/instrchange.h"
 #include "importmxml.h"
+#include "mscore/seq.h"
 
 namespace Ms {
 
@@ -2232,10 +2233,13 @@ void MusicXml::xmlPart(QDomElement e, QString id)
             delete drumset;
             // set the instruments for this part
             MusicXmlInstrList il = pass1.getInstrList(id);
+            QString prevInstrId = il.instrument(Fraction(0, 1));
             for (auto it = il.cbegin(); it != il.cend(); ++it) {
                   Fraction f = (*it).first;
                   if (f > Fraction(0, 1)) {
                         auto instrId = (*it).second;
+                        if (instrId == prevInstrId)
+                              continue;
                         int staff = score->staffIdx(part);
                         int track = staff * VOICES;
                         //qDebug("xmlPart: instrument change: tick %s (%d) track %d instr '%s'",
@@ -2253,6 +2257,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                               instr.channel(0)->program = mxmlInstr.midiProgram;
                               instr.channel(0)->pan = mxmlInstr.midiPan;
                               instr.channel(0)->volume = mxmlInstr.midiVolume;
+                              instr.channel(0)->updateInitList();
                               instr.setTrackName(mxmlInstr.name);
                               InstrumentChange* ic = new InstrumentChange(instr, score);
                               ic->setTrack(track);
@@ -2264,6 +2269,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                               else
                                     ic->setXmlText(text);
                               segment->add(ic);
+                              prevInstrId = instrId;
                               }
                         }
                   }
