@@ -149,9 +149,11 @@ void Inspector::setElements(const QList<Element*>& l)
             else if (_element) {
                   switch(_element->type()) {
                         case Element::Type::FBOX:
-                        case Element::Type::TBOX:
                         case Element::Type::VBOX:
                               ie = new InspectorVBox(this);
+                              break;
+                        case Element::Type::TBOX:
+                              ie = new InspectorTBox(this);
                               break;
                         case Element::Type::HBOX:
                               ie = new InspectorHBox(this);
@@ -355,6 +357,26 @@ InspectorVBox::InspectorVBox(QWidget* parent)
             { P_ID::TOP_MARGIN,    0, 0, vb.topMargin,    vb.resetTopMargin    },
             { P_ID::BOTTOM_MARGIN, 0, 0, vb.bottomMargin, vb.resetBottomMargin },
             { P_ID::BOX_HEIGHT,    0, 0, vb.height,       0                    }
+            };
+      mapSignals();
+      }
+
+//---------------------------------------------------------
+//   InspectorTBox
+//---------------------------------------------------------
+
+InspectorTBox::InspectorTBox(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      tb.setupUi(addWidget());
+
+      iList = {
+            { P_ID::TOP_GAP,       0, 0, tb.topGap,       tb.resetTopGap       },
+            { P_ID::BOTTOM_GAP,    0, 0, tb.bottomGap,    tb.resetBottomGap    },
+            { P_ID::LEFT_MARGIN,   0, 0, tb.leftMargin,   tb.resetLeftMargin   },
+            { P_ID::RIGHT_MARGIN,  0, 0, tb.rightMargin,  tb.resetRightMargin  },
+            { P_ID::TOP_MARGIN,    0, 0, tb.topMargin,    tb.resetTopMargin    },
+            { P_ID::BOTTOM_MARGIN, 0, 0, tb.bottomMargin, tb.resetBottomMargin },
             };
       mapSignals();
       }

@@ -88,6 +88,7 @@ QT5_WRAP_UI (ui_headers
 
       inspector/inspector_element.ui
       inspector/inspector_vbox.ui
+      inspector/inspector_tbox.ui
       inspector/inspector_articulation.ui
       inspector/inspector_spacer.ui
       inspector/inspector_hbox.ui
