@@ -2263,6 +2263,8 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                               }
                         }
                   qreal stretch = m->userStretch() * measureSpacing;
+                  if (stretch < 1.0)
+                        stretch = 1.0;
                   ww            *= stretch;
                   cautionaryW   = cautionaryWidth(m, hasCourtesy) * stretch;
 
@@ -2498,7 +2500,10 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
                   else
                         ww = m->minWidth1();
 
-                  ww *= m->userStretch() * styleD(StyleIdx::measureSpacing);
+                  qreal stretch = m->userStretch() * styleD(StyleIdx::measureSpacing);
+                  if (stretch < 1.0)
+                        stretch = 1.0;
+                  ww *= stretch;
                   if (ww < minMeasureWidth)
                         ww = minMeasureWidth;
                   isFirstMeasure = false;
