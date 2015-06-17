@@ -2663,27 +2663,6 @@ void AddTextStyle::redo()
       }
 
 //---------------------------------------------------------
-//   ChangeStretch
-//---------------------------------------------------------
-
-ChangeStretch::ChangeStretch(Measure* m, qreal s)
-   : measure(m), stretch(s)
-      {
-      }
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeStretch::flip()
-      {
-      qreal oStretch = measure->userStretch();
-      measure->setUserStretch(stretch);
-      measure->score()->setLayoutAll(true);
-      stretch = oStretch;
-      }
-
-//---------------------------------------------------------
 //   ChangeStyle
 //---------------------------------------------------------
 
