@@ -745,20 +745,6 @@ class AddTextStyle : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeStretch
-//---------------------------------------------------------
-
-class ChangeStretch : public UndoCommand {
-      Measure* measure;
-      qreal stretch;
-      void flip();
-
-   public:
-      ChangeStretch(Measure*, qreal);
-      UNDO_NAME("ChangeStretch")
-      };
-
-//---------------------------------------------------------
 //   ChangeStyle
 //---------------------------------------------------------
 
