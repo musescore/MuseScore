@@ -108,7 +108,6 @@
 #include "importxmlfirstpass.h"
 #include "libmscore/instrchange.h"
 #include "importmxml.h"
-#include "mscore/seq.h"
 
 namespace Ms {
 

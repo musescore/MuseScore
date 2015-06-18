@@ -395,6 +395,7 @@ static void setFirstInstrument(Part* part, const QString& partId,
             part->setPan(instr.midiPan);
             part->setVolume(instr.midiVolume);
             part->instrument()->setTrackName(instr.name);
+            part->instrument()->channel(0)->updateInitList();
             }
       else
             qDebug("setFirstInstrument: no instrument found for part '%s'", qPrintable(partId));  // TODO
@@ -454,10 +455,16 @@ static QString findDeleteStaffText(Segment* s, int track)
 static void setPartInstruments(Part* part, const QString& partId,
                                Score* score, const MusicXmlInstrList& il, const MusicXMLDrumset& mxmlDrumset)
       {
+      QString prevInstrId = il.instrument(Fraction(0, 1));
+      if (prevInstrId.isEmpty() && il.size() > 0)
+            prevInstrId = il.begin()->second;
+
       for (auto it = il.cbegin(); it != il.cend(); ++it) {
             Fraction f = (*it).first;
             if (f > Fraction(0, 1)) {
                   auto instrId = (*it).second;
+                  if (instrId == prevInstrId)
+                        continue;
                   int staff = score->staffIdx(part);
                   int track = staff * VOICES;
                   //qDebug("setPartInstruments: instrument change: tick %s (%d) track %d instr '%s'",
@@ -475,6 +482,7 @@ static void setPartInstruments(Part* part, const QString& partId,
                         instr.channel(0)->program = mxmlInstr.midiProgram;
                         instr.channel(0)->pan = mxmlInstr.midiPan;
                         instr.channel(0)->volume = mxmlInstr.midiVolume;
+                        instr.channel(0)->updateInitList();
                         instr.setTrackName(mxmlInstr.name);
                         InstrumentChange* ic = new InstrumentChange(instr, score);
                         ic->setTrack(track);
@@ -483,6 +491,7 @@ static void setPartInstruments(Part* part, const QString& partId,
                         QString text = findDeleteStaffText(segment, track);
                         ic->setXmlText(text.isEmpty() ? "Instrument" : text);
                         segment->add(ic);
+                        prevInstrId = instrId;
                         }
                   }
             }
