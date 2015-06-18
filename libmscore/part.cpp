@@ -311,9 +311,9 @@ int Part::midiPort() const
 //   setMidiChannel(channel, port) to set both
 //---------------------------------------------------------
 
-void Part::setMidiChannel(int ch, int port)
+void Part::setMidiChannel(int ch, int port, int tick)
       {
-      Channel* channel = instrument()->channel(0);
+      Channel* channel = instrument(tick)->channel(0);
       if (channel->channel == -1) {
             // Add new mapping
             MidiMapping mm;
