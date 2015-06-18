@@ -1892,8 +1892,18 @@ void MusicXml::xmlScorePart(QDomElement e, QString id, int& parts)
                         }
                   }
             else if (e.tagName() == "midi-device") {
-                  // TODO
-                  domNotImplemented(e);
+                  if (!e.hasAttribute("port"))
+                        continue;
+                  QString instrId = e.attribute("id","");
+                  QString port = e.attribute("port");
+                  // If instrId is missing, the device assignment affects all
+                  // score-instrument elements in the score-part
+                  if (instrId.isEmpty()) {
+                        for (auto it = drumsets[id].cbegin(); it != drumsets[id].cend(); ++it)
+                              drumsets[id][it.key()].midiPort = port.toInt() - 1;
+                        }
+                  else if (drumsets[id].contains(instrId))
+                        drumsets[id][instrId].midiPort = port.toInt() - 1;
                   }
             else
                   domError(e);
@@ -2206,7 +2216,7 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                   qDebug("xmlPart: initial instrument '%s' not found in part '%s'", qPrintable(instrId), qPrintable(id));
                   instr = drumsets[id].first();
                   }
-            // part->setMidiChannel(instr.midiChannel); not required (is a NOP anyway)
+            part->setMidiChannel(instr.midiChannel, instr.midiPort);
             part->setMidiProgram(instr.midiProgram);
             part->setPan(instr.midiPan);
             part->setVolume(instr.midiVolume);
@@ -2249,7 +2259,6 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                         else {
                               MusicXMLDrumInstrument mxmlInstr = drumsets[id].value(instrId);
                               Instrument instr;
-                              // part->setMidiChannel(instr.midiChannel); not required (is a NOP anyway)
                               instr.channel(0)->program = mxmlInstr.midiProgram;
                               instr.channel(0)->pan = mxmlInstr.midiPan;
                               instr.channel(0)->volume = mxmlInstr.midiVolume;
@@ -2264,6 +2273,9 @@ void MusicXml::xmlPart(QDomElement e, QString id)
                               else
                                     ic->setXmlText(text);
                               segment->add(ic);
+
+                              int key = part->instruments()->rbegin()->first;
+                              part->setMidiChannel(mxmlInstr.midiChannel, mxmlInstr.midiPort, key);
                               }
                         }
                   }
