@@ -109,6 +109,7 @@
               <point time="0" pitch="0" vibrato="0"/>
               <point time="30" pitch="100" vibrato="0"/>
               <point time="60" pitch="100" vibrato="0"/>
+              <lid>7</lid>
               </Bend>
             <pitch>66</pitch>
             <tpc>20</tpc>
@@ -264,6 +265,7 @@
                 <point time="0" pitch="0" vibrato="0"/>
                 <point time="30" pitch="100" vibrato="0"/>
                 <point time="60" pitch="100" vibrato="0"/>
+                <lid>7</lid>
                 </Bend>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -304,6 +306,7 @@
                 <point time="0" pitch="0" vibrato="0"/>
                 <point time="30" pitch="100" vibrato="0"/>
                 <point time="60" pitch="100" vibrato="0"/>
+                <lid>7</lid>
                 </Bend>
               <pitch>66</pitch>
               <tpc>20</tpc>
