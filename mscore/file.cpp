@@ -1585,7 +1585,7 @@ void MuseScore::exportFile()
       else
             name = QString("%1/%2.%3").arg(saveDirectory).arg(cs->name()).arg(saveFormat);
 
-      int idx = fl.indexOf(QRegExp(".+\\(\\*\\." + saveFormat + "\\)"));
+      int idx = fl.indexOf(QRegExp(".+\\(\\*\\." + saveFormat + "\\)"), Qt::CaseInsensitive);
       if (idx != -1)
             fl.move(idx, 0);
       QString filter = fl.join(";;");
@@ -1641,6 +1641,16 @@ bool MuseScore::exportParts()
           saveDirectory = preferences.myScoresPath;
           }
 
+      if (saveDirectory.isEmpty())
+            saveDirectory = preferences.myScoresPath;
+
+      if (lastSaveCopyFormat.isEmpty())
+            lastSaveCopyFormat = settings.value("lastSaveCopyFormat", "pdf").toString();
+      QString saveFormat = lastSaveCopyFormat;
+
+      if (saveFormat.isEmpty())
+            saveFormat = "pdf";
+
       QString scoreName = cs->parentScore() ? cs->parentScore()->name() : cs->name();
       QString name;
 #ifdef Q_OS_WIN
@@ -1648,8 +1658,11 @@ bool MuseScore::exportParts()
             name = QString("%1/%2").arg(saveDirectory).arg(scoreName);
       else
 #endif
-      name = QString("%1/%2.pdf").arg(saveDirectory).arg(scoreName);
+      name = QString("%1/%2.%3").arg(saveDirectory).arg(scoreName).arg(saveFormat);
 
+      int idx = fl.indexOf(QRegExp(".+\\(\\*\\." + saveFormat + "\\)"), Qt::CaseInsensitive);
+      if (idx != -1)
+            fl.move(idx, 0);
       QString filter = fl.join(";;");
       QString fn = getSaveScoreName(saveDialogTitle, name, filter);
       if (fn.isEmpty())
@@ -1657,6 +1670,7 @@ bool MuseScore::exportParts()
 
       QFileInfo fi(fn);
       lastSaveCopyDirectory = fi.absolutePath();
+      lastSaveCopyFormat = fi.suffix();
 
       QString ext = fi.suffix();
       if (ext.isEmpty()) {
