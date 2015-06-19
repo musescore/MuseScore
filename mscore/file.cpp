@@ -398,11 +398,7 @@ bool MuseScore::saveFile(Score* score)
             if (QFileInfo(fname).suffix().isEmpty())
                   fname += ".mscz";
 
-            fn = mscore->getSaveScoreName(
-               tr("MuseScore: Save Score"),
-               fname,
-               filter
-               );
+            fn = mscore->getSaveScoreName(tr("MuseScore: Save Score"), fname, filter);
             if (fn.isEmpty())
                   return false;
             score->fileInfo()->setFile(fn);
@@ -1564,9 +1560,15 @@ void MuseScore::exportFile()
             lastSaveDirectory = settings.value("lastSaveDirectory", preferences.myScoresPath).toString();
       QString saveDirectory = lastSaveCopyDirectory;
 
-      if (saveDirectory.isEmpty()) {
+      if (saveDirectory.isEmpty())
             saveDirectory = preferences.myScoresPath;
-            }
+
+      if (lastSaveCopyFormat.isEmpty())
+            lastSaveCopyFormat = settings.value("lastSaveCopyFormat", "pdf").toString();
+      QString saveFormat = lastSaveCopyFormat;
+
+      if (saveFormat.isEmpty())
+            saveFormat = "pdf";
 
       QString name;
 #ifdef Q_OS_WIN
@@ -1579,10 +1581,13 @@ void MuseScore::exportFile()
       else
 #endif
       if (cs->parentScore())
-            name = QString("%1/%2-%3.pdf").arg(saveDirectory).arg(cs->parentScore()->name()).arg(createDefaultFileName(cs->name()));
+            name = QString("%1/%2-%3.%4").arg(saveDirectory).arg(cs->parentScore()->name()).arg(createDefaultFileName(cs->name())).arg(saveFormat);
       else
-            name = QString("%1/%2.pdf").arg(saveDirectory).arg(cs->name());
+            name = QString("%1/%2.%3").arg(saveDirectory).arg(cs->name()).arg(saveFormat);
 
+      int idx = fl.indexOf(QRegExp(".+\\(\\*\\." + saveFormat + "\\)"));
+      if (idx != -1)
+            fl.move(idx, 0);
       QString filter = fl.join(";;");
       QString fn = getSaveScoreName(saveDialogTitle, name, filter);
       if (fn.isEmpty())
@@ -1590,6 +1595,7 @@ void MuseScore::exportFile()
 
       QFileInfo fi(fn);
       lastSaveCopyDirectory = fi.absolutePath();
+      lastSaveCopyFormat = fi.suffix();
 
       if (fi.suffix().isEmpty())
             QMessageBox::critical(this, tr("MuseScore: Export"), tr("Cannot determine file type"));
