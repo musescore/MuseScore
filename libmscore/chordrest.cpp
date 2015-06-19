@@ -41,6 +41,7 @@
 #include "harmony.h"
 #include "figuredbass.h"
 #include "icon.h"
+#include "utils.h"
 
 namespace Ms {
 
@@ -882,7 +883,19 @@ Element* ChordRest::drop(const DropData& data)
                   break;
 
             case Element::Type::HARMONY:
-                  static_cast<Harmony*>(e)->render();
+                  {
+                  // transpose
+                  Harmony* harmony = static_cast<Harmony*>(e);
+                  Interval interval = staff()->part()->instrument()->transpose();
+                  if (!score()->styleB(StyleIdx::concertPitch) && !interval.isZero()) {
+                        interval.flip();
+                        int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
+                        int baseTpc = transposeTpc(harmony->baseTpc(), interval, true);
+                        score()->undoTransposeHarmony(harmony, rootTpc, baseTpc);
+                        }
+                  // render
+                  harmony->render();
+                  }
                   // fall through
             case Element::Type::TEXT:
             case Element::Type::STAFF_TEXT:
