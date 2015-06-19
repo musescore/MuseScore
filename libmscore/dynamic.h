@@ -108,8 +108,6 @@ class Dynamic : public Text {
       void setDynRange(Range t) { _dynRange = t;    }
       void undoSetDynRange(Range t);
 
-      virtual QLineF dragAnchor() const override;
-
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool     setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID id) const override;
