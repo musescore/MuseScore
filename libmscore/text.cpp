@@ -2433,6 +2433,27 @@ void Text::dragTo(const QPointF& p)
       }
 
 //---------------------------------------------------------
+//   dragAnchor
+//---------------------------------------------------------
+
+QLineF Text::dragAnchor() const
+      {
+      qreal xp = 0.0;
+      for (Element* e = parent(); e; e = e->parent())
+            xp += e->x();
+      qreal yp;
+      if (parent()->type() == Element::Type::SEGMENT)
+            yp = static_cast<Segment*>(parent())->measure()->system()->staffYpage(staffIdx());
+      else
+            yp = parent()->canvasPos().y();
+      QPointF p1(xp, yp);
+      QPointF p2 = canvasPos();
+      if (layoutToParentWidth())
+            p2 += bbox().topLeft();
+      return QLineF(p1, p2);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
