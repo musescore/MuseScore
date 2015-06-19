@@ -796,7 +796,7 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
             qDebug("no application mime data");
             return PasteStatus::NO_MIME;
             }
-      if ((_selection.isSingle()|| _selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
+      if ((_selection.isSingle() || _selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
             QByteArray data(ms->data(mimeSymbolFormat));
             XmlReader e(data);
             QPointF dragOffset;
