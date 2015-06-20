@@ -308,6 +308,8 @@ class Text : public Element {
       void setAbove(bool val) {  textStyle().setYoff(val ? -2.0 : 7.0); }
       void dragTo(const QPointF&);
 
+      virtual QLineF dragAnchor() const override;
+
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant& v);
       virtual QVariant propertyDefault(P_ID id) const;
