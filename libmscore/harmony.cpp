@@ -1468,24 +1468,6 @@ void Harmony::textStyleChanged()
       }
 
 //---------------------------------------------------------
-//   dragAnchor
-//---------------------------------------------------------
-
-QLineF Harmony::dragAnchor() const
-      {
-      qreal xp = 0.0;
-      for (Element* e = parent(); e; e = e->parent())
-            xp += e->x();
-      qreal yp;
-      if (parent()->type() == Element::Type::SEGMENT)
-            yp = static_cast<Segment*>(parent())->measure()->system()->staffYpage(staffIdx());
-      else
-            yp = parent()->canvasPos().y();
-      QPointF p(xp, yp);
-      return QLineF(p, canvasPos());
-      }
-
-//---------------------------------------------------------
 //   extensionName
 //---------------------------------------------------------
 
