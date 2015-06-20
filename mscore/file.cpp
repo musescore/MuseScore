@@ -619,13 +619,18 @@ void MuseScore::newFile()
                                           }
                                     }
                               }
+
+                        // determined if this staff is linked to previous so we can reuse rests
+                        bool linkedToPrevious = staffIdx && staff->isLinked(_score->staff(staffIdx - 1));
                         if (measure->timesig() != measure->len()) {
+                              if (!linkedToPrevious)
+                                    puRests.clear();
                               QList<TDuration> dList = toDurationList(measure->len(), false);
                               if (!dList.isEmpty()) {
                                     int ltick = tick;
                                     int k = 0;
                                     foreach (TDuration d, dList) {
-                                          if (k < puRests.count() && staff->linkedStaves())
+                                          if (k < puRests.count())
                                                 rest = static_cast<Rest*>(puRests[k]->linkedClone());
                                           else {
                                                 rest = new Rest(score, d);
@@ -640,11 +645,9 @@ void MuseScore::newFile()
                                           k++;
                                           }
                                     }
-                              if (!staff->linkedStaves())
-                                    puRests.clear();
                               }
                         else {
-                              if (rest && staff->linkedStaves())
+                              if (linkedToPrevious && rest)
                                     rest = static_cast<Rest*>(rest->linkedClone());
                               else
                                     rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
@@ -653,8 +656,6 @@ void MuseScore::newFile()
                               rest->setTrack(staffIdx * VOICES);
                               Segment* seg = measure->getSegment(rest, tick);
                               seg->add(rest);
-                              if (!staff->linkedStaves())
-                                    rest = nullptr;
                               }
                         }
                   }
