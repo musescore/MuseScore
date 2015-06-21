@@ -24,7 +24,7 @@
       <score-instrument id="P1-I1">
         <instrument-name>Alto</instrument-name>
         </score-instrument>
-      <midi-device id="P1-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P1-I1">
         <midi-channel>1</midi-channel>
         <midi-program>53</midi-program>

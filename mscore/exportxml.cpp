@@ -4464,19 +4464,36 @@ void ExportMusicXml::write(QIODevice* dev)
             else {
                   MxmlReverseInstrumentMap rim;
                   initReverseInstrMap(rim, instrMap);
-                  foreach(int instNr, rim.keys()) {
+                  foreach(int instNr, rim.keys())
                         scoreInstrument(xml, idx + 1, instNr + 1, MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()));
-                        }
+
+                  bool sameMIDIPorts = true;
+                  int firstMIDIPort = part->midiPort();
                   for (auto ii = rim.constBegin(); ii != rim.constEnd(); ii++) {
-                        int instNr = ii.key();
-                        int midiPort = part->midiPort() + 1;
-                        if (ii.value()->channel().size() > 0)
-                              midiPort = score()->midiMapping(ii.value()->channel(0)->channel)->port + 1;
-                        if (midiPort >= 1 && midiPort <= 16)
-                              xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 1)).arg(midiPort), "");
-                        else
-                              xml.tag(QString("midi-device %1").arg(instrId(idx+1, instNr + 1)), "");
-                        midiInstrument(xml, idx + 1, instNr + 1, rim.value(instNr), _score);
+                        if (ii.value()->channel().size() > 0) {
+                              if (firstMIDIPort != score()->midiMapping(ii.value()->channel(0)->channel)->port) {
+                                    sameMIDIPorts = false;
+                                    break;
+                                    }
+                              }
+                        }
+                  // If instruments have the same MIDI port, write a single midi-device tag without id.
+                  // The device assignment affects all score-instrument elements in the score-part.
+                  if (sameMIDIPorts) {
+                        xml.tag(QString("midi-device port=\"%1\"").arg(firstMIDIPort + 1), "");
+                        for (auto ii = rim.constBegin(); ii != rim.constEnd(); ii++)
+                              midiInstrument(xml, idx + 1, ii.key() + 1, rim.value(ii.key()), _score);
+                        }
+                  else {
+                        for (auto ii = rim.constBegin(); ii != rim.constEnd(); ii++) {
+                              int instNr = ii.key();
+                              int midiPort = part->midiPort() + 1;
+                              if (ii.value()->channel().size() > 0)
+                                    midiPort = score()->midiMapping(ii.value()->channel(0)->channel)->port + 1;
+                              if (midiPort >= 1 && midiPort <= 16)
+                                    xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 1)).arg(midiPort), "");
+                              midiInstrument(xml, idx + 1, instNr + 1, rim.value(instNr), _score);
+                              }
                         }
                   }
 

@@ -19,7 +19,7 @@
       <score-instrument id="P1-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-device id="P1-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P1-I1">
         <midi-channel>1</midi-channel>
         <midi-program>1</midi-program>
@@ -33,7 +33,7 @@
       <score-instrument id="P2-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-device id="P2-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P2-I1">
         <midi-channel>2</midi-channel>
         <midi-program>1</midi-program>
@@ -47,7 +47,7 @@
       <score-instrument id="P3-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-device id="P3-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P3-I1">
         <midi-channel>3</midi-channel>
         <midi-program>1</midi-program>
@@ -61,7 +61,7 @@
       <score-instrument id="P4-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-device id="P4-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P4-I1">
         <midi-channel>4</midi-channel>
         <midi-program>1</midi-program>
@@ -75,7 +75,7 @@
       <score-instrument id="P5-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-device id="P5-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P5-I1">
         <midi-channel>5</midi-channel>
         <midi-program>1</midi-program>
@@ -89,7 +89,7 @@
       <score-instrument id="P6-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-device id="P6-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P6-I1">
         <midi-channel>6</midi-channel>
         <midi-program>1</midi-program>
@@ -103,7 +103,7 @@
       <score-instrument id="P7-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-device id="P7-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P7-I1">
         <midi-channel>7</midi-channel>
         <midi-program>1</midi-program>
@@ -117,7 +117,7 @@
       <score-instrument id="P8-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-device id="P8-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P8-I1">
         <midi-channel>8</midi-channel>
         <midi-program>1</midi-program>
@@ -131,7 +131,7 @@
       <score-instrument id="P9-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-device id="P9-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P9-I1">
         <midi-channel>9</midi-channel>
         <midi-program>1</midi-program>
@@ -145,7 +145,7 @@
       <score-instrument id="P10-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-device id="P10-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P10-I1">
         <midi-channel>11</midi-channel>
         <midi-program>1</midi-program>
@@ -159,7 +159,7 @@
       <score-instrument id="P11-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-device id="P11-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P11-I1">
         <midi-channel>12</midi-channel>
         <midi-program>1</midi-program>
@@ -173,7 +173,7 @@
       <score-instrument id="P12-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-device id="P12-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P12-I1">
         <midi-channel>13</midi-channel>
         <midi-program>1</midi-program>
@@ -187,7 +187,7 @@
       <score-instrument id="P13-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-device id="P13-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P13-I1">
         <midi-channel>14</midi-channel>
         <midi-program>1</midi-program>
@@ -201,7 +201,7 @@
       <score-instrument id="P14-I1">
         <instrument-name>Piano</instrument-name>
         </score-instrument>
-      <midi-device id="P14-I1" port="1"></midi-device>
+      <midi-device port="1"></midi-device>
       <midi-instrument id="P14-I1">
         <midi-channel>15</midi-channel>
         <midi-program>1</midi-program>
