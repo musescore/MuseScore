@@ -73,6 +73,7 @@ public:
       void directionType(const Fraction cTime, QList<MxmlOctaveShiftDesc>& starts, QList<MxmlOctaveShiftDesc>& stops);
       void handleOctaveShift(const Fraction cTime, const QString& type, short size, MxmlOctaveShiftDesc& desc);
       void note(const QString& partId, const Fraction cTime, Fraction& dura, VoiceOverlapDetector& vod);
+      void notePrintSpacingNo(Fraction& dura);
       void duration(Fraction& dura);
       void forward(Fraction& dura);
       void backup(Fraction& dura);
