@@ -820,7 +820,9 @@ bool Staff::isLinked(Staff* staff)
 //---------------------------------------------------------
 //   primaryStaff
 ///   if there are linked staves, the primary staff is
-///   the one who is played back
+///   the one who is played back and it's not a tab staff
+///   because we don't have enough information  to play
+///   e.g ornaments. NOTE: it's not necessarily the top staff!
 //---------------------------------------------------------
 
 bool Staff::primaryStaff() const
@@ -828,8 +830,10 @@ bool Staff::primaryStaff() const
       QList<Staff*> s;
       if (!_linkedStaves)
             return true;
+      if (isTabStaff())
+            return false;
       foreach(Staff* staff, _linkedStaves->staves()) {
-            if (staff->score() == score())
+            if (staff->score() == score() && !staff->isTabStaff())
                   s.append(staff);
             }
       return s.front() == this;

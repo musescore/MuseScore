@@ -1211,7 +1211,7 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
             Note *note = chord->notes()[k];
             if ( noteHasGlissando(note))
                   renderGlissando(events, note);
-            else {
+            else if (chord->staff()->isPitchedStaff()) {
                   for (Articulation* a : chord->articulations()) {
                         if ( false == a->playArticulation())
                               continue;
