@@ -1800,24 +1800,33 @@ QList<SymId> Element::toTimeSigString(const QString& s) const
       {
       QList<SymId> d;
       for (int i = 0; i < s.size(); ++i) {
-            switch (s[i].toLatin1()) {
-                  case '+': d += SymId::timeSigPlusSmall; break;
-                  case '0': d += SymId::timeSig0; break;
-                  case '1': d += SymId::timeSig1; break;
-                  case '2': d += SymId::timeSig2; break;
-                  case '3': d += SymId::timeSig3; break;
-                  case '4': d += SymId::timeSig4; break;
-                  case '5': d += SymId::timeSig5; break;
-                  case '6': d += SymId::timeSig6; break;
-                  case '7': d += SymId::timeSig7; break;
-                  case '8': d += SymId::timeSig8; break;
-                  case '9': d += SymId::timeSig9; break;
-                  case 'C': d += SymId::timeSigCommon; break;
-                  case 'O': d += SymId::mensuralProlation2; break;
-                  case '(': d += SymId::timeSigParensLeftSmall; break;
-                  case ')': d += SymId::timeSigParensRightSmall; break;
-                  case '\xA2': d += SymId::timeSigCutCommon; break;    // '¢'
-                  case '\xD8': d += SymId::mensuralProlation3; break;  // 'Ø'
+            switch (s[i].unicode()) {
+                  case 43: d += SymId::timeSigPlusSmall; break; // '+'
+                  case 48: d += SymId::timeSig0; break;         // '0'
+                  case 49: d += SymId::timeSig1; break;         // '1'
+                  case 50: d += SymId::timeSig2; break;         // '2'
+                  case 51: d += SymId::timeSig3; break;         // '3'
+                  case 52: d += SymId::timeSig4; break;         // '4'
+                  case 53: d += SymId::timeSig5; break;         // '5'
+                  case 54: d += SymId::timeSig6; break;         // '6'
+                  case 55: d += SymId::timeSig7; break;         // '7'
+                  case 56: d += SymId::timeSig8; break;         // '8'
+                  case 57: d += SymId::timeSig9; break;         // '9'
+                  case 67: d += SymId::timeSigCommon; break;    // 'C'
+                  case 40: d += SymId::timeSigParensLeftSmall; break;  // '('
+                  case 41: d += SymId::timeSigParensRightSmall; break; // ')'
+                  case 162: d += SymId::timeSigCutCommon; break;    // '¢'
+                  case 59664: d += SymId::mensuralProlation1; break;
+                  case 79:                                          // 'O'
+                  case 59665: d += SymId::mensuralProlation2; break;
+                  case 216:                                        // 'Ø'
+                  case 59666: d += SymId::mensuralProlation3; break;
+                  case 59667: d += SymId::mensuralProlation4; break;
+                  case 59668: d += SymId::mensuralProlation5; break;
+                  case 59670: d += SymId::mensuralProlation7; break;
+                  case 59671: d += SymId::mensuralProlation8; break;
+                  case 59673: d += SymId::mensuralProlation10; break;
+                  case 59674: d += SymId::mensuralProlation11; break;
                   default:  break;  // d += s[i]; break;
                   }
             }
