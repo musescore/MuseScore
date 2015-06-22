@@ -1673,9 +1673,10 @@ void Note::layout()
 
 void Note::layout2()
       {
-      // this is now done in Score::layoutChords3()
+      // for standard staves this is done in Score::layoutChords3()
       // so that the results are available there
-      // adjustReadPos();
+      if (staff()->isTabStaff())
+            adjustReadPos();
 
       int dots = chord()->dots();
       if (dots) {
