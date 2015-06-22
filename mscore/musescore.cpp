@@ -2648,6 +2648,7 @@ void MuseScore::writeSettings()
             settings.setValue(QString("score-%1").arg(idx), scoreList[idx]->fileInfo()->absoluteFilePath());
 
       settings.setValue("lastSaveCopyDirectory", lastSaveCopyDirectory);
+      settings.setValue("lastSaveCopyFormat", lastSaveCopyFormat);
       settings.setValue("lastSaveDirectory", lastSaveDirectory);
 
       settings.beginGroup("MainWindow");
