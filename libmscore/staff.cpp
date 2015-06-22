@@ -827,16 +827,21 @@ bool Staff::isLinked(Staff* staff)
 
 bool Staff::primaryStaff() const
       {
-      QList<Staff*> s;
       if (!_linkedStaves)
             return true;
-      if (isTabStaff())
-            return false;
+      QList<Staff*> s;
+      QList<Staff*> ss;
       foreach(Staff* staff, _linkedStaves->staves()) {
-            if (staff->score() == score() && !staff->isTabStaff())
+            if (staff->score() == score()) {
                   s.append(staff);
+                  if (!staff->isTabStaff())
+                        ss.append(staff);
+                  }
             }
-      return s.front() == this;
+      if (s.size() == 1) // the linked staves are in different scores
+      	return s.front() == this;
+      else // return a non tab linked staff in this score
+      	return ss.front() == this;
       }
 
 //---------------------------------------------------------
