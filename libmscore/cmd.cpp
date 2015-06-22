@@ -525,6 +525,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 
                   ChordRest* ncr;
                   Note* note = 0;
+                  Tie* addTie = 0;
                   if (nval.pitch == -1) {
                         nr = ncr = new Rest(this);
                         nr->setTrack(track);
@@ -537,6 +538,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                         if (tie) {
                               tie->setEndNote(note);
                               note->setTieBack(tie);
+                              addTie = tie;
                               }
                         Chord* chord = new Chord(this);
                         chord->setTrack(track);
@@ -555,6 +557,8 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                         }
                   ncr->setTuplet(cr ? cr->tuplet() : 0);
                   undoAddCR(ncr, measure, tick);
+                  if (addTie)
+                        undoAddElement(addTie);
                   _playNote = true;
                   segment = ncr->segment();
                   tick += ncr->actualTicks();
