@@ -124,6 +124,7 @@
               <point time="40" pitch="0" vibrato="0"/>
               <point time="50" pitch="100" vibrato="0"/>
               <point time="60" pitch="100" vibrato="0"/>
+              <lid>8</lid>
               </Bend>
             <Tie id="2">
               <lid>9</lid>
@@ -175,6 +176,7 @@
               <point time="30" pitch="100" vibrato="0"/>
               <point time="45" pitch="0" vibrato="0"/>
               <point time="60" pitch="0" vibrato="0"/>
+              <lid>18</lid>
               </Bend>
             <pitch>57</pitch>
             <tpc>17</tpc>
@@ -191,6 +193,7 @@
               <point time="0" pitch="0" vibrato="0"/>
               <point time="30" pitch="100" vibrato="0"/>
               <point time="60" pitch="100" vibrato="0"/>
+              <lid>21</lid>
               </Bend>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -208,6 +211,7 @@
             <Bend>
               <point time="0" pitch="100" vibrato="0"/>
               <point time="60" pitch="100" vibrato="0"/>
+              <lid>25</lid>
               </Bend>
             <pitch>57</pitch>
             <tpc>17</tpc>
@@ -225,6 +229,7 @@
               <point time="20" pitch="100" vibrato="0"/>
               <point time="40" pitch="0" vibrato="0"/>
               <point time="60" pitch="0" vibrato="0"/>
+              <lid>28</lid>
               </Bend>
             <pitch>53</pitch>
             <tpc>13</tpc>
@@ -383,6 +388,7 @@
                 <point time="40" pitch="0" vibrato="0"/>
                 <point time="50" pitch="100" vibrato="0"/>
                 <point time="60" pitch="100" vibrato="0"/>
+                <lid>8</lid>
                 </Bend>
               <Tie id="4">
                 <lid>9</lid>
@@ -434,6 +440,7 @@
                 <point time="30" pitch="100" vibrato="0"/>
                 <point time="45" pitch="0" vibrato="0"/>
                 <point time="60" pitch="0" vibrato="0"/>
+                <lid>18</lid>
                 </Bend>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -450,6 +457,7 @@
                 <point time="0" pitch="0" vibrato="0"/>
                 <point time="30" pitch="100" vibrato="0"/>
                 <point time="60" pitch="100" vibrato="0"/>
+                <lid>21</lid>
                 </Bend>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -467,6 +475,7 @@
               <Bend>
                 <point time="0" pitch="100" vibrato="0"/>
                 <point time="60" pitch="100" vibrato="0"/>
+                <lid>25</lid>
                 </Bend>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -484,6 +493,7 @@
                 <point time="20" pitch="100" vibrato="0"/>
                 <point time="40" pitch="0" vibrato="0"/>
                 <point time="60" pitch="0" vibrato="0"/>
+                <lid>28</lid>
                 </Bend>
               <pitch>53</pitch>
               <tpc>13</tpc>
@@ -528,6 +538,7 @@
                 <point time="40" pitch="0" vibrato="0"/>
                 <point time="50" pitch="100" vibrato="0"/>
                 <point time="60" pitch="100" vibrato="0"/>
+                <lid>8</lid>
                 </Bend>
               <Tie id="6">
                 <lid>9</lid>
@@ -579,6 +590,7 @@
                 <point time="30" pitch="100" vibrato="0"/>
                 <point time="45" pitch="0" vibrato="0"/>
                 <point time="60" pitch="0" vibrato="0"/>
+                <lid>18</lid>
                 </Bend>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -595,6 +607,7 @@
                 <point time="0" pitch="0" vibrato="0"/>
                 <point time="30" pitch="100" vibrato="0"/>
                 <point time="60" pitch="100" vibrato="0"/>
+                <lid>21</lid>
                 </Bend>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -612,6 +625,7 @@
               <Bend>
                 <point time="0" pitch="100" vibrato="0"/>
                 <point time="60" pitch="100" vibrato="0"/>
+                <lid>25</lid>
                 </Bend>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -629,6 +643,7 @@
                 <point time="20" pitch="100" vibrato="0"/>
                 <point time="40" pitch="0" vibrato="0"/>
                 <point time="60" pitch="0" vibrato="0"/>
+                <lid>28</lid>
                 </Bend>
               <pitch>53</pitch>
               <tpc>13</tpc>
