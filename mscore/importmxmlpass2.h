@@ -105,6 +105,7 @@ public:
       Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime,
                  Fraction& dura, QString& currentVoice, GraceChordList& gcl, int& gac,
                  Beam*& beam, FiguredBassList& fbl, int& alt);
+      void notePrintSpacingNo(Fraction& dura);
       FiguredBassItem* figure(const int idx, const bool paren);
       FiguredBass* figuredBass();
       FretDiagram* frame();
