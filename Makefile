@@ -20,6 +20,10 @@
 
 REVISION  = `cat mscore/revision.h`
 CPUS      = `grep -c processor /proc/cpuinfo`
+# Avoid build errors when processor=0 (as in m68k)
+ifeq ($(CPUS), 0)
+  CPUS=1
+endif
 
 PREFIX    = "/usr/local"
 VERSION   = "2.0.2b-${REVISION}"
