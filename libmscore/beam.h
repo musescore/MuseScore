@@ -142,6 +142,8 @@ class Beam : public Element {
 
       QPointF beamPos() const;
       void setBeamPos(const QPointF& bp);
+      
+      qreal beamDist() const              { return _beamDist; }
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
