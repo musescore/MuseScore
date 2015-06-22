@@ -18,6 +18,7 @@
 #include "ui_inspector_element.h"
 #include "ui_inspector_break.h"
 #include "ui_inspector_vbox.h"
+#include "ui_inspector_tbox.h"
 #include "ui_inspector_hbox.h"
 #include "ui_inspector_articulation.h"
 #include "ui_inspector_spacer.h"
@@ -86,6 +87,18 @@ class InspectorVBox : public InspectorBase {
 
    public:
       InspectorVBox(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorTBox
+//---------------------------------------------------------
+
+class InspectorTBox : public InspectorBase {
+      Q_OBJECT
+      Ui::InspectorTBox tb;
+
+   public:
+      InspectorTBox(QWidget* parent);
       };
 
 //---------------------------------------------------------
