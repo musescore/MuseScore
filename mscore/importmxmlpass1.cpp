@@ -2587,6 +2587,11 @@ void MusicXMLParserPass1::note(const QString& partId,
       Q_ASSERT(_e.isStartElement() && _e.name() == "note");
       //logDebugTrace("MusicXMLParserPass1::note");
 
+      if (_e.attributes().value("print-spacing") == "no") {
+            notePrintSpacingNo(dura);
+            return;
+            }
+
       //float alter = 0;
       bool chord = false;
       int dots = 0;
@@ -2725,6 +2730,47 @@ void MusicXMLParserPass1::note(const QString& partId,
             // TODO
             vod.addNote(sTime.ticks(), (sTime + dura).ticks(), voice, staff);
             }
+      }
+
+//---------------------------------------------------------
+//   notePrintSpacingNo
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/note node for a note with print-spacing="no".
+ These are handled like a forward: only moving the time forward.
+ */
+
+void MusicXMLParserPass1::notePrintSpacingNo(Fraction& dura)
+      {
+      Q_ASSERT(_e.isStartElement() && _e.name() == "note");
+      //logDebugTrace("MusicXMLParserPass1::notePrintSpacingNo");
+
+      bool chord = false;
+      bool grace = false;
+
+      while (_e.readNextStartElement()) {
+            if (_e.name() == "chord") {
+                  chord = true;
+                  _e.readNext();
+                  }
+            else if (_e.name() == "duration")
+                  duration(dura);
+            else if (_e.name() == "grace") {
+                  grace = true;
+                  _e.readNext();
+                  }
+            else
+                  _e.skipCurrentElement();        // skip but don't log
+            }
+
+      // don't count chord or grace note duration
+      // note that this does not check the MusicXML requirement that notes in a chord
+      // cannot have a duration longer than the first note in the chord
+      if (chord || grace)
+            dura.set(0, 1);
+
+      Q_ASSERT(_e.isEndElement() && _e.name() == "note");
       }
 
 //---------------------------------------------------------
