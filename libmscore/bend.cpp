@@ -259,6 +259,7 @@ void Bend::write(Xml& xml) const
             xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
                .arg(v.time).arg(v.pitch).arg(v.vibrato));
             }
+      Element::writeProperties(xml);
       xml.etag();
       }
 
@@ -277,7 +278,7 @@ void Bend::read(XmlReader& e)
                   _points.append(pv);
                   e.readNext();
                   }
-            else
+            else if (!Element::readProperties(e))
                   e.unknown();
             }
       }
