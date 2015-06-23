@@ -642,7 +642,7 @@ InspectorBend::InspectorBend(QWidget* parent)
       g.setupUi(addWidget());
 
       iList = {
-            { P_ID::PLAY_BEND, 0, 0, g.playBend, g.resetPlayBend }
+            { P_ID::PLAY, 0, 0, g.playBend, g.resetPlayBend }
             };
 
       mapSignals();

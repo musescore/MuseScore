@@ -228,7 +228,7 @@
               <point time="0" pitch="0" vibrato="0"/>
               <point time="15" pitch="100" vibrato="0"/>
               <point time="60" pitch="100" vibrato="0"/>
-              <playBend>0</playBend>
+              <play>0</play>
               </Bend>
             <pitch>62</pitch>
             <tpc>16</tpc>
@@ -314,7 +314,7 @@
               <point time="0" pitch="0" vibrato="0"/>
               <point time="15" pitch="100" vibrato="0"/>
               <point time="60" pitch="100" vibrato="0"/>
-              <playBend>0</playBend>
+              <play>0</play>
               </Bend>
             <pitch>50</pitch>
             <tpc>16</tpc>

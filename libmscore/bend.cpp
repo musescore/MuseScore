@@ -260,7 +260,7 @@ void Bend::write(Xml& xml) const
             xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
                .arg(v.time).arg(v.pitch).arg(v.vibrato));
             }
-      writeProperty(xml, P_ID::PLAY_BEND);
+      writeProperty(xml, P_ID::PLAY);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -280,7 +280,7 @@ void Bend::read(XmlReader& e)
                   _points.append(pv);
                   e.readNext();
                   }
-            else if (e.name() == "playBend") {
+            else if (e.name() == "play") {
                   setPlayBend(e.readBool());
                   }
             else if (!Element::readProperties(e))
@@ -295,7 +295,7 @@ void Bend::read(XmlReader& e)
 QVariant Bend::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_ID::PLAY_BEND:
+            case P_ID::PLAY:
                   return bool(playBend());
             default:
                   return Element::getProperty(propertyId);
@@ -309,7 +309,7 @@ QVariant Bend::getProperty(P_ID propertyId) const
 bool Bend::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::PLAY_BEND:
+            case P_ID::PLAY:
                  setPlayBend(v.toBool());
                  break;
             default:
@@ -326,7 +326,7 @@ bool Bend::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Bend::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
-            case P_ID::PLAY_BEND:
+            case P_ID::PLAY:
                   return true;
             default:
                   return Element::propertyDefault(propertyId);
