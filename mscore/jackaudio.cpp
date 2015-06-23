@@ -301,6 +301,10 @@ static int graph_callback(void*)
       return 0;
       }
 
+//---------------------------------------------------------
+//   timebase
+//---------------------------------------------------------
+
 void JackAudio::timebase(jack_transport_state_t state, jack_nframes_t /*nframes*/, jack_position_t *pos, int /*new_pos*/, void *arg)
       {
       JackAudio* audio = (JackAudio*)arg;
@@ -639,6 +643,7 @@ void JackAudio::midiRead()
       }
 
 //---------------------------------------------------------
+//   handleTimeSigTempoChanged
 //   Called after tempo or time signature
 //   changed while playback
 //---------------------------------------------------------

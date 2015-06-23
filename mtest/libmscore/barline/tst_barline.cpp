@@ -23,7 +23,7 @@
 using namespace Ms;
 
 //---------------------------------------------------------
-//   TestClef
+//   TestBarline
 //---------------------------------------------------------
 
 class TestBarline : public QObject, public MTest
