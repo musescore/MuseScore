@@ -16,6 +16,7 @@
 
 #include "inspectorBase.h"
 #include "ui_inspector_element.h"
+#include "ui_inspector_bend.h"
 #include "ui_inspector_break.h"
 #include "ui_inspector_vbox.h"
 #include "ui_inspector_tbox.h"
@@ -239,6 +240,20 @@ class InspectorAccidental : public InspectorBase {
 
    public:
       InspectorAccidental(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorBend
+//---------------------------------------------------------
+
+class InspectorBend : public InspectorBase {
+      Q_OBJECT
+
+      UiInspectorElement e;
+      Ui::InspectorBend g;
+
+   public:
+      InspectorBend(QWidget* parent);
       };
 
 //---------------------------------------------------------

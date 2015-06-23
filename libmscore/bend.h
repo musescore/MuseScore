@@ -31,6 +31,7 @@ class Bend : public Element {
       qreal _lw;
       QPointF notePos;
       qreal noteWidth;
+      bool _playBend;
 
    public:
       Bend(Score* s);
@@ -43,6 +44,13 @@ class Bend : public Element {
       QList<PitchValue>& points()                { return _points; }
       const QList<PitchValue>& points() const    { return _points; }
       void setPoints(const QList<PitchValue>& p) { _points = p;    }
+      bool playBend() const          { return _playBend; }
+      void setPlayBend(bool v)       { _playBend = v;    }
+
+      // property methods
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
       };
 
 
