@@ -195,7 +195,7 @@ MyWebView::MyWebView(QWidget *parent):
 
       setZoomFactor(guiScaling);
 
-      if(!enableExperimental)
+      if (!enableExperimental)
             setContextMenuPolicy(Qt::NoContextMenu);
 
       //set cookie jar for persistent cookies
