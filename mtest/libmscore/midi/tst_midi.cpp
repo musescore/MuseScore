@@ -93,6 +93,8 @@ void TestMidi::events_data()
       QTest::newRow("testGraceBefore") <<  "testGraceBefore";
       QTest::newRow("testKantataBWV140Excerpts") <<  "testKantataBWV140Excerpts";
       QTest::newRow("testTrillTransposingInstrument") <<  "testTrillTransposingInstrument";
+      QTest::newRow("testAndanteExcerpts") <<  "testAndanteExcerpts";
+
       // glissando
       QTest::newRow("testGlissando") << "testGlissando";
       QTest::newRow("testGlissandoAcrossStaffs") << "testGlissandoAcrossStaffs";

@@ -961,7 +961,8 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
 
 void renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, int tickspernote,
    const vector<int> & prefix, const vector<int> & body,
-   bool repeatp, bool sustainp, const vector<int> & suffix)
+   bool repeatp, bool sustainp, const vector<int> & suffix,
+   int minticksperquarter=16, int maxticksperquarter=12)
       {
       events->clear();
       Chord *chord = note->chord();
@@ -979,13 +980,19 @@ void renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
             return;
 
       qreal ticksPerSecond = chord->score()->tempo(chord->tick()) * MScore::division;
+      
       // I am heuristically declaring that the fastest possible trill is a 32nd note of a 120 bpm metronome.
       // This corresponds to 16 notes per second. 16 = 32 / (120 / 60).
       // Thus minduration = ticksPerSecond / 16.
-      int mintickspernote = int(ticksPerSecond / 16); // minimum number of ticks for the shortest note in a trill or other articulation
-
+      int mintickspernote = int(ticksPerSecond / minticksperquarter); // minimum number of ticks for the shortest note in a trill or other articulation
       // is the requested duration smaller than the minimum, if so, increase it to the minimum.
       tickspernote = max(tickspernote, mintickspernote);
+
+      if (maxticksperquarter > 0) {
+            // for tempos which are very slow, such as adagio, we may need to speed up the trill, to make it sound reasonable.
+            int maxtickspernote = int(ticksPerSecond / maxticksperquarter);
+            tickspernote = min(tickspernote, maxtickspernote);
+            }
 
       // calculate whether to shorten the duration value.
       if ( tickspernote*(p + b + s) <= maxticks )
@@ -1047,6 +1054,7 @@ void renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
             ontime = makeEvent(suffix[j], ontime, tieForward(j,suffix));
       }
 
+     
 //---------------------------------------------------------
 //   noteHasGlissando
 // true if note is the end of a glissando
@@ -1123,7 +1131,7 @@ void renderGlissando(NoteEventList* events, Note *notestart)
                                           body.push_back(p - pitchstart);
                                     }
                               }
-                        renderNoteArticulation(events, notestart, true, MScore::division, empty, body, false, true, empty);
+                        renderNoteArticulation(events, notestart, true, MScore::division, empty, body, false, true, empty, 16, 0);
                         }
                   }
             }
