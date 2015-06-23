@@ -165,7 +165,6 @@ enum class P_ID : unsigned char {
 
       TIME_STRETCH,
       ORNAMENT_STYLE,
-      PLAY_ARTICULATION,
       TIMESIG,
       TIMESIG_GLOBAL,
       TIMESIG_STRETCH,
@@ -223,7 +222,6 @@ enum class P_ID : unsigned char {
       TRACK,
 
       GLISSANDO_STYLE,
-      PLAY_GLISSANDO,
       END
       };
 
