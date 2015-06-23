@@ -170,7 +170,6 @@ static const PropertyData propertyList[] = {
 
       { P_ID::TIME_STRETCH,        false, 0,               P_TYPE::REAL     },
       { P_ID::ORNAMENT_STYLE,      false, "ornamentStyle", P_TYPE::ORNAMENT_STYLE},
-      { P_ID::PLAY_ARTICULATION,   false, "playArticulation", P_TYPE::BOOL},
 
       { P_ID::TIMESIG,             false, 0,               P_TYPE::FRACTION },
       { P_ID::TIMESIG_GLOBAL,      false, 0,               P_TYPE::FRACTION },
@@ -203,8 +202,8 @@ static const PropertyData propertyList[] = {
       { P_ID::NO_OFFSET,           false, "noOffset",              P_TYPE::INT  },
       { P_ID::IRREGULAR,           true,  "irregular",             P_TYPE::BOOL },
       { P_ID::ANCHOR,              false,  "anchor",               P_TYPE::INT },
-      { P_ID::SLUR_UOFF1,          false,  "o1",                   P_TYPE::POINT  },
 
+      { P_ID::SLUR_UOFF1,          false,  "o1",                   P_TYPE::POINT  },
       { P_ID::SLUR_UOFF2,          false,  "o2",                   P_TYPE::POINT  },
       { P_ID::SLUR_UOFF3,          false,  "o3",                   P_TYPE::POINT  },
       { P_ID::SLUR_UOFF4,          false,  "o4",                   P_TYPE::POINT  },
@@ -229,7 +228,6 @@ static const PropertyData propertyList[] = {
       { P_ID::TRACK,               false, 0,                       P_TYPE::INT },
 
       { P_ID::GLISSANDO_STYLE,     false, "glissandoStyle",        P_TYPE::GLISSANDO_STYLE},
-      { P_ID::PLAY_GLISSANDO,      false, "playGlissando",         P_TYPE::BOOL},
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };
 

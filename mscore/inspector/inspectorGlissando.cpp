@@ -37,7 +37,7 @@ InspectorGlissando::InspectorGlissando(QWidget* parent)
             { P_ID::GLISS_TEXT,      0, false, g.text,     g.resetText     },
             { P_ID::GLISS_SHOW_TEXT, 0, false, g.showText, g.resetShowText },
             { P_ID::GLISSANDO_STYLE, 0, false, g.glissandoStyle, g.resetGlissandoStyle},
-            { P_ID::PLAY_GLISSANDO,  0, 0,     g.playGlissando, g.resetPlayGlissando}
+            { P_ID::PLAY,            0, 0,     g.playGlissando, g.resetPlayGlissando}
             };
 
       mapSignals();

@@ -123,7 +123,7 @@ QVariant GlissandoSegment::getProperty(P_ID id) const
             case P_ID::GLISS_TEXT:
             case P_ID::GLISS_SHOW_TEXT:
             case P_ID::GLISSANDO_STYLE:
-            case P_ID::PLAY_GLISSANDO:
+            case P_ID::PLAY:
                   return glissando()->getProperty(id);
             default:
                   return LineSegment::getProperty(id);
@@ -141,7 +141,7 @@ bool GlissandoSegment::setProperty(P_ID id, const QVariant& v)
             case P_ID::GLISS_TEXT:
             case P_ID::GLISS_SHOW_TEXT:
             case P_ID::GLISSANDO_STYLE:
-            case P_ID::PLAY_GLISSANDO:
+            case P_ID::PLAY:
                   return glissando()->setProperty(id, v);
             default:
                   return LineSegment::setProperty(id, v);
@@ -159,7 +159,7 @@ QVariant GlissandoSegment::propertyDefault(P_ID id) const
       case P_ID::GLISS_TEXT:
       case P_ID::GLISS_SHOW_TEXT:
       case P_ID::GLISSANDO_STYLE:
-      case P_ID::PLAY_GLISSANDO:
+      case P_ID::PLAY:
                   return glissando()->propertyDefault(id);
             default:
                   return LineSegment::propertyDefault(id);
@@ -382,7 +382,7 @@ void Glissando::write(Xml& xml) const
       if (_showText && !_text.isEmpty())
             xml.tag("text", _text);
       xml.tag("subtype", int(_glissandoType));
-      writeProperty(xml, P_ID::PLAY_GLISSANDO);
+      writeProperty(xml, P_ID::PLAY);
       writeProperty(xml, P_ID::GLISSANDO_STYLE);
       SLine::writeProperties(xml);
       xml.etag();
@@ -409,7 +409,7 @@ void Glissando::read(XmlReader& e)
                   _glissandoType = Type(e.readInt());
             else if (tag == "glissandoStyle") {
                 setProperty(P_ID::GLISSANDO_STYLE, Ms::getProperty(P_ID::GLISSANDO_STYLE, e));
-            } else if ( tag == "playGlissando") {
+            } else if ( tag == "play") {
                 setPlayGlissando(e.readBool());
             }
             else if (!SLine::readProperties(e))
@@ -740,7 +740,7 @@ QVariant Glissando::getProperty(P_ID propertyId) const
                   return showText();
             case P_ID::GLISSANDO_STYLE:
                   return int(glissandoStyle());
-            case P_ID::PLAY_GLISSANDO:
+            case P_ID::PLAY:
                   return bool(playGlissando());
             default:
                   break;
@@ -767,7 +767,7 @@ bool Glissando::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::GLISSANDO_STYLE:
                  setGlissandoStyle(MScore::GlissandoStyle(v.toInt()));
                  break;
-            case P_ID::PLAY_GLISSANDO:
+            case P_ID::PLAY:
                  setPlayGlissando(v.toBool());
                  break;
             default:
@@ -794,7 +794,7 @@ QVariant Glissando::propertyDefault(P_ID propertyId) const
                   return true;
             case P_ID::GLISSANDO_STYLE:
                   return int(MScore::GlissandoStyle::CHROMATIC);
-            case P_ID::PLAY_GLISSANDO:
+            case P_ID::PLAY:
                   return true;
             default:
                   break;

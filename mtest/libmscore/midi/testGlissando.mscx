@@ -1055,7 +1055,7 @@
             <Glissando id="35">
               <text>gliss.</text>
               <subtype>1</subtype>
-              <playGlissando>false</playGlissando>
+              <play>0</play>
               <diagonal>1</diagonal>
               <lineWidth>0.15</lineWidth>
               <anchor>3</anchor>

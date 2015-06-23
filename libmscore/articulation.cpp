@@ -273,7 +273,7 @@ void Articulation::read(XmlReader& e)
                   setProperty(P_ID::DIRECTION, Ms::getProperty(P_ID::DIRECTION, e));
             else if ( tag == "ornamentStyle")
                   setProperty(P_ID::ORNAMENT_STYLE, Ms::getProperty(P_ID::ORNAMENT_STYLE, e));
-            else if ( tag == "playArticulation")
+            else if ( tag == "play")
                   setPlayArticulation(e.readBool());
             else if (tag == "timeStretch")
                   _timeStretch = e.readDouble();
@@ -303,7 +303,7 @@ void Articulation::write(Xml& xml) const
       xml.tag("subtype", subtypeName());
       if (_timeStretch != 1.0)
             xml.tag("timeStretch", _timeStretch);
-      writeProperty(xml, P_ID::PLAY_ARTICULATION);
+      writeProperty(xml, P_ID::PLAY);
       writeProperty(xml, P_ID::ORNAMENT_STYLE);
       Element::writeProperties(xml);
       if (anchorStyle == PropertyStyle::UNSTYLED)
@@ -559,7 +559,7 @@ QVariant Articulation::getProperty(P_ID propertyId) const
             case P_ID::ARTICULATION_ANCHOR: return int(anchor());
             case P_ID::TIME_STRETCH:        return timeStretch();
             case P_ID::ORNAMENT_STYLE:      return int(ornamentStyle());
-            case P_ID::PLAY_ARTICULATION:   return bool(playArticulation());
+            case P_ID::PLAY:   return bool(playArticulation());
             default:
                   return Element::getProperty(propertyId);
             }
@@ -580,7 +580,7 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
                   anchorStyle = PropertyStyle::UNSTYLED;
                   setAnchor(ArticulationAnchor(v.toInt()));
                   break;
-            case P_ID::PLAY_ARTICULATION:
+            case P_ID::PLAY:
                   setPlayArticulation(v.toBool());
                   break;
             case P_ID::ORNAMENT_STYLE:
@@ -632,7 +632,7 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
             case P_ID::ORNAMENT_STYLE:
                   //return int(score()->style()->ornamentStyle(_ornamentStyle));
                   return int(MScore::OrnamentStyle::DEFAULT);
-            case P_ID::PLAY_ARTICULATION:
+            case P_ID::PLAY:
                   return true;
             default:
                   break;
