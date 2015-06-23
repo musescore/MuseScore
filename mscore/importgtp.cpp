@@ -1126,7 +1126,7 @@ void GuitarPro::createSlur(bool hasSlur, int staffIdx, ChordRest* cr)
       }
 
 //---------------------------------------------------------
-//   createSlur
+//   createOttava
 //---------------------------------------------------------
 
 void GuitarPro::createOttava(bool hasOttava, int track, ChordRest* cr, QString value)
@@ -2142,6 +2142,10 @@ void GuitarPro3::read(QFile* fp)
                   setTempo(tempo, score->firstMeasure());
             }
       }
+
+//---------------------------------------------------------
+//   readBeatEffects
+//---------------------------------------------------------
 
 int GuitarPro3::readBeatEffects(int track, Segment* segment)
       {

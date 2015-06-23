@@ -24,7 +24,7 @@
 using namespace Ms;
 
 //---------------------------------------------------------
-//   TestCopyPaste
+//   TestCopyPasteSymbolList
 //---------------------------------------------------------
 
 class TestCopyPasteSymbolList : public QObject, public MTest

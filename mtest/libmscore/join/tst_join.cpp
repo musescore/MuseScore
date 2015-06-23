@@ -57,7 +57,7 @@ void TestJoin::initTestCase()
       }
 
 //---------------------------------------------------------
-//   beam
+//   join
 //---------------------------------------------------------
 
 void TestJoin::join(const char* p1, const char* p2)

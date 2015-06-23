@@ -368,7 +368,7 @@ void Staff::clearTimeSig()
       }
 
 //---------------------------------------------------------
-//   Staff::key
+//   Staff::keySigEvent
 //
 //    locates the key sig currently in effect at tick
 //---------------------------------------------------------
@@ -714,7 +714,7 @@ void Staff::setLines(int val)
       }
 
 //---------------------------------------------------------
-//   line distance
+//   lineDistance
 //---------------------------------------------------------
 
 qreal Staff::lineDistance() const

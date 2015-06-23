@@ -76,7 +76,7 @@ void TestRepeat::initTestCase()
       }
 
 //---------------------------------------------------------
-//   initTestCase
+//   repeat
 //---------------------------------------------------------
 
 void TestRepeat::repeat(const char* f1, const QString & ref)

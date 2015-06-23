@@ -21,7 +21,7 @@
 using namespace Ms;
 
 //---------------------------------------------------------
-//   TestNote
+//   TestText
 //---------------------------------------------------------
 
 class TestText : public QObject, public MTest
