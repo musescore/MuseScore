@@ -38,6 +38,7 @@ Bend::Bend(Score* s)
    : Element(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
+      setPlayBend(true);
       }
 
 //---------------------------------------------------------
@@ -259,6 +260,7 @@ void Bend::write(Xml& xml) const
             xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
                .arg(v.time).arg(v.pitch).arg(v.vibrato));
             }
+      writeProperty(xml, P_ID::PLAY_BEND);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -278,8 +280,56 @@ void Bend::read(XmlReader& e)
                   _points.append(pv);
                   e.readNext();
                   }
+            else if (e.name() == "playBend") {
+                  setPlayBend(e.readBool());
+                  }
             else if (!Element::readProperties(e))
                   e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Bend::getProperty(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::PLAY_BEND:
+                  return bool(playBend());
+            default:
+                  return Element::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Bend::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            case P_ID::PLAY_BEND:
+                 setPlayBend(v.toBool());
+                 break;
+            default:
+                  return Element::setProperty(propertyId, v);
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Bend::propertyDefault(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::PLAY_BEND:
+                  return true;
+            default:
+                  return Element::propertyDefault(propertyId);
             }
       }
 

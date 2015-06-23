@@ -53,7 +53,9 @@ class TestMidi : public QObject, public MTest
       void midi03();
       void events_data();
       void events();
-      void midiPortExport() { midiExportTestRef("testMidiPort"); }
+      void midiBendsExport1() { midiExportTestRef("testBends1"); }
+      void midiBendsExport2() { midiExportTestRef("testBends2"); }      // Play property test
+      void midiPortExport()   { midiExportTestRef("testMidiPort"); }
       };
 
 //---------------------------------------------------------
