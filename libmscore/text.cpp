@@ -1556,8 +1556,9 @@ void Text::endEdit()
                   // when we called it for the linked elements
                   // by also checking for empty old text, we avoid creating an unnecessary element on undo stack
                   // that returns us to the initial empty text created upon startEdit()
+                  // (except this is needed for empty text frames to ensure that adding text marks score dity)
 
-                  if (!oldText.isEmpty()) {
+                  if (!oldText.isEmpty() || (parent() && parent()->type() == Element::Type::TBOX)) {
                         // oldText is good for original element
                         // but use original text for each linked element
                         // these can differ (eg, for chord symbols in transposing parts)

@@ -1930,6 +1930,13 @@ void Score::deleteItem(Element* el)
                   qDebug("cannot remove %s", el->name());
                   break;
 
+            case Element::Type::TEXT:
+                  if (el->parent()->type() == Element::Type::TBOX)
+                        undoChangeProperty(el, P_ID::TEXT, QString());
+                  else
+                        undoRemoveElement(el);
+                  break;
+
             default:
                   undoRemoveElement(el);
                   break;
