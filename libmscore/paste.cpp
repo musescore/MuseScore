@@ -821,9 +821,11 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                                     ddata.view       = view;
                                     ddata.element    = nel;
                                     ddata.duration   = duration;
-                                    target->drop(ddata);
-                                    if (_selection.element())
-                                          addRefresh(_selection.element()->abbox());
+                                    if (target->acceptDrop(ddata)) {
+                                          target->drop(ddata);
+                                          if (_selection.element())
+                                                addRefresh(_selection.element()->abbox());
+                                          }
                                     }
                               }
                               delete el;
