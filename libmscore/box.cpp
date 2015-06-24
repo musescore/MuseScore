@@ -522,9 +522,9 @@ bool Box::acceptDrop(const DropData& data) const
 Element* Box::drop(const DropData& data)
       {
       Element* e = data.element;
-      if(e->flag(ElementFlag::ON_STAFF))
+      if (e->flag(ElementFlag::ON_STAFF))
             return 0;
-      switch(e->type()) {
+      switch (e->type()) {
             case Element::Type::LAYOUT_BREAK:
                   {
                   LayoutBreak* lb = static_cast<LayoutBreak*>(e);
@@ -540,7 +540,7 @@ Element* Box::drop(const DropData& data)
                               delete lb;
                               break;
                               }
-                        foreach(Element* elem, _el) {
+                        foreach (Element* elem, _el) {
                               if (elem->type() == Element::Type::LAYOUT_BREAK) {
                                     score()->undoChangeElement(elem, e);
                                     break;
@@ -548,11 +548,12 @@ Element* Box::drop(const DropData& data)
                               }
                         break;
                         }
-                  lb->setTrack(-1);       // this are system elements
+                  lb->setTrack(-1);       // these are system elements
                   lb->setParent(this);
                   score()->undoAddElement(lb);
                   return lb;
                   }
+
             case Element::Type::STAFF_TEXT:
                   {
                   Text* text = new Text(score());
@@ -583,10 +584,15 @@ Element* Box::drop(const DropData& data)
                         }
                   break;
 
-            default:
+            case Element::Type::TEXT:
+            case Element::Type::IMAGE:
+            case Element::Type::SYMBOL:
                   e->setParent(this);
                   score()->undoAddElement(e);
                   return e;
+
+            default:
+                  return 0;
             }
       return 0;
       }
