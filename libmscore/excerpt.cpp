@@ -236,22 +236,26 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
 
             ns->setStartElement(0);
             ns->setEndElement(0);
-            for (ScoreElement* e : *cr1->links()) {
-                  ChordRest* cr = static_cast<ChordRest*>(e);
-                  if (cr == cr1)
-                        continue;
-                  if ((cr->score() == score) && (cr->tick() == ns->tick()) && cr->track() == dstTrack) {
-                        ns->setStartElement(cr);
-                        break;
+            if (cr1->links()) {
+                  for (ScoreElement* e : *cr1->links()) {
+                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        if (cr == cr1)
+                              continue;
+                        if ((cr->score() == score) && (cr->tick() == ns->tick()) && cr->track() == dstTrack) {
+                              ns->setStartElement(cr);
+                              break;
+                              }
                         }
                   }
-            for (ScoreElement* e : *cr2->links()) {
-                  ChordRest* cr = static_cast<ChordRest*>(e);
-                  if (cr == cr2)
-                        continue;
-                  if ((cr->score() == score) && (cr->tick() == ns->tick2()) && cr->track() == dstTrack2) {
-                        ns->setEndElement(cr);
-                        break;
+            if (cr2->links()) {
+                  for (ScoreElement* e : *cr2->links()) {
+                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        if (cr == cr2)
+                              continue;
+                        if ((cr->score() == score) && (cr->tick() == ns->tick2()) && cr->track() == dstTrack2) {
+                              ns->setEndElement(cr);
+                              break;
+                              }
                         }
                   }
             if (!ns->startElement())
