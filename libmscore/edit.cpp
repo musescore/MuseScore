@@ -2779,7 +2779,8 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
 
 void Score::checkSpanner(int startTick, int endTick)
       {
-      QList<Spanner*> sl;
+      QList<Spanner*> sl;     // spanners to remove
+      QList<Spanner*> sl2;    // spanners to shorten
       auto spanners = _spanner.findOverlapping(startTick, endTick);
 // printf("checkSpanner %d %d\n", startTick, endTick);
 //      for (auto i = spanners.begin(); i < spanners.end(); i++) {
@@ -2816,13 +2817,19 @@ void Score::checkSpanner(int startTick, int endTick)
                         }
                   else {
                         if (s->tick2() > lastTick)
-                              s->undoChangeProperty(P_ID::SPANNER_TICKS, lastTick - s->tick());
+                              sl2.append(s);    //s->undoChangeProperty(P_ID::SPANNER_TICKS, lastTick - s->tick());
+                        else
+                              s->computeEndElement();
                         }
-                  s->computeEndElement();
                   }
             }
       for (auto s : sl)       // actually remove scheduled spanners
             undo(new RemoveElement(s));
+      for (auto s : sl2) {    // shorten spanners that extended past end of score
+            undo(new ChangeProperty(s, P_ID::SPANNER_TICKS, lastTick - s->tick()));
+            s->computeEndElement();
+            }
       }
+
 }
 
