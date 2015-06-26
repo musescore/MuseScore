@@ -31,6 +31,14 @@
 #include "ottava.h"
 #include "harmony.h"
 
+// #define DEBUG_CLEFS
+
+#ifdef DEBUG_CLEFS
+#define DUMP_CLEFS(s) dumpClefs(s)
+#else
+#define DUMP_CLEFS(s)
+#endif
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -264,7 +272,7 @@ void Staff::setClef(Clef* clef)
                   }
             }
       clefs.setClef(clef->segment()->tick(), clef->clefTypeList());
-//      dumpClefs("setClef");
+      DUMP_CLEFS("setClef");
       }
 
 //---------------------------------------------------------
@@ -292,7 +300,7 @@ void Staff::removeClef(Clef* clef)
                   break;
                   }
             }
-//      dumpClefs("removeClef");
+      DUMP_CLEFS("removeClef");
       }
 
 //---------------------------------------------------------
@@ -1028,32 +1036,40 @@ void Staff::insertTime(int tick, int len)
             }
       _keys.insert(kl2.begin(), kl2.end());
 
-      ClefList cl2;
-      for (auto i = clefs.lower_bound(tick); i != clefs.end();) {
-            ClefTypeList ctl = i->second;
-            int tick = i->first;
-            clefs.erase(i++);
-            cl2.setClef(tick + len, ctl);
-            }
-      clefs.insert(cl2.begin(), cl2.end());
-
       // check if there is a clef at the end of measure
-      // before tick: do not remove from clefs list
-
+      // before tick
+      Clef* clef = 0;
       Measure* m = _score->tick2measure(tick);
       if (m && (m->tick() == tick) && (m->prevMeasure())) {
             m = m->prevMeasure();
             Segment* s = m->findSegment(Segment::Type::Clef, tick);
             if (s) {
                   int track = idx() * VOICES;
-                  Clef* clef = static_cast<Clef*>(s->element(track));
-                  if (clef)
-                        setClef(clef);
+                  clef = static_cast<Clef*>(s->element(track));
                   }
             }
 
+      ClefList cl2;
+      for (auto i = clefs.lower_bound(tick); i != clefs.end();) {
+            ClefTypeList ctl = i->second;
+            int t = i->first;
+            if (clef && tick == t) {
+                  ++i;
+                  continue;
+                  }
+            clefs.erase(i++);
+            cl2.setClef(t + len, ctl);
+            }
+      clefs.insert(cl2.begin(), cl2.end());
+
+      // check if there is a clef at the end of measure
+      // before tick: do not remove from clefs list
+
+      if (clef)
+            setClef(clef);
+
       updateOttava();
-//      dumpClefs("  insertTime");
+      DUMP_CLEFS("  insertTime");
       }
 
 //---------------------------------------------------------
