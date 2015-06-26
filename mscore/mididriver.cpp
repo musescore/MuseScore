@@ -382,6 +382,39 @@ void AlsaMidiDriver::read()
             if (rv < 0)
                   return;
 
+            if (mscore && preferences.acceptMMCmessages
+                       && (ev->type == SND_SEQ_EVENT_SYSEX
+                        || ev->type == SND_SEQ_EVENT_SONGPOS
+                       || (ev->type >= SND_SEQ_EVENT_START && ev->type <= SND_SEQ_EVENT_STOP))) {
+
+                  // Convert AlsaMidi to MIDI messages
+                  int midiType = ev->type;
+                  int* data = nullptr;
+                  int len = 0;
+                  switch(ev->type) {
+                        case SND_SEQ_EVENT_SONGPOS:
+                              midiType = ME_SONGPOS;
+                              data = new int[2];
+                              data[0] = ev->data.control.value % 128;
+                              data[1] = ev->data.control.value / 128;
+                        break;
+                        case SND_SEQ_EVENT_START:
+                        case SND_SEQ_EVENT_CONTINUE:
+                        case SND_SEQ_EVENT_STOP:
+                              midiType += 220;
+                        break;
+                        case SND_SEQ_EVENT_SYSEX:
+                              midiType = ME_SYSEX;
+                              data = new int[ev->data.ext.len-1];
+                              for (unsigned int i = 0; i < ev->data.ext.len-1; ++i)
+                                    data[i] = ((unsigned char*)ev->data.ext.ptr)[i+1];
+                              len = ev->data.ext.len-1;
+                        break;
+                        }
+                  seq->driver()->readMMC(midiType, len, data);
+                  if (data)
+                        delete[] data;
+                  }
             if (!mscore || !mscore->midiinEnabled()) {
                   snd_seq_free_event(ev);
                   return;
