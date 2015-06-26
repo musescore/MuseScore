@@ -103,6 +103,8 @@ void Preferences::init()
       iconWidth          = 28;
 
       enableMidiInput    = true;
+      acceptMMCmessages  = false;
+      mmcDeviceId        = 127;
       playNotes          = true;
       playChordOnAddNote = true;
 
@@ -247,6 +249,8 @@ void Preferences::write()
       s.setValue("dropColor",          MScore::dropColor);
       s.setValue("defaultColor",       MScore::defaultColor);
       s.setValue("enableMidiInput",    enableMidiInput);
+      s.setValue("acceptMMCmessages",  acceptMMCmessages);
+      s.setValue("mmcDeviceId",        mmcDeviceId);
       s.setValue("playNotes",          playNotes);
       s.setValue("playChordOnAddNote", playChordOnAddNote);
 
@@ -400,6 +404,8 @@ void Preferences::read()
       MScore::dropColor       = s.value("dropColor",    MScore::dropColor).value<QColor>();
 
       enableMidiInput         = s.value("enableMidiInput", enableMidiInput).toBool();
+      acceptMMCmessages       = s.value("acceptMMCmessages", acceptMMCmessages).toBool();
+      mmcDeviceId             = s.value("mmcDeviceId", mmcDeviceId).toInt();
       playNotes               = s.value("playNotes", playNotes).toBool();
       playChordOnAddNote      = s.value("playChordOnAddNote", playChordOnAddNote).toBool();
 
@@ -680,6 +686,11 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(jackDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
       connect(useJackAudio, SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
       connect(useJackMidi,  SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
+
+      QStringList sl;
+      for (int i = 0; i < 127; i++)
+            sl.append(QString().setNum(i));
+      mmcDevice->insertItems(0, sl);
       updateRemote();
       }
 
@@ -803,6 +814,8 @@ void PreferenceDialog::updateValues()
       iconHeight->setValue(prefs.iconHeight);
 
       enableMidiInput->setChecked(prefs.enableMidiInput);
+      mmcDevice->setCurrentIndex(prefs.mmcDeviceId);
+      acceptMMC->setChecked(prefs.acceptMMCmessages);
       playNotes->setChecked(prefs.playNotes);
       playChordOnAddNote->setChecked(prefs.playChordOnAddNote);
 
@@ -1289,6 +1302,8 @@ void PreferenceDialog::apply()
       prefs.enableMidiInput = enableMidiInput->isChecked();
       prefs.playNotes      = playNotes->isChecked();
       prefs.playChordOnAddNote = playChordOnAddNote->isChecked();
+      prefs.acceptMMCmessages  = acceptMMC->isChecked();
+      prefs.mmcDeviceId        = mmcDevice->currentIndex();
 
       prefs.showNavigator      = navigatorShow->isChecked();
       prefs.showPlayPanel      = playPanelShow->isChecked();

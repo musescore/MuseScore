@@ -89,6 +89,8 @@ struct Preferences {
       int iconHeight, iconWidth;
       QColor dropColor;
       bool enableMidiInput;
+      bool acceptMMCmessages;
+      int mmcDeviceId;
       bool playNotes;         // play notes on click
       bool playChordOnAddNote;
       bool showNavigator;

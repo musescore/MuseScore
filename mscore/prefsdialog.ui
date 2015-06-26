@@ -1265,6 +1265,19 @@
         </widget>
        </item>
        <item>
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="QGroupBox" name="rcGroup">
          <property name="toolTip">
           <string>Enable MIDI remote control</string>
@@ -1297,6 +1310,19 @@
           <property name="spacing">
            <number>6</number>
           </property>
+          <item row="2" column="5">
+           <widget class="Ms::GreendotButton" name="rca4">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Quarter note is active</string>
+            </property>
+            <property name="text">
+             <string notr="true">...</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_15">
             <property name="text">
@@ -1506,19 +1532,6 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="5">
-           <widget class="Ms::GreendotButton" name="rca4">
-            <property name="focusPolicy">
-             <enum>Qt::StrongFocus</enum>
-            </property>
-            <property name="accessibleName">
-             <string>Quarter note is active</string>
-            </property>
-            <property name="text">
-             <string notr="true">...</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="6">
            <widget class="Ms::RecordButton" name="rcr4">
             <property name="focusPolicy">
@@ -1558,6 +1571,13 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="12">
+           <widget class="QLabel" name="label_46">
+            <property name="text">
+             <string>Double augmentation dot</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="12">
            <widget class="QLabel" name="label_45">
             <property name="text">
@@ -1565,13 +1585,6 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="12">
-           <widget class="QLabel" name="label_46">
-            <property name="text">
-             <string>Double augmentation dot</string>
             </property>
            </widget>
           </item>
@@ -1751,22 +1764,6 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="Ms::GreendotButton" name="stopActive">
-            <property name="focusPolicy">
-             <enum>Qt::StrongFocus</enum>
-            </property>
-            <property name="toolTip">
-             <string>Is active</string>
-            </property>
-            <property name="accessibleName">
-             <string>Stop is active</string>
-            </property>
-            <property name="text">
-             <string notr="true">...</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="2">
            <widget class="Ms::RecordButton" name="recordPlay">
             <property name="focusPolicy">
@@ -1777,6 +1774,22 @@
             </property>
             <property name="accessibleName">
              <string>Play record</string>
+            </property>
+            <property name="text">
+             <string notr="true">...</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="Ms::GreendotButton" name="stopActive">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Is active</string>
+            </property>
+            <property name="accessibleName">
+             <string>Stop is active</string>
             </property>
             <property name="text">
              <string notr="true">...</string>
@@ -1825,6 +1838,16 @@
             </property>
            </widget>
           </item>
+          <item row="4" column="4">
+           <widget class="QLabel" name="label_41">
+            <property name="text">
+             <string>16th note</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
           <item row="4" column="2">
            <widget class="Ms::RecordButton" name="recordEditMode">
             <property name="focusPolicy">
@@ -1838,16 +1861,6 @@
             </property>
             <property name="text">
              <string notr="true">...</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="4">
-           <widget class="QLabel" name="label_41">
-            <property name="text">
-             <string>16th note</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -1975,16 +1988,6 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="8">
-           <widget class="QLabel" name="label_53">
-            <property name="text">
-             <string>Undo</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
           <item row="4" column="12" colspan="3">
            <widget class="QPushButton" name="midiRemoteControlClear">
             <property name="accessibleName">
@@ -1992,6 +1995,16 @@
             </property>
             <property name="text">
              <string>Clear</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="8">
+           <widget class="QLabel" name="label_53">
+            <property name="text">
+             <string>Undo</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -2645,51 +2658,6 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout71">
-          <item row="1" column="2">
-           <widget class="QCheckBox" name="becomeTimebaseMaster">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="accessibleName">
-             <string>Timebase Master</string>
-            </property>
-            <property name="text">
-             <string>Timebase Master</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="useJackTransport">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="accessibleName">
-             <string>Use JACK Transport</string>
-            </property>
-            <property name="text">
-             <string>Use JACK Transport</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QCheckBox" name="useJackAudio">
-            <property name="accessibleName">
-             <string>Use JACK Audio</string>
-            </property>
-            <property name="text">
-             <string>Use JACK Audio</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="3">
            <widget class="QCheckBox" name="rememberLastMidiConnections">
             <property name="sizePolicy">
@@ -2703,6 +2671,19 @@
             </property>
             <property name="text">
              <string>Remember last connection(s)</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QCheckBox" name="useJackAudio">
+            <property name="accessibleName">
+             <string>Use JACK Audio</string>
+            </property>
+            <property name="text">
+             <string>Use JACK Audio</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -2737,6 +2718,102 @@
              <string>Use JACK MIDI</string>
             </property>
            </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="useJackTransport">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="accessibleName">
+             <string>Use JACK Transport</string>
+            </property>
+            <property name="text">
+             <string>Use JACK Transport</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="becomeTimebaseMaster">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="accessibleName">
+             <string>Timebase Master</string>
+            </property>
+            <property name="text">
+             <string>Timebase Master</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="mmcGroupBox">
+         <property name="title">
+          <string>MIDI Machine Control</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QCheckBox" name="acceptMMC">
+            <property name="text">
+             <string>Accept MMC messages</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_21">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>Device ID:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="mmcDevice">
+            <item>
+             <property name="text">
+              <string>Any</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_22">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>316</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
