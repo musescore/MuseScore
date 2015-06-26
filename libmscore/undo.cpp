@@ -1572,7 +1572,7 @@ const char* AddElement::name() const
       {
       static char buffer[64];
       if (element->isText())
-            snprintf(buffer, 64, "Add: %s <%s>", element->name(), qPrintable(static_cast<Text*>(element)->text()));
+            snprintf(buffer, 64, "Add: %s <%s>", element->name(), qPrintable(static_cast<Text*>(element)->plainText()));
       else
             snprintf(buffer, 64, "Add: %s", element->name());
       return buffer;
@@ -1704,7 +1704,7 @@ const char* RemoveElement::name() const
       {
       static char buffer[64];
       if (element->isText())
-            snprintf(buffer, 64, "Rem: %s <%s>", element->name(), qPrintable(static_cast<Text*>(element)->text()));
+            snprintf(buffer, 64, "Rem: %s <%s>", element->name(), qPrintable(static_cast<Text*>(element)->plainText()));
       else
             snprintf(buffer, 64, "Rem: %s", element->name());
       return buffer;
