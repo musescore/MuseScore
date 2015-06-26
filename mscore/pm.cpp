@@ -213,6 +213,25 @@ void PortMidiDriver::read()
             int n = Pm_Read(inputStream, buffer, 1);
             if (n > 0) {
                   int status  = Pm_MessageStatus(buffer[0].message);
+                  if (status >= ME_SYSEX) {
+                        int len = 0;
+                        int* data = nullptr;
+                        if (status == ME_SONGPOS) {
+                              data = new int[2];
+                              data[0] = Pm_MessageData1(buffer[0].message);
+                              data[1] = Pm_MessageData2(buffer[0].message);
+                              len = 2;
+                              seq->driver()->readMMC(status, len, data);
+                              }
+                        else if (status == ME_SYSEX) {
+                              // TODO
+                              }
+                        else
+                              seq->driver()->readMMC(status, len, data);
+
+                         if (data)
+                               delete[] data;
+                        }
                   int type    = status & 0xF0;
                   int channel = status & 0x0F;
                   if (type == ME_NOTEON) {
