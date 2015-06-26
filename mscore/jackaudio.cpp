@@ -377,6 +377,15 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
                               int type = event.buffer[0];
                               if (nn && (type == ME_CLOCK || type == ME_SENSE))
                                     continue;
+
+                              if (type >= ME_SYSEX) {
+                                    int* data = new int[nn-1];
+                                    for (int y = 0; y < nn-1; y++)
+                                          data[y] = event.buffer[y+1];
+                                    audio->readMMC(type, nn-1, data);
+                                    delete[] data;
+                                    continue;
+                                    }
                               Event e;
                               e.setChannel(type & 0xf);
                               type &= 0xf0;
