@@ -4997,7 +4997,7 @@ int main(int argc, char* av[])
       if (mscore->hasToCheckForUpdate())
             mscore->checkForUpdate();
 
-      if (!scoresOnCommandline && preferences.showStartcenter && !restoredSession) {
+      if (!scoresOnCommandline && preferences.showStartcenter && (!restoredSession || mscore->scores().size() == 0)) {
 #ifdef Q_OS_MAC
 // ugly, but on mac we get an event when a file is open.
 // We can't get the event when the startcenter is shown.
