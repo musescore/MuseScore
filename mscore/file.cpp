@@ -1216,7 +1216,7 @@ QString MuseScore::getFotoFilename(QString& filter, QString* selectedFilter)
 //   getPaletteFilename
 //---------------------------------------------------------
 
-QString MuseScore::getPaletteFilename(bool open)
+QString MuseScore::getPaletteFilename(bool open, const QString& name)
       {
       QString title;
       QString filter;
@@ -1237,6 +1237,13 @@ QString MuseScore::getPaletteFilename(bool open)
 
       QFileInfo myPalettes(dataPath + "/profiles");
       QString defaultPath = myPalettes.absoluteFilePath();
+      if (!name.isEmpty()) {
+            QString fname = createDefaultFileName(name);
+            QFileInfo myName(fname);
+            if (myName.isRelative())
+                  myName.setFile(defaultPath, fname);
+            defaultPath = myName.absoluteFilePath();
+            }
 
       if (preferences.nativeDialogs) {
             QString fn;

@@ -576,7 +576,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QString getAudioFile(const QString&);
       QString getDrumsetFilename(bool open);
       QString getPluginFilename(bool open);
-      QString getPaletteFilename(bool open);
+      QString getPaletteFilename(bool open, const QString& name = "");
       QString getWallpaper(const QString& caption);
 
       bool hRaster() const { return hRasterAction->isChecked(); }
