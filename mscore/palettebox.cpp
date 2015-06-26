@@ -205,7 +205,7 @@ void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
                   break;
             case PaletteCommand::SAVE:
                   {
-                  QString path = mscore->getPaletteFilename(false);
+                  QString path = mscore->getPaletteFilename(false, palette->name());
                   if (!path.isEmpty())
                         palette->write(path);
                   }
