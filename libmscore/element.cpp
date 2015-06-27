@@ -656,7 +656,8 @@ void Element::writeProperties(Xml& xml) const
             xml.tag("lid", _links->lid());
       if (!userOff().isNull()) {
             if (type() == Element::Type::VOLTA_SEGMENT
-                        || type() == Element::Type::GLISSANDO_SEGMENT || isChordRest())
+                || type() == Element::Type::GLISSANDO_SEGMENT || isChordRest()
+                || (xml.clipboardmode && isSLineSegment()))
                   xml.tag("offset", userOff() / spatium());
             else
                   xml.tag("pos", pos() / score()->spatium());
@@ -1544,7 +1545,16 @@ QVariant Element::propertyDefault(P_ID id) const
 bool Element::isSLine() const
       {
       return type() == Element::Type::HAIRPIN || type() == Element::Type::OTTAVA || type() == Element::Type::PEDAL
-         || type() == Element::Type::TRILL || type() == Element::Type::VOLTA || type() == Element::Type::TEXTLINE || type() == Element::Type::NOTELINE;
+         || type() == Element::Type::TRILL || type() == Element::Type::VOLTA || type() == Element::Type::TEXTLINE || type() == Element::Type::NOTELINE || type() == Element::Type::GLISSANDO;
+      }
+
+//---------------------------------------------------------
+//   isSLine
+//---------------------------------------------------------
+
+bool Element::isSLineSegment() const
+      {
+      return type() == Element::Type::HAIRPIN_SEGMENT || type() == Element::Type::OTTAVA_SEGMENT || type() == Element::Type::PEDAL_SEGMENT || type() == Element::Type::TRILL_SEGMENT || type() == Element::Type::VOLTA_SEGMENT || type() == Element::Type::TEXTLINE_SEGMENT || type() == Element::Type::GLISSANDO_SEGMENT;
       }
 
 //---------------------------------------------------------

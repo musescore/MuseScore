@@ -404,6 +404,7 @@ class Element : public QObject, public ScoreElement {
 
       bool isDurationElement() const { return isChordRest() || (type() == Element::Type::TUPLET); }
       bool isSLine() const;
+      bool isSLineSegment() const;
 
       virtual void draw(QPainter*) const {}
 
