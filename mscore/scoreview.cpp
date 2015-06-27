@@ -2990,19 +2990,25 @@ void ScoreView::cmd(const QAction* a)
             }
       else if (cmd == "toggle-visible") {
             _score->startCmd();
-            foreach(Element* e, _score->selection().elements())
-                  _score->undo(new ChangeProperty(e, P_ID::VISIBLE, !e->getProperty(P_ID::VISIBLE).toBool()));
+            QSet<Element*> spanners;
+            for (Element* e : _score->selection().elements()) {
+                  bool spannerSegment = e->isSpannerSegment();
+                  if (!spannerSegment || !spanners.contains(static_cast<SpannerSegment*>(e)->spanner()))
+                        _score->undo(new ChangeProperty(e, P_ID::VISIBLE, !e->getProperty(P_ID::VISIBLE).toBool()));
+                  if (spannerSegment)
+                        spanners.insert(static_cast<SpannerSegment*>(e)->spanner());
+                  }
             _score->endCmd();
             }
       else if (cmd == "set-visible") {
             _score->startCmd();
-            foreach(Element* e, _score->selection().elements())
+            for (Element* e : _score->selection().elements())
                   _score->undo(new ChangeProperty(e, P_ID::VISIBLE, true));
             _score->endCmd();
             }
       else if (cmd == "unset-visible") {
             _score->startCmd();
-            foreach(Element* e, _score->selection().elements())
+            for (Element* e : _score->selection().elements())
                   _score->undo(new ChangeProperty(e, P_ID::VISIBLE, false));
             _score->endCmd();
             }
