@@ -3913,7 +3913,8 @@ void Score::changeVoice(int voice)
       {
       startCmd();
       QList<Element*> el;
-      foreach(Element* e, selection().elements()) {
+      QList<Element*> oel = selection().elements();     // make copy
+      for (Element* e : oel) {
             if (e->type() == Element::Type::NOTE) {
                   Note* note   = static_cast<Note*>(e);
                   Chord* chord = note->chord();
@@ -3962,6 +3963,8 @@ void Score::changeVoice(int voice)
                               ChordRest* pcr = nullptr;
                               ChordRest* ncr = nullptr;
                               for (Segment* s2 = m->first(Segment::Type::ChordRest); s2; s2 = s2->next()) {
+                                    if (s2->segmentType() != Segment::Type::ChordRest)
+                                          continue;
                                     ChordRest* cr2 = static_cast<ChordRest*>(s2->element(dstTrack));
                                     if (!cr2 || cr2->type() == Element::Type::REST)
                                           continue;
@@ -4032,7 +4035,7 @@ void Score::changeVoice(int voice)
 
       if (!el.isEmpty())
             selection().clear();
-      foreach(Element* e, el)
+      for (Element* e : el)
             select(e, SelectType::ADD, -1);
       setLayoutAll(true);
       endCmd();
