@@ -3556,12 +3556,17 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
                         // write formatted
                         MScoreTextToMXML mttm("text", attr, defFmt, mtf);
                         mttm.writeTextFragments(l->fragmentList(), xml);
+#if 0
                         /*
                          Temporarily disabled because it doesn't work yet (and thus breaks the regression test).
                          See MusicXml::xmlLyric: "// TODO-WS      l->setTick(tick);"
                         if((l)->endTick() > 0)
                               xml.tagE("extend");
                         */
+#else
+                        if (l->ticks())
+                              xml.tagE("extend");
+#endif
                         xml.etag();
                         }
                   }
