@@ -129,6 +129,8 @@ class Chord : public ChordRest {
 
       LedgerLine* ledgerLines()                  { return _ledgerLines; }
 
+      qreal defaultStemLength();
+
       void layoutStem1();
       void layoutHook1();     // create hook if required
       void layoutStem();
