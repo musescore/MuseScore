@@ -2699,6 +2699,7 @@ void Score::deselect(Element* el)
       {
       refresh |= el->abbox();
       _selection.remove(el);
+      setSelectionChanged(true);
       }
 
 //---------------------------------------------------------
