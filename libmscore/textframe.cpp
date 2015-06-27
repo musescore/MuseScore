@@ -102,16 +102,65 @@ void TBox::scanElements(void* data, void (*func)(void*, Element*), bool all)
       }
 
 //---------------------------------------------------------
+//   drop
+//---------------------------------------------------------
+
+Element* TBox::drop(const DropData& data)
+      {
+      Element* e = data.element;
+      switch (e->type()) {
+            case Element::Type::TEXT:
+                  {
+                  Text* t = static_cast<Text*>(e);
+                  _text->undoSetText(t->xmlText());
+                  _text->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(t->textStyle()));
+                  delete e;
+                  return _text;
+                  }
+            default:
+                  return VBox::drop(data);
+            }
+      }
+
+//---------------------------------------------------------
+//   add
+///   Add new Element \a el to TBox
+//---------------------------------------------------------
+
+void TBox::add(Element* e)
+      {
+      if (e->type() == Element::Type::TEXT) {
+            // does not normally happen, since drop() handles this directly
+            Text* t = static_cast<Text*>(e);
+            _text->undoSetText(t->xmlText());
+            _text->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(t->textStyle()));
+            }
+      else {
+            VBox::add(e);
+            }
+      }
+
+//---------------------------------------------------------
 //   remove
 //---------------------------------------------------------
 
 void TBox::remove(Element* el)
-     {
-     if (el == _text) {
-           _text->clear();
+      {
+      if (el == _text) {
+            // does not normally happen, since Score::deleteItem() handles this directly
+            // but if it does:
+            // replace with new empty text element
+            // this keeps undo/redo happier than just clearing the text
+            qDebug("TBox::remove() - replacing _text");
+            _text = new Text(score());
+            _text->setLayoutToParentWidth(true);
+            _text->setParent(this);
+            _text->setTextStyleType(TextStyleType::FRAME);
            }
-     else
-           MeasureBase::remove(el);
-     }
+      else {
+            VBox::remove(el);
+           }
+      }
+
 }
 
