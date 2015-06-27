@@ -344,6 +344,8 @@ enum class StyleIdx : unsigned char {
       tremoloBoxHeight,
       tremoloStrokeWidth,
       tremoloDistance,
+      // TODO tremoloBeamLengthMultiplier,
+      // TODO tremoloMaxBeamLength,
 
       linearStretch,
       crossMeasureValues,

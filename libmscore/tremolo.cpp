@@ -9,7 +9,6 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
 //=============================================================================
-
 #include "tremolo.h"
 #include "score.h"
 #include "style.h"
@@ -117,30 +116,31 @@ void Tremolo::layout()
       qreal _spatium  = spatium() * mag();
 
       qreal w2  = _spatium * score()->styleS(StyleIdx::tremoloWidth).val() * .5;
-      qreal h2  = _spatium * score()->styleS(StyleIdx::tremoloBoxHeight).val()  * .5;
+      // qreal h2  = _spatium * score()->styleS(StyleIdx::tremoloBoxHeight).val()  * .5;
       qreal lw  = _spatium * score()->styleS(StyleIdx::tremoloStrokeWidth).val();
       qreal td  = _spatium * score()->styleS(StyleIdx::tremoloDistance).val();
       path      = QPainterPath();
 
       qreal ty   = 0.0;
-      for (int i = 0; i < _lines; ++i) {
-            path.moveTo(-w2,  ty + h2 - lw);
-            path.lineTo( w2,  ty - h2);
-            path.lineTo( w2,  ty - h2 + lw);
-            path.lineTo(-w2,  ty + h2);
 
-            path.closeSubpath();
+      for (int i = 0; i < _lines; i++) {
+            path.addRect(-w2, ty, 2.0 * w2, lw);
             ty += td;
             }
 
-      QRectF rect = path.boundingRect();
-      if ((parent() == 0) && !twoNotes())
-            rect.setHeight(rect.height() + _spatium);
-      setbbox(rect);
+      // QRectF rect = path.boundingRect();
+      // if ((parent() == 0) && !twoNotes())
+      //       rect.setHeight(rect.height() + _spatium);
 
       _chord1 = static_cast<Chord*>(parent());
-      if (_chord1 == 0)
+      if (_chord1 == 0) {
+            // just for the palette
+            QTransform shearTransform;
+            shearTransform.shear(0.0, -(lw / 2.0) / w2);
+            path = shearTransform.map(path);
+            setbbox(path.boundingRect());
             return;
+            }
       Note* anchor1 = _chord1->upNote();
       Stem* stem    = _chord1->stem();
       qreal x, y, h;
@@ -224,6 +224,12 @@ void Tremolo::layout()
                   };
             int idx = _chord1->hook() ? 1 : (_chord1->beam() ? 2 : 0);
             y = (line + t[idx][up][_lines-1][line & 1]) * spatium() * .5;
+
+            QTransform shearTransform;
+            shearTransform.shear(0.0, -(lw / 2.0) / w2);
+            path = shearTransform.map(path);
+
+            setbbox(path.boundingRect());
             setPos(x, y);
             adjustReadPos();
             return;
@@ -246,13 +252,93 @@ void Tremolo::layout()
       _chord2 = static_cast<Chord*>(s->element(track()));
       _chord2->setTremolo(this);
 
-      int x2  = _chord2->stemPosBeam().x();
-      int x1  = _chord1->stemPosBeam().x();
+      Stem *stem2 = _chord2->stem(), *stem1 = _chord1->stem();
 
-      // qreal x2     = _chord2->_chord2->up()stemPos(_chord2->up(), true).x();
-      // qreal x1     = _chord1->stemPos(_chord1->up(), true).x();
-      x             = x1 - _chord1->pagePos().x() + (x2 - x1 + _chord1->upNote()->headWidth()) * .5;
-      setPos(x, y);
+      // compute the y coordinates of the tips of the stems
+      qreal y1, y2;
+      qreal firstChordStaffY;
+
+      if (stem2 && stem1) {
+            // stemPageYOffset variable is used for the case when the first
+            // chord is cross-staff
+            firstChordStaffY = stem1->pagePos().y() - stem1->y();  // y coordinate of the staff of the first chord
+            y1 = stem1->y() + stem1->p2().y();
+            y2 = stem2->pagePos().y() - firstChordStaffY + stem2->p2().y();  // ->p2().y() is better than ->stemLen()
+            }
+      else {
+            firstChordStaffY = _chord1->pagePos().y() - _chord1->y();  // y coordinate of the staff of the first chord
+            y1 = _chord1->stemPosBeam().y() - firstChordStaffY + _chord1->defaultStemLength();
+            y2 = _chord2->stemPosBeam().y() - firstChordStaffY + _chord2->defaultStemLength();
+            }
+
+      // improve the case when one stem is up and another is down
+      if (_chord1->beams() == 0 && _chord2->beams() == 0 &&
+          _chord1->up() != _chord2->up()) {
+            qreal meanNote1Y = .5 * (_chord1->upNote()->pagePos().y() - firstChordStaffY + _chord1->downNote()->pagePos().y() - firstChordStaffY);
+            qreal meanNote2Y = .5 * (_chord2->upNote()->pagePos().y() - firstChordStaffY + _chord2->downNote()->pagePos().y() - firstChordStaffY);
+            y1 = .5 * (y1 + meanNote1Y);
+            y2 = .5 * (y2 + meanNote2Y);
+            }
+
+      y = (y1 + y2) * .5;
+      if (!_chord1->up()) {
+            y -= path.boundingRect().height() * .5;
+            }
+      if (!_chord2->up()) {
+            y -= path.boundingRect().height() * .5;
+            }
+
+      // compute the x coordinates of the inner edge of the stems
+      qreal x2  = _chord2->stemPosBeam().x();
+      if (_chord2->up() && stem2) x2 -= stem2->lineWidth();
+      qreal x1  = _chord1->stemPosBeam().x();
+      if (!_chord1->up() && stem1) x1 += stem1->lineWidth();
+
+      x = (x1 + x2) * .5 - _chord1->pagePos().x();
+
+      QTransform xScaleTransform;
+      // TODO const qreal H_MULTIPLIER = score()->styleS(StyleIdx::tremoloBeamLengthMultiplier).val();
+      const qreal H_MULTIPLIER = 0.62;
+      // TODO const qreal MAX_H_LENGTH = _spatium * score()->styleS(StyleIdx::tremoloBeamLengthMultiplier).val();
+      const qreal MAX_H_LENGTH = _spatium * 12.0;
+
+      qreal xScaleFactor = qMin(H_MULTIPLIER * (x2 - x1), MAX_H_LENGTH);
+      xScaleFactor /= (2.0 * w2);
+
+      xScaleTransform.scale(xScaleFactor, 1.0);
+      path = xScaleTransform.map(path);
+
+      qreal beamYOffset = 0.0;
+
+      if (_chord1->beams() == _chord2->beams() && _chord1->beams() > 0) {
+            int beams = _chord1->beams();
+            qreal beamHalfLineWidth = point(score()->styleS(StyleIdx::beamWidth)) * .5 * mag();
+            beamYOffset = beams * _chord1->beam()->beamDist() - beamHalfLineWidth;
+            if (_chord1->up() != _chord2->up()) {  // cross-staff
+                  beamYOffset += beamYOffset + beamHalfLineWidth;
+                  }
+            else if (!_chord1->up() && !_chord2->up()) {
+                  beamYOffset = -beamYOffset;
+                  }
+            }
+
+      QTransform shearTransform;
+      if (_chord1->beams() == 0 && _chord2->beams() == 0) {
+            if (_chord1->up() && !_chord2->up())
+                  shearTransform.shear(0.0, (y2 - y1 - path.boundingRect().height()) / (x2 - x1));
+            else if (!_chord1->up() && _chord2->up())
+                  shearTransform.shear(0.0, (y2 - y1 + path.boundingRect().height()) / (x2 - x1));
+            else
+                  shearTransform.shear(0.0, (y2 - y1) / (x2 - x1));
+            }
+      else {
+            shearTransform.shear(0.0, (y2 - y1) / (x2 - x1));
+            }
+
+      path = shearTransform.map(path);
+
+      setbbox(path.boundingRect());
+      setPos(x, y + beamYOffset);
       adjustReadPos();
       }
 
@@ -368,4 +454,3 @@ QString Tremolo::accessibleInfo()
       }
 
 }
-
