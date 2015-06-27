@@ -1676,7 +1676,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   keysig->layout();
                   undo(new AddElement(keysig));
                   }
-            else if (!needKeysig && keysig)
+            else if (!needKeysig && keysig && keysig->generated())
                   undoRemoveElement(keysig);
             else if (keysig && !(keysig->keySigEvent() == keyIdx))
                   undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy()));
