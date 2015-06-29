@@ -1548,6 +1548,7 @@ bool Score::addArticulation(Element* el, Articulation* a)
             return false;
             }
       a->setParent(cr);
+      a->setTrack(cr->track()); // make sure it propagates between score and parts
       undoAddElement(a);
       return true;
       }
