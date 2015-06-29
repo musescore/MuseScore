@@ -1603,7 +1603,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         else
                               yDownMax = qMax(y, yDownMax);
                         }
-                  qreal slant = _spatium;
+                  qreal slant = hasNoSlope() ? 0 : _spatium;
                   if (crl.front()->up())
                         slant = -slant;
                   py1   = yUpMin + (yDownMax - yUpMin) * .5 - slant * .5;
