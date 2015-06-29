@@ -658,6 +658,8 @@ QPointF SLine::linePos(Grip grip, System** sys) const
 //                  System* s = static_cast<Note*>(startElement())->chord()->segment()->system();
 //                  *sys = s;
                   Element* e = grip == Grip::START ? startElement() : endElement();
+                  if (!e)
+                        return QPointF();
                   System* s = static_cast<Note*>(e)->chord()->segment()->system();
                   *sys = s;
                   // for GLISSANDO returns the position of the anchor note relative to the system

@@ -4239,6 +4239,10 @@ void ScoreView::cmdAddNoteLine()
             qDebug("addNoteLine: no note %p %p", firstNote, lastNote);
             return;
             }
+      if (firstNote == lastNote) {
+           qDebug("addNoteLine: no support for note to same note line %p", firstNote);
+           return;
+           }
       TextLine* tl = new TextLine(_score);
       tl->setParent(firstNote);
       tl->setStartElement(firstNote);
