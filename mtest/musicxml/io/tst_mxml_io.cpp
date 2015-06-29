@@ -94,6 +94,7 @@ private slots:
       void implicitMeasure1() { mxmlIoTest("testImplicitMeasure1"); }
       void incorrectStaffNumber() { mxmlIoTestRef("testIncorrectStaffNumber"); }
       void instrumentChangeMIDIportExport() { mxmlMscxExportTestRef("testInstrumentChangeMIDIportExport"); }
+      void instrumentChange() { mxmlIoTest("testInstrumentChange"); }
       void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
       void keysig1() { mxmlIoTest("testKeysig1"); }
       void keysig2() { mxmlIoTest("testKeysig2"); }
