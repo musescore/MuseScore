@@ -1555,4 +1555,26 @@ void Seq::handleTimeSigTempoChanged()
       {
       _driver->handleTimeSigTempoChanged();
       }
+
+//---------------------------------------------------------
+//   accurateSeek
+//   used to seek when receiving an external
+//   MIDI Machine Control GOTO or Song Position Pointer message.
+//   Called from RT thread.
+//---------------------------------------------------------
+
+void Seq::accurateSeek(int utick)
+      {
+      EventMap::const_iterator it = events.lower_bound(utick);
+      if (it->first != utick) {
+            // There is no event at the given utick.
+            // In order to seek accurate we have to create new event.
+            // Note: this event is temporal and will be deleted
+            // on the next collectEvents() call.
+            if (playlistChanged)
+                  collectEvents();
+            seq->events.insert(std::pair<int, NPlayEvent>(utick, NPlayEvent(ME_INVALID, 0 , 0, 0)));
+            }
+      seekRT(utick);
+      }
 }

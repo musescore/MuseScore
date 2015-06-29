@@ -54,6 +54,7 @@ class Driver {
       virtual void checkTransportSeek(int, int, bool) {}
       virtual int bufferSize() {return 0;}
       virtual void updateOutPortCount(int) {}
+      void readMMC(int type, int len, int* data);
       };
 
 

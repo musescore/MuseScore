@@ -13,6 +13,8 @@
 #include "config.h"
 #include "preferences.h"
 #include "driver.h"
+#include "libmscore/score.h"
+#include "seq.h"
 
 #ifdef USE_JACK
 #include "jackaudio.h"
@@ -133,5 +135,85 @@ Driver* driverFactory(Seq* seq, QString driverName)
       return driver;
       }
 
-}
+//---------------------------------------------------------
+//   readMMC
+//   reads MIDI Machine Control messages
+//---------------------------------------------------------
 
+void Driver::readMMC(int type, int len, int* data)
+      {
+      if (!preferences.acceptMMCmessages)
+            return;
+
+      switch (type) {
+            case ME_START:
+                  seq->seekRT(0);
+                  if (preferences.useJackTransport)
+                        seekTransport(0);
+                  startTransport();
+            break;
+            case ME_STOP:
+                  stopTransport();
+            break;
+            case ME_CONTINUE:
+                  startTransport();
+            break;
+            case ME_SONGPOS: {
+                  int utick = (128 * data[1] + data[0]) * MScore::division / 4.0;
+                  seq->accurateSeek(utick);
+                  if (preferences.useJackTransport)
+                        seekTransport(utick);
+                  }
+            break;
+            case ME_SYSEX:
+                  // MIDI Machine Control (MMC)
+                  if (data[0] == 0x7F) {
+                        int deviceId = data[1];
+                        if (deviceId != preferences.mmcDeviceId && preferences.mmcDeviceId != 127)
+                              break;
+                        // Goto MMC message
+                        // 0xF0 0x7F <deviceID> 0x06 0x44 0x06 0x01 <hr> <mn> <sc> <fr> <ff> 0xF7
+                        if (len == 12 && data[2] == 0x06 && data[3] == 0x44
+                                      && data[4] == 0x06 && data[5] == 0x01) {
+                              int hour     = data[6] & 0x1f;
+                              int minute   = data[7];
+                              int second   = data[8];
+                              int frameNumber      = data[9];
+                              int subFrameNumber   = data[10];
+
+                              qreal utime = hour*3600 + minute*60 + second + (qreal)frameNumber/30.0 + (qreal)subFrameNumber/300.0;
+                              int utick = seq->score()->utime2utick(utime);
+                              seq->accurateSeek(utick);
+                              if (preferences.useJackTransport)
+                                    seekTransport(utick);
+                              break;
+                              }
+
+                        // MMC format:
+                        // 0xF0 0x7F <deviceID> 0x06 <command> 0xF7
+                        if (data[2] != 0x06)
+                              break;
+                        int command = data[3];
+                        switch (command) {
+                              case 1: // Stop
+                              case 9: // Pause
+                                    stopTransport();
+                              break;
+                              case 2: // Play
+                              case 3: // Deferred Play
+                                    startTransport();
+                              break;
+                              case 4: // Fast Forward
+                                      // TODO
+                              break;
+                              case 5: // Rewind
+                                    seq->seekRT(0);  // Don't use seq->rewindStart() - it's for UI thread
+                                    if (preferences.useJackTransport)
+                                          seekTransport(0);
+                              break;
+                              }
+                        }
+            break;
+            }
+      }
+}
