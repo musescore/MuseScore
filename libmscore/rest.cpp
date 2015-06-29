@@ -189,7 +189,7 @@ bool Rest::acceptDrop(const DropData& data) const
       Element* e = data.element;
       Element::Type type = e->type();
       if (
-         (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
+            (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::NBEAM)
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
@@ -201,6 +201,7 @@ bool Rest::acceptDrop(const DropData& data) const
          || (type == Element::Type::BAR_LINE)
          || (type == Element::Type::BREATH)
          || (type == Element::Type::CHORD)
+         || (type == Element::Type::NOTE)
          || (type == Element::Type::STAFF_STATE)
          || (type == Element::Type::INSTRUMENT_CHANGE)
          || (type == Element::Type::DYNAMIC)
@@ -212,11 +213,10 @@ bool Rest::acceptDrop(const DropData& data) const
          || (type == Element::Type::TREMOLOBAR)
          || (type == Element::Type::IMAGE)
          || (type == Element::Type::SYMBOL)
+         || (type == Element::Type::REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)
          ) {
             return true;
             }
-      if(type == Element::Type::REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)
-            return true;
       return false;
       }
 
