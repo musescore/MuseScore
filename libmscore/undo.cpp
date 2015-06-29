@@ -1634,6 +1634,12 @@ RemoveElement::RemoveElement(Element* e)
                               score->undo(new RemoveElement(note->tieFor()));
                         if (note->tieBack())
                               score->undo(new RemoveElement(note->tieBack()));
+                        for (Spanner* s : note->spannerBack()) {
+                              score->undo(new RemoveElement(s));
+                              }
+                        for (Spanner* s : note->spannerFor()) {
+                              score->undo(new RemoveElement(s));
+                              }
                         }
                   }
             }

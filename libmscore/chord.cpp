@@ -502,6 +502,12 @@ void Chord::remove(Element* e)
                               if (note->tieFor()->endNote())
                                     note->tieFor()->endNote()->setTieBack(0);
                               }
+                        for (Spanner* s : note->spannerBack()) {
+                              note->removeSpannerBack(s);
+                              }
+                        for (Spanner* s : note->spannerFor()) {
+                              note->removeSpannerFor(s);
+                              }
                         }
                   else
                         qDebug("Chord::remove() note %p not found!", e);
