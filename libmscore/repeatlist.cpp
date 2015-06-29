@@ -364,9 +364,9 @@ void RepeatList::unwind()
                         Measure* nm = _score->searchLabel(s->jumpTo());
                         endRepeat   = _score->searchLabel(s->playUntil());
                         continueAt  = _score->searchLabel(s->continueAt());
-                        isGoto      = true;
 
                         if (nm && endRepeat) {
+                              isGoto      = true;
                               rs->len = m->endTick() - rs->tick;
                               append(rs);
                               rs = new RepeatSegment;

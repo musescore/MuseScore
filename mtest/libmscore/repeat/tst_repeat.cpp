@@ -64,6 +64,9 @@ class TestRepeat : public QObject, public MTest
       
       void repeat24() { repeat("repeat24.mscx", "1;2;3;4;2;3;4;5;3;4;5;6"); } // imbricated DS and ||: :||
       void repeat25() { repeat("repeat25.mscx", "1;2;1;2;3;4;2;3;4;5;4;5"); } // imbricated DS and ||: :||
+      
+      void repeat26() { repeat("repeat26.mscx", "1;1;2;2;3"); } // empty and garbage jump
+
       };
 
 //---------------------------------------------------------
