@@ -170,14 +170,14 @@ namespace Ms {
         tar.push_back(tick);
         ar.push_back(tempomap->tick2time(tick));
         if (!cisrest[i])
-          nrar.push_back(tempomap->tick2time(tick));
+          nrar.push_back(tick);
       }
 
       onset_obj["ticks"] = tar;
       onset_obj["times"] = ar;
-      onset_obj["nonrest_times"] = nrar;
-      onset_obj["beg_time"] = tempomap->tick2time(firstNonRest[key]);
-      onset_obj["end_time"] = tempomap->tick2time(lastNonRest[key]);
+      onset_obj["nonrest_ticks"] = nrar;
+      onset_obj["beg_tick"] = firstNonRest[key];
+      onset_obj["end_tick"] = lastNonRest[key];
 
       jsonobj[key] = onset_obj;
     }
