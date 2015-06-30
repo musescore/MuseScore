@@ -205,6 +205,8 @@ void Box::writeProperties(Xml& xml) const
 void Box::read(XmlReader& e)
       {
       _leftMargin = _rightMargin = _topMargin = _bottomMargin = 0.0;
+      _boxHeight = Spatium(0); // override default set in constructor
+      _boxWidth = Spatium(0);
       bool keepMargins = false;        // whether original margins have to be kept when reading old file
 
       while (e.readNextStartElement()) {
