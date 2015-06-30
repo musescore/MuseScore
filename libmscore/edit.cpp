@@ -1512,24 +1512,45 @@ void Score::cmdAddTie()
 
 void Score::cmdAddOttava(Ottava::Type type)
       {
+      Selection sel = selection();
       ChordRest* cr1;
       ChordRest* cr2;
-      getSelectedChordRest2(&cr1, &cr2);
-      if (!cr1)
-            return;
-      if (cr2 == 0)
-            cr2 = cr1;
+      // add on each staff if possible
+      if (sel.isRange() && sel.staffStart() != sel.staffEnd() - 1) {
+            for (int staffIdx = sel.staffStart() ; staffIdx < sel.staffEnd(); ++staffIdx) {
+                  ChordRest* cr1 = sel.firstChordRest(staffIdx * VOICES);
+                  ChordRest* cr2 = sel.lastChordRest(staffIdx * VOICES);
+                  if (!cr1)
+                       continue;
+                  if (cr2 == 0)
+                       cr2 = cr1;
+                  Ottava* ottava = new Ottava(this);
+                  ottava->setOttavaType(type);
+                  ottava->setTrack(cr1->track());
+                  ottava->setTrack2(cr1->track());
+                  ottava->setTick(cr1->tick());
+                  ottava->setTick2(cr2->tick() + cr2->actualTicks());
+                  undoAddElement(ottava);
+                  }
+            }
+      else {
+            getSelectedChordRest2(&cr1, &cr2);
+            if (!cr1)
+                  return;
+            if (cr2 == 0)
+                  cr2 = cr1;
 
-      Ottava* ottava = new Ottava(this);
-      ottava->setOttavaType(type);
+            Ottava* ottava = new Ottava(this);
+            ottava->setOttavaType(type);
 
-      ottava->setTrack(cr1->track());
-      ottava->setTrack2(cr1->track());
-      ottava->setTick(cr1->tick());
-      ottava->setTick2(cr2->tick() + cr2->actualTicks());
-      undoAddElement(ottava);
-      if (!noteEntryMode())
-            select(ottava, SelectType::SINGLE, 0);
+            ottava->setTrack(cr1->track());
+            ottava->setTrack2(cr1->track());
+            ottava->setTick(cr1->tick());
+            ottava->setTick2(cr2->tick() + cr2->actualTicks());
+            undoAddElement(ottava);
+            if (!noteEntryMode())
+                  select(ottava, SelectType::SINGLE, 0);
+            }
       }
 
 //---------------------------------------------------------

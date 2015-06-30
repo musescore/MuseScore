@@ -4141,7 +4141,7 @@ void ScoreView::startUndoRedo()
 
 //---------------------------------------------------------
 //   cmdAddSlur
-//    'S' typed on keyboard
+//    command invoked, or icon double clicked
 //---------------------------------------------------------
 
 void ScoreView::cmdAddSlur()
@@ -4154,8 +4154,10 @@ void ScoreView::cmdAddSlur()
             is.setSlur(nullptr);
             return;
             }
+      bool undoActive = _score->undo()->active();
       if (_score->selection().isRange()) {
-            _score->startCmd();
+            if (!undoActive)
+                  _score->startCmd();
             int startTrack = _score->selection().staffStart() * VOICES;
             int endTrack   = _score->selection().staffEnd() * VOICES;
             for (int track = startTrack; track < endTrack; ++track) {
@@ -4184,7 +4186,8 @@ void ScoreView::cmdAddSlur()
                         _score->undoAddElement(slur);
                         }
                   }
-            _score->endCmd();
+            if (!undoActive)
+                  _score->endCmd();
             mscore->endCmd();
             }
       else {
@@ -4324,6 +4327,14 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
 void ScoreView::cmdAddHairpin(bool decrescendo)
       {
       Selection selection = _score->selection();
+      // special case for two selected chordrests on same staff
+      bool twoNotesSameStaff = false;
+      if (selection.isList() && selection.elements().size() == 2) {
+            ChordRest* cr1 = selection.firstChordRest();
+            ChordRest* cr2 = selection.lastChordRest();
+            if (cr1 && cr2 && cr1 != cr2 && cr1->staffIdx() == cr2->staffIdx())
+                  twoNotesSameStaff = true;
+            }
       // add hairpin on each staff if possible
       if (selection.isRange() && selection.staffStart() != selection.staffEnd() - 1) {
             _score->startCmd();
@@ -4339,7 +4350,7 @@ void ScoreView::cmdAddHairpin(bool decrescendo)
             _score->endCmd();
             _score->startCmd();
             }
-      else if (selection.isRange() || selection.isSingle()) {
+      else if (selection.isRange() || selection.isSingle() || twoNotesSameStaff) {
             // for single staff range selection, or single selection,
             // find start & end elements elements
             ChordRest* cr1;
@@ -4351,7 +4362,8 @@ void ScoreView::cmdAddHairpin(bool decrescendo)
                   cr2 = cr1;
 
             _score->startCmd();
-            Hairpin* pin = _score->addHairpin(decrescendo, cr1->tick(), cr2->tick() + cr2->actualTicks(), cr1->track());
+            int tick2 = twoNotesSameStaff ? cr2->tick() : cr2->tick() + cr2->actualTicks();
+            Hairpin* pin = _score->addHairpin(decrescendo, cr1->tick(), tick2, cr1->track());
             pin->layout();
             _score->endCmd();
             _score->startCmd();

@@ -269,47 +269,28 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
 
       undoAddElement(spanner);
       select(spanner, SelectType::SINGLE, 0);
+      }
 
-      if (spanner->type() == Element::Type::TRILL) {
-            Element* e = segment->element(staffIdx * VOICES);
-            if (e && e->type() == Element::Type::CHORD) {
-                  Chord* chord = static_cast<Chord*>(e);
-                  Fraction l = chord->duration();
-                  // if (chord->notes().size() > 1) {
-                        // trill do not work for chords
-                  //      }
-                  Note* note = chord->upNote();
-                  while (note->tieFor()) {
-                        note = note->tieFor()->endNote();
-                        l += note->chord()->duration();
-                        }
-                  Segment* s = note->chord()->segment();
-                  s = s->next1(Segment::Type::ChordRest);
-                  while (s) {
-                        Element* e = s->element(staffIdx * VOICES);
-                        if (e)
-                              break;
-                        s = s->next1(Segment::Type::ChordRest);
-                        }
-                  if (s) {
-                        for (ScoreElement* e : spanner->linkList())
-                              static_cast<Spanner*>(e)->setTick2(s->tick());
-                        }
-                  Fraction d(1,32);
-                  Fraction e = l / d;
-                  int n = e.numerator() / e.denominator();
-                  QList<NoteEvent*> events;
-                  int pitch  = chord->upNote()->ppitch();
-                  Key key    = chord->staff()->key(segment->tick());
-                  int pitch2 = diatonicUpDown(key, pitch, 1);
-                  int dpitch = pitch2 - pitch;
-                  for (int i = 0; i < n; i += 2) {
-                        events.append(new NoteEvent(0,      i * 1000 / n,    1000/n));
-                        events.append(new NoteEvent(dpitch, (i+1) *1000 / n, 1000/n));
-                        }
-                  undo(new ChangeNoteEvents(chord, events));
-                  }
-            }
+//---------------------------------------------------------
+//   cmdAddSpanner
+//    used when applying a spanner to a selection
+//---------------------------------------------------------
+
+void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment, Segment* endSegment)
+      {
+      int track = staffIdx * VOICES;
+      spanner->setTrack(track);
+      spanner->setTrack2(track);
+      spanner->setTick(startSegment->tick());
+      int tick2;
+      if (!endSegment)
+            tick2 = lastSegment()->tick();
+      else if (endSegment == startSegment)
+            tick2 = startSegment->measure()->last()->tick();
+      else
+            tick2 = endSegment->tick();
+      spanner->setTick2(tick2);
+      undoAddElement(spanner);
       }
 
 //---------------------------------------------------------
