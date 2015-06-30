@@ -324,6 +324,19 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             score->startCmd();
             }
       if (sel.isList()) {
+            ChordRest* cr1 = sel.firstChordRest();
+            ChordRest* cr2 = sel.lastChordRest();
+            bool addSingle = false;       // add a single line only
+            if (cr1 && cr2 == cr1) {
+                  // one chordrest selected, ok to add line
+                  addSingle = true;
+                  }
+            else if (sel.elements().size() == 2 && cr1 && cr2 && cr1 != cr2) {
+                  // two chordrests selected
+                  // must be on same staff in order to add line, except for slur
+                  if (element->type() == Element::Type::SLUR || cr1->staffIdx() == cr2->staffIdx())
+                        addSingle = true;
+                  }
             if (viewer->mscoreState() == STATE_NOTE_ENTRY_DRUM && element->type() == Element::Type::CHORD) {
                   // use input position rather than selection if possible
                   Element* e = score->inputState().cr();
@@ -342,8 +355,22 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                   else
                         qDebug("nowhere to place drum note");
                   }
+            else if (element->type() == Element::Type::SLUR && addSingle) {
+                  viewer->cmdAddSlur();
+                  }
+            else if (element->isSLine() && element->type() != Element::Type::GLISSANDO && addSingle) {
+                  Segment* startSegment = cr1->segment();
+                  Segment* endSegment = cr2->segment();
+                  if (element->type() == Element::Type::PEDAL && cr2 != cr1)
+                        endSegment = endSegment->nextCR(cr2->track());
+                  // TODO - handle cross-voice selections
+                  int idx = cr1->staffIdx();
+                  Spanner* spanner = static_cast<Spanner*>(element->clone());
+                  spanner->setScore(score);
+                  score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
+                  }
             else {
-                  foreach(Element* e, sel.elements())
+                  for (Element* e : sel.elements())
                         applyDrop(score, viewer, e, element);
                   }
             }
@@ -356,12 +383,24 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                   QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                   applyDrop(score, viewer, m, element, pt);
                   }
+            else if (element->type() == Element::Type::SLUR) {
+                  viewer->cmdAddSlur();
+                  }
+            else if (element->isSLine() && element->type() != Element::Type::GLISSANDO) {
+                  Segment* startSegment = sel.startSegment();
+                  Segment* endSegment = sel.endSegment();
+                  int endStaff = sel.staffEnd();
+                  for (int i = sel.staffStart(); i < endStaff; ++i) {
+                        Spanner* spanner = static_cast<Spanner*>(element->clone());
+                        spanner->setScore(score);
+                        score->cmdAddSpanner(spanner, i, startSegment, endSegment);
+                        }
+                  }
             else {
                   int track1 = sel.staffStart() * VOICES;
                   int track2 = sel.staffEnd() * VOICES;
                   Segment* startSegment = sel.startSegment();
                   Segment* endSegment = sel.endSegment(); //keep it, it could change during the loop
-                  bool stop = false;
                   for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                         for (int track = track1; track < track2; ++track) {
                               Element* e = s->element(track);
@@ -369,22 +408,15 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                                     continue;
                               if (e->type() == Element::Type::CHORD) {
                                     Chord* chord = static_cast<Chord*>(e);
-                                    foreach(Note* n, chord->notes()) {
+                                    for (Note* n : chord->notes())
                                           applyDrop(score, viewer, n, element);
-                                          if (element->type() == Element::Type::SLUR || element->type() == Element::Type::HAIRPIN) {
-                                                stop = true;
-                                                break;
-                                                }
-                                          }
                                     }
                               else {
                                     // do not apply articulation to barline in a range selection
                                     if(e->type() != Element::Type::BAR_LINE || element->type() != Element::Type::ARTICULATION)
                                           applyDrop(score, viewer, e, element);
                                     }
-                              if (stop) break;
                               }
-                        if (stop) break;
                         }
                   }
             }
