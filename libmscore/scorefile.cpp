@@ -185,6 +185,13 @@ void Score::write(Xml& xml, bool selectionOnly)
       if (selectionOnly) {
             staffStart   = _selection.staffStart();
             staffEnd     = _selection.staffEnd();
+            // make sure we select full parts
+            Staff* sStaff = staff(staffStart);
+            Part* sPart = sStaff->part();
+            Staff* eStaff = staff(staffEnd - 1);
+            Part* ePart = eStaff->part();
+            staffStart = staffIdx(sPart);
+            staffEnd = staffIdx(ePart) + ePart->nstaves();
             measureStart = _selection.startSegment()->measure();
             if (_selection.endSegment())
                   measureEnd   = _selection.endSegment()->measure()->next();
