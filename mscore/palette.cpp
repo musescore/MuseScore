@@ -26,6 +26,12 @@
 #include "libmscore/chord.h"
 #include "libmscore/clef.h"
 #include "libmscore/segment.h"
+#include "libmscore/measure.h"
+#include "libmscore/staff.h"
+#include "libmscore/system.h"
+#include "libmscore/page.h"
+#include "libmscore/keysig.h"
+#include "libmscore/timesig.h"
 #include "preferences.h"
 #include "seq.h"
 #include "libmscore/part.h"
@@ -275,8 +281,8 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
       {
       DropData dropData;
       dropData.view       = viewer;
-      dropData.pos        = pt;
-      dropData.dragOffset = pt;
+      dropData.pos        = pt.isNull() ? target->pagePos() : pt;
+      dropData.dragOffset = QPointF();
       dropData.modifiers  = 0;
       dropData.element    = e;
 
@@ -303,7 +309,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       int i = idx(ev->pos());
       if (i == -1)
             return;
-      Score* score   = mscore->currentScore();
+      Score* score = mscore->currentScore();
       if (score == 0)
             return;
       const Selection& sel = score->selection();
@@ -311,7 +317,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             return;
 
       Element* element = 0;
-      if (i < size() &&  cells[i])
+      if (i < size() && cells[i])
             element = cells[i]->element;
       if (element == 0)
             return;
@@ -375,13 +381,127 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                   }
             }
       else if (sel.isRange()) {
-            // TODO: check for other element types:
-            if (element->type() == Element::Type::BAR_LINE) {
-                  // TODO: apply to multiple measures
-                  Measure* m = sel.startSegment()->measure();
-                  QRectF r = m->staffabbox(sel.staffStart());
-                  QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
-                  applyDrop(score, viewer, m, element, pt);
+            if (element->type() == Element::Type::BAR_LINE
+                || element->type() == Element::Type::MARKER
+                || element->type() == Element::Type::JUMP
+                || element->type() == Element::Type::SPACER
+                || element->type() == Element::Type::LAYOUT_BREAK
+                || element->type() == Element::Type::VBOX
+                || element->type() == Element::Type::HBOX
+                || element->type() == Element::Type::TBOX
+                || element->type() == Element::Type::MEASURE
+                || element->type() == Element::Type::BRACKET
+                || (element->type() == Element::Type::ICON
+                    && (static_cast<Icon*>(element)->iconType() == IconType::VFRAME
+                        || static_cast<Icon*>(element)->iconType() == IconType::HFRAME
+                        || static_cast<Icon*>(element)->iconType() == IconType::TFRAME
+                        || static_cast<Icon*>(element)->iconType() == IconType::MEASURE
+                        || static_cast<Icon*>(element)->iconType() == IconType::BRACKETS))) {
+                  Measure* last = sel.endSegment() ? sel.endSegment()->measure() : nullptr;
+                  for (Measure* m = sel.startSegment()->measure(); m; m = m->nextMeasureMM()) {
+                        QRectF r = m->staffabbox(sel.staffStart());
+                        QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
+                        pt += m->system()->page()->pos();
+                        applyDrop(score, viewer, m, element, pt);
+                        if (m == last)
+                              break;
+                        }
+                  }
+            else if (element->type() == Element::Type::CLEF
+                     || element->type() == Element::Type::KEYSIG
+                     || element->type() == Element::Type::TIMESIG) {
+                  Measure* m1 = sel.startSegment()->measure();
+                  Measure* m2 = sel.endSegment() ? sel.endSegment()->measure() : nullptr;
+                  if (m2 == m1 && sel.startSegment()->rtick() == 0)
+                        m2 = nullptr;     // don't restore original if one full measure selected
+                  else if (m2)
+                        m2 = m2->nextMeasureMM();
+                  // for clefs, apply to each staff separately
+                  // otherwise just apply to top staff
+                  int staffIdx1 = sel.staffStart();
+                  int staffIdx2 = element->type() == Element::Type::CLEF ? sel.staffEnd() : staffIdx1 + 1;
+                  for (int i = staffIdx1; i < staffIdx2; ++i) {
+                        // for clefs, use mid-measure changes if appropriate
+                        Element* e1 = nullptr;
+                        Element* e2 = nullptr;
+                        // use mid-measure clef changes as appropriate
+                        if (element->type() == Element::Type::CLEF) {
+                              if (sel.startSegment()->segmentType() == Segment::Type::ChordRest && sel.startSegment()->rtick() != 0) {
+                                    ChordRest* cr = static_cast<ChordRest*>(sel.startSegment()->nextChordRest(i * VOICES));
+                                    if (cr && cr->isChord())
+                                          e1 = static_cast<Chord*>(cr)->upNote();
+                                    else
+                                          e1 = cr;
+                                    }
+                              if (sel.endSegment() && sel.endSegment()->segmentType() == Segment::Type::ChordRest) {
+                                    ChordRest* cr = static_cast<ChordRest*>(sel.endSegment()->nextChordRest(i * VOICES));
+                                    if (cr && cr->isChord())
+                                          e2 = static_cast<Chord*>(cr)->upNote();
+                                    else
+                                          e2 = cr;
+                                    }
+                              }
+                        if (m2 || e2) {
+                              // restore original clef/keysig/timesig
+                              Staff* staff = score->staff(i);
+                              int tick1 = sel.startSegment()->tick();
+                              Element* oelement = nullptr;
+                              switch (element->type()) {
+                                    case Element::Type::CLEF:
+                                          {
+                                          Clef* oclef = new Clef(score);
+                                          oclef->setClefType(staff->clef(tick1));
+                                          oelement = oclef;
+                                          break;
+                                          }
+                                    case Element::Type::KEYSIG:
+                                          {
+                                          KeySig* okeysig = new KeySig(score);
+                                          okeysig->setKeySigEvent(staff->keySigEvent(tick1));
+                                          if (!score->styleB(StyleIdx::concertPitch) && !okeysig->isCustom() && !okeysig->isAtonal()) {
+                                                Interval v = staff->part()->instrument()->transpose();
+                                                if (!v.isZero()) {
+                                                      Key k = okeysig->key();
+                                                      okeysig->setKey(transposeKey(k, v));
+                                                      }
+                                                }
+                                          oelement = okeysig;
+                                          break;
+                                          }
+                                    case Element::Type::TIMESIG:
+                                          {
+                                          TimeSig* otimesig = new TimeSig(score);
+                                          otimesig->setFrom(staff->timeSig(tick1));
+                                          oelement = otimesig;
+                                          break;
+                                          }
+                                    default:
+                                          break;
+                                    }
+                              if (oelement) {
+                                    if (e2) {
+                                          applyDrop(score, viewer, e2, oelement);
+                                          }
+                                    else {
+                                          QRectF r = m2->staffabbox(i);
+                                          QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
+                                          pt += m2->system()->page()->pos();
+                                          applyDrop(score, viewer, m2, oelement, pt);
+                                          }
+                                    delete oelement;
+                                    }
+                              }
+                        // apply new clef/keysig/timesig
+                        if (e1) {
+                              applyDrop(score, viewer, e1, element);
+                              }
+                        else {
+                              QRectF r = m1->staffabbox(i);
+                              QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
+                              pt += m1->system()->page()->pos();
+                              applyDrop(score, viewer, m1, element, pt);
+                              }
+                        }
                   }
             else if (element->type() == Element::Type::SLUR) {
                   viewer->cmdAddSlur();
