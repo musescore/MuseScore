@@ -954,6 +954,7 @@ MuseScore::MuseScore()
 #endif
 
       menuHelp->addSeparator();
+      menuHelp->addAction(tr("Ask for Help"), this, SLOT(askForHelp()));
       menuHelp->addAction(tr("Report a Bug"), this, SLOT(reportBug()));
 
       menuHelp->addSeparator();
@@ -2814,9 +2815,16 @@ void MuseScore::play(Element* e, int pitch) const
 
 void MuseScore::reportBug()
       {
-      QString url("http://musescore.org/en/node/add/project-issue/musescore?sha=");
-      url += revision();
-      QDesktopServices::openUrl(QUrl(url.trimmed()));
+      QDesktopServices::openUrl(QUrl(QString("https://musescore.org/redirect/post/bug-report?sha=%1&locale=%2").arg(revision()).arg(getLocaleISOCode()).trimmed()));
+      }
+
+//---------------------------------------------------------
+//   askForHelp
+//---------------------------------------------------------
+
+void MuseScore::askForHelp()
+      {
+      QDesktopServices::openUrl(QUrl(QString("https://musescore.org/redirect/post/question?locale=").arg(getLocaleISOCode()).trimmed()));
       }
 
 //---------------------------------------------------------
