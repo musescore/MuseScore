@@ -2815,7 +2815,8 @@ void MuseScore::play(Element* e, int pitch) const
 
 void MuseScore::reportBug()
       {
-      QDesktopServices::openUrl(QUrl(QString("https://musescore.org/redirect/post/bug-report?sha=%1&locale=%2").arg(revision()).arg(getLocaleISOCode()).trimmed()));
+      QString url = QString("https://musescore.org/redirect/post/bug-report?sha=%1&locale=%2").arg(revision()).arg(getLocaleISOCode());
+      QDesktopServices::openUrl(QUrl(url.trimmed()));
       }
 
 //---------------------------------------------------------
@@ -2824,7 +2825,8 @@ void MuseScore::reportBug()
 
 void MuseScore::askForHelp()
       {
-      QDesktopServices::openUrl(QUrl(QString("https://musescore.org/redirect/post/question?locale=").arg(getLocaleISOCode()).trimmed()));
+      QString url = QString("https://musescore.org/redirect/post/question?locale=%1").arg(getLocaleISOCode());
+      QDesktopServices::openUrl(QUrl(url.trimmed()));
       }
 
 //---------------------------------------------------------
