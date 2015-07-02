@@ -304,7 +304,8 @@ int Part::midiPort() const
 
 //---------------------------------------------------------
 //   setMidiChannel
-//   called from importmusicxml, importMidi and importGtp*
+//   Called from importmusicxml, importMidi and importGtp*.
+//   Specify tick to set MIDI channel to an InstrumentChange element.
 //   Usage:
 //   setMidiChannel(channel)       to set channel
 //   setMidiChannel(-1, port)      to set port
@@ -319,8 +320,8 @@ void Part::setMidiChannel(int ch, int port, int tick)
             MidiMapping mm;
             mm.part = this;
             mm.articulation = channel;
-            mm.channel = 0;
-            mm.port = 0;
+            mm.channel = -1;
+            mm.port = -1;
             if (ch != -1)
                   mm.channel = ch;
             if (port != -1)

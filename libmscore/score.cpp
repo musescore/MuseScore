@@ -889,7 +889,7 @@ void Score::appendPart(Part* p)
 //---------------------------------------------------------
 //   rebuildMidiMapping
 //   1. Remove mappings to deleted instruments
-//   2. Add mappings to new instruments
+//   2. Add mappings to new instruments and repair existing ones
 //   3. Set mappings in order you see in Add->Instruments
 //---------------------------------------------------------
 
@@ -911,7 +911,8 @@ void Score::rebuildMidiMapping()
             for (auto i = il->begin(); i != il->end() && !channelExists; ++i) {
                   const Instrument* instr = i->second;
                   if (_midiMapping[index].articulation->channel != -1
-                        && instr->channel().contains(_midiMapping[index].articulation))
+                        && instr->channel().contains(_midiMapping[index].articulation)
+                        && !(_midiMapping[index].port == -1 && _midiMapping[index].channel == -1))
                         channelExists = true;
                   }
             if (!channelExists) {
@@ -929,12 +930,14 @@ void Score::rebuildMidiMapping()
       for (int index = 0; index < removeOffset; index++)
             _midiMapping.removeLast();
 
-      // 2.  Add mappings to new instruments
+      // 2.  Add mappings to new instruments and repair existing ones
       int maxport = 0;
       QSet<int> occupiedMidiChannels; // each entry is port*16+channel
       occupiedMidiChannels.reserve(_midiMapping.size()); // Bringing down the complexity of insertion to amortized O(1)
 
       for(MidiMapping mm :_midiMapping) {
+            if (mm.port == -1 || mm.channel == -1)
+                  continue;
             occupiedMidiChannels.insert((int)(mm.port)*16+(int)mm.channel);
             if (maxport < mm.port)
                   maxport = mm.port;
@@ -955,9 +958,58 @@ void Score::rebuildMidiMapping()
                                     break;
                                     }
                               }
-                        // Channel could already exist, so we need to add only missing Channels
-                        if (channelExists)
+                        // Channel could already exist, but have unassigned port or channel. Repair and continue
+                        if (channelExists) {
+                              if (_midiMapping[channel->channel].port == -1) {
+                                    int ch = _midiMapping[channel->channel].channel;
+                                    for (int p = 0;; p++) {
+                                          if (!occupiedMidiChannels.contains(p*16+ch)) {
+                                                _midiMapping[channel->channel].port = p;
+                                                occupiedMidiChannels.insert(p*16+ch);
+                                                break;
+                                                }
+                                          }
+                                    }
+                              else if (_midiMapping[channel->channel].channel == -1) {
+                                    int p = _midiMapping[channel->channel].port;
+                                    if (drum && !occupiedMidiChannels.contains(p*16+9)) {
+                                                _midiMapping[channel->channel].channel = 9;
+                                                continue;
+                                          }
+                                    else if (drum && occupiedMidiChannels.contains(p*16+9)) {
+                                          for (int pi = 0;; pi++) {
+                                                if (!occupiedMidiChannels.contains(pi*16+9)) {
+                                                      occupiedMidiChannels.insert(pi*16+9);
+                                                      _midiMapping[channel->channel].channel = 9;
+                                                      _midiMapping[channel->channel].port    = pi;
+                                                      break;
+                                                      }
+                                                }
+                                          continue;
+                                          }
+                                    bool found = false;
+                                    for (int ch = 0; ch < 16 && !drum; ch++) {
+                                          if (ch != 9 && !occupiedMidiChannels.contains(p*16+ch)) {
+                                                occupiedMidiChannels.insert(p*16+ch);
+                                                _midiMapping[channel->channel].channel = ch;
+                                                found = true;
+                                                break;
+                                                }
+                                          }
+                                    // Find new port and channel for this instrument
+                                    if (!found) {
+                                          for (;;startFrom++) {
+                                                if (startFrom % 16 != 9 && !occupiedMidiChannels.contains(startFrom)) {
+                                                      occupiedMidiChannels.insert(startFrom);
+                                                      _midiMapping[channel->channel].port    = startFrom / 16;
+                                                      _midiMapping[channel->channel].channel = startFrom % 16;
+                                                      break;
+                                                      }
+                                                }
+                                          }
+                                    }
                               continue;
+                              }
 
                         MidiMapping mm;
                         if (drum) {
@@ -1058,6 +1110,8 @@ void Score::checkMidiMapping()
                   }
             else {
                   lastChannel++;
+                  if (lastChannel % 16 == 9)
+                        lastChannel++;
                   int p = lastChannel / 16;
                   int c = lastChannel % 16;
                   if (m.port != p || m.channel != c) {
