@@ -2298,8 +2298,11 @@ bool Text::readProperties(XmlReader& e)
             e.readElementText();
       else if (tag == "html")
             setPlainText(QTextDocumentFragment::fromHtml(e.readXml()).toPlainText());
-      else if (tag == "text")
+      else if (tag == "text") {
             _text = e.readXml();
+            // 2.0 and 2.0.1 had unicode symbols
+            _text.replace("<sym>unicode", "<sym>met");
+            }
       else if (tag == "html-data")
             setXmlText(convertFromHtml(e.readXml()));
       else if (tag == "subtype")          // obsolete
