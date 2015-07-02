@@ -1310,13 +1310,13 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
                         textTempo += "(";
                   textTempo += durationTempoL;
                   if (tempoPtr->getLeftNoteDot())
-                        textTempo += "<sym>space</sym><sym>unicodeAugmentationDot</sym>";
+                        textTempo += "<sym>space</sym><sym>metAugmentationDot</sym>";
                   textTempo += " = ";
                   switch (tempoPtr->getRightSideType()) {
                         case 1:
                               textTempo += durationTempoR;
                               if (tempoPtr->getRightNoteDot())
-                                    textTempo += "<sym>space</sym><sym>unicodeAugmentationDot</sym>";
+                                    textTempo += "<sym>space</sym><sym>metAugmentationDot</sym>";
                               break;
                         case 2:
                               textTempo += (tempoPtr->getRightText()).toHtmlEscaped();
@@ -1335,7 +1335,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
             if (textTempo.isEmpty()) {
                   textTempo = durationTempoL;
                   if (tempoPtr->getLeftNoteDot())
-                        textTempo += "<sym>space</sym><sym>unicodeAugmentationDot</sym>";
+                        textTempo += "<sym>space</sym><sym>metAugmentationDot</sym>";
                   textTempo += " = " + QString::number(tempoPtr->getTypeTempo());
                   t->setVisible(false);
                   }
