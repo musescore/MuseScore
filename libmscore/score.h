@@ -246,6 +246,8 @@ enum class PasteStatus : char {
 //   @P poet            QString           poet of the score (read only)
 //   @P hasLyrics       bool              score has lyrics (read only)
 //   @P hasHarmonies    bool              score has chord symbols (read only)
+//   @P lyricCount      int               number of lyric item (read only)
+//   @P harmonyCount    int               number of harmony item (read only)
 //   @P keysig          int               key signature at the start of the score (read only)
 //   @P duration        int               duration of score in seconds (read only)
 //   @P excerpts        array[Ms::Excerpt] the list of the excerpts (linked parts)
@@ -270,6 +272,8 @@ class Score : public QObject {
       Q_PROPERTY(QString                poet              READ poet)
       Q_PROPERTY(bool                   hasLyrics         READ hasLyrics)
       Q_PROPERTY(bool                   hasHarmonies      READ hasHarmonies)
+      Q_PROPERTY(int                    lyricCount        READ lyricCount)
+      Q_PROPERTY(int                    harmonyCount      READ harmonyCount)
       Q_PROPERTY(int                    keysig            READ keysig)
       Q_PROPERTY(int                    duration          READ duration)
       Q_PROPERTY(QQmlListProperty<Ms::Excerpt> excerpts   READ qmlExcerpts)
@@ -1051,6 +1055,9 @@ class Score : public QObject {
       int nmeasures();
       bool hasLyrics();
       bool hasHarmonies();
+      int  lyricCount();
+      int  harmonyCount();
+      Q_INVOKABLE QString extractLyrics();
       int keysig();
       int duration();
 
