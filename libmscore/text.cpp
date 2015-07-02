@@ -2219,9 +2219,11 @@ void Text::writeProperties(Xml& xml, bool writeText, bool writeStyle) const
             _textStyle.writeProperties(xml, score()->textStyle(_styleIndex));
             }
       if (writeText) {
-            // Make sure we don't write met* symbol, they are not supported in 2.0, 2.0.1
+            // Make sure we don't write metNote and metAugmentationDot symbols,
+            // they are not supported in 2.0 and 2.0.1
             QString t = xmlText();
-            t.replace("<sym>met",       "<sym>unicode");
+            t.replace("<sym>metN",       "<sym>unicodeN");
+            t.replace("<sym>metA",       "<sym>unicodeA");
             xml.writeXml("text", t);
             }
       }
