@@ -870,7 +870,19 @@ Palette* MuseScore::newLinesPalette(bool basic)
             pedal = new Pedal(gscore);
             pedal->setLen(w);
             pedal->setBeginText("<sym>keyboardPedalPed</sym>");
+            pedal->setContinueText("(<sym>keyboardPedalPed</sym>)");
             pedal->setEndHook(true);
+            sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
+
+            pedal = new Pedal(gscore);
+            pedal->setLen(w);
+            pedal->setBeginText("<sym>keyboardPedalPed</sym>");
+            pedal->setContinueText("(<sym>keyboardPedalPed</sym>)");
+            pedal->setEndText("<sym>keyboardPedalUp</sym>");
+            Align align = pedal->endTextElement()->textStyle().align();
+            align = (align & AlignmentFlags::VMASK) | AlignmentFlags::HCENTER;
+            pedal->endTextElement()->textStyle().setAlign(align);
+            pedal->setLineVisible(false);
             sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
             }
 
