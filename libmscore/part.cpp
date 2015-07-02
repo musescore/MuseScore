@@ -552,5 +552,87 @@ void Part::insertTime(int tick, int len)
       _instruments.insert(il.begin(), il.end());
       }
 
+//---------------------------------------------------------
+//   lyricCount
+//---------------------------------------------------------
+
+int Part::lyricCount()
+      {
+      if (!score())
+            return 0;
+      int count = 0;
+      Segment::Type st = Segment::Type::ChordRest;
+      for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
+            for (int i = startTrack(); i < endTrack() ; ++i) {
+                  if (seg->lyricsList(i))
+                        count += seg->lyricsList(i)->size();
+                  }
+            }
+      return count;
+      }
+
+//---------------------------------------------------------
+//   harmonyCount
+//---------------------------------------------------------
+
+int Part::harmonyCount()
+      {
+      if (!score())
+            return 0;
+      int count = 0;
+      Segment::Type st = Segment::Type::ChordRest;
+      for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
+            for (Element* e : seg->annotations()) {
+                  if (e->type() == Element::Type::HARMONY && e->track() >= startTrack() && e->track() < endTrack())
+                        count++;
+                  }
+            }
+      return count;
+      }
+
+//---------------------------------------------------------
+//   hasPitchedStaff
+//---------------------------------------------------------
+
+bool Part::hasPitchedStaff()
+      {
+      if (!staves())
+            return false;
+      for (Staff* s : *staves()) {
+            if (s && s->isPitchedStaff())
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   hasTabStaff
+//---------------------------------------------------------
+
+bool Part::hasTabStaff()
+      {
+      if (!staves())
+            return false;
+      for (Staff* s : *staves()) {
+            if (s && s->isTabStaff())
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   hasDrumStaff
+//---------------------------------------------------------
+
+bool Part::hasDrumStaff()
+      {
+      if (!staves())
+            return false;
+      for (Staff* s : *staves()) {
+            if (s && s->isDrumStaff())
+                  return true;
+            }
+      return false;
+      }
 }
 

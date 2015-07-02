@@ -3756,11 +3756,118 @@ bool Score::hasHarmonies()
       Segment::Type st = Segment::Type::ChordRest;
       for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             for (Element* e : seg->annotations()) {
-                        if (e->type() == Element::Type::HARMONY)
-                              return true;
+                  if (e->type() == Element::Type::HARMONY)
+                        return true;
                   }
             }
       return false;
+      }
+
+//---------------------------------------------------------
+//   lyricCount
+//---------------------------------------------------------
+
+int Score::lyricCount()
+      {
+      int count = 0;
+      Segment::Type st = Segment::Type::ChordRest;
+      for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
+            for (int i = 0; i < ntracks() ; ++i) {
+                  if (seg->lyricsList(i))
+                        count += seg->lyricsList(i)->size();
+                  }
+            }
+      return count;
+      }
+
+//---------------------------------------------------------
+//   harmonyCount
+//---------------------------------------------------------
+
+int Score::harmonyCount()
+      {
+      int count = 0;
+      Segment::Type st = Segment::Type::ChordRest;
+      for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
+            for (Element* e : seg->annotations()) {
+                  if (e->type() == Element::Type::HARMONY)
+                        count++;
+                  }
+            }
+      return count;
+      }
+
+QString Score::extractLyrics()
+      {
+      QString result;
+      updateRepeatList(true);
+      setPlaylistDirty();
+      Segment::Type st = Segment::Type::ChordRest;
+      for (int track = 0; track < ntracks(); track += VOICES) {
+            bool found = false;
+            int maxLyrics = 1;
+            for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+                  m->setPlaybackCount(0);
+                  }
+            // follow the repeat segments
+            for (const RepeatSegment* rs : *repeatList()) {
+                  int startTick  = rs->tick;
+                  int endTick    = startTick + rs->len;
+                  for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
+                        int playCount = m->playbackCount();
+                        for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
+                              // consider voice 1 only
+                              if (seg->lyricsList(track) == nullptr || seg->lyricsList(track)->size() == 0)
+                                    continue;
+                              if (seg->lyricsList(track)->size() > maxLyrics)
+                                    maxLyrics = seg->lyricsList(track)->size();
+                              if (playCount >= seg->lyricsList(track)->size())
+                                    continue;
+                              Lyrics* l = seg->lyricsList(track)->at(playCount);
+                              if (!l)
+                                    continue;
+                              found = true;
+                              QString lyric = l->plainText().trimmed();
+                              if (l->syllabic() == Lyrics::Syllabic::SINGLE || l->syllabic() == Lyrics::Syllabic::END)
+                                    result += lyric + " ";
+                              else if (l->syllabic() == Lyrics::Syllabic::BEGIN || l->syllabic() == Lyrics::Syllabic::MIDDLE)
+                                    result += lyric;
+                              }
+                        m->setPlaybackCount(m->playbackCount() + 1);
+                        if (m->tick() + m->ticks() >= endTick)
+                              break;
+                        }
+                  }
+            // consider remaning lyrics
+            for (int lyricsNumber = 0; lyricsNumber < maxLyrics; lyricsNumber++) {
+                  for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+                        int playCount = m->playbackCount();
+                        if (lyricsNumber >= playCount) {
+                              for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
+                                    // consider voice 1 only
+                                    if (seg->lyricsList(track) == nullptr || seg->lyricsList(track)->size() == 0)
+                                          continue;
+                                    if (seg->lyricsList(track)->size() > maxLyrics)
+                                          maxLyrics = seg->lyricsList(track)->size();
+                                    if (lyricsNumber >= seg->lyricsList(track)->size())
+                                          continue;
+                                    Lyrics* l = seg->lyricsList(track)->at(lyricsNumber);
+                                    if (!l)
+                                          continue;
+                                    found = true;
+                                    QString lyric = l->plainText().trimmed();
+                                    if (l->syllabic() == Lyrics::Syllabic::SINGLE || l->syllabic() == Lyrics::Syllabic::END)
+                                          result += lyric + " ";
+                                    else if (l->syllabic() == Lyrics::Syllabic::BEGIN || l->syllabic() == Lyrics:: Syllabic::MIDDLE)
+                                          result += lyric;
+                                    }
+                              }
+                        }
+                  }
+            if (found)
+                  result += "\n\n";
+            }
+      return result.trimmed();
       }
 
 //---------------------------------------------------------
