@@ -53,6 +53,11 @@ class Part : public QObject, public ScoreElement {
       Q_PROPERTY(int midiProgram READ midiProgram)
       Q_PROPERTY(int midiChannel READ midiChannel)
       Q_PROPERTY(QString instrumentId READ instrumentId)
+      Q_PROPERTY(int lyricCount READ lyricCount)
+      Q_PROPERTY(int harmonyCount READ harmonyCount)
+      Q_PROPERTY(bool hasTabStaff READ hasTabStaff)
+      Q_PROPERTY(bool hasPitchedStaff READ hasPitchedStaff)
+      Q_PROPERTY(bool hasDrumStaff READ hasDrumStaff)
 
       QString _partName;           ///< used in tracklist (mixer)
       InstrumentList _instruments;
@@ -135,6 +140,12 @@ class Part : public QObject, public ScoreElement {
 
       QVariant getProperty(P_ID) const override;
       bool setProperty(P_ID, const QVariant&) override;
+
+      int lyricCount();
+      int harmonyCount();
+      bool hasPitchedStaff();
+      bool hasTabStaff();
+      bool hasDrumStaff();
       };
 
 }     // namespace Ms
