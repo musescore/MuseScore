@@ -18,6 +18,7 @@
 #include "segment.h"
 #include "measure.h"
 #include "undo.h"
+#include "staff.h"
 
 namespace Ms {
 
@@ -542,6 +543,8 @@ void Spanner::computeEndElement()
                   if (_ticks != nticks) {
                         qDebug("%s ticks changed, %d -> %d", name(), _ticks, nticks);
                         setTicks(nticks);
+                        if (type() == Element::Type::OTTAVA)
+                              staff()->updateOttava();
                         }
                   }
                   break;
