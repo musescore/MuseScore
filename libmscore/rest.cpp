@@ -197,6 +197,8 @@ bool Rest::acceptDrop(const DropData& data) const
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
          || (type == Element::Type::ARTICULATION && static_cast<Articulation*>(e)->isFermata())
          || (type == Element::Type::CLEF)
+         || (type == Element::Type::KEYSIG)
+         || (type == Element::Type::TIMESIG)
          || (type == Element::Type::STAFF_TEXT)
          || (type == Element::Type::BAR_LINE)
          || (type == Element::Type::BREATH)

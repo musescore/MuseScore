@@ -1322,6 +1322,8 @@ bool Note::acceptDrop(const DropData& data) const
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BRACKETS)
          || (type == Element::Type::SYMBOL)
          || (type == Element::Type::CLEF)
+         || (type == Element::Type::KEYSIG)
+         || (type == Element::Type::TIMESIG)
          || (type == Element::Type::BAR_LINE)
          || (type == Element::Type::SLUR)
          || (type == Element::Type::HAIRPIN)
