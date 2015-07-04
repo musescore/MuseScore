@@ -386,7 +386,7 @@ Score::Score(Score* parent)
             }
 
       _synthesizerState = parent->_synthesizerState;
-       accInfo = tr("No selection");
+      accInfo = tr("No selection");
       }
 
 Score::Score(Score* parent, const MStyle* s)
@@ -1023,7 +1023,7 @@ QList<System*> Score::searchSystem(const QPointF& pos) const
                   }
             if ((ii == n) || (ns == 0))
                   y2 = page->height();
-            else  {
+            else {
                   qreal sy2 = s->y() + s->bbox().height();
                   y2         = sy2 + (ns->y() - sy2) * .5;
                   }
@@ -1454,7 +1454,7 @@ void Score::addElement(Element* element)
                   {
                   Element* cr = element->parent();
                   if (cr->type() == Element::Type::CHORD)
-                         createPlayEvents(static_cast<Chord*>(cr));
+                        createPlayEvents(static_cast<Chord*>(cr));
                   }
                   break;
             case Element::Type::BREATH:
@@ -1597,7 +1597,7 @@ void Score::removeElement(Element* element)
                   {
                   Element* cr = element->parent();
                   if (cr->type() == Element::Type::CHORD)
-                         createPlayEvents(static_cast<Chord*>(cr));
+                        createPlayEvents(static_cast<Chord*>(cr));
                   }
                   break;
 
@@ -2055,7 +2055,7 @@ bool Score::appendScore(Score* score)
       {
       if (parts().size() < score->parts().size() || staves().size() < score->staves().size())
             return false;
-      TieMap  tieMap;
+      TieMap tieMap;
 
       MeasureBase* lastMeasure = last();
       if (!lastMeasure)
@@ -2089,6 +2089,24 @@ bool Score::appendScore(Score* score)
             }
       fixTicks();
 
+      // if the appended score has less staves,
+      // make sure the measures have full measure rest
+      for (Measure* m = tick2measure(tickLen); m; m = m->nextMeasure()) {
+            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                  Fraction f;
+                  for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
+                        for (int v = 0; v < VOICES; ++v) {
+                              ChordRest* cr = static_cast<ChordRest*>(s->element(staffIdx * VOICES + v));
+                              if (cr == 0)
+                                    continue;
+                              f += cr->actualFraction();
+                              }
+                        }
+                  if (f.isZero())
+                        addRest(m->tick(), staffIdx*VOICES, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                  }
+            }
+
       // adjust key signatures
       for (Staff* st : score->staves()) {
             int staffIdx = score->staffIdx(st);
@@ -2109,7 +2127,7 @@ bool Score::appendScore(Score* score)
                   addElement(ks);
                   }
             // other key signatures (initial other than "C", non-initial)
-           for (auto k : *(st->keyList())) {
+            for (auto k : *(st->keyList())) {
                   int tick = k.first;
                   KeySigEvent key = k.second;
                   joinedStaff->setKey(tick + tickLen, key);
@@ -2492,8 +2510,8 @@ void Score::cmdRemoveStaff(int staffIdx)
             for (Staff* staff : s->linkedStaves()->staves()) {
                   if (staff != s)
                         s2 = staff;
-                 Score* lscore = staff->score();
-                 if (lscore != this) {
+                  Score* lscore = staff->score();
+                  if (lscore != this) {
                         undoRemoveStaff(staff);
                         if (staff->part()->nstaves() == 0) {
                               int pIndex    = lscore->staffIdx(staff->part());
@@ -2799,9 +2817,9 @@ void Score::selectAdd(Element* e)
             if (_selection.elements().contains(e))
                   _selection.remove(e);
             else {
-                _selection.add(e);
-                selState = SelState::LIST;
-                }
+                  _selection.add(e);
+                  selState = SelState::LIST;
+                  }
             }
       _selection.setState(selState);
       }
@@ -2820,7 +2838,7 @@ void Score::selectRange(Element* e, int staffIdx)
             int etick = tick + m->ticks();
             activeTrack = staffIdx * VOICES;
             if (_selection.isNone()
-                      || (_selection.isList() && !_selection.isSingle())) {
+               || (_selection.isList() && !_selection.isSingle())) {
                         if (_selection.isList())
                               deselectAll();
                   _selection.setRange(m->tick2segment(tick),
@@ -2964,7 +2982,7 @@ void Score::collectMatch(void* data, Element* e)
                   }
             }
       if ((p->staffStart != -1)
-          && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
+         && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
             return;
       if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST
          || e->type() == Element::Type::NOTE || e->type() == Element::Type::LYRICS
@@ -3018,7 +3036,7 @@ void Score::selectSimilar(Element* e, bool sameStaff)
       score->scanElements(&pattern, collectMatch);
 
       score->select(0, SelectType::SINGLE, 0);
-      foreach (Element* e, pattern.el) {
+      for (Element* e : pattern.el) {
             score->select(e, SelectType::ADD, 0);
             }
       }
@@ -3044,8 +3062,8 @@ void Score::selectSimilarInRange(Element* e)
       score->scanElementsInRange(&pattern, collectMatch);
 
       score->select(0, SelectType::SINGLE, 0);
-      foreach (Element* e, pattern.el) {
-                  score->select(e, SelectType::ADD, 0);
+      for (Element* e : pattern.el) {
+            score->select(e, SelectType::ADD, 0);
             }
       }
 
@@ -3117,12 +3135,12 @@ void Score::lassoSelectEnd()
             }
       if (noteRestCount > 0) {
             endSegment = endCR->nextSegmentAfterCR(Segment::Type::ChordRest
-                                                   | Segment::Type::EndBarLine
-                                                   | Segment::Type::Clef);
+               | Segment::Type::EndBarLine
+               | Segment::Type::Clef);
             _selection.setRange(startSegment, endSegment, startStaff, endStaff+1);
             if (!_selection.isRange())
                   _selection.setState(SelState::RANGE);
-                  _selection.updateSelectedElements();
+            _selection.updateSelectedElements();
             }
       _updateAll = true;
       }
@@ -3158,7 +3176,7 @@ void Score::addLyrics(int tick, int staffIdx, const QString& txt)
             }
       if (!lyricsAdded) {
             qDebug("no chord/rest for lyrics<%s> at tick %d, staff %d",
-                   qPrintable(txt), tick, staffIdx);
+               qPrintable(txt), tick, staffIdx);
             }
       }
 
@@ -3739,7 +3757,7 @@ bool Score::hasLyrics()
       {
       Segment::Type st = Segment::Type::ChordRest;
       for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-            for (int i = 0; i < ntracks() ; ++i) {
+            for (int i = 0; i < ntracks(); ++i) {
                   if (seg->lyricsList(i) && seg->lyricsList(i)->size() > 0)
                         return true;
                   }
@@ -3772,7 +3790,7 @@ int Score::lyricCount()
       int count = 0;
       Segment::Type st = Segment::Type::ChordRest;
       for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-            for (int i = 0; i < ntracks() ; ++i) {
+            for (int i = 0; i < ntracks(); ++i) {
                   if (seg->lyricsList(i))
                         count += seg->lyricsList(i)->size();
                   }
