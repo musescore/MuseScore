@@ -313,8 +313,16 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
             drawSymbol(SymId::repeatDot, painter, QPointF(x, 3.0 * _spatium));
             }
       else if (parent()->type() == Element::Type::SEGMENT) {
-            System* s = static_cast<Segment*>(parent())->measure()->system();
+            System* system = static_cast<Segment*>(parent())->measure()->system();
             int staffIdx1    = staffIdx();
+            // find first visible staff
+            Staff* staff1 = score()->staff(staffIdx1);
+            SysStaff* sysStaff1 = system->staff(staffIdx1);
+            while ( staff1 && sysStaff1 && !(sysStaff1->show() && staff1->show()) ) {
+                  staffIdx1++;
+                  staff1 = score()->staff(staffIdx1);
+                  sysStaff1 = system->staff(staffIdx1);
+                  }
             int staffIdx2    = staffIdx1 + _span - 1;
             int sp = _span;
             if (staffIdx2 >= score()->nstaves()) {
@@ -322,17 +330,20 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
                   staffIdx2 = score()->nstaves() - 1;
                   sp = staffIdx2 - staffIdx1 + 1;
                   }
-            qreal dy  = s->staff(staffIdx1)->y();
+            qreal dy  = sysStaff1->y();
             for (int i = 0; i < sp; ++i) {
                   Staff* staff  = score()->staff(staffIdx1 + i);
-                  StaffType* st = staff->staffType();
-                  qreal doty1   = (st->doty1() + .5) * _spatium;
-                  qreal doty2   = (st->doty2() + .5) * _spatium;
+                  SysStaff* sysStaff = system->staff(staffIdx1 + i);
+                  if (sysStaff->show()) {
+                        StaffType* st = staff->staffType();
+                        qreal doty1   = (st->doty1() + .5) * _spatium;
+                        qreal doty2   = (st->doty2() + .5) * _spatium;
 
-                  qreal staffy  = s->staff(staffIdx1 + i)->y() - dy;
+                        qreal staffy  = sysStaff->y() - dy;
 
-                  drawSymbol(SymId::repeatDot, painter, QPointF(x, staffy + doty1));
-                  drawSymbol(SymId::repeatDot, painter, QPointF(x, staffy + doty2));
+                        drawSymbol(SymId::repeatDot, painter, QPointF(x, staffy + doty1));
+                        drawSymbol(SymId::repeatDot, painter, QPointF(x, staffy + doty2));
+                        }
                   }
             }
       }
