@@ -1090,11 +1090,11 @@
         "noteheadDiamondBlack": {
             "stemDownNW": [
                 0.0,
-                0.004
+                -0.516
             ],
             "stemUpSE": [
                 1.124,
-                0.004
+                0.496
             ]
         },
         "noteheadDiamondBlackOld": {
@@ -1174,11 +1174,11 @@
         "noteheadDiamondHalf": {
             "stemDownNW": [
                 0.0,
-                0.0
+                -0.516
             ],
             "stemUpSE": [
                 1.136,
-                0.0
+                0.496
             ]
         },
         "noteheadDiamondHalfFilled": {
@@ -1598,7 +1598,7 @@
             ],
             "stemUpSE": [
                 1.312,
-                0.568
+                0.22
             ]
         },
         "noteheadTriangleDownHalf": {
@@ -1608,7 +1608,7 @@
             ],
             "stemUpSE": [
                 1.26,
-                0.5
+                0.22
             ]
         },
         "noteheadTriangleDownWhite": {
