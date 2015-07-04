@@ -836,6 +836,10 @@ Element* ChordRest::drop(const DropData& data)
                   score()->cmdInsertClef(static_cast<Clef*>(e), this);
                   break;
 
+            case Element::Type::KEYSIG:
+            case Element::Type::TIMESIG:
+                  return measure()->drop(data);
+
             case Element::Type::TEMPO_TEXT:
                   {
                   TempoText* tt = static_cast<TempoText*>(e);
