@@ -2667,9 +2667,8 @@ void Score::connectTies(bool silent)
                                     }
                               }
                         // connect a glissando without initial note (old glissando format)
-                        for (Spanner* spanner : n->spannerBack())
-                              if (spanner->type() == Element::Type::GLISSANDO
-                                          && spanner->startElement() == nullptr) {
+                        for (Spanner* spanner : n->spannerBack()) {
+                              if (spanner->type() == Element::Type::GLISSANDO && spanner->startElement() == nullptr) {
                                     Note* initialNote = Glissando::guessInitialNote(n->chord());
                                     n->removeSpannerBack(spanner);
                                     if (initialNote != nullptr) {
@@ -2682,9 +2681,18 @@ void Score::connectTies(bool silent)
                                           spanner->setParent(initialNote);
                                           initialNote->add(spanner);
                                           }
-                                    else
+                                    else {
                                           delete spanner;
+                                          }
                                     }
+                              }
+                        // spanner with no end element can happen during copy/paste
+                        for (Spanner* spanner : n->spannerFor()) {
+                              if (spanner->endElement() == nullptr) {
+                                    n->removeSpannerFor(spanner);
+                                    delete spanner;
+                                    }
+                              }
                         }
                   // connect two note tremolos
                   Tremolo* tremolo = c->tremolo();
