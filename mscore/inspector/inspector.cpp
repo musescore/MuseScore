@@ -24,6 +24,7 @@
 #include "inspectorMarker.h"
 #include "inspectorJump.h"
 #include "inspectorGlissando.h"
+#include "inspectorArpeggio.h"
 #include "inspectorNote.h"
 #include "inspectorAmbitus.h"
 #include "inspectorFret.h"
@@ -246,6 +247,9 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         case Element::Type::BEND:
                               ie = new InspectorBend(this);
+                              break;
+                        case Element::Type::ARPEGGIO:
+                              ie = new InspectorArpeggio(this);
                               break;
                         default:
                               if (_element->isText())
