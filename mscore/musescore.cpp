@@ -3815,21 +3815,33 @@ void MuseScore::transpose()
       td.enableTransposeChordNames(rangeSelection);
 
       int startStaffIdx = 0;
+      int endStaffIdx   = 0;
       int startTick     = 0;
       if (rangeSelection) {
             startStaffIdx = cs->selection().staffStart();
+            endStaffIdx   = cs->selection().staffEnd();
             startTick     = cs->selection().tickStart();
             }
-      Staff* staff = cs->staff(startStaffIdx);
-      Key key = staff->key(startTick);
-      if (!cs->styleB(StyleIdx::concertPitch)) {
-            int diff = staff->part()->instrument(startTick)->transpose().chromatic;
-            if (diff)
-                  key = transposeKey(key, diff);
+
+      // find the key of the first pitched staff
+      Key key = Key::C;
+      for (int i = startStaffIdx; i < endStaffIdx; ++i) {
+            Staff* staff = cs->staff(i);
+            if (staff->isPitchedStaff()) {
+                  key = staff->key(startTick);
+                  if (!cs->styleB(StyleIdx::concertPitch)) {
+                        int diff = staff->part()->instrument(startTick)->transpose().chromatic;
+                        if (diff)
+                              key = transposeKey(key, diff);
+                        }
+                  break;
+                  }
             }
+
       td.setKey(key);
       if (!td.exec())
             return;
+
       cs->transpose(td.mode(), td.direction(), td.transposeKey(), td.transposeInterval(),
          td.getTransposeKeys(), td.getTransposeChordNames(), td.useDoubleSharpsFlats());
 
