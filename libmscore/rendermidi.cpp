@@ -1261,7 +1261,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             renderTremolo(chord, ell);
 
             }
-      else if (chord->arpeggio()) {
+      else if (chord->arpeggio() && chord->arpeggio()->playArpeggio()) {
             renderArpeggio(chord, ell);
             return ell;  // dont apply gateTime to arpeggio events
             }
