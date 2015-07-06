@@ -104,6 +104,9 @@ rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtPurchasing.*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtQuickParticles.*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngine.*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngineCore.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtScript.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtScriptTools.*
+rm -rf ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtDeclarative.*
 
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/Enginio
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtBluetooth
