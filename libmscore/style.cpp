@@ -1114,7 +1114,7 @@ void StyleData::load(XmlReader& e)
 
                                     }
                               if (idx2 >= int(ArticulationType::ARTICULATIONS))
-                                    e.unknown();
+                                    continue;
                               }
                         }
                   }
