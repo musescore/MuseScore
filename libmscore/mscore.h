@@ -17,8 +17,8 @@
 
 namespace Ms {
 
-#define MSC_VERSION     "2.06"
-static const int MSCVERSION = 206;
+#define MSC_VERSION     "2.07"
+static const int MSCVERSION = 207;
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -53,7 +53,8 @@ static const int MSCVERSION = 206;
 //    2.03  save Box topGap, bottomGap in spatium units
 //    2.04  added hideSystemBarLine flag to Staff
 //    2.05  breath segment changed to use tick of following chord rather than preceding chord
-//    2.06  Glissando moved from final chord to start note
+//    2.06  Glissando moved from final chord to start note (Version 2.0.x)
+//    2.07  irregular, breaMMrest are stored differently, more style options
 
 
 class MStyle;
