@@ -242,9 +242,11 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
       {
       bool rangeSelection = selection().isRange();
       int startStaffIdx = 0;
+      int endStaffIdx   = 0;
       int startTick     = 0;
       if (rangeSelection) {
             startStaffIdx = selection().staffStart();
+            endStaffIdx   = selection().staffEnd();
             startTick     = selection().tickStart();
             }
 
@@ -254,13 +256,23 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
       if (mode != TransposeMode::DIATONICALLY) {
             if (mode == TransposeMode::BY_KEY) {
                   // calculate interval from "transpose by key"
-                  Key oKey = st->key(startTick);
-                  if (!styleB(StyleIdx::concertPitch)) {
-                        int diff = st->part()->instrument(startTick)->transpose().chromatic;
-                        if (diff)
-                              oKey = transposeKey(oKey, diff);
+                  // find the key of the first pitched staff
+                  Key key = Key::C;
+                  for (int i = startStaffIdx; i < endStaffIdx; ++i) {
+                        Staff* s = staff(i);
+                        if (s->isPitchedStaff()) {
+                              key = s->key(startTick);
+                              if (!styleB(StyleIdx::concertPitch)) {
+                                    int diff = s->part()->instrument(startTick)->transpose().chromatic;
+                                    if (diff)
+                                          key = transposeKey(key, diff);
+                                    }
+                              // remember this staff to use as basis in transposing key signatures
+                              st = s;
+                              break;
+                              }
                         }
-                  interval = keydiff2Interval(oKey, trKey, direction);
+                  interval = keydiff2Interval(key, trKey, direction);
                   }
             else {
                   interval = intervalList[transposeInterval];
