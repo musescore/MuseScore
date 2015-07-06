@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>904</width>
+    <width>923</width>
     <height>739</height>
    </rect>
   </property>
@@ -5451,6 +5451,41 @@
            </widget>
           </item>
           <item>
+           <widget class="QGroupBox" name="groupBox_19">
+            <property name="title">
+             <string>Appearance</string>
+            </property>
+            <layout class="QFormLayout" name="formLayout_10">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Tuplet bracket thickness:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="tupletBracketWidth">
+               <property name="suffix">
+                <string>sp</string>
+               </property>
+               <property name="minimum">
+                <double>0.050000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>1.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
            <spacer name="verticalSpacer_3">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -5814,6 +5849,7 @@
   <tabstop>tupletNoteLeftDistance</tabstop>
   <tabstop>tupletStemRightDistance</tabstop>
   <tabstop>tupletNoteRightDistance</tabstop>
+  <tabstop>tupletBracketWidth</tabstop>
  </tabstops>
  <resources/>
  <connections>

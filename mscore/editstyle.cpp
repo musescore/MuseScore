@@ -143,6 +143,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             { StyleIdx::tupletStemRightDistance, tupletStemRightDistance },
             { StyleIdx::tupletNoteLeftDistance,  tupletNoteLeftDistance  },
             { StyleIdx::tupletNoteRightDistance, tupletNoteRightDistance },
+            { StyleIdx::tupletBracketWidth,      tupletBracketWidth },
 
             };
 
