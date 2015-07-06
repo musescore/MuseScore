@@ -139,6 +139,7 @@ void Tremolo::layout()
             shearTransform.shear(0.0, -(lw / 2.0) / w2);
             path = shearTransform.map(path);
             setbbox(path.boundingRect());
+            addbbox(QRectF(bbox().x(), bbox().bottom(), bbox().width(), _spatium));
             return;
             }
       Note* anchor1 = _chord1->upNote();
