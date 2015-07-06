@@ -1220,6 +1220,7 @@ QString MuseScore::getPaletteFilename(bool open, const QString& name)
       {
       QString title;
       QString filter;
+      QString wd      = QString("%1/%2").arg(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation)).arg(QCoreApplication::applicationName());
       if (open) {
             title  = tr("MuseScore: Load Palette");
             filter = tr("MuseScore Palette (*.mpal)");
@@ -1227,15 +1228,9 @@ QString MuseScore::getPaletteFilename(bool open, const QString& name)
       else {
             title  = tr("MuseScore: Save Palette");
             filter = tr("MuseScore Palette (*.mpal)");
-
-            // create dataPath/profiles if it does not exist
-            QDir dir;
-            dir.mkpath(dataPath);
-            QString path = dataPath + "/profiles";
-            dir.mkpath(path);
             }
 
-      QFileInfo myPalettes(dataPath + "/profiles");
+      QFileInfo myPalettes(wd);
       QString defaultPath = myPalettes.absoluteFilePath();
       if (!name.isEmpty()) {
             QString fname = createDefaultFileName(name);
