@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2002-2011 Werner Schweer
+//  Copyright (C) 2002-2015 Werner Schweer & others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -15,75 +15,76 @@
  Implementation of most part of class ScoreView.
 */
 
-#include "globals.h"
 #include "scoreview.h"
-#include "libmscore/score.h"
-#include "preferences.h"
-#include "libmscore/utils.h"
-#include "libmscore/segment.h"
-#include "musescore.h"
-#include "seq.h"
-#include "libmscore/staff.h"
-#include "libmscore/chord.h"
-#include "libmscore/rest.h"
-#include "libmscore/page.h"
-#include "libmscore/xml.h"
-#include "libmscore/text.h"
-#include "libmscore/note.h"
-#include "libmscore/dynamic.h"
-#include "libmscore/pedal.h"
-#include "libmscore/volta.h"
-#include "libmscore/ottava.h"
-#include "libmscore/noteline.h"
-#include "libmscore/trill.h"
-#include "libmscore/hairpin.h"
-#include "libmscore/image.h"
-#include "libmscore/part.h"
-#include "libmscore/icon.h"
+
+#include "breaksdialog.h"
+#include "continuouspanel.h"
+#include "drumroll.h"
 #include "editdrumset.h"
 #include "editstaff.h"
-#include "splitstaff.h"
-#include "libmscore/barline.h"
-#include "libmscore/system.h"
+#include "globals.h"
 #include "magbox.h"
-#include "libmscore/measure.h"
-#include "drumroll.h"
-#include "libmscore/lyrics.h"
-#include "libmscore/figuredbass.h"
-#include "textpalette.h"
-#include "libmscore/undo.h"
-#include "libmscore/slur.h"
-#include "libmscore/harmony.h"
-#include "libmscore/navigate.h"
-#include "libmscore/stringdata.h"
-#include "libmscore/shadownote.h"
-#include "libmscore/sym.h"
-#include "libmscore/lasso.h"
-#include "libmscore/box.h"
-#include "libmscore/textframe.h"
-#include "texttools.h"
-#include "libmscore/clef.h"
-#include "scoretab.h"
 #include "measureproperties.h"
-#include "textcursor.h"
+#include "musescore.h"
 #include "navigator.h"
-#include "continuouspanel.h"
-#include "breaksdialog.h"
-
-#include "libmscore/pitchspelling.h"
-#include "libmscore/notedot.h"
-#include "libmscore/articulation.h"
-#include "libmscore/tuplet.h"
-#include "libmscore/stafftext.h"
-#include "libmscore/keysig.h"
-#include "libmscore/timesig.h"
-#include "libmscore/spanner.h"
-#include "libmscore/rehearsalmark.h"
-#include "libmscore/excerpt.h"
-#include "libmscore/stafftype.h"
-#include "libmscore/repeatlist.h"
+#include "preferences.h"
+#include "scoretab.h"
+#include "seq.h"
+#include "splitstaff.h"
+#include "textcursor.h"
+#include "textpalette.h"
+#include "texttools.h"
 
 #include "inspector/inspector.h"
+
+#include "libmscore/articulation.h"
+#include "libmscore/barline.h"
+#include "libmscore/box.h"
+#include "libmscore/chord.h"
+#include "libmscore/clef.h"
+#include "libmscore/dynamic.h"
+#include "libmscore/excerpt.h"
+#include "libmscore/figuredbass.h"
+#include "libmscore/hairpin.h"
+#include "libmscore/harmony.h"
+#include "libmscore/icon.h"
+#include "libmscore/image.h"
+#include "libmscore/keysig.h"
+#include "libmscore/lasso.h"
+#include "libmscore/lyrics.h"
+#include "libmscore/measure.h"
+#include "libmscore/navigate.h"
+#include "libmscore/notedot.h"
+#include "libmscore/note.h"
+#include "libmscore/noteline.h"
+#include "libmscore/ottava.h"
+#include "libmscore/page.h"
+#include "libmscore/part.h"
+#include "libmscore/pedal.h"
+#include "libmscore/pitchspelling.h"
+#include "libmscore/rehearsalmark.h"
+#include "libmscore/repeatlist.h"
+#include "libmscore/rest.h"
+#include "libmscore/score.h"
+#include "libmscore/segment.h"
+#include "libmscore/shadownote.h"
+#include "libmscore/slur.h"
+#include "libmscore/spanner.h"
+#include "libmscore/staff.h"
+#include "libmscore/stafftext.h"
+#include "libmscore/stafftype.h"
+#include "libmscore/stringdata.h"
+#include "libmscore/sym.h"
+#include "libmscore/system.h"
+#include "libmscore/textframe.h"
+#include "libmscore/text.h"
+#include "libmscore/timesig.h"
+#include "libmscore/trill.h"
+#include "libmscore/tuplet.h"
+#include "libmscore/undo.h"
+#include "libmscore/utils.h"
+#include "libmscore/volta.h"
+#include "libmscore/xml.h"
 
 namespace Ms {
 
@@ -1436,25 +1437,31 @@ void ScoreView::moveCursor()
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
 
       double h;
-      qreal mag       = _spatium / (MScore::DPI * SPATIUM20);
-      double w        = _spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag);
-      Staff* staff    = _score->staff(staffIdx);
-      double lineDist = staff->staffType()->lineDistance().val() * _spatium;
-      int lines       = staff->lines();
-      int strg        = is.string();
-      x              -= _spatium;
+      qreal mag               = _spatium / (MScore::DPI * SPATIUM20);
+      double w                = _spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag);
+      Staff* staff            = _score->staff(staffIdx);
+      StaffType* staffType    = staff->staffType();
+      double lineDist         = staffType->lineDistance().val() * _spatium;
+      int lines               = staff->lines();
+      int strg                = is.string();          // strg refers to an instrument physical string
+      x                       -= _spatium;
+      int instrStrgs          = staff->part()->instrument()->stringData()->strings();
       // if on a TAB staff and InputState::_string makes sense,
       // draw cursor around single string
-      if (staff->isTabStaff() && strg > VISUAL_STRING_NONE && strg < lines) {
-            h = lineDist * 1.5;       // 1 space above strg for letters and 1/2 sp. below strg for numbers
-            y += lineDist * (strg-1); // start 1 sp. above strg to include letter position
+      if (staff->isTabStaff() && strg >= 0 && strg <= instrStrgs) {
+            h = lineDist;                 // cursor height is one full line distance
+            y += staffType->physStringToYOffset(strg) * _spatium;
+            // if frets are on lines, centre on string; if frets are above lines, 'sit' above string
+            y -= (staffType->onLines() ? lineDist * 0.5 : lineDist);
             // look for a note on this string in this staff
+            // if found, it will be selected, to synchronize the 'new note input cursor' and the 'current note cursor'
+            // i.e. the point where a new note would be added and the existing note which receives any editing
+            // (like pitch change or articulation addition)
             bool        done  = false;
             Segment*    seg   = is.segment();
             int         minTrack = (is.track() / VOICES) * VOICES;
             int         maxTrack = minTrack + VOICES;
             // get the physical string corresponding to current visual string
-            strg = staff->staffType()->visualStringToPhys(strg);
             for (int t = minTrack; t < maxTrack; t++) {
                   Element* e = seg->element(t);
                   if (e != nullptr && e->type() == Element::Type::CHORD)
@@ -3096,19 +3103,22 @@ void ScoreView::cmd(const QAction* a)
 
       // STATE_NOTE_ENTRY_TAB actions
 
-      else if(cmd == "string-above") {
-            int   strg = _score->inputState().string();
-            if(strg > 0) {
-                  _score->inputState().setString(strg-1);
-                  moveCursor();
-                  }
-            }
-      else if(cmd == "string-below") {
+      // move input state string up or down, within the number of strings of the instrument;
+      // this may move the input state cursor outside of the tab line range to accommodate
+      // instrument strings not represented in the tab (e.g.: lute bass strings):
+      // the appropriate visual rendition of the input cursor in those cases will be managed by moveCursor()
+      else if(cmd == "string-above" || cmd == "string-below") {
             InputState& is          = _score->inputState();
-            int         maxStrg     = _score->staff(is.track() / VOICES)->lines() - 1;
-            int         strg        = is.string();
-            if(strg < maxStrg) {
-                  is.setString(strg+1);
+            Staff*      staff       = _score->staff(is.track() / VOICES);
+            int         instrStrgs  = staff->part()->instrument()->stringData()->strings();
+            // assume "string-below": if tab is upside-down, 'below' means toward instrument top (-1)
+            // if not, 'below' means toward instrument bottom (+1)
+            int         delta       = (staff->staffType()->upsideDown() ? -1 : +1);
+            if (cmd == "string-above")                      // if "above", reverse delta
+                  delta = -delta;
+            int         strg        = is.string() + delta;  // dest. physical string
+            if(strg >= 0 && strg < instrStrgs) {            // if dest. string within instrument limits
+                  is.setString(strg);                       // update status
                   moveCursor();
                   }
             }
@@ -3142,6 +3152,7 @@ void ScoreView::cmd(const QAction* a)
             cmdAddFret(13);
       else if(cmd == "fret-14")
             cmdAddFret(14);
+
       else if (cmd == "text-word-left")
             static_cast<Text*>(editObject)->movePosition(QTextCursor::WordLeft);
       else if (cmd == "text-word-right")
@@ -3302,10 +3313,9 @@ void ScoreView::startNoteEntry()
             case StaffGroup::TAB: {
                   int strg = 0;                 // assume topmost string as current string
                   // if entering note entry with a note selected and the note has a string
-                  // set InputState::_string to note visual string
+                  // set InputState::_string to note physical string
                   if (el->type() == Element::Type::NOTE) {
                         strg = (static_cast<Note*>(el))->string();
-                        strg = staff->staffType()->physStringToVisual(strg);
                         }
                   is.setString(strg);
                   break;

@@ -52,7 +52,7 @@ void ShadowNote::draw(QPainter* painter) const
       else
             voice = ps.voice();
 
-      QPen pen(MScore::selectColor[voice].lighter(120), lw);
+      QPen pen(MScore::selectColor[voice].lighter(SHADOW_NOTE_LIGHT), lw);
       painter->setPen(pen);
 
       drawSymbol(sym, painter);
