@@ -2099,8 +2099,11 @@ void Chord::layoutTablature()
       StaffType* tab    = staff()->staffType();
       qreal lineDist    = tab->lineDistance().val() *_spatium;
       qreal stemX       = tab->chordStemPosX(this) *_spatium;
+      int   ledgerLines = 0;
+      qreal llY;
 
-      int numOfNotes = _notes.size();
+      int   numOfNotes  = _notes.size();
+      qreal minY        = 1000.0;               // just a very large value
       for (int i = 0; i < numOfNotes; ++i) {
             Note* note = _notes.at(i);
             note->layout();
@@ -2110,13 +2113,17 @@ void Chord::layoutTablature()
                   headWidth = fretWidth;
             // centre fret string on stem
             qreal x = stemX - fretWidth*0.5;
-            if (note->fixed())
-                  note->setPos(x, note->line() * lineDist / 2);
-            else
-                  note->setPos(x, tab->physStringToVisual(note->string()) * lineDist);
+            qreal y = note->fixed() ? note->line() * lineDist / 2 : tab->physStringToYOffset(note->string()) * _spatium;
+            note->setPos(x, y);
+            if (y < minY)
+                  minY  = y;
+            int   currLedgerLines   = tab->numOfTabLedgerLines(note->string());
+            if (currLedgerLines > ledgerLines) {
+                  ledgerLines = currLedgerLines;
+                  llY         = y;
+                  }
 
-            // allow extra space for shortened ties
-            // this code must be kept synchronized
+            // allow extra space for shortened ties; this code must be kept synchronized
             // with the tie positioning code in Tie::slurPos()
             // but the allocation of space needs to be performed here
             Tie* tie;
@@ -2160,8 +2167,30 @@ void Chord::layoutTablature()
                         lll = qMax(lll, d);
                         }
                   }
-
             }
+
+      // create ledger lines, if required (in some historic styles)
+      if (ledgerLines > 0) {
+// there seems to be no need for widening 'ledger lines' beyond fret mark widths; more 'on the field'
+// tests and usage will show if this depends on the metrics of the specific fonts used or not.
+//            qreal extraLen    = score()->styleS(StyleIdx::ledgerLineLength).val() * _spatium;
+            qreal extraLen    = 0;
+            qreal llX         = stemX - (headWidth + extraLen) * 0.5;
+            for (int i = 0; i < ledgerLines; i++) {
+                  LedgerLine* ldgLin = new LedgerLine(score());
+                  ldgLin->setParent(this);
+                  ldgLin->setTrack(track());
+                  ldgLin->setVisible(_visible);
+                  ldgLin->setLen(Spatium( (headWidth + extraLen) / _spatium) );
+                  ldgLin->setPos(llX, llY);
+                  ldgLin->setNext(_ledgerLines);
+                  _ledgerLines = ldgLin;
+                  ldgLin->layout();
+                  llY += lineDist / ledgerLines;
+                  }
+            headWidth += extraLen;        // include ledger lines extra width in chord width
+            }
+
       // horiz. spacing: leave half width at each side of the (potential) stem
       qreal halfHeadWidth = headWidth * 0.5;
       if (lll < stemX - halfHeadWidth)
@@ -2177,10 +2206,6 @@ void Chord::layoutTablature()
       // remove stems
       if (tab->slashStyle() || _noStem || measure()->slashStyle(staffIdx()) || durationType().type() <
          (tab->minimStyle() != TablatureMinimStyle::NONE ? TDuration::DurationType::V_HALF : TDuration::DurationType::V_QUARTER) ) {
-            // delete _stem;
-            // delete _hook;
-            // _stem = 0;
-            // _hook = 0;
             if (_stem)
                   score()->undo(new RemoveElement(_stem));
             if (_hook)
@@ -2239,14 +2264,18 @@ void Chord::layoutTablature()
                   else
                         _tabDur->setDuration(durationType().type(), dots(), tab);
                   _tabDur->setParent(this);
-//                  _tabDur->setMag(mag());     // useless to set grace mag: graces have no dur. symbol
+//                  _tabDur->setMag(mag());           // useless to set grace mag: graces have no dur. symbol
                   _tabDur->layout();
+                  if (minY < 0) {                     // if some fret extends above tab body (like bass strings)
+                        _tabDur->rypos() += minY;     // raise duration symbol
+                        _tabDur->bbox().translate(0, minY);
+                        }
                   }
-            else {                    // symbol not needed: if exists, delete
+            else {                              // symbol not needed: if exists, delete
                   delete _tabDur;
                   _tabDur = 0;
                   }
-            }                 // end of if(duration_symbols)
+            }                             // end of if(duration_symbols)
 
       if (_arpeggio) {
             qreal headHeight = upnote->headHeight();
@@ -2358,7 +2387,6 @@ void Chord::layoutTablature()
                         _space.setRw(rx);
                   }
             }
-      // bbox();
 
       for (int i = 0; i < numOfNotes; ++i)
             _notes.at(i)->layout2();
