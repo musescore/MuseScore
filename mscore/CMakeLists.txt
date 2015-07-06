@@ -124,6 +124,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_fret.ui
       inspector/inspector_break.ui
       inspector/inspector_bend.ui
+      inspector/inspector_arpeggio.ui
       ${SCRIPT_UI}
       )
 
@@ -256,6 +257,7 @@ add_executable ( ${ExecutableName}
       musicxmlfonthandler.cpp musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
       savePositions.cpp inspector/inspectorJump.cpp inspector/inspectorMarker.cpp
       inspector/inspectorGlissando.cpp inspector/inspectorNote.cpp inspector/inspectorAmbitus.cpp
+      inspector/inspectorArpeggio.cpp
       paletteBoxButton.cpp driver.cpp exportmidi.cpp noteGroups.cpp
       pathlistdialog.cpp exampleview.cpp inspector/inspectorTextLine.cpp miconengine.cpp
       importmidi/importmidi.cpp

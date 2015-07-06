@@ -36,6 +36,7 @@ Arpeggio::Arpeggio(Score* s)
       _span     = 1;
       _userLen1 = 0.0;
       _userLen2 = 0.0;
+      _playArpeggio = true;
       }
 
 //---------------------------------------------------------
@@ -64,6 +65,7 @@ void Arpeggio::write(Xml& xml) const
             xml.tag("userLen2", _userLen2 / spatium());
       if (_span != 1)
             xml.tag("span", _span);
+      writeProperty(xml, P_ID::PLAY);
       xml.etag();
       }
 
@@ -83,6 +85,8 @@ void Arpeggio::read(XmlReader& e)
                   _userLen2 = e.readDouble() * spatium();
             else if (tag == "span")
                   _span = e.readInt();
+            else if (tag == "play")
+                 _playArpeggio = e.readBool();
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -401,6 +405,8 @@ QVariant Arpeggio::getProperty(P_ID propertyId) const
                   return userLen1();
             case P_ID::ARP_USER_LEN2:
                   return userLen2();
+            case P_ID::PLAY:
+                  return _playArpeggio;
             default:
                   break;
             }
@@ -420,6 +426,9 @@ bool Arpeggio::setProperty(P_ID propertyId, const QVariant& val)
             case P_ID::ARP_USER_LEN2:
                   setUserLen2(val.toDouble());
                   break;
+            case P_ID::PLAY:
+                  setPlayArpeggio(val.toBool());
+                  break;
             default:
                   if (!Element::setProperty(propertyId, val))
                         return false;
@@ -429,6 +438,23 @@ bool Arpeggio::setProperty(P_ID propertyId, const QVariant& val)
       return true;
       }
 
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
 
+QVariant Arpeggio::propertyDefault(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_ID::ARP_USER_LEN1:
+                  return 0.0;
+            case P_ID::ARP_USER_LEN2:
+                  return 0.0;
+            case P_ID::PLAY:
+                  return true;
+            default:
+                  break;
+            }
+      return Element::propertyDefault(propertyId);
+      }
 }
 
