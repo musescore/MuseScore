@@ -38,7 +38,6 @@ bool needToSplit(const std::multimap<ReducedFraction, MidiChord> &chords,
       }
 
 
-#ifdef QT_DEBUG
 
 bool areNotesSortedByPitchInAscOrder(const QList<MidiNote>& notes)
       {
@@ -48,8 +47,6 @@ bool areNotesSortedByPitchInAscOrder(const QList<MidiNote>& notes)
             }
       return true;
       }
-
-#endif
 
 
 struct SplitTry {

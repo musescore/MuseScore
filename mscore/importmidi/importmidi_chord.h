@@ -135,7 +135,6 @@ void setBarIndexes(
             const ReducedFraction &basicQuant,
             const ReducedFraction &lastTick, const TimeSigMap *sigmap);
 
-#ifdef QT_DEBUG
 
 bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &chords);
 bool areBarIndexesSuccessive(const std::multimap<ReducedFraction, MidiChord> &chords);
@@ -146,7 +145,6 @@ bool isLastTickValid(const ReducedFraction &lastTick,
                      const std::multimap<int, MTrack> &tracks);
 bool areBarIndexesSet(const std::multimap<ReducedFraction, MidiChord> &chords);
 
-#endif
 
 } // namespace MChord
 } // namespace Ms

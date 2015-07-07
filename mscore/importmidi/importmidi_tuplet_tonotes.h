@@ -21,9 +21,7 @@ void addElementToTuplet(int voice,
 void createTupletNotes(Staff *staff,
                        const std::multimap<ReducedFraction, TupletData> &tuplets);
 
-#ifdef QT_DEBUG
 bool haveTupletsEnoughElements(const Staff *staff);
-#endif
 
 } // namespace MidiTuplet
 } // namespace Ms

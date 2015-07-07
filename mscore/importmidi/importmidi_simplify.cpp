@@ -30,7 +30,6 @@ bool hasComplexBeamedDurations(const QList<std::pair<ReducedFraction, TDuration>
       }
 
 
-#ifdef QT_DEBUG
 
 bool areDurationsEqual(
             const QList<std::pair<ReducedFraction, TDuration> > &durations,
@@ -42,8 +41,6 @@ bool areDurationsEqual(
 
       return desiredLen == desiredLen;
       }
-
-#endif
 
 
 void lengthenNote(

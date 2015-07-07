@@ -62,7 +62,6 @@ extractLyricsFromTrack(const MidiTrack &track, int division, bool isDivisionInTp
       }
 
 
-#ifdef QT_DEBUG
 
 bool areEqualIndexesSuccessive(const QList<MTrack> &tracks)
       {
@@ -84,7 +83,6 @@ bool areEqualIndexesSuccessive(const QList<MTrack> &tracks)
       return true;
       }
 
-#endif
 
 
 struct BestTrack

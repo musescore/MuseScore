@@ -17,11 +17,9 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 
-#ifdef QT_DEBUG
 #include "libmscore/staff.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
-#endif
 
 
 namespace Ms {
@@ -92,7 +90,6 @@ void TieStateMachine::addSeg(const Segment *seg, int strack)
       }
 
 
-#ifdef QT_DEBUG
 
 void printInconsistentTieLocation(int measureIndex, int staffIndex)
       {
@@ -137,7 +134,6 @@ bool areTiesConsistent(const Staff *staff)
       return true;
       }
 
-#endif
 
 
 } // namespace MidiTie

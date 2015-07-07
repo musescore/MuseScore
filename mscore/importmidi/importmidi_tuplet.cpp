@@ -531,7 +531,6 @@ void addChordsBetweenTupletNotes(
       }
 
 
-#ifdef QT_DEBUG
 
 bool doTupletsHaveCommonChords(const std::vector<TupletInfo> &tuplets)
       {
@@ -806,7 +805,6 @@ bool areAllTupletsDifferent(const std::multimap<ReducedFraction, TupletData> &tu
       return true;
       }
 
-#endif
 
 
 void addTupletEvents(std::multimap<ReducedFraction, TupletData> &tupletEvents,
@@ -839,13 +837,11 @@ void addTupletEvents(std::multimap<ReducedFraction, TupletData> &tupletEvents,
                   if (tiedTuplet.tupletId == tupletInfo.id) {
                         MidiChord &midiChord = tiedTuplet.chord->second;
 
-#ifdef QT_DEBUG
                         QString message = "Tied tuplet and tied chord have different voices, "
                                           "tuplet voice = ";
                         message += QString::number(tiedTuplet.voice) + ", chord voice = ";
                         message += QString::number(midiChord.voice) + ", bar number (from 1) = ";
                         message += QString::number(midiChord.barIndex + 1);
-#endif
                         Q_ASSERT_X(tiedTuplet.voice == midiChord.voice,
                                    "MidiTuplet::addTupletEvents", message.toAscii().data());
 
@@ -1141,9 +1137,7 @@ void findAllTuplets(
                               // chords at the end of the current bar
                               // may have changed bar index - from next bar to the current bar
                               // because they were included in tuplets
-#ifdef QT_DEBUG
                         bool nextBarFound = false;
-#endif
                         const auto endBarTick = ReducedFraction::fromTicks(
                                                 sigmap->bar2tick(currentBarIndex + 1, 0));
                         for (auto it = endBarIt; it != chords.end() && it->first < endBarTick; ++it) {
@@ -1156,10 +1150,8 @@ void findAllTuplets(
 
                                     ++endBarIt;
                                     }
-#ifdef QT_DEBUG
                               if (it->second.barIndex > currentBarIndex)
                                     nextBarFound = true;
-#endif
                               }
                         }
 

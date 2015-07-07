@@ -197,7 +197,6 @@ void removeOverlappingNotes(std::multimap<int, MTrack> &tracks)
       }
 
 
-#ifdef QT_DEBUG
 
 // check for equal on time values with the same voice that is invalid
 bool areOnTimeValuesDifferent(const std::multimap<ReducedFraction, MidiChord> &chords)
@@ -265,7 +264,6 @@ bool areBarIndexesSet(const std::multimap<ReducedFraction, MidiChord> &chords)
       return true;
       }
 
-#endif
 
 void setToNegative(ReducedFraction &v1, ReducedFraction &v2, ReducedFraction &v3)
       {
@@ -598,11 +596,9 @@ void setBarIndexes(
                   continue;
             for (; it != chords.end(); ++it) {
                   const auto onTime = Quantize::findQuantizedChordOnTime(*it, basicQuant);
-#ifdef QT_DEBUG
                   const auto barStart = ReducedFraction::fromTicks(sigmap->bar2tick(barIndex, 0));
                   Q_ASSERT_X(!(it->first >= barStart && onTime < barStart),
                              "MChord::setBarIndexes", "quantized on time cannot be in previous bar");
-#endif
                   if (onTime < endBarTick) {
                         it->second.barIndex = barIndex;
                         continue;

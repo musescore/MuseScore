@@ -45,7 +45,6 @@ int voiceLimit()
       }
 
 
-#ifdef QT_DEBUG
 
 bool areNotesSortedByOffTimeInAscOrder(
             const QList<MidiNote>& notes,
@@ -97,7 +96,6 @@ bool areVoicesSame(const std::multimap<ReducedFraction, MidiChord> &chords)
       return true;
       }
 
-#endif
 
 
 bool allNotesHaveEqualLength(const QList<MidiNote> &notes)

@@ -276,7 +276,6 @@ TupletErrorResult findTupletError(
       }
 
 
-#ifdef QT_DEBUG
 
 bool areCommonsDifferent(const std::vector<int> &selectedCommons)
       {
@@ -304,7 +303,6 @@ bool areCommonsUncommon(const std::vector<int> &selectedCommons,
       return true;
       }
 
-#endif
 
 
 int findAvailableVoice(
@@ -387,7 +385,6 @@ bool canUseIndex(
       }
 
 
-#ifdef QT_DEBUG
 
 bool areTupletChordsEmpty(const std::vector<TupletInfo> &tuplets)
       {
@@ -426,7 +423,6 @@ bool validateSelectedTuplets(Iter beginIt,
       return true;
       }
 
-#endif
 
 
 void tryUpdateBestIndexes(

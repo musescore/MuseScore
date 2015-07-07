@@ -85,7 +85,6 @@ void lengthenTooShortNotes(std::multimap<int, MTrack> &tracks)
       }
 
 
-#ifdef QT_DEBUG
 
 bool doNotesOverlap(const MTrack &track)
       {
@@ -137,7 +136,6 @@ bool noTooShortNotes(const std::multimap<int, MTrack> &tracks)
       return true;
       }
 
-#endif
 
 std::vector<std::multimap<ReducedFraction, MidiChord> >
 separateDrumChordsTo2Voices(const std::multimap<ReducedFraction, MidiChord> &chords)

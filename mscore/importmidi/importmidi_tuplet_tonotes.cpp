@@ -23,7 +23,6 @@ void addElementToTuplet(int voice,
       {
       const auto foundTuplets = findTupletsForTimeRange(voice, onTime, len, tuplets, true);
 
-#ifdef QT_DEBUG
       if (foundTuplets.size() > 1) {
             qDebug() << "Measure number (from 1):" << el->measure()->no() + 1
                      << ", staff index (from 0):" << el->staff()->idx();
@@ -31,7 +30,6 @@ void addElementToTuplet(int voice,
             Q_ASSERT_X(false, "MidiTuplet::addElementToTuplet",
                        "More than one tuplet contains specified duration");
             }
-#endif
 
       if (!foundTuplets.empty()) {
             auto &tuplet = const_cast<TupletData &>(foundTuplets.front()->second);
@@ -73,7 +71,6 @@ void createTupletNotes(
       }
 
 
-#ifdef QT_DEBUG
 
 void printInvalidTupletLocation(int measureIndex, int staffIndex)
       {
@@ -115,7 +112,6 @@ bool haveTupletsEnoughElements(const Staff *staff)
       return true;
       }
 
-#endif
 
 } // namespace MidiTuplet
 } // namespace Ms
