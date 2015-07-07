@@ -531,7 +531,7 @@ void Staff::read(XmlReader& e)
             if (tag == "type") {    // obsolete
                   int staffTypeIdx = e.readInt();
                   qDebug("obsolete: Staff::read staffTypeIdx %d", staffTypeIdx);
-                  _staffType = *StaffType::preset(StaffTypes(staffTypeIdx));
+                  _staffType = *StaffType::preset(staffTypeIdx);
                   // set default barLineFrom and barLineTo according to staff type num. of lines
                   // (1-line staff bar lines are special)
                   _barLineFrom = (lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);

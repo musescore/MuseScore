@@ -270,6 +270,7 @@ class Note : public Element {
       QPointF stemUpSE() const;
 
       SymId noteHead() const;
+      NoteHead::Group shapeNoteHeadGroup() const;
       NoteHead::Group headGroup() const   { return _headGroup; }
       NoteHead::Type headType() const     { return _headType;  }
       void setHeadGroup(NoteHead::Group val);

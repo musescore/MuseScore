@@ -150,10 +150,15 @@ bool StaffType::isSameStructure(const StaffType& st) const
          || st._genTimesig   != _genTimesig)
             return false;
 
-      if (_group != StaffGroup::TAB) {                      // common to pitched and percussion
+      if (_group == StaffGroup::PERCUSSION) {                      // common to pitched and percussion
             return st._genKeysig      == _genKeysig
                && st._showLedgerLines == _showLedgerLines
                ;
+            }
+      else if (_group == StaffGroup::STANDARD) {
+            return st._genKeysig       == _genKeysig
+                && st._showLedgerLines == _showLedgerLines
+                && st._shapeNoteStyle  == _shapeNoteStyle;
             }
       else {                                                // TAB-specific
             return st._genDurations == _genDurations
@@ -221,6 +226,12 @@ void StaffType::write(Xml& xml) const
                   xml.tag("keysig", _genKeysig);
             if (!_showLedgerLines)
                   xml.tag("ledgerlines", _showLedgerLines);
+            if (_shapeNoteStyle != ShapeNoteStyle::NONE) {
+                  if (_shapeNoteStyle == ShapeNoteStyle::FOUR)
+                        xml.tag("shapenotestyle", "FOUR");
+                  else if (_shapeNoteStyle == ShapeNoteStyle::SEVEN)
+                        xml.tag("shapenotestyle", "SEVEN");
+                  }
             }
       else {
             xml.tag("durations",        _genDurations);
@@ -314,6 +325,13 @@ void StaffType::read(XmlReader& e)
                   setUpsideDown(e.readBool());
             else if (tag == "useNumbers")
                   setUseNumbers(e.readBool());
+            else if (tag == "shapenotestyle") {
+                  QString style = e.readElementText();
+                  if (style == "FOUR")
+                        setShapeNoteStyle(ShapeNoteStyle::FOUR);
+                  else if (style == "SEVEN")
+                        setShapeNoteStyle(ShapeNoteStyle::SEVEN);
+                  }
             else
                   e.unknown();
             }
@@ -976,7 +994,7 @@ bool StaffType::fontData(bool bDuration, int nIdx, QString* pFamily, QString* pD
 //
 //=========================================================
 
-static const int _defaultPreset[STAFF_GROUP_MAX] =
+const int StaffType::defaultPreset[] =
       { 0,              // default pitched preset is "stdNormal"
         3,              // default percussion preset is "perc5lines"
         5               // default tab preset is "tab6StrCommon"
@@ -988,11 +1006,11 @@ static const QString _emptyString = QString();
 //   Static functions for StaffType presets
 //---------------------------------------------------------
 
-const StaffType* StaffType::preset(StaffTypes idx)
+const StaffType* StaffType::preset(int idx)
       {
-      if (int(idx) < 0 || int(idx) >= int(_presets.size()))
+      if (idx < 0 || idx >= int(_presets.size()))
             return &_presets[0];
-      return &_presets[int(idx)];
+      return &_presets[idx];
       }
 
 const StaffType* StaffType::presetFromXmlName(QString& xmlName)
@@ -1015,7 +1033,7 @@ const StaffType* StaffType::presetFromName(QString& name)
 #endif
 const StaffType* StaffType::getDefaultPreset(StaffGroup grp)
       {
-      int _idx = _defaultPreset[int(grp)];
+      int _idx = defaultPreset[int(grp)];
       return &_presets[_idx];
       }
 
@@ -1050,6 +1068,15 @@ void StaffType::initStaffTypes()
          StaffType(StaffGroup::TAB, "tab6StrItalian",QObject::tr("Tab. 6-str. Italian"),6, 1.5, false, true, true,  true,  "MuseScore Tab Italian",15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   true,  true,  false, false, true,  true),
          StaffType(StaffGroup::TAB, "tab6StrFrench", QObject::tr("Tab. 6-str. French"), 6, 1.5, false, true, true,  true,  "MuseScore Tab French", 15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   false, false, false, false, false, false)
          };
+      
+      StaffType shapeNotesFour = StaffType(StaffGroup::STANDARD, "shapeNotesFour", QObject::tr("Shape Notes - Four"), 5, 1, true, true, false, true, true, true);
+      shapeNotesFour.setShapeNoteStyle(ShapeNoteStyle::FOUR);
+
+      StaffType shapeNotesSeven = StaffType(StaffGroup::STANDARD, "shapeNotesSeven", QObject::tr("Shape Notes - Seven"), 5, 1, true, true, false, true, true, true);
+      shapeNotesSeven.setShapeNoteStyle(ShapeNoteStyle::SEVEN);
+
+      _presets.push_back(shapeNotesFour);
+      _presets.push_back(shapeNotesSeven);
       }
 }                 // namespace Ms
 

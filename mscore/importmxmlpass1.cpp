@@ -2084,15 +2084,15 @@ void MusicXMLParserPass1::clef(const QString& partId)
                   n--;              // make zero-based
             }
 
-      StaffTypes staffType = StaffTypes::STANDARD;
+      StaffGroup staffGroup = StaffGroup::STANDARD;
 
       while (_e.readNextStartElement()) {
             if (_e.name() == "sign") {
                   QString sign = _e.readElementText();
                   if (sign == "TAB")
-                        staffType = StaffTypes::TAB_DEFAULT;
+                        staffGroup = StaffGroup::TAB;
                   else if (sign == "percussion")
-                        staffType = StaffTypes::PERC_DEFAULT;
+                        staffGroup = StaffGroup::PERCUSSION;
                   }
             else
                   skipLogCurrElem();
@@ -2105,8 +2105,8 @@ void MusicXMLParserPass1::clef(const QString& partId)
 
       // TODO: changed for #55501, but now staff type init is shared between pass 1 and 2
       // old code: if (0 <= n && n < staves && staffType != StaffTypes::STANDARD)
-      if (0 <= n && n < staves && staffType == StaffTypes::TAB_DEFAULT)
-            _score->staff(staffIdx + n)->setStaffType(StaffType::preset(staffType));
+      if (0 <= n && n < staves && staffGroup == StaffGroup::TAB)
+            _score->staff(staffIdx + n)->setStaffType(StaffType::getDefaultPreset(staffGroup));
       }
 
 //---------------------------------------------------------
