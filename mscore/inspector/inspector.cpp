@@ -646,7 +646,11 @@ InspectorBend::InspectorBend(QWidget* parent)
       g.setupUi(addWidget());
 
       iList = {
-            { P_ID::PLAY, 0, 0, g.playBend, g.resetPlayBend }
+            { P_ID::COLOR,        0, 0, e.color,       e.resetColor       },
+            { P_ID::VISIBLE,      0, 0, e.visible,     e.resetVisible     },
+            { P_ID::USER_OFF,     0, 0, e.offsetX,     e.resetX           },
+            { P_ID::USER_OFF,     1, 0, e.offsetY,     e.resetY           },
+            { P_ID::PLAY,         0, 0, g.playBend,    g.resetPlayBend    }
             };
 
       mapSignals();
