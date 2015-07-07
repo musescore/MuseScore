@@ -812,7 +812,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
 
 //---------------------------------------------------------
 //   cloneStaff2
-//    staves are in different scores
+//    staves are potentially in different scores
 //---------------------------------------------------------
 
 void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
