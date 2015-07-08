@@ -2058,12 +2058,13 @@ static bool processNonGui()
             if (!converterMode)
                   return res;
             }
-
+      bool rv = true;
       if (converterMode) {
             QString fn(outFileName);
             Score* cs = mscore->currentScore();
             if (!cs)
                   return false;
+            LayoutMode layoutMode = cs->layoutMode();
             if (!styleFile.isEmpty()) {
                   QFile f(styleFile);
                   if (f.open(QIODevice::ReadOnly)) {
@@ -2080,7 +2081,7 @@ static bool processNonGui()
                         }
                   return true;
                   }
-            if (fn.endsWith(".mscz")) {
+            else if (fn.endsWith(".mscz")) {
                   QFileInfo fi(fn);
                   try {
                         cs->saveCompressedFile(fi, false);
@@ -2090,15 +2091,33 @@ static bool processNonGui()
                         }
                   return true;
                   }
-            if (fn.endsWith(".xml"))
-                  return saveXml(cs, fn);
-            if (fn.endsWith(".mxl"))
-                  return saveMxl(cs, fn);
-            if (fn.endsWith(".mid"))
+            else if (fn.endsWith(".xml")) {
+                  if (layoutMode != LayoutMode::PAGE) {
+                        cs->startCmd();
+                        cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                        cs->doLayout();
+                        }
+                  rv = saveXml(cs, fn);
+                  }
+            else if (fn.endsWith(".mxl")) {
+                  if (layoutMode != LayoutMode::PAGE) {
+                        cs->startCmd();
+                        cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                        cs->doLayout();
+                        }
+                  rv = saveMxl(cs, fn);
+                  }
+            else if (fn.endsWith(".mid"))
                   return mscore->saveMidi(cs, fn);
-            if (fn.endsWith(".pdf")) {
-                  if (!exportScoreParts)
-                        return mscore->savePdf(fn);
+            else if (fn.endsWith(".pdf")) {
+                  if (!exportScoreParts) {
+                        if (layoutMode != LayoutMode::PAGE) {
+                              cs->startCmd();
+                              cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                              cs->doLayout();
+                        }
+                        rv = mscore->savePdf(fn);
+                        }
                   else {
                         if (cs->excerpts().size() == 0) {
                               QList<Excerpt*> exceprts = Excerpt::createAllExcerpt(cs);
@@ -2121,30 +2140,56 @@ static bool processNonGui()
                         return mscore->savePdf(scores, fn);
                         }
                   }
-            if (fn.endsWith(".png"))
-                  return mscore->savePng(cs, fn);
-            if (fn.endsWith(".svg"))
-                  return mscore->saveSvg(cs, fn);
+            else if (fn.endsWith(".png")) {
+                  if (layoutMode != LayoutMode::PAGE) {
+                        cs->startCmd();
+                        cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                        cs->doLayout();
+                        }
+                  rv = mscore->savePng(cs, fn);
+                  }
+            else if (fn.endsWith(".svg")) {
+                  if (layoutMode != LayoutMode::PAGE) {
+                        cs->startCmd();
+                        cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                        cs->doLayout();
+                        }
+                  rv = mscore->saveSvg(cs, fn);
+                  }
 #ifdef HAS_AUDIOFILE
-            if (fn.endsWith(".wav") || fn.endsWith(".ogg") || fn.endsWith(".flac"))
+            else if (fn.endsWith(".wav") || fn.endsWith(".ogg") || fn.endsWith(".flac"))
                   return mscore->saveAudio(cs, fn);
 #endif
 #ifdef USE_LAME
-            if (fn.endsWith(".mp3"))
+            else if (fn.endsWith(".mp3"))
                   return mscore->saveMp3(cs, fn);
 #endif
-            if (fn.endsWith(".spos"))
-                  return savePositions(cs, fn, true);
-            if (fn.endsWith(".mpos"))
-                  return savePositions(cs, fn, false);
-            if (fn.endsWith(".mlog"))
+            else if (fn.endsWith(".spos")) {
+                  if (layoutMode != LayoutMode::PAGE) {
+                        cs->startCmd();
+                        cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                        cs->doLayout();
+                        }
+                  rv = savePositions(cs, fn, true);
+                  }
+            else if (fn.endsWith(".mpos")) {
+                  if (layoutMode != LayoutMode::PAGE) {
+                        cs->startCmd();
+                        cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                        cs->doLayout();
+                        }
+                  rv = savePositions(cs, fn, false);
+                  }
+            else if (fn.endsWith(".mlog"))
                   return cs->sanityCheck(fn);
             else {
                   qDebug("dont know how to convert to %s", qPrintable(outFileName));
                   return false;
                   }
+            if (layoutMode != cs->layoutMode())
+                  cs->endCmd(true);       // rollback
             }
-      return true;
+      return rv;
       }
 
 //---------------------------------------------------------
