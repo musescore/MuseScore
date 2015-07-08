@@ -64,7 +64,9 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addAction(getAction("loop"));
       tb->addSeparator();
       tb->addAction(getAction("repeat"));
-      tb->addAction(getAction("follow"));
+      QAction* followAction = getAction("follow");
+      followAction->setChecked(preferences.followSong);
+      tb->addAction(followAction);
       tb->addSeparator();
       tb->addAction(getAction("metronome"));
 

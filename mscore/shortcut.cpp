@@ -2372,10 +2372,12 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          "follow",
-         QT_TRANSLATE_NOOP("action","Pan piano roll"),
+         QT_TRANSLATE_NOOP("action","Pan Piano Roll"),
          QT_TRANSLATE_NOOP("action","Toggle pan piano roll"),
          QT_TRANSLATE_NOOP("action","Pan roll during playback"),
-         Icons::pan_ICON
+         Icons::pan_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_SCORE | ShortcutFlags::A_CHECKABLE | ShortcutFlags::A_CHECKED
          },
       {
          MsWidget::MAIN_WINDOW,
