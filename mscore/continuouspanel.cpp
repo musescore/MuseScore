@@ -362,7 +362,7 @@ void ContinuousPanel::draw(QPainter& painter, const QList<Element*>& el) {
 
                   // Draw staff lines
                   StaffLines* newStaffLines = static_cast<StaffLines*>(e->clone());
-                  newStaffLines->setWidth(_width);
+                  newStaffLines->setWidth(bg.width());
                   newStaffLines->setParent(parent);
                   newStaffLines->setTrack(e->track());
                   newStaffLines->layout();
