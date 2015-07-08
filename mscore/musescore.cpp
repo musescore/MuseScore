@@ -4116,10 +4116,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "zoomout")
             decMag();
       else if (cmd == "zoom100") {
-            if (cv) {
+            if (cv)
                   cv->setMag(MagIdx::MAG_100, 1.0);
-                  cv->setOffset(0.0, 0.0);
-                  }
             setMag(1.0);
             }
       else if (cmd == "midi-on")
