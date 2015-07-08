@@ -44,7 +44,7 @@ enum class SymId;
 //   Grip
 //---------------------------------------------------------
 
-enum class Grip : char {
+enum class Grip : signed char {
       NO_GRIP = -1,
       START = 0, END = 1,                         // arpeggio etc.
           MIDDLE = 2, APERTURE = 3,               // Line
