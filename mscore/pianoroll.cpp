@@ -18,6 +18,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
+#include "libmscore/repeatlist.h"
 #include "awl/pitchlabel.h"
 #include "awl/pitchedit.h"
 #include "awl/poslabel.h"
@@ -484,6 +485,8 @@ void PianorollEditor::keyReleased(int /*pitch*/)
 void PianorollEditor::heartBeat(Seq* seq)
       {
       unsigned tick = seq->getCurTick();
+      if (score()->repeatList())
+            tick = score()->repeatList()->utick2tick(tick);
       if (locator[0].tick() != tick) {
             posChanged(POS::CURRENT, tick);
             if (preferences.followSong)
