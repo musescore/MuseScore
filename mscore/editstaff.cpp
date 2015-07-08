@@ -41,6 +41,8 @@
 
 namespace Ms {
 
+extern bool useFactorySettings;
+
 //---------------------------------------------------------
 //   EditStaff
 //---------------------------------------------------------
@@ -89,6 +91,14 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       updateStaffType();
       updateInstrument();
 
+      if (!useFactorySettings) {
+            QSettings settings;
+            settings.beginGroup("EditStaff");
+            resize(settings.value("size", QSize(484, 184)).toSize());
+            move(settings.value("pos", QPoint(10, 10)).toPoint());
+            settings.endGroup();
+            }
+
       connect(buttonBox,            SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
       connect(changeInstrument,     SIGNAL(clicked()),            SLOT(showInstrumentDialog()));
       connect(changeStaffType,      SIGNAL(clicked()),            SLOT(showStaffTypeDialog()));
@@ -103,6 +113,20 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       connect(showTimesig,          SIGNAL(clicked()),            SLOT(showTimeSigChanged()));
       connect(showBarlines,         SIGNAL(clicked()),            SLOT(showBarlinesChanged()));
       addAction(getAction("local-help"));  // why is this needed?
+      }
+
+//---------------------------------------------------------
+//   closeEvent
+//---------------------------------------------------------
+
+void EditStaff::closeEvent(QCloseEvent* ev)
+      {
+      QSettings settings;
+      settings.beginGroup("EditStaff");
+      settings.setValue("size", size());
+      settings.setValue("pos", pos());
+      settings.endGroup();
+      QWidget::closeEvent(ev);
       }
 
 //---------------------------------------------------------
