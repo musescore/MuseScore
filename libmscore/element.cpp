@@ -955,7 +955,7 @@ void StaffLines::draw(QPainter* painter) const
 qreal StaffLines::y1() const
       {
       System* system = measure()->system();
-      if (system == 0)
+      if (system == 0 || staffIdx() >= system->staves()->size())
             return 0.0;
 
       return system->staff(staffIdx())->y() + ipos().y();
