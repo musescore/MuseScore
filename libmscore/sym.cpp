@@ -5355,8 +5355,8 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
       int pr           = painter->device()->devicePixelRatio();
       qreal pixelRatio = qreal(pr > 0 ? pr : 1);
       worldScale      *= pixelRatio;
-      if (worldScale < 1.0)
-            worldScale = 1.0;
+//      if (worldScale < 1.0)
+//            worldScale = 1.0;
       int scale16      = lrint(worldScale * 6553.6 * mag);
 
       GlyphKey gk(face, id, mag, worldScale, color);
