@@ -51,7 +51,7 @@ class PositionCursor;
 class ContinuousPanel;
 class Tuplet;
 
-enum class Grip : char;
+enum class Grip : signed char;
 enum class POS : char;
 enum class MagIdx : char;
 
