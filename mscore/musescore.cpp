@@ -558,7 +558,9 @@ MuseScore::MuseScore()
       transportTools->addWidget(_playButton);
       transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("loop")));
       transportTools->addSeparator();
-      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("repeat")));
+      QAction* repeatAction = getAction("repeat");
+      repeatAction->setChecked(MScore::playRepeats);
+      transportTools->addWidget(new AccessibleToolButton(transportTools, repeatAction));
       transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("pan")));
       transportTools->addWidget(new AccessibleToolButton(transportTools, metronomeAction));
 
@@ -4238,9 +4240,11 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "print")
             printFile();
       else if (cmd == "repeat") {
-            MScore::playRepeats = !MScore::playRepeats;
-            cs->updateRepeatList(MScore::playRepeats);
-            emit cs->playlistChanged();
+            MScore::playRepeats = a->isChecked();
+            if (cs) {
+                  cs->updateRepeatList(MScore::playRepeats);
+                  emit cs->playlistChanged();
+                  }
             }
       else if (cmd == "pan")
             MScore::panPlayback = !MScore::panPlayback;
