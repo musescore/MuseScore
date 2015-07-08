@@ -2129,7 +2129,7 @@ static bool processNonGui()
                   else {
                         if (cs->excerpts().size() == 0) {
                               QList<Excerpt*> exceprts = Excerpt::createAllExcerpt(cs);
-                              
+
                               foreach(Excerpt* e, exceprts) {
                                     Score* nscore = new Score(e->oscore());
                                     e->setPartScore(nscore);
@@ -4115,6 +4115,13 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             incMag();
       else if (cmd == "zoomout")
             decMag();
+      else if (cmd == "zoom100") {
+            if (cv) {
+                  cv->setMag(MagIdx::MAG_100, 1.0);
+                  cv->setOffset(0.0, 0.0);
+                  }
+            setMag(1.0);
+            }
       else if (cmd == "midi-on")
             midiinToggled(a->isChecked());
       else if (cmd == "undo")

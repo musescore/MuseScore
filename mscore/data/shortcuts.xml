@@ -639,6 +639,10 @@
     <seq>Ctrl+-</seq>
     </SC>
   <SC>
+    <key>zoom100</key>
+    <seq>Ctrl+0</seq>
+    </SC>
+  <SC>
     <key>mirror-note</key>
     <seq>Shift+X</seq>
     </SC>
