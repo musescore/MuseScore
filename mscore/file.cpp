@@ -1839,10 +1839,20 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             rv = saveMp3(cs, fn);
 #endif
       else if (ext == "spos") {
+            if (layoutMode != LayoutMode::PAGE) {
+                  cs->startCmd();
+                  cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                  cs->doLayout();
+                  }
             // save positions of segments
             rv = savePositions(cs, fn, true);
             }
       else if (ext == "mpos") {
+            if (layoutMode != LayoutMode::PAGE) {
+                  cs->startCmd();
+                  cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                  cs->doLayout();
+                  }
             // save positions of measures
             rv = savePositions(cs, fn, false);
             }
