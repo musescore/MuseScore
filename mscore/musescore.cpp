@@ -2044,6 +2044,7 @@ static bool processNonGui()
             bool res = false;
             if (mscore->loadPlugin(pn)){
                   Score* cs = mscore->currentScore();
+                  LayoutMode layoutMode = cs->layoutMode();
                   if (!styleFile.isEmpty()) {
                         QFile f(styleFile);
                         if (f.open(QIODevice::ReadOnly))
@@ -2052,7 +2053,14 @@ static bool processNonGui()
                   cs->startCmd();
                   cs->setLayoutAll(true);
                   cs->endCmd();
+                  if (layoutMode != LayoutMode::PAGE) {
+                        cs->startCmd();
+                        cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                        cs->doLayout();
+                        }
                   mscore->pluginTriggered(0);
+                  if (layoutMode != cs->layoutMode())
+                        cs->endCmd(true);       // rollback
                   res = true;
                   }
             if (!converterMode)
