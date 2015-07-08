@@ -3679,7 +3679,7 @@
             </Instrument>
             <Instrument id="trombone">
                   <longName>Trombone</longName>
-                  <shortName>Trb.</shortName>
+                  <shortName>Tbn.</shortName>
                   <description>Trombone</description>
                   <musicXMLid>brass.trombone</musicXMLid>
                   <clef>F</clef>
@@ -3696,7 +3696,7 @@
             <Instrument id="trombone-treble">
                   <trackName>Trombone (Treble Clef)</trackName>
                   <longName>Trombone</longName>
-                  <shortName>Trb.</shortName>
+                  <shortName>Tbn.</shortName>
                   <description>Trombone</description>
                   <musicXMLid>brass.trombone</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -3712,7 +3712,7 @@
             </Instrument>
             <Instrument id="soprano-trombone">
                   <longName>Soprano Trombone</longName>
-                  <shortName>S. Trb.</shortName>
+                  <shortName>S. Tbn.</shortName>
                   <description>Soprano Trombone</description>
                   <musicXMLid>brass.trombone</musicXMLid>
                   <clef>G</clef>
@@ -3725,7 +3725,7 @@
             </Instrument>
             <Instrument id="alto-trombone">
                   <longName>Alto Trombone</longName>
-                  <shortName>A. Trb.</shortName>
+                  <shortName>A. Tbn.</shortName>
                   <description>Alto Trombone</description>
                   <musicXMLid>brass.trombone.alto</musicXMLid>
                   <clef>C3</clef>
@@ -3739,7 +3739,7 @@
             </Instrument>
             <Instrument id="tenor-trombone">
                   <longName>Tenor Trombone</longName>
-                  <shortName>T. Trb.</shortName>
+                  <shortName>T. Tbn.</shortName>
                   <description>Tenor Trombone</description>
                   <musicXMLid>brass.trombone.tenor</musicXMLid>
                   <clef>F</clef>
@@ -3754,7 +3754,7 @@
             </Instrument>
             <Instrument id="bass-trombone">
                   <longName>Bass Trombone</longName>
-                  <shortName>B. Trb.</shortName>
+                  <shortName>B. Tbn.</shortName>
                   <description>Bass Trombone</description>
                   <musicXMLid>brass.trombone.bass</musicXMLid>
                   <clef>F</clef>
@@ -3770,7 +3770,7 @@
             </Instrument>
             <Instrument id="contrabass-trombone">
                   <longName>Contrabass Trombone</longName>
-                  <shortName>Cb. Trb.</shortName>
+                  <shortName>Cb. Tbn.</shortName>
                   <description>Contrabass Trombone</description>
                   <musicXMLid>brass.trombone.contrabass</musicXMLid>
                   <clef>F</clef>
@@ -9209,7 +9209,7 @@
             </Instrument>
             <Instrument id="violoncello">
                   <longName>Violoncello</longName>
-                  <shortName>Vlc.</shortName>
+                  <shortName>Vc.</shortName>
                   <description>Violoncello</description>
                   <musicXMLid>strings.cello</musicXMLid>
                   <clef>F</clef>
@@ -9231,7 +9231,7 @@
             </Instrument>
             <Instrument id="violoncellos">
                   <longName>Violoncellos</longName>
-                  <shortName>Vlcs.</shortName>
+                  <shortName>Vcs.</shortName>
                   <description>Violoncellos</description>
                   <musicXMLid>strings.group</musicXMLid>
                   <clef>F</clef>
