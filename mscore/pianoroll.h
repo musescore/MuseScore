@@ -33,7 +33,7 @@ class Ruler;
 class Seq;
 class WaveView;
 
-enum class Grip : char;
+enum class Grip : signed char;
 
 //---------------------------------------------------------
 //   PianorollEditor
