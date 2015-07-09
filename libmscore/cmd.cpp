@@ -290,7 +290,13 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
       else
             tick2 = endSegment->tick();
       spanner->setTick2(tick2);
-      undoAddElement(spanner);
+      // original spanner may have been cloned from palette
+      // this results in different behavior from drag & drop for ottava
+      // we can simulate drag & drop by cloning the clone
+      // see https://musescore.org/en/node/68271
+      Spanner* nsp = static_cast<Spanner*>(spanner->clone());
+      delete spanner;
+      undoAddElement(nsp);
       }
 
 //---------------------------------------------------------
