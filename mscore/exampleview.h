@@ -20,7 +20,7 @@ namespace Ms {
 class Element;
 class Score;
 class Note;
-enum class Grip : char;
+enum class Grip : signed char;
 
 //---------------------------------------------------------
 //   ExampleView
