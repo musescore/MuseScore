@@ -174,7 +174,7 @@ void addFileToZip(MQZipWriter * uz, const QString& filename, const QString & zip
     file.remove();
 }
 
-void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal>& t2t, const bool do_linearize);
+void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal>& t2t);
 
 bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const bool do_linearize, const QString& partsName) {
 
@@ -204,6 +204,21 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 
   MQZipWriter uz(saveName);
 
+    cs->repeatList()->unwind();
+    if (cs->repeatList()->size()>1) {
+       if (do_linearize) {
+          Score * nscore = mscore->linearize(cs);
+          delete cs;
+          cs = nscore;
+       }
+       else {
+          QMessageBox::critical(0, QObject::tr("SVC export Failed"),
+             QObject::tr("Score contains repeats. Please linearize!"));
+          return false;
+       }
+    }
+
+
     Score* thisScore = cs->rootScore();
     if (partsinfo.isEmpty()) {
 
@@ -218,7 +233,7 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
       saveMidi(cs,tname);
       addFileToZip(&uz, tname, tname);
 
-    	createSvgCollection(&uz, cs, QString("0/"), tick2time, do_linearize);
+    	createSvgCollection(&uz, cs, QString("0/"), tick2time);
     }
     else {
 
@@ -237,7 +252,9 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
         part->setId(QString::number(pi++));
       }
 
-      //qWarning() << "JSON HAS " << partsinfo.size() << " PARTS" << endl;
+      // qWarning() << "JSON HAS " << partsinfo.size() << " PARTS" << endl;
+
+      qWarning() << "SVC: Creating audio";
 
       QJsonObject atracks = partsinfo["audiotracks"].toObject();
       stretchAudio(cs, tick2time);
@@ -252,16 +269,20 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
         }
       }
 
+
       if (partsinfo.contains("excerpts")) {
+        qWarning() << "SVC: Creating SVGS";
+
         int ei = 0;
         QString prefix = QString::number(ei++)+'/';
-        createSvgCollection(&uz, cs, prefix, tick2time, do_linearize);
+        createSvgCollection(&uz, cs, prefix, tick2time);
 
   	    foreach (Excerpt* e, thisScore->excerpts())  {
   	    	Score * tScore = e->partScore();
+          qWarning() << "SVC: CREATING PART" << ei;
 
           prefix = QString::number(ei++)+'/';
-  	    	createSvgCollection(&uz, tScore, prefix, tick2time, do_linearize);
+  	    	createSvgCollection(&uz, tScore, prefix, tick2time);
   	    }
       }
 	}
@@ -275,22 +296,7 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 
 QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t, QString basename);
 
-void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal>& t2t, const bool do_linearize) {
-
-      score->repeatList()->unwind();
-      if (score->repeatList()->size()>1) {
-
-         if (do_linearize) {
-            Score * nscore = mscore->linearize(score);
-            delete score;
-            score = nscore;
-         }
-         else {
-            QMessageBox::critical(0, QObject::tr("SVC export Failed"),
-               QObject::tr("Score contains repeats. Please linearize!"));
-            return;
-         }
-      }
+void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal>& t2t) {
 
       QJsonObject qts = QJsonObject();
 

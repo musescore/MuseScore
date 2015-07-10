@@ -94,11 +94,11 @@ namespace Ms {
       Measure * last = 0;
       last = static_cast<Measure*>(score->insertMeasure(Element::Type::MEASURE,0,false));
 
-      score->select(last);
       score->startCmd();
+      score->select(last);
       score->cmdPaste(mimeData,0);
+      score->deselectAll();      
       score->endCmd();
-      score->deselectAll();
    }
 
    Score * MuseScore::linearize(Score* old_score)
@@ -139,9 +139,9 @@ namespace Ms {
 
             // Remove all measures past the first jump
             if (ml) {  
+               score->startCmd();
                score->select(ml,SelectType::SINGLE);
                score->select(score->lastMeasure(),SelectType::RANGE);
-               score->startCmd();
                score->cmdDeleteSelectedMeasures();
                score->endCmd(); 
             }
