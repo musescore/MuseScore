@@ -5672,6 +5672,26 @@ void ScoreFont::load()
                         QString("6stringTabClefSerif"),
                         SymId::sixStringTabClefSerif
                   },
+                  {     QString("noteheadBlack"),
+                        QString("noteheadBlackOversized"),
+                        SymId::noteheadBlack
+                  },
+                  {     QString("noteheadHalf"),
+                        QString("noteheadHalfOversized"),
+                        SymId::noteheadHalf
+                  },
+                  {     QString("noteheadWhole"),
+                        QString("noteheadWholeOversized"),
+                        SymId::noteheadWhole
+                  },
+                  {     QString("noteheadDoubleWhole"),
+                        QString("noteheadDoubleWholeOversized"),
+                        SymId::noteheadDoubleWhole
+                  },
+                  {     QString("noteheadDoubleWholeSquare"),
+                        QString("noteheadDoubleWholeSquareOversized"),
+                        SymId::noteheadDoubleWholeSquare
+                  },
                   {     QString("noteheadDoubleWhole"),
                         QString("noteheadDoubleWholeAlt"),
                         SymId::noteheadDoubleWholeAlt
