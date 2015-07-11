@@ -73,6 +73,8 @@ class Trill : public SLine {
       Q_PROPERTY(Ms::Trill::Type trillType READ trillType WRITE undoSetTrillType)
       Type _trillType;
       Accidental* _accidental;
+      MScore::OrnamentStyle _ornamentStyle; // for use in ornaments such as trill
+      bool _playArticulation;
 
    public:
       Trill(Score* s);
@@ -91,6 +93,10 @@ class Trill : public SLine {
       void undoSetTrillType(Type val);
       void setTrillType(Type tt)          { _trillType = tt; }
       Type trillType() const              { return _trillType; }
+      void setOrnamentStyle(MScore::OrnamentStyle val) { _ornamentStyle = val;}
+      MScore::OrnamentStyle ornamentStyle() const { return _ornamentStyle;}
+      void setPlayArticulation(bool val)  { _playArticulation = val;}
+      bool playArticulation() const       { return _playArticulation; }
       QString trillTypeName() const;
       QString trillTypeUserName();
       Accidental* accidental() const      { return _accidental; }
