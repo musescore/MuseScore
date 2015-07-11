@@ -209,6 +209,8 @@ QVariant TrillSegment::getProperty(P_ID id) const
       {
       switch (id) {
             case P_ID::TRILL_TYPE:
+            case P_ID::ORNAMENT_STYLE:
+            case P_ID::PLAY:
                   return trill()->getProperty(id);
             default:
                   return LineSegment::getProperty(id);
@@ -223,6 +225,8 @@ bool TrillSegment::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
             case P_ID::TRILL_TYPE:
+            case P_ID::ORNAMENT_STYLE:
+            case P_ID::PLAY:
                   return trill()->setProperty(id, v);
             default:
                   return LineSegment::setProperty(id, v);
@@ -237,6 +241,8 @@ QVariant TrillSegment::propertyDefault(P_ID id) const
       {
       switch (id) {
             case P_ID::TRILL_TYPE:
+            case P_ID::ORNAMENT_STYLE:
+            case P_ID::PLAY:
                   return trill()->propertyDefault(id);
             default:
                   return LineSegment::propertyDefault(id);
@@ -266,6 +272,8 @@ Trill::Trill(Score* s)
       {
       _trillType = Type::TRILL_LINE;
       _accidental = 0;
+      _ornamentStyle    = MScore::OrnamentStyle::DEFAULT;
+      setPlayArticulation(true);
       }
 
 Trill::~Trill()
@@ -364,6 +372,8 @@ void Trill::write(Xml& xml) const
             return;
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
       xml.tag("subtype", trillTypeName());
+      writeProperty(xml, P_ID::PLAY);
+      writeProperty(xml, P_ID::ORNAMENT_STYLE);
       SLine::writeProperties(xml);
       if (_accidental)
             _accidental->write(xml);
@@ -389,6 +399,10 @@ void Trill::read(XmlReader& e)
                   _accidental->read(e);
                   _accidental->setParent(this);
                   }
+            else if ( tag == "ornamentStyle")
+                  setProperty(P_ID::ORNAMENT_STYLE, Ms::getProperty(P_ID::ORNAMENT_STYLE, e));
+            else if ( tag == "play")
+                  setPlayArticulation(e.readBool());
             else if (!SLine::readProperties(e))
                   e.unknown();
             }
@@ -467,6 +481,10 @@ QVariant Trill::getProperty(P_ID propertyId) const
       switch(propertyId) {
             case P_ID::TRILL_TYPE:
                   return int(trillType());
+            case P_ID::ORNAMENT_STYLE:
+                  return int(ornamentStyle());
+            case P_ID::PLAY:
+                  return bool(playArticulation());
             default:
                   break;
             }
@@ -482,6 +500,12 @@ bool Trill::setProperty(P_ID propertyId, const QVariant& val)
       switch(propertyId) {
             case P_ID::TRILL_TYPE:
                   setTrillType(Type(val.toInt()));
+                  break;
+            case P_ID::PLAY:
+                  setPlayArticulation(val.toBool());
+                  break;
+            case P_ID::ORNAMENT_STYLE:
+                  setOrnamentStyle(MScore::OrnamentStyle(val.toInt()));
                   break;
             default:
                   if (!SLine::setProperty(propertyId, val))
@@ -501,6 +525,11 @@ QVariant Trill::propertyDefault(P_ID propertyId) const
       switch(propertyId) {
             case P_ID::TRILL_TYPE:
                   return 0;
+            case P_ID::ORNAMENT_STYLE:
+                  //return int(score()->style()->ornamentStyle(_ornamentStyle));
+                  return int(MScore::OrnamentStyle::DEFAULT);
+            case P_ID::PLAY:
+                  return true;
             default:
                   return SLine::propertyDefault(propertyId);
             }
