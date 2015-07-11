@@ -955,6 +955,22 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
       }
 
 //---------------------------------------------------------
+// totalTiedNoteTicks
+//      return the total of the actualTicks of the given note plus
+//      the chain of zero or more notes tied to it to the right.
+//---------------------------------------------------------
+int totalTiedNoteTicks(Note* note)
+      {
+      int total = note->chord()->actualTicks();
+      while (note->tieFor() && (note->chord()->tick() < note->tieFor()->endNote()->chord()->tick())) {
+            note = note->tieFor()->endNote();
+            total += note->chord()->actualTicks();
+            }
+      return total;
+      };
+      
+      
+//---------------------------------------------------------
 //   renderNoteArticulation
 // tickspernote, number of ticks, either _16h or _32nd, i.e., MScore::division/4 or MScore::division/8
 // repeatp, true means repeat the body as many times as possible to fill the time slice.
@@ -967,10 +983,11 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
    int fastestFreq=16, int slowestFreq=8 // 16 Hz and 8 Hz
    )
       {
+
       events->clear();
       Chord *chord = note->chord();
-      int space   = 1000 * chord->actualTicks();
-      int maxticks = chord->actualTicks();
+      int maxticks = totalTiedNoteTicks(note);
+      int space = 1000 * maxticks;
       int numrepeat = 1;
       int sustain   = 0;
       int ontime    = 0;
@@ -1359,15 +1376,11 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
       //
       for (int i = 0; i < notes; ++i) {
             NoteEventList* el = &ell[i];
-            int nn = el->size();
-            if (nn == 0 && chord->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
+            if (el->size() == 0 && chord->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
                   el->append(NoteEvent(0, ontime, 1000-ontime));
-                  ++nn;
                   }
-            for (int i = 0; i < nn; ++i) {
-                  NoteEvent* e = &(*el)[i];
-                  e->setLen(e->len() * gateTime / 100);
-                  }
+            for ( NoteEvent &e : ell[i])
+                  e.setLen(e.len() * gateTime / 100);
             }
       return ell;
       }
