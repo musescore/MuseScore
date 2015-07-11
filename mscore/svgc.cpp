@@ -135,12 +135,13 @@ void stretchAudio(Score * score, const QMap<int,qreal>& t2t) {
   TempoMap * tempomap = score->tempomap();
 
   foreach(int tick, t2t.keys()) {
-    if (ptick<0) {
+    if (ptick<0 || abs((t2t[tick]-t2t[0])-tempomap->tick2time(tick))<0.05) {
+      //qWarning() << "Skipping tempo change";
       ptick = tick;
       continue;
     }
 
-    qreal tempo = ((tick-ptick) / (t2t[tick]-t2t[ptick])) / 
+    qreal tempo = ((tick-ptick) / ( (t2t[tick]-t2t[0]) - tempomap->tick2time(ptick))) / 
                     (MScore::division * tempomap->relTempo());
 
     tempomap->setTempo(ptick,tempo);
@@ -222,6 +223,7 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
     Score* thisScore = cs->rootScore();
     if (partsinfo.isEmpty()) {
 
+      qWarning() << "NO PARTSINFO";
     	/*
     	// Convert to tab (list of types in stafftype.h)
     	foreach( Staff * staff, cs->staves())
@@ -294,6 +296,25 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 	return true;
 }
 
+// Return the first note of the piece
+Note * first_note(Score * score) {
+    foreach( Page* page, score->pages() ) {
+      foreach( System* sys, *(page->systems()) ) {
+
+        QList<const Element*> elems;
+        foreach(MeasureBase *m, sys->measures())
+           m->scanElements(&elems, collectElements, false);           
+
+        foreach(const Element * e, elems)
+          if (e->type()==Element::Type::NOTE) {
+            Note * note = (Note*)e;
+            return note;
+          }
+      }
+    }
+    return NULL;
+}
+
 QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t, QString basename);
 
 void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal>& t2t) {
@@ -316,10 +337,23 @@ void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, 
 
       // Initial time signature and ppm
       Fraction ts = score->firstMeasure()->timesig();
-      qreal unit_dur = score->tempomap()->tick2time(1920/ts.denominator())-score->tempomap()->tick2time(0); // 480 ticks per quarter note
+
+      // 480 ticks per quarter note - so calculated from the duration of a normal length bar from beginning
+      qreal unit_dur = (score->tempomap()->tick2time(
+                                      1920*ts.numerator()/ts.denominator()) -
+                        score->tempomap()->tick2time(0))/ts.numerator();
+
       QJsonArray timesig; timesig.push_back(ts.numerator()); timesig.push_back(ts.denominator());
       qts["time_signature"] = timesig;
-      qts["ppm"] = round(60.0/unit_dur);
+      qts["ppm"] =(60.0/unit_dur);
+
+      Note * first = first_note(score);
+      if (first!=NULL) {
+        qts["first_note_pitch"] = first->ppitch();
+        qreal tuning = 440.0*pow(2,first->tuning()/1200.0);
+        qts["tuning"] = tuning;
+        qts["first_note_hz"] = tuning*pow(2,(first->ppitch()-69)/12.0);
+      }
 
       // Total ticks/time to end.
       Measure* lastm = score->lastMeasure();
@@ -386,7 +420,6 @@ QSet<Note *> * mark_tie_ends(QList<const Element*> const &elems) {
 
     return res;
 }
-
 
 qreal * find_margins(Score * score) {
 

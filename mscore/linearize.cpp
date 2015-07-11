@@ -101,6 +101,48 @@ namespace Ms {
       score->endCmd();
    }
 
+   void post_linearize(Score * score) {
+      // Remove volta markers
+      for (const std::pair<int,Spanner*>& p : score->spannerMap().map()) {
+         Spanner* s = p.second;
+         if (s->type() != Element::Type::VOLTA) continue;
+         //qDebug("VOLTA!");
+         score->removeSpanner(s);
+      }
+
+      for(Measure * m = score->firstMeasure(); m; m=m->nextMeasure()) {
+         // Remove repeats
+         if (m->repeatFlags()!=Repeat::NONE) {
+
+
+            m->setRepeatFlags(Repeat::NONE);
+            m->setRepeatCount(0);
+         }
+
+         // START_REPEAT, END_REPEAT; START_END_REPEAT
+
+         BarLineType ebl = m->endBarLineType();
+         if (ebl==BarLineType::START_REPEAT || ebl==BarLineType::END_REPEAT ||
+            ebl==BarLineType::END_START_REPEAT)
+            m->setEndBarLineType(BarLineType::NORMAL, false);
+
+
+         // Remove coda/fine labels and jumps
+         for (auto e : m->el())
+            if (e->type() == Element::Type::MARKER || 
+               e->type() == Element::Type::JUMP) {
+               //qDebug("JUMP? %s",qPrintable(e->userName()));
+               score->deleteItem(e);
+            }
+      }
+      score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
+      
+      // Postprocessing stuff
+      score->setLayoutAll(true);
+      score->fixTicks();
+      score->doLayout();
+   }
+
    Score * MuseScore::linearize(Score* old_score)
       {
 
@@ -152,41 +194,10 @@ namespace Ms {
          copy = true;;
       }
 
-      
-      // Remove volta markers
-      for (const std::pair<int,Spanner*>& p : score->spannerMap().map()) {
-         Spanner* s = p.second;
-         if (s->type() != Element::Type::VOLTA) continue;
-         //qDebug("VOLTA!");
-         score->removeSpanner(s);
-      }
+      post_linearize(score);
 
-      for(Measure * m = score->firstMeasure(); m; m=m->nextMeasure()) {
-         // Remove repeats
-         if (m->repeatFlags()!=Repeat::NONE) {
-
-
-            m->setRepeatFlags(Repeat::NONE);
-            m->setRepeatCount(0);
-         }
-         // Remove coda/fine labels and jumps
-         for (auto e : m->el())
-            if (e->type() == Element::Type::MARKER || 
-               e->type() == Element::Type::JUMP) {
-               //qDebug("JUMP? %s",qPrintable(e->userName()));
-               score->deleteItem(e);
-            }
-      }
-
-      score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
-      
-      // score->deselectAll();
-      //old_score->deselectAll();
-
-      // Postprocessing stuff
-      score->setLayoutAll(true);
-      score->fixTicks();
-      score->doLayout();
+      foreach(Excerpt * e, score->rootScore()->excerpts())
+         post_linearize(e->partScore());
 
       return score;
    }
