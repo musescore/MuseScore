@@ -234,6 +234,8 @@ Articulation::Articulation(Score* s)
       _up = true;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       setArticulationType(ArticulationType::Fermata);
+      _ornamentStyle    = MScore::OrnamentStyle::DEFAULT;
+      setPlayArticulation(true);
       }
 
 //---------------------------------------------------------
@@ -246,8 +248,7 @@ void Articulation::setArticulationType(ArticulationType idx)
       _anchor           = score()->style()->articulationAnchor(int(_articulationType));
       anchorStyle       = PropertyStyle::STYLED;
       _timeStretch      = articulationList[int(articulationType())].timeStretch;
-      _ornamentStyle    = MScore::OrnamentStyle::DEFAULT;
-      setPlayArticulation(true);
+
       }
 
 //---------------------------------------------------------
