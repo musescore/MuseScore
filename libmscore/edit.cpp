@@ -1746,7 +1746,7 @@ void Score::deleteItem(Element* el)
                                           }
                                     }
                               }
-                        select(rest, SelectType::SINGLE, 0);
+                        //select(rest, SelectType::SINGLE, 0);
                         }
                   else  {
                         // remove segment if empty
@@ -2200,8 +2200,8 @@ void Score::cmdDeleteSelection()
                               }
                         }
                   }
-            s1 = tick2segmentMM(stick1);
-            s2 = tick2segmentMM(stick2,true);
+            s1 = tick2segment(stick1);
+            s2 = tick2segment(stick2,true);
             if (s1 == 0 || s2 == 0)
                   deselectAll();
             else {
@@ -2237,7 +2237,7 @@ void Score::cmdDeleteSelection()
                   }
 
             }
-      //deselectAll();
+      deselectAll();
       _layoutAll = true;
       }
 
