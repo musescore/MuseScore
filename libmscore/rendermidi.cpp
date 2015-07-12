@@ -1201,7 +1201,6 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
            ,{Trill::Type::UPPRALL_LINE,    ArticulationType::UpPrall}
            ,{Trill::Type::DOWNPRALL_LINE,  ArticulationType::DownPrall}
            ,{Trill::Type::PRALLPRALL_LINE, ArticulationType::Trill}
-           ,{Trill::Type::PURE_LINE,       ArticulationType::Trill}
            };
       auto it = articulationMap.find(trillType);
       if (it == articulationMap.cend() )
