@@ -1849,9 +1849,16 @@ Element* Score::move(const QString& cmd)
             if (noteEntryMode())
                   _is.moveToNextInputPos();
             el = nextChordRest(cr);
+            if (!el)
+                 el = cr;
             }
       else if (cmd == "prev-chord") {
             if (noteEntryMode() && _is.segment()) {
+                  // when there is no cr at input position for current voice,
+                  // this is a sign that input cursor has advanced into a gap / empty measure
+                  // use selected chord if present,
+                  if (inputState().cr() == nullptr && cr == selection().cr())
+                        el = cr;
                   Segment* s = _is.segment()->prev1();
                   //
                   // if _is._segment is first chord/rest segment in measure
@@ -1874,7 +1881,8 @@ Element* Score::move(const QString& cmd)
                         s = m->first(Segment::Type::ChordRest);
                   _is.moveInputPos(s);
                   }
-            el = prevChordRest(cr);
+            if (!el)
+                  el = prevChordRest(cr);
             }
       else if (cmd == "next-measure") {
             el = nextMeasure(cr);
