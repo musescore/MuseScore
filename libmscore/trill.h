@@ -57,7 +57,7 @@ class TrillSegment : public LineSegment {
 
 //---------------------------------------------------------
 //   @@ Trill
-//   @P trillType  Ms::Trill::Type  (TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE, PURE_LINE)
+//   @P trillType  Ms::Trill::Type  (TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE)
 //---------------------------------------------------------
 
 class Trill : public SLine {
@@ -66,7 +66,7 @@ class Trill : public SLine {
 
    public:
       enum class Type : char {
-            TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE, PURE_LINE
+            TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE
             };
 
    private:
