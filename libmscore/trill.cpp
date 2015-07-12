@@ -30,8 +30,7 @@ const TrillTableItem trillTable[] = {
       { Trill::Type::TRILL_LINE,      "trill",      QT_TRANSLATE_NOOP("trillType", "Trill line")          },
       { Trill::Type::UPPRALL_LINE,    "upprall",    QT_TRANSLATE_NOOP("trillType", "Upprall line")        },
       { Trill::Type::DOWNPRALL_LINE,  "downprall",  QT_TRANSLATE_NOOP("trillType", "Downprall line")      },
-      { Trill::Type::PRALLPRALL_LINE, "prallprall", QT_TRANSLATE_NOOP("trillType", "Prallprall line")     },
-      { Trill::Type::PURE_LINE      , "pure",       QT_TRANSLATE_NOOP("trillType", "Wavy line")           }
+      { Trill::Type::PRALLPRALL_LINE, "prallprall", QT_TRANSLATE_NOOP("trillType", "Prallprall line")     }
       };
 
 int trillTableSize() {
@@ -141,7 +140,6 @@ void TrillSegment::layout()
                         symbolLine(SymId::ornamentTrill, SymId::wiggleTrill);
                         break;
                   case Trill::Type::PRALLPRALL_LINE:
-                  case Trill::Type::PURE_LINE:
                         symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
                         break;
                   case Trill::Type::UPPRALL_LINE:
@@ -423,7 +421,7 @@ void Trill::setTrillType(const QString& s)
       else if (s == "prallprall")
             _trillType = Type::PRALLPRALL_LINE;
       else if (s == "pure")
-            _trillType = Type::PURE_LINE;
+            _trillType = Type::PRALLPRALL_LINE; // obsolete, compatibility only
       else
             qDebug("Trill::setSubtype: unknown <%s>", qPrintable(s));
       }
@@ -443,8 +441,6 @@ QString Trill::trillTypeName() const
                   return "downprall";
             case Type::PRALLPRALL_LINE:
                   return "prallprall";
-            case Type::PURE_LINE:
-                  return "pure";
             default:
                   qDebug("unknown Trill subtype %hhd", trillType());
                   return "?";
