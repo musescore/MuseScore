@@ -1,713 +1,1028 @@
 {
     "6stringTabClef": {
-        "codepoint": "U+e1cB"
-    },
+        "codepoint": "U+E06D", 
+        "description": "6-string tab clef"
+    }, 
     "accdnCombDot": {
-        "codepoint": "U+e1b0"
-    },
+        "codepoint": "U+E8CA", 
+        "description": "Combining accordion coupler dot"
+    }, 
     "accdnCombLH2RanksEmpty": {
-        "codepoint": "U+e1b1"
-    },
+        "codepoint": "U+E8C8", 
+        "description": "Combining left hand, 2 ranks, empty"
+    }, 
     "accdnCombLH3RanksEmptySquare": {
-        "codepoint": "U+e1b3"
-    },
+        "codepoint": "U+E8C9", 
+        "description": "Combining left hand, 3 ranks, empty (square)"
+    }, 
     "accdnCombRH3RanksEmpty": {
-        "codepoint": "U+e1af"
-    },
+        "codepoint": "U+E8C6", 
+        "description": "Combining right hand, 3 ranks, empty"
+    }, 
     "accdnCombRH4RanksEmpty": {
-        "codepoint": "U+e1b2"
-    },
+        "codepoint": "U+E8C7", 
+        "description": "Combining right hand, 4 ranks, empty"
+    }, 
     "accidentalBakiyeFlat": {
-        "codepoint": "U+e115"
-    },
+        "codepoint": "U+E442", 
+        "description": "Bakiye (flat)"
+    }, 
     "accidentalBuyukMucennebFlat": {
-        "codepoint": "U+e116"
-    },
+        "codepoint": "U+E440", 
+        "description": "B\u00fcy\u00fck m\u00fccenneb (flat)"
+    }, 
     "accidentalBuyukMucennebSharp": {
-        "codepoint": "U+e110"
-    },
+        "codepoint": "U+E447", 
+        "description": "B\u00fcy\u00fck m\u00fccenneb (sharp)"
+    }, 
     "accidentalDoubleFlat": {
-        "codepoint": "U+e11a"
-    },
+        "alternateCodepoint": "U+1D12B", 
+        "codepoint": "U+E264", 
+        "description": "Double flat"
+    }, 
     "accidentalDoubleSharp": {
-        "codepoint": "U+e11c"
-    },
+        "alternateCodepoint": "U+1D12A", 
+        "codepoint": "U+E263", 
+        "description": "Double sharp"
+    }, 
     "accidentalFlat": {
-        "codepoint": "U+e114"
-    },
+        "alternateCodepoint": "266D", 
+        "codepoint": "U+E260", 
+        "description": "Flat"
+    }, 
     "accidentalKomaSharp": {
-        "codepoint": "U+e111"
-    },
+        "codepoint": "U+E444", 
+        "description": "Koma (sharp)"
+    }, 
     "accidentalKoron": {
-        "codepoint": "U+e1d5"
-    },
-    "accidentalNatural": {
-        "codepoint": "U+e113"
-    },
-    "accidentalQuarterToneSharpStein": {
-        "codepoint": "U+e10f"
-    },
-    "accidentalQuarterToneFlatStein": {
-        "codepoint": "U+E118"
-    },
-    "accidentalThreeQuarterTonesFlatZimmermann": {
-        "codepoint": "U+E117"
-    },
-    "accidentalThreeQuarterTonesSharpStein": {
-        "codepoint": "U+E112"
-    },
-    "accidentalSharp": {
-        "codepoint": "U+e10e"
-    },
-    "accidentalSori": {
-        "codepoint": "U+e1d4"
-    },
+        "codepoint": "U+E460", 
+        "description": "Koron (quarter tone flat)"
+    }, 
     "accidentalKucukMucennebSharp": {
-        "codepoint": "U+e111"
-    },
-    "accidentalThreeQuarterTonesSharpArrowUp": {
-        "codepoint": "U+e1c1"
-    },
-    "accidentalQuarterToneSharpArrowDown": {
-        "codepoint": "U+e1c2"
-    },
-    "accidentalQuarterToneFlatArrowUp": {
-        "codepoint": "U+e1bb"
-    },
-    "accidentalThreeQuarterTonesFlatArrowDown": {
-        "codepoint": "U+e1bc"
-    },
-    "accidentalQuarterToneSharpNaturalArrowUp": {
-        "codepoint": "U+e1be"
-    },
-    "accidentalQuarterToneFlatNaturalArrowDown": {
-        "codepoint": "U+e1bf"
-    },
+        "codepoint": "U+E446", 
+        "description": "K\u00fc\u00e7\u00fck m\u00fccenneb (sharp)"
+    }, 
+    "accidentalNatural": {
+        "alternateCodepoint": "266E", 
+        "codepoint": "U+E261", 
+        "description": "Natural"
+    }, 
     "accidentalParensLeft": {
-        "codepoint": "U+E26A"
+        "codepoint": "U+E26A", 
+        "description": "Accidental parenthesis, left"
     }, 
     "accidentalParensRight": {
-        "codepoint": "U+E26B"
-    },                    
+        "codepoint": "U+E26B", 
+        "description": "Accidental parenthesis, right"
+    }, 
+    "accidentalQuarterToneFlatArrowUp": {
+        "alternateCodepoint": "U+1D12C", 
+        "codepoint": "U+E270", 
+        "description": "Quarter-tone flat"
+    }, 
+    "accidentalQuarterToneFlatNaturalArrowDown": {
+        "alternateCodepoint": "U+1D12F", 
+        "codepoint": "U+E273", 
+        "description": "Quarter-tone flat"
+    }, 
+    "accidentalQuarterToneFlatStein": {
+        "codepoint": "U+E280", 
+        "description": "Reversed flat (quarter-tone flat) (Stein)"
+    }, 
+    "accidentalQuarterToneSharpArrowDown": {
+        "alternateCodepoint": "U+1D131", 
+        "codepoint": "U+E275", 
+        "description": "Quarter-tone sharp"
+    }, 
+    "accidentalQuarterToneSharpNaturalArrowUp": {
+        "alternateCodepoint": "U+1D12E", 
+        "codepoint": "U+E272", 
+        "description": "Quarter-tone sharp"
+    }, 
+    "accidentalQuarterToneSharpStein": {
+        "codepoint": "U+E282", 
+        "description": "Half sharp (quarter-tone sharp) (Stein)"
+    }, 
+    "accidentalSharp": {
+        "alternateCodepoint": "266F", 
+        "codepoint": "U+E262", 
+        "description": "Sharp"
+    }, 
+    "accidentalSori": {
+        "codepoint": "U+E461", 
+        "description": "Sori (quarter tone sharp)"
+    }, 
+    "accidentalThreeQuarterTonesFlatArrowDown": {
+        "alternateCodepoint": "U+1D12D", 
+        "codepoint": "U+E271", 
+        "description": "Three-quarter-tones flat"
+    }, 
+    "accidentalThreeQuarterTonesFlatZimmermann": {
+        "codepoint": "U+E281", 
+        "description": "Reversed flat and flat (three-quarter-tones flat) (Zimmermann)"
+    }, 
+    "accidentalThreeQuarterTonesSharpArrowUp": {
+        "alternateCodepoint": "U+1D130", 
+        "codepoint": "U+E274", 
+        "description": "Three-quarter-tones sharp"
+    }, 
+    "accidentalThreeQuarterTonesSharpStein": {
+        "codepoint": "U+E283", 
+        "description": "One and a half sharps (three-quarter-tones sharp) (Stein)"
+    }, 
     "arrowheadBlackDown": {
-        "codepoint": "U+E126"
-    },
+        "codepoint": "U+EB7C", 
+        "description": "Black arrowhead down (S)"
+    }, 
     "arrowheadBlackLeft": {
-        "codepoint": "U+E124"
-    },
+        "codepoint": "U+EB7E", 
+        "description": "Black arrowhead left (W)"
+    }, 
     "arrowheadBlackRight": {
-        "codepoint": "U+E123"
-    },
+        "codepoint": "U+EB7A", 
+        "description": "Black arrowhead right (E)"
+    }, 
     "arrowheadBlackUp": {
-        "codepoint": "U+E125"
-    },
+        "codepoint": "U+EB78", 
+        "description": "Black arrowhead up (N)"
+    }, 
     "arrowheadWhiteDown": {
-        "codepoint": "U+E122"
-    },
+        "codepoint": "U+EB84", 
+        "description": "White arrowhead down (S)"
+    }, 
     "arrowheadWhiteLeft": {
-        "codepoint": "U+E120"
-    },
+        "codepoint": "U+EB86", 
+        "description": "White arrowhead left (W)"
+    }, 
     "arrowheadWhiteRight": {
-        "codepoint": "U+E11f"
-    },
+        "codepoint": "U+EB82", 
+        "description": "White arrowhead right (E)"
+    }, 
     "arrowheadWhiteUp": {
-        "codepoint": "U+E121"
-    },
+        "codepoint": "U+EB80", 
+        "description": "White arrowhead up (N)"
+    }, 
     "articAccentAbove": {
-        "codepoint": "U+E4A0"
-    },
+        "alternateCodepoint": "U+1D17B", 
+        "codepoint": "U+E4A0", 
+        "description": "Accent above"
+    }, 
     "articAccentBelow": {
-        "codepoint": "U+E4A1"
-    },
+        "codepoint": "U+E4A1", 
+        "description": "Accent below"
+    }, 
     "articMarcatoAbove": {
-        "codepoint": "U+e169"
-    },
+        "alternateCodepoint": "U+1D17F", 
+        "codepoint": "U+E4AC", 
+        "description": "Marcato above"
+    }, 
     "articMarcatoBelow": {
-        "codepoint": "U+e16a"
-    },
+        "codepoint": "U+E4AD", 
+        "description": "Marcato below"
+    }, 
     "articStaccatissimoAbove": {
-        "codepoint": "U+e164"
-    },
+        "alternateCodepoint": "U+1D17E", 
+        "codepoint": "U+E4A6", 
+        "description": "Staccatissimo above"
+    }, 
     "articStaccatissimoBelow": {
-        "codepoint": "U+e165"
-    },
+        "codepoint": "U+E4A7", 
+        "description": "Staccatissimo below"
+    }, 
     "articStaccatoAbove": {
-        "codepoint": "U+E4A2"
-    },
+        "alternateCodepoint": "U+1D17C", 
+        "codepoint": "U+E4A2", 
+        "description": "Staccato above"
+    }, 
     "articStaccatoBelow": {
-        "codepoint": "U+E4A3"
-    },
+        "codepoint": "U+E4A3", 
+        "description": "Staccato below"
+    }, 
     "articTenutoAbove": {
-        "codepoint": "U+E4A4"
-    },
+        "alternateCodepoint": "U+1D17D", 
+        "codepoint": "U+E4A4", 
+        "description": "Tenuto above"
+    }, 
     "articTenutoBelow": {
-        "codepoint": "U+E4A5"
-    },
+        "codepoint": "U+E4A5", 
+        "description": "Tenuto below"
+    }, 
     "articTenutoStaccatoAbove": {
-        "codepoint": "U+e168"
-    },
+        "alternateCodepoint": "U+1D182", 
+        "codepoint": "U+E4B2", 
+        "description": "Lour\u00e9 (tenuto-staccato) above"
+    }, 
     "articTenutoStaccatoBelow": {
-        "codepoint": "U+e167"
-    },
+        "codepoint": "U+E4B3", 
+        "description": "Lour\u00e9 (tenuto-staccato) below"
+    }, 
     "augmentationDot": {
-        "codepoint": "U+e127"
-    },
+        "alternateCodepoint": "U+1D16D", 
+        "codepoint": "U+E1E7", 
+        "description": "Augmentation dot"
+    }, 
     "bracketBottom": {
-        "codepoint": "U+e1ae"
-    },
+        "codepoint": "U+E004", 
+        "description": "Bracket bottom"
+    }, 
     "bracketTop": {
-        "codepoint": "U+e1ad"
-    },
+        "codepoint": "U+E003", 
+        "description": "Bracket top"
+    }, 
     "brassMuteClosed": {
-        "codepoint": "U+e16c"
-    },
+        "codepoint": "U+E5E5", 
+        "description": "Muted (closed)"
+    }, 
     "brassMuteOpen": {
-        "codepoint": "U+e16b"
-    },
+        "codepoint": "U+E5E7", 
+        "description": "Open"
+    }, 
     "breathMarkComma": {
-        "codepoint": "U+e17a"
-    },
+        "alternateCodepoint": "U+1D112", 
+        "codepoint": "U+E4CE", 
+        "description": "Breath mark (comma)"
+    }, 
     "cClef": {
-        "codepoint": "U+e19a"
-    },
+        "alternateCodepoint": "U+1D121", 
+        "codepoint": "U+E05C", 
+        "description": "C clef"
+    }, 
     "caesura": {
-        "codepoint": "U+e18f"
-    },
+        "alternateCodepoint": "U+1D113", 
+        "codepoint": "U+E4D1", 
+        "description": "Caesura"
+    }, 
     "caesuraCurved": {
-        "codepoint": "U+e18e"
-    },
+        "codepoint": "U+E4D4", 
+        "description": "Curved caesura"
+    }, 
     "coda": {
-        "codepoint": "U+e178"
-    },
+        "alternateCodepoint": "U+1D10C", 
+        "codepoint": "U+E048", 
+        "description": "Coda"
+    }, 
     "codaSquare": {
-        "codepoint": "U+e179"
-    },
+        "codepoint": "U+E049", 
+        "description": "Square coda"
+    }, 
     "dynamicForte": {
-        "codepoint": "U+66"
-    },
+        "alternateCodepoint": "U+1D191", 
+        "codepoint": "U+E522", 
+        "description": "Forte"
+    }, 
     "dynamicMezzo": {
-        "codepoint": "U+6d"
-    },
+        "alternateCodepoint": "U+1D190", 
+        "codepoint": "U+E521", 
+        "description": "Mezzo"
+    }, 
     "dynamicPiano": {
-        "codepoint": "U+70"
-    },
+        "alternateCodepoint": "U+1D18F", 
+        "codepoint": "U+E520", 
+        "description": "Piano"
+    }, 
     "dynamicRinforzando": {
-        "codepoint": "U+72"
-    },
+        "alternateCodepoint": "U+1D18C", 
+        "codepoint": "U+E523", 
+        "description": "Rinforzando"
+    }, 
     "dynamicSforzando": {
-        "codepoint": "U+73"
-    },
+        "alternateCodepoint": "U+1D18D", 
+        "codepoint": "U+E524", 
+        "description": "Sforzando"
+    }, 
     "dynamicZ": {
-        "codepoint": "U+7a"
-    },
+        "alternateCodepoint": "U+1D18E", 
+        "codepoint": "U+E525", 
+        "description": "Z"
+    }, 
     "fClef": {
-        "codepoint": "U+e19c"
-    },
+        "alternateCodepoint": "U+1D122", 
+        "codepoint": "U+E062", 
+        "description": "F clef"
+    }, 
     "fClef15ma": {
-        "codepoint": "U+e1dd"
-    },
+        "codepoint": "U+E066", 
+        "description": "F clef quindicesima alta"
+    }, 
     "fClef15mb": {
-        "codepoint": "U+e1da"
-    },
+        "codepoint": "U+E063", 
+        "description": "F clef quindicesima bassa"
+    }, 
     "fClef8va": {
-        "codepoint": "U+e1dc"
-    },
+        "alternateCodepoint": "U+1D123", 
+        "codepoint": "U+E065", 
+        "description": "F clef ottava alta"
+    }, 
     "fClef8vb": {
-        "codepoint": "U+e1db"
-    },
+        "alternateCodepoint": "U+1D124", 
+        "codepoint": "U+E064", 
+        "description": "F clef ottava bassa"
+    }, 
     "fermataAbove": {
-        "codepoint": "U+e158"
-    },
+        "alternateCodepoint": "U+1D110", 
+        "codepoint": "U+E4C0", 
+        "description": "Fermata above"
+    }, 
     "fermataBelow": {
-        "codepoint": "U+e159"
-    },
+        "alternateCodepoint": "U+1D111", 
+        "codepoint": "U+E4C1", 
+        "description": "Fermata below"
+    }, 
     "fermataLongAbove": {
-        "codepoint": "U+e15c"
-    },
+        "codepoint": "U+E4C6", 
+        "description": "Long fermata above"
+    }, 
     "fermataLongBelow": {
-        "codepoint": "U+e15d"
-    },
+        "codepoint": "U+E4C7", 
+        "description": "Long fermata below"
+    }, 
     "fermataShortAbove": {
-        "codepoint": "U+e15a"
-    },
+        "codepoint": "U+E4C4", 
+        "description": "Short fermata above"
+    }, 
     "fermataShortBelow": {
-        "codepoint": "U+e15b"
-    },
+        "codepoint": "U+E4C5", 
+        "description": "Short fermata below"
+    }, 
     "fermataVeryLongAbove": {
-        "codepoint": "U+e15e"
-    },
+        "codepoint": "U+E4C8", 
+        "description": "Very long fermata above"
+    }, 
     "fermataVeryLongBelow": {
-        "codepoint": "U+e15f"
-    },
+        "codepoint": "U+E4C9", 
+        "description": "Very long fermata below"
+    }, 
     "flag128thDown": {
-        "codepoint": "U+e1b7"
-    },
+        "codepoint": "U+E249", 
+        "description": "Combining flag 5 (128th) below"
+    }, 
     "flag128thUp": {
-        "codepoint": "U+e1b8"
-    },
+        "alternateCodepoint": "U+1D172", 
+        "codepoint": "U+E248", 
+        "description": "Combining flag 5 (128th) above"
+    }, 
     "flag16thDown": {
-        "codepoint": "U+e197"
-    },
+        "codepoint": "U+E243", 
+        "description": "Combining flag 2 (16th) below"
+    }, 
     "flag16thUp": {
-        "codepoint": "U+e191"
-    },
+        "alternateCodepoint": "U+1D16F", 
+        "codepoint": "U+E242", 
+        "description": "Combining flag 2 (16th) above"
+    }, 
     "flag32ndDown": {
-        "codepoint": "U+e198"
-    },
+        "codepoint": "U+E245", 
+        "description": "Combining flag 3 (32nd) below"
+    }, 
     "flag32ndUp": {
-        "codepoint": "U+e192"
-    },
+        "alternateCodepoint": "U+1D170", 
+        "codepoint": "U+E244", 
+        "description": "Combining flag 3 (32nd) above"
+    }, 
     "flag64thDown": {
-        "codepoint": "U+e199"
-    },
+        "codepoint": "U+E247", 
+        "description": "Combining flag 4 (64th) below"
+    }, 
     "flag64thUp": {
-        "codepoint": "U+e193"
-    },
+        "alternateCodepoint": "U+1D171", 
+        "codepoint": "U+E246", 
+        "description": "Combining flag 4 (64th) above"
+    }, 
     "flag8thDown": {
-        "codepoint": "U+e194"
-    },
+        "codepoint": "U+E241", 
+        "description": "Combining flag 1 (8th) below"
+    }, 
     "flag8thUp": {
-        "codepoint": "U+e190"
-    },
+        "alternateCodepoint": "U+1D16E", 
+        "codepoint": "U+E240", 
+        "description": "Combining flag 1 (8th) above"
+    }, 
     "gClef": {
-        "codepoint": "U+e19e"
-    },
+        "alternateCodepoint": "U+1D11E", 
+        "codepoint": "U+E050", 
+        "description": "G clef"
+    }, 
     "gClef15ma": {
-        "codepoint": "U+e1d9"
-    },
+        "codepoint": "U+E054", 
+        "description": "G clef quindicesima alta"
+    }, 
     "gClef15mb": {
-        "codepoint": "U+e1d6"
-    },
+        "codepoint": "U+E051", 
+        "description": "G clef quindicesima bassa"
+    }, 
     "gClef8va": {
-        "codepoint": "U+e1d8"
-    },
+        "alternateCodepoint": "U+1D11F", 
+        "codepoint": "U+E053", 
+        "description": "G clef ottava alta"
+    }, 
     "gClef8vb": {
-        "codepoint": "U+e1d7"
-    },
+        "alternateCodepoint": "U+1D120", 
+        "codepoint": "U+E052", 
+        "description": "G clef ottava bassa"
+    }, 
     "gClef8vbParens": {
-        "codepoint": "U+E057"
-    },
+        "codepoint": "U+E057", 
+        "description": "G clef, optionally ottava bassa"
+    }, 
     "graceNoteSlashStemDown": {
-        "codepoint": "U+e196"
-    },
+        "codepoint": "U+E565", 
+        "description": "Slash for stem down grace note"
+    }, 
     "graceNoteSlashStemUp": {
-        "codepoint": "U+e195"
-    },
+        "codepoint": "U+E564", 
+        "description": "Slash for stem up grace note"
+    }, 
     "guitarFadeIn": {
-        "codepoint": "U+e843"
-    },
+        "codepoint": "U+E843", 
+        "description": "Fade in"
+    }, 
     "guitarFadeOut": {
-        "codepoint": "U+e844"
-    },
+        "codepoint": "U+E844", 
+        "description": "Fade out"
+    }, 
     "guitarVolumeSwell": {
-        "codepoint": "U+e845"
-    },
-    "wiggleSawtooth": {
-        "codepoint": "U+EABB"
-    },
-    "wiggleSawtoothWide": {
-        "codepoint": "U+EABC"
-    },
-    "wiggleVibratoLargeFaster": {
-        "codepoint": "U+EAE4"
-    },
-    "wiggleVibratoLargeSlowest": {
-        "codepoint": "U+EAE8"
-    },
-    "keyboardPedalHeel1": {
-        "codepoint": "U+e172"
-    },
-    "keyboardPedalHeel2": {
-        "codepoint": "U+e173"
-    },
-    "keyboardPedalP": {
-        "codepoint": "U+e1a9"
-    },
-    "keyboardPedalE": {
-        "codepoint": "U+e1ab"
-    },
+        "codepoint": "U+E845", 
+        "description": "Volume swell"
+    }, 
     "keyboardPedalD": {
-        "codepoint": "U+e1aa"
-    },
+        "codepoint": "U+E653", 
+        "description": "Pedal d"
+    }, 
     "keyboardPedalDot": {
-        "codepoint": "U+e1a8"
-    },
+        "codepoint": "U+E654", 
+        "description": "Pedal dot"
+    }, 
+    "keyboardPedalE": {
+        "codepoint": "U+E652", 
+        "description": "Pedal e"
+    }, 
+    "keyboardPedalHeel1": {
+        "codepoint": "U+E661", 
+        "description": "Pedal heel 1"
+    }, 
+    "keyboardPedalHeel2": {
+        "codepoint": "U+E662", 
+        "description": "Pedal heel 2"
+    }, 
     "keyboardPedalHyphen": {
-        "codepoint": "U+e1a7"
-    },
+        "codepoint": "U+E658", 
+        "description": "Pedal hyphen"
+    }, 
+    "keyboardPedalP": {
+        "codepoint": "U+E651", 
+        "description": "Pedal P"
+    }, 
     "keyboardPedalPed": {
-        "codepoint": "U+e1ac"
-    },
+        "alternateCodepoint": "U+1D1AE", 
+        "codepoint": "U+E650", 
+        "description": "Pedal mark"
+    }, 
     "keyboardPedalToe1": {
-        "codepoint": "U+e174"
-    },
+        "codepoint": "U+E664", 
+        "description": "Pedal toe 1"
+    }, 
     "keyboardPedalToe2": {
-        "codepoint": "U+e175"
-    },
+        "codepoint": "U+E665", 
+        "description": "Pedal toe 2"
+    }, 
     "keyboardPedalUp": {
-        "codepoint": "U+e1a6"
-    },
+        "alternateCodepoint": "U+1D1AF", 
+        "codepoint": "U+E655", 
+        "description": "Pedal up mark"
+    }, 
     "luteFingeringRHFirst": {
-        "codepoint": "U+EBAE",
+        "codepoint": "U+EBAE", 
         "description": "Right-hand fingering, first finger"
-    },
+    }, 
     "luteFingeringRHSecond": {
-        "codepoint": "U+EBAF",
+        "codepoint": "U+EBAF", 
         "description": "Right-hand fingering, second finger"
-    },
+    }, 
     "luteFingeringRHThird": {
-        "codepoint": "U+EBB0",
+        "codepoint": "U+EBB0", 
         "description": "Right-hand fingering, third finger"
-    },
+    }, 
     "luteFingeringRHThumb": {
-        "codepoint": "U+EBAD",
+        "codepoint": "U+EBAD", 
         "description": "Right-hand fingering, thumb"
-    },
+    }, 
     "mensuralProlation1": {
-        "codepoint": "U+E910"
-    },
-    "mensuralProlation2": {
-        "codepoint": "U+E911"
-    },
-    "mensuralProlation3": {
-        "codepoint": "U+E912"
-    },
-    "mensuralProlation4": {
-        "codepoint": "U+E913"
-    },
-    "mensuralProlation5": {
-        "codepoint": "U+E914"
-    },
-    "mensuralProlation6": {
-        "codepoint": "U+E915"
-    },
-    "mensuralProlation7": {
-        "codepoint": "U+E916"
-    },
-    "mensuralProlation8": {
-        "codepoint": "U+E917"
-    },
-    "mensuralProlation9": {
-        "codepoint": "U+E918"
-    },
+        "alternateCodepoint": "U+1D1C7", 
+        "codepoint": "U+E910", 
+        "description": "Tempus perfectum cum prolatione perfecta (9/8)"
+    }, 
     "mensuralProlation10": {
-        "codepoint": "U+E919"
-    },
+        "alternateCodepoint": "U+1D1CE", 
+        "codepoint": "U+E919", 
+        "description": "Tempus imperfectum cum prolatione imperfecta diminution 4"
+    }, 
     "mensuralProlation11": {
-        "codepoint": "U+E91A"
-    },
-    "noteShapeTriangleUpBlack": {
-        "codepoint": "U+e140"
-    },
-    "noteShapeTriangleUpWhite": {
-        "codepoint": "U+e13e"
-    },
-    "noteShapeTriangleRightBlack": {
-        "codepoint": "U+e14f"
-    },
-    "noteShapeTriangleRightWhite": {
-        "codepoint": "U+e14d"
-    },
-    "noteShapeTriangleLeftBlack": {
-        "codepoint": "U+e14e"
-    },
-    "noteShapeTriangleLeftWhite": {
-        "codepoint": "U+e14c"
-    },
-    "noteheadBlack": {
-        "codepoint": "U+e12d"
-    },
-    "noteheadCircleX": {
-        "codepoint": "U+e13c"
-    },
-    "noteheadCircleXDoubleWhole": {
-        "codepoint": "U+e13c"
-    },
-    "noteheadCircleXHalf": {
-        "codepoint": "U+e13c"
-    },
-    "noteheadCircleXWhole": {
-        "codepoint": "U+e13c"
-    },
-    "noteheadDiamondBlack": {
-        "codepoint": "U+e130"
-    },
-    "noteheadDiamondHalf": {
-        "codepoint": "U+e12f"
-    },
-    "noteheadDiamondWhole": {
-        "codepoint": "U+e12e"
-    },
-    "noteheadDoubleWhole": {
-        "codepoint": "U+e12a"
-    },
-    "noteheadDoubleWholeSquare": {
-        "codepoint": "U+e1c6"
-    },
-    "noteheadHalf": {
-        "codepoint": "U+e12c"
-    },
-    "noteheadParenthesisLeft": {
-        "codepoint": "U+e11e"
-    },
-    "noteheadParenthesisRight": {
-        "codepoint": "U+e11d"
-    },
-    "noteheadSlashWhiteWhole": {
-        "codepoint": "U+e136"
-    },
-    "noteheadSlashHorizontalEnds": {
-        "codepoint": "U+e138"
-    },
-    "noteheadSlashWhiteHalf": {
-        "codepoint": "U+e137"
-    },
-    "noteheadTriangleDownBlack": {
-        "codepoint": "U+e134"
-    },
-    "noteheadTriangleDownDoubleWhole": {
-        "codepoint": "U+e131"
-    },
-    "noteheadTriangleDownHalf": {
-        "codepoint": "U+e132"
-    },
-    "noteheadTriangleDownWhole": {
-        "codepoint": "U+e131"
-    },
-    "noteheadTriangleLeftBlack": {
-        "codepoint": "U+e14f"
-    },
-    "noteheadTriangleUpBlack": {
-        "codepoint": "U+e134"
-    },
-    "noteheadTriangleUpHalf": {
-        "codepoint": "U+e132"
-    },
-    "noteheadTriangleUpWhole": {
-        "codepoint": "U+e131"
-    },
-    "noteheadTriangleUpRightBlack": {
-        "codepoint": "U+e14e"
-    },
-    "noteheadTriangleUpRightWhite": {
-        "codepoint": "U+e14c"
-    },
-    "noteheadWhole": {
-        "codepoint": "U+e12b"
-    },
-    "noteheadXBlack": {
-        "codepoint": "U+e13b"
-    },
-    "noteheadXHalf": {
-        "codepoint": "U+e13a"
-    },
-    "noteheadXWhole": {
-        "codepoint": "U+e139"
-    },
-    "noteShapeSquareBlack": {
-        "codepoint": "U+e152"
-    },
-    "noteShapeSquareWhite": {
-        "codepoint": "U+e151"
-    },
+        "codepoint": "U+E91A", 
+        "description": "Tempus imperfectum cum prolatione imperfecta diminution 5"
+    }, 
+    "mensuralProlation2": {
+        "alternateCodepoint": "U+1D1C8", 
+        "codepoint": "U+E911", 
+        "description": "Tempus perfectum cum prolatione imperfecta (3/4)"
+    }, 
+    "mensuralProlation3": {
+        "alternateCodepoint": "U+1D1C9", 
+        "codepoint": "U+E912", 
+        "description": "Tempus perfectum cum prolatione imperfecta diminution 1 (3/8)"
+    }, 
+    "mensuralProlation4": {
+        "codepoint": "U+E913", 
+        "description": "Tempus perfectum cum prolatione perfecta diminution 2 (9/16)"
+    }, 
+    "mensuralProlation5": {
+        "alternateCodepoint": "U+1D1CA", 
+        "codepoint": "U+E914", 
+        "description": "Tempus imperfectum cum prolatione perfecta (6/8)"
+    }, 
+    "mensuralProlation6": {
+        "alternateCodepoint": "U+1D1CB", 
+        "codepoint": "U+E915", 
+        "description": "Tempus imperfectum cum prolatione imperfecta (2/4)"
+    }, 
+    "mensuralProlation7": {
+        "alternateCodepoint": "U+1D1CC", 
+        "codepoint": "U+E916", 
+        "description": "Tempus imperfectum cum prolatione imperfecta diminution 1 (2/2)"
+    }, 
+    "mensuralProlation8": {
+        "codepoint": "U+E917", 
+        "description": "Tempus imperfectum cum prolatione imperfecta diminution 2 (6/16)"
+    }, 
+    "mensuralProlation9": {
+        "alternateCodepoint": "U+1D1CD", 
+        "codepoint": "U+E918", 
+        "description": "Tempus imperfectum cum prolatione imperfecta diminution 3 (2/2)"
+    }, 
     "noteShapeDiamondBlack": {
-        "codepoint": "U+e149"
-    },
+        "codepoint": "U+E1B9", 
+        "description": "Diamond black (4-shape mi; 7-shape mi)"
+    }, 
     "noteShapeDiamondWhite": {
-        "codepoint": "U+e148"
-    },
+        "codepoint": "U+E1B8", 
+        "description": "Diamond white (4-shape mi; 7-shape mi)"
+    }, 
     "noteShapeMoonBlack": {
-        "codepoint": "U+e145"
-    },
+        "codepoint": "U+E1BD", 
+        "description": "Moon black (Aikin 7-shape re)"
+    }, 
     "noteShapeMoonWhite": {
-        "codepoint": "U+e143"
-    },
+        "codepoint": "U+E1BC", 
+        "description": "Moon white (Aikin 7-shape re)"
+    }, 
     "noteShapeRoundBlack": {
-        "codepoint": "U+e1ce"
-    },
+        "codepoint": "U+E1B1", 
+        "description": "Round black (4-shape sol; 7-shape so)"
+    }, 
     "noteShapeRoundWhite": {
-        "codepoint": "U+e1cd"
-    },
+        "codepoint": "U+E1B0", 
+        "description": "Round white (4-shape sol; 7-shape so)"
+    }, 
+    "noteShapeSquareBlack": {
+        "codepoint": "U+E1B3", 
+        "description": "Square black (4-shape la; Aikin 7-shape la)"
+    }, 
+    "noteShapeSquareWhite": {
+        "codepoint": "U+E1B2", 
+        "description": "Square white (4-shape la; Aikin 7-shape la)"
+    }, 
+    "noteShapeTriangleLeftBlack": {
+        "codepoint": "U+E1B7", 
+        "description": "Triangle left black (stem up; 4-shape fa; 7-shape fa)"
+    }, 
+    "noteShapeTriangleLeftWhite": {
+        "codepoint": "U+E1B6", 
+        "description": "Triangle left white (stem up; 4-shape fa; 7-shape fa)"
+    }, 
+    "noteShapeTriangleRightBlack": {
+        "codepoint": "U+E1B5", 
+        "description": "Triangle right black (stem down; 4-shape fa; 7-shape fa)"
+    }, 
+    "noteShapeTriangleRightWhite": {
+        "codepoint": "U+E1B4", 
+        "description": "Triangle right white (stem down; 4-shape fa; 7-shape fa)"
+    }, 
     "noteShapeTriangleRoundBlack": {
-        "codepoint": "U+e156"
-    },
+        "codepoint": "U+E1BF", 
+        "description": "Triangle-round black (Aikin 7-shape ti)"
+    }, 
     "noteShapeTriangleRoundWhite": {
-        "codepoint": "U+e154"
-    },
+        "codepoint": "U+E1BE", 
+        "description": "Triangle-round white (Aikin 7-shape ti)"
+    }, 
+    "noteShapeTriangleUpBlack": {
+        "codepoint": "U+E1BB", 
+        "description": "Triangle up black (Aikin 7-shape do)"
+    }, 
+    "noteShapeTriangleUpWhite": {
+        "codepoint": "U+E1BA", 
+        "description": "Triangle up white (Aikin 7-shape do)"
+    }, 
+    "noteheadBlack": {
+        "alternateCodepoint": "U+1D158", 
+        "codepoint": "U+E0A4", 
+        "description": "Black notehead"
+    }, 
+    "noteheadCircleX": {
+        "alternateCodepoint": "U+1D145", 
+        "codepoint": "U+E0B3", 
+        "description": "Circle X notehead"
+    }, 
+    "noteheadCircleXDoubleWhole": {
+        "codepoint": "U+E0B0", 
+        "description": "Circle X double whole"
+    }, 
+    "noteheadCircleXHalf": {
+        "codepoint": "U+E0B2", 
+        "description": "Circle X half"
+    }, 
+    "noteheadCircleXWhole": {
+        "codepoint": "U+E0B1", 
+        "description": "Circle X whole"
+    }, 
+    "noteheadDiamondBlack": {
+        "codepoint": "U+E0DB", 
+        "description": "Diamond black notehead"
+    }, 
+    "noteheadDiamondHalf": {
+        "codepoint": "U+E0D9", 
+        "description": "Diamond half notehead"
+    }, 
+    "noteheadDiamondWhole": {
+        "codepoint": "U+E0D8", 
+        "description": "Diamond whole notehead"
+    }, 
+    "noteheadDoubleWhole": {
+        "codepoint": "U+E0A0", 
+        "description": "Double whole (breve) notehead"
+    }, 
+    "noteheadDoubleWholeSquare": {
+        "codepoint": "U+E0A1", 
+        "description": "Double whole (breve) notehead (square)"
+    }, 
+    "noteheadHalf": {
+        "alternateCodepoint": "U+1D157", 
+        "codepoint": "U+E0A3", 
+        "description": "Half (minim) notehead"
+    }, 
+    "noteheadParenthesisLeft": {
+        "codepoint": "U+E0F5", 
+        "description": "Opening parenthesis"
+    }, 
+    "noteheadParenthesisRight": {
+        "codepoint": "U+E0F6", 
+        "description": "Closing parenthesis"
+    }, 
+    "noteheadSlashHorizontalEnds": {
+        "alternateCodepoint": "U+1D10D", 
+        "codepoint": "U+E101", 
+        "description": "Slash with horizontal ends"
+    }, 
+    "noteheadSlashWhiteHalf": {
+        "codepoint": "U+E103", 
+        "description": "White slash half"
+    }, 
+    "noteheadSlashWhiteWhole": {
+        "codepoint": "U+E102", 
+        "description": "White slash whole"
+    }, 
+    "noteheadTriangleDownBlack": {
+        "alternateCodepoint": "U+1D14F", 
+        "codepoint": "U+E0C7", 
+        "description": "Triangle notehead down black"
+    }, 
+    "noteheadTriangleDownDoubleWhole": {
+        "codepoint": "U+E0C3", 
+        "description": "Triangle notehead down double whole"
+    }, 
+    "noteheadTriangleDownHalf": {
+        "codepoint": "U+E0C5", 
+        "description": "Triangle notehead down half"
+    }, 
+    "noteheadTriangleDownWhole": {
+        "codepoint": "U+E0C4", 
+        "description": "Triangle notehead down whole"
+    }, 
+    "noteheadTriangleLeftBlack": {
+        "alternateCodepoint": "U+1D14B", 
+        "codepoint": "U+E0C0", 
+        "description": "Triangle notehead left black"
+    }, 
+    "noteheadTriangleUpBlack": {
+        "alternateCodepoint": "U+1D149", 
+        "codepoint": "U+E0BE", 
+        "description": "Triangle notehead up black"
+    }, 
+    "noteheadTriangleUpHalf": {
+        "codepoint": "U+E0BC", 
+        "description": "Triangle notehead up half"
+    }, 
+    "noteheadTriangleUpRightBlack": {
+        "alternateCodepoint": "U+1D151", 
+        "codepoint": "U+E0C9", 
+        "description": "Triangle notehead up right black"
+    }, 
+    "noteheadTriangleUpRightWhite": {
+        "alternateCodepoint": "U+1D150", 
+        "codepoint": "U+E0C8", 
+        "description": "Triangle notehead up right white"
+    }, 
+    "noteheadTriangleUpWhole": {
+        "codepoint": "U+E0BB", 
+        "description": "Triangle notehead up whole"
+    }, 
+    "noteheadWhole": {
+        "codepoint": "U+E0A2", 
+        "description": "Whole (semibreve) notehead"
+    }, 
+    "noteheadXBlack": {
+        "alternateCodepoint": "U+1D143", 
+        "codepoint": "U+E0A9", 
+        "description": "X notehead black"
+    }, 
+    "noteheadXHalf": {
+        "codepoint": "U+E0A8", 
+        "description": "X notehead half"
+    }, 
+    "noteheadXWhole": {
+        "codepoint": "U+E0A7", 
+        "description": "X notehead whole"
+    }, 
     "ornamentMordent": {
-        "codepoint": "U+e183"
-    },
+        "codepoint": "U+E56C", 
+        "description": "Mordent"
+    }, 
     "ornamentMordentInverted": {
-        "codepoint": "U+e184"
-    },
+        "codepoint": "U+E56D", 
+        "description": "Inverted mordent"
+    }, 
     "ornamentPrecompSlide": {
-        "codepoint": "U+e1d3"
-    },
+        "codepoint": "U+E5B0", 
+        "description": "Slide"
+    }, 
     "ornamentTremblement": {
-        "codepoint": "U+e185"
-    },
+        "codepoint": "U+E56E", 
+        "description": "Tremblement"
+    }, 
     "ornamentTrill": {
-        "codepoint": "U+e171"
-    },
+        "alternateCodepoint": "U+1D196", 
+        "codepoint": "U+E566", 
+        "description": "Trill"
+    }, 
     "ornamentTurn": {
-        "codepoint": "U+e170"
-    },
+        "alternateCodepoint": "U+1D197", 
+        "codepoint": "U+E567", 
+        "description": "Turn"
+    }, 
     "ornamentTurnInverted": {
-        "codepoint": "U+e16f"
-    },
+        "alternateCodepoint": "U+1D198", 
+        "codepoint": "U+E568", 
+        "description": "Inverted turn"
+    }, 
     "ornamentZigZagLineNoRightEnd": {
-        "codepoint": "U+e182"
-    },
+        "alternateCodepoint": "U+1D19C", 
+        "codepoint": "U+E59D", 
+        "description": "Ornament zig-zag line without right-hand end"
+    }, 
     "ornamentZigZagLineWithRightEnd": {
-        "codepoint": "U+e183"
-    },
+        "alternateCodepoint": "U+1D19D", 
+        "codepoint": "U+E59E", 
+        "description": "Ornament zig-zag line with right-hand end"
+    }, 
     "pluckedSnapPizzicatoAbove": {
-        "codepoint": "U+e1b9"
-    },
+        "codepoint": "U+E631", 
+        "description": "Snap pizzicato above"
+    }, 
     "pluckedSnapPizzicatoBelow": {
-        "codepoint": "U+e1b9"
+        "alternateCodepoint": "U+1D1AD", 
+        "codepoint": "U+E630", 
+        "description": "Snap pizzicato below"
     }, 
     "repeatDot": {
-        "codepoint": "U+e043"
-    },
+        "codepoint": "U+E044", 
+        "description": "Single repeat dot"
+    }, 
     "rest128th": {
-        "codepoint": "U+e10d"
-    },
+        "alternateCodepoint": "U+1D142", 
+        "codepoint": "U+E4EA", 
+        "description": "128th (semihemidemisemiquaver) rest"
+    }, 
     "rest16th": {
-        "codepoint": "U+e10a"
-    },
+        "alternateCodepoint": "U+1D13F", 
+        "codepoint": "U+E4E7", 
+        "description": "16th (semiquaver) rest"
+    }, 
     "rest32nd": {
-        "codepoint": "U+e10b"
-    },
+        "alternateCodepoint": "U+1D140", 
+        "codepoint": "U+E4E8", 
+        "description": "32nd (demisemiquaver) rest"
+    }, 
     "rest64th": {
-        "codepoint": "U+e10c"
-    },
+        "alternateCodepoint": "U+1D141", 
+        "codepoint": "U+E4E9", 
+        "description": "64th (hemidemisemiquaver) rest"
+    }, 
     "rest8th": {
-        "codepoint": "U+e109"
-    },
+        "alternateCodepoint": "U+1D13E", 
+        "codepoint": "U+E4E6", 
+        "description": "Eighth (quaver) rest"
+    }, 
     "restDoubleWhole": {
-        "codepoint": "U+e106"
-    },
+        "alternateCodepoint": "U+1D13A", 
+        "codepoint": "U+E4E2", 
+        "description": "Double whole (breve) rest"
+    }, 
     "restHalf": {
-        "codepoint": "U+e101"
-    },
+        "alternateCodepoint": "U+1D13C", 
+        "codepoint": "U+E4E4", 
+        "description": "Half (minim) rest"
+    }, 
     "restHalfLegerLine": {
-        "codepoint": "U+e103"
-    },
+        "codepoint": "U+E4F5", 
+        "description": "Half rest on leger line"
+    }, 
     "restLonga": {
-        "codepoint": "U+e105"
-    },
+        "codepoint": "U+E4E1", 
+        "description": "Longa rest"
+    }, 
     "restMaxima": {
-        "codepoint": "U+e104"
-    },
+        "codepoint": "U+E4E0", 
+        "description": "Maxima rest"
+    }, 
     "restQuarter": {
-        "codepoint": "U+e107"
-    },
+        "alternateCodepoint": "U+1D13D", 
+        "codepoint": "U+E4E5", 
+        "description": "Quarter (crotchet) rest"
+    }, 
     "restQuarterOld": {
-        "codepoint": "U+e108"
-    },
+        "codepoint": "U+E4F2", 
+        "description": "Old-style quarter (crotchet) rest"
+    }, 
     "restWhole": {
-        "codepoint": "U+e100"
-    },
+        "alternateCodepoint": "U+1D13B", 
+        "codepoint": "U+E4E3", 
+        "description": "Whole (semibreve) rest"
+    }, 
     "restWholeLegerLine": {
-        "codepoint": "U+e102"
-    },
+        "codepoint": "U+E4F4", 
+        "description": "Whole rest on leger line"
+    }, 
     "reversedBracketBottom": {
-        "codepoint": "U+e1b6"
-    },
+        "codepoint": "U+E006", 
+        "description": "Reversed bracket bottom"
+    }, 
     "reversedBracketTop": {
-        "codepoint": "U+e1b5"
-    },
+        "codepoint": "U+E005", 
+        "description": "Reversed bracket top"
+    }, 
     "segno": {
-        "codepoint": "U+e177"
-    },
+        "alternateCodepoint": "U+1D10B", 
+        "codepoint": "U+E047", 
+        "description": "Segno"
+    }, 
     "segnoSerpent1": {
-        "codepoint": "U+e1cf"
-    },
+        "codepoint": "U+E04A", 
+        "description": "Segno (serpent)"
+    }, 
     "stringsDownBow": {
-        "codepoint": "U+e16e"
-    },
+        "alternateCodepoint": "U+1D1AA", 
+        "codepoint": "U+E610", 
+        "description": "Down bow"
+    }, 
     "stringsHarmonic": {
-        "codepoint": "U+e176"
-    },
+        "alternateCodepoint": "U+1D1AC", 
+        "codepoint": "U+E614", 
+        "description": "Harmonic"
+    }, 
     "stringsThumbPosition": {
-        "codepoint": "U+e160"
-    },
+        "codepoint": "U+E624", 
+        "description": "Thumb position"
+    }, 
     "stringsUpBow": {
-        "codepoint": "U+e16d"
-    },
+        "alternateCodepoint": "U+1D1AB", 
+        "codepoint": "U+E612", 
+        "description": "Up bow"
+    }, 
     "timeSig0": {
-        "codepoint": "U+30"
-    },
+        "codepoint": "U+E080", 
+        "description": "Time signature 0"
+    }, 
     "timeSig1": {
-        "codepoint": "U+31"
-    },
+        "codepoint": "U+E081", 
+        "description": "Time signature 1"
+    }, 
     "timeSig2": {
-        "codepoint": "U+32"
-    },
+        "codepoint": "U+E082", 
+        "description": "Time signature 2"
+    }, 
     "timeSig3": {
-        "codepoint": "U+33"
-    },
+        "codepoint": "U+E083", 
+        "description": "Time signature 3"
+    }, 
     "timeSig4": {
-        "codepoint": "U+34"
-    },
+        "codepoint": "U+E084", 
+        "description": "Time signature 4"
+    }, 
     "timeSig5": {
-        "codepoint": "U+35"
-    },
+        "codepoint": "U+E085", 
+        "description": "Time signature 5"
+    }, 
     "timeSig6": {
-        "codepoint": "U+36"
-    },
+        "codepoint": "U+E086", 
+        "description": "Time signature 6"
+    }, 
     "timeSig7": {
-        "codepoint": "U+37"
-    },
+        "codepoint": "U+E087", 
+        "description": "Time signature 7"
+    }, 
     "timeSig8": {
-        "codepoint": "U+38"
-    },
+        "codepoint": "U+E088", 
+        "description": "Time signature 8"
+    }, 
     "timeSig9": {
-        "codepoint": "U+39"
-    },
+        "codepoint": "U+E089", 
+        "description": "Time signature 9"
+    }, 
     "timeSigCommon": {
-        "codepoint": "U+E09A"
-    },
+        "alternateCodepoint": "U+1D134", 
+        "codepoint": "U+E08A", 
+        "description": "Common time"
+    }, 
     "timeSigCutCommon": {
-        "codepoint": "U+E09B"
-    },
-    "timeSigParensLeftSmall": {
-        "codepoint": "U+E0A2"
-    },
-    "timeSigParensRightSmall": {
-        "codepoint": "U+E0A3"
-    },
+        "alternateCodepoint": "U+1D135", 
+        "codepoint": "U+E08B", 
+        "description": "Cut time"
+    }, 
     "timeSigParensLeft": {
-        "codepoint": "U+E094"
-    },
+        "codepoint": "U+E094", 
+        "description": "Left parenthesis for whole time signature"
+    }, 
+    "timeSigParensLeftSmall": {
+        "codepoint": "U+E092", 
+        "description": "Left parenthesis for numerator only"
+    }, 
     "timeSigParensRight": {
-        "codepoint": "U+E095"
-    },
+        "codepoint": "U+E095", 
+        "description": "Right parenthesis for whole time signature"
+    }, 
+    "timeSigParensRightSmall": {
+        "codepoint": "U+E093", 
+        "description": "Right parenthesis for numerator only"
+    }, 
     "timeSigPlusSmall": {
-        "codepoint": "U+E09D"
-    },
+        "codepoint": "U+E08D", 
+        "description": "Time signature + (for numerators)"
+    }, 
     "unpitchedPercussionClef1": {
-        "codepoint": "U+e1a0"
-    },
+        "alternateCodepoint": "U+1D125", 
+        "codepoint": "U+E069", 
+        "description": "Unpitched percussion clef 1"
+    }, 
     "wiggleArpeggiatoDown": {
-        "codepoint": "U+e17e"
-    },
+        "codepoint": "U+EAAA", 
+        "description": "Arpeggiato wiggle segment, downwards"
+    }, 
     "wiggleArpeggiatoDownArrow": {
-        "codepoint": "U+e181"
-    },
+        "codepoint": "U+EAAE", 
+        "description": "Arpeggiato arrowhead down"
+    }, 
     "wiggleArpeggiatoUp": {
-        "codepoint": "U+e17e"
-    },
+        "codepoint": "U+EAA9", 
+        "description": "Arpeggiato wiggle segment, upwards"
+    }, 
     "wiggleArpeggiatoUpArrow": {
-        "codepoint": "U+e181"
-    },
+        "codepoint": "U+EAAD", 
+        "description": "Arpeggiato arrowhead up"
+    }, 
+    "wiggleSawtooth": {
+        "codepoint": "U+EABB", 
+        "description": "Sawtooth line segment"
+    }, 
+    "wiggleSawtoothWide": {
+        "codepoint": "U+EABC", 
+        "description": "Wide sawtooth line segment"
+    }, 
     "wiggleTrill": {
-        "codepoint": "U+e17f"
-    },
+        "codepoint": "U+EAA4", 
+        "description": "Trill wiggle segment"
+    }, 
     "wiggleTrillFastest": {
-        "codepoint": "U+e182"
+        "codepoint": "U+EAA0", 
+        "description": "Trill wiggle segment, fastest"
+    }, 
+    "wiggleVibratoLargeFaster": {
+        "codepoint": "U+EAE4", 
+        "description": "Vibrato large, faster"
+    }, 
+    "wiggleVibratoLargeSlowest": {
+        "codepoint": "U+EAE8", 
+        "description": "Vibrato large, slowest"
     },
+
     "ornamentPrallMordent": {
         "codepoint": "U+e186"
     },
