@@ -2554,14 +2554,18 @@ bool Measure::createEndBarLines()
       BarLine* bl = 0;
       int span    = 0;        // span counter
       int aspan   = 0;        // actual span
-      bool mensur = false;    // keep note of mensurstrich case
-      int spanTot;            // to keep track of the target span
+      bool mensur = false;    // keep note of Mensurstrich case
+      int spanTot;            // to keep track of the target span as we count down
+      int lastIdx;
       int spanFrom;
       int spanTo;
+      static const int unknownSpanFrom = 9999;
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            Staff* staff = score()->staff(staffIdx);
-            int track    = staffIdx * VOICES;
+            Staff* staff      = score()->staff(staffIdx);
+            int track         = staffIdx * VOICES;
+            int staffLines    = staff->lines();
+            bool show         = system() ? staff->show() && system()->staff(staffIdx)->show() : staff->show();
 
             // get existing bar line for this staff, if any
             BarLine* cbl = static_cast<BarLine*>(seg->element(track));
@@ -2570,18 +2574,18 @@ bool Measure::createEndBarLines()
             // and forget about any previous bar line
 
             if (span == 0) {
-                  if (cbl && cbl->customSpan()) {      // if there is a bar line and has custom span,
+                  if (cbl && cbl->customSpan()) {     // if there is a bar line and has custom span,
                         span        = cbl->span();    // get span values from it
                         spanFrom    = cbl->spanFrom();
                         spanTo      = cbl->spanTo();
                         // if bar span values == staff span values, set bar as not custom
-                        if(span == staff->barLineSpan() && spanFrom == staff->barLineFrom()
+                        if (span == staff->barLineSpan() && spanFrom == staff->barLineFrom()
                            && spanTo == staff->barLineTo())
                               cbl->setCustomSpan(false);
                         }
                   else {                              // otherwise, get from staff
-                        span        = staff->barLineSpan();
-                        // if some span OR last staff (span=0) of a mensurstrich case, get From/To from staff
+                        span = staff->barLineSpan();
+                        // if some span OR last staff (span0) of a Mensurstrich case, get From/To from staff
                         if (span || mensur) {
                               spanFrom    = staff->barLineFrom();
                               spanTo      = staff->barLineTo();
@@ -2592,18 +2596,32 @@ bool Measure::createEndBarLines()
                         // set bar line span values to default
                         else {
                               span        = 1;
-                              spanFrom    = 0;
-                              spanTo      = (staff->lines()-1)*2;
+                              spanFrom    = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
+                              spanTo      = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staff->lines() - 1) * 2;
                               }
                         }
-                  if ((staffIdx + span) > nstaves)
+                  if (!show) {
+                        // this staff is not visible
+                        // we should recalculate spanFrom when we find a visible staff
+                        spanFrom = unknownSpanFrom;
+                        }
+                  if ((staffIdx + span) > nstaves)    // sanity check, don't span more than available staves
                         span = nstaves - staffIdx;
                   spanTot     = span;
-                  bl = 0;
+                  lastIdx     = staffIdx + span - 1;
+                  bl          = nullptr;
+                  }
+            else if (spanFrom == unknownSpanFrom && show) {
+                  // we started a span earlier, but had not found a visible staff yet
+                  spanFrom = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
+                  if (bl)
+                        bl->setCustomSpan(true);
                   }
             if (staff->show() && span) {
                   //
                   // there should be a barline in this staff
+                  // this is true even for a staff not shown because of hide empty staves
+                  // but not for a staff not shown because it is made invisible
                   //
                   // if we already have a bar line, keep extending this bar line down until span exhausted;
                   // if no barline yet, re-use the bar line existing in this staff if any,
@@ -2644,14 +2662,14 @@ bool Measure::createEndBarLines()
                         // and the bar line for this staff (cbl) is not needed:
                         // DELETE it
                         if (cbl && cbl != bl) {
-                              // mensurstrich special case:
+                              // Mensurstrich special case:
                               // if span arrives inside the end staff (spanTo>0) OR
                               //          span is not multi-staff (spanTot<=1) OR
                               //          current staff is not the last spanned staff (span!=1) OR
                               //          staff is the last score staff
                               //    remove bar line for this staff
                               // If NONE of the above conditions holds, the staff is the last staff of
-                              // a mensurstrich(-like) span: keep its bar line, as it may span to next staff
+                              // a Mensurstrich(-like) span: keep its bar line, as it may span to next staff
                               if (spanTo > 0 || spanTot <= 1 || span != 1 || staffIdx == nstaves-1) {
                                     score()->undoRemoveElement(cbl);
                                     changed = true;
@@ -2674,12 +2692,12 @@ bool Measure::createEndBarLines()
             if (span) {
                   if (bl) {
                         ++aspan;
-                        if (staff->show()) {          // update only if visible
+                        if (show) {             // update only if visible
                               bl->setSpan(aspan);
                               bl->setSpanFrom(spanFrom);
                               // if current actual span < target span, set spanTo to full staff height
-                              if(aspan < spanTot)
-                                    bl->setSpanTo((staff->lines()-1)*2);
+                              if (aspan < spanTot && staffIdx < lastIdx)
+                                    bl->setSpanTo(staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffLines - 1) * 2);
                               // if we reached target span, set spanTo to intended value
                               else
                                     bl->setSpanTo(spanTo);
@@ -2688,7 +2706,7 @@ bool Measure::createEndBarLines()
                   --span;
                   }
             // if just finished (span==0) a multi-staff span (spanTot>1) ending at the top of a staff (spanTo<=0)
-            // scan this staff again, as it may have its own bar lines (mensurstich(-like) span)
+            // scan this staff again, as it may have its own bar lines (Mensurstich(-like) span)
             if (spanTot > 1 && spanTo <= 0 && span == 0) {
                   mensur = true;
                   staffIdx--;
