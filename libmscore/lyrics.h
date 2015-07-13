@@ -37,7 +37,7 @@ namespace Ms {
 
 //---------------------------------------------------------
 //   @@ Lyrics
-//   @P syllabic  Ms::Lyrics::Syllabic  (SINGLE, BEGIN, END, MIDDLE)
+//   @P syllabic  enum (Lyrics.SINGLE, Lyrics.BEGIN, Lyrics.END, Lyrics.MIDDLE)
 //---------------------------------------------------------
 
 class LyricsLine;

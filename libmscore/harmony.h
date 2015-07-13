@@ -44,21 +44,20 @@ struct TextSegment {
 
 //---------------------------------------------------------
 //   @@ Harmony
-///    root note and bass note are notated as
-///    "tonal pitch class":
-///
-///           bb   b   -   #  ##
-///            0,  7, 14, 21, 28,  // C
-///            2,  9, 16, 23, 30,  // D
-///            4, 11, 18, 25, 32,  // E
-///           -1,  6, 13, 20, 27,  // F
-///            1,  8, 15, 22, 29,  // G
-///            3, 10, 17, 24, 31,  // A
-///            5, 12, 19, 26, 33,  // B
+///    root note and bass note are notated as "tonal pitch class":
+///   <table>
+///         <tr><td>&nbsp;</td><td>bb</td><td> b</td><td> -</td><td> #</td><td>##</td></tr>
+///         <tr><td>C</td>     <td> 0</td><td> 7</td><td>14</td><td>21</td><td>28</td></tr>
+///         <tr><td>D</td>     <td> 2</td><td> 9</td><td>16</td><td>23</td><td>30</td></tr>
+///         <tr><td>E</td>     <td> 4</td><td>11</td><td>18</td><td>25</td><td>32</td></tr>
+///         <tr><td>F</td>     <td>-1</td><td> 6</td><td>13</td><td>20</td><td>27</td></tr>
+///         <tr><td>G</td>     <td> 1</td><td> 8</td><td>15</td><td>22</td><td>29</td></tr>
+///         <tr><td>A</td>     <td> 3</td><td>10</td><td>17</td><td>24</td><td>31</td></tr>
+///         <tr><td>B</td>     <td> 5</td><td>12</td><td>19</td><td>26</td><td>33</td></tr></table>
 //
-//   @P id int        harmony identifier
-//   @P rootTpc  int  root note as "tonal pitch class"
-//   @P baseTpc  int  bass note as "tonal pitch class"
+//   @P baseTpc   int   bass note as "tonal pitch class"
+//   @P id        int   harmony identifier
+//   @P rootTpc   int   root note as "tonal pitch class"
 //---------------------------------------------------------
 
 struct RenderAction;
@@ -66,9 +65,9 @@ class HDegree;
 
 class Harmony : public Text {
       Q_OBJECT
+      Q_PROPERTY(int baseTpc  READ baseTpc  WRITE setBaseTpc)
       Q_PROPERTY(int id  READ id  WRITE setId)
       Q_PROPERTY(int rootTpc  READ rootTpc  WRITE setRootTpc)
-      Q_PROPERTY(int baseTpc  READ baseTpc  WRITE setBaseTpc)
 
       int _rootTpc;                       // root note for chord
       int _baseTpc;                       // bass note or chord base; used for "slash" chords
