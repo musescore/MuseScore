@@ -154,7 +154,7 @@ void Startcenter::writeSettings(QSettings& settings)
 void Startcenter::readSettings(QSettings& settings)
       {
       settings.beginGroup("Startcenter");
-      resize(settings.value("size", QSize(670, 520)).toSize());
+      resize(settings.value("size", QSize(690, 520)).toSize());
       move(settings.value("pos", QPoint(200, 100)).toPoint());
       settings.endGroup();
       }
