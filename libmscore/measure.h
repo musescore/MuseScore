@@ -106,8 +106,8 @@ enum class MeasureNumberMode : char {
 //   @@ Measure
 ///    one measure in a system
 //
-//   @P firstSegment    Ms::Segment       the first segment of the measure (read-only)
-//   @P lastSegment     Ms::Segment       the last segment of the measure (read-only)
+//   @P firstSegment    Segment       the first segment of the measure (read-only)
+//   @P lastSegment     Segment       the last segment of the measure (read-only)
 //---------------------------------------------------------
 
 class Measure : public MeasureBase {
