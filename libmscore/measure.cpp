@@ -2558,10 +2558,13 @@ bool Measure::createEndBarLines()
       int spanTot;            // to keep track of the target span
       int spanFrom;
       int spanTo;
+      static const int unknownBarlineFrom = 9999;
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            Staff* staff = score()->staff(staffIdx);
-            int track    = staffIdx * VOICES;
+            Staff* staff   = score()->staff(staffIdx);
+            int staffLines = staff->lines();
+            bool show      = system() ? staff->show() && system()->staff(staffIdx)->show() : staff->show();
+            int track      = staffIdx * VOICES;
 
             // get existing bar line for this staff, if any
             BarLine* cbl = static_cast<BarLine*>(seg->element(track));
@@ -2570,7 +2573,7 @@ bool Measure::createEndBarLines()
             // and forget about any previous bar line
 
             if (span == 0) {
-                  if (cbl && cbl->customSpan()) {      // if there is a bar line and has custom span,
+                  if (cbl && cbl->customSpan()) {     // if there is a bar line and has custom span,
                         span        = cbl->span();    // get span values from it
                         spanFrom    = cbl->spanFrom();
                         spanTo      = cbl->spanTo();
@@ -2580,10 +2583,13 @@ bool Measure::createEndBarLines()
                               cbl->setCustomSpan(false);
                         }
                   else {                              // otherwise, get from staff
-                        span        = staff->barLineSpan();
+                        span = staff->barLineSpan();
                         // if some span OR last staff (span=0) of a mensurstrich case, get From/To from staff
                         if (span || mensur) {
-                              spanFrom    = staff->barLineFrom();
+                              if (show)
+                                    spanFrom = staff->barLineFrom();
+                              else
+                                    spanFrom = unknownBarlineFrom;
                               spanTo      = staff->barLineTo();
                               mensur      = false;
                               }
@@ -2592,8 +2598,8 @@ bool Measure::createEndBarLines()
                         // set bar line span values to default
                         else {
                               span        = 1;
-                              spanFrom    = 0;
-                              spanTo      = (staff->lines()-1)*2;
+                              spanFrom    = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
+                              spanTo      = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffLines - 1) * 2;
                               }
                         }
                   if ((staffIdx + span) > nstaves)
@@ -2676,13 +2682,24 @@ bool Measure::createEndBarLines()
                         ++aspan;
                         if (staff->show()) {          // update only if visible
                               bl->setSpan(aspan);
+                              // if the top staff was invisible
+                              // set spanFrom based on default for first visible staff
+                              if (show && spanFrom == unknownBarlineFrom)
+                                    spanFrom = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
                               bl->setSpanFrom(spanFrom);
                               // if current actual span < target span, set spanTo to full staff height
-                              if(aspan < spanTot)
-                                    bl->setSpanTo((staff->lines()-1)*2);
+                              // note this is also hit for the last staff of the span
+                              // in cases where there are invisible staves present
+                              if (aspan < spanTot) {
+                                    if (staffLines == 1)
+                                          bl->setSpanTo(BARLINE_SPAN_1LINESTAFF_TO);
+                                    else
+                                          bl->setSpanTo((staffLines - 1) * 2);
+                                    }
                               // if we reached target span, set spanTo to intended value
-                              else
+                              else {
                                     bl->setSpanTo(spanTo);
+                                    }
                               }
                         }
                   --span;
