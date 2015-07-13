@@ -92,7 +92,11 @@ void GlissandoSegment::draw(QPainter* painter) const
             QList<SymId> ids;
             for (int i = 0; i < n; ++i)
                   ids.append(SymId::wiggleTrill);
-            score()->scoreFont()->draw(ids, painter, magS(), QPointF(x, b.height() * .7), scale);
+            // this is very ugly but fix #68846 for now
+            bool tmp = MScore::pdfPrinting;
+            MScore::pdfPrinting = true;
+            score()->scoreFont()->draw(ids, painter, magS(), QPointF(x, b.height() * .7), scale *2.0);
+            MScore::pdfPrinting = tmp;
             }
       if (glissando()->showText()) {
             const TextStyle& st = score()->textStyle(TextStyleType::GLISSANDO);
