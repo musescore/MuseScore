@@ -57,9 +57,9 @@ class HairpinSegment : public LineSegment {
 
 //---------------------------------------------------------
 //   @@ Hairpin
-//   @P hairpinType  Ms::Hairpin::Type  (CRESCENDO, DECRESCENDO)
+//   @P dynRange     enum (Dynamic.STAFF, Dynamic.PART, Dynamic.SYSTEM)
+//   @P hairpinType  enum (Hairpin.CRESCENDO, Hairpin.DECRESCENDO)
 //   @P veloChange   int
-//   @P dynRange     Ms::Dynamic::Range (STAFF, PART, SYSTEM)
 //---------------------------------------------------------
 
 class Hairpin : public SLine {
@@ -71,9 +71,9 @@ class Hairpin : public SLine {
       enum class Type : char { CRESCENDO, DECRESCENDO };
 
    private:
+      Q_PROPERTY(Ms::Dynamic::Range dynRange    READ  dynRange    WRITE undoSetDynRange)
       Q_PROPERTY(Ms::Hairpin::Type  hairpinType READ  hairpinType WRITE undoSetHairpinType)
       Q_PROPERTY(int                veloChange  READ  veloChange  WRITE undoSetVeloChange)
-      Q_PROPERTY(Ms::Dynamic::Range dynRange    READ  dynRange    WRITE undoSetDynRange)
 
       bool  _hairpinCircledTip;
       Type _hairpinType;
