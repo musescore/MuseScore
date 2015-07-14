@@ -522,7 +522,7 @@ class NoteEntryDragTransition : public QEventTransition
 //   NoteEntryButtonTransition
 //---------------------------------------------------------
 
-class NoteEntryButtonTransition : public QEventTransition
+class NoteEntryButtonTransition : public QMouseEventTransition
       {
       ScoreView* canvas;
 
@@ -534,7 +534,7 @@ class NoteEntryButtonTransition : public QEventTransition
             }
    public:
       NoteEntryButtonTransition(ScoreView* c)
-         : QEventTransition(c, QEvent::MouseButtonPress), canvas(c) {}
+         : QMouseEventTransition(c, QEvent::MouseButtonPress, Qt::LeftButton), canvas(c) {}
       };
 
 //---------------------------------------------------------
@@ -623,6 +623,25 @@ bool ScoreViewDragTransition::eventTest(QEvent* event)
 
 ScoreViewDragTransition::ScoreViewDragTransition(ScoreView* c, QState* target)
    : QMouseEventTransition(c, QEvent::MouseButtonPress, Qt::LeftButton), canvas(c)
+      {
+      setTargetState(target);
+      }
+
+//---------------------------------------------------------
+//   ScoreViewDragTransition2
+//---------------------------------------------------------
+
+bool ScoreViewDragTransition2::eventTest(QEvent* event)
+      {
+      if (!QMouseEventTransition::eventTest(event))
+            return false;
+      QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(event);
+      QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
+      return canvas->mouseMidPress(me);
+      }
+
+ScoreViewDragTransition2::ScoreViewDragTransition2(ScoreView* c, QState* target)
+   : QMouseEventTransition(c, QEvent::MouseButtonPress, Qt::MidButton), canvas(c)
       {
       setTargetState(target);
       }
@@ -729,6 +748,7 @@ ScoreView::ScoreView(QWidget* parent)
       s->addTransition(new DeSelectTransition(this));                         // deselect
       connect(s, SIGNAL(entered()), mscore, SLOT(setNormalState()));
       s->addTransition(new ScoreViewDragTransition(this, states[DRAG]));      // ->stateDrag
+      s->addTransition(new ScoreViewDragTransition2(this, states[DRAG_MID])); // ->DRAG_MID
       s->addTransition(new ScoreViewLassoTransition(this, states[LASSO]));    // ->stateLasso
       s->addTransition(new ElementDragTransition(this, states[DRAG_OBJECT])); // ->stateDragObject
       s->addTransition(new CommandTransition("note-input", states[NOTE_ENTRY])); // ->noteEntry
@@ -847,6 +867,7 @@ ScoreView::ScoreView(QWidget* parent)
       connect(s, SIGNAL(exited()), SLOT(endNoteEntry()));
       s->addTransition(new NoteEntryDragTransition(this));                    // mouse drag
       s->addTransition(new NoteEntryButtonTransition(this));                  // mouse button
+      s->addTransition(new ScoreViewDragTransition2(this, states[DRAG_NOTE_ENTRY]));
       s->addTransition(new CommandTransition("play", states[ENTRY_PLAY]));    // ->entryPlay
 
       // setup normal drag canvas state
@@ -856,6 +877,22 @@ ScoreView::ScoreView(QWidget* parent)
       cl->setTargetState(states[NORMAL]);
       s->addTransition(cl);
       connect(s, SIGNAL(entered()), SLOT(deselectAll()));
+      s->addTransition(new DragTransition(this));
+
+      // setup note entry drag canvas state
+      s = states[DRAG_NOTE_ENTRY];
+      s->assignProperty(this, "cursor", QCursor(Qt::SizeAllCursor));
+      cl = new QEventTransition(this, QEvent::MouseButtonRelease);
+      cl->setTargetState(states[NOTE_ENTRY]);
+      s->addTransition(cl);
+      s->addTransition(new DragTransition(this));
+
+      // setup mid button drag canvas state (do not deselect)
+      s = states[DRAG_MID];
+      s->assignProperty(this, "cursor", QCursor(Qt::SizeAllCursor));
+      cl = new QEventTransition(this, QEvent::MouseButtonRelease);
+      cl->setTargetState(states[NORMAL]);
+      s->addTransition(cl);
       s->addTransition(new DragTransition(this));
 
       //----------------------setup play state
@@ -883,6 +920,7 @@ ScoreView::ScoreView(QWidget* parent)
 
             s1->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
             s1->addTransition(new ScoreViewDragTransition(this, s2));      // ->stateDrag
+            s1->addTransition(new ScoreViewDragTransition2(this, s2));     // ->stateDrag
 
             // drag during play state
             s2->assignProperty(this, "cursor", QCursor(Qt::SizeAllCursor));
@@ -894,6 +932,7 @@ ScoreView::ScoreView(QWidget* parent)
 
             s->setInitialState(s1);
             s->addTransition(new ScoreViewDragTransition(this, s2));
+            s->addTransition(new ScoreViewDragTransition2(this, s2));
 
             // setup editPlay state
             s = states[ENTRY_PLAY];
@@ -3521,7 +3560,7 @@ void ScoreView::select(QMouseEvent* ev)
 bool ScoreView::mousePress(QMouseEvent* ev)
       {
       startMoveI = ev->pos();
-      data.startMove  = imatrix.map(QPointF(startMoveI));
+      data.startMove  = toLogical(startMoveI);
       curElement = elementNear(data.startMove);
 
       if (curElement && curElement->type() == Element::Type::MEASURE) {
@@ -3531,6 +3570,18 @@ bool ScoreView::mousePress(QMouseEvent* ev)
                   curElement = 0;
             }
       return curElement != 0;
+      }
+
+//---------------------------------------------------------
+//   mousePress
+//    return true if element is clicked
+//---------------------------------------------------------
+
+bool ScoreView::mouseMidPress(QMouseEvent* ev)
+      {
+      startMoveI = ev->pos();
+      data.startMove  = toLogical(startMoveI);
+      return true;
       }
 
 //---------------------------------------------------------
@@ -3550,7 +3601,7 @@ void ScoreView::mouseReleaseEvent(QMouseEvent* event)
 
 void ScoreView::onEditPasteTransition(QMouseEvent* ev)
       {
-      data.startMove = imatrix.map(QPointF(ev->pos()));
+      data.startMove = toLogical(ev->pos());
       Element* e = elementNear(data.startMove);
       if (e == editObject) {
             if (editObject->mousePress(data.startMove, ev)) {

@@ -100,6 +100,21 @@ class ScoreViewDragTransition : public QMouseEventTransition
       };
 
 //---------------------------------------------------------
+//   ScoreViewDragTransition2
+//---------------------------------------------------------
+
+class ScoreViewDragTransition2 : public QMouseEventTransition
+      {
+      ScoreView* canvas;
+
+   protected:
+      virtual bool eventTest(QEvent* event);
+
+   public:
+      ScoreViewDragTransition2(ScoreView* c, QState* target);
+      };
+
+//---------------------------------------------------------
 //   CommandEvent
 //---------------------------------------------------------
 
@@ -117,7 +132,8 @@ struct CommandEvent : public QEvent
 class ScoreView : public QWidget, public MuseScoreView {
       Q_OBJECT
 
-      enum States { NORMAL, DRAG, DRAG_OBJECT, EDIT, DRAG_EDIT, LASSO,
+      enum States { NORMAL, DRAG, DRAG_NOTE_ENTRY, DRAG_MID,
+            DRAG_OBJECT, EDIT, DRAG_EDIT, LASSO,
             NOTE_ENTRY, MAG, PLAY, ENTRY_PLAY, FOTOMODE,
             STATES
             };
@@ -351,6 +367,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void doDragEdit(QMouseEvent* ev);
       void select(QMouseEvent*);
       bool mousePress(QMouseEvent* ev);
+      bool mouseMidPress(QMouseEvent* ev);
       bool testElementDragTransition(QMouseEvent* ev);
       bool editElementDragTransition(QMouseEvent* ev);
       bool fotoEditElementDragTransition(QMouseEvent* ev);
