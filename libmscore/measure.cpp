@@ -2594,7 +2594,7 @@ bool Measure::createEndBarLines()
                         // but if staff is set to no span, a multi-staff spanning bar line
                         // has been shortened to span less staves and following staves left without bars;
                         // set bar line span values to default
-                        else {
+                        else if (show) {
                               span        = 1;
                               spanFrom    = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
                               spanTo      = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staff->lines() - 1) * 2;
