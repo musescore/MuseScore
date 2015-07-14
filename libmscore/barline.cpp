@@ -1237,7 +1237,10 @@ void BarLine::updateCustomSpan()
       // span is custom if barline belongs to a staff and any of the staff span params is different from barline's
       // if no staff or same span params as staff, span is not custom
       Staff* stf = staff();
-      _customSpan = stf && (stf->barLineSpan() != _span || stf->barLineFrom() != _spanFrom || stf->barLineTo() != _spanTo);
+      if (!stf)
+            _customSpan = false;
+      else
+            _customSpan = stf->barLineSpan() != _span || stf->barLineFrom() != _spanFrom || stf->barLineTo() != _spanTo;
       updateGenerated(!_customSpan);
       }
 
@@ -1281,7 +1284,7 @@ void BarLine::updateCustomType()
                   }
             }
       _customSubtype = (_barLineType != refType);
-      updateGenerated(!_customSubtype);         // if _customSubType, _genereated is surely false
+      updateGenerated(!_customSubtype);         // if _customSubType, _generated is surely false
       }
 
 //---------------------------------------------------------

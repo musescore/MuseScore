@@ -22,6 +22,7 @@
 #include "musescore.h"
 #include "scoreview.h"
 #include "seq.h"
+#include "libmscore/barline.h"
 #include "libmscore/clef.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/instrtemplate.h"
@@ -409,10 +410,45 @@ void MuseScore::editInstrList()
       //
 
       int n = rootScore->nstaves();
+      int curSpan = 0;
       for (int i = 0; i < n; ++i) {
             Staff* staff = rootScore->staff(i);
-            if (staff->barLineSpan() > (n - i))
-                  rootScore->undoChangeBarLineSpan(staff, n - i, 0, (rootScore->staff(n-1)->lines()-1) * 2);
+            int span = staff->barLineSpan();
+            int setSpan = -1;
+            if (curSpan == 0) {
+                  // no current span; this staff must start a new one
+                  if (span == 0)
+                        setSpan = 1;
+                  else if (span > (n - i))
+                        setSpan = n - i;
+                  else {
+                        // TODO: check that spanTo is still valid
+                        // see https://musescore.org/en/node/41786
+                        // but is it even possible to tell whether this the right thing to do?
+                        // consider, the original bottom staff might have been a tab staff but the user explicitly set barlines to be shorter
+                        // and we wouldn't want to undo that here
+                        // unlikely, but there might be other cases to worry about
+                        curSpan = span;
+                        }
+                  }
+            else {
+                  // within current span; the staff must have span of 0
+                  if (span)
+                        setSpan = 0;
+                  }
+            if (setSpan != -1) {
+                  // need to correct span for staff
+                  // calculate spanFrom and spanTo values
+                  if (setSpan > 0)
+                        curSpan = setSpan;
+                  int spanFrom = staff->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
+                  int idxTo = setSpan == 0 ? i : i + setSpan - 1;
+                  int linesTo = rootScore->staff(idxTo)->lines();
+                  int spanTo = linesTo == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (linesTo - 1) * 2;
+                  rootScore->undoChangeBarLineSpan(staff, setSpan, spanFrom, spanTo);
+                  }
+            --curSpan;
+
             QList<BracketItem> brackets = staff->brackets();
             int nn = brackets.size();
             for (int ii = 0; ii < nn; ++ii) {

@@ -2585,7 +2585,7 @@ bool Measure::createEndBarLines()
                         }
                   else {                              // otherwise, get from staff
                         span = staff->barLineSpan();
-                        // if some span OR last staff (span0) of a Mensurstrich case, get From/To from staff
+                        // if some span OR last staff (span==0) of a Mensurstrich case, get From/To from staff
                         if (span || mensur) {
                               spanFrom    = staff->barLineFrom();
                               spanTo      = staff->barLineTo();
@@ -2614,8 +2614,6 @@ bool Measure::createEndBarLines()
             else if (spanFrom == unknownSpanFrom && show) {
                   // we started a span earlier, but had not found a visible staff yet
                   spanFrom = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
-                  if (bl)
-                        bl->setCustomSpan(true);
                   }
             if (staff->show() && span) {
                   //
