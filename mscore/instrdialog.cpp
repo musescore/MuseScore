@@ -427,12 +427,12 @@ void MuseScore::editInstrList()
                         // span to last staff
                         setSpan = n - i;
                         }
-                  else if (span > 1) {
+                  else if (span > 1 && staff->barLineTo() > 0) {
                         // TODO: check if spanTo is still valid
                         // the code here fixes https://musescore.org/en/node/41786
                         // but by forcing an update,
                         // we lose custom modifications to staff barLineTo
-                        // at least this happens only for span > 1
+                        // at least this happens only for span > 1, and not for Mensurstrich
                         setSpan = span;   // force update to pick up new barLineTo value
                         }
                   else {
