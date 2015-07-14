@@ -390,7 +390,7 @@ void MuseScore::editInstrList()
       QList<int> dl;
       int idx2 = 0;
       bool sort = false;
-      for(Staff* staff : dst) {
+      for (Staff* staff : dst) {
             int idx = rootScore->staves().indexOf(staff);
             if (idx == -1)
                   qDebug("staff in dialog(%p) not found in score", staff);
@@ -417,35 +417,50 @@ void MuseScore::editInstrList()
             int setSpan = -1;
             if (curSpan == 0) {
                   // no current span; this staff must start a new one
-                  if (span == 0)
+                  if (span == 0) {
+                        // this staff previously was in middle of span
+                        // update it to a span of 1
                         setSpan = 1;
-                  else if (span > (n - i))
+                        }
+                  else if (span > (n - i)) {
+                        // staves must have been removed;
+                        // span to last staff
                         setSpan = n - i;
+                        }
+                  else if (span > 1) {
+                        // TODO: check if spanTo is still valid
+                        // the code here fixes https://musescore.org/en/node/41786
+                        // but by forcing an update,
+                        // we lose custom modifications to staff barLineTo
+                        // at least this happens only for span > 1
+                        setSpan = span;   // force update to pick up new barLineTo value
+                        }
                   else {
-                        // TODO: check that spanTo is still valid
-                        // see https://musescore.org/en/node/41786
-                        // but is it even possible to tell whether this the right thing to do?
-                        // consider, the original bottom staff might have been a tab staff but the user explicitly set barlines to be shorter
-                        // and we wouldn't want to undo that here
-                        // unlikely, but there might be other cases to worry about
+                        // ordinary start of span
+                        // keep current barLineFrom and barLineTo
                         curSpan = span;
                         }
                   }
             else {
-                  // within current span; the staff must have span of 0
+                  // within a current span; staff must have span of 0
                   if (span)
                         setSpan = 0;
                   }
             if (setSpan != -1) {
-                  // need to correct span for staff
+                  // need to update span for staff
                   // calculate spanFrom and spanTo values
-                  if (setSpan > 0)
+                  if (setSpan > 0) {
                         curSpan = setSpan;
-                  int spanFrom = staff->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
-                  int idxTo = setSpan == 0 ? i : i + setSpan - 1;
-                  int linesTo = rootScore->staff(idxTo)->lines();
-                  int spanTo = linesTo == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (linesTo - 1) * 2;
-                  rootScore->undoChangeBarLineSpan(staff, setSpan, spanFrom, spanTo);
+                        int spanFrom = staff->lines() == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
+                        int linesTo = rootScore->staff(i + setSpan - 1)->lines();
+                        int spanTo = linesTo == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (linesTo - 1) * 2;
+                        rootScore->undoChangeBarLineSpan(staff, setSpan, spanFrom, spanTo);
+                        }
+                  else {
+                        // for consistency with Barline::endEdit,
+                        // don't special case 1-line staves if span == 0
+                        rootScore->undoChangeBarLineSpan(staff, setSpan, 0, (staff->lines() - 1) * 2);
+                        }
                   }
             --curSpan;
 
