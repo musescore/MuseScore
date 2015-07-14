@@ -844,8 +844,13 @@ void BarLine::endEdit()
                   int idx1 = staffIdx() + _span;
                   int idx2 = staffIdx() + staff()->barLineSpan();
                   // set standard span for each no-longer-spanned staff
-                  for (int idx = idx1; idx < idx2; ++idx)
-                        score()->undoChangeBarLineSpan(score()->staff(idx), 1, 0, (score()->staff(idx)->lines()-1)*2);
+                  for (int idx = idx1; idx < idx2; ++idx) {
+                        Staff* staff = score()->staff(idx);
+                        int lines = staff->lines();
+                        int spanFrom = lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
+                        int spanTo = lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (lines - 1) * 2;
+                        score()->undoChangeBarLineSpan(staff, 1, spanFrom, spanTo);
+                        }
                   }
             }
 
