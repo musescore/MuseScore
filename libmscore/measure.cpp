@@ -2559,6 +2559,8 @@ bool Measure::createEndBarLines()
       int lastIdx;
       int spanFrom;
       int spanTo;
+      bool custom;
+      bool generated;
       static const int unknownSpanFrom = 9999;
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
@@ -2601,8 +2603,8 @@ bool Measure::createEndBarLines()
                               }
                         }
                   if (!show) {
-                        // this staff is not visible
-                        // we should recalculate spanFrom when we find a visible staff
+                        // this staff is not visible or is hidden
+                        // we should recalculate spanFrom when we find a valid staff
                         spanFrom = unknownSpanFrom;
                         }
                   if ((staffIdx + span) > nstaves)    // sanity check, don't span more than available staves
@@ -2674,6 +2676,11 @@ bool Measure::createEndBarLines()
                                     }
                               }
                         }
+                  // HACK! and TODO - this doesn't quite work across save / open
+                  // double bars get written with span info even though explicit set to not custom
+                  // so they get read back in as custom
+                  custom = bl && bl->customSpan();
+                  generated = bl && bl->generated();
                   }
             else {
                   //
@@ -2690,21 +2697,30 @@ bool Measure::createEndBarLines()
             if (span) {
                   if (bl) {
                         ++aspan;
-                        if (show) {             // update only if visible
-                              bl->setSpan(aspan);
+                        if (staff->show()) {          // count visible staves only (whether hidden or not)
+                              bl->setSpan(aspan);     // need to update span & spanFrom even for hidden staves
                               bl->setSpanFrom(spanFrom);
-                              // if current actual span < target span, set spanTo to full staff height
-                              if (aspan < spanTot && staffIdx < lastIdx)
-                                    bl->setSpanTo(staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffLines - 1) * 2);
-                              // if we reached target span, set spanTo to intended value
-                              else
-                                    bl->setSpanTo(spanTo);
+                              if (show) {             // but don't update spanTo for hidden staves
+                                    // if current actual span < target span, set spanTo to full staff height
+                                    if (aspan < spanTot && staffIdx < lastIdx)
+                                          bl->setSpanTo(staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffLines - 1) * 2);
+                                    // if we reached target span, set spanTo to intended value
+                                    else
+                                          bl->setSpanTo(spanTo);
+                                    }
+                              // HACK!
+                              // the span information above can make barlines look "custom" even when they really are not
+                              // conversely for "generated"
+                              // in the case of hide empty staves, this means they are not properly restored when the option is turned off again
+                              // so force the custom & generated status to reflect reality
+                              bl->setCustomSpan(custom);
+                              bl->setGenerated(generated);
                               }
                         }
                   --span;
                   }
             // if just finished (span==0) a multi-staff span (spanTot>1) ending at the top of a staff (spanTo<=0)
-            // scan this staff again, as it may have its own bar lines (Mensurstich(-like) span)
+            // scan this staff again, as it may have its own bar lines (Mensurstrich(-like) span)
             if (spanTot > 1 && spanTo <= 0 && span == 0) {
                   mensur = true;
                   staffIdx--;
