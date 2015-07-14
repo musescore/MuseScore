@@ -1963,14 +1963,22 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       int pageOffset = 0;
       if (firstScore)
             pageOffset = firstScore->pageNumberOffset();
-      bool firstPage = true;
+
+      // need to determine the total number of pages before printing each part
+      int totalPages = 0;
       for (Score* s : cs) {
             LayoutMode layoutMode = s->layoutMode();
             if (layoutMode != LayoutMode::PAGE) {
                   s->startCmd();
                   s->undo(new ChangeLayoutMode(s, LayoutMode::PAGE));
                   s->doLayout();
-                  }
+	    } 
+	    totalPages += s->npages();
+      }
+      QString finalPageNumber = QString::number(pageOffset + totalPages);
+
+      bool firstPage = true;
+      for (Score* s : cs) {
             s->setPrinting(true);
             MScore::pdfPrinting = true;
 
@@ -1985,33 +1993,40 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             QString evenFooterL = s->style()->value(StyleIdx::evenFooterL).toString();
             QString tmp = evenFooterL;
             tmp.replace("$p", "$P");
+	    tmp.replace("$n", finalPageNumber);
             s->style()->set(StyleIdx::evenFooterL, tmp);
 
             QString evenFooterC = s->style()->value(StyleIdx::evenFooterC).toString();
             tmp = evenFooterC;
             tmp.replace("$p", "$P");
+	    tmp.replace("$n", finalPageNumber);
             s->style()->set(StyleIdx::evenFooterC, tmp);
 
             QString evenFooterR = s->style()->value(StyleIdx::evenFooterR).toString();
             tmp = evenFooterR;
             tmp.replace("$p", "$P");
+	    tmp.replace("$n", finalPageNumber);
             s->style()->set(StyleIdx::evenFooterR, tmp);
 
             QString oddFooterL = s->style()->value(StyleIdx::oddFooterL).toString();
             tmp = oddFooterL;
             tmp.replace("$p", "$P");
+	    tmp.replace("$n", finalPageNumber);
             s->style()->set(StyleIdx::oddFooterL, tmp);
 
             QString oddFooterC = s->style()->value(StyleIdx::oddFooterC).toString();
             tmp = oddFooterC;
             tmp.replace("$p", "$P");
+	    tmp.replace("$n", finalPageNumber);
             s->style()->set(StyleIdx::oddFooterC, tmp);
 
             QString oddFooterR = s->style()->value(StyleIdx::oddFooterR).toString();
             tmp = oddFooterR;
             tmp.replace("$p", "$P");
+	    tmp.replace("$n", finalPageNumber);
             s->style()->set(StyleIdx::oddFooterR, tmp);
 
+            LayoutMode layoutMode = s->layoutMode();
             if (layoutMode == LayoutMode::PAGE)
                   s->startCmd();
             s->doLayout();
