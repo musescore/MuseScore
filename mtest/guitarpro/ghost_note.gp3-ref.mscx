@@ -270,7 +270,7 @@
         <Staff id="2">
           <linkedTo>1</linkedTo>
           <StaffType group="tablature">
-            <name>tab6StrCommon</name>
+            <name>tab4StrCommon</name>
             <lines>4</lines>
             <lineDistance>1.5</lineDistance>
             <timesig>0</timesig>
@@ -291,7 +291,6 @@
             <useNumbers>1</useNumbers>
             </StaffType>
           <bracket type="-1" span="0"/>
-          <barLineSpan from="0" to="14">1</barLineSpan>
           </Staff>
         <trackName></trackName>
         <Instrument>
