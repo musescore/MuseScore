@@ -340,6 +340,7 @@ Score::Score()
       _sigmap   = new TimeSigMap();
       _style    = *(MScore::defaultStyle());
       accInfo = tr("No selection");
+      _midiMapping.clear();
       }
 
 Score::Score(const MStyle* s)
@@ -351,6 +352,7 @@ Score::Score(const MStyle* s)
       _sigmap   = new TimeSigMap();
       _style    = *s;
       accInfo = tr("No selection");
+      _midiMapping.clear();
       }
 
 //
@@ -887,20 +889,91 @@ void Score::appendPart(Part* p)
       }
 
 //---------------------------------------------------------
-//   rebuildMidiMapping
-//   1. Remove mappings to deleted instruments
-//   2. Add mappings to new instruments and repair existing ones
-//   3. Set mappings in order you see in Add->Instruments
+//   getNextFreeMidiMapping
 //---------------------------------------------------------
 
-void Score::rebuildMidiMapping()
+int Score::getNextFreeMidiMapping(int p, int ch)
       {
-      // 1. Remove mappings to deleted instruments
+      if (ch != -1 && p != -1)
+            return p*16+ch;
+
+      else if (ch != -1 && p == -1) {
+            for (int port = 0;; port++) {
+                  if (!occupiedMidiChannels.contains(port*16+ch)) {
+                        occupiedMidiChannels.insert(port*16+ch);
+                        return port*16+ch;
+                        }
+                  }
+            }
+      else if (ch == -1 && p != -1) {
+            for (int channel = 0; channel < 16; channel++) {
+                  if (channel != 9 && !occupiedMidiChannels.contains(p*16+channel)) {
+                        occupiedMidiChannels.insert(p*16+channel);
+                        return p*16+channel;
+                        }
+                  }
+            }
+
+      for (;;searchMidiMappingFrom++) {
+            if (searchMidiMappingFrom % 16 != 9 && !occupiedMidiChannels.contains(searchMidiMappingFrom)) {
+                  occupiedMidiChannels.insert(searchMidiMappingFrom);
+                  return searchMidiMappingFrom;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   getNextFreeDrumMidiMapping
+//---------------------------------------------------------
+
+int Score::getNextFreeDrumMidiMapping()
+      {
+      for (int i = 0;; i++) {
+            if (!occupiedMidiChannels.contains(i*16+9)) {
+                  occupiedMidiChannels.insert(i*16+9);
+                  return i*16+9;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   reorderMidiMapping
+//   Set mappings in order you see in Add->Instruments
+//---------------------------------------------------------
+
+void Score::reorderMidiMapping()
+      {
+      int sequenceNumber = 0;
+      for (Part* part : _parts) {
+            const InstrumentList* il = part->instruments();
+            for (auto i = il->begin(); i != il->end(); ++i) {
+                  const Instrument* instr = i->second;
+                  for (Channel* channel : instr->channel()) {
+                        if (!(_midiMapping[sequenceNumber].part == part
+                              && _midiMapping[sequenceNumber].articulation == channel)) {
+                              int shouldBe = channel->channel;
+                              _midiMapping.swap(sequenceNumber, shouldBe);
+                              _midiMapping[sequenceNumber].articulation->channel = sequenceNumber;
+                              channel->channel = sequenceNumber;
+                              _midiMapping[shouldBe].articulation->channel = shouldBe;
+                              }
+                        sequenceNumber++;
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   removeDeletedMidiMapping
+//   Remove mappings to deleted instruments
+//---------------------------------------------------------
+
+void Score::removeDeletedMidiMapping()
+      {
       int removeOffset = 0;
       int mappingSize = _midiMapping.size();
       for (int index = 0; index < mappingSize; index++) {
-            MidiMapping* mm = midiMapping(index);
-            Part* p = mm->part;
+            Part* p = midiMapping(index)->part;
             if (!_parts.contains(p)) {
                   removeOffset++;
                   continue;
@@ -910,16 +983,15 @@ void Score::rebuildMidiMapping()
             const InstrumentList* il = p->instruments();
             for (auto i = il->begin(); i != il->end() && !channelExists; ++i) {
                   const Instrument* instr = i->second;
-                  if (_midiMapping[index].articulation->channel != -1
-                        && instr->channel().contains(_midiMapping[index].articulation)
-                        && !(_midiMapping[index].port == -1 && _midiMapping[index].channel == -1))
-                        channelExists = true;
+                  channelExists = (_midiMapping[index].articulation->channel != -1 && instr->channel().contains(_midiMapping[index].articulation)
+                      && !(_midiMapping[index].port == -1 && _midiMapping[index].channel == -1));
+                  if (channelExists)
+                        break;
                   }
             if (!channelExists) {
                   removeOffset++;
                   continue;
                   }
-
             // Let's do a left shift by 'removeOffset' items if necessary
             if (index != 0 && removeOffset != 0) {
                   _midiMapping[index-removeOffset] = _midiMapping[index];
@@ -929,10 +1001,18 @@ void Score::rebuildMidiMapping()
       // We have 'removeOffset' deleted instruments, let's remove their mappings
       for (int index = 0; index < removeOffset; index++)
             _midiMapping.removeLast();
+      }
 
-      // 2.  Add mappings to new instruments and repair existing ones
+//---------------------------------------------------------
+//   updateMidiMapping
+//   Add mappings to new instruments and repair existing ones
+//---------------------------------------------------------
+
+int Score::updateMidiMapping()
+      {
       int maxport = 0;
-      QSet<int> occupiedMidiChannels; // each entry is port*16+channel
+      occupiedMidiChannels.clear();
+      searchMidiMappingFrom = 0;
       occupiedMidiChannels.reserve(_midiMapping.size()); // Bringing down the complexity of insertion to amortized O(1)
 
       for(MidiMapping mm :_midiMapping) {
@@ -943,13 +1023,11 @@ void Score::rebuildMidiMapping()
                   maxport = mm.port;
             }
 
-      int startFrom = 0;
       for (Part* part : _parts) {
             const InstrumentList* il = part->instruments();
             for (auto i = il->begin(); i != il->end(); ++i) {
                   const Instrument* instr = i->second;
                   bool drum = instr->useDrumset();
-
                   for (Channel* channel : instr->channel()) {
                         bool channelExists = false;
                         for (MidiMapping mapping: _midiMapping) {
@@ -961,79 +1039,31 @@ void Score::rebuildMidiMapping()
                         // Channel could already exist, but have unassigned port or channel. Repair and continue
                         if (channelExists) {
                               if (_midiMapping[channel->channel].port == -1) {
-                                    int ch = _midiMapping[channel->channel].channel;
-                                    for (int p = 0;; p++) {
-                                          if (!occupiedMidiChannels.contains(p*16+ch)) {
-                                                _midiMapping[channel->channel].port = p;
-                                                occupiedMidiChannels.insert(p*16+ch);
-                                                break;
-                                                }
-                                          }
+                                    int nm = getNextFreeMidiMapping(-1, _midiMapping[channel->channel].channel);
+                                    _midiMapping[channel->channel].port = nm / 16;
                                     }
                               else if (_midiMapping[channel->channel].channel == -1) {
-                                    int p = _midiMapping[channel->channel].port;
-                                    if (drum && !occupiedMidiChannels.contains(p*16+9)) {
-                                                _midiMapping[channel->channel].channel = 9;
-                                                continue;
-                                          }
-                                    else if (drum && occupiedMidiChannels.contains(p*16+9)) {
-                                          for (int pi = 0;; pi++) {
-                                                if (!occupiedMidiChannels.contains(pi*16+9)) {
-                                                      occupiedMidiChannels.insert(pi*16+9);
-                                                      _midiMapping[channel->channel].channel = 9;
-                                                      _midiMapping[channel->channel].port    = pi;
-                                                      break;
-                                                      }
-                                                }
+                                    if (drum) {
+                                          _midiMapping[channel->channel].port = getNextFreeDrumMidiMapping() / 16;
+                                          _midiMapping[channel->channel].channel = 9;
                                           continue;
                                           }
-                                    bool found = false;
-                                    for (int ch = 0; ch < 16 && !drum; ch++) {
-                                          if (ch != 9 && !occupiedMidiChannels.contains(p*16+ch)) {
-                                                occupiedMidiChannels.insert(p*16+ch);
-                                                _midiMapping[channel->channel].channel = ch;
-                                                found = true;
-                                                break;
-                                                }
-                                          }
-                                    // Find new port and channel for this instrument
-                                    if (!found) {
-                                          for (;;startFrom++) {
-                                                if (startFrom % 16 != 9 && !occupiedMidiChannels.contains(startFrom)) {
-                                                      occupiedMidiChannels.insert(startFrom);
-                                                      _midiMapping[channel->channel].port    = startFrom / 16;
-                                                      _midiMapping[channel->channel].channel = startFrom % 16;
-                                                      break;
-                                                      }
-                                                }
-                                          }
+                                    int nm = getNextFreeMidiMapping(_midiMapping[channel->channel].port);
+                                    _midiMapping[channel->channel].port    = nm / 16;
+                                    _midiMapping[channel->channel].channel = nm % 16;
                                     }
                               continue;
                               }
 
                         MidiMapping mm;
                         if (drum) {
-                              for (int i = 0;; i++) {
-                                    if (!occupiedMidiChannels.contains(i*16+9)) {
-                                          occupiedMidiChannels.insert(i*16+9);
-                                          mm.port = i;
-                                          mm.channel = 9;
-                                          break;
-                                          }
-                                    }
+                              mm.port = getNextFreeDrumMidiMapping() / 16;
+                              mm.channel = 9;
                               }
                         else {
-                              for (;;startFrom++) {
-                                    // skipping drum port
-                                    if (startFrom % 16 == 9)
-                                          continue;
-                                    if (!occupiedMidiChannels.contains(startFrom)) {
-                                          occupiedMidiChannels.insert(startFrom);
-                                          mm.port = startFrom / 16;
-                                          mm.channel = startFrom % 16;
-                                          break;
-                                          }
-                                    }
+                              int nm = getNextFreeMidiMapping();
+                              mm.port    = nm / 16;
+                              mm.channel = nm % 16;
                               }
 
                         if (mm.port > maxport)
@@ -1047,28 +1077,18 @@ void Score::rebuildMidiMapping()
                         }
                   }
             }
+      return maxport;
+      }
 
-      // 3. Set mappings in order you see in Add->Instruments
-      int sequenceNumber = 0;
-      for (Part* part : _parts) {
-            const InstrumentList* il = part->instruments();
-            for (auto i = il->begin(); i != il->end(); ++i) {
-                  const Instrument* instr = i->second;
-                  for (Channel* channel : instr->channel()) {
-                        if (!(_midiMapping[sequenceNumber].part == part
-                              && _midiMapping[sequenceNumber].articulation == channel)) {
-                              // Should swap
-                              int shouldBe = channel->channel;
-                              _midiMapping.swap(sequenceNumber, shouldBe);
-                              _midiMapping[sequenceNumber].articulation->channel = sequenceNumber;
-                              channel->channel = sequenceNumber;
-                              _midiMapping[shouldBe].articulation->channel = shouldBe;
-                              }
-                        sequenceNumber++;
-                        }
-                  }
-            }
+//---------------------------------------------------------
+//   rebuildMidiMapping
+//---------------------------------------------------------
 
+void Score::rebuildMidiMapping()
+      {
+      removeDeletedMidiMapping();
+      int maxport = updateMidiMapping();
+      reorderMidiMapping();
       setMidiPortCount(maxport);
       }
 
@@ -1097,10 +1117,8 @@ void Score::checkMidiMapping()
       int lastDrumPort = -1;
       int index = 0;
       for (MidiMapping m : _midiMapping) {
-            if (index >= drum.size()) {
-                  qDebug()<<"checkMidiMapping error: wrong mapping, index: "<<index<<", drum.size: "<<drum.size();
+            if (index >= drum.size())
                   break;
-                  }
             if (drum[index]) {
                   lastDrumPort++;
                   if (m.port != lastDrumPort) {
@@ -3819,8 +3837,9 @@ void Score::setSoloMute()
                   b->soloMute = false;
                   for (int j = 0; j < _midiMapping.size(); j++) {
                         Channel* a = _midiMapping[j].articulation;
-                        a->soloMute = (i != j && !a->solo);
-                        a->solo     = (i == j || a->solo);
+                        bool sameMidiMapping = _midiMapping[i].port == _midiMapping[j].port && _midiMapping[i].channel == _midiMapping[j].channel;
+                        a->soloMute = (i != j && !a->solo && !sameMidiMapping);
+                        a->solo     = (i == j || a->solo || sameMidiMapping);
                         }
                   }
             }
