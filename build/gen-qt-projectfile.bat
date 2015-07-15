@@ -12,6 +12,7 @@ echo       %1/share/locale/mscore_bg.ts \
 echo       %1/share/locale/mscore_ca.ts \
 echo       %1/share/locale/mscore_ca@valencia.ts \
 echo       %1/share/locale/mscore_cs.ts \
+echo       %1/share/locale/mscore_cy.ts \
 echo       %1/share/locale/mscore_da.ts \
 echo       %1/share/locale/mscore_de.ts \
 echo       %1/share/locale/mscore_el.ts \
