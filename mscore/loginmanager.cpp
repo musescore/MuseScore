@@ -103,10 +103,11 @@ void LoginManager::onAuthorizedRequestDone()
             QMessageBox::critical(0, tr("Network error"), tr("Please check your Internet connection"));
       else if (_oauthManager->lastError() == KQOAuthManager::ContentOperationNotPermittedError)
             QMessageBox::critical(0, tr("Please upgrade"), tr("Your MuseScore version is too old to use this feature.<br/> <a href=\"%1\">Please upgrade first</a>.").arg("http://musescore.org"));
-      else if (_oauthManager->lastError() == KQOAuthManager::RequestUnauthorized){
-            logout();
-            mscore->showLoginDialog();
-            }
+      // don't do that, it will logout user if score is private and already known
+      //else if (_oauthManager->lastError() == KQOAuthManager::RequestUnauthorized){
+      //      logout();
+      //      mscore->showLoginDialog();
+      //      }
       }
 
 /*------- TRY LOGIN ROUTINES ----------------------------*/
