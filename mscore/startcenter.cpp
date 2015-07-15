@@ -54,7 +54,7 @@ Startcenter::Startcenter()
       //init webview
       if (!noWebView) {
             _webView = new MyWebView(this);
-            _webView->setUrl(QUrl("https://connect2.musescore.com/"));
+            _webView->setUrl(QUrl(QString("https://connect2.musescore.com/?version=%1").arg(VERSION)));
             horizontalLayout->addWidget(_webView);
             }
 
