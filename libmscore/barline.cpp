@@ -830,7 +830,7 @@ void BarLine::endEdit()
                   int idx2 = idx1 + _span;
                   // set span 0 to all additional staves
                   for (int idx = idx1 + 1; idx < idx2; ++idx)
-                        // mensurstrich special case:
+                        // Mensurstrich special case:
                         // if line spans to top line of a stave AND current staff is
                         //    the last spanned staff BUT NOT the last score staff
                         //          keep its bar lines
@@ -1286,7 +1286,7 @@ void BarLine::updateCustomType()
                   }
             }
       _customSubtype = (_barLineType != refType);
-      updateGenerated(!_customSubtype);         // if _customSubType, _genereated is surely false
+      updateGenerated(!_customSubtype);         // if _customSubType, _generated is surely false
       }
 
 //---------------------------------------------------------
