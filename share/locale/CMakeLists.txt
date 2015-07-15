@@ -27,6 +27,7 @@ install(FILES
       mscore_ca.qm
       mscore_ca@valencia.qm
       mscore_cs.qm
+      mscore_cy.qm
       mscore_da.qm
       mscore_de.qm
       mscore_el.qm
@@ -114,6 +115,7 @@ install(FILES
       instruments_ca.qm
       instruments_ca@valencia.qm
       instruments_cs.qm
+      instruments_cy.qm
       instruments_da.qm
       instruments_de.qm
       instruments_el.qm
