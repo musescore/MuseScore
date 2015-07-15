@@ -93,11 +93,11 @@ class SpannerSegment : public Element {
 //   @@ Spanner
 ///   Virtual base class for slurs, ties, lines etc.
 //
-//    @P anchor         Ms::Spanner::Anchor     (SEGMENT, MEASURE, CHORD, NOTE)
-//    @P endElement     MS::Element             the element the spanner end is anchored to (read-only)
-//    @P startElement   MS::Element             the element the spanner start is anchored to (read-only)
-//    @P tick           int                     tick start position
-//    @P tick2          int                     tick end position
+//    @P anchor         enum (Spanner.CHORD, Spanner.MEASURE, Spanner.NOTE, Spanner.SEGMENT)
+//    @P endElement     Element           the element the spanner end is anchored to (read-only)
+//    @P startElement   Element           the element the spanner start is anchored to (read-only)
+//    @P tick           int               tick start position
+//    @P tick2          int               tick end position
 //----------------------------------------------------------------------------------
 
 class Spanner : public Element {
