@@ -2556,7 +2556,7 @@ bool Measure::createEndBarLines()
       BarLine* bl = 0;
       int span    = 0;        // span counter
       int aspan   = 0;        // actual span
-      bool mensur = false;    // keep note of mensurstrich case
+      bool mensur = false;    // keep note of Mensurstrich case
       int spanTot;            // to keep track of the target span
       int spanFrom;
       int spanTo;
@@ -2583,7 +2583,7 @@ bool Measure::createEndBarLines()
                         }
                   else {                              // otherwise, get from staff
                         span        = staff->barLineSpan();
-                        // if some span OR last staff (span=0) of a mensurstrich case, get From/To from staff
+                        // if some span OR last staff (span=0) of a Mensurstrich case, get From/To from staff
                         if (span || mensur) {
                               spanFrom    = staff->barLineFrom();
                               spanTo      = staff->barLineTo();
@@ -2646,14 +2646,14 @@ bool Measure::createEndBarLines()
                         // and the bar line for this staff (cbl) is not needed:
                         // DELETE it
                         if (cbl && cbl != bl) {
-                              // mensurstrich special case:
+                              // Mensurstrich special case:
                               // if span arrives inside the end staff (spanTo>0) OR
                               //          span is not multi-staff (spanTot<=1) OR
                               //          current staff is not the last spanned staff (span!=1) OR
                               //          staff is the last score staff
                               //    remove bar line for this staff
                               // If NONE of the above conditions holds, the staff is the last staff of
-                              // a mensurstrich(-like) span: keep its bar line, as it may span to next staff
+                              // a Mensurstrich(-like) span: keep its bar line, as it may span to next staff
                               if (spanTo > 0 || spanTot <= 1 || span != 1 || staffIdx == nstaves-1) {
                                     score()->undoRemoveElement(cbl);
                                     changed = true;
@@ -2690,7 +2690,7 @@ bool Measure::createEndBarLines()
                   --span;
                   }
             // if just finished (span==0) a multi-staff span (spanTot>1) ending at the top of a staff (spanTo<=0)
-            // scan this staff again, as it may have its own bar lines (mensurstich(-like) span)
+            // scan this staff again, as it may have its own bar lines (Mensurstrich(-like) span)
             if (spanTot > 1 && spanTo <= 0 && span == 0) {
                   mensur = true;
                   staffIdx--;
