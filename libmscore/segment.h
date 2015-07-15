@@ -36,13 +36,13 @@ class System;
 ///    A segment holds all vertical aligned staff elements.
 ///    Segments are typed and contain only Elements of the same type.
 //
-//   @P next            Ms::Segment       the next segment in the whole score; null at last score segment (read-only)
-//   @P nextInMeasure   Ms::Segment       the next segment in measure; null at last measure segment (read-only)
-//   @P prev            Ms::Segment       the previous segment in the whole score; null at first score segment (read-only)
-//   @P prevInMeasure   Ms::Segment       the previous segment in measure; null at first measure segment (read-only)
-//   @P segmentType     Ms::Segment::Type (Invalid, Clef, KeySig, Ambitus, TimeSig, StartRepeatBarLine, BarLine, ChordRest, Breath, EndBarLine TimeSigAnnounce, KeySigAnnounce, All)
+//   @P annotations     array[Element]    the list of annotations (read only)
+//   @P next            Segment           the next segment in the whole score; null at last score segment (read-only)
+//   @P nextInMeasure   Segment           the next segment in measure; null at last measure segment (read-only)
+//   @P prev            Segment           the previous segment in the whole score; null at first score segment (read-only)
+//   @P prevInMeasure   Segment           the previous segment in measure; null at first measure segment (read-only)
+//   @P segmentType     enum (Segment.All, .Ambitus, .BarLine, .Breath, .ChordRest, .Clef, .EndBarLine, .Invalid, .KeySig, .KeySigAnnounce, .StartRepeatBarLine, .TimeSig, .TimeSigAnnounce)
 //   @P tick            int               midi tick position (read only)
-//   @P annotations     array[Ms::Element] the list of annotations (read only)
 //------------------------------------------------------------------------
 
 /**
@@ -57,13 +57,13 @@ class System;
 
 class Segment : public Element {
       Q_OBJECT
+      Q_PROPERTY(QQmlListProperty<Ms::Element> annotations READ qmlAnnotations)
       Q_PROPERTY(Ms::Segment*       next              READ next1)
       Q_PROPERTY(Ms::Segment*       nextInMeasure     READ next)
       Q_PROPERTY(Ms::Segment*       prev              READ prev1)
       Q_PROPERTY(Ms::Segment*       prevInMeasure     READ prev)
       Q_PROPERTY(Ms::Segment::Type  segmentType       READ segmentType WRITE setSegmentType)
       Q_PROPERTY(int                tick              READ tick)
-      Q_PROPERTY(QQmlListProperty<Ms::Element> annotations READ qmlAnnotations)
       Q_ENUMS(Type)
 
 public:
@@ -139,6 +139,7 @@ public:
 
       Ms::Element* element(int track) const { return _elist.value(track);  }
       // a variant of the above function, specifically designed to be called from QML
+      //@ returns the element at track 'track' (null if none)
       Q_INVOKABLE Ms::Element* elementAt(int track) const;
       ChordRest* cr(int track) const                    {
             Q_ASSERT(_segmentType == Type::ChordRest);
