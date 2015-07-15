@@ -2393,15 +2393,17 @@ Score::FileError importGTP(Score* score, const QString& name)
             pscore->staves().append(s);
             stavesMap.append(score->staffIdx(staff));
             cloneStaves(score, pscore, stavesMap);
+            int strings = staff->part()->instrument()->stringData()->strings();
 
-            if (staff->part()->instrument()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
+            if (strings > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
                   p->setStaves(2);
                   Staff* s1 = p->staff(1);
 
                   StaffType st = *StaffType::preset(StaffTypes::TAB_DEFAULT);
                   st.setSlashStyle(true);
                   s1->setStaffType(&st);
-                  s1->setLines(staff->part()->instrument()->stringData()->strings());
+                  s1->setLines(strings);
+                  s1->setBarLineTo((strings - 1) * 2);
                   cloneStaff(s,s1);
                   p->staves()->front()->addBracket(BracketItem(BracketType::NORMAL, 2));
                   }
@@ -2414,10 +2416,11 @@ Score::FileError importGTP(Score* score, const QString& name)
             excerpt->parts().append(part);
             score->excerpts().append(excerpt);
 
-            if (staff->part()->instrument()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
+            if (strings > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
                   Staff* staff2 = pscore->staff(1);
                   staff2->setStaffType(StaffType::preset(StaffTypes::TAB_DEFAULT));
-                  staff2->setLines(staff->part()->instrument()->stringData()->strings());
+                  staff2->setLines(strings);
+                  staff2->setBarLineTo((strings - 1) * 2);
             }
 
             //
