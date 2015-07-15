@@ -116,11 +116,6 @@
          <string>Prall Prall</string>
         </property>
        </item>
-       <item>
-        <property name="text">
-         <string>Wavy Line</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item row="0" column="3">
