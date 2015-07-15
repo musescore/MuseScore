@@ -2559,15 +2559,13 @@ bool Measure::createEndBarLines()
       int lastIdx;
       int spanFrom;
       int spanTo;
-      bool custom;
-      bool generated;
       static const int unknownSpanFrom = 9999;
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* staff      = score()->staff(staffIdx);
             int track         = staffIdx * VOICES;
             int staffLines    = staff->lines();
-            bool show         = system() ? staff->show() && system()->staff(staffIdx)->show() : staff->show();
+            //bool show         = system() ? staff->show() && system()->staff(staffIdx)->show() : staff->show();
 
             // get existing bar line for this staff, if any
             BarLine* cbl = static_cast<BarLine*>(seg->element(track));
@@ -2596,14 +2594,14 @@ bool Measure::createEndBarLines()
                         // but if staff is set to no span, a multi-staff spanning bar line
                         // has been shortened to span less staves and following staves left without bars;
                         // set bar line span values to default
-                        else if (show) {
+                        else if (staff->show()) {
                               span        = 1;
                               spanFrom    = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
                               spanTo      = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staff->lines() - 1) * 2;
                               }
                         }
-                  if (!show) {
-                        // this staff is not visible or is hidden
+                  if (!staff->show()) {
+                        // this staff is not visible
                         // we should recalculate spanFrom when we find a valid staff
                         spanFrom = unknownSpanFrom;
                         }
@@ -2613,8 +2611,8 @@ bool Measure::createEndBarLines()
                   lastIdx     = staffIdx + span - 1;
                   bl          = nullptr;
                   }
-            else if (spanFrom == unknownSpanFrom && show) {
-                  // we started a span earlier, but had not found a visible staff yet
+            else if (spanFrom == unknownSpanFrom && staff->show()) {
+                  // we started a span earlier, but had not found a valid staff yet
                   spanFrom = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
                   }
             if (staff->show() && span) {
@@ -2676,11 +2674,6 @@ bool Measure::createEndBarLines()
                                     }
                               }
                         }
-                  // HACK! and TODO - this doesn't quite work across save / open
-                  // double bars get written with span info even though explicit set to not custom
-                  // so they get read back in as custom
-                  custom = bl && bl->customSpan();
-                  generated = bl && bl->generated();
                   }
             else {
                   //
@@ -2700,21 +2693,14 @@ bool Measure::createEndBarLines()
                         if (staff->show()) {          // count visible staves only (whether hidden or not)
                               bl->setSpan(aspan);     // need to update span & spanFrom even for hidden staves
                               bl->setSpanFrom(spanFrom);
-                              if (show) {             // but don't update spanTo for hidden staves
-                                    // if current actual span < target span, set spanTo to full staff height
-                                    if (aspan < spanTot && staffIdx < lastIdx)
-                                          bl->setSpanTo(staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffLines - 1) * 2);
-                                    // if we reached target span, set spanTo to intended value
-                                    else
-                                          bl->setSpanTo(spanTo);
-                                    }
-                              // HACK!
-                              // the span information above can make barlines look "custom" even when they really are not
-                              // conversely for "generated"
-                              // in the case of hide empty staves, this means they are not properly restored when the option is turned off again
-                              // so force the custom & generated status to reflect reality
-                              bl->setCustomSpan(custom);
-                              bl->setGenerated(generated);
+                              //if (show) {             // but don't update spanTo for hidden staves
+                              // if current actual span < target span, set spanTo to full staff height
+                              if (aspan < spanTot && staffIdx < lastIdx)
+                                    bl->setSpanTo(staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffLines - 1) * 2);
+                              // if we reached target span, set spanTo to intended value
+                              else
+                                    bl->setSpanTo(spanTo);
+                              //      }
                               }
                         }
                   --span;
