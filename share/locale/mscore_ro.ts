@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ro">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ro" version="2.1">
 <context>
     <name>AboutBox</name>
     <message>
@@ -15,11 +13,11 @@
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; for new versions and more information.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Support MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;your donation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; for new versions and more information.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Support MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;your donation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -42,7 +40,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;MusicXML is an open file format for exchanging digital sheet music,&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;supported by many applications. MusicXML is copyright © MakeMusic, Inc.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All rights reserved. For more information, see: &lt;a href=&quot;http://www.musicxml.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;MusicXML.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
@@ -2437,7 +2435,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Measure Numbers</source>
-        <translation>Numerotaţie măsuri</translation>
+        <translation>Numerotare Măsuri</translation>
     </message>
     <message>
         <source>Default TAB Clef</source>
@@ -3044,6 +3042,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Inspector de glissando</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpegiatto</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Redare</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restabilește valoare &quot;Redare&quot;</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3108,6 +3125,30 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Restabilește Întindere Timpului</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Stil Ornament</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Implicit</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Baroc</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Restabilește Tipul Ornamentului</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Redare</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restabilește valoare &quot;Redare&quot;</translation>
     </message>
 </context>
 <context>
@@ -3278,6 +3319,25 @@ space unit</extracomment>
     <message>
         <source>User position</source>
         <translation>Poziție dată de utilizator</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Inspector de Glissando</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Bend</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Redare</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restabilește valoare &quot;Redare&quot;</translation>
     </message>
 </context>
 <context>
@@ -3560,6 +3620,42 @@ space unit</extracomment>
     <message>
         <source>Show text</source>
         <translation>Arată text</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Stil</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Restabilește Stilul</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Stil Redare</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Cromatic</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Clape Albe</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Clape Negre</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diatonic</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Redare</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restabilește valoare &quot;Redare&quot;</translation>
     </message>
 </context>
 <context>
@@ -4368,6 +4464,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Inspector de Cadru de Text</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Cadru Text</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Golul de jos</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Magine sus</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Restabilește valoarea</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Restabilește Golul de sus</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Restabilește Golul de jos</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Margine stânga</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Margine jos</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Restabilește Marginea din dreapta</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Margine dreapta</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Restabilește Marginea de jos</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Restabilește Marginea de sus</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Restabilește Marginea din stânga</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Golul de sus</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>sp</translation>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4498,12 +4666,36 @@ space unit</extracomment>
         <translation>Prall Prall</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Linie ondulată</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Restabilește valoarea</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Stil Ornament</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Direcție</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Implicit</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Baroc</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Restabilește Tipul Ornamentului</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Redare</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restabilește valoare &quot;Redare&quot;</translation>
     </message>
 </context>
 <context>
@@ -4878,6 +5070,13 @@ space unit</extracomment>
     <message>
         <source>Add time signature to palette</source>
         <translation>Adaugă metrul la paletă</translation>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>atonal</translation>
     </message>
 </context>
 <context>
@@ -5360,45 +5559,6 @@ Would you like to locate %2 now?</source>
 Trebuie să faceți acest lucru o singură dată.
 
 Doriți să localizați %2 acum?</translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Open PDF/XPS file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="unfinished">Deschide...</translation>
-    </message>
-    <message>
-        <source>Previous</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Next</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ZoomIn</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ZoomOut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ToolBar</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6089,14 +6249,6 @@ a eșuat:</translation>
         <translation>semnul de $ însuși</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>etichetă meta data</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Etichete disponibile și valorile lor curente:</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Aplică tuturor știmelor</translation>
     </message>
@@ -6111,6 +6263,14 @@ a eșuat:</translation>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>numărul paginii, dacă este mai mult de o pagină</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>etichetă meta data, vedeți dedesupt</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Etichete meta data disponibile și valorile lor curente:</translation>
     </message>
 </context>
 <context>
@@ -6929,7 +7089,7 @@ Restaurez sesiunea?</translation>
         <translation>MuseScore: Citește Numele Spațiului de Lucru</translation>
     </message>
     <message>
-        <source>&apos;%1&apos; does already exist,
+        <source>'%1' does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; există deja.
 alegeți un nume diferit:</translation>
@@ -7237,6 +7397,14 @@ alegeți un nume diferit:</translation>
         <source>Cannot write into %1</source>
         <translation>Nu se poate scrie în %1</translation>
     </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation>Această partitură nu poate fi salvata online. Reparați măsurile corupte și încercați din nou.</translation>
+    </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Cereți Ajutor</translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7436,6 +7604,10 @@ alegeți un nume diferit:</translation>
     <message>
         <source>new Palette</source>
         <translation>Paletă Nouă</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation>Paletă Singură</translation>
     </message>
 </context>
 <context>
@@ -7643,6 +7815,17 @@ Salvați înainte de a închide?</translation>
     </message>
 </context>
 <context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Vocea: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Durată: %2; %3</translation>
+    </message>
+</context>
+<context>
     <name>Ms::Score</name>
     <message>
         <source>The style file is not compatible with this version of MuseScore.</source>
@@ -7705,10 +7888,6 @@ a eșuat: %2</translation>
         <translation>Scrierea Stilul a eșuat: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>fișier negăsit</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Nicio selecție</translation>
     </message>
@@ -7719,6 +7898,10 @@ a eșuat: %2</translation>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>Măsura %1, portativul %2, vocea %3 este prea lungă. Așteptat: %4; Găsit: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>Eroare de citire XML la linia %1 coloana %2: %3</translation>
     </message>
 </context>
 <context>
@@ -8033,6 +8216,12 @@ Selectați mai multe măsuri consecutive pt. a le uni și încercați din nou</t
         <source>Transparent background</source>
         <translation>Fundal transparent</translation>
     </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>Nu se poate sparge măsura aici:
+Prima bătaie a măsurii</translation>
+    </message>
 </context>
 <context>
     <name>Ms::SearchComboBox</name>
@@ -8203,7 +8392,7 @@ Selectați mai multe măsuri consecutive pt. a le uni și încercați din nou</t
         <translation>MuseScore: Citire Nume Stil</translation>
     </message>
     <message>
-        <source>&apos;%1&apos; does already exist,
+        <source>'%1' does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; există deja.
 alegeți un nume diferit:</translation>
@@ -10429,6 +10618,18 @@ a eșuat:</translation>
         <source>Check for new version of MuseScore</source>
         <translation>Verifică automat pentru noi versiuni MuseScore</translation>
     </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filtru</translation>
+    </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Export RPN-uri</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10576,7 +10777,7 @@ Vizitați &lt;a href=&quot;http://musescore.org&quot;&gt;website-ul MuseScore &l
 </translation>
     </message>
     <message>
-        <source>Can&apos;t find rootfile
+        <source>Can't find rootfile
 %1</source>
         <translation>Nu s-a găsit fișierul rădăcină
 %1</translation>
@@ -10749,6 +10950,14 @@ Vizitați &lt;a href=&quot;http://musescore.org&quot;&gt;website-ul MuseScore &l
         <source>File corrupted %1</source>
         <translation>Fișier corupt %1</translation>
     </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation>MuseScore: Eroare de upload</translation>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation>Doriți să se încerce totuși încărcarea fișierului?</translation>
+    </message>
 </context>
 <context>
     <name>QWidget</name>
@@ -10895,17 +11104,6 @@ Doriți să-l suprascrieți?</translation>
     <message>
         <source>Tab 2</source>
         <translation>Tabulator 2</translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Vocea: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Durată: %2; %3</translation>
     </message>
 </context>
 <context>
@@ -11289,6 +11487,14 @@ Doriți să-l suprascrieți?</translation>
     <message>
         <source>System flag</source>
         <translation>Flag de sistem</translation>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation>Caută...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Şterge</translation>
     </message>
 </context>
 <context>
@@ -13638,10 +13844,6 @@ a eșuat:</translation>
         <translation>Ligatură împănată, mai rapidă</translation>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Paletă</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Panou Redare</translation>
     </message>
@@ -13676,10 +13878,6 @@ a eșuat:</translation>
     <message>
         <source>Add lyrics</source>
         <translation>Adaugă versuri</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Marcaj Tempo...</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -14036,10 +14234,6 @@ a eșuat:</translation>
     <message>
         <source>Repeat selection</source>
         <translation>Repetare Selecţie</translation>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
-        <translation>Pan-ează Pianina</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
@@ -15605,6 +15799,22 @@ a eșuat:</translation>
         <source>Set loop in position</source>
         <translation>Stabilește poziție loop in</translation>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Palete</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Marcaj Tempo</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation>Mărire la 100%</translation>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation>Pan-ează Pianina</translation>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -16656,6 +16866,10 @@ Măsura nu este vidă.</translation>
         <source>Tablature2</source>
         <translation>Tabulatură 2</translation>
     </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>Cheia Sol 8vb optional</translation>
+    </message>
 </context>
 <context>
     <name>drumset</name>
@@ -17285,10 +17499,6 @@ Măsura nu este vidă.</translation>
         <translation>Notă Shadow</translation>
     </message>
     <message>
-        <source>Rubber Band</source>
-        <translation>Elastic de Cauciuc</translation>
-    </message>
-    <message>
         <source>Tab Duration Symbol</source>
         <translation>Symbol Durată Tab</translation>
     </message>
@@ -17770,10 +17980,6 @@ Măsura nu este vidă.</translation>
     <message>
         <source>Prallprall line</source>
         <translation>PrallPrall linie</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Linie ondulată</translation>
     </message>
 </context>
 <context>

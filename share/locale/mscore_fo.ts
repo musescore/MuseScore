@@ -1,18 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fo">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fo" version="2.1">
 <context>
     <name>AboutBox</name>
     <message>
         <source>About MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation>Um MuseScore</translation>
     </message>
     <message>
         <source>Copy revision number</source>
-        <translation type="unfinished"></translation>
+        <translation>Rita av útgávutal</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; for new versions and more information.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Support MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;your donation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -20,45 +27,51 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Support MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;your donation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
     <name>AboutMusicXMLBox</name>
     <message>
         <source>About MusicXML</source>
-        <translation type="unfinished"></translation>
+        <translation>Um MusicXML</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;MusicXML is an open file format for exchanging digital sheet music,&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;supported by many applications. MusicXML is copyright © MakeMusic, Inc.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All rights reserved. For more information, see: &lt;a href=&quot;http://www.musicxml.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;MusicXML.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;MusicXML is an open file format for exchanging digital sheet music,&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;supported by many applications. MusicXML is copyright © MakeMusic, Inc.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All rights reserved. For more information, see: &lt;a href=&quot;http://www.musicxml.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;MusicXML.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>The MusicXML Public License:</source>
-        <translation type="unfinished"></translation>
+        <translation>Almannaloyvi MusicXML:</translation>
     </message>
 </context>
 <context>
     <name>AeolusGui</name>
     <message>
         <source>Azimuth</source>
-        <translation type="unfinished"></translation>
+        <translation>Breidd</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Breidd</translation>
     </message>
     <message>
         <source>Reflect</source>
-        <translation type="unfinished"></translation>
+        <translation>Spegla</translation>
     </message>
     <message>
         <source>Reverb</source>
@@ -66,23 +79,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Delay</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>Tíð</translation>
     </message>
     <message>
         <source>Direct</source>
-        <translation type="unfinished"></translation>
+        <translation>Beinleiðis</translation>
     </message>
     <message>
         <source>III</source>
-        <translation type="unfinished"></translation>
+        <translation>III</translation>
     </message>
     <message>
         <source>II</source>
-        <translation type="unfinished"></translation>
+        <translation>II</translation>
     </message>
     <message>
         <source>I</source>
@@ -90,78 +103,78 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>P</source>
-        <translation type="unfinished"></translation>
+        <translation>P</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Plasering</translation>
     </message>
 </context>
 <context>
     <name>AlbumManager</name>
     <message>
         <source>MuseScore: Album Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Savnsstjórnan</translation>
     </message>
     <message>
         <source>Add Score</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat nótablað</translation>
     </message>
     <message>
         <source>Remove Score</source>
-        <translation type="unfinished"></translation>
+        <translation>Strika nótablað</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Aşağı</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Yukarı</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>New</translation>
+        <translation>Nýtt</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation>Yükle</translation>
+        <translation>Tak fram skapilón</translation>
     </message>
     <message>
         <source>Print Album</source>
-        <translation type="unfinished"></translation>
+        <translation>Prenta savn</translation>
     </message>
     <message>
         <source>Join Scores</source>
-        <translation type="unfinished"></translation>
+        <translation>Set saman nótabløð</translation>
     </message>
     <message>
         <source>Album name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Savnsnavn:</translation>
     </message>
     <message>
         <source>Move current score down in list</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt nótablað niður í lista</translation>
     </message>
     <message>
         <source>Move current score up in list</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt nótablað upp í lista</translation>
     </message>
     <message>
         <source>Album name</source>
-        <translation type="unfinished"></translation>
+        <translation>Savnsnavn</translation>
     </message>
     <message>
         <source>Remove current score</source>
-        <translation type="unfinished"></translation>
+        <translation>Strika nótablað</translation>
     </message>
     <message>
         <source>Create new album</source>
-        <translation type="unfinished"></translation>
+        <translation>Ger nýtt savn</translation>
     </message>
     <message>
         <source>Load an existing album</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak fram album sum er til taks</translation>
     </message>
 </context>
 <context>
@@ -172,146 +185,146 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Framkoma</translation>
     </message>
     <message>
         <source>Direction:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ætt</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation>auto</translation>
+        <translation>Sjálvvirkið</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Yukarı</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Aşağı</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>Anchor:</source>
-        <translation>Anchor:</translation>
+        <translation>Akker:</translation>
     </message>
     <message>
         <source>Channel</source>
-        <translation>Kanal</translation>
+        <translation>Rás</translation>
     </message>
     <message>
         <source>MIDI Action</source>
-        <translation>Midi hending</translation>
+        <translation>Midi-hending</translation>
     </message>
     <message>
         <source>Above Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Omanfyri stav</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Niðanfyri stav</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Sjálvvirkin ljómur</translation>
     </message>
     <message>
         <source>Above Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Oman samljóms</translation>
     </message>
     <message>
         <source>Below Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Niðan samljóms</translation>
     </message>
 </context>
 <context>
     <name>Awl::ColorLabel</name>
     <message>
         <source>MuseScore: Select Color</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Vel lit</translation>
     </message>
 </context>
 <context>
     <name>BarLineBase</name>
     <message>
         <source>custom subtype</source>
-        <translation type="unfinished"></translation>
+        <translation>Sergjørt slag</translation>
     </message>
     <message>
         <source>custom span</source>
-        <translation type="unfinished"></translation>
+        <translation>Sergjørt spenni</translation>
     </message>
 </context>
 <context>
     <name>BendDialog</name>
     <message>
         <source>MuseScore: Bend Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Bendingar eginleikar</translation>
     </message>
     <message>
         <source>Bend type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bendingar slag</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
-        <translation type="unfinished"></translation>
+        <translation>Klikk og legg afturat tak frá nøkur punkt</translation>
     </message>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"></translation>
+        <translation>Bend</translation>
     </message>
     <message>
         <source>Bend/Release</source>
-        <translation type="unfinished"></translation>
+        <translation>Bend/slepp</translation>
     </message>
     <message>
         <source>Bend/Release/Bend</source>
-        <translation type="unfinished"></translation>
+        <translation>Bend/slepp/bend</translation>
     </message>
     <message>
         <source>Prebend</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyribend</translation>
     </message>
     <message>
         <source>Prebend/Release</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyribend/slepp</translation>
     </message>
 </context>
 <context>
     <name>BreaksDialog</name>
     <message>
         <source>MuseScore: Add/Remove Line Breaks</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Skoyt/strika reglubrot</translation>
     </message>
     <message>
         <source>Break lines every</source>
-        <translation type="unfinished"></translation>
+        <translation>Brót reglur hvørji</translation>
     </message>
     <message>
         <source>Number of measures</source>
-        <translation type="unfinished"></translation>
+        <translation>Málatal</translation>
     </message>
     <message>
         <source>measures</source>
-        <translation type="unfinished"></translation>
+        <translation>mál</translation>
     </message>
     <message>
         <source>Add line breaks at end of each system</source>
-        <translation type="unfinished"></translation>
+        <translation>Skoyt reglubrot upp í lok hvørjar skipanar</translation>
     </message>
     <message>
         <source>Remove current line breaks</source>
-        <translation type="unfinished"></translation>
+        <translation>Strika reglubrot</translation>
     </message>
     <message>
         <source>Break lines every X measures</source>
-        <translation type="unfinished"></translation>
+        <translation>Brót reglur hvørji X taktir</translation>
     </message>
 </context>
 <context>
     <name>ChordBase</name>
     <message>
         <source>Glissando end</source>
-        <translation type="unfinished"></translation>
+        <translation>Glissando endi</translation>
     </message>
 </context>
 <context>
@@ -322,11 +335,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tab 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrá 1</translation>
     </message>
     <message>
         <source>Tab 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrá 2</translation>
     </message>
     <message>
         <source>Save As</source>
@@ -334,77 +347,77 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Load</source>
-        <translation>Yükle</translation>
+        <translation>Tak fram</translation>
     </message>
     <message>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Sam.eyð.</translation>
     </message>
 </context>
 <context>
     <name>EditDrumset</name>
     <message>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation>Vanligt</translation>
     </message>
     <message>
         <source>Cross</source>
-        <translation type="unfinished"></translation>
+        <translation>Krossur</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation type="unfinished"></translation>
+        <translation>Diamantur</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation>Triangle</translation>
+        <translation>Tríhyrningur</translation>
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"></translation>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Slash</source>
-        <translation type="unfinished"></translation>
+        <translation>Skák</translation>
     </message>
     <message>
         <source>XCircle</source>
-        <translation type="unfinished"></translation>
+        <translation>XSirkul</translation>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"></translation>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"></translation>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"></translation>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"></translation>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"></translation>
+        <translation>Ti</translation>
     </message>
 </context>
 <context>
     <name>EditDrumsetBase</name>
     <message>
         <source>MuseScore: Edit Drumset</source>
-        <translation>MuseScore: Broyt Trummusett</translation>
+        <translation>MuseScore: Rætta trummusett</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation>Ad:</translation>
+        <translation>Navn:</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation>Yükle</translation>
+        <translation>Tak fram</translation>
     </message>
     <message>
         <source>Save</source>
@@ -412,7 +425,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>No.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nr.</translation>
     </message>
     <message>
         <source>Note</source>
@@ -428,15 +441,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Auto</source>
-        <translation>auto</translation>
+        <translation>Sjálvvirkið</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Yukarı</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Aşağı</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>1</source>
@@ -456,7 +469,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Shortcut:</source>
-        <translation>Kısayol:</translation>
+        <translation>Sniðvegur:</translation>
     </message>
     <message>
         <source>A</source>
@@ -492,113 +505,113 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staff line:</source>
-        <translation>Stave Line:</translation>
+        <translation>Stavstrika:</translation>
     </message>
     <message>
         <source>Stem direction:</source>
-        <translation>Stem Direction:</translation>
+        <translation>Leggjaætt:</translation>
     </message>
     <message>
         <source>Default voice:</source>
-        <translation>Default Voice:</translation>
+        <translation>Forsett rødd</translation>
     </message>
     <message>
         <source>Note head:</source>
-        <translation>Note Head:</translation>
+        <translation>Nótahøvd:</translation>
     </message>
 </context>
 <context>
     <name>EditInstrumentBase</name>
     <message>
         <source>MuseScore: Edit Instrument Properties</source>
-        <translation>MuseScore: Edit Instrument Properties</translation>
+        <translation>MuseScore: Broyt eginleikar ljóðførisins</translation>
     </message>
     <message>
         <source>Instrument Properties</source>
-        <translation>Instrument Properties</translation>
+        <translation>Eginleikar ljóðførisins</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>TAMAM</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Vazgeç</translation>
+        <translation>Ógilda</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation>Ad:</translation>
+        <translation>Navn:</translation>
     </message>
     <message>
         <source>Pitch:</source>
-        <translation>Pitch:</translation>
+        <translation>Tónahædd:</translation>
     </message>
     <message>
         <source>Transpose:</source>
-        <translation type="unfinished"></translation>
+        <translation>Transponera:</translation>
     </message>
     <message>
         <source>Staves:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stavir:</translation>
     </message>
     <message>
         <source>Short name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stuttnevni:</translation>
     </message>
     <message>
         <source>MIDI program:</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-forrit:</translation>
     </message>
 </context>
 <context>
     <name>EditPitchBase</name>
     <message>
         <source>Note Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótaval:</translation>
     </message>
     <message>
         <source>Select Note:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel nóta:</translation>
     </message>
     <message>
         <source>Octave 8</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttund 8</translation>
     </message>
     <message>
         <source>Octave 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttund 7</translation>
     </message>
     <message>
         <source>Octave 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttund 6</translation>
     </message>
     <message>
         <source>Octave 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttund 5</translation>
     </message>
     <message>
         <source>Octave 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttund 4</translation>
     </message>
     <message>
         <source>Octave 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttund 3</translation>
     </message>
     <message>
         <source>Octave 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttund 2</translation>
     </message>
     <message>
         <source>Octave 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttund 1</translation>
     </message>
     <message>
         <source>Octave 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttund 0</translation>
     </message>
     <message>
         <source>Octave -1</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttund -1</translation>
     </message>
     <message>
         <source>C</source>
@@ -626,518 +639,518 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>B</source>
-        <translation>H</translation>
+        <translation>B</translation>
     </message>
     <message>
         <source>C 8</source>
-        <translation type="unfinished"></translation>
+        <translation>C 8</translation>
     </message>
     <message>
         <source>D 8</source>
-        <translation type="unfinished"></translation>
+        <translation>D 8</translation>
     </message>
     <message>
         <source>E 8</source>
-        <translation type="unfinished"></translation>
+        <translation>E 8</translation>
     </message>
     <message>
         <source>F 8</source>
-        <translation type="unfinished"></translation>
+        <translation>F 8</translation>
     </message>
     <message>
         <source>G 8</source>
-        <translation type="unfinished"></translation>
+        <translation>G 8</translation>
     </message>
     <message>
         <source>A 8</source>
-        <translation type="unfinished"></translation>
+        <translation>A 8</translation>
     </message>
     <message>
         <source>B 8</source>
-        <translation type="unfinished"></translation>
+        <translation>B 8</translation>
     </message>
     <message>
         <source>C 7</source>
-        <translation type="unfinished"></translation>
+        <translation>C 7</translation>
     </message>
     <message>
         <source>D 7</source>
-        <translation type="unfinished"></translation>
+        <translation>D 7</translation>
     </message>
     <message>
         <source>E 7</source>
-        <translation type="unfinished"></translation>
+        <translation>E 7</translation>
     </message>
     <message>
         <source>F 7</source>
-        <translation type="unfinished"></translation>
+        <translation>F 7</translation>
     </message>
     <message>
         <source>G 7</source>
-        <translation type="unfinished"></translation>
+        <translation>G 7</translation>
     </message>
     <message>
         <source>A 7</source>
-        <translation type="unfinished"></translation>
+        <translation>A 7</translation>
     </message>
     <message>
         <source>B 7</source>
-        <translation type="unfinished"></translation>
+        <translation>B 7</translation>
     </message>
     <message>
         <source>C 6</source>
-        <translation type="unfinished"></translation>
+        <translation>C 6</translation>
     </message>
     <message>
         <source>D 6</source>
-        <translation type="unfinished"></translation>
+        <translation>D 6</translation>
     </message>
     <message>
         <source>E 6</source>
-        <translation type="unfinished"></translation>
+        <translation>E 6</translation>
     </message>
     <message>
         <source>F 6</source>
-        <translation type="unfinished"></translation>
+        <translation>F 6</translation>
     </message>
     <message>
         <source>G 6</source>
-        <translation type="unfinished"></translation>
+        <translation>G 6</translation>
     </message>
     <message>
         <source>A 6</source>
-        <translation type="unfinished"></translation>
+        <translation>A 6</translation>
     </message>
     <message>
         <source>B 6</source>
-        <translation type="unfinished"></translation>
+        <translation>B 6</translation>
     </message>
     <message>
         <source>C 5</source>
-        <translation type="unfinished"></translation>
+        <translation>C 5</translation>
     </message>
     <message>
         <source>D 5</source>
-        <translation type="unfinished"></translation>
+        <translation>D 5</translation>
     </message>
     <message>
         <source>E 5</source>
-        <translation type="unfinished"></translation>
+        <translation>E 5</translation>
     </message>
     <message>
         <source>F 5</source>
-        <translation type="unfinished"></translation>
+        <translation>F 5</translation>
     </message>
     <message>
         <source>G 5</source>
-        <translation type="unfinished"></translation>
+        <translation>G 5</translation>
     </message>
     <message>
         <source>A 5</source>
-        <translation type="unfinished"></translation>
+        <translation>A 5</translation>
     </message>
     <message>
         <source>B 5</source>
-        <translation type="unfinished"></translation>
+        <translation>B 5</translation>
     </message>
     <message>
         <source>C 4</source>
-        <translation type="unfinished"></translation>
+        <translation>C 4</translation>
     </message>
     <message>
         <source>D 4</source>
-        <translation type="unfinished"></translation>
+        <translation>D 4</translation>
     </message>
     <message>
         <source>E 4</source>
-        <translation type="unfinished"></translation>
+        <translation>E 4</translation>
     </message>
     <message>
         <source>F 4</source>
-        <translation type="unfinished"></translation>
+        <translation>F 4</translation>
     </message>
     <message>
         <source>G 4</source>
-        <translation type="unfinished"></translation>
+        <translation>G 4</translation>
     </message>
     <message>
         <source>A 4</source>
-        <translation type="unfinished"></translation>
+        <translation>A 4</translation>
     </message>
     <message>
         <source>B 4</source>
-        <translation type="unfinished"></translation>
+        <translation>B 4</translation>
     </message>
     <message>
         <source>C 3</source>
-        <translation type="unfinished"></translation>
+        <translation>C 3</translation>
     </message>
     <message>
         <source>D 3</source>
-        <translation type="unfinished"></translation>
+        <translation>D 3</translation>
     </message>
     <message>
         <source>E 3</source>
-        <translation type="unfinished"></translation>
+        <translation>E 3</translation>
     </message>
     <message>
         <source>F 3</source>
-        <translation type="unfinished"></translation>
+        <translation>F 3</translation>
     </message>
     <message>
         <source>G 3</source>
-        <translation type="unfinished"></translation>
+        <translation>G 3</translation>
     </message>
     <message>
         <source>A 3</source>
-        <translation type="unfinished"></translation>
+        <translation>A 3</translation>
     </message>
     <message>
         <source>B 3</source>
-        <translation type="unfinished"></translation>
+        <translation>B 3</translation>
     </message>
     <message>
         <source>C 2</source>
-        <translation type="unfinished"></translation>
+        <translation>C 2</translation>
     </message>
     <message>
         <source>D 2</source>
-        <translation type="unfinished"></translation>
+        <translation>D 2</translation>
     </message>
     <message>
         <source>E 2</source>
-        <translation type="unfinished"></translation>
+        <translation>E 2</translation>
     </message>
     <message>
         <source>F 2</source>
-        <translation type="unfinished"></translation>
+        <translation>F 2</translation>
     </message>
     <message>
         <source>G 2</source>
-        <translation type="unfinished"></translation>
+        <translation>G 2</translation>
     </message>
     <message>
         <source>A 2</source>
-        <translation type="unfinished"></translation>
+        <translation>A 2</translation>
     </message>
     <message>
         <source>B 2</source>
-        <translation type="unfinished"></translation>
+        <translation>B 2</translation>
     </message>
     <message>
         <source>C 1</source>
-        <translation type="unfinished"></translation>
+        <translation>C 1</translation>
     </message>
     <message>
         <source>D 1</source>
-        <translation type="unfinished"></translation>
+        <translation>D 1</translation>
     </message>
     <message>
         <source>E 1</source>
-        <translation type="unfinished"></translation>
+        <translation>E 1</translation>
     </message>
     <message>
         <source>F 1</source>
-        <translation type="unfinished"></translation>
+        <translation>F 1</translation>
     </message>
     <message>
         <source>G 1</source>
-        <translation type="unfinished"></translation>
+        <translation>G 1</translation>
     </message>
     <message>
         <source>A 1</source>
-        <translation type="unfinished"></translation>
+        <translation>A 1</translation>
     </message>
     <message>
         <source>B 1</source>
-        <translation type="unfinished"></translation>
+        <translation>B 1</translation>
     </message>
     <message>
         <source>C 0</source>
-        <translation type="unfinished"></translation>
+        <translation>C 0</translation>
     </message>
     <message>
         <source>D 0</source>
-        <translation type="unfinished"></translation>
+        <translation>D 0</translation>
     </message>
     <message>
         <source>E 0</source>
-        <translation type="unfinished"></translation>
+        <translation>E 0</translation>
     </message>
     <message>
         <source>F 0</source>
-        <translation type="unfinished"></translation>
+        <translation>F 0</translation>
     </message>
     <message>
         <source>G 0</source>
-        <translation type="unfinished"></translation>
+        <translation>G 0</translation>
     </message>
     <message>
         <source>A 0</source>
-        <translation type="unfinished"></translation>
+        <translation>A 0</translation>
     </message>
     <message>
         <source>B 0</source>
-        <translation type="unfinished"></translation>
+        <translation>B 0</translation>
     </message>
     <message>
         <source>C -1</source>
-        <translation type="unfinished"></translation>
+        <translation>C -1</translation>
     </message>
     <message>
         <source>D -1</source>
-        <translation type="unfinished"></translation>
+        <translation>D -1</translation>
     </message>
     <message>
         <source>E -1</source>
-        <translation type="unfinished"></translation>
+        <translation>E -1</translation>
     </message>
     <message>
         <source>F -1</source>
-        <translation type="unfinished"></translation>
+        <translation>F -1</translation>
     </message>
     <message>
         <source>G -1</source>
-        <translation type="unfinished"></translation>
+        <translation>G -1</translation>
     </message>
     <message>
         <source>A -1</source>
-        <translation type="unfinished"></translation>
+        <translation>A -1</translation>
     </message>
     <message>
         <source>B -1</source>
-        <translation type="unfinished"></translation>
+        <translation>B -1</translation>
     </message>
     <message>
         <source>C♯</source>
-        <translation type="unfinished"></translation>
+        <translation>C♯</translation>
     </message>
     <message>
         <source>E♭</source>
-        <translation type="unfinished"></translation>
+        <translation>E♭</translation>
     </message>
     <message>
         <source>F♯</source>
-        <translation type="unfinished"></translation>
+        <translation>F♯</translation>
     </message>
     <message>
         <source>A♭</source>
-        <translation type="unfinished"></translation>
+        <translation>A♭</translation>
     </message>
     <message>
         <source>B♭</source>
-        <translation>H</translation>
+        <translation>B♭</translation>
     </message>
     <message>
         <source>C♯ 8</source>
-        <translation type="unfinished"></translation>
+        <translation>C♯ 8</translation>
     </message>
     <message>
         <source>E♭ 8</source>
-        <translation type="unfinished"></translation>
+        <translation>E♭ 8</translation>
     </message>
     <message>
         <source>F♯ 8</source>
-        <translation type="unfinished"></translation>
+        <translation>F♯ 8</translation>
     </message>
     <message>
         <source>A♭ 8</source>
-        <translation type="unfinished"></translation>
+        <translation>A♭ 8</translation>
     </message>
     <message>
         <source>B♭ 8</source>
-        <translation type="unfinished"></translation>
+        <translation>B♭ 8</translation>
     </message>
     <message>
         <source>C♯ 7</source>
-        <translation type="unfinished"></translation>
+        <translation>C♯ 7</translation>
     </message>
     <message>
         <source>E♭ 7</source>
-        <translation type="unfinished"></translation>
+        <translation>E♭ 7</translation>
     </message>
     <message>
         <source>F♯ 7</source>
-        <translation type="unfinished"></translation>
+        <translation>F♯ 7</translation>
     </message>
     <message>
         <source>A♭ 7</source>
-        <translation type="unfinished"></translation>
+        <translation>A♭ 7</translation>
     </message>
     <message>
         <source>B♭ 7</source>
-        <translation type="unfinished"></translation>
+        <translation>B♭ 7</translation>
     </message>
     <message>
         <source>C♯ 6</source>
-        <translation type="unfinished"></translation>
+        <translation>C♯ 6</translation>
     </message>
     <message>
         <source>E♭ 6</source>
-        <translation type="unfinished"></translation>
+        <translation>E♭ 6</translation>
     </message>
     <message>
         <source>F♯ 6</source>
-        <translation type="unfinished"></translation>
+        <translation>F♯ 6</translation>
     </message>
     <message>
         <source>A♭ 6</source>
-        <translation type="unfinished"></translation>
+        <translation>A♭ 6</translation>
     </message>
     <message>
         <source>B♭ 6</source>
-        <translation type="unfinished"></translation>
+        <translation>B♭ 6</translation>
     </message>
     <message>
         <source>C♯ 5</source>
-        <translation type="unfinished"></translation>
+        <translation>C♯ 5</translation>
     </message>
     <message>
         <source>E♭ 5</source>
-        <translation type="unfinished"></translation>
+        <translation>E♭ 5</translation>
     </message>
     <message>
         <source>F♯ 5</source>
-        <translation type="unfinished"></translation>
+        <translation>F♯ 5</translation>
     </message>
     <message>
         <source>A♭ 5</source>
-        <translation type="unfinished"></translation>
+        <translation>A♭ 5</translation>
     </message>
     <message>
         <source>B♭ 5</source>
-        <translation type="unfinished"></translation>
+        <translation>B♭ 5</translation>
     </message>
     <message>
         <source>C♯ 4</source>
-        <translation type="unfinished"></translation>
+        <translation>C♯ 4</translation>
     </message>
     <message>
         <source>E♭ 4</source>
-        <translation type="unfinished"></translation>
+        <translation>E♭ 4</translation>
     </message>
     <message>
         <source>F♯ 4</source>
-        <translation type="unfinished"></translation>
+        <translation>F♯ 4</translation>
     </message>
     <message>
         <source>A♭ 4</source>
-        <translation type="unfinished"></translation>
+        <translation>A♭ 4</translation>
     </message>
     <message>
         <source>B♭ 4</source>
-        <translation type="unfinished"></translation>
+        <translation>B♭ 4</translation>
     </message>
     <message>
         <source>C♯ 3</source>
-        <translation type="unfinished"></translation>
+        <translation>C♯ 3</translation>
     </message>
     <message>
         <source>E♭ 3</source>
-        <translation type="unfinished"></translation>
+        <translation>E♭ 3</translation>
     </message>
     <message>
         <source>F♯ 3</source>
-        <translation type="unfinished"></translation>
+        <translation>F♯ 3</translation>
     </message>
     <message>
         <source>A♭ 3</source>
-        <translation type="unfinished"></translation>
+        <translation>A♭ 3</translation>
     </message>
     <message>
         <source>B♭ 3</source>
-        <translation type="unfinished"></translation>
+        <translation>B♭ 3</translation>
     </message>
     <message>
         <source>C♯ 2</source>
-        <translation type="unfinished"></translation>
+        <translation>C♯ 2</translation>
     </message>
     <message>
         <source>E♭ 2</source>
-        <translation type="unfinished"></translation>
+        <translation>E♭ 2</translation>
     </message>
     <message>
         <source>F♯ 2</source>
-        <translation type="unfinished"></translation>
+        <translation>F♯ 2</translation>
     </message>
     <message>
         <source>A♭ 2</source>
-        <translation type="unfinished"></translation>
+        <translation>A♭ 2</translation>
     </message>
     <message>
         <source>B♭ 2</source>
-        <translation type="unfinished"></translation>
+        <translation>B♭ 2</translation>
     </message>
     <message>
         <source>C♯ 1</source>
-        <translation type="unfinished"></translation>
+        <translation>C♯ 1</translation>
     </message>
     <message>
         <source>E♭ 1</source>
-        <translation type="unfinished"></translation>
+        <translation>E♭ 1</translation>
     </message>
     <message>
         <source>F♯ 1</source>
-        <translation type="unfinished"></translation>
+        <translation>F♯ 1</translation>
     </message>
     <message>
         <source>A♭ 1</source>
-        <translation type="unfinished"></translation>
+        <translation>A♭ 1</translation>
     </message>
     <message>
         <source>B♭ 1</source>
-        <translation type="unfinished"></translation>
+        <translation>B♭ 1</translation>
     </message>
     <message>
         <source>C♯ 0</source>
-        <translation type="unfinished"></translation>
+        <translation>C♯ 0</translation>
     </message>
     <message>
         <source>E♭ 0</source>
-        <translation type="unfinished"></translation>
+        <translation>E♭ 0</translation>
     </message>
     <message>
         <source>F♯ 0</source>
-        <translation type="unfinished"></translation>
+        <translation>F♯ 0</translation>
     </message>
     <message>
         <source>A♭ 0</source>
-        <translation type="unfinished"></translation>
+        <translation>A♭ 0</translation>
     </message>
     <message>
         <source>B♭ 0</source>
-        <translation type="unfinished"></translation>
+        <translation>B♭ 0</translation>
     </message>
     <message>
         <source>C♯ -1</source>
-        <translation type="unfinished"></translation>
+        <translation>C♯ -1</translation>
     </message>
     <message>
         <source>E♭ -1</source>
-        <translation type="unfinished"></translation>
+        <translation>E♭ -1</translation>
     </message>
     <message>
         <source>F♯ -1</source>
-        <translation type="unfinished"></translation>
+        <translation>F♯ -1</translation>
     </message>
     <message>
         <source>A♭ -1</source>
-        <translation type="unfinished"></translation>
+        <translation>A♭ -1</translation>
     </message>
     <message>
         <source>B♭ -1</source>
-        <translation type="unfinished"></translation>
+        <translation>B♭ -1</translation>
     </message>
     <message>
         <source>»C</source>
-        <translation type="unfinished"></translation>
+        <translation>»C</translation>
     </message>
 </context>
 <context>
     <name>EditRaster</name>
     <message>
         <source>1 / </source>
-        <translation type="unfinished"></translation>
+        <translation>1 / </translation>
     </message>
     <message>
         <source>sp</source>
@@ -1145,42 +1158,42 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>MuseScore: Edit Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Broyt grind</translation>
     </message>
     <message>
         <source>Edit Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt grind</translation>
     </message>
     <message>
         <source>Horizontal grid:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vatnrætt grind:</translation>
     </message>
     <message>
         <source>Vertical  grid:</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrætt grind:</translation>
     </message>
 </context>
 <context>
     <name>EditStaffBase</name>
     <message>
         <source>MuseScore: Edit Staff/Part Properties</source>
-        <translation>MuseScore: Edit Stave/Part Properties</translation>
+        <translation>MuseScore: Broyt stav/Eginleikar partsins</translation>
     </message>
     <message>
         <source>Part Properties</source>
-        <translation>Part Properties</translation>
+        <translation>Eginleikar partsins</translation>
     </message>
     <message>
         <source>Change Instrument...</source>
-        <translation>Change Instrument…</translation>
+        <translation>Broyt ljóðføri...</translation>
     </message>
     <message>
         <source>Instrument:</source>
-        <translation>Instrument:</translation>
+        <translation>Ljóðføri:</translation>
     </message>
     <message>
         <source>Amateur:</source>
-        <translation>Amateur:</translation>
+        <translation>Leikfólk:</translation>
     </message>
     <message>
         <source>-</source>
@@ -1188,127 +1201,127 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Professional:</source>
-        <translation>Professional:</translation>
+        <translation>Serfrøðingur:</translation>
     </message>
     <message>
         <source>0 - Perfect Unison</source>
-        <translation type="unfinished"></translation>
+        <translation>0 - Reint Samljóð</translation>
     </message>
     <message>
         <source>1 - Augmented Unison</source>
-        <translation type="unfinished"></translation>
+        <translation>1 - Økt Samljóð</translation>
     </message>
     <message>
         <source>0 - Diminished Second</source>
-        <translation type="unfinished"></translation>
+        <translation>0 - Minka Tvíund</translation>
     </message>
     <message>
         <source>1 - Minor Second</source>
-        <translation type="unfinished"></translation>
+        <translation>1 - Lítil Tvíund</translation>
     </message>
     <message>
         <source>2 - Major Second</source>
-        <translation type="unfinished"></translation>
+        <translation>2 - Stór Tvíund</translation>
     </message>
     <message>
         <source>3 - Augmented Second</source>
-        <translation type="unfinished"></translation>
+        <translation>3 -  Økt Tvíund</translation>
     </message>
     <message>
         <source>2 - Diminished Third</source>
-        <translation type="unfinished"></translation>
+        <translation>2 - Minka Tríund</translation>
     </message>
     <message>
         <source>3 - Minor Third</source>
-        <translation type="unfinished"></translation>
+        <translation>3 - Lítil Tríund</translation>
     </message>
     <message>
         <source>4 - Major Third</source>
-        <translation type="unfinished"></translation>
+        <translation>4 - Stór Tríund</translation>
     </message>
     <message>
         <source>5 - Augmented Third</source>
-        <translation type="unfinished"></translation>
+        <translation>5 - Økt Tríund</translation>
     </message>
     <message>
         <source>4 - Diminished Fourth</source>
-        <translation type="unfinished"></translation>
+        <translation>4 - Minka Fjórðund</translation>
     </message>
     <message>
         <source>5 - Perfect Fourth</source>
-        <translation type="unfinished"></translation>
+        <translation>5 - Rein Fjórðund</translation>
     </message>
     <message>
         <source>6 - Augmented Fourth</source>
-        <translation type="unfinished"></translation>
+        <translation>6 - Økt Fjórðund</translation>
     </message>
     <message>
         <source>6 - Diminished Fifth</source>
-        <translation type="unfinished"></translation>
+        <translation>6 - Minka Fimmund</translation>
     </message>
     <message>
         <source>7 - Perfect Fifth</source>
-        <translation type="unfinished"></translation>
+        <translation>7 - Rein Fimmund</translation>
     </message>
     <message>
         <source>8 - Augmented Fifth</source>
-        <translation type="unfinished"></translation>
+        <translation>8 - Økt Fimmund</translation>
     </message>
     <message>
         <source>7 - Diminished Sixth</source>
-        <translation type="unfinished"></translation>
+        <translation>7 - Minka Seksund</translation>
     </message>
     <message>
         <source>8 - Minor Sixth</source>
-        <translation type="unfinished"></translation>
+        <translation>8 - Lítil Seksund</translation>
     </message>
     <message>
         <source>9 - Major Sixth</source>
-        <translation type="unfinished"></translation>
+        <translation>9 - Stór Seksund</translation>
     </message>
     <message>
         <source>10 - Augmented Sixth</source>
-        <translation type="unfinished"></translation>
+        <translation>10 - Økt Seksund</translation>
     </message>
     <message>
         <source>9 - Diminished Seventh</source>
-        <translation type="unfinished"></translation>
+        <translation>9 - Minka Sjeyund</translation>
     </message>
     <message>
         <source>10 - Minor Seventh</source>
-        <translation type="unfinished"></translation>
+        <translation>10 - Lítil Sjeyund</translation>
     </message>
     <message>
         <source>11 - Major Seventh</source>
-        <translation type="unfinished"></translation>
+        <translation>11 - Stór Sjeyund</translation>
     </message>
     <message>
         <source>12 - Augmented Seventh</source>
-        <translation type="unfinished"></translation>
+        <translation>12 - Økt Sjeyund</translation>
     </message>
     <message>
         <source>11 - Diminished Octave</source>
-        <translation type="unfinished"></translation>
+        <translation>11 - Minka Áttund</translation>
     </message>
     <message>
         <source>12 - Perfect Octave</source>
-        <translation type="unfinished"></translation>
+        <translation>12 - Rein Áttund</translation>
     </message>
     <message>
         <source>Number of strings:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tal av streingjum</translation>
     </message>
     <message>
         <source>Staff Properties</source>
-        <translation>Stave Properties</translation>
+        <translation>Eginleikar stavsins</translation>
     </message>
     <message>
         <source>Invisible staff lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Ósjónligar stavlinjur</translation>
     </message>
     <message>
         <source>Small staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Lítil stavur</translation>
     </message>
     <message>
         <source>sp</source>
@@ -1316,83 +1329,83 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staff line color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav striku litur</translation>
     </message>
     <message>
         <source>Part name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Raddarnavn</translation>
     </message>
     <message>
         <source>Long instrument name:</source>
-        <translation>Long Instrument Name:</translation>
+        <translation>Fulla navn ljóðførisins</translation>
     </message>
     <message>
         <source>Short instrument name:</source>
-        <translation>Short Instrument Name:</translation>
+        <translation>Stuttnevni ljóðførisins:</translation>
     </message>
     <message>
         <source>Usable pitch range:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tónaspenni</translation>
     </message>
     <message>
         <source>Play transposition:</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl broytt tónalag</translation>
     </message>
     <message>
         <source>+ Octave:</source>
-        <translation type="unfinished"></translation>
+        <translation>+ Áttund</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Yukarı</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Aşağı</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>Edit String Data...</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt streingja data</translation>
     </message>
     <message>
         <source>Show time signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís taktslag</translation>
     </message>
     <message>
         <source>Style group:</source>
-        <translation type="unfinished"></translation>
+        <translation>Snið bólkur:</translation>
     </message>
     <message>
         <source>Show barlines</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís taktstrikur</translation>
     </message>
     <message>
         <source>Show clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís lykil</translation>
     </message>
     <message>
         <source>Lines:</source>
-        <translation>Lines:</translation>
+        <translation>Strikur:</translation>
     </message>
     <message>
         <source>Line distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Strikufjarstøða</translation>
     </message>
     <message>
         <source>Extra distance above staff:</source>
-        <translation type="unfinished"></translation>
+        <translation>Størri fjarstøða omanfyri stav</translation>
     </message>
     <message>
         <source>Never hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym aldri</translation>
     </message>
     <message>
         <source>Do not hide if system is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym ikki um skipan er tóm</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Tónastigi</translation>
     </message>
     <message>
         <source>%</source>
@@ -1400,22 +1413,22 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Advanced Style Properties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Snið framkomnir eginleikar</translation>
     </message>
     <message>
         <source>Hide system barline</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym taktstrikur í skipanini</translation>
     </message>
 </context>
 <context>
     <name>EditStaffType</name>
     <message>
         <source>MuseScore: Edit Staff Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt stav slag</translation>
     </message>
     <message>
         <source>Lines:</source>
-        <translation>Lines:</translation>
+        <translation>Strikur:</translation>
     </message>
     <message>
         <source>sp</source>
@@ -1423,27 +1436,27 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>STANDARD STAFF</source>
-        <translation type="unfinished"></translation>
+        <translation>VANLIGUR STAVUR</translation>
     </message>
     <message>
         <source>Stemless</source>
-        <translation>stemless</translation>
+        <translation>Leggleyst</translation>
     </message>
     <message>
         <source>Create a new staff type of current group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Stovna nýtt stavslag í verandi bólki</translation>
     </message>
     <message>
         <source>Fret Marks</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandamerkir</translation>
     </message>
     <message>
         <source>Font:</source>
-        <translation>Font:</translation>
+        <translation>Stavsnið:</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation>Size:</translation>
+        <translation>Stødd:</translation>
     </message>
     <message>
         <source>pt</source>
@@ -1451,198 +1464,198 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Marks are:</source>
-        <translation type="unfinished"></translation>
+        <translation>Merkir eru:</translation>
     </message>
     <message>
         <source>Numbers</source>
-        <translation>Numbers</translation>
+        <translation>Tøl</translation>
     </message>
     <message>
         <source>Letters</source>
-        <translation type="unfinished"></translation>
+        <translation>Bókstavir</translation>
     </message>
     <message>
         <source>Marks are drawn:</source>
-        <translation type="unfinished"></translation>
+        <translation>Merkir eru teknaði:</translation>
     </message>
     <message>
         <source>Lines are:</source>
-        <translation type="unfinished"></translation>
+        <translation>Strikur eru:</translation>
     </message>
     <message>
         <source>Continuous</source>
-        <translation>Continue</translation>
+        <translation>Áhaldandi</translation>
     </message>
     <message>
         <source>Broken</source>
-        <translation type="unfinished"></translation>
+        <translation>Brotin</translation>
     </message>
     <message>
         <source>Note Values</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótavirði</translation>
     </message>
     <message>
         <source>Shown as:</source>
-        <translation type="unfinished"></translation>
+        <translation>Víst sum:</translation>
     </message>
     <message>
         <source>None</source>
-        <translation>eingin</translation>
+        <translation>Eingi</translation>
     </message>
     <message>
         <source>Stems and beams</source>
-        <translation type="unfinished"></translation>
+        <translation>Leggir og bjálkar</translation>
     </message>
     <message>
         <source>Stem style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg snið</translation>
     </message>
     <message>
         <source>Beside staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Víð síðuna av stavi</translation>
     </message>
     <message>
         <source>Through staff</source>
-        <translation type="unfinished"></translation>
+        <translation>í gjøgnum stav</translation>
     </message>
     <message>
         <source>Stem position:</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg plasering</translation>
     </message>
     <message>
         <source>Above</source>
-        <translation>Above</translation>
+        <translation>Omanfyri</translation>
     </message>
     <message>
         <source>Below</source>
-        <translation type="unfinished"></translation>
+        <translation>Niðanfyri</translation>
     </message>
     <message>
         <source>Half notes:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálvnótar:</translation>
     </message>
     <message>
         <source>As short stem</source>
-        <translation type="unfinished"></translation>
+        <translation>Sum stuttur leggur</translation>
     </message>
     <message>
         <source>As slashed stem</source>
-        <translation type="unfinished"></translation>
+        <translation>Sum skák leggur</translation>
     </message>
     <message>
         <source>Preview</source>
-        <translation>Preview</translation>
+        <translation>Undansýning</translation>
     </message>
     <message>
         <source>Line distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Striku fjarstøða</translation>
     </message>
     <message>
         <source>Show clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís lykil</translation>
     </message>
     <message>
         <source>Show time signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís taktslag</translation>
     </message>
     <message>
         <source>Show barlines</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís takt strikur</translation>
     </message>
     <message>
         <source>Vertical offset:</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrætt offsett</translation>
     </message>
     <message>
         <source>On lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Á strikum</translation>
     </message>
     <message>
         <source>Above lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Omanfyri strikum</translation>
     </message>
     <message>
         <source>Note symbols</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tekin</translation>
     </message>
     <message>
         <source>Upside down</source>
-        <translation type="unfinished"></translation>
+        <translation>Upp og niður</translation>
     </message>
     <message>
         <source>Show rests</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís tagnartekin</translation>
     </message>
     <message>
         <source>Add to Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat Skapilónir</translation>
     </message>
     <message>
         <source>Template:</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapilón</translation>
     </message>
     <message>
         <source>Show key signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís ljómslag</translation>
     </message>
     <message>
         <source>Show ledger lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís eykastrikur</translation>
     </message>
     <message>
         <source>Show Key signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís Ljómslag</translation>
     </message>
     <message>
         <source>&lt; Reset to Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Aftur til skabilón</translation>
     </message>
     <message>
         <source>Repeat:</source>
-        <translation type="unfinished"></translation>
+        <translation>Endurtøka:</translation>
     </message>
     <message>
         <source>Never</source>
-        <translation>Never</translation>
+        <translation>Aldrin</translation>
     </message>
     <message>
         <source>At new system</source>
-        <translation type="unfinished"></translation>
+        <translation>Við nýggju skipan</translation>
     </message>
     <message>
         <source>At new meas.</source>
-        <translation type="unfinished"></translation>
+        <translation>Við nýggju takt</translation>
     </message>
     <message>
         <source>Always</source>
-        <translation type="unfinished"></translation>
+        <translation>Altíð</translation>
     </message>
 </context>
 <context>
     <name>EditStringDataBase</name>
     <message>
         <source>String Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Streingja tilfar</translation>
     </message>
     <message>
         <source>Strings Tuning:</source>
-        <translation type="unfinished"></translation>
+        <translation>Streingja stemning:</translation>
     </message>
     <message>
         <source>New String...</source>
-        <translation type="unfinished"></translation>
+        <translation>Nýggjur strongur</translation>
     </message>
     <message>
         <source>Edit String...</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt strong...</translation>
     </message>
     <message>
         <source>Delete String</source>
-        <translation type="unfinished"></translation>
+        <translation>Strika strong</translation>
     </message>
     <message>
         <source>Number of frets:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tal av bondum</translation>
     </message>
     <message>
         <source>Open</source>
@@ -1650,95 +1663,95 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Pitch</source>
-        <translation>Pitch</translation>
+        <translation>Tónahædd</translation>
     </message>
 </context>
 <context>
     <name>EditStyleBase</name>
     <message>
         <source>MuseScore: Edit Style</source>
-        <translation>MuseScore: Edit Style</translation>
+        <translation>MuseScore: Broyt snið</translation>
     </message>
     <message>
         <source>Score</source>
-        <translation>Score</translation>
+        <translation>Raddskrá</translation>
     </message>
     <message>
         <source>Page</source>
-        <translation>Page</translation>
+        <translation>Síða</translation>
     </message>
     <message>
         <source>Header, Footer, Numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Teksthøvd, tekstfótur, tøl</translation>
     </message>
     <message>
         <source>System</source>
         <extracomment>a music system, a line of music</extracomment>
-        <translation>System</translation>
+        <translation>Kervi</translation>
     </message>
     <message>
         <source>Measure</source>
-        <translation>Bar</translation>
+        <translation>Mál</translation>
     </message>
     <message>
         <source>Barlines</source>
-        <translation>Bar lines</translation>
+        <translation>Málstrikur</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notes</translation>
+        <translation>Nótar</translation>
     </message>
     <message>
         <source>Clefs</source>
-        <translation>Clefs</translation>
+        <translation>Lyklar</translation>
     </message>
     <message>
         <source>Arpeggios</source>
-        <translation>Arpeggios</translation>
+        <translation>Brotin ljómur</translation>
     </message>
     <message>
         <source>Beams</source>
-        <translation>Beams</translation>
+        <translation>Bogar</translation>
     </message>
     <message>
         <source>Slurs/Ties</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindibogar</translation>
     </message>
     <message>
         <source>Sizes</source>
-        <translation>Sizes</translation>
+        <translation>Støddir</translation>
     </message>
     <message>
         <source>Hairpins, Volta, Ottava</source>
-        <translation type="unfinished"></translation>
+        <translation>Hárnál, endurtøkutekin, áttund </translation>
     </message>
     <message>
         <source>Pedal, Trill</source>
-        <translation type="unfinished"></translation>
+        <translation>Pedal, Trilla</translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Besiffraður bassur</translation>
     </message>
     <message>
         <source>Articulations, Ornaments</source>
-        <translation>Articulations, Ornaments</translation>
+        <translation>Ljóðmyndan, prýði</translation>
     </message>
     <message>
         <source>Accidentals</source>
-        <translation>Accidentals</translation>
+        <translation>Fortekn</translation>
     </message>
     <message>
         <source>Tuplets</source>
-        <translation>Tuplets</translation>
+        <translation>Nótabólkar</translation>
     </message>
     <message>
         <source>Display in concert pitch</source>
-        <translation>Display in Concert Pitch</translation>
+        <translation>Sýn í sannari tónahædd</translation>
     </message>
     <message>
         <source>Minimum width of measure:</source>
-        <translation type="unfinished"></translation>
+        <translation>Minsta vídd á takt</translation>
     </message>
     <message>
         <source>sp</source>
@@ -1749,335 +1762,335 @@ space unit</extracomment>
     </message>
     <message>
         <source>Minimum number of empty measures:</source>
-        <translation>Minimum Number of empty bars:</translation>
+        <translation>Lágmark tómra mála:</translation>
     </message>
     <message>
         <source>Hide empty staves</source>
-        <translation>Hide Empty Staves</translation>
+        <translation>Fjal tómar stavir</translation>
     </message>
     <message>
         <source>Don&apos;t hide empty staves in first system</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikki goyma tómar stavir í fyrstu skipan</translation>
     </message>
     <message>
         <source>Display note values across measure bar (EXPERIMENTAL, early music only!)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís nótavirði yvir um taktstriku (ROYND, bert gamalur tónleikur!)</translation>
     </message>
     <message>
         <source>Music top margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tónleikur ovari breddi</translation>
     </message>
     <message>
         <source>Create clef for all systems</source>
-        <translation>Create clef for all systems</translation>
+        <translation>Ger lykil fyri allar skipanir</translation>
     </message>
     <message>
         <source>Music bottom margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tónleikur niðari breddi</translation>
     </message>
     <message>
         <source>Staff distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav fjarstøða</translation>
     </message>
     <message>
         <source>Grand staff distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvuðs stavs fjarstøða</translation>
     </message>
     <message>
         <source>Min. system distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Minsta skipan fjarstøða</translation>
     </message>
     <message>
         <source>Lyrics top margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekstur ovari breddi</translation>
     </message>
     <message>
         <source>Lyrics bottom margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekstur niðari breddi</translation>
     </message>
     <message>
         <source>Vertical frame top margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrøtt ramma ovari breddi</translation>
     </message>
     <message>
         <source>Vertical frame bottom margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrøtt ramma niðari breddi</translation>
     </message>
     <message>
         <source>Create courtesy clefs</source>
-        <translation type="unfinished"></translation>
+        <translation>Stovna hjálpilykil</translation>
     </message>
     <message>
         <source>Create courtesy time signatures</source>
-        <translation>Create courtesy time signatures</translation>
+        <translation>Stovna hjálpi takt tekin</translation>
     </message>
     <message>
         <source>Create key signature for all systems</source>
-        <translation type="unfinished"></translation>
+        <translation>Stovna ljómslagstekin fyri allar skipanir</translation>
     </message>
     <message>
         <source>Create courtesy key signatures</source>
-        <translation>Create courtesy key signatures</translation>
+        <translation>Stovna hjálpi ljómslagstekin</translation>
     </message>
     <message>
         <source>Lyrics line height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst striku hædd</translation>
     </message>
     <message>
         <source>Max. system distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesta fjarstøða millum skipanir</translation>
     </message>
     <message>
         <source>Last system fill threshold:</source>
-        <translation>Last system fill threshold</translation>
+        <translation>Seinasta skipan fyll lægsta mark</translation>
     </message>
     <message>
         <source>Show first</source>
-        <translation>ilk göster</translation>
+        <translation>Vís fyrst</translation>
     </message>
     <message>
         <source>Odd/Even</source>
-        <translation>tek/çift</translation>
+        <translation>Stak/Maka</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation>Left</translation>
+        <translation>Vinstra</translation>
     </message>
     <message>
         <source>Middle</source>
-        <translation>MIDDLE</translation>
+        <translation>Miðja</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Høgra</translation>
     </message>
     <message>
         <source>Even</source>
-        <translation type="unfinished"></translation>
+        <translation>Maka</translation>
     </message>
     <message>
         <source>Odd</source>
-        <translation type="unfinished"></translation>
+        <translation>Stak</translation>
     </message>
     <message>
         <source>All staves</source>
-        <translation type="unfinished"></translation>
+        <translation>Allir stavir</translation>
     </message>
     <message>
         <source>Every system</source>
-        <translation>every system</translation>
+        <translation>Allar skipanir</translation>
     </message>
     <message>
         <source>System bracket distance:</source>
-        <translation>System Bracket Distance:</translation>
+        <translation>Klombur skipan fjarstøða:</translation>
     </message>
     <message>
         <source>Brace distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Reim fjarstøða:</translation>
     </message>
     <message>
         <source>Spacing (1=tight):</source>
-        <translation type="unfinished"></translation>
+        <translation>Glopp (1=tætt):</translation>
     </message>
     <message>
         <source>Minimum measure width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Minsta taktvídd:</translation>
     </message>
     <message>
         <source>Note to barline distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>fjarstøða nóti - taktstrika:</translation>
     </message>
     <message>
         <source>Barline to note distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarstøða taktstrika - nóti:</translation>
     </message>
     <message>
         <source>Clef left margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lykil vinstri breddi:</translation>
     </message>
     <message>
         <source>Minimum note distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Minsta nóta fjarstøða:</translation>
     </message>
     <message>
         <source>Key signature left margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljómslag vinstri breddi</translation>
     </message>
     <message>
         <source>Time signature left margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>taktslag vinstri breddi:</translation>
     </message>
     <message>
         <source>Clef/Key right margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lykil/ljómslag høgri breddi:</translation>
     </message>
     <message>
         <source>Clef to barline distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarstøða lykil - taktstrika:</translation>
     </message>
     <message>
         <source>Staff line thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav striku vídd:</translation>
     </message>
     <message>
         <source>Barline to accidental distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarstøða taktstrika - leys fortekin:</translation>
     </message>
     <message>
         <source>Show repeat bar tips (&quot;winged&quot; repeats)</source>
-        <translation>Show repeat bar tips (&quot;winged&quot; repeats)</translation>
+        <translation>Vís endurtøku taktar prei</translation>
     </message>
     <message>
         <source>Barline at start of single staff</source>
-        <translation>Bar line at start of single stave</translation>
+        <translation>Taktstrika við byrjan av stak stavi</translation>
     </message>
     <message>
         <source>Barline at start of multiple staves</source>
-        <translation>Bar line at start of multiple staves</translation>
+        <translation>Taktstrika við byrjan av fleiri stavum</translation>
     </message>
     <message>
         <source>Barline thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Taktstriku vídd:</translation>
     </message>
     <message>
         <source>End barline thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Enda taktstriku vídd:</translation>
     </message>
     <message>
         <source>End barline distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Enda taktstriku fjarstøða:</translation>
     </message>
     <message>
         <source>Double barline thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupul taktstriku vídd:</translation>
     </message>
     <message>
         <source>Double barline distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupul taktstriku fjarstøða:</translation>
     </message>
     <message>
         <source>Shorten stems</source>
-        <translation type="unfinished"></translation>
+        <translation>Stytt leggir</translation>
     </message>
     <message>
         <source>Progression:</source>
-        <translation type="unfinished"></translation>
+        <translation>Framgonga:</translation>
     </message>
     <message>
         <source>Shortest stem:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stytsti leggur:</translation>
     </message>
     <message>
         <source>Accidental note distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Leys fortekin nóta fjarstøða:</translation>
     </message>
     <message>
         <source>Accidental distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Leys fortekin fjarstøða:</translation>
     </message>
     <message>
         <source>Note dot distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóti prikkur fjarstøða:</translation>
     </message>
     <message>
         <source>Dot dot distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikkur prikkur fjarstøða:</translation>
     </message>
     <message>
         <source>Ledger line thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Eykastriku vídd</translation>
     </message>
     <message>
         <source>Ledger line length:</source>
-        <translation type="unfinished"></translation>
+        <translation>Eykastriku longd:</translation>
     </message>
     <message>
         <source>Stem thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg vídd:</translation>
     </message>
     <message>
         <source>Dot size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikkur stødd:</translation>
     </message>
     <message>
         <source>Distance to note:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarstøða til nóta:</translation>
     </message>
     <message>
         <source>Line thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Strikuvídd:</translation>
     </message>
     <message>
         <source>Hook length:</source>
-        <translation type="unfinished"></translation>
+        <translation>Krókur longd:</translation>
     </message>
     <message>
         <source>Beam thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bjálki vídd:</translation>
     </message>
     <message>
         <source>Beam distance (in beam thickness units):</source>
-        <translation type="unfinished"></translation>
+        <translation>Bjálki fjarstøða (bjálkavídd eindir):</translation>
     </message>
     <message>
         <source>Broken beam minimum length:</source>
-        <translation type="unfinished"></translation>
+        <translation>Brotin bjálki minsta longd:</translation>
     </message>
     <message>
         <source>Flatten all beams</source>
-        <translation type="unfinished"></translation>
+        <translation>Javna allar bjálkar</translation>
     </message>
     <message>
         <source>Line thickness at end:</source>
-        <translation type="unfinished"></translation>
+        <translation>Strikuvídd endi:</translation>
     </message>
     <message>
         <source>Line thickness middle:</source>
-        <translation type="unfinished"></translation>
+        <translation>Strikuvídd miðja:</translation>
     </message>
     <message>
         <source>Dotted line thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikkut striku vídd:</translation>
     </message>
     <message>
         <source>Small staff size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lítil stavur stødd:</translation>
     </message>
     <message>
         <source>Small note size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lítil nóti stødd:</translation>
     </message>
     <message>
         <source>Grace note size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Skreyt nóti stødd:</translation>
     </message>
     <message>
         <source>Small clef size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lítil lykil stødd:</translation>
     </message>
     <message>
         <source>Hairpins</source>
-        <translation>Hairpins</translation>
+        <translation>Hárnálir</translation>
     </message>
     <message>
         <source>Height:</source>
-        <translation>Height</translation>
+        <translation>Hædd:</translation>
     </message>
     <message>
         <source>Default vertical position:</source>
-        <translation type="unfinished"></translation>
+        <translation>Forsett loddrøtt plasering:</translation>
     </message>
     <message>
         <source>Volta</source>
-        <translation>Volta</translation>
+        <translation>Hús</translation>
     </message>
     <message>
         <source>Hook height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Krókur hædd:</translation>
     </message>
     <message>
         <source>Line style:</source>
-        <translation>Line style:</translation>
+        <translation>Striku snið:</translation>
     </message>
     <message>
         <source>Ottava</source>
@@ -2085,15 +2098,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Pedal Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Pedal strika</translation>
     </message>
     <message>
         <source>Trill Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Trillu strika</translation>
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Framkoma</translation>
     </message>
     <message>
         <source>Standard</source>
@@ -2101,43 +2114,43 @@ space unit</extracomment>
     </message>
     <message>
         <source>Jazz</source>
-        <translation type="unfinished"></translation>
+        <translation>Jazz</translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Sergjørd</translation>
     </message>
     <message>
         <source>Load chords.xml</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak fram akkord.xml</translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Týskt</translation>
     </message>
     <message>
         <source>Solfeggio</source>
-        <translation type="unfinished"></translation>
+        <translation>Solfeggio</translation>
     </message>
     <message>
         <source>Lower case minor chords</source>
-        <translation type="unfinished"></translation>
+        <translation>Smáir bókstavir moll akkordir</translation>
     </message>
     <message>
         <source>Positioning</source>
-        <translation type="unfinished"></translation>
+        <translation>Plasering</translation>
     </message>
     <message>
         <source>Minimum chord spacing:</source>
-        <translation type="unfinished"></translation>
+        <translation>Minsta akkord fjarstøða</translation>
     </message>
     <message>
         <source>Font:</source>
-        <translation>Font:</translation>
+        <translation>Funtur:</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation>Size:</translation>
+        <translation>Stødd:</translation>
     </message>
     <message>
         <source>pt</source>
@@ -2145,43 +2158,43 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Striku hædd</translation>
     </message>
     <message>
         <source>Vertical position:</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrøtt plasering:</translation>
     </message>
     <message>
         <source>from top of staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Frá toppi av stavi</translation>
     </message>
     <message>
         <source>of font height</source>
-        <translation type="unfinished"></translation>
+        <translation>Av funtarhædd</translation>
     </message>
     <message>
         <source>Alignment</source>
-        <translation type="unfinished"></translation>
+        <translation>Í beinum rað</translation>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Toppur</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Botnur</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Style</translation>
+        <translation>Snið</translation>
     </message>
     <message>
         <source>Modern</source>
-        <translation type="unfinished"></translation>
+        <translation>Modernaður</translation>
     </message>
     <message>
         <source>Historic</source>
-        <translation type="unfinished"></translation>
+        <translation>Søguligur</translation>
     </message>
     <message>
         <source>sp</source>
@@ -2190,139 +2203,139 @@ space unit</extracomment>
     </message>
     <message>
         <source>Articulation distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Framburður fjarstøða</translation>
     </message>
     <message>
         <source>Note head distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótahøvd fjarstøða</translation>
     </message>
     <message>
         <source>Articulation size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Framburður stødd:</translation>
     </message>
     <message>
         <source>Accidental</source>
-        <translation>Accidental</translation>
+        <translation>Leys fortekn</translation>
     </message>
     <message>
         <source>Maximum slope:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hámarks hall</translation>
     </message>
     <message>
         <source>Vertical distance from stem:</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrøtt fjarstøða til legg</translation>
     </message>
     <message>
         <source>Avoid the staves</source>
-        <translation type="unfinished"></translation>
+        <translation>Slepp undan stavum</translation>
     </message>
     <message>
         <source>Distance before the stem of the first note:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarstøða til legg á fyrsta nóta:</translation>
     </message>
     <message>
         <source>Distance before the head of the first note:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarstøða til høvd á fyrsta nóta:</translation>
     </message>
     <message>
         <source>Distance after the stem of the last note:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarstøða aftaná legg á seinasta nóta:</translation>
     </message>
     <message>
         <source>Distance after the head of the last note:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarstøða aftaná høvd á síðsta tóna:</translation>
     </message>
     <message>
         <source>Distance to fretboard diagram:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarstøða til bandaborð diagramm</translation>
     </message>
     <message>
         <source>Chord Symbols</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord symbol</translation>
     </message>
     <message>
         <source>Chord symbols style file:</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord symbol snið fíla:</translation>
     </message>
     <message>
         <source>Capo</source>
-        <translation type="unfinished"></translation>
+        <translation>Capo</translation>
     </message>
     <message>
         <source>Vertical distance from note head:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lodrøtt fjarstøða frá nóta høvdi:</translation>
     </message>
     <message>
         <source>Capo fret position:</source>
-        <translation type="unfinished"></translation>
+        <translation>Capo band plasering:</translation>
     </message>
     <message>
         <source>Semitones offset</source>
-        <translation type="unfinished"></translation>
+        <translation>hálvtónar offsett</translation>
     </message>
     <message>
         <source>Cents offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Centar offsett</translation>
     </message>
     <message>
         <source>A, B♭, B, C, C♯, ...</source>
-        <translation type="unfinished"></translation>
+        <translation>A, B♭, B, C, C♯, ...</translation>
     </message>
     <message>
         <source>Chord Symbols, Fretboard Diagrams</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord symbol, bandaborð diagramm</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandaborð diagramm</translation>
     </message>
     <message>
         <source>Fret offset number font size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Band offsett, tal funtur stødd:</translation>
     </message>
     <message>
         <source>Position:</source>
-        <translation type="unfinished"></translation>
+        <translation>Plasering:</translation>
     </message>
     <message>
         <source>Minimum tie length:</source>
-        <translation type="unfinished"></translation>
+        <translation>Minsta bindiboga longd:</translation>
     </message>
     <message>
         <source>Interval:</source>
-        <translation type="unfinished"></translation>
+        <translation>Interval:</translation>
     </message>
     <message>
         <source>Hide instrument name if there is only 1 instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym ljóðførisnavn um bert 1 ljóðføri</translation>
     </message>
     <message>
         <source>Maximum barline distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesta taktstriku fjarstøða</translation>
     </message>
     <message>
         <source>Standard TAB clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Normalur TAB lykil</translation>
     </message>
     <message>
         <source>Serif TAB clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Serif TAB lykil</translation>
     </message>
     <message>
         <source>Swing Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Swing stilling</translation>
     </message>
     <message>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Av</translation>
     </message>
     <message>
         <source>Eighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttandapartur</translation>
     </message>
     <message>
         <source>Sixteenth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekstandapartur</translation>
     </message>
     <message>
         <source>%</source>
@@ -2330,7 +2343,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Musical symbols font:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tónleika symbol funtur:</translation>
     </message>
     <message>
         <source>Swing:</source>
@@ -2338,237 +2351,237 @@ space unit</extracomment>
     </message>
     <message>
         <source>Select swing ratio:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel swing lutfall:</translation>
     </message>
     <message>
         <source>Musical text font:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tónleika tekst funtur:</translation>
     </message>
     <message>
         <source>Emmentaler Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Emmentaler tekstur</translation>
     </message>
     <message>
         <source>Bravura Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Bravura tekstur</translation>
     </message>
     <message>
         <source>Gonville Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Gonville tekstur</translation>
     </message>
     <message>
         <source>Show header also on first page</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís teksthøvd eisini á fyrstu síðu</translation>
     </message>
     <message>
         <source>Show footer also on first page</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís tekstfót eisini á fyrstu síðu</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
     <message>
         <source>Use odd/even page header</source>
-        <translation type="unfinished"></translation>
+        <translation>Nýt stak/maka síðu teksthøvd</translation>
     </message>
     <message>
         <source>Use odd/even page footer</source>
-        <translation type="unfinished"></translation>
+        <translation>Nýt stak/maka síðu fót</translation>
     </message>
     <message>
         <source>System bracket thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Skipan: Klombur tjúkt</translation>
     </message>
     <message>
         <source>Brace thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Reim tjýkd</translation>
     </message>
     <message>
         <source>Continue height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Verðandi hædd:</translation>
     </message>
     <message>
         <source>Continuous</source>
-        <translation>Continue</translation>
+        <translation>Hald fram</translation>
     </message>
     <message>
         <source>Dashed</source>
-        <translation>Dashed</translation>
+        <translation>Strikaður</translation>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikka</translation>
     </message>
     <message>
         <source>Dash-dotted</source>
-        <translation type="unfinished"></translation>
+        <translation>Striku-prikka</translation>
     </message>
     <message>
         <source>Dash-dot-dotted</source>
-        <translation type="unfinished"></translation>
+        <translation>Striku-prik-prikka</translation>
     </message>
     <message>
         <source>Numbers only</source>
-        <translation type="unfinished"></translation>
+        <translation>Bert tøl</translation>
     </message>
     <message>
         <source>Header Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvd tekstur</translation>
     </message>
     <message>
         <source>Footer Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekstfótur tekstur</translation>
     </message>
     <message>
         <source>Measure Numbers</source>
-        <translation>Bar Numbers</translation>
+        <translation>Takt nummar</translation>
     </message>
     <message>
         <source>Default TAB Clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Forsettur TAB lykil</translation>
     </message>
     <message>
         <source>Naturals in Key Signatures</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóti uttan fortekin í ljómslagstekni</translation>
     </message>
     <message>
         <source>Vertical Distance from the Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrøtt fjarstøða frá nótunum</translation>
     </message>
     <message>
         <source>Horizontal Distance from the Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Vatnrødd fjarstøða frá nótunum</translation>
     </message>
     <message>
         <source>Only for a change to C Maj / A min</source>
-        <translation type="unfinished"></translation>
+        <translation>Bert broyting til C dur/A moll</translation>
     </message>
     <message>
         <source>Create multimeasure rests</source>
-        <translation type="unfinished"></translation>
+        <translation>Stovna fleirtakta tøgn</translation>
     </message>
     <message>
         <source>Multimeasure rest margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fleirtakta tøgn breddi:</translation>
     </message>
     <message>
         <source>Before key signature if changing to fewer sharps or flats</source>
-        <translation type="unfinished"></translation>
+        <translation>Áðrenn ljómslagsbroyting um broyting til færri fortekin</translation>
     </message>
     <message>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
-        <translation type="unfinished"></translation>
+        <translation>Aftaná ljómslagstekin um broyting til færri fortekin. Áðrenn um broyting frá/til b og #</translation>
     </message>
     <message>
         <source>A, B♭, H, C, C♯, ...</source>
-        <translation type="unfinished"></translation>
+        <translation>A, B♭, H, C, C♯, ...</translation>
     </message>
     <message>
         <source>A, B, H, C, Cis</source>
-        <translation type="unfinished"></translation>
+        <translation>A, B, H, C, Cis</translation>
     </message>
     <message>
         <source>Full German</source>
-        <translation type="unfinished"></translation>
+        <translation>Fult týskt</translation>
     </message>
     <message>
         <source>Do, Do♯, Re♭, Re, ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Do, Do♯, Re♭, Re, ...</translation>
     </message>
     <message>
         <source>Do, Do♯, Ré♭, Ré, ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Do, Do♯, Ré♭, Ré, ...</translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Franskt</translation>
     </message>
     <message>
         <source>Lower case bass notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Bass tónar smáir bókstavir</translation>
     </message>
     <message>
         <source>All caps note names</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta nøvn stórir bókstavir</translation>
     </message>
     <message>
         <source>Note Spelling</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta staviháttur</translation>
     </message>
     <message>
         <source>Automatic Capitalization</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisk kapitalisering</translation>
     </message>
     <message>
         <source>Vertical frame upper margin</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrøtt ramma ovari breddi</translation>
     </message>
     <message>
         <source>Vertical frame lower margin</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrøtt ramma niðari breddi</translation>
     </message>
     <message>
         <source>Scale:</source>
-        <translation>Scale:</translation>
+        <translation>Stigi:</translation>
     </message>
     <message>
         <source>Barré line thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Barré striku vídd:</translation>
     </message>
     <message>
         <source>Scale barlines to staff size</source>
-        <translation type="unfinished"></translation>
+        <translation>Passa taktstrikur til stavstødd</translation>
     </message>
     <message>
         <source>Barline to grace note distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarstøða taktstrika - skreytnóti:</translation>
     </message>
 </context>
 <context>
     <name>ExcerptsDialog</name>
     <message>
         <source>MuseScore: Parts</source>
-        <translation>MuseScore: Parts</translation>
+        <translation>MuseScore: Partar</translation>
     </message>
     <message>
         <source>Instrument:</source>
-        <translation>Instrument:</translation>
+        <translation>Ljóðføri:</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Delete</translation>
+        <translation>Sletta</translation>
     </message>
     <message>
         <source>New All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt nýtt</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>New</translation>
+        <translation>Nýtt</translation>
     </message>
     <message>
         <source>Part title:</source>
-        <translation type="unfinished"></translation>
+        <translation>Parts heiti</translation>
     </message>
     <message>
         <source>Edit Part</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt part</translation>
     </message>
     <message>
         <source>Select Part</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel part</translation>
     </message>
 </context>
 <context>
     <name>FluidGui</name>
     <message>
         <source>Up</source>
-        <translation>Yukarı</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Aşağı</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -2576,102 +2589,102 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add</source>
-        <translation>Add</translation>
+        <translation>Skoyt uppí</translation>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Sound Fonts</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóð funtur</translation>
     </message>
     <message>
         <source>SoundFont %1 already loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðfuntur %1 longu frammi</translation>
     </message>
     <message>
         <source>Cannot load SoundFont %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki taka fram ljóðfunt %1</translation>
     </message>
 </context>
 <context>
     <name>FretDiagramProperties</name>
     <message>
         <source>Strings:</source>
-        <translation type="unfinished"></translation>
+        <translation>Streingir:</translation>
     </message>
     <message>
         <source>Frets:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bond:</translation>
     </message>
     <message>
         <source>MuseScore: Fretboard Diagram Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Bandaborð yvirlit eginleikar</translation>
     </message>
 </context>
 <context>
     <name>GlissandoProperties</name>
     <message>
         <source>MuseScore: Glissando Properties</source>
-        <translation>MuseScore: Glissando Properties</translation>
+        <translation>MuseScore: Glissando eginleikar</translation>
     </message>
     <message>
         <source>Show Text</source>
-        <translation>Show Text</translation>
+        <translation>Vís tekst</translation>
     </message>
     <message>
         <source>Text:</source>
-        <translation>Text:</translation>
+        <translation>Tekstur</translation>
     </message>
 </context>
 <context>
     <name>GreendotButton</name>
     <message>
         <source>Record</source>
-        <translation>record</translation>
+        <translation>Upptak</translation>
     </message>
 </context>
 <context>
     <name>ImportMidiPanel</name>
     <message>
         <source>Close MIDI import panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Stong MIDI flyt inn panel</translation>
     </message>
     <message>
         <source>Move track up</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt spor upp</translation>
     </message>
     <message>
         <source>Move track down</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt spor niður</translation>
     </message>
     <message>
         <source>Text charset:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst kodur:</translation>
     </message>
     <message>
         <source>Apply MIDI import operations</source>
-        <translation type="unfinished"></translation>
+        <translation>Brúka Midi innflyt atgerð</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation>Apply</translation>
+        <translation>Brúka</translation>
     </message>
     <message>
         <source>Cancel not applied MIDI import operations</source>
-        <translation type="unfinished"></translation>
+        <translation>Strika ikki nýtt Midi innflyt atgerðir</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Vazgeç</translation>
+        <translation>Strika</translation>
     </message>
 </context>
 <context>
     <name>InsertMeasuresDialogBase</name>
     <message>
         <source>Mscore: Insert Measures</source>
-        <translation>Mscore: Insert Bars</translation>
+        <translation>Mscore: Innset taktir</translation>
     </message>
     <message>
         <source>OK</source>
@@ -2679,45 +2692,45 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>Strika</translation>
     </message>
     <message>
         <source>Insert empty measures</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn tómar taktir</translation>
     </message>
     <message>
         <source>Number of measures to insert:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tal av taktum at seta inn</translation>
     </message>
 </context>
 <context>
     <name>InspectorAccidental</name>
     <message>
         <source>Accidental</source>
-        <translation>Accidental</translation>
+        <translation>Leys fortekn</translation>
     </message>
     <message>
         <source>Small</source>
-        <translation>small</translation>
+        <translation>Lítil</translation>
     </message>
     <message>
         <source>Accidental Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Leys fortekin inspektor</translation>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla smá virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
 </context>
 <context>
     <name>InspectorAmbitus</name>
     <message>
         <source>Head group</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvd bólkur</translation>
     </message>
     <message>
         <source>sp</source>
@@ -2725,15 +2738,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Bottom note</source>
-        <translation type="unfinished"></translation>
+        <translation>Botn nóti</translation>
     </message>
     <message>
         <source>C♭♭</source>
-        <translation type="unfinished"></translation>
+        <translation>C♭♭</translation>
     </message>
     <message>
         <source>C♭</source>
-        <translation type="unfinished"></translation>
+        <translation>C♭</translation>
     </message>
     <message>
         <source>C</source>
@@ -2741,19 +2754,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>C♯</source>
-        <translation type="unfinished"></translation>
+        <translation>C♯</translation>
     </message>
     <message>
         <source>C♯♯</source>
-        <translation type="unfinished"></translation>
+        <translation>C♯♯</translation>
     </message>
     <message>
         <source>D♭♭</source>
-        <translation type="unfinished"></translation>
+        <translation>D♭♭</translation>
     </message>
     <message>
         <source>D♭</source>
-        <translation type="unfinished"></translation>
+        <translation>D♭</translation>
     </message>
     <message>
         <source>D</source>
@@ -2761,39 +2774,39 @@ space unit</extracomment>
     </message>
     <message>
         <source>D♯</source>
-        <translation type="unfinished"></translation>
+        <translation>D♯</translation>
     </message>
     <message>
         <source>D♯♯</source>
-        <translation type="unfinished"></translation>
+        <translation>D♯♯</translation>
     </message>
     <message>
         <source>E♭♭</source>
-        <translation type="unfinished"></translation>
+        <translation>E♭♭</translation>
     </message>
     <message>
         <source>E♭</source>
-        <translation type="unfinished"></translation>
+        <translation>E♭</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>C</translation>
+        <translation>E</translation>
     </message>
     <message>
         <source>E♯</source>
-        <translation type="unfinished"></translation>
+        <translation>E♯</translation>
     </message>
     <message>
         <source>E♯♯</source>
-        <translation type="unfinished"></translation>
+        <translation>E♯♯</translation>
     </message>
     <message>
         <source>F♭♭</source>
-        <translation type="unfinished"></translation>
+        <translation>F♭♭</translation>
     </message>
     <message>
         <source>F♭</source>
-        <translation type="unfinished"></translation>
+        <translation>F♭</translation>
     </message>
     <message>
         <source>F</source>
@@ -2801,19 +2814,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>F♯</source>
-        <translation type="unfinished"></translation>
+        <translation>F♯</translation>
     </message>
     <message>
         <source>F♯♯</source>
-        <translation type="unfinished"></translation>
+        <translation>F♯♯</translation>
     </message>
     <message>
         <source>G♭♭</source>
-        <translation type="unfinished"></translation>
+        <translation>G♭♭</translation>
     </message>
     <message>
         <source>G♭</source>
-        <translation type="unfinished"></translation>
+        <translation>G♭</translation>
     </message>
     <message>
         <source>G</source>
@@ -2821,19 +2834,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>G♯</source>
-        <translation type="unfinished"></translation>
+        <translation>G♯</translation>
     </message>
     <message>
         <source>G♯♯</source>
-        <translation type="unfinished"></translation>
+        <translation>G♯♯</translation>
     </message>
     <message>
         <source>A♭♭</source>
-        <translation type="unfinished"></translation>
+        <translation>A♭♭</translation>
     </message>
     <message>
         <source>A♭</source>
-        <translation type="unfinished"></translation>
+        <translation>A♭</translation>
     </message>
     <message>
         <source>A</source>
@@ -2841,43 +2854,43 @@ space unit</extracomment>
     </message>
     <message>
         <source>A♯</source>
-        <translation type="unfinished"></translation>
+        <translation>A♯</translation>
     </message>
     <message>
         <source>A♯♯</source>
-        <translation type="unfinished"></translation>
+        <translation>A♯♯</translation>
     </message>
     <message>
         <source>B♭♭</source>
-        <translation type="unfinished"></translation>
+        <translation>B♭♭</translation>
     </message>
     <message>
         <source>B♭</source>
-        <translation>H</translation>
+        <translation>B♭</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>H</translation>
+        <translation>B</translation>
     </message>
     <message>
         <source>B♯</source>
-        <translation type="unfinished"></translation>
+        <translation>B♯</translation>
     </message>
     <message>
         <source>B♯♯</source>
-        <translation type="unfinished"></translation>
+        <translation>B♯♯</translation>
     </message>
     <message>
         <source>Oct </source>
-        <translation type="unfinished"></translation>
+        <translation>Átt.</translation>
     </message>
     <message>
         <source>Has line</source>
-        <translation type="unfinished"></translation>
+        <translation>Has strika</translation>
     </message>
     <message>
         <source>Top note</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovasti nóti</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -2885,71 +2898,71 @@ space unit</extracomment>
     </message>
     <message>
         <source>Whole</source>
-        <translation type="unfinished"></translation>
+        <translation>Heilur</translation>
     </message>
     <message>
         <source>Half</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálvur</translation>
     </message>
     <message>
         <source>Quarter</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvartur</translation>
     </message>
     <message>
         <source>Breve</source>
-        <translation type="unfinished"></translation>
+        <translation>Breve</translation>
     </message>
     <message>
         <source>Head type</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvd slag</translation>
     </message>
     <message>
         <source>Update Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Dagfør úrval</translation>
     </message>
     <message>
         <source>Direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Leið</translation>
     </message>
     <message>
         <source>Upright</source>
-        <translation type="unfinished"></translation>
+        <translation>Vanligt klaver</translation>
     </message>
     <message>
         <source>Leaning Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Helling vinstru</translation>
     </message>
     <message>
         <source>Leaning Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Helling høgru</translation>
     </message>
     <message>
         <source>Ambitus Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Ambitus inspektor</translation>
     </message>
     <message>
         <source>Oct</source>
-        <translation type="unfinished"></translation>
+        <translation>Átt</translation>
     </message>
     <message>
         <source>Reset Has line value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla Has striku virði</translation>
     </message>
     <message>
         <source>Reset Head group value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla høvd bólka virði</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla leið virði</translation>
     </message>
     <message>
         <source>Update range</source>
-        <translation type="unfinished"></translation>
+        <translation>Dagfør tónaøki</translation>
     </message>
     <message>
         <source>Reset Head type value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla høvd slag virði</translation>
     </message>
     <message>
         <source>Normal</source>
@@ -2957,94 +2970,113 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cross</source>
-        <translation type="unfinished"></translation>
+        <translation>Krossur</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation type="unfinished"></translation>
+        <translation>Diamantur</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation>Triangle</translation>
+        <translation>Tríkantur</translation>
     </message>
     <message>
         <source>Slash</source>
-        <translation type="unfinished"></translation>
+        <translation>Skák</translation>
     </message>
     <message>
         <source>XCircle</source>
-        <translation type="unfinished"></translation>
+        <translation>XSirkul</translation>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"></translation>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"></translation>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"></translation>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"></translation>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>Sol</source>
-        <translation type="unfinished"></translation>
+        <translation>Sol</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"></translation>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"></translation>
+        <translation>Ti</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt. Brevis</translation>
     </message>
     <message>
         <source>Line thickness</source>
-        <translation type="unfinished"></translation>
+        <translation>Striku vídd</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
     <message>
         <source>Reset Line thickness value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla striku vídd virði</translation>
     </message>
     <message>
         <source>[Undefined]</source>
-        <translation type="unfinished"></translation>
+        <translation>[Ólýst]</translation>
     </message>
     <message>
         <source>Ambitus</source>
-        <translation type="unfinished"></translation>
+        <translation>Ambitus</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glissando inspektor</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpeggio</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spæl</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nullstilla spæl virði</translation>
     </message>
 </context>
 <context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
-        <translation>Articulation</translation>
+        <translation>Framburður</translation>
     </message>
     <message>
         <source>Direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Leið</translation>
     </message>
     <message>
         <source>Anchor</source>
-        <translation>Anchor</translation>
+        <translation>Akker</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Sjálvvirkin akkord</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -3052,129 +3084,153 @@ space unit</extracomment>
     </message>
     <message>
         <source>Up</source>
-        <translation>Yukarı</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Aşağı</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>Above Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Omanfyri stav</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Niðanfyri stav</translation>
     </message>
     <message>
         <source>Above Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Omanfyri Akkord</translation>
     </message>
     <message>
         <source>Below Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Niðanfyri akkord</translation>
     </message>
     <message>
         <source>Time stretch</source>
-        <translation type="unfinished"></translation>
+        <translation>Tíðarskeið</translation>
     </message>
     <message>
         <source>Articulation Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Framburður inspektor</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla leið virði</translation>
     </message>
     <message>
         <source>Reset Anchor value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla akker virði</translation>
     </message>
     <message>
         <source>Reset Time stretch value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla tíðarbil virði</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Skreyt snið</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Forsett</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barokk</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Nulstilla skreyt stílur virði</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spæl</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nulstilla spæl virði</translation>
     </message>
 </context>
 <context>
     <name>InspectorBarLine</name>
     <message>
         <source>Barline</source>
-        <translation type="unfinished"></translation>
+        <translation>Taktstrika</translation>
     </message>
     <message>
         <source>Style:</source>
-        <translation>Style:</translation>
+        <translation>Snið:</translation>
     </message>
     <message>
         <source>Span from:</source>
-        <translation type="unfinished"></translation>
+        <translation>Spenni frá:</translation>
     </message>
     <message>
         <source>Spanned staves:</source>
-        <translation type="unfinished"></translation>
+        <translation>Spentir stavar:</translation>
     </message>
     <message>
         <source>Span to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Spenni til:</translation>
     </message>
     <message>
         <source>Span preset:</source>
-        <translation type="unfinished"></translation>
+        <translation>Spenni føst innstilling:</translation>
     </message>
     <message>
         <source>Barline Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Taktstriku inspektor</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation>Slag</translation>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla slag virði</translation>
     </message>
     <message>
         <source>Span from</source>
-        <translation type="unfinished"></translation>
+        <translation>Spenni frá</translation>
     </message>
     <message>
         <source>Span</source>
-        <translation type="unfinished"></translation>
+        <translation>Spenni</translation>
     </message>
     <message>
         <source>Span to</source>
-        <translation type="unfinished"></translation>
+        <translation>Spenni til</translation>
     </message>
     <message>
         <source>Reset Span value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla spenni virði</translation>
     </message>
     <message>
         <source>Reset Span from value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla spenni frá virði</translation>
     </message>
     <message>
         <source>Reset Span to value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla spenni til virði</translation>
     </message>
     <message>
         <source>Spantype</source>
-        <translation type="unfinished"></translation>
+        <translation>Spenni slag</translation>
     </message>
     <message>
         <source>Reset Span type value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla spenni slag virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
 </context>
 <context>
     <name>InspectorBeam</name>
     <message>
         <source>Beam</source>
-        <translation>Beam</translation>
+        <translation>Bjálki</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -3182,15 +3238,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Up</source>
-        <translation>Yukarı</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Aşağı</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>Direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Leið</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3198,93 +3254,112 @@ space unit</extracomment>
     </message>
     <message>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Plasering</translation>
     </message>
     <message>
         <source>Horizontal</source>
-        <translation type="unfinished"></translation>
+        <translation>Vatnrætt</translation>
     </message>
     <message>
         <source>Beam Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Bjálka inspektor</translation>
     </message>
     <message>
         <source>Vertical position offset left</source>
-        <translation type="unfinished"></translation>
+        <translation>loddrøtt plasering offsett vinstra</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla leið virði</translation>
     </message>
     <message>
         <source>Vertical position offset right</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrøtt plasering offsett høgra</translation>
     </message>
     <message>
         <source>Reset User position value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla brúkara plaseringsvirði</translation>
     </message>
     <message>
         <source>Reset Local Relayout value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla staðbundin um-uppseting</translation>
     </message>
     <message>
         <source>Reset Horizontal value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla vatnrætt virði</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation>Left</translation>
+        <translation>Vinstra</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Høgra</translation>
     </message>
     <message>
         <source>Grow right</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka høgra</translation>
     </message>
     <message>
         <source>Grow left</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka vinstra</translation>
     </message>
     <message>
         <source>Reset Grow right value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla hækka høgra</translation>
     </message>
     <message>
         <source>Reset Grow left value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla hækka vinstra</translation>
     </message>
     <message>
         <source>Local relayout</source>
-        <translation type="unfinished"></translation>
+        <translation>Staðbundin um-uppseting</translation>
     </message>
     <message>
         <source>User position</source>
-        <translation type="unfinished"></translation>
+        <translation>Brúkara plasering</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glissando inspektor</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Bend</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spæl</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nullstilla spæl virði</translation>
     </message>
 </context>
 <context>
     <name>InspectorBreak</name>
     <message>
         <source>Element Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Element Inspektor</translation>
     </message>
     <message>
         <source>Layout Break</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppseting brot</translation>
     </message>
 </context>
 <context>
     <name>InspectorChord</name>
     <message>
         <source>Chord</source>
-        <translation>Chord</translation>
+        <translation>Akkord</translation>
     </message>
     <message>
         <source>Stem direction</source>
-        <translation>nótahálsur upp/niður</translation>
+        <translation>Leggur upp/niður</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -3292,15 +3367,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Up</source>
-        <translation>Yukarı</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Aşağı</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>Vertical offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrætt offsett</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3309,117 +3384,117 @@ space unit</extracomment>
     </message>
     <message>
         <source>Horizontal offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Vatnrætt offsett</translation>
     </message>
     <message>
         <source>Small</source>
-        <translation>small</translation>
+        <translation>Lítil</translation>
     </message>
     <message>
         <source>Stemless</source>
-        <translation>stemless</translation>
+        <translation>Leggleysur</translation>
     </message>
     <message>
         <source>Chord Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord inspektor</translation>
     </message>
     <message>
         <source>Reset Vertical offset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla loddrætt offsett virði</translation>
     </message>
     <message>
         <source>Reset Horizontal offset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla vatnrætt offsett virði</translation>
     </message>
     <message>
         <source>Reset Stem direction value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla legg leið virði</translation>
     </message>
     <message>
         <source>Horizontal Offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Vatnrætt offsett</translation>
     </message>
     <message>
         <source>Reset Small Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla lítil virði</translation>
     </message>
     <message>
         <source>Reset Stemless value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla leggleys virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
 </context>
 <context>
     <name>InspectorClef</name>
     <message>
         <source>Clef</source>
-        <translation>Clef</translation>
+        <translation>Lykil</translation>
     </message>
     <message>
         <source>Show courtesy</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís tignarheiti</translation>
     </message>
     <message>
         <source>Clef Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Lykil inspektor</translation>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla vís tignarheiti virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
 </context>
 <context>
     <name>InspectorDynamic</name>
     <message>
         <source>Dynamic</source>
-        <translation>Dynamic</translation>
+        <translation>Dynamikkur</translation>
     </message>
     <message>
         <source>Dynamic Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Dynamikkur spenni</translation>
     </message>
     <message>
         <source>Velocity</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferð</translation>
     </message>
     <message>
         <source>Staff</source>
-        <translation>Stave</translation>
+        <translation>Stavur</translation>
     </message>
     <message>
         <source>Part</source>
-        <translation type="unfinished"></translation>
+        <translation>Rødd</translation>
     </message>
     <message>
         <source>System</source>
-        <translation>System</translation>
+        <translation>Skipan</translation>
     </message>
     <message>
         <source>Dynamic Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Dynamikkur inspektor</translation>
     </message>
     <message>
         <source>Reset Velocity value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla ferð virði</translation>
     </message>
     <message>
         <source>Reset Dynamic range value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla dynamikkur spenni virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
     <message>
         <source>Dynamic range</source>
-        <translation type="unfinished"></translation>
+        <translation>Dynamiskt spenni</translation>
     </message>
 </context>
 <context>
@@ -3430,7 +3505,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Vertical offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrætt offsett</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3439,69 +3514,69 @@ space unit</extracomment>
     </message>
     <message>
         <source>Color</source>
-        <translation>Colour</translation>
+        <translation>Litur</translation>
     </message>
     <message>
         <source>Horizontal offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Vatnrætt offsett</translation>
     </message>
     <message>
         <source>Visible</source>
-        <translation>Visible</translation>
+        <translation>Sjónligur</translation>
     </message>
     <message>
         <source>Element Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Element inspektor</translation>
     </message>
     <message>
         <source>Reset Horizontal offset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla vatnrætt offsett virði</translation>
     </message>
     <message>
         <source>Reset Vertical offset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla loddrætt offsett virði</translation>
     </message>
     <message>
         <source>Reset Visible value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla sjónligt virði</translation>
     </message>
     <message>
         <source>Reset Color value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla litur virði</translation>
     </message>
 </context>
 <context>
     <name>InspectorEmpty</name>
     <message>
         <source>Empty Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Tøm Inspektor</translation>
     </message>
     <message>
         <source>Nothing selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Einki valt</translation>
     </message>
 </context>
 <context>
     <name>InspectorFret</name>
     <message>
         <source>Ottava Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Ottava inspektor</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Tónastigi</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla slag virði</translation>
     </message>
     <message>
         <source>Fretboard Diagram</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandaborð diagramm</translation>
     </message>
 </context>
 <context>
@@ -3512,73 +3587,109 @@ space unit</extracomment>
     </message>
     <message>
         <source>Text</source>
-        <translation>Text</translation>
+        <translation>Tekstur</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation>Slag</translation>
     </message>
     <message>
         <source>Glissando Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Glissando Inspektor</translation>
     </message>
     <message>
         <source>Reset Text value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla tekstur virði</translation>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla slag virði</translation>
     </message>
     <message>
         <source>Straight</source>
-        <translation>Straight</translation>
+        <translation>Beint</translation>
     </message>
     <message>
         <source>Wavy</source>
-        <translation type="unfinished"></translation>
+        <translation>Aldandi</translation>
     </message>
     <message>
         <source>Reset Show text value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla vís tekst virði</translation>
     </message>
     <message>
         <source>Show text</source>
-        <translation>Show Text</translation>
+        <translation>Vís tekst</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Snið</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Nullstilla snið virði</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Spæl snið</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Kromatiskur</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Hvítir tangentar</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Svartir tangentar</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diatoniskur</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spæl</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nulstilla spæl virði</translation>
     </message>
 </context>
 <context>
     <name>InspectorGroupElement</name>
     <message>
         <source>Element Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Elements bólkur</translation>
     </message>
     <message>
         <source>Set Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Áset lit</translation>
     </message>
     <message>
         <source>Set Visible</source>
-        <translation>Set Visible</translation>
+        <translation>Áset sjónligt</translation>
     </message>
     <message>
         <source>Set Invisible</source>
-        <translation>Set Invisible</translation>
+        <translation>Áset ósjónligt</translation>
     </message>
     <message>
         <source>Element Group Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Elements bólkur inspektor</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Colour</translation>
+        <translation>Litur</translation>
     </message>
 </context>
 <context>
     <name>InspectorHBox</name>
     <message>
         <source>Horizontal Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Vatnrøtt ramma</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3587,70 +3698,70 @@ space unit</extracomment>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Breidd</translation>
     </message>
     <message>
         <source>Horizontal Frame Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Vatnrøtt ramma inspektor</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
     <message>
         <source>Right gap</source>
-        <translation type="unfinished"></translation>
+        <translation>Høgra hol</translation>
     </message>
     <message>
         <source>Left gap</source>
-        <translation type="unfinished"></translation>
+        <translation>Vinstra hol</translation>
     </message>
     <message>
         <source>Reset Left gap value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla vinstra hol virði</translation>
     </message>
     <message>
         <source>Reset Right gap value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla høgra hol virði</translation>
     </message>
 </context>
 <context>
     <name>InspectorHairpin</name>
     <message>
         <source>Hairpin</source>
-        <translation>Hairpin</translation>
+        <translation>Hárnál</translation>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Hædd</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation>Slag</translation>
     </message>
     <message>
         <source>Dynamic range</source>
-        <translation type="unfinished"></translation>
+        <translation>Dynamiskt spenni</translation>
     </message>
     <message>
         <source>Staff</source>
-        <translation>Stave</translation>
+        <translation>Stavur</translation>
     </message>
     <message>
         <source>Part</source>
-        <translation type="unfinished"></translation>
+        <translation>Rødd</translation>
     </message>
     <message>
         <source>System</source>
-        <translation>System</translation>
+        <translation>Skipan</translation>
     </message>
     <message>
         <source>Velocity change</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferð broyting</translation>
     </message>
     <message>
         <source>Continue height</source>
-        <translation type="unfinished"></translation>
+        <translation>Verðandi hædd</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3658,31 +3769,31 @@ space unit</extracomment>
     </message>
     <message>
         <source>Circled tip</source>
-        <translation type="unfinished"></translation>
+        <translation>Sirkul tippur</translation>
     </message>
     <message>
         <source>Hairpin Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Hárnál inspektor</translation>
     </message>
     <message>
         <source>Reset Velocity change value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla ferð broyting virði</translation>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla slag virði</translation>
     </message>
     <message>
         <source>Reset Dynamic range value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla dynamikkur spenni virði</translation>
     </message>
     <message>
         <source>Reset Height value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla hædd virði</translation>
     </message>
     <message>
         <source>Reset Circled tip value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla sirkul tippur virði</translation>
     </message>
     <message>
         <source>Crescendo</source>
@@ -3694,132 +3805,132 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
     <message>
         <source>Reset Continue height value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla verðandi hædd virði</translation>
     </message>
 </context>
 <context>
     <name>InspectorImage</name>
     <message>
         <source>Image</source>
-        <translation>Image</translation>
+        <translation>Mynd</translation>
     </message>
     <message>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Stødd</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>stigi</translation>
     </message>
     <message>
         <source>Image Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Mynd inspektor</translation>
     </message>
     <message>
         <source>Scale to frame size</source>
-        <translation type="unfinished"></translation>
+        <translation>hækka/lækka til  rammu stødd</translation>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Hædd</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Breidd</translation>
     </message>
     <message>
         <source>Scale Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Stigvís breidd</translation>
     </message>
     <message>
         <source>Scale Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Stigvís hædd</translation>
     </message>
     <message>
         <source>Reset Scale to frame size value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla hækka/lækka til rammu stødd</translation>
     </message>
     <message>
         <source>Reset Lock aspect ratio value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla lás støddlutfall</translation>
     </message>
     <message>
         <source>Lock aspect ratio</source>
-        <translation>lock aspect ratio</translation>
+        <translation>Lás støddlutfall</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarstøða millum tvær strikur á normalum 5-linju stavi</translation>
     </message>
     <message>
         <source>Size in staff space units</source>
-        <translation type="unfinished"></translation>
+        <translation>Stødd í stav glopp eindum</translation>
     </message>
     <message>
         <source>Reset Size in staff space units value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla stødd í stav glopp eindum</translation>
     </message>
 </context>
 <context>
     <name>InspectorJump</name>
     <message>
         <source>Jump</source>
-        <translation>Jump</translation>
+        <translation>Lop</translation>
     </message>
     <message>
         <source>Jump to</source>
-        <translation type="unfinished"></translation>
+        <translation>Lop til</translation>
     </message>
     <message>
         <source>Play until</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl inntil</translation>
     </message>
     <message>
         <source>Continue at</source>
-        <translation type="unfinished"></translation>
+        <translation>Halt áfram við</translation>
     </message>
     <message>
         <source>Jump Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Lop inspektor</translation>
     </message>
     <message>
         <source>Reset Jump to value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla lop til virði</translation>
     </message>
     <message>
         <source>Reset Play until value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla spæl fram til virði</translation>
     </message>
     <message>
         <source>Reset Continue at value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla halt áfram við virði</translation>
     </message>
 </context>
 <context>
     <name>InspectorKeySig</name>
     <message>
         <source>Key Signature</source>
-        <translation>Key Signature</translation>
+        <translation>Ljómslagstekin</translation>
     </message>
     <message>
         <source>Show courtesy</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís tignarheiti</translation>
     </message>
     <message>
         <source>Key Signature Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljómslagstekn inspektor</translation>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla vís tignarheiti virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
 </context>
 <context>
@@ -3830,7 +3941,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Plasering</translation>
     </message>
     <message>
         <source>mm</source>
@@ -3838,34 +3949,34 @@ space unit</extracomment>
     </message>
     <message>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Stødd</translation>
     </message>
     <message>
         <source>Lasso Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Lasso inspektor</translation>
     </message>
     <message>
         <source>Vertical position</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrøtt plasering</translation>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Hædd</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Breidd</translation>
     </message>
     <message>
         <source>Horizontal Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Vatnrøtt plasering</translation>
     </message>
 </context>
 <context>
     <name>InspectorLine</name>
     <message>
         <source>Line</source>
-        <translation>Line</translation>
+        <translation>Strika</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3874,82 +3985,82 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line color</source>
-        <translation type="unfinished"></translation>
+        <translation>Striku litur</translation>
     </message>
     <message>
         <source>Line style</source>
-        <translation type="unfinished"></translation>
+        <translation>Striku snið</translation>
     </message>
     <message>
         <source>Allow diagonal</source>
-        <translation type="unfinished"></translation>
+        <translation>Loyv diagonali</translation>
     </message>
     <message>
         <source>Line Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Striku inspektor</translation>
     </message>
     <message>
         <source>Reset Line color value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla striku lit virði</translation>
     </message>
     <message>
         <source>Reset Allow diagonal value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla loyv diagonal virði</translation>
     </message>
     <message>
         <source>Reset Line style value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla striku snið virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
     <message>
         <source>Line thickness</source>
-        <translation type="unfinished"></translation>
+        <translation>Striku vídd</translation>
     </message>
     <message>
         <source>Continuous</source>
-        <translation>Continue</translation>
+        <translation>Halt fram</translation>
     </message>
     <message>
         <source>Dashed</source>
-        <translation>Dashed</translation>
+        <translation>Strikaður</translation>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikka</translation>
     </message>
     <message>
         <source>Dash-dotted</source>
-        <translation type="unfinished"></translation>
+        <translation>Striku-prikka</translation>
     </message>
     <message>
         <source>Dash-dot-dotted</source>
-        <translation type="unfinished"></translation>
+        <translation>Striku-prik-prikka</translation>
     </message>
     <message>
         <source>Reset Line thickness value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla striku vídd virði</translation>
     </message>
     <message>
         <source>Reset Line visible value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla strika sjónlig virði</translation>
     </message>
     <message>
         <source>Line visible</source>
-        <translation type="unfinished"></translation>
+        <translation>Strika sjónlig</translation>
     </message>
 </context>
 <context>
     <name>InspectorMarker</name>
     <message>
         <source>Marker</source>
-        <translation>Marker</translation>
+        <translation>Merki</translation>
     </message>
     <message>
         <source>Label</source>
-        <translation type="unfinished"></translation>
+        <translation>Frámerki</translation>
     </message>
     <message>
         <source>Segno</source>
@@ -3969,39 +4080,39 @@ space unit</extracomment>
     </message>
     <message>
         <source>To Coda</source>
-        <translation type="unfinished"></translation>
+        <translation>TIl Coda</translation>
     </message>
     <message>
         <source>Marker type</source>
-        <translation type="unfinished"></translation>
+        <translation>Merki slag</translation>
     </message>
     <message>
         <source>Marker Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Merki inspektor</translation>
     </message>
     <message>
         <source>Reset Marker type value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla merki slag virði</translation>
     </message>
     <message>
         <source>Reset Label value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla frámerki virði</translation>
     </message>
     <message>
         <source>Marker Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Merki slag</translation>
     </message>
     <message>
         <source>Segno variation</source>
-        <translation type="unfinished"></translation>
+        <translation>Segno variatión</translation>
     </message>
     <message>
         <source>Varied coda</source>
-        <translation>Varied coda</translation>
+        <translation>Skiftandi coda</translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Sergjørt</translation>
     </message>
 </context>
 <context>
@@ -4012,19 +4123,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Play</source>
-        <translation>Play</translation>
+        <translation>Spæl</translation>
     </message>
     <message>
         <source>Tuning</source>
-        <translation>Tuning</translation>
+        <translation>Stilling</translation>
     </message>
     <message>
         <source>Velocity</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferð</translation>
     </message>
     <message>
         <source>Mirror head</source>
-        <translation type="unfinished"></translation>
+        <translation>Spegla høvd</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -4032,27 +4143,27 @@ space unit</extracomment>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Toppur</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Botnur</translation>
     </message>
     <message>
         <source>Whole</source>
-        <translation type="unfinished"></translation>
+        <translation>Heilur</translation>
     </message>
     <message>
         <source>Half</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálvur</translation>
     </message>
     <message>
         <source>Quarter</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvartur</translation>
     </message>
     <message>
         <source>Breve</source>
-        <translation type="unfinished"></translation>
+        <translation>Breve</translation>
     </message>
     <message>
         <source>Offset</source>
@@ -4064,99 +4175,99 @@ space unit</extracomment>
     </message>
     <message>
         <source>Head type</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvd slag</translation>
     </message>
     <message>
         <source>Head group</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvd bólkur</translation>
     </message>
     <message>
         <source>Dot position</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikk plasering</translation>
     </message>
     <message>
         <source>Velocity type</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferð slag</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation>Left</translation>
+        <translation>Vinstra</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Høgra</translation>
     </message>
     <message>
         <source>Small </source>
-        <translation type="unfinished"></translation>
+        <translation>Lítil</translation>
     </message>
     <message>
         <source>Note Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta inspektor</translation>
     </message>
     <message>
         <source>Reset Mirror head value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla spegil høvd virði</translation>
     </message>
     <message>
         <source>Reset Velocity type value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla ferð slag virði</translation>
     </message>
     <message>
         <source>Reset Head type value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla høvd slag virði</translation>
     </message>
     <message>
         <source>Reset Velocity value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla ferð virði</translation>
     </message>
     <message>
         <source>Mirror Head</source>
-        <translation type="unfinished"></translation>
+        <translation>Spegilshøvd</translation>
     </message>
     <message>
         <source>Small</source>
-        <translation>small</translation>
+        <translation>Lítil</translation>
     </message>
     <message>
         <source>Reset Head group value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla høvd bólka virði</translation>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla smá virði</translation>
     </message>
     <message>
         <source>Reset Tuning value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla semmivirði</translation>
     </message>
     <message>
         <source>Reset Play value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla spæl virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
     <message>
         <source>Reset Dot position value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla prikk plaseringsvirði</translation>
     </message>
     <message>
         <source>Line</source>
-        <translation>Line</translation>
+        <translation>Strika</translation>
     </message>
     <message>
         <source>Fix to line</source>
-        <translation type="unfinished"></translation>
+        <translation>Fest at striku</translation>
     </message>
     <message>
         <source>Reset Fix to line</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla fest at striku</translation>
     </message>
     <message>
         <source>Reset Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla striku</translation>
     </message>
 </context>
 <context>
@@ -4167,11 +4278,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation>Slag</translation>
     </message>
     <message>
         <source>Placement</source>
-        <translation type="unfinished"></translation>
+        <translation>Plasering</translation>
     </message>
     <message>
         <source>8va</source>
@@ -4191,66 +4302,66 @@ space unit</extracomment>
     </message>
     <message>
         <source>22ma</source>
-        <translation type="unfinished">15ma {22m?}</translation>
+        <translation>22ma</translation>
     </message>
     <message>
         <source>22mb</source>
-        <translation type="unfinished">15mb {22m?}</translation>
+        <translation>22mb</translation>
     </message>
     <message>
         <source>Numbers only</source>
-        <translation type="unfinished"></translation>
+        <translation>Bert tøl</translation>
     </message>
     <message>
         <source>Ottava Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Ottava inspektor</translation>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla slag virði</translation>
     </message>
     <message>
         <source>Reset Placement value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla plaseringsvirði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
     <message>
         <source>Above</source>
-        <translation>Above</translation>
+        <translation>Omanfyri</translation>
     </message>
     <message>
         <source>Below</source>
-        <translation type="unfinished"></translation>
+        <translation>Niðanfyri</translation>
     </message>
     <message>
         <source>Reset Numbers only value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði fyri bert tøl</translation>
     </message>
 </context>
 <context>
     <name>InspectorRest</name>
     <message>
         <source>Rest</source>
-        <translation>Rest</translation>
+        <translation>Tøgn</translation>
     </message>
     <message>
         <source>Small</source>
-        <translation>small</translation>
+        <translation>Lítil</translation>
     </message>
     <message>
         <source>Rest Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Tagnar inspektor</translation>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla smá virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
 </context>
 <context>
@@ -4266,77 +4377,77 @@ space unit</extracomment>
     </message>
     <message>
         <source>Trailing space</source>
-        <translation type="unfinished"></translation>
+        <translation>Halarúm</translation>
     </message>
     <message>
         <source>Leading space</source>
-        <translation type="unfinished"></translation>
+        <translation>Oddarúm</translation>
     </message>
     <message>
         <source>Segment Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Bólka inspektor</translation>
     </message>
     <message>
         <source>Reset Leading space value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla oddarúm virði</translation>
     </message>
     <message>
         <source>Reset Trailing space value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla halarúm virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
 </context>
 <context>
     <name>InspectorSlur</name>
     <message>
         <source>Line type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Striku slag:</translation>
     </message>
     <message>
         <source>Slur/Tie</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindibogi</translation>
     </message>
     <message>
         <source>Slur Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindiboga inspektor</translation>
     </message>
     <message>
         <source>Reset Line type value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla striku slag virði</translation>
     </message>
     <message>
         <source>Line type</source>
-        <translation type="unfinished"></translation>
+        <translation>Striku slag</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
     <message>
         <source>Continuous</source>
-        <translation>Continue</translation>
+        <translation>Halt fram</translation>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikka</translation>
     </message>
     <message>
         <source>Dashed</source>
-        <translation>Dashed</translation>
+        <translation>Strikaður</translation>
     </message>
 </context>
 <context>
     <name>InspectorSpacer</name>
     <message>
         <source>Spacer</source>
-        <translation>Spacer</translation>
+        <translation>Gloppknappur</translation>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Hædd</translation>
     </message>
     <message>
         <source>sp</source>
@@ -4345,11 +4456,83 @@ space unit</extracomment>
     </message>
     <message>
         <source>Spacer Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Glopp inspektor</translation>
     </message>
     <message>
         <source>Reset Height value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla hædd virði</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Tekstrammu inspektor</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Tekst ramma</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Niðara hol</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Ovari breddi</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Nullstilla virði</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Nullstilla ovara hol virði </translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Nullstilla niðara hol virði</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Vinstri breddi</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Niðari breddi</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Nullstilla høgri breddi virði</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Høgri breddi</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Nullstilla niðari breddi virði</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Nullstilla ovari breddi virði</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Nullstilla vinstri breddi virði</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Ovara hol</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>sp</translation>
     </message>
 </context>
 <context>
@@ -4364,27 +4547,27 @@ space unit</extracomment>
     </message>
     <message>
         <source>Follow text</source>
-        <translation type="unfinished"></translation>
+        <translation>Fylg teksti</translation>
     </message>
     <message>
         <source>BPM</source>
-        <translation>BPM</translation>
+        <translation>SUM</translation>
     </message>
     <message>
         <source>Tempo Marking Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempo merki inspektor</translation>
     </message>
     <message>
         <source>Reset Tempo value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla tempo virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
     <message>
         <source>Reset Follow text value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla fylg teksti virði</translation>
     </message>
 </context>
 <context>
@@ -4395,57 +4578,57 @@ space unit</extracomment>
     </message>
     <message>
         <source>Style</source>
-        <translation>Style</translation>
+        <translation>Snið</translation>
     </message>
     <message>
         <source>Text Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst inspektor</translation>
     </message>
     <message>
         <source>Reset Style value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla snið virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
     <message>
         <source>Reset Text to Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla tekst til snið</translation>
     </message>
 </context>
 <context>
     <name>InspectorTextLine</name>
     <message>
         <source>Text Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst strika</translation>
     </message>
     <message>
         <source>Text Line Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst striku inspektor</translation>
     </message>
 </context>
 <context>
     <name>InspectorTimeSig</name>
     <message>
         <source>Time Signature</source>
-        <translation>Enter Time Signature:</translation>
+        <translation>Takt slag:</translation>
     </message>
     <message>
         <source>Show courtesy</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís tignarheiti</translation>
     </message>
     <message>
         <source>Time Signature Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt slag inspektor</translation>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla vís tignarheiti virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
 </context>
 <context>
@@ -4456,117 +4639,141 @@ space unit</extracomment>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation>Slag</translation>
     </message>
     <message>
         <source>Trill Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Trillu inspektor</translation>
     </message>
     <message>
         <source>Reset Trill type</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla trillu slag</translation>
     </message>
     <message>
         <source>Trill Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Trillu strika</translation>
     </message>
     <message>
         <source>Up Prall</source>
-        <translation type="unfinished"></translation>
+        <translation>Upp prall</translation>
     </message>
     <message>
         <source>Down Prall</source>
-        <translation type="unfinished"></translation>
+        <translation>Niður prall</translation>
     </message>
     <message>
         <source>Prall Prall</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Wavy Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Prall prall</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Skreyt snið</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Leið</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Forsett</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barokk</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Nulstilla skreyt stílur virði</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spæl</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nullstilla spæl virði</translation>
     </message>
 </context>
 <context>
     <name>InspectorTuplet</name>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Nótabólkar</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation>number</translation>
+        <translation>Nummar</translation>
     </message>
     <message>
         <source>Relation</source>
-        <translation>relation</translation>
+        <translation>Samband</translation>
     </message>
     <message>
         <source>Nothing</source>
-        <translation>nothing</translation>
+        <translation>Einki</translation>
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Sjálvvirki</translation>
     </message>
     <message>
         <source>Bracket</source>
-        <translation>Bracket</translation>
+        <translation>Klombur</translation>
     </message>
     <message>
         <source>Direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Leið</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation>auto</translation>
+        <translation>Sjálvv.</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Yukarı</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Aşağı</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>Tuplet Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótabólka inspektor</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla leið virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
     <message>
         <source>Reset Number type value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla nummar slag virði</translation>
     </message>
     <message>
         <source>Reset Bracket type value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla klombur slag virði</translation>
     </message>
     <message>
         <source>Number type</source>
-        <translation type="unfinished"></translation>
+        <translation>Nummar slag</translation>
     </message>
     <message>
         <source>Bracket type</source>
-        <translation type="unfinished"></translation>
+        <translation>Klombur slag</translation>
     </message>
 </context>
 <context>
     <name>InspectorVBox</name>
     <message>
         <source>Vertical Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrøtt ramma</translation>
     </message>
     <message>
         <source>mm</source>
@@ -4579,63 +4786,63 @@ space unit</extracomment>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Hædd</translation>
     </message>
     <message>
         <source>Vertical Frame Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrøtt ramma inspektor</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
     <message>
         <source>Right margin</source>
-        <translation>Right margin</translation>
+        <translation>Høgri breddi</translation>
     </message>
     <message>
         <source>Reset Top gap value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla ovara hol virði</translation>
     </message>
     <message>
         <source>Reset Bottom gap value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla niðara hol virði</translation>
     </message>
     <message>
         <source>Bottom margin</source>
-        <translation type="unfinished"></translation>
+        <translation>Niðari breddi</translation>
     </message>
     <message>
         <source>Left margin</source>
-        <translation>Left margin</translation>
+        <translation>Vinstri breddi</translation>
     </message>
     <message>
         <source>Top gap</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovara hol</translation>
     </message>
     <message>
         <source>Bottom gap</source>
-        <translation type="unfinished"></translation>
+        <translation>Niðara hol</translation>
     </message>
     <message>
         <source>Top margin</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovari breddi</translation>
     </message>
     <message>
         <source>Reset Left margin value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla vinstri breddi virði</translation>
     </message>
     <message>
         <source>Reset Right margin value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla høgri breddi virði</translation>
     </message>
     <message>
         <source>Reset Top margin value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla ovari breddi virði</translation>
     </message>
     <message>
         <source>Reset Bottom margin value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla niðari breddi virði</translation>
     </message>
 </context>
 <context>
@@ -4650,62 +4857,62 @@ space unit</extracomment>
     </message>
     <message>
         <source>Closed</source>
-        <translation type="unfinished"></translation>
+        <translation>Stongt</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation>Slag</translation>
     </message>
     <message>
         <source>Volta Inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Volta inspektor</translation>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstilla slag virði</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla virði</translation>
     </message>
 </context>
 <context>
     <name>InstrumentWizard</name>
     <message>
         <source>0</source>
-        <translation type="unfinished">0</translation>
+        <translation>0</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Leita</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Clear</translation>
+        <translation>Rudda</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Add</translation>
+        <translation>Legg afturat</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Remove</translation>
+        <translation>Tak burtur</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Up</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Down</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>Add Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg stav afturat</translation>
     </message>
     <message>
         <source>Add Linked Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg leinkjaðan stav afturat</translation>
     </message>
     <message>
         <source>1</source>
@@ -4721,34 +4928,34 @@ space unit</extracomment>
     </message>
     <message>
         <source>Instrument wizard</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðføris flogvit</translation>
     </message>
     <message>
         <source>Instrument List</source>
-        <translation>Instrument List</translation>
+        <translation>Ljóðføris listi</translation>
     </message>
     <message>
         <source>Added Instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>afturatløgd ljóðføri</translation>
     </message>
     <message>
         <source>Instrument Genre Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðføris sjangru filtur</translation>
     </message>
 </context>
 <context>
     <name>InstrumentsDialog</name>
     <message>
         <source>All instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>Øll ljóðføri</translation>
     </message>
     <message>
         <source>MuseScore: Instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Ljóðføri</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation>Yükle</translation>
+        <translation>Tak fram</translation>
     </message>
     <message>
         <source>Save</source>
@@ -4756,128 +4963,135 @@ space unit</extracomment>
     </message>
     <message>
         <source>OK</source>
-        <translation>TAMAM</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Vazgeç</translation>
+        <translation>Strika</translation>
     </message>
 </context>
 <context>
     <name>InstrumentsWidget</name>
     <message>
         <source>MuseScore: Instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Ljóðføri</translation>
     </message>
     <message>
         <source>Instrument List</source>
-        <translation>Instrument List</translation>
+        <translation>Ljóðføris listi</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Leita</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Clear</translation>
+        <translation>Rudda</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Add</translation>
+        <translation>Skoyt uppí</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Remove</translation>
+        <translation>Tak burtur</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Yukarı</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Aşağı</translation>
+        <translation>Niður</translation>
     </message>
     <message>
         <source>Add Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg stav afturat</translation>
     </message>
     <message>
         <source>Add Linked Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg leinkjaðan stav afturat</translation>
     </message>
     <message>
         <source>Staves</source>
-        <translation>Staves</translation>
+        <translation>Stavir</translation>
     </message>
     <message>
         <source>Visible</source>
-        <translation>Visible</translation>
+        <translation>Sjónligur</translation>
     </message>
     <message>
         <source>Clef</source>
-        <translation>Clef</translation>
+        <translation>Lykil</translation>
     </message>
     <message>
         <source>Linked</source>
-        <translation type="unfinished"></translation>
+        <translation>Leinkjaður</translation>
     </message>
     <message>
         <source>Staff type</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav slag</translation>
     </message>
     <message>
         <source>Instrument Genre Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðføris sjangru filtur</translation>
     </message>
     <message>
         <source>Instrument list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðførislisti</translation>
     </message>
     <message>
         <source>Clear Search box</source>
-        <translation type="unfinished"></translation>
+        <translation>Rudda leitikassa</translation>
     </message>
     <message>
         <source>Partitur List</source>
-        <translation type="unfinished"></translation>
+        <translation>Partitur listi</translation>
     </message>
     <message>
         <source>Staff linked to previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Stavur leinkjaður til fyrra</translation>
     </message>
 </context>
 <context>
     <name>KeyEdit</name>
     <message>
         <source>Create Key Signature</source>
-        <translation>Create Key Signature</translation>
+        <translation>Stovna ljómslagstekin</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Clear</translation>
+        <translation>Rudda</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Add</translation>
+        <translation>Skoyt uppí</translation>
     </message>
     <message>
         <source>Add time signature to palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat takt slag til palett</translation>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>atonalur</translation>
     </message>
 </context>
 <context>
     <name>LayerManager</name>
     <message>
         <source>MuseScore: Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Musescore: Løg</translation>
     </message>
     <message>
         <source>Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Lag</translation>
     </message>
     <message>
         <source>Create</source>
-        <translation type="unfinished"></translation>
+        <translation>Stovna</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -4885,15 +5099,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Frámerkir</translation>
     </message>
     <message>
         <source>Add Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat frámerki</translation>
     </message>
     <message>
         <source>Delete Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>Sletta frámerki</translation>
     </message>
     <message>
         <source>1</source>
@@ -4925,7 +5139,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished">8</translation>
+        <translation>8</translation>
     </message>
     <message>
         <source>9</source>
@@ -4933,15 +5147,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>10</source>
-        <translation type="unfinished">10</translation>
+        <translation>10</translation>
     </message>
     <message>
         <source>11</source>
-        <translation type="unfinished">11</translation>
+        <translation>11</translation>
     </message>
     <message>
         <source>12</source>
-        <translation type="unfinished">12</translation>
+        <translation>12</translation>
     </message>
     <message>
         <source>13</source>
@@ -4949,106 +5163,106 @@ space unit</extracomment>
     </message>
     <message>
         <source>14</source>
-        <translation type="unfinished">14</translation>
+        <translation>14</translation>
     </message>
     <message>
         <source>15</source>
-        <translation type="unfinished">15</translation>
+        <translation>15</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished">16</translation>
+        <translation>16</translation>
     </message>
     <message>
         <source>17</source>
-        <translation type="unfinished">17</translation>
+        <translation>17</translation>
     </message>
     <message>
         <source>18</source>
-        <translation type="unfinished">18</translation>
+        <translation>18</translation>
     </message>
     <message>
         <source>19</source>
-        <translation type="unfinished">19</translation>
+        <translation>19</translation>
     </message>
     <message>
         <source>20</source>
-        <translation type="unfinished">20</translation>
+        <translation>20</translation>
     </message>
     <message>
         <source>21</source>
-        <translation type="unfinished">21</translation>
+        <translation>21</translation>
     </message>
     <message>
         <source>22</source>
-        <translation type="unfinished">22</translation>
+        <translation>22</translation>
     </message>
     <message>
         <source>23</source>
-        <translation type="unfinished">23</translation>
+        <translation>23</translation>
     </message>
     <message>
         <source>24</source>
-        <translation type="unfinished">24</translation>
+        <translation>24</translation>
     </message>
     <message>
         <source>25</source>
-        <translation type="unfinished">25</translation>
+        <translation>25</translation>
     </message>
     <message>
         <source>26</source>
-        <translation type="unfinished">26</translation>
+        <translation>26</translation>
     </message>
     <message>
         <source>27</source>
-        <translation type="unfinished">27</translation>
+        <translation>27</translation>
     </message>
     <message>
         <source>28</source>
-        <translation type="unfinished">28</translation>
+        <translation>28</translation>
     </message>
     <message>
         <source>29</source>
-        <translation type="unfinished">29</translation>
+        <translation>29</translation>
     </message>
     <message>
         <source>30</source>
-        <translation type="unfinished">30</translation>
+        <translation>30</translation>
     </message>
     <message>
         <source>31</source>
-        <translation type="unfinished">31</translation>
+        <translation>31</translation>
     </message>
     <message>
         <source>Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>Frámerkir</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Lýsing</translation>
     </message>
 </context>
 <context>
     <name>LinePropertiesDialog</name>
     <message>
         <source>MuseScore: Line Properties</source>
-        <translation>MuseScore: Line Properties</translation>
+        <translation>MuseScore: Striku eginleikar</translation>
     </message>
     <message>
         <source>Begin</source>
-        <translation>Begin</translation>
+        <translation>Byrja</translation>
     </message>
     <message>
         <source>Above</source>
-        <translation>Above</translation>
+        <translation>Omanfyri</translation>
     </message>
     <message>
         <source>Below</source>
-        <translation type="unfinished"></translation>
+        <translation>Niðanfyri</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation>Left</translation>
+        <translation>Vinstra</translation>
     </message>
     <message>
         <source>sp</source>
@@ -5056,137 +5270,137 @@ space unit</extracomment>
     </message>
     <message>
         <source>Up</source>
-        <translation>Up</translation>
+        <translation>Upp</translation>
     </message>
     <message>
         <source>90°</source>
-        <translation type="unfinished">90°</translation>
+        <translation>90°</translation>
     </message>
     <message>
         <source>45°</source>
-        <translation type="unfinished">45°</translation>
+        <translation>45°</translation>
     </message>
     <message>
         <source>Continue</source>
-        <translation>Continue</translation>
+        <translation>Halt fram</translation>
     </message>
     <message>
         <source>End</source>
-        <translation>End</translation>
+        <translation>Endi</translation>
     </message>
     <message>
         <source>Place:</source>
-        <translation>place:</translation>
+        <translation>Stað:</translation>
     </message>
     <message>
         <source>Hook:</source>
-        <translation type="unfinished"></translation>
+        <translation>Krókur:</translation>
     </message>
     <message>
         <source>Text:</source>
-        <translation>Text:</translation>
+        <translation>Tekstur:</translation>
     </message>
 </context>
 <context>
     <name>LoginDialog</name>
     <message>
         <source>Log in to MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation>Innrita í MuseScore</translation>
     </message>
     <message>
         <source>Username or email</source>
-        <translation type="unfinished"></translation>
+        <translation>Brúkaranavn ella email</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Loyniorð</translation>
     </message>
 </context>
 <context>
     <name>MIDI import operations</name>
     <message>
         <source>Quarter</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvartur</translation>
     </message>
     <message>
         <source>Eighth</source>
-        <translation type="unfinished"></translation>
+        <translation>Átta</translation>
     </message>
     <message>
         <source>16th</source>
-        <translation>semiquaver</translation>
+        <translation>16prt</translation>
     </message>
     <message>
         <source>32nd</source>
-        <translation>demisemiquaver</translation>
+        <translation>32prt</translation>
     </message>
     <message>
         <source>64th</source>
-        <translation type="unfinished">semiquaver {64t?}</translation>
+        <translation>64prt</translation>
     </message>
     <message>
         <source>128th</source>
-        <translation type="unfinished">semiquaver {128t?}</translation>
+        <translation>128prt</translation>
     </message>
     <message>
         <source>Detect swing</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdaga Swing</translation>
     </message>
     <message>
         <source>None (1:1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Einki (1:1)</translation>
     </message>
     <message>
         <source>Swing (2:1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Swing (2:1)</translation>
     </message>
     <message>
         <source>Shuffle (3:1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Shuffle (3:1)</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation>Import</translation>
+        <translation>Innflyt</translation>
     </message>
     <message>
         <source>Staff name</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav navn</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóð</translation>
     </message>
     <message>
         <source>Lyrics</source>
-        <translation>Lyrics</translation>
+        <translation>Tekstur</translation>
     </message>
     <message>
         <source>2-plets</source>
-        <translation type="unfinished"></translation>
+        <translation>2-bólkur</translation>
     </message>
     <message>
         <source>3-plets</source>
-        <translation type="unfinished"></translation>
+        <translation>3-bólkur</translation>
     </message>
     <message>
         <source>4-plets</source>
-        <translation type="unfinished"></translation>
+        <translation>4-bólkur</translation>
     </message>
     <message>
         <source>5-plets</source>
-        <translation type="unfinished"></translation>
+        <translation>5-bólkur</translation>
     </message>
     <message>
         <source>7-plets</source>
-        <translation type="unfinished"></translation>
+        <translation>7-bólkur</translation>
     </message>
     <message>
         <source>9-plets</source>
-        <translation type="unfinished"></translation>
+        <translation>9-bólkur</translation>
     </message>
     <message>
         <source>Tuplets</source>
-        <translation>Tuplets</translation>
+        <translation>Nótabólkar</translation>
     </message>
     <message>
         <source>2</source>
@@ -5218,83 +5432,91 @@ space unit</extracomment>
     </message>
     <message>
         <source>12</source>
-        <translation type="unfinished">12</translation>
+        <translation>12</translation>
     </message>
     <message>
         <source>15</source>
-        <translation type="unfinished">15</translation>
+        <translation>15</translation>
     </message>
     <message>
         <source>21</source>
-        <translation type="unfinished">21</translation>
+        <translation>21</translation>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished">8</translation>
+        <translation>8</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished">16</translation>
+        <translation>16</translation>
     </message>
     <message>
         <source>32</source>
-        <translation type="unfinished">32</translation>
+        <translation>32</translation>
     </message>
     <message>
         <source>Time signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt slag</translation>
     </message>
     <message>
         <source>2x less
 measure count</source>
-        <translation type="unfinished"></translation>
+        <translation>2x minni
+takt tal</translation>
     </message>
     <message>
         <source>Is human
 performance</source>
-        <translation type="unfinished"></translation>
+        <translation>Er menniskjalig
+framførsla</translation>
     </message>
     <message>
         <source>Split staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Kloyv stav</translation>
     </message>
     <message>
         <source>Clef
 changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Lykil
+Broytingar</translation>
     </message>
     <message>
         <source>Simplify
 durations</source>
-        <translation type="unfinished"></translation>
+        <translation>Einfalda
+tíðarbil</translation>
     </message>
     <message>
         <source>Show
 staccato</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís
+staccato</translation>
     </message>
     <message>
         <source>Dotted
 notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikkaðir
+nótar</translation>
     </message>
     <message>
         <source>Show
 tempo text</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís
+tempo tekst</translation>
     </message>
     <message>
         <source>Recognize
 pickup measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Finn
+byrjunar takt</translation>
     </message>
     <message>
         <source>Max. quantization</source>
-        <translation type="unfinished"></translation>
+        <translation>maks. Kvantisering</translation>
     </message>
     <message>
         <source>Max. voices</source>
-        <translation type="unfinished"></translation>
+        <translation>Maks. røddir</translation>
     </message>
     <message>
         <source>Channel</source>
@@ -5302,135 +5524,99 @@ pickup measure</source>
     </message>
     <message>
         <source>MuseScore instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Musescore ljóðføri</translation>
     </message>
     <message>
         <source>Show
 chord symbols</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís
+akkord symbol</translation>
     </message>
 </context>
 <context>
     <name>MIDI import: tracks model</name>
     <message>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Øll</translation>
     </message>
 </context>
 <context>
     <name>MP3Exporter</name>
     <message>
         <source>Where is %1 ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Hvar er %1 ?</translation>
     </message>
     <message>
         <source>Save as MP3</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym sum MP3</translation>
     </message>
     <message>
         <source>MuseScore does not export MP3 files directly, but instead uses the freely available LAME library.  You must obtain %1 separately (for details check the handbook), and then locate the file for MuseScore.
 You only need to do this once.
 
 Would you like to locate %2 now?</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>Open PDF/XPS file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="unfinished">Opna</translation>
-    </message>
-    <message>
-        <source>Previous</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Next</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ZoomIn</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ZoomOut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ToolBar</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore flytir ikki út MP3 fílir beinleiðis, men brúkar í staðin ta fría atkomiliga LAME savnið. Tú mást útvega %1 hvørt fyri seg (sí nærri í hondbókini), og síðani finna fíluna til MuseScore.
+Tær nýtist bert gera hetta einaferð.
+Ynskir tú at finna %2 nú? </translation>
     </message>
 </context>
 <context>
     <name>MasterPalette</name>
     <message>
         <source>MuseScore: Master Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: høvuðspalett</translation>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation>Grace Notes</translation>
+        <translation>Skreyt nótar</translation>
     </message>
     <message>
         <source>Clefs</source>
-        <translation>Clefs</translation>
+        <translation>Lyklar</translation>
     </message>
     <message>
         <source>Key Signatures</source>
-        <translation>Key Signatures</translation>
+        <translation>Ljómslagstekin</translation>
     </message>
     <message>
         <source>Time Signatures</source>
-        <translation>Time Signatures</translation>
+        <translation>Takt slag</translation>
     </message>
     <message>
         <source>Barlines</source>
-        <translation>Bar lines</translation>
+        <translation>Taktstrikur</translation>
     </message>
     <message>
         <source>Lines</source>
-        <translation>Lines</translation>
+        <translation>Strikur</translation>
     </message>
     <message>
         <source>Breaths &amp; Pauses</source>
-        <translation type="unfinished"></translation>
+        <translation>Steðgur &amp;&amp; Íhald</translation>
     </message>
     <message>
         <source>Brackets</source>
-        <translation>Brackets</translation>
+        <translation>Klombur</translation>
     </message>
     <message>
         <source>Articulations &amp; Ornaments</source>
-        <translation type="unfinished"></translation>
+        <translation>Artikulatión &amp; Skreyt</translation>
     </message>
     <message>
         <source>Accidentals</source>
-        <translation>Accidentals</translation>
+        <translation>Leys fortekin</translation>
     </message>
     <message>
         <source>Dynamics</source>
-        <translation>Dynamics</translation>
+        <translation>Dynamikkur</translation>
     </message>
     <message>
         <source>Fingering</source>
-        <translation>Fingering</translation>
+        <translation>Fingrasetningur</translation>
     </message>
     <message>
         <source>Note Heads</source>
-        <translation>Note Heads</translation>
+        <translation>Nótahøvd</translation>
     </message>
     <message>
         <source>Tremolo</source>
@@ -5442,74 +5628,75 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Text</source>
-        <translation>Text</translation>
+        <translation>Tekstur</translation>
     </message>
     <message>
         <source>Beam Properties</source>
-        <translation>Beam Properties</translation>
+        <translation>Bjálka eginleikar</translation>
     </message>
     <message>
         <source>Frames &amp; Measures</source>
-        <translation type="unfinished"></translation>
+        <translation>Rammur &amp; Taktir</translation>
     </message>
     <message>
         <source>Symbols</source>
-        <translation>Symbols</translation>
+        <translation>Symbolir</translation>
     </message>
     <message>
         <source>Arpeggios &amp; Glissandi</source>
-        <translation type="unfinished"></translation>
+        <translation>Arpeggio &amp; Glissandi</translation>
     </message>
     <message>
         <source>Breaks &amp; Spacers</source>
-        <translation type="unfinished"></translation>
+        <translation>Reglubrot &amp; Millumrúm</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekkjapípu príði</translation>
     </message>
     <message>
         <source>Repeats &amp; Jumps</source>
-        <translation type="unfinished"></translation>
+        <translation>Endurtøkur &amp; lop</translation>
     </message>
 </context>
 <context>
     <name>MeasureProperties</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>cannot change measure length:
 tuplet would cross measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki broyta taktlongd
+nótabólkur fer um takt</translation>
     </message>
 </context>
 <context>
     <name>MeasurePropertiesBase</name>
     <message>
         <source>MuseScore: Measure Properties</source>
-        <translation>MuseScore: Measure Properties</translation>
+        <translation>MuseScore: Takt eginleikar</translation>
     </message>
     <message>
         <source>Staves</source>
-        <translation>Staves</translation>
+        <translation>Stavir</translation>
     </message>
     <message>
         <source>New Row</source>
-        <translation>New Row</translation>
+        <translation>Nýggj røð</translation>
     </message>
     <message>
         <source>Staff</source>
-        <translation>Stave</translation>
+        <translation>Stavur</translation>
     </message>
     <message>
         <source>Visible</source>
-        <translation>Visible</translation>
+        <translation>Sjónligur</translation>
     </message>
     <message>
         <source>Stemless</source>
-        <translation>Stemless</translation>
+        <translation>Leggleysur</translation>
     </message>
     <message>
         <source>a</source>
@@ -5517,7 +5704,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>visible</source>
-        <translation>visible</translation>
+        <translation>Sjónligur</translation>
     </message>
     <message>
         <source>c</source>
@@ -5525,7 +5712,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Measure Duration</source>
-        <translation>Measure Duration</translation>
+        <translation>Takt tíðarlongd</translation>
     </message>
     <message>
         <source>/</source>
@@ -5545,15 +5732,15 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished">8</translation>
+        <translation>8</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished">16</translation>
+        <translation>16</translation>
     </message>
     <message>
         <source>32</source>
-        <translation type="unfinished">32</translation>
+        <translation>32</translation>
     </message>
     <message>
         <source>64</source>
@@ -5561,70 +5748,70 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Other</source>
-        <translation>Other</translation>
+        <translation>Annað</translation>
     </message>
     <message>
         <source>Exclude from measure count</source>
-        <translation type="unfinished"></translation>
+        <translation>Halt uttanfyri takt teljing</translation>
     </message>
     <message>
         <source>Repeat count:</source>
-        <translation>repeat count:</translation>
+        <translation>Endurtak teljing:</translation>
     </message>
     <message>
         <source>Layout stretch:</source>
-        <translation>layout stretch</translation>
+        <translation>Uppseting vídd</translation>
     </message>
     <message>
         <source>Measure number mode:</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt nummar háttur:</translation>
     </message>
     <message>
         <source>Nominal:</source>
-        <translation>nominal</translation>
+        <translation>Áljóðandi:</translation>
     </message>
     <message>
         <source>Actual:</source>
-        <translation>actual</translation>
+        <translation>Veruligur</translation>
     </message>
     <message>
         <source>Add to measure number:</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat takt tali:</translation>
     </message>
     <message>
         <source>Do not count</source>
-        <translation>do not count</translation>
+        <translation>Ikki telja</translation>
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Sjálvvirki:</translation>
     </message>
     <message>
         <source>Always Show</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís altíð</translation>
     </message>
     <message>
         <source>Always Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym altíð</translation>
     </message>
     <message>
         <source>Go to previous measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Far til takt frammanundan.</translation>
     </message>
     <message>
         <source>Go to next measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Far til næstu takt</translation>
     </message>
     <message>
         <source>Break multimeasure rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Steðga fleir takta íhald</translation>
     </message>
 </context>
 <context>
     <name>MeasuresDialogBase</name>
     <message>
         <source>Mscore: Append Measures</source>
-        <translation>Mscore: Append Bars</translation>
+        <translation>Mscore: Innset taktir</translation>
     </message>
     <message>
         <source>OK</source>
@@ -5632,95 +5819,95 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>Strika</translation>
     </message>
     <message>
         <source>Append empty measures</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat tómar taktir</translation>
     </message>
     <message>
         <source>Number of measures to append:</source>
-        <translation>Number of bars to append</translation>
+        <translation>Tal av taktum at leggja afturat</translation>
     </message>
 </context>
 <context>
     <name>MediaDialog</name>
     <message>
         <source>Dialog</source>
-        <translation>Dialog</translation>
+        <translation>Samtala</translation>
     </message>
     <message>
         <source>PDF-Scan</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF-Skann</translation>
     </message>
     <message>
         <source>Add Scan</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat Skann</translation>
     </message>
     <message>
         <source>Remove Scan</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak burtur Skann</translation>
     </message>
     <message>
         <source>Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóð</translation>
     </message>
     <message>
         <source>Add Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat ljóð</translation>
     </message>
     <message>
         <source>Remove Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak burtur ljóð</translation>
     </message>
 </context>
 <context>
     <name>MenuNotes</name>
     <message>
         <source>&amp;Notes</source>
-        <translation>&amp;Notes</translation>
+        <translation>&amp;nótar</translation>
     </message>
 </context>
 <context>
     <name>MetaEditDialog</name>
     <message>
         <source>MuseScore Version:</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore útgáva:</translation>
     </message>
     <message>
         <source>Revision:</source>
-        <translation type="unfinished"></translation>
+        <translation>Endurskoðan:</translation>
     </message>
     <message>
         <source>API-Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>API-stig</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>New</translation>
+        <translation>Nýtt</translation>
     </message>
     <message>
         <source>MuseScore: Score Information</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Nótablað upplýsingar</translation>
     </message>
 </context>
 <context>
     <name>Ms</name>
     <message>
         <source>Fall</source>
-        <translation type="unfinished"></translation>
+        <translation>Fall</translation>
     </message>
     <message>
         <source>Doit</source>
-        <translation type="unfinished"></translation>
+        <translation>Minsta petti</translation>
     </message>
     <message>
         <source>Plop</source>
-        <translation type="unfinished"></translation>
+        <translation>gjums</translation>
     </message>
     <message>
         <source>Scoop</source>
-        <translation type="unfinished"></translation>
+        <translation>Glíðan</translation>
     </message>
 </context>
 <context>
@@ -5742,74 +5929,74 @@ tuplet would cross measure</source>
     <name>Ms::AccessibleScoreView</name>
     <message>
         <source>Score %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótablað %1</translation>
     </message>
 </context>
 <context>
     <name>Ms::AccessibleSearchBox</name>
     <message>
         <source>Measure</source>
-        <translation>Measure</translation>
+        <translation>Takt</translation>
     </message>
     <message>
         <source>Page</source>
-        <translation>Page</translation>
+        <translation>Síða</translation>
     </message>
     <message>
         <source>Rehearsal Mark</source>
-        <translation>Rehearsal Mark</translation>
+        <translation>Venjingar merki</translation>
     </message>
     <message>
         <source>Not found </source>
-        <translation type="unfinished"></translation>
+        <translation>Ikki funnin</translation>
     </message>
 </context>
 <context>
     <name>Ms::AlbumManager</name>
     <message>
         <source>MuseScore: Add Score</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: legg afturat nótablað</translation>
     </message>
     <message>
         <source>MuseScore: Load Album</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Tak album fram</translation>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx)</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore fílir (*.mscz *.mscx)</translation>
     </message>
     <message>
         <source>MuseScore Album Files (*.album)</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore album fila (*.album)</translation>
     </message>
     <message>
         <source>Error while creating score from album.</source>
-        <translation type="unfinished"></translation>
+        <translation>Villa: stovna nótablað frá album</translation>
     </message>
 </context>
 <context>
     <name>Ms::Ambitus</name>
     <message>
         <source>%1; Top pitch: %2%3; Bottom pitch: %4%5</source>
-        <translation type="unfinished"></translation>
+        <translation>%1; Ovasti nóti: %2%3; Niðasti nóti: %4%5</translation>
     </message>
 </context>
 <context>
     <name>Ms::ArticulationProperties</name>
     <message>
         <source>normal</source>
-        <translation>normal</translation>
+        <translation>Vanligt</translation>
     </message>
 </context>
 <context>
     <name>Ms::BarLine</name>
     <message>
         <source>%1 Start of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 byrjan av %2</translation>
     </message>
     <message>
         <source>%1 End of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Endi av %2</translation>
     </message>
 </context>
 <context>
@@ -5820,155 +6007,157 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Breath</source>
-        <translation>Breath</translation>
+        <translation>Steðgur</translation>
     </message>
 </context>
 <context>
     <name>Ms::ChordRest</name>
     <message>
         <source>Duplet</source>
-        <translation>Duplet</translation>
+        <translation>Tvíbólkur</translation>
     </message>
     <message>
         <source>Triplet</source>
-        <translation>Triplet</translation>
+        <translation>Tríbólkur</translation>
     </message>
     <message>
         <source>Quadruplet</source>
-        <translation>Quadruplet</translation>
+        <translation>Fjórbólkur</translation>
     </message>
     <message>
         <source>Sextuplet</source>
-        <translation>Sextuplet</translation>
+        <translation>Seksbólkur</translation>
     </message>
     <message>
         <source>Septuplet</source>
-        <translation>Septuplet</translation>
+        <translation>Seksbólkur</translation>
     </message>
     <message>
         <source>Octuplet</source>
-        <translation>Octuplet</translation>
+        <translation>Áttabólkur</translation>
     </message>
     <message>
         <source>Custom Tuplet</source>
-        <translation type="unfinished"></translation>
+        <translation>Sergjørdur nótabólkur</translation>
     </message>
     <message>
         <source>Quintuplet</source>
-        <translation>Quintuplet</translation>
+        <translation>Fimmbólkur</translation>
     </message>
     <message>
         <source>Nonuplet</source>
-        <translation>Nonuplet</translation>
+        <translation>Níggjubólkur</translation>
     </message>
     <message>
         <source>%1 Start of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 byrjan av %2</translation>
     </message>
     <message>
         <source>%1 End of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Endi av %2</translation>
     </message>
     <message>
         <source>Dotted %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikkaður %1</translation>
     </message>
     <message>
         <source>Double dotted %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupult prikkaður %1</translation>
     </message>
     <message>
         <source>Triple dotted %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Trí - prikkaður %1</translation>
     </message>
 </context>
 <context>
     <name>Ms::ChordStyleEditor</name>
     <message>
         <source>MuseScore: Chord Symbols Style Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Akkord Symbol Snið ritil</translation>
     </message>
 </context>
 <context>
     <name>Ms::DrumTools</name>
     <message>
         <source>Drum Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Trummu tól</translation>
     </message>
     <message>
         <source>Edit Drumset</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt trummusett</translation>
     </message>
     <message>
         <source>Drums</source>
-        <translation>Drums</translation>
+        <translation>Trummur</translation>
     </message>
 </context>
 <context>
     <name>Ms::DrumrollEditor</name>
     <message>
         <source>Toolbar 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Amboðsbjálki 1</translation>
     </message>
     <message>
         <source>Toolbar 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Amboðsbjálki 3</translation>
     </message>
     <message>
         <source>Cursor:</source>
-        <translation>Cursor:</translation>
+        <translation>Peikari:</translation>
     </message>
     <message>
         <source>Velocity:</source>
-        <translation>Velocity:</translation>
+        <translation>Ferð:</translation>
     </message>
     <message>
         <source>offset</source>
-        <translation>offset</translation>
+        <translation>offsett</translation>
     </message>
     <message>
         <source>user</source>
-        <translation>user</translation>
+        <translation>Brúkari</translation>
     </message>
     <message>
         <source>Pitch:</source>
-        <translation>Pitch:</translation>
+        <translation>Tónahædd:</translation>
     </message>
     <message>
         <source>MuseScore: &lt;%1&gt; Staff: %2</source>
-        <translation>MuseScore: &lt;%1&gt; Stave: %2</translation>
+        <translation>MuseScore: &lt;%1&gt; Stavur: %2</translation>
     </message>
 </context>
 <context>
     <name>Ms::EditDrumset</name>
     <message>
         <source>invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>Ógildigur</translation>
     </message>
     <message>
         <source>MuseScore: Open File</source>
-        <translation>MuseScore: Open File</translation>
+        <translation>MuseScore: Opna fílu</translation>
     </message>
     <message>
         <source>Write File failed: </source>
-        <translation>Write File failed: </translation>
+        <translation>Skriva fíl miseydnað: </translation>
     </message>
     <message>
         <source>MuseScore: Write Drumset</source>
-        <translation>MuseScore: Write Drumset</translation>
+        <translation>MuseScore: Skriva trummusett</translation>
     </message>
     <message>
         <source>Open File
 %1
 failed: </source>
-        <translation type="unfinished"></translation>
+        <translation>Opna fílu
+%1
+villa:</translation>
     </message>
 </context>
 <context>
     <name>Ms::EditStaff</name>
     <message>
         <source>The instrument name is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðførisnavnið er ógildugt</translation>
     </message>
 </context>
 <context>
@@ -5981,7 +6170,7 @@ failed: </source>
     <message>
         <source>Pitch</source>
         <comment>string data</comment>
-        <translation>Pitch</translation>
+        <translation>Tónahædd</translation>
     </message>
 </context>
 <context>
@@ -5992,95 +6181,95 @@ failed: </source>
     </message>
     <message>
         <source>Anchor</source>
-        <translation>Anchor</translation>
+        <translation>Akker</translation>
     </message>
     <message>
         <source>Above Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Omanfyri stav</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Niðanfyri stav</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Sjálvvirkin ljómur</translation>
     </message>
     <message>
         <source>Above Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Omanfyri akkord</translation>
     </message>
     <message>
         <source>Below Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Niðanfyri akkord</translation>
     </message>
     <message>
         <source>Special symbols in header/footer</source>
-        <translation type="unfinished"></translation>
+        <translation>Serstøk symbol í høvd/fót</translation>
     </message>
     <message>
         <source>page number, except on first page</source>
-        <translation type="unfinished"></translation>
+        <translation>síðu nummar, uttan á fyrstu síðu</translation>
     </message>
     <message>
         <source>page number, on all pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Síðu nummar, á øllum síðum</translation>
     </message>
     <message>
         <source>number of pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Tal á síðum</translation>
     </message>
     <message>
         <source>file name</source>
-        <translation type="unfinished"></translation>
+        <translation>Fílu navn</translation>
     </message>
     <message>
         <source>file path+name</source>
-        <translation type="unfinished"></translation>
+        <translation>Fílu leið+navn</translation>
     </message>
     <message>
         <source>current date</source>
-        <translation type="unfinished"></translation>
+        <translation>dagsins dato</translation>
     </message>
     <message>
         <source>creation date</source>
-        <translation type="unfinished"></translation>
+        <translation>Framleiðslu dato</translation>
     </message>
     <message>
         <source>copyright, on first page only</source>
-        <translation type="unfinished"></translation>
+        <translation>Útgávurættur, bert á fyrstu síðu</translation>
     </message>
     <message>
         <source>copyright, on all pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Útgávurættur, á øllum síðum</translation>
     </message>
     <message>
         <source>the $ sign itself</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>meta data tag</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation type="unfinished"></translation>
+        <translation>$ tekni sjálvt</translation>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat øllum pørtum</translation>
     </message>
     <message>
         <source>last modification time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tíðspunkt fyri seinasta broyting</translation>
     </message>
     <message>
         <source>last modification date</source>
-        <translation type="unfinished"></translation>
+        <translation>Seinasti broytingar dagur</translation>
     </message>
     <message>
         <source>page number, if there is more than one page</source>
-        <translation type="unfinished"></translation>
+        <translation>Síðu nummar, um fleiri enn ein síða</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>Meta data merki, sí niðanfyri</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Meta data merkir til taks, teirra núverandi virði:</translation>
     </message>
 </context>
 <context>
@@ -6089,14 +6278,16 @@ failed: </source>
         <source>Cannot open figured bass description:
 %1
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki opna besifringsbass lýsing:
+%1
+%2</translation>
     </message>
 </context>
 <context>
     <name>Ms::Fingering</name>
     <message>
         <source>String number</source>
-        <translation type="unfinished"></translation>
+        <translation>Streingja nummar</translation>
     </message>
 </context>
 <context>
@@ -6111,473 +6302,475 @@ failed: </source>
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Sergjørd</translation>
     </message>
 </context>
 <context>
     <name>Ms::Harmony</name>
     <message>
         <source>sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>krossur</translation>
     </message>
     <message>
         <source>flat</source>
-        <translation type="unfinished"></translation>
+        <translation>b fyri nótan</translation>
     </message>
 </context>
 <context>
     <name>Ms::HelpQuery</name>
     <message>
         <source>Search for: </source>
-        <translation type="unfinished"></translation>
+        <translation>Leita eftir:</translation>
     </message>
 </context>
 <context>
     <name>Ms::Inspector</name>
     <message>
         <source>Inspector</source>
-        <translation>Inspector</translation>
+        <translation>Inspektor</translation>
     </message>
     <message>
         <source>Inspector Subwindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Inspektor undirvindeyga</translation>
     </message>
 </context>
 <context>
     <name>Ms::InspectorBase</name>
     <message>
         <source>Inspector</source>
-        <translation>Inspector</translation>
+        <translation>Inspektor</translation>
     </message>
 </context>
 <context>
     <name>Ms::InspectorGroupElement</name>
     <message>
         <source>Select</source>
-        <translation>Select</translation>
+        <translation>Vel</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notes</translation>
+        <translation>Nótar</translation>
     </message>
     <message>
         <source>Rests</source>
-        <translation type="unfinished"></translation>
+        <translation>tøgnir</translation>
     </message>
 </context>
 <context>
     <name>Ms::InspectorNote</name>
     <message>
         <source>Select</source>
-        <translation>Select</translation>
+        <translation>Vel</translation>
     </message>
     <message>
         <source>Dot1</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikk1</translation>
     </message>
     <message>
         <source>Dot2</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikk2</translation>
     </message>
     <message>
         <source>Dot3</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikk3</translation>
     </message>
     <message>
         <source>Hook</source>
-        <translation>Hook</translation>
+        <translation>Krókur</translation>
     </message>
     <message>
         <source>Stem</source>
-        <translation>Stem</translation>
+        <translation>Leggur</translation>
     </message>
     <message>
         <source>Beam</source>
-        <translation>Beam</translation>
+        <translation>Bjálki</translation>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Nótabólkur</translation>
     </message>
 </context>
 <context>
     <name>Ms::InspectorRest</name>
     <message>
         <source>Select</source>
-        <translation>Select</translation>
+        <translation>Vel</translation>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Nótabólkur</translation>
     </message>
 </context>
 <context>
     <name>Ms::InstrumentsDialog</name>
     <message>
         <source>MuseScore: Save Instrument List</source>
-        <translation>MuseScore: Save Instrument List</translation>
+        <translation>MuseScore: Goym ljóðførislista</translation>
     </message>
     <message>
         <source>Write Style failed: </source>
-        <translation>Write Style failed: </translation>
+        <translation>Skrivað snið miseydnað: </translation>
     </message>
     <message>
         <source>MuseScore: Write Style</source>
-        <translation>MuseScore: Write Style</translation>
+        <translation>MuseScore: Skrivað snið</translation>
     </message>
     <message>
         <source>MuseScore: Load Instrument List</source>
-        <translation>MuseScore: Load Instrument List</translation>
+        <translation>MuseScore: Tak fram ljóðførislista</translation>
     </message>
     <message>
         <source>MuseScore: Open Instruments File</source>
-        <translation type="unfinished"></translation>
+        <translation>Musescore: Opna ljóðføris fílu</translation>
     </message>
     <message>
         <source>Open Instruments File
 %1
 failed: </source>
-        <translation type="unfinished"></translation>
+        <translation>Opna ljóðførisfílu
+%1
+villa:</translation>
     </message>
     <message>
         <source>MuseScore Instruments (*.xml)</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore ljóðføri (*.xml)</translation>
     </message>
 </context>
 <context>
     <name>Ms::InstrumentsWidget</name>
     <message>
         <source>Staff %1</source>
-        <translation>Stave %1</translation>
+        <translation>Stav %1</translation>
     </message>
     <message>
         <source>Staves</source>
-        <translation>Staves</translation>
+        <translation>Stavir</translation>
     </message>
     <message>
         <source>Clef</source>
-        <translation>Clef</translation>
+        <translation>Lykil</translation>
     </message>
     <message>
         <source>Staff type</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav slag</translation>
     </message>
     <message>
         <source>Visible</source>
-        <translation>Visible</translation>
+        <translation>Sjónligur</translation>
     </message>
     <message>
         <source>Linked</source>
-        <translation type="unfinished"></translation>
+        <translation>Leinkjaður</translation>
     </message>
 </context>
 <context>
     <name>Ms::KeyEditor</name>
     <message>
         <source>MuseScore: Key Signatures</source>
-        <translation>MuseScore: Key Signatures</translation>
+        <translation>MuseScore: Ljómslagstekin</translation>
     </message>
 </context>
 <context>
     <name>Ms::KeySig</name>
     <message>
         <source>%1: Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>%1: sergjørt</translation>
     </message>
 </context>
 <context>
     <name>Ms::LayerManager</name>
     <message>
         <source>MuseScore: select layer tag</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: vel lag merki</translation>
     </message>
     <message>
         <source>layer tag</source>
-        <translation type="unfinished"></translation>
+        <translation>lag merki</translation>
     </message>
 </context>
 <context>
     <name>Ms::LoginDialog</name>
     <message>
         <source>&lt;a href=&quot;%1&quot;&gt;Create an account&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Stovna konto&lt;/a&gt;</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;%1&quot;&gt;Forgot password?&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Gloymt loyniorð?&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Login error</source>
-        <translation type="unfinished"></translation>
+        <translation>Innritan villa</translation>
     </message>
     <message>
         <source>Please fill in your username and password</source>
-        <translation type="unfinished"></translation>
+        <translation>Vinarliga skriva títt brúkaranavn og loyniorð</translation>
     </message>
 </context>
 <context>
     <name>Ms::LoginManager</name>
     <message>
         <source>Network error</source>
-        <translation type="unfinished"></translation>
+        <translation>Netverk villa</translation>
     </message>
     <message>
         <source>Unsuccessful login. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Misseydna innritan. Vinarilga royn aftur</translation>
     </message>
     <message>
         <source>Sorry, wrong email address, username or password. Please check again. &lt;a href=&quot;%1&quot;&gt;Have you forgotten your password&lt;/a&gt;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Orsaka, skeiv email adressa, brúkaranavn ella loyniorð. Vinarliga kanna aftur.&lt;a href=&quot;%1&quot;&gt;Hevur tú gloymt títt loyniorð&lt;/a&gt;?</translation>
     </message>
     <message>
         <source>This account has been blocked.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nevnda konto er sperra.</translation>
     </message>
     <message>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or &lt;a href=&quot;%1&quot;&gt;request a new activation email&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tín konto er ikki virkin enn. Vinarliga kanna tína mailboks fyri at gera tína konto virkna ella &lt;a href=&quot;%1&quot;&gt;Bið um nýggjan virknis email&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Error while getting user info. Please try again</source>
-        <translation type="unfinished"></translation>
+        <translation>Villa í innlesing avbrúkara upplýsningum. Vinarilga royn aftur</translation>
     </message>
     <message>
         <source>Error while getting user info: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Villa í innlesing av brúkaraupplýsningum: %1</translation>
     </message>
     <message>
         <source>An error occurred during the file transfer. Please try again</source>
-        <translation type="unfinished"></translation>
+        <translation>Villa í samband við flyting av fílu. Vinarliga royn aftur</translation>
     </message>
     <message>
         <source>Cannot upload: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki uppsenda: %1</translation>
     </message>
     <message>
         <source>Please upgrade</source>
-        <translation type="unfinished"></translation>
+        <translation>Vinarliga uppstiga</translation>
     </message>
     <message>
         <source>Your MuseScore version is too old to use this feature.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Please upgrade first&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tín MuseScore útgáva er ov gomul til hendan tátt&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Vinarliga uppstiga fyrst&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Please check your Internet connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Vinarliga kanna títt internet samband</translation>
     </message>
     <message>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klokkutíðin á tínum tóli er skeivt stilla. Vinarliga kanna og stilla rætt. Góð ráð: set klokkutíðina sjálvvirkna. Um tú enn ikki kann innrita, &lt;a href=&quot;%1&quot;&gt;Kontakta okkum&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
     <name>Ms::MScore</name>
     <message>
         <source>you cannot create an element</source>
-        <translation type="unfinished"></translation>
+        <translation>tú kanst ikki stovna element</translation>
     </message>
 </context>
 <context>
     <name>Ms::MagBox</name>
     <message>
         <source>Zoom</source>
-        <translation>Magnification</translation>
+        <translation>Suming</translation>
     </message>
 </context>
 <context>
     <name>Ms::MeasureProperties</name>
     <message>
         <source>MuseScore: Measure Properties for Measure %1</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: takt eginleikar takt %1</translation>
     </message>
     <message>
         <source>visible</source>
-        <translation>visible</translation>
+        <translation>Sjónligur</translation>
     </message>
     <message>
         <source>stemless</source>
-        <translation type="unfinished"></translation>
+        <translation>Leggleysur</translation>
     </message>
 </context>
 <context>
     <name>Ms::MediaDialog</name>
     <message>
         <source>MuseScore: Additional Media</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Eyka miðlar</translation>
     </message>
 </context>
 <context>
     <name>Ms::MetaEditDialog</name>
     <message>
         <source>MuseScore: Input Tag Name</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Inntak Merki Navn</translation>
     </message>
     <message>
         <source>New tag name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nýtt merki navn:</translation>
     </message>
 </context>
 <context>
     <name>Ms::Mixer</name>
     <message>
         <source>MuseScore: Mixer</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Miksari</translation>
     </message>
 </context>
 <context>
     <name>Ms::MuseScore</name>
     <message>
         <source>Could not open MP3 encoding library!</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki opna MP3 kodu savn!</translation>
     </message>
     <message>
         <source>Not a valid or supported MP3 encoding library!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikki galdandi ella stuðla MP3 kodu savn!</translation>
     </message>
     <message>
         <source>Unable to initialize MP3 stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki innleiða MP3 streym</translation>
     </message>
     <message>
         <source>Unable to open target file for writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki opna mál fílu til skriving</translation>
     </message>
     <message>
         <source>Error %1 returned from MP3 encoder</source>
-        <translation type="unfinished"></translation>
+        <translation>Villa %1 komi aftur frá MP3 innkodara</translation>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Save changes to the score &quot;%1&quot;
 before closing?</source>
-        <translation>Save changes to the score &quot;%1&quot; before closing?</translation>
+        <translation>Goym broytingar í nótablaðnum &quot;%1&quot; áðrenn afturlating?</translation>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore Fílir (*.mscz *.mscx);;</translation>
     </message>
     <message>
         <source>MusicXML Files (*.xml *.mxl);;</source>
-        <translation>MusicXML Files (*.xml *.mxl);;</translation>
+        <translation>MusicXML Fila (*.xml *.mxl);;</translation>
     </message>
     <message>
         <source>MIDI Files (*.mid *.midi *.kar);;</source>
-        <translation>MIDI Files (*.mid *.midi *.kar);;</translation>
+        <translation>MIDI Fila (*.mid *.midi *.kar);;</translation>
     </message>
     <message>
         <source>Muse Data Files (*.md);;</source>
-        <translation>Muse Data Files (*.md);;</translation>
+        <translation>Muse Data Fila (*.md);;</translation>
     </message>
     <message>
         <source>Capella Files (*.cap *.capx);;</source>
-        <translation type="unfinished"></translation>
+        <translation>Capella Filir (*.cap *.capx);;</translation>
     </message>
     <message>
         <source>BB Files &lt;experimental&gt; (*.mgu *.MGU *.sgu *.SGU);;</source>
-        <translation>BB Fílar &lt;experimental&gt; (*.mgu *.MGU *.sgu *.SGU);;</translation>
+        <translation>BB Fíla &lt;experimental&gt; (*.mgu *.MGU *.sgu *.SGU);;</translation>
     </message>
     <message>
         <source>Overture / Score Writer Files &lt;experimental&gt; (*.ove *.scw);;</source>
-        <translation type="unfinished"></translation>
+        <translation>Overture / Score Writer Filir &lt;experimental&gt; (*.ove *.scw);;</translation>
     </message>
     <message>
         <source>Bagpipe Music Writer Files &lt;experimental&gt; (*.bww);;</source>
-        <translation type="unfinished"></translation>
+        <translation>Bagpipe Music Writer Filir &lt;experimental&gt; (*.bww);;</translation>
     </message>
     <message>
         <source>MuseScore: Load Score</source>
-        <translation>MuseScore: Load Score</translation>
+        <translation>MuseScore: Tak fram nótablað</translation>
     </message>
     <message>
         <source>MuseScore: Save Score</source>
-        <translation>MuseScore: Save Score</translation>
+        <translation>MuseScore: Goym nótablað</translation>
     </message>
     <message>
         <source>MuseScore: Save File</source>
-        <translation>MuseScore: Save File</translation>
+        <translation>MuseScore: Goym fílu</translation>
     </message>
     <message>
         <source>Untitled</source>
-        <translation>Untitled</translation>
+        <translation>Ónevnd</translation>
     </message>
     <message>
         <source>MuseScore: Load Style</source>
-        <translation>MuseScore: Load Style</translation>
+        <translation>MuseScore: Tak fram snið</translation>
     </message>
     <message>
         <source>MuseScore: Save Style</source>
-        <translation>MuseScore: Save Style</translation>
+        <translation>MuseScore: Goym snið</translation>
     </message>
     <message>
         <source>MuseScore Style File (*.mss)</source>
-        <translation>MuseScore Style File (*.mss)</translation>
+        <translation>MuseScore Snið fíla (*.mss)</translation>
     </message>
     <message>
         <source>PDF Scan File (*.pdf);;All (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF Skann Fila (*.pdf);;All (*)</translation>
     </message>
     <message>
         <source>Choose PDF Scan</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel PDF Skann</translation>
     </message>
     <message>
         <source>MuseScore: Choose PDF Scan</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Vel PDF skann</translation>
     </message>
     <message>
         <source>Choose Audio File</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel ljóð fílu</translation>
     </message>
     <message>
         <source>MuseScore: Save Image</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Goym mynd</translation>
     </message>
     <message>
         <source>MuseScore: Load Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Tak fram palett</translation>
     </message>
     <message>
         <source>MuseScore: Save Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Goym Palett</translation>
     </message>
     <message>
         <source>MuseScore Palette (*.mpal)</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore Palett (*.mpal)</translation>
     </message>
     <message>
         <source>MuseScore: Load Plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Tak fram plugin</translation>
     </message>
     <message>
         <source>MuseScore: Save Plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Goym plugin</translation>
     </message>
     <message>
         <source>MuseScore Plugin File (*.qml)</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore Plugin fíla (*.qml)</translation>
     </message>
     <message>
         <source>MuseScore: Load Drumset</source>
-        <translation>MuseScore: Load Drumset</translation>
+        <translation>MuseScore: Tak fram trummusett</translation>
     </message>
     <message>
         <source>MuseScore: Save Drumset</source>
-        <translation>MuseScore: Save Drumset</translation>
+        <translation>MuseScore: Goym trummusett</translation>
     </message>
     <message>
         <source>MuseScore Drumset File (*.drm)</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore Trummusett fíla (*.drm)</translation>
     </message>
     <message>
         <source>Standard MIDI File (*.mid)</source>
-        <translation>Standard MIDI File (*.mid)</translation>
+        <translation>Vanlig MIDI Fíla (*.mid)</translation>
     </message>
     <message>
         <source>PDF File (*.pdf)</source>
-        <translation>PDF File (*.pdf)</translation>
+        <translation>PDF Fíla (*.pdf)</translation>
     </message>
     <message>
         <source>PNG Bitmap Graphic (*.png)</source>
@@ -6597,113 +6790,115 @@ before closing?</source>
     </message>
     <message>
         <source>MP3 Audio (*.mp3)</source>
-        <translation type="unfinished"></translation>
+        <translation>MP3 ljóð (*.mp3)</translation>
     </message>
     <message>
         <source>MuseScore: Export</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Flyt út</translation>
     </message>
     <message>
         <source>MuseScore: Save As</source>
-        <translation>MuseScore: Save As</translation>
+        <translation>MuseScore: Goym sum</translation>
     </message>
     <message>
         <source>MuseScore: Export Parts</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Flyt út partar</translation>
     </message>
     <message>
         <source>&quot;%1&quot; already exists.
 Do you want to replace it?
 </source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; er longu til.
+Vil tú skifta hana út?
+</translation>
     </message>
     <message>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift út</translation>
     </message>
     <message>
         <source>Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>Leyp um</translation>
     </message>
     <message>
         <source>Replace All</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift út alt</translation>
     </message>
     <message>
         <source>Skip All</source>
-        <translation type="unfinished"></translation>
+        <translation>Leyp um alt</translation>
     </message>
     <message>
         <source>Parts were successfully exported</source>
-        <translation type="unfinished"></translation>
+        <translation>Eydnaðist at flyta út partar</translation>
     </message>
     <message>
         <source>MuseScore: Save a Copy</source>
-        <translation>MuseScore: Save a Copy</translation>
+        <translation>MuseScore: Goym avrit</translation>
     </message>
     <message>
         <source>MuseScore: Save Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Goym úrval</translation>
     </message>
     <message>
         <source>MuseScore: Save Selected</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Goym útvaldu</translation>
     </message>
     <message>
         <source>Images (*.jpg *.jpeg *.png);;All (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>myndir (*.jpg *.jpeg *.png);;All (*)</translation>
     </message>
     <message>
         <source>Repeat measure sign</source>
-        <translation>Repeat bar sign</translation>
+        <translation>Endurtak takt tekin</translation>
     </message>
     <message>
         <source>Line break</source>
-        <translation>Line break</translation>
+        <translation>Striku brot</translation>
     </message>
     <message>
         <source>Page break</source>
-        <translation>Page break</translation>
+        <translation>Síðu brot</translation>
     </message>
     <message>
         <source>Section break</source>
-        <translation type="unfinished"></translation>
+        <translation>Sektión reglubrot</translation>
     </message>
     <message>
         <source>Staff spacer down</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav glopp niður</translation>
     </message>
     <message>
         <source>Staff spacer up</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav glopp upp</translation>
     </message>
     <message>
         <source>Fingering %1</source>
-        <translation>Fingering %1</translation>
+        <translation>Fingrasetingur %1</translation>
     </message>
     <message>
         <source>String number %1</source>
-        <translation>String number %1</translation>
+        <translation>Streingja nummar %1</translation>
     </message>
     <message>
         <source>Bracket</source>
-        <translation>Bracket</translation>
+        <translation>Klombur</translation>
     </message>
     <message>
         <source>Brace</source>
-        <translation type="unfinished"></translation>
+        <translation>Reim</translation>
     </message>
     <message>
         <source>Square</source>
-        <translation type="unfinished"></translation>
+        <translation>kvadrat</translation>
     </message>
     <message>
         <source>Line</source>
-        <translation>Line</translation>
+        <translation>Strika</translation>
     </message>
     <message>
         <source>Breath</source>
-        <translation>Breath</translation>
+        <translation>Steðgur</translation>
     </message>
     <message>
         <source>Caesura</source>
@@ -6719,19 +6914,19 @@ Do you want to replace it?
     </message>
     <message>
         <source>Staff Text</source>
-        <translation>Stave Text</translation>
+        <translation>Stav tekstur</translation>
     </message>
     <message>
         <source>System Text</source>
-        <translation>System Text</translation>
+        <translation>Skipan tekstur</translation>
     </message>
     <message>
         <source>Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>ljóðføri</translation>
     </message>
     <message>
         <source>4/4 common time</source>
-        <translation>4/4 common time</translation>
+        <translation>4/4 vanlig takt</translation>
     </message>
     <message>
         <source>2/2 alla breve</source>
@@ -6739,28 +6934,29 @@ Do you want to replace it?
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;legg afturat</translation>
     </message>
     <message>
         <source>&amp;Measures</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Taktir</translation>
     </message>
     <message>
         <source>&amp;Frames</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Rammur</translation>
     </message>
     <message>
         <source>&amp;Text</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Tekstur</translation>
     </message>
     <message>
         <source>&amp;Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Strikur</translation>
     </message>
     <message>
         <source>No measure selected:
 Please select a measure and try again</source>
-        <translation>No Measure selected: please select a measure and try again.</translation>
+        <translation>Eingin takt vald:
+Vinarliga vel takt og royn aftur</translation>
     </message>
     <message>
         <source>synthesizer</source>
@@ -6768,113 +6964,115 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>audio track</source>
-        <translation type="unfinished"></translation>
+        <translation>ljóð spor</translation>
     </message>
     <message>
         <source>File Operations</source>
-        <translation>File Operations</translation>
+        <translation>Filu atgerðir</translation>
     </message>
     <message>
         <source>Transport Tools</source>
-        <translation>Transport Tools</translation>
+        <translation>Flutningstól</translation>
     </message>
     <message>
         <source>Page View</source>
-        <translation type="unfinished"></translation>
+        <translation>Síðu sýning</translation>
     </message>
     <message>
         <source>Continuous View</source>
-        <translation type="unfinished"></translation>
+        <translation>Framhaldandi sýning</translation>
     </message>
     <message>
         <source>Concert Pitch</source>
-        <translation>Concert Pitch</translation>
+        <translation>Kamartóni</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation>&amp;File</translation>
+        <translation>&amp;Fila</translation>
     </message>
     <message>
         <source>Open &amp;Recent</source>
-        <translation>Open &amp;Recent</translation>
+        <translation>Opna &amp;Seinastu</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation>&amp;Edit</translation>
+        <translation>&amp;Ritstjórna</translation>
     </message>
     <message>
         <source>&amp;Measure</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Takt</translation>
     </message>
     <message>
         <source>&amp;Voices</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Røddir</translation>
     </message>
     <message>
         <source>W&amp;orkspaces</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Arbeiðsrúm</translation>
     </message>
     <message>
         <source>&amp;Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Serrættindi...</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sýning</translation>
     </message>
     <message>
         <source>Add N&amp;ote</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat n&amp;óta</translation>
     </message>
     <message>
         <source>Add &amp;Interval</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat &amp;interval</translation>
     </message>
     <message>
         <source>T&amp;uplets</source>
-        <translation type="unfinished"></translation>
+        <translation>N&amp;ótabólkar</translation>
     </message>
     <message>
         <source>&amp;Layout</source>
-        <translation>&amp;Layout</translation>
+        <translation>&amp;Uppsetan</translation>
     </message>
     <message>
         <source>&amp;Style</source>
-        <translation>Style</translation>
+        <translation>&amp;Snið</translation>
     </message>
     <message>
         <source>&amp;Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Plugin</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Help</translation>
+        <translation>&amp;Hjálp</translation>
     </message>
     <message>
         <source>&amp;Online Handbook</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Álinju Handbók</translation>
     </message>
     <message>
         <source>Check for &amp;Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Kanna eftir &amp;dagføring</translation>
     </message>
     <message>
         <source>The previous session quit unexpectedly.
 
 Restore session?</source>
-        <translation>The previous session quit unexpectedly. Restore this session?</translation>
+        <translation>Seinasta seta endaði knappuliga
+
+Endurnýggja setu?</translation>
     </message>
     <message>
         <source>Go To: </source>
-        <translation>Go To: </translation>
+        <translation>Far til: </translation>
     </message>
     <message>
         <source>MuseScore: Tuplet Error</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Nótabólk villa</translation>
     </message>
     <message>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki stovna við lufalli %1 fyri tíðarbil %2</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -6882,82 +7080,85 @@ Restore session?</source>
     </message>
     <message>
         <source>Undo Changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Angra broytingar</translation>
     </message>
     <message>
         <source>MuseScore: Read Workspace Name</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Les arbeiðsrúm navn</translation>
     </message>
     <message>
-        <source>&apos;%1&apos; does already exist,
+        <source>'%1' does already exist,
 please choose a different name:</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;%1&apos; er longu til,
+vinarliga vel annað navn:</translation>
     </message>
     <message>
         <source>Ogg Audio File (*.ogg);;All (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogg ljóð fíla (*.ogg);;All (*)</translation>
     </message>
     <message>
         <source>MuseScore: Choose Ogg Audio File</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Vel Ogg ljóð fílu</translation>
     </message>
     <message>
         <source>FLAC Audio (*.flac)</source>
-        <translation type="unfinished"></translation>
+        <translation>FLAC ljóð (*.flac)</translation>
     </message>
     <message>
         <source>Chord Symbols Style File (*.xml)</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord symbol snið fíla (*.xml)</translation>
     </message>
     <message>
         <source>MuseScore: Load Chord Symbols Style</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Tak fram akkord symbol snið</translation>
     </message>
     <message>
         <source>MuseScore: Save Chord Symbols Style</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Goym akkord symbol snið</translation>
     </message>
     <message>
         <source>MuseScore: Insert Image</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Set inn mynd</translation>
     </message>
     <message>
         <source>Report a Bug</source>
-        <translation type="unfinished"></translation>
+        <translation>Boða frá lús</translation>
     </message>
     <message>
         <source>System</source>
         <extracomment>The default language of the operating system. NOT a music system.</extracomment>
-        <translation>System</translation>
+        <translation>Skipan</translation>
     </message>
     <message>
         <source>Please select one or more measures</source>
-        <translation type="unfinished"></translation>
+        <translation>Vinarliga vel eina ella fleiri taktir</translation>
     </message>
     <message>
         <source>Error Opening LAME library</source>
-        <translation type="unfinished"></translation>
+        <translation>Villa opnan av LAME savni</translation>
     </message>
     <message>
         <source>Encoding Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kodu vílla</translation>
     </message>
     <message>
         <source>Confirm Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Váttað skift út</translation>
     </message>
     <message>
         <source>Error reading language file %s at line %d column %d: %s
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Villa við lesing av málfílu %s við linju %d teigur %d: %s
+
+</translation>
     </message>
     <message>
         <source>MuseScore: Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Ávaring</translation>
     </message>
     <message>
         <source>PDF Files &lt;experimental OMR&gt; (*.pdf);;</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF Fílir &lt;experimental OMR&gt; (*.pdf);;</translation>
     </message>
     <message>
         <source>New...</source>
@@ -6965,23 +7166,23 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Clear Recent Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Rudda nýligar fílir</translation>
     </message>
     <message>
         <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation type="unfinished"></translation>
+        <translation>Allar stuðlaðar fílur (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
     </message>
     <message>
         <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation type="unfinished"></translation>
+        <translation>Allar stuðlaðar fílur (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
     </message>
     <message>
         <source>Zoom</source>
-        <translation>Magnification</translation>
+        <translation>Suming</translation>
     </message>
     <message>
         <source>View Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Sýningar háttur</translation>
     </message>
     <message>
         <source>Swing</source>
@@ -6989,179 +7190,179 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Key Signatures</source>
-        <translation>Key Signatures</translation>
+        <translation>Ljómslagstekin</translation>
     </message>
     <message>
         <source>Time Signatures</source>
-        <translation>Time Signatures</translation>
+        <translation>Takt slag</translation>
     </message>
     <message>
         <source>Symbols</source>
-        <translation>Symbols</translation>
+        <translation>Symbolir</translation>
     </message>
     <message>
         <source>Cannot create tuplet: Note value is too short</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki stovna nótabólk: nótavirði ov líti</translation>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore Fíla (*.mscz)</translation>
     </message>
     <message>
         <source>Uncompressed MuseScore File (*.mscx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ósamanpakkaður MuseScore Fíla (*.mscx)</translation>
     </message>
     <message>
         <source>MusicXML File (*.xml)</source>
-        <translation type="unfinished"></translation>
+        <translation>TónleikaXML File (*.xml)</translation>
     </message>
     <message>
         <source>Compressed MusicXML File (*.mxl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Samanpakkaður tónleikaXML fíla (*.mxl)</translation>
     </message>
     <message>
         <source>Show MIDI import panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís MIDI flyt inn panel</translation>
     </message>
     <message>
         <source>Tempo text</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempo tekstur</translation>
     </message>
     <message>
         <source>Staff text</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav tekstur</translation>
     </message>
     <message>
         <source>System text</source>
-        <translation type="unfinished"></translation>
+        <translation>Skipan tekstur</translation>
     </message>
     <message>
         <source>Rehearsal mark</source>
-        <translation type="unfinished"></translation>
+        <translation>Venjingar merki</translation>
     </message>
     <message>
         <source>Instrument change</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðføris broyting</translation>
     </message>
     <message>
         <source>Set visible</source>
-        <translation type="unfinished"></translation>
+        <translation>Set sjónligt</translation>
     </message>
     <message>
         <source>Set invisible</source>
-        <translation type="unfinished"></translation>
+        <translation>Set ósjónligt</translation>
     </message>
     <message>
         <source>Change staff type</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt stav slag</translation>
     </message>
     <message>
         <source>Change instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt ljóðføri</translation>
     </message>
     <message>
         <source>Fretboard diagram</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandaborð diagramm</translation>
     </message>
     <message>
         <source>Measure:Beat:Tick</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt:Slag:Klikk</translation>
     </message>
     <message>
         <source>Switch layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Být um lag</translation>
     </message>
     <message>
         <source>Switch play mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Být um spæli hátt</translation>
     </message>
     <message>
         <source>Workspace name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Arbeiðsrúm navn:</translation>
     </message>
     <message>
         <source>Score_and_Parts</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótablað_og_Partar</translation>
     </message>
     <message>
         <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</translation>
     </message>
     <message>
         <source>MuseScore Styles (*.mss)</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore snið (*.mss)</translation>
     </message>
     <message>
         <source>MuseScore Plugin (*.qml)</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore plugin (*.qml)</translation>
     </message>
     <message>
         <source>MuseScore Drumset (*.drm)</source>
-        <translation>MuseScore drumset (*.drm)</translation>
+        <translation>MuseScore trummusett (*.drm)</translation>
     </message>
     <message>
         <source>RH Guitar Fingering %1</source>
-        <translation type="unfinished"></translation>
+        <translation>HH Guitar Fingrasetningur %1</translation>
     </message>
     <message>
         <source>LH Guitar Fingering %1</source>
-        <translation type="unfinished"></translation>
+        <translation>VH Guitar Fingrasetningur %1</translation>
     </message>
     <message>
         <source>All Supported Files (*.svg *.jpg *.jpeg *.png);;Scalable Vector Graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</source>
-        <translation type="unfinished"></translation>
+        <translation>Allar stuðlaðar Fílur (*.svg *.jpg *.jpeg *.png);;Scalable Vector Graphics (*.svg);;JPEG (*.jpg *.jpeg);;PNG (*.png)</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Tól</translation>
     </message>
     <message>
         <source>No score</source>
-        <translation>no score</translation>
+        <translation>Einki nótablað</translation>
     </message>
     <message>
         <source>Edit mode</source>
-        <translation>edit mode</translation>
+        <translation>Broyt støða</translation>
     </message>
     <message>
         <source>Text edit mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst broyting støða</translation>
     </message>
     <message>
         <source>Lyrics edit mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Songtekst broyting støða</translation>
     </message>
     <message>
         <source>Chord symbol/figured bass edit mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord symbol/besifraður bass broyting støða</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Play</translation>
+        <translation>Spæl</translation>
     </message>
     <message>
         <source>Score locked</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótablað læst</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Handbók</translation>
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Um...</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished"></translation>
+        <translation>Um &amp;sp...</translation>
     </message>
     <message>
         <source>About &amp;MusicXML...</source>
-        <translation type="unfinished"></translation>
+        <translation>Um &amp;TónleikaXML...</translation>
     </message>
     <message>
         <source>Image Capture</source>
-        <translation type="unfinished"></translation>
+        <translation>Taka mynd</translation>
     </message>
     <message>
         <source>Note Input</source>
@@ -7169,116 +7370,124 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Note input mode</source>
-        <translation>Note input mode</translation>
+        <translation>Nóta innsetan støða</translation>
     </message>
     <message>
         <source>Drum input mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Trummu innritan støða</translation>
     </message>
     <message>
         <source>TAB input mode</source>
-        <translation type="unfinished"></translation>
+        <translation>TAB innritan støða</translation>
     </message>
     <message>
         <source>Image capture mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak mynd støða</translation>
     </message>
     <message>
         <source>Cannot determine file type</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki gera av fílu slag</translation>
     </message>
     <message>
         <source>MuseScore:</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore:</translation>
     </message>
     <message>
         <source>Cannot write into %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki skriva inn í %1</translation>
+    </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation>Hetta nótablað kann ikki goymast álinju. Vinarliga bøt um spiltar taktir og royn aftur.</translation>
+    </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Bið um hjálp</translation>
     </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
     <message>
         <source>Could not&lt;br /&gt; connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki&lt;br /&gt; sambinda</translation>
     </message>
     <message>
         <source>To connect with the community, &lt;br /&gt; you need to have internet &lt;br /&gt; connection enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyri at sambinda við felagsskap, &lt;br /&gt; mást tú hava internet &lt;br /&gt; samband frá</translation>
     </message>
     <message>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Royn aftur</translation>
     </message>
     <message>
         <source>Close this permanently</source>
-        <translation type="unfinished"></translation>
+        <translation>Stong hetta med alla</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizard</name>
     <message>
         <source>MuseScore: Create New Score</source>
-        <translation>MuseScore: Create New Score</translation>
+        <translation>MuseScore: Stovna nýtt nótablað</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage1</name>
     <message>
         <source>Create New Score</source>
-        <translation>Create New Score</translation>
+        <translation>Stovna nýtt nótablað</translation>
     </message>
     <message>
         <source>This wizard creates a new score</source>
-        <translation>This wizard creates a new score.</translation>
+        <translation>Hesin gandakallar stovnar nýtt nótablað.</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage2</name>
     <message>
         <source>Create New Score</source>
-        <translation>Create New Score</translation>
+        <translation>Stovna nýtt nótablað</translation>
     </message>
     <message>
         <source>Define a set of instruments. Each instrument is represented by one or more staves</source>
-        <translation type="unfinished"></translation>
+        <translation>Áset ein bólk av ljóðførum. Hvørt ljóðføri er umboða av einum ella fleiri stavum </translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage3</name>
     <message>
         <source>Create New Score</source>
-        <translation>Create New Score</translation>
+        <translation>Stovna nýtt nótablað</translation>
     </message>
     <message>
         <source>Create Time Signature</source>
-        <translation>Create Time Signature</translation>
+        <translation>Stovna takt slag</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage4</name>
     <message>
         <source>Create New Score</source>
-        <translation>Create New Score</translation>
+        <translation>Stovna nýtt nótablað</translation>
     </message>
     <message>
         <source>Select Template File:</source>
-        <translation>Select Template File:</translation>
+        <translation>Vel skapilón fílu:</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage5</name>
     <message>
         <source>Create New Score</source>
-        <translation>Create New Score</translation>
+        <translation>Stovna nýtt nótablað</translation>
     </message>
     <message>
         <source>Select Key Signature and Tempo:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel ljómslagstekin og tempo</translation>
     </message>
     <message>
         <source>Key Signature</source>
-        <translation>Key Signature</translation>
+        <translation>Ljómslagstekin</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -7286,18 +7495,18 @@ please choose a different name:</source>
     </message>
     <message>
         <source>BPM:</source>
-        <translation>BPM</translation>
+        <translation>SUM</translation>
     </message>
     <message>
         <source>Beats per minute</source>
-        <translation type="unfinished"></translation>
+        <translation>Sløg um minuttin</translation>
     </message>
 </context>
 <context>
     <name>Ms::NoEffectGui</name>
     <message>
         <source>No Plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Einki plugin</translation>
     </message>
 </context>
 <context>
@@ -7308,15 +7517,15 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Grace note after</source>
-        <translation type="unfinished"></translation>
+        <translation>Skreyt nóta aftaná</translation>
     </message>
     <message>
         <source>Grace note before</source>
-        <translation type="unfinished"></translation>
+        <translation>Skreytnóta áðrenn</translation>
     </message>
     <message>
         <source>Invalid note</source>
-        <translation type="unfinished"></translation>
+        <translation>Ógildigur nóti</translation>
     </message>
     <message>
         <source>Note</source>
@@ -7324,7 +7533,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Voice: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Rødd: %1</translation>
     </message>
     <message>
         <source>Acciaccatura</source>
@@ -7332,56 +7541,56 @@ please choose a different name:</source>
     </message>
     <message>
         <source>%1 Start of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 byrjan av %2</translation>
     </message>
     <message>
         <source>%1 End of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Endi av %2</translation>
     </message>
     <message>
         <source>%1; Pitch: %2; Duration: %3%4</source>
-        <translation type="unfinished"></translation>
+        <translation>%1; Tóni: %2; Tíðarbil: %3%4</translation>
     </message>
     <message>
         <source>Beat Slash</source>
-        <translation type="unfinished"></translation>
+        <translation>Slag strika</translation>
     </message>
     <message>
         <source>Rhythm Slash</source>
-        <translation type="unfinished"></translation>
+        <translation>Rútmu strika</translation>
     </message>
 </context>
 <context>
     <name>Ms::OmrPanel</name>
     <message>
         <source>OMR Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>OMR Panel</translation>
     </message>
 </context>
 <context>
     <name>Ms::Palette</name>
     <message>
         <source>Clear</source>
-        <translation>Clear</translation>
+        <translation>Rudda</translation>
     </message>
     <message>
         <source>Properties...</source>
-        <translation>Properties…</translation>
+        <translation>Eginleikar...</translation>
     </message>
     <message>
         <source>More Elements...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fleiri element...</translation>
     </message>
 </context>
 <context>
     <name>Ms::PaletteBox</name>
     <message>
         <source>Palettes</source>
-        <translation>Palettes</translation>
+        <translation>Palettir</translation>
     </message>
     <message>
         <source>Select workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel arbeiðsrúm</translation>
     </message>
     <message>
         <source>+</source>
@@ -7389,348 +7598,373 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Add new workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat nýtt arbeiðsrúm</translation>
     </message>
     <message>
         <source>new Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Nýggj palett</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation>Stak- palett</translation>
     </message>
 </context>
 <context>
     <name>Ms::PaletteBoxButton</name>
     <message>
         <source>Palette Properties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Palett eginleikar...</translation>
     </message>
     <message>
         <source>Insert New Palette...</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn nýggja palett...</translation>
     </message>
     <message>
         <source>Move Palette Up</source>
-        <translation>Move Palette Up</translation>
+        <translation>Flyt palett upp</translation>
     </message>
     <message>
         <source>Move Palette Down</source>
-        <translation>Move Palette Down</translation>
+        <translation>Flyt palett niður</translation>
     </message>
     <message>
         <source>Enable Editing</source>
-        <translation>Enable Editing</translation>
+        <translation>Gilda broyting</translation>
     </message>
     <message>
         <source>Save Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym palett</translation>
     </message>
     <message>
         <source>Load Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak fram palett</translation>
     </message>
     <message>
         <source>Delete Palette</source>
-        <translation>Delete Palette</translation>
+        <translation>Strika palett</translation>
     </message>
 </context>
 <context>
     <name>Ms::PathListDialog</name>
     <message>
         <source>Choose a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel eina filuskrá</translation>
     </message>
 </context>
 <context>
     <name>Ms::PianoTools</name>
     <message>
         <source>Piano Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano Knappaborð</translation>
     </message>
 </context>
 <context>
     <name>Ms::PluginCreator</name>
     <message>
         <source>File Operations</source>
-        <translation>File Operations</translation>
+        <translation>Fílu atgerðir</translation>
     </message>
     <message>
         <source>Edit Operations</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt atgerðir</translation>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>untitled</source>
-        <translation type="unfinished"></translation>
+        <translation>ónevnd</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Handbók</translation>
     </message>
     <message>
         <source>MuseScore Plugin Creator</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore Plugin stovnari</translation>
     </message>
     <message>
         <source>Plugin &quot;%1&quot; has changes.
 Save before closing?</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin &quot;%1&quot; er broytt.
+Goym áðrenn stong?</translation>
     </message>
     <message>
         <source>MuseScore: Save Plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Goym plugin</translation>
     </message>
     <message>
         <source>Cannot determine file type</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki gera av fílu slag</translation>
     </message>
 </context>
 <context>
     <name>Ms::PreferenceDialog</name>
     <message>
         <source>The language will be changed once you restart MuseScore.</source>
-        <translation type="unfinished"></translation>
+        <translation>Málið verður broytt tá tú startar MuseScore av nýggju.</translation>
     </message>
     <message>
         <source>Choose Notepaper</source>
-        <translation>Choose Notepaper</translation>
+        <translation>Vel nótaark</translation>
     </message>
     <message>
         <source>Choose Background Wallpaper</source>
-        <translation>Choose Background Wallpaper</translation>
+        <translation>Vel bakgrund tapet</translation>
     </message>
     <message>
         <source>Choose Default Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel forsett snið</translation>
     </message>
     <message>
         <source>Choose Default Style for Parts</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel forsett snið fyri partar</translation>
     </message>
     <message>
         <source>Choose Instrument List</source>
-        <translation>Choose Instrument List</translation>
+        <translation>Vel ljóðføris lista</translation>
     </message>
     <message>
         <source>Instrument List (*.xml)</source>
-        <translation>Instrument List (*.xml)</translation>
+        <translation>Ljóðførislisti (*.xml)</translation>
     </message>
     <message>
         <source>Choose Starting Score</source>
-        <translation>Choose Starting Score</translation>
+        <translation>Vel byrjunar nótapappír</translation>
     </message>
     <message>
         <source>MuseScore Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Sniðvegir</translation>
     </message>
     <message>
         <source>Print Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Prenta Sniðvegir</translation>
     </message>
     <message>
         <source>Choose Default Style for Imports</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel forsett snið fyri innflyting</translation>
     </message>
     <message>
         <source>Choose Score Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel nótablað faldara</translation>
     </message>
     <message>
         <source>Choose Style Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel snið faldara</translation>
     </message>
     <message>
         <source>Choose Template Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel skapilón faldara</translation>
     </message>
     <message>
         <source>Choose Plugin Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel plugin faldara</translation>
     </message>
     <message>
         <source>Choose Image Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel mynd faldara</translation>
     </message>
     <message>
         <source>Action: %1; Shortcut: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerð: %1; Sniðvegur: %2</translation>
     </message>
     <message>
         <source>No shortcut defined</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingin sniðvegur ásettur</translation>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;All (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore Fílir (*.mscz *.mscx);;All (*)</translation>
     </message>
     <message>
         <source>SoundFont Folders</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðfuntar faldarar</translation>
     </message>
 </context>
 <context>
     <name>Ms::ResourceManager</name>
     <message>
         <source>Languages</source>
-        <translation type="unfinished"></translation>
+        <translation>Mál</translation>
     </message>
     <message>
         <source>%1 KB</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 KB</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation>Update</translation>
+        <translation>Dagfør</translation>
     </message>
     <message>
         <source>No update</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingin dagføring</translation>
     </message>
     <message>
         <source>Updating</source>
-        <translation type="unfinished"></translation>
+        <translation>Dagførir</translation>
     </message>
     <message>
         <source>Failed, try again</source>
-        <translation type="unfinished"></translation>
+        <translation>Miseydnað, royn aftur</translation>
     </message>
     <message>
         <source>Updated</source>
-        <translation type="unfinished"></translation>
+        <translation>Dagført</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Rødd: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Tíðarbil: %2; %3</translation>
     </message>
 </context>
 <context>
     <name>Ms::Score</name>
     <message>
         <source>The style file is not compatible with this version of MuseScore.</source>
-        <translation type="unfinished"></translation>
+        <translation>Snið fílan kann ikki sameinast við hesi útgávu av MuseScore.</translation>
     </message>
     <message>
         <source>The following file is locked: 
 %1 
 
 Try saving to a different location.</source>
-        <translation>The following file is locked:
+        <translation>Nevnda fíla er stongd:
 %1
-Try saving to a different location.</translation>
+Royn at goyma á øðrum staði.</translation>
     </message>
     <message>
         <source>Open Temp File
 %1
 failed: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Opna Temp Fílu
+%1
+miseydnað: %2</translation>
     </message>
     <message>
         <source>MuseScore: Save File failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Goym fílu miseydnað: %1</translation>
     </message>
     <message>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Umdoypur temp. filu &lt;%1&gt; til &lt;%2&gt; miseydnað:
+%3</translation>
     </message>
     <message>
         <source>Open File
 %1
 failed: </source>
-        <translation type="unfinished"></translation>
+        <translation>Opna fílu
+%1
+villa:</translation>
     </message>
     <message>
         <source>Open File
 %1
 failed: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Opna fílu
+%1
+miseydnað: %2</translation>
     </message>
     <message>
         <source>Open Style File
 %1
 failed: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Opna snið fílu
+%1
+miseydnað: %2</translation>
     </message>
     <message>
         <source>Write Style failed: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>file not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivað snið miseydnað: %1</translation>
     </message>
     <message>
         <source>No selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Einki úrval</translation>
     </message>
     <message>
         <source>Measure %1 Staff %2 incomplete. Expected: %3; Found: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt %1 Stavur %2 óliðugur. Væntað: %3, Funnin: %4</translation>
     </message>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt %1, stavur %2, rødd %3 ov long. Væntað: %4; Funnin: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>XML lesivilla við linju %1 teigur %2: %3</translation>
     </message>
 </context>
 <context>
     <name>Ms::ScoreAccessibility</name>
     <message>
         <source>No selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Einki úrval</translation>
     </message>
     <message>
         <source>Beat: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Slag: %1</translation>
     </message>
     <message>
         <source>Range Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Spenni úrval</translation>
     </message>
     <message>
         <source>List Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista úrval</translation>
     </message>
     <message>
         <source>Measure: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt: %1</translation>
     </message>
     <message>
         <source>Start Measure: %1; Start Beat: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Byrja takt: %1; Byrja slag: %2</translation>
     </message>
     <message>
         <source>End Measure: %1; End Beat: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Síðsta takt: %1; Síðsta slag: %2</translation>
     </message>
     <message>
         <source>Staff %1</source>
-        <translation>Stave %1</translation>
+        <translation>Stavur %1</translation>
     </message>
 </context>
 <context>
     <name>Ms::ScoreBrowser</name>
     <message>
         <source>Choose Instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel ljóðføri</translation>
     </message>
     <message>
         <source>Create New Score</source>
-        <translation>Create New Score</translation>
+        <translation>Stovna nýtt nótablað</translation>
     </message>
     <message>
         <source>Custom Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Sergjørdar skapilónir</translation>
     </message>
     <message>
         <source>Getting Started</source>
-        <translation type="unfinished"></translation>
+        <translation>At byrja</translation>
     </message>
 </context>
 <context>
     <name>Ms::ScoreView</name>
     <message>
         <source>Set Standard Size...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vil normala stødd...</translation>
     </message>
     <message>
         <source>MuseScore: Set Output Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Vel úttaks loysni</translation>
     </message>
     <message>
         <source>PNG Bitmap Graphic (*.png)</source>
@@ -7738,7 +7972,7 @@ failed: %2</source>
     </message>
     <message>
         <source>PDF File (*.pdf)</source>
-        <translation>PDF File (*.pdf)</translation>
+        <translation>PDF Fíla (*.pdf)</translation>
     </message>
     <message>
         <source>Scalable Vector Graphic (*.svg)</source>
@@ -7746,375 +7980,387 @@ failed: %2</source>
     </message>
     <message>
         <source>MuseScore: Save As</source>
-        <translation>MuseScore: Save As</translation>
+        <translation>MuseScore: Goym sum</translation>
     </message>
     <message>
         <source>Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Lag</translation>
     </message>
     <message>
         <source>Text Properties...</source>
-        <translation>Text Properties…</translation>
+        <translation>Tekst eginleikar…</translation>
     </message>
     <message>
         <source>Articulation Properties...</source>
-        <translation>Framsagnar eginleikar</translation>
+        <translation>Framburður eginleikar</translation>
     </message>
     <message>
         <source>Bend Properties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bendingar eginleikar...</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Add</translation>
+        <translation>Skoyt uppí</translation>
     </message>
     <message>
         <source>Volta Properties...</source>
-        <translation>Volta Properties…</translation>
+        <translation>Volta eginleikar…</translation>
     </message>
     <message>
         <source>Time Signature Properties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt slag eginleikar</translation>
     </message>
     <message>
         <source>Line Properties...</source>
-        <translation>Line Properties…</translation>
+        <translation>Striku eginleikar…</translation>
     </message>
     <message>
         <source>Staff Text Properties...</source>
-        <translation>Stave Text Properties...</translation>
+        <translation>Stav tekstur eginleikar...</translation>
     </message>
     <message>
         <source>Change Instrument Properties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt ljóðføris eginleikar</translation>
     </message>
     <message>
         <source>Staff</source>
-        <translation>Stave</translation>
+        <translation>Stavur</translation>
     </message>
     <message>
         <source>Staff Properties...</source>
-        <translation>Stave Properties...</translation>
+        <translation>Stav eginleikar...</translation>
     </message>
     <message>
         <source>Measure</source>
-        <translation>Measure</translation>
+        <translation>Takt</translation>
     </message>
     <message>
         <source>Measure Properties...</source>
-        <translation>Measure Properties…</translation>
+        <translation>Takt eginleikar…</translation>
     </message>
     <message>
         <source>Style...</source>
-        <translation type="unfinished"></translation>
+        <translation>Snið...</translation>
     </message>
     <message>
         <source>Chord Articulation...</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord framburður...</translation>
     </message>
     <message>
         <source>Section Break Properties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sektión reglubrot eginleikar...</translation>
     </message>
     <message>
         <source>Change Instrument...</source>
-        <translation>Change Instrument…</translation>
+        <translation>Broyt ljóðføri…</translation>
     </message>
     <message>
         <source>Glissando Properties...</source>
-        <translation>Glissando Properties…</translation>
+        <translation>Glissando eginleikar…</translation>
     </message>
     <message>
         <source>Select</source>
-        <translation>Select</translation>
+        <translation>Vel</translation>
     </message>
     <message>
         <source>More...</source>
-        <translation>More…</translation>
+        <translation>Meira…</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hjálp</translation>
     </message>
     <message>
         <source>Debugger</source>
-        <translation type="unfinished"></translation>
+        <translation>Avlúsari</translation>
     </message>
     <message>
         <source>Edit Drumset...</source>
-        <translation>Edit Drumset…</translation>
+        <translation>Rætta Trummusett…</translation>
     </message>
     <message>
         <source>Drumroll Editor...</source>
-        <translation>Drumroll Editor…</translation>
+        <translation>Trummurulla ritil…</translation>
     </message>
     <message>
         <source>Pianoroll Editor...</source>
-        <translation>Pianoroll Editor…</translation>
+        <translation>Klaverrulla ritil…</translation>
     </message>
     <message>
         <source>Split Staff...</source>
-        <translation>Split Stave...</translation>
+        <translation>Být sundur stav...</translation>
     </message>
     <message>
         <source>Object Debugger</source>
-        <translation type="unfinished"></translation>
+        <translation>Luta avlúsari</translation>
     </message>
     <message>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingin stavur funnin:
+Vinarliga brúka ljóðføris vindeyga og
+stovna nakrar stavir</translation>
     </message>
     <message>
         <source>No measure selected:
 Please select a measure and try again</source>
-        <translation>No Measure selected: please select a measure and try again.</translation>
+        <translation>Eingin takt vald:
+Vinarliga vel takt og royn aftur</translation>
     </message>
     <message>
         <source>Fretboard Diagram Properties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandaborð diagramm eginleikar...</translation>
     </message>
     <message>
         <source>Set output resolution for PNG/SVG</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel úttakst loysni fyri PNG/SVG</translation>
     </message>
     <message>
         <source>Tremolo Bar Properties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tremolo takt eginleikar...</translation>
     </message>
     <message>
         <source>Text Style...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst snið...</translation>
     </message>
     <message>
         <source>System Text Properties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Skipan tekstur eginleikar</translation>
     </message>
     <message>
         <source>Resolution (%1 DPI)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Loysni (%1DPI)...</translation>
     </message>
     <message>
         <source>Hide Courtesy Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym hjálpi takt slag</translation>
     </message>
     <message>
         <source>Show Courtesy Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís hjálpi takt slag</translation>
     </message>
     <message>
         <source>Hide Courtesy Key Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym hjálpi ljómslagstekin</translation>
     </message>
     <message>
         <source>Show Courtesy Key Signature</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís hjálpi ljómslagstekin</translation>
     </message>
     <message>
         <source>No chord/rest selected:
 Please select a chord/rest and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingin akkord/tøgn vald:
+Vinarliga vel akkord/tøgn og royn aftur</translation>
     </message>
     <message>
         <source>Cannot split measure here:
 Cannot split tuplet</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki kloyva takt her:
+Kann ikki kloyva nótabólk</translation>
     </message>
     <message>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingin takt vald:
+Vinarliga vel taktir at sambinda og royn aftur</translation>
     </message>
     <message>
         <source>Auto-resize to page</source>
-        <translation type="unfinished"></translation>
+        <translation>Sjálvv.-støddbroying til síðu</translation>
     </message>
     <message>
         <source>Hide Courtesy Clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym hjálpilykil</translation>
     </message>
     <message>
         <source>Show Courtesy Clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís hjálpilykil</translation>
     </message>
     <message>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
-        <translation type="unfinished"></translation>
+        <translation>Vinarliga vel allan nótabólkin/tremolo og royn aftur</translation>
     </message>
     <message>
         <source>Image Capture</source>
-        <translation type="unfinished"></translation>
+        <translation>Taka mynd</translation>
     </message>
     <message>
         <source>Save As (Print Mode)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym sum (prent støða)...</translation>
     </message>
     <message>
         <source>Save As (Screenshot Mode)...</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym sum (Skíggjamynd støða)...</translation>
     </message>
     <message>
         <source>Cannot determine file type</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki gera av fílu slag</translation>
     </message>
     <message>
         <source>No destination to paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingin leið at seta inn</translation>
     </message>
     <message>
         <source>Cannot paste into tuplet</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki seta inn í nótabólk</translation>
     </message>
     <message>
         <source>Tuplet cannot cross barlines</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótabólkur ikki yvirum taktstrikur</translation>
     </message>
     <message>
         <source>Transparent background</source>
-        <translation type="unfinished"></translation>
+        <translation>Glæru bakgrund</translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>Kann ikki kloyva takt her:
+Fyrsta slag í taktini</translation>
     </message>
 </context>
 <context>
     <name>Ms::SearchComboBox</name>
     <message>
         <source>Search Box</source>
-        <translation type="unfinished"></translation>
+        <translation>Leitikassi</translation>
     </message>
     <message>
         <source>Type to search. Press Enter to return to score.</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriva fyri at leita. Trýst enter fyri nótablað.</translation>
     </message>
 </context>
 <context>
     <name>Ms::Segment</name>
     <message>
         <source>Start of </source>
-        <translation type="unfinished"></translation>
+        <translation>Byrjan av</translation>
     </message>
     <message>
         <source>End of </source>
-        <translation type="unfinished"></translation>
+        <translation>Endi av</translation>
     </message>
     <message>
         <source>Annotations:</source>
-        <translation type="unfinished"></translation>
+        <translation>Viðmerkingar:</translation>
     </message>
 </context>
 <context>
     <name>Ms::SelectionListWidget</name>
     <message>
         <source>Selection filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Úrvalsfiltur</translation>
     </message>
     <message>
         <source>Use Tab and Backtab to move through the check boxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Brúka Tab og Backtab fyri at flyta millum avkrossingarteigar</translation>
     </message>
 </context>
 <context>
     <name>Ms::SelectionWindow</name>
     <message>
         <source>Selection</source>
-        <translation>Selection</translation>
+        <translation>Úrval</translation>
     </message>
 </context>
 <context>
     <name>Ms::ShortcutCaptureDialog</name>
     <message>
         <source>Shortcut conflicts with </source>
-        <translation>Shortcut conflicts with </translation>
+        <translation>Sniðvegur er í stríð við</translation>
     </message>
     <message>
         <source>Shortcut conflicts with</source>
-        <translation type="unfinished"></translation>
+        <translation>Sniðvegur er í stríð við</translation>
     </message>
     <message>
         <source>New shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Nýggjur sniðvegur</translation>
     </message>
 </context>
 <context>
     <name>Ms::StaffTextProperties</name>
     <message>
         <source>normal</source>
-        <translation>normal</translation>
+        <translation>Vanligt</translation>
     </message>
     <message>
         <source>MuseScore: System Text Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Skipan tekstur eginleikar</translation>
     </message>
     <message>
         <source>MuseScore: Staff Text Properties</source>
-        <translation>MuseScore: Stave Text Properties</translation>
+        <translation>MuseScore: Stav tekstur eginleikar</translation>
     </message>
 </context>
 <context>
     <name>Ms::StartDialog</name>
     <message>
         <source>MuseScore Startup Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore Byrjunar vindeyga</translation>
     </message>
 </context>
 <context>
     <name>Ms::SymbolDialog</name>
     <message>
         <source>MuseScore: Symbols</source>
-        <translation>MuseScore: Symbols</translation>
+        <translation>MuseScore: Symbolir</translation>
     </message>
 </context>
 <context>
     <name>Ms::TempoText</name>
     <message>
         <source>note = %1</source>
-        <translation type="unfinished"></translation>
+        <translation>nóti = %1</translation>
     </message>
     <message>
         <source>Dotted %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikkaður %1</translation>
     </message>
     <message>
         <source>Double dotted %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupult prikkaður %1</translation>
     </message>
     <message>
         <source>Triple dotted %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Trí - prikkaður %1</translation>
     </message>
 </context>
 <context>
     <name>Ms::TextEditor</name>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>Feitir</translation>
     </message>
     <message>
         <source>Italic</source>
-        <translation type="unfinished"></translation>
+        <translation>Skákskriva</translation>
     </message>
     <message>
         <source>Underline</source>
-        <translation type="unfinished"></translation>
+        <translation>Strika undir</translation>
     </message>
     <message>
         <source>Align left</source>
-        <translation>align left</translation>
+        <translation>fylking vinstra</translation>
     </message>
     <message>
         <source>Align center</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilla í miðju</translation>
     </message>
     <message>
         <source>Align right</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilla til høgru</translation>
     </message>
     <message>
         <source>Subscript</source>
-        <translation type="unfinished"></translation>
+        <translation>Lágskrift</translation>
     </message>
     <message>
         <source>Superscript</source>
-        <translation type="unfinished"></translation>
+        <translation>Háskrift</translation>
     </message>
 </context>
 <context>
@@ -8134,72 +8380,73 @@ Please select a range of measures to join and try again</source>
     <name>Ms::TextProperties</name>
     <message>
         <source>MuseScore: Text Properties</source>
-        <translation>MuseScore: Text Properties</translation>
+        <translation>MuseScore: Tekst eginleikar</translation>
     </message>
 </context>
 <context>
     <name>Ms::TextStyleDialog</name>
     <message>
         <source>MuseScore: Read Style Name</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Les snið navn</translation>
     </message>
     <message>
-        <source>&apos;%1&apos; does already exist,
+        <source>'%1' does already exist,
 please choose a different name:</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;%1&apos; er longu til,
+vinarliga vel annað navn:</translation>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat øllum pørtum</translation>
     </message>
     <message>
         <source>Text style name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst snið navn:</translation>
     </message>
 </context>
 <context>
     <name>Ms::TextTools</name>
     <message>
         <source>Text Tools</source>
-        <translation>Text Tools</translation>
+        <translation>Tekst tól</translation>
     </message>
     <message>
         <source>Text Edit</source>
-        <translation>Text Edit</translation>
+        <translation>Broyt tekst</translation>
     </message>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>Feitir</translation>
     </message>
     <message>
         <source>Italic</source>
-        <translation type="unfinished"></translation>
+        <translation>Skákskriva</translation>
     </message>
     <message>
         <source>Underline</source>
-        <translation type="unfinished"></translation>
+        <translation>Strika undir</translation>
     </message>
     <message>
         <source>Subscript</source>
-        <translation type="unfinished"></translation>
+        <translation>Lágskrift</translation>
     </message>
     <message>
         <source>Superscript</source>
-        <translation type="unfinished"></translation>
+        <translation>Háskrift</translation>
     </message>
 </context>
 <context>
     <name>Ms::TimeDialog</name>
     <message>
         <source>MuseScore: Time Signatures</source>
-        <translation>MuseScore: Time Signatures</translation>
+        <translation>MuseScore: takt slag</translation>
     </message>
 </context>
 <context>
     <name>Ms::TimeSig</name>
     <message>
         <source>Common time</source>
-        <translation type="unfinished"></translation>
+        <translation>Vanlig takt</translation>
     </message>
     <message>
         <source>Cut time</source>
@@ -8207,205 +8454,205 @@ please choose a different name:</source>
     </message>
     <message>
         <source>%1/%2 time</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2 tíð</translation>
     </message>
 </context>
 <context>
     <name>Ms::UpdateChecker</name>
     <message>
         <source>An update for MuseScore is available: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</source>
-        <translation>An update for MuseScore is available: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</translation>
+        <translation>Eitt update av MuseScore er tøkt: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Update Available</source>
-        <translation>Update Available</translation>
+        <translation>Update tøkt</translation>
     </message>
     <message>
         <source>No Update Available</source>
-        <translation>No Update Available</translation>
+        <translation>Einki Update tøkt</translation>
     </message>
 </context>
 <context>
     <name>Ms::UploadScoreDialog</name>
     <message>
         <source>All Rights reserved</source>
-        <translation type="unfinished"></translation>
+        <translation>Øll rættindi umbiðin</translation>
     </message>
     <message>
         <source>Creative Commons Attribution</source>
-        <translation type="unfinished"></translation>
+        <translation>Creative Commons Attribution</translation>
     </message>
     <message>
         <source>Creative Commons Attribution Share Alike</source>
-        <translation type="unfinished"></translation>
+        <translation>Creative Commons Attribution Share Alike</translation>
     </message>
     <message>
         <source>Creative Commons Attribution No Derivative Works</source>
-        <translation type="unfinished"></translation>
+        <translation>Creative Commons Attribution No Derivative Works</translation>
     </message>
     <message>
         <source>Creative Commons Attribution Noncommercial</source>
-        <translation type="unfinished"></translation>
+        <translation>Creative Commons Attribution Noncommercial</translation>
     </message>
     <message>
         <source>Creative Commons Attribution Noncommercial Share Alike</source>
-        <translation type="unfinished"></translation>
+        <translation>Creative Commons Attribution Noncommercial Share Alike</translation>
     </message>
     <message>
         <source>Creative Commons Attribution Noncommercial Non Derivate Works</source>
-        <translation type="unfinished"></translation>
+        <translation>Creative Commons Attribution Noncommercial Non Derivate Works</translation>
     </message>
     <message>
         <source>Public Domain</source>
-        <translation type="unfinished"></translation>
+        <translation>Alment Øki</translation>
     </message>
     <message>
         <source>Creative Commons Zero</source>
-        <translation type="unfinished"></translation>
+        <translation>Creative Commons Zero</translation>
     </message>
     <message>
         <source>Missing title</source>
-        <translation type="unfinished"></translation>
+        <translation>Einki heiti</translation>
     </message>
     <message>
         <source>Please provide a title</source>
-        <translation type="unfinished"></translation>
+        <translation>Vinarliga áset heiti</translation>
     </message>
     <message>
         <source>Success</source>
-        <translation type="unfinished"></translation>
+        <translation>Gott úrslit</translation>
     </message>
     <message>
         <source>Finished! &lt;a href=&quot;%1&quot;&gt;Go to my score&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Liðugt! &lt;a href=&quot;%1&quot;&gt;Far til mítt nótablað&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Villa</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;%1&quot;&gt;What does this mean?&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Hvat merkir hetta?&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Respect the &lt;a href=&quot;%1&quot;&gt;community guidelines&lt;/a&gt;. Only make your scores accessible to anyone with permission from the right holders.</source>
-        <translation type="unfinished"></translation>
+        <translation>Virða &lt;a href=&quot;%1&quot;&gt;felagskaps leiðreglur&lt;/a&gt;. Gev bert einum og hvørjum við røttu loyvunum atgongd til tíni nótabløð.</translation>
     </message>
     <message>
         <source>Use a comma to separate the tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Brúka komma fyri at skilja millum merkir</translation>
     </message>
     <message>
         <source>[&lt;a href=&quot;%1&quot;&gt;link&lt;/a&gt;]</source>
-        <translation type="unfinished"></translation>
+        <translation>[&lt;a href=&quot;%1&quot;&gt;leinkja&lt;/a&gt;]</translation>
     </message>
 </context>
 <context>
     <name>Ms::Workspace</name>
     <message>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Framkomin</translation>
     </message>
     <message>
         <source>Basic</source>
-        <translation type="unfinished"></translation>
+        <translation>Einfaldur</translation>
     </message>
 </context>
 <context>
     <name>Multi value editor</name>
     <message>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Øll</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>TAMAM</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
     <name>MuseScore</name>
     <message>
         <source>G major, E minor</source>
-        <translation>G major, E minor</translation>
+        <translation>G dur, E moll</translation>
     </message>
     <message>
         <source>D major, B minor</source>
-        <translation>D major, B minor</translation>
+        <translation>D dur, B moll</translation>
     </message>
     <message>
         <source>C major, A minor</source>
-        <translation>C major, A minor</translation>
+        <translation>C dur, A moll</translation>
     </message>
     <message>
         <source>F major, D minor</source>
-        <translation type="unfinished"></translation>
+        <translation>F dur, D moll</translation>
     </message>
     <message>
         <source>Cb major, Ab minor</source>
-        <translation>Cb major, Ab minor</translation>
+        <translation>Cb dur, Ab moll</translation>
     </message>
     <message>
         <source>Gb major, Eb minor</source>
-        <translation>Gb major, Eb minor</translation>
+        <translation>Gb dur, Eb moll</translation>
     </message>
     <message>
         <source>A major, F# minor</source>
-        <translation>A major, F# minor</translation>
+        <translation>A dur, F# moll</translation>
     </message>
     <message>
         <source>Db major, Bb minor</source>
-        <translation>Db major, Bb minor</translation>
+        <translation>Db dur, Bb moll</translation>
     </message>
     <message>
         <source>E major, C# minor</source>
-        <translation>E major, C# minor</translation>
+        <translation>E dur, C# moll</translation>
     </message>
     <message>
         <source>Ab major, F minor</source>
-        <translation>Ab major, F minor</translation>
+        <translation>Ab dur, F moll</translation>
     </message>
     <message>
         <source>B major, G# minor</source>
-        <translation>B major, G# minor</translation>
+        <translation>B dur, G# moll</translation>
     </message>
     <message>
         <source>Eb major, C minor</source>
-        <translation>Eb major, C minor</translation>
+        <translation>Eb dur, C moll</translation>
     </message>
     <message>
         <source>F# major, D# minor</source>
-        <translation>F# major, D# minor</translation>
+        <translation>F# dur, D# moll</translation>
     </message>
     <message>
         <source>Bb major, G minor</source>
-        <translation>Bb major, G minor</translation>
+        <translation>Bb dur, G moll</translation>
     </message>
     <message>
         <source>C# major, A# minor</source>
-        <translation>C# major, A# minor</translation>
+        <translation>C# dur, A# moll</translation>
     </message>
     <message>
         <source>Open/Atonal</source>
-        <translation type="unfinished"></translation>
+        <translation>Opin/Atonalur</translation>
     </message>
 </context>
 <context>
     <name>NewWizard</name>
     <message>
         <source>Title:</source>
-        <translation>Title:</translation>
+        <translation>Heiti:</translation>
     </message>
     <message>
         <source>Subtitle:</source>
-        <translation>Subtitle:</translation>
+        <translation>Undirheiti:</translation>
     </message>
     <message>
         <source>Composer:</source>
-        <translation>Composer:</translation>
+        <translation>Tónaskald:</translation>
     </message>
     <message>
         <source>Lyricist:</source>
-        <translation>Lyricist:</translation>
+        <translation>Yrkjari:</translation>
     </message>
     <message>
         <source>Copyright:</source>
@@ -8413,35 +8660,35 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Title</source>
-        <translation>Title</translation>
+        <translation>Heiti</translation>
     </message>
     <message>
         <source>Insert title here</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn heiti her</translation>
     </message>
     <message>
         <source>Subtitle</source>
-        <translation>Subtitle</translation>
+        <translation>Undirheiti</translation>
     </message>
     <message>
         <source>Insert subtitle here</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn undirheiti her</translation>
     </message>
     <message>
         <source>Composer</source>
-        <translation>Composer</translation>
+        <translation>Tónaskald</translation>
     </message>
     <message>
         <source>Insert composer&apos;s name here</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn navn tónaskaldsins her</translation>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"></translation>
+        <translation>Songtekstarithøvundur</translation>
     </message>
     <message>
         <source>Insert lyricist&apos;s name here</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn navn rithøvundans her</translation>
     </message>
     <message>
         <source>Copyright</source>
@@ -8449,30 +8696,30 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert copyright here</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn útgávurætt her</translation>
     </message>
 </context>
 <context>
     <name>NoteGroups</name>
     <message>
         <source>Note Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta bólkar</translation>
     </message>
     <message>
         <source>1/16</source>
-        <translation>semiquaver</translation>
+        <translation>16prt nóti</translation>
     </message>
     <message>
         <source>1/32</source>
-        <translation>demisemiquaver</translation>
+        <translation>32prt nóti</translation>
     </message>
     <message>
         <source>1/8</source>
-        <translation>quaver</translation>
+        <translation>8prt nót</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla</translation>
     </message>
 </context>
 <context>
@@ -8483,58 +8730,58 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Process</source>
-        <translation type="unfinished"></translation>
+        <translation>Gongd</translation>
     </message>
     <message>
         <source>Mark staves</source>
-        <translation type="unfinished"></translation>
+        <translation>Merk stavir</translation>
     </message>
     <message>
         <source>Mark slices</source>
-        <translation type="unfinished"></translation>
+        <translation>Merk stykkir</translation>
     </message>
     <message>
         <source>Mark barlines</source>
-        <translation type="unfinished"></translation>
+        <translation>Marka taktstrikur</translation>
     </message>
     <message>
         <source>Show lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís taktstrikur</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarstøða millum tvær linjur á normalum 5-linju stavi</translation>
     </message>
     <message>
         <source>Staff space:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav rúm:</translation>
     </message>
 </context>
 <context>
     <name>PageSettingsBase</name>
     <message>
         <source>MuseScore: Page Settings</source>
-        <translation>MuseScore: Page Settings</translation>
+        <translation>MuseScore: Síða stilling</translation>
     </message>
     <message>
         <source>Page Size</source>
-        <translation>Page Size</translation>
+        <translation>Síða stødd</translation>
     </message>
     <message>
         <source>Landscape</source>
-        <translation>Landscape</translation>
+        <translation>Landslag</translation>
     </message>
     <message>
         <source>Height:</source>
-        <translation>Height</translation>
+        <translation>Hædd:</translation>
     </message>
     <message>
         <source>Width:</source>
-        <translation>Width:</translation>
+        <translation>Vídd:</translation>
     </message>
     <message>
         <source>Scaling</source>
-        <translation>Scaling</translation>
+        <translation>Stigi</translation>
     </message>
     <message>
         <source>mm</source>
@@ -8546,23 +8793,23 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Printable Area</source>
-        <translation type="unfinished"></translation>
+        <translation>Øki at prenta</translation>
     </message>
     <message>
         <source>Odd Page Margins</source>
-        <translation>Odd Page Margins</translation>
+        <translation>Stak síðu breddi</translation>
     </message>
     <message>
         <source>Even Page Margins</source>
-        <translation>Even Page Margins</translation>
+        <translation>Maka síðu breddi</translation>
     </message>
     <message>
         <source>Preview</source>
-        <translation>Preview</translation>
+        <translation>Undansýning</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation>Apply</translation>
+        <translation>Brúka</translation>
     </message>
     <message>
         <source>OK</source>
@@ -8570,58 +8817,58 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>Strika</translation>
     </message>
     <message>
         <source>Two sided</source>
-        <translation>Two Sided</translation>
+        <translation>Tvísíða</translation>
     </message>
     <message>
         <source>First page number:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyrsta síðu tal:</translation>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat øllum pørtum</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarstøða millum tvær linjur á normalum 5-linju stavi</translation>
     </message>
     <message>
         <source>Staff space:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav rúm:</translation>
     </message>
 </context>
 <context>
     <name>Palette</name>
     <message>
         <source>Beam Properties</source>
-        <translation>Beam Properties</translation>
+        <translation>Bjálka eginleikar</translation>
     </message>
     <message>
         <source>Dynamics</source>
-        <translation>Dynamics</translation>
+        <translation>Dynamikkur</translation>
     </message>
     <message>
         <source>Key Signatures</source>
-        <translation>Key Signatures</translation>
+        <translation>Ljómslagstekin</translation>
     </message>
     <message>
         <source>Accidentals</source>
-        <translation>Accidentals</translation>
+        <translation>Leys fortekin</translation>
     </message>
     <message>
         <source>Barlines</source>
-        <translation>Bar lines</translation>
+        <translation>Taktstrikur</translation>
     </message>
     <message>
         <source>Breaks &amp;&amp; Spacers</source>
-        <translation type="unfinished"></translation>
+        <translation>Reglubrot &amp;&amp; Millumrúm</translation>
     </message>
     <message>
         <source>Fingering</source>
-        <translation>Fingering</translation>
+        <translation>Fingrasetningur</translation>
     </message>
     <message>
         <source>Tremolo</source>
@@ -8629,27 +8876,27 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Note Heads</source>
-        <translation>Note Heads</translation>
+        <translation>Nótahøvd</translation>
     </message>
     <message>
         <source>Brackets</source>
-        <translation>Brackets</translation>
+        <translation>Klombur</translation>
     </message>
     <message>
         <source>Breaths &amp;&amp; Pauses</source>
-        <translation type="unfinished"></translation>
+        <translation>Steðgur &amp;&amp; Íhald</translation>
     </message>
     <message>
         <source>Clefs</source>
-        <translation>Clefs</translation>
+        <translation>Lyklar</translation>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation>Grace Notes</translation>
+        <translation>Skreyt nótar</translation>
     </message>
     <message>
         <source>Lines</source>
-        <translation>Lines</translation>
+        <translation>Strikur</translation>
     </message>
     <message>
         <source>Diminuendo</source>
@@ -8689,11 +8936,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>22ma</source>
-        <translation type="unfinished">15ma {22m?}</translation>
+        <translation>22ma</translation>
     </message>
     <message>
         <source>22mb</source>
-        <translation type="unfinished">15mb {22m?}</translation>
+        <translation>22mb</translation>
     </message>
     <message>
         <source>Pedal</source>
@@ -8701,11 +8948,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Text line</source>
-        <translation>Text line</translation>
+        <translation>Tekst strika</translation>
     </message>
     <message>
         <source>Line</source>
-        <translation>Line</translation>
+        <translation>Strika</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -8713,124 +8960,126 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Text</source>
-        <translation>Text</translation>
+        <translation>Tekstur</translation>
     </message>
     <message>
         <source>Time Signatures</source>
-        <translation>Time Signatures</translation>
+        <translation>Takt slag</translation>
     </message>
     <message>
         <source>Staff Changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav broytingar</translation>
     </message>
     <message>
         <source>Arpeggios &amp;&amp; Glissandi</source>
-        <translation type="unfinished"></translation>
+        <translation>Arpeggio &amp;&amp; Glissandi</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekkjapípu príði</translation>
     </message>
     <message>
         <source>Frames &amp;&amp; Measures</source>
-        <translation type="unfinished"></translation>
+        <translation>Rammur &amp;&amp; Taktir</translation>
     </message>
     <message>
         <source>Articulations &amp;&amp; Ornaments</source>
-        <translation>Articulations &amp;&amp; Ornaments</translation>
+        <translation>Framburður &amp;&amp; Príði</translation>
     </message>
     <message>
         <source>Ambitus</source>
-        <translation type="unfinished"></translation>
+        <translation>Ambitus</translation>
     </message>
     <message>
         <source>MuseScore: Writing Palette File</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Skrivar palett fílu</translation>
     </message>
     <message>
         <source>Writing Palette File
 %1
 failed: </source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivar Palett Fílu
+%1
+miseydnað: </translation>
     </message>
     <message>
         <source>common symbols</source>
-        <translation type="unfinished"></translation>
+        <translation>Felags symbol</translation>
     </message>
     <message>
         <source>all font symbols</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbol allir funtar</translation>
     </message>
     <message>
         <source>Tick 1 span</source>
-        <translation type="unfinished"></translation>
+        <translation>Klikk 1 spenni</translation>
     </message>
     <message>
         <source>Tick 2 span</source>
-        <translation type="unfinished"></translation>
+        <translation>Klikk 2 spenni</translation>
     </message>
     <message>
         <source>Short 1 span</source>
-        <translation type="unfinished"></translation>
+        <translation>Stutt 1 spenni</translation>
     </message>
     <message>
         <source>Short 2 span</source>
-        <translation type="unfinished"></translation>
+        <translation>Stutt 2 spenni</translation>
     </message>
     <message>
         <source>Repeats &amp;&amp; Jumps</source>
-        <translation type="unfinished"></translation>
+        <translation>Endurtøkur &amp;&amp; lop</translation>
     </message>
     <message>
         <source>Normal barline</source>
-        <translation type="unfinished"></translation>
+        <translation>Vanlig taktstrika</translation>
     </message>
     <message>
         <source>Dashed barline</source>
-        <translation type="unfinished"></translation>
+        <translation>Strokin taktstrika</translation>
     </message>
     <message>
         <source>Dotted barline</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikkut taktstrika</translation>
     </message>
     <message>
         <source>End bar barline</source>
-        <translation type="unfinished"></translation>
+        <translation>Síðsta takt taktstrika</translation>
     </message>
     <message>
         <source>Double barline</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupul taktstrika</translation>
     </message>
     <message>
         <source>Start repeat</source>
-        <translation>Start Repeat</translation>
+        <translation>Byrja endurtøku</translation>
     </message>
     <message>
         <source>End repeat</source>
-        <translation>End Repeat</translation>
+        <translation>Enda endurtøku</translation>
     </message>
     <message>
         <source>End-start repeat</source>
-        <translation>End-Start Repeat</translation>
+        <translation>Enda-Byrja endurtøku</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandaborð diagramm</translation>
     </message>
 </context>
 <context>
     <name>PaletteCellProperties</name>
     <message>
         <source>Cell Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Puntur eginleikar</translation>
     </message>
     <message>
         <source>Palette Cell Properties</source>
-        <translation>Palette Cell Properties</translation>
+        <translation>Palett punt eginleikar</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation>Ad:</translation>
+        <translation>Navn:</translation>
     </message>
     <message>
         <source>sp</source>
@@ -8838,7 +9087,7 @@ failed: </source>
     </message>
     <message>
         <source>Content offset</source>
-        <translation type="unfinished"></translation>
+        <translation>Innihalds offsett</translation>
     </message>
     <message>
         <source>Y:</source>
@@ -8850,22 +9099,22 @@ failed: </source>
     </message>
     <message>
         <source>Draw staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekna stav</translation>
     </message>
     <message>
         <source>Content scale:</source>
-        <translation type="unfinished"></translation>
+        <translation>Innihald stigi:</translation>
     </message>
 </context>
 <context>
     <name>PaletteProperties</name>
     <message>
         <source>MuseScore: Palette Properties</source>
-        <translation>MuseScore: Palette Properties</translation>
+        <translation>MuseScore: Palett eginleikar</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation>Name:</translation>
+        <translation>Navn:</translation>
     </message>
     <message>
         <source>sp</source>
@@ -8873,31 +9122,31 @@ failed: </source>
     </message>
     <message>
         <source>Scale:</source>
-        <translation>Scale:</translation>
+        <translation>Stigi:</translation>
     </message>
     <message>
         <source>Width:</source>
-        <translation>Width:</translation>
+        <translation>Vídd:</translation>
     </message>
     <message>
         <source>Height:</source>
-        <translation>Height</translation>
+        <translation>Hædd:</translation>
     </message>
     <message>
         <source>Cell size:</source>
-        <translation>Cell Size:</translation>
+        <translation>Punkt Stødd:</translation>
     </message>
     <message>
         <source>Element offset:</source>
-        <translation>Element Offset</translation>
+        <translation>Element offsett:</translation>
     </message>
     <message>
         <source>Show grid</source>
-        <translation>Show Grid</translation>
+        <translation>Vís grind</translation>
     </message>
     <message>
         <source>Show &apos;More Elements...&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís &quot;Fleiri element...&quot;</translation>
     </message>
 </context>
 <context>
@@ -8940,39 +9189,39 @@ failed: </source>
     </message>
     <message>
         <source>Drumset</source>
-        <translation>drumset</translation>
+        <translation>Trummusett</translation>
     </message>
     <message>
         <source>Sound:</source>
-        <translation>Sound:</translation>
+        <translation>Ljóð:</translation>
     </message>
     <message>
         <source>MIDI sound for part</source>
-        <translation>midi sound for part</translation>
+        <translation>midi ljóð til part</translation>
     </message>
     <message>
         <source>Part name</source>
-        <translation type="unfinished"></translation>
+        <translation>Partur navn</translation>
     </message>
     <message>
         <source>Panorama position</source>
-        <translation type="unfinished"></translation>
+        <translation>Panorama plasering</translation>
     </message>
     <message>
         <source>MIDI sound</source>
-        <translation type="unfinished"></translation>
+        <translation>Midi ljóð</translation>
     </message>
     <message>
         <source>Part Name</source>
-        <translation>Part Name</translation>
+        <translation>Navn partur</translation>
     </message>
     <message>
         <source>Use arrows to modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Brúka pílar at broyta</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóð</translation>
     </message>
 </context>
 <context>
@@ -8994,19 +9243,19 @@ failed: </source>
     <name>PianorollEditor</name>
     <message>
         <source>Toolbar 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Amboðsbjálki 1</translation>
     </message>
     <message>
         <source>Wave</source>
-        <translation type="unfinished"></translation>
+        <translation>Bylgja</translation>
     </message>
     <message>
         <source>Show wave display</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís bylgju skýggja</translation>
     </message>
     <message>
         <source>Toolbar 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tól bjálki 2</translation>
     </message>
     <message>
         <source>Cursor:</source>
@@ -9034,7 +9283,7 @@ failed: </source>
     </message>
     <message>
         <source>Len:</source>
-        <translation type="unfinished"></translation>
+        <translation>Len:</translation>
     </message>
     <message>
         <source>MuseScore: &lt;%1&gt; Staff: %2</source>
@@ -9045,7 +9294,7 @@ failed: </source>
     <name>PlayPanelBase</name>
     <message>
         <source>MuseScore: Play Panel</source>
-        <translation>MuseScore: Play Panel</translation>
+        <translation>MuseScore: spæl panel</translation>
     </message>
     <message>
         <source>001.01</source>
@@ -9061,11 +9310,11 @@ failed: </source>
     </message>
     <message>
         <source>Relative tempo</source>
-        <translation type="unfinished"></translation>
+        <translation>Lutfallsligt tempo</translation>
     </message>
     <message>
         <source>Master volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvuðs ljóðstyrki</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -9074,11 +9323,11 @@ failed: </source>
     </message>
     <message>
         <source>Actual tempo</source>
-        <translation type="unfinished"></translation>
+        <translation>Veruligt tempo</translation>
     </message>
     <message>
         <source>120BPM</source>
-        <translation type="unfinished"></translation>
+        <translation>120SUM</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -9091,42 +9340,42 @@ failed: </source>
     </message>
     <message>
         <source>Playback Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl plasering</translation>
     </message>
     <message>
         <source>Relative Tempo to 120 beats per minute</source>
-        <translation type="unfinished"></translation>
+        <translation>Lutfallsligt tempo til 120 sløg um min.</translation>
     </message>
     <message>
         <source>Use up and down arrows to change value</source>
-        <translation type="unfinished"></translation>
+        <translation>Brúka upp/niður pílar fyri at broyta virði</translation>
     </message>
     <message>
         <source>Master Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvuðs ljóðstyrki</translation>
     </message>
     <message>
         <source>Relative tempo to 120 beats per minute</source>
-        <translation type="unfinished"></translation>
+        <translation>Lutfallsligt tempo til 120 sløg um min.</translation>
     </message>
 </context>
 <context>
     <name>PluginCreatorBase</name>
     <message>
         <source>Run</source>
-        <translation type="unfinished"></translation>
+        <translation>Koyr</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppa</translation>
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Fíla</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hjálp</translation>
     </message>
     <message>
         <source>Edit</source>
@@ -9146,11 +9395,11 @@ failed: </source>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Handbók</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>angra</translation>
+        <translation>Angra</translation>
     </message>
     <message>
         <source>Redo</source>
@@ -9158,30 +9407,30 @@ failed: </source>
     </message>
     <message>
         <source>R</source>
-        <translation type="unfinished"></translation>
+        <translation>R</translation>
     </message>
     <message>
         <source>Reload current plugin source</source>
-        <translation type="unfinished"></translation>
+        <translation>Løð verðandi plugin keldu umaftur</translation>
     </message>
     <message>
         <source>Close Plugin Creator</source>
-        <translation type="unfinished"></translation>
+        <translation>Stong plugin stovnara</translation>
     </message>
 </context>
 <context>
     <name>PluginManager</name>
     <message>
         <source>Plugin Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin umsitari</translation>
     </message>
     <message>
         <source>Define Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Áset sniðveg</translation>
     </message>
     <message>
         <source>Path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Leið:</translation>
     </message>
     <message>
         <source>Version:</source>
@@ -9193,26 +9442,26 @@ failed: </source>
     </message>
     <message>
         <source>Shortcut:</source>
-        <translation>Kısayol:</translation>
+        <translation>Sniðvegur:</translation>
     </message>
     <message>
         <source>Clear Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Strika Sniðveg</translation>
     </message>
 </context>
 <context>
     <name>PrefsDialogBase</name>
     <message>
         <source>MuseScore: Preferences</source>
-        <translation>MuseScore: Preferences</translation>
+        <translation>MuseScore: Serrættindi</translation>
     </message>
     <message>
         <source>MuseScore Preferences</source>
-        <translation>MuseScore Preferences</translation>
+        <translation>MuseScore Serrættindi</translation>
     </message>
     <message>
         <source>Reset All Preferences to Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla øll serrættindi til forsett</translation>
     </message>
     <message>
         <source>General</source>
@@ -9236,19 +9485,19 @@ failed: </source>
     </message>
     <message>
         <source>OSC remote control</source>
-        <translation type="unfinished"></translation>
+        <translation>OSC fjarstýring</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Style</translation>
+        <translation>Snið</translation>
     </message>
     <message>
         <source>Icon size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikon stødd:</translation>
     </message>
     <message>
         <source>Animations</source>
-        <translation type="unfinished"></translation>
+        <translation>Teknimyndagerðir</translation>
     </message>
     <message>
         <source>Canvas</source>
@@ -9268,15 +9517,15 @@ failed: </source>
     </message>
     <message>
         <source>Paper</source>
-        <translation type="unfinished"></translation>
+        <translation>Pappír</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Blandaður</translation>
     </message>
     <message>
         <source>Enable MIDI input</source>
-        <translation>Enable MIDI input</translation>
+        <translation>Gilda MIDI inntak</translation>
     </message>
     <message>
         <source>Play notes when editing</source>
@@ -9292,11 +9541,11 @@ failed: </source>
     </message>
     <message>
         <source>16th note</source>
-        <translation type="unfinished"></translation>
+        <translation>16prt nóti</translation>
     </message>
     <message>
         <source>32nd note</source>
-        <translation type="unfinished"></translation>
+        <translation>32prt nóti</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -9308,19 +9557,19 @@ failed: </source>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís</translation>
     </message>
     <message>
         <source>default scale for new score views</source>
-        <translation type="unfinished"></translation>
+        <translation>Forstettur stigi til sí nýggj nótabløð</translation>
     </message>
     <message>
         <source>Default Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Forsettar fílar</translation>
     </message>
     <message>
         <source>Style:</source>
-        <translation>Style:</translation>
+        <translation>Snið:</translation>
     </message>
     <message>
         <source>I/O</source>
@@ -9328,7 +9577,7 @@ failed: </source>
     </message>
     <message>
         <source>Use JACK MIDI</source>
-        <translation type="unfinished"></translation>
+        <translation>Brúka JACK MIDI</translation>
     </message>
     <message>
         <source>Remember last connection(s)</source>
@@ -9336,15 +9585,15 @@ failed: </source>
     </message>
     <message>
         <source>PulseAudio</source>
-        <translation type="unfinished"></translation>
+        <translation>PulseAudio</translation>
     </message>
     <message>
         <source>PortAudio</source>
-        <translation type="unfinished"></translation>
+        <translation>PortAudio</translation>
     </message>
     <message>
         <source>API:</source>
-        <translation type="unfinished"></translation>
+        <translation>API:</translation>
     </message>
     <message>
         <source>Device:</source>
@@ -9352,7 +9601,7 @@ failed: </source>
     </message>
     <message>
         <source>default</source>
-        <translation>default</translation>
+        <translation>Forsett</translation>
     </message>
     <message>
         <source>192000</source>
@@ -9428,15 +9677,15 @@ failed: </source>
     </message>
     <message>
         <source>Style Used for Import</source>
-        <translation>Style Used for Import</translation>
+        <translation>Snið nýtt til innflutning</translation>
     </message>
     <message>
         <source>Built in style</source>
-        <translation>Built in style</translation>
+        <translation>Innbygt snið</translation>
     </message>
     <message>
         <source>Use style file:</source>
-        <translation>Use style file:</translation>
+        <translation>Nýt snið fílu:</translation>
     </message>
     <message>
         <source>Browse...</source>
@@ -9444,35 +9693,35 @@ failed: </source>
     </message>
     <message>
         <source>Overture import character set:</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt inn Overture skriftsnið:</translation>
     </message>
     <message>
         <source>Guitar Pro import character set:</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt inn Guitar Pro skriftsnið:</translation>
     </message>
     <message>
         <source>MusicXML</source>
-        <translation type="unfinished"></translation>
+        <translation>MusicXML</translation>
     </message>
     <message>
         <source>Import layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt inn uppseting</translation>
     </message>
     <message>
         <source>Import system and page breaks</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt inn skipan og síðu brot</translation>
     </message>
     <message>
         <source>MIDI</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI</translation>
     </message>
     <message>
         <source>Quarter</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvartur</translation>
     </message>
     <message>
         <source>Eighth</source>
-        <translation type="unfinished"></translation>
+        <translation>Átta</translation>
     </message>
     <message>
         <source>16th</source>
@@ -9484,7 +9733,7 @@ failed: </source>
     </message>
     <message>
         <source>64th</source>
-        <translation type="unfinished">semiquaver {64t?}</translation>
+        <translation>64prt</translation>
     </message>
     <message>
         <source>Export</source>
@@ -9492,39 +9741,39 @@ failed: </source>
     </message>
     <message>
         <source>PNG/SVG</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG/SVG</translation>
     </message>
     <message>
         <source>Transparent background</source>
-        <translation type="unfinished"></translation>
+        <translation>Glæru bakgrund</translation>
     </message>
     <message>
         <source>Expand repeats</source>
-        <translation>Expand Repeats</translation>
+        <translation>Víðkaðar endurtøkur</translation>
     </message>
     <message>
         <source>Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóð</translation>
     </message>
     <message>
         <source>Export layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt út uppseting</translation>
     </message>
     <message>
         <source>Export all system and page breaks</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt út øll skipan og síðu brot</translation>
     </message>
     <message>
         <source>Export manually added system and page breaks only</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt út manuelt einans samanløgd skipan og síðu brot </translation>
     </message>
     <message>
         <source>Do not export system or page breaks</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt ikki út skipan og síðu brot</translation>
     </message>
     <message>
         <source>Shortcuts</source>
-        <translation>Shortcuts</translation>
+        <translation>Sniðvegur</translation>
     </message>
     <message>
         <source>Action</source>
@@ -9532,11 +9781,11 @@ failed: </source>
     </message>
     <message>
         <source>Shortcut</source>
-        <translation>Shortcut</translation>
+        <translation>Sniðvegur</translation>
     </message>
     <message>
         <source>Reset Shortcut to Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla sniðveg til forsett</translation>
     </message>
     <message>
         <source>Define...</source>
@@ -9544,7 +9793,7 @@ failed: </source>
     </message>
     <message>
         <source>Print</source>
-        <translation>Print</translation>
+        <translation>Prenta</translation>
     </message>
     <message>
         <source>Update</source>
@@ -9588,11 +9837,11 @@ failed: </source>
     </message>
     <message>
         <source>Default duration:</source>
-        <translation>Default duration:</translation>
+        <translation>Forsett tíðarlongd:</translation>
     </message>
     <message>
         <source>MIDI remote control</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI fjarstýring</translation>
     </message>
     <message>
         <source>Rewind</source>
@@ -9600,19 +9849,19 @@ failed: </source>
     </message>
     <message>
         <source>Toggle play</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift spæl</translation>
     </message>
     <message>
         <source>Whole note</source>
-        <translation type="unfinished"></translation>
+        <translation>Heilnóti</translation>
     </message>
     <message>
         <source>Half note</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálvnóti</translation>
     </message>
     <message>
         <source>Quarter note</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvartnóti</translation>
     </message>
     <message>
         <source>Rest</source>
@@ -9620,7 +9869,7 @@ failed: </source>
     </message>
     <message>
         <source>Augmentation dot</source>
-        <translation type="unfinished"></translation>
+        <translation>Økingar prikkur</translation>
     </message>
     <message>
         <source>Tie</source>
@@ -9632,23 +9881,23 @@ failed: </source>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppa</translation>
     </message>
     <message>
         <source>Instrument list 2:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðføris listi 2:</translation>
     </message>
     <message>
         <source>Instrument list 1:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðførislisti 1:</translation>
     </message>
     <message>
         <source>Style for part:</source>
-        <translation type="unfinished"></translation>
+        <translation>Snið til part</translation>
     </message>
     <message>
         <source>ALSA audio</source>
-        <translation type="unfinished"></translation>
+        <translation>ALSA ljóð</translation>
     </message>
     <message>
         <source>Sample rate:</source>
@@ -9656,19 +9905,19 @@ failed: </source>
     </message>
     <message>
         <source>JACK audio server</source>
-        <translation type="unfinished"></translation>
+        <translation>JACK ljóð ambætari</translation>
     </message>
     <message>
         <source>Character Set Used When Importing Binary Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriftsnið brúkt tá tvítalsfílar verða innfluttir</translation>
     </message>
     <message>
         <source>Shortest note:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stytsti nóti:</translation>
     </message>
     <message>
         <source>Double augmentation dot</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupultur økingar prikkur</translation>
     </message>
     <message>
         <source>Save every:</source>
@@ -9676,36 +9925,36 @@ failed: </source>
     </message>
     <message>
         <source>Proximity for selecting elements:</source>
-        <translation>Proximity for selecting elements</translation>
+        <translation>Nærleiki tá element verða vald:</translation>
     </message>
     <message>
         <source>Default zoom:</source>
-        <translation type="unfinished"></translation>
+        <translation>Forsett suming</translation>
     </message>
     <message>
         <source>Resolution DPI:</source>
-        <translation type="unfinished"></translation>
+        <translation>Loysni DPI:</translation>
     </message>
     <message>
         <source>Port number:</source>
         <extracomment>The UDP port number on which the MuseScore OSC server will listen on</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Portur nummar:</translation>
     </message>
     <message>
         <source>Use JACK Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Brúka JACK ljóð</translation>
     </message>
     <message>
         <source>Use JACK Transport</source>
-        <translation type="unfinished"></translation>
+        <translation>Brúka JACK Flutning</translation>
     </message>
     <message>
         <source>Timebase Master</source>
-        <translation type="unfinished"></translation>
+        <translation>Tíðargrundarlag Høvuðs-</translation>
     </message>
     <message>
         <source>MIDI Input:</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI inntøka</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -9713,551 +9962,551 @@ failed: </source>
     </message>
     <message>
         <source>Preferences Tab Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Serrættindis talvu fyrisitari</translation>
     </message>
     <message>
         <source>General Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Vanligt spjaldur</translation>
     </message>
     <message>
         <source>Select language</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel mál</translation>
     </message>
     <message>
         <source>The language will be changed once you restart MuseScore.</source>
-        <translation type="unfinished"></translation>
+        <translation>Málið verður broytt tá tú startar MuseScore av nýggju.</translation>
     </message>
     <message>
         <source>Start with score</source>
-        <translation type="unfinished"></translation>
+        <translation>Byrja við nótablaði</translation>
     </message>
     <message>
         <source>Insert path to starting score</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn leið at byrja nótablað</translation>
     </message>
     <message>
         <source>Choose starting score</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel byrjunar nótablað</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting the starting score</source>
-        <translation type="unfinished"></translation>
+        <translation>Opnar fílu vindeyga fyri val av byrjunar nótablaði</translation>
     </message>
     <message>
         <source>Select delay (in minutes) between auto saves</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel seinking (í minuttum) millum sjálvv. goym</translation>
     </message>
     <message>
         <source>Port number</source>
-        <translation type="unfinished"></translation>
+        <translation>Portur nummar</translation>
     </message>
     <message>
         <source>Select style</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel snið</translation>
     </message>
     <message>
         <source>Icon Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikon hædd</translation>
     </message>
     <message>
         <source>Icon Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikon vídd</translation>
     </message>
     <message>
         <source>Style folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Snið faldari</translation>
     </message>
     <message>
         <source>Insert path for style folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn leið til snið faldara</translation>
     </message>
     <message>
         <source>Choose score folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel nótablaðs faldara</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the score folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Opnar faldara vindeyga: val av nótablaðs faldara</translation>
     </message>
     <message>
         <source>Choose style folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel snið faldara</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the style folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Opna faldara vindeyga fyri at velja snið faldara</translation>
     </message>
     <message>
         <source>Score folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótablaðs faldari</translation>
     </message>
     <message>
         <source>Insert path to score folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn leið til nótablaðs faldara</translation>
     </message>
     <message>
         <source>Template folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapilón faldari</translation>
     </message>
     <message>
         <source>Insert path to Template folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn leið til skapilón faldara</translation>
     </message>
     <message>
         <source>Plugin folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin faldari</translation>
     </message>
     <message>
         <source>Insert path to plugin folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn leið til plugin faldara</translation>
     </message>
     <message>
         <source>Choose plugin folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel plugin faldara</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the plugin folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Opna faldara vindeyga - vel plugin faldaran</translation>
     </message>
     <message>
         <source>Image folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Mynda faldari</translation>
     </message>
     <message>
         <source>Insert path to image folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn leið til mynda faldara</translation>
     </message>
     <message>
         <source>Choose template folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel skapilón faldara</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the template folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel faldara vindeyga at velja skapilón faldara</translation>
     </message>
     <message>
         <source>Opens a folder dialog for selecting the image folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Opnar faldara vindeyga fyri vali av mynda faldara</translation>
     </message>
     <message>
         <source>Canvas Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Lørift spjaldur</translation>
     </message>
     <message>
         <source>Background Wallpaper</source>
-        <translation type="unfinished"></translation>
+        <translation>Bakgrunds tapet</translation>
     </message>
     <message>
         <source>Background Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Bakgrunds litur</translation>
     </message>
     <message>
         <source>Background wallpaper path</source>
-        <translation type="unfinished"></translation>
+        <translation>Bakgrunds tapet leið</translation>
     </message>
     <message>
         <source>Insert path to background wallpaper file</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn leið til bakgrunds tapet fílu</translation>
     </message>
     <message>
         <source>Choose Background wallpaper file</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel bakgrundstapet fílu</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting the wallpaper file</source>
-        <translation type="unfinished"></translation>
+        <translation>Opnar fílu vindeyga fyri vali av tapet fílu</translation>
     </message>
     <message>
         <source>Select background color</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel bakgrunds lit</translation>
     </message>
     <message>
         <source>Opens a dialog for selecting the background color</source>
-        <translation type="unfinished"></translation>
+        <translation>Opna vindeyga til val av bakgrunds liti</translation>
     </message>
     <message>
         <source>Paper wallpaper path</source>
-        <translation type="unfinished"></translation>
+        <translation>Pappír tapet leið</translation>
     </message>
     <message>
         <source>Insert path to paper wallpaper file</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn leið til pappír tapet fílu</translation>
     </message>
     <message>
         <source>Choose paper wallpaper file</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel pappír tapet fílu</translation>
     </message>
     <message>
         <source>Select paper color</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel pappír lit</translation>
     </message>
     <message>
         <source>Opens a dialog for selecting the paper color</source>
-        <translation type="unfinished"></translation>
+        <translation>Opnar vindeyga til val av pappír liti</translation>
     </message>
     <message>
         <source>Paper Wallpaper</source>
-        <translation type="unfinished"></translation>
+        <translation>Pappír tapet</translation>
     </message>
     <message>
         <source>Paper Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Pappír litur</translation>
     </message>
     <message>
         <source>Enable MIDI Input</source>
-        <translation>Enable MIDI Input</translation>
+        <translation>Gilda MIDI inntak</translation>
     </message>
     <message>
         <source>Default duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Forsett tíðarlongd</translation>
     </message>
     <message>
         <source>Rewind is active</source>
-        <translation type="unfinished"></translation>
+        <translation>Spola aftur er virkið</translation>
     </message>
     <message>
         <source>Rewind record</source>
-        <translation type="unfinished"></translation>
+        <translation>Spola aftur upptak</translation>
     </message>
     <message>
         <source>Toggle play record</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift spæl tak upp</translation>
     </message>
     <message>
         <source>Whole note is active</source>
-        <translation type="unfinished"></translation>
+        <translation>Heilnóti er virkin</translation>
     </message>
     <message>
         <source>Half note is active</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálvnóti er virkin</translation>
     </message>
     <message>
         <source>Whole note record</source>
-        <translation type="unfinished"></translation>
+        <translation>Heiltóni upptak</translation>
     </message>
     <message>
         <source>Half note record</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálvnóti upptak</translation>
     </message>
     <message>
         <source>Rest is active</source>
-        <translation type="unfinished"></translation>
+        <translation>Tøgn er virkin</translation>
     </message>
     <message>
         <source>Augmentation dot is active</source>
-        <translation type="unfinished"></translation>
+        <translation>Økingar prikkur er virkin</translation>
     </message>
     <message>
         <source>Augmentation dot record</source>
-        <translation type="unfinished"></translation>
+        <translation>Økingarprikkur upptak</translation>
     </message>
     <message>
         <source>Double augmentation dot is active</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupultur økingarprikkur er virkin</translation>
     </message>
     <message>
         <source>Double augmentation dot record</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupultur økingarprikkur upptak</translation>
     </message>
     <message>
         <source>Tie is active</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindibogi er virkin</translation>
     </message>
     <message>
         <source>Tie record</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindibogi upptak</translation>
     </message>
     <message>
         <source>Rest record</source>
-        <translation type="unfinished"></translation>
+        <translation>Tøgn upptak</translation>
     </message>
     <message>
         <source>Play is active</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl er virki</translation>
     </message>
     <message>
         <source>Stop is active</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppa er virki</translation>
     </message>
     <message>
         <source>Play record</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl upptak</translation>
     </message>
     <message>
         <source>Stop record</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppa upptak</translation>
     </message>
     <message>
         <source>16th note is active</source>
-        <translation type="unfinished"></translation>
+        <translation>16prt nóti er virkin</translation>
     </message>
     <message>
         <source>16th note record</source>
-        <translation type="unfinished"></translation>
+        <translation>16prt nóti upptak</translation>
     </message>
     <message>
         <source>32nd note is active</source>
-        <translation type="unfinished"></translation>
+        <translation>32prt nóti er virkin</translation>
     </message>
     <message>
         <source>32nd note record</source>
-        <translation type="unfinished"></translation>
+        <translation>32prt nóti upptak</translation>
     </message>
     <message>
         <source>Score Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótablað spjaldur</translation>
     </message>
     <message>
         <source>Default zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Forsett suming</translation>
     </message>
     <message>
         <source>Choose Instrument list 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel instrumentlista 1</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a instrument list file</source>
-        <translation type="unfinished"></translation>
+        <translation>Opnar eitt fílu vindeyga, vel ein ljóðføris lista fílu</translation>
     </message>
     <message>
         <source>Instrument list 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðførislisti 1</translation>
     </message>
     <message>
         <source>Insert path to a instrument list file</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn leið til eina ljóðførislista fílu</translation>
     </message>
     <message>
         <source>Insert path to style file</source>
-        <translation type="unfinished"></translation>
+        <translation>Set in leið til snið fílu</translation>
     </message>
     <message>
         <source>Choose style</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel snið</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a style file</source>
-        <translation type="unfinished"></translation>
+        <translation>Opna faldara vindeyga fyri at velja snið fílu</translation>
     </message>
     <message>
         <source>Style for part</source>
-        <translation type="unfinished"></translation>
+        <translation>Snið til part</translation>
     </message>
     <message>
         <source>Insert path to style file for part</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn leið til snið fílu fyri part</translation>
     </message>
     <message>
         <source>Choose style for part</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel snið til part</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a style file for part</source>
-        <translation type="unfinished"></translation>
+        <translation>Opnar eitt fílu vindeyga fyri val av snið fílu fyri part</translation>
     </message>
     <message>
         <source>Instrument list 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðførislisti 2</translation>
     </message>
     <message>
         <source>Choose Instrument list 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel ljóðførislista 2</translation>
     </message>
     <message>
         <source>I/O Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>I/O spjaldur</translation>
     </message>
     <message>
         <source>Port Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóð portur</translation>
     </message>
     <message>
         <source>API</source>
-        <translation type="unfinished"></translation>
+        <translation>API</translation>
     </message>
     <message>
         <source>Choose API</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel API</translation>
     </message>
     <message>
         <source>MIDI Input</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI inntak</translation>
     </message>
     <message>
         <source>Choose MIDI Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel MIDI inntak</translation>
     </message>
     <message>
         <source>Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Tól</translation>
     </message>
     <message>
         <source>Choose device</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel tól</translation>
     </message>
     <message>
         <source>Fragments</source>
-        <translation type="unfinished"></translation>
+        <translation>Brot</translation>
     </message>
     <message>
         <source>Choose number of fragments</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel nummar av brotum</translation>
     </message>
     <message>
         <source>Period Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Punktum stødd</translation>
     </message>
     <message>
         <source>Choose period size</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel punktum stødd</translation>
     </message>
     <message>
         <source>Sample rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Sample rate</translation>
     </message>
     <message>
         <source>Choose sample rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel sample rate</translation>
     </message>
     <message>
         <source>Import Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Innflytingar spjaldur</translation>
     </message>
     <message>
         <source>Build in style</source>
-        <translation type="unfinished"></translation>
+        <translation>Innbygt snið</translation>
     </message>
     <message>
         <source>Use style file</source>
-        <translation type="unfinished"></translation>
+        <translation>Brúka snið fílu</translation>
     </message>
     <message>
         <source>Overture import character set</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt inn Overture skriftsnið</translation>
     </message>
     <message>
         <source>Choose Overture import character set</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel flyt inn Overture skriftsnið</translation>
     </message>
     <message>
         <source>Guitar Pro import character set</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt inn Guitar Pro skriftsnið</translation>
     </message>
     <message>
         <source>Choose Guitar Pro import character set</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel flyt inn Guitar Pro skriftsnið</translation>
     </message>
     <message>
         <source>Shortest note</source>
-        <translation type="unfinished"></translation>
+        <translation>Stytsti nóti</translation>
     </message>
     <message>
         <source>Choose the shortest note value</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel styststa nótavirði</translation>
     </message>
     <message>
         <source>Export Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt út spjaldur</translation>
     </message>
     <message>
         <source>Resolution DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>Loysni DPI</translation>
     </message>
     <message>
         <source>Choose resolution DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel loysni DPI</translation>
     </message>
     <message>
         <source>Shortcuts Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Sniðvegir spjaldur</translation>
     </message>
     <message>
         <source>Shortcuts table</source>
-        <translation type="unfinished"></translation>
+        <translation>Sniðvegir borð</translation>
     </message>
     <message>
         <source>Reset Shortcut to default</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla sniðveg til forsett</translation>
     </message>
     <message>
         <source>Define</source>
-        <translation type="unfinished"></translation>
+        <translation>Áset</translation>
     </message>
     <message>
         <source>Update Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Dagfør spjaldur</translation>
     </message>
     <message>
         <source>Eighth note</source>
-        <translation type="unfinished"></translation>
+        <translation>áttundnóti</translation>
     </message>
     <message>
         <source>Quarter note is active</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvartnóti er virkin</translation>
     </message>
     <message>
         <source>Quarter note record</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvartnóti tak upp</translation>
     </message>
     <message>
         <source>Eighth note is active</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttundnóti er virkin</translation>
     </message>
     <message>
         <source>Eighth note record</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttundnóti tak upp</translation>
     </message>
     <message>
         <source>64th note</source>
-        <translation type="unfinished"></translation>
+        <translation>64prt nóti</translation>
     </message>
     <message>
         <source>64th note is active</source>
-        <translation type="unfinished"></translation>
+        <translation>64prt nóti er virkin</translation>
     </message>
     <message>
         <source>64th note record</source>
-        <translation type="unfinished"></translation>
+        <translation>64prt nóti tak upp</translation>
     </message>
     <message>
         <source>Here you can configure shortcuts for actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Her kanst tú innstilla sniðvegir til gerðir</translation>
     </message>
     <message>
         <source>Resets the shortcuts to their default assignment</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla sniðvegir til teirra forsettu uppgávu</translation>
     </message>
     <message>
         <source>Clears the shortcut assignment for the selected action</source>
-        <translation type="unfinished"></translation>
+        <translation>Strika sniðveg ásetanina til valdu gerðina</translation>
     </message>
     <message>
         <source>Opens a dialog for defining a new shortcut for the selected action</source>
-        <translation type="unfinished"></translation>
+        <translation>Opnar eitt vindeyga at áseta nýggjan sniðveg fyri valdu gerðina</translation>
     </message>
     <message>
         <source>Print the shortcuts list</source>
-        <translation type="unfinished"></translation>
+        <translation>Prenta sniðvegslista</translation>
     </message>
     <message>
         <source>Update translations</source>
-        <translation type="unfinished"></translation>
+        <translation>Dagfør umsetingar</translation>
     </message>
     <message>
         <source>Dark</source>
-        <translation type="unfinished"></translation>
+        <translation>Myrk</translation>
     </message>
     <message>
         <source>Light</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljós</translation>
     </message>
     <message>
         <source>Enable MIDI remote control</source>
-        <translation type="unfinished"></translation>
+        <translation>Gilda MIDI fjarstýring</translation>
     </message>
     <message>
         <source>Is active</source>
-        <translation type="unfinished"></translation>
+        <translation>Er virkin</translation>
     </message>
     <message>
         <source>Record</source>
@@ -10265,19 +10514,19 @@ failed: </source>
     </message>
     <message>
         <source>Default scale for new score views</source>
-        <translation type="unfinished"></translation>
+        <translation>Forsettur stigi til sí nýggj nótabløð</translation>
     </message>
     <message>
         <source>Show play panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís spæl panel</translation>
     </message>
     <message>
         <source>Show navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís Skipara</translation>
     </message>
     <message>
         <source>OSC Remote Control</source>
-        <translation type="unfinished"></translation>
+        <translation>OSC fjarstýring</translation>
     </message>
     <message>
         <source>MIDI Remote Control</source>
@@ -10285,39 +10534,39 @@ failed: </source>
     </message>
     <message>
         <source>Show start center</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís byrjunar depil</translation>
     </message>
     <message>
         <source>Undo is active</source>
-        <translation type="unfinished"></translation>
+        <translation>Angra er virki</translation>
     </message>
     <message>
         <source>Undo record</source>
-        <translation type="unfinished"></translation>
+        <translation>Angra upptøku</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>angra</translation>
+        <translation>Angra</translation>
     </message>
     <message>
         <source>Play whole chord when adding note</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl alla akkordina við nótatilsetan</translation>
     </message>
     <message>
         <source>SoundFont folders</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðfunta faldarar</translation>
     </message>
     <message>
         <source>Insert path to SoundFont folders</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn leið til ljóðfunta faldarar</translation>
     </message>
     <message>
         <source>Opens a dialog for configuring the SoundFont folders</source>
-        <translation type="unfinished"></translation>
+        <translation>Opnar vindeyga til stilling av ljóðfunta faldarum</translation>
     </message>
     <message>
         <source>Note Input Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Nót inntak spjaldur</translation>
     </message>
     <message>
         <source>Note Input</source>
@@ -10325,47 +10574,59 @@ failed: </source>
     </message>
     <message>
         <source>Note input</source>
-        <translation type="unfinished"></translation>
+        <translation>nóta inntak</translation>
     </message>
     <message>
         <source>Note input is active</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta inntak er virki</translation>
     </message>
     <message>
         <source>Note input record</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta inntak upptak</translation>
     </message>
     <message>
         <source>Folders</source>
-        <translation type="unfinished"></translation>
+        <translation>Faldarar</translation>
     </message>
     <message>
         <source>Images:</source>
-        <translation type="unfinished"></translation>
+        <translation>Myndir:</translation>
     </message>
     <message>
         <source>Scores:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótabløð:</translation>
     </message>
     <message>
         <source>Styles:</source>
-        <translation type="unfinished"></translation>
+        <translation>Snið:</translation>
     </message>
     <message>
         <source>Templates:</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapilónir:</translation>
     </message>
     <message>
         <source>Plugins:</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin:</translation>
     </message>
     <message>
         <source>SoundFonts:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðfuntar:</translation>
     </message>
     <message>
         <source>Check for new version of MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation>Eftirkanna nýggjar útgávur av MuseScore</translation>
+    </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filtur</translation>
+    </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Flyt út RPNs</translation>
     </message>
 </context>
 <context>
@@ -10374,42 +10635,48 @@ failed: </source>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Eingin nóti ella tekstur valdur:
+Vinarliga vel nóta ella tekst og endurroyn atgerð
+</translation>
     </message>
     <message>
         <source>Please select a single note or slur and retry operation
 </source>
-        <translation>Please select a single note or slur and retry operation.
+        <translation>Vinarliga vel ein nóta ella bindiboga og endurroyn atgerð
 </translation>
     </message>
     <message>
         <source>Please select one or more staves and retry operation
 </source>
-        <translation>Please select one or more staves and retry operation.
+        <translation>Vinarliga vel ein ella fleiri stavir og endurroyn atgerð
 </translation>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>No note or figured bass selected:
 Please select a single note or figured bass and retry.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Eingin nóti ella besifringsbassur valdur:
+Vinarliga vel einkultan nóta ella besifringsbass og royn aftur.
+</translation>
     </message>
     <message>
         <source>No note selected:
 Please select a single note and retry operation
 </source>
-        <translation>No note selected: Please select a single note and retry operation.
+        <translation>Eingin nóti valdur:
+Vinarliga vel ein nóta og endurroyn atgerð
 </translation>
     </message>
     <message>
         <source>No note or rest selected:
 Please select a single note or rest and retry operation
 </source>
-        <translation>No note or rest selected: Please select a single note or rest and retry operation.
+        <translation>Eingin nóti ella tøgn vald: 
+Vinarliga vel ein nóta ella tøgn og endurroyn atgerð
 </translation>
     </message>
 </context>
@@ -10421,105 +10688,120 @@ Please select a single note or rest and retry operation
     </message>
     <message>
         <source>Perc. 3 lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Perc. 3 linjur</translation>
     </message>
     <message>
         <source>Perc. 5 lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Perc. 5 linjur</translation>
     </message>
     <message>
         <source>Tab. ukulele</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab. ukulele</translation>
     </message>
     <message>
         <source>Perc. 1 line</source>
-        <translation type="unfinished"></translation>
+        <translation>Perc. 1 linja</translation>
     </message>
     <message>
         <source>Cannot open chord description:
 %1
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki opna akkordlýsing:
+%1
+%2</translation>
     </message>
     <message>
         <source>Open Chord Description
 %1
 failed: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Opna akkord lýsing
+%1
+miseydnað: %2</translation>
     </message>
     <message>
         <source>Write Chord Description failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriva akkord lýsing miseydnað: %1</translation>
     </message>
     <message>
         <source>Cannot open tablature font description:
 %1
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki opna tab funta lýsing
+%1
+%2</translation>
     </message>
     <message>
         <source>Cannot read file %1:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki lesa fílu %1:
+</translation>
     </message>
     <message>
         <source>bad format</source>
-        <translation type="unfinished"></translation>
+        <translation>Vánaligt snið</translation>
     </message>
     <message>
         <source>unknown type</source>
-        <translation type="unfinished"></translation>
+        <translation>Ókent slag</translation>
     </message>
     <message>
         <source>It was last saved with version 0.9.5 or older.&lt;br&gt;You can convert this score by opening and then saving with MuseScore version 1.x&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Tað var goymt við útgávu 0.9.5 ella eldri. &lt;br&gt;Tú kanst umleggja hetta nótablaðið við opna og goyma við MuseScore versión 1.x&lt;/a&gt;</translation>
     </message>
     <message>
         <source>This score was saved using a newer version of MuseScore.&lt;br&gt;
 Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hetta nótablaðið var goymt við nýggjari útgávu av MuseScore.&lt;br&gt;
+Vitja &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore heimasíðuna&lt;/a&gt; og tak niður nýggjastu útgávuna.</translation>
     </message>
     <message>
         <source>File not found %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fíla ikki funnin %1</translation>
     </message>
     <message>
         <source>MuseScore: Load Error</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Feilur: tak fram</translation>
     </message>
     <message>
         <source>Internal error: MusicXML schema is invalid
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Innvortis villa: MusicXML skema er galið
+</translation>
     </message>
     <message>
         <source>Error reading container.xml at line %1 column %2: %3
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Villa við lesing av container.xml við linju %1 teigur %2: %3
+</translation>
     </message>
     <message>
-        <source>Can&apos;t find rootfile
+        <source>Can't find rootfile
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Finnur ikki rótfílu
+%1</translation>
     </message>
     <message>
         <source>File &apos;%1&apos; is not a valid MusicXML file</source>
-        <translation type="unfinished"></translation>
+        <translation>Fíla &apos;%1&apos; er ikki galdandi MusicXML fíla</translation>
     </message>
     <message>
         <source>Error at line %1 column %2: %3
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Villa við linju %1 teigur %2: %3
+
+</translation>
     </message>
     <message>
         <source>Could not open MusicXML file
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki opna MusicXML fílu
+%1</translation>
     </message>
     <message>
         <source>Could not open compressed MusicXML file
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki opna pakkaða MusicXML fílu
+%1</translation>
     </message>
     <message>
         <source>normal</source>
@@ -10527,31 +10809,31 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Sergjørd</translation>
     </message>
     <message>
         <source>Long</source>
-        <translation type="unfinished"></translation>
+        <translation>Langur</translation>
     </message>
     <message>
         <source>Breve</source>
-        <translation type="unfinished"></translation>
+        <translation>Breve</translation>
     </message>
     <message>
         <source>Whole</source>
-        <translation type="unfinished"></translation>
+        <translation>Heilur</translation>
     </message>
     <message>
         <source>Half</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálvur</translation>
     </message>
     <message>
         <source>Quarter</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvartur</translation>
     </message>
     <message>
         <source>Eighth</source>
-        <translation type="unfinished"></translation>
+        <translation>Átta</translation>
     </message>
     <message>
         <source>16th</source>
@@ -10563,115 +10845,124 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>64th</source>
-        <translation type="unfinished">semiquaver {64t?}</translation>
+        <translation>64prt</translation>
     </message>
     <message>
         <source>128th</source>
-        <translation type="unfinished">semiquaver {128t?}</translation>
+        <translation>128prt</translation>
     </message>
     <message>
         <source>256th</source>
-        <translation type="unfinished">semiquaver {256t?}</translation>
+        <translation>256prt</translation>
     </message>
     <message>
         <source>512th</source>
-        <translation type="unfinished">semiquaver {512t?}</translation>
+        <translation>512prt</translation>
     </message>
     <message>
         <source>1024th</source>
-        <translation type="unfinished">semiquaver {1024t?}</translation>
+        <translation>1024prt</translation>
     </message>
     <message>
         <source>Zero</source>
-        <translation type="unfinished"></translation>
+        <translation>Null</translation>
     </message>
     <message>
         <source>Measure</source>
-        <translation>Measure</translation>
+        <translation>Takt</translation>
     </message>
     <message>
         <source>Invalid</source>
-        <translation>invalid</translation>
+        <translation>Ógildugt</translation>
     </message>
     <message>
         <source>double flat</source>
-        <translation type="unfinished"></translation>
+        <translation>dupult b</translation>
     </message>
     <message>
         <source>flat</source>
-        <translation type="unfinished"></translation>
+        <translation>b fyri nótan</translation>
     </message>
     <message>
         <source>sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>krossur</translation>
     </message>
     <message>
         <source>double sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>dupultur krossur</translation>
     </message>
     <message>
         <source>Internal error: Could not open resource musicxml.xsd
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Innvortis villa: Kann ikki opna tilfeingi musicxml.xsd
+</translation>
     </message>
     <message>
         <source>Tab. balalaika</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab. balalaika</translation>
     </message>
     <message>
         <source>Tab. 6-str. simple</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab. 6-str. einkul</translation>
     </message>
     <message>
         <source>Tab. 6-str. common</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab. 6-str. vanligur</translation>
     </message>
     <message>
         <source>Tab. 6-str. full</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab. 6-str. heilur</translation>
     </message>
     <message>
         <source>Tab. 4-str. simple</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab. 4-str. einkul</translation>
     </message>
     <message>
         <source>Tab. 4-str. common</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab. 4-str. vanligur</translation>
     </message>
     <message>
         <source>Tab. 4-str. full</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab. 4-str. heilur</translation>
     </message>
     <message>
         <source>Tab. 5-str. simple</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab. 5-str. einkul</translation>
     </message>
     <message>
         <source>Tab. 5-str. common</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab. 5-str. vanligur</translation>
     </message>
     <message>
         <source>Tab. 5-str. full</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab. 5-str. heilur</translation>
     </message>
     <message>
         <source>Tab. 6-str. Italian</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab. 6-str. Italienskur</translation>
     </message>
     <message>
         <source>Tab. 6-str. French</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab. 6-str. Franskur</translation>
     </message>
     <message>
         <source>File corrupted %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fiíla oyðiløgd %1</translation>
+    </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation>MuseScore: Uppsend feilur</translation>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation>Ynskir tú at royna at taka fram alíkavæl?</translation>
     </message>
 </context>
 <context>
     <name>QWidget</name>
     <message>
         <source>MuseScore: Save Album into Score</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Goym savn inn í nótablað</translation>
     </message>
     <message>
         <source>MuseScore: Save File</source>
@@ -10683,19 +10974,19 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Save Album</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Goym savn</translation>
     </message>
     <message>
         <source>Write Album failed: </source>
-        <translation type="unfinished"></translation>
+        <translation>Skriva savn miseydnað:</translation>
     </message>
     <message>
         <source>MuseScore: Write Album</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Skriva Savn</translation>
     </message>
     <message>
         <source>Untitled</source>
-        <translation>Untitled</translation>
+        <translation>Ónevnd</translation>
     </message>
     <message>
         <source>MuseScore: Import Capella</source>
@@ -10703,23 +10994,23 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>Load failed: </source>
-        <translation>Load failed: </translation>
+        <translation>Tak fram, miseydnað:</translation>
     </message>
     <message>
         <source>MuseScore: Import Guitar Pro</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Flyt inn Guitar Pro</translation>
     </message>
     <message>
         <source>MuseScore: Load MIDI</source>
-        <translation>MuseScore: load MIDI</translation>
+        <translation>MuseScore: Tak fram MIDI</translation>
     </message>
     <message>
         <source>MuseScore: Load Style Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Miseydnað: tak fram snið</translation>
     </message>
     <message>
         <source>MuseScore: Load Languages Failed:</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Tak fram mál, miseydnað:</translation>
     </message>
     <message>
         <source>MuseScore: Invalid Command</source>
@@ -10727,50 +11018,53 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Open Album failed</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Opna savn, miseydnað</translation>
     </message>
     <message>
         <source>Open Album File
 %1
 failed: </source>
-        <translation type="unfinished"></translation>
+        <translation>Opna savn fílu
+%1
+miseydnað: </translation>
     </message>
     <message>
         <source>MuseScore: Open Album File</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Opna savns fílu</translation>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore Fíla (*.mscz)</translation>
     </message>
     <message>
         <source>MuseScore Files (*.album)</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore Fílir (*.album)</translation>
     </message>
     <message>
         <source>Overwrite?</source>
-        <translation type="unfinished"></translation>
+        <translation>Yvirskriva?</translation>
     </message>
     <message>
         <source>%1 already exists.
 Do you want to overwrite it?</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 er longu til.
+Ynskir tú at yvirskriva?</translation>
     </message>
     <message>
         <source>Install SoundFont</source>
-        <translation type="unfinished"></translation>
+        <translation>Innset ljóðfunt</translation>
     </message>
     <message>
         <source>Do you want to install the SoundFont %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ynskir tú at innseta ljóðfuntin %1?</translation>
     </message>
     <message>
         <source>SoundFont installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðfuntur innsettur</translation>
     </message>
     <message>
         <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðfuntur innsettur. Vinarliga far til Sýning &gt; Synthesizer fyri at leggja afturat og Sýning &gt; Miksari fyri at velja eitt ljóðføris ljóð</translation>
     </message>
 </context>
 <context>
@@ -10784,11 +11078,11 @@ Do you want to overwrite it?</source>
     <name>Resource</name>
     <message>
         <source>MuseScore Resources</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore tilfar</translation>
     </message>
     <message>
         <source>Tab 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrá 1</translation>
     </message>
     <message>
         <source>Language</source>
@@ -10796,30 +11090,19 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Fílunavn</translation>
     </message>
     <message>
         <source>File Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Fílu stødd</translation>
     </message>
     <message>
         <source>Install/Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg inn/Dagfør</translation>
     </message>
     <message>
         <source>Tab 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrá 2</translation>
     </message>
 </context>
 <context>
@@ -10834,7 +11117,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Created: </source>
-        <translation type="unfinished"></translation>
+        <translation>Stovnað:</translation>
     </message>
     <message>
         <source>Name:</source>
@@ -10842,30 +11125,30 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Nothing selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Einki valt</translation>
     </message>
 </context>
 <context>
     <name>SectionBreakProperties</name>
     <message>
         <source>MuseScore: Section Break Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Sektión reglubrot eginleikar</translation>
     </message>
     <message>
         <source>Pause:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa:</translation>
     </message>
     <message>
         <source>sec</source>
-        <translation type="unfinished"></translation>
+        <translation>sek</translation>
     </message>
     <message>
         <source>Start new section with long instrument names</source>
-        <translation type="unfinished"></translation>
+        <translation>Byrja nýggja sektión við longum ljóðførisnøvnum</translation>
     </message>
     <message>
         <source>Start new section with measure number one</source>
-        <translation type="unfinished"></translation>
+        <translation>Byrja nýggja sektión við takt nummar eitt.</translation>
     </message>
 </context>
 <context>
@@ -10880,62 +11163,62 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Select</source>
-        <translation>Select</translation>
+        <translation>Vel</translation>
     </message>
     <message>
         <source>Element type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Element Slag</translation>
     </message>
     <message>
         <source>Same staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Sami stavur</translation>
     </message>
     <message>
         <source>Same voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Sama rødd</translation>
     </message>
     <message>
         <source>Same subtype:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sama undirslag</translation>
     </message>
     <message>
         <source>Same system</source>
-        <translation type="unfinished"></translation>
+        <translation>Sama skipan</translation>
     </message>
     <message>
         <source>Replace selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Být um úrval</translation>
     </message>
     <message>
         <source>Add to selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat úrvali</translation>
     </message>
     <message>
         <source>Search in selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Leita í úrvali</translation>
     </message>
     <message>
         <source>Subtract from selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak frá úrvali</translation>
     </message>
     <message>
         <source>In selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Í úrvali</translation>
     </message>
 </context>
 <context>
     <name>SelectInstrument</name>
     <message>
         <source>MuseScore: Select Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Vel ljóðføri</translation>
     </message>
     <message>
         <source>0</source>
-        <translation type="unfinished">0</translation>
+        <translation>0</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Leita</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -10943,37 +11226,37 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Current instrument:</source>
-        <translation type="unfinished"></translation>
+        <translation>Verandi ljóðføri:</translation>
     </message>
 </context>
 <context>
     <name>SfListDialog</name>
     <message>
         <source>SoundFont Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðfuntu fílar</translation>
     </message>
 </context>
 <context>
     <name>SfzListDialog</name>
     <message>
         <source>SFZ Files</source>
-        <translation type="unfinished"></translation>
+        <translation>SFZ fílar</translation>
     </message>
 </context>
 <context>
     <name>ShortcutCaptureDialogBase</name>
     <message>
         <source>Old shortcuts:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gamlir sniðvegir</translation>
     </message>
     <message>
         <source>New shortcut:</source>
-        <translation>New shortcut:</translation>
+        <translation>Nýggjur sniðvegur:</translation>
     </message>
     <message>
         <source>Type to set shortcut</source>
         <comment>placeholder text</comment>
-        <translation type="unfinished"></translation>
+        <translation>Slag sum ásetur sniðveg</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -10985,7 +11268,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift út</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -10993,23 +11276,23 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Enter Shortcut Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Innrita sniðvegsrøð</translation>
     </message>
     <message>
         <source>Press up to four keys to enter shortcut sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Trýst upp til fýra knappar: innrita sniðvegsrøð</translation>
     </message>
     <message>
         <source>Old shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Gamlir sniðvegir</translation>
     </message>
     <message>
         <source>New shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Nýggjur sniðvegur</translation>
     </message>
     <message>
         <source>Type to set shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Slag sum ásetur sniðveg</translation>
     </message>
 </context>
 <context>
@@ -11024,7 +11307,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Split point:</source>
-        <translation type="unfinished"></translation>
+        <translation>Klúgv punkt</translation>
     </message>
 </context>
 <context>
@@ -11046,7 +11329,7 @@ Do you want to overwrite it?</source>
     <name>StaffTextProperties</name>
     <message>
         <source>Change Channel</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt kanal</translation>
     </message>
     <message>
         <source>1</source>
@@ -11066,7 +11349,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Channel:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kanal:</translation>
     </message>
     <message>
         <source>Name</source>
@@ -11074,37 +11357,39 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Lýsing</translation>
     </message>
     <message>
         <source>Actions for selected channel:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hendingar hjá valdu kanal:</translation>
     </message>
     <message>
         <source>Aeolus Stops</source>
-        <translation type="unfinished"></translation>
+        <translation>Aeolus Stopp</translation>
     </message>
     <message>
         <source>III</source>
-        <translation type="unfinished"></translation>
+        <translation>III</translation>
     </message>
     <message>
         <source>Principal
 8</source>
-        <translation type="unfinished"></translation>
+        <translation>Prinsipal
+8</translation>
     </message>
     <message>
         <source>Gemshorn
 8</source>
-        <translation type="unfinished"></translation>
+        <translation>Gemshorn
+8</translation>
     </message>
     <message>
         <source>PushButton</source>
-        <translation type="unfinished"></translation>
+        <translation>Trýstknappur</translation>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift eina ella fleiri røddir til ávísa kanal:</translation>
     </message>
     <message>
         <source>MIDI Action</source>
@@ -11116,7 +11401,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Swing Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Swing stilling</translation>
     </message>
     <message>
         <source>Swing:</source>
@@ -11124,11 +11409,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Av</translation>
     </message>
     <message>
         <source>Select swing ratio:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel swing lutfall</translation>
     </message>
     <message>
         <source>%</source>
@@ -11136,26 +11421,26 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Eighth note</source>
-        <translation type="unfinished"></translation>
+        <translation>áttundnóti</translation>
     </message>
     <message>
         <source>Sixteenth note</source>
-        <translation type="unfinished"></translation>
+        <translation>sekstansnóti</translation>
     </message>
 </context>
 <context>
     <name>StaffTypeTemplates</name>
     <message>
         <source>Staff Type Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav slag skapilónir</translation>
     </message>
     <message>
         <source>Save Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym skapilónir</translation>
     </message>
     <message>
         <source>Load Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak fram skapilón</translation>
     </message>
 </context>
 <context>
@@ -11170,22 +11455,22 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Load Score</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak fram nótablað</translation>
     </message>
     <message>
         <source>Startup Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Byrjunar Gluggi</translation>
     </message>
 </context>
 <context>
     <name>Startcenter</name>
     <message>
         <source>Start Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Byrjunar depil</translation>
     </message>
     <message>
         <source>Open a score...</source>
-        <translation type="unfinished"></translation>
+        <translation>Opna eitt nótablað...</translation>
     </message>
     <message>
         <source>Close</source>
@@ -11200,7 +11485,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>System flag</source>
-        <translation type="unfinished"></translation>
+        <translation>Skipanarmerki</translation>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation>Leita...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Rudda</translation>
     </message>
 </context>
 <context>
@@ -11211,11 +11504,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Save to Score</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym til nótablað</translation>
     </message>
     <message>
         <source>Load from Score</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak fram úr nótablaði</translation>
     </message>
     <message>
         <source>Vol</source>
@@ -11223,15 +11516,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Master Effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvuðs effektir</translation>
     </message>
     <message>
         <source>Effect B:</source>
-        <translation type="unfinished"></translation>
+        <translation>Effekt B:</translation>
     </message>
     <message>
         <source>Effect A:</source>
-        <translation type="unfinished"></translation>
+        <translation>Effekt A:</translation>
     </message>
     <message>
         <source>Tuning</source>
@@ -11244,81 +11537,81 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Change Tuning</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt stilling</translation>
     </message>
     <message>
         <source>Master volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvuðs ljóðstyrki</translation>
     </message>
     <message>
         <source>Set as Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Set sum forsett</translation>
     </message>
     <message>
         <source>Load Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak fram forsett</translation>
     </message>
     <message>
         <source>Master tuning:</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvuðs stilling:</translation>
     </message>
     <message>
         <source>Save to score</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym til nótablað</translation>
     </message>
     <message>
         <source>Load from score</source>
-        <translation type="unfinished"></translation>
+        <translation>Tak fram úr nótablaði</translation>
     </message>
     <message>
         <source>Use up and down arrows to modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Brúka upp og niður pílar at broyta</translation>
     </message>
     <message>
         <source>Metronome gain</source>
-        <translation type="unfinished"></translation>
+        <translation>Metronom styrki</translation>
     </message>
     <message>
         <source>Effect A</source>
-        <translation type="unfinished"></translation>
+        <translation>Effekt A</translation>
     </message>
     <message>
         <source>Effect B</source>
-        <translation type="unfinished"></translation>
+        <translation>Effekt B</translation>
     </message>
     <message>
         <source>Hertz</source>
-        <translation type="unfinished"></translation>
+        <translation>Hertz</translation>
     </message>
     <message>
         <source>Master tuning</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvuðs stilling</translation>
     </message>
 </context>
 <context>
     <name>TextPaletteBase</name>
     <message>
         <source>MuseScore: Special Characters</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Serstakt skriftsnið</translation>
     </message>
     <message>
         <source>Code Page:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kodu síða</translation>
     </message>
     <message>
         <source>Common</source>
-        <translation type="unfinished"></translation>
+        <translation>Vanligt</translation>
     </message>
     <message>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Øll</translation>
     </message>
 </context>
 <context>
     <name>TextProperties</name>
     <message>
         <source>Style:</source>
-        <translation>Style:</translation>
+        <translation>Snið:</translation>
     </message>
     <message>
         <source>Text</source>
@@ -11338,7 +11631,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>System flag</source>
-        <translation type="unfinished"></translation>
+        <translation>Skipanarmerki</translation>
     </message>
     <message>
         <source>Offset</source>
@@ -11347,12 +11640,12 @@ Do you want to overwrite it?</source>
     <message>
         <source>Horizontal:</source>
         <extracomment>coordinate</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Vatnrætt</translation>
     </message>
     <message>
         <source>Vertical:</source>
         <extracomment>coordinate</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Loddrætt</translation>
     </message>
     <message>
         <source>Unit:</source>
@@ -11380,155 +11673,155 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Foreground color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Litur frammanfyri:</translation>
     </message>
     <message>
         <source>Background color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Litur aftanfyri</translation>
     </message>
     <message>
         <source>Alignment</source>
-        <translation type="unfinished"></translation>
+        <translation>Í beinum rað</translation>
     </message>
     <message>
         <source>Reset to Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla til snið</translation>
     </message>
     <message>
         <source>Text margin:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst breddi:</translation>
     </message>
     <message>
         <source>Border radius:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rammi radius:</translation>
     </message>
     <message>
         <source>Font face</source>
-        <translation type="unfinished"></translation>
+        <translation>Funt høvd</translation>
     </message>
     <message>
         <source>Font point size</source>
-        <translation type="unfinished"></translation>
+        <translation>Funt punt stødd</translation>
     </message>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>Feitir</translation>
     </message>
     <message>
         <source>Italic</source>
-        <translation type="unfinished"></translation>
+        <translation>Skákskriva</translation>
     </message>
     <message>
         <source>Underline</source>
-        <translation type="unfinished"></translation>
+        <translation>Strika undir</translation>
     </message>
     <message>
         <source>Text color</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst litur</translation>
     </message>
     <message>
         <source>Horizontal offset to reference point</source>
-        <translation type="unfinished"></translation>
+        <translation>Vatnrætt offsett til tilvísingar punkt</translation>
     </message>
     <message>
         <source>Vertical offset to reference point</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrætt offsett til tilvísingar punkt</translation>
     </message>
     <message>
         <source>Offset is absolute</source>
-        <translation type="unfinished"></translation>
+        <translation>Offsett er treytaleyst</translation>
     </message>
     <message>
         <source>Align left edge of text to reference point</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilla vinstra bredda av teksti til tilvísingarpunkt</translation>
     </message>
     <message>
         <source>Center text on reference point</source>
-        <translation type="unfinished"></translation>
+        <translation>Miðset tekst á tilvísingar punkt</translation>
     </message>
     <message>
         <source>Align top edge of text to reference point</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilla ovara bredda av teksti til tilvísingar punkt</translation>
     </message>
     <message>
         <source>Align right edge of text to reference point</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilla høgra bredda av teksti til tilvísingar punkt</translation>
     </message>
     <message>
         <source>Center text vertical to reference point</source>
-        <translation type="unfinished"></translation>
+        <translation>Miðset tekst loddrætt til tilvísingar punkt</translation>
     </message>
     <message>
         <source>Align bottom edge of text to reference point</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilla niðara bredda av teksti til tilvísingar punkt</translation>
     </message>
     <message>
         <source>Enable text frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Gilda tekst rammu</translation>
     </message>
     <message>
         <source>Draw circled frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekna sirkul rammu</translation>
     </message>
     <message>
         <source>Draw boxed frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekna kassa rammu</translation>
     </message>
     <message>
         <source>Border thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rammu tjúkt:</translation>
     </message>
     <message>
         <source>Frame line thickness</source>
-        <translation type="unfinished"></translation>
+        <translation>Rammu striku vídd</translation>
     </message>
     <message>
         <source>Frame inner margin</source>
-        <translation type="unfinished"></translation>
+        <translation>Innari breddi á rammu</translation>
     </message>
     <message>
         <source>Corner round</source>
-        <translation type="unfinished"></translation>
+        <translation>Horn runt</translation>
     </message>
     <message>
         <source>Text background color</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst bakgrund mynd</translation>
     </message>
     <message>
         <source>Frame color</source>
-        <translation type="unfinished"></translation>
+        <translation>Rammu litur</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarstøða millum tvær linjur á normalum 5-linju stavi</translation>
     </message>
     <message>
         <source>Offset in staff space units</source>
-        <translation type="unfinished"></translation>
+        <translation>Offsett í stav millumrúms eindum</translation>
     </message>
     <message>
         <source>Staff space</source>
         <extracomment>spatium unit</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Stav millumrúm</translation>
     </message>
     <message>
         <source>Size follows &apos;Staff space&apos; setting</source>
-        <translation type="unfinished"></translation>
+        <translation>Stødd fylgir &quot;stav millumrúm&quot; stilling</translation>
     </message>
     <message>
         <source>Align baseline of text to reference point</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilla grundlinju á teksti til tilvísingar punkt</translation>
     </message>
 </context>
 <context>
     <name>TextStyle</name>
     <message>
         <source>Title</source>
-        <translation>Title</translation>
+        <translation>Heiti</translation>
     </message>
     <message>
         <source>Subtitle</source>
-        <translation>Subtitle</translation>
+        <translation>Undirheiti</translation>
     </message>
     <message>
         <source>Composer</source>
@@ -11536,15 +11829,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"></translation>
+        <translation>Songtekstarithøvundur</translation>
     </message>
     <message>
         <source>Lyrics Odd Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekstur stak linja</translation>
     </message>
     <message>
         <source>Lyrics Even Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekstur maka linja</translation>
     </message>
     <message>
         <source>Fingering</source>
@@ -11552,15 +11845,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Instrument Name (Long)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðførisnavn (Langt)</translation>
     </message>
     <message>
         <source>Instrument Name (Short)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðførisnavn (Stutt)</translation>
     </message>
     <message>
         <source>Instrument Name (Part)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðførisnavn (Partur)</translation>
     </message>
     <message>
         <source>Dynamics</source>
@@ -11568,7 +11861,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Technique</source>
-        <translation type="unfinished"></translation>
+        <translation>Teknikkur</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -11588,11 +11881,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Nótabólkur</translation>
     </message>
     <message>
         <source>System</source>
-        <translation>System</translation>
+        <translation>Skipan</translation>
     </message>
     <message>
         <source>Staff</source>
@@ -11600,7 +11893,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord symbol</translation>
     </message>
     <message>
         <source>Rehearsal Mark</source>
@@ -11608,11 +11901,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Repeat Text Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Endurtak tekst vinstru</translation>
     </message>
     <message>
         <source>Repeat Text Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Endurtak tekst høgru</translation>
     </message>
     <message>
         <source>Repeat Text</source>
@@ -11628,7 +11921,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Text Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst linja</translation>
     </message>
     <message>
         <source>Glissando</source>
@@ -11644,42 +11937,42 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"></translation>
+        <translation>Bend</translation>
     </message>
     <message>
         <source>Header</source>
-        <translation type="unfinished"></translation>
+        <translation>Teksthøvd</translation>
     </message>
     <message>
         <source>Footer</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekstfótur</translation>
     </message>
     <message>
         <source>Instrument Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðføri, broyting</translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Besiffraður bassur</translation>
     </message>
     <message>
         <source>LH Guitar Fingering</source>
-        <translation type="unfinished"></translation>
+        <translation>VH guitar fingrasetningur</translation>
     </message>
     <message>
         <source>RH Guitar Fingering</source>
-        <translation type="unfinished"></translation>
+        <translation>HH guitar fingrasetingur</translation>
     </message>
     <message>
         <source>Pedal</source>
-        <translation type="unfinished">Pedal</translation>
+        <translation>Pedal</translation>
     </message>
 </context>
 <context>
     <name>TextStyleDialog</name>
     <message>
         <source>MuseScore: Edit Text Styles</source>
-        <translation>MuseScore: Edit Text Styles</translation>
+        <translation>MuseScore: broyt tekst snið</translation>
     </message>
     <message>
         <source>New</source>
@@ -11697,11 +11990,11 @@ Do you want to overwrite it?</source>
     <name>TimeDialogBase</name>
     <message>
         <source>Create Time Signature</source>
-        <translation>Create Time Signature</translation>
+        <translation>Stovna takt slag</translation>
     </message>
     <message>
         <source>Value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Virði:</translation>
     </message>
     <message>
         <source>/</source>
@@ -11721,15 +12014,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished">8</translation>
+        <translation>8</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished">16</translation>
+        <translation>16</translation>
     </message>
     <message>
         <source>32</source>
-        <translation type="unfinished">32</translation>
+        <translation>32</translation>
     </message>
     <message>
         <source>64</source>
@@ -11745,14 +12038,14 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Add time signature to palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat takt slag til palett</translation>
     </message>
 </context>
 <context>
     <name>TimeSigProperties</name>
     <message>
         <source>Time Signature Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt slag eginleikar</translation>
     </message>
     <message>
         <source>/</source>
@@ -11764,15 +12057,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Note Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta bólkar</translation>
     </message>
     <message>
         <source>Values</source>
-        <translation type="unfinished"></translation>
+        <translation>Virðir</translation>
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Framkoma</translation>
     </message>
     <message>
         <source>Other:</source>
@@ -11780,18 +12073,18 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Global value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Globalt virði:</translation>
     </message>
     <message>
         <source>Actual value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Veruligt virði:</translation>
     </message>
 </context>
 <context>
     <name>TimesigWizard</name>
     <message>
         <source>Enter Time Signature:</source>
-        <translation>Enter Time Signature:</translation>
+        <translation>Set inn takt slag:</translation>
     </message>
     <message>
         <source>/</source>
@@ -11811,15 +12104,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished">8</translation>
+        <translation>8</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished">16</translation>
+        <translation>16</translation>
     </message>
     <message>
         <source>32</source>
-        <translation type="unfinished">32</translation>
+        <translation>32</translation>
     </message>
     <message>
         <source>64</source>
@@ -11831,7 +12124,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Duration:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tíðarbil:</translation>
     </message>
     <message>
         <source>Enter Number of Measures:</source>
@@ -11847,23 +12140,23 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Common time</source>
-        <translation type="unfinished"></translation>
+        <translation>Vanlig takt</translation>
     </message>
     <message>
         <source>Time Signature Wizard</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt slag flogvit</translation>
     </message>
     <message>
         <source>Beat unit</source>
-        <translation type="unfinished"></translation>
+        <translation>Slag eind</translation>
     </message>
     <message>
         <source>Common Time</source>
-        <translation type="unfinished"></translation>
+        <translation>vanlig takt</translation>
     </message>
     <message>
         <source>Enter Number of Measures</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriva tal av taktum</translation>
     </message>
     <message>
         <source>Measures</source>
@@ -11871,22 +12164,22 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Cut Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Klipp tíð</translation>
     </message>
     <message>
         <source>Beats in a measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Sløg í einari takt</translation>
     </message>
     <message>
         <source>Hint: You can also add or remove measures after creation of the score.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ráð: Legg afturat ella tak burtur taktir aftaná nótablaðið er framleitt.</translation>
     </message>
 </context>
 <context>
     <name>TransposeDialogBase</name>
     <message>
         <source>MuseScore: Transpose</source>
-        <translation>MuseScore: Transpose</translation>
+        <translation>MuseScore: Transponera</translation>
     </message>
     <message>
         <source>F major / D minor</source>
@@ -12022,35 +12315,35 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Transpose key signatures</source>
-        <translation>Transpose key signatures</translation>
+        <translation>Transponera ljómslagstekin</translation>
     </message>
     <message>
         <source>Second</source>
-        <translation type="unfinished"></translation>
+        <translation>Annar</translation>
     </message>
     <message>
         <source>Third</source>
-        <translation type="unfinished"></translation>
+        <translation>Triðji</translation>
     </message>
     <message>
         <source>Fourth</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjórði</translation>
     </message>
     <message>
         <source>Fifth</source>
-        <translation type="unfinished"></translation>
+        <translation>Fimti</translation>
     </message>
     <message>
         <source>Sixth</source>
-        <translation type="unfinished"></translation>
+        <translation>Sætti</translation>
     </message>
     <message>
         <source>Seventh</source>
-        <translation type="unfinished"></translation>
+        <translation>Sjeyndi</translation>
     </message>
     <message>
         <source>Keep degree alterations</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym stig broytingar</translation>
     </message>
     <message>
         <source>Options</source>
@@ -12058,163 +12351,163 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Transpose chord symbols</source>
-        <translation type="unfinished"></translation>
+        <translation>Transponera akkord symbol</translation>
     </message>
     <message>
         <source>C♭ major / A♭ minor</source>
-        <translation type="unfinished"></translation>
+        <translation>C♭ dur / A♭ moll</translation>
     </message>
     <message>
         <source>G♭ major / E♭ minor</source>
-        <translation type="unfinished"></translation>
+        <translation>G♭ dur / E♭ moll</translation>
     </message>
     <message>
         <source>D♭ major / B♭ minor</source>
-        <translation type="unfinished"></translation>
+        <translation>D♭ dur / B♭ moll</translation>
     </message>
     <message>
         <source>A♭ major / F minor</source>
-        <translation type="unfinished"></translation>
+        <translation>A♭ dur / F moll</translation>
     </message>
     <message>
         <source>E♭ major / C minor</source>
-        <translation type="unfinished"></translation>
+        <translation>E♭ dur / C moll</translation>
     </message>
     <message>
         <source>B♭ major / G minor</source>
-        <translation type="unfinished"></translation>
+        <translation>B♭ dur / G moll</translation>
     </message>
     <message>
         <source>A major / F♯ minor</source>
-        <translation type="unfinished"></translation>
+        <translation>A dur / F♯ moll</translation>
     </message>
     <message>
         <source>E major / C♯ minor</source>
-        <translation type="unfinished"></translation>
+        <translation>E dur / C♯ moll</translation>
     </message>
     <message>
         <source>B major / G♯ minor</source>
-        <translation type="unfinished"></translation>
+        <translation>B dur / G♯ moll</translation>
     </message>
     <message>
         <source>F♯ major / D♯ minor</source>
-        <translation type="unfinished"></translation>
+        <translation>F♯ dur / D♯ moll</translation>
     </message>
     <message>
         <source>C♯ major / A♯ minor</source>
-        <translation type="unfinished"></translation>
+        <translation>C♯ dur / A♯ moll</translation>
     </message>
     <message>
         <source>Single Sharps and Flats Only</source>
-        <translation type="unfinished"></translation>
+        <translation>Bert einstakir krossar og b</translation>
     </message>
     <message>
         <source>Use Double Sharps and Flats</source>
-        <translation type="unfinished"></translation>
+        <translation>Brúka dupult krossar og b</translation>
     </message>
     <message>
         <source>Transpose Chromatically</source>
-        <translation type="unfinished"></translation>
+        <translation>Transponera kromatiskt</translation>
     </message>
     <message>
         <source>By Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Eftir ljómslagi</translation>
     </message>
     <message>
         <source>By Interval</source>
-        <translation type="unfinished"></translation>
+        <translation>Eftir intervalli</translation>
     </message>
     <message>
         <source>Transpose Diatonically</source>
-        <translation type="unfinished"></translation>
+        <translation>Transponera diatoniskt</translation>
     </message>
 </context>
 <context>
     <name>Tremolo</name>
     <message>
         <source>Eighth through stem</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttund gjøgnum legg</translation>
     </message>
     <message>
         <source>16th through stem</source>
-        <translation type="unfinished"></translation>
+        <translation>16prt gjøgnum legg</translation>
     </message>
     <message>
         <source>32nd through stem</source>
-        <translation type="unfinished"></translation>
+        <translation>32prt gjøgnum legg</translation>
     </message>
     <message>
         <source>64th through stem</source>
-        <translation type="unfinished"></translation>
+        <translation>64prt gjøgnum legg</translation>
     </message>
     <message>
         <source>Eighth between notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttund millum nótar</translation>
     </message>
     <message>
         <source>16th between notes</source>
-        <translation type="unfinished"></translation>
+        <translation>16prt millum nótar</translation>
     </message>
     <message>
         <source>32nd between notes</source>
-        <translation type="unfinished"></translation>
+        <translation>32prt millum nótar</translation>
     </message>
     <message>
         <source>64th between notes</source>
-        <translation type="unfinished"></translation>
+        <translation>64prt millum nótar</translation>
     </message>
 </context>
 <context>
     <name>TremoloBarDialog</name>
     <message>
         <source>Bend type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bendingar slag</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
-        <translation type="unfinished"></translation>
+        <translation>Klikk og legg afturat tak frá nøkur punkt</translation>
     </message>
     <message>
         <source>Dip</source>
-        <translation type="unfinished"></translation>
+        <translation>Dypp</translation>
     </message>
     <message>
         <source>Dive</source>
-        <translation type="unfinished"></translation>
+        <translation>Kav</translation>
     </message>
     <message>
         <source>Inverted Dip</source>
-        <translation type="unfinished"></translation>
+        <translation>Umvent dyp</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="unfinished"></translation>
+        <translation>Aftur</translation>
     </message>
     <message>
         <source>MuseScore: Tremolo Bar Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Tremolo takt eginleiki</translation>
     </message>
     <message>
         <source>Release(Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sleppa (Upp)</translation>
     </message>
     <message>
         <source>Release(Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sleppa (niður)</translation>
     </message>
 </context>
 <context>
     <name>TupletBase</name>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Nótabólkur</translation>
     </message>
 </context>
 <context>
     <name>TupletDialog</name>
     <message>
         <source>MuseScore: Create Tuplet</source>
-        <translation>MuseScore: create tuplet</translation>
+        <translation>MuseScore: Stovna nótabólk</translation>
     </message>
     <message>
         <source>Type</source>
@@ -12234,11 +12527,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Bracket</source>
-        <translation>Bracket</translation>
+        <translation>Klombur</translation>
     </message>
     <message>
         <source>Relation:</source>
-        <translation type="unfinished"></translation>
+        <translation>Samband:</translation>
     </message>
     <message>
         <source>Relation</source>
@@ -12250,54 +12543,54 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Auto bracket</source>
-        <translation>auto bracket</translation>
+        <translation>Auto klombur</translation>
     </message>
 </context>
 <context>
     <name>UploadScoreDialog</name>
     <message>
         <source>Score Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótablaðs upplýsingar</translation>
     </message>
     <message>
         <source>You&apos;re logged in as</source>
-        <translation type="unfinished"></translation>
+        <translation>Tú ert innritaður sum</translation>
     </message>
     <message>
         <source>USERNAME</source>
-        <translation type="unfinished"></translation>
+        <translation>BRÚKARANAVN</translation>
     </message>
     <message>
         <source>Sign out</source>
-        <translation type="unfinished"></translation>
+        <translation>Rita út</translation>
     </message>
     <message>
         <source>Sign out on exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Rita út við útgongd</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation>Title</translation>
+        <translation>Heiti</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Lýsing</translation>
     </message>
     <message>
         <source>License</source>
-        <translation type="unfinished"></translation>
+        <translation>Hald</translation>
     </message>
     <message>
         <source>Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Frámerkir</translation>
     </message>
     <message>
         <source>Update the existing score </source>
-        <translation type="unfinished"></translation>
+        <translation>Dagfør nótablað sum er</translation>
     </message>
     <message>
         <source>Make this score private</source>
-        <translation type="unfinished"></translation>
+        <translation>Ger nótablaðið privat</translation>
     </message>
 </context>
 <context>
@@ -12319,104 +12612,106 @@ Do you want to overwrite it?</source>
     <name>Workspace</name>
     <message>
         <source>MuseScore: Writing Workspace File</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Skrivar arbeiðsrúm fílu</translation>
     </message>
     <message>
         <source>Writing Workspace File
 %1
 failed: </source>
-        <translation type="unfinished"></translation>
+        <translation>Skrivar arbeiðsrúm fílu
+%1
+miseydnað: </translation>
     </message>
 </context>
 <context>
     <name>XmlStream</name>
     <message>
         <source>Extra content at end of document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eyka innihald við enda á skjali</translation>
     </message>
     <message>
         <source>Invalid entity value.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ógildugt einindis virðir</translation>
     </message>
     <message>
         <source>Invalid XML character.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ógildigur XML eginleiki</translation>
     </message>
     <message>
         <source>Sequence &apos;]]&gt;&apos; not allowed in content.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rað &apos;]]&gt;&apos; ikki loyvt í innihaldi.</translation>
     </message>
     <message>
         <source>Encountered incorrectly encoded content.</source>
-        <translation type="unfinished"></translation>
+        <translation>Møtti skeivt kodaðum innihaldi</translation>
     </message>
     <message>
         <source>Namespace prefix &apos;%1&apos; not declared</source>
-        <translation type="unfinished"></translation>
+        <translation>Navnamillumrúm forskoyti &apos;%1&apos; ikki fráboða</translation>
     </message>
     <message>
         <source>Illegal namespace declaration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ólógligt navnamillumrúm fráboðan.</translation>
     </message>
     <message>
         <source>Attribute redefined.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eginleiki umásettur.</translation>
     </message>
     <message>
         <source>Unexpected character &apos;%1&apos; in public id literal.</source>
-        <translation type="unfinished"></translation>
+        <translation>Óvæntaður karakterur &apos;%1&apos; í almennum id orðarætt.</translation>
     </message>
     <message>
         <source>Invalid XML version string.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ógildugur XML útgávu strongur.</translation>
     </message>
     <message>
         <source>Unsupported XML version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikki stuðlað XML útgáva</translation>
     </message>
     <message>
         <source>The standalone pseudo attribute must appear after the encoding.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sjálvstøðugi falski eginleikin má koma fram aftaná kodingina</translation>
     </message>
     <message>
         <source>%1 is an invalid encoding name.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 er eitt ógildugt kodu navn.</translation>
     </message>
     <message>
         <source>Encoding %1 is unsupported</source>
-        <translation type="unfinished"></translation>
+        <translation>Koda %1 er óstuðlað</translation>
     </message>
     <message>
         <source>Standalone accepts only yes or no.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sjálvstøðugi góðtekur bert ja ella nei</translation>
     </message>
     <message>
         <source>Invalid attribute in XML declaration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ógildigur eginleiki í XML lýsing</translation>
     </message>
     <message>
         <source>Premature end of document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ófullborin endi á skjali.</translation>
     </message>
     <message>
         <source>Invalid document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ógildugt skjal.</translation>
     </message>
     <message>
         <source>Expected </source>
-        <translation type="unfinished"></translation>
+        <translation>Væntað</translation>
     </message>
     <message>
         <source>, but got &apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>, Men hevur &apos;</translation>
     </message>
     <message>
         <source>Unexpected &apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Óvæntað &apos;</translation>
     </message>
     <message>
         <source>Expected character data.</source>
-        <translation type="unfinished"></translation>
+        <translation>Væntað sermerkis tilfar.</translation>
     </message>
 </context>
 <context>
@@ -12431,15 +12726,15 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>SoundFont %1 already loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>SoundFont %1 longu frammi</translation>
     </message>
     <message>
         <source>Cannot load SoundFont %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki taka fram SoundFont %1</translation>
     </message>
 </context>
 <context>
@@ -12450,7 +12745,7 @@ failed: </source>
     </message>
     <message>
         <source>Sharp</source>
-        <translation>sharp</translation>
+        <translation>krossur</translation>
     </message>
     <message>
         <source>Flat</source>
@@ -12458,7 +12753,7 @@ failed: </source>
     </message>
     <message>
         <source>Double sharp</source>
-        <translation>double sharp</translation>
+        <translation>dupultur krossur</translation>
     </message>
     <message>
         <source>Double flat</source>
@@ -12470,94 +12765,94 @@ failed: </source>
     </message>
     <message>
         <source>Flat-slash</source>
-        <translation type="unfinished"></translation>
+        <translation>b tekin-strika</translation>
     </message>
     <message>
         <source>Flat-slash2</source>
-        <translation type="unfinished"></translation>
+        <translation>b tekin-strika2</translation>
     </message>
     <message>
         <source>Mirrored-flat2</source>
-        <translation type="unfinished"></translation>
+        <translation>Speglað-b tekin2</translation>
     </message>
     <message>
         <source>Mirrored-flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Speglað-b tekin</translation>
     </message>
     <message>
         <source>Mirrored-flat-slash</source>
-        <translation type="unfinished"></translation>
+        <translation>Speglað-b tekin-stirka</translation>
     </message>
     <message>
         <source>Flat-flat-slash</source>
-        <translation type="unfinished"></translation>
+        <translation>b tekin-b tekin-strika</translation>
     </message>
     <message>
         <source>Sharp-slash</source>
-        <translation type="unfinished"></translation>
+        <translation>Krossur-strika</translation>
     </message>
     <message>
         <source>Sharp-slash2</source>
-        <translation type="unfinished"></translation>
+        <translation>Krossur-strika2</translation>
     </message>
     <message>
         <source>Sharp-slash3</source>
-        <translation type="unfinished"></translation>
+        <translation>Krossur-strika3</translation>
     </message>
     <message>
         <source>Sharp-slash4</source>
-        <translation type="unfinished"></translation>
+        <translation>Krossur-strika4</translation>
     </message>
     <message>
         <source>Sharp arrow up</source>
-        <translation type="unfinished"></translation>
+        <translation>Kross pílur upp</translation>
     </message>
     <message>
         <source>Sharp arrow down</source>
-        <translation type="unfinished"></translation>
+        <translation>Kross pílur niður</translation>
     </message>
     <message>
         <source>Sharp arrow both</source>
-        <translation type="unfinished"></translation>
+        <translation>Kross pílar báðir</translation>
     </message>
     <message>
         <source>Flat arrow up</source>
-        <translation type="unfinished"></translation>
+        <translation>b tekin pílur upp</translation>
     </message>
     <message>
         <source>Flat arrow down</source>
-        <translation type="unfinished"></translation>
+        <translation>b tekin pílur niður</translation>
     </message>
     <message>
         <source>Flat arrow both</source>
-        <translation type="unfinished"></translation>
+        <translation>b tekin pílar báðir</translation>
     </message>
     <message>
         <source>Natural arrow up</source>
-        <translation type="unfinished"></translation>
+        <translation>reinur nóti pílur upp</translation>
     </message>
     <message>
         <source>Natural arrow down</source>
-        <translation type="unfinished"></translation>
+        <translation>Reinur nóti pílur niður</translation>
     </message>
     <message>
         <source>Natural arrow both</source>
-        <translation type="unfinished"></translation>
+        <translation>Reinur nóti báðir pílar</translation>
     </message>
     <message>
         <source>Sori</source>
-        <translation type="unfinished"></translation>
+        <translation>Sori</translation>
     </message>
     <message>
         <source>Koron</source>
-        <translation type="unfinished"></translation>
+        <translation>Koron</translation>
     </message>
 </context>
 <context>
     <name>action</name>
     <message>
         <source>Local Handbook...</source>
-        <translation type="unfinished"></translation>
+        <translation>StaðbundinHandbók</translation>
     </message>
     <message>
         <source>Local handbook</source>
@@ -12573,7 +12868,7 @@ failed: </source>
     </message>
     <message>
         <source>Load score from file</source>
-        <translation>Load score from file</translation>
+        <translation>Tak fram nótablað úr fílu</translation>
     </message>
     <message>
         <source>Save</source>
@@ -12593,11 +12888,11 @@ failed: </source>
     </message>
     <message>
         <source>Save Selection...</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym úrval...</translation>
     </message>
     <message>
         <source>Save current selection as new score</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym verandi úrval sum nýtt nótablað</translation>
     </message>
     <message>
         <source>Save a Copy...</source>
@@ -12609,23 +12904,23 @@ failed: </source>
     </message>
     <message>
         <source>Export...</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt út...</translation>
     </message>
     <message>
         <source>Export score</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt út nótablað</translation>
     </message>
     <message>
         <source>Save a copy of the score in various formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym eitt avrit av nótablaðnum í ymsum forsniði</translation>
     </message>
     <message>
         <source>Export Parts...</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt út partar...</translation>
     </message>
     <message>
         <source>Save a copy of the score&apos;s parts in various formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym avrit av pørtum nótablaðsins í ymsum forsniði</translation>
     </message>
     <message>
         <source>Close</source>
@@ -12645,23 +12940,23 @@ failed: </source>
     </message>
     <message>
         <source>Print...</source>
-        <translation>Printa</translation>
+        <translation>Prenta...</translation>
     </message>
     <message>
         <source>Print</source>
-        <translation>Print</translation>
+        <translation>Prenta</translation>
     </message>
     <message>
         <source>Print score</source>
-        <translation>Print score</translation>
+        <translation>Prenta nótabløð</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>angra</translation>
+        <translation>Angra</translation>
     </message>
     <message>
         <source>Undo last change</source>
-        <translation>Undo last change</translation>
+        <translation>Angra seinastu broyting</translation>
     </message>
     <message>
         <source>Redo</source>
@@ -12669,7 +12964,7 @@ failed: </source>
     </message>
     <message>
         <source>Redo last undo</source>
-        <translation>Redo last undone change</translation>
+        <translation>Ger umaftur seinasta angra</translation>
     </message>
     <message>
         <source>Cut</source>
@@ -12689,7 +12984,7 @@ failed: </source>
     </message>
     <message>
         <source>Show instruments dialog</source>
-        <translation>Show instruments dialog</translation>
+        <translation>Vís ljóðføris vindeyga</translation>
     </message>
     <message>
         <source>Note Input</source>
@@ -12945,59 +13240,59 @@ failed: </source>
     </message>
     <message>
         <source>Insert A</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn A</translation>
     </message>
     <message>
         <source>Insert note A</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn nóta A</translation>
     </message>
     <message>
         <source>Insert B</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn B</translation>
     </message>
     <message>
         <source>Insert note B</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn nóta B</translation>
     </message>
     <message>
         <source>Insert C</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn C</translation>
     </message>
     <message>
         <source>Insert note C</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn C nóta</translation>
     </message>
     <message>
         <source>Insert D</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn D</translation>
     </message>
     <message>
         <source>Insert note D</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn D nóta</translation>
     </message>
     <message>
         <source>Insert E</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn E</translation>
     </message>
     <message>
         <source>Insert note E</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn E nóta</translation>
     </message>
     <message>
         <source>Insert F</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn F</translation>
     </message>
     <message>
         <source>Insert note F</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn F nóta</translation>
     </message>
     <message>
         <source>Insert G</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn G</translation>
     </message>
     <message>
         <source>Insert note G</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn G nóta</translation>
     </message>
     <message>
         <source>Rest</source>
@@ -13013,7 +13308,7 @@ failed: </source>
     </message>
     <message>
         <source>Tenuto</source>
-        <translation type="unfinished"></translation>
+        <translation>Tenuto</translation>
     </message>
     <message>
         <source>Trill</source>
@@ -13021,7 +13316,7 @@ failed: </source>
     </message>
     <message>
         <source>Marcato</source>
-        <translation type="unfinished"></translation>
+        <translation>Marcato</translation>
     </message>
     <message>
         <source>Reset Beam Mode</source>
@@ -13029,7 +13324,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset beam mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla bjálka støðu</translation>
     </message>
     <message>
         <source>Reset beam mode of selected measures</source>
@@ -13045,11 +13340,11 @@ failed: </source>
     </message>
     <message>
         <source>Pitch up or move text or articulation up</source>
-        <translation type="unfinished"></translation>
+        <translation>Tóna upp ella flyt tekst ella framburðartekin upp</translation>
     </message>
     <message>
         <source>Diatonic pitch up</source>
-        <translation type="unfinished"></translation>
+        <translation>Tóna upp diatoniskt</translation>
     </message>
     <message>
         <source>Up Octave</source>
@@ -13061,7 +13356,7 @@ failed: </source>
     </message>
     <message>
         <source>Pitch up by an octave or move text or articulation up</source>
-        <translation type="unfinished"></translation>
+        <translation>Tóna upp ein áttund ella flyt tekst ella framburðartekin upp</translation>
     </message>
     <message>
         <source>Up Note in Chord</source>
@@ -13089,11 +13384,11 @@ failed: </source>
     </message>
     <message>
         <source>Pitch down or move text or articulation down</source>
-        <translation type="unfinished"></translation>
+        <translation>Tóna niður ella flyt tekst ella framburðartekin niður</translation>
     </message>
     <message>
         <source>Diatonic pitch down</source>
-        <translation type="unfinished"></translation>
+        <translation>Tóni niður diatoniskt</translation>
     </message>
     <message>
         <source>Pitch down octave</source>
@@ -13101,7 +13396,7 @@ failed: </source>
     </message>
     <message>
         <source>Pitch down by an octave or move text or articulation down</source>
-        <translation type="unfinished"></translation>
+        <translation>Tóna niður ein áttund ella flyt tekst ella framburðartekin niður</translation>
     </message>
     <message>
         <source>Down Note in Chord</source>
@@ -13125,27 +13420,27 @@ failed: </source>
     </message>
     <message>
         <source>Go to previous chord or move text left</source>
-        <translation type="unfinished"></translation>
+        <translation>Far til fyrru akkord ella flyt tekst til vinstru</translation>
     </message>
     <message>
         <source>Go to previous measure or move text left</source>
-        <translation type="unfinished"></translation>
+        <translation>Far til fyrru taktina ella flyt tekst til vinstru</translation>
     </message>
     <message>
         <source>Previous staff or voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyrri stavur ella rødd</translation>
     </message>
     <message>
         <source>Go to next chord or move text right</source>
-        <translation type="unfinished"></translation>
+        <translation>Far til næstu akkord ella flyt tekst til høgru</translation>
     </message>
     <message>
         <source>Go to next measure or move text right</source>
-        <translation type="unfinished"></translation>
+        <translation>Far til næstu takt ella flyt tekst til høgru</translation>
     </message>
     <message>
         <source>Next staff or voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Næsti stavur ella rødd</translation>
     </message>
     <message>
         <source>Add previous chord to selection</source>
@@ -13161,15 +13456,15 @@ failed: </source>
     </message>
     <message>
         <source>Select Section</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel sektión</translation>
     </message>
     <message>
         <source>Move chord/rest right</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt akkord/tøgn til høgru</translation>
     </message>
     <message>
         <source>Move chord/rest left</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt akkord/tøgn til vinstru</translation>
     </message>
     <message>
         <source>Select to end of measure</source>
@@ -13177,11 +13472,11 @@ failed: </source>
     </message>
     <message>
         <source>Select to beginning of line</source>
-        <translation>select to beginning of line</translation>
+        <translation>Val til byrjan av linju</translation>
     </message>
     <message>
         <source>Select to end of line</source>
-        <translation>select to end of line</translation>
+        <translation>Val til enda á linju</translation>
     </message>
     <message>
         <source>Select to beginning of score</source>
@@ -13213,7 +13508,7 @@ failed: </source>
     </message>
     <message>
         <source>Add crescendo</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat crescendo</translation>
     </message>
     <message>
         <source>Decrescendo</source>
@@ -13221,23 +13516,23 @@ failed: </source>
     </message>
     <message>
         <source>Add decrescendo</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat decrescendo</translation>
     </message>
     <message>
         <source>Ottava 8va</source>
-        <translation type="unfinished"></translation>
+        <translation>Ottava 8va</translation>
     </message>
     <message>
         <source>Add ottava 8va</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat ottava 8va</translation>
     </message>
     <message>
         <source>Ottava 8vb</source>
-        <translation type="unfinished"></translation>
+        <translation>Ottava 8vb</translation>
     </message>
     <message>
         <source>Add ottava 8vb</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat ottava 8vb</translation>
     </message>
     <message>
         <source>Escape</source>
@@ -13253,7 +13548,7 @@ failed: </source>
     </message>
     <message>
         <source>Timewise delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Sletta eftir tíð</translation>
     </message>
     <message>
         <source>Timewise Delete</source>
@@ -13261,7 +13556,7 @@ failed: </source>
     </message>
     <message>
         <source>Delete element and duration</source>
-        <translation>Delete element and duration</translation>
+        <translation>Strika element og tíðarbil</translation>
     </message>
     <message>
         <source>Delete Selected Measures</source>
@@ -13269,7 +13564,7 @@ failed: </source>
     </message>
     <message>
         <source>Append One Measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat eina takt</translation>
     </message>
     <message>
         <source>Append Measures...</source>
@@ -13281,7 +13576,7 @@ failed: </source>
     </message>
     <message>
         <source>Insert One Measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn eina takt</translation>
     </message>
     <message>
         <source>Insert Measures...</source>
@@ -13297,11 +13592,11 @@ failed: </source>
     </message>
     <message>
         <source>Insert Text Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn tekst rammu</translation>
     </message>
     <message>
         <source>Append Text Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt tekst rammu</translation>
     </message>
     <message>
         <source>Insert Vertical Frame</source>
@@ -13329,19 +13624,19 @@ failed: </source>
     </message>
     <message>
         <source>Quintuplet</source>
-        <translation>Quintuplet</translation>
+        <translation>Fimmbólkur</translation>
     </message>
     <message>
         <source>Sextuplet</source>
-        <translation>Sextuplet</translation>
+        <translation>Seksbólkur</translation>
     </message>
     <message>
         <source>Septuplet</source>
-        <translation>Septuplet</translation>
+        <translation>Sjeybólkur</translation>
     </message>
     <message>
         <source>Octuplet</source>
-        <translation>Octuplet</translation>
+        <translation>Áttabólkur</translation>
     </message>
     <message>
         <source>Nonuplet</source>
@@ -13353,7 +13648,7 @@ failed: </source>
     </message>
     <message>
         <source>Other tuplets</source>
-        <translation>Other Tuplets</translation>
+        <translation>Aðrir nótabólkar</translation>
     </message>
     <message>
         <source>Longa</source>
@@ -13361,67 +13656,67 @@ failed: </source>
     </message>
     <message>
         <source>Double whole note</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupultur heilnóti</translation>
     </message>
     <message>
         <source>Whole note</source>
-        <translation type="unfinished"></translation>
+        <translation>Heilnóti</translation>
     </message>
     <message>
         <source>Half note</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálvnóti</translation>
     </message>
     <message>
         <source>Quarter note</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvartnóti</translation>
     </message>
     <message>
         <source>16th note</source>
-        <translation type="unfinished"></translation>
+        <translation>16prt nóti</translation>
     </message>
     <message>
         <source>Note duration: 16th</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta longd: 16prt</translation>
     </message>
     <message>
         <source>32nd note</source>
-        <translation type="unfinished"></translation>
+        <translation>32prt nóti</translation>
     </message>
     <message>
         <source>Note duration: 32nd</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta longd: 32prt</translation>
     </message>
     <message>
         <source>64th note</source>
-        <translation type="unfinished"></translation>
+        <translation>64prt nóti</translation>
     </message>
     <message>
         <source>Note duration: 64th</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta longd: 64prt</translation>
     </message>
     <message>
         <source>128th note</source>
-        <translation type="unfinished"></translation>
+        <translation>128prt nóti</translation>
     </message>
     <message>
         <source>Note duration: 128th</source>
-        <translation type="unfinished"></translation>
+        <translation>nóta longd: 128prt</translation>
     </message>
     <message>
         <source>Increase active duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Veks um virkna tíðarbil</translation>
     </message>
     <message>
         <source>Decrease active duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Minka um virkna tíðarbil</translation>
     </message>
     <message>
         <source>Augmentation dot</source>
-        <translation type="unfinished"></translation>
+        <translation>Økingar prikkur</translation>
     </message>
     <message>
         <source>Double augmentation dot</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupultur økingar prikkur</translation>
     </message>
     <message>
         <source>Tie</source>
@@ -13453,7 +13748,7 @@ failed: </source>
     </message>
     <message>
         <source>Add acciaccatura</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat acciaccatura</translation>
     </message>
     <message>
         <source>Appoggiatura</source>
@@ -13461,27 +13756,27 @@ failed: </source>
     </message>
     <message>
         <source>Add appoggiatura</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat appoggiatura</translation>
     </message>
     <message>
         <source>Grace: quarter</source>
-        <translation type="unfinished"></translation>
+        <translation>Skreyt: fjórðnóti</translation>
     </message>
     <message>
         <source>Grace: 16th</source>
-        <translation type="unfinished"></translation>
+        <translation>Skreyt: 16prt</translation>
     </message>
     <message>
         <source>Add 16th grace note</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat 16prt skreyt nóti</translation>
     </message>
     <message>
         <source>Grace: 32nd</source>
-        <translation type="unfinished"></translation>
+        <translation>Skreyt: 32prt</translation>
     </message>
     <message>
         <source>Add 32nd grace note</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat 32prt skreyt nóti</translation>
     </message>
     <message>
         <source>1</source>
@@ -13517,7 +13812,7 @@ failed: </source>
     </message>
     <message>
         <source>Enable MIDI input</source>
-        <translation>Enable MIDI input</translation>
+        <translation>Gilda MIDI inntak</translation>
     </message>
     <message>
         <source>Beam start</source>
@@ -13525,7 +13820,7 @@ failed: </source>
     </message>
     <message>
         <source>Beam middle</source>
-        <translation type="unfinished"></translation>
+        <translation>Bjálki miðja</translation>
     </message>
     <message>
         <source>No beam</source>
@@ -13533,7 +13828,7 @@ failed: </source>
     </message>
     <message>
         <source>Beam 32nd sub</source>
-        <translation type="unfinished"></translation>
+        <translation>Bjálki 32prt undir</translation>
     </message>
     <message>
         <source>Auto beam</source>
@@ -13541,27 +13836,23 @@ failed: </source>
     </message>
     <message>
         <source>Feathered beam, slower</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarðaður bjálki, seinni</translation>
     </message>
     <message>
         <source>Feathered beam, faster</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Palette</source>
-        <translation>Palette</translation>
+        <translation>Fjarðaður bjálki, skjótari</translation>
     </message>
     <message>
         <source>Play Panel</source>
-        <translation>Play Panel</translation>
+        <translation>Spæl panel</translation>
     </message>
     <message>
         <source>Navigator</source>
-        <translation>Navigator</translation>
+        <translation>Skipari</translation>
     </message>
     <message>
         <source>MIDI Import Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI flyt inn panel</translation>
     </message>
     <message>
         <source>Mixer</source>
@@ -13577,7 +13868,7 @@ failed: </source>
     </message>
     <message>
         <source>Zoom canvas</source>
-        <translation type="unfinished"></translation>
+        <translation>Sum lørift</translation>
     </message>
     <message>
         <source>Lyrics</source>
@@ -13585,23 +13876,19 @@ failed: </source>
     </message>
     <message>
         <source>Add lyrics</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat sangtekst</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg tempo merki afturat</translation>
     </message>
     <message>
         <source>System Text</source>
-        <translation>System Text</translation>
+        <translation>Skipan tekstur</translation>
     </message>
     <message>
         <source>Add system text</source>
-        <translation>Add System Text</translation>
+        <translation>Legg afturat skipan tekstur</translation>
     </message>
     <message>
         <source>Staff Text</source>
@@ -13617,7 +13904,7 @@ failed: </source>
     </message>
     <message>
         <source>Add frame text</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat rammu tekst</translation>
     </message>
     <message>
         <source>Title</source>
@@ -13625,7 +13912,7 @@ failed: </source>
     </message>
     <message>
         <source>Add title text</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat heitis tekst</translation>
     </message>
     <message>
         <source>Subtitle</source>
@@ -13633,7 +13920,7 @@ failed: </source>
     </message>
     <message>
         <source>Add subtitle text</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat undirheiti</translation>
     </message>
     <message>
         <source>Composer</source>
@@ -13641,15 +13928,15 @@ failed: </source>
     </message>
     <message>
         <source>Add composer text</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat tónaskald tekst</translation>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"></translation>
+        <translation>Songtekstarithøvundur</translation>
     </message>
     <message>
         <source>Add lyricist text</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat skald tekst</translation>
     </message>
     <message>
         <source>Rehearsal Mark</source>
@@ -13657,7 +13944,7 @@ failed: </source>
     </message>
     <message>
         <source>Add rehearsal mark</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat venjingar merki</translation>
     </message>
     <message>
         <source>Picture</source>
@@ -13665,7 +13952,7 @@ failed: </source>
     </message>
     <message>
         <source>Add picture</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat mynd</translation>
     </message>
     <message>
         <source>Play</source>
@@ -13681,23 +13968,23 @@ failed: </source>
     </message>
     <message>
         <source>Play Previous Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl fyrru akkord</translation>
     </message>
     <message>
         <source>Play Previous Measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl fyrru taktina</translation>
     </message>
     <message>
         <source>Play Next Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl næstu akkord</translation>
     </message>
     <message>
         <source>Play Next Measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl næstu taktina</translation>
     </message>
     <message>
         <source>Player Seek to Begin</source>
-        <translation type="unfinished"></translation>
+        <translation>Spælari finn byrjan</translation>
     </message>
     <message>
         <source>Rewind</source>
@@ -13709,19 +13996,19 @@ failed: </source>
     </message>
     <message>
         <source>Rewind to start position</source>
-        <translation>Rewind to start position</translation>
+        <translation>Bakka til byrjanarplasering</translation>
     </message>
     <message>
         <source>Player Seek to End</source>
-        <translation type="unfinished"></translation>
+        <translation>Spælari finn endan</translation>
     </message>
     <message>
         <source>Play repeats</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl endurtøkur</translation>
     </message>
     <message>
         <source>Toggle repeats playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift endurtøkur spæl</translation>
     </message>
     <message>
         <source>Pan</source>
@@ -13729,27 +14016,27 @@ failed: </source>
     </message>
     <message>
         <source>Toggle pan score</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift víðmynd av nótablaði</translation>
     </message>
     <message>
         <source>Pan score during playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Fylg nótablaðnum tá spælt verður</translation>
     </message>
     <message>
         <source>Load Style...</source>
-        <translation>Load Style…</translation>
+        <translation>Tak fram snið…</translation>
     </message>
     <message>
         <source>Load style</source>
-        <translation>Load style</translation>
+        <translation>Tak fram snið</translation>
     </message>
     <message>
         <source>Save Style...</source>
-        <translation>Save Style…</translation>
+        <translation>Goym snið…</translation>
     </message>
     <message>
         <source>Save style</source>
-        <translation>Save style</translation>
+        <translation>Goym snið</translation>
     </message>
     <message>
         <source>Select All</source>
@@ -13757,27 +14044,27 @@ failed: </source>
     </message>
     <message>
         <source>&amp;Transpose...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Transponera...</translation>
     </message>
     <message>
         <source>Transpose</source>
-        <translation>Transpose</translation>
+        <translation>Transponera</translation>
     </message>
     <message>
         <source>Treble Clef</source>
-        <translation type="unfinished"></translation>
+        <translation>G-lykil</translation>
     </message>
     <message>
         <source>Add treble clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat G-lykil</translation>
     </message>
     <message>
         <source>Bass Clef</source>
-        <translation type="unfinished"></translation>
+        <translation>F-lykil</translation>
     </message>
     <message>
         <source>Add bass clef</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat F-lykil</translation>
     </message>
     <message>
         <source>Exchange Voice 1-2</source>
@@ -13817,15 +14104,15 @@ failed: </source>
     </message>
     <message>
         <source>Info...</source>
-        <translation type="unfinished"></translation>
+        <translation>leiðbein...</translation>
     </message>
     <message>
         <source>Edit score info</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt nótablaðs uppl.</translation>
     </message>
     <message>
         <source>Toggle System Break</source>
-        <translation>Toggle System Break</translation>
+        <translation>Skift skipan brot</translation>
     </message>
     <message>
         <source>Toggle Page Break</source>
@@ -13833,23 +14120,23 @@ failed: </source>
     </message>
     <message>
         <source>Toggle Section Break</source>
-        <translation type="unfinished"></translation>
+        <translation>Být um sektión reglubrot</translation>
     </message>
     <message>
         <source>Edit Element</source>
-        <translation>Edit Element</translation>
+        <translation>Broyt element</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla</translation>
     </message>
     <message>
         <source>Reset user settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla brúkara stillingar</translation>
     </message>
     <message>
         <source>Debugger</source>
-        <translation type="unfinished"></translation>
+        <translation>Avlúsari</translation>
     </message>
     <message>
         <source>Reset Stretch</source>
@@ -13857,7 +14144,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset measure stretch</source>
-        <translation type="unfinished"></translation>
+        <translation>Nullstilla takt vídd</translation>
     </message>
     <message>
         <source>Show Invisible</source>
@@ -13865,7 +14152,7 @@ failed: </source>
     </message>
     <message>
         <source>Show Unprintable</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís Óprenta</translation>
     </message>
     <message>
         <source>Show Frames</source>
@@ -13873,15 +14160,15 @@ failed: </source>
     </message>
     <message>
         <source>Show Page Margins</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís síðubreddar</translation>
     </message>
     <message>
         <source>Insert Special Characters...</source>
-        <translation type="unfinished"></translation>
+        <translation>Set in serstakt skriftsnið</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Millumrúm</translation>
     </message>
     <message>
         <source>Find</source>
@@ -13897,39 +14184,39 @@ failed: </source>
     </message>
     <message>
         <source>Mirror note head</source>
-        <translation type="unfinished"></translation>
+        <translation>Spegla nótahøvd</translation>
     </message>
     <message>
         <source>General...</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvuðs...</translation>
     </message>
     <message>
         <source>Edit general style</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt vanligt snið</translation>
     </message>
     <message>
         <source>Text...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekstur...</translation>
     </message>
     <message>
         <source>Edit text style</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt tekst snið</translation>
     </message>
     <message>
         <source>All Similar Elements</source>
-        <translation>All Similar Elements</translation>
+        <translation>Øll líknandi element</translation>
     </message>
     <message>
         <source>Select all similar elements</source>
-        <translation>Select all similar elements</translation>
+        <translation>Vel øll líknandi element</translation>
     </message>
     <message>
         <source>All Similar Elements in Same Staff</source>
-        <translation>All Similar Elements in Same Stave</translation>
+        <translation>Øll líknandi Element í sama stavi</translation>
     </message>
     <message>
         <source>Select all similar elements in same staff</source>
-        <translation>Select all similar emements in same stave</translation>
+        <translation>Vel øll líknandi element í sama stavi</translation>
     </message>
     <message>
         <source>Synthesizer</source>
@@ -13937,27 +14224,23 @@ failed: </source>
     </message>
     <message>
         <source>Double duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupult tíðarbil</translation>
     </message>
     <message>
         <source>Half duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálvt tíðarbil</translation>
     </message>
     <message>
         <source>Repeat selection</source>
         <translation>Repeat selection</translation>
     </message>
     <message>
-        <source>Pan piano roll</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Toggle pan piano roll</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift víðmynd av klaver rullu</translation>
     </message>
     <message>
         <source>Pan roll during playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Fylg við rullu tá spæl</translation>
     </message>
     <message>
         <source>Documents Side by Side</source>
@@ -13965,7 +14248,7 @@ failed: </source>
     </message>
     <message>
         <source>Display documents side by side</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís skjøl síðu um síðu</translation>
     </message>
     <message>
         <source>Documents Stacked</source>
@@ -13973,7 +14256,7 @@ failed: </source>
     </message>
     <message>
         <source>Display documents stacked</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís skjøl uppstáplað</translation>
     </message>
     <message>
         <source>Parts...</source>
@@ -13981,51 +14264,51 @@ failed: </source>
     </message>
     <message>
         <source>Manage parts</source>
-        <translation type="unfinished"></translation>
+        <translation>Umsit partar</translation>
     </message>
     <message>
         <source>Enharmonic up</source>
-        <translation type="unfinished"></translation>
+        <translation>Enharmoniskt upp</translation>
     </message>
     <message>
         <source>Enharmonic down</source>
-        <translation type="unfinished"></translation>
+        <translation>Enharmoniskt niður</translation>
     </message>
     <message>
         <source>Create new revision</source>
-        <translation type="unfinished"></translation>
+        <translation>Stovna nýggja rætting</translation>
     </message>
     <message>
         <source>Show OMR image</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís OMR mynd</translation>
     </message>
     <message>
         <source>Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Fullur skermur</translation>
     </message>
     <message>
         <source>Re-Pitch Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Um-tóna støða</translation>
     </message>
     <message>
         <source>Replace pitches without changing rhythms</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift út tónar uttan at broyta rútmur</translation>
     </message>
     <message>
         <source>Piano Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano Knappaborð</translation>
     </message>
     <message>
         <source>Additional Media...</source>
-        <translation type="unfinished"></translation>
+        <translation>Eyka miðlar...</translation>
     </message>
     <message>
         <source>Show media dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís miðla vindeyga</translation>
     </message>
     <message>
         <source>Split Measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Kloyv takt</translation>
     </message>
     <message>
         <source>Page Settings...</source>
@@ -14033,47 +14316,47 @@ failed: </source>
     </message>
     <message>
         <source>Album...</source>
-        <translation type="unfinished"></translation>
+        <translation>Savn...</translation>
     </message>
     <message>
         <source>Album</source>
-        <translation type="unfinished"></translation>
+        <translation>Savn</translation>
     </message>
     <message>
         <source>Layers...</source>
-        <translation type="unfinished"></translation>
+        <translation>Løg...</translation>
     </message>
     <message>
         <source>Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Løg</translation>
     </message>
     <message>
         <source>Next Score</source>
-        <translation type="unfinished"></translation>
+        <translation>Næsta nótablað</translation>
     </message>
     <message>
         <source>Previous Score</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyrra nótablað</translation>
     </message>
     <message>
         <source>Inspector</source>
-        <translation>Inspector</translation>
+        <translation>Inspektor</translation>
     </message>
     <message>
         <source>Show inspector</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís inspektor</translation>
     </message>
     <message>
         <source>Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Lykkja</translation>
     </message>
     <message>
         <source>Toggle loop playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift loop spæl</translation>
     </message>
     <message>
         <source>Loop playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Lykkju spæl</translation>
     </message>
     <message>
         <source>Metronome</source>
@@ -14081,339 +14364,339 @@ failed: </source>
     </message>
     <message>
         <source>Toggle metronome playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift metronom spæl</translation>
     </message>
     <message>
         <source>Play metronome during playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl metronom meðan spæl</translation>
     </message>
     <message>
         <source>Toggle count-in playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift tel-inn spæl</translation>
     </message>
     <message>
         <source>Play count-in at playback start</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl tel-inn við spæl byrjan</translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Besiffraður bassur</translation>
     </message>
     <message>
         <source>Add figured bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat besifringsbass</translation>
     </message>
     <message>
         <source>Transpose Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Transponera upp</translation>
     </message>
     <message>
         <source>Transpose Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Transponera niður</translation>
     </message>
     <message>
         <source>Master Palette...</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvuðs palett...</translation>
     </message>
     <message>
         <source>Show master palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís høvuðs palett</translation>
     </message>
     <message>
         <source>Toggle View Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift sýnishátt</translation>
     </message>
     <message>
         <source>Next syllable</source>
-        <translation type="unfinished"></translation>
+        <translation>Næsta stavilsi</translation>
     </message>
     <message>
         <source>Previous syllable</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyrra stavilsi</translation>
     </message>
     <message>
         <source>Toggle visibility</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift sýni</translation>
     </message>
     <message>
         <source>Set visible</source>
-        <translation type="unfinished"></translation>
+        <translation>Set sjónligt</translation>
     </message>
     <message>
         <source>Set invisible</source>
-        <translation type="unfinished"></translation>
+        <translation>Set ósjónligt</translation>
     </message>
     <message>
         <source>Lock Score</source>
-        <translation type="unfinished"></translation>
+        <translation>Læs nótablað</translation>
     </message>
     <message>
         <source>Longa (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Longa (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 16th (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: 16prt (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 32nd (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: 32prt (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 64th (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: 64prt (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 128th (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: 128prt (TAB)</translation>
     </message>
     <message>
         <source>Increase active duration (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Veks um virkna tíðarbil (TAB)</translation>
     </message>
     <message>
         <source>Decrease active duration (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Minka virkna tíðarbil (TAB)</translation>
     </message>
     <message>
         <source>Rest (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tøgn (TAB)</translation>
     </message>
     <message>
         <source>Enter rest (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn Tøgn (TAB)</translation>
     </message>
     <message>
         <source>Select string above (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel strong omanfyri (bert TAB)</translation>
     </message>
     <message>
         <source>Select string below (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel strong niðanfyri (bert TAB)</translation>
     </message>
     <message>
         <source>Fret 0 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 0 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 0 on current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat band 0 á valda strong (bert TAB)</translation>
     </message>
     <message>
         <source>Fret 1 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 1 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 1 on current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat band 1 á valda strong (bert TAB)</translation>
     </message>
     <message>
         <source>Fret 2 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 2 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 2 on current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat band 2a valda strong (bert TAB)</translation>
     </message>
     <message>
         <source>Fret 3 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 3 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 3 on current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat band 3 á valda strong (bert TAB)</translation>
     </message>
     <message>
         <source>Fret 4 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 4 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 4 of current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat band 4 á valda strong (bert TAB)</translation>
     </message>
     <message>
         <source>Fret 5 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 5 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 5 of current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat 5 á valda strong (bert TAB)</translation>
     </message>
     <message>
         <source>Fret 6 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 6 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 6 of current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat band 6 á verandi strong (bert TAB)</translation>
     </message>
     <message>
         <source>Fret 7 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 7 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 7 of current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat band 7 á verandi strong (bert TAB)</translation>
     </message>
     <message>
         <source>Fret 8 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 8 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 8 of current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat band 8 á verandi strong (bert TAB)</translation>
     </message>
     <message>
         <source>Fret 9 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 9 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 9 of current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat band 9 á verandi strong (bert TAB)</translation>
     </message>
     <message>
         <source>Insert Fretboard Diagram Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn bandaborð diagramm rammu</translation>
     </message>
     <message>
         <source>Add quarter grace note</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg kvartnóta afturat skreytnóta </translation>
     </message>
     <message>
         <source>Chord Symbols...</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord symbol...</translation>
     </message>
     <message>
         <source>Edit chord symbols style</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt akkord symbol snið</translation>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord symbol</translation>
     </message>
     <message>
         <source>Add chord symbol</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg akkord symbol afturat</translation>
     </message>
     <message>
         <source>Previous beat (Chord symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyrra slag (Akkord symbol)</translation>
     </message>
     <message>
         <source>Next beat (Chord symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Næsta slag (Akkord symbol)</translation>
     </message>
     <message>
         <source>Respell Pitches</source>
-        <translation type="unfinished"></translation>
+        <translation>Stava tónar aftur</translation>
     </message>
     <message>
         <source>Full Measure Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Tøgn heila takt</translation>
     </message>
     <message>
         <source>Converts the measure to a full measure rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Ger taktina um til tøgn heila takt</translation>
     </message>
     <message>
         <source>Join Measures</source>
-        <translation type="unfinished"></translation>
+        <translation>Set saman taktir</translation>
     </message>
     <message>
         <source>OMR Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>OMR Panel</translation>
     </message>
     <message>
         <source>Fret 10 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 10 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 10 of current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat band 10 á verandi strong (bert TAB)</translation>
     </message>
     <message>
         <source>Fret 11 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 11 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 11 of current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat band 11 á verandi strong (bert TAB)</translation>
     </message>
     <message>
         <source>Fret 12 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 12 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 12 of current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat band 12 á verandi strong (bert TAB)</translation>
     </message>
     <message>
         <source>Fret 13 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 13 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 13 of current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat band 13 á verandi strong (bert TAB)</translation>
     </message>
     <message>
         <source>Fret 14 (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Band 14 (TAB)</translation>
     </message>
     <message>
         <source>Add fret 14 of current string (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat band 14 á verandi strong (bert TAB)</translation>
     </message>
     <message>
         <source>Grace: 16th after</source>
-        <translation type="unfinished"></translation>
+        <translation>Skreyt: 16prt eftir</translation>
     </message>
     <message>
         <source>Add 16th grace note after</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat 16prt skreyt nóta eftir</translation>
     </message>
     <message>
         <source>Grace: 32nd after</source>
-        <translation type="unfinished"></translation>
+        <translation>Skreyt: 32prt eftir</translation>
     </message>
     <message>
         <source>Add 32nd grace note after</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat 32prt skreyt nóta eftir</translation>
     </message>
     <message>
         <source>All Similar Elements in Range Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Øll líknandi element í økis vali</translation>
     </message>
     <message>
         <source>Select all similar elements in the range selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel øll líknandi element í økis vali</translation>
     </message>
     <message>
         <source>Add brackets to element</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg klombur afturat elementi</translation>
     </message>
     <message>
         <source>Selection Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Val filtur</translation>
     </message>
     <message>
         <source>Eighth note</source>
-        <translation type="unfinished"></translation>
+        <translation>áttundnóti</translation>
     </message>
     <message>
         <source>Add Eighth grace note after</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat 8prt skreyt nóta eftir</translation>
     </message>
     <message>
         <source>Beam 16th sub</source>
-        <translation type="unfinished"></translation>
+        <translation>Bjálki 16prt undir</translation>
     </message>
     <message>
         <source>Go to the first element</source>
-        <translation type="unfinished"></translation>
+        <translation>Far til fyrsta element</translation>
     </message>
     <message>
         <source>Go to the last element</source>
-        <translation type="unfinished"></translation>
+        <translation>Far til seinasta element</translation>
     </message>
     <message>
         <source>Key Signatures...</source>
@@ -14421,15 +14704,15 @@ failed: </source>
     </message>
     <message>
         <source>Show key signature palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís ljómslagstekn palett</translation>
     </message>
     <message>
         <source>Time Signatures...</source>
-        <translation>Time Signatures…</translation>
+        <translation>Takt sløg…</translation>
     </message>
     <message>
         <source>Show time signature palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís takt slag palett</translation>
     </message>
     <message>
         <source>Symbols...</source>
@@ -14437,39 +14720,39 @@ failed: </source>
     </message>
     <message>
         <source>Show symbol palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís symbol palett</translation>
     </message>
     <message>
         <source>Grace: eighth after</source>
-        <translation type="unfinished"></translation>
+        <translation>Skreyt: 8prt eftir</translation>
     </message>
     <message>
         <source>Enable snap to horizontal grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Gilda samband við vatnrætt net</translation>
     </message>
     <message>
         <source>Enable snap to vertical grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Gilda samband við Loddrætt net</translation>
     </message>
     <message>
         <source>Configure grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Samanset netmynstur</translation>
     </message>
     <message>
         <source>Insert one measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Set in eina takt</translation>
     </message>
     <message>
         <source>Insert horizontal frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn vatnrætta rammu</translation>
     </message>
     <message>
         <source>Insert text frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn tekst rammu</translation>
     </message>
     <message>
         <source>Insert vertical frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Set in loddrætta rammu</translation>
     </message>
     <message>
         <source>Part Name</source>
@@ -14477,135 +14760,135 @@ failed: </source>
     </message>
     <message>
         <source>Add part name</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat part navn</translation>
     </message>
     <message>
         <source>Save Online...</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym álinju</translation>
     </message>
     <message>
         <source>Save score on MuseScore.com</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym nótablað á MuseScore.com</translation>
     </message>
     <message>
         <source>Explode</source>
-        <translation type="unfinished"></translation>
+        <translation>Brest</translation>
     </message>
     <message>
         <source>Explode contents of top selected staff into staves below</source>
-        <translation type="unfinished"></translation>
+        <translation>Brest innihald í ovara stavi í stavir niðanfyri</translation>
     </message>
     <message>
         <source>Implode</source>
-        <translation type="unfinished"></translation>
+        <translation>Fell saman</translation>
     </message>
     <message>
         <source>Implode contents of selected staves into top selected staff</source>
-        <translation type="unfinished"></translation>
+        <translation>Fell saman innihald í valdum stavum í óvasta valda stav</translation>
     </message>
     <message>
         <source>Fill With Slashes</source>
-        <translation type="unfinished"></translation>
+        <translation>Fill við strikum</translation>
     </message>
     <message>
         <source>Toggle Rhythmic Slash Notation</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift strikurútmu nótaskrift</translation>
     </message>
     <message>
         <source>Start Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Byrjunar depil</translation>
     </message>
     <message>
         <source>Toggle create multimeasure rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Slá til frá: ger fleir takta tøgn</translation>
     </message>
     <message>
         <source>Resequence Rehearsal Marks</source>
-        <translation type="unfinished"></translation>
+        <translation>Umskipa venjingar merki</translation>
     </message>
     <message>
         <source>Increase Stretch</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka strekki</translation>
     </message>
     <message>
         <source>Increase stretch</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka strekki</translation>
     </message>
     <message>
         <source>Increase stretch of selected measures</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka vídd av valdum taktum</translation>
     </message>
     <message>
         <source>Decrease Stretch</source>
-        <translation type="unfinished"></translation>
+        <translation>Lækka strekki</translation>
     </message>
     <message>
         <source>Decrease stretch</source>
-        <translation type="unfinished"></translation>
+        <translation>Lækka strekki</translation>
     </message>
     <message>
         <source>Decrease stretch of selected measures</source>
-        <translation type="unfinished"></translation>
+        <translation>Lækka vídd av valdum taktum</translation>
     </message>
     <message>
         <source>Plugin Creator...</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin stovnari...</translation>
     </message>
     <message>
         <source>Plugin Manager...</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin umsitari...</translation>
     </message>
     <message>
         <source>Resource Manager...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilfar umsitari...</translation>
     </message>
     <message>
         <source>Add/Remove Line Breaks...</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat/tak burtur linju brot</translation>
     </message>
     <message>
         <source>File: Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Fíla: opna</translation>
     </message>
     <message>
         <source>File: Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Fíla: goym</translation>
     </message>
     <message>
         <source>File: Save online</source>
-        <translation type="unfinished"></translation>
+        <translation>Fíla: goym álinju</translation>
     </message>
     <message>
         <source>File: Save as</source>
-        <translation type="unfinished"></translation>
+        <translation>Fíla: goym sum</translation>
     </message>
     <message>
         <source>Save selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Goym úrval</translation>
     </message>
     <message>
         <source>File: Save a copy</source>
-        <translation type="unfinished"></translation>
+        <translation>File: goym eitt avrit</translation>
     </message>
     <message>
         <source>Export parts</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt út partar</translation>
     </message>
     <message>
         <source>File: Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Fíla: stong</translation>
     </message>
     <message>
         <source>File: New</source>
-        <translation type="unfinished"></translation>
+        <translation>Fíla: nýggj</translation>
     </message>
     <message>
         <source>Note input</source>
-        <translation type="unfinished"></translation>
+        <translation>nóta inntak</translation>
     </message>
     <message>
         <source>Respell pitches</source>
-        <translation type="unfinished"></translation>
+        <translation>Umstava tónar</translation>
     </message>
     <message>
         <source>Flip Direction</source>
@@ -14613,47 +14896,47 @@ failed: </source>
     </message>
     <message>
         <source>Diatonic Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Diatoniskt upp</translation>
     </message>
     <message>
         <source>Move Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt upp</translation>
     </message>
     <message>
         <source>Diatonic Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Diatoniskt niður</translation>
     </message>
     <message>
         <source>Down Octave</source>
-        <translation type="unfinished"></translation>
+        <translation>Niður Áttund</translation>
     </message>
     <message>
         <source>Next Element</source>
-        <translation type="unfinished"></translation>
+        <translation>Næsta element</translation>
     </message>
     <message>
         <source>Accessibility: Next element</source>
-        <translation type="unfinished"></translation>
+        <translation>Atgongd: næsta element</translation>
     </message>
     <message>
         <source>Previous Element</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyrra element</translation>
     </message>
     <message>
         <source>Accessibility: Previous element</source>
-        <translation type="unfinished"></translation>
+        <translation>Atgongd: fyrra element</translation>
     </message>
     <message>
         <source>First Element</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyrsta element</translation>
     </message>
     <message>
         <source>Last Element</source>
-        <translation type="unfinished"></translation>
+        <translation>Seinasta element</translation>
     </message>
     <message>
         <source>Move Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt niður</translation>
     </message>
     <message>
         <source>Previous Chord</source>
@@ -14665,7 +14948,7 @@ failed: </source>
     </message>
     <message>
         <source>Previous Staff or Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyrri stavur ella rødd</translation>
     </message>
     <message>
         <source>Next Chord</source>
@@ -14677,75 +14960,75 @@ failed: </source>
     </message>
     <message>
         <source>Next Staff or Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Næsti stavur ella rødd</translation>
     </message>
     <message>
         <source>Add Previous Chord to Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat fyrru akkord í úrval</translation>
     </message>
     <message>
         <source>Select to Beginning of Measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel til byrjan av takt</translation>
     </message>
     <message>
         <source>Add Next Chord to Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat næstu akkord í úrval</translation>
     </message>
     <message>
         <source>Select section</source>
-        <translation type="unfinished"></translation>
+        <translation>Vel sektión</translation>
     </message>
     <message>
         <source>Move Chord/Rest Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt akkord/tøgn til høgru</translation>
     </message>
     <message>
         <source>Move Chord/Rest left</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt akkord/tøgn til vinstru</translation>
     </message>
     <message>
         <source>Select to Beginning of Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Val til byrjan av linju</translation>
     </message>
     <message>
         <source>Select to End of Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Val til enda á linju</translation>
     </message>
     <message>
         <source>Select to Beginning of Score</source>
-        <translation type="unfinished"></translation>
+        <translation>Val til byrjan av nótablaði</translation>
     </message>
     <message>
         <source>Select to End of Score</source>
-        <translation type="unfinished"></translation>
+        <translation>Val til enda av nótablaði</translation>
     </message>
     <message>
         <source>Add Staff Above to Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat stav omanfyri úrvali</translation>
     </message>
     <message>
         <source>Add Staff Below to Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat stav niðanfyri úrval</translation>
     </message>
     <message>
         <source>Page: Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Síða: Fyrra</translation>
     </message>
     <message>
         <source>Page: Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Síða: Næsta</translation>
     </message>
     <message>
         <source>Page: Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Síða: ovast</translation>
     </message>
     <message>
         <source>Page: End</source>
-        <translation type="unfinished"></translation>
+        <translation>Síða: endi</translation>
     </message>
     <message>
         <source>Full measure rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Tøgn heila takt</translation>
     </message>
     <message>
         <source>Delete selected measures</source>
@@ -14753,199 +15036,199 @@ failed: </source>
     </message>
     <message>
         <source>Append one measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg eina takt afturat</translation>
     </message>
     <message>
         <source>Append text frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt tekst rammu</translation>
     </message>
     <message>
         <source>Insert fretboard diagram frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Set inn bandaborð diagramm rammu</translation>
     </message>
     <message>
         <source>Append horizontal frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt vatnrøttu rammu</translation>
     </message>
     <message>
         <source>Append vertical frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt loddrøttu rammu</translation>
     </message>
     <message>
         <source>Note duration: Longa</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: Longa</translation>
     </message>
     <message>
         <source>Double Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupul heilnóti</translation>
     </message>
     <message>
         <source>Note duration: Double whole</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: Dupul heil</translation>
     </message>
     <message>
         <source>Whole Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Heiltóni</translation>
     </message>
     <message>
         <source>Note duration: Whole</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: Heil</translation>
     </message>
     <message>
         <source>Half Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálvnóti</translation>
     </message>
     <message>
         <source>Note duration: Half</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: Hálvur</translation>
     </message>
     <message>
         <source>Quarter Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvart nóti</translation>
     </message>
     <message>
         <source>Note duration: Quarter</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: kvart</translation>
     </message>
     <message>
         <source>Eighth Note</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttandapartur</translation>
     </message>
     <message>
         <source>Note duration: Eighth</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: Áttund</translation>
     </message>
     <message>
         <source>16th Note</source>
-        <translation type="unfinished"></translation>
+        <translation>16prt nóti</translation>
     </message>
     <message>
         <source>32nd Note</source>
-        <translation type="unfinished"></translation>
+        <translation>32prt nóti</translation>
     </message>
     <message>
         <source>64th Note</source>
-        <translation type="unfinished"></translation>
+        <translation>64prt nóti</translation>
     </message>
     <message>
         <source>128th Note</source>
-        <translation type="unfinished"></translation>
+        <translation>128prt nóti</translation>
     </message>
     <message>
         <source>Increase Active Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Veks um virkna tíðarbil</translation>
     </message>
     <message>
         <source>Decrease Active Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>minka virkna tíðarbil</translation>
     </message>
     <message>
         <source>Augmentation Dot</source>
-        <translation type="unfinished"></translation>
+        <translation>Økingar prikkur</translation>
     </message>
     <message>
         <source>Note duration: Augmentation dot</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: Økingar prikkur</translation>
     </message>
     <message>
         <source>Double Augmentation Dot</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupul økingar prikkur</translation>
     </message>
     <message>
         <source>Note duration: Double augmentation dot</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: dupul økingar prikkur</translation>
     </message>
     <message>
         <source>Note duration: Tie</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: bindibogi</translation>
     </message>
     <message>
         <source>Note input: Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta inntøka: Tøgn</translation>
     </message>
     <message>
         <source>Double Sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupul krossur</translation>
     </message>
     <message>
         <source>Note input: Double sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta innsetan: dupul krossur</translation>
     </message>
     <message>
         <source>Note input: Sharp</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta innsetan: krossur</translation>
     </message>
     <message>
         <source>Note input: Natural</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta innsetan: Einki fortekin</translation>
     </message>
     <message>
         <source>Note input: Flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta innsetan: b tekin</translation>
     </message>
     <message>
         <source>Double Flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupult b tekin</translation>
     </message>
     <message>
         <source>Note input: Double flat</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta innsetan: dupul b tekin</translation>
     </message>
     <message>
         <source>Grace: Quarter</source>
-        <translation type="unfinished"></translation>
+        <translation>Skreyt: Kvart</translation>
     </message>
     <message>
         <source>Grace: Eighth after</source>
-        <translation type="unfinished"></translation>
+        <translation>Skreyt: Áttund aftaná</translation>
     </message>
     <message>
         <source>MIDI Input</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI inntak</translation>
     </message>
     <message>
         <source>Beam Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Bjálka byrjan</translation>
     </message>
     <message>
         <source>Beam Middle</source>
-        <translation type="unfinished"></translation>
+        <translation>Bjálka miðja</translation>
     </message>
     <message>
         <source>No Beam</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingin bjálki</translation>
     </message>
     <message>
         <source>Beam 16th Sub</source>
-        <translation type="unfinished"></translation>
+        <translation>Bjálki 16prt undir</translation>
     </message>
     <message>
         <source>Beam 32nd Sub</source>
-        <translation type="unfinished"></translation>
+        <translation>Bjálki 32prt undir</translation>
     </message>
     <message>
         <source>Auto Beam</source>
-        <translation type="unfinished"></translation>
+        <translation>Sjálvv. bjálki</translation>
     </message>
     <message>
         <source>Feathered Beam, Slower</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarðaður bjálki, seinni</translation>
     </message>
     <message>
         <source>Feathered Beam, Faster</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjarðaður bjálki, skjótari</translation>
     </message>
     <message>
         <source>Play panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl panel</translation>
     </message>
     <message>
         <source>Selection filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Úrvalsfiltur</translation>
     </message>
     <message>
         <source>MIDI import panel</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI flyt inn panel</translation>
     </message>
     <message>
         <source>Status bar</source>
@@ -14957,31 +15240,31 @@ failed: </source>
     </message>
     <message>
         <source>Play previous chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl fyrru akkord</translation>
     </message>
     <message>
         <source>Play previous measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl fyrru taktina</translation>
     </message>
     <message>
         <source>Play next chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl næstu akkord</translation>
     </message>
     <message>
         <source>Play next measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl næstu takt</translation>
     </message>
     <message>
         <source>Player seek to begin</source>
-        <translation type="unfinished"></translation>
+        <translation>Spælari, royn at byrja</translation>
     </message>
     <message>
         <source>Player seek to end</source>
-        <translation type="unfinished"></translation>
+        <translation>Spælari, royn at enda</translation>
     </message>
     <message>
         <source>Play Repeats</source>
-        <translation type="unfinished"></translation>
+        <translation>Spæl endurtøkur</translation>
     </message>
     <message>
         <source>Select all</source>
@@ -14989,243 +15272,243 @@ failed: </source>
     </message>
     <message>
         <source>Exchange voice 1-2</source>
-        <translation type="unfinished"></translation>
+        <translation>Být um rødd 1-2</translation>
     </message>
     <message>
         <source>Exchange voice 1-3</source>
-        <translation type="unfinished"></translation>
+        <translation>Být um rødd 1-3</translation>
     </message>
     <message>
         <source>Exchange voice 1-4</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt um rødd 1-4</translation>
     </message>
     <message>
         <source>Exchange voice 2-3</source>
-        <translation type="unfinished"></translation>
+        <translation>Být um rødd 2-3</translation>
     </message>
     <message>
         <source>Exchange voice 2-4</source>
-        <translation type="unfinished"></translation>
+        <translation>Být um rødd 2-4</translation>
     </message>
     <message>
         <source>Exchange voice 3-4</source>
-        <translation type="unfinished"></translation>
+        <translation>Být um rødd 3-4</translation>
     </message>
     <message>
         <source>Repeat Last Command</source>
-        <translation type="unfinished"></translation>
+        <translation>Endurtak seinastu boðini</translation>
     </message>
     <message>
         <source>Toggle system break</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift skipan brot</translation>
     </message>
     <message>
         <source>Toggle page break</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift síðuskift</translation>
     </message>
     <message>
         <source>Toggle section break</source>
-        <translation type="unfinished"></translation>
+        <translation>Být um sektión reglubrot</translation>
     </message>
     <message>
         <source>Edit element</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt element</translation>
     </message>
     <message>
         <source>Show invisible</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís ósjónlig</translation>
     </message>
     <message>
         <source>Show unprintable</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís óprenta</translation>
     </message>
     <message>
         <source>Show frames</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís rammur</translation>
     </message>
     <message>
         <source>Show page margins</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís síðu breddar</translation>
     </message>
     <message>
         <source>Insert special characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Set in serstakt skriftsnið</translation>
     </message>
     <message>
         <source>Whole Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Heil tøgn</translation>
     </message>
     <message>
         <source>Note input: Whole rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta innsetan: heil tøgn</translation>
     </message>
     <message>
         <source>Half Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálv tøgn</translation>
     </message>
     <message>
         <source>Note input: Half rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta innsetan: hálv tøgn</translation>
     </message>
     <message>
         <source>Quarter Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvart tøgn</translation>
     </message>
     <message>
         <source>Note input: Quarter rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta innsetan: Kvart tøgn</translation>
     </message>
     <message>
         <source>Eighth Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttund tøgn</translation>
     </message>
     <message>
         <source>Note input: Eighth rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta innsetan: Áttund tøgn</translation>
     </message>
     <message>
         <source>Zoom in</source>
-        <translation type="unfinished"></translation>
+        <translation>Suma inn</translation>
     </message>
     <message>
         <source>Zoom out</source>
-        <translation type="unfinished"></translation>
+        <translation>Suma út</translation>
     </message>
     <message>
         <source>Mirror Note Head</source>
-        <translation type="unfinished"></translation>
+        <translation>Spegla nóta høvd</translation>
     </message>
     <message>
         <source>Double Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupult tíðarbil</translation>
     </message>
     <message>
         <source>Half Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálvt tíðarbil</translation>
     </message>
     <message>
         <source>Repeat Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Endurtak úrval</translation>
     </message>
     <message>
         <source>Enharmonic Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Enharmoniskt upp</translation>
     </message>
     <message>
         <source>Enharmonic Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Enharmoniskt niður</translation>
     </message>
     <message>
         <source>Create New Revision</source>
-        <translation type="unfinished"></translation>
+        <translation>Stovna nýggja endurskoðan</translation>
     </message>
     <message>
         <source>Toggle Image Capture</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift myndafangan</translation>
     </message>
     <message>
         <source>Toggle image capture</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift myndafangan</translation>
     </message>
     <message>
         <source>Show OMR Image</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís OMR mynd</translation>
     </message>
     <message>
         <source>Full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Fullur skermur</translation>
     </message>
     <message>
         <source>Enable Snap to Horizontal Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Gílda samband við vatnrætt net</translation>
     </message>
     <message>
         <source>Enable Snap to Vertical Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Gilda samband við loddrætt net</translation>
     </message>
     <message>
         <source>Configure Grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilla grind</translation>
     </message>
     <message>
         <source>Piano keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano keyboard</translation>
     </message>
     <message>
         <source>Split measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Kloyv takt</translation>
     </message>
     <message>
         <source>Join measures</source>
-        <translation type="unfinished"></translation>
+        <translation>Set saman taktir</translation>
     </message>
     <message>
         <source>Page settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Síðu innstilling</translation>
     </message>
     <message>
         <source>Next score</source>
-        <translation type="unfinished"></translation>
+        <translation>Næsta nótablað</translation>
     </message>
     <message>
         <source>Previous score</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyrra nótablað</translation>
     </message>
     <message>
         <source>Plugin creator</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin stovnari</translation>
     </message>
     <message>
         <source>Plugin manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin umsitari</translation>
     </message>
     <message>
         <source>Resource manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilfar umsitari...</translation>
     </message>
     <message>
         <source>Show OMR panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Vís OMR panel</translation>
     </message>
     <message>
         <source>Loop In</source>
-        <translation type="unfinished"></translation>
+        <translation>Lykkja inn</translation>
     </message>
     <message>
         <source>Loop Out</source>
-        <translation type="unfinished"></translation>
+        <translation>Lykkja út</translation>
     </message>
     <message>
         <source>Set loop out position</source>
-        <translation type="unfinished"></translation>
+        <translation>Áset sloyfu út plasering</translation>
     </message>
     <message>
         <source>Count-In</source>
-        <translation type="unfinished"></translation>
+        <translation>Tel-inn</translation>
     </message>
     <message>
         <source>Transpose up</source>
-        <translation type="unfinished"></translation>
+        <translation>Transponera upp</translation>
     </message>
     <message>
         <source>Transpose down</source>
-        <translation type="unfinished"></translation>
+        <translation>Transponera niður</translation>
     </message>
     <message>
         <source>Toggle view mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift sýnishátt</translation>
     </message>
     <message>
         <source>Next Syllable</source>
-        <translation type="unfinished"></translation>
+        <translation>Næsta stavilsi</translation>
     </message>
     <message>
         <source>Previous Syllable</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyrra stavilsi</translation>
     </message>
     <message>
         <source>Toggle Visibility</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift sýni</translation>
     </message>
     <message>
         <source>Set Visible</source>
@@ -15237,343 +15520,361 @@ failed: </source>
     </message>
     <message>
         <source>Note Anchored Textline</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótafest tekstlinja</translation>
     </message>
     <message>
         <source>Note anchored textline</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótafest tekstlinja</translation>
     </message>
     <message>
         <source>Lock score</source>
-        <translation type="unfinished"></translation>
+        <translation>Stong nótablað</translation>
     </message>
     <message>
         <source>Note duration: Longa (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: Longa (TAB</translation>
     </message>
     <message>
         <source>Double Whole Note (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupul heilnóti (TAB)</translation>
     </message>
     <message>
         <source>Note duration: Double whole (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: Dupul heilur (TAB)</translation>
     </message>
     <message>
         <source>Whole Note (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Heilur nóti (TAB)</translation>
     </message>
     <message>
         <source>Note duration: Whole (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: heilur (TAB)</translation>
     </message>
     <message>
         <source>Half Note (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálvur nóti (TAB)</translation>
     </message>
     <message>
         <source>Note duration: Half (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: Hálvur (TAB)</translation>
     </message>
     <message>
         <source>Quarter Note (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvart nóti (TAB)</translation>
     </message>
     <message>
         <source>Note duration: Quarter (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: Kvart (TAB)</translation>
     </message>
     <message>
         <source>Eighth Note (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Áttund nóti (TAB)</translation>
     </message>
     <message>
         <source>Note duration: Eighth (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta tíðarbil: Áttund (TAB)</translation>
     </message>
     <message>
         <source>16th Note (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>16prt nóti (TAB)</translation>
     </message>
     <message>
         <source>32nd Note (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>32prt nóti (TAB)</translation>
     </message>
     <message>
         <source>64th Note (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>64prt nóti (TAB)</translation>
     </message>
     <message>
         <source>128th Note (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>128prt nóti (TAB)</translation>
     </message>
     <message>
         <source>Increase Active Duration (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Veks um virkið tíðarbil (TAB)</translation>
     </message>
     <message>
         <source>Decrease Active Duration (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Minka um virkið tíðarbil (TAB)</translation>
     </message>
     <message>
         <source>Note input: Rest (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta innsetan: tøgn (TAB)</translation>
     </message>
     <message>
         <source>String Above (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Strongur omanfyri (TAB)</translation>
     </message>
     <message>
         <source>String Below (TAB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Strongur niðanfyri (TAB)</translation>
     </message>
     <message>
         <source>Previous Beat (Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyrra slag (Akkord symbol)</translation>
     </message>
     <message>
         <source>Next Beat (Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Næsta slag (Akkord symbol)</translation>
     </message>
     <message>
         <source>Add Brackets to Element</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg klombur afturat elementi</translation>
     </message>
     <message>
         <source>Toggle Create Multimeasure Rest</source>
-        <translation type="unfinished"></translation>
+        <translation>Slá til frá: ger fleirtakta tøgn</translation>
     </message>
     <message>
         <source>Bold Face</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvd feitir stavir</translation>
     </message>
     <message>
         <source>Bold face</source>
-        <translation type="unfinished"></translation>
+        <translation>Høvd feitir stavir</translation>
     </message>
     <message>
         <source>Italic</source>
-        <translation type="unfinished"></translation>
+        <translation>Skákskriva</translation>
     </message>
     <message>
         <source>Underline</source>
-        <translation type="unfinished"></translation>
+        <translation>Strika undir</translation>
     </message>
     <message>
         <source>Move Word Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt orð til vinstru</translation>
     </message>
     <message>
         <source>Move word left</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt orð til vinstru</translation>
     </message>
     <message>
         <source>Move Word Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt orð til høgru</translation>
     </message>
     <message>
         <source>Move word right</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt orð til høgru</translation>
     </message>
     <message>
         <source>Fill with slashes</source>
-        <translation type="unfinished"></translation>
+        <translation>Fill við strikum</translation>
     </message>
     <message>
         <source>Toggle rhythmic slash notation</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift strikurútmu nótaskrift</translation>
     </message>
     <message>
         <source>Add/remove line breaks</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg afturat/tak burtur linju brot</translation>
     </message>
     <message>
         <source>Resequence rehearsal marks</source>
-        <translation type="unfinished"></translation>
+        <translation>Umskipa venjingar merki</translation>
     </message>
     <message>
         <source>Start center</source>
-        <translation type="unfinished"></translation>
+        <translation>Byrjunar depil</translation>
     </message>
     <message>
         <source>Longa Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Longa hækking (b.f. bass/akk. symb.)</translation>
     </message>
     <message>
         <source>Advance of a longa (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við longa (bert besifringsbassur/akkord symbol)</translation>
     </message>
     <message>
         <source>Breve Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Breve hækking (b.f.bass/akk. symb.)</translation>
     </message>
     <message>
         <source>Advance of a double whole note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við dupul heilnóta (bert besifringsbassur/akkord symbol)</translation>
     </message>
     <message>
         <source>Whole Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka heilan nóta (b.s. bass/akk. symb.)</translation>
     </message>
     <message>
         <source>Advance of a whole note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við heilum nóta (bert besifringsbass/akkord symbol)</translation>
     </message>
     <message>
         <source>Half Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við hálvum nóta (b.f. bass/akk. symb.)</translation>
     </message>
     <message>
         <source>Advance of a half note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við hálvum nóta (bert besifringsbass/akkord symbol)</translation>
     </message>
     <message>
         <source>Quarter Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við kvartum nóta (b.f. bass/akk. symb.)</translation>
     </message>
     <message>
         <source>Advance of a quarter note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við kvart nóta (bert besifringsbass/akkord symbol)</translation>
     </message>
     <message>
         <source>Eighth Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við áttund nóta (b.f. bass/akk. symb.)</translation>
     </message>
     <message>
         <source>Advance of an eighth note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við áttund nóta (bert besifringsbass/akkord symbol)</translation>
     </message>
     <message>
         <source>16th Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við 16prt nóta (b.f. bass/akk. symb.)</translation>
     </message>
     <message>
         <source>Advance of a 16th note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við 16prt nóta (bert besifringsbass/Akkord symbol)</translation>
     </message>
     <message>
         <source>32nd Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við 32prt nóta (b.f. bass/akk. symb.)</translation>
     </message>
     <message>
         <source>Advance of a 32nd note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við 32prt nóta (bert besifringsbass/akkord symbol)</translation>
     </message>
     <message>
         <source>64th Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við 64prt nóta (b.f. bass/akk. symb.)</translation>
     </message>
     <message>
         <source>Advance of a 64th note (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hækka við 64prt nóta (bert besifringsbass/akkord symbol)</translation>
     </message>
     <message>
         <source>Previous Measure (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyrru takt (F.B./akkord symbol)</translation>
     </message>
     <message>
         <source>Previous measure (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyrru takt (bert besifrings bassur/akkord symbol)</translation>
     </message>
     <message>
         <source>Next Measure (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation>Næsta takt (F.B./akkord symbol)</translation>
     </message>
     <message>
         <source>Next measure (Figured bass/Chord symbol only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Næsta takt (bert besifrings bassur/akkord symbol)</translation>
     </message>
     <message>
         <source>Toggle staccato</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift staccato</translation>
     </message>
     <message>
         <source>Toggle tenuto</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift tenuto</translation>
     </message>
     <message>
         <source>Toggle trill</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift trillu</translation>
     </message>
     <message>
         <source>Toggle marcato</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift marcato</translation>
     </message>
     <message>
         <source>Import PDF...</source>
-        <translation type="unfinished"></translation>
+        <translation>Innflyt PDF...</translation>
     </message>
     <message>
         <source>Import PDF</source>
-        <translation type="unfinished"></translation>
+        <translation>Innflyt PDF</translation>
     </message>
     <message>
         <source>Import a PDF file with an experimental service on musescore.com</source>
-        <translation type="unfinished"></translation>
+        <translation>Innflyt PDF fílu við royndar tænastu á musescore.com</translation>
     </message>
     <message>
         <source>Set loop in position</source>
-        <translation type="unfinished"></translation>
+        <translation>Áset sloyfu inn plasering</translation>
+    </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Palettir</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Tempo merki</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation>Suma til 100%</translation>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation>Panorera piano rullu</translation>
     </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki umskriva taktir:
+Nótabólkar fara um takt</translation>
     </message>
     <message>
         <source>Cannot change local time signature:
 Measure is not empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ikki broyta staðbundi takt slag:
+Takt er ikki tóm</translation>
     </message>
 </context>
 <context>
     <name>articulation</name>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"></translation>
+        <translation>Bend</translation>
     </message>
     <message>
         <source>Slide out down</source>
-        <translation type="unfinished"></translation>
+        <translation>Glíð út niður</translation>
     </message>
     <message>
         <source>Slide out up</source>
-        <translation type="unfinished"></translation>
+        <translation>Glíð út upp</translation>
     </message>
     <message>
         <source>Slide in below</source>
-        <translation type="unfinished"></translation>
+        <translation>Glíð inn niðanfyri</translation>
     </message>
     <message>
         <source>Slide in above</source>
-        <translation type="unfinished"></translation>
+        <translation>Glíð inn omanfyri</translation>
     </message>
     <message>
         <source>Fermata</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermata</translation>
     </message>
     <message>
         <source>Short fermata</source>
-        <translation type="unfinished"></translation>
+        <translation>Stutt fermata</translation>
     </message>
     <message>
         <source>Long fermata</source>
-        <translation type="unfinished"></translation>
+        <translation>Long fermata</translation>
     </message>
     <message>
         <source>Very long fermata</source>
-        <translation type="unfinished"></translation>
+        <translation>Sera long fermata</translation>
     </message>
     <message>
         <source>Sforzato</source>
-        <translation type="unfinished"></translation>
+        <translation>Sforzato</translation>
     </message>
     <message>
         <source>Staccato</source>
@@ -15581,71 +15882,71 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Staccatissimo</source>
-        <translation type="unfinished"></translation>
+        <translation>Staccatissimo</translation>
     </message>
     <message>
         <source>Tenuto</source>
-        <translation type="unfinished"></translation>
+        <translation>Tenuto</translation>
     </message>
     <message>
         <source>Portato</source>
-        <translation type="unfinished"></translation>
+        <translation>Portato</translation>
     </message>
     <message>
         <source>Marcato</source>
-        <translation type="unfinished"></translation>
+        <translation>Marcato</translation>
     </message>
     <message>
         <source>Fade in</source>
-        <translation type="unfinished"></translation>
+        <translation>Fada inn</translation>
     </message>
     <message>
         <source>Fade out</source>
-        <translation type="unfinished"></translation>
+        <translation>Fada út</translation>
     </message>
     <message>
         <source>Volume swell</source>
-        <translation type="unfinished"></translation>
+        <translation>Styrki svella</translation>
     </message>
     <message>
         <source>Wiggle sawtooth</source>
-        <translation type="unfinished"></translation>
+        <translation>Vagga sawtooth</translation>
     </message>
     <message>
         <source>Wiggle sawtooth wide</source>
-        <translation type="unfinished"></translation>
+        <translation>Vagga sawtooth vítt</translation>
     </message>
     <message>
         <source>Wiggle vibrato large faster</source>
-        <translation type="unfinished"></translation>
+        <translation>Vagga stórt vibrato skjótari</translation>
     </message>
     <message>
         <source>Wiggle vibrato large slowest</source>
-        <translation type="unfinished"></translation>
+        <translation>Vagga stórt vibrato seinni</translation>
     </message>
     <message>
         <source>Ouvert</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvert</translation>
     </message>
     <message>
         <source>Stopped/Pizzicato left hand</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppa/Pizzicato vinstra hond</translation>
     </message>
     <message>
         <source>Up bow</source>
-        <translation type="unfinished"></translation>
+        <translation>Boga upp</translation>
     </message>
     <message>
         <source>Down bow</source>
-        <translation type="unfinished"></translation>
+        <translation>Boga niður</translation>
     </message>
     <message>
         <source>Reverse turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Umvent vend</translation>
     </message>
     <message>
         <source>Turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Vend</translation>
     </message>
     <message>
         <source>Trill</source>
@@ -15653,91 +15954,91 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Prall</source>
-        <translation type="unfinished"></translation>
+        <translation>Prall</translation>
     </message>
     <message>
         <source>Mordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Mordent</translation>
     </message>
     <message>
         <source>Prall prall</source>
-        <translation type="unfinished"></translation>
+        <translation>Prall prall</translation>
     </message>
     <message>
         <source>Prall mordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Prall mordent</translation>
     </message>
     <message>
         <source>Up prall</source>
-        <translation type="unfinished"></translation>
+        <translation>Upp prall</translation>
     </message>
     <message>
         <source>Down prall</source>
-        <translation type="unfinished"></translation>
+        <translation>Niður prall</translation>
     </message>
     <message>
         <source>Up mordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Upp mordent</translation>
     </message>
     <message>
         <source>Down mordent</source>
-        <translation type="unfinished"></translation>
+        <translation>Niður mordent</translation>
     </message>
     <message>
         <source>Prall down</source>
-        <translation type="unfinished"></translation>
+        <translation>Prall niður</translation>
     </message>
     <message>
         <source>Prall up</source>
-        <translation type="unfinished"></translation>
+        <translation>Prall upp</translation>
     </message>
     <message>
         <source>Line prall</source>
-        <translation type="unfinished"></translation>
+        <translation>Linju prall</translation>
     </message>
     <message>
         <source>Schleifer</source>
-        <translation type="unfinished"></translation>
+        <translation>Schleifer</translation>
     </message>
     <message>
         <source>Snap pizzicato</source>
-        <translation type="unfinished"></translation>
+        <translation>Klikk pizzicato</translation>
     </message>
     <message>
         <source>Tapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Pikkan</translation>
     </message>
     <message>
         <source>Slapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Klamsan</translation>
     </message>
     <message>
         <source>Popping</source>
-        <translation type="unfinished"></translation>
+        <translation>Smellan</translation>
     </message>
     <message>
         <source>Thumb pos.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tummil st.</translation>
     </message>
     <message>
         <source>Lute thumb fing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lutt tummil fingraset.</translation>
     </message>
     <message>
         <source>Lute 1 fing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lutt 1 fing.</translation>
     </message>
     <message>
         <source>Lute 2 fing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lutt 2 fing.</translation>
     </message>
     <message>
         <source>Lute 3 fing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lutt 3 fing.</translation>
     </message>
     <message>
         <source>Tremolo bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Tremolo bjálki</translation>
     </message>
 </context>
 <context>
@@ -15748,7 +16049,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>c#</source>
-        <translation type="unfinished"></translation>
+        <translation>c#</translation>
     </message>
     <message>
         <source>d</source>
@@ -15756,7 +16057,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>d#</source>
-        <translation type="unfinished"></translation>
+        <translation>d#</translation>
     </message>
     <message>
         <source>e</source>
@@ -15768,15 +16069,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>f#</source>
-        <translation type="unfinished"></translation>
+        <translation>f#</translation>
     </message>
     <message>
         <source>g</source>
-        <translation type="unfinished"></translation>
+        <translation>g</translation>
     </message>
     <message>
         <source>g#</source>
-        <translation type="unfinished"></translation>
+        <translation>g#</translation>
     </message>
     <message>
         <source>a</source>
@@ -15784,11 +16085,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>a#</source>
-        <translation type="unfinished"></translation>
+        <translation>a#</translation>
     </message>
     <message>
         <source>b</source>
-        <translation type="unfinished"></translation>
+        <translation>b</translation>
     </message>
     <message>
         <source>C</source>
@@ -15796,7 +16097,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>C#</source>
-        <translation type="unfinished"></translation>
+        <translation>C#</translation>
     </message>
     <message>
         <source>D</source>
@@ -15804,7 +16105,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>D#</source>
-        <translation type="unfinished"></translation>
+        <translation>D#</translation>
     </message>
     <message>
         <source>E</source>
@@ -15816,7 +16117,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"></translation>
+        <translation>F#</translation>
     </message>
     <message>
         <source>G</source>
@@ -15824,7 +16125,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>G#</source>
-        <translation type="unfinished"></translation>
+        <translation>G#</translation>
     </message>
     <message>
         <source>A</source>
@@ -15832,7 +16133,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>A#</source>
-        <translation type="unfinished"></translation>
+        <translation>A#</translation>
     </message>
     <message>
         <source>B</source>
@@ -15843,643 +16144,643 @@ Measure is not empty</source>
     <name>bagpipe</name>
     <message>
         <source>Single grace low G</source>
-        <translation type="unfinished"></translation>
+        <translation>Einkul skreyt lágt G</translation>
     </message>
     <message>
         <source>Single grace low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Einkul skreyt lágt A</translation>
     </message>
     <message>
         <source>Single grace B</source>
-        <translation type="unfinished"></translation>
+        <translation>Einkul skreyt B</translation>
     </message>
     <message>
         <source>Single grace C</source>
-        <translation type="unfinished"></translation>
+        <translation>Einkul skreyt C</translation>
     </message>
     <message>
         <source>Single grace D</source>
-        <translation type="unfinished"></translation>
+        <translation>Einkul skreyt D</translation>
     </message>
     <message>
         <source>Single grace E</source>
-        <translation type="unfinished"></translation>
+        <translation>Einkul skreyt E</translation>
     </message>
     <message>
         <source>Single grace F</source>
-        <translation type="unfinished"></translation>
+        <translation>Einkul skreyt F</translation>
     </message>
     <message>
         <source>Single grace high G</source>
-        <translation type="unfinished"></translation>
+        <translation>Einkul skreyt høgt G</translation>
     </message>
     <message>
         <source>Single grace high A</source>
-        <translation type="unfinished"></translation>
+        <translation>Einkul skreyt høgt A</translation>
     </message>
     <message>
         <source>Double grace</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupul skreyt</translation>
     </message>
     <message>
         <source>Half doubling on low G</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálv dupult á lágt G</translation>
     </message>
     <message>
         <source>Half doubling on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálv dupult á lágt A</translation>
     </message>
     <message>
         <source>Half doubling on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálv dupult á B</translation>
     </message>
     <message>
         <source>Half doubling on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálv dupult á C</translation>
     </message>
     <message>
         <source>Half doubling on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálv dupult á D</translation>
     </message>
     <message>
         <source>Half doubling on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálv dupult á E</translation>
     </message>
     <message>
         <source>Half doubling on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Hálv dupult á F</translation>
     </message>
     <message>
         <source>Doubling on high G</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupult á høgt G</translation>
     </message>
     <message>
         <source>Doubling on high A</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupult á høgt A</translation>
     </message>
     <message>
         <source>Half strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Half strike on low A</translation>
     </message>
     <message>
         <source>Half strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Half strike on B</translation>
     </message>
     <message>
         <source>Half strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Half strike on C</translation>
     </message>
     <message>
         <source>Half strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Half strike on D</translation>
     </message>
     <message>
         <source>Half strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Half strike on E</translation>
     </message>
     <message>
         <source>Half strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Half strike on F</translation>
     </message>
     <message>
         <source>Half strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation>Half strike on high G</translation>
     </message>
     <message>
         <source>Grip</source>
-        <translation type="unfinished"></translation>
+        <translation>Grip</translation>
     </message>
     <message>
         <source>Half D throw</source>
-        <translation type="unfinished"></translation>
+        <translation>Half D throw</translation>
     </message>
     <message>
         <source>Doubling on low G</source>
-        <translation type="unfinished"></translation>
+        <translation>Doubling on low G</translation>
     </message>
     <message>
         <source>Doubling on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Doubling on low A</translation>
     </message>
     <message>
         <source>Doubling on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Doubling on B</translation>
     </message>
     <message>
         <source>Doubling on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Doubling on C</translation>
     </message>
     <message>
         <source>Doubling on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Doubling on D</translation>
     </message>
     <message>
         <source>Doubling on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Doubling on E</translation>
     </message>
     <message>
         <source>Doubling on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Doubling on F</translation>
     </message>
     <message>
         <source>Thumb doubling on low G</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb doubling on low G</translation>
     </message>
     <message>
         <source>Thumb doubling on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb doubling on low A</translation>
     </message>
     <message>
         <source>Thumb doubling on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb doubling on B</translation>
     </message>
     <message>
         <source>Thumb doubling on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb doubling on C</translation>
     </message>
     <message>
         <source>Thumb doubling on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb doubling on D</translation>
     </message>
     <message>
         <source>Thumb doubling on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb doubling on E</translation>
     </message>
     <message>
         <source>Thumb doubling on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb doubling on F</translation>
     </message>
     <message>
         <source>G grace note on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note on low A</translation>
     </message>
     <message>
         <source>G grace note on B</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note on B</translation>
     </message>
     <message>
         <source>G grace note on C</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note on C</translation>
     </message>
     <message>
         <source>G grace note on D</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note on D</translation>
     </message>
     <message>
         <source>G grace note on E</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note on E</translation>
     </message>
     <message>
         <source>G grace note on F</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note on F</translation>
     </message>
     <message>
         <source>Double strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Double strike on low A</translation>
     </message>
     <message>
         <source>Double strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Double strike on B</translation>
     </message>
     <message>
         <source>Double strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Double strike on C</translation>
     </message>
     <message>
         <source>Double strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Double strike on D</translation>
     </message>
     <message>
         <source>Double strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Double strike on E</translation>
     </message>
     <message>
         <source>Double strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Double strike on F</translation>
     </message>
     <message>
         <source>Double strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation>Double strike on high G</translation>
     </message>
     <message>
         <source>Double strike on high A</source>
-        <translation type="unfinished"></translation>
+        <translation>Double strike on high A</translation>
     </message>
     <message>
         <source>Thumb strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb strike on low A</translation>
     </message>
     <message>
         <source>Thumb strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb strike on B</translation>
     </message>
     <message>
         <source>Thumb strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb strike on C</translation>
     </message>
     <message>
         <source>Thumb strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb strike on D</translation>
     </message>
     <message>
         <source>Thumb strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb strike on E</translation>
     </message>
     <message>
         <source>Thumb strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb strike on F</translation>
     </message>
     <message>
         <source>Thumb strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb strike on high G</translation>
     </message>
     <message>
         <source>Birl</source>
-        <translation type="unfinished"></translation>
+        <translation>Birl</translation>
     </message>
     <message>
         <source>D throw</source>
-        <translation type="unfinished"></translation>
+        <translation>D throw</translation>
     </message>
     <message>
         <source>Half heavy D throw</source>
-        <translation type="unfinished"></translation>
+        <translation>Half heavy D throw</translation>
     </message>
     <message>
         <source>Taorluath</source>
-        <translation type="unfinished"></translation>
+        <translation>Taorluath</translation>
     </message>
     <message>
         <source>Bubly</source>
-        <translation type="unfinished"></translation>
+        <translation>Bubly</translation>
     </message>
     <message>
         <source>Heavy D throw</source>
-        <translation type="unfinished"></translation>
+        <translation>Heavy D throw</translation>
     </message>
     <message>
         <source>Half double strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Half double strike on low A</translation>
     </message>
     <message>
         <source>Half double strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Half double strike on B</translation>
     </message>
     <message>
         <source>Half double strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Half double strike on C</translation>
     </message>
     <message>
         <source>Half double strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Half double strike on D</translation>
     </message>
     <message>
         <source>Half double strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Half double strike on E</translation>
     </message>
     <message>
         <source>Half double strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Half double strike on F</translation>
     </message>
     <message>
         <source>Half double strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation>Half double strike on high G</translation>
     </message>
     <message>
         <source>Half double strike on high A</source>
-        <translation type="unfinished"></translation>
+        <translation>Half double strike on high A</translation>
     </message>
     <message>
         <source>Half grip on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Half grip on low A</translation>
     </message>
     <message>
         <source>Half grip on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Half grip on B</translation>
     </message>
     <message>
         <source>Half grip on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Half grip on C</translation>
     </message>
     <message>
         <source>Half grip on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Half grip on D</translation>
     </message>
     <message>
         <source>Half grip on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Half grip on E</translation>
     </message>
     <message>
         <source>Half grip on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Half grip on F</translation>
     </message>
     <message>
         <source>Half grip on high G</source>
-        <translation type="unfinished"></translation>
+        <translation>Half grip on high G</translation>
     </message>
     <message>
         <source>Half grip on high A</source>
-        <translation type="unfinished"></translation>
+        <translation>Half grip on high A</translation>
     </message>
     <message>
         <source>Half pele on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Half pele on low A</translation>
     </message>
     <message>
         <source>Half pele on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Half pele on B</translation>
     </message>
     <message>
         <source>Half pele on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Half pele on C</translation>
     </message>
     <message>
         <source>Half pele on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Half pele on D</translation>
     </message>
     <message>
         <source>Half pele on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Half pele on E</translation>
     </message>
     <message>
         <source>Half pele on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Half pele on F</translation>
     </message>
     <message>
         <source>Half pele on high G</source>
-        <translation type="unfinished"></translation>
+        <translation>Half pele on high G</translation>
     </message>
     <message>
         <source>G grace note grip on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note grip on low A</translation>
     </message>
     <message>
         <source>G grace note grip on B</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note grip on B</translation>
     </message>
     <message>
         <source>G grace note grip on C</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note grip on C</translation>
     </message>
     <message>
         <source>G grace note grip on D</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note grip on D</translation>
     </message>
     <message>
         <source>G grace note grip on E</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note grip on E</translation>
     </message>
     <message>
         <source>G grace note grip on F</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note grip on F</translation>
     </message>
     <message>
         <source>Thumb grip on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb grip on low A</translation>
     </message>
     <message>
         <source>Thumb grip on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb grip on B</translation>
     </message>
     <message>
         <source>Thumb grip on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb grip on C</translation>
     </message>
     <message>
         <source>Thumb grip on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb grip on D</translation>
     </message>
     <message>
         <source>Thumb grip on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb grip on E</translation>
     </message>
     <message>
         <source>Thumb grip on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb grip on F</translation>
     </message>
     <message>
         <source>Thumb grip on high G</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb grip on high G</translation>
     </message>
     <message>
         <source>Pele on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Pele on low A</translation>
     </message>
     <message>
         <source>Pele on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Pele on B</translation>
     </message>
     <message>
         <source>Pele on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Pele on C</translation>
     </message>
     <message>
         <source>Pele on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Pele on D</translation>
     </message>
     <message>
         <source>Pele on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Pele on E</translation>
     </message>
     <message>
         <source>Pele on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Pele on F</translation>
     </message>
     <message>
         <source>Thumb grace note pele on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb grace note pele on low A</translation>
     </message>
     <message>
         <source>Thumb grace note pele on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb grace note pele on B</translation>
     </message>
     <message>
         <source>Thumb grace note pele on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb grace note pele on C</translation>
     </message>
     <message>
         <source>Thumb grace note pele on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb grace note pele on D</translation>
     </message>
     <message>
         <source>Thumb grace note pele on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb grace note pele on E</translation>
     </message>
     <message>
         <source>Thumb grace note pele on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb grace note pele on F</translation>
     </message>
     <message>
         <source>Thumb grace note pele on high G</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb grace note pele on high G</translation>
     </message>
     <message>
         <source>G grace note double strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note double strike on low A</translation>
     </message>
     <message>
         <source>G grace note double strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note double strike on B</translation>
     </message>
     <message>
         <source>G grace note double strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note double strike on C</translation>
     </message>
     <message>
         <source>G grace note double strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note double strike on D</translation>
     </message>
     <message>
         <source>G grace note double strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note double strike on E</translation>
     </message>
     <message>
         <source>G grace note double strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note double strike on F</translation>
     </message>
     <message>
         <source>Thumb double strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb double strike on low A</translation>
     </message>
     <message>
         <source>Thumb double strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb double strike on B</translation>
     </message>
     <message>
         <source>Thumb double strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb double strike on C</translation>
     </message>
     <message>
         <source>Thumb double strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb double strike on D</translation>
     </message>
     <message>
         <source>Thumb double strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb double strike on E</translation>
     </message>
     <message>
         <source>Thumb double strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb double strike on F</translation>
     </message>
     <message>
         <source>Thumb double strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb double strike on high G</translation>
     </message>
     <message>
         <source>Triple strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Triple strike on low A</translation>
     </message>
     <message>
         <source>Triple strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Triple strike on B</translation>
     </message>
     <message>
         <source>Triple strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Triple strike on C</translation>
     </message>
     <message>
         <source>Triple strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Triple strike on D</translation>
     </message>
     <message>
         <source>Triple strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Triple strike on E</translation>
     </message>
     <message>
         <source>Triple strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Triple strike on F</translation>
     </message>
     <message>
         <source>Triple strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation>Triple strike on high G</translation>
     </message>
     <message>
         <source>Triple strike on high A</source>
-        <translation type="unfinished"></translation>
+        <translation>Triple strike on high A</translation>
     </message>
     <message>
         <source>Half triple strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Half triple strike on low A</translation>
     </message>
     <message>
         <source>Half triple strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Half triple strike on B</translation>
     </message>
     <message>
         <source>Half triple strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Half triple strike on C</translation>
     </message>
     <message>
         <source>Half triple strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Half triple strike on D</translation>
     </message>
     <message>
         <source>Half triple strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Half triple strike on E</translation>
     </message>
     <message>
         <source>Half triple strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Half triple strike on F</translation>
     </message>
     <message>
         <source>Half triple strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation>Half triple strike on high G</translation>
     </message>
     <message>
         <source>Half triple strike on high A</source>
-        <translation type="unfinished"></translation>
+        <translation>Half triple strike on high A</translation>
     </message>
     <message>
         <source>G grace note triple strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note triple strike on low A</translation>
     </message>
     <message>
         <source>G grace note triple strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note triple strike on B</translation>
     </message>
     <message>
         <source>G grace note triple strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note triple strike on C</translation>
     </message>
     <message>
         <source>G grace note triple strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note triple strike on D</translation>
     </message>
     <message>
         <source>G grace note triple strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note triple strike on E</translation>
     </message>
     <message>
         <source>G grace note triple strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation>G grace note triple strike on F</translation>
     </message>
     <message>
         <source>Thumb triple strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb triple strike on low A</translation>
     </message>
     <message>
         <source>Thumb triple strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb triple strike on B</translation>
     </message>
     <message>
         <source>Thumb triple strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb triple strike on C</translation>
     </message>
     <message>
         <source>Thumb triple strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb triple strike on D</translation>
     </message>
     <message>
         <source>Thumb triple strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb triple strike on E</translation>
     </message>
     <message>
         <source>Thumb triple strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb triple strike on F</translation>
     </message>
     <message>
         <source>Thumb triple strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation>Thumb triple strike on high G</translation>
     </message>
 </context>
 <context>
@@ -16562,7 +16863,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Tablature2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tablature2</translation>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>G lykil møguliga 8vb</translation>
     </message>
 </context>
 <context>
@@ -16581,235 +16886,235 @@ Measure is not empty</source>
     </message>
     <message>
         <source>High Q</source>
-        <translation type="unfinished"></translation>
+        <translation>Høgt Q</translation>
     </message>
     <message>
         <source>Slap</source>
-        <translation type="unfinished"></translation>
+        <translation>Slag</translation>
     </message>
     <message>
         <source>Scratch Push</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrav skump</translation>
     </message>
     <message>
         <source>Scratch Pull</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrav hál</translation>
     </message>
     <message>
         <source>Sticks</source>
-        <translation type="unfinished"></translation>
+        <translation>Stikkarar</translation>
     </message>
     <message>
         <source>Metronome Click</source>
-        <translation type="unfinished"></translation>
+        <translation>Metronom Klikk</translation>
     </message>
     <message>
         <source>Metronome Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Metronom Klokka</translation>
     </message>
     <message>
         <source>Bass Drum 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bass trumma 1</translation>
     </message>
     <message>
         <source>Acoustic Snare</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkustisk snare</translation>
     </message>
     <message>
         <source>Hand Clap</source>
-        <translation type="unfinished"></translation>
+        <translation>Hond klapp</translation>
     </message>
     <message>
         <source>Electric Snare</source>
-        <translation type="unfinished"></translation>
+        <translation>Elektrisk Snare</translation>
     </message>
     <message>
         <source>Low Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Djúp gólv tam</translation>
     </message>
     <message>
         <source>Closed Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Læstur Hi-Hattur</translation>
     </message>
     <message>
         <source>High Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Høg gólv tam</translation>
     </message>
     <message>
         <source>Pedal Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Pedal Hi-Hattur</translation>
     </message>
     <message>
         <source>Low Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Lá tam</translation>
     </message>
     <message>
         <source>Open Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Opin Hi-hattur</translation>
     </message>
     <message>
         <source>Low-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Lá-mið tam</translation>
     </message>
     <message>
         <source>Hi-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Høg-mið tam</translation>
     </message>
     <message>
         <source>Crash Cymbal 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Krash bekkari 1</translation>
     </message>
     <message>
         <source>High Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Høg tam</translation>
     </message>
     <message>
         <source>Ride Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride klokka</translation>
     </message>
     <message>
         <source>Cowbell</source>
-        <translation type="unfinished"></translation>
+        <translation>Kúklokkar</translation>
     </message>
     <message>
         <source>Vibraslap</source>
-        <translation type="unfinished"></translation>
+        <translation>Vibraslap</translation>
     </message>
     <message>
         <source>Low Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Lág Bongo</translation>
     </message>
     <message>
         <source>Mute Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Dempa Høg Konga</translation>
     </message>
     <message>
         <source>Open Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Opin høg Konga</translation>
     </message>
     <message>
         <source>Low Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Lág Konga</translation>
     </message>
     <message>
         <source>High Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation>Høg Timbale</translation>
     </message>
     <message>
         <source>Low Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation>Lág Timbale</translation>
     </message>
     <message>
         <source>High Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>Høgt Agogo</translation>
     </message>
     <message>
         <source>Low Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>Lág Agogo</translation>
     </message>
     <message>
         <source>Cabasa</source>
-        <translation type="unfinished"></translation>
+        <translation>Kabasa</translation>
     </message>
     <message>
         <source>Maracas</source>
-        <translation type="unfinished"></translation>
+        <translation>Marakas</translation>
     </message>
     <message>
         <source>Short Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Stutt floyta</translation>
     </message>
     <message>
         <source>Long Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation>Long Floyta</translation>
     </message>
     <message>
         <source>Short Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation>Stutt Guiro</translation>
     </message>
     <message>
         <source>Long Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation>Long Guiro</translation>
     </message>
     <message>
         <source>Claves</source>
-        <translation type="unfinished"></translation>
+        <translation>Klaves</translation>
     </message>
     <message>
         <source>Hi Wood Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Høgur Wood Block</translation>
     </message>
     <message>
         <source>Low Wood Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Lágur Wood Block</translation>
     </message>
     <message>
         <source>Mute Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation>Dempa Cucia</translation>
     </message>
     <message>
         <source>Open Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation>Opin Cucia</translation>
     </message>
     <message>
         <source>Mute Triangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Dempaður triangul</translation>
     </message>
     <message>
         <source>Open Triangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Opin triangul</translation>
     </message>
     <message>
         <source>Shaker</source>
-        <translation type="unfinished"></translation>
+        <translation>Shaker</translation>
     </message>
     <message>
         <source>Bell Tree</source>
-        <translation type="unfinished"></translation>
+        <translation>Klokku træ</translation>
     </message>
     <message>
         <source>Mute Surdo</source>
-        <translation type="unfinished"></translation>
+        <translation>Demp. Surdo</translation>
     </message>
     <message>
         <source>Open Surdo</source>
-        <translation type="unfinished"></translation>
+        <translation>Opin Surdo</translation>
     </message>
     <message>
         <source>Ride Cymbal 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride bekkari 1</translation>
     </message>
     <message>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Kina bekkari</translation>
     </message>
     <message>
         <source>Splash Cymbal</source>
-        <translation type="unfinished"></translation>
+        <translation>Splash Bekkari</translation>
     </message>
     <message>
         <source>Crash Cymbal 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Krasj Bekkari 2</translation>
     </message>
     <message>
         <source>Ride Cymbal 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ride bekkari 2</translation>
     </message>
     <message>
         <source>Castanets</source>
-        <translation type="unfinished"></translation>
+        <translation>Kastanettir</translation>
     </message>
     <message>
         <source>Square Click</source>
-        <translation type="unfinished"></translation>
+        <translation>Square Klikk</translation>
     </message>
     <message>
         <source>Hi Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Høg Bongo</translation>
     </message>
     <message>
         <source>Sleigh Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Sledu Klokka</translation>
     </message>
 </context>
 <context>
@@ -16820,7 +17125,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>C#</source>
-        <translation type="unfinished"></translation>
+        <translation>C#</translation>
     </message>
     <message>
         <source>D</source>
@@ -16828,7 +17133,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <source>E</source>
@@ -16840,7 +17145,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"></translation>
+        <translation>F#</translation>
     </message>
     <message>
         <source>G</source>
@@ -16848,7 +17153,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ab</source>
-        <translation type="unfinished"></translation>
+        <translation>Ab</translation>
     </message>
     <message>
         <source>A</source>
@@ -16871,7 +17176,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>C#</source>
-        <translation type="unfinished"></translation>
+        <translation>C#</translation>
     </message>
     <message>
         <source>D</source>
@@ -16879,7 +17184,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Eb</source>
-        <translation type="unfinished"></translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <source>E</source>
@@ -16891,7 +17196,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"></translation>
+        <translation>F#</translation>
     </message>
     <message>
         <source>G</source>
@@ -16899,7 +17204,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ab</source>
-        <translation type="unfinished"></translation>
+        <translation>Ab</translation>
     </message>
     <message>
         <source>A</source>
@@ -16918,7 +17223,7 @@ Measure is not empty</source>
     <name>elementName</name>
     <message>
         <source>invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>Ógildigur</translation>
     </message>
     <message>
         <source>Symbol</source>
@@ -16930,11 +17235,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Line</source>
-        <translation>Line</translation>
+        <translation>Linja</translation>
     </message>
     <message>
         <source>Bracket</source>
-        <translation>Bracket</translation>
+        <translation>Klombur</translation>
     </message>
     <message>
         <source>Arpeggio</source>
@@ -16962,7 +17267,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Breath</source>
-        <translation>Breath</translation>
+        <translation>Steðgur</translation>
     </message>
     <message>
         <source>Glissando</source>
@@ -16978,7 +17283,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Articulation</source>
-        <translation>Articulation</translation>
+        <translation>Framburður</translation>
     </message>
     <message>
         <source>Dynamic</source>
@@ -17010,7 +17315,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Nótabólkur</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -17018,7 +17323,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Bend</source>
-        <translation type="unfinished"></translation>
+        <translation>Bend</translation>
     </message>
     <message>
         <source>Volta</source>
@@ -17066,7 +17371,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>System</source>
-        <translation>System</translation>
+        <translation>Skipan</translation>
     </message>
     <message>
         <source>Compound</source>
@@ -17090,27 +17395,27 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ossia</source>
-        <translation type="unfinished"></translation>
+        <translation>Ossia</translation>
     </message>
     <message>
         <source>Instrument Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðførisnavn</translation>
     </message>
     <message>
         <source>Slur Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindiboga partur</translation>
     </message>
     <message>
         <source>Staff Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav linjur</translation>
     </message>
     <message>
         <source>Bar Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt strikur</translation>
     </message>
     <message>
         <source>Stem Slash</source>
-        <translation type="unfinished"></translation>
+        <translation>Legg strika</translation>
     </message>
     <message>
         <source>Key Signature</source>
@@ -17118,19 +17423,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Time Signature</source>
-        <translation>Enter Time Signature:</translation>
+        <translation>Takt slag</translation>
     </message>
     <message>
         <source>Repeat Measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Endurtak takt</translation>
     </message>
     <message>
         <source>Chord Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord linjur</translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Besiffraður bassur</translation>
     </message>
     <message>
         <source>Staff Text</source>
@@ -17142,23 +17447,23 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Instrument Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðføri, broyting</translation>
     </message>
     <message>
         <source>Hairpin Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Hárnál partur</translation>
     </message>
     <message>
         <source>Ottava Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Ottava partur</translation>
     </message>
     <message>
         <source>Trill Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Trillu partur</translation>
     </message>
     <message>
         <source>Text Line Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst linju petti</translation>
     </message>
     <message>
         <source>Volta Segment</source>
@@ -17166,43 +17471,39 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Pedal Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Pedal partur</translation>
     </message>
     <message>
         <source>Layout Break</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppseting brot</translation>
     </message>
     <message>
         <source>Staff State</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav støða</translation>
     </message>
     <message>
         <source>Ledger Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Eykalinja</translation>
     </message>
     <message>
         <source>Note Head</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta høvd</translation>
     </message>
     <message>
         <source>Note Dot</source>
-        <translation type="unfinished"></translation>
+        <translation>Nóta prikkur</translation>
     </message>
     <message>
         <source>Shadow Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Rubber Band</source>
-        <translation type="unfinished"></translation>
+        <translation>Skugga nóti</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab tíðarbil symbol</translation>
     </message>
     <message>
         <source>Font Symbol</source>
-        <translation type="unfinished"></translation>
+        <translation>Funt symbol</translation>
     </message>
     <message>
         <source>Hairpin</source>
@@ -17210,106 +17511,106 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Text Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst linja</translation>
     </message>
     <message>
         <source>Note Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótalinja</translation>
     </message>
     <message>
         <source>Element List</source>
-        <translation type="unfinished"></translation>
+        <translation>Element listi</translation>
     </message>
     <message>
         <source>Staff List</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav listi</translation>
     </message>
     <message>
         <source>Measure List</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt listi</translation>
     </message>
     <message>
         <source>Horizontal Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Vatnrøtt ramma</translation>
     </message>
     <message>
         <source>Vertical Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Loddrøtt ramma</translation>
     </message>
     <message>
         <source>Text Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst ramma</translation>
     </message>
     <message>
         <source>Fretboard Diagram Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandaborð diagramm ramma</translation>
     </message>
     <message>
         <source>Bagpipe Embellishment</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekkjapípu skreyt</translation>
     </message>
     <message>
         <source>Fretboard Diagram</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandaborð diagramm</translation>
     </message>
     <message>
         <source>Ambitus</source>
-        <translation type="unfinished"></translation>
+        <translation>Ambitus</translation>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord symbol</translation>
     </message>
     <message>
         <source>Tremolo Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Tremolo bummur</translation>
     </message>
     <message>
         <source>Melisma Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Melismu linja</translation>
     </message>
     <message>
         <source>Glissando Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Glissando partur</translation>
     </message>
     <message>
         <source>Melisma Line Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Melismu linju petti</translation>
     </message>
 </context>
 <context>
     <name>fotomode</name>
     <message>
         <source>Resize to A</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt til A</translation>
     </message>
     <message>
         <source>Resize to B</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt til B</translation>
     </message>
     <message>
         <source>Resize to C</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt til C</translation>
     </message>
     <message>
         <source>Resize to D</source>
-        <translation type="unfinished"></translation>
+        <translation>Broyt til D</translation>
     </message>
     <message>
         <source>Set size A</source>
-        <translation type="unfinished"></translation>
+        <translation>Áset stødd A</translation>
     </message>
     <message>
         <source>Set size B</source>
-        <translation type="unfinished"></translation>
+        <translation>Áset stødd B</translation>
     </message>
     <message>
         <source>Set size C</source>
-        <translation type="unfinished"></translation>
+        <translation>Áset stødd C</translation>
     </message>
     <message>
         <source>Set size D</source>
-        <translation type="unfinished"></translation>
+        <translation>Áset stødd D</translation>
     </message>
 </context>
 <context>
@@ -17323,27 +17624,27 @@ Measure is not empty</source>
     <name>inspector</name>
     <message>
         <source>Staff default</source>
-        <translation type="unfinished"></translation>
+        <translation>Forsettur stavur</translation>
     </message>
     <message>
         <source>Tick 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tick 1</translation>
     </message>
     <message>
         <source>Tick 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tick 2</translation>
     </message>
     <message>
         <source>Short 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Stutt 1</translation>
     </message>
     <message>
         <source>Short 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Stutt 2</translation>
     </message>
     <message>
         <source>[Custom]</source>
-        <translation type="unfinished"></translation>
+        <translation>[Sergjørd]</translation>
     </message>
 </context>
 <context>
@@ -17362,11 +17663,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>D.S. al Coda</source>
-        <translation type="unfinished"></translation>
+        <translation>D.S. al Coda</translation>
     </message>
     <message>
         <source>D.S. al Fine</source>
-        <translation type="unfinished"></translation>
+        <translation>D.S. al Fine</translation>
     </message>
     <message>
         <source>D.S.</source>
@@ -17423,15 +17724,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>To Coda</source>
-        <translation type="unfinished"></translation>
+        <translation>TIl Coda</translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Sergjørd</translation>
     </message>
     <message>
         <source>Segno variation</source>
-        <translation type="unfinished"></translation>
+        <translation>Segno variatión</translation>
     </message>
 </context>
 <context>
@@ -17442,11 +17743,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Cross</source>
-        <translation type="unfinished"></translation>
+        <translation>Krossur</translation>
     </message>
     <message>
         <source>Diamond</source>
-        <translation type="unfinished"></translation>
+        <translation>Diamantur</translation>
     </message>
     <message>
         <source>Triangle</source>
@@ -17454,50 +17755,50 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"></translation>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Slash</source>
-        <translation type="unfinished"></translation>
+        <translation>Skák</translation>
     </message>
     <message>
         <source>XCircle</source>
-        <translation type="unfinished"></translation>
+        <translation>XSirkul</translation>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"></translation>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"></translation>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"></translation>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"></translation>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"></translation>
+        <translation>Ti</translation>
     </message>
     <message>
         <source>Sol</source>
-        <translation type="unfinished"></translation>
+        <translation>Sol</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt. Brevis</translation>
     </message>
 </context>
 <context>
     <name>plugins_directory</name>
     <message>
         <source>Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin</translation>
     </message>
 </context>
 <context>
@@ -17508,34 +17809,34 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Every Day</source>
-        <translation type="unfinished"></translation>
+        <translation>Hvønn dag</translation>
     </message>
     <message>
         <source>Every 3 Days</source>
-        <translation type="unfinished"></translation>
+        <translation>3 hvønn dag</translation>
     </message>
     <message>
         <source>Every Week</source>
-        <translation type="unfinished"></translation>
+        <translation>Hvørja viku</translation>
     </message>
     <message>
         <source>Every 2 Weeks</source>
-        <translation type="unfinished"></translation>
+        <translation>2 hvørja viku</translation>
     </message>
     <message>
         <source>Every Month</source>
-        <translation type="unfinished"></translation>
+        <translation>Hvønn mánað</translation>
     </message>
     <message>
         <source>Every 2 Months</source>
-        <translation type="unfinished"></translation>
+        <translation>2 hvønn mánað</translation>
     </message>
 </context>
 <context>
     <name>scores_directory</name>
     <message>
         <source>Scores</source>
-        <translation type="unfinished"></translation>
+        <translation>Nótabløð</translation>
     </message>
 </context>
 <context>
@@ -17554,23 +17855,23 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Chord Symbols</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkord symbol</translation>
     </message>
     <message>
         <source>Other Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Annar tekstur</translation>
     </message>
     <message>
         <source>Articulations</source>
-        <translation type="unfinished"></translation>
+        <translation>Framburðar</translation>
     </message>
     <message>
         <source>Slurs</source>
-        <translation type="unfinished"></translation>
+        <translation>Bindibogar</translation>
     </message>
     <message>
         <source>Figured Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Besiffraður bassur</translation>
     </message>
     <message>
         <source>Ottava</source>
@@ -17586,11 +17887,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Pedal Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Pedal linja</translation>
     </message>
     <message>
         <source>Other Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Aðrar linjur</translation>
     </message>
     <message>
         <source>Arpeggios</source>
@@ -17598,90 +17899,86 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Glissandi</source>
-        <translation type="unfinished"></translation>
+        <translation>Glissandi</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandaborð diagramm</translation>
     </message>
     <message>
         <source>Breath Marks</source>
-        <translation type="unfinished"></translation>
+        <translation>Steðgir merki</translation>
     </message>
     <message>
         <source>Voice 1</source>
-        <translation type="unfinished">voice 1</translation>
+        <translation>Rødd 1</translation>
     </message>
     <message>
         <source>Voice 2</source>
-        <translation type="unfinished">voice 2</translation>
+        <translation>Rødd 2</translation>
     </message>
     <message>
         <source>Voice 3</source>
-        <translation type="unfinished">voice 3</translation>
+        <translation>Rødd 3</translation>
     </message>
     <message>
         <source>Voice 4</source>
-        <translation type="unfinished">voice 4</translation>
+        <translation>Rødd 4</translation>
     </message>
 </context>
 <context>
     <name>soundfonts_directory</name>
     <message>
         <source>Soundfonts</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljóðfuntar</translation>
     </message>
 </context>
 <context>
     <name>staff group header name</name>
     <message>
         <source>STANDARD STAFF</source>
-        <translation type="unfinished"></translation>
+        <translation>VANLIGUR STAVUR</translation>
     </message>
     <message>
         <source>PERCUSSION STAFF</source>
-        <translation type="unfinished"></translation>
+        <translation>PERKUSSIÓN STAVUR</translation>
     </message>
     <message>
         <source>TABLATURE STAFF</source>
-        <translation type="unfinished"></translation>
+        <translation>TABLATURE STAVUR</translation>
     </message>
 </context>
 <context>
     <name>styles_directory</name>
     <message>
         <source>Styles</source>
-        <translation>Style</translation>
+        <translation>Snið</translation>
     </message>
 </context>
 <context>
     <name>templates_directory</name>
     <message>
         <source>Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapilónir</translation>
     </message>
 </context>
 <context>
     <name>trillType</name>
     <message>
         <source>Trill line</source>
-        <translation>Trill line</translation>
+        <translation>Trillu linja</translation>
     </message>
     <message>
         <source>Upprall line</source>
-        <translation type="unfinished"></translation>
+        <translation>Upp prall linja</translation>
     </message>
     <message>
         <source>Downprall line</source>
-        <translation type="unfinished"></translation>
+        <translation>Niður prall linja</translation>
     </message>
     <message>
         <source>Prallprall line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation type="unfinished"></translation>
+        <translation>Prallprall linja</translation>
     </message>
 </context>
 <context>
@@ -17692,7 +17989,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>c#</source>
-        <translation type="unfinished"></translation>
+        <translation>c#</translation>
     </message>
     <message>
         <source>d</source>
@@ -17700,7 +17997,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>d#</source>
-        <translation type="unfinished"></translation>
+        <translation>d#</translation>
     </message>
     <message>
         <source>e</source>
@@ -17712,15 +18009,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>f#</source>
-        <translation type="unfinished"></translation>
+        <translation>f#</translation>
     </message>
     <message>
         <source>g</source>
-        <translation type="unfinished"></translation>
+        <translation>g</translation>
     </message>
     <message>
         <source>g#</source>
-        <translation type="unfinished"></translation>
+        <translation>g#</translation>
     </message>
     <message>
         <source>a</source>
@@ -17728,11 +18025,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>a#</source>
-        <translation type="unfinished"></translation>
+        <translation>a#</translation>
     </message>
     <message>
         <source>b</source>
-        <translation type="unfinished"></translation>
+        <translation>b</translation>
     </message>
     <message>
         <source>C</source>
@@ -17740,7 +18037,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>C#</source>
-        <translation type="unfinished"></translation>
+        <translation>C#</translation>
     </message>
     <message>
         <source>D</source>
@@ -17748,7 +18045,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>D#</source>
-        <translation type="unfinished"></translation>
+        <translation>D#</translation>
     </message>
     <message>
         <source>E</source>
@@ -17760,7 +18057,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"></translation>
+        <translation>F#</translation>
     </message>
     <message>
         <source>G</source>
@@ -17768,7 +18065,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>G#</source>
-        <translation type="unfinished"></translation>
+        <translation>G#</translation>
     </message>
     <message>
         <source>A</source>
@@ -17776,7 +18073,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>A#</source>
-        <translation type="unfinished"></translation>
+        <translation>A#</translation>
     </message>
     <message>
         <source>B</source>
