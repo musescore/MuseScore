@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="el">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="el" version="2.1">
 <context>
     <name>AboutBox</name>
     <message>
@@ -15,11 +13,11 @@
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; for new versions and more information.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Support MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;your donation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Visit&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt; color:#0000ff;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;www.musescore.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; for new versions and more information.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Support MuseScore with &lt;/span&gt;&lt;a href=&quot;http://www.musescore.org/en/donate&quot;&gt;&lt;span style=&quot; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;your donation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Arial'; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt;Copyright &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;©&lt;/span&gt;&lt;span style=&quot; font-family:'Arial'; font-size:10pt;&quot;&gt; 1999-2015 Werner Schweer and Others. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Arial&apos;; font-size:10pt;&quot;&gt;Published under the GNU General Public License&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
  &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -42,7 +40,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;MusicXML is an open file format for exchanging digital sheet music,&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;supported by many applications. MusicXML is copyright © MakeMusic, Inc.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All rights reserved. For more information, see: &lt;a href=&quot;http://www.musicxml.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;MusicXML.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
@@ -1796,11 +1794,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Grand staff distance:</source>
-        <translation>Απόσταση κύριου πενταγράμμου-για πιάνο:</translation>
+        <translation>Απόσταση κύριου πενταγράμμου:</translation>
     </message>
     <message>
         <source>Min. system distance:</source>
-        <translation>Ελάχιστη απόσταση συστήματος:</translation>
+        <translation>Ελάχ. απόσταση συστήματος:</translation>
     </message>
     <message>
         <source>Lyrics top margin:</source>
@@ -2073,7 +2071,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Hairpins</source>
-        <translation>Φουρκέτες</translation>
+        <translation>Ψαλίδια Δυναμικής</translation>
     </message>
     <message>
         <source>Height:</source>
@@ -2185,7 +2183,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Bottom</source>
-        <translation>Κάτω μέρος</translation>
+        <translation>Βάση</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2330,15 +2328,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Off</source>
-        <translation>Απενεργό</translation>
+        <translation>Ανενεργό</translation>
     </message>
     <message>
         <source>Eighth Note</source>
-        <translation>Όγδοο </translation>
+        <translation>Νότα Ογδόου</translation>
     </message>
     <message>
         <source>Sixteenth Note</source>
-        <translation>Δεκατο έκτο</translation>
+        <translation>Νότα Δεκάτου-έκτου</translation>
     </message>
     <message>
         <source>%</source>
@@ -2749,139 +2747,139 @@ space unit</extracomment>
     </message>
     <message>
         <source>C♭</source>
-        <translation>C♭ /Ντο♭</translation>
+        <translation>Ντο♭</translation>
     </message>
     <message>
         <source>C</source>
-        <translation>C /Ντο</translation>
+        <translation>Ντο</translation>
     </message>
     <message>
         <source>C♯</source>
-        <translation>C♯ /Ντο♯</translation>
+        <translation>Ντο♯</translation>
     </message>
     <message>
         <source>C♯♯</source>
-        <translation>C♯♯ /Ντο♯♯</translation>
+        <translation>Ντο♯♯</translation>
     </message>
     <message>
         <source>D♭♭</source>
-        <translation>D♭♭ /Ρε♭♭</translation>
+        <translation>Ρε♭♭</translation>
     </message>
     <message>
         <source>D♭</source>
-        <translation>D♭ /Ρε♭</translation>
+        <translation>Ρε♭</translation>
     </message>
     <message>
         <source>D</source>
-        <translation>D /Ρε</translation>
+        <translation>Ρε</translation>
     </message>
     <message>
         <source>D♯</source>
-        <translation>D♯ /Ρε♯</translation>
+        <translation>Ρε♯</translation>
     </message>
     <message>
         <source>D♯♯</source>
-        <translation>D♯♯ /Ρε♯♯</translation>
+        <translation>Ρε♯♯</translation>
     </message>
     <message>
         <source>E♭♭</source>
-        <translation>E♭♭ /Μι♭♭</translation>
+        <translation>Μι♭♭</translation>
     </message>
     <message>
         <source>E♭</source>
-        <translation>E♭</translation>
+        <translation>Μι♭</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>E /Μι</translation>
+        <translation>Μι</translation>
     </message>
     <message>
         <source>E♯</source>
-        <translation>E♯ /Μι♯</translation>
+        <translation>Μι♯</translation>
     </message>
     <message>
         <source>E♯♯</source>
-        <translation>E♯♯ /Μι♯♯</translation>
+        <translation>Μι♯♯</translation>
     </message>
     <message>
         <source>F♭♭</source>
-        <translation>F♭♭ /Φα♭♭</translation>
+        <translation>Φα♭♭</translation>
     </message>
     <message>
         <source>F♭</source>
-        <translation>F♭ /Φα♭</translation>
+        <translation>Φα♭</translation>
     </message>
     <message>
         <source>F</source>
-        <translation>F /Φα</translation>
+        <translation>Φα</translation>
     </message>
     <message>
         <source>F♯</source>
-        <translation>F♯</translation>
+        <translation>Φα♯</translation>
     </message>
     <message>
         <source>F♯♯</source>
-        <translation>F♯♯ /Φα♯♯</translation>
+        <translation>Φα♯♯</translation>
     </message>
     <message>
         <source>G♭♭</source>
-        <translation>G♭♭ /Σολ♭♭</translation>
+        <translation>Σολ♭♭</translation>
     </message>
     <message>
         <source>G♭</source>
-        <translation>G♭ /Σολ♭</translation>
+        <translation>Σολ♭</translation>
     </message>
     <message>
         <source>G</source>
-        <translation>G /Σολ</translation>
+        <translation>Σολ</translation>
     </message>
     <message>
         <source>G♯</source>
-        <translation>G♯ /Σολ♯</translation>
+        <translation>Σολ♯</translation>
     </message>
     <message>
         <source>G♯♯</source>
-        <translation>G♯♯ /Σολ♯♯</translation>
+        <translation>Σολ♯♯</translation>
     </message>
     <message>
         <source>A♭♭</source>
-        <translation>A♭♭ /Λα♭♭</translation>
+        <translation>Λα♭♭</translation>
     </message>
     <message>
         <source>A♭</source>
-        <translation>A♭ /Λα♭</translation>
+        <translation>Λα♭</translation>
     </message>
     <message>
         <source>A</source>
-        <translation>Α /Λα</translation>
+        <translation>Λα</translation>
     </message>
     <message>
         <source>A♯</source>
-        <translation>A♯ /Λα♯</translation>
+        <translation>Λα♯</translation>
     </message>
     <message>
         <source>A♯♯</source>
-        <translation>A♯♯ /Λα♯♯</translation>
+        <translation>Λα♯♯</translation>
     </message>
     <message>
         <source>B♭♭</source>
-        <translation>B♭♭ /Σι♭♭</translation>
+        <translation>Σι♭♭</translation>
     </message>
     <message>
         <source>B♭</source>
-        <translation>B♭ /Σι♭</translation>
+        <translation>Σι♭</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>B /Σι</translation>
+        <translation>Σι</translation>
     </message>
     <message>
         <source>B♯</source>
-        <translation>B♯ /Σι♯</translation>
+        <translation>Σι♯</translation>
     </message>
     <message>
         <source>B♯♯</source>
-        <translation>B♯♯ /Σι♯♯</translation>
+        <translation>Σι♯♯</translation>
     </message>
     <message>
         <source>Oct </source>
@@ -3045,6 +3043,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Ελεγκτής Glissando</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Αρπισμός</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Αναπαραγωγή</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Επαναφορά αξίας Αναπαραγωγής</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3109,6 +3126,30 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Επαναφορά αξίας έκτασης Χρόνου</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>προκαθορισμένο</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Μπαρόκ</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Αναπαραγωγή</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3282,6 +3323,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Ελεγκτής Glissando</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Αναπαραγωγή</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorBreak</name>
     <message>
         <source>Element Inspector</source>
@@ -3446,7 +3506,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Vertical offset</source>
-        <translation>Kατακόρυφη Mετατόπιση</translation>
+        <translation>Kατακόρυφη μετατόπιση</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3562,6 +3622,42 @@ space unit</extracomment>
         <source>Show text</source>
         <translation>Εμφάνιση Κειμένου</translation>
     </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Χρωματικό</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Λευκά πλήκτρα</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Μαύρα πλήκτρα</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Διατονικό</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Αναπαραγωγή</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>InspectorGroupElement</name>
@@ -3594,7 +3690,7 @@ space unit</extracomment>
     <name>InspectorHBox</name>
     <message>
         <source>Horizontal Frame</source>
-        <translation>Οριζόντιο πλαίσιο</translation>
+        <translation>Οριζόντιο Πλαίσιο</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3729,7 +3825,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Scale</source>
-        <translation>Κλίμακα:</translation>
+        <translation>Κλίμακα</translation>
     </message>
     <message>
         <source>Image Inspector</source>
@@ -3737,7 +3833,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Scale to frame size</source>
-        <translation>Κλίμακα στο Μέγεθος πλαισίου</translation>
+        <translation>Κλίμακα στο μέγεθος πλαισίου</translation>
     </message>
     <message>
         <source>Height</source>
@@ -4369,6 +4465,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4499,12 +4667,36 @@ space unit</extracomment>
         <translation>Διπλή Ανάκρουση</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Κυματιστή Γραμμή</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Επαναφορά αξίας</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Κατεύθνση</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>προκαθορισμένο</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Μπαρόκ</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Αναπαραγωγή</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Επαναφορά αξίας Αναπαραγωγής</translation>
     </message>
 </context>
 <context>
@@ -4879,6 +5071,13 @@ space unit</extracomment>
     <message>
         <source>Add time signature to palette</source>
         <translation>Προσθήκη ετικέτας χρόνου στην παλέτα</translation>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -5366,45 +5565,6 @@ Would you like to locate %2 now?</source>
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
-    <message>
-        <source>Open PDF/XPS file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Previous</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Next</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ZoomIn</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ZoomOut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ToolBar</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>MasterPalette</name>
     <message>
         <source>MuseScore: Master Palette</source>
@@ -5496,7 +5656,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Repeats &amp; Jumps</source>
@@ -6030,11 +6190,11 @@ failed: </source>
     </message>
     <message>
         <source>Above Staff</source>
-        <translation>Πάνω Πεντάγραμμο</translation>
+        <translation>Πάνω από Πεντάγραμμο</translation>
     </message>
     <message>
         <source>Below Staff</source>
-        <translation>Κάτω Πεντάγραμμο</translation>
+        <translation>Κάτω από Πεντάγραμμο</translation>
     </message>
     <message>
         <source>Chord Automatic</source>
@@ -6093,28 +6253,28 @@ failed: </source>
         <translation>το σύμβολο $ καθεαυτό</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>ετικέτα μετα-δεδομένων</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Διαθέσιμες ετικέτες και οι τωρινές τους αξίες:</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Εφαρμογή σε όλα τα Μέρη</translation>
     </message>
     <message>
         <source>last modification time</source>
-        <translation>τελευταία τροποποίηση χρόνου</translation>
+        <translation>τελευταία ώρα τροποποίησης</translation>
     </message>
     <message>
         <source>last modification date</source>
-        <translation>Τελευταία ημερομηνία τροποποίησης</translation>
+        <translation>τελευταία ημερομηνία τροποποίησης</translation>
     </message>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>αριθμός σελίδας, αν υπάρχουν περισσότερες από μία σελίδες</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -6361,7 +6521,7 @@ failed: </source>
     </message>
     <message>
         <source>Unsuccessful login. Please try again.</source>
-        <translation>Αποτυχία εισόδου. Προσπαθήστε ξανά</translation>
+        <translation>Αποτυχία εισόδου. Παρακαλώ προσπαθήστε ξανά</translation>
     </message>
     <message>
         <source>Sorry, wrong email address, username or password. Please check again. &lt;a href=&quot;%1&quot;&gt;Have you forgotten your password&lt;/a&gt;?</source>
@@ -6385,7 +6545,7 @@ failed: </source>
     </message>
     <message>
         <source>An error occurred during the file transfer. Please try again</source>
-        <translation>Ένα συνέβη σφάλμα κατά τη μεταφορά του αρχείο. Παρακαλώ προσπαθήστε ξανά</translation>
+        <translation>Ένα σφάλμα συνέβη κατά τη μεταφορά του αρχείου. Παρακαλώ προσπαθήστε ξανά</translation>
     </message>
     <message>
         <source>Cannot upload: %1</source>
@@ -6405,7 +6565,7 @@ failed: </source>
     </message>
     <message>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, &lt;a href=&quot;%1&quot;&gt;contact us&lt;/a&gt;.</source>
-        <translation>Η τοπική ώρα στη συσκευή σας δεν έχει ρυθμιστεί σωστά. Παρακαλώ ελέγξτε και ρυθμίστε την. Συνιστάται να βάλετε την ώρα/ζώνη ώρας στο αυτόματο. Άν ακόμα δεν μπορείται να συνδεθείτε, &lt;a href=&quot;%1&quot;&gt;επικοινωνήστε μαζί μας&lt;/a&gt;.</translation>
+        <translation>Η τοπική ώρα στη συσκευή σας δεν έχει ρυθμιστεί σωστά. Παρακαλώ ελέγξτε και ρυθμίστε. Συνιστάται να βάλετε την ώρα/ζώνη ώρας στο αυτόματο. Αν ακόμα δεν μπορείτε να συνδεθείτε, &lt;a href=&quot;%1&quot;&gt;επικοινωνήστε μαζί μας&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
@@ -6560,7 +6720,7 @@ before closing?</source>
     </message>
     <message>
         <source>Choose PDF Scan</source>
-        <translation>Επιλογή Σάρωσης-PDF</translation>
+        <translation>Επιλογή Σάρωσης PDF</translation>
     </message>
     <message>
         <source>MuseScore: Choose PDF Scan</source>
@@ -6838,7 +6998,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>Open &amp;Recent</source>
-        <translation>Άνοιγμα &amp;Πρόσφατο</translation>
+        <translation>Άνοιγμα &amp;Πρόσφατου</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
@@ -6858,7 +7018,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>&amp;Preferences...</source>
-        <translation>&amp;Επιλογές</translation>
+        <translation>&amp;Προτιμήσεις...</translation>
     </message>
     <message>
         <source>&amp;View</source>
@@ -6933,7 +7093,7 @@ Restore session?</source>
         <translation>MuseScore: Ανάγνωση Ονόματος Χώρου Εργασίας</translation>
     </message>
     <message>
-        <source>&apos;%1&apos; does already exist,
+        <source>'%1' does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; ήδη υπάρχει,
 παρακαλώ επιλέξτε ένα διαφορετικό όνομα:</translation>
@@ -7231,7 +7391,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Cannot determine file type</source>
-        <translation>Αδύνατος ο προσδιορισμός του τύπου αρχείου</translation>
+        <translation>Αδύνατος προσδιορισμός τύπου του αρχείου</translation>
     </message>
     <message>
         <source>MuseScore:</source>
@@ -7240,6 +7400,14 @@ please choose a different name:</source>
     <message>
         <source>Cannot write into %1</source>
         <translation>Αδύνατο γράψιμο στο %1</translation>
+    </message>
+    <message>
+        <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7440,6 +7608,10 @@ please choose a different name:</source>
     <message>
         <source>new Palette</source>
         <translation>νέα Παλέτα</translation>
+    </message>
+    <message>
+        <source>Single Palette</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7647,6 +7819,17 @@ Save before closing?</source>
     </message>
 </context>
 <context>
+    <name>Ms::Rest</name>
+    <message>
+        <source>Voice: %1</source>
+        <translation>Φωνή: %1</translation>
+    </message>
+    <message>
+        <source>%1; Duration: %2; %3</source>
+        <translation>%1; Διάρκεια: %2; %3</translation>
+    </message>
+</context>
+<context>
     <name>Ms::Score</name>
     <message>
         <source>The style file is not compatible with this version of MuseScore.</source>
@@ -7709,10 +7892,6 @@ failed: %2</source>
         <translation>Στυλ Γραφής απέτυχε: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>Το αρχείο δεν βρέθηκε</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Καμία επιλογή</translation>
     </message>
@@ -7723,6 +7902,10 @@ failed: %2</source>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>Μέτρο %1, πεντάγραμμο %2, φωνή %3 πολύ μεγάλο. Αναμενόμενο: %4; Βρέθηκε: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -8037,6 +8220,11 @@ Please select a range of measures to join and try again</source>
         <source>Transparent background</source>
         <translation>Διαφανές παρασκήνιο</translation>
     </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::SearchComboBox</name>
@@ -8207,7 +8395,7 @@ Please select a range of measures to join and try again</source>
         <translation>MuseScore: Ανάγνωση Ονόματος Στυλ</translation>
     </message>
     <message>
-        <source>&apos;%1&apos; does already exist,
+        <source>'%1' does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; ήδη υπάρχει,
 παρακαλώ επιλέξτε ένα διαφορετικό όνομα:</translation>
@@ -8793,7 +8981,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Frames &amp;&amp; Measures</source>
@@ -10032,7 +10220,7 @@ failed: </source>
     </message>
     <message>
         <source>Tie record</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Rest record</source>
@@ -10332,7 +10520,7 @@ failed: </source>
     </message>
     <message>
         <source>Default scale for new score views</source>
-        <translation type="unfinished"></translation>
+        <translation>Προεπιλεγμένη κλίμακα για νέες προβολές παρτιτούρων</translation>
     </message>
     <message>
         <source>Show play panel</source>
@@ -10400,7 +10588,7 @@ failed: </source>
     </message>
     <message>
         <source>Note input record</source>
-        <translation type="unfinished"></translation>
+        <translation>Εγγραφή εισαγωγής νοτών</translation>
     </message>
     <message>
         <source>Folders</source>
@@ -10433,6 +10621,18 @@ failed: </source>
     <message>
         <source>Check for new version of MuseScore</source>
         <translation>Έλεγχος για νέα έκδοση του MuseScore</translation>
+    </message>
+    <message>
+        <source>Filter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>PDF</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -10576,10 +10776,10 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>Error reading container.xml at line %1 column %2: %3
 </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Can&apos;t find rootfile
+        <source>Can't find rootfile
 %1</source>
         <translation>Αδύνατη εύρεση ρίζας αρχείου
 %1</translation>
@@ -10616,7 +10816,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>Long</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Breve</source>
@@ -10751,6 +10951,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>File corrupted %1</source>
         <translation>Κατεστραμμένο αρχείο %1</translation>
+    </message>
+    <message>
+        <source>MuseScore: Upload Error</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Do you want to try to load this file anyway?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -10901,17 +11109,6 @@ Do you want to overwrite it?</source>
     </message>
 </context>
 <context>
-    <name>Rest</name>
-    <message>
-        <source>Voice: %1</source>
-        <translation>Φωνή: %1</translation>
-    </message>
-    <message>
-        <source>%1; Duration: %2; %3</source>
-        <translation>%1; Διάρκεια: %2; %3</translation>
-    </message>
-</context>
-<context>
     <name>ScorePreview</name>
     <message>
         <source>Form</source>
@@ -10950,11 +11147,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Start new section with long instrument names</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Start new section with measure number one</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -11171,7 +11368,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Aeolus Stops</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>III</source>
@@ -11186,11 +11383,11 @@ Do you want to overwrite it?</source>
     <message>
         <source>Gemshorn
 8</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>PushButton</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Switch one or more voices to a specified channel:</source>
@@ -11292,6 +11489,14 @@ Do you want to overwrite it?</source>
         <source>System flag</source>
         <translation>Σημαία συστήματος</translation>
     </message>
+    <message>
+        <source>Search...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SynthControl</name>
@@ -11366,7 +11571,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Metronome gain</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Effect A</source>
@@ -11470,11 +11675,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Foreground color:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Background color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Χρώμα παρασκηνίου:</translation>
     </message>
     <message>
         <source>Alignment</source>
@@ -11490,7 +11695,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Border radius:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Font face</source>
@@ -11498,7 +11703,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Font point size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Bold</source>
@@ -11607,7 +11812,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Align baseline of text to reference point</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -11866,7 +12071,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Other:</source>
-        <translation>Άλλο:</translation>
+        <translation>Άλλα:</translation>
     </message>
     <message>
         <source>Global value:</source>
@@ -11945,7 +12150,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Beat unit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Common Time</source>
@@ -11953,7 +12158,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Enter Number of Measures</source>
-        <translation type="unfinished"></translation>
+        <translation>Εισαγωγή Αριθμού Μέτρων</translation>
     </message>
     <message>
         <source>Measures</source>
@@ -12140,7 +12345,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Keep degree alterations</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Options</source>
@@ -12200,7 +12405,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Use Double Sharps and Flats</source>
-        <translation>Χρήση διπλών διέσεων και υφέσεων</translation>
+        <translation>Χρήση Διπλών Διέσεων και Υφέσεων</translation>
     </message>
     <message>
         <source>Transpose Chromatically</source>
@@ -12235,7 +12440,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>64th through stem</source>
-        <translation type="unfinished">16τα ανάμεσα στο στέλεχος {64t?}</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Eighth between notes</source>
@@ -12266,15 +12471,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Dip</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Dive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Inverted Dip</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Return</source>
@@ -12282,15 +12487,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>MuseScore: Tremolo Bar Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>MuseScore: Ιδιότητες Μπάρας Τρέμολου</translation>
     </message>
     <message>
         <source>Release(Up)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Release(Down)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -12328,7 +12533,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Relation:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Relation</source>
@@ -12410,13 +12615,13 @@ Do you want to overwrite it?</source>
     <name>Workspace</name>
     <message>
         <source>MuseScore: Writing Workspace File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Writing Workspace File
 %1
 failed: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -12427,39 +12632,39 @@ failed: </source>
     </message>
     <message>
         <source>Invalid entity value.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Invalid XML character.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sequence &apos;]]&gt;&apos; not allowed in content.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Encountered incorrectly encoded content.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Namespace prefix &apos;%1&apos; not declared</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Illegal namespace declaration.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Attribute redefined.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Unexpected character &apos;%1&apos; in public id literal.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Invalid XML version string.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Unsupported XML version.</source>
@@ -12467,47 +12672,47 @@ failed: </source>
     </message>
     <message>
         <source>The standalone pseudo attribute must appear after the encoding.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>%1 is an invalid encoding name.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Encoding %1 is unsupported</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Standalone accepts only yes or no.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Invalid attribute in XML declaration.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Premature end of document.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Invalid document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Μη έγκυρο έγγραφο.</translation>
     </message>
     <message>
         <source>Expected </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>, but got &apos;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Unexpected &apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Μη αναμενόμενο&apos;</translation>
     </message>
     <message>
         <source>Expected character data.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -12561,43 +12766,43 @@ failed: </source>
     </message>
     <message>
         <source>Flat-slash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Flat-slash2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Mirrored-flat2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Mirrored-flat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Mirrored-flat-slash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Flat-flat-slash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sharp-slash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sharp-slash2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sharp-slash3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sharp-slash4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sharp arrow up</source>
@@ -12637,11 +12842,11 @@ failed: </source>
     </message>
     <message>
         <source>Sori</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Koron</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -12924,59 +13129,59 @@ failed: </source>
     </message>
     <message>
         <source>A</source>
-        <translation>A (Λα)</translation>
+        <translation>Λα</translation>
     </message>
     <message>
         <source>Enter note A</source>
-        <translation>Εισαγωγή νότας A (Λα)</translation>
+        <translation>Εισαγωγή νότας Λα</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>B (Σι)</translation>
+        <translation>Σι</translation>
     </message>
     <message>
         <source>Enter note B</source>
-        <translation>Εισαγωγή Νότας Β (Σι)</translation>
+        <translation>Εισαγωγή Νότας Σι</translation>
     </message>
     <message>
         <source>C</source>
-        <translation>C (Ντο)</translation>
+        <translation>Ντο</translation>
     </message>
     <message>
         <source>Enter note C</source>
-        <translation>Εισαγωγή Νότας C (Ντο)</translation>
+        <translation>Εισαγωγή Νότας Ντο</translation>
     </message>
     <message>
         <source>D</source>
-        <translation>D (Ρε)</translation>
+        <translation>Ρε</translation>
     </message>
     <message>
         <source>Enter note D</source>
-        <translation>Εισαγωγή Νότας D (Ρε)</translation>
+        <translation>Εισαγωγή Νότας Ρε</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>E (Μι)</translation>
+        <translation>Μι</translation>
     </message>
     <message>
         <source>Enter note E</source>
-        <translation>Εισαγωγή Νότας Ε (Μι)</translation>
+        <translation>Εισαγωγή Νότας Μι</translation>
     </message>
     <message>
         <source>F</source>
-        <translation>F(Φα)</translation>
+        <translation>Φα</translation>
     </message>
     <message>
         <source>Enter note F</source>
-        <translation>Εισαγωγή Νότας F (Φα)</translation>
+        <translation>Εισαγωγή Νότας Φα</translation>
     </message>
     <message>
         <source>G</source>
-        <translation>G (Σολ)</translation>
+        <translation>Σολ</translation>
     </message>
     <message>
         <source>Enter note G</source>
-        <translation>Εισαγωγή Νότας G (Σολ)</translation>
+        <translation>Εισαγωγή Νότας Σολ</translation>
     </message>
     <message>
         <source>Add A</source>
@@ -13036,59 +13241,59 @@ failed: </source>
     </message>
     <message>
         <source>Insert A</source>
-        <translation>Εισαγωγή Α /Λα</translation>
+        <translation>Εισαγωγή Λα</translation>
     </message>
     <message>
         <source>Insert note A</source>
-        <translation>Εισαγωγή νότας Α /Λα</translation>
+        <translation>Εισαγωγή νότας Λα</translation>
     </message>
     <message>
         <source>Insert B</source>
-        <translation>Εισαγωγή Β /Σι</translation>
+        <translation>Εισαγωγή Σι</translation>
     </message>
     <message>
         <source>Insert note B</source>
-        <translation>Εισαγωγή νότας Β /Σι</translation>
+        <translation>Εισαγωγή νότας Σι</translation>
     </message>
     <message>
         <source>Insert C</source>
-        <translation>Εισαγωγή C /Ντο</translation>
+        <translation>Εισαγωγή Ντο</translation>
     </message>
     <message>
         <source>Insert note C</source>
-        <translation>Εισαγωγή νότας C /Ντο</translation>
+        <translation>Εισαγωγή νότας Ντο</translation>
     </message>
     <message>
         <source>Insert D</source>
-        <translation>Εισαγωγή D /Ρε</translation>
+        <translation>Εισαγωγή Ρε</translation>
     </message>
     <message>
         <source>Insert note D</source>
-        <translation>Εισαγωγή Νότας D /Ρε</translation>
+        <translation>Εισαγωγή νότας Ρε</translation>
     </message>
     <message>
         <source>Insert E</source>
-        <translation>Εισαγωγή Ε /Μι</translation>
+        <translation>Εισαγωγή Μι</translation>
     </message>
     <message>
         <source>Insert note E</source>
-        <translation>Εισαγωγή Νότας Ε /Μι</translation>
+        <translation>Εισαγωγή νότας Ε /Μι</translation>
     </message>
     <message>
         <source>Insert F</source>
-        <translation>Εισαγωγή F /Φα</translation>
+        <translation>Εισαγωγή Φα</translation>
     </message>
     <message>
         <source>Insert note F</source>
-        <translation>Εισαγωγή Νότας F /Φα</translation>
+        <translation>Εισαγωγή νότας Φα</translation>
     </message>
     <message>
         <source>Insert G</source>
-        <translation>Εισαγωγή G /Σολ</translation>
+        <translation>Εισαγωγή Σολ</translation>
     </message>
     <message>
         <source>Insert note G</source>
-        <translation>Εισαγωγή Νότας G /Σολ</translation>
+        <translation>Εισαγωγή νότας Σολ</translation>
     </message>
     <message>
         <source>Rest</source>
@@ -13320,7 +13525,7 @@ failed: </source>
     </message>
     <message>
         <source>Add ottava 8va</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Ottava 8vb</source>
@@ -13344,7 +13549,7 @@ failed: </source>
     </message>
     <message>
         <source>Timewise delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Timewise Delete</source>
@@ -13508,11 +13713,11 @@ failed: </source>
     </message>
     <message>
         <source>Augmentation dot</source>
-        <translation type="unfinished">Tελεία Επαυξήσεως</translation>
+        <translation>Tελεία Επαυξήσεως</translation>
     </message>
     <message>
         <source>Double augmentation dot</source>
-        <translation type="unfinished">Τελεία διπλής επαύξησης</translation>
+        <translation>Τελεία διπλής επαύξησης</translation>
     </message>
     <message>
         <source>Tie</source>
@@ -13624,7 +13829,7 @@ failed: </source>
     </message>
     <message>
         <source>Beam 32nd sub</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Auto beam</source>
@@ -13637,10 +13842,6 @@ failed: </source>
     <message>
         <source>Feathered beam, faster</source>
         <translation>Φτεροειδής ενωτική γραμμή, πιο γρήγορα</translation>
-    </message>
-    <message>
-        <source>Palette</source>
-        <translation>Παλέτα</translation>
     </message>
     <message>
         <source>Play Panel</source>
@@ -13677,10 +13878,6 @@ failed: </source>
     <message>
         <source>Add lyrics</source>
         <translation>Προσθήκη στίχων</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Σήμανση τέμπο</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -13820,11 +14017,11 @@ failed: </source>
     </message>
     <message>
         <source>Toggle pan score</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pan score during playback</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Load Style...</source>
@@ -14039,16 +14236,12 @@ failed: </source>
         <translation>Επανάληψη επιλογής</translation>
     </message>
     <message>
-        <source>Pan piano roll</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Toggle pan piano roll</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pan roll during playback</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Documents Side by Side</source>
@@ -14100,7 +14293,7 @@ failed: </source>
     </message>
     <message>
         <source>Replace pitches without changing rhythms</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Piano Keyboard</source>
@@ -14108,7 +14301,7 @@ failed: </source>
     </message>
     <message>
         <source>Additional Media...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Show media dialog</source>
@@ -14180,11 +14373,11 @@ failed: </source>
     </message>
     <message>
         <source>Toggle count-in playback</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Play count-in at playback start</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Figured Bass</source>
@@ -14276,11 +14469,11 @@ failed: </source>
     </message>
     <message>
         <source>Select string above (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Select string below (TAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fret 0 (TAB)</source>
@@ -14396,7 +14589,7 @@ failed: </source>
     </message>
     <message>
         <source>Respell Pitches</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Full Measure Rest</source>
@@ -14404,7 +14597,7 @@ failed: </source>
     </message>
     <message>
         <source>Converts the measure to a full measure rest</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Join Measures</source>
@@ -14472,15 +14665,15 @@ failed: </source>
     </message>
     <message>
         <source>All Similar Elements in Range Selection</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Select all similar elements in the range selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιλογή όλων των ομοίων στοιχείων στην επιλογή εύρους</translation>
     </message>
     <message>
         <source>Add brackets to element</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Selection Filter</source>
@@ -14496,7 +14689,7 @@ failed: </source>
     </message>
     <message>
         <source>Beam 16th sub</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Go to the first element</source>
@@ -14536,15 +14729,15 @@ failed: </source>
     </message>
     <message>
         <source>Enable snap to horizontal grid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Enable snap to vertical grid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Configure grid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Insert one measure</source>
@@ -14580,31 +14773,31 @@ failed: </source>
     </message>
     <message>
         <source>Explode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Explode contents of top selected staff into staves below</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Implode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Implode contents of selected staves into top selected staff</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fill With Slashes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Toggle Rhythmic Slash Notation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Start Center</source>
-        <translation type="unfinished">Κέντρο Εκκίνησης </translation>
+        <translation>Κέντρο Εκκίνησης </translation>
     </message>
     <message>
         <source>Toggle create multimeasure rest</source>
@@ -14612,31 +14805,31 @@ failed: </source>
     </message>
     <message>
         <source>Resequence Rehearsal Marks</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Increase Stretch</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Increase stretch</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Increase stretch of selected measures</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Decrease Stretch</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Decrease stretch</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Decrease stretch of selected measures</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Plugin Creator...</source>
@@ -14648,11 +14841,11 @@ failed: </source>
     </message>
     <message>
         <source>Resource Manager...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Add/Remove Line Breaks...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>File: Open</source>
@@ -14696,7 +14889,7 @@ failed: </source>
     </message>
     <message>
         <source>Respell pitches</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Flip Direction</source>
@@ -14812,11 +15005,11 @@ failed: </source>
     </message>
     <message>
         <source>Add Staff Above to Selection</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Add Staff Below to Selection</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Page: Previous</source>
@@ -14932,19 +15125,19 @@ failed: </source>
     </message>
     <message>
         <source>Augmentation Dot</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Note duration: Augmentation dot</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Double Augmentation Dot</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Note duration: Double augmentation dot</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Note duration: Tie</source>
@@ -15008,11 +15201,11 @@ failed: </source>
     </message>
     <message>
         <source>Beam 16th Sub</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Beam 32nd Sub</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Auto Beam</source>
@@ -15060,15 +15253,15 @@ failed: </source>
     </message>
     <message>
         <source>Play next measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Αναπαραγωγή επόμενου μέτρου</translation>
     </message>
     <message>
         <source>Player seek to begin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Player seek to end</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Play Repeats</source>
@@ -15080,11 +15273,11 @@ failed: </source>
     </message>
     <message>
         <source>Exchange voice 1-2</source>
-        <translation type="unfinished">Ανταλλαγή φωνής 1-2</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Exchange voice 1-3</source>
-        <translation type="unfinished">Ανταλλαγή φωνής 1-3</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Exchange voice 1-4</source>
@@ -15128,7 +15321,7 @@ failed: </source>
     </message>
     <message>
         <source>Show unprintable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Show frames</source>
@@ -15148,7 +15341,7 @@ failed: </source>
     </message>
     <message>
         <source>Note input: Whole rest</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half Rest</source>
@@ -15156,7 +15349,7 @@ failed: </source>
     </message>
     <message>
         <source>Note input: Half rest</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Quarter Rest</source>
@@ -15164,7 +15357,7 @@ failed: </source>
     </message>
     <message>
         <source>Note input: Quarter rest</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Eighth Rest</source>
@@ -15172,7 +15365,7 @@ failed: </source>
     </message>
     <message>
         <source>Note input: Eighth rest</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Zoom in</source>
@@ -15184,7 +15377,7 @@ failed: </source>
     </message>
     <message>
         <source>Mirror Note Head</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Double Duration</source>
@@ -15196,7 +15389,7 @@ failed: </source>
     </message>
     <message>
         <source>Repeat Selection</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Enharmonic Up</source>
@@ -15228,15 +15421,15 @@ failed: </source>
     </message>
     <message>
         <source>Enable Snap to Horizontal Grid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Enable Snap to Vertical Grid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Configure Grid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Piano keyboard</source>
@@ -15272,7 +15465,7 @@ failed: </source>
     </message>
     <message>
         <source>Resource manager</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Show OMR panel</source>
@@ -15280,19 +15473,19 @@ failed: </source>
     </message>
     <message>
         <source>Loop In</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Loop Out</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Set loop out position</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Count-In</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Transpose up</source>
@@ -15328,11 +15521,11 @@ failed: </source>
     </message>
     <message>
         <source>Note Anchored Textline</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Note anchored textline</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Lock score</source>
@@ -15428,19 +15621,19 @@ failed: </source>
     </message>
     <message>
         <source>Add Brackets to Element</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Toggle Create Multimeasure Rest</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Bold Face</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Bold face</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Italic</source>
@@ -15468,11 +15661,11 @@ failed: </source>
     </message>
     <message>
         <source>Fill with slashes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Toggle rhythmic slash notation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Add/remove line breaks</source>
@@ -15480,15 +15673,15 @@ failed: </source>
     </message>
     <message>
         <source>Resequence rehearsal marks</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Start center</source>
-        <translation type="unfinished"></translation>
+        <translation>Κέντρο εκκίνησης</translation>
     </message>
     <message>
         <source>Longa Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Advance of a longa (Figured bass/Chord symbol only)</source>
@@ -15496,7 +15689,7 @@ failed: </source>
     </message>
     <message>
         <source>Breve Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Advance of a double whole note (Figured bass/Chord symbol only)</source>
@@ -15504,7 +15697,7 @@ failed: </source>
     </message>
     <message>
         <source>Whole Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Advance of a whole note (Figured bass/Chord symbol only)</source>
@@ -15512,7 +15705,7 @@ failed: </source>
     </message>
     <message>
         <source>Half Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Advance of a half note (Figured bass/Chord symbol only)</source>
@@ -15520,7 +15713,7 @@ failed: </source>
     </message>
     <message>
         <source>Quarter Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Advance of a quarter note (Figured bass/Chord symbol only)</source>
@@ -15528,7 +15721,7 @@ failed: </source>
     </message>
     <message>
         <source>Eighth Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Advance of an eighth note (Figured bass/Chord symbol only)</source>
@@ -15536,7 +15729,7 @@ failed: </source>
     </message>
     <message>
         <source>16th Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Advance of a 16th note (Figured bass/Chord symbol only)</source>
@@ -15544,7 +15737,7 @@ failed: </source>
     </message>
     <message>
         <source>32nd Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Advance of a 32nd note (Figured bass/Chord symbol only)</source>
@@ -15552,7 +15745,7 @@ failed: </source>
     </message>
     <message>
         <source>64th Note Advance (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Advance of a 64th note (Figured bass/Chord symbol only)</source>
@@ -15560,7 +15753,7 @@ failed: </source>
     </message>
     <message>
         <source>Previous Measure (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Previous measure (Figured bass/Chord symbol only)</source>
@@ -15568,7 +15761,7 @@ failed: </source>
     </message>
     <message>
         <source>Next Measure (F.B./Chord Symbol)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Next measure (Figured bass/Chord symbol only)</source>
@@ -15576,19 +15769,19 @@ failed: </source>
     </message>
     <message>
         <source>Toggle staccato</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Toggle tenuto</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Toggle trill</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Toggle marcato</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Import PDF...</source>
@@ -15600,11 +15793,27 @@ failed: </source>
     </message>
     <message>
         <source>Import a PDF file with an experimental service on musescore.com</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Set loop in position</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Palettes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -15634,19 +15843,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Slide out down</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Slide out up</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Slide in below</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Slide in above</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fermata</source>
@@ -15698,31 +15907,31 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Volume swell</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Wiggle sawtooth</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Wiggle sawtooth wide</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Wiggle vibrato large faster</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Wiggle vibrato large slowest</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Ouvert</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Stopped/Pizzicato left hand</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Up bow</source>
@@ -15750,7 +15959,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Mordent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Prall prall</source>
@@ -15758,7 +15967,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Prall mordent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Up prall</source>
@@ -15770,11 +15979,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Up mordent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Down mordent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Prall down</source>
@@ -15790,47 +15999,47 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Schleifer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Snap pizzicato</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Tapping</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Slapping</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Popping</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb pos.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Lute thumb fing.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Lute 1 fing.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Lute 2 fing.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Lute 3 fing.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Tremolo bar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -15976,67 +16185,67 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Half doubling on low G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half doubling on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half doubling on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half doubling on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half doubling on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half doubling on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half doubling on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Doubling on high G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Doubling on high A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Grip</source>
@@ -16044,35 +16253,35 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Half D throw</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Doubling on low G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Doubling on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Doubling on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Doubling on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Doubling on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Doubling on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Doubling on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb doubling on low G</source>
@@ -16104,59 +16313,59 @@ Measure is not empty</source>
     </message>
     <message>
         <source>G grace note on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Double strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Double strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Double strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Double strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Double strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Double strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Double strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Double strike on high A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb strike on low A</source>
@@ -16188,55 +16397,55 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Birl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>D throw</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half heavy D throw</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Taorluath</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Bubly</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Heavy D throw</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half double strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half double strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half double strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half double strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half double strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half double strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half double strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half double strike on high A</source>
@@ -16276,31 +16485,31 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Half pele on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half pele on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half pele on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half pele on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half pele on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half pele on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half pele on high G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note grip on low A</source>
@@ -16356,223 +16565,223 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Pele on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pele on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pele on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pele on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pele on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pele on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb grace note pele on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb grace note pele on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb grace note pele on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb grace note pele on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb grace note pele on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb grace note pele on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb grace note pele on high G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note double strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note double strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note double strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note double strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note double strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note double strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb double strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb double strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb double strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb double strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb double strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb double strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb double strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Triple strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Triple strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Triple strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Triple strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Triple strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Triple strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Triple strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Triple strike on high A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half triple strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half triple strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half triple strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half triple strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half triple strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half triple strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half triple strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Half triple strike on high A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note triple strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note triple strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note triple strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note triple strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note triple strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>G grace note triple strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb triple strike on low A</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb triple strike on B</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb triple strike on C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb triple strike on D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb triple strike on E</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb triple strike on F</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Thumb triple strike on high G</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -16657,6 +16866,10 @@ Measure is not empty</source>
         <source>Tablature2</source>
         <translation>Ταμπλατούρα2</translation>
     </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>drumset</name>
@@ -16674,7 +16887,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>High Q</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Slap</source>
@@ -16682,19 +16895,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Scratch Push</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Scratch Pull</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sticks</source>
-        <translation type="unfinished"></translation>
+        <translation>Μπαγκέτες</translation>
     </message>
     <message>
         <source>Metronome Click</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Metronome Bell</source>
@@ -16706,7 +16919,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Acoustic Snare</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Hand Clap</source>
@@ -16714,51 +16927,51 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Electric Snare</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Low Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Closed Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>High Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pedal Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Low Tom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open Hi-Hat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Low-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Hi-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Crash Cymbal 1</source>
-        <translation type="unfinished">Κράς Κύμβαλο 1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>High Tom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Ride Bell</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cowbell</source>
@@ -16770,35 +16983,35 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Low Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Mute Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Low Conga</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>High Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Low Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>High Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Low Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cabasa</source>
@@ -16810,19 +17023,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Short Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Long Whistle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Short Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Long Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Claves</source>
@@ -16838,15 +17051,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Mute Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Mute Triangle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open Triangle</source>
@@ -16854,7 +17067,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Shaker</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Bell Tree</source>
@@ -16862,11 +17075,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Mute Surdo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open Surdo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Ride Cymbal 1</source>
@@ -16894,7 +17107,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Square Click</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Hi Bongo</source>
@@ -16909,102 +17122,102 @@ Measure is not empty</source>
     <name>editstaff</name>
     <message>
         <source>C</source>
-        <translation>C /Ντο</translation>
+        <translation>Ντο</translation>
     </message>
     <message>
         <source>C#</source>
-        <translation>C# /Ντο#</translation>
+        <translation>Ντο#</translation>
     </message>
     <message>
         <source>D</source>
-        <translation>D /Ρε</translation>
+        <translation>Ρε</translation>
     </message>
     <message>
         <source>Eb</source>
-        <translation>Eb /Μιb</translation>
+        <translation>Μιb</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>E /Μι</translation>
+        <translation>Μι</translation>
     </message>
     <message>
         <source>F</source>
-        <translation>F /Φα</translation>
+        <translation>Φα</translation>
     </message>
     <message>
         <source>F#</source>
-        <translation>F# /Φα#</translation>
+        <translation>Φα#</translation>
     </message>
     <message>
         <source>G</source>
-        <translation>G /Σολ</translation>
+        <translation>Σολ</translation>
     </message>
     <message>
         <source>Ab</source>
-        <translation>Ab /Λαb</translation>
+        <translation>Λαb</translation>
     </message>
     <message>
         <source>A</source>
-        <translation>Α /Λα</translation>
+        <translation>Λα</translation>
     </message>
     <message>
         <source>Bb</source>
-        <translation>B /Σι</translation>
+        <translation>Σι</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>B /Σι</translation>
+        <translation>Σι</translation>
     </message>
 </context>
 <context>
     <name>editstringdata</name>
     <message>
         <source>C</source>
-        <translation>C /Ντο</translation>
+        <translation>Ντο</translation>
     </message>
     <message>
         <source>C#</source>
-        <translation>C# /Ντο#</translation>
+        <translation>Ντο#</translation>
     </message>
     <message>
         <source>D</source>
-        <translation>D /Ρε</translation>
+        <translation>Ρε</translation>
     </message>
     <message>
         <source>Eb</source>
-        <translation>Eb /Μιb</translation>
+        <translation>Μιb</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>E /Μι</translation>
+        <translation>Μι</translation>
     </message>
     <message>
         <source>F</source>
-        <translation>F /Φα</translation>
+        <translation>Φα</translation>
     </message>
     <message>
         <source>F#</source>
-        <translation>F# /Φα#</translation>
+        <translation>Φα#</translation>
     </message>
     <message>
         <source>G</source>
-        <translation>G /Σολ</translation>
+        <translation>Σολ</translation>
     </message>
     <message>
         <source>Ab</source>
-        <translation>Ab /Λαb</translation>
+        <translation>Λαb</translation>
     </message>
     <message>
         <source>A</source>
-        <translation>Α /Λα</translation>
+        <translation>Λα</translation>
     </message>
     <message>
         <source>Bb</source>
-        <translation>B /Σι</translation>
+        <translation>Σιb</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>B /Σι</translation>
+        <translation>Σι</translation>
     </message>
 </context>
 <context>
@@ -17187,7 +17400,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Instrument Name</source>
-        <translation>Όνομα οργάνου</translation>
+        <translation>Όνομα Οργάνου</translation>
     </message>
     <message>
         <source>Slur Segment</source>
@@ -17203,7 +17416,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Stem Slash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Key Signature</source>
@@ -17255,7 +17468,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Volta Segment</source>
-        <translation>Βόλτα</translation>
+        <translation>Τμήμα Volta</translation>
     </message>
     <message>
         <source>Pedal Segment</source>
@@ -17267,11 +17480,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Staff State</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Ledger Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Βοηθητική Γραμμή</translation>
     </message>
     <message>
         <source>Note Head</source>
@@ -17283,11 +17496,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Shadow Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Rubber Band</source>
-        <translation type="unfinished"></translation>
+        <translation>Σκίαση Νότας</translation>
     </message>
     <message>
         <source>Tab Duration Symbol</source>
@@ -17339,7 +17548,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Bagpipe Embellishment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fretboard Diagram</source>
@@ -17772,10 +17981,6 @@ Measure is not empty</source>
         <source>Prallprall line</source>
         <translation>Γραμμή Διπλής ανάκρουσης</translation>
     </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Κυματιστή Γραμμή</translation>
-    </message>
 </context>
 <context>
     <name>utils</name>
@@ -17785,7 +17990,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>c#</source>
-        <translation>c#</translation>
+        <translation>ντο#</translation>
     </message>
     <message>
         <source>d</source>
@@ -17793,7 +17998,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>d#</source>
-        <translation>d#</translation>
+        <translation>ρε#</translation>
     </message>
     <message>
         <source>e</source>
@@ -17805,7 +18010,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>f#</source>
-        <translation>f#</translation>
+        <translation>φα#</translation>
     </message>
     <message>
         <source>g</source>
@@ -17813,7 +18018,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>g#</source>
-        <translation>g#</translation>
+        <translation>σολ#</translation>
     </message>
     <message>
         <source>a</source>
@@ -17821,59 +18026,59 @@ Measure is not empty</source>
     </message>
     <message>
         <source>a#</source>
-        <translation>a#</translation>
+        <translation>λα#</translation>
     </message>
     <message>
         <source>b</source>
-        <translation>b</translation>
+        <translation>σι</translation>
     </message>
     <message>
         <source>C</source>
-        <translation>C /Ντο</translation>
+        <translation>Ντο</translation>
     </message>
     <message>
         <source>C#</source>
-        <translation>C# /Ντο#</translation>
+        <translation>Ντο#</translation>
     </message>
     <message>
         <source>D</source>
-        <translation>D /Ρε</translation>
+        <translation>Ρε</translation>
     </message>
     <message>
         <source>D#</source>
-        <translation>D#</translation>
+        <translation>Ρε#</translation>
     </message>
     <message>
         <source>E</source>
-        <translation>E /Μι</translation>
+        <translation>Μι</translation>
     </message>
     <message>
         <source>F</source>
-        <translation>F /Φα</translation>
+        <translation>Φα</translation>
     </message>
     <message>
         <source>F#</source>
-        <translation>F# /Φα#</translation>
+        <translation>Φα#</translation>
     </message>
     <message>
         <source>G</source>
-        <translation>G /Σολ</translation>
+        <translation>Σολ</translation>
     </message>
     <message>
         <source>G#</source>
-        <translation>G#</translation>
+        <translation>Σολ#</translation>
     </message>
     <message>
         <source>A</source>
-        <translation>Α /Λα</translation>
+        <translation>Λα</translation>
     </message>
     <message>
         <source>A#</source>
-        <translation>A#</translation>
+        <translation>Λα#</translation>
     </message>
     <message>
         <source>B</source>
-        <translation>B /Σι</translation>
+        <translation>Σι</translation>
     </message>
 </context>
 </TS>
