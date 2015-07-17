@@ -494,6 +494,9 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
 
       QSet<Note *> * tie_ends = NULL; 
 
+      bool use_t2t = !t2t.isEmpty();
+      TempoMap * tempomap = score->tempomap();
+
       QJsonArray result;
 
       foreach( Page* page, score->pages() ) {
@@ -535,10 +538,11 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
             sys->scanElements(&elems, collectElements, false);
 
             qreal end_pos = -1.0;
-            QJsonArray barlines;
+            QJsonArray barlines, bartimes, barbeats;
             QMap<int,qreal> tick2pos;
             QMap<int,int> just_tied; // just the end of tied note
             QMap<int,int> is_rest;
+            QMap<int,int> pitches;
             tie_ends = mark_tie_ends(elems);
             foreach(const Element * e, elems) {
 
@@ -572,6 +576,11 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
                   is_rest.insert(tick,is_rest.value(tick,true) && 
                                   (e->type() == Element::Type::REST));
 
+                  Note * note = (Note*)e;
+                  if (e->type() == Element::Type::NOTE && 
+                    (!pitches.contains(tick) || pitches[tick] < note->ppitch()))
+                    pitches.insert(tick,note->ppitch());
+
                   // Update the bounds for actual audio
                   if (e->type() == Element::Type::NOTE) {
                     if (firstNonRest<0 || tick<firstNonRest) firstNonRest = tick;
@@ -581,7 +590,16 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
 
                }
                else if (e->type() == Element::Type::MEASURE) {
+                  Measure * m = (Measure*)e;
                   barlines.push_back(lpos);
+                  barbeats.push_back(m->timesig().numerator());
+
+                  int tick = m->first()->tick();
+                  bartimes.push_back(use_t2t?
+                    t2t[tick]:tempomap->tick2time(tick));
+
+
+                  
                   end_pos = (bb.right()+dx)/w;
                }
 
@@ -600,15 +618,13 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
           
             delete p; delete svgbuf; delete tie_ends;
 
-            QJsonArray ticks, times, positions, change, rest;
-
-            bool use_t2t = !t2t.isEmpty();
-            TempoMap * tempomap = score->tempomap();
+            QJsonArray ticks, times, positions, change, rest, pitches_ar;
 
             foreach(int tick, tick2pos.keys()){
               ticks.push_back(tick);
               times.push_back(use_t2t?t2t[tick]:tempomap->tick2time(tick));
               positions.push_back(tick2pos[tick]);
+              pitches_ar.push_back(pitches.value(tick,-1));
 
               change.push_back(int(!(just_tied[tick] || (rest.last().toInt() && is_rest[tick]))));
               rest.push_back(int(is_rest[tick]));
@@ -616,7 +632,12 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
 
             sobj["notes"] = positions;
             sobj["ticks"] = ticks;
+            sobj["pitches"] = pitches_ar;
+
             sobj["blines"] = barlines;
+            sobj["btimes"] = bartimes;
+            sobj["bbeats"] = barbeats;
+
             sobj["times"] = times;
             sobj["is_change"] = change;
             sobj["is_rest"] = rest;
