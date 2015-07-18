@@ -569,6 +569,8 @@ void Ambitus::updateRange()
                               && chord->type() == Element::Type::CHORD) {
                         // update pitch range (with associated tpc's)
                         foreach (Note* n, chord->notes()) {
+                              if (!n->play())         // skip notes which are not to be played
+                                    continue;
                               int pitch = n->ppitch();
                               if (pitch > pitchTop) {
                                     pitchTop = pitch;
