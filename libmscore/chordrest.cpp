@@ -42,6 +42,7 @@
 #include "figuredbass.h"
 #include "icon.h"
 #include "utils.h"
+#include "keysig.h"
 
 namespace Ms {
 
@@ -836,7 +837,6 @@ Element* ChordRest::drop(const DropData& data)
                   score()->cmdInsertClef(static_cast<Clef*>(e), this);
                   break;
 
-            case Element::Type::KEYSIG:
             case Element::Type::TIMESIG:
                   return measure()->drop(data);
 
@@ -976,6 +976,17 @@ Element* ChordRest::drop(const DropData& data)
                         }
                   }
                   delete e;
+                  break;
+
+            case Element::Type::KEYSIG:
+                  {
+                  KeySig* ks    = static_cast<KeySig*>(e);
+                  KeySigEvent k = ks->keySigEvent();
+                  delete ks;
+
+                  // apply only to this stave
+                  score()->undoChangeKeySig(staff(), tick(), k);
+                  }
                   break;
 
             default:
