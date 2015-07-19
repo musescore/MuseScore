@@ -350,20 +350,41 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm, AccidentalState* as)
 
 AccidentalVal Measure::findAccidental(Note* note) const
       {
+      Chord* chord = note->chord();
       AccidentalState tversatz;  // state of already set accidentals for this measure
-      tversatz.init(note->chord()->staff()->key(tick()));
+      tversatz.init(chord->staff()->key(tick()));
 
-      Segment::Type st = Segment::Type::ChordRest;
-      for (Segment* segment = first(st); segment; segment = segment->next(st)) {
-            int startTrack = note->staffIdx() * VOICES;
-            int endTrack   = startTrack + VOICES;
-            for (int track = startTrack; track < endTrack; ++track) {
-                  Element* e = segment->element(track);
-                  if (!e || e->type() != Element::Type::CHORD)
+      for (Segment* segment = first(); segment; segment = segment->next()) {
+            int startTrack = chord->staffIdx() * VOICES;
+            if (segment->segmentType() == Segment::Type::KeySig) {
+                  KeySig* ks = static_cast<KeySig*>(segment->element(startTrack));
+                  if (!ks)
                         continue;
-                  Chord* chord = static_cast<Chord*>(e);
-                  for (Chord* chord1 : chord->graceNotes()) {
-                        for (Note* note1 : chord1->notes()) {
+                  tversatz.init(chord->staff()->key(segment->tick()));
+                  }
+            else if (segment->segmentType() == Segment::Type::ChordRest) {
+                  int endTrack   = startTrack + VOICES;
+                  for (int track = startTrack; track < endTrack; ++track) {
+                        Element* e = segment->element(track);
+                        if (!e || e->type() != Element::Type::CHORD)
+                              continue;
+                        Chord* chord = static_cast<Chord*>(e);
+                        for (Chord* chord1 : chord->graceNotes()) {
+                              for (Note* note1 : chord1->notes()) {
+                                    if (note1->tieBack())
+                                          continue;
+                                    //
+                                    // compute accidental
+                                    //
+                                    int tpc  = note1->tpc();
+                                    int line = absStep(tpc, note1->epitch());
+
+                                    if (note == note1)
+                                          return tversatz.accidentalVal(line);
+                                    tversatz.setAccidentalVal(line, tpc2alter(tpc));
+                                    }
+                              }
+                        for (Note* note1 : chord->notes()) {
                               if (note1->tieBack())
                                     continue;
                               //
@@ -376,19 +397,6 @@ AccidentalVal Measure::findAccidental(Note* note) const
                                     return tversatz.accidentalVal(line);
                               tversatz.setAccidentalVal(line, tpc2alter(tpc));
                               }
-                        }
-                  for (Note* note1 : chord->notes()) {
-                        if (note1->tieBack())
-                              continue;
-                        //
-                        // compute accidental
-                        //
-                        int tpc  = note1->tpc();
-                        int line = absStep(tpc, note1->epitch());
-
-                        if (note == note1)
-                              return tversatz.accidentalVal(line);
-                        tversatz.setAccidentalVal(line, tpc2alter(tpc));
                         }
                   }
             }
@@ -2122,7 +2130,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                         }
                   else {
                         // if key sig not at beginning of measure => courtesy key sig
-                        bool courtesySig = (curTick > tick());
+//                        bool courtesySig = (curTick > tick());
+                        bool courtesySig = (curTick == endTick());
                         segment = getSegment(courtesySig ? Segment::Type::KeySigAnnounce : Segment::Type::KeySig, curTick);
                         segment->add(ks);
                         if (!courtesySig)
@@ -3794,7 +3803,13 @@ void Measure::layoutStage1()
                               }
                         }
 
-                  if (segment->segmentType() == Segment::Type::ChordRest) {
+                  if (segment->segmentType() == Segment::Type::KeySig) {
+                        KeySig* ks = static_cast<KeySig*>(segment->element(staffIdx * VOICES));
+                        if (!ks)
+                              continue;
+                        as.init(staff->key(segment->tick()));
+                        }
+                  else if (segment->segmentType() == Segment::Type::ChordRest) {
                         Staff* staff     = score()->staff(staffIdx);
                         qreal staffMag  = staff->mag();
 
