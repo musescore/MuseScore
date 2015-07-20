@@ -438,12 +438,19 @@ void Score::updateRepeatList(bool expandRepeats)
             s->tick  = 0;
             s->len   = m->tick() + m->ticks();
             s->utick = 0;
-            s->utime = 0.0;
-            s->timeOffset = 0.0;
+//            s->utime = 0.0;
+//            s->timeOffset = 0.0;
             repeatList()->append(s);
             }
       else
             repeatList()->unwind();
+
+      // regenerate unrolled tempomap now that repeatlist has been updated.
+      // first delete the stale unrolledTempomap before regenerating (if it exists)
+      if(rootScore()->_unrolledTempomap)
+            delete rootScore()->_unrolledTempomap;
+      rootScore()->_unrolledTempomap = new TempoMap( repeatList(), tempomap() );
+
       if (MScore::debugMode)
             repeatList()->dump();
       setPlaylistDirty();

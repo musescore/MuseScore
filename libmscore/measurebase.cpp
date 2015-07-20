@@ -149,7 +149,7 @@ void MeasureBase::add(Element* e)
                         break;
                   case LayoutBreak::Type::SECTION:
                         _sectionBreak = b;
-//does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
+                        score()->setPauseThroughTick(endTick(), b->pause());
                         score()->setLayoutAll(true);
                         break;
                   }
@@ -175,7 +175,7 @@ void MeasureBase::remove(Element* el)
                         break;
                   case LayoutBreak::Type::SECTION:
                         _sectionBreak = 0;
-                        score()->setPause(endTick(), 0);
+                        score()->setPauseThroughTick(endTick(), 0.0); // currently section breaks are the only event causing a pause through a tick, so it is safe to set this pause to 0 when removing section break for now.
                         score()->addLayoutFlags(LayoutFlag::FIX_TICKS);
                         score()->setLayoutAll(true);
                         break;

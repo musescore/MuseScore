@@ -32,7 +32,7 @@ static void saveMeasureEvents(Xml& xml, Measure* m, int offset)
       for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
             int tick = s->tick() + offset;
             int id = segs[(void*)s];
-            int time = lrint(m->score()->repeatList()->utick2utime(tick) * 1000);
+            int time = lrint(m->score()->utick2utime(tick) * 1000);
             xml.tagE(QString("event elid=\"%1\" position=\"%2\"")
                .arg(id)
                .arg(time)
@@ -128,7 +128,7 @@ bool savePositions(Score* score, const QString& name, bool segments)
                         else {
                               int tick = m->tick() + tickOffset;
                               int id = segs[(void*)m];
-                              int time = lrint(m->score()->repeatList()->utick2utime(tick) * 1000);
+                              int time = lrint(m->score()->utick2utime(tick) * 1000);
                               xml.tagE(QString("event elid=\"%1\" position=\"%2\"")
                                  .arg(id)
                                  .arg(time)

@@ -10,6 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QtCore/QtDebug>
 #include "repeatlist.h"
 #include "score.h"
 #include "measure.h"
@@ -96,8 +97,18 @@ RepeatSegment::RepeatSegment()
       tick       = 0;
       len        = 0;
       utick      = 0;
-      utime      = 0.0;
-      timeOffset = 0.0;
+//      utime      = 0.0;
+//      timeOffset = 0.0;
+      }
+
+//---------------------------------------------------------
+//   RepeatSegment::dump
+//    prints contents of just this repeat segment via qDebug to console
+//---------------------------------------------------------
+
+void RepeatSegment::dump() const
+      {
+      qDebug("RepeatSegment:\ttick=%d, len=%d, utick=%d", tick, len, utick );
       }
 
 //---------------------------------------------------------
@@ -130,18 +141,21 @@ int RepeatList::ticks()
 
 void RepeatList::update()
       {
-      const TempoMap* tl = _score->tempomap();
+
+      // repeatlist is only concerned with ticks/uticks, and no longer concerned with time/utime.
+
+//      const TempoMap* tl = _score->tempomap();
 
       int utick = 0;
-      qreal t  = 0;
+//      qreal t  = 0;
 
       for(RepeatSegment* s : *this) {
             s->utick      = utick;
-            s->utime      = t;
-            qreal ct      = tl->tick2time(s->tick);
-            s->timeOffset = t - ct;
+      //      s->utime      = t;
+      //      qreal ct      = tl->tick2time(s->tick);
+      //      s->timeOffset = t - ct;
             utick        += s->len;
-            t            += tl->tick2time(s->tick + s->len) - ct;
+      //      t            += tl->tick2time(s->tick + s->len) - ct;
             }
       }
 
@@ -183,62 +197,24 @@ int RepeatList::tick2utick(int tick) const
       }
 
 //---------------------------------------------------------
-//   utick2utime
-//---------------------------------------------------------
-
-qreal RepeatList::utick2utime(int tick) const
-      {
-      unsigned n = size();
-      unsigned ii = (idx1 < n) && (tick >= at(idx1)->utick) ? idx1 : 0;
-      for (unsigned i = ii; i < n; ++i) {
-            if ((tick >= at(i)->utick) && ((i + 1 == n) || (tick < at(i+1)->utick))) {
-                  int t     = tick - (at(i)->utick - at(i)->tick);
-                  qreal tt = _score->tempomap()->tick2time(t) + at(i)->timeOffset;
-                  return tt;
-                  }
-            }
-      return 0.0;
-      }
-
-//---------------------------------------------------------
-//   utime2utick
-//---------------------------------------------------------
-
-int RepeatList::utime2utick(qreal t) const
-      {
-      unsigned n = size();
-      unsigned ii = (idx2 < n) && (t >= at(idx2)->utime) ? idx2 : 0;
-      for (unsigned i = ii; i < n; ++i) {
-            if ((t >= at(i)->utime) && ((i + 1 == n) || (t < at(i+1)->utime))) {
-                  idx2 = i;
-                  return _score->tempomap()->time2tick(t - at(i)->timeOffset) + (at(i)->utick - at(i)->tick);
-                  }
-            }
-      if (MScore::debugMode) {
-            qFatal("time %f not found in RepeatList", t);
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   dump
 //---------------------------------------------------------
 
 void RepeatList::dump() const
       {
-#if 0
+//#if 0
       qDebug("==Dump Repeat List:==");
       foreach(const RepeatSegment* s, *this) {
-            qDebug("%p  tick: %3d(%d) %3d(%d) len %d(%d) beats  %f + %f", s,
+            qDebug("%p  tick: %3d(%d) %3d(%d) len %d(%d)", s,
                s->utick / MScore::division,
                s->utick / MScore::division / 4,
                s->tick / MScore::division,
                s->tick / MScore::division / 4,
                s->len / MScore::division,
-               s->len / MScore::division / 4,
-               s->utime, s->timeOffset);
+               s->len / MScore::division / 4);
+      //         s->utime, s->timeOffset);
             }
-#endif
+//#endif
       }
 
 //---------------------------------------------------------

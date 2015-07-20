@@ -322,6 +322,7 @@ void Score::init()
       _showOmr                = false;
       _sigmap                 = 0;
       _tempomap               = 0;
+      _unrolledTempomap       = 0;
       _layoutMode             = LayoutMode::PAGE;
       _noteHeadWidth          = 0.0;      // set in doLayout()
       _midiPortCount          = 0;
@@ -337,6 +338,7 @@ Score::Score()
       _parentScore = 0;
       init();
       _tempomap = new TempoMap;
+      _unrolledTempomap = 0;  // unrolled tempomap is not generated until unwind repeatlist
       _sigmap   = new TimeSigMap();
       _style    = *(MScore::defaultStyle());
       accInfo = tr("No selection");
@@ -348,6 +350,7 @@ Score::Score(const MStyle* s)
       _parentScore = 0;
       init();
       _tempomap = new TempoMap;
+      _unrolledTempomap = 0;  // unrolled tempomap is not generated until unwind repeatlist
       _sigmap   = new TimeSigMap();
       _style    = *s;
       accInfo = tr("No selection");
@@ -358,6 +361,7 @@ Score::Score(const MStyle* s)
 //    _undo
 //    _sigmap
 //    _tempomap
+//    _unrolledTempoMap
 //    _repeatList
 //    _links
 //    _staffTypes
@@ -428,6 +432,9 @@ Score::~Score()
       delete _tempomap;
       delete _sigmap;
       delete _repeatList;
+
+      if(_unrolledTempomap)
+            delete _unrolledTempomap;
       }
 
 //---------------------------------------------------------
@@ -467,6 +474,8 @@ void Score::addMeasure(MeasureBase* m, MeasureBase* pos)
 
 void Score::fixTicks()
       {
+      invalidateUnrolledTempomap();
+
       int tick = 0;
       Measure* fm = firstMeasure();
       if (fm == 0)
@@ -483,6 +492,7 @@ void Score::fixTicks()
             tempomap()->clear();
             smap->clear();
             smap->add(0, SigEvent(sig,  nsig, 0));
+
             }
 
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
@@ -499,11 +509,12 @@ void Score::fixTicks()
                   m->mmRest()->moveTicks(diff);
 
 //            if (!parentScore()) {
+
                   //
                   //  implement section break rest
                   //
                   if (m->sectionBreak() && m->pause() != 0.0)
-                        setPause(m->tick() + m->ticks(), m->pause());
+                        setPauseThroughTick(m->tick() + m->ticks(), m->pause());
 
                   //
                   // implement fermata as a tempo change
@@ -522,7 +533,7 @@ void Score::fixTicks()
                                           }
                                     }
                               if (length != 0.0)
-                                    setPause(tick, length);
+                                    setPauseBeforeTick(tick, length);
                               }
                         else if (s->segmentType() == Segment::Type::TimeSig) {
                               for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
@@ -1741,18 +1752,32 @@ Segment* Score::lastSegment() const
 //   utick2utime
 //---------------------------------------------------------
 
-qreal Score::utick2utime(int tick) const
+qreal Score::utick2utime(int utick)
       {
-      return repeatList()->utick2utime(tick);
+      if ( !unrolledTempomap() ) {
+            qDebug( "asked for utick2utime, but unrolledTempomap is invalid.  Regenerating unrolledTempomap..." );
+            unrollTempomap();
+            }
+
+      qreal utime = unrolledTempomap()->tick2time(utick);
+      qDebug("utick2utime(%d) => %f", utick, utime);
+      return utime;
       }
 
 //---------------------------------------------------------
 //   utime2utick
 //---------------------------------------------------------
 
-int Score::utime2utick(qreal utime) const
+int Score::utime2utick(qreal utime)
       {
-      return repeatList()->utime2utick(utime);
+      if ( !unrolledTempomap() ) {
+            qDebug( "asked for utime2utick, but unrolledTempomap is invalid.  Regenerating unrolledTempomap..." );
+            unrollTempomap();
+            }
+
+      int utick = unrolledTempomap()->time2tick(utime);
+      qDebug("utime2utick(%f) => %d", utime, utick);
+      return utick;
       }
 
 //---------------------------------------------------------
@@ -1897,12 +1922,64 @@ void Score::setTempomap(TempoMap* tm)
       }
 
 //---------------------------------------------------------
+//   setRelTempo
+//---------------------------------------------------------
+
+void Score::setRelTempo(qreal val)
+      {
+      tempomap()->setRelTempo(val);
+      if(unrolledTempomap())
+            unrolledTempomap()->setRelTempo(val);
+      }
+
+//---------------------------------------------------------
 //   tempomap
 //---------------------------------------------------------
 
 TempoMap* Score::tempomap() const
       {
       return rootScore()->_tempomap;
+      }
+
+//---------------------------------------------------------
+//   unrolledTempomap
+//---------------------------------------------------------
+
+TempoMap* Score::unrolledTempomap() const
+      {
+      return rootScore()->_unrolledTempomap;
+      }
+
+//---------------------------------------------------------
+//   invalidateUnrolledTempomap
+//---------------------------------------------------------
+
+void Score::invalidateUnrolledTempomap()
+      {
+      Score* root = rootScore();
+      qDebug("invalidating root->_unrolledTempomap addr: %x", root->_unrolledTempomap );
+      if ( root->_unrolledTempomap ) {
+            delete root->_unrolledTempomap;
+            root->_unrolledTempomap = 0;  // point to NULL to indicate that _unrolledTempomap now longer exists
+            qDebug("root->_unrolledTempomap deleted, now is invalid. Will be regenerated when needed.");
+            }
+      else
+            qDebug("root->_unrolledTempomap already invalid. Will be regenerated when needed.");
+      }
+
+//---------------------------------------------------------
+//   unrolledTempomap
+//---------------------------------------------------------
+
+void Score::unrollTempomap()
+      {
+      qDebug("unrollTempomap() called...  unrolling tempomap now...");
+      //should only be root score if this is called.  rootScore()->_unrolledTempomap = new TempoMap( repeatList(), tempomap() );
+
+      if ( _unrolledTempomap )
+            invalidateUnrolledTempomap();
+
+      _unrolledTempomap = new TempoMap( _repeatList, _tempomap );
       }
 
 //---------------------------------------------------------
@@ -3192,6 +3269,8 @@ void Score::setTempo(Segment* segment, qreal tempo)
 
 void Score::setTempo(int tick, qreal tempo)
       {
+      qDebug( "Score::setTempo( tick %d, %f bps)", tick, tempo );
+      invalidateUnrolledTempomap();
       tempomap()->setTempo(tick, tempo);
       _playlistDirty = true;
       }
@@ -3202,17 +3281,33 @@ void Score::setTempo(int tick, qreal tempo)
 
 void Score::removeTempo(int tick)
       {
+      qDebug( "Score::removeTempo( tick %d)", tick );
+      invalidateUnrolledTempomap();
       tempomap()->delTempo(tick);
       _playlistDirty = true;
       }
 
 //---------------------------------------------------------
-//   setPause
+//   setPauseBeforeTick
 //---------------------------------------------------------
 
-void Score::setPause(int tick, qreal seconds)
+void Score::setPauseBeforeTick(int tick, qreal seconds)
       {
-      tempomap()->setPause(tick, seconds);
+      qDebug( "Score::setPauseBeforeTick( tick %d, %f seconds)", tick, seconds );
+      invalidateUnrolledTempomap();
+      tempomap()->setPauseBeforeTick(tick, seconds);
+      _playlistDirty = true;
+      }
+
+//---------------------------------------------------------
+//   setPauseThroughTick
+//---------------------------------------------------------
+
+void Score::setPauseThroughTick(int tick, qreal seconds)
+      {
+      qDebug( "Score::setPauseThroughTick( tick %d, %f seconds)", tick, seconds );
+      invalidateUnrolledTempomap();
+      tempomap()->setPauseThroughTick(tick, seconds);
       _playlistDirty = true;
       }
 
