@@ -445,6 +445,9 @@ qreal * find_margins(Score * score) {
           qreal top = rect.top();
           qreal bot = rect.bottom();
 
+          //if (e->type() == Element::Type::SLUR_SEGMENT)
+            qDebug() << e->name() << sys_top-top << bot-sys_bot;
+
           if (!e->visible()) continue;
 
           if (top<max_top)  {
@@ -464,7 +467,7 @@ qreal * find_margins(Score * score) {
       }
     }
 
-    //qDebug() << "MARGINS: "<< max_tm << " " << max_bm << " " << score->styleP(StyleIdx::minSystemDistance)/2 << endl;
+    qDebug() << "MARGINS: "<< max_tm << " " << max_bm << " " << score->styleP(StyleIdx::minSystemDistance)/2 << endl;
 
     qreal * res = new qreal[2];
     res[0] = max_tm; res[1] = max_bm;
@@ -489,7 +492,7 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
       qreal top_margin = margins[0]+0.5;
       qreal bot_margin = margins[1]+0.5;
       qreal h_margin = score->styleP(StyleIdx::staffDistance);
-      if (top_margin<bot_margin) bot_margin = top_margin;
+      if (top_margin<bot_margin) top_margin = bot_margin;
       delete [] margins;
 
       QSet<Note *> * tie_ends = NULL; 
@@ -592,7 +595,7 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
                else if (e->type() == Element::Type::MEASURE) {
                   Measure * m = (Measure*)e;
                   barlines.push_back(lpos);
-                  barbeats.push_back(m->timesig().numerator());
+                  barbeats.push_back(m->len().numerator());
 
                   int tick = m->first()->tick();
                   bartimes.push_back(use_t2t?
