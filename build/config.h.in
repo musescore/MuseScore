@@ -32,9 +32,10 @@
 #cmakedefine HAS_AUDIOFILE
 #cmakedefine USE_SSE
 
-#define INSTALL_NAME      "${Mscore_INSTALL_NAME}"
-#define INSTPREFIX        "${CMAKE_INSTALL_PREFIX}"
-#define VERSION           "${MUSESCORE_VERSION_FULL}"
+#define MUSESCORE_NAME_VERSION  "${MUSESCORE_NAME_VERSION}"
+#define INSTALL_NAME            "${Mscore_INSTALL_NAME}"
+#define INSTPREFIX              "${CMAKE_INSTALL_PREFIX}"
+#define VERSION                 "${MUSESCORE_VERSION_FULL}"
 
 #cmakedefine AEOLUS
 #cmakedefine ZERBERUS

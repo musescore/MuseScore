@@ -342,7 +342,7 @@ MuseScore::MuseScore()
    : QMainWindow()
       {
       _sstate = STATE_INIT;
-      setWindowTitle(QString("MuseScore"));
+      setWindowTitle(QString(MUSESCORE_NAME_VERSION));
       setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
 
       ucheck = new UpdateChecker();
@@ -1357,7 +1357,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             }
 #endif
       if (!cs) {
-            setWindowTitle("MuseScore");
+            setWindowTitle(MUSESCORE_NAME_VERSION);
             if (_navigator && _navigator->widget()) {
                   navigator()->setScoreView(view);
                   navigator()->setScore(0);
@@ -1408,9 +1408,9 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             mag->setCurrentIndex(int(view->magIdx()));
 
       if (cs->parentScore())
-            setWindowTitle("MuseScore: " + cs->parentScore()->name() + "-" + cs->name());
+            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->parentScore()->name() + "-" + cs->name());
       else
-            setWindowTitle("MuseScore: " + cs->name());
+            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->name());
 
       QAction* a = getAction("concert-pitch");
       a->setChecked(cs->styleB(StyleIdx::concertPitch));
