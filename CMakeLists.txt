@@ -72,7 +72,7 @@ option(OCR           "enable OCR, requires OMR" OFF)           # requires tesser
 option(SOUNDFONT3    "ogg vorbis compressed fonts" ON)         # enable ogg vorbis compressed fonts, require ogg & vorbis
 option(HAS_AUDIOFILE "enable audio export" ON)                 # requires libsndfile
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
-option(BUILD_LAME    "enable mp3 export" ON)                   # requires libmp3lame
+option(BUILD_LAME    "enable mp3 export" ON)                   # requires libmp3lame (non-free), call CMake with -DBUILD_LAME="OFF" to disable
 
 SET(JACK_LONGNAME "jack (jack audio connection kit)")
 SET(JACK_MIN_VERSION "0.98.0")
@@ -131,7 +131,7 @@ else (APPLE)
 endif(APPLE)
 
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH ON) # Call CMake with option -DCMAKE_SKIP_RPATH to not set RPATH (Debian packaging requirement)
 set(CMAKE_SKIP_RULE_DEPENDENCY TRUE)
 
 # The Mscore version number.
@@ -146,6 +146,14 @@ SET(MUSESCORE_NAME_VERSION "${MUSESCORE_NAME} ${MUSESCORE_VERSION_MAJOR}")
 #
 SET(MUSESCORE_VERSION_FULL  "${MUSESCORE_VERSION}.${MUSESCORE_VERSION_PATCH}")
 
+if (MUSESCORE_LABEL)
+  SET (MUSESCORE_NAME_VERSION "${MUSESCORE_NAME_VERSION} ${MUSESCORE_LABEL}")
+endif (MUSESCORE_LABEL)
+
+if (MSCORE_UNSTABLE)
+  SET (MUSESCORE_NAME_VERSION "${MUSESCORE_NAME_VERSION} (${MUSESCORE_VERSION_FULL} unstable)")
+endif (MSCORE_UNSTABLE)
+
 if (MINGW OR APPLE)
   if(MINGW)
       SET(Mscore_INSTALL_NAME  "")
@@ -155,7 +163,7 @@ if (MINGW OR APPLE)
       SET(Mscore_SHARE_NAME    "mscore.app/")
   endif(MINGW)
 else (MINGW OR APPLE)
-      SET(Mscore_INSTALL_NAME  "mscore-${MUSESCORE_VERSION}/")
+      SET(Mscore_INSTALL_NAME  "mscore${MSCORE_INSTALL_SUFFIX}-${MUSESCORE_VERSION}/")
       SET(Mscore_SHARE_NAME    "share/")
 endif (MINGW OR APPLE)
 
@@ -395,31 +403,44 @@ configure_file (
       )
 
 if (NOT MINGW AND NOT APPLE)
+    #### PACKAGING for Linux and BSD based systems (more in mscore/CMakeLists.txt) ####
     #
     #     set library search path for runtime linker to load the same
     #     qt libraries as we used at compile time
     #
-    set (CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath=${_qt5Core_install_prefix}/lib")
-    # install desktop file
-    install( FILES build/mscore.desktop DESTINATION share/applications)
+    SET(CMAKE_INSTALL_RPATH "${_qt5Core_install_prefix}/lib") # ignored if CMAKE_SKIP_RPATH="TRUE"
+    # install desktop file (perform variable substitution first)
+    configure_file(build/mscore.desktop.in mscore${MSCORE_INSTALL_SUFFIX}.desktop)
+    install( FILES ${PROJECT_BINARY_DIR}/mscore${MSCORE_INSTALL_SUFFIX}.desktop DESTINATION share/applications)
+    # substitute variables within man pages
+    set(MAN_NAME mscore)
+    set(MAN_ALIAS musescore)
+    set(MAN_EXTENSION .1)
+    set(MAN_FULL_NAME ${MAN_NAME}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
+    set(MAN_FULL_ALIAS ${MAN_ALIAS}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
+    set(MAN_TARGET ${PROJECT_SOURCE_DIR}/build/${MAN_NAME}${MAN_EXTENSION}.in)
+    set(MAN_BUILD ${PROJECT_BINARY_DIR}/${MAN_FULL_NAME})
+    configure_file(${MAN_TARGET} ${MAN_BUILD})
     # compress man pages if gzip is installed (don't on OpenBSD)
     # note: compressing man pages is normal on Linux but not OpenBSD
-    set(MAN_TARGET ${PROJECT_SOURCE_DIR}/build/mscore.1)
     find_program( GZIP_EXECUTABLE gzip DOC "A tool for compressing manpages (optional)." )
     if (GZIP_EXECUTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
         message(STATUS "Found gzip. Man pages will be compressed.")
-        set(MAN_BUILD ${PROJECT_BINARY_DIR}/mscore.1.gz)
+        set(MAN_TARGET ${MAN_BUILD})
+        set(MAN_EXTENSION ${MAN_EXTENSION}.gz)
+        set(MAN_FULL_NAME ${MAN_NAME}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
+        set(MAN_FULL_ALIAS ${MAN_ALIAS}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
+        set(MAN_BUILD ${PROJECT_BINARY_DIR}/${MAN_FULL_NAME})
         add_custom_command(
             OUTPUT ${MAN_BUILD}
             DEPENDS ${MAN_TARGET}
-            COMMAND ${GZIP_EXECUTABLE} < ${MAN_TARGET} > ${MAN_BUILD}
+            COMMAND ${GZIP_EXECUTABLE} -9 < ${MAN_TARGET} > ${MAN_BUILD}
             )
         add_custom_target(manpages
             DEPENDS ${MAN_BUILD}
             COMMAND echo "Man pages have been compressed ready for installation."
             VERBATIM
             )
-        set(MAN_TARGET ${MAN_BUILD})
     else (GZIP_EXECUTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
         if (CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
             message(STATUS "System is OpenBSD: Man pages will not be compressed.")
@@ -432,9 +453,24 @@ if (NOT MINGW AND NOT APPLE)
             )
     endif (GZIP_EXECUTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
     # install man pages in either compressed or uncompressed form
-    install( FILES ${MAN_TARGET} DESTINATION share/man/man1 COMPONENT doc)
+    install( FILES ${MAN_BUILD} DESTINATION share/man/man1 COMPONENT doc)
+    # create symlink alias for man pages so `man musescore` = `man mscore`
+    find_program( LN_EXECUTABLE ln DOC "A tool for creating symbolic link aliases (optional)." )
+    if (LN_EXECUTABLE)
+        message(STATUS "Found ln. Symlink aliases will be created for MuseScore executable and the man pages.")
+        add_custom_command(
+            TARGET manpages
+            COMMAND echo "Creating symlink alias for man pages."
+            COMMAND ${LN_EXECUTABLE} -sf "${MAN_FULL_NAME}" "${MAN_FULL_ALIAS}"
+            COMMAND echo 'Symlink alias: ${MAN_FULL_ALIAS} -> ${MAN_FULL_NAME}'
+            )
+        install( FILES ${PROJECT_BINARY_DIR}/${MAN_FULL_ALIAS} DESTINATION share/man/man1 COMPONENT doc)
+     else (LN_EXECUTABLE)
+         message(STATUS "ln not found (it is optional). No symlink aliases will be created.")
+     endif (LN_EXECUTABLE)
     # add .MSCZ and .MSCX to MIME database (informs system that filetypes .MSCZ & .MSCX are MuseScore files)
-    install( FILES ${PROJECT_SOURCE_DIR}/build/musescore.xml DESTINATION share/mime/packages COMPONENT doc)
+    configure_file(build/musescore.xml.in musescore${MSCORE_INSTALL_SUFFIX}.xml)
+    install( FILES ${PROJECT_BINARY_DIR}/musescore${MSCORE_INSTALL_SUFFIX}.xml DESTINATION share/mime/packages COMPONENT doc)
     # Note: must now run "update-mime-database" to apply changes. This is done in the Makefile.
 endif (NOT MINGW AND NOT APPLE)
 
