@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-  <mime-type type="application/x-musescore">
+  <mime-type type="application/x-musescore@MSCORE_INSTALL_SUFFIX@">@Variables_substituted_by_CMAKE_on_installation@
     <comment>MuseScore file</comment>
     <sub-class-of type="application/zip"/>
     <glob pattern="*.mscz"/>
   </mime-type>
-  <mime-type type="application/x-musescore+xml">
+  <mime-type type="application/x-musescore@MSCORE_INSTALL_SUFFIX@+xml">
     <comment>uncompressed MuseScore file</comment>
     <sub-class-of type="application/xml"/>
     <glob pattern="*.mscx" />
   </mime-type>
-  <mime-type type="application/vnd.recordare.musicxml">
+  <mime-type type="application/vnd.recordare.musicxml@MSCORE_INSTALL_SUFFIX@">
     <!-- http://www.musicxml.com/for-developers/musicxml-dtd/ -->
     <_comment>MusicXML file</_comment>
     <sub-class-of type="application/zip"/>
@@ -19,7 +19,7 @@
 <!--  <generic-icon name="audio-x-generic"/> Uncomment to use generic audio file icon -->
     <glob pattern="*.mxl"/>
   </mime-type>
-  <mime-type type="application/vnd.recordare.musicxml+xml">
+  <mime-type type="application/vnd.recordare.musicxml@MSCORE_INSTALL_SUFFIX@+xml">
     <!-- http://www.musicxml.com/for-developers/musicxml-dtd/ -->
     <_comment>uncompressed MusicXML file</_comment>
     <sub-class-of type="application/xml"/>
