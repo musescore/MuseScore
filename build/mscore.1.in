@@ -19,13 +19,13 @@
 .\" TeX users may be more comfortable with the \fB<whatever>\fP and
 .\" \fI<whatever>\fP escape sequences to invode bold face and italics, 
 .\" respectively.
-.SH NAME
-\fBmscore\fP \- MuseScore sheet music editor.
+.SH NAME@Variables_substituted_by_CMAKE_on_installation@
+\fBmscore@MSCORE_INSTALL_SUFFIX@\fP \- @MUSESCORE_NAME_VERSION@ sheet music editor.
 
 MuseScore is a free and open source WYSIWYG typesetting program for musical scores, released under the GNU General Public Licence.
 
 .SH SYNOPSIS
-.B mscore
+.B mscore@MSCORE_INSTALL_SUFFIX@
 .RI [ options ]
 .RI [ filename(s) ]
 
