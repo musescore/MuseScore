@@ -200,6 +200,7 @@ class Element : public QObject, public ScoreElement {
             SLUR_SEGMENT,
             STAFF_LINES,
             BAR_LINE,
+            SYSTEM_DIVIDER,
             STEM_SLASH,
             LINE,
 

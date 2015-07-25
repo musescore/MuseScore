@@ -39,6 +39,7 @@
 #include "chordrest.h"
 #include "iname.h"
 #include "spanner.h"
+#include "sym.h"
 
 namespace Ms {
 
@@ -1180,5 +1181,135 @@ Element* System::prevElement()
             }
       return re;
       }
+
+//---------------------------------------------------------
+//   SystemDivider
+//---------------------------------------------------------
+
+SystemDivider::SystemDivider(Score* s) : Symbol(s)
+      {
+      setSystemFlag(true);
+      setTrack(0);
+      // default value, but not valid until setDividerType()
+      _dividerType = SystemDivider::Type::LEFT;
+      _sym = SymId::systemDivider;
+      }
+
+//---------------------------------------------------------
+//   SystemDivider
+//---------------------------------------------------------
+
+SystemDivider::SystemDivider(const SystemDivider& sd) : Symbol(sd)
+      {
+      _dividerType = sd._dividerType;
+      }
+
+//---------------------------------------------------------
+//   setDividerType
+//---------------------------------------------------------
+
+void SystemDivider::setDividerType(SystemDivider::Type v)
+      {
+      ScoreFont* sf = _score->scoreFont();
+       _dividerType = v;
+       if (v == SystemDivider::Type::LEFT) {
+             SymId symLeft = Sym::name2id(_score->styleSt(StyleIdx::dividerLeftSym));
+             if (!symIsValid(symLeft))
+                   sf = sf->fallbackFont();
+             setSym(symLeft, sf);
+             setXoff(_score->styleD(StyleIdx::dividerLeftX));
+             setYoff(_score->styleD(StyleIdx::dividerLeftY));
+             setAlign(AlignmentFlags::LEFT | AlignmentFlags::VCENTER);
+             }
+       else {
+             SymId symRight = Sym::name2id(_score->styleSt(StyleIdx::dividerRightSym));
+             if (!symIsValid(symRight))
+                   sf = sf->fallbackFont();
+             setSym(symRight, sf);
+             setXoff(_score->styleD(StyleIdx::dividerRightX));
+             setYoff(_score->styleD(StyleIdx::dividerRightY));
+             setAlign(AlignmentFlags::RIGHT | AlignmentFlags::VCENTER);
+             }
+      }
+
+//---------------------------------------------------------
+//   drag
+//---------------------------------------------------------
+
+QRectF SystemDivider::drag(EditData* ed)
+      {
+      setGenerated(false);
+      return Symbol::drag(ed);
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void SystemDivider::layout()
+      {
+      Symbol::layout();
+      // center vertically between systems
+      rypos() -= bbox().y();
+      Measure* m = measure();
+      if (m) {
+            System* s1 = m->system();
+            if (!s1)
+                  return;
+            rypos() += s1->height() + (s1->distance() + s1->stretchDistance()) * 0.5;
+            // center horizontally under left/right barline
+            if (dividerType() == SystemDivider::Type::LEFT)
+                  rxpos() -= width() * 0.5;
+            else
+                  rxpos() += m->width() + width() * 0.5;
+            }
+      adjustReadPos();
+      }
+
+//---------------------------------------------------------
+//   write
+//---------------------------------------------------------
+
+void SystemDivider::write(Xml& xml) const
+      {
+      if (dividerType() == SystemDivider::Type::LEFT)
+            xml.stag(QString("SystemDivider type=\"left\""));
+      else
+            xml.stag(QString("SystemDivider type=\"right\""));
+      writeProperties(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
+void SystemDivider::read(XmlReader& e)
+      {
+      Align a = align() & AlignmentFlags::VMASK;
+      ScoreFont* sf = score()->scoreFont();
+      if (e.attribute("type") == "left") {
+            _dividerType = SystemDivider::Type::LEFT;
+            SymId sym = Sym::name2id(score()->styleSt(StyleIdx::dividerLeftSym));
+            if (!symIsValid(sym))
+                  sf = sf->fallbackFont();
+            setSym(sym, sf);
+            setAlign(a | AlignmentFlags::LEFT);
+            setXoff(score()->styleB(StyleIdx::dividerLeftX));
+            setYoff(score()->styleB(StyleIdx::dividerLeftY));
+            }
+      else {
+            _dividerType = SystemDivider::Type::RIGHT;
+            SymId sym = Sym::name2id(score()->styleSt(StyleIdx::dividerRightSym));
+            if (!symIsValid(sym))
+                  sf = sf->fallbackFont();
+            setSym(sym, sf);
+            setAlign(a | AlignmentFlags::RIGHT);
+            setXoff(score()->styleB(StyleIdx::dividerRightX));
+            setYoff(score()->styleB(StyleIdx::dividerRightY));
+            }
+      Symbol::read(e);
+      }
+
 }
 

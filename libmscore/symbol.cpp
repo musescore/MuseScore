@@ -58,9 +58,9 @@ void Symbol::layout()
       {
       // foreach(Element* e, leafs())     done in BSymbol::layout() ?
       //      e->layout();
-      ElementLayout::layout(this);
-      BSymbol::layout();
       setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
+      ElementLayout::layout(this);
+      BSymbol::layout();      // adjustReadPos() happens here
       }
 
 //---------------------------------------------------------
