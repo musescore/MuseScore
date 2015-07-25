@@ -20,6 +20,7 @@
 
 #include "element.h"
 #include "spatium.h"
+#include "symbol.h"
 
 namespace Ms {
 
@@ -191,6 +192,35 @@ class System : public Element {
 
 typedef QList<System*>::iterator iSystem;
 typedef QList<System*>::const_iterator ciSystem;
+
+class SystemDivider : public Symbol {
+      Q_OBJECT
+      Q_ENUMS(Type)
+
+   public:
+      enum class Type : char { LEFT, RIGHT };
+
+   private:
+      Type _dividerType;
+
+   public:
+      SystemDivider(Score* s = 0);
+      SystemDivider(const SystemDivider&);
+
+      virtual SystemDivider* clone() const override   { return new SystemDivider(*this); }
+      virtual Element::Type type() const override     { return Element::Type::SYSTEM_DIVIDER; }
+
+      Type dividerType() const                        { return _dividerType; }
+      void setDividerType(Type v);
+
+      virtual QRectF drag(EditData*) override;
+      virtual void layout() override;
+      virtual void write(Xml&) const override;
+      virtual void read(XmlReader&) override;
+
+      virtual Segment* segment() const override       { return 0; }
+      Measure* measure() const                        { return (Measure*)parent(); }
+      };
 
 
 }     // namespace Ms

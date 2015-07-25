@@ -1715,9 +1715,8 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
       int strack = staff * VOICES;
       int etrack = strack + VOICES;
       foreach (const Element* el, _el) {
-            if (!el->generated() && ((el->staffIdx() == staff) || (el->systemFlag() && writeSystemElements))) {
+            if (!el->generated() && ((el->staffIdx() == staff) || (el->systemFlag() && writeSystemElements)))
                   el->write(xml);
-                  }
             }
       Q_ASSERT(first());
       Q_ASSERT(last());
@@ -2313,6 +2312,11 @@ void Measure::read(XmlReader& e, int staffIdx)
                   noText->setTrack(e.track());
                   noText->setParent(this);
                   staves[noText->staffIdx()]->setNoText(noText);
+                  }
+            else if (tag == "SystemDivider") {
+                  SystemDivider* sd = new SystemDivider(score());
+                  sd->read(e);
+                  add(sd);
                   }
             else if (tag == "Ambitus") {
                   Ambitus* range = new Ambitus(score());
