@@ -4354,7 +4354,7 @@ static void determineTupletTypeAndCount(Tuplet* t, int& tupletType, int& tupletC
  is 1/8. For this tuplet smalles note is 1/16, count is 6.
  */
 
-TDuration determineTupletBaseLen(Tuplet* t)
+static TDuration determineTupletBaseLen(Tuplet* t)
       {
       int tupletType  = 0; // smallest note type in the tuplet
       int tupletCount = 0; // number of smallest notes in the tuplet
@@ -4400,7 +4400,7 @@ TDuration determineTupletBaseLen(Tuplet* t)
  Use note types instead of duration to prevent errors due to rounding.
  */
 
-bool isTupletFilled(Tuplet* t, TDuration normalType)
+static bool isTupletFilled(Tuplet* t, TDuration normalType)
       {
       if (!t) return false;
 
