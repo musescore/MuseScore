@@ -158,6 +158,7 @@ private:
       Fraction _timeSigDura;
 
       QVector<Tuplet*> _tuplets;                 ///< Current tuplet for each track in the current part
+      QVector<bool> _tuplImpls;                 ///< Current tuplet implicit flag for each track in the current part
       SlurDesc _slur[MAX_NUMBER_LEVEL];
       Trill* _trills[MAX_NUMBER_LEVEL];          ///< Current trills
       SLine* _brackets[MAX_BRACKETS];
