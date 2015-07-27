@@ -1709,8 +1709,9 @@ void MusicXMLParserPass1::scorePart()
                   // It is displayed by default, but can be suppressed (print-object=”no”)
                   // As of MusicXML 3.0, formatting is deprecated, with part-name in plain text
                   // and the formatted version in the part-abbreviation-display element
+                  QString name = _e.readElementText();
                   if (!(_e.attributes().value("print-object") == "no"))
-                        _partMap[id]->setPlainShortName(_e.readElementText());
+                        _partMap[id]->setPlainShortName(name);
                   }
             else if (_e.name() == "part-abbreviation-display")
                   _e.skipCurrentElement();  // skip but don't log
@@ -1723,6 +1724,7 @@ void MusicXMLParserPass1::scorePart()
             else
                   skipLogCurrElem();
             }
+      Q_ASSERT(_e.isEndElement() && _e.name() == "score-part");
       }
 
 //---------------------------------------------------------
@@ -1763,6 +1765,7 @@ void MusicXMLParserPass1::scoreInstrument(const QString& partId)
             else
                   skipLogCurrElem();
             }
+      Q_ASSERT(_e.isEndElement() && _e.name() == "score-instrument");
       }
 
 //---------------------------------------------------------
@@ -1835,6 +1838,7 @@ void MusicXMLParserPass1::midiInstrument(const QString& partId)
             else
                   skipLogCurrElem();
             }
+      Q_ASSERT(_e.isEndElement() && _e.name() == "midi-instrument");
       }
 
 //---------------------------------------------------------
