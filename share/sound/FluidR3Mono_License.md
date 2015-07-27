@@ -1,4 +1,4 @@
-FluidR3Mono_GM.sf3
+FluidR3Mono_GM.sf2
 ---
 
 Current version: 2.110 8th May 2015)
