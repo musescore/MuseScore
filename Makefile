@@ -26,8 +26,8 @@ ifeq ($(CPUS), 0)
 endif
 
 PREFIX    = "/usr/local"
-#VERSION   = "2.0.2b-${REVISION}"
-VERSION = 2.0.2
+VERSION   = "2.0.3b-${REVISION}"
+#VERSION = 2.0.2
 
 #
 # change path to include your Qt5 installation
