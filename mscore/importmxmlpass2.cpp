@@ -794,7 +794,6 @@ static void tupletAssert()
  the note length is divided by two, checked by tupletAssert().
  */
 
-#if 0
 static void smallestTypeAndCount(ChordRest const* const cr, int& type, int& count)
       {
       type = int(cr->durationType().type());
@@ -956,10 +955,6 @@ static bool isTupletFilled(Tuplet* t, TDuration normalType)
             return tupletCount >= t->ratio().numerator();
             }
       }
-#else
-extern bool isTupletFilled(Tuplet* t, TDuration normalType);
-extern TDuration determineTupletBaseLen(Tuplet* t);
-#endif
 
 //---------------------------------------------------------
 //   addTupletToChord
@@ -975,7 +970,7 @@ extern TDuration determineTupletBaseLen(Tuplet* t);
  and track are used.
  */
 
-void addTupletToChord(ChordRest* cr, Tuplet*& tuplet,
+void addTupletToChord(ChordRest* cr, Tuplet*& tuplet, bool& tuplImpl,
                       const Fraction& timeMod, const MusicXmlTupletDesc& tupletDesc,
                       const TDuration normalType)
       {
@@ -997,6 +992,14 @@ void addTupletToChord(ChordRest* cr, Tuplet*& tuplet,
       if (!tuplet) {
             if (tupletDesc.type == MxmlStartStop::START
                 || (!tuplet && (actualNotes != 1 || normalNotes != 1))) {
+                  if (tupletDesc.type != MxmlStartStop::START) {
+                        tuplImpl = true;
+                        // report missing start
+                        qDebug("implicit tuplet start cr %p tick %d track %d", cr, cr->tick(), cr->track()); // TODO
+                        }
+                  else
+                        tuplImpl = false;
+                  // create a new tuplet
                   tuplet = new Tuplet(cr->score());
                   tuplet->setTrack(cr->track());
                   tuplet->setRatio(Fraction(actualNotes, normalNotes));
@@ -1024,7 +1027,7 @@ void addTupletToChord(ChordRest* cr, Tuplet*& tuplet,
       // or when the time-modification is not found.
       if (tuplet) {
             if (tupletDesc.type == MxmlStartStop::STOP
-                || isTupletFilled(tuplet, normalType)
+                || (tuplImpl && isTupletFilled(tuplet, normalType))
                 || (actualNotes == 1 && normalNotes == 1)) {
                   // set baselen
                   TDuration td = determineTupletBaseLen(tuplet);
@@ -1327,6 +1330,7 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
       _timeSigDura = Fraction(0, 0);             // invalid
       int nstaves = _pass1.getPart(partId)->nstaves();
       _tuplets.resize(nstaves * VOICES);
+      _tuplImpls.resize(nstaves * VOICES);
       _tie    = 0;
       _lastVolta = 0;
       _hasDrumset = false;
@@ -4323,7 +4327,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   Q_ASSERT(part);
                   int scoreRelStaff = _score->staffIdx(part); // zero-based number of parts first staff in the score
                   int partRelTrack = msTrack + msVoice - scoreRelStaff * VOICES;
-                  addTupletToChord(cr, _tuplets[partRelTrack], timeMod, tupletDesc, normalType);
+                  addTupletToChord(cr, _tuplets[partRelTrack], _tuplImpls[partRelTrack], timeMod, tupletDesc, normalType);
                   }
             }
 
