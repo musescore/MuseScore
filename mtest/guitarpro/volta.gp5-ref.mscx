@@ -2638,8 +2638,8 @@
             <accidental>0</accidental>
             </KeySig>
           <Beam id="37">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="37">
             <lid>10</lid>
@@ -2691,8 +2691,8 @@
               </Note>
             </Chord>
           <Beam id="38">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="38">
             <lid>17</lid>
@@ -2744,8 +2744,8 @@
               </Note>
             </Chord>
           <Beam id="39">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="39">
             <lid>24</lid>
@@ -2814,8 +2814,8 @@
           </Measure>
         <Measure number="2">
           <Beam id="40">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="40">
             <lid>34</lid>
@@ -2867,8 +2867,8 @@
               </Note>
             </Chord>
           <Beam id="41">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="41">
             <lid>41</lid>
@@ -2920,8 +2920,8 @@
               </Note>
             </Chord>
           <Beam id="42">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="42">
             <lid>48</lid>
@@ -2990,8 +2990,8 @@
           </Measure>
         <Measure number="3">
           <Beam id="43">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="43">
             <lid>58</lid>
@@ -3043,8 +3043,8 @@
               </Note>
             </Chord>
           <Beam id="44">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="44">
             <lid>65</lid>
@@ -3096,8 +3096,8 @@
               </Note>
             </Chord>
           <Beam id="45">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="45">
             <lid>72</lid>
@@ -3166,8 +3166,8 @@
           </Measure>
         <Measure number="4">
           <Beam id="46">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="46">
             <lid>82</lid>
@@ -3219,8 +3219,8 @@
               </Note>
             </Chord>
           <Beam id="47">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="47">
             <lid>89</lid>
@@ -3272,8 +3272,8 @@
               </Note>
             </Chord>
           <Beam id="48">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="48">
             <lid>96</lid>
@@ -3342,8 +3342,8 @@
           </Measure>
         <Measure number="5">
           <Beam id="49">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="49">
             <lid>106</lid>
@@ -3395,8 +3395,8 @@
               </Note>
             </Chord>
           <Beam id="50">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="50">
             <lid>113</lid>
@@ -3448,8 +3448,8 @@
               </Note>
             </Chord>
           <Beam id="51">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="51">
             <lid>120</lid>
@@ -3518,8 +3518,8 @@
           </Measure>
         <Measure number="6">
           <Beam id="52">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="52">
             <lid>130</lid>
@@ -3571,8 +3571,8 @@
               </Note>
             </Chord>
           <Beam id="53">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="53">
             <lid>137</lid>
@@ -3624,8 +3624,8 @@
               </Note>
             </Chord>
           <Beam id="54">
-            <l1>46</l1>
-            <l2>46</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Tuplet id="54">
             <lid>144</lid>
