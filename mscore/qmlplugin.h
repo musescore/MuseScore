@@ -40,6 +40,7 @@ extern int updateVersion();
 //   @P description          QString
 //   @P pluginType           QString
 //   @P dockArea             QString
+//   @P requiresScore        bool              whether the plugin requires an existing score to run
 //   @P division             int               number of MIDI ticks for 1/4 note (read only)
 //   @P mscoreVersion        int               complete version number of MuseScore in the form: MMmmuu (read only)
 //   @P mscoreMajorVersion   int               1st part of the MuseScore version (read only)
@@ -59,6 +60,7 @@ class QmlPlugin : public QQuickItem {
       Q_PROPERTY(QString pluginType      READ pluginType WRITE setPluginType)
 
       Q_PROPERTY(QString dockArea        READ dockArea WRITE setDockArea)
+      Q_PROPERTY(bool requiresScore      READ requiresScore WRITE setRequiresScore)
       Q_PROPERTY(int division            READ division)
       Q_PROPERTY(int mscoreVersion       READ mscoreVersion)
       Q_PROPERTY(int mscoreMajorVersion  READ mscoreMajorVersion)
@@ -72,6 +74,7 @@ class QmlPlugin : public QQuickItem {
       QString _menuPath;
       QString _pluginType;
       QString _dockArea;
+      bool    _requiresScore;
       QString _version;
       QString _description;
       QFile logFile;
@@ -99,6 +102,8 @@ class QmlPlugin : public QQuickItem {
       void setDockArea(const QString& s)   { _dockArea = s;    }
       QString dockArea() const             { return _dockArea; }
       void runPlugin()                     { emit run();       }
+      void setRequiresScore(bool b)        { _requiresScore = b;    }
+      bool requiresScore() const           { return _requiresScore; }
 
       int division() const                { return MScore::division; }
       int mscoreVersion() const           { return Ms::version();      }
