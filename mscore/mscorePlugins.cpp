@@ -413,6 +413,15 @@ void MuseScore::pluginTriggered(int idx)
             }
 
       QmlPlugin* p = qobject_cast<QmlPlugin*>(obj);
+      if(MuseScoreCore::mscoreCore->currentScore() == nullptr && p->requiresScore() == true) {
+            QMessageBox::information(0,
+                  QMessageBox::tr("MuseScore"),
+                  QMessageBox::tr("No score open.\n"
+                  "This plugin requires an open score to run.\n"),
+                  QMessageBox::Ok, QMessageBox::NoButton);
+            delete obj;
+            return;
+            }
       p->setFilePath(pp.section('/', 0, -2));
 
       if (p->pluginType() == "dock" || p->pluginType() == "dialog") {
