@@ -120,7 +120,7 @@ enum class Pad : char {
 
 //---------------------------------------------------------
 //   LayoutMode
-//    PAGE   The normal page view, honors page and line breaks.
+//    PAGE   The normal page view, honors page and line breaks
 //    LINE   The panoramic view, one long system
 //    FLOAT  The "reflow" mode, ignore page and line breaks
 //    SYSTEM The "never ending page", page break are turned into line break
@@ -1117,6 +1117,10 @@ class Score : public QObject, public ScoreElement {
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
 
+      Page* currentlyPaintedPage;
+      Page* currentlyEditedPage;
+      QSet<Beam*> multiSystemBeams;
+
       friend class ChangeSynthesizerState;
       friend class Chord;
       };
@@ -1130,4 +1134,3 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags);
 
 
 #endif
-

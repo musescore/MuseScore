@@ -3524,6 +3524,10 @@ PAGEDBG("      == page break");
       // Remove not needed pages. TODO: make undoable:
       while (_pages.size() > curPage)
             _pages.takeLast();
+
+      for (Beam* beam : multiSystemBeams) {
+            beam->onPageLayoutUpdated();
+            }
       }
 
 //---------------------------------------------------------
@@ -4229,4 +4233,3 @@ void Score::updateBarLineSpans(int idx, int linesOld, int linesNew)
       }
 
 }
-

@@ -1259,6 +1259,7 @@ void Score::print(QPainter* painter, int pageNo)
       _printing  = true;
       MScore::pdfPrinting = true;
       Page* page = pages().at(pageNo);
+      currentlyPaintedPage = page;
       QRectF fr  = page->abbox();
 
       QList<Element*> ell = page->items(fr);
@@ -1574,4 +1575,3 @@ Tuplet* Score::searchTuplet(XmlReader& /*e*/, int /*id*/)
       }
 
 }
-

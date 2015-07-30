@@ -24,6 +24,7 @@ class ChordRest;
 class MuseScoreView;
 class Chord;
 class System;
+class Page;
 enum class SpannerSegmentType : char;
 
 struct BeamFragment;
@@ -38,6 +39,9 @@ class Beam : public Element {
       QList<ChordRest*> _elements;        // must be sorted by tick
       QList<QLineF*> beamSegments;
       MScore::Direction _direction;
+
+      QSet<ChordRest*> _firstChordsInPages;  // used for beams spanning two (or more) pages
+      QHash<Page*, QPair<int, int>> _lineIdxsForPage;
 
       bool _up;
       bool _distribute;                   // equal spacing of elements
@@ -62,6 +66,8 @@ class Beam : public Element {
       qreal slope;
 
       int editFragment;       // valid in edit mode
+
+      bool _pageLayoutIsComplete;
 
       void layout2(QList<ChordRest*>, SpannerSegmentType, int frag);
       bool twoBeamedNotes();
@@ -142,7 +148,7 @@ class Beam : public Element {
 
       QPointF beamPos() const;
       void setBeamPos(const QPointF& bp);
-      
+
       qreal beamDist() const              { return _beamDist; }
 
       virtual QVariant getProperty(P_ID propertyId) const override;
@@ -153,6 +159,10 @@ class Beam : public Element {
       virtual void styleChanged() override;
       bool isGrace() const { return _isGrace; }  // for debugger
       bool cross() const   { return _cross; }
+
+      bool shouldBeCollectedByChordRest(ChordRest* cr)
+                           { return _firstChordsInPages.contains(cr); }
+      void onPageLayoutUpdated();
       };
 
 
@@ -161,4 +171,3 @@ class Beam : public Element {
 Q_DECLARE_METATYPE(Ms::Beam::Mode);
 
 #endif
-
