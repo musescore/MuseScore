@@ -2398,6 +2398,27 @@ bool Measure::visible(int staffIdx) const
             qDebug("Measure::visible: bad staffIdx: %d", staffIdx);
             return false;
             }
+      if (score()->staff(staffIdx)->showIfEmpty()) {  // TODO: new style option
+            // TODO: isMeasureRest() const
+            int strack;
+            int etrack;
+            if (staffIdx < 0) {
+                  strack = 0;
+                  etrack = score()->nstaves() * VOICES;
+                  }
+            else {
+                  strack = staffIdx * VOICES;
+                  etrack = strack + VOICES;
+                  }
+            for (Segment* s = first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
+                  for (int track = strack; track < etrack; ++track) {
+                        Element* e = s->element(track);
+                        if (e && e->type() != Element::Type::REST)
+                              return score()->staff(staffIdx)->show() && staves[staffIdx]->_visible;
+                        }
+                  }
+            return false;
+            }
       return score()->staff(staffIdx)->show() && staves[staffIdx]->_visible;
       }
 
