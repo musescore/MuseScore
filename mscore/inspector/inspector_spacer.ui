@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>193</width>
-    <height>90</height>
+    <width>231</width>
+    <height>170</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,21 +17,6 @@
    <string>Spacer Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>0</number>
-   </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
    <item>
     <widget class="QLabel" name="elementName">
      <property name="font">
@@ -63,9 +48,6 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
      <property name="leftMargin">
       <number>0</number>
      </property>
@@ -76,6 +58,9 @@
       <number>0</number>
      </property>
      <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="spacing">
       <number>0</number>
      </property>
      <item row="0" column="0">
@@ -122,10 +107,50 @@
      </item>
     </layout>
    </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item row="0" column="1">
+      <widget class="QToolButton" name="resetAbsolute">
+       <property name="accessibleName">
+        <string>Reset Height value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="absolute">
+       <property name="text">
+        <string>Absolute</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
   </layout>
  </widget>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <tabstops>
+  <tabstop>height</tabstop>
+  <tabstop>resetHeight</tabstop>
+  <tabstop>absolute</tabstop>
+  <tabstop>resetAbsolute</tabstop>
+ </tabstops>
+ <resources/>
  <connections/>
 </ui>

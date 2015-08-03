@@ -440,9 +440,21 @@ InspectorSpacer::InspectorSpacer(QWidget* parent)
       sp.setupUi(addWidget());
 
       iList = {
-            { P_ID::SPACE, 0, false, sp.height, sp.resetHeight  }
+            { P_ID::SPACE, 0, false, sp.height, sp.resetHeight },
+            { P_ID::FIXED, 0, false, sp.absolute, sp.resetAbsolute }
             };
       mapSignals();
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorSpacer::setElement()
+      {
+      Spacer* spacer = static_cast<Spacer*>(inspector->element());
+      sp.absolute->setEnabled(spacer->spacerType() == SpacerType::DOWN);
+      InspectorBase::setElement();
       }
 
 //---------------------------------------------------------

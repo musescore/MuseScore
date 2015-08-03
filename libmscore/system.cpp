@@ -39,6 +39,7 @@
 #include "chordrest.h"
 #include "iname.h"
 #include "spanner.h"
+#include "spacer.h"
 #include "sym.h"
 
 namespace Ms {
@@ -378,6 +379,13 @@ void System::layout2()
                   MeasureBase* m = ml.at(i);
                   distDown = qMax(distDown, m->distanceDown(staffIdx));
                   distUp   = qMax(distUp,   m->distanceUp(staffIdx));
+                  if (m->isMeasure()) {
+                        Measure* mm = static_cast<Measure*>(m);
+                        Spacer* spacer = mm->mstaff(staffIdx)->_vspacerDown;
+                        // allow spacer to set distance absolutely
+                        if (spacer && spacer->absolute())
+                              distDown = spacer->gap();
+                        }
                   }
             s->setDistanceDown(distDown);
             s->setDistanceUp(distUp);

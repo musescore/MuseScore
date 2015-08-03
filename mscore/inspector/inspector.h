@@ -137,6 +137,7 @@ class InspectorSpacer : public InspectorBase {
 
    public:
       InspectorSpacer(QWidget* parent);
+      virtual void setElement() override;
       };
 
 //---------------------------------------------------------
