@@ -1160,7 +1160,8 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
                   ,{ArticulationType::Trill,       defstyle,_32nd, {0,1}, {0,1},        true,  true, {}}
                   ,{ArticulationType::Plusstop,    baroque, _32nd, {0,-1},{0, -1},      true,  true, {}}
                   ,{ArticulationType::Mordent,     any,     _32nd, {},    {0,-1,0},     false, true, {}}
-                  ,{ArticulationType::Prall,       any,     _32nd, {},    {0,1,0},      false, true, {}} // inverted mordent
+                  ,{ArticulationType::Prall,       defstyle,_32nd, {},    {0,1,0},      false, true, {}} // inverted mordent
+                  ,{ArticulationType::Prall,       baroque, _32nd, {1,0,1},{0},         false, true, {}} // short trill
                   ,{ArticulationType::PrallPrall,  any,     _32nd, {1,0}, {1,0},        false, true, {}}
                   ,{ArticulationType::PrallMordent,any,     _32nd, {},    {1,0,-1,0},   false, true, {}}
                   ,{ArticulationType::LinePrall,   any,     _32nd, {2,2,2},{1,0},       true,  true, {}}
