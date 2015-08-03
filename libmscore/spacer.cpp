@@ -25,14 +25,16 @@ Spacer::Spacer(Score* score)
    : Element(score)
       {
       _spacerType = SpacerType::UP;
-      _gap = 0.0;
+      _gap        = 0.0;
+      _absolute   = false;
       }
 
 Spacer::Spacer(const Spacer& s)
    : Element(s)
       {
-      _gap    = s._gap;
-      path    = s.path;
+      _gap        = s._gap;
+      _absolute   = s._absolute;
+      path        = s.path;
       _spacerType = s._spacerType;
       }
 
@@ -151,6 +153,7 @@ void Spacer::write(Xml& xml) const
       xml.tag("subtype", int(_spacerType));
       Element::writeProperties(xml);
       xml.tag("space", _gap / spatium());
+      xml.tag("absolute", _absolute);
       xml.etag();
       }
 
@@ -166,6 +169,8 @@ void Spacer::read(XmlReader& e)
                   _spacerType = SpacerType(e.readInt());
             else if (tag == "space")
                   _gap = e.readDouble() * spatium();
+            else if (tag == "absolute")
+                  _absolute = e.readBool();
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -180,6 +185,7 @@ QVariant Spacer::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
             case P_ID::SPACE: return gap();
+            case P_ID::FIXED: return absolute();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -194,6 +200,9 @@ bool Spacer::setProperty(P_ID propertyId, const QVariant& v)
       switch(propertyId) {
             case P_ID::SPACE:
                   setGap(v.toDouble());
+                  break;
+            case P_ID::FIXED:
+                  setAbsolute(v.toBool());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
@@ -214,6 +223,7 @@ QVariant Spacer::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_ID::SPACE: return QVariant(0.0);
+            case P_ID::FIXED: return QVariant(false);
             default:
                   return Element::propertyDefault(id);
             }

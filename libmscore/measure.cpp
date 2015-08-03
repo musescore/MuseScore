@@ -803,10 +803,36 @@ void Measure::add(Element* el)
             case Element::Type::SPACER:
                   {
                   Spacer* sp = static_cast<Spacer*>(el);
+                  int idx = el->staffIdx();
                   if (sp->spacerType() == SpacerType::UP)
-                        staves[el->staffIdx()]->_vspacerUp = sp;
-                  else if (sp->spacerType() == SpacerType::DOWN)
-                        staves[el->staffIdx()]->_vspacerDown = sp;
+                        staves[idx]->_vspacerUp = sp;
+                  else {
+                        // calculate appropriate initial size
+                        if (system()) {
+                              int n = _score->nstaves();
+                              int idx2 = 0;
+                              // find next visible staff
+                              for (int i = idx + 1; i < n; ++i) {
+                                    if (_score->staff(i)->show() && system()->staff(i)->show()) {
+                                          idx2 = i;
+                                          break;
+                                          }
+                                    }
+                              qreal dist;
+                              if (idx2) {
+                                    // distance to staff
+                                    qreal y1 = system()->staff(idx)->bbox().bottom();
+                                    qreal y2 = system()->staff(idx2)->bbox().top();
+                                    dist = y2 - y1;
+                                    }
+                              else {
+                                    // distance to next system
+                                    dist = qMax(system()->distance() + system()->stretchDistance(), _score->styleD(StyleIdx::minSystemDistance) * spatium());
+                                    }
+                              sp->setGap(dist);
+                              }
+                        staves[idx]->_vspacerDown = sp;
+                        }
                   }
                   break;
             case Element::Type::SEGMENT:
@@ -1708,7 +1734,6 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
             writeProperty(xml, P_ID::MEASURE_NUMBER_MODE);
             writeProperty(xml, P_ID::SYSTEM_INITIAL_BARLINE_TYPE);
             }
-      qreal _spatium = spatium();
       MStaff* mstaff = staves[staff];
       if (mstaff->noText() && !mstaff->noText()->generated()) {
             xml.stag("MeasureNumber");
@@ -1717,9 +1742,9 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
             }
 
       if (mstaff->_vspacerUp)
-            xml.tag("vspacerUp", mstaff->_vspacerUp->gap() / _spatium);
+            mstaff->_vspacerUp->write(xml);
       if (mstaff->_vspacerDown)
-            xml.tag("vspacerDown", mstaff->_vspacerDown->gap() / _spatium);
+            mstaff->_vspacerDown->write(xml);
       if (!mstaff->_visible)
             xml.tag("visible", mstaff->_visible);
       if (mstaff->_slashStyle)
@@ -2290,22 +2315,40 @@ void Measure::read(XmlReader& e, int staffIdx)
                   _repeatFlags = _repeatFlags | Repeat::END;
                   }
             else if (tag == "vspacer" || tag == "vspacerDown") {
-                  if (staves[staffIdx]->_vspacerDown == 0) {
-                        Spacer* spacer = new Spacer(score());
+                  Spacer* spacer = staves[staffIdx]->_vspacerDown;
+                  if (!spacer) {
+                        spacer = new Spacer(score());
+                        spacer->setTrack(staffIdx * VOICES);
                         spacer->setSpacerType(SpacerType::DOWN);
-                        spacer->setTrack(staffIdx * VOICES);
                         add(spacer);
                         }
-                  staves[staffIdx]->_vspacerDown->setGap(e.readDouble() * _spatium);
+                  spacer->setGap(e.readDouble() * _spatium);
                   }
-            else if (tag == "vspacer" || tag == "vspacerUp") {
-                  if (staves[staffIdx]->_vspacerUp == 0) {
-                        Spacer* spacer = new Spacer(score());
-                        spacer->setSpacerType(SpacerType::UP);
+            else if (tag == "vspacerUp") {
+                  Spacer* spacer = staves[staffIdx]->_vspacerUp;
+                  if (!spacer) {
+                        spacer = new Spacer(score());
                         spacer->setTrack(staffIdx * VOICES);
+                        spacer->setSpacerType(SpacerType::UP);
                         add(spacer);
                         }
-                  staves[staffIdx]->_vspacerUp->setGap(e.readDouble() * _spatium);
+                  spacer->setGap(e.readDouble() * _spatium);
+                  }
+            else if (tag == "Spacer") {
+                  Spacer* spacer = new Spacer(score());
+                  spacer->setTrack(staffIdx * VOICES);
+                  spacer->read(e);
+                  if (spacer->spacerType() == SpacerType::DOWN) {
+                        Spacer *ospacer = staves[staffIdx]->_vspacerDown;
+                        if (ospacer)
+                              remove(ospacer);
+                        }
+                  else {
+                        Spacer *ospacer = staves[staffIdx]->_vspacerUp;
+                        if (ospacer)
+                              remove(ospacer);
+                        }
+                  add(spacer);
                   }
             else if (tag == "visible")
                   staves[staffIdx]->_visible = e.readInt();

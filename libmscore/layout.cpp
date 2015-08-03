@@ -38,6 +38,7 @@
 #include "segment.h"
 #include "sig.h"
 #include "slur.h"
+#include "spacer.h"
 #include "staff.h"
 #include "stem.h"
 #include "style.h"
@@ -3388,6 +3389,7 @@ void Score::layoutPages()
       const qreal _spatium            = spatium();
       const qreal slb                 = styleS(StyleIdx::staffLowerBorder).val()    * _spatium;
       const qreal sub                 = styleS(StyleIdx::staffUpperBorder).val()    * _spatium;
+      const qreal staffDist           = styleS(StyleIdx::staffDistance).val()       * _spatium;
       const qreal systemDist          = styleS(StyleIdx::minSystemDistance).val()   * _spatium;
       const qreal systemFrameDistance = styleS(StyleIdx::systemFrameDistance).val() * _spatium;
       const qreal frameSystemDistance = styleS(StyleIdx::frameSystemDistance).val() * _spatium;
@@ -3416,8 +3418,14 @@ PAGEDBG("  system %d", i);
                         break;
                   ++i;
                   }
-            qreal tmargin;    // top system margin
-            qreal bmargin;    // bottom system margin
+            bool allowStretch = true;
+            qreal tmargin;                // top system margin
+            qreal bmargin;                // bottom system margin
+            qreal absoluteSpacer = 0.0;   // amount of absolute spacer
+            // if last staff is hidden
+            // spacer on last visible staff is already incorporated into system height,
+            // but relative to staff distance rather than system distance
+            qreal heightAdjust = 0.0;
 
             if (pC.sr.isVbox()) {
                   VBox* vbox = pC.sr.vbox();
@@ -3432,17 +3440,62 @@ PAGEDBG("  system %d", i);
                   }
             else {
                   if (pC.lastSystem) {
-                        if (pC.lastSystem->isVbox())
+                        if (pC.lastSystem->isVbox()) {
                               tmargin = pC.lastSystem->vbox()->bottomGap() + frameSystemDistance;
-                        else
+                              }
+                        else {
+                              qreal v = 0.0;
+                              System* s = pC.lastSystem;
+                              // find last visible staff
+                              int lastVisible = -1;
+                              int lastStaff = nstaves() - 1;
+                              for (int i = lastStaff; i >= 0; --i) {
+                                    if (staff(i)->show() && s->staff(i)->show()) {
+                                          lastVisible = i;
+                                          break;
+                                          }
+                                    }
+                              if (lastVisible >= 0) {
+                                    for (MeasureBase* mb : s->measures()) {
+                                          if (!mb->isMeasure())
+                                                continue;
+                                          Measure* m = static_cast<Measure*>(mb);
+                                          Spacer* spacer = m->mstaff(lastVisible)->_vspacerDown;
+                                          if (spacer) {
+                                                qreal gap = spacer->gap();
+                                                if (spacer->absolute()) {
+                                                      v = qMax(gap, v);
+                                                      }
+                                                else if (lastVisible < lastStaff) {
+                                                      // different adjustments needed according to spacer height
+                                                      // relative to staffDist & systemDist
+                                                      if (gap > systemDist)
+                                                            heightAdjust = staffDist - systemDist;
+                                                      else if (gap > staffDist)
+                                                            heightAdjust = staffDist - gap;
+                                                      }
+                                                }
+                                          }
+                                    }
+                              if (v > 0.0) {
+                                    allowStretch = false;
+                                    if (lastVisible == lastStaff)
+                                          absoluteSpacer = v;
+                                    else
+                                          absoluteSpacer = staffDist;
+                                    }
                               tmargin = qMax(pC.tm(), systemDist);
+                              }
                         }
                   else
                         tmargin = qMax(pC.tm(), sub);
                   bmargin = pC.bm();
                   }
 
-            tmargin = qMax(tmargin, pC.prevDist);
+            if (absoluteSpacer > 0.0)
+                  tmargin = absoluteSpacer;
+            else
+                  tmargin = qMax(tmargin, pC.prevDist) + heightAdjust;
             qreal h = pC.sr.height();
 
 PAGEDBG("   y:%f + h:%f + tm:%f + qMax(bm:%f,%f)[=%f] > %f",
@@ -3485,7 +3538,7 @@ PAGEDBG("      == page break");
                   }
 
             if (pC.lastSystem) {
-                  bool addStretch = !pC.lastSystem->isVbox() && !pC.sr.isVbox();
+                  bool addStretch = !pC.lastSystem->isVbox() && !pC.sr.isVbox() && allowStretch;
                   pC.lastSystem->setAddStretch(addStretch);
                   if (addStretch)
                         ++pC.gaps;
