@@ -2364,11 +2364,12 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
       foreach (Staff* staff, _staves) {
             SysStaff* s  = system->staff(staffIdx);
             bool oldShow = s->show();
-            if (staff->showIfEmpty()      // TODO: new style option
+            Staff::HideMode hideMode = staff->hideWhenEmpty();
+            if (hideMode == Staff::HideMode::ALWAYS
                 || (styleB(StyleIdx::hideEmptyStaves)
                     && (staves > 1)
                     && !(isFirstSystem && styleB(StyleIdx::dontHideStavesInFirstSystem))
-                    && !staff->neverHide())) {
+                    && hideMode != Staff::HideMode::NEVER)) {
                   bool hideStaff = true;
                   foreach(MeasureBase* m, system->measures()) {
                         if (m->type() != Element::Type::MEASURE)

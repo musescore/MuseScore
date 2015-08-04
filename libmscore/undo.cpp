@@ -2495,13 +2495,14 @@ void ChangePageFormat::flip()
 //---------------------------------------------------------
 
 ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible,
-   qreal _userDist, bool _neverHide, bool _showIfEmpty, bool hide)
+   qreal _userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway, bool hide)
       {
       staff       = _staff;
       invisible   = _invisible;
       userDist    = _userDist;
-      neverHide   = _neverHide;
+      hideMode    = _hideMode;
       showIfEmpty = _showIfEmpty;
+      cutaway     = _cutaway;
       hideSystemBarLine = hide;
       }
 
@@ -2526,20 +2527,23 @@ void ChangeStaff::flip()
 
       bool oldInvisible   = staff->invisible();
       qreal oldUserDist   = staff->userDist();
-      bool oldNeverHide   = staff->neverHide();
+      Staff::HideMode oldHideMode    = staff->hideWhenEmpty();
       bool oldShowIfEmpty = staff->showIfEmpty();
+      bool oldCutaway     = staff->cutaway();
       bool hide           = staff->hideSystemBarLine();
 
       staff->setInvisible(invisible);
       staff->setUserDist(userDist);
-      staff->setNeverHide(neverHide);
+      staff->setHideWhenEmpty(hideMode);
       staff->setShowIfEmpty(showIfEmpty);
+      staff->setCutaway(cutaway);
       staff->setHideSystemBarLine(hideSystemBarLine);
 
       invisible   = oldInvisible;
       userDist    = oldUserDist;
-      neverHide   = oldNeverHide;
+      hideMode    = oldHideMode;
       showIfEmpty = oldShowIfEmpty;
+      cutaway     = oldCutaway;
       hideSystemBarLine = hide;
 
       Score* score = staff->score();

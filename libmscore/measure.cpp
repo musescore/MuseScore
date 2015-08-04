@@ -2392,33 +2392,14 @@ void Measure::read(XmlReader& e, int staffIdx)
 
 bool Measure::visible(int staffIdx) const
       {
-      if (system() && (system()->staves()->isEmpty() || !system()->staff(staffIdx)->show()))
-            return false;
       if (staffIdx >= score()->staves().size()) {
             qDebug("Measure::visible: bad staffIdx: %d", staffIdx);
             return false;
             }
-      if (score()->staff(staffIdx)->showIfEmpty()) {  // TODO: new style option
-            // TODO: isMeasureRest() const
-            int strack;
-            int etrack;
-            if (staffIdx < 0) {
-                  strack = 0;
-                  etrack = score()->nstaves() * VOICES;
-                  }
-            else {
-                  strack = staffIdx * VOICES;
-                  etrack = strack + VOICES;
-                  }
-            for (Segment* s = first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
-                  for (int track = strack; track < etrack; ++track) {
-                        Element* e = s->element(track);
-                        if (e && e->type() != Element::Type::REST)
-                              return score()->staff(staffIdx)->show() && staves[staffIdx]->_visible;
-                        }
-                  }
+      if (system() && (system()->staves()->isEmpty() || !system()->staff(staffIdx)->show()))
             return false;
-            }
+      if (score()->staff(staffIdx)->cutaway() && isMeasureRest(staffIdx))
+            return false;
       return score()->staff(staffIdx)->show() && staves[staffIdx]->_visible;
       }
 
@@ -2848,7 +2829,7 @@ bool Measure::hasVoice(int track) const
 ///   all staves.
 //-------------------------------------------------------------------
 
-bool Measure::isMeasureRest(int staffIdx)
+bool Measure::isMeasureRest(int staffIdx) const
       {
       int strack;
       int etrack;
@@ -2876,7 +2857,7 @@ bool Measure::isMeasureRest(int staffIdx)
 //    rests.
 //---------------------------------------------------------
 
-bool Measure::isFullMeasureRest()
+bool Measure::isFullMeasureRest() const
       {
       int strack = 0;
       int etrack = score()->nstaves() * VOICES;
@@ -2899,7 +2880,7 @@ bool Measure::isFullMeasureRest()
 //   isRepeatMeasure
 //---------------------------------------------------------
 
-bool Measure::isRepeatMeasure(Staff* staff)
+bool Measure::isRepeatMeasure(Staff* staff) const
       {
       int staffIdx = score()->staffIdx(staff);
       int strack        = staffIdx * VOICES;
