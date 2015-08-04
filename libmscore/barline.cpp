@@ -239,9 +239,9 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   SysStaff* sysStaff1 = system->staff(staffIdx1);
                   SysStaff* sysStaff2 = system->staff(staffIdx2);
                   while (span > 0) {
+                        // TODO: skip barlines for invisible measures too; requires vertical position adjustment
                         // if start staff not shown, reduce span and move one staff down
-
-                        if ( !(sysStaff1->show() && staff1->show()) ) {
+                        if ( !(sysStaff1->show() && staff1->show() /*&& measure->visible(staffIdx1)*/) ) {
                               span--;
                               if (staffIdx1 >= nstaves-1)         // running out of staves?
                                     break;
@@ -249,7 +249,7 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                               staff1    = score()->staff(staffIdx1);
                               }
                         // if end staff not shown, reduce span and move one staff up
-                        else if ( !(sysStaff2->show() && staff2->show()) ) {
+                        else if ( !(sysStaff2->show() && staff2->show() /*&& measure->visible(staffIdx2)*/) ) {
                               span--;
                               if (staffIdx2 == 0)
                                     break;
@@ -281,6 +281,8 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                         // base y on top visible staff in barline span
                         // after skipping ones with hideSystemBarLine set
                         yp = sysStaff1->y();
+                        // TODO: adjustment for staves skipped because of invisible measures
+                        // so that barlines are not drawn through invisible measures at top/bottom of span
                         }
                   *y1 = l1->y1() - yp;
                   *y1 += (_spanFrom * staff1->lineDistance() * staff1->spatium()) / 2;
