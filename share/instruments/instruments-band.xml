@@ -201,7 +201,7 @@
         </instrument>
      <instrument>
         <name>F Dizi</name>
-        <short-name>A Di.</short-name>
+        <short-name>F Di.</short-name>
         <clef>0</clef>
         <aPitchRange>72-103</aPitchRange>
         <pPitchRange>72-103</pPitchRange>
@@ -2706,7 +2706,7 @@
         <channel>
            <program>0</program>
            </channel>
-        </instrument>     
+        </instrument>
      <instrument>
         <name>Drumset</name>
         <description>Drumset 3 lines</description>

@@ -54,7 +54,7 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "G Dizi"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "G Di."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "F Dizi"),
 //: F Dizi
-QT_TRANSLATE_NOOP("InstrumentsXML", "A Di."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "F Di."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "E Dizi"),
 //: E Dizi
 QT_TRANSLATE_NOOP("InstrumentsXML", "E Di."),
@@ -763,26 +763,26 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Serpent"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Spt."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Trombone"),
 //: Trombone
-QT_TRANSLATE_NOOP("InstrumentsXML", "Trb."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Tbn."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Trombone"),
 //: Trombone
-QT_TRANSLATE_NOOP("InstrumentsXML", "Trb."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Tbn."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Trombone (Treble Clef)"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Soprano Trombone"),
 //: Soprano Trombone
-QT_TRANSLATE_NOOP("InstrumentsXML", "S. Trb."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "S. Tbn."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Alto Trombone"),
 //: Alto Trombone
-QT_TRANSLATE_NOOP("InstrumentsXML", "A. Trb."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "A. Tbn."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tenor Trombone"),
 //: Tenor Trombone
-QT_TRANSLATE_NOOP("InstrumentsXML", "T. Trb."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "T. Tbn."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Bass Trombone"),
 //: Bass Trombone
-QT_TRANSLATE_NOOP("InstrumentsXML", "B. Trb."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "B. Tbn."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Contrabass Trombone"),
 //: Contrabass Trombone
-QT_TRANSLATE_NOOP("InstrumentsXML", "Cb. Trb."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Cb. Tbn."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Cimbasso"),
 //: Cimbasso
 QT_TRANSLATE_NOOP("InstrumentsXML", "Cim."),
@@ -1556,12 +1556,12 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Violoncello"),
 //: Violoncello
-QT_TRANSLATE_NOOP("InstrumentsXML", "Vlc."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Vc."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Violoncellos"),
 //: Violoncellos
-QT_TRANSLATE_NOOP("InstrumentsXML", "Vlcs."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Vcs."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Contrabass"),
@@ -1580,18 +1580,28 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Db."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Pardessus de viole"),
 //: Pardessus de viole
 QT_TRANSLATE_NOOP("InstrumentsXML", "Pds. v."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Treble Viol"),
 //: Treble Viol
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tr. vl."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Alto Viol"),
 //: Alto Viol
 QT_TRANSLATE_NOOP("InstrumentsXML", "A. Vl."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tenor Viol"),
 //: Tenor Viol
 QT_TRANSLATE_NOOP("InstrumentsXML", "T. Vl."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Viola da gamba"),
 //: Viola da gamba
 QT_TRANSLATE_NOOP("InstrumentsXML", "Vla. d. g."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Viola da gamba (Tab)"),
 //: Viola da gamba (Tab)
 QT_TRANSLATE_NOOP("InstrumentsXML", "Vla. d. g."),
@@ -1599,6 +1609,10 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Viola da gamba (Tablature)"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Violone"),
 //: Violone
 QT_TRANSLATE_NOOP("InstrumentsXML", "Vne."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "D Violone"),
 //: D Violone
 QT_TRANSLATE_NOOP("InstrumentsXML", "Vne."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
