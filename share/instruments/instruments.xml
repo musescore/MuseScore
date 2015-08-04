@@ -285,7 +285,7 @@
             </Instrument>
             <Instrument id="f-dizi">
                   <longName>F Dizi</longName>
-                  <shortName>A Di.</shortName>
+                  <shortName>F Di.</shortName>
                   <description>F Dizi</description>
                   <musicXMLid>wind.flutes.di-zi</musicXMLid>
                   <clef>G</clef>
