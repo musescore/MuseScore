@@ -54,7 +54,7 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "G Dizi"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "G Di."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "F Dizi"),
 //: F Dizi
-QT_TRANSLATE_NOOP("InstrumentsXML", "A Di."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "F Di."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "E Dizi"),
 //: E Dizi
 QT_TRANSLATE_NOOP("InstrumentsXML", "E Di."),
