@@ -201,7 +201,7 @@
         </instrument>
      <instrument>
         <name>Ди в строе фа</name>
-        <short-name>A Di.</short-name>
+        <short-name>F Di.</short-name>
         <clef>0</clef>
         <aPitchRange>72-103</aPitchRange>
         <pPitchRange>72-103</pPitchRange>
