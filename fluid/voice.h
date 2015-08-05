@@ -208,6 +208,7 @@ class Voice
       void update_param(int gen);
 
       double GEN(int n) { return gen[n].val + gen[n].mod + gen[n].nrpn; }
+      double GEN_04(int n) { return gen[n].val*0.4 + gen[n].mod + gen[n].nrpn; }
 
       void modulate_all();
       void modulate(bool _cc, int _ctrl);
