@@ -1233,7 +1233,7 @@ void renderGlissando(NoteEventList* events, Note *notestart)
       {
       vector<int> empty = {};
       int Cnote = 60; // pitch of middle C
-      int pitchstart = notestart->epitch();
+      int pitchstart = notestart->ppitch();
       int linestart = notestart->line();
 
       set<int> blacknotes = {  1,  3,    6, 8, 10};
@@ -1248,15 +1248,15 @@ void renderGlissando(NoteEventList* events, Note *notestart)
                   if (glissando->playGlissando() && Element::Type::NOTE == ee->type()) {
                         vector<int> body;
                         Note *noteend = static_cast<Note *>(ee);
-                        int pitchend   = noteend->epitch();
+                        int pitchend   = noteend->ppitch();
                         bool direction= pitchend >  pitchstart;
                         if (pitchend == pitchstart)
                               continue; // next spanner
                         if (glissandoStyle == MScore::GlissandoStyle::DIATONIC) { // scale obeying accidentals
                               int line;
-                              int lineend = convertLine(noteend->line(), noteend, notestart);
                               int p = pitchstart;
-                              for (line = linestart; (direction) ? (line>lineend) : (line<lineend);
+                              // iterate as long as we haven't past the pitchend.
+                              for (line = linestart; (direction) ? (p<pitchend) : (p>pitchend);
                                  (direction) ? line-- : line++) {
                                     int halfsteps = articulationExcursion(notestart, noteend, linestart - line);
                                     p = pitchstart + halfsteps;
