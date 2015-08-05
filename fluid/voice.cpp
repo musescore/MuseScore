@@ -763,6 +763,8 @@ void Voice::update_param(int _gen)
       float x;
       float y;
       unsigned int count;
+      // Alternate attenuation scale used by EMU10K1 cards when setting the attenuation at the preset or instrument level within the SoundFont bank.
+      static const float ALT_ATTENUATION_SCALE = 0.4;
 
       double gain = 1.0 / 32768.0f;
       switch (_gen) {
@@ -774,7 +776,7 @@ void Voice::update_param(int _gen)
                   break;
 
             case GEN_ATTENUATION:
-                  attenuation = GEN(GEN_ATTENUATION);
+                  attenuation = gen[GEN_ATTENUATION].val * ALT_ATTENUATION_SCALE + gen[GEN_ATTENUATION].mod + gen[GEN_ATTENUATION].nrpn;
 
                   /* Range: SF2.01 section 8.1.3 # 48
                    * Motivation for range checking:
