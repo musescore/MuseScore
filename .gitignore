@@ -26,3 +26,4 @@ CMakeLists.txt.user.*
 vtest/html
 thirdparty/mupdf-qt
 
+/build

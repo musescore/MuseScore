@@ -774,7 +774,7 @@ void Voice::update_param(int _gen)
                   break;
 
             case GEN_ATTENUATION:
-                  attenuation = GEN(GEN_ATTENUATION);
+                  attenuation = GEN_04(GEN_ATTENUATION);
 
                   /* Range: SF2.01 section 8.1.3 # 48
                    * Motivation for range checking:
