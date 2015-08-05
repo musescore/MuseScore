@@ -3274,7 +3274,7 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const int
                         key.setMode(KeyMode::MINOR);
                         }
                   else {
-                        skipLogCurrElem();
+                        qDebug("%s", qPrintable(QString("Unsupported mode '%1'").arg(m)));
                         }
                   }
             else if (_e.name() == "cancel")
