@@ -1996,6 +1996,8 @@ void MusicXMLParserPass2::measure(const QString& partId,
              qPrintable(mDura.print()),
              qPrintable(mDura.reduced().print()));
              */
+            mDura.reduce();
+            mTime.reduce();
             }
 
       // convert remaining grace chords to grace after
