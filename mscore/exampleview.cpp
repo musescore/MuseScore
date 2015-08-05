@@ -336,7 +336,9 @@ void ExampleView::mousePressEvent(QMouseEvent* event)
 
 QSize ExampleView::sizeHint() const
       {
-      return QSize(1000 * guiScaling, 80 * guiScaling);
+      return QSize(
+            1000 * guiScaling * (MScore::DPI / 90),
+              80 * guiScaling * (MScore::DPI / 90));
       }
 
 
