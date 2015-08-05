@@ -161,7 +161,7 @@ bool Album::createScore(const QString& fn)
                   }
 
             // try to append each excerpt
-            if (item->score->excerpts().count() == score->excerpts().count() ) {
+            if (item->score->excerpts().count() == score->excerpts().count()) {
                   for (int i = 0; i < score->excerpts().count(); i++) {
                         Score* currentScoreExcerpt = item->score->excerpts().at(i)->partScore();
                         if (currentScoreExcerpt) {
