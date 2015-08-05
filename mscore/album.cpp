@@ -135,7 +135,7 @@ bool Album::createScore(const QString& fn)
 
       // do layout for first score's root and excerpt scores
       firstScore->doLayout();
-      for (int i=0; i<firstScore->excerpts().count(); i++) {
+      for (int i = 0; i < firstScore->excerpts().count(); i++) {
             if (firstScore->excerpts().at(i)->partScore()) {
                   firstScore->excerpts().at(i)->partScore()->doLayout();
                   }
@@ -162,7 +162,7 @@ bool Album::createScore(const QString& fn)
 
             // try to append each excerpt
             if (item->score->excerpts().count() == score->excerpts().count() ) {
-                  for (int i=0; i<score->excerpts().count(); i++) {
+                  for (int i = 0; i < score->excerpts().count(); i++) {
                         Score* currentScoreExcerpt = item->score->excerpts().at(i)->partScore();
                         if (currentScoreExcerpt) {
                               currentScoreExcerpt->doLayout();
@@ -182,7 +182,7 @@ bool Album::createScore(const QString& fn)
                   }
             else {
                   qDebug("Will not append album item \"%s\".  Mismatch between number of excerpts with first album item \"%s\"",
-                              qPrintable( item->name ), qPrintable( _scores[0]->name ) );
+                              qPrintable(item->name), qPrintable(_scores[0]->name));
                   delete score;
                   return false;
                   }
