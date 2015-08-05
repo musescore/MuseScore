@@ -9113,7 +9113,7 @@
                   <aPitchRange>62-93</aPitchRange>
                   <pPitchRange>62-105</pPitchRange>
                   <Channel>
-                        <program value="40"/>
+                        <program value="110"/>
                   </Channel>
                   <Channel name="pizzicato">
                         <program value="45"/>
