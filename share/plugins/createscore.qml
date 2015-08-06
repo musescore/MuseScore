@@ -5,6 +5,7 @@ MuseScore {
       version:  "2.0"
       description: "This demo plugin creates a new score."
       menuPath: "Plugins.createscore"
+      requiresScore: false
 
       onRun: {
             console.log("hello createscore");

@@ -28,7 +28,8 @@ import MuseScore 1.0
 MuseScore {
       menuPath: "Plugins.run"
       version:  "2.0"
-      description: "This demo plugin runs an external command. Probably this will only work on Linux.";
+      description: "This demo plugin runs an external command. Probably this will only work on Linux."
+      requiresScore: false
 
       QProcess {
         id: proc
