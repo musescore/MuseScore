@@ -205,6 +205,10 @@ void Clef::layout()
                   }
 
             lines = staffType->lines();         // init values from staff type
+#if 0
+            // with fewer than 5 lines, keep clef toward top of staff (ignore line spacing)
+            if (!stf->isPitchedStaff() || lines >= 5)
+#endif
             lineDist = staffType->lineDistance().val();
             }
 

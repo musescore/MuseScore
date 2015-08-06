@@ -640,13 +640,14 @@ void Chord::addLedgerLine(int track, int line, bool visible, qreal x, Spatium le
 void Chord::createLedgerLines(int track, vector<LedgerLineData>& vecLines, bool visible)
       {
       qreal _spatium = spatium();
+      qreal stepDistance = staff() ? staff()->lineDistance() * 0.5 : 0.5;
       for (auto lld : vecLines) {
             LedgerLine* h = new LedgerLine(score());
             h->setParent(this);
             h->setTrack(track);
             h->setVisible(lld.visible && visible);
             h->setLen(Spatium( (lld.maxX - lld.minX) / _spatium) );
-            h->setPos(lld.minX, lld.line * _spatium * .5);
+            h->setPos(lld.minX, lld.line * _spatium * stepDistance);
             h->setNext(_ledgerLines);
             _ledgerLines = h;
             }
@@ -1343,8 +1344,8 @@ qreal Chord::defaultStemLength() {
             int n = tab[_hook ? 1 : 0][up() ? 1 : 0][odd][_tremolo->lines()-1];
             stemLen += n * .5;
             }
-      // scale stemLen according to staff line spacing
-      if (staff())
+      // TAB: scale stemLen according to staff line spacing
+      if (staff() && staff()->isTabStaff())
             stemLen *= staff()->staffType()->lineDistance().val();
 
       return stemLen * _spatium;
