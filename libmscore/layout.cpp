@@ -778,7 +778,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       int columnBottom[7] = { -1, -1, -1, -1, -1, -1, -1 };
 
       qreal sp           = staff->spatium();
-      qreal stepDistance = sp * .5;
+      qreal stepDistance = sp * staff->lineDistance() * .5;
       int stepOffset     = staff->staffType()->stepOffset();
 
       qreal lx                = 10000.0;  // leftmost note head position

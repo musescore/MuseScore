@@ -537,17 +537,40 @@ int Rest::computeLineOffset()
                   default:
                         break;
                   }
+            // adjust offsets for staves with fewer than five lines
+            if (lines == 1) {
+                  if (lineOffset > 0)
+                        lineOffset -= 5;
+                  else
+                        lineOffset -= 3;
+                  }
+            else if (lines == 2) {
+                  if (lineOffset > 0)
+                        lineOffset -= 4;
+                  else
+                        lineOffset -= 2;
+                  }
+            else if (lines < 5) {
+                  if (lineOffset > 0)
+                        lineOffset -= (5 - lines) * 2;
+                  }
             }
       else {
+            // compute reasonable offset for staves of fewer than 5 lines
             switch(durationType().type()) {
                   case TDuration::DurationType::V_LONG:
                   case TDuration::DurationType::V_BREVE:
                   case TDuration::DurationType::V_MEASURE:
                   case TDuration::DurationType::V_WHOLE:
-                        if (lines == 1)
+                        if (lines <= 2)
                               lineOffset = -2;
                         break;
                   case TDuration::DurationType::V_HALF:
+                        if (lines == 1)
+                              lineOffset = -4;
+                        else if (lines <= 3)
+                              lineOffset = -2;
+                        break;
                   case TDuration::DurationType::V_QUARTER:
                   case TDuration::DurationType::V_EIGHTH:
                   case TDuration::DurationType::V_16TH:
@@ -559,6 +582,10 @@ int Rest::computeLineOffset()
                   case TDuration::DurationType::V_1024TH:
                         if (lines == 1)
                               lineOffset = -4;
+                        if (lines == 2)
+                              lineOffset = -3;
+                        else if (lines == 3)
+                              lineOffset = -2;
                         break;
                   default:
                         break;
