@@ -7,6 +7,7 @@ MuseScore {
       version:  "2.0"
       description: "Create random score."
       menuPath: "Plugins.random2"
+      requiresScore: false
       pluginType: "dock"
       dockArea:   "left"
       width:  150

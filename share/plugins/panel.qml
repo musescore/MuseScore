@@ -6,6 +6,7 @@ MuseScore {
     menuPath:   "Plugins.panel"
     version:  "2.0"
     description: "This demo plugin creates a GUI panel."
+    requiresScore: false
 
     pluginType: "dock"
     dockArea:   "left"

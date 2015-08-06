@@ -5,6 +5,7 @@ MuseScore {
       version:  "2.0"
       description: "Create random score."
       menuPath: "Plugins.random"
+      requiresScore: false
 
       function addNote(key, cursor) {
             var cdur = [ 0, 2, 4, 5, 7, 9, 11 ];
