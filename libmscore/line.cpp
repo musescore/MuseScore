@@ -11,10 +11,13 @@
 //=============================================================================
 
 #include "line.h"
+
 #include "barline.h"
 #include "chord.h"
 #include "lyrics.h"
 #include "measure.h"
+#include "note.h"
+#include "part.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -150,7 +153,12 @@ QPointF LineSegment::getGrip(Grip grip) const
 
 QPointF LineSegment::gripAnchor(Grip grip) const
       {
-      qreal y = system()->staffYpage(staffIdx());
+      // Middle or aperture grip have no anchor
+      if (grip == Grip::MIDDLE || grip == Grip::APERTURE)
+            return QPointF(0, 0);
+      // note-anchored spanners are relative to the system
+      qreal y = spanner()->anchor() == Spanner::Anchor::NOTE ?
+                  system()->pos().y() : system()->staffYpage(staffIdx());
       if (spannerSegmentType() == SpannerSegmentType::MIDDLE) {
             qreal x;
             switch (grip) {
@@ -161,8 +169,6 @@ QPointF LineSegment::gripAnchor(Grip grip) const
                         x = system()->lastMeasure()->abbox().right();
                         break;
                   default:
-                  case Grip::MIDDLE:
-                  case Grip::APERTURE:
                         x = 0; // No Anchor
                         y = 0;
                         break;
@@ -170,8 +176,7 @@ QPointF LineSegment::gripAnchor(Grip grip) const
             return QPointF(x, y);
             }
       else {
-            if ((grip == Grip::MIDDLE || grip == Grip::APERTURE) // center grip or aperture grip
-               || (grip == Grip::END && spannerSegmentType() == SpannerSegmentType::BEGIN)
+            if ((grip == Grip::END && spannerSegmentType() == SpannerSegmentType::BEGIN)
                || (grip == Grip::START && spannerSegmentType() == SpannerSegmentType::END)
                )
                   return QPointF(0, 0);
@@ -180,7 +185,7 @@ QPointF LineSegment::gripAnchor(Grip grip) const
                   QPointF p(line()->linePos(grip, &s));
                   p.ry() += y - system()->pos().y();
                   if (s)
-                        p += s->pos();
+                        p += s->pos();    // to page coordinates
                   return p;
                   }
             }
@@ -205,79 +210,141 @@ bool LineSegment::edit(MuseScoreView* sv, Grip curGrip, int key, Qt::KeyboardMod
       int track   = l->track();
       int track2  = l->track2();    // assumed to be same as track
 
-      if (l->anchor() == Spanner::Anchor::SEGMENT) {
-            Segment* s1 = spanner()->startSegment();
-            Segment* s2 = spanner()->endSegment();
-            // check for line going to end of score
-            if (spanner()->tick2() >= score()->lastSegment()->tick()) {
-                  // endSegment calculated above will be the last chord/rest of score
-                  // but that is not correct - it should be an imaginary note *after* the end of the score
-                  // best we can do is set s2 to lastSegment (probably the end barline)
-                  s2 = score()->lastSegment();
-                  }
-            if (!s1 && !s2) {
-                  qDebug("LineSegment::edit: no start/end segment");
-                  return true;
-                  }
-            if (key == Qt::Key_Left) {
-                  if (curGrip == Grip::START)
-                        s1 = prevSeg1(s1, track);
-                  else if (curGrip == Grip::END || curGrip == Grip::MIDDLE)
-                        s2 = prevSeg1(s2, track2);
-                  }
-            else if (key == Qt::Key_Right) {
-                  if (curGrip == Grip::START)
-                        s1 = nextSeg1(s1, track);
-                  else if (curGrip == Grip::END || curGrip == Grip::MIDDLE) {
-                        Segment* ns2 = nextSeg1(s2, track2);
-                        if (ns2)
-                              s2 = ns2;
-                        else
-                              s2 = score()->lastSegment();
+      switch(l->anchor()) {
+            case Spanner::Anchor::SEGMENT:
+                  {
+                  Segment* s1 = spanner()->startSegment();
+                  Segment* s2 = spanner()->endSegment();
+                  // check for line going to end of score
+                  if (spanner()->tick2() >= score()->lastSegment()->tick()) {
+                        // endSegment calculated above will be the last chord/rest of score
+                        // but that is not correct - it should be an imaginary note *after* the end of the score
+                        // best we can do is set s2 to lastSegment (probably the end barline)
+                        s2 = score()->lastSegment();
                         }
+                  if (!s1 && !s2) {
+                        qDebug("LineSegment::edit: no start/end segment");
+                        return true;
+                        }
+                  if (key == Qt::Key_Left) {
+                        if (curGrip == Grip::START)
+                              s1 = prevSeg1(s1, track);
+                        else if (curGrip == Grip::END || curGrip == Grip::MIDDLE)
+                              s2 = prevSeg1(s2, track2);
+                        }
+                  else if (key == Qt::Key_Right) {
+                        if (curGrip == Grip::START)
+                              s1 = nextSeg1(s1, track);
+                        else if (curGrip == Grip::END || curGrip == Grip::MIDDLE) {
+                              Segment* ns2 = nextSeg1(s2, track2);
+                              if (ns2)
+                                    s2 = ns2;
+                              else
+                                    s2 = score()->lastSegment();
+                              }
+                        }
+                  if (s1 == 0 || s2 == 0 || s1->tick() >= s2->tick())
+                        return true;
+                  if (s1->tick() != spanner()->tick())
+                        spanner()->setTick(s1->tick());
+                  if (s2->tick() != spanner()->tick2())
+                        spanner()->setTick2(s2->tick());
                   }
-            if (s1 == 0 || s2 == 0 || s1->tick() >= s2->tick())
-                  return true;
-            if (s1->tick() != spanner()->tick())
-                  spanner()->setTick(s1->tick());
-            if (s2->tick() != spanner()->tick2())
-                  spanner()->setTick2(s2->tick());
-            }
-      else {
-            Measure* m1 = l->startMeasure();
-            Measure* m2 = l->endMeasure();
+                  break;
+            case Spanner::Anchor::NOTE:
+                  {
+                  Note* note1       = static_cast<Note*>(l->startElement());
+                  Note* note2       = static_cast<Note*>(l->endElement());
+                  Note* oldNote1    = note1;
+                  Note* oldNote2    = note2;
+                  if (!note1 && !note2) {
+                        qDebug("LineSegment::edit: no start/end note");
+                        return true;            // accept the event without doing anything
+                        }
 
-            if (key == Qt::Key_Left) {
-                  if (curGrip == Grip::START) {
-                        if (m1->prevMeasure())
-                              m1 = m1->prevMeasure();
-                        }
-                  else if (curGrip == Grip::END || curGrip == Grip::MIDDLE) {
-                        Measure* m = m2->prevMeasure();
-                        if (m)
-                              m2 = m;
+                  switch(key) {
+                        case Qt::Key_Left:
+                              if (curGrip == Grip::START)
+                                    note1 = prevChordNote(note1);
+                              else if (curGrip == Grip::END || curGrip == Grip::MIDDLE)
+                                    note2 = prevChordNote(note2);
+                              break;
+                        case Qt::Key_Right:
+                              if (curGrip == Grip::START)
+                                    note1 = nextChordNote(note1);
+                              else if (curGrip == Grip::END || curGrip == Grip::MIDDLE)
+                                    note2 = nextChordNote(note2);
+                              break;
+                        case Qt::Key_Up:
+                              if (curGrip == Grip::START)
+                                    note1 = static_cast<Note*>(score()->upAlt(note1));
+                              else if (curGrip == Grip::END || curGrip == Grip::MIDDLE)
+                                    note2 = static_cast<Note*>(score()->upAlt(note2));
+                              break;
+                        case Qt::Key_Down:
+                              if (curGrip == Grip::START)
+                                    note1 = static_cast<Note*>(score()->downAlt(note1));
+                              else if (curGrip == Grip::END || curGrip == Grip::MIDDLE)
+                                    note2 = static_cast<Note*>(score()->downAlt(note2));
+                              break;
+                        default:
+                              return true;
+                  }
+
+                  // check prevChordNote() and nextchordNote() didn't return null
+                  // OR Score::upAlt() and Score::downAlt() didn't return non-Note (notably rests)
+                  // OR spanner duration is > 0
+                  // OR note1 and note2 didn't end up in different instruments
+                  // if this is the case, accepts the event and return without doing nothing
+                  if (note1 == 0 || note2 == 0
+                              || note1->type() != Element::Type::NOTE || note2->type() != Element::Type::NOTE
+                              || note1->chord()->tick() >= note2->chord()->tick()
+                              || note1->chord()->staff()->part()->instrument(note1->chord()->tick())
+                                    != note2->chord()->staff()->part()->instrument(note2->chord()->tick()) )
+                        return true;
+                  if (note1 != oldNote1 || note2 != oldNote2) {
+                        spanner()->setNoteSpan(note1, note2);          // set new spanner span
                         }
                   }
-            else if (key == Qt::Key_Right) {
-                  if (curGrip == Grip::START) {
-                        if (m1->nextMeasure())
-                              m1 = m1->nextMeasure();
+                  break;
+            default:
+                  {
+                  Measure* m1 = l->startMeasure();
+                  Measure* m2 = l->endMeasure();
+
+                  if (key == Qt::Key_Left) {
+                        if (curGrip == Grip::START) {
+                              if (m1->prevMeasure())
+                                    m1 = m1->prevMeasure();
+                              }
+                        else if (curGrip == Grip::END || curGrip == Grip::MIDDLE) {
+                              Measure* m = m2->prevMeasure();
+                              if (m)
+                                    m2 = m;
+                              }
                         }
-                  else if (curGrip == Grip::END || curGrip == Grip::MIDDLE) {
-                        if (m2->nextMeasure())
-                              m2 = m2->nextMeasure();
+                  else if (key == Qt::Key_Right) {
+                        if (curGrip == Grip::START) {
+                              if (m1->nextMeasure())
+                                    m1 = m1->nextMeasure();
+                              }
+                        else if (curGrip == Grip::END || curGrip == Grip::MIDDLE) {
+                              if (m2->nextMeasure())
+                                    m2 = m2->nextMeasure();
+                              }
+                        }
+                  if (m1->tick() > m2->tick())
+                        return true;
+                  if (l->startElement() != m1) {
+                        l->setTick(m1->tick());
+                        l->setTicks(m2->endTick() - m1->tick());
+                        }
+                  else if (l->endElement() != m2) {
+                        l->setTicks(m2->endTick() - m1->tick());
                         }
                   }
-            if (m1->tick() > m2->tick())
-                  return true;
-            if (l->startElement() != m1) {
-                  l->setTick(m1->tick());
-                  l->setTicks(m2->endTick() - m1->tick());
-                  }
-            else if (l->endElement() != m2) {
-                  l->setTicks(m2->endTick() - m1->tick());
-                  }
-            }
+      }
+
       _score->doLayout();     // needed to compute multi measure rests
 
 //      l->layout();
@@ -459,7 +526,8 @@ SLine::SLine(const SLine& s)
 
 //---------------------------------------------------------
 //   linePos
-//    return System/Staff coordinates
+//    Anchor::NOTE: return anchor note position in system coordinates
+//    Other:        return (x position (relative to what?), 0)
 //---------------------------------------------------------
 
 QPointF SLine::linePos(Grip grip, System** sys) const
@@ -656,21 +724,16 @@ QPointF SLine::linePos(Grip grip, System** sys) const
 
             case Spanner::Anchor::NOTE:
                   {
-//                  System* s = static_cast<Note*>(startElement())->chord()->segment()->system();
-//                  *sys = s;
                   Element* e = grip == Grip::START ? startElement() : endElement();
                   if (!e)
                         return QPointF();
                   System* s = static_cast<Note*>(e)->chord()->segment()->system();
                   *sys = s;
-                  // for GLISSANDO returns the position of the anchor note relative to the system
-                  // for others, returns the position of the anchor note relative to the staff
+                  // return the position of the anchor note relative to the system
 //                  QPointF     elemPagePos = e->pagePos();                   // DEBUG
 //                  QPointF     systPagePos = s->pagePos();
 //                  qreal       staffYPage  = s->staffYpage(e->staffIdx());
-                  return e->pagePos() -
-                        (type() == Element::Type::GLISSANDO ? s->pagePos()
-                              : QPointF(s->pagePos().x(), s->staffYpage(e->staffIdx())) );
+                  return e->pagePos() - s->pagePos();
                   }
 
             case Spanner::Anchor::CHORD:
