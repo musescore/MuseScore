@@ -22,6 +22,7 @@
 #include "globals.h"
 #include "libmscore/score.h"
 #include "libmscore/page.h"
+#include "libmscore/excerpt.h"
 #include "preferences.h"
 #include "libmscore/mscore.h"
 #include "libmscore/xml.h"
@@ -127,16 +128,61 @@ bool Album::createScore(const QString& fn)
       loadScores();
 
       Score* firstScore = _scores[0]->score;
-      if (!firstScore)
+      if (!firstScore) {
+            qDebug("First score is NULL. Will not attempt to join scores.");
             return false;
+            }
+
+      // do layout for first score's root and excerpt scores
       firstScore->doLayout();
+      for (int i = 0; i < firstScore->excerpts().count(); i++) {
+            if (firstScore->excerpts().at(i)->partScore()) {
+                  firstScore->excerpts().at(i)->partScore()->doLayout();
+                  }
+            else {
+                  qDebug("First score has excerpts, but excerpt %d is NULL.  Will not attempt to join scores.", i);
+                  return false;
+                  }
+            }
+
       Score* score = firstScore->clone();
+
       foreach (AlbumItem* item, _scores) {
+
             if (item->score == 0 || item->score == firstScore)
                   continue;
+
+            // try to append root score
             item->score->doLayout();
             if (!score->appendScore(item->score)) {
-                  qDebug("cannot append score");
+                  qDebug("Cannot append root score of album item \"%s\".", qPrintable(item->name));
+                  delete score;
+                  return false;
+                  }
+
+            // try to append each excerpt
+            if (item->score->excerpts().count() == score->excerpts().count()) {
+                  for (int i = 0; i < score->excerpts().count(); i++) {
+                        Score* currentScoreExcerpt = item->score->excerpts().at(i)->partScore();
+                        if (currentScoreExcerpt) {
+                              currentScoreExcerpt->doLayout();
+                              if (!score->excerpts().at(i)->partScore()->appendScore(currentScoreExcerpt)) {
+                                    qDebug("Cannot append excerpt %d of album item \"%s\".", i, qPrintable(item->name));
+                                    delete score;
+                                    return false;
+                                    }
+                              }
+                        else {
+                              qDebug("First score has excerpts, but excerpt %d of album item \"%s\" is NULL.  Will not attempt to join scores.",
+                                          i, qPrintable(item->name));
+                              delete score;
+                              return false;
+                              }
+                        }
+                  }
+            else {
+                  qDebug("Will not append album item \"%s\".  Mismatch between number of excerpts with first album item \"%s\"",
+                              qPrintable(item->name), qPrintable(_scores[0]->name));
                   delete score;
                   return false;
                   }
