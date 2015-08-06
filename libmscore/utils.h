@@ -66,6 +66,8 @@ extern int majorVersion();
 extern int minorVersion();
 extern int updateVersion();
 
+extern Note* nextChordNote(Note* note);
+extern Note* prevChordNote(Note* note);
 extern Segment* nextSeg1(Segment* s, int& track);
 extern Segment* prevSeg1(Segment* seg, int& track);
 

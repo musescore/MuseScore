@@ -572,7 +572,7 @@ void Note::removeSpanner(Spanner* l)
                   // abort();
                   }
             if (l->type() == Element::Type::GLISSANDO)
-                 e->chord()->setEndsGlissando(false);
+                 e->chord()->updateEndsGlissando();
             }
       if (!removeSpannerFor(l)) {
             qDebug("Note(%p): cannot remove spannerFor %s %p", this, l->name(), l);
