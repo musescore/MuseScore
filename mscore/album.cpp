@@ -79,7 +79,7 @@ void Album::print()
       if (_scores[0]->score)
             pageOffset = _scores[0]->score->pageNumberOffset();
 
-      foreach(AlbumItem* item, _scores) {
+      for (AlbumItem* item : _scores) {
             Score* score = item->score;
             if (score == 0)
                   continue;
@@ -100,7 +100,7 @@ void Album::print()
                   QRectF fr = page->abbox();
                   QList<Element*> ell = page->items(fr);
                   qStableSort(ell.begin(), ell.end(), elementLessThan);
-                  foreach(const Element* e, ell) {
+                  for (const Element* e : ell) {
                         e->itemDiscovered = 0;
                         if (!e->visible())
                               continue;
@@ -147,7 +147,23 @@ bool Album::createScore(const QString& fn)
 
       Score* score = firstScore->clone();
 
-      foreach (AlbumItem* item, _scores) {
+      int excerptCount = firstScore->excerpts().count();
+      bool joinExcerpt = true;
+	for (AlbumItem* item : _scores) {
+            if (item->score == 0 || item->score == firstScore)
+                  continue;
+            if (item->score->excerpts().count() != excerptCount) {
+                  joinExcerpt = false;
+                  qDebug("Will not join parts. Album item \"%s\".  Mismatch between number of excerpts with first album item \"%s\"", qPrintable(item->name), qPrintable(_scores[0]->name));
+                  break;
+                  }
+            }
+      if (!joinExcerpt) {
+            for (Excerpt* ex : score->excerpts())
+                  score->removeExcerpt(ex->partScore());
+            }
+
+      for (AlbumItem* item : _scores) {
 
             if (item->score == 0 || item->score == firstScore)
                   continue;
@@ -161,7 +177,7 @@ bool Album::createScore(const QString& fn)
                   }
 
             // try to append each excerpt
-            if (item->score->excerpts().count() == score->excerpts().count()) {
+            if (joinExcerpt) {
                   for (int i = 0; i < score->excerpts().count(); i++) {
                         Score* currentScoreExcerpt = item->score->excerpts().at(i)->partScore();
                         if (currentScoreExcerpt) {
@@ -179,12 +195,6 @@ bool Album::createScore(const QString& fn)
                               return false;
                               }
                         }
-                  }
-            else {
-                  qDebug("Will not append album item \"%s\".  Mismatch between number of excerpts with first album item \"%s\"",
-                              qPrintable(item->name), qPrintable(_scores[0]->name));
-                  delete score;
-                  return false;
                   }
             }
       score->fileInfo()->setFile(fn);
@@ -275,7 +285,7 @@ void Album::load(XmlReader& e)
 
 void Album::loadScores()
       {
-      foreach(AlbumItem* item, _scores) {
+      for (AlbumItem* item : _scores) {
             if (item->path.isEmpty())
                   continue;
             QString ip = item->path;
@@ -298,7 +308,7 @@ void Album::save(Xml& xml)
       {
       xml.stag("Album");
       xml.tag("name", _name);
-      foreach(AlbumItem* item, _scores) {
+      for (AlbumItem* item : _scores) {
             xml.stag("Score");
             xml.tag("name", item->name);
             xml.tag("path", item->path);
