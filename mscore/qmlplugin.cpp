@@ -30,7 +30,6 @@ QmlPlugin::QmlPlugin(QQuickItem* parent)
    : QQuickItem(parent)
       {
       msc = MuseScoreCore::mscoreCore;
-      _requiresScore = true;              // by default plugins require a score to work
       }
 
 QmlPlugin::~QmlPlugin()
