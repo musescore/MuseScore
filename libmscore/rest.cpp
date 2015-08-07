@@ -403,20 +403,22 @@ void Rest::layout()
                   dotline = -1;
                   break;
             }
+      // DEBUG: no longer needed now that computeLineOffset returns an appropriate value?
+      //int stepOffset = 0;
+      //if (staff())
+      //      stepOffset = staff()->staffType()->stepOffset();
       qreal _spatium = spatium();
-      int stepOffset = 0;
-      if (staff())
-            stepOffset = staff()->staffType()->stepOffset();
-      int line       = lrint(userOff().y() / _spatium); //  + ((staff()->lines()-1) * 2);
       qreal lineDist = staff() ? staff()->staffType()->lineDistance().val() : 1.0;
+      qreal yOff     = userOff().y();
+      int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
 
       int lines = staff() ? staff()->lines() : 5;
       int lineOffset = computeLineOffset();
 
       int yo;
-      _sym = getSymbol(durationType().type(), line + lineOffset/2, lines, &yo);
+      _sym = getSymbol(durationType().type(), lineOffset / 2 + userLine, lines, &yo);
       layoutArticulations();
-      rypos() = (qreal(yo) + qreal(lineOffset + stepOffset) * .5) * lineDist * _spatium;
+      rypos() = (qreal(yo) + qreal(lineOffset/* + stepOffset*/) * .5) * lineDist * _spatium;
 
       Spatium rs;
       if (dots()) {
@@ -440,8 +442,6 @@ void Rest::layout()
 
 int Rest::computeLineOffset()
       {
-      int lineOffset = 0;
-      int lines = staff() ? staff()->lines() : 5;
       Segment* s = segment();
       bool offsetVoices = s && measure() && measure()->mstaff(staffIdx())->hasVoices;
       if (offsetVoices && voice() == 0) {
@@ -491,9 +491,16 @@ int Rest::computeLineOffset()
                   offsetVoices = false;
             }
 #endif
+
+      int lineOffset = 0;
+      int lines = staff() ? staff()->lines() : 5;
+      int assumedCenter = 4;
+      int actualCenter = (lines - 1);
+      int centerDiff = actualCenter - assumedCenter;
+
       if (offsetVoices) {
             // move rests in a multi voice context
-            bool up = (voice() == 0) || (voice() == 2);       // TODO: use style values
+            bool up = (voice() == 0) || (voice() == 2);     // TODO: use style values
             switch(durationType().type()) {
                   case TDuration::DurationType::V_LONG:
                         lineOffset = up ? -3 : 5;
@@ -502,9 +509,11 @@ int Rest::computeLineOffset()
                         lineOffset = up ? -3 : 5;
                         break;
                   case TDuration::DurationType::V_MEASURE:
-                        if (duration() >= Fraction(2, 1))    // breve symbol
+                        if (duration() >= Fraction(2, 1))   // breve symbol
                               lineOffset = up ? -3 : 5;
-                        // fall through
+                        else
+                              lineOffset = up ? -4 : 6;     // whole symbol
+                        break;
                   case TDuration::DurationType::V_WHOLE:
                         lineOffset = up ? -4 : 6;
                         break;
@@ -537,60 +546,51 @@ int Rest::computeLineOffset()
                   default:
                         break;
                   }
-            // adjust offsets for staves with fewer than five lines
-            if (lines == 1) {
-                  if (lineOffset > 0)
-                        lineOffset -= 5;
-                  else
-                        lineOffset -= 3;
-                  }
-            else if (lines == 2) {
-                  if (lineOffset > 0)
-                        lineOffset -= 4;
-                  else
-                        lineOffset -= 2;
-                  }
-            else if (lines < 5) {
-                  if (lineOffset > 0)
-                        lineOffset -= (5 - lines) * 2;
+
+            // adjust offsets for staves with other than five lines
+            if (lines != 5) {
+                  lineOffset += centerDiff;
+                  if (centerDiff & 1) {
+                        // round to line
+                        if (lines == 2 && staff() && staff()->lineDistance() < 2.0)
+                              ;                                         // leave alone
+                        else if (lines <= 6)
+                              lineOffset += lineOffset > 0 ? -1 : 1;    // round inward
+                        else
+                              lineOffset += lineOffset > 0 ? 1 : -1;    // round outward
+                        }
                   }
             }
       else {
-            // compute reasonable offset for staves of fewer than 5 lines
+            // Gould says to center rests on middle line or space
+            // but subjectively, many rests look strange centered on a space
+            // so we do it for 2-line staves only
+            if (centerDiff & 1 && lines != 2)
+                  centerDiff += 1;  // round down
+
+            lineOffset = centerDiff;
             switch(durationType().type()) {
                   case TDuration::DurationType::V_LONG:
                   case TDuration::DurationType::V_BREVE:
                   case TDuration::DurationType::V_MEASURE:
                   case TDuration::DurationType::V_WHOLE:
-                        if (lines <= 2)
-                              lineOffset = -2;
+                        if (lineOffset & 1)
+                              lineOffset += 1;  // always round to nearest line
+                        else if (lines <= 3)
+                              lineOffset += 2;  // special case - move down for 1-line or 3-line staff
                         break;
                   case TDuration::DurationType::V_HALF:
-                        if (lines == 1)
-                              lineOffset = -4;
-                        else if (lines <= 3)
-                              lineOffset = -2;
-                        break;
-                  case TDuration::DurationType::V_QUARTER:
-                  case TDuration::DurationType::V_EIGHTH:
-                  case TDuration::DurationType::V_16TH:
-                  case TDuration::DurationType::V_32ND:
-                  case TDuration::DurationType::V_64TH:
-                  case TDuration::DurationType::V_128TH:
-                  case TDuration::DurationType::V_256TH:
-                  case TDuration::DurationType::V_512TH:
-                  case TDuration::DurationType::V_1024TH:
-                        if (lines == 1)
-                              lineOffset = -4;
-                        if (lines == 2)
-                              lineOffset = -3;
-                        else if (lines == 3)
-                              lineOffset = -2;
+                        if (lineOffset & 1)
+                              lineOffset += 1;  // always round to nearest line
                         break;
                   default:
                         break;
                   }
             }
+      // DEBUG: subtract this off only to be added back in layout()?
+      // that would throw off calculation of when ledger lines are needed
+      //if (staff())
+      //      lineOffset -= staff()->staffType()->stepOffset();
       return lineOffset;
       }
 
