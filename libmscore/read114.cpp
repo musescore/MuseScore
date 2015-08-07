@@ -255,8 +255,10 @@ void Part::read114(XmlReader& e)
                         int n = 0;
                         if (st->lines() == 1)
                               n = 4;
-                        for (int  i = 0; i < DRUM_INSTRUMENTS; ++i)
+                        for (int  i = 0; i < DRUM_INSTRUMENTS; ++i) {
                               d->drum(i).line -= n;
+                              d->drum(i).line /= 2;
+                              }
                         }
                   }
             else if (tag == "name") {
