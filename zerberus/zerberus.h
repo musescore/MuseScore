@@ -77,6 +77,7 @@ class Zerberus : public Ms::Synthesizer {
       VoiceFifo freeVoices;
       Voice* activeVoices = 0;
       int _loadProgress = 0;
+      bool _loadWasCanceled = false;
 
       void programChange(int channel, int program);
       void trigger(Channel*, int key, int velo, Trigger);
@@ -97,6 +98,8 @@ class Zerberus : public Ms::Synthesizer {
       Channel* channel(int n)       { return _channel[n]; }
       int loadProgress()            { return _loadProgress; }
       void setLoadProgress(int val) { _loadProgress = val; }
+      bool loadWasCanceled()        { return _loadWasCanceled; }
+      void setLoadWasCanceled(bool status)     { _loadWasCanceled = status; }
 
       virtual void setMasterTuning(double val) { _masterTuning = val;  }
       virtual double masterTuning() const      { return _masterTuning; }
