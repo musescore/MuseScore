@@ -340,6 +340,8 @@ bool ZInstrument::loadSfz(const QString& s)
                   continue;
             QList<QByteArray> bal = ba.split(' ');
             foreach(const QByteArray& bb, bal) {
+                  if (zerberus->loadWasCanceled())
+                        return false;
                   if (bb == "<group>") {
                         if (!groupMode && !r.isEmpty())
                               addRegion(r);
