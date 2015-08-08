@@ -144,6 +144,8 @@ void stretchAudio(Score * score, const QMap<int,qreal>& t2t) {
     qreal tempo = ((tick-ptick) / ( (t2t[tick]-t2t[0]) - tempomap->tick2time(ptick))) / 
                     (MScore::division * tempomap->relTempo());
 
+    qWarning() << tempo;
+
     tempomap->setTempo(ptick,tempo);
 
     ptick = tick;
@@ -201,7 +203,7 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 		return false;
 	}
 
-  QMap<int,qreal> tick2time; // is bypassed, if empty!
+  QMap<int,qreal> tick2time, orig_t2t; // latter is bypassed, if empty!
 
   MQZipWriter uz(saveName);
 
@@ -235,7 +237,7 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
       saveMidi(cs,tname);
       addFileToZip(&uz, tname, tname);
 
-    	createSvgCollection(&uz, cs, QString("0/"), tick2time);
+    	createSvgCollection(&uz, cs, QString("0/"), orig_t2t);
     }
     else {
 
@@ -244,8 +246,12 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
         QJsonArray ticks = onsets["ticks"].toArray();
         QJsonArray times = onsets["times"].toArray();
 
-        for(int i=0;i<ticks.size();i++)
-          tick2time[ticks[i].toInt()] = times[i].toDouble();
+        for(int i=0;i<ticks.size();i++) {
+          int tick = ticks[i].toInt();
+          tick2time[tick] = times[i].toDouble();
+          orig_t2t[tick] = cs->tempomap()->tick2time(tick);
+        }
+
       }
 
       // Number parts just the same as exporting metadata
@@ -277,14 +283,14 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 
         int ei = 0;
         QString prefix = QString::number(ei++)+'/';
-        createSvgCollection(&uz, cs, prefix, tick2time);
+        createSvgCollection(&uz, cs, prefix, orig_t2t);
 
   	    foreach (Excerpt* e, thisScore->excerpts())  {
   	    	Score * tScore = e->partScore();
           qWarning() << "SVC: CREATING PART" << ei;
 
           prefix = QString::number(ei++)+'/';
-  	    	createSvgCollection(&uz, tScore, prefix, tick2time);
+  	    	createSvgCollection(&uz, tScore, prefix, orig_t2t);
   	    }
       }
 	}
@@ -315,9 +321,9 @@ Note * first_note(Score * score) {
     return NULL;
 }
 
-QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t, QString basename);
+QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& orig_t2t, QString basename);
 
-void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal>& t2t) {
+void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal>& orig_t2t) {
 
       QJsonObject qts = QJsonObject();
 
@@ -360,11 +366,7 @@ void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, 
 
       int total_ticks = lastm->tick()+lastm->ticks();
       qts["total_ticks"] = total_ticks;
-      qts["total_time"] = t2t.isEmpty()?
-                            score->tempomap()->tick2time(total_ticks):
-                            t2t.value(total_ticks, // Provide a linear approximation as default (important for old exercises)
-                              t2t.first() + (t2t.last()-t2t.first())*total_ticks/(t2t.lastKey()-t2t.firstKey()));
-
+      qts["total_time"] = score->tempomap()->tick2time(total_ticks);
       score->setPrinting(true);
 
       LayoutMode layout_mode = score->layoutMode();
@@ -373,12 +375,12 @@ void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, 
       score->undo(new ChangeLayoutMode(score, LayoutMode::PAGE));
       score->doLayout();
       
-      qts["systems"] = createSvgs(score,uz,t2t,prefix+QString("Page"));   
+      qts["systems"] = createSvgs(score,uz,orig_t2t,prefix+QString("Page"));   
 
       score->undo(new ChangeLayoutMode(score, LayoutMode::LINE));
       score->doLayout();
 
-      qts["csystem"] = createSvgs(score,uz,t2t,prefix+QString("Line"))[0];
+      qts["csystem"] = createSvgs(score,uz,orig_t2t,prefix+QString("Line"))[0];
 
       score->undo(new ChangeLayoutMode(score, layout_mode));
       score->doLayout();
@@ -474,7 +476,7 @@ qreal * find_margins(Score * score) {
     return res;
 }
 
-QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t, QString basename) {
+QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& orig_t2t, QString basename) {
 
       QPainter * p = NULL;
       QBuffer * svgbuf=NULL;
@@ -497,17 +499,25 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
 
       QSet<Note *> * tie_ends = NULL; 
 
-      bool use_t2t = !t2t.isEmpty();
       TempoMap * tempomap = score->tempomap();
 
       QJsonArray result;
+
+      // Find max system width
+      qreal max_w = 0;
+      foreach( Page* page, score->pages() )
+         foreach( System* sys, *(page->systems()) ) {
+            qreal cur_w = sys->pageBoundingRect().width();
+            if (cur_w>max_w) max_w = cur_w;
+        }
 
       foreach( Page* page, score->pages() ) {
          foreach( System* sys, *(page->systems()) ) {
             QJsonObject sobj;
 
             QRectF sys_rect = sys->pageBoundingRect();
-            w = sys_rect.width() + 2*h_margin;
+            //w = sys_rect.width() + 2*h_margin;
+            w = max_w + 2*h_margin; // Make systems uniform width
             h = sys_rect.height() + top_margin + bot_margin;
  
             svgname = basename + QString::number(count++)+".svg";
@@ -541,7 +551,7 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
             sys->scanElements(&elems, collectElements, false);
 
             qreal end_pos = -1.0;
-            QJsonArray barlines, bartimes, barbeats;
+            QJsonArray barlines, bartimes, barbeats, barirregular;
             QMap<int,qreal> tick2pos;
             QMap<int,int> just_tied; // just the end of tied note
             QMap<int,int> is_rest;
@@ -596,12 +606,10 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
                   Measure * m = (Measure*)e;
                   barlines.push_back(lpos);
                   barbeats.push_back(m->len().numerator());
+                  barirregular.push_back(m->irregular()?1:0);
 
                   int tick = m->first()->tick();
-                  bartimes.push_back(use_t2t?
-                    t2t[tick]:tempomap->tick2time(tick));
-
-
+                  bartimes.push_back(tempomap->tick2time(tick));
                   
                   end_pos = (bb.right()+dx)/w;
                }
@@ -621,11 +629,14 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
           
             delete p; delete svgbuf; delete tie_ends;
 
-            QJsonArray ticks, times, positions, change, rest, pitches_ar;
+            QJsonArray ticks, times, otimes, positions, change, rest, pitches_ar;
 
+            bool has_original = orig_t2t.isEmpty();
             foreach(int tick, tick2pos.keys()){
               ticks.push_back(tick);
-              times.push_back(use_t2t?t2t[tick]:tempomap->tick2time(tick));
+              qreal ttime = tempomap->tick2time(tick);
+              times.push_back(ttime);
+              otimes.push_back(has_original?orig_t2t[tick]:ttime);
               positions.push_back(tick2pos[tick]);
               pitches_ar.push_back(pitches.value(tick,-1));
 
@@ -640,8 +651,10 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& t2t
             sobj["blines"] = barlines;
             sobj["btimes"] = bartimes;
             sobj["bbeats"] = barbeats;
+            sobj["birreg"] = barirregular;
 
             sobj["times"] = times;
+            sobj["otimes"] = otimes;
             sobj["is_change"] = change;
             sobj["is_rest"] = rest;
 
