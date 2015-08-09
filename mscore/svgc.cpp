@@ -248,7 +248,7 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
         QJsonArray ticks = onsets["ticks"].toArray();
         QJsonArray times = onsets["times"].toArray();
 
-        t0 = times[0] - cs->tempomap()->tick2time(0);
+        t0 = times[0].toDouble() - cs->tempomap()->tick2time(0);
 
         for(int i=0;i<ticks.size();i++) {
           int tick = ticks[i].toInt();
