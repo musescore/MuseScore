@@ -5462,13 +5462,9 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                         QString glissText = _e.readElementText();
                         if (gliss) {
                               logError(QString("overlapping glissando/slide %1").arg(n+1));
-                              delete gliss;
-                              gliss = 0;
                               }
                         else if (!note) {
                               logError(QString("no note for glissando/slide %1 start").arg(n+1));
-                              delete gliss;
-                              gliss = 0;
                               }
                         else {
                               gliss = new Glissando(_score);
