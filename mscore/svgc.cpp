@@ -144,7 +144,7 @@ void stretchAudio(Score * score, const QMap<int,qreal>& t2t) {
     qreal tempo = ((tick-ptick) / ( (t2t[tick]-t2t[0]) - tempomap->tick2time(ptick))) / 
                     (MScore::division * tempomap->relTempo());
 
-    qWarning() << tempo;
+    //qWarning() << tempo;
 
     tempomap->setTempo(ptick,tempo);
 
@@ -177,7 +177,7 @@ void addFileToZip(MQZipWriter * uz, const QString& filename, const QString & zip
     file.remove();
 }
 
-void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal>& t2t);
+void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal>& t2t, const qreal t0);
 
 bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const bool do_linearize, const QString& partsName) {
 
@@ -237,19 +237,23 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
       saveMidi(cs,tname);
       addFileToZip(&uz, tname, tname);
 
-    	createSvgCollection(&uz, cs, QString("0/"), orig_t2t);
+    	createSvgCollection(&uz, cs, QString("0/"), orig_t2t, 0.0);
     }
     else {
+
+      qreal t0 = 0.0;
 
       if (partsinfo.contains("onsets")) {
         QJsonObject onsets = partsinfo["onsets"].toObject(); 
         QJsonArray ticks = onsets["ticks"].toArray();
         QJsonArray times = onsets["times"].toArray();
 
+        t0 = times[0] - cs->tempomap()->tick2time(0);
+
         for(int i=0;i<ticks.size();i++) {
           int tick = ticks[i].toInt();
           tick2time[tick] = times[i].toDouble();
-          orig_t2t[tick] = cs->tempomap()->tick2time(tick);
+          orig_t2t[tick] = t0 + cs->tempomap()->tick2time(tick);
         }
 
       }
@@ -266,6 +270,7 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 
       QJsonObject atracks = partsinfo["audiotracks"].toObject();
       stretchAudio(cs, tick2time);
+
       foreach ( QString key, atracks.keys()) {
         // Synthesize the described track
         QJsonObject atobj = atracks[key].toObject();
@@ -283,14 +288,14 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 
         int ei = 0;
         QString prefix = QString::number(ei++)+'/';
-        createSvgCollection(&uz, cs, prefix, orig_t2t);
+        createSvgCollection(&uz, cs, prefix, orig_t2t ,t0);
 
   	    foreach (Excerpt* e, thisScore->excerpts())  {
   	    	Score * tScore = e->partScore();
-          qWarning() << "SVC: CREATING PART" << ei;
+          //qWarning() << "SVC: CREATING PART" << ei;
 
           prefix = QString::number(ei++)+'/';
-  	    	createSvgCollection(&uz, tScore, prefix, orig_t2t);
+  	    	createSvgCollection(&uz, tScore, prefix, orig_t2t, t0);
   	    }
       }
 	}
@@ -321,9 +326,9 @@ Note * first_note(Score * score) {
     return NULL;
 }
 
-QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& orig_t2t, QString basename);
+QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& orig_t2t, const qreal t0, QString basename);
 
-void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal>& orig_t2t) {
+void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, const QMap<int,qreal>& orig_t2t, const qreal t0) {
 
       QJsonObject qts = QJsonObject();
 
@@ -375,12 +380,12 @@ void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, 
       score->undo(new ChangeLayoutMode(score, LayoutMode::PAGE));
       score->doLayout();
       
-      qts["systems"] = createSvgs(score,uz,orig_t2t,prefix+QString("Page"));   
+      qts["systems"] = createSvgs(score,uz,orig_t2t,t0,prefix+QString("Page"));   
 
       score->undo(new ChangeLayoutMode(score, LayoutMode::LINE));
       score->doLayout();
 
-      qts["csystem"] = createSvgs(score,uz,orig_t2t,prefix+QString("Line"))[0];
+      qts["csystem"] = createSvgs(score,uz,orig_t2t,t0,prefix+QString("Line"))[0];
 
       score->undo(new ChangeLayoutMode(score, layout_mode));
       score->doLayout();
@@ -448,7 +453,7 @@ qreal * find_margins(Score * score) {
           qreal bot = rect.bottom();
 
           //if (e->type() == Element::Type::SLUR_SEGMENT)
-            qDebug() << e->name() << sys_top-top << bot-sys_bot;
+          //qDebug() << e->name() << sys_top-top << bot-sys_bot;
 
           if (!e->visible()) continue;
 
@@ -469,14 +474,14 @@ qreal * find_margins(Score * score) {
       }
     }
 
-    qDebug() << "MARGINS: "<< max_tm << " " << max_bm << " " << score->styleP(StyleIdx::minSystemDistance)/2 << endl;
+    //qDebug() << "MARGINS: "<< max_tm << " " << max_bm << " " << score->styleP(StyleIdx::minSystemDistance)/2 << endl;
 
     qreal * res = new qreal[2];
     res[0] = max_tm; res[1] = max_bm;
     return res;
 }
 
-QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& orig_t2t, QString basename) {
+QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& orig_t2t, const qreal t0, QString basename) {
 
       QPainter * p = NULL;
       QBuffer * svgbuf=NULL;
@@ -562,14 +567,22 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
                if (!e->visible())
                      continue;
 
+               if (e->type() == Element::Type::TEMPO_TEXT)
+                  continue;
+
                QPointF pos(e->pagePos());
                p->translate(pos);
                e->draw(p);
 
                QRectF bb = e->pageBoundingRect();
+
+               // Make an exception for rests that are full measure length
+               // Make them start at the barline instead of at the symbol
+               if (e->type() == Element::Type::REST && 
+                      ((Rest*)e)->isFullMeasureRest() )
+                    bb = ((Rest*)e)->measure()->pageBoundingRect();
+
                qreal lpos = (bb.left()+dx)/w;
-
-
 
                if (e->type() == Element::Type::NOTE || 
                    e->type() == Element::Type::REST) {
@@ -579,7 +592,8 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
 
                   int tick = cr->segment()->tick();
 
-                  if (!tick2pos.contains(tick) || tick2pos[tick]>lpos)
+                  if (!tick2pos.contains(tick) || tick2pos[tick]>lpos || 
+                      (is_rest.value(tick,false) && e->type() == Element::Type::NOTE)) // is_rest check here mainly for the full measure rest special case if there are notes in other voices
                     tick2pos[tick] = lpos;
 
                   // NB! ar[17] = !ar.contains(17); would not work as expected...
@@ -632,9 +646,10 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
             QJsonArray ticks, times, otimes, positions, change, rest, pitches_ar;
 
             bool has_original = orig_t2t.isEmpty();
+
             foreach(int tick, tick2pos.keys()){
               ticks.push_back(tick);
-              qreal ttime = tempomap->tick2time(tick);
+              qreal ttime = tempomap->tick2time(tick) + t0;
               times.push_back(ttime);
               otimes.push_back(has_original?orig_t2t[tick]:ttime);
               positions.push_back(tick2pos[tick]);
