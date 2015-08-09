@@ -623,7 +623,7 @@ QJsonArray createSvgs(Score* score, MQZipWriter * uz, const QMap<int,qreal>& ori
                   barirregular.push_back(m->irregular()?1:0);
 
                   int tick = m->first()->tick();
-                  bartimes.push_back(tempomap->tick2time(tick));
+                  bartimes.push_back(tempomap->tick2time(tick)+t0);
                   
                   end_pos = (bb.right()+dx)/w;
                }
