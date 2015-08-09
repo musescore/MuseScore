@@ -675,7 +675,8 @@ static void addLyric(ChordRest* cr, Lyrics* l, int lyricNo)
 static void addLyrics(ChordRest* cr,
                       QMap<int, Lyrics*>& numbrdLyrics,
                       QMap<int, Lyrics*>& defyLyrics,
-                      QList<Lyrics*>& unNumbrdLyrics)
+                      QList<Lyrics*>& unNumbrdLyrics,
+                      QSet<Lyrics*>& extLyrics)
       {
       // first the lyrics with valid number
       int lyricNo = -1;
@@ -683,6 +684,8 @@ static void addLyrics(ChordRest* cr,
             lyricNo = i.key(); // use number obtained from MusicXML file
             Lyrics* l = i.value();
             addLyric(cr, l, lyricNo);
+            if (extLyrics.contains(l))
+                  qDebug("extend lyric %p number %d", l, lyricNo);
             }
 
       // then the lyrics without valid number but with valid default-y
@@ -690,6 +693,8 @@ static void addLyrics(ChordRest* cr,
             lyricNo++; // use sequence number
             Lyrics* l = i.value();
             addLyric(cr, l, lyricNo);
+            if (extLyrics.contains(l))
+                  qDebug("extend lyric %p number %d", l, lyricNo);
             }
 
       // finally the remaining lyrics, which are simply added in order they appear in the MusicXML file
@@ -697,6 +702,8 @@ static void addLyrics(ChordRest* cr,
             lyricNo++; // use sequence number
             Lyrics* l = *i;
             addLyric(cr, l, lyricNo);
+            if (extLyrics.contains(l))
+                  qDebug("extend lyric %p number %d", l, lyricNo);
             }
       }
 
@@ -4277,7 +4284,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             cr = c;
             }
 
-      // cr can be 0 here(if a rest cannot be added)
+      // cr can be 0 here (if a rest cannot be added)
       // TODO: complete and cleanup handling this case
       if (cr) {
             cr->setVisible(printObject);
@@ -4291,6 +4298,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       QMap<int, Lyrics*> numberedLyrics; // lyrics with valid number
       QMap<int, Lyrics*> defaultyLyrics; // lyrics with valid default-y
       QList<Lyrics*> unNumberedLyrics;   // lyrics with neither
+      QSet<Lyrics*> extendedLyrics;      // lyrics with the extend flag set
       MusicXmlTupletDesc tupletDesc;
       bool lastGraceAFter = false;       // set by notations() if end of grace after sequence found
 
@@ -4298,7 +4306,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
             //qDebug("in second loop element '%s'", qPrintable(_e.name().toString()));
             if (_e.name() == "lyric")
-                  lyric(numberedLyrics, defaultyLyrics, unNumberedLyrics);  // TODO: move track handling to addlyric
+                  lyric(numberedLyrics, defaultyLyrics, unNumberedLyrics, extendedLyrics);  // TODO: move track handling to addlyric
             else if (_e.name() == "notations")
                   notations(note, cr, noteStartTime.ticks(), tupletDesc, lastGraceAFter);
             else
@@ -4333,9 +4341,9 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   }
             }
 
-      // add lyrics found by xmlLyric
+      // add lyrics found by lyric
       if (cr)
-            addLyrics(cr, numberedLyrics, defaultyLyrics, unNumberedLyrics);
+            addLyrics(cr, numberedLyrics, defaultyLyrics, unNumberedLyrics, extendedLyrics);
 
       // add figured bass element
       if (!fbl.isEmpty()) {
@@ -5061,7 +5069,8 @@ void MusicXMLParserPass2::rest(int& step, int& octave)
 
 void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
                                 QMap<int, Lyrics*>& defyLyrics,
-                                QList<Lyrics*>& unNumbrdLyrics)
+                                QList<Lyrics*>& unNumbrdLyrics,
+                                QSet<Lyrics*>& extLyrics)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "lyric");
 
@@ -5097,7 +5106,22 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
 
       QString formattedText;
       while (_e.readNextStartElement()) {
-            if (_e.name() == "syllabic") {
+            if (_e.name() == "elision") {
+                  // TODO verify elision handling
+                  /*
+                   QString text = _e.readElementText();
+                   if (text.isEmpty())
+                   formattedText += " ";
+                   else
+                   */
+                  formattedText += nextPartOfFormattedString(_e);
+            }
+            else if (_e.name() == "extend") {
+                  qDebug("lyric %p has extend", l);
+                  extLyrics.insert(l);
+                  _e.readNext();
+            }
+            else if (_e.name() == "syllabic") {
                   QString syll = _e.readElementText();
                   if (syll == "single")
                         l->setSyllabic(Lyrics::Syllabic::SINGLE);
@@ -5112,16 +5136,6 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
                   }
             else if (_e.name() == "text")
                   formattedText += nextPartOfFormattedString(_e);
-            else if (_e.name() == "elision") {
-                  // TODO verify elision handling
-                  /*
-                  QString text = _e.readElementText();
-                  if (text.isEmpty())
-                        formattedText += " ";
-                  else
-                   */
-                  formattedText += nextPartOfFormattedString(_e);
-                  }
             else
                   skipLogCurrElem();
             }

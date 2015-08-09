@@ -119,7 +119,7 @@ public:
       void pitch(int& step, int& alter, int& oct, AccidentalType& accid);
       void rest(int& step, int& octave);
       void lyric(QMap<int, Lyrics*>& numbrdLyrics, QMap<int, Lyrics*>& defyLyrics,
-                 QList<Lyrics*>& unNumbrdLyrics);
+                 QList<Lyrics*>& unNumbrdLyrics, QSet<Lyrics*>& extLyrics);
       void notations(Note* note, ChordRest* cr, const int tick, MusicXmlTupletDesc& tupletDesc, bool& lastGraceAFter);
       void stem(MScore::Direction& sd, bool& nost);
       void fermata(ChordRest* cr);
