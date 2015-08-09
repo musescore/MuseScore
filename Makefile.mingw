@@ -22,7 +22,7 @@
 REVISION  = $(shell type mscore\revision.h)
 VERSION   = 2.0.3b-${REVISION}
 #VERSION = 2.0.2
-CPUS = 1
+CPUS = %NUMBER_OF_PROCESSORS%
 
 release:
 	if not exist build.release\nul mkdir build.release
@@ -68,3 +68,4 @@ doxy:
 	doxygen build.debug/Doxyfile
 doxylib:
 	doxygen build.debug/Doxyfile-LibMscore
+
