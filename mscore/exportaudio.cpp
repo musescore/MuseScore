@@ -82,7 +82,9 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
       QProgressDialog progress(this);
       progress.setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
       progress.setWindowModality(Qt::ApplicationModal);
-      progress.setCancelButton(0);
+      //progress.setCancelButton(0);
+      progress.setCancelButtonText(tr("Cancel"));
+      progress.setLabelText(tr("Exporting..."));
       if (!MScore::noGui)
             progress.show();
 
@@ -170,6 +172,8 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
                         }
                   playTime = endTime;
                   if (!MScore::noGui) {
+                        if (progress.wasCanceled())
+                              break;
                         progress.setValue((pass * et + playTime) / 2);
                         qApp->processEvents();
                         }
@@ -179,6 +183,8 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
                   if (playTime >= et && max*peak < 0.000001)
                         break;
                   }
+            if (progress.wasCanceled())
+                  break;
             if (pass == 0 && peak == 0.0) {
                   qDebug("song is empty");
                   break;
@@ -194,6 +200,8 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             qDebug("close soundfile failed");
             return false;
             }
+      if (progress.wasCanceled())
+            QFile::remove(name);
 
       return true;
       }
