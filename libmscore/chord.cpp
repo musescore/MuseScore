@@ -2724,28 +2724,41 @@ QPointF Chord::layoutArticulation(Articulation* a)
                   alignToStem = (st == ArticulationType::Staccato && articulations().size() == 1);
                   }
             else {                              // if articulation is not beyond a stem
-                  int line;
+                  int line;                     // line of note
+                  int staffOff;                 // offset that should account for line spacing
+                  int extraOff = 0.0;           // offset that should not acocunt for line spacing
+                  int lines = (staff()->lines() - 1) * 2;               // num. of staff positions within staff
                   int add = (st == ArticulationType::Sforzatoaccent ? 1 : 0); // sforzato accent needs more offset
                   if (bottom) {                 // if below chord
                         line = downLine();                              // staff position (lines and spaces) of chord lowest note
-                        int lines = (staff()->lines() - 1) * 2;         // num. of staff positions within staff
                         if (line < lines)                               // if note above staff bottom line
-                              // round space pos. to line pos. above ("line & ~1") and move to 2nd space below ("+3")
-                              line = ((line-add) & ~1) + 3 + add*2;
+                              staffOff = 3 - ((line - add) & 1) + add;        // round to next space below
                         else                                            // if note on or below staff bottom line,
-                              line += 2 + add;                                // move 1 whole space below
+                              staffOff = 2 + add;                             // move 1 whole space below
+                        if (_spStaff != _spatium) {
+                              int clearLine = qMax(line, lines);
+                              int headRoom = qMax(clearLine - line, 0);
+                              extraOff = staffOff - qMin(staffOff, headRoom);
+                              staffOff -= extraOff;
+                              }
                         pos.ry() = -a->height() / 2;                    // symbol is below baseline, shift if a bit up
                         }
                   else {                        // if above chord
                         line = upLine();                                // staff position (lines and spaces) of chord highest note
                         if (line > 0)                                   // if note below staff top line
-                              // round space pos. to line pos. below ("(line+1) & ~1") and move to 2nd space above ("-3")
-                              line = ((line+1+add) & ~1) - 3 - add*2;
+                              staffOff = -3 + ((line + add) & 1) - add;       // round to next space above
                         else                                            // if note or or above staff top line
-                              line -= 2 + add;                                // move 1 whole space above
+                              staffOff = -2 - add;                            // move 1 whole space above
+                        if (_spStaff != _spatium) {
+                              int clearLine = qMin(line, 0);
+                              int headRoom = qMax(line - clearLine, 0);
+                              extraOff = staffOff + qMin(-staffOff, headRoom);
+                              staffOff -= extraOff;
+                              }
                         pos.ry() = a->height() / 2;                     // symbol is on baseline, shift it a bit down
                         }
-                  pos.ry() += line * _spStaff2;                         // convert staff position to sp distance
+                  pos.ry() += (line + staffOff) * _spStaff2;            // convert staff position to sp distance
+                  pos.ry() += extraOff * _spatium2;
                   }
             if (!staff()->isTabStaff() && !alignToStem) {
                   if (up())
@@ -2804,13 +2817,13 @@ QPointF Chord::layoutArticulation(Articulation* a)
             }
 
       if (botGap)
-            chordBotY += _spStaff;
+            chordBotY += _spatium;
       else
-            chordBotY += _spStaff * .5;
+            chordBotY += _spatium * .5;
       if (topGap)
-            chordTopY -= _spStaff;
+            chordTopY -= _spatium;
       else
-            chordTopY -= _spStaff * .5;
+            chordTopY -= _spatium * .5;
 
       // avoid collisions of staff articulations with chord notes:
       // gap between note and staff articulation is distance0 + 0.5 spatium
@@ -2862,9 +2875,9 @@ QPointF Chord::layoutArticulation(Articulation* a)
 
       qreal dist;                               // distance between occupied area and articulation
       switch(st) {
-            case ArticulationType::Marcato:        dist = 1.0 * _spStaff; break;
-            case ArticulationType::Sforzatoaccent: dist = 1.5 * _spStaff; break;
-            default: dist = score()->styleS(StyleIdx::propertyDistance).val() * _spStaff;
+            case ArticulationType::Marcato:        dist = 1.0 * _spatium; break;
+            case ArticulationType::Sforzatoaccent: dist = 1.5 * _spatium; break;
+            default: dist = score()->styleS(StyleIdx::propertyDistance).val() * _spatium;
             }
 
       if (aa == ArticulationAnchor::CHORD || aa == ArticulationAnchor::TOP_CHORD || aa == ArticulationAnchor::BOTTOM_CHORD) {
