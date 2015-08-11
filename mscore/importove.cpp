@@ -1553,6 +1553,10 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                                           setDirection = true;
                                           }
                                     }
+                              else {
+                              	// no drumset, we don't allow mid staff percussion
+                                    note->setTpc(14);
+                              	}
                               }
                         else {
                               const int OCTAVE = 7;
