@@ -290,6 +290,37 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
       else
             tick2 = endSegment->tick();
       spanner->setTick2(tick2);
+      if (spanner->type() == Element::Type::TEXTLINE
+          || spanner->type() == Element::Type::NOTELINE
+          || spanner->type() == Element::Type::OTTAVA
+          || spanner->type() == Element::Type::PEDAL
+          || spanner->type() == Element::Type::VOLTA) {
+            // rebase text elements to score style
+            TextLine* tl = static_cast<TextLine*>(spanner);
+            TextStyleType st;
+            Text* t;
+            // begin
+            t = tl->beginTextElement();
+            if (t) {
+                  st = t->textStyleType();
+                  if (st >= TextStyleType::DEFAULT)
+                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), textStyle(st));
+                  }
+            // continue
+            t = tl->continueTextElement();
+            if (t) {
+                  st = t->textStyleType();
+                  if (st >= TextStyleType::DEFAULT)
+                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), textStyle(st));
+                  }
+            // end
+            t = tl->endTextElement();
+            if (t) {
+                  st = t->textStyleType();
+                  if (st >= TextStyleType::DEFAULT)
+                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), textStyle(st));
+                  }
+            }
       undoAddElement(spanner);
       }
 

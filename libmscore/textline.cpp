@@ -446,6 +446,21 @@ TextLine::~TextLine()
       }
 
 //---------------------------------------------------------
+//   setScore
+//---------------------------------------------------------
+
+void TextLine::setScore(Score* s)
+      {
+      Spanner::setScore(s);
+      if (_beginText)
+            _beginText->setScore(s);
+      if (_continueText)
+            _continueText->setScore(s);
+      if (_endText)
+            _endText->setScore(s);
+      }
+
+//---------------------------------------------------------
 //   createBeginTextElement
 //---------------------------------------------------------
 
