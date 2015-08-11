@@ -448,6 +448,9 @@ bool Zerberus::loadInstrument(const QString& s)
                   return true;
                   }
             }
+      catch (std::bad_alloc& a) {
+            qDebug("Unable to allocate memory when loading Zerberus soundfont %s", qPrintable(s));
+            }
       catch (...) {
             }
       qDebug("Zerberus::loadInstrument failed");
