@@ -534,13 +534,15 @@ void Spanner::computeEndElement()
       {
       switch (_anchor) {
             case Anchor::SEGMENT: {
-                  _endElement = score()->findCRinStaff(tick2() - 1, track2());
+                  // find last cr on this staff that ends before tick2
+                  _endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
                   if (!_endElement) {
                         qDebug("%s no end element for tick %d", name(), tick2());
                         return;
                         }
                   if (!endCR()->measure()->isMMRest()) {
-                        int nticks = endCR()->tick() + endCR()->actualTicks() - _tick;
+                        ChordRest* cr = endCR();
+                        int nticks = cr->tick() + cr->actualTicks() - _tick;
                         if (_ticks != nticks) {
                               qDebug("%s ticks changed, %d -> %d", name(), _ticks, nticks);
                               setTicks(nticks);

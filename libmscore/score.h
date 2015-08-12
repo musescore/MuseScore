@@ -1039,7 +1039,7 @@ class Score : public QObject {
       Hairpin* addHairpin(bool crescendo, int tickStart, int tickEnd, int track);
 
       ChordRest* findCR(int tick, int track) const;
-      ChordRest* findCRinStaff(int tick, int track) const;
+      ChordRest* findCRinStaff(int tick, int staffIdx) const;
       void layoutSpanner();
       void insertTime(int tickPos, int tickLen);
 
