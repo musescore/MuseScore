@@ -1,5 +1,5 @@
 #!/bin/sh
-xvfb-run ctest --output-on-failure
+xvfb-run ctest -j8 --output-on-failure
 
 PROC_RET=$?
 
