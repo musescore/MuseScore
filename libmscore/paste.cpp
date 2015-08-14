@@ -265,6 +265,13 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               sp->read(e);
                               sp->setTrack(e.track());
                               sp->setTick(e.tick());
+                              // check if we saw endSpanner / stop element already
+                              int id = e.spannerId(sp);
+                              const SpannerValues* sv = e.spannerValues(id);
+                              if (sv) {
+                                    sp->setTick2(sv->tick2);
+                                    sp->setTrack2(sv->track2);
+                                    }
                               undoAddElement(sp);
                               }
                         else if (tag == "endSpanner") {
@@ -859,7 +866,7 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                         qDebug("paste <%s>", data.data());
                   XmlReader e(data);
                   e.setPasteMode(true);
-                  if (!pasteStaff(e, cr->segment(),cr->staffIdx())) {
+                  if (!pasteStaff(e, cr->segment(), cr->staffIdx())) {
                         qDebug("paste failed");
                         return PasteStatus::TUPLET_CROSSES_BAR;
                         }
