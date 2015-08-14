@@ -44,7 +44,8 @@ class RepeatList: public QList<RepeatSegment*>
 
       RepeatSegment* rs;            // tmp value during unwind()
 
-      Measure* jumpToStartRepeat(Measure*);
+      Measure* jumpToStartRepeat(Measure*);      
+      void unwindSection(Measure* fm, Measure* em);
 
    public:
       RepeatList(Score* s);

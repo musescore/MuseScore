@@ -844,6 +844,7 @@ class Score : public QObject {
 
       void endUndoRedo();
       Measure* searchLabel(const QString& s);
+      Measure* searchLabelWithinSectionFirst(const QString& s, Measure* sectionStartMeasure, Measure* sectionEndMeasure);
       RepeatList* repeatList() const;
       qreal utick2utime(int tick) const;
       int utime2utick(qreal utime) const;
