@@ -84,6 +84,7 @@ class TextLine : public SLine {
 
       virtual TextLine* clone() const override            { return new TextLine(*this); }
       virtual Element::Type type() const override         { return Element::Type::TEXTLINE; }
+      virtual void setScore(Score* s) override;
       virtual LineSegment* createLineSegment() override;
 
       virtual void write(Xml& xml) const override;
