@@ -1068,6 +1068,9 @@ class Score : public QObject, public ScoreElement {
       QImage createThumbnail();
       QString createRehearsalMarkText(RehearsalMark* current) const;
       QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
+      
+      static int convertLine(int lineL2, Note *noteL, Note *noteR);
+      static int convertLine(int lineL2, ClefType clefL, ClefType clefR);
 
       //@ ??
       Q_INVOKABLE void cropPage(qreal margins);

@@ -1869,39 +1869,76 @@ int normalizeFbDigit(int digit) {
             return (digit == FBIDigitNone ) ? 3 : digit;
       }
 
+int lineDifference(Key k1, Key k2)
+      {
+            auto base = [](Key k) {
+                  switch (k) {
+                        case Key::C_B:
+                        case Key::C:
+                        case Key::C_S:
+                              return 0;
+                        case Key::D_B:
+                        case Key::D:
+                              return 1;
+                        case Key::E_B:
+                        case Key::E:
+                              return 2;
+                        case Key::F:
+                        case Key::F_S:
+                              return 3;
+                        case Key::G_B:
+                        case Key::G:
+                              return 4;
+                        case Key::A_B:
+                        case Key::A:
+                              return 5;
+                        case Key::B_B:
+                        case Key::B:
+                              return 6;
+                        default:
+                              return -1; // never happens
+                        }
+                  };
+            return base(k1)-base(k2);
+      }
+      
 Note* findAntecedent(Chord *chord, int harmony_line)
       {
       // Here we must apply the accidental seen earlier in the measure if there is one, even if in a different octave.
       // Find the note with maximum tick, but <= note->tick() whose line % 7 == native_pitch->line%7.
       // Take its accidental.
       const Segment::Type st = Segment::Type::ChordRest;
+      Note* bass_note = chord->notes()[0];
       Note* antecedent = nullptr;
-      for (Segment* segment = chord->measure()->first(st); segment; segment = segment->next(st)) {
-            // loop over segments in this measure
-            int track = chord->track();
-            if (segment->tick() > chord->tick())
-                  continue;
-            Element *element = segment->element(track);
-            if (element == 0)
-                  continue; // next track
-            if (false == element->staff()->isPitchedStaff())
-                  continue; // next track
-            if (element->type() != Element::Type::CHORD)
-                  continue; // next track
+      Key k1 = chord->staff()->key(chord->tick());
+      for (int track=0; track < chord->score()->ntracks(); track++) {
+            for (Segment* segment = chord->measure()->first(st); segment; segment = segment->next(st)) {
+                  // loop over segments in this measure
+                  if (segment->tick() > chord->tick())
+                        continue;
+                  Element *element = segment->element(track);
+                  if (element == 0)
+                        continue; // next track
+                  if (false == element->staff()->isPitchedStaff())
+                        continue; // next track
+                  if (element->type() != Element::Type::CHORD)
+                        continue; // next track
             
-            Chord* ch = static_cast<Chord*>(element);
-            
-            for (Note *n : ch->notes()) {
-                  if (!linesEvenOctaves(n->line(), harmony_line) ) // skip note if it is not same line or +/- octaves
-                        continue; // next n
-                  if (nullptr == antecedent)
-                        antecedent = n;
-                        if (n->chord()->tick() < antecedent->chord()->tick())
+                  Chord* ch = static_cast<Chord*>(element);
+                  for (Note *n : ch->notes()) {
+                        Key k2 = n->staff()->key(n->chord()->tick());
+                        int line_effective = Score::convertLine(n->line(), n, bass_note) - lineDifference(k1,k2); // effective line as if converted to the clef and key signature of the bass_note
+                        if (!linesEvenOctaves(line_effective, harmony_line) ) // skip note if it is not same line or +/- octaves
                               continue; // next n
-                  antecedent = n;
+                        if (nullptr == antecedent)
+                              antecedent = n;
+                              if (n->chord()->tick() < antecedent->chord()->tick())
+                                    continue; // next n
+                        antecedent = n;
+                        }
                   }
             }
-            return antecedent;
+      return antecedent;
       }
       
       
@@ -1936,8 +1973,8 @@ void renderFbHarmony(Chord *chord, vector<int> & harmonys, FiguredBassItem::Modi
                         harmony = native_pitch + int(acciv);
                         }
                   else {
-                        // harmony should be close to native_pitch +/- 4 half steps
-                        harmony = antecedent->ppitch();
+                        // harmony should be close to native_pitch +/- 2 half steps
+                        harmony = antecedent->ppitch(); // ppitch is the played pitch, so it is correct even if the antecedent comes from a transposing instrument.
                         while (harmony > native_pitch + 2) // double sharp
                               harmony -= 12;
                         while (harmony < native_pitch - 2) // double flat
@@ -1988,7 +2025,7 @@ bool FiguredBass::calcFiguredBass(Chord *chord, vector<int> & harmonys)
       Q_ASSERT(harmonys.size() == 0);
       Segment *segment = chord->segment();
       FiguredBassItem::Modifier none = FiguredBassItem::Modifier::NONE;
-      
+
       if ( chord->notes().size() == 0 ) {
             return false; // no notes in the chord, not sure if this is possible?
             }

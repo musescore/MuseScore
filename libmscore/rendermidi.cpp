@@ -862,7 +862,7 @@ void renderArpeggio(Chord *chord, QList<NoteEventList> & ell)
 //   convertLine
 // find the line in clefF corresponding to lineL2 in clefR
 //---------------------------------------------------------
-int convertLine (int lineL2, ClefType clefL, ClefType clefR) {
+int Score::convertLine (int lineL2, ClefType clefL, ClefType clefR) {
       int lineR2 = lineL2;
       int goalpitch = line2pitch(lineL2, clefL, Key::C);
       while ( line2pitch(lineR2, clefR, Key::C) > goalpitch )
@@ -878,7 +878,7 @@ int convertLine (int lineL2, ClefType clefL, ClefType clefR) {
 // for example middle C is line 10 in Treble clef, but is line -2 in Bass clef.
 //---------------------------------------------------------
 
-int convertLine(int lineL2, Note *noteL, Note *noteR)
+int Score::convertLine(int lineL2, Note *noteL, Note *noteR)
       {
       return convertLine(lineL2,
          noteL->chord()->staff()->clef(noteL->chord()->tick()),
@@ -912,7 +912,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
       Measure* measureR = chordR->segment()->measure();
 
       Segment* segment = noteL->chord()->segment();
-      int lineR2 = convertLine(lineL2, noteL, noteR);
+      int lineR2 = Score::convertLine(lineL2, noteL, noteR);
       // is there another note in this segment on the same line?
       // if so, use its pitch exactly.
       int halfsteps = 0;
