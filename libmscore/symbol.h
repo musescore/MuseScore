@@ -54,7 +54,7 @@ class Symbol : public BSymbol {
       void setAbove(bool);
 
       virtual qreal baseLine() const     { return 0.0; }
-      Segment* segment() const           { return (Segment*)parent(); }
+      virtual Segment* segment() const   { return (Segment*)parent(); }
       };
 
 //---------------------------------------------------------

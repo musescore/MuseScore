@@ -99,6 +99,7 @@ static const ElementName elementNames[] = {
       ElementName("SlurSegment",          QT_TRANSLATE_NOOP("elementName", "Slur Segment")),
       ElementName("StaffLines",           QT_TRANSLATE_NOOP("elementName", "Staff Lines")),
       ElementName("BarLine",              QT_TRANSLATE_NOOP("elementName", "Bar Line")),
+      ElementName("SystemDivider",        QT_TRANSLATE_NOOP("elementName", "System Divider")),
       ElementName("StemSlash",            QT_TRANSLATE_NOOP("elementName", "Stem Slash")),
       ElementName("Line",                 QT_TRANSLATE_NOOP("elementName", "Line")),
 
@@ -657,6 +658,7 @@ void Element::writeProperties(Xml& xml) const
       if (!userOff().isNull()) {
             if (type() == Element::Type::VOLTA_SEGMENT
                 || type() == Element::Type::GLISSANDO_SEGMENT || isChordRest()
+                || type() == Element::Type::SYSTEM_DIVIDER
                 || (xml.clipboardmode && isSLineSegment()))
                   xml.tag("offset", userOff() / spatium());
             else
@@ -1287,6 +1289,7 @@ Element* Element::create(Element::Type type, Score* score)
             case Element::Type::KEYSIG:            return new KeySig(score);
             case Element::Type::TIMESIG:           return new TimeSig(score);
             case Element::Type::BAR_LINE:          return new BarLine(score);
+            case Element::Type::SYSTEM_DIVIDER:    return new SystemDivider(score);
             case Element::Type::ARPEGGIO:          return new Arpeggio(score);
             case Element::Type::BREATH:            return new Breath(score);
             case Element::Type::GLISSANDO:         return new Glissando(score);

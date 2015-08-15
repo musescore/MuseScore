@@ -121,6 +121,12 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             { StyleIdx::bracketDistance,         bracketDistance         },
             { StyleIdx::akkoladeWidth,           akkoladeWidth           },
             { StyleIdx::akkoladeBarDistance,     akkoladeBarDistance     },
+            { StyleIdx::dividerLeft,             dividerLeft             },
+            { StyleIdx::dividerLeftX,            dividerLeftX            },
+            { StyleIdx::dividerLeftY,            dividerLeftY            },
+            { StyleIdx::dividerRight,            dividerRight            },
+            { StyleIdx::dividerRightX,           dividerRightX           },
+            { StyleIdx::dividerRightY,           dividerRightY           },
             { StyleIdx::propertyDistanceHead,    propertyDistanceHead    },
             { StyleIdx::propertyDistanceStem,    propertyDistanceStem    },
             { StyleIdx::propertyDistance,        propertyDistance        },
@@ -416,6 +422,8 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::repeatBarTips,           showRepeatBarTips->isChecked());
       lstyle.set(StyleIdx::startBarlineSingle,      showStartBarlineSingle->isChecked());
       lstyle.set(StyleIdx::startBarlineMultiple,    showStartBarlineMultiple->isChecked());
+      lstyle.set(StyleIdx::dividerLeftSym,          dividerLeftSym->currentText());
+      lstyle.set(StyleIdx::dividerRightSym,         dividerRightSym->currentText());
 
       lstyle.set(StyleIdx::measureSpacing,          measureSpacing->value());
       lstyle.set(StyleIdx::showMeasureNumber,       showMeasureNumber->isChecked());
@@ -629,6 +637,8 @@ void EditStyle::setValues()
       showRepeatBarTips->setChecked(lstyle.value(StyleIdx::repeatBarTips).toBool());
       showStartBarlineSingle->setChecked(lstyle.value(StyleIdx::startBarlineSingle).toBool());
       showStartBarlineMultiple->setChecked(lstyle.value(StyleIdx::startBarlineMultiple).toBool());
+      dividerLeftSym->setCurrentText(lstyle.value(StyleIdx::dividerLeftSym).toString());
+      dividerRightSym->setCurrentText(lstyle.value(StyleIdx::dividerRightSym).toString());
 
       measureSpacing->setValue(lstyle.value(StyleIdx::measureSpacing).toDouble());
       noteBarDistance->setValue(lstyle.value(StyleIdx::noteBarDistance).toDouble());
