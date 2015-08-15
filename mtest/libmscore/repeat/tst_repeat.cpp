@@ -67,6 +67,12 @@ class TestRepeat : public QObject, public MTest
       
       void repeat26() { repeat("repeat26.mscx", "1;1;2;2;3"); } // empty and garbage jump
 
+      // #27-#30 test forward jumps into repeated section of form:     ||: jump |   |: forward | 1stEnd :| 2ndEnd |   || 
+      void repeat27() { repeat("repeat27.mscx", "1;3;5;6"); }		// jump to forward, play until end,     continue at blank
+      void repeat28() { repeat("repeat28.mscx", "1;3;4;3;5;6"); }	// jump to forward, play until blank,   continue at blank 
+      void repeat29() { repeat("repeat29.mscx", "1;3;2;3;4;3;5;6"); }	// jump to forward, play until to coda, continue at code before forward
+      void repeat30() { repeat("repeat30.mscx", "1;3;6"); }		// jump to forward, play until to coda, continue at coda at end
+
       };
 
 //---------------------------------------------------------
