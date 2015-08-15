@@ -3612,7 +3612,10 @@ ChordRest* Score::findCRinStaff(int tick, int staffIdx) const
                   ChordRest* cr = static_cast<ChordRest*>(ns->element(t));
                   if (cr) {
                         int endTick = cr->tick() + cr->actualTicks();
-                        if (endTick >= lastTick && endTick <= tick) {
+                        // allow fudge factor for tuplets
+                        // TODO: replace with fraction-based calculation
+                        int fudge = cr->tuplet() ? 5 : 0;
+                        if (endTick + fudge >= lastTick && endTick - fudge <= tick) {
                               s = ns;
                               actualTrack = t;
                               lastTick = endTick;

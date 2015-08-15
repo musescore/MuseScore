@@ -543,7 +543,10 @@ void Spanner::computeEndElement()
                   if (!endCR()->measure()->isMMRest()) {
                         ChordRest* cr = endCR();
                         int nticks = cr->tick() + cr->actualTicks() - _tick;
-                        if (_ticks != nticks) {
+                        // allow fudge factor for tuplets
+                        // TODO: replace with fraction-based calculation
+                        int fudge = cr->tuplet() ? 5 : 0;
+                        if (qAbs(_ticks - nticks) > fudge) {
                               qDebug("%s ticks changed, %d -> %d", name(), _ticks, nticks);
                               setTicks(nticks);
                               if (type() == Element::Type::OTTAVA)
