@@ -399,24 +399,29 @@ void RepeatList::unwind()
 
 Measure* RepeatList::jumpToStartRepeat(Measure* m)
       {
-      Measure* nm;
-      //
-      // go back to start of repeat or section break
-      // handle special case of end repeat (Measure m) has a section break
-      //
-      for (nm = m; nm && nm != _score->firstMeasure(); nm = nm->prevMeasure()) {
-            if (nm->repeatFlags() & Repeat::START || (nm->sectionBreak() && m != nm)) {
-                  if (nm->sectionBreak() && nm->nextMeasure())
-                        nm = nm->nextMeasure();
-                  break;
-                  }
-            }
+      // finalize the previous repeat segment
       rs->len = m->tick() + m->ticks() - rs->tick;
       append(rs);
 
+      // search backwards until find start of repeat
+      while (true) {
+
+            if (m->repeatFlags() & Repeat::START)
+                  break;
+
+            if (m == _score->firstMeasure())
+                  break;
+
+            if (m->prevMeasure()->sectionBreak())
+                  break;
+
+            m = m->prevMeasure();
+            }
+
+      // initialize the next repeat segment
       rs        = new RepeatSegment;
-      rs->tick  = nm->tick();
-      return nm;
+      rs->tick  = m->tick();
+      return m;
       }
 
 }

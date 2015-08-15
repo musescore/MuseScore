@@ -67,6 +67,12 @@ class TestRepeat : public QObject, public MTest
       
       void repeat26() { repeat("repeat26.mscx", "1;1;2;2;3"); } // empty and garbage jump
 
+      void repeat27() { repeat("repeat27.mscx", "1;2;2;1"); }       // #73486 single-measure repeat at end of section
+      void repeat28() { repeat("repeat28.mscx", "1;2;2;1;2;1"); }   // #73486 single-measure repeat at end of section w/DC
+      void repeat29() { repeat("repeat29.mscx", "1;2;3;3;2;3;1"); } // #73486 single-measure repeat at end of section w/DS
+
+      void repeat30() { repeat("repeat30.mscx", "1;1;2;1;2"); }     // #73496 single measure section at beginning of score followed by a section with end repeat (without beginning repeat)
+
       };
 
 //---------------------------------------------------------
