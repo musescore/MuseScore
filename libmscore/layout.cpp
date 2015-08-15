@@ -3528,6 +3528,17 @@ void Score::layoutPage(const PageContext& pC, qreal d)
                         system->move(QPointF(0.0, y));
                         }
                   }
+            // remove system dividers
+            for (System* s : *page->systems()) {
+                  for (MeasureBase* mb : s->measures()) {
+                        if (!mb->isMeasure())
+                              continue;
+                        for (Element* e : mb->el()) {
+                              if (e->type() == Element::Type::SYSTEM_DIVIDER)
+                                    mb->remove(e);
+                              }
+                        }
+                  }
             return;
             }
 
@@ -3615,6 +3626,57 @@ void Score::layoutPage(const PageContext& pC, qreal d)
             system->move(QPointF(0.0, y));
             if (system->addStretch())
                   y += system->stretchDistance();
+
+            if (system->isVbox())
+                  continue;
+
+            // add / remove system dividers
+            bool divideLeft = styleB(StyleIdx::dividerLeft);
+            bool divideRight = styleB(StyleIdx::dividerRight);
+            if (system == page->systems()->last()) {
+                  // no dividers for last system of page
+                  divideLeft = false;
+                  divideRight = false;
+                  }
+            MeasureBase* first = system->firstMeasure();
+            MeasureBase* last = system->lastMeasure();
+            for (MeasureBase* mb : system->measures()) {
+                  if (!mb->isMeasure())
+                        continue;
+                  SystemDivider* divider1 = nullptr;
+                  SystemDivider* divider2 = nullptr;
+                  for (Element* e : mb->el()) {
+                        if (e->type() != Element::Type::SYSTEM_DIVIDER)
+                              continue;
+                        SystemDivider* sd = static_cast<SystemDivider*>(e);
+                        if (sd->generated())
+                              mb->remove(sd);
+                        else if (mb == first && divideLeft && sd->dividerType() == SystemDivider::Type::LEFT)
+                              divider1 = sd;
+                        else if (mb == last && divideRight && sd->dividerType() == SystemDivider::Type::RIGHT)
+                              divider2 = sd;
+                        else  // this was non-generated, but no longer applies
+                              mb->remove(sd);
+                        }
+                  if (mb == first && divideLeft) {
+                        if (!divider1) {
+                              divider1 = new SystemDivider(this);
+                              divider1->setGenerated(true);
+                              divider1->setParent(mb);
+                              addElement(divider1);
+                              }
+                        divider1->setDividerType(SystemDivider::Type::LEFT);
+                        }
+                  if (mb == last && divideRight) {
+                        if (!divider2) {
+                              divider2 = new SystemDivider(this);
+                              divider2->setGenerated(true);
+                              divider2->setParent(mb);
+                              addElement(divider2);
+                              }
+                        divider2->setDividerType(SystemDivider::Type::RIGHT);
+                        }
+                  }
             }
       }
 
