@@ -73,6 +73,11 @@ class TestRepeat : public QObject, public MTest
 
       void repeat30() { repeat("repeat30.mscx", "1;1;2;1;2"); }     // #73496 single measure section at beginning of score followed by a section with end repeat (without beginning repeat)
 
+      void repeat31() { repeat("repeat31.mscx", "1;2;2;1;2"); }               // #73531 ending measure has jump and repeat m1 |: m2 DC :|
+      void repeat32() { repeat("repeat32.mscx", "1;2;3;3;2;3"); }             // #73531 ending measure has jump and repeat m1 |S m2 |: m3 DS :|
+      void repeat33() { repeat("repeat33.mscx", "1;2;3;2;3;1;2;3"); }         // #73531 ending measure has jump and repeat m1 |: m2 | m3 DC :|
+      void repeat34() { repeat("repeat34.mscx", "1;2;3;2;4;5;5;1;2;4;5"); }   // #73531 ending measure has jump and repeat m1 |: m2 |1e m3 :| 2e m4 |: m5 | DC :|
+
       };
 
 //---------------------------------------------------------

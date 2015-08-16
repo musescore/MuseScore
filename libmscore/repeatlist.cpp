@@ -277,8 +277,13 @@ void RepeatList::unwind()
             Repeat flags = m->repeatFlags();
             bool doJump = false; // process jump after endrepeat
 
-// qDebug("repeat m%d(%d) lc%d loop %d repeatCount %d isGoto %d endRepeat %p flags 0x%x",
-//               m->no(), m->tick(), m->playbackCount(), loop, repeatCount, isGoto, endRepeat, int(flags));
+            // during any DC or DS, will take last time through repeat
+            if (isGoto && (flags & Repeat::END))
+                  loop = m->repeatCount() - 1;
+
+//            qDebug("m%d(tick %7d) %p: playbackCount %d loop %d repeatCount %d isGoto %d endRepeat %p continueAt %p flags 0x%x",
+//                   m->no()+1, m->tick(), m, m->playbackCount(), loop, repeatCount, isGoto, endRepeat, continueAt, int(flags));
+
 
             if (endRepeat) {
                   Volta* volta = _score->searchVolta(m->tick());
