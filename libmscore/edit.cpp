@@ -963,7 +963,6 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
       const Instrument* instr = st->part()->instrument(s->tick());
       NoteVal nval;
       const StringData* stringData = 0;
-      StaffType* tab = 0;
 
       switch (st->staffType()->group()) {
             case StaffGroup::PERCUSSION: {
@@ -988,21 +987,26 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
                         return nval;
                         }
                   stringData = instr->stringData();
-                  tab = st->staffType();
-                  int string = tab->visualStringToPhys(line);
-                  if (string < 0 || string >= stringData->strings()) {
+                  if (line < 0 || line >= stringData->strings()) {
                         error = true;
                         return nval;
                         }
-                  // build a default NoteVal for that line
-                  nval.string = string;
-                  if (pos.fret != FRET_NONE)       // if a fret is given, use it
+                  // build a default NoteVal for that string
+                  nval.string = line;
+                  if (pos.fret != FRET_NONE)          // if a fret is given, use it
                         nval.fret = pos.fret;
-                  else {                        // if no fret, use 0 as default
+                  else {                              // if no fret, use 0 as default
                         _is.setString(line);
                         nval.fret = 0;
                         }
-                  nval.pitch = stringData->getPitch(string, nval.fret, st, tick);
+                  // reduce within fret limit
+                  if (nval.fret > stringData->frets())
+                        nval.fret = stringData->frets();
+                  // for open strings, only accepts fret 0 (strings in StringData are from bottom to top)
+                  int   strgDataIdx = stringData->strings() - line - 1;
+                  if (nval.fret > 0 && stringData->stringList().at(strgDataIdx).open == true)
+                        nval.fret = 0;
+                  nval.pitch = stringData->getPitch(line, nval.fret, st, tick);
                   break;
                   }
 

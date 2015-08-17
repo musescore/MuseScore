@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2010-2011 Werner Schweer
+//  Copyright (C) 2010-2015 Werner Schweer & others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -36,16 +36,16 @@ class Xml;
 #define STAFFTYPE_TAB_DEFAULTSTEMPOSX     0.75
 #define STAFFTYPE_TAB_DEFAULTDOTDIST_X    0.75
 
+// TAB STEM NOTATION
 // the ratio between the length of a full stem and the lenght of a short stem
 // (used for half note stems, in some TAB styles)
 #define STAFFTYPE_TAB_SHORTSTEMRATIO      0.5
-
+// metrics of slashes through half note stems
 #define STAFFTYPE_TAB_SLASH_WIDTH         1.2   /* X width of half note slash */
 #define STAFFTYPE_TAB_SLASH_SLANTY        0.8   /* the Y coord of the slash slant */
 #define STAFFTYPE_TAB_SLASH_THICK         0.4   /* slash thickness */
 #define STAFFTYPE_TAB_SLASH_DISPL         0.8   /* the total displacement between one slash and the next:
                                                       includes slash thickness and empty space between slashes*/
-
 // the total height of a double slash
 #define STAFFTYPE_TAB_SLASH_2TOTHEIGHT     (STAFFTYPE_TAB_SLASH_THICK+STAFFTYPE_TAB_SLASH_DISPL+STAFFTYPE_TAB_SLASH_SLANTY)
 // the initial Y coord for a double shash on an UP stem = topmost corner of topmost slash
@@ -59,22 +59,40 @@ class Xml;
 // the initial Y coord for a double shash on an DN stem = topmost corner of topmost slash
 #define STAFFTYPE_TAB_SLASH_4STARTY_DN     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP+STAFFTYPE_TAB_SLASH_4TOTHEIGHT)*0.5)
 
+// HISTORIC TAB BASS STRING NOTATION
+// The following constants refer to the specifics of bass string notation in historic
+//    (Renaiss./Baroque French and Italian) tablatures.
+
+// how much to lower a bass string note with slashes with respect to line distance (in fraction of line distance)
+#define STAFFTYPE_TAB_BASSSLASH_YOFFSET   0.33
+// The following constants could ideially be customizeable values;
+//    they are currently constants to simplify implementation;
+// Note that these constants do not constrain which strings of an instrument are
+//    physically frettable (which is defined in the instrument itself) but fix the
+//    number of bass strings for which the notation is able to express a fret number
+//    rather than simply a string ordinal.
+#define NUM_OF_BASSSTRINGS_WITH_LETTER    4     // the max number of bass strings frettable with letter notation (French)
+#define NUM_OF_BASSSTRINGS_WITH_NUMBER    2     // the max number of bass strings frettable with number notation (Italian)
+
 //---------------------------------------------------------
 //   TablatureFont
 //---------------------------------------------------------
 
-#define NUM_OF_DIGITFRETS     25
-#define NUM_OF_LETTERFRETS    17
-
+#define NUM_OF_DIGITFRETS                 25    // the max fret number which can be rendered with numbers
+#define NUM_OF_LETTERFRETS                17    // the max fret number which can be rendered with letters
+#define NUM_OF_BASSSTRING_SLASHES         5     // the max number of slashes supported for French bass strings notation
+                                                // (currently, only 3 slashes are used at most; another two are
+                                                // foreseen for future customizability)
 struct TablatureFretFont {
-      QString family;                 // the family of the physical font to use
-      QString displayName;            // the name to display to the user
-      qreal   defPitch;               // the default size of the font
-      qreal   defYOffset;             // the default Y displacement
-      QChar   xChar;                  // the char to use for 'x'
-      QChar   ghostChar;              // the char to use for ghost notes
-      QString displayDigit[NUM_OF_DIGITFRETS];    // the string to draw for digit frets
-      QChar   displayLetter[NUM_OF_LETTERFRETS];  // the char to use for letter frets
+      QString family;                           // the family of the physical font to use
+      QString displayName;                      // the name to display to the user
+      qreal   defPitch;                         // the default size of the font
+      qreal   defYOffset;                       // the default Y displacement
+      QChar   xChar;                            // the char to use for 'x'
+      QChar   ghostChar;                        // the char to use for ghost notes
+      QString slashChar[NUM_OF_BASSSTRING_SLASHES];// the char used to draw one or more '/' symbols
+      QString displayDigit[NUM_OF_DIGITFRETS];  // the string to draw for digit frets
+      QChar   displayLetter[NUM_OF_LETTERFRETS];// the char to use for letter frets
 
       bool read(XmlReader&);
       };
@@ -264,12 +282,16 @@ class StaffType {
       void setShowLedgerLines(bool val)        { _showLedgerLines = val;    }
       bool showLedgerLines() const             { return _showLedgerLines;   }
 
-      QString fretString(int fret, bool ghost) const;   // returns a string with the text for fret
+      QString fretString(int fret, int string, bool ghost) const;   // returns a string with the text for fret
       QString durationString(TDuration::DurationType type, int dots) const;
 
-      // functions to cope with tabulature visual order (top down or upside down)
-      int physStringToVisual(int strg) const;       // return the string in visual order from physical string
-      int visualStringToPhys(int strg) const;       // return the string in physical order from visual string
+      // functions to cope with historic TAB's pecularities, like upside-down, bass string notations
+      int     physStringToVisual(int strg) const;                 // return the string in visual order from physical string
+      int     visualStringToPhys(int line) const;                 // return the string in physical order from visual string
+      qreal   physStringToYOffset(int strg) const;                // return the string Y offset (in sp, chord-relative)
+      QString tabBassStringPrefix(int strg, bool* hasFret) const; // return a string with the prefix, if any, identifying a bass string
+      void    drawInputStringMarks(QPainter* p, int string, int voice, QRectF rect) const;
+      int     numOfTabLedgerLines(int string) const;
 
       // properties getters (some getters require updated metrics)
       qreal durationBoxH();
@@ -287,7 +309,7 @@ class StaffType {
       qreal fretMaskH()                   { return _lineDistance.val() * MScore::DPI*SPATIUM20; }
       qreal fretMaskY()                   { return (_onLines ? -0.5 : -1.0) * _lineDistance.val() * MScore::DPI*SPATIUM20; }
 
-      const QFont&  fretFont()            { return _fretFont;           }
+      const QFont&  fretFont() const      { return _fretFont;           }
       const QString fretFontName() const  { return _fretFonts[_fretFontIdx].displayName; }
       qreal fretFontSize() const          { return _fretFontSize;       }
       qreal fretFontUserY() const         { return _fretFontUserY;      }

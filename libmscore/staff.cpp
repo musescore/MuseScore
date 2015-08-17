@@ -977,10 +977,7 @@ bool Staff::genKeySig()
 
 bool Staff::showLedgerLines()
       {
-      if (_staffType.group() == StaffGroup::TAB)
-            return false;
-      else
-            return _staffType.showLedgerLines();
+      return _staffType.showLedgerLines();
       }
 
 //---------------------------------------------------------
