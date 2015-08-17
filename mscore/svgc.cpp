@@ -135,7 +135,11 @@ void stretchAudio(Score * score, const QMap<int,qreal>& t2t) {
   TempoMap * tempomap = score->tempomap();
 
   foreach(int tick, t2t.keys()) {
-    if (ptick<0 || abs((t2t[tick]-t2t[0])-tempomap->tick2time(tick))<0.05) {
+
+    //qWarning() << tick << t2t[tick]-t2t[0] << tempomap->tick2time(tick);
+
+    if (ptick != 0 && // Make sure to set the tempo in the beginning!!
+        (ptick<0 || abs((t2t[tick]-t2t[0])-tempomap->tick2time(tick))<0.05)) {
       //qWarning() << "Skipping tempo change";
       ptick = tick;
       continue;
@@ -144,9 +148,9 @@ void stretchAudio(Score * score, const QMap<int,qreal>& t2t) {
     qreal tempo = ((tick-ptick) / ( (t2t[tick]-t2t[0]) - tempomap->tick2time(ptick))) / 
                     (MScore::division * tempomap->relTempo());
 
-    //qWarning() << tempo;
-
     tempomap->setTempo(ptick,tempo);
+
+    //qWarning() << "Change" << tempo << tick << ptick << t2t[tick]-t2t[0] << tempomap->tick2time(tick);
 
     ptick = tick;
   }
