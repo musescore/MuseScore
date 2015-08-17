@@ -554,9 +554,7 @@ endif (MINGW)
 
 if (APPLE)
      install (FILES
-      ../fonts/gootville/Gootville.otf
       ../fonts/gootville/GootvilleText.otf
-      ../fonts/mscore/mscore.ttf
       ../fonts/mscore/MScoreText.ttf
       ../fonts/MuseJazz.ttf
       ../fonts/FreeSerif.ttf
@@ -566,7 +564,6 @@ if (APPLE)
       ../fonts/FreeSans.ttf
       ../fonts/mscoreTab.ttf
       ../fonts/mscore-BC.ttf
-      ../fonts/bravura/Bravura.otf
       ../fonts/bravura/BravuraText.otf
      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
      )
