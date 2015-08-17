@@ -61,7 +61,7 @@ Beam::Beam(Score* s)
       _userModified[1] = false;
       _grow1           = 1.0;
       _grow2           = 1.0;
-      editFragment     = 0;
+      editFragment     = -1;
       _isGrace          = false;
       _cross            = false;
       _noSlope         = score()->styleB(StyleIdx::beamNoSlope);
@@ -86,6 +86,7 @@ Beam::Beam(const Beam& b)
       _userModified[1] = b._userModified[1];
       _grow1           = b._grow1;
       _grow2           = b._grow2;
+      editFragment     = b.editFragment;
       foreach(BeamFragment* f, b.fragments)
             fragments.append(new BeamFragment(*f));
       minMove          = b.minMove;
@@ -379,8 +380,12 @@ void Beam::layout1()
             // int idx = (_direction == MScore::Direction::AUTO || _direction == MScore::Direction::DOWN) ? 0 : 1;
             slope = 0.0;
 
-            for (ChordRest* cr : _elements)
-                  cr->setUp(_up);
+            for (ChordRest* cr : _elements) {
+                  // leave initial guess alone for moved chords within a beam that crosses staves
+                  // otherwise, assume beam direction is stem direction
+                  if (!_cross || !cr->staffMove())
+                        cr->setUp(_up);
+                  }
 
             }     // end of if/else(tablature)
       }
@@ -1542,6 +1547,10 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               // guess was wrong, have to relayout
                               if (!_isGrace) {
                                     score()->layoutChords1(c->segment(), c->staffIdx());
+                                    // DEBUG: attempting to layout during beam edit causes crash
+                                    // probably because ledger lines are deleted and added back
+                                    if (editFragment == -1)
+                                          c->layout();
                                     }
                               else {
                                     relayoutGrace = true;
@@ -1586,6 +1595,11 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               c->setUp(nup);
                               // guess was wrong, have to relayout
                               score()->layoutChords1(c->segment(), c->staffIdx());
+                              c->layout();
+                              // TODO: this might affect chord space, which might affect segment position
+                              // we should relayout entire measure
+                              // this probably means starting over for beam as well
+                              // see https://musescore.org/en/node/71901
                               }
                         }
 
@@ -2200,6 +2214,7 @@ void Beam::startEdit(MuseScoreView*, const QPointF& p)
 void Beam::endEdit()
       {
       Element::endEdit();
+      editFragment = -1;
       // we need a full relayout to trigger stems to be redrawn
       score()->setLayoutAll(true);
       }
