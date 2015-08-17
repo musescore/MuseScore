@@ -180,7 +180,7 @@ void KeySig::layout()
       // naturals should go AFTER accidentals if they should not go before!
       bool suffixNaturals = naturalsOn && !prefixNaturals;
 
-      const char* lines = ClefInfo::lines(clef);
+      const signed char* lines = ClefInfo::lines(clef);
 
       // add prefixed naturals, if any
 
