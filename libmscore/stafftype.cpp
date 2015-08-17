@@ -688,7 +688,7 @@ int StaffType::visualStringToPhys(int line) const
 TabDurationSymbol::TabDurationSymbol(Score* s)
    : Element(s)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
+      setFlags(flags() & ~(ElementFlag::MOVABLE | ElementFlag::SELECTABLE) );
       setGenerated(true);
       _tab  = 0;
       _text = QString();
@@ -697,7 +697,7 @@ TabDurationSymbol::TabDurationSymbol(Score* s)
 TabDurationSymbol::TabDurationSymbol(Score* s, StaffType* tab, TDuration::DurationType type, int dots)
    : Element(s)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
+      setFlags(flags() & ~(ElementFlag::MOVABLE | ElementFlag::SELECTABLE) );
       setGenerated(true);
       setDuration(type, dots, tab);
       }
