@@ -354,7 +354,7 @@ bool ChordRest::readProperties(XmlReader& e)
                   if (atype == "stop") {
                         SpannerValues sv;
                         sv.spannerId = id;
-                        sv.track2    = e.track();
+                        sv.track2    = track();
                         sv.tick2     = e.tick();
                         e.addSpannerValues(sv);
                         }

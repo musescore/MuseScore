@@ -61,7 +61,7 @@ class TestCopyPaste : public QObject, public MTest
       void copyPasteOnlySecondVoice();
       void copypaste19() { copypaste("19"); }       // chord symbols
       void copyPasteShortTremolo() { copypastevoice("21", 1); } // remove tremolo on shorten note #30411
-
+      void copypaste22() { copypaste("22"); }       // cross-staff slur
 
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 
@@ -101,6 +101,8 @@ void TestCopyPaste::copypaste(const char* idx)
       QVERIFY(m4 != 0);
 
       score->select(m2);
+      if (score->nstaves() > 1)
+            score->select(m2, SelectType::RANGE, score->nstaves() - 1);
       QVERIFY(score->selection().canCopy());
       QString mimeType = score->selection().mimeType();
       QVERIFY(!mimeType.isEmpty());
