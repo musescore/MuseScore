@@ -2242,6 +2242,15 @@ void Score::cmdDeleteSelection()
 
             }
       deselectAll();
+      if (_is.noteEntryMode()) {
+            ChordRest* cr = _is.cr();
+            if (cr) {
+                  if (cr->type() == Element::Type::CHORD)
+                        select(static_cast<Chord*>(cr)->upNote(), SelectType::SINGLE);
+                  else
+                        select(cr, SelectType::SINGLE);
+                  }
+            }
       _layoutAll = true;
       }
 
