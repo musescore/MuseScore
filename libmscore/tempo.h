@@ -13,13 +13,24 @@
 #ifndef __AL_TEMPO_H__
 #define __AL_TEMPO_H__
 
+#include "repeatlist.h"
+
 namespace Ms {
 
+class RepeatSegment;
 class Xml;
 
-enum class TempoType : char { INVALID = 0x0, PAUSE = 0x1, FIX = 0x2, RAMP = 0x4};
+enum class TempoType : char {
+      INVALID           = 0x0,
+      PAUSE_BEFORE_TICK = 0x1,
+      FIX               = 0x2,
+      RAMP              = 0x4,
+      PAUSE_THROUGH_TICK= 0x8,
+      PAUSE_AFTER_TICK  = 0x10,
+      PAUSE_ANY = PAUSE_BEFORE_TICK | PAUSE_THROUGH_TICK | PAUSE_AFTER_TICK
+      };
 
-typedef QFlags<TempoType> TempoTypes;
+Q_DECLARE_FLAGS(TempoTypes, TempoType);
 Q_DECLARE_OPERATORS_FOR_FLAGS(TempoTypes);
 
 //---------------------------------------------------------
@@ -29,13 +40,17 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(TempoTypes);
 struct TEvent {
       TempoTypes type;
       qreal tempo;     // beats per second
-      qreal pause;     // pause in seconds
       qreal time;      // precomputed time for tick in sec
+
+      // may have both types of pauses on the same tick
+      qreal pauseBeforeTick;  // pause in seconds just before the tick
+      qreal pauseThroughTick; // pause in seconds precisely at the tick
 
       TEvent();
       TEvent(const TEvent& e);
-      TEvent(qreal bps, qreal seconds, TempoType t);
+      TEvent(qreal tempo, qreal pauseBeforeTick, qreal pauseThroughTick, TempoType type);
       bool valid() const;
+      void dump() const;
       };
 
 //---------------------------------------------------------
@@ -52,6 +67,8 @@ class TempoMap : public std::map<int, TEvent> {
 
    public:
       TempoMap();
+      TempoMap( const RepeatList* repeatList, const TempoMap* graphicalTempoMap ); // creates unrolled tempomap
+
       void clear();
 
       void dump() const;
@@ -65,8 +82,9 @@ class TempoMap : public std::map<int, TEvent> {
       int time2tick(qreal time, int tick, int* sn) const;
       int tempoSN() const { return _tempoSN; }
 
-      void setTempo(int t, qreal);
-      void setPause(int t, qreal);
+      void setPauseBeforeTick(int tick, qreal seconds);
+      void setPauseThroughTick(int tick, qreal seconds);
+      void setTempo(int tick, qreal tempo);
       void delTempo(int tick);
 
       void setRelTempo(qreal val);

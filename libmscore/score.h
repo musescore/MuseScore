@@ -338,7 +338,8 @@ class Score : public QObject {
 
       RepeatList* _repeatList;
       TimeSigMap* _sigmap;
-      TempoMap* _tempomap;
+      TempoMap* _tempomap;          // the graphical tempo map, indexed by "ticks", not "uticks"
+      TempoMap* _unrolledTempomap;  // unrolled version of tempomap generated whenever _repeatList is unwound.  If null, then invalid
 
       InputState _is;
       MStyle _style;
@@ -812,12 +813,17 @@ class Score : public QObject {
 
       void setTempomap(TempoMap* tm);
       TempoMap* tempomap() const;
+      TempoMap* unrolledTempomap() const;
+      void invalidateUnrolledTempomap();
+      void unrollTempomap();
       TimeSigMap* sigmap() const;
 
       void setTempo(Segment*, qreal);
       void setTempo(int tick, qreal bps);
+      void setRelTempo(qreal val);
       void removeTempo(int tick);
-      void setPause(int tick, qreal seconds);
+      void setPauseBeforeTick(int tick, qreal seconds);
+      void setPauseThroughTick(int tick, qreal seconds);
       qreal tempo(int tick) const;
 
       bool defaultsRead() const                      { return _defaultsRead;    }
@@ -845,8 +851,8 @@ class Score : public QObject {
       void endUndoRedo();
       Measure* searchLabel(const QString& s);
       RepeatList* repeatList() const;
-      qreal utick2utime(int tick) const;
-      int utime2utick(qreal utime) const;
+      qreal utick2utime(int utick);
+      int utime2utick(qreal utime);
       //@ ??
       Q_INVOKABLE void updateRepeatList(bool expandRepeats);
 

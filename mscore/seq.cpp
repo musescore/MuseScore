@@ -550,13 +550,13 @@ void Seq::processMessages()
                               continue;
                         if (playTime != 0) {
                               int utick = cs->utime2utick(qreal(playTime) / qreal(MScore::sampleRate));
-                              cs->tempomap()->setRelTempo(msg.realVal);
+                              cs->setRelTempo(msg.realVal);
                               playTime = cs->utick2utime(utick) * MScore::sampleRate;
                               if (preferences.jackTimebaseMaster && preferences.useJackTransport)
                                     _driver->seekTransport(utick + 2 * cs->utime2utick(qreal((_driver->bufferSize()) + 1) / qreal(MScore::sampleRate)));
                               }
                         else
-                              cs->tempomap()->setRelTempo(msg.realVal);
+                              cs->setRelTempo(msg.realVal);
                         cs->repeatList()->update();
                         prevTempo = curTempo();
                         emit tempoChanged();
