@@ -3584,36 +3584,42 @@ ChordRest* Score::findCR(int tick, int track) const
 
 //---------------------------------------------------------
 //   findCRinStaff
-//    find chord/rest <= tick in staff
-//    prefer shortest duration (so it does not overlap next chordrest segment)
+//    find last chord/rest on staff that ends before tick
 //---------------------------------------------------------
 
-ChordRest* Score::findCRinStaff(int tick, int track) const
+ChordRest* Score::findCRinStaff(int tick, int staffIdx) const
       {
-      Measure* m = tick2measureMM(tick);
+      int ptick = tick - 1;
+      Measure* m = tick2measureMM(ptick);
       if (!m) {
-            qDebug("findCRinStaff: no measure for tick %d", tick);
+            qDebug("findCRinStaff: no measure for tick %d", ptick);
             return nullptr;
             }
       // attach to first rest all spanner when mmRest
       if (m->isMMRest())
-            tick = m->tick();
+            ptick = m->tick();
       Segment* s = m->first(Segment::Type::ChordRest);
-      int strack = (track / VOICES) * VOICES;
+      int strack = staffIdx * VOICES;
       int etrack = strack + VOICES;
       int actualTrack = strack;
 
+      int lastTick = -1;
       for (Segment* ns = s; ; ns = ns->next(Segment::Type::ChordRest)) {
-            if (ns == 0 || ns->tick() > tick)
+            if (ns == 0 || ns->tick() > ptick)
                   break;
-            // found a segment; now find shortest chordrest on this staff (if any)
-            ChordRest* shortestCR = 0;
+            // found a segment; now find longest cr on this staff that does not overlap tick
             for (int t = strack; t < etrack; ++t) {
                   ChordRest* cr = static_cast<ChordRest*>(ns->element(t));
-                  if (cr && (!shortestCR || cr->actualTicks() < shortestCR->actualTicks())) {
-                        shortestCR = cr;
-                        s = ns;
-                        actualTrack = t;
+                  if (cr) {
+                        int endTick = cr->tick() + cr->actualTicks();
+                        // allow fudge factor for tuplets
+                        // TODO: replace with fraction-based calculation
+                        int fudge = cr->tuplet() ? 5 : 0;
+                        if (endTick + fudge >= lastTick && endTick - fudge <= tick) {
+                              s = ns;
+                              actualTrack = t;
+                              lastTick = endTick;
+                              }
                         }
                   }
             }
