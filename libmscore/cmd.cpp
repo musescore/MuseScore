@@ -1939,10 +1939,19 @@ Element* Score::move(const QString& cmd)
             if (el->type() == Element::Type::CHORD)
                   el = static_cast<Chord*>(el)->upNote();       // originally downNote
             _playNote = true;
-            select(el, SelectType::SINGLE, 0);
             if (noteEntryMode()) {
+                  // if cursor moved into a gap, selection cannot follow
+                  // only select & play el if it was not already selected (does not normally happen)
+                  ChordRest* cr = _is.cr();
+                  if (cr || !el->selected())
+                        select(el, SelectType::SINGLE, 0);
+                  else
+                        _playNote = false;
                   foreach (MuseScoreView* view ,viewer)
                         view->moveCursor();
+                  }
+            else {
+                  select(el, SelectType::SINGLE, 0);
                   }
             }
       return el;
