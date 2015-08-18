@@ -2836,7 +2836,7 @@ void Score::cmdSlashFill()
                   s = setNoteRest(s, track + voice, nv, f);
                   Chord* c = static_cast<Chord*>(s->element(track + voice));
                   if (c->links()) {
-                        foreach (ScoreElement* e, *c->links()) {
+                        for (ScoreElement* e : *c->links()) {
                               Chord* lc = static_cast<Chord*>(e);
                               lc->setSlash(true, true);
                               }
@@ -2870,7 +2870,14 @@ void Score::cmdSlashRhythm()
       foreach (Element* e, selection().elements()) {
             if (e->voice() >= 2 && e->type() == Element::Type::REST) {
                   Rest* r = static_cast<Rest*>(e);
-                  r->setAccent(!r->accent());
+                  if (r->links()) {
+                        for (ScoreElement* e : *r->links()) {
+                              Rest* lr = static_cast<Rest*>(e);
+                              lr->setAccent(!lr->accent());
+                              }
+                        }
+                  else
+                        r->setAccent(!r->accent());
                   continue;
                   }
             else if (e->type() == Element::Type::NOTE) {
@@ -2883,7 +2890,14 @@ void Score::cmdSlashRhythm()
                         continue;
                   chords.append(c);
                   // toggle slash setting
-                  c->setSlash(!c->slash(), false);
+                  if (c->links()) {
+                        for (ScoreElement* e : *c->links()) {
+                              Chord* lc = static_cast<Chord*>(e);
+                              lc->setSlash(!lc->slash(), false);
+                              }
+                        }
+                  else
+                        c->setSlash(!c->slash(), false);
                   }
             }
       setLayoutAll(true);
