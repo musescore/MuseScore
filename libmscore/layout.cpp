@@ -1454,12 +1454,12 @@ void Score::doLayout()
                   Measure* measure = static_cast<Measure*>(m);
                   measureNo += measure->noOffset();
                   measure->setNo(measureNo);
-                  if (measure->sectionBreak() && measure->sectionBreak()->startWithMeasureOne())
-                        measureNo = 0;
-                  else if (!measure->irregular())      // dont count measure
+                  if (!measure->irregular())      // dont count measure
                         ++measureNo;
                   measure->layoutStage1();
                   }
+            if (m->sectionBreak() && m->sectionBreak()->startWithMeasureOne())
+                  measureNo = 0;
             }
 
       if (styleB(StyleIdx::createMultiMeasureRests))
