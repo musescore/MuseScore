@@ -534,14 +534,19 @@ void Spanner::computeEndElement()
       {
       switch (_anchor) {
             case Anchor::SEGMENT: {
-                  _endElement = score()->findCRinStaff(tick2() - 1, track2());
+                  // find last cr on this staff that ends before tick2
+                  _endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
                   if (!_endElement) {
                         qDebug("%s no end element for tick %d", name(), tick2());
                         return;
                         }
                   if (!endCR()->measure()->isMMRest()) {
-                        int nticks = endCR()->tick() + endCR()->actualTicks() - _tick;
-                        if (_ticks != nticks) {
+                        ChordRest* cr = endCR();
+                        int nticks = cr->tick() + cr->actualTicks() - _tick;
+                        // allow fudge factor for tuplets
+                        // TODO: replace with fraction-based calculation
+                        int fudge = cr->tuplet() ? 5 : 0;
+                        if (qAbs(_ticks - nticks) > fudge) {
                               qDebug("%s ticks changed, %d -> %d", name(), _ticks, nticks);
                               setTicks(nticks);
                               if (type() == Element::Type::OTTAVA)
