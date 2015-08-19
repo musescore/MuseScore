@@ -1453,11 +1453,20 @@ void ScoreView::moveCursor()
             Segment*    seg   = is.segment();
             int         minTrack = (is.track() / VOICES) * VOICES;
             int         maxTrack = minTrack + VOICES;
+            // get selected chordrest, if one exists and is in this segment
+            ChordRest* scr = _score->selection().cr();
+            if (scr && scr->segment() != seg)
+                  scr = nullptr;
             // get the physical string corresponding to current visual string
             strg = staff->staffType()->visualStringToPhys(strg);
             for (int t = minTrack; t < maxTrack; t++) {
                   Element* e = seg->element(t);
-                  if (e != nullptr && e->type() == Element::Type::CHORD)
+                  if (e != nullptr && e->type() == Element::Type::CHORD) {
+                        // if there is a selected chordrest in this segment on this track but it is not e
+                        // then the selected chordrest must be a grace note chord, and we should use it
+                        if (scr && scr->track() == t && scr != e)
+                              e = scr;
+                        // search notes looking for one on current string
                         for (Note* n : static_cast<Chord*>(e)->notes())
                               // if note found on this string, make it current
                               if (n->string() == strg) {
@@ -1477,6 +1486,7 @@ void ScoreView::moveCursor()
                                     done = true;
                                     break;
                                     }
+                        }
                   if (done)
                         break;
                   }
