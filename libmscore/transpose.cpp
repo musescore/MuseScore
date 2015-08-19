@@ -296,7 +296,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
 
       if (_selection.isList()) {
             foreach (Element* e, _selection.uniqueElements()) {
-                  if (e->staff()->staffType()->group() == StaffGroup::PERCUSSION)
+                  if (!e->staff() || e->staff()->staffType()->group() == StaffGroup::PERCUSSION)
                         continue;
                   if (e->type() == Element::Type::NOTE) {
                         Note* note = static_cast<Note*>(e);
