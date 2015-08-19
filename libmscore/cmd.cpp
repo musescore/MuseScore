@@ -1994,7 +1994,7 @@ Element* Score::move(const QString& cmd)
                         select(el, SelectType::SINGLE, 0);
                   else
                         _playNote = false;
-                  foreach (MuseScoreView* view ,viewer)
+                  for (MuseScoreView* view : viewer)
                         view->moveCursor();
                   }
             else {
