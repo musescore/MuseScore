@@ -1169,7 +1169,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
             setLayoutAll(true);
             }
       if (_is.repitchMode()) {
-            // move cursor to next note, but skip tied ntoes (they were already repitched above)
+            // move cursor to next note, but skip tied notes (they were already repitched above)
             ChordRest* next = lastTiedNote ? nextChordRest(lastTiedNote->chord()) : nextChordRest(_is.cr());
             while (next && next->type() != Element::Type::CHORD)
                   next = nextChordRest(next);
@@ -1414,8 +1414,13 @@ void Score::cmdAddTie()
       {
       QList<Note*> noteList;
       Element* el = selection().element();
-      if (el && el->type() == Element::Type::NOTE)
-            noteList.append(static_cast<Note*>(el));
+      if (el && el->type() == Element::Type::NOTE) {
+            Note* n = static_cast<Note*>(el);
+            if (noteEntryMode())
+                  noteList = n->chord()->notes();
+            else
+                  noteList.append(n);
+            }
       else if (el && el->type() == Element::Type::STEM) {
             Chord* chord = static_cast<Stem*>(el)->chord();
             noteList = chord->notes();
@@ -1428,41 +1433,70 @@ void Score::cmdAddTie()
             }
 
       startCmd();
-      foreach (Note* note, noteList) {
+      Chord* lastAddedChord = nullptr;
+      for (Note* note : noteList) {
             if (note->tieFor()) {
                   qDebug("cmdAddTie: note %p has already tie? noteFor: %p", note, note->tieFor());
                   continue;
                   }
-            Chord* chord = note->chord();
 
             if (noteEntryMode()) {
-                  if (chord == _is.cr())      // if noteentry is started
-                        break;
+                  // set cursor at position after note
+                  _is.setSegment(note->chord()->segment());
+                  _is.moveToNextInputPos();
+                  _is.setLastSegment(_is.segment());
 
                   if (_is.cr() == 0)
                         expandVoice();
-                  if (_is.cr() == 0)
+                  ChordRest* cr = _is.cr();
+                  if (cr == 0)
                         break;
 
-                  bool addFlag = false; // _is.cr()->type() == Element::Type::CHORD;
+                  bool addFlag = lastAddedChord != nullptr;
 
+                  // try to re-use existing note or chord
+                  Note* n = nullptr;
+                  if (cr->isChord()) {
+                        Chord* c = static_cast<Chord*>(cr);
+                        Note* nn = c->findNote(note->pitch());
+                        if (nn && nn->tpc() == note->tpc())
+                              n = nn;           // re-use note
+                        else
+                              addFlag = true;   // re-use chord
+                        }
+
+                  // if no note to re-use, create one
                   NoteVal nval(note->noteVal());
-                  Note* n = addPitch(nval, addFlag);
+                  if (!n)
+                        n = addPitch(nval, addFlag);
+                  else
+                        select(n);
+
                   if (n) {
+                        if (!lastAddedChord)
+                              lastAddedChord = n->chord();
                         // n is not necessarily next note if duration span over measure
                         Note* nnote = searchTieNote(note);
-                        if (nnote) {
-                              n->setLine(note->line());
-                              n->setTpc(note->tpc());
+                        while (nnote) {
+                              // DEBUG: if duration spans over measure
+                              // this does not set line for intermediate notes
+                              // tpc was set correctly already
+                              //n->setLine(note->line());
+                              //n->setTpc(note->tpc());
                               Tie* tie = new Tie(this);
                               tie->setStartNote(note);
                               tie->setEndNote(nnote);
                               tie->setTrack(note->track());
                               undoAddElement(tie);
-                              nextInputPos(n->chord(), false);
+                              if (!addFlag || nnote->chord() == lastAddedChord) {
+                                    break;
+                                    }
+                              else {
+                                    note = nnote;
+                                    _is.setLastSegment(_is.segment());
+                                    nnote = addPitch(nval, true);
+                                    }
                               }
-                        else
-                              qDebug("cmdAddTie: no next note?");
                         }
                   }
             else {
@@ -1507,6 +1541,8 @@ void Score::cmdAddTie()
                         }
                   }
             }
+      if (lastAddedChord)
+            nextInputPos(lastAddedChord, false);
       endCmd();
       }
 
