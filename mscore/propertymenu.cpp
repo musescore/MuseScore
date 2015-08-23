@@ -211,7 +211,9 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->type() == Element::Type::TEXTLINE_SEGMENT
                   || e->type() == Element::Type::OTTAVA_SEGMENT
-                  || e->type() == Element::Type::PEDAL_SEGMENT) {
+                  || e->type() == Element::Type::PEDAL_SEGMENT
+                  || (e->type() == Element::Type::HAIRPIN_SEGMENT
+                      && static_cast<HairpinSegment*>(e)->hairpin()->useTextLine())) {
             popup->addAction(tr("Line Properties..."))->setData("l-props");
             }
       else if (e->type() == Element::Type::STAFF_TEXT) {

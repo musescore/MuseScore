@@ -16,6 +16,7 @@
 #include "element.h"
 #include "dynamic.h"
 #include "line.h"
+#include "textline.h"
 #include "mscore.h"
 
 class QPainter;
@@ -29,7 +30,7 @@ class Hairpin;
 //   @@ HairpinSegment
 //---------------------------------------------------------
 
-class HairpinSegment : public LineSegment {
+class HairpinSegment : public TextLineSegment {
       Q_OBJECT
 
       QLineF l1, l2;
@@ -39,7 +40,7 @@ class HairpinSegment : public LineSegment {
 
    protected:
    public:
-      HairpinSegment(Score* s) : LineSegment(s) {}
+      HairpinSegment(Score* s) : TextLineSegment(s) {}
       Hairpin* hairpin() const                       { return (Hairpin*)spanner(); }
       virtual HairpinSegment* clone() const override { return new HairpinSegment(*this); }
       virtual Element::Type type() const override    { return Element::Type::HAIRPIN_SEGMENT; }
@@ -62,7 +63,7 @@ class HairpinSegment : public LineSegment {
 //   @P veloChange   int
 //---------------------------------------------------------
 
-class Hairpin : public SLine {
+class Hairpin : public TextLine {
       Q_OBJECT
       Q_ENUMS(Type)
       Q_ENUMS(Ms::Dynamic::Range)
@@ -75,6 +76,7 @@ class Hairpin : public SLine {
       Q_PROPERTY(Ms::Hairpin::Type  hairpinType READ  hairpinType WRITE undoSetHairpinType)
       Q_PROPERTY(int                veloChange  READ  veloChange  WRITE undoSetVeloChange)
 
+      bool _useTextLine;
       bool  _hairpinCircledTip;
       Type _hairpinType;
       int _veloChange;
@@ -103,8 +105,10 @@ class Hairpin : public SLine {
       virtual void layout() override;
       virtual LineSegment* createLineSegment() override;
 
+      bool useTextLine() const                 { return _useTextLine; }
+      void setUseTextLine(bool val)            { _useTextLine = val; }
       bool hairpinCircledTip() const           { return _hairpinCircledTip; }
-      void setHairpinCircledTip( bool val )    { _hairpinCircledTip = val; }
+      void setHairpinCircledTip(bool val)      { _hairpinCircledTip = val; }
 
       int veloChange() const           { return _veloChange; }
       void setVeloChange(int v)        { _veloChange = v;    }

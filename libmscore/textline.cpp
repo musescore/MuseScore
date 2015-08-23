@@ -114,6 +114,12 @@ void TextLineSegment::draw(QPainter* painter) const
             QPen pen(normalColor ? tl->lineColor() : color, textlineLineWidth, tl->lineStyle());
             if (!tl->lineVisible())
                   pen.setColor(Qt::gray);
+            if (tl->lineStyle() == Qt::CustomDashLine) {
+                  QVector<qreal> pattern;
+                  pattern << 5.0 << 20.0;
+                  pen.setDashPattern(pattern);
+                  pen.setDashOffset(15.0);
+                  }
             painter->setPen(pen);
 
             QPointF pp1(l, 0.0);
@@ -202,6 +208,7 @@ void TextLineSegment::layout1()
       TextLine* tl = textLine();
       if (parent() && tl && tl->type() != Element::Type::OTTAVA
                   && tl->type() != Element::Type::PEDAL
+                  && tl->type() != Element::Type::HAIRPIN
                   && tl->type() != Element::Type::VOLTA)
             rypos() += -5.0 * spatium();
 
