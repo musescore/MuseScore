@@ -85,6 +85,93 @@ MusicXmlTupletDesc::MusicXmlTupletDesc()
       }
 
 //---------------------------------------------------------
+//   MusicXmlLyricsExtend
+//---------------------------------------------------------
+
+//---------------------------------------------------------
+//   init
+//---------------------------------------------------------
+
+void MusicXmlLyricsExtend::init()
+      {
+      _lyrics.clear();
+      }
+
+//---------------------------------------------------------
+//   addLyric
+//---------------------------------------------------------
+
+// add a single lyric to be extended later
+// called when lyric with "extend" or "extend type=start" is found
+
+void MusicXmlLyricsExtend::addLyric(Lyrics* const lyric)
+      {
+      _lyrics.insert(lyric);
+      }
+
+//---------------------------------------------------------
+//   setExtend
+//---------------------------------------------------------
+
+// find the duration of the chord starting at or after s in track and ending at tick
+
+static int lastChordTicks(const Segment* s, const int track, const int tick)
+      {
+      while (s && s->tick() < tick) {
+            Element* el = s->element(track);
+            if (el && el->isChordRest()) {
+                  ChordRest* cr = static_cast<ChordRest*>(el);
+                  if (cr->tick() + cr->actualTicks() == tick) {
+                        qDebug("  -> last chord of extend %p", cr);
+                        return cr->actualTicks();
+                        }
+                  }
+            s = s->nextCR(track, true);
+            }
+      return 0;
+      }
+
+// set extend for lyric no in track to end at tick
+// called when lyric (with or without "extend" ?) or note with "extend type=stop" is found
+// note that no == -1 means all lyrics in this track
+
+// note: must support three scenarios:
+// - lyric with extend, stopped by next lyric (stops at start of note)
+// - lyric with extend, stopped by next lyric w/ extend stop (stops at end of note)
+// - extends still open at end of part
+
+void MusicXmlLyricsExtend::setExtend(const int no, const int track, const int tick)
+      {
+      qDebug("MusicXmlLyricsExtend::setExtend(no %d, track %d, tick %d)", no, track, tick);
+      QList<Lyrics*> list;
+      foreach(Lyrics* l, _lyrics) {
+            Element* const el = l->parent();
+            if (el->type() == Element::Type::CHORD) {       // TODO: rest also possible ?
+                  ChordRest* const par = static_cast<ChordRest*>(el);
+                  qDebug("- l %p par %p par->track %d par->tick %d", l, par, par->track(), par->tick());
+                  if (par->track() == track && (no == -1 || l->no() == no)) {
+                        qDebug("  -> must set extend");
+                        int lct = lastChordTicks(l->segment(), track, tick);
+                        if (lct > 0) {
+                              // set lyric tick to the total length fron the lyric note
+                              // plus all notes covered by the melisma minus the last note length
+                              l->setTicks(tick - par->tick() - lct);
+                              qDebug("  -> extend %d", l->ticks());
+                              }
+                        list.append(l);
+                        }
+                  }
+            else
+                  qDebug("- l %p par %p (not a chord)", l, l->parent());
+            }
+      // cleanup
+      foreach(Lyrics* l, list) {
+            qDebug("remove %p", l);
+            _lyrics.remove(l);
+            }
+      }
+
+//---------------------------------------------------------
 //   noteTypeToFraction
 //---------------------------------------------------------
 
@@ -652,7 +739,7 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
  Add a single lyric to the score or delete it (if number too high)
  */
 
-static void addLyric(ChordRest* cr, Lyrics* l, int lyricNo)
+static void addLyric(ChordRest* cr, Lyrics* l, int lyricNo, MusicXmlLyricsExtend& extendedLyrics)
       {
       if (lyricNo > MAX_LYRICS) {
             qDebug("too much lyrics (>%d)", MAX_LYRICS); // TODO
@@ -661,6 +748,7 @@ static void addLyric(ChordRest* cr, Lyrics* l, int lyricNo)
       else {
             l->setNo(lyricNo);
             cr->add(l);
+            extendedLyrics.setExtend(lyricNo, cr->track(), cr->tick());
             }
       }
 
@@ -676,34 +764,41 @@ static void addLyrics(ChordRest* cr,
                       QMap<int, Lyrics*>& numbrdLyrics,
                       QMap<int, Lyrics*>& defyLyrics,
                       QList<Lyrics*>& unNumbrdLyrics,
-                      QSet<Lyrics*>& extLyrics)
+                      QSet<Lyrics*>& extLyrics,
+                      MusicXmlLyricsExtend& extendedLyrics)
       {
       // first the lyrics with valid number
       int lyricNo = -1;
       for (QMap<int, Lyrics*>::const_iterator i = numbrdLyrics.constBegin(); i != numbrdLyrics.constEnd(); ++i) {
             lyricNo = i.key(); // use number obtained from MusicXML file
             Lyrics* l = i.value();
-            addLyric(cr, l, lyricNo);
-            if (extLyrics.contains(l))
+            addLyric(cr, l, lyricNo, extendedLyrics);
+            if (extLyrics.contains(l)) {
                   qDebug("extend lyric %p number %d", l, lyricNo);
+                  extendedLyrics.addLyric(l);
+                  }
             }
 
       // then the lyrics without valid number but with valid default-y
       for (QMap<int, Lyrics*>::const_iterator i = defyLyrics.constBegin(); i != defyLyrics.constEnd(); ++i) {
             lyricNo++; // use sequence number
             Lyrics* l = i.value();
-            addLyric(cr, l, lyricNo);
-            if (extLyrics.contains(l))
+            addLyric(cr, l, lyricNo, extendedLyrics);
+            if (extLyrics.contains(l)) {
                   qDebug("extend lyric %p number %d", l, lyricNo);
+                  extendedLyrics.addLyric(l);
+                  }
             }
 
       // finally the remaining lyrics, which are simply added in order they appear in the MusicXML file
       for (QList<Lyrics*>::const_iterator i = unNumbrdLyrics.constBegin(); i != unNumbrdLyrics.constEnd(); ++i) {
             lyricNo++; // use sequence number
             Lyrics* l = *i;
-            addLyric(cr, l, lyricNo);
-            if (extLyrics.contains(l))
+            addLyric(cr, l, lyricNo, extendedLyrics);
+            if (extLyrics.contains(l)) {
                   qDebug("extend lyric %p number %d", l, lyricNo);
+                  extendedLyrics.addLyric(l);
+                  }
             }
       }
 
@@ -1363,6 +1458,7 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
       //      glissandoText = "";
       //      glissandoColor = "";
       _multiMeasureRestCount = -1;
+      _extendedLyrics.init();
       }
 
 //---------------------------------------------------------
@@ -1643,8 +1739,8 @@ void MusicXMLParserPass2::part()
             }
 #endif
 
+      // read the measures
       int nr = 0; // current measure sequence number
-
       while (_e.readNextStartElement()) {
             if (_e.name() == "measure") {
                   Fraction t = _pass1.getMeasureStart(nr);
@@ -1660,6 +1756,16 @@ void MusicXMLParserPass2::part()
                   skipLogCurrElem();
             }
 
+      // stop all remaining extends for this part
+      Measure* lm = _pass1.getPart(id)->score()->lastMeasure();
+      if (lm) {
+            int strack = _pass1.trackForPart(id);
+            int etrack = strack + _pass1.getPart(id)->nstaves() * VOICES;
+            int lastTick = lm->tick() + lm->ticks();
+            qDebug("end of part: stopping extends strack %d etrack %d lasttick %d", strack, etrack, lastTick);
+            for (int trk = strack; trk < etrack; trk++)
+                  _extendedLyrics.setExtend(-1, trk, lastTick);
+            }
 
       //qDebug("spanner list:");
       auto i = _spanners.constBegin();
@@ -4342,8 +4448,14 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             }
 
       // add lyrics found by lyric
-      if (cr)
-            addLyrics(cr, numberedLyrics, defaultyLyrics, unNumberedLyrics, extendedLyrics);
+      if (cr) {
+            // add lyrics and stop corresponding extends
+            addLyrics(cr, numberedLyrics, defaultyLyrics, unNumberedLyrics, extendedLyrics, _extendedLyrics);
+            if (bRest) {
+                  // stop all extends
+                  _extendedLyrics.setExtend(-1, cr->track(), cr->tick());
+                  }
+            }
 
       // add figured bass element
       if (!fbl.isEmpty()) {
@@ -5115,12 +5227,12 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
                    else
                    */
                   formattedText += nextPartOfFormattedString(_e);
-            }
+                  }
             else if (_e.name() == "extend") {
                   qDebug("lyric %p has extend", l);
                   extLyrics.insert(l);
                   _e.readNext();
-            }
+                  }
             else if (_e.name() == "syllabic") {
                   QString syll = _e.readElementText();
                   if (syll == "single")
