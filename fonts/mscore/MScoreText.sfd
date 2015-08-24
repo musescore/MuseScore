@@ -2390,6 +2390,7 @@ SplineSet
  420 423 420 423 409 423 c 2,96,-1
  305 423 l 1,0,-1
 EndSplineSet
+Kerns2: 69 -150 "sous-table 'kern' Cr+AOkA-nage horizontal lookup0"
 EndChar
 
 StartChar: uniE520
