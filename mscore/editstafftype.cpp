@@ -39,17 +39,6 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setupUi(this);
 
-      // needed to have separate sets of radio buttons
-      QButtonGroup* bg1 = new QButtonGroup(this);
-      bg1->addButton(numbersRadio);
-      bg1->addButton(lettersRadio);
-      QButtonGroup* bg2 = new QButtonGroup(this);
-      bg2->addButton(onLinesRadio);
-      bg2->addButton(aboveLinesRadio);
-      QButtonGroup* bg3 = new QButtonGroup(this);
-      bg3->addButton(linesThroughRadio);
-      bg3->addButton(linesBrokenRadio);
-
       staff     = st;
       staffType = *staff->staffType();
       Instrument* instr = staff->part()->instrument();
@@ -102,34 +91,35 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
       connect(showLedgerLinesPercussion,  SIGNAL(toggled(bool)),  SLOT(updatePreview()));
       connect(stemlessPercussion,         SIGNAL(toggled(bool)),  SLOT(updatePreview()));
 
-      connect(noteValuesSymb, SIGNAL(toggled(bool)),              SLOT(tabStemsToggled(bool)));
-      connect(noteValuesStems,SIGNAL(toggled(bool)),              SLOT(tabStemsToggled(bool)));
-      connect(valuesRepeatNever,  SIGNAL(toggled(bool)),          SLOT(updatePreview()));
-      connect(valuesRepeatSystem, SIGNAL(toggled(bool)),          SLOT(updatePreview()));
-      connect(valuesRepeatMeasure,SIGNAL(toggled(bool)),          SLOT(updatePreview()));
-      connect(valuesRepeatAlways, SIGNAL(toggled(bool)),          SLOT(updatePreview()));
-      connect(stemBesideRadio,SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-      connect(stemThroughRadio,SIGNAL(toggled(bool)),             SLOT(tabStemThroughToggled(bool)));
-      connect(stemAboveRadio, SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-      connect(stemBelowRadio, SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-      connect(minimShortRadio,    SIGNAL(toggled(bool)),          SLOT(tabMinimShortToggled(bool)));
-      connect(minimSlashedRadio,  SIGNAL(toggled(bool)),          SLOT(updatePreview()));
-      connect(showRests,      SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-      connect(durFontName,    SIGNAL(currentIndexChanged(int)),   SLOT(durFontNameChanged(int)));
-      connect(durFontSize,    SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
-      connect(durY,           SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
-      connect(fretFontName,   SIGNAL(currentIndexChanged(int)),   SLOT(fretFontNameChanged(int)));
-      connect(fretFontSize,   SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
-      connect(fretY,          SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
+      connect(noteValuesSymb,       SIGNAL(toggled(bool)),              SLOT(tabStemsToggled(bool)));
+      connect(noteValuesStems,      SIGNAL(toggled(bool)),              SLOT(tabStemsToggled(bool)));
+      connect(valuesRepeatNever,    SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(valuesRepeatSystem,   SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(valuesRepeatMeasure,  SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(valuesRepeatAlways,   SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(stemBesideRadio,      SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(stemThroughRadio,     SIGNAL(toggled(bool)),              SLOT(tabStemThroughToggled(bool)));
+      connect(stemAboveRadio,       SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(stemBelowRadio,       SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(minimShortRadio,      SIGNAL(toggled(bool)),              SLOT(tabMinimShortToggled(bool)));
+      connect(minimSlashedRadio,    SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(showRests,            SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(durFontName,          SIGNAL(currentIndexChanged(int)),   SLOT(durFontNameChanged(int)));
+      connect(durFontSize,          SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
+      connect(durY,                 SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
+      connect(fretFontName,         SIGNAL(currentIndexChanged(int)),   SLOT(fretFontNameChanged(int)));
+      connect(fretFontSize,         SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
+      connect(fretY,                SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
 
-      connect(linesThroughRadio, SIGNAL(toggled(bool)),           SLOT(updatePreview()));
-      connect(onLinesRadio,   SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-      connect(upsideDown,     SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-      connect(numbersRadio,   SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(linesThroughRadio,    SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(onLinesRadio,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(upsideDown,           SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(numbersRadio,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+      connect(showBackTied,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
 
-      connect(templateReset,  SIGNAL(clicked()),                  SLOT(resetToTemplateClicked()));
-      connect(addToTemplates,   SIGNAL(clicked()),                SLOT(addToTemplatesClicked()));
-//      connect(groupCombo,       SIGNAL(currentIndexChanged(int)), SLOT(staffGroupChanged(int)));
+      connect(templateReset,        SIGNAL(clicked()),                  SLOT(resetToTemplateClicked()));
+      connect(addToTemplates,       SIGNAL(clicked()),                  SLOT(addToTemplatesClicked()));
+//      connect(groupCombo,           SIGNAL(currentIndexChanged(int)),   SLOT(staffGroupChanged(int)));
       }
 
 //---------------------------------------------------------
@@ -188,6 +178,7 @@ void EditStaffType::setValues()
                   aboveLinesRadio->setChecked(!staffType.onLines());
                   linesThroughRadio->setChecked(staffType.linesThrough());
                   linesBrokenRadio->setChecked(!staffType.linesThrough());
+                  showBackTied->setChecked(staffType.showBackTied());
 
                   idx = durFontName->findText(staffType.durationFontName(), Qt::MatchFixedString);
                   if (idx == -1)
@@ -355,6 +346,7 @@ void EditStaffType::setFromDlg()
       staffType.setFretFontSize(fretFontSize->value());
       staffType.setFretFontUserY(fretY->value());
       staffType.setLinesThrough(linesThroughRadio->isChecked());
+      staffType.setShowBackTied(showBackTied->isChecked());
       staffType.setMinimStyle(minimNoneRadio->isChecked() ? TablatureMinimStyle::NONE :
             (minimShortRadio->isChecked() ? TablatureMinimStyle::SHORTER : TablatureMinimStyle::SLASHED));
       staffType.setSymbolRepeat(valuesRepeatNever->isChecked() ? TablatureSymbolRepeat::NEVER :
@@ -402,6 +394,7 @@ void EditStaffType::blockSignals(bool block)
       numbersRadio->blockSignals(block);
       linesThroughRadio->blockSignals(block);
       onLinesRadio->blockSignals(block);
+      showBackTied->blockSignals(block);
 
       upsideDown->blockSignals(block);
       valuesRepeatNever->blockSignals(block);

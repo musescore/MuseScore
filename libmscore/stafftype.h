@@ -190,6 +190,7 @@ class StaffType {
       bool  _stemsThrough = true;         // stems are drawn through the staff rather than beside it (stem-and-beam durations only)
       bool  _upsideDown   = false;        // whether lines are drawn with highest string at top (false) or at bottom (true)
       bool  _useNumbers   = true;         // true: use numbers ('0' - ...) for frets | false: use letters ('a' - ...)
+      bool  _showBackTied = true;         // whether back-tied notes are shown or not
 
       // TAB: internally managed variables
       // Note: values in RASTER UNITS are independent from score scaling and
@@ -237,7 +238,7 @@ class StaffType {
                   const QString& durFontName, qreal durFontSize, qreal durFontUserY, qreal genDur,
                   const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY, TablatureSymbolRepeat symRepeat,
                   bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
-                  bool stemsDown, bool stemThrough, bool upsideDown, bool useNumbers);
+                  bool stemsDown, bool stemThrough, bool upsideDown, bool useNumbers, bool showBackTied);
 
       virtual ~StaffType() {}
       bool operator==(const StaffType&) const;
@@ -324,6 +325,7 @@ class StaffType {
       bool  stemThrough() const           { return _stemsThrough;       }
       bool  upsideDown() const            { return _upsideDown;         }
       bool  useNumbers() const            { return _useNumbers;         }
+      bool  showBackTied() const          { return _showBackTied;       }
 
       // properties setters (setting some props invalidates metrics)
       void  setDurationFontName(const QString&);
@@ -342,6 +344,7 @@ class StaffType {
       void  setStemsThrough(bool val)     { _stemsThrough = val;        }
       void  setUpsideDown(bool val)       { _upsideDown = val;          }
       void  setUseNumbers(bool val)       { _useNumbers = val; _fretMetricsValid = false; }
+      void  setShowBackTied(bool val)     { _showBackTied = val;        }
 
       // utility functions for tab specially managed elements
       QPointF chordStemPos(const Chord*) const;

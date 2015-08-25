@@ -702,7 +702,7 @@ void Note::draw(QPainter* painter) const
 
       if (tablature) {
             StaffType* tab = staff()->staffType();
-            if (tieBack() && tab->slashStyle())       // skip back-tied notes on tabs without stems
+            if (tieBack() && !tab->showBackTied())    // skip back-tied notes if not shown
                   return;
             QString s;
             if (fixed())
