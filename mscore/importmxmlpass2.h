@@ -74,6 +74,21 @@ struct MusicXmlSpannerDesc {
       };
 
 //---------------------------------------------------------
+//   MusicXmlLyricsExtend
+//---------------------------------------------------------
+
+class MusicXmlLyricsExtend {
+public:
+      MusicXmlLyricsExtend() {}
+      void init();
+      void addLyric(Lyrics* const lyric);
+      void setExtend(const int no, const int track, const int tick);
+
+private:
+      QSet<Lyrics*> _lyrics;
+      };
+
+//---------------------------------------------------------
 //   MusicXMLParserPass2
 //---------------------------------------------------------
 
@@ -119,7 +134,7 @@ public:
       void pitch(int& step, int& alter, int& oct, AccidentalType& accid);
       void rest(int& step, int& octave);
       void lyric(QMap<int, Lyrics*>& numbrdLyrics, QMap<int, Lyrics*>& defyLyrics,
-                 QList<Lyrics*>& unNumbrdLyrics);
+                 QList<Lyrics*>& unNumbrdLyrics, QSet<Lyrics*>& extLyrics);
       void notations(Note* note, ChordRest* cr, const int tick, MusicXmlTupletDesc& tupletDesc, bool& lastGraceAFter);
       void stem(MScore::Direction& sd, bool& nost);
       void fermata(ChordRest* cr);
@@ -181,6 +196,7 @@ private:
       Chord* _tremStart;                          ///< Starting chord for current tremolo
       FiguredBass* _figBass;                      ///< Current figured bass element (to attach to next note)
       int _multiMeasureRestCount;
+      MusicXmlLyricsExtend _extendedLyrics;       ///< Lyrics with "extend" requiring fixup
       };
 
 //---------------------------------------------------------

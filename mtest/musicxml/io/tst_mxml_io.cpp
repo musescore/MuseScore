@@ -77,6 +77,7 @@ private slots:
       void dynamics3() { mxmlIoTestRef("testDynamics3"); }
       void emptyMeasure() { mxmlIoTestRef("testEmptyMeasure"); }
       void emptyVoice1() { mxmlIoTestRef("testEmptyVoice1"); }
+      void extendedLyrics() { mxmlIoTestRef("testExtendedLyrics"); }
       void figuredBass1() { mxmlIoTest("testFiguredBass1"); }
       void figuredBass2() { mxmlIoTest("testFiguredBass2"); }
       void figuredBass3() { mxmlIoTest("testFiguredBass3"); }
