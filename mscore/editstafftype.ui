@@ -224,7 +224,7 @@
         <number>0</number>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page">
         <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0">
@@ -483,7 +483,7 @@
                 </item>
                 <item>
                  <layout class="QGridLayout" name="gridLayout">
-                  <item row="2" column="0">
+                  <item row="1" column="0">
                    <widget class="QLabel" name="onStringsLabel">
                     <property name="minimumSize">
                      <size>
@@ -499,7 +499,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="1">
+                  <item row="1" column="1">
                    <widget class="QRadioButton" name="onLinesRadio">
                     <property name="minimumSize">
                      <size>
@@ -516,9 +516,12 @@
                     <property name="autoExclusive">
                      <bool>true</bool>
                     </property>
+                    <attribute name="buttonGroup">
+                     <string notr="true">OnAboveLinesButtGroup</string>
+                    </attribute>
                    </widget>
                   </item>
-                  <item row="4" column="1">
+                  <item row="2" column="1">
                    <widget class="QRadioButton" name="linesThroughRadio">
                     <property name="minimumSize">
                      <size>
@@ -535,9 +538,12 @@
                     <property name="autoExclusive">
                      <bool>true</bool>
                     </property>
+                    <attribute name="buttonGroup">
+                     <string notr="true">ContinuousBrokenLinesbuttGroup</string>
+                    </attribute>
                    </widget>
                   </item>
-                  <item row="4" column="0">
+                  <item row="2" column="0">
                    <widget class="QLabel" name="linesThroughLabel">
                     <property name="minimumSize">
                      <size>
@@ -571,7 +577,7 @@
                      <bool>true</bool>
                     </property>
                     <attribute name="buttonGroup">
-                     <string notr="true">buttonGroup</string>
+                     <string notr="true">NumLettersButtGroup</string>
                     </attribute>
                    </widget>
                   </item>
@@ -600,11 +606,11 @@
                      <bool>true</bool>
                     </property>
                     <attribute name="buttonGroup">
-                     <string notr="true">buttonGroup</string>
+                     <string notr="true">NumLettersButtGroup</string>
                     </attribute>
                    </widget>
                   </item>
-                  <item row="2" column="2">
+                  <item row="1" column="2">
                    <widget class="QRadioButton" name="aboveLinesRadio">
                     <property name="text">
                      <string>Above lines</string>
@@ -612,9 +618,12 @@
                     <property name="autoExclusive">
                      <bool>true</bool>
                     </property>
+                    <attribute name="buttonGroup">
+                     <string notr="true">OnAboveLinesButtGroup</string>
+                    </attribute>
                    </widget>
                   </item>
-                  <item row="4" column="2">
+                  <item row="2" column="2">
                    <widget class="QRadioButton" name="linesBrokenRadio">
                     <property name="text">
                      <string>Broken</string>
@@ -625,7 +634,34 @@
                     <property name="autoExclusive">
                      <bool>true</bool>
                     </property>
+                    <attribute name="buttonGroup">
+                     <string notr="true">ContinuousBrokenLinesbuttGroup</string>
+                    </attribute>
                    </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_3">
+                  <item>
+                   <widget class="QCheckBox" name="showBackTied">
+                    <property name="text">
+                     <string>Show back-tied fret marks</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_6">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
                   </item>
                  </layout>
                 </item>
@@ -845,7 +881,7 @@
                       <enum>Qt::PlainText</enum>
                      </property>
                      <property name="buddy">
-                      <cstring>noteValuesNone</cstring>
+                      <cstring>valuesRepeatNever</cstring>
                      </property>
                     </widget>
                    </item>
@@ -1322,6 +1358,12 @@
   <tabstop>genClef</tabstop>
   <tabstop>genTimesig</tabstop>
   <tabstop>showBarlines</tabstop>
+  <tabstop>genKeysigPitched</tabstop>
+  <tabstop>showLedgerLinesPitched</tabstop>
+  <tabstop>stemlessPitched</tabstop>
+  <tabstop>genKeysigPercussion</tabstop>
+  <tabstop>showLedgerLinesPercussion</tabstop>
+  <tabstop>stemlessPercussion</tabstop>
   <tabstop>upsideDown</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>fretFontName</tabstop>
@@ -1333,12 +1375,17 @@
   <tabstop>aboveLinesRadio</tabstop>
   <tabstop>linesThroughRadio</tabstop>
   <tabstop>linesBrokenRadio</tabstop>
+  <tabstop>showBackTied</tabstop>
   <tabstop>durFontName</tabstop>
   <tabstop>durFontSize</tabstop>
   <tabstop>durY</tabstop>
   <tabstop>noteValuesNone</tabstop>
   <tabstop>noteValuesSymb</tabstop>
   <tabstop>noteValuesStems</tabstop>
+  <tabstop>valuesRepeatNever</tabstop>
+  <tabstop>valuesRepeatSystem</tabstop>
+  <tabstop>valuesRepeatMeasure</tabstop>
+  <tabstop>valuesRepeatAlways</tabstop>
   <tabstop>stemBesideRadio</tabstop>
   <tabstop>stemThroughRadio</tabstop>
   <tabstop>stemAboveRadio</tabstop>
@@ -1350,12 +1397,6 @@
   <tabstop>templateCombo</tabstop>
   <tabstop>templateReset</tabstop>
   <tabstop>addToTemplates</tabstop>
-  <tabstop>showLedgerLinesPercussion</tabstop>
-  <tabstop>stemlessPercussion</tabstop>
-  <tabstop>genKeysigPitched</tabstop>
-  <tabstop>showLedgerLinesPitched</tabstop>
-  <tabstop>stemlessPitched</tabstop>
-  <tabstop>genKeysigPercussion</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -1393,6 +1434,8 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
+  <buttongroup name="OnAboveLinesButtGroup"/>
+  <buttongroup name="NumLettersButtGroup"/>
+  <buttongroup name="ContinuousBrokenLinesbuttGroup"/>
  </buttongroups>
 </ui>
