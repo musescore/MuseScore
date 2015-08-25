@@ -110,7 +110,7 @@ void MusicXmlLyricsExtend::addLyric(Lyrics* const lyric)
       }
 
 //---------------------------------------------------------
-//   setExtend
+//   lastChordTicks
 //---------------------------------------------------------
 
 // find the duration of the chord starting at or after s in track and ending at tick
@@ -121,52 +121,42 @@ static int lastChordTicks(const Segment* s, const int track, const int tick)
             Element* el = s->element(track);
             if (el && el->isChordRest()) {
                   ChordRest* cr = static_cast<ChordRest*>(el);
-                  if (cr->tick() + cr->actualTicks() == tick) {
-                        qDebug("  -> last chord of extend %p", cr);
+                  if (cr->tick() + cr->actualTicks() == tick)
                         return cr->actualTicks();
-                        }
                   }
             s = s->nextCR(track, true);
             }
       return 0;
       }
 
-// set extend for lyric no in track to end at tick
-// called when lyric (with or without "extend" ?) or note with "extend type=stop" is found
-// note that no == -1 means all lyrics in this track
+//---------------------------------------------------------
+//   setExtend
+//---------------------------------------------------------
 
-// note: must support three scenarios:
-// - lyric with extend, stopped by next lyric (stops at start of note)
-// - lyric with extend, stopped by next lyric w/ extend stop (stops at end of note)
-// - extends still open at end of part
+// set extend for lyric no in track to end at tick
+// called when lyric (with or without "extend") or note with "extend type=stop" is found
+// note that no == -1 means all lyrics in this track
 
 void MusicXmlLyricsExtend::setExtend(const int no, const int track, const int tick)
       {
-      qDebug("MusicXmlLyricsExtend::setExtend(no %d, track %d, tick %d)", no, track, tick);
       QList<Lyrics*> list;
       foreach(Lyrics* l, _lyrics) {
             Element* const el = l->parent();
             if (el->type() == Element::Type::CHORD) {       // TODO: rest also possible ?
                   ChordRest* const par = static_cast<ChordRest*>(el);
-                  qDebug("- l %p par %p par->track %d par->tick %d", l, par, par->track(), par->tick());
                   if (par->track() == track && (no == -1 || l->no() == no)) {
-                        qDebug("  -> must set extend");
                         int lct = lastChordTicks(l->segment(), track, tick);
                         if (lct > 0) {
                               // set lyric tick to the total length fron the lyric note
                               // plus all notes covered by the melisma minus the last note length
                               l->setTicks(tick - par->tick() - lct);
-                              qDebug("  -> extend %d", l->ticks());
                               }
                         list.append(l);
                         }
                   }
-            else
-                  qDebug("- l %p par %p (not a chord)", l, l->parent());
             }
       // cleanup
       foreach(Lyrics* l, list) {
-            qDebug("remove %p", l);
             _lyrics.remove(l);
             }
       }
@@ -773,10 +763,8 @@ static void addLyrics(ChordRest* cr,
             lyricNo = i.key(); // use number obtained from MusicXML file
             Lyrics* l = i.value();
             addLyric(cr, l, lyricNo, extendedLyrics);
-            if (extLyrics.contains(l)) {
-                  qDebug("extend lyric %p number %d", l, lyricNo);
+            if (extLyrics.contains(l))
                   extendedLyrics.addLyric(l);
-                  }
             }
 
       // then the lyrics without valid number but with valid default-y
@@ -784,10 +772,8 @@ static void addLyrics(ChordRest* cr,
             lyricNo++; // use sequence number
             Lyrics* l = i.value();
             addLyric(cr, l, lyricNo, extendedLyrics);
-            if (extLyrics.contains(l)) {
-                  qDebug("extend lyric %p number %d", l, lyricNo);
+            if (extLyrics.contains(l))
                   extendedLyrics.addLyric(l);
-                  }
             }
 
       // finally the remaining lyrics, which are simply added in order they appear in the MusicXML file
@@ -795,10 +781,8 @@ static void addLyrics(ChordRest* cr,
             lyricNo++; // use sequence number
             Lyrics* l = *i;
             addLyric(cr, l, lyricNo, extendedLyrics);
-            if (extLyrics.contains(l)) {
-                  qDebug("extend lyric %p number %d", l, lyricNo);
+            if (extLyrics.contains(l))
                   extendedLyrics.addLyric(l);
-                  }
             }
       }
 
@@ -1762,7 +1746,6 @@ void MusicXMLParserPass2::part()
             int strack = _pass1.trackForPart(id);
             int etrack = strack + _pass1.getPart(id)->nstaves() * VOICES;
             int lastTick = lm->tick() + lm->ticks();
-            qDebug("end of part: stopping extends strack %d etrack %d lasttick %d", strack, etrack, lastTick);
             for (int trk = strack; trk < etrack; trk++)
                   _extendedLyrics.setExtend(-1, trk, lastTick);
             }
@@ -5189,34 +5172,12 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
       Lyrics* l = new Lyrics(_score);
       // TODO in addlyrics: l->setTrack(trk);
 
-      bool ok = true;
-      int lyricNo = _e.attributes().value("number").toString().toInt(&ok) - 1;
-
-      if (ok) {
-            if (lyricNo < 0) {
-                  qDebug("invalid lyrics number (<0)"); // TODO
-                  delete l;
-                  return;
-                  }
-            else if (lyricNo > MAX_LYRICS) {
-                  qDebug("too much lyrics (>%d)", MAX_LYRICS); // TODO
-                  delete l;
-                  return;
-                  }
-            else {
-                  numbrdLyrics[lyricNo] = l;
-                  }
-            }
-      else {
-            int defaultY = _e.attributes().value("default-y").toString().toInt(&ok);
-            if (ok)
-                  // invert default-y as it decreases with increasing lyric number
-                  defyLyrics[-defaultY] = l;
-            else
-                  unNumbrdLyrics.append(l);
-            }
-
+      bool hasExtend = false;
+      QString strLyricNo = _e.attributes().value("number").toString();
+      QString strDefaultY = _e.attributes().value("default-y").toString();
+      QString extendType;
       QString formattedText;
+
       while (_e.readNextStartElement()) {
             if (_e.name() == "elision") {
                   // TODO verify elision handling
@@ -5229,8 +5190,8 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
                   formattedText += nextPartOfFormattedString(_e);
                   }
             else if (_e.name() == "extend") {
-                  qDebug("lyric %p has extend", l);
-                  extLyrics.insert(l);
+                  hasExtend = true;
+                  extendType = _e.attributes().value("type").toString();
                   _e.readNext();
                   }
             else if (_e.name() == "syllabic") {
@@ -5251,6 +5212,43 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
             else
                   skipLogCurrElem();
             }
+
+      // if no lyric read (e.g. only 'extend "type=stop"'), no further action required
+      if (formattedText == "") {
+            delete l;
+            return;
+            }
+
+      // put lyric on correct list to be able determine line number later
+      bool ok = true;
+      int lyricNo = strLyricNo.toInt(&ok) - 1;
+      if (ok) {
+            if (lyricNo < 0) {
+                  qDebug("invalid lyrics number (<0)");       // TODO
+                  delete l;
+                  return;
+                  }
+            else if (lyricNo > MAX_LYRICS) {
+                  qDebug("too much lyrics (>%d)", MAX_LYRICS);       // TODO
+                  delete l;
+                  return;
+                  }
+            else {
+                  numbrdLyrics[lyricNo] = l;
+                  }
+            }
+      else {
+            int defaultY = strDefaultY.toInt(&ok);
+            if (ok)
+                  // invert default-y as it decreases with increasing lyric number
+                  defyLyrics[-defaultY] = l;
+            else
+                  unNumbrdLyrics.append(l);
+            }
+
+      if (hasExtend && (extendType == "" || extendType == "start"))
+            extLyrics.insert(l);
+
       //qDebug("formatted lyric '%s'", qPrintable(formattedText));
       l->setXmlText(formattedText);
       }

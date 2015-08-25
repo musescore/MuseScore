@@ -16,6 +16,13 @@
       <supports element="print" attribute="new-system" type="no"/>
       <supports element="stem" type="yes"/>
       </encoding>
+    <miscellaneous>
+      <miscellaneous-field name="description">
+        Test lyrics with both 'extend' (old) and 'extend type="..."' (new).
+        Currently MuseScore exports "old" style extends, thus converting
+        the new ones to old ones.
+        </miscellaneous-field>
+      </miscellaneous>
     </identification>
   <part-list>
     <score-part id="P1">
@@ -244,6 +251,88 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
+        </note>
+      </measure>
+    <measure number="6">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <lyric number="1">
+          <syllabic>single</syllabic>
+          <text>Two</text>
+          <extend type="start"/>
+          </lyric>
+        <lyric number="2">
+          <syllabic>single</syllabic>
+          <text>One</text>
+          </lyric>
+        </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <lyric number="1">
+          <extend type="stop"/>
+          </lyric>
+        <lyric number="2">
+          <syllabic>single</syllabic>
+          <text>Two</text>
+          <extend/>
+          </lyric>
+        </note>
+      </measure>
+    <measure number="7">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <lyric number="1">
+          <syllabic>single</syllabic>
+          <text>Two</text>
+          <extend type="start"/>
+          </lyric>
+        <lyric number="2">
+          <extend type="stop"/>
+          </lyric>
+        </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric number="1">
+          <extend type="stop"/>
+          </lyric>
+        <lyric number="2">
+          <syllabic>single</syllabic>
+          <text>One</text>
+          </lyric>
+        </note>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>

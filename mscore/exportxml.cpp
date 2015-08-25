@@ -3534,7 +3534,6 @@ void ExportMusicXml::lyrics(const QList<Lyrics*>* ll, const int trk)
       foreach(const Lyrics* l, *ll) {
             if (l && !l->xmlText().isEmpty()) {
                   if ((l)->track() == trk) {
-                        qDebug("lyric text '%s' ticks %d", qPrintable(l->plainText()), l->ticks());
                         xml.stag(QString("lyric number=\"%1\"").arg((l)->no() + 1));
                         Lyrics::Syllabic syl = (l)->syllabic();
                         QString s = "";
