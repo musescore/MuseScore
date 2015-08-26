@@ -861,6 +861,8 @@ void Slur::slurPos(SlurPos* sp)
             };
       SlurAnchor sa1 = SlurAnchor::NONE;
       SlurAnchor sa2 = SlurAnchor::NONE;
+      // if slur is 'embedded' between either stem or both (as it might happens with voices)
+      // link corresponding slur end to stem position
       if ((scr->up() == ecr->up()) && !scr->beam() && !ecr->beam() && (_up == scr->up())) {
             if (stem1)
                   sa1 = SlurAnchor::STEM;
@@ -869,17 +871,27 @@ void Slur::slurPos(SlurPos* sp)
             }
 
       qreal __up = _up ? -1.0 : 1.0;
+      qreal hw1 = note1 ? note1->tabHeadWidth(stt) : startCR()->width();      // if stt == 0, tabHeadWidth()
+      qreal hw2 = note2 ? note2->tabHeadWidth(stt) : endCR()->width();        // defaults to headWidth()
+      QPointF pt;
       switch (sa1) {
-            case SlurAnchor::STEM: //sc can't be null
-                  sp->p1 += sc->stemPos() - sc->pagePos() + sc->stem()->p2();
-                  sp->p1 += QPointF(0.35 * _spatium, 0.25 * _spatium);
+            case SlurAnchor::STEM:        //sc can't be null
+                  // place slur starting point at stem base point
+                  pt = sc->stemPos() - sc->pagePos() + sc->stem()->p2();
+                  if (useTablature)                   // in tabs, stems are centred on note:
+                        pt.rx() = hw1 * 0.5;          // skip half note head to touch stem
+                  sp->p1 += pt;
+                  sp->p1 += QPointF(0.35 * _spatium, 0.25 * _spatium);  // clear the stem (x) and the note head (y)
                   break;
             case SlurAnchor::NONE:
                   break;
             }
       switch(sa2) {
-            case SlurAnchor::STEM: //ec can't be null
-                  sp->p2 += ec->stemPos() - ec->pagePos() + ec->stem()->p2();
+            case SlurAnchor::STEM:        //ec can't be null
+                  pt = ec->stemPos() - ec->pagePos() + ec->stem()->p2();
+                  if (useTablature)
+                        pt.rx() = hw2 * 0.5;
+                  sp->p2 += pt;
                   sp->p2 += QPointF(-0.35 * _spatium, 0.25 * _spatium);
                   break;
             case SlurAnchor::NONE:
@@ -892,9 +904,10 @@ void Slur::slurPos(SlurPos* sp)
       //    vertical:   _spatium * .4 above/below note head
       //
       //------p1
+      // NOTE: all the code up to "------p2" only has effect if (sa1 == SlurAnchor::NONE)
+      //    and could be placed in the switch (sa1) case SlurAnchor::NONE above
       bool stemPos = false;   // p1 starts at chord stem side
-      qreal hw = note1 ? note1->tabHeadWidth(stt) : startCR()->width();     // if stt == 0, tabHeadWidth()
-      xo = hw * .5;                                                           // defaults to headWidth()
+      xo = hw1 * .5;
       if (note1)
             yo = note1->pos().y();
       else if(_up)
@@ -916,7 +929,7 @@ void Slur::slurPos(SlurPos* sp)
                   }
             else {
                   if (sc->up() && _up)
-                        xo = hw + _spatium * .3;
+                        xo = hw1 + _spatium * .3;
                   //
                   // handle case: stem up   - stem down
                   //              stem down - stem up
@@ -954,8 +967,9 @@ void Slur::slurPos(SlurPos* sp)
             sp->p1 += QPointF(xo, yo);
 
       //------p2
-      hw = note2 ? note2->tabHeadWidth(stt) : endCR()->width();
-      xo = hw * .5;
+      // NOTE: all the code up to end only has effect if (sa2 == SlurAnchor::NONE)
+      //    and could be placed in the switch (sa2) case SlurAnchor::NONE above
+      xo = hw2 * .5;
       if (note2)
             yo = note2->pos().y();
       else if(_up)
