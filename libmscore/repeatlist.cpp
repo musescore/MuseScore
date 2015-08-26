@@ -122,6 +122,7 @@ RepeatSegment::RepeatSegment()
       utick      = 0;
       utime      = 0.0;
       timeOffset = 0.0;
+      pauseBefore = 0.0;
       }
 
 //---------------------------------------------------------
@@ -159,8 +160,9 @@ void RepeatList::update()
       int utick = 0;
       qreal t  = 0;
 
-      for(RepeatSegment* s : *this) {
+      for (RepeatSegment* s : *this) {
             s->utick      = utick;
+            t += s->pauseBefore;
             s->utime      = t;
             qreal ct      = tl->tick2time(s->tick);
             s->timeOffset = t - ct;
@@ -252,15 +254,18 @@ void RepeatList::dump() const
       {
 #if 0
       qDebug("==Dump Repeat List:==");
-      foreach(const RepeatSegment* s, *this) {
-            qDebug("%p  tick: %3d(%d) %3d(%d) len %d(%d) beats  %f + %f", s,
+      foreach (const RepeatSegment* s, *this) {
+            qDebug("%p  tick: %3d(%d) %3d(%d) len %d(%d) beats  %f + %f pauseBefore %f",
+               s,
                s->utick / MScore::division,
                s->utick / MScore::division / 4,
                s->tick / MScore::division,
                s->tick / MScore::division / 4,
                s->len / MScore::division,
                s->len / MScore::division / 4,
-               s->utime, s->timeOffset);
+               s->utime,
+               s->timeOffset,
+               s->pauseBefore);
             }
 #endif
       }
@@ -290,6 +295,7 @@ void RepeatList::unwind()
 
       MeasureBase* sectionStartMeasureBase = NULL; // NULL indicates haven't discovered starting Measure of section
       MeasureBase* sectionEndMeasureBase = NULL;
+      qreal pauseBefore = 0.0;
 
       // partition score by section breaks and unwind individual sections seperately
       // note: section breaks may occur on non-Measure frames, so must seach list of all MeasureBases
@@ -309,13 +315,16 @@ void RepeatList::unwind()
 
                   // only unwind if section starts and ends with actual real measure
                   if (sectionStartMeasureBase && sectionEndMeasureBase) {
-                        unwindSection(reinterpret_cast<Measure*>(sectionStartMeasureBase), reinterpret_cast<Measure*>(sectionEndMeasureBase));
+                        unwindSection(static_cast<Measure*>(sectionStartMeasureBase), static_cast<Measure*>(sectionEndMeasureBase), pauseBefore);
                         sectionStartMeasureBase = sectionEndMeasureBase = NULL; // reset to NULL to indicate that don't know starting Measure of next section after starting new section
+                        pauseBefore = mb->pause(); // the pause before the next section to unwind will equal the pause of the section break at the end of the section we just unwound
                         }
                   else {
                         qDebug( "Will not unroll a section that doesn't start or end with an actual measure. sectionStartMeasureBase = %p, sectionEndMeasureBase = %p",
                                     sectionStartMeasureBase, sectionEndMeasureBase);
                         }
+
+
                   }
             }
 
@@ -329,7 +338,7 @@ void RepeatList::unwind()
 //    appends repeat segments to rs
 //---------------------------------------------------------
 
-void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEndMeasure)
+void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEndMeasure, qreal pauseBefore)
       {
 //      qDebug("unwind %d-measure section starting %p through %p", sectionEndMeasure->no()+1, sectionStartMeasure, sectionEndMeasure);
 
@@ -337,6 +346,7 @@ void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEnd
 
       rs         = new RepeatSegment;
       rs->tick   = sectionStartMeasure->tick(); // prepare initial repeat segment for start of this section
+      rs->pauseBefore = pauseBefore;
 
       Measure* endRepeat  = 0; // measure where the current repeat should stop
       Measure* continueAt = 0; // measure where the playback should continue after the repeat (To coda)
@@ -415,7 +425,7 @@ void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEnd
                   }
             if (doJump && !isGoto) {
                   Jump* s = 0;
-                  foreach(Element* e, m->el()) {
+                  for (Element* e : m->el()) {
                         if (e->type() == Element::Type::JUMP) {
                               s = static_cast<Jump*>(e);
                               break;

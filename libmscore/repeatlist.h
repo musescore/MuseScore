@@ -28,7 +28,8 @@ class RepeatSegment {
       int len;
       int utick;
       qreal utime;
-      qreal timeOffset;
+      qreal timeOffset;      
+      qreal pauseBefore;
 
       RepeatSegment();
       };
@@ -45,7 +46,7 @@ class RepeatList: public QList<RepeatSegment*>
       RepeatSegment* rs;            // tmp value during unwind()
 
       Measure* jumpToStartRepeat(Measure*);
-      void unwindSection(Measure* fm, Measure* em);
+      void unwindSection(Measure* fm, Measure* em, qreal pauseBefore);
 
    public:
       RepeatList(Score* s);

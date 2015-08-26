@@ -499,11 +499,6 @@ void Score::fixTicks()
                   m->mmRest()->moveTicks(diff);
 
 //            if (!parentScore()) {
-                  //
-                  //  implement section break rest
-                  //
-                  if (m->sectionBreak() && m->pause() != 0.0)
-                        setPause(m->tick() + m->ticks(), m->pause());
 
                   //
                   // implement fermata as a tempo change
