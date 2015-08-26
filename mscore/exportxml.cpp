@@ -1813,15 +1813,12 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
 
 
 //---------------------------------------------------------
-//   chordAttributes
+//   fermatas
 //---------------------------------------------------------
 
-void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technical& technical,
-                                     TrillHash& trillStart, TrillHash& trillStop)
+static void fermatas(const QList<Articulation*>& cra, Xml& xml, Notations& notations)
       {
-      const QList<Articulation*>& na = chord->articulations();
-      // first output the fermatas
-      for (const Articulation* a : na) {
+      for (const Articulation* a : cra) {
             ArticulationType at = a->articulationType();
             if (at == ArticulationType::Fermata
                 || at == ArticulationType::Shortfermata
@@ -1842,6 +1839,18 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         xml.tag(tagName, "square");
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   chordAttributes
+//---------------------------------------------------------
+
+void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technical& technical,
+                                     TrillHash& trillStart, TrillHash& trillStop)
+      {
+      const QList<Articulation*>& na = chord->articulations();
+      // first output the fermatas
+      fermatas(na, xml, notations);
 
       // then the attributes whose elements are children of <articulations>
       Articulations articulations;
@@ -2777,6 +2786,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
             xml.tag("staff", staff);
 
       Notations notations;
+      fermatas(rest->articulations(), xml, notations);
       tupletStartStop(rest, notations, xml);
       notations.etag(xml);
 
