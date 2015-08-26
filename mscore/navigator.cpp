@@ -49,7 +49,6 @@ NScrollArea::NScrollArea(QWidget* w)
 
       setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
       setMinimumHeight(40);
-      setMaximumHeight(140);
       setLineWidth(0);
       }
 
