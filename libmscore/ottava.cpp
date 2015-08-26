@@ -111,6 +111,7 @@ QVariant OttavaSegment::propertyDefault(P_ID id) const
             case P_ID::OTTAVA_TYPE:
             case P_ID::PLACEMENT:
             case P_ID::NUMBERS_ONLY:
+            case P_ID::TEXT_STYLE_TYPE:
                   return ottava()->propertyDefault(id);
             default:
                   return TextLineSegment::propertyDefault(id);
