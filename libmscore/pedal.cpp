@@ -58,6 +58,7 @@ QVariant PedalSegment::propertyDefault(P_ID id) const
       switch (id) {
             case P_ID::LINE_WIDTH:
             case P_ID::LINE_STYLE:
+            case P_ID::TEXT_STYLE_TYPE:
                   return pedal()->propertyDefault(id);
             default:
                   return TextLineSegment::propertyDefault(id);
