@@ -414,7 +414,7 @@ void Technical::etag(Xml& xml)
             xml.etag();
       technicalPrinted = false;
       }
-      
+
 //---------------------------------------------------------
 //   color2xml
 //---------------------------------------------------------
@@ -577,7 +577,7 @@ void SlurHandler::doSlurStart(const Slur* s, Notations& notations, Xml& xml)
       tagName += slurTieLineStyle(s); // define line type
       tagName += color2xml(s);
       tagName += QString(" type=\"start\"%1")
-                  .arg(s->slurDirection() == MScore::Direction::UP ? " placement=\"above\"" : "");
+            .arg(s->slurDirection() == MScore::Direction::UP ? " placement=\"above\"" : "");
 
       if (i >= 0) {
             // remove from list and print start
@@ -1602,11 +1602,11 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, int staff, bool visib
 
             // first put the KeySyms in a map
             QMap<qreal, KeySym> map;
-            foreach(const KeySym& ksym, keysyms) {
+            foreach(const KeySym &ksym, keysyms) {
                   map.insert(ksym.spos.x(), ksym);
                   }
             // then write them (automatically sorted on key)
-            foreach(const KeySym& ksym, map) {
+            foreach(const KeySym &ksym, map) {
                   int line = static_cast<int>(round(2 * ksym.spos.y()));
                   int step = (po - line) % 7;
                   //qDebug(" keysym sym %d spos %g,%g pos %g,%g -> line %d step %d",
@@ -1639,7 +1639,7 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, int staff, bool visib
 void ExportMusicXml::clef(int staff, const Clef* clef)
       {
       ClefType ct = clef->clefType();
-      clefDebug("ExportMusicXml::clef(staff %d, clef %d)", staff, ct);
+      clefDebug("ExportMusicXml::clef(staff %d, clef %hhd)", staff, ct);
 
       QString tagName = "clef";
       if (staff)
@@ -4690,6 +4690,7 @@ void ExportMusicXml::write(QIODevice* dev)
                         }
 
                         {
+                        // make sure clefs at end of measure get exported at start of next measure
                         Measure* prevMeasure = m->prevMeasure();
                         int tick             = m->tick();
                         Segment* cs1;
@@ -4701,12 +4702,16 @@ void ExportMusicXml::write(QIODevice* dev)
                         else
                               cs1 = 0;
 
-                        if (cs1 && cs2)   // should not happen
-                              seg = cs2;
+                        if (cs1 && cs2) {
+                              // should only happen at begin of new system
+                              // when previous system ends with a non-generated clef
+                              seg = cs1;
+                              }
                         else if (cs1)
                               seg = cs1;
                         else
                               seg = cs2;
+                        clefDebug("exportxml: clef segments cs1=%p cs2=%p seg=%p", cs1, cs2, seg);
 
                         // output attribute at start of measure: clef
                         if (seg) {
@@ -4845,7 +4850,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                           // also ignore clefs at the start of a measure,
                                           // these have already been output
                                           // also ignore clefs at the end of a measure
-                                          //
+                                          // these will be output at the start of the next measure
                                           Clef* cle = static_cast<Clef*>(el);
                                           int ti = seg->tick();
                                           clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, int(cle->clefType()), el->generated());
