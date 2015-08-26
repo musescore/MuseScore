@@ -115,10 +115,15 @@ void TextLineSegment::draw(QPainter* painter) const
             if (!tl->lineVisible())
                   pen.setColor(Qt::gray);
             if (tl->lineStyle() == Qt::CustomDashLine) {
+                  bool palette = !(parent() && parent()->parent());     // hack for palette
                   QVector<qreal> pattern;
-                  pattern << 5.0 << 20.0;
+                  if (palette)
+                        pattern << 5.0 << 5.0;
+                  else
+                        pattern << 5.0 << 20.0;
                   pen.setDashPattern(pattern);
-                  pen.setDashOffset(15.0);
+                  if (!palette)
+                        pen.setDashOffset(15.0);
                   }
             painter->setPen(pen);
 

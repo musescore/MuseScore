@@ -188,7 +188,6 @@ void HairpinSegment::draw(QPainter* painter) const
             QVector<qreal> pattern;
             pattern << 5.0 << 20.0;
             pen.setDashPattern(pattern);
-            pen.setDashOffset(15.0);
             }
 
       painter->setPen(pen);
@@ -208,6 +207,7 @@ void HairpinSegment::draw(QPainter* painter) const
 QVariant HairpinSegment::getProperty(P_ID id) const
       {
       switch (id) {
+            case P_ID::HAIRPIN_TEXTLINE:
             case P_ID::HAIRPIN_CIRCLEDTIP:
             case P_ID::HAIRPIN_TYPE:
             case P_ID::VELO_CHANGE:
@@ -217,7 +217,7 @@ QVariant HairpinSegment::getProperty(P_ID id) const
             case P_ID::HAIRPIN_CONT_HEIGHT:
                   return hairpin()->getProperty(id);
             default:
-                  return LineSegment::getProperty(id);
+                  return TextLineSegment::getProperty(id);
             }
       }
 
@@ -228,6 +228,7 @@ QVariant HairpinSegment::getProperty(P_ID id) const
 bool HairpinSegment::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
+            case P_ID::HAIRPIN_TEXTLINE:
             case P_ID::HAIRPIN_CIRCLEDTIP:
             case P_ID::HAIRPIN_TYPE:
             case P_ID::VELO_CHANGE:
@@ -238,7 +239,7 @@ bool HairpinSegment::setProperty(P_ID id, const QVariant& v)
             case P_ID::HAIRPIN_CONT_HEIGHT:
                   return hairpin()->setProperty(id, v);
             default:
-                  return LineSegment::setProperty(id, v);
+                  return TextLineSegment::setProperty(id, v);
             }
       }
 
@@ -249,6 +250,8 @@ bool HairpinSegment::setProperty(P_ID id, const QVariant& v)
 QVariant HairpinSegment::propertyDefault(P_ID id) const
       {
       switch (id) {
+            case P_ID::HAIRPIN_TEXTLINE:
+            case P_ID::TEXT_STYLE_TYPE:
             case P_ID::HAIRPIN_CIRCLEDTIP:
             case P_ID::HAIRPIN_TYPE:
             case P_ID::VELO_CHANGE:
@@ -258,7 +261,7 @@ QVariant HairpinSegment::propertyDefault(P_ID id) const
             case P_ID::HAIRPIN_CONT_HEIGHT:
                   return hairpin()->propertyDefault(id);
             default:
-                  return LineSegment::propertyDefault(id);
+                  return TextLineSegment::propertyDefault(id);
             }
       }
 
@@ -275,7 +278,7 @@ PropertyStyle HairpinSegment::propertyStyle(P_ID id) const
                   return hairpin()->propertyStyle(id);
 
             default:
-                  return LineSegment::propertyStyle(id);
+                  return TextLineSegment::propertyStyle(id);
             }
       }
 
@@ -292,7 +295,7 @@ void HairpinSegment::resetProperty(P_ID id)
                   return hairpin()->resetProperty(id);
 
             default:
-                  return LineSegment::resetProperty(id);
+                  return TextLineSegment::resetProperty(id);
             }
       }
 
@@ -436,6 +439,8 @@ void Hairpin::undoSetDynRange(Dynamic::Range val)
 QVariant Hairpin::getProperty(P_ID id) const
       {
       switch (id) {
+            case P_ID::HAIRPIN_TEXTLINE:
+                return _useTextLine;
             case P_ID::HAIRPIN_CIRCLEDTIP:
                 return _hairpinCircledTip;
             case P_ID::HAIRPIN_TYPE:
@@ -460,6 +465,9 @@ QVariant Hairpin::getProperty(P_ID id) const
 bool Hairpin::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
+            case P_ID::HAIRPIN_TEXTLINE:
+                _useTextLine = v.toBool();
+                break;
             case P_ID::HAIRPIN_CIRCLEDTIP:
                 _hairpinCircledTip = v.toBool();
                 break;
@@ -499,6 +507,8 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
 QVariant Hairpin::propertyDefault(P_ID id) const
       {
       switch (id) {
+            case P_ID::HAIRPIN_TEXTLINE:    return _useTextLine;  // HACK: treat current setting as default
+            case P_ID::TEXT_STYLE_TYPE:     return int(TextStyleType::HAIRPIN);
             case P_ID::HAIRPIN_CIRCLEDTIP:  return false;
             case P_ID::HAIRPIN_TYPE:        return int(Type::CRESCENDO);
             case P_ID::VELO_CHANGE:         return 0;

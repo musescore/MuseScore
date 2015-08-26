@@ -135,6 +135,7 @@ static const PropertyData propertyList[] = {
       { P_ID::NUMBERS_ONLY,        false, "numbersOnly",   P_TYPE::BOOL   },
       { P_ID::TRILL_TYPE,          false, "",              P_TYPE::INT    },
 
+      { P_ID::HAIRPIN_TEXTLINE,    false, "useTextLine",   P_TYPE::BOOL   },
       { P_ID::HAIRPIN_CIRCLEDTIP,  false, "hairpinCircledTip", P_TYPE::BOOL     },
       { P_ID::HAIRPIN_TYPE,        true,  "",              P_TYPE::INT     },
       { P_ID::HAIRPIN_HEIGHT,      false, "hairpinHeight",     P_TYPE::SPATIUM },

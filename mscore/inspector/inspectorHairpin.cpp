@@ -36,9 +36,11 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             { P_ID::USER_OFF,            0, 0, e.offsetX,           e.resetX                 },
             { P_ID::USER_OFF,            1, 0, e.offsetY,           e.resetY                 },
             { P_ID::DIAGONAL,            0, 0, l.diagonal,          l.resetDiagonal          },
+            { P_ID::LINE_VISIBLE,        0, 0, l.lineVisible,       l.resetLineVisible       },
             { P_ID::LINE_COLOR,          0, 0, l.lineColor,         l.resetLineColor         },
             { P_ID::LINE_WIDTH,          0, 0, l.lineWidth,         l.resetLineWidth         },
             { P_ID::LINE_STYLE,          0, 0, l.lineStyle,         l.resetLineStyle         },
+            { P_ID::HAIRPIN_TEXTLINE,    0, 0, h.useTextLine,       h.resetUseTextLine       },
             { P_ID::HAIRPIN_CIRCLEDTIP,  0, 0, h.hairpinCircledTip, h.resetHairpinCircledTip },
             { P_ID::HAIRPIN_TYPE,        0, 0, h.hairpinType,       h.resetHairpinType       },
             { P_ID::DYNAMIC_RANGE,       0, 0, h.dynRange,          h.resetDynRange          },
@@ -48,5 +50,19 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             };
       mapSignals();
       }
+
+//---------------------------------------------------------
+//   postInit
+//---------------------------------------------------------
+
+void InspectorHairpin::postInit()
+      {
+      bool useTextLine = h.useTextLine->isChecked();
+      l.lineVisible->setEnabled(useTextLine);
+      h.hairpinCircledTip->setDisabled(useTextLine);
+      h.hairpinHeight->setDisabled(useTextLine);
+      h.hairpinContHeight->setDisabled(useTextLine);
+      }
+
 }
 

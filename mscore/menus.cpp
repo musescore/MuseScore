@@ -798,7 +798,7 @@ Palette* MuseScore::newLinesPalette(bool basic)
       gabel2->setLen(w);
       gabel2->setUseTextLine(true);
       gabel2->setLineStyle(Qt::CustomDashLine);
-      gabel2->setBeginText("<i>cresc.</i>");
+      gabel2->setBeginText("cresc.");
       sp->append(gabel2, qApp->translate("lines", "Crescendo line"));
 
       Hairpin* gabel3 = new Hairpin(gscore);
@@ -806,7 +806,7 @@ Palette* MuseScore::newLinesPalette(bool basic)
       gabel3->setLen(w);
       gabel3->setUseTextLine(true);
       gabel3->setLineStyle(Qt::CustomDashLine);
-      gabel3->setBeginText("<i>dim.</i>");
+      gabel3->setBeginText("dim.");
       sp->append(gabel3, QT_TRANSLATE_NOOP("Palette", "Diminuendo line"));
 
       Volta* volta = new Volta(gscore);
