@@ -3343,6 +3343,7 @@ struct PageContext {
       qreal y;
       int gaps;
       SystemRow sr;
+      SystemRow prevSR;
 
       System* lastSystem;
       qreal prevDist;
@@ -3395,6 +3396,7 @@ PAGEDBG("  system %d", i);
             //
             // collect system row
             //
+            pC.prevSR = pC.sr;
             pC.sr.clear();
             for (;;) {
                   System* system = _systems[i];
@@ -3562,7 +3564,12 @@ void Score::layoutPage(const PageContext& pC, qreal d)
                   // we could strip this off too, but then the lyrics might crowd the page margin too much
                   // TODO: consider another style parameter here
                   qreal allowableMargin = d;    // + styleP(StyleIdx::lyricsMinBottomDistance);
-                  qreal extra = qMax(pC.sr.extraDistance(lastVisible) - allowableMargin, 0.0);
+                  qreal lastSRextraDistance = 0.0;
+                  if (pC.prevSR.systems.contains(lastSystem))
+                        lastSRextraDistance = pC.prevSR.extraDistance(lastVisible);
+                  else if (pC.sr.systems.contains(lastSystem))
+                        lastSRextraDistance = pC.sr.extraDistance(lastVisible);
+                  qreal extra = qMax(lastSRextraDistance - allowableMargin, 0.0);
                   // for last staff of system, this distance has not been accounted for at all
                   // for interior staves (with last staves hidden), this is only partially accounted for
                   if (lastVisible == lastStaff)
