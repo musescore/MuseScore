@@ -974,6 +974,7 @@ void Palette::dragEnterEvent(QDragEnterEvent* event)
 
 void Palette::dragMoveEvent(QDragMoveEvent* ev)
       {
+      ev->acceptProposedAction();
       int i = idx(ev->pos());
       if (i == -1)
             return;
