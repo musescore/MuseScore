@@ -330,6 +330,10 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
 
 void Score::expandVoice(Segment* s, int track)
       {
+      if (!s) {
+            qDebug("expand voice: no segment");
+            return;
+            }
       if (s->element(track)) {
             ChordRest* cr = (ChordRest*)(s->element(track));
             qDebug("expand voice: found %s %s", cr->name(), qPrintable(cr->duration().print()));
