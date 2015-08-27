@@ -1862,7 +1862,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const MScor
             // and in a beam ...
             // (note no check is done on correct order of beam begin/continue/end)
             if (cr->track() == beam->track()
-                && (bm == Beam::Mode::BEGIN || bm == Beam::Mode::MID || bm == Beam::Mode::END)) {
+                && (bm == Beam::Mode::BEGIN || bm == Beam::Mode::MID || bm == Beam::Mode::END || bm == Beam::Mode::BEGIN32 || bm == Beam::Mode::BEGIN64)) {
                   // ... and actually add cr to the beam
                   beam->add(cr);
                   }
@@ -4989,6 +4989,22 @@ void MusicXMLParserPass2::beam(Beam::Mode& beamMode)
             else if (s == "forward hook")
                   ;
             else
+                  logError(QString("unknown beam keyword '%1'").arg(s));
+            }
+      else if (beamNo == 2 && beamMode != Beam::Mode::BEGIN) {
+            QString s = _e.readElementText();
+            if (s == "begin")
+                  beamMode = Beam::Mode::BEGIN32;
+            else if (s != "end" && s != "continue"
+               && s != "backward hook" && s == "forward hook")
+                  logError(QString("unknown beam keyword '%1'").arg(s));
+            }
+      else if (beamNo == 3 && beamMode != Beam::Mode::BEGIN && beamMode != Beam::Mode::BEGIN32) {
+            QString s = _e.readElementText();
+            if (s == "begin")
+                  beamMode = Beam::Mode::BEGIN64;
+            else if (s != "end" && s != "continue"
+               && s != "backward hook" && s == "forward hook")
                   logError(QString("unknown beam keyword '%1'").arg(s));
             }
       else
