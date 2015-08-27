@@ -192,6 +192,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             gain = 0.99 / peak;
             }
 
+      bool wasCanceled = progress.wasCanceled();
       progress.close();
 
       MScore::sampleRate = oldSampleRate;
@@ -200,7 +201,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             qDebug("close soundfile failed");
             return false;
             }
-      if (progress.wasCanceled())
+      if (wasCanceled)
             QFile::remove(name);
 
       return true;

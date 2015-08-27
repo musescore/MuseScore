@@ -848,11 +848,12 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       if (bytes > 0L)
             file.write((char*)bufferOut, bytes);
 
+      bool wasCanceled = progress.wasCanceled();
       progress.close();
       delete synti;
       delete[] bufferOut;
       file.close();
-      if (progress.wasCanceled())
+      if (wasCanceled)
             file.remove();
       MScore::sampleRate = oldSampleRate;
       return true;
