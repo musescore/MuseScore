@@ -187,6 +187,11 @@
          <string>Dash-dot-dotted</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Wide dashed</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item row="4" column="2">

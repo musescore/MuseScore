@@ -482,6 +482,7 @@ void InspectorBase::setupLineStyle(QComboBox* cb)
       cb->setItemData(2, int(Qt::DotLine));
       cb->setItemData(3, int(Qt::DashDotLine));
       cb->setItemData(4, int(Qt::DashDotDotLine));
+      cb->setItemData(5, int(Qt::CustomDashLine));
       }
 }
 
