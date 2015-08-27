@@ -530,6 +530,19 @@ QPointF Element::pagePos() const
       else {
             if (parent()->parent())
                   p += parent()->pagePos();
+            // grace chord position is based on that of the main chord
+            // but on the assumption they are on the same staves
+            // adjust position here if this assumption is not true
+            if (type() == Element::Type::CHORD && parent()->type() == Element::Type::CHORD) {
+                  const Chord* c = static_cast<const Chord*>(this);
+                  const Chord* pc = static_cast<const Chord*>(parent());
+                  System* system = pc->segment()->system();
+                  if ((c->staffMove() != pc->staffMove()) && system) {
+                        int csi = c->staffIdx() + c->staffMove();
+                        int psi = pc->staffIdx() + pc->staffMove();
+                        p.ry() += system->staffYpage(csi) - system->staffYpage(psi);
+                        }
+                  }
             }
       return p;
       }
