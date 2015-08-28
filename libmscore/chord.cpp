@@ -1693,6 +1693,27 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
       }
 
 //---------------------------------------------------------
+//   pagePos
+//---------------------------------------------------------
+
+QPointF Chord::pagePos() const
+      {
+      if (isGrace()) {
+            QPointF p(pos());
+            if (parent() == 0)
+                  return p;
+            p.rx() = pageX();
+
+            const Chord* pc = static_cast<const Chord*>(parent());
+            System* system = pc->segment()->system();
+            int csi = staffIdx() + staffMove();
+            p.ry() += system->staffYpage(csi);
+            return p;
+            }
+      return Element::pagePos();
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
