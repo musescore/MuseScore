@@ -1925,6 +1925,20 @@ void ScoreView::paint(const QRect& r, QPainter& p)
 
             if (!ss)
                   return;
+
+            if (!ss->measure()->system()) {
+                  // segment is in a measure that has not been laid out yet
+                  // this can happen in mmrests
+                  // first chordrest segment of mmrest instead
+                  const Measure* mmr = ss->measure()->mmRest1();
+                  if (mmr)
+                        ss = mmr->first(Segment::Type::ChordRest);
+                  else
+                        return;                 // not an mmrest?
+                  if (!ss)
+                        return;                 // mmrest has no chordrest segment?
+                  }
+
             p.setBrush(Qt::NoBrush);
 
             QPen pen;
