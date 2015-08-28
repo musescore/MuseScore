@@ -5052,11 +5052,11 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                         octave++;
                   }
             else {
-                  int curPitch = -1;
+                  int curPitch = 60;
                   if (is.segment()) {
                         Staff* staff = score()->staff(is.track() / VOICES);
                         Segment* seg = is.segment()->prev1(Segment::Type::ChordRest | Segment::Type::Clef);
-                        while(seg) {
+                        while (seg) {
                               if (seg->segmentType() == Segment::Type::ChordRest) {
                                     Element* p = seg->element(is.track());
                                     if (p && p->type() == Element::Type::CHORD) {
@@ -5067,9 +5067,9 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                                     }
                               else if (seg->segmentType() == Segment::Type::Clef) {
                                     Element* p = seg->element( (is.track() / VOICES) * VOICES); // clef on voice 1
-                                    if(p && p->type() == Element::Type::CLEF) {
+                                    if (p && p->type() == Element::Type::CLEF) {
                                           Clef* clef = static_cast<Clef*>(p);
-                                          // check if it's an actual key change or just a courtesy
+                                          // check if it's an actual change or just a courtesy
                                           ClefType ctb = staff->clef(clef->tick() - 1);
                                           if (ctb != clef->clefType() || clef->tick() == 0) {
                                                 curPitch = line2pitch(4, clef->clefType(), Key::C); // C 72 for treble clef
@@ -5077,7 +5077,7 @@ void ScoreView::cmdAddPitch(int note, bool addFlag)
                                                 }
                                           }
                                     }
-                              seg = seg->prev1(Segment::Type::ChordRest | Segment::Type::Clef);
+                              seg = seg->prev1MM(Segment::Type::ChordRest | Segment::Type::Clef);
                               }
                         octave = curPitch / 12;
                         }
