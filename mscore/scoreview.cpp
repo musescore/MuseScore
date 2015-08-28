@@ -1931,12 +1931,12 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   // this can happen in mmrests
                   // first chordrest segment of mmrest instead
                   const Measure* mmr = ss->measure()->mmRest1();
-                  if (mmr)
+                  if (mmr && mmr->system())
                         ss = mmr->first(Segment::Type::ChordRest);
                   else
-                        return;                 // not an mmrest?
+                        return;                 // still no system?
                   if (!ss)
-                        return;                 // mmrest has no chordrest segment?
+                        return;                 // no chordrest segment?
                   }
 
             p.setBrush(Qt::NoBrush);
@@ -1977,11 +1977,22 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             System* system1 = system2;
             double x1;
 
-            for (Segment* s = ss; s && (s != es);) {
+            for (Segment* s = ss; s && (s != es); ) {
                   Segment* ns = s->next1MM();
                   system1  = system2;
                   system2  = s->measure()->system();
-                  pt       = s->pagePos();
+                  if (!system2) {
+                        // as before, use mmrest if necessary
+                        const Measure* mmr = s->measure()->mmRest1();
+                        if (mmr)
+                              system2 = mmr->system();
+                        if (!system2)
+                              break;
+                        // extend rectangle to end of mmrest
+                        pt = mmr->last()->pagePos();
+                        }
+                  else
+                        pt = s->pagePos();
                   x1  = x2;
                   x2  = pt.x() + _spatium * 2;
 
