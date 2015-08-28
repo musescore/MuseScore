@@ -188,6 +188,7 @@ class Chord : public ChordRest {
 
       Note* selectedNote() const;
       virtual void layout();
+      virtual QPointF pagePos() const override;      ///< position in page coordinates
       void layout2();
       void cmdUpdateNotes(AccidentalState*);
 
