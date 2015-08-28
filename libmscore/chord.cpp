@@ -1706,6 +1706,8 @@ QPointF Chord::pagePos() const
 
             const Chord* pc = static_cast<const Chord*>(parent());
             System* system = pc->segment()->system();
+            if (!system)
+                  return p;
             int csi = staffIdx() + staffMove();
             p.ry() += system->staffYpage(csi);
             return p;
