@@ -58,6 +58,10 @@
 
 namespace Ms {
 
+static const int  TIME_GATE_TYPE_NONE     = 0;
+static const int  TIME_GATE_TYPE_USER     = 1;  // value used in pre-2.0 scores
+static const int  TIME_GATE_TYPE_OFFSET   = 2;  // value used in pre-2.0 scores, accepted (but ignored) by 2.0.x, used again by 2.1
+
 //---------------------------------------------------------
 //   noteHeads
 //    note head groups
@@ -788,6 +792,13 @@ void Note::write(Xml& xml) const
             int id = xml.spannerId(_tieBack);
             xml.tagE(QString("endSpanner id=\"%1\"").arg(id));
             }
+      // if either time gate value is non-zero, write both
+      if (_onTimeOffset != 0 || _offTimeOffset != 0) {
+            xml.tag("onTimeType", TIME_GATE_TYPE_OFFSET);
+            xml.tag("offTimeType", TIME_GATE_TYPE_OFFSET);
+            xml.tag("onTimeOffset", _onTimeOffset);
+            xml.tag("offTimeOffset", _offTimeOffset);
+      }
       if ((chord() == 0 || chord()->playEventType() != PlayEventType::Auto) && !_playEvents.isEmpty()) {
             xml.stag("Events");
             foreach(const NoteEvent& e, _playEvents)
@@ -828,7 +839,9 @@ void Note::write(Xml& xml) const
 
 void Note::read(XmlReader& e)
       {
-      bool hasAccidental = false;                     // used for userAccidental backward compatibility
+      bool  hasAccidental     = false;                      // used for userAccidental backward compatibility
+      int   onGateType        = TIME_GATE_TYPE_OFFSET;      // if no gate type is given, assume offset
+      int   offGateType       = TIME_GATE_TYPE_OFFSET;      // (old scores used either "user" or "offset")
 
       _tpc[0] = Tpc::TPC_INVALID;
       _tpc[1] = Tpc::TPC_INVALID;
@@ -858,29 +871,27 @@ void Note::read(XmlReader& e)
                   setFixed(e.readBool());
             else if (tag == "fixedLine")
                   setFixedLine(e.readInt());
-            else if (tag == "onTimeType") { //obsolete
-                  if (e.readElementText() == "offset")
-                        _onTimeType = 2;
-                  else
-                        _onTimeType = 1;
+            else if (tag == "onTimeType") {
+                  if (e.readElementText() == "user")        // obsolete: record it to properly
+                        onGateType = TIME_GATE_TYPE_USER;   // convert gate values
                   }
-            else if (tag == "offTimeType") { //obsolete
-                  if (e.readElementText() == "offset")
-                        _offTimeType = 2;
-                  else
-                        _offTimeType = 1;
+            else if (tag == "offTimeType") {
+                  if (e.readElementText() == "user")        // obsolete: record it to properly
+                        offGateType = TIME_GATE_TYPE_USER;  // convert gate values
             }
-            else if (tag == "onTimeOffset") {// obsolete
-                  if (_onTimeType == 1)
-                        setOnTimeOffset(e.readInt() * 1000 / chord()->actualTicks());
-                  else
-                        setOnTimeOffset(e.readInt() * 10);
+            else if (tag == "onTimeOffset") {
+                  int   val = e.readInt();
+                  // convert old-style "user" (in ticks) into offset (in %)
+                  if (onGateType == TIME_GATE_TYPE_USER)
+                        val = (val * FULL_NOTE_TIME_GATE) / chord()->actualTicks();
+                  _onTimeOffset = val;
                   }
-            else if (tag == "offTimeOffset") {// obsolete
-                  if (_offTimeType == 1)
-                        setOffTimeOffset(1000 + (e.readInt() * 1000 / chord()->actualTicks()));
-                  else
-                        setOffTimeOffset(1000 + (e.readInt() * 10));
+            else if (tag == "offTimeOffset") {
+                  int   val = e.readInt();
+                  // convert old-style "user" (in ticks) into offset (in %)
+                  if (offGateType == TIME_GATE_TYPE_USER)
+                        val = (val * FULL_NOTE_TIME_GATE) / chord()->actualTicks();
+                  _offTimeOffset = val;
                   }
             else if (tag == "head")
                   setProperty(P_ID::HEAD_GROUP, Ms::getProperty(P_ID::HEAD_GROUP, e));
@@ -2195,6 +2206,10 @@ QVariant Note::getProperty(P_ID propertyId) const
                   return fixed();
             case P_ID::FIXED_LINE:
                   return fixedLine();
+            case P_ID::ONTIME_OFFSET:
+                  return onTimeOffset();
+            case P_ID::OFFTIME_OFFSET:
+                  return offTimeOffset();
             default:
                   break;
             }
@@ -2278,6 +2293,12 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::FIXED_LINE:
                   setFixedLine(v.toInt());
+                  break;
+            case P_ID::ONTIME_OFFSET:
+                  setOnTimeOffset(v.toInt());
+                  break;
+            case P_ID::OFFTIME_OFFSET:
+                  setOffTimeOffset(v.toInt());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
@@ -2438,6 +2459,10 @@ QVariant Note::propertyDefault(P_ID propertyId) const
                   return false;
             case P_ID::FIXED_LINE:
                   return 0;
+            case P_ID::ONTIME_OFFSET:
+                  return DEFAULT_NOTE_ONTIME_OFFSET;
+            case P_ID::OFFTIME_OFFSET:
+                  return DEFAULT_NOTE_OFFTIME_OFFSET;
             default:
                   break;
             }
@@ -2450,8 +2475,11 @@ QVariant Note::propertyDefault(P_ID propertyId) const
 
 void Note::setOnTimeOffset(int val)
       {
-      _playEvents[0].setOntime(val);
-      chord()->setPlayEventType(PlayEventType::User);
+      if (val - _offTimeOffset >= FULL_NOTE_TIME_GATE)      // avoid a 0 or negative note time gate
+            return;
+      _onTimeOffset = val;
+      if (chord() && score())             // recreate play events
+            score()->createPlayEvents(chord());
       }
 
 //---------------------------------------------------------
@@ -2460,8 +2488,11 @@ void Note::setOnTimeOffset(int val)
 
 void Note::setOffTimeOffset(int val)
       {
-      _playEvents[0].setLen(val - _playEvents[0].ontime());
-      chord()->setPlayEventType(PlayEventType::User);
+      if (_onTimeOffset - val >= FULL_NOTE_TIME_GATE) // avoid a 0 or negative note time gate
+            return;
+      _offTimeOffset = val;
+      if (chord() && score())             // recreate play events
+            score()->createPlayEvents(chord());
       }
 
 //---------------------------------------------------------

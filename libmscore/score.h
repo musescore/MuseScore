@@ -488,7 +488,6 @@ class Score : public QObject, public ScoreElement {
       FileError read1(XmlReader&, bool ignoreVersionError);
 
    protected:
-      void createPlayEvents(Chord*);
       void createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord, int& ontime);
 
       SynthesizerState _synthesizerState;
@@ -804,6 +803,7 @@ class Score : public QObject, public ScoreElement {
       void updateChannel();
       void updateSwing();
       void createPlayEvents();
+      void createPlayEvents(Chord*);
 
       int midiPortCount() const;
       void setMidiPortCount(int);
