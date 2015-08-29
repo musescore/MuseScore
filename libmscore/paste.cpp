@@ -405,7 +405,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
 
       if (pasted) {                       //select only if we pasted something
             if (styleB(StyleIdx::createMultiMeasureRests))
-                  doLayout();
+                  createMMRests();
             Segment* s1 = tick2segmentMM(dstTick);
             Segment* s2 = tick2segmentMM(dstTick + tickLen);
             int endStaff = dstStaff + staves;
