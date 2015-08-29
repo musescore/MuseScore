@@ -176,13 +176,14 @@ void HairpinSegment::draw(QPainter* painter) const
             TextLineSegment::draw(painter);
             return;
             }
+
       QColor color;
       if (selected() && !(score() && score()->printing()))
             color = (track() > -1) ? MScore::selectColor[voice()] : MScore::selectColor[0];
-      else if (!visible())
+      else if (!hairpin()->visible())     // || !hairpin()->lineVisible()
             color = Qt::gray;
       else
-            color = hairpin()->curColor();
+            color = hairpin()->lineColor();
       QPen pen(color, point(hairpin()->lineWidth()), hairpin()->lineStyle());
       if (hairpin()->lineStyle() == Qt::CustomDashLine) {
             QVector<qreal> pattern;
