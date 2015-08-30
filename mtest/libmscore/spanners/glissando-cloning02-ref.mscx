@@ -165,6 +165,7 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
         <TextStyle>
           <halign>left</halign>
           <valign>top</valign>
