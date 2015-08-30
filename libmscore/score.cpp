@@ -375,14 +375,18 @@ Score::Score(Score* parent)
       else {
             // inherit most style settings from parent
             _style = *parent->style();
+
             // but borrow defaultStyle page layout settings
             const PageFormat* pf = MScore::defaultStyle()->pageFormat();
             qreal sp = MScore::defaultStyle()->spatium();
             _style.setPageFormat(*pf);
             _style.setSpatium(sp);
 
-            //concert pitch is off for parts
+            // and force some style settings that just make sense for parts
             _style.set(StyleIdx::concertPitch, false);
+            _style.set(StyleIdx::createMultiMeasureRests, true);
+            _style.set(StyleIdx::dividerLeft, false);
+            _style.set(StyleIdx::dividerRight, false);
             }
 
       _synthesizerState = parent->_synthesizerState;
