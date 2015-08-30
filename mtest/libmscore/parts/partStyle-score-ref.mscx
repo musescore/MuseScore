@@ -624,6 +624,23 @@
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
+        <Measure number="1" len="32/4">
+          <multiMeasureRest>8</multiMeasureRest>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration z="32" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>1920</tick>
         <Measure number="2">
           <Rest>
             <lid>32</lid>
