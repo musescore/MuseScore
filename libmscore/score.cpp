@@ -642,6 +642,8 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
       // search for segment + offset
       QPointF pppp = p - m->canvasPos();
       int strack = i * VOICES;
+      if (!staff(i))
+            return nullptr;
       int etrack = staff(i)->part()->nstaves() * VOICES + strack;
 
       SysStaff* sstaff = m->system()->staff(i);
