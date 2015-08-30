@@ -1747,13 +1747,14 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         //
                         // if first or last of group (including tuplet groups)
                         // unconditionally set beam at right or left side
+                        Tuplet* tuplet = cr1->tuplet();
                         if (c1 == 0)
                               ;
                         else if (c1 == n - 1)
                               len = -len;
-                        else if (cr1->tuplet() && cr1 == cr1->tuplet()->elements().first())
+                        else if (tuplet && cr1 == tuplet->elements().first())
                               ;
-                        else if (cr1->tuplet() && cr1 == cr1->tuplet()->elements().last())
+                        else if (tuplet && cr1 == tuplet->elements().last())
                               len = -len;
                         else if (b32 || b64)          // end of a sub-beam group
                               len = -len;
@@ -1813,15 +1814,24 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                               else {
                                     // determine if this is a logical group end as per 2) above
 
-                                    int measTick = cr1->measure()->tick();
-                                    int tickNext = crl[c1+1]->tick() - measTick;
+                                    int baseTick = tuplet ? tuplet->tick() : cr1->measure()->tick();
+                                    int tickNext = nextCR->tick() - baseTick;
+                                    if (tuplet) {
+                                          // for tuplets with odd ratios, apply ratio
+                                          // thus, we are performing calculation relative to apparent rather than actual beat
+                                          // for tuplets with even ratios, use actual beat
+                                          // see https://musescore.org/en/node/58061
+                                          Fraction r = tuplet->ratio();
+                                          if (r.numerator() & 1)
+                                                tickNext = (tickNext * r.numerator()) / r.denominator();
+                                          }
 
                                     // determine the tick length of a chord with one beam level less than this
                                     // (i.e. twice the ticks of this)
 
-                                    int tickMod  = cr1->duration().ticks() * 2;    // (tickNext - (crl[c1]->tick() - measTick)) * 2;
+                                    int tickMod  = cr1->duration().ticks() * 2;     // (tickNext - (crl[c1]->tick() - baseTick)) * 2;
 
-                                    // if this completes, within the measure, a unit of tickMod length, flip beam to left
+                                    // if this completes, within the measure or tuplet, a unit of tickMod length, flip beam to left
                                     // (allow some tolerance for tick rounding in tuplets
                                     // without tuplet tolerance, could be simplified)
 
