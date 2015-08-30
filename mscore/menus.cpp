@@ -786,11 +786,15 @@ Palette* MuseScore::newLinesPalette(bool basic)
       Hairpin* gabel0 = new Hairpin(gscore);
       gabel0->setHairpinType(Hairpin::Type::CRESCENDO);
       gabel0->setLen(w);
+      gabel0->setBeginText("cresc.");
+      gabel0->setContinueText("(cresc.)");
       sp->append(gabel0, qApp->translate("lines", "Crescendo hairpin"));
 
       Hairpin* gabel1 = new Hairpin(gscore);
       gabel1->setHairpinType(Hairpin::Type::DECRESCENDO);
       gabel1->setLen(w);
+      gabel1->setBeginText("dim.");
+      gabel1->setContinueText("(dim.)");
       sp->append(gabel1, QT_TRANSLATE_NOOP("Palette", "Diminuendo hairpin"));
 
       Hairpin* gabel2 = new Hairpin(gscore);
@@ -799,6 +803,7 @@ Palette* MuseScore::newLinesPalette(bool basic)
       gabel2->setUseTextLine(true);
       gabel2->setLineStyle(Qt::CustomDashLine);
       gabel2->setBeginText("cresc.");
+      gabel2->setContinueText("(cresc.)");
       sp->append(gabel2, qApp->translate("lines", "Crescendo line"));
 
       Hairpin* gabel3 = new Hairpin(gscore);
@@ -807,6 +812,7 @@ Palette* MuseScore::newLinesPalette(bool basic)
       gabel3->setUseTextLine(true);
       gabel3->setLineStyle(Qt::CustomDashLine);
       gabel3->setBeginText("dim.");
+      gabel3->setContinueText("(dim.)");
       sp->append(gabel3, QT_TRANSLATE_NOOP("Palette", "Diminuendo line"));
 
       Volta* volta = new Volta(gscore);

@@ -294,6 +294,7 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
           || spanner->type() == Element::Type::NOTELINE
           || spanner->type() == Element::Type::OTTAVA
           || spanner->type() == Element::Type::PEDAL
+          || spanner->type() == Element::Type::HAIRPIN
           || spanner->type() == Element::Type::VOLTA) {
             // rebase text elements to score style
             TextLine* tl = static_cast<TextLine*>(spanner);
