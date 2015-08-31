@@ -163,6 +163,7 @@
 #include <QHelpIndexModel>
 #include <QTextBrowser>
 
+#include <QLockFile>
 
 // change Q_ASSERT to NOP if not debugging
 

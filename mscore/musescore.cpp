@@ -4769,7 +4769,15 @@ int main(int argc, char* av[])
       if (deletePreferences) {
             QDir(dataPath).removeRecursively();
             QSettings settings;
-            QFile::remove(settings.fileName());
+            QFile::remove(settings.fileName() + ".lock");               // forcibly remove any stale lock
+            QLockFile settingsLockFile(settings.fileName() + ".lock");
+            if (settingsLockFile.lock()) {
+                  QFile::remove(settings.fileName());
+                  settingsLockFile.unlock();
+                  }
+            else {
+                  qWarning("Unable to lock %s, so can't delete preferences.", qPrintable(settings.fileName()));
+                  }
             }
 
       // create local plugin directory
