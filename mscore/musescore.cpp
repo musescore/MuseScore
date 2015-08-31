@@ -4769,6 +4769,7 @@ int main(int argc, char* av[])
       if (deletePreferences) {
             QDir(dataPath).removeRecursively();
             QSettings settings;
+            QFile::remove(settings.fileName() + ".lock"); //forcibly remove lock
             QFile::remove(settings.fileName());
             }
 
