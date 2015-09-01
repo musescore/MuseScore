@@ -2007,6 +2007,20 @@ void Note::setLine(int n)
       }
 
 //---------------------------------------------------------
+//   physicalLine
+//---------------------------------------------------------
+
+int Note::physicalLine() const
+      {
+      int l = line();
+      Staff *st = staff();
+      if (st && st->logicalLineDistance() != st->lineDistance())
+            return l * (st->logicalLineDistance() / st->lineDistance());
+      else
+            return l;
+      }
+
+//---------------------------------------------------------
 //   setString
 //---------------------------------------------------------
 
