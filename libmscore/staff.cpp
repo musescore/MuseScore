@@ -744,13 +744,12 @@ qreal Staff::logicalLineDistance() const
 //---------------------------------------------------------
 //   scaleNotesToLines
 //    returns true if logical line = physical line
-//    (not meaningful for tab staves, which do layout differently)
 //---------------------------------------------------------
 
 bool Staff::scaleNotesToLines() const
       {
       // TODO: make style option
-      return isPitchedStaff();
+      return !isDrumStaff();
       }
 
 //---------------------------------------------------------
@@ -761,7 +760,7 @@ bool Staff::scaleNotesToLines() const
 int Staff::middleLine() const
       {
       int line = lines() - 1;
-      if (isTabStaff() || scaleNotesToLines())
+      if (scaleNotesToLines())
             return line;
       else
             return line * lineDistance() / logicalLineDistance();
@@ -776,7 +775,7 @@ int Staff::middleLine() const
 int Staff::bottomLine() const
       {
       int line = (lines() - 1) * 2;
-      if (isTabStaff() || scaleNotesToLines())
+      if (scaleNotesToLines())
             return line;
       else
             return line * lineDistance() / logicalLineDistance();

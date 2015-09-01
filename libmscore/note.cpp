@@ -2014,7 +2014,7 @@ int Note::physicalLine() const
       {
       int l = line();
       Staff *st = staff();
-      if (st && st->logicalLineDistance() != st->lineDistance())
+      if (st && !st->scaleNotesToLines())
             return l * (st->logicalLineDistance() / st->lineDistance());
       else
             return l;

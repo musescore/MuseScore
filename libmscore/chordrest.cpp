@@ -473,9 +473,12 @@ void ChordRest::layoutArticulations()
       {
       if (parent() == 0 || _articulations.isEmpty())
             return;
-      qreal _spatium  = spatium();
-      qreal _spStaff  = _spatium * staff()->lineDistance(); // scaled to staff line distance for vert. pos. within a staff
-      qreal _spDist  = _spatium;                            // scaling for distance between articulations
+      qreal _spatium = spatium();
+      bool scale     = staff()->scaleNotesToLines();
+      qreal pld      = staff()->lineDistance();
+      qreal lld      = staff()->logicalLineDistance();
+      qreal _spStaff = _spatium * pld;    // scaled to staff line distance for vert. pos. within a staff
+      qreal _spDist  = _spatium;          // scaling for distance between articulations
 
       if (type() == Element::Type::CHORD) {
             if (_articulations.size() == 1) {
@@ -617,6 +620,8 @@ void ChordRest::layoutArticulations()
             Chord* chord = static_cast<Chord*>(this);
             if (bottom) {
                   int line = downLine();
+                  if (!scale)
+                        line = ceil((line * lld) / pld);
                   y = chordBotY + dy;
                   if (!headSide && type() == Element::Type::CHORD && chord->stem()) {
                         Stem* stem = chord->stem();
@@ -627,7 +632,6 @@ void ChordRest::layoutArticulations()
                         // and only if no other articulations on this side
                         //x = stem->pos().x();
                         int line   = lrint((y+0.5*_spStaff) / _spStaff);
-                        // TODO: logicalLineDistance
                         if (line < staff()->lines())  // align between staff lines
                               y = line * _spStaff + _spatium * .5;
                         else
@@ -635,7 +639,6 @@ void ChordRest::layoutArticulations()
                         }
                   else {
                         int lines = (staff()->lines() - 1) * 2;
-                        // TODO: logicalLineDistance
                         if (line < lines)
                               y = ((line & ~1) + 3) * _spStaff;
                         else
@@ -645,6 +648,8 @@ void ChordRest::layoutArticulations()
                   }
             else {
                   int line = upLine();
+                  if (!scale)
+                        line = floor((line * lld) / pld);
                   y = chordTopY - dy;
                   if (!headSide && type() == Element::Type::CHORD && chord->stem()) {
                         Stem* stem = chord->stem();
@@ -655,14 +660,12 @@ void ChordRest::layoutArticulations()
                         // and only if no other articulations on this side
                         //x = stem->pos().x();
                         int line   = lrint((y-0.5*_spStaff) / _spStaff);
-                        // TODO: logicalLineDistance
                         if (line >= 0)    // align between staff lines
                               y = line * _spStaff - _spatium * .5;
                         else
                               y -= _spatium;
                         }
                   else {
-                        // TODO: logicalLineDistance
                         if (line > 0)
                               y = (((line+1) & ~1) - 3) * _spStaff;
                         else
