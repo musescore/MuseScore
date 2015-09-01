@@ -2692,8 +2692,10 @@ bool Chord::setProperty(P_ID propertyId, const QVariant& v)
 QPointF Chord::layoutArticulation(Articulation* a)
       {
       qreal _spatium = spatium();
-      qreal _spStaff = _spatium * staff()->lineDistance();              // scaled to physical staff line distance
-//      qreal _spLogical = _spatium * staff()->logicalLineDistance();     // scaled to logical staff line distance
+      qreal pld = staff()->lineDistance();
+      qreal lld = staff()->logicalLineDistance();
+      bool scale = staff()->scaleNotesToLines();
+      qreal _spStaff = _spatium * pld;    // scaled to physical staff line distance
 
       ArticulationAnchor aa = a->anchor();
 
@@ -2730,9 +2732,8 @@ QPointF Chord::layoutArticulation(Articulation* a)
             qreal _spatium2 = _spatium * .5;
             qreal _spStaff2 = _spStaff * .5;
             if (stemSide) {                     // if artic. is really beyond a stem,
-                  qreal lineDelta = up() ? -_spStaff2 : _spStaff2;      // move it 1/2sp away from stem
-                  int line = lrint((pos.y() + lineDelta) / _spStaff);   // round to nearest staff line
-                  // TODO: logicalLineDistance
+                  qreal lineDelta = up() ? -_spStaff2 : _spStaff2;    // move it 1/2sp away from stem
+                  int line = lrint((pos.y() + lineDelta) / _spStaff); // round to nearest staff line
                   if (line >= 0 && line <= staff()->lines()-1)          // if within staff, align between staff lines
                         pos.ry() = (line * _spStaff) + (bottom ? _spStaff2 : -_spStaff2);
                   else {                                                // if outside staff, add some more space (?)
@@ -2742,43 +2743,52 @@ QPointF Chord::layoutArticulation(Articulation* a)
                   alignToStem = (st == ArticulationType::Staccato && articulations().size() == 1);
                   }
             else {                              // if articulation is not beyond a stem
-                  int line;                     // line of note
+                  int lline;                    // logical line of note
+                  int line;                     // physical line of note
                   int staffOff;                 // offset that should account for line spacing
-                  int extraOff = 0.0;           // offset that should not acocunt for line spacing
+                  int extraOff = 0;             // offset that should not acocunt for line spacing
                   int lines = (staff()->lines() - 1) * 2;               // num. of staff positions within staff
                   int add = (st == ArticulationType::Sforzatoaccent ? 1 : 0); // sforzato accent needs more offset
                   if (bottom) {                 // if below chord
-                        line = downLine();                              // staff position (lines and spaces) of chord lowest note
-                        // TODO: logicalLineDistance
+                        lline = downLine();                             // logical line of chord lowest note
+                        line = scale ? lline : lline * (lld / pld);     // corresponding physical line
                         if (line < lines)                               // if note above staff bottom line
                               staffOff = 3 - ((line - add) & 1) + add;        // round to next space below
                         else                                            // if note on or below staff bottom line,
                               staffOff = 2 + add;                             // move 1 whole space below
-                        if (_spStaff != _spatium) {
-                              int clearLine = qMax(line, lines);
-                              int headRoom = qMax(clearLine - line, 0);
-                              extraOff = staffOff - qMin(staffOff, headRoom);
-                              staffOff -= extraOff;
+                        if (pld != 1.0) {
+                              // on staves with non-standard line spacing
+                              // we need to consider line spacing for the portion of the offset that is within staff or ledger lines
+                              // but not for any offset beyond that
+                              int clearLine = qMax(line, lines);              // line we need to clear
+                              int headRoom = qMax(clearLine - line, 0);       // amount of room between note and line we need to clear
+                              extraOff = staffOff - qMin(staffOff, headRoom); // amount by which we do not need to consider line distance
+                              staffOff -= extraOff;                           // amount by which we need to consider line distance
+                              if (!scale && lline > clearLine * pld)
+                                    extraOff += lline - floor(line * pld);    // adjust for rounding of physical line
                               }
                         pos.ry() = -a->height() / 2;                    // symbol is below baseline, shift if a bit up
                         }
                   else {                        // if above chord
-                        line = upLine();                                // staff position (lines and spaces) of chord highest note
-                        // TODO: logicalLineDistance
+                        lline = upLine();                               // logical line of chord highest note
+                        line = scale ? lline : lline * (lld / pld);     // corresponding physical line
                         if (line > 0)                                   // if note below staff top line
                               staffOff = -3 + ((line + add) & 1) - add;       // round to next space above
                         else                                            // if note or or above staff top line
                               staffOff = -2 - add;                            // move 1 whole space above
-                        if (_spStaff != _spatium) {
+                        if (pld != 1.0) {
+                              // see corresponding code above
                               int clearLine = qMin(line, 0);
                               int headRoom = qMax(line - clearLine, 0);
                               extraOff = staffOff + qMin(-staffOff, headRoom);
                               staffOff -= extraOff;
+                              if (!scale && lline < clearLine * pld)
+                                    extraOff += lline - ceil(line * pld);
                               }
                         pos.ry() = a->height() / 2;                     // symbol is on baseline, shift it a bit down
                         }
-                  pos.ry() += (line + staffOff) * _spStaff2;            // convert staff position to sp distance
-                  pos.ry() += extraOff * _spatium2;
+                  pos.ry() += (line + staffOff) * _spStaff2;            // offset that needs to account for line distance
+                  pos.ry() += extraOff * _spatium2;                     // additional offset that need not account for line distance
                   }
             if (!staff()->isTabStaff() && !alignToStem) {
                   if (up())
