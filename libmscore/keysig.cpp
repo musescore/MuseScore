@@ -76,7 +76,7 @@ qreal KeySig::mag() const
 
 void KeySig::addLayout(SymId sym, qreal x, int line)
       {
-      qreal stepDistance = staff() ? staff()->lineDistance() * 0.5 : 0.5;
+      qreal stepDistance = staff() ? staff()->logicalLineDistance() * 0.5 : 0.5;
       KeySym ks;
       ks.sym    = sym;
       ks.spos   = QPointF(x, qreal(line) * stepDistance);

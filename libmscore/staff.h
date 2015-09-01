@@ -195,6 +195,10 @@ class Staff : public QObject, public ScoreElement {
       int lines() const;
       void setLines(int);
       qreal lineDistance() const;
+      qreal logicalLineDistance() const;
+      bool scaleNotesToLines() const;
+      int middleLine() const;
+      int bottomLine() const;
       int barLineSpan() const        { return _barLineSpan; }
       int barLineFrom() const        { return _barLineFrom; }
       int barLineTo() const          { return _barLineTo;   }

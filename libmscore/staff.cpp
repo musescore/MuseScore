@@ -723,11 +723,64 @@ void Staff::setLines(int val)
 
 //---------------------------------------------------------
 //   lineDistance
+//    distance between staff lines
 //---------------------------------------------------------
 
 qreal Staff::lineDistance() const
       {
       return _staffType.lineDistance().val();
+      }
+
+//---------------------------------------------------------
+//   logicalLineDistance
+//    distance between logical (note) lines
+//---------------------------------------------------------
+
+qreal Staff::logicalLineDistance() const
+      {
+      return scaleNotesToLines() ? _staffType.lineDistance().val() : 1.0;
+      }
+
+//---------------------------------------------------------
+//   scaleNotesToLines
+//    returns true if logical line = physical line
+//    (not meaningful for tab staves, which do layout differently)
+//---------------------------------------------------------
+
+bool Staff::scaleNotesToLines() const
+      {
+      // TODO: make style option
+      return isPitchedStaff();
+      }
+
+//---------------------------------------------------------
+//   middleLine
+//    returns logical line number of middle staff line
+//---------------------------------------------------------
+
+int Staff::middleLine() const
+      {
+      int line = lines() - 1;
+      if (isTabStaff() || scaleNotesToLines())
+            return line;
+      else
+            return line * lineDistance() / logicalLineDistance();
+      //return isTabStaff() ? line : line * lineDistance() / logicalLineDistance();
+      }
+
+//---------------------------------------------------------
+//   bottomLine
+//    returns logical line number of bottom staff line
+//---------------------------------------------------------
+
+int Staff::bottomLine() const
+      {
+      int line = (lines() - 1) * 2;
+      if (isTabStaff() || scaleNotesToLines())
+            return line;
+      else
+            return line * lineDistance() / logicalLineDistance();
+      //return isTabStaff() ? line : line * lineDistance() / logicalLineDistance();
       }
 
 //---------------------------------------------------------

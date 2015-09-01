@@ -255,9 +255,14 @@ void Part::read114(XmlReader& e)
                         int n = 0;
                         if (st->lines() == 1)
                               n = 4;
-                        for (int  i = 0; i < DRUM_INSTRUMENTS; ++i) {
+                        // TODO: logicalLineDistance will not return a reasonable value
+                        // since the staff type is not set yet
+                        // for now, assume 1
+                        int lld = 1;      //qRound(st->logicalLineDistance());
+                        for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
                               d->drum(i).line -= n;
-                              d->drum(i).line /= 2;
+                              if (lld > 1)
+                                    d->drum(i).line /= lld;
                               }
                         }
                   }

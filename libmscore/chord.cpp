@@ -633,14 +633,14 @@ void Chord::addLedgerLine(int track, int line, bool visible, qreal x, Spatium le
 //   createLedgerLines
 ///   Creates the ledger lines fro a chord
 ///   \arg track      track the ledger line belongs to
-///   \arg lines      a vector of LedgerLineData describing thelines to add
+///   \arg lines      a vector of LedgerLineData describing the lines to add
 ///   \arg visible    whether the line is visible or not
 //---------------------------------------------------------
 
 void Chord::createLedgerLines(int track, vector<LedgerLineData>& vecLines, bool visible)
       {
       qreal _spatium = spatium();
-      qreal stepDistance = staff() ? staff()->lineDistance() * 0.5 : 0.5;
+      qreal stepDistance = 0.5;     // staff() ? staff()->lineDistance() * 0.5 : 0.5;
       for (auto lld : vecLines) {
             LedgerLine* h = new LedgerLine(score());
             h->setParent(this);
@@ -665,7 +665,9 @@ void Chord::addLedgerLines(int move)
       int   track = staff2track(idx);           // the track lines belong to
       qreal hw    = _notes[0]->headWidth();
       // the line pos corresponding to the bottom line of the staff
-      int   lineBelow = (score()->staff(idx)->lines()-1) * 2;
+      Staff* st = score()->staff(idx);
+      int lineBelow = (st->lines() - 1) * 2;
+      qreal lineDistance = st->lineDistance();
       qreal minX, maxX;                         // note extrema in raster units
 //      qreal minXr, maxXr;                       // ledger line extrema in raster units
       int   minLine, maxLine;
@@ -696,7 +698,7 @@ void Chord::addLedgerLines(int move)
             for (int i = from; i < n && i >=0 ; i += delta) {
                   const Note* note = _notes.at(i);
 
-                  int l = note->line();
+                  int l = note->physicalLine();
                   if ( (!j && l < lineBelow) || // if 1st pass and note not below staff
                        (j && l >= 0) )          // or 2nd pass and note not above staff
                         break;                  // stop this pass
@@ -737,10 +739,12 @@ void Chord::addLedgerLines(int move)
                         }
 
                   // check if note vert. pos. is outside current range
-                  // and, in case, add data for new line(s)
+                  // and, if so, add data for new line(s)
                   if (l < minLine) {
                         for (int i = l; i < minLine; i += 2) {
                               lld.line = i;
+                              if (lineDistance != 1.0)
+                                    lld.line *= lineDistance;
                               lld.minX = minX;
                               lld.maxX = maxX;
                               lld.visible = visible;
@@ -752,6 +756,8 @@ void Chord::addLedgerLines(int move)
                   if (l > maxLine) {
                         for (int i = maxLine+2; i <= l; i += 2) {
                               lld.line = i;
+                              if (lineDistance != 1.0)
+                                    lld.line *= lineDistance;
                               lld.minX = minX;
                               lld.maxX = maxX;
                               lld.visible = visible;
@@ -850,7 +856,7 @@ void Chord::computeUp()
             _up = !(track() % 2);
             }
       else {
-            int   dnMaxLine   = staff()->staffType()->lines() - 1;
+            int   dnMaxLine   = staff()->middleLine();
             int   ud          = (tab ? upString()*2 : upNote()->line() ) - dnMaxLine;
             // standard case: if only 1 note or cross beaming
             if (_notes.size() == 1 || staffMove()) {
@@ -1237,10 +1243,13 @@ qreal Chord::defaultStemLength() {
       downnote          = downNote();
       ul = upLine();
       dl = downLine();
+      Staff* st = staff();
+      qreal physicalLineDistance = st ? st->lineDistance() : 1.0;
+      qreal logicalLineDistance = st ? st->logicalLineDistance() : 1.0;
 
       StaffType* tab = 0;
-      if (staff() && staff()->isTabStaff()) {
-            tab = staff()->staffType();
+      if (st && st->isTabStaff()) {
+            tab = st->staffType();
             // require stems only if TAB is not stemless and this chord has a stem
             if (!tab->slashStyle() && _stem) {
                   // if stems are beside staff, apply special formatting
@@ -1250,6 +1259,11 @@ qreal Chord::defaultStemLength() {
                   }
             }
       }
+      else if (logicalLineDistance != 1.0) {
+            // convert to actual distance from top of staff in sp
+            ul *= logicalLineDistance;
+            dl *= logicalLineDistance;
+            }
 
       if (tab && !tab->onLines()) {       // if TAB and frets above strings, move 1 position up
             --ul;
@@ -1289,7 +1303,9 @@ qreal Chord::defaultStemLength() {
             }
       else {
             // normal note (not grace)
-            qreal staffHeight = staff() ? (staff()->lines()- 1) : 4;
+            qreal staffHeight = st ? st->lines() - 1 : 4;
+            if (physicalLineDistance != 1.0 && !tab)
+                  staffHeight *= physicalLineDistance;
             qreal staffHlfHgt = staffHeight * 0.5;
             if (up()) {                   // stem up
                   qreal dy  = dl * .5;                      // note-side vert. pos.
@@ -1345,8 +1361,8 @@ qreal Chord::defaultStemLength() {
             stemLen += n * .5;
             }
       // TAB: scale stemLen according to staff line spacing
-      if (staff() && staff()->isTabStaff())
-            stemLen *= staff()->staffType()->lineDistance().val();
+      if (tab)
+            stemLen *= physicalLineDistance;
 
       return stemLen * _spatium;
 }
@@ -2676,7 +2692,8 @@ bool Chord::setProperty(P_ID propertyId, const QVariant& v)
 QPointF Chord::layoutArticulation(Articulation* a)
       {
       qreal _spatium = spatium();
-      qreal _spStaff = _spatium * staff()->lineDistance();      // scaled to staff line distance for vert. pos. within a staff
+      qreal _spStaff = _spatium * staff()->lineDistance();              // scaled to physical staff line distance
+//      qreal _spLogical = _spatium * staff()->logicalLineDistance();     // scaled to logical staff line distance
 
       ArticulationAnchor aa = a->anchor();
 
@@ -2715,6 +2732,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
             if (stemSide) {                     // if artic. is really beyond a stem,
                   qreal lineDelta = up() ? -_spStaff2 : _spStaff2;      // move it 1/2sp away from stem
                   int line = lrint((pos.y() + lineDelta) / _spStaff);   // round to nearest staff line
+                  // TODO: logicalLineDistance
                   if (line >= 0 && line <= staff()->lines()-1)          // if within staff, align between staff lines
                         pos.ry() = (line * _spStaff) + (bottom ? _spStaff2 : -_spStaff2);
                   else {                                                // if outside staff, add some more space (?)
@@ -2731,6 +2749,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                   int add = (st == ArticulationType::Sforzatoaccent ? 1 : 0); // sforzato accent needs more offset
                   if (bottom) {                 // if below chord
                         line = downLine();                              // staff position (lines and spaces) of chord lowest note
+                        // TODO: logicalLineDistance
                         if (line < lines)                               // if note above staff bottom line
                               staffOff = 3 - ((line - add) & 1) + add;        // round to next space below
                         else                                            // if note on or below staff bottom line,
@@ -2745,6 +2764,7 @@ QPointF Chord::layoutArticulation(Articulation* a)
                         }
                   else {                        // if above chord
                         line = upLine();                                // staff position (lines and spaces) of chord highest note
+                        // TODO: logicalLineDistance
                         if (line > 0)                                   // if note below staff top line
                               staffOff = -3 + ((line + add) & 1) - add;       // round to next space above
                         else                                            // if note or or above staff top line
@@ -2961,7 +2981,7 @@ void Chord::setSlash(bool flag, bool stemless)
       // voice-dependent attributes - line, size, offset, head
       if (track() % VOICES < 2) {
             // use middle line
-            line = staff()->lines() - 1;
+            line = staff()->middleLine();
             }
       else {
             // set small
@@ -2969,13 +2989,13 @@ void Chord::setSlash(bool flag, bool stemless)
             // set outside the staff
             qreal y = 0.0;
             if (track() % 2) {
-                  line = staff()->lines() * 2 - 1;
+                  line = staff()->bottomLine() + 1;
                   y = 0.5 * spatium();
                   }
             else {
                   line = -1;
                   if (!staff()->isDrumStaff())
-                  y = -0.5 * spatium();
+                        y = -0.5 * spatium();
                   }
             // for non-drum staves, add an additional offset
             // for drum staves, no offset, but use normal head

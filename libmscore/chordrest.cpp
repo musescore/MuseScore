@@ -627,6 +627,7 @@ void ChordRest::layoutArticulations()
                         // and only if no other articulations on this side
                         //x = stem->pos().x();
                         int line   = lrint((y+0.5*_spStaff) / _spStaff);
+                        // TODO: logicalLineDistance
                         if (line < staff()->lines())  // align between staff lines
                               y = line * _spStaff + _spatium * .5;
                         else
@@ -634,6 +635,7 @@ void ChordRest::layoutArticulations()
                         }
                   else {
                         int lines = (staff()->lines() - 1) * 2;
+                        // TODO: logicalLineDistance
                         if (line < lines)
                               y = ((line & ~1) + 3) * _spStaff;
                         else
@@ -653,12 +655,14 @@ void ChordRest::layoutArticulations()
                         // and only if no other articulations on this side
                         //x = stem->pos().x();
                         int line   = lrint((y-0.5*_spStaff) / _spStaff);
+                        // TODO: logicalLineDistance
                         if (line >= 0)    // align between staff lines
                               y = line * _spStaff - _spatium * .5;
                         else
                               y -= _spatium;
                         }
                   else {
+                        // TODO: logicalLineDistance
                         if (line > 0)
                               y = (((line+1) & ~1) - 3) * _spStaff;
                         else

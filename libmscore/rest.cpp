@@ -408,8 +408,9 @@ void Rest::layout()
       //if (staff())
       //      stepOffset = staff()->staffType()->stepOffset();
       qreal _spatium = spatium();
-      qreal lineDist = staff() ? staff()->staffType()->lineDistance().val() : 1.0;
       qreal yOff     = userOff().y();
+      Staff* st      = staff();
+      qreal lineDist = st ? st->staffType()->lineDistance().val() : 1.0;
       int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
 
       int lines = staff() ? staff()->lines() : 5;
