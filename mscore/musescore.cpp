@@ -2646,8 +2646,8 @@ void MuseScore::changeState(ScoreState val)
             }
       if (!e) {
             textTools()->hide();
-            if (textPalette)
-                  textPalette->hide();
+            if (textTools()->kbAction()->isChecked())
+                  textTools()->kbAction()->setChecked(false);
             }
       else {
             if (e->isText()) {
