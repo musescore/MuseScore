@@ -33,8 +33,12 @@ Spatium Hairpin::editHairpinHeight;
 void HairpinSegment::layout()
       {
       if (hairpin()->useTextLine()) {
+            // layout as textline rather than true hairpin
+            // use dynamics text style for position, so the text aligns with dynamics
+            // TODO: new style setting specifically for vertical offset of textline hairpins?
+            // or, use hairpinY but adjust by 0.5sp, which currently yields same vertical position as dynamics
             if (parent())
-                  rypos() += score()->styleS(StyleIdx::hairpinY).val() * spatium();
+                  rypos() += score()->textStyle(TextStyleType::DYNAMICS).offset(spatium()).y();
             TextLineSegment::layout();
             return;
             }
