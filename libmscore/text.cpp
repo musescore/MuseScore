@@ -2687,7 +2687,12 @@ Element* Text::drop(const DropData& data)
                   delete e;
 
                   if (_editMode) {
-                        insert(&_cursor, QChar(code));
+                        if (code & 0xffff0000) {
+                              insert(&_cursor, QChar::highSurrogate(code));
+                              insert(&_cursor, QChar::lowSurrogate(code));
+                              }
+                        else
+                              insert(&_cursor, QChar(code));
                         layout1();
                         static const qreal w = 2.0; // 8.0 / view->matrix().m11();
                         score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
