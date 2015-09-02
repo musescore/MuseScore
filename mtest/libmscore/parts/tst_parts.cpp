@@ -149,7 +149,6 @@ void TestParts::createParts(Score* score)
 
       nscore->setName(parts.front()->partName());
       score->undo(new AddExcerpt(nscore));
-      nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
 
       //
       // create second part
@@ -165,7 +164,6 @@ void TestParts::createParts(Score* score)
 
       nscore->setName(parts.front()->partName());
       score->undo(new AddExcerpt(nscore));
-      nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
       }
 
 //---------------------------------------------------------

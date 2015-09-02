@@ -709,8 +709,6 @@
             </System>
           <System>
             </System>
-          <System>
-            </System>
           </Page>
         </PageList>
       <Part>
@@ -819,6 +817,18 @@
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
+        <Measure number="2" len="124/4">
+          <multiMeasureRest>31</multiMeasureRest>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration z="124" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>3840</tick>
         <Measure number="3">
           <Rest>
             <lid>15</lid>
@@ -1072,8 +1082,6 @@
             </System>
           <System>
             </System>
-          <System>
-            </System>
           </Page>
         </PageList>
       <Part>
@@ -1183,6 +1191,18 @@
             <duration z="4" n="4"/>
             </Rest>
           </Measure>
+        <Measure number="2" len="124/4">
+          <multiMeasureRest>31</multiMeasureRest>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration z="124" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>3840</tick>
         <Measure number="3">
           <Rest>
             <lid>87</lid>
