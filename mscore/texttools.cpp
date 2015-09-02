@@ -107,7 +107,7 @@ TextTools::TextTools(QWidget* parent)
       connect(typefaceUnderline,   SIGNAL(triggered(bool)), SLOT(underlineClicked(bool)));
       connect(typefaceSubscript,   SIGNAL(triggered(bool)), SLOT(subscriptClicked(bool)));
       connect(typefaceSuperscript, SIGNAL(triggered(bool)), SLOT(superscriptClicked(bool)));
-      connect(showKeyboard,        SIGNAL(triggered(bool)), SLOT(showKeyboardClicked(bool)));
+      connect(showKeyboard,        SIGNAL(toggled(bool)),   SLOT(showKeyboardClicked(bool)));
       }
 
 //---------------------------------------------------------

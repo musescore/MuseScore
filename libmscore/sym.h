@@ -2635,6 +2635,8 @@ class ScoreFont {
       const QString& name() const           { return _name;   }
       const QString& family() const         { return _family; }
 
+      QString fontPath() const { return _fontPath; }
+
       static ScoreFont* fontFactory(QString);
       static ScoreFont* fallbackFont();
       static const char* fallbackTextFont();
