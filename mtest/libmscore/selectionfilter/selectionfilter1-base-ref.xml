@@ -21,6 +21,12 @@
       <subtype>0</subtype>
       <veloChange>10</veloChange>
       <track>0</track>
+      <beginText>
+        <text>cresc.</text>
+        </beginText>
+      <continueText>
+        <text>(cresc.)</text>
+        </continueText>
       </HairPin>
     <Chord>
       <track>0</track>

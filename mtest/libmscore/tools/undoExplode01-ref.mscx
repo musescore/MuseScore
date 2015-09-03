@@ -316,6 +316,12 @@
       <Measure number="3">
         <HairPin id="2">
           <subtype>0</subtype>
+          <beginText>
+            <text>cresc.</text>
+            </beginText>
+          <continueText>
+            <text>(cresc.)</text>
+            </continueText>
           </HairPin>
         <Chord>
           <dots>1</dots>
@@ -464,6 +470,12 @@
       <Measure number="3">
         <HairPin id="4">
           <subtype>0</subtype>
+          <beginText>
+            <text>cresc.</text>
+            </beginText>
+          <continueText>
+            <text>(cresc.)</text>
+            </continueText>
           </HairPin>
         <Chord>
           <dots>1</dots>
@@ -612,6 +624,12 @@
       <Measure number="3">
         <HairPin id="6">
           <subtype>0</subtype>
+          <beginText>
+            <text>cresc.</text>
+            </beginText>
+          <continueText>
+            <text>(cresc.)</text>
+            </continueText>
           </HairPin>
         <Chord>
           <dots>1</dots>
@@ -760,6 +778,12 @@
       <Measure number="3">
         <HairPin id="8">
           <subtype>0</subtype>
+          <beginText>
+            <text>cresc.</text>
+            </beginText>
+          <continueText>
+            <text>(cresc.)</text>
+            </continueText>
           </HairPin>
         <Chord>
           <dots>1</dots>
