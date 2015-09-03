@@ -408,6 +408,13 @@ void Hairpin::read(XmlReader& e)
             else if (!TextLine::readProperties(e))
                   e.unknown();
             }
+
+      // add default text to legacy hairpins
+      if (score()->mscVersion() <= 206) {
+            bool cresc = _hairpinType == Hairpin::Type::CRESCENDO;
+            setBeginText(cresc ? "cresc." : "dim.");
+            setContinueText(cresc ? "(cresc.)" : "(dim.)");
+            }
       }
 
 //---------------------------------------------------------
