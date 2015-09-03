@@ -371,6 +371,12 @@
       <Measure number="3">
         <HairPin id="2">
           <subtype>0</subtype>
+          <beginText>
+            <text>cresc.</text>
+            </beginText>
+          <continueText>
+            <text>(cresc.)</text>
+            </continueText>
           </HairPin>
         <Chord>
           <dots>1</dots>
