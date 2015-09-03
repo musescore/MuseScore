@@ -159,6 +159,12 @@
           </Chord>
         <HairPin id="2">
           <subtype>0</subtype>
+          <beginText>
+            <text>cresc.</text>
+            </beginText>
+          <continueText>
+            <text>(cresc.)</text>
+            </continueText>
           </HairPin>
         <Chord>
           <durationType>quarter</durationType>

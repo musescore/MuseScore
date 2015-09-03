@@ -196,6 +196,12 @@
             <off2 x="0" y="0"/>
             <pos x="34.0159" y="6.60645"/>
             </Segment>
+          <beginText>
+            <text>cresc.</text>
+            </beginText>
+          <continueText>
+            <text>(cresc.)</text>
+            </continueText>
           </HairPin>
         <Chord>
           <lid>14</lid>
@@ -1087,6 +1093,12 @@
             <subtype>0</subtype>
             <veloChange>10</veloChange>
             <lid>115</lid>
+            <beginText>
+              <text>cresc.</text>
+              </beginText>
+            <continueText>
+              <text>(cresc.)</text>
+              </continueText>
             </HairPin>
           <Chord>
             <lid>14</lid>
