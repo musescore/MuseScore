@@ -99,6 +99,12 @@
         <HairPin id="2">
           <subtype>1</subtype>
           <veloChange>10</veloChange>
+          <beginText>
+            <text>dim.</text>
+            </beginText>
+          <continueText>
+            <text>(dim.)</text>
+            </continueText>
           </HairPin>
         <Chord>
           <durationType>quarter</durationType>
