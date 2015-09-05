@@ -1303,12 +1303,14 @@ bool Measure::acceptDrop(const DropData& data) const
 Element* Measure::drop(const DropData& data)
       {
       Element* e = data.element;
-      int staffIdx;
+      int staffIdx = -1;
       Segment* seg;
       _score->pos2measure(data.pos, &staffIdx, 0, &seg, 0);
 
       if (e->systemFlag())
             staffIdx = 0;
+      if (staffIdx < 0)
+            return 0;
 #if 0 // yet(?) unused
       QPointF mrp(data.pos - pagePos());
 #endif
