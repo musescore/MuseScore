@@ -1325,6 +1325,7 @@ void BarLine::updateGenerated(bool canBeTrue)
                   && _visible       == true
                   && generatedType  == true
                   && _customSpan    == false
+                  && !isNudged()
                   );
             }
       }
