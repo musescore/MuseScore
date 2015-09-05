@@ -42,6 +42,7 @@
 #include "figuredbass.h"
 #include "icon.h"
 #include "utils.h"
+#include "page.h"
 
 namespace Ms {
 
@@ -838,7 +839,16 @@ Element* ChordRest::drop(const DropData& data)
 
             case Element::Type::KEYSIG:
             case Element::Type::TIMESIG:
-                  return measure()->drop(data);
+                  if (measure()->system()) {
+                        // convert page-relative pos to score-relative
+                        DropData ndd = data;
+                        ndd.pos += measure()->system()->page()->pos();
+                        return measure()->drop(ndd);
+                        }
+                  else {
+                        delete e;
+                        return 0;
+                        }
 
             case Element::Type::TEMPO_TEXT:
                   {
