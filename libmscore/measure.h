@@ -303,7 +303,6 @@ class Measure : public MeasureBase {
       bool isEmpty() const;
       bool isOnlyRests(int track) const;
 
-
       void layoutStage1();
       int playbackCount() const      { return _playbackCount; }
       void setPlaybackCount(int val) { _playbackCount = val; }

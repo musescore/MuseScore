@@ -264,6 +264,31 @@ qreal MeasureBase::pause() const
       }
 
 //---------------------------------------------------------
+//   isStartOfSection
+//    returns true if start of score.
+//    returns true if start of a new section.
+//          (caveat: section breaks may occur on measure base objects that aren't actual measures.)
+//---------------------------------------------------------
+
+bool MeasureBase::isStartOfSection() const
+      {
+      MeasureBase* m = _prev;
+      while (m) {
+            // if first reach a section break, then is start of a new section
+            if (m->sectionBreak())
+                  return true;
+
+            // if encounter an actual measure before encountering a section break, then is not start of a section
+            if (m->isMeasure())
+                  return false;
+
+            m = m->prev();
+            }
+
+      return true;      // if reach start of score, then is start of a section
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
