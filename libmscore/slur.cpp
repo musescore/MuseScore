@@ -818,10 +818,13 @@ void Slur::slurPos(SlurPos* sp)
             return;
             }
 
-      bool useTablature = staff() != nullptr && staff()->isTabStaff();
-      StaffType* stt = nullptr;
-      if (useTablature)
-            stt = staff()->staffType();
+      bool        useTablature      = staff() != nullptr && staff()->isTabStaff();
+      bool        staffHasStems     = true;     // assume staff uses stems
+      StaffType*  stt               = nullptr;
+      if (useTablature) {
+            stt               = staff()->staffType();
+            staffHasStems     = stt->stemThrough();   // if tab with stems beside, stems do not count for slur pos
+            }
 
       ChordRest* scr = startCR();
       ChordRest* ecr = endCR();
@@ -853,8 +856,8 @@ void Slur::slurPos(SlurPos* sp)
 
       qreal xo, yo;
 
-      Stem* stem1 = sc?sc->stem():0;
-      Stem* stem2 = ec?ec->stem():0;
+      Stem* stem1 = sc && staffHasStems ? sc->stem() : 0;
+      Stem* stem2 = ec && staffHasStems ? ec->stem() : 0;
 
       enum class SlurAnchor : char {
             NONE, STEM
