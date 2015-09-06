@@ -121,6 +121,8 @@ class MeasureBase : public Element {
       int endTick() const                    { return tick() + ticks();  }
       void setTick(int t)                    { _tick = t;     }
 
+      bool isStartOfSection() const;
+
       qreal pause() const;
 
       virtual QVariant getProperty(P_ID propertyId) const override;

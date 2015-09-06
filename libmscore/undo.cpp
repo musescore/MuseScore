@@ -533,13 +533,22 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   continue;
                   }
 
+            int staffIdx = staff->idx();
+            int track    = staffIdx * VOICES;
             Segment* destSeg = measure->findSegment(Segment::Type::Clef, tick);
 
-            // move measure-initial clef to last segment of prev measure
-
             if (firstSeg                        // if at start of measure
-               && measure->prevMeasure()        // and there is a previous measure
+               && !measure->isStartOfSection()  // and not start of a section
                ) {
+                  // remove clef from this segment if one exists
+                  Segment* segmentToRemoveClef = measure->findSegment(Segment::Type::Clef, tick);
+                  if (segmentToRemoveClef) {
+                        Clef* clefToRemove = static_cast<Clef*>(segmentToRemoveClef->element(track));
+                        if (clefToRemove)
+                              segmentToRemoveClef->remove(clefToRemove);
+                        }
+
+                  // move measure-initial clef to last segment of prev measure
                   measure = measure->prevMeasure();
                   destSeg = measure->findSegment(Segment::Type::Clef, tick);
                   }
@@ -548,8 +557,6 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
                   destSeg = new Segment(measure, Segment::Type::Clef, seg->tick());
                   score->undoAddElement(destSeg);
                   }
-            int staffIdx = staff->idx();
-            int track    = staffIdx * VOICES;
             Clef* clef   = static_cast<Clef*>(destSeg->element(track));
 
             if (clef) {
