@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>742</width>
+    <width>602</width>
     <height>281</height>
    </rect>
   </property>
@@ -92,7 +92,7 @@
    <item row="0" column="2" rowspan="3">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="Awl::MeterSlider" name="gain" native="true">
+      <widget class="Awl::MeterSlider" name="gain">
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
@@ -105,7 +105,7 @@
        <property name="accessibleDescription">
         <string>Use up and down arrows to modify</string>
        </property>
-       <property name="channel" stdset="0">
+       <property name="channel">
         <number>2</number>
        </property>
       </widget>
@@ -129,7 +129,7 @@
     </layout>
    </item>
    <item row="0" column="1">
-    <widget class="Awl::VolSlider" name="mgain" native="true">
+    <widget class="Awl::VolSlider" name="mgain">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -145,7 +145,7 @@
      <property name="accessibleDescription">
       <string>Use up and down arrows to modify</string>
      </property>
-     <property name="center" stdset="0">
+     <property name="center">
       <bool>true</bool>
      </property>
     </widget>
@@ -153,9 +153,15 @@
    <item row="0" column="0" rowspan="2">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="masterEffectsTab">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <attribute name="title">
        <string>Master Effects</string>
       </attribute>
@@ -163,22 +169,10 @@
        <item row="1" column="0" colspan="6">
         <widget class="QStackedWidget" name="effectStackA">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>640</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>640</width>
-           <height>16777215</height>
-          </size>
          </property>
         </widget>
        </item>
@@ -205,22 +199,10 @@
        <item row="2" column="0" colspan="6">
         <widget class="QStackedWidget" name="effectStackB">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>640</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>640</width>
-           <height>16777215</height>
-          </size>
          </property>
         </widget>
        </item>
@@ -260,6 +242,12 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <attribute name="title">
        <string>Tuning</string>
       </attribute>
