@@ -239,7 +239,7 @@ void Compressor::process(int frames, float* ip, float *op)
             if ((count++ & 3) == 3) {
                   amp = rms.process(sum * 0.25f);
                   sum = 0.0f;
-                  if (isnan(env_rms))     // This can happen sometimes, but I don't know why
+                  if (qIsNaN(env_rms))     // This can happen sometimes, but I don't know why
                         env_rms = 0.0f;
                   env = LIN_INTERP(rms_peak, env_rms, env_peak);
                   if (env <= knee_min)
