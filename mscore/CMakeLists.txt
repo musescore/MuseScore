@@ -532,7 +532,6 @@ else (MINGW)
      install( TARGETS mscore RUNTIME DESTINATION bin )
      if (LN_EXECUTABLE)
         add_custom_target(mscore_alias
-            DEPENDS mscore
             COMMAND echo "Creating symlink alias for mscore executable."
             COMMAND ${LN_EXECUTABLE} -sf "mscore${MSCORE_INSTALL_SUFFIX}" "musescore${MSCORE_INSTALL_SUFFIX}"
             COMMAND echo 'Symlink alias: musescore${MSCORE_INSTALL_SUFFIX} -> mscore${MSCORE_INSTALL_SUFFIX}'
