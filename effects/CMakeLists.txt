@@ -19,10 +19,15 @@ else (APPLE)
 endif (APPLE)
 
 QT5_ADD_RESOURCES (qrc_effects_files
-      zita1/zita.qrc
+     zita1/zita.qrc
+     )
+
+QT5_WRAP_UI (ui_headers
+      compressor/compressor_gui.ui
       )
 
 add_library (effects STATIC
+      ${ui_headers}
       ${qrc_effects_files}
       ${PROJECT_BINARY_DIR}/all.h
       ${PCH}
@@ -32,6 +37,8 @@ add_library (effects STATIC
       noeffect/noeffectgui.h
       zita1/zita.cpp
       zita1/zitagui.cpp
+      compressor/compressor.cpp
+      compressor/compressorgui.cpp
       ${INCS}
       )
 set_target_properties (
