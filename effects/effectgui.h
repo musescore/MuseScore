@@ -30,6 +30,7 @@ class EffectGui : public QWidget {
 
    public slots:
       void valueChanged(const QString& name, qreal);
+      void valueChanged(qreal, int);
 
    public:
       EffectGui(Effect*, QWidget* parent = 0);

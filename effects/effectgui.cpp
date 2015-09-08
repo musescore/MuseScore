@@ -38,5 +38,13 @@ void EffectGui::valueChanged(const QString& msg, qreal val)
             }
       }
 
+void EffectGui::valueChanged(qreal val, int idx)
+      {
+      if (_effect->nvalue(idx) != val) {
+            _effect->setNValue(idx, val);
+            emit valueChanged();
+            }
+      }
+
 }
 
