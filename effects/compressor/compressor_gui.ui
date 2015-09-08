@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CompressorGui</class>
+ <widget class="QWidget" name="CompressorGui">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>644</width>
+    <height>88</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>644</width>
+    <height>79</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>644</width>
+    <height>88</height>
+   </size>
+  </property>
+  <property name="palette">
+   <palette>
+    <active>
+     <colorrole role="Button">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>119</red>
+        <green>119</green>
+        <blue>120</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Light">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>115</red>
+        <green>115</green>
+        <blue>115</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Midlight">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>135</red>
+        <green>135</green>
+        <blue>136</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Text">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ButtonText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>136</red>
+        <green>136</green>
+        <blue>136</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>131</red>
+        <green>131</green>
+        <blue>132</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="AlternateBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>126</red>
+        <green>126</green>
+        <blue>127</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="NoRole">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>121</red>
+        <green>121</green>
+        <blue>121</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </active>
+    <inactive>
+     <colorrole role="Button">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>119</red>
+        <green>119</green>
+        <blue>120</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Light">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>115</red>
+        <green>115</green>
+        <blue>115</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Midlight">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>135</red>
+        <green>135</green>
+        <blue>136</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Text">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ButtonText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>136</red>
+        <green>136</green>
+        <blue>136</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>131</red>
+        <green>131</green>
+        <blue>132</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="AlternateBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>126</red>
+        <green>126</green>
+        <blue>127</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="NoRole">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>121</red>
+        <green>121</green>
+        <blue>121</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </inactive>
+    <disabled>
+     <colorrole role="Button">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>119</red>
+        <green>119</green>
+        <blue>120</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Light">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>115</red>
+        <green>115</green>
+        <blue>115</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Midlight">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>135</red>
+        <green>135</green>
+        <blue>136</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Text">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>172</red>
+        <green>174</green>
+        <blue>176</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ButtonText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>165</red>
+        <green>167</green>
+        <blue>169</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>131</red>
+        <green>131</green>
+        <blue>132</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>131</red>
+        <green>131</green>
+        <blue>132</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="AlternateBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>126</red>
+        <green>126</green>
+        <blue>127</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="NoRole">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>121</red>
+        <green>121</green>
+        <blue>121</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </disabled>
+   </palette>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="horizontalSpacing">
+    <number>32</number>
+   </property>
+   <item row="1" column="1">
+    <widget class="QLabel" name="label1">
+     <property name="text">
+      <string>Attack</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4">
+    <widget class="QLabel" name="label4">
+     <property name="text">
+      <string>Ratio</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QLabel" name="label2">
+     <property name="text">
+      <string>Release</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
+    <widget class="QLabel" name="label5">
+     <property name="text">
+      <string>Knee</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>RMS</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QLabel" name="label3">
+     <property name="text">
+      <string>Threshold</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="6">
+    <widget class="QLabel" name="label6">
+     <property name="text">
+      <string>Gain</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="Awl::Knob" name="attack">
+     <property name="toolTip">
+      <string>Attack time (ms)</string>
+     </property>
+     <property name="whatsThis">
+      <string>The attack time in milliseconds.</string>
+     </property>
+     <property name="value">
+      <double>1.500000000000000</double>
+     </property>
+     <property name="scaleWidth">
+      <number>5</number>
+     </property>
+     <property name="scaleColor">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+     <property name="id">
+      <number>1</number>
+     </property>
+     <property name="minValue">
+      <double>1.500000000000000</double>
+     </property>
+     <property name="maxValue">
+      <double>400.000000000000000</double>
+     </property>
+     <property name="lineStep">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="pageStep">
+      <double>20.000000000000000</double>
+     </property>
+     <property name="dclickValue1">
+      <double>1.500000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="7" rowspan="2">
+    <widget class="QLabel" name="label_8">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="palette">
+      <palette>
+       <active>
+        <colorrole role="WindowText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </active>
+       <inactive>
+        <colorrole role="WindowText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </inactive>
+       <disabled>
+        <colorrole role="WindowText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>165</red>
+           <green>167</green>
+           <blue>169</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </disabled>
+      </palette>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>15</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string notr="true">SC4</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="Awl::Knob" name="release">
+     <property name="toolTip">
+      <string>Release time (ms)</string>
+     </property>
+     <property name="whatsThis">
+      <string>Teh release time in milliseconds.</string>
+     </property>
+     <property name="value">
+      <double>2.000000000000000</double>
+     </property>
+     <property name="scaleWidth">
+      <number>5</number>
+     </property>
+     <property name="scaleColor">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+     <property name="id">
+      <number>2</number>
+     </property>
+     <property name="minValue">
+      <double>2.000000000000000</double>
+     </property>
+     <property name="maxValue">
+      <double>800.000000000000000</double>
+     </property>
+     <property name="lineStep">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="pageStep">
+      <double>20.000000000000000</double>
+     </property>
+     <property name="dclickValue1">
+      <double>2.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="Awl::Knob" name="rms">
+     <property name="toolTip">
+      <string>RMS</string>
+     </property>
+     <property name="statusTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and  peak is better for heavier, fast compression and percussion.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="value">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="scaleWidth">
+      <number>5</number>
+     </property>
+     <property name="scaleColor">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+     <property name="markSize">
+      <number>6</number>
+     </property>
+     <property name="border">
+      <number>2</number>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="Awl::Knob" name="ratio">
+     <property name="toolTip">
+      <string>Ratio (1:n)</string>
+     </property>
+     <property name="whatsThis">
+      <string>The gain reduction ratio used when the signal level exceeds the threshold.</string>
+     </property>
+     <property name="value">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="scaleWidth">
+      <number>5</number>
+     </property>
+     <property name="scaleColor">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+     <property name="id">
+      <number>4</number>
+     </property>
+     <property name="minValue">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="maxValue">
+      <double>2.000000000000000</double>
+     </property>
+     <property name="lineStep">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="pageStep">
+      <double>5.000000000000000</double>
+     </property>
+     <property name="dclickValue1">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="dclickValue2">
+      <double>1.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="5">
+    <widget class="Awl::Knob" name="knee">
+     <property name="toolTip">
+      <string>Knee radius (dB)</string>
+     </property>
+     <property name="whatsThis">
+      <string>Teh distance from the threshold where the knee curve starts.</string>
+     </property>
+     <property name="value">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="scaleWidth">
+      <number>5</number>
+     </property>
+     <property name="scaleColor">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+     <property name="id">
+      <number>5</number>
+     </property>
+     <property name="minValue">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="maxValue">
+      <double>10.000000000000000</double>
+     </property>
+     <property name="lineStep">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="pageStep">
+      <double>5.000000000000000</double>
+     </property>
+     <property name="dclickValue1">
+      <double>1.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="6">
+    <widget class="Awl::Knob" name="gain">
+     <property name="toolTip">
+      <string>Makeup gain (dB)</string>
+     </property>
+     <property name="whatsThis">
+      <string>Controls the gain of the makeup input signal in dB's.</string>
+     </property>
+     <property name="value">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="scaleWidth">
+      <number>5</number>
+     </property>
+     <property name="scaleColor">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+     <property name="id">
+      <number>6</number>
+     </property>
+     <property name="maxValue">
+      <double>24.000000000000000</double>
+     </property>
+     <property name="lineStep">
+      <double>3.000000000000000</double>
+     </property>
+     <property name="pageStep">
+      <double>6.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="Awl::Knob" name="threshold">
+     <property name="toolTip">
+      <string>Threshhold level (dB)</string>
+     </property>
+     <property name="whatsThis">
+      <string>The point at which the compressor will start to kick in.</string>
+     </property>
+     <property name="value">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="scaleWidth">
+      <number>5</number>
+     </property>
+     <property name="scaleColor">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+     <property name="id">
+      <number>3</number>
+     </property>
+     <property name="minValue">
+      <double>-30.000000000000000</double>
+     </property>
+     <property name="maxValue">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="dclickValue1">
+      <double>-2.000000000000000</double>
+     </property>
+     <property name="dclickValue2">
+      <double>-5.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Awl::Knob</class>
+   <extends>QWidget</extends>
+   <header>awl/knob.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

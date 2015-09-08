@@ -41,7 +41,7 @@ SynthControl::SynthControl(QWidget* parent)
       _score = 0;
 
       setWindowFlags(Qt::Tool);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+//      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       int idx = 0;
       for (Synthesizer* s : synti->synthesizer()) {

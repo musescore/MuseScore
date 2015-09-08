@@ -21,7 +21,7 @@
 #ifndef __AWLPLUGIN_H__
 #define __AWLPLUGIN_H__
 
-#include <QtDesigner/QDesignerCustomWidgetInterface>
+#include <QtUiPlugin/QDesignerCustomWidgetInterface>
 
 //---------------------------------------------------------
 //   AwlPlugin
