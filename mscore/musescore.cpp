@@ -94,6 +94,7 @@
 #include "driver.h"
 
 #include "effects/zita1/zita.h"
+#include "effects/compressor/compressor.h"
 #include "effects/noeffect/noeffect.h"
 #include "synthesizer/synthesizer.h"
 #include "synthesizer/synthesizergui.h"
@@ -2281,9 +2282,11 @@ MasterSynthesizer* synthesizerFactory()
 #endif
       ms->registerEffect(0, new NoEffect);
       ms->registerEffect(0, new ZitaReverb);
+      ms->registerEffect(0, new Compressor);
       // ms->registerEffect(0, new Freeverb);
       ms->registerEffect(1, new NoEffect);
       ms->registerEffect(1, new ZitaReverb);
+      ms->registerEffect(1, new Compressor);
       // ms->registerEffect(1, new Freeverb);
       ms->setEffect(0, 1);
       ms->setEffect(1, 0);
