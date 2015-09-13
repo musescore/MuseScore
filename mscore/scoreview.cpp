@@ -5839,7 +5839,7 @@ void ScoreView::loopToggled(bool val)
       if (_score->lastMeasure() == 0)
             return;
       if (_score->pos(POS::LEFT) == 0 && _score->pos(POS::RIGHT) == 0)
-            _score->setPos(POS::RIGHT, _score->lastMeasure()->endTick()-1);
+            _score->setPos(POS::RIGHT, _score->lastMeasure()->endTick());
       _curLoopIn->move(_score->loopInTick());
       _curLoopOut->move(_score->loopOutTick());
       _curLoopIn->setVisible(val);
