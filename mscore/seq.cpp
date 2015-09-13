@@ -733,7 +733,7 @@ void Seq::process(unsigned n, float* buffer)
             //
             unsigned framePos = 0;
             int endTime = *pPlayTime + frames;
-            int utickEnd = cs->repeatList()->tick2utick(cs->lastMeasure()->endTick()) - 1;
+            int utickEnd = cs->repeatList()->tick2utick(cs->lastMeasure()->endTick());
             for ( ; *pPlayPos != pEvents->cend(); ) {
                   int n;
                   if (inCountIn) {
@@ -1505,7 +1505,7 @@ void Seq::setLoopIn()
       else
             tick = cs->pos();             // Otherwise, use the selected note.
       if (tick >= cs->loopOutTick())   // If In pos >= Out pos, reset Out pos to end of score
-            cs->setPos(POS::RIGHT, cs->lastMeasure()->endTick() - 1);
+            cs->setPos(POS::RIGHT, cs->lastMeasure()->endTick());
       cs->setPos(POS::LEFT, tick);
       }
 
@@ -1524,8 +1524,8 @@ void Seq::setLoopOut()
       if (tick <= cs->loopInTick())   // If Out pos <= In pos, reset In pos to beginning of score
             cs->setPos(POS::LEFT, 0);
       else
-          if (tick > cs->lastMeasure()->endTick() - 1)
-              tick = cs->lastMeasure()->endTick() - 1;
+          if (tick > cs->lastMeasure()->endTick())
+              tick = cs->lastMeasure()->endTick();
       cs->setPos(POS::RIGHT, tick);
       if (state == Transport::PLAY)
             guiToSeq(SeqMsg(SeqMsgId::SEEK, tick));

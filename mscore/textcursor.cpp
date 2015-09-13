@@ -133,6 +133,8 @@ void PositionCursor::move(int tick)
       //
       // set mark height for whole system
       //
+      if (_type == CursorType::LOOP_OUT)
+        tick --;
       Score* score = _sv->score();
       Measure* measure = score->tick2measureMM(tick);
       if (measure == 0)
