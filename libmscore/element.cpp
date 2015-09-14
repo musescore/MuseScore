@@ -98,7 +98,8 @@ static const ElementName elementNames[] = {
       ElementName("InstrumentName",       QT_TRANSLATE_NOOP("elementName", "Instrument Name")),
       ElementName("SlurSegment",          QT_TRANSLATE_NOOP("elementName", "Slur Segment")),
       ElementName("StaffLines",           QT_TRANSLATE_NOOP("elementName", "Staff Lines")),
-      ElementName("BarLine",              QT_TRANSLATE_NOOP("elementName", "Bar Line")),
+      ElementName("BarLine",              QT_TRANSLATE_NOOP("elementName", "Barline")),
+
       ElementName("StemSlash",            QT_TRANSLATE_NOOP("elementName", "Stem Slash")),
       ElementName("Line",                 QT_TRANSLATE_NOOP("elementName", "Line")),
 
