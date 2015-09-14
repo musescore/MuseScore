@@ -202,7 +202,7 @@
       <string>Release time (ms)</string>
      </property>
      <property name="whatsThis">
-      <string>Teh release time in milliseconds.</string>
+      <string>The release time in milliseconds.</string>
      </property>
      <property name="value">
       <double>2.000000000000000</double>
@@ -356,7 +356,7 @@
       <string>Knee radius (dB)</string>
      </property>
      <property name="whatsThis">
-      <string>Teh distance from the threshold where the knee curve starts.</string>
+      <string>The distance from the threshold where the knee curve starts.</string>
      </property>
      <property name="value">
       <double>1.000000000000000</double>
