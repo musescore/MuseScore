@@ -2547,7 +2547,7 @@
             <item row="1" column="0">
              <widget class="QLabel" name="label_83">
               <property name="text">
-               <string>End barline thickness:</string>
+               <string>Final barline thickness:</string>
               </property>
               <property name="buddy">
                <cstring>endBarWidth</cstring>
@@ -2567,7 +2567,7 @@
             <item row="2" column="0">
              <widget class="QLabel" name="label_84">
               <property name="text">
-               <string>End barline distance:</string>
+               <string>Final barline distance:</string>
               </property>
               <property name="buddy">
                <cstring>endBarDistance</cstring>
