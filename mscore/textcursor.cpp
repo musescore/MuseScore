@@ -60,28 +60,28 @@ void PositionCursor::paint(QPainter* p)
 
       qreal x = _rect.left();
       qreal y = _rect.top();
-      qreal tx = x - 1.0;
 
       switch(_type) {
             case CursorType::LOOP_IN:           // draw a right-pointing triangle
-                  p->setPen(QPen(_color, 2.0, Qt::SolidLine, Qt::FlatCap));
+                  {
+                  qreal tx = x - 1.0;
+                  p->setPen(QPen(_color, 2.0, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
                   p->drawLine(x, y, x, _rect.bottom());
-                  p->setPen(QPen(_color, 2.0, Qt::SolidLine, Qt::RoundCap, Qt::MiterJoin));
                   points[0] = QPointF(tx, y);
                   points[1] = QPointF(tx, y + h);
                   points[2] = QPointF(tx + h, y + h * .5);
                   p->setBrush(_color);
-                  p->drawPolygon(points, 3);
+                  p->drawConvexPolygon(points, 3);
+                  }
                   break;
             case CursorType::LOOP_OUT:          // draw a left-pointing triangle
-                  p->setPen(QPen(_color, 2.0, Qt::SolidLine, Qt::FlatCap));
+                  p->setPen(QPen(_color, 2.0, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
                   p->drawLine(x, y, x, _rect.bottom());
-                  p->setPen(QPen(_color, 2.0, Qt::SolidLine, Qt::RoundCap, Qt::MiterJoin));
                   points[0] = QPointF(x, y);
                   points[1] = QPointF(x, y + h);
                   points[2] = QPointF(x - h, y + h * .5);
                   p->setBrush(_color);
-                  p->drawPolygon(points, 3);
+                  p->drawConvexPolygon(points, 3);
                   break;
             default:                            // fill the rectangle and add TAB string marks, if required
                   p->fillRect(_rect, color());
