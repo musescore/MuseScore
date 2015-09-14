@@ -520,7 +520,7 @@ QString TDuration::durationTypeUserName() const
       {
       QString s = QObject::tr("Custom");
       switch(_val) {
-            case DurationType::V_LONG:      s = QObject::tr("Long"   ); break;
+            case DurationType::V_LONG:      s = QObject::tr("Longa"   ); break;
             case DurationType::V_BREVE:     s = QObject::tr("Breve"  ); break;
             case DurationType::V_WHOLE:     s = QObject::tr("Whole"  ); break;
             case DurationType::V_HALF:      s = QObject::tr("Half"   ); break;
