@@ -134,7 +134,9 @@ uninstall:
 	&& if [ ${UPDATE_CACHE} = "TRUE" ]; then \
 	     update-mime-database "${PREFIX}/share/mime"; \
 	     gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"; \
-	fi
+	   fi \
+	&& xargs ../build/rm-empty-dirs < install_manifest.txt \
+	&& rm install_manifest.txt
 
 uninstalldebug:
 	cd build.debug \
@@ -142,7 +144,9 @@ uninstalldebug:
 	&& if [ ${UPDATE_CACHE} = "TRUE" ]; then \
 	     update-mime-database "${PREFIX}/share/mime"; \
 	     gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"; \
-	fi
+	   fi \
+	&& xargs ../build/rm-empty-dirs < install_manifest.txt \
+	&& rm install_manifest.txt
 
 #
 #  linux
