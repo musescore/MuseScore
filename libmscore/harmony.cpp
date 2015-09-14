@@ -653,7 +653,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
       *base = Tpc::TPC_INVALID;
       int slash = s.lastIndexOf('/');
       if (slash != -1) {
-            QString bs = s.mid(slash+1);
+            QString bs = s.mid(slash + 1).simplified();
             s = s.mid(idx, slash - idx).simplified();
             int idx2;
             *base = convertNote(bs, _baseSpelling, _baseCase, idx2);
@@ -666,7 +666,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
                   }
             }
       else
-            s = s.mid(idx).simplified();
+            s = s.mid(idx);   // don't simplify; keep leading space before extension if present
       _userName = s;
       const ChordList* cl = score()->style()->chordList();
       const ChordDescription* cd = 0;
