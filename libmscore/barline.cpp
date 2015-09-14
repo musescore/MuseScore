@@ -55,7 +55,7 @@ static const BarLineTableItem barLineTable[] {
         { BarLineType::NORMAL,           QT_TRANSLATE_NOOP("Palette", "Normal barline") },
         { BarLineType::BROKEN,           QT_TRANSLATE_NOOP("Palette", "Dashed barline") },
         { BarLineType::DOTTED,           QT_TRANSLATE_NOOP("Palette", "Dotted barline") },
-        { BarLineType::END,              QT_TRANSLATE_NOOP("Palette", "End bar barline") },
+        { BarLineType::END,              QT_TRANSLATE_NOOP("Palette", "Final barline") },
         { BarLineType::DOUBLE,           QT_TRANSLATE_NOOP("Palette", "Double barline") },
         { BarLineType::START_REPEAT,     QT_TRANSLATE_NOOP("Palette", "Start repeat") },
         { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End repeat") },
@@ -1035,7 +1035,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type, qreal mag)
             case BarLineType::DOTTED:
                   break;
             default:
-                  qDebug("illegal bar line type");
+                  qDebug("illegal barline type");
                   break;
             }
       return dw;

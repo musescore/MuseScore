@@ -545,7 +545,7 @@ Score::FileError Score::read114(XmlReader& e)
 
             // check barLineSpan
             if (s->barLineSpan() > (n - idx)) {
-                  qDebug("read114: invalid bar line span %d (max %d)",
+                  qDebug("read114: invalid barline span %d (max %d)",
                      s->barLineSpan(), n - idx);
                   s->setBarLineSpan(n - idx);
                   }
