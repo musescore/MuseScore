@@ -229,8 +229,10 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
             const auto basicQuant = Quantize::quantValueToFraction(
                         opers.data()->trackOpers.quantValue.value(mtrack.indexOfOperation));
 
+#ifdef QT_DEBUG
             Q_ASSERT_X(MChord::isLastTickValid(lastTick, mtrack.chords),
                        "quantizeAllTracks", "Last tick is less than max note off time");
+#endif
 
             MChord::setBarIndexes(mtrack.chords, basicQuant, lastTick, sigmap);
 
@@ -239,19 +241,22 @@ void quantizeAllTracks(std::multimap<int, MTrack> &tracks,
             else
                   MidiTuplet::findAllTuplets(mtrack.tuplets, mtrack.chords, sigmap, basicQuant);
 
+#ifdef QT_DEBUG
             Q_ASSERT_X(!doNotesOverlap(track.second),
                        "quantizeAllTracks",
                        "There are overlapping notes of the same voice that is incorrect");
-
+#endif
                         // (4/3 of the smallest duration) tol is less sensitive
                         // to on time inaccuracies than 1/2 earlier
             MChord::collectChords(mtrack, {2, 1}, {4, 3});
             Quantize::quantizeChords(mtrack.chords, sigmap, basicQuant);
             MidiTuplet::removeEmptyTuplets(mtrack);
 
+#ifdef QT_DEBUG
             Q_ASSERT_X(MidiTuplet::areTupletRangesOk(mtrack.chords, mtrack.tuplets),
                        "quantizeAllTracks", "Tuplet chord/note is outside tuplet "
                         "or non-tuplet chord/note is inside tuplet");
+#endif
             }
       }
 
@@ -997,12 +1002,14 @@ void applySwing(QList<MTrack> &tracks)
             const auto swingType = opers.swing.value(mt.indexOfOperation);
             Swing::detectSwing(mt.staff, swingType);
 
+#ifdef QT_DEBUG
             Q_ASSERT_X(MidiTie::areTiesConsistent(mt.staff),
                        "applySwing", "Ties are inconsistent");
 
             Q_ASSERT_X(MidiTuplet::haveTupletsEnoughElements(mt.staff),
                        "MTrack::convertTrack",
                        "Tuplet has less than 2 elements or all elements are rests");
+#endif
             }
       }
 
@@ -1112,8 +1119,10 @@ void convertMidi(Score *score, const MidiFile *mf)
 
       MChord::removeOverlappingNotes(tracks);
 
+#ifdef QT_DEBUG
       Q_ASSERT_X(!doNotesOverlap(tracks),
                  "convertMidi", "There are overlapping notes of the same voice that is incorrect");
+#endif
 
       LRHand::splitIntoLeftRightHands(tracks);
       MidiDrum::splitDrumVoices(tracks);
@@ -1122,10 +1131,12 @@ void convertMidi(Score *score, const MidiFile *mf)
       quantizeAllTracks(tracks, sigmap, lastTick);
       MChord::removeOverlappingNotes(tracks);
 
+#ifdef QT_DEBUG
       Q_ASSERT_X(!doNotesOverlap(tracks),
                  "convertMidi", "There are overlapping notes of the same voice that is incorrect");
       Q_ASSERT_X(noTooShortNotes(tracks),
                  "convertMidi", "There are notes of length < min allowed duration");
+#endif
 
       MChord::mergeChordsWithEqualOnTimeAndVoice(tracks);
       Simplify::simplifyDurationsNotDrums(tracks, sigmap);

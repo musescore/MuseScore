@@ -474,7 +474,9 @@ void createClefs(Staff *staff, int indexOfOperation, bool isDrumTrack)
       if (!mainClefWasSet && canChangeClef)
             createMainClefFromAveragePitch(staff, strack);
 
+#ifdef QT_DEBUG
       Q_ASSERT_X(!doesClefBreakTie(staff), "MidiClef::createClefs", "Clef breaks the tie");
+#endif
       }
 
 } // namespace MidiClef

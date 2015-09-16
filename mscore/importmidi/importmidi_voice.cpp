@@ -118,9 +118,11 @@ int findDurationCountInGroup(
             const TimeSigMap *sigmap,
             const std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
       {
+#ifdef QT_DEBUG      	  
       Q_ASSERT_X(areNotesSortedByOffTimeInAscOrder(notes, groupOfIndexes),
                  "MidiVoice::findDurationCountInGroup",
                  "Notes are not sorted by off time in ascending order");
+#endif
 
       const auto &opers = preferences.midiImportOperations.data()->trackOpers;
       const int currentTrack = preferences.midiImportOperations.currentTrack();
@@ -209,9 +211,11 @@ int findOptimalSplitPoint(
 
       Q_ASSERT_X(!notes.isEmpty(),
                  "MidiVoice::findOptimalSplitPoint", "Notes are empty");
+#ifdef QT_DEBUG
       Q_ASSERT_X(areNotesSortedByOffTimeInAscOrder(notes),
                  "MidiVoice::findOptimalSplitPoint",
                  "Notes are not sorted by length in ascending order");
+#endif
 
       int optSplit = -1;
 
@@ -534,8 +538,10 @@ void insertNewTuplet(
       MidiTuplet::TupletData newTuplet = tuplet->second;
       newTuplet.voice = newVoice;
 
+#ifdef QT_DEBUG
       Q_ASSERT_X(!doesTupletAlreadyExist(newTuplet.onTime, newVoice, tuplets),
                  "MidiVoice::addOrUpdateTuplet", "Tuplet already exists");
+#endif
 
       tuplet = tuplets.insert({tupletOnTime, newTuplet});
       insertedTuplets.insert({tupletOnTime, tuplet});
@@ -749,10 +755,12 @@ bool splitChordToVoice(
       MidiChord &chord = chordIt->second;
       auto &notes = chord.notes;
 
+#ifdef QT_DEBUG
       Q_ASSERT_X(MidiTuplet::isTupletRangeOk(*chordIt, tuplets),
                  "MidiVoice::splitChordToVoice, before split",
                  "Tuplet chord/note is outside tuplet "
                  "or non-tuplet chord/note is inside tuplet before simplification");
+#endif
 
       if (notesToMove.size() == notes.size()) {
                         // don't split chord, just move it to another voice
@@ -803,10 +811,12 @@ bool splitChordToVoice(
                   }
             }
 
+#ifdef QT_DEBUG
       Q_ASSERT_X(MidiTuplet::isTupletRangeOk(*chordIt, tuplets),
                  "MidiVoice::splitChordToVoice, after split",
                  "Tuplet chord/note is outside tuplet "
                  "or non-tuplet chord/note is inside tuplet before simplification");
+#endif
 
       return splitDone;
       }
@@ -842,10 +852,12 @@ bool doVoiceSeparation(
             std::multimap<ReducedFraction, MidiTuplet::TupletData> &tuplets)
       {
 
+#ifdef QT_DEBUG      	  
       Q_ASSERT_X(MidiTuplet::areTupletRangesOk(chords, tuplets),
                  "MidiVoice::doVoiceSeparation",
                  "Tuplet chord/note is outside tuplet "
                  "or non-tuplet chord/note is inside tuplet before voice separation");
+#endif
 
       MChord::sortNotesByLength(chords);
       std::multimap<ReducedFraction,
@@ -885,10 +897,12 @@ bool doVoiceSeparation(
                   maxVoiceIt->second = bestSplit.voice;
             }
 
+#ifdef QT_DEBUG
       Q_ASSERT_X(MidiTuplet::areTupletRangesOk(chords, tuplets),
                  "MidiVoice::doVoiceSeparation",
                  "Tuplet chord/note is outside tuplet "
                  "or non-tuplet chord/note is inside tuplet after voice separation");
+#endif
 
       return changed;
       }
@@ -1015,6 +1029,7 @@ bool separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap
 
             if (userVoiceCount > 1 && userVoiceCount <= voiceLimit()) {
 
+#ifdef QT_DEBUG
                   Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
                              "MidiVoice::separateVoices",
                              "Not all tuplets are referenced in chords or notes "
@@ -1022,10 +1037,12 @@ bool separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap
                   Q_ASSERT_X(areVoicesSame(mtrack.chords),
                              "MidiVoice::separateVoices", "Different voices of chord and tuplet "
                              "before voice separation");
+#endif
 
                   if (doVoiceSeparation(mtrack.chords, sigmap, mtrack.tuplets))
                         changed = true;
 
+#ifdef QT_DEBUG
                   Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
                              "MidiVoice::separateVoices",
                              "Not all tuplets are referenced in chords or notes "
@@ -1033,9 +1050,11 @@ bool separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap
                   Q_ASSERT_X(areVoicesSame(mtrack.chords),
                              "MidiVoice::separateVoices", "Different voices of chord and tuplet "
                              "after voice separation, before voice sort");
+#endif
 
                   sortVoices(mtrack.chords, sigmap);
 
+#ifdef QT_DEBUG
                   Q_ASSERT_X(MidiTuplet::areAllTupletsReferenced(mtrack.chords, mtrack.tuplets),
                              "MidiVoice::separateVoices",
                              "Not all tuplets are referenced in chords or notes "
@@ -1043,6 +1062,7 @@ bool separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap
                   Q_ASSERT_X(areVoicesSame(mtrack.chords),
                              "MidiVoice::separateVoices", "Different voices of chord and tuplet "
                              "after voice sort");
+#endif
                   }
             }
 

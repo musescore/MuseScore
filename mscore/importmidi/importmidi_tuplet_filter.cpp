@@ -552,16 +552,20 @@ void findNextTuplet(
                   selectedTuplets.push_back(index);
                   }
 
+#ifdef QT_DEBUG
             Q_ASSERT_X(validateSelectedTuplets(selectedTuplets.begin(), selectedTuplets.end(), tuplets),
                        "MIDI tuplets::findNextTuplet", "Tuplets have common chords but they shouldn't");
+#endif
 
             const auto voiceIntervals = prepareVoiceIntervals(selectedTuplets, tupletIntervals);
             const auto usedFirstChords = prepareUsedFirstChords(selectedTuplets, tuplets);
 
+#ifdef QT_DEBUG
             Q_ASSERT_X(areCommonsDifferent(selectedTuplets), "MidiTuplet::findNextTuplet",
                        "There are duplicates in selected commons");
             Q_ASSERT_X(areCommonsUncommon(selectedTuplets, tupletCommons),
                        "MidiTuplet::findNextTuplet", "Incompatible selected commons");
+#endif
 
             if (isCommonGroupBegins) {
                   bool canAddMoreIndexes = false;
@@ -701,17 +705,21 @@ void filterTuplets(std::vector<TupletInfo> &tuplets,
       if (tuplets.empty())
             return;
 
+#ifdef QT_DEBUG
       Q_ASSERT_X(!areTupletChordsEmpty(tuplets),
                  "MIDI tuplets: filterTuplets", "Tuplet has no chords but it should");
+#endif
 
       removeUselessTuplets(tuplets);
       removeExtraTuplets(tuplets);
 
       std::set<int> uncommons = findLongestUncommonGroup(tuplets, basicQuant);
 
+#ifdef QT_DEBUG
       Q_ASSERT_X(validateSelectedTuplets(uncommons.begin(), uncommons.end(), tuplets),
                  "MIDI tuplets: filterTuplets",
                  "Uncommon tuplets have common chords but they shouldn't");
+#endif
 
       size_t commonsSize = tuplets.size();
       if (uncommons.size() > 1) {
@@ -723,8 +731,10 @@ void filterTuplets(std::vector<TupletInfo> &tuplets,
       const std::vector<int> bestIndexes = findBestTuplets(tupletCommons, tuplets,
                                                            commonsSize, basicQuant);
 
+#ifdef QT_DEBUG
       Q_ASSERT_X(validateSelectedTuplets(bestIndexes.begin(), bestIndexes.end(), tuplets),
                  "MIDI tuplets: filterTuplets", "Tuplets have common chords but they shouldn't");
+#endif
 
       std::vector<TupletInfo> newTuplets;
       for (int i: bestIndexes)
