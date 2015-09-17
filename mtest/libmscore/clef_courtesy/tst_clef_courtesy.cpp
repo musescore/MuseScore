@@ -33,6 +33,7 @@ class TestClefCourtesy : public QObject, public MTest
       void initTestCase();
       void clef_courtesy01();
       void clef_courtesy02();
+      void clef_courtesy03();
       void clef_courtesy_78196();
       };
 
@@ -155,6 +156,42 @@ void TestClefCourtesy::clef_courtesy02()
       QVERIFY2(clefCourt->bbox().width() == 0, "Courtesy clef in measure 3 is NOT hidden.");
 
       QVERIFY(saveCompareScore(score, "clef_courtesy02.mscx", DIR + "clef_courtesy02-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   clef_courtesy03
+//    tests issue #76006 "if insert clef to measure after single-measure system with section break, then should not display courtesy clef"
+//    adds a clef on meas 2, which occurs after a single-measure section
+//    the added clef should not be visible, since it is after a section break
+//---------------------------------------------------------
+
+void TestClefCourtesy::clef_courtesy03()
+      {
+      Score* score = readScore(DIR + "clef_courtesy03.mscx");
+      score->doLayout();
+
+      Measure* m1 = score->firstMeasure();
+      Measure* m2 = m1->nextMeasure();
+
+      // make a clef-drop object and drop it to the 2nd measure
+      Clef* clef = new Clef(score); // create a new element, as Measure::drop() will eventually delete it
+      clef->setClefType(ClefType::G1);
+      DropData dropData;
+      dropData.pos = m2->pagePos();
+      dropData.element = clef;
+      m2->drop(dropData);
+      score->doLayout();
+
+      // verify the not required courtesy clef element is on end of m1 but is not shown
+      Clef *clefCourt = nullptr;
+      Segment *seg = m1->findSegment(Segment::Type::Clef, m2->tick());
+      QVERIFY2(seg != nullptr, "No SegClef in measure 1.");
+      clefCourt = static_cast<Clef*>(seg->element(0));
+      QVERIFY2(clefCourt != nullptr, "No courtesy clef element in measure 1.");
+      QVERIFY2(clefCourt->bbox().width() == 0, "Courtesy clef in measure 1 is NOT hidden.");
+
+      QVERIFY(saveCompareScore(score, "clef_courtesy03.mscx", DIR + "clef_courtesy03-ref.mscx"));
       delete score;
       }
 
