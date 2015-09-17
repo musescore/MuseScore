@@ -2213,6 +2213,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
             bool hasCourtesy;
             qreal cautionaryW = 0.0;
             qreal ww          = 0.0;
+            bool systemWasNotEmpty = !system->measures().isEmpty();
 
             if (curMeasure->type() == Element::Type::HBOX) {
                   ww = point(static_cast<Box*>(curMeasure)->boxWidth());
@@ -2238,6 +2239,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                   if (isFirstMeasure) {
                         firstMeasure = m;
                         addSystemHeader(m, isFirstSystem);
+                        system->measures().append(curMeasure);    // append measure to system before minWidth2() performs courtesy clef layout calculation
                         ww = m->minWidth2();
                         }
                   else
@@ -2276,21 +2278,23 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
 
                   if (ww < minMeasureWidth)
                         ww = minMeasureWidth;
-                  isFirstMeasure = false;
                   }
 
             // collect at least one measure
-            bool empty = system->measures().isEmpty();
-
-            if (!empty && (minWidth + ww > systemWidth)) {
+            if (systemWasNotEmpty && (minWidth + ww > systemWidth)) {
                   curMeasure->setSystem(oldSystem);
                   continueFlag = false;
                   break;
                   }
+
             if (curMeasure->type() == Element::Type::MEASURE)
                   lastMeasure = static_cast<Measure*>(curMeasure);
 
-            system->measures().append(curMeasure);
+            // append measure if did not already append measure
+            if (curMeasure->type() == Element::Type::MEASURE && isFirstMeasure)
+                  isFirstMeasure = false;
+            else
+                  system->measures().append(curMeasure);
 
             Element::Type nt;
             if (_showVBox)
