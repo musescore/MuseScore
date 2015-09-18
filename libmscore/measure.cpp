@@ -1315,6 +1315,7 @@ Element* Measure::drop(const DropData& data)
       QPointF mrp(data.pos - pagePos());
 #endif
       Staff* staff = score()->staff(staffIdx);
+      bool fromPalette = (e->track() == -1);
 
       switch(e->type()) {
             case Element::Type::MEASURE_LIST:
@@ -1332,6 +1333,16 @@ qDebug("drop staffList");
             case Element::Type::JUMP:
                   e->setParent(this);
                   e->setTrack(0);
+                  {
+                  // code borrowed from ChordRest::drop()
+                  Text* t = static_cast<Text*>(e);
+                  TextStyleType st = t->textStyleType();
+                  // for palette items, we want to use current score text style settings
+                  // except where the source element had explicitly overridden these via text properties
+                  // palette text style will be relative to baseStyle, so rebase this to score
+                  if (st >= TextStyleType::DEFAULT && fromPalette)
+                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
+                  }
                   score()->undoAddElement(e);
                   return e;
 
