@@ -2076,6 +2076,26 @@ bool Score::appendScore(Score* score)
       if (styleB(StyleIdx::concertPitch) != score->styleB(StyleIdx::concertPitch))
             score->cmdConcertPitchChanged(styleB(StyleIdx::concertPitch), true);
 
+      // convert any "generated" initial clefs into real "non-generated" clefs if clef type changes
+      if (score->firstMeasure()) {
+            Segment* initialClefSegment = score->firstMeasure()->findSegment(Segment::Type::Clef, 0);      // find clefs at first tick of first measure
+            if (initialClefSegment) {
+                  for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+                        int track    = staffIdx * VOICES;
+                        Staff* staff = score->staff(staffIdx);
+                        Clef* initialClef  = static_cast<Clef*>(initialClefSegment->element(track));
+
+                        // if the first clef of score to append is generated and
+                        // if the first clef of score to append is of different type than clef at final tick of first score
+                        if (initialClef->generated() && initialClef->clefType() != this->staff(staffIdx)->clef(tickOfAppend)) {
+
+                              // then convert that generated clef into a real non-generated clef so that its different type will be copied to joined score
+                              score->undoChangeClef(staff, initialClefSegment, initialClef->clefType());
+                              }
+                        }
+                  }
+            }
+
       // clone the measures
       MeasureBaseList* ml = &score->_measures;
       for (MeasureBase* mb = ml->first(); mb; mb = mb->next()) {
