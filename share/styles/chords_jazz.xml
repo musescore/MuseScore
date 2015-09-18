@@ -110,6 +110,8 @@
     <sym name="aug"/>
     <sym name="dim"/>
     <sym name="alt"/>
+    <sym name="bass"/>
+    <sym name="pedal"/>
 
     </font>
 
