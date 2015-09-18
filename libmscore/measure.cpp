@@ -2420,6 +2420,26 @@ bool Measure::slashStyle(int staffIdx) const
       }
 
 //---------------------------------------------------------
+//   isFinalMeasureOfSection
+//    returns true if this measure is final actual measure of a section
+//    takes into consideration fact that subsequent measures base objects may have section break before encountering next actual measure
+//---------------------------------------------------------
+
+bool Measure::isFinalMeasureOfSection() const
+      {
+      const MeasureBase* mb = static_cast<const MeasureBase*>(this);
+
+      do {
+            if (mb->sectionBreak())
+                  return true;
+
+            mb = mb->next();
+            } while (mb && !mb->isMeasure());   // loop until reach next actual measure or end of score
+
+      return false;
+      }
+
+//---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 
