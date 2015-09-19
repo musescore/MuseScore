@@ -34,6 +34,7 @@ class TestKeySig : public QObject, public MTest
       void initTestCase();
       void keysig();
       void concertPitch();
+      void keysig_78216();
       };
 
 //---------------------------------------------------------
@@ -107,6 +108,27 @@ void TestKeySig::keysig()
       QVERIFY(saveCompareScore(score, writeFile6, reference6));
 
       delete score;
+      }
+
+//---------------------------------------------------------
+//   keysig_78216
+//    input score has section breaks on non-measure MeasureBase objects.
+//    should not display courtesy keysig at the end of final measure of each section (meas 1, 2, & 3), even if section break occurs on subsequent non-measure frame.
+//---------------------------------------------------------
+
+void TestKeySig::keysig_78216()
+      {
+      Score* score = readScore(DIR + "keysig_78216.mscx");
+      score->doLayout();
+
+      Measure* m1 = score->firstMeasure();
+      Measure* m2 = m1->nextMeasure();
+      Measure* m3 = m2->nextMeasure();
+
+      // verify no keysig exists in segment of final tick of m1, m2, m3
+      QVERIFY2(m1->findSegment(Segment::Type::KeySig, m1->endTick()) == nullptr, "Should be no keysig at end of measure 1.");
+      QVERIFY2(m2->findSegment(Segment::Type::KeySig, m2->endTick()) == nullptr, "Should be no keysig at end of measure 2.");
+      QVERIFY2(m3->findSegment(Segment::Type::KeySig, m3->endTick()) == nullptr, "Should be no keysig at end of measure 3.");
       }
 
 void TestKeySig::concertPitch()

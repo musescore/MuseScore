@@ -2833,7 +2833,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
 
       bool needRelayout = false;
 
-      foreach (System* system, sl) {
+      for (System* system : sl) {
             // set system initial bar line type here, as in System::layout...() methods
             // it is either too early (in System::layout() measures are not added to the system yet)
             // or too late (in System::layout2(), horizontal spacing has already been done
@@ -2856,12 +2856,13 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
 
             if (m && nm) {
                   int tick = m->tick() + m->ticks();
+                  bool isFinalMeasureOfSection = m->isFinalMeasureOfSection();
 
                   // locate a time sig. in the next measure and, if found,
                   // check if it has cout. sig. turned off
                   TimeSig* ts;
                   Segment* tss         = nm->findSegment(Segment::Type::TimeSig, tick);
-                  bool showCourtesySig = tss && styleB(StyleIdx::genCourtesyTimesig) && !(m->sectionBreak() && _layoutMode != LayoutMode::FLOAT);
+                  bool showCourtesySig = tss && styleB(StyleIdx::genCourtesyTimesig) && !(isFinalMeasureOfSection && _layoutMode != LayoutMode::FLOAT);
                   if (showCourtesySig) {
                         ts = static_cast<TimeSig*>(tss->element(0));
                         if (ts && !ts->showCourtesySig())
@@ -2900,7 +2901,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
                         int track = staffIdx * VOICES;
                         Staff* staff = _staves[staffIdx];
-                        showCourtesySig = styleB(StyleIdx::genCourtesyKeysig) && !(m->sectionBreak() && _layoutMode != LayoutMode::FLOAT);
+                        showCourtesySig = styleB(StyleIdx::genCourtesyKeysig) && !(isFinalMeasureOfSection && _layoutMode != LayoutMode::FLOAT);
 
                         KeySigEvent key1 = staff->keySigEvent(tick - 1);
                         KeySigEvent key2 = staff->keySigEvent(tick);
