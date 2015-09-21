@@ -75,9 +75,7 @@ void AlbumManager::addClicked()
             if (fn.isEmpty())
                   continue;
             if(fn.endsWith (".mscz") || fn.endsWith (".mscx")) {
-                  AlbumItem* item = new AlbumItem;
-                  item->path = fn;
-                  album->append(item);
+                  album->append(new AlbumItem(fn));
                   QFileInfo fi(fn);
 
                   QListWidgetItem* li = new QListWidgetItem(fi.completeBaseName(), scoreList);

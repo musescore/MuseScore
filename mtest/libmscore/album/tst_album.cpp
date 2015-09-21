@@ -29,6 +29,7 @@ class TestAlbum : public QObject, public MTest
    private slots:
       void initTestCase();
       void album01();
+      void album_78521();
 
       };
 
@@ -47,20 +48,30 @@ void TestAlbum::initTestCase()
 
 void TestAlbum::album01()
       {
-      Album* album = new Album();
-      album->setName("test");
-      
-      AlbumItem* item = new AlbumItem;
-      item->path = root + "/" + DIR + "album01-01.mscx";
-      album->append(item);
-      
-      item = new AlbumItem;
-      item->path = root + "/" + DIR + "album01-02.mscx";
-      album->append(item);
-      
-      album->createScore("album01.mscx");
-      
+      Album album;
+      album.setName("test");
+      album.append(new AlbumItem(root + "/" + DIR + "album01-01.mscx"));
+      album.append(new AlbumItem(root + "/" + DIR + "album01-02.mscx"));
+      album.createScore("album01.mscx");
       QVERIFY(compareFiles("album01.mscx", DIR + "album01-ref.mscx"));
+      }
+
+//---------------------------------------------------------
+///  album_78521
+///   test cases for input scores that contain no actual measures:
+///   -album_78521-vbox contains only a VBox (but no measures)
+///   -album_78521-empty contains no MeasureBase objects
+//--------------------------------------------------------
+
+void TestAlbum::album_78521()
+      {
+      Album album;
+      album.setName("test");
+      album.append(new AlbumItem(root + "/" + DIR + "album_78521-vbox.mscx"));
+      album.append(new AlbumItem(root + "/" + DIR + "album_78521-vbox.mscx"));
+      album.append(new AlbumItem(root + "/" + DIR + "album_78521-empty.mscx"));
+      album.createScore("album_78521-vbox-vbox-empty.mscx");
+      QVERIFY(compareFiles("album_78521-vbox-vbox-empty.mscx", DIR + "album_78521-vbox-vbox-empty-ref.mscx"));
       }
 
 QTEST_MAIN(TestAlbum)
