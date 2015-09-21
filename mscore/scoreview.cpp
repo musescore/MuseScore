@@ -1176,7 +1176,8 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
             mscore->editInPianoroll(staff);
             }
       else if (cmd == "staff-properties") {
-            EditStaff editStaff(staff, this);
+            int tick = obj ? obj->tick() : -1;
+            EditStaff editStaff(staff, tick, this);
             connect(&editStaff, SIGNAL(instrumentChanged()), mscore, SLOT(instrumentChanged()));
             editStaff.exec();
             }
@@ -4487,7 +4488,7 @@ void ScoreView::cmdChangeEnharmonic(bool up)
                         }
                   else {
                         n->undoSetTpc(tpc);
-                        if (up || staff->part()->instrument()->transpose().isZero()) {
+                        if (up || staff->part()->instrument(n->chord()->tick())->transpose().isZero()) {
                               // change both spellings
                               int t = n->transposeTpc(tpc);
                               if (n->concertPitch())

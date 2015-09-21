@@ -38,7 +38,7 @@ namespace Ms {
 //   transposeChord
 //---------------------------------------------------------
 
-static void transposeChord(Chord* c, Interval srcTranspose)
+static void transposeChord(Chord* c, Interval srcTranspose, int tick)
       {
       // set note track
       // check if staffMove moves a note to a
@@ -49,7 +49,7 @@ static void transposeChord(Chord* c, Interval srcTranspose)
       if (nn < 0 || nn >= c->score()->nstaves())
             c->setStaffMove(0);
       Part* part = c->part();
-      Interval dstTranspose = part->instrument()->transpose();
+      Interval dstTranspose = part->instrument(tick)->transpose();
 
       if (srcTranspose != dstTranspose) {
             if (!dstTranspose.isZero()) {
@@ -195,7 +195,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                           for (int i = 0; i < graceNotes.size(); ++i) {
                                                 Chord* gc = graceNotes[i];
                                                 gc->setGraceIndex(i);
-                                                transposeChord(gc, e.transpose());
+                                                transposeChord(gc, e.transpose(), tick);
                                                 chord->add(gc);
                                                 }
                                           graceNotes.clear();
@@ -294,7 +294,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               harmony->setTrack(e.track());
                               // transpose
                               Part* partDest = staff(e.track() / VOICES)->part();
-                              Interval interval = partDest->instrument()->transpose();
+                              Interval interval = partDest->instrument(e.tick())->transpose();
                               if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                                     interval.flip();
                                     int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
@@ -446,7 +446,7 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
       {
 // qDebug("pasteChordRest %s at %d, len %d/%d", cr->name(), tick, cr->duration().numerator(), cr->duration().denominator() );
       if (cr->type() == Element::Type::CHORD)
-            transposeChord(static_cast<Chord*>(cr), srcTranspose);
+            transposeChord(static_cast<Chord*>(cr), srcTranspose, tick);
 
       Measure* measure = tick2measure(tick);
       if (!measure)
@@ -636,7 +636,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                               el->setTrack(trackZeroVoice(destTrack));
                               // transpose
                               Part* partDest = staff(track2staff(destTrack))->part();
-                              Interval interval = partDest->instrument()->transpose();
+                              Interval interval = partDest->instrument(destTick)->transpose();
                               if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                                     interval.flip();
                                     int rootTpc = transposeTpc(el->rootTpc(), interval, true);

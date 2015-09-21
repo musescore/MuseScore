@@ -746,8 +746,9 @@ void spell(QList<Event>& notes, int key)
 void changeAllTpcs(Note* n, int tpc1)
       {
       Interval v;
+      int tick = n && n->chord() ? n->chord()->tick() : -1;
       if (n && n->part() && n->part()->instrument()) {
-            v = n->part()->instrument()->transpose();
+            v = n->part()->instrument(tick)->transpose();
             v.flip();
             }
       int tpc2 = Ms::transposeTpc(tpc1, v, true);
