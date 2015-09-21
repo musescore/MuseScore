@@ -170,7 +170,7 @@ static void xmlSetPitch(Note* n, char step, int alter, int octave, Ottava* (&ott
 
       const Staff* staff = n->score()->staff(track / VOICES);
       const Instrument* instr = staff->part()->instrument();
-      const Interval intval = instr->transpose();
+      const Interval intval = instr->transpose();     // TODO: tick
       //qDebug("  staff=%p instr=%p dia=%d chro=%d",
       //       staff, instr, (int) intval.diatonic, (int) intval.chromatic);
 

@@ -421,7 +421,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   npitch        = line2pitch(line, clef, key);
 
                   int ntpc   = pitch2tpc(npitch, key, Prefer::NEAREST);
-                  Interval v = on->part()->instrument()->transpose();
+                  Interval v = on->part()->instrument(tick)->transpose();
                   if (v.isZero())
                         ntpc1 = ntpc2 = ntpc;
                   else {

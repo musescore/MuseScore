@@ -569,6 +569,8 @@ void System::setInstrumentNames(bool longName)
             return;
             }
 
+      // TODO: ml is normally empty here, so we are unable to retrieve tick
+      // thus, staff name does not reflect current instrument
       int tick = ml.isEmpty() ? 0 : ml.front()->tick();
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
             SysStaff* staff = _staves[staffIdx];

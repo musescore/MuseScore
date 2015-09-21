@@ -484,7 +484,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
             int track    = staffIdx * VOICES;
             KeySig* ks   = static_cast<KeySig*>(s->element(track));
 
-            Interval interval = staff->part()->instrument()->transpose();
+            Interval interval = staff->part()->instrument(tick)->transpose();
             KeySigEvent nkey = key;
             bool concertPitch = score->styleB(StyleIdx::concertPitch);
             if (interval.chromatic && !concertPitch && !nkey.custom() && !nkey.isAtonal()) {
@@ -1149,7 +1149,7 @@ void Score::undoAddElement(Element* element)
                         Harmony* h = static_cast<Harmony*>(ne);
                         if (score->styleB(StyleIdx::concertPitch) != element->score()->styleB(StyleIdx::concertPitch)) {
                               Part* partDest = h->part();
-                              Interval interval = partDest->instrument()->transpose();
+                              Interval interval = partDest->instrument(tick)->transpose();
                               if (!interval.isZero()) {
                                     if (!score->styleB(StyleIdx::concertPitch))
                                           interval.flip();
@@ -3217,8 +3217,19 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
 
 void ChangeInstrument::flip()
       {
-      Instrument* oi = is->instrument();
-      is->setInstrument(instrument);
+      Instrument* oi = is->instrument();  //new Instrument(*is->instrument());
+      is->setInstrument(instrument);      //*instrument
+
+      // transpose
+      int tickStart = is->segment()->tick();
+      auto i = is->staff()->part()->instruments()->find(tickStart);
+      ++i;
+      int tickEnd;
+      if (i == is->staff()->part()->instruments()->end())
+            tickEnd = -1;
+      else
+            tickEnd = i->first;
+      is->score()->transpositionChanged(is->staff()->part(), oi->transpose(), tickStart, tickEnd);
 
       is->score()->rebuildMidiMapping();
       is->score()->setInstrumentsChanged(true);
