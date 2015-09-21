@@ -2062,7 +2062,7 @@ bool Score::appendScore(Score* score)
       MeasureBase* lastMeasure = last();
       if (!lastMeasure)
             return false;
-      int tickLen = lastMeasure->endTick();
+      int tickOfAppend = lastMeasure->endTick();
 
       if (!lastMeasure->lineBreak() && !lastMeasure->pageBreak()) {
             lastMeasure->undoSetBreak(true, LayoutBreak::Type::LINE);
@@ -2090,10 +2090,11 @@ bool Score::appendScore(Score* score)
             _measures.add(nmb);
             }
       fixTicks();
+      Measure* firstAppendedMeasure = tick2measure(tickOfAppend);
 
       // if the appended score has less staves,
       // make sure the measures have full measure rest
-      for (Measure* m = tick2measure(tickLen); m; m = m->nextMeasure()) {
+      for (Measure* m = firstAppendedMeasure; m; m = m->nextMeasure()) {
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                   Fraction f;
                   for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
@@ -2110,29 +2111,30 @@ bool Score::appendScore(Score* score)
             }
 
       // adjust key signatures
-      for (Staff* st : score->staves()) {
-            int staffIdx = score->staffIdx(st);
-            Staff* joinedStaff = staff(staffIdx);
-            // special case for initial "C" key signature - these have no explicit element
-            Measure* m = tick2measure(tickLen);
-            Segment* seg = m->getSegment(Segment::Type::KeySig, tickLen);
-            if (!seg->element(staffIdx * VOICES)) {
-                  // no need to create new initial "C" key sig
-                  // if staff already ends in that key
-                  if (joinedStaff->key(tickLen - 1) == Key::C)
-                        continue;
-                  Key key = Key::C;
-                  KeySig* ks = new KeySig(this);
-                  ks->setTrack(staffIdx * VOICES);
-                  ks->setKey(key);
-                  ks->setParent(seg);
-                  addElement(ks);
-                  }
-            // other key signatures (initial other than "C", non-initial)
-            for (auto k : *(st->keyList())) {
-                  int tick = k.first;
-                  KeySigEvent key = k.second;
-                  joinedStaff->setKey(tick + tickLen, key);
+      if (firstAppendedMeasure) {
+            Segment* seg = firstAppendedMeasure->getSegment(Segment::Type::KeySig, tickOfAppend);
+            for (Staff* st : score->staves()) {
+                  int staffIdx = score->staffIdx(st);
+                  Staff* joinedStaff = staff(staffIdx);
+                  // special case for initial "C" key signature - these have no explicit element
+                  if (!seg->element(staffIdx * VOICES)) {
+                        // no need to create new initial "C" key sig
+                        // if staff already ends in that key
+                        if (joinedStaff->key(tickOfAppend - 1) == Key::C)
+                              continue;
+                        Key key = Key::C;
+                        KeySig* ks = new KeySig(this);
+                        ks->setTrack(staffIdx * VOICES);
+                        ks->setKey(key);
+                        ks->setParent(seg);
+                        addElement(ks);
+                        }
+                  // other key signatures (initial other than "C", non-initial)
+                  for (auto k : *(st->keyList())) {
+                        int tick = k.first;
+                        KeySigEvent key = k.second;
+                        joinedStaff->setKey(tick + tickOfAppend, key);
+                        }
                   }
             }
 
@@ -2142,8 +2144,8 @@ bool Score::appendScore(Score* score)
             Spanner* ns = static_cast<Spanner*>(spanner->clone());
             ns->setScore(this);
             ns->setParent(0);
-            ns->setTick(spanner->tick() + tickLen);
-            ns->setTick2(spanner->tick2() + tickLen);
+            ns->setTick(spanner->tick() + tickOfAppend);
+            ns->setTick2(spanner->tick2() + tickOfAppend);
             if (ns->type() == Element::Type::SLUR) {
                   // set start/end element for slur
                   ns->setStartElement(0);
