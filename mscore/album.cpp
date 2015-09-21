@@ -30,6 +30,20 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   AlbumItem
+//---------------------------------------------------------
+AlbumItem::AlbumItem()
+      {
+      this->score = nullptr;
+      }
+
+AlbumItem::AlbumItem(QString path)
+      {
+      this->path = path;
+      this->score = nullptr;
+      }
+
+//---------------------------------------------------------
 //   Album
 //---------------------------------------------------------
 
@@ -259,7 +273,6 @@ void Album::load(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "Score") {
                   AlbumItem* i = new AlbumItem;
-                  i->score = 0;
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "name")
