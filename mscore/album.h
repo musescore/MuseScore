@@ -35,6 +35,9 @@ struct AlbumItem {
       QString name;
       QString path;
       Score* score;
+
+      AlbumItem();
+      AlbumItem(QString path);
       };
 
 //---------------------------------------------------------
