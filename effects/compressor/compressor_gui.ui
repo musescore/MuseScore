@@ -29,7 +29,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true"/>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -123,45 +123,45 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="Awl::Knob" name="attack">
+    <widget class="Awl::Knob" name="attack" native="true">
      <property name="toolTip">
       <string>Attack time (ms)</string>
      </property>
      <property name="whatsThis">
       <string>The attack time in milliseconds.</string>
      </property>
-     <property name="value">
+     <property name="value" stdset="0">
       <double>1.500000000000000</double>
      </property>
-     <property name="scaleWidth">
+     <property name="scaleWidth" stdset="0">
       <number>5</number>
      </property>
-     <property name="scaleColor">
+     <property name="scaleColor" stdset="0">
       <color>
        <red>255</red>
        <green>255</green>
        <blue>255</blue>
       </color>
      </property>
-     <property name="id">
+     <property name="id" stdset="0">
       <number>1</number>
      </property>
-     <property name="minValue">
+     <property name="minValue" stdset="0">
       <double>1.500000000000000</double>
      </property>
-     <property name="maxValue">
+     <property name="maxValue" stdset="0">
       <double>400.000000000000000</double>
      </property>
-     <property name="lineStep">
+     <property name="lineStep" stdset="0">
       <double>1.000000000000000</double>
      </property>
-     <property name="pageStep">
+     <property name="pageStep" stdset="0">
       <double>20.000000000000000</double>
      </property>
-     <property name="dclickValue1">
+     <property name="dclickValue1" stdset="0">
       <double>1.500000000000000</double>
      </property>
-     <property name="text">
+     <property name="text" stdset="0">
       <string/>
      </property>
     </widget>
@@ -197,45 +197,45 @@
     </widget>
    </item>
    <item row="0" column="2">
-    <widget class="Awl::Knob" name="release">
+    <widget class="Awl::Knob" name="release" native="true">
      <property name="toolTip">
       <string>Release time (ms)</string>
      </property>
      <property name="whatsThis">
       <string>The release time in milliseconds.</string>
      </property>
-     <property name="value">
+     <property name="value" stdset="0">
       <double>2.000000000000000</double>
      </property>
-     <property name="scaleWidth">
+     <property name="scaleWidth" stdset="0">
       <number>5</number>
      </property>
-     <property name="scaleColor">
+     <property name="scaleColor" stdset="0">
       <color>
        <red>255</red>
        <green>255</green>
        <blue>255</blue>
       </color>
      </property>
-     <property name="id">
+     <property name="id" stdset="0">
       <number>2</number>
      </property>
-     <property name="minValue">
+     <property name="minValue" stdset="0">
       <double>2.000000000000000</double>
      </property>
-     <property name="maxValue">
+     <property name="maxValue" stdset="0">
       <double>800.000000000000000</double>
      </property>
-     <property name="lineStep">
+     <property name="lineStep" stdset="0">
       <double>1.000000000000000</double>
      </property>
-     <property name="pageStep">
+     <property name="pageStep" stdset="0">
       <double>20.000000000000000</double>
      </property>
-     <property name="dclickValue1">
+     <property name="dclickValue1" stdset="0">
       <double>2.000000000000000</double>
      </property>
-     <property name="text">
+     <property name="text" stdset="0">
       <string/>
      </property>
     </widget>
@@ -307,95 +307,95 @@
     </widget>
    </item>
    <item row="0" column="4">
-    <widget class="Awl::Knob" name="ratio">
+    <widget class="Awl::Knob" name="ratio" native="true">
      <property name="toolTip">
       <string>Ratio (1:n)</string>
      </property>
      <property name="whatsThis">
       <string>The gain reduction ratio used when the signal level exceeds the threshold.</string>
      </property>
-     <property name="value">
+     <property name="value" stdset="0">
       <double>1.000000000000000</double>
      </property>
-     <property name="scaleWidth">
+     <property name="scaleWidth" stdset="0">
       <number>5</number>
      </property>
-     <property name="scaleColor">
+     <property name="scaleColor" stdset="0">
       <color>
        <red>255</red>
        <green>255</green>
        <blue>255</blue>
       </color>
      </property>
-     <property name="id">
+     <property name="id" stdset="0">
       <number>4</number>
      </property>
-     <property name="minValue">
+     <property name="minValue" stdset="0">
       <double>1.000000000000000</double>
      </property>
-     <property name="maxValue">
+     <property name="maxValue" stdset="0">
       <double>20.000000000000000</double>
      </property>
-     <property name="lineStep">
+     <property name="lineStep" stdset="0">
       <double>1.000000000000000</double>
      </property>
-     <property name="pageStep">
+     <property name="pageStep" stdset="0">
       <double>5.000000000000000</double>
      </property>
-     <property name="dclickValue1">
+     <property name="dclickValue1" stdset="0">
       <double>1.000000000000000</double>
      </property>
-     <property name="dclickValue2">
+     <property name="dclickValue2" stdset="0">
       <double>1.000000000000000</double>
      </property>
     </widget>
    </item>
    <item row="0" column="5">
-    <widget class="Awl::Knob" name="knee">
+    <widget class="Awl::Knob" name="knee" native="true">
      <property name="toolTip">
       <string>Knee radius (dB)</string>
      </property>
      <property name="whatsThis">
       <string>The distance from the threshold where the knee curve starts.</string>
      </property>
-     <property name="value">
+     <property name="value" stdset="0">
       <double>1.000000000000000</double>
      </property>
-     <property name="scaleWidth">
+     <property name="scaleWidth" stdset="0">
       <number>5</number>
      </property>
-     <property name="scaleColor">
+     <property name="scaleColor" stdset="0">
       <color>
        <red>255</red>
        <green>255</green>
        <blue>255</blue>
       </color>
      </property>
-     <property name="id">
+     <property name="id" stdset="0">
       <number>5</number>
      </property>
-     <property name="minValue">
+     <property name="minValue" stdset="0">
       <double>1.000000000000000</double>
      </property>
-     <property name="maxValue">
+     <property name="maxValue" stdset="0">
       <double>10.000000000000000</double>
      </property>
-     <property name="lineStep">
+     <property name="lineStep" stdset="0">
       <double>1.000000000000000</double>
      </property>
-     <property name="pageStep">
+     <property name="pageStep" stdset="0">
       <double>5.000000000000000</double>
      </property>
-     <property name="dclickValue1">
+     <property name="dclickValue1" stdset="0">
       <double>1.000000000000000</double>
      </property>
-     <property name="text">
+     <property name="text" stdset="0">
       <string/>
      </property>
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="Awl::Knob" name="rms">
+    <widget class="Awl::Knob" name="rms" native="true">
      <property name="toolTip">
       <string>RMS</string>
      </property>
@@ -405,105 +405,105 @@
      <property name="whatsThis">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and  peak is better for heavier, fast compression and percussion.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
-     <property name="value">
+     <property name="value" stdset="0">
       <double>0.000000000000000</double>
      </property>
-     <property name="scaleWidth">
+     <property name="scaleWidth" stdset="0">
       <number>5</number>
      </property>
-     <property name="scaleColor">
+     <property name="scaleColor" stdset="0">
       <color>
        <red>255</red>
        <green>255</green>
        <blue>255</blue>
       </color>
      </property>
-     <property name="markSize">
+     <property name="markSize" stdset="0">
       <number>6</number>
      </property>
-     <property name="border">
+     <property name="border" stdset="0">
       <number>2</number>
      </property>
-     <property name="text">
+     <property name="text" stdset="0">
       <string/>
      </property>
     </widget>
    </item>
    <item row="0" column="6">
-    <widget class="Awl::Knob" name="gain">
+    <widget class="Awl::Knob" name="gain" native="true">
      <property name="toolTip">
       <string>Makeup gain (dB)</string>
      </property>
      <property name="whatsThis">
       <string>Controls the gain of the makeup input signal in dB's.</string>
      </property>
-     <property name="value">
+     <property name="value" stdset="0">
       <double>0.000000000000000</double>
      </property>
-     <property name="scaleWidth">
+     <property name="scaleWidth" stdset="0">
       <number>5</number>
      </property>
-     <property name="scaleColor">
+     <property name="scaleColor" stdset="0">
       <color>
        <red>255</red>
        <green>255</green>
        <blue>255</blue>
       </color>
      </property>
-     <property name="id">
+     <property name="id" stdset="0">
       <number>6</number>
      </property>
-     <property name="maxValue">
+     <property name="maxValue" stdset="0">
       <double>24.000000000000000</double>
      </property>
-     <property name="lineStep">
+     <property name="lineStep" stdset="0">
       <double>3.000000000000000</double>
      </property>
-     <property name="pageStep">
+     <property name="pageStep" stdset="0">
       <double>6.000000000000000</double>
      </property>
-     <property name="text">
+     <property name="text" stdset="0">
       <string/>
      </property>
     </widget>
    </item>
    <item row="0" column="3">
-    <widget class="Awl::Knob" name="threshold">
+    <widget class="Awl::Knob" name="threshold" native="true">
      <property name="toolTip">
       <string>Threshhold level (dB)</string>
      </property>
      <property name="whatsThis">
       <string>The point at which the compressor will start to kick in.</string>
      </property>
-     <property name="value">
+     <property name="value" stdset="0">
       <double>0.000000000000000</double>
      </property>
-     <property name="scaleWidth">
+     <property name="scaleWidth" stdset="0">
       <number>5</number>
      </property>
-     <property name="scaleColor">
+     <property name="scaleColor" stdset="0">
       <color>
        <red>255</red>
        <green>255</green>
        <blue>255</blue>
       </color>
      </property>
-     <property name="id">
+     <property name="id" stdset="0">
       <number>3</number>
      </property>
-     <property name="minValue">
+     <property name="minValue" stdset="0">
       <double>-30.000000000000000</double>
      </property>
-     <property name="maxValue">
+     <property name="maxValue" stdset="0">
       <double>0.000000000000000</double>
      </property>
-     <property name="dclickValue1">
+     <property name="dclickValue1" stdset="0">
       <double>-2.000000000000000</double>
      </property>
-     <property name="dclickValue2">
+     <property name="dclickValue2" stdset="0">
       <double>-5.000000000000000</double>
      </property>
-     <property name="text">
+     <property name="text" stdset="0">
       <string/>
      </property>
     </widget>
