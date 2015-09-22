@@ -502,9 +502,9 @@ Element* FretDiagram::drop(const DropData& data)
       {
       Element* e = data.element;
       if (e->type() == Element::Type::HARMONY) {
-            // TODO: make undoable
             Harmony* h = static_cast<Harmony*>(e);
-            h->setParent(this);
+            h->setParent(parent());
+            h->setTrack((track() / VOICES) * VOICES);
             score()->undoAddElement(h);
             }
       else {
