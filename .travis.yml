@@ -13,10 +13,10 @@ addons:
     - g++-4.9
     - cmake
     - alsa
-    - libsndfile1 
-    - wget 
-    - make 
-    - ant 
+    - libsndfile1
+    - wget
+    - make
+    - ant
     - curl
     - libasound2-dev
     - portaudio19-dev
@@ -24,9 +24,9 @@ addons:
     - zlib1g-dev
     - libfreetype6-dev
     - libfontconfig1-dev
-    - lame 
+    - lame
     - libmp3lame-dev
-    - libegl1-mesa-dev 
+    - libegl1-mesa-dev
     - libegl1-mesa
     - ccache
 
@@ -40,7 +40,7 @@ before_install:
   - export CC=/usr/bin/gcc-4.9
   - export CXX=/usr/bin/g++-4.9
   - "mkdir qt5"
-  - "wget -q -O qt5.zip http://utils.musescore.org.s3.amazonaws.com/qt541.zip"
+  - "wget -q -O qt5.zip http://utils.musescore.org.s3.amazonaws.com/qt542.zip"
   - "unzip -qq qt5.zip -d qt5"
   - "export PATH=`pwd`/qt5/bin:$PATH"
   - "export QT_PLUGIN_PATH=`pwd`/qt5/plugins"
