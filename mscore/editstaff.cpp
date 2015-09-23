@@ -468,16 +468,16 @@ void EditStaff::editStringDataClicked()
 
 static const char* g_cNoteName[] = {
       QT_TRANSLATE_NOOP("editstaff", "C"),
-      QT_TRANSLATE_NOOP("editstaff", "C#"),
+      QT_TRANSLATE_NOOP("editstaff", "C\u266f"),
       QT_TRANSLATE_NOOP("editstaff", "D"),
-      QT_TRANSLATE_NOOP("editstaff", "Eb"),
+      QT_TRANSLATE_NOOP("editstaff", "E\u266d"),
       QT_TRANSLATE_NOOP("editstaff", "E"),
       QT_TRANSLATE_NOOP("editstaff", "F"),
-      QT_TRANSLATE_NOOP("editstaff", "F#"),
+      QT_TRANSLATE_NOOP("editstaff", "F\u266f"),
       QT_TRANSLATE_NOOP("editstaff", "G"),
-      QT_TRANSLATE_NOOP("editstaff", "Ab"),
+      QT_TRANSLATE_NOOP("editstaff", "A\u266d"),
       QT_TRANSLATE_NOOP("editstaff", "A"),
-      QT_TRANSLATE_NOOP("editstaff", "Bb"),
+      QT_TRANSLATE_NOOP("editstaff", "B\u266d"),
       QT_TRANSLATE_NOOP("editstaff", "B")
       };
 
