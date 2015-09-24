@@ -608,9 +608,10 @@ qreal StaffType::chordStemLength(const Chord* chord) const
       else {
             bool shrt = (minimStyle() == TablatureMinimStyle::SHORTER) && (chord->durationType().type() == TDuration::DurationType::V_HALF);
             stemLen = (stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : STAFFTYPE_TAB_DEFAULTSTEMLEN_UP)
-                        * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0) * chord->mag();
+                        * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0);
             }
-      return stemLen;
+      // scale length by scale of parent chord, but relative to scale of context staff
+      return stemLen * chord->mag() / chord->staff()->mag();
       }
 
 //---------------------------------------------------------
