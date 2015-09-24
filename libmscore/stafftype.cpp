@@ -874,7 +874,7 @@ void TabDurationSymbol::layout()
             ypos += TAB_RESTSYMBDISPL * spatium();
             }
       bbox().setRect(0.0, ybb * mags, wbb * mags, _tab->durationBoxH() * mags);
-      setPos(0.0, ypos);
+      setPos(0.0, ypos*mags);
       }
 
 //---------------------------------------------------------
