@@ -5437,7 +5437,7 @@
        <item>
         <widget class="QGroupBox" name="keySigNaturalsGroup">
          <property name="title">
-          <string>Naturals in Key Signatures</string>
+          <string>♮ in Key Signatures</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_35">
           <item>
@@ -5450,14 +5450,14 @@
           <item>
            <widget class="QRadioButton" name="radioKeySigNatBefore">
             <property name="text">
-             <string>Before key signature if changing to fewer sharps or flats</string>
+             <string>Before key signature if changing to fewer ♯ or ♭</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QRadioButton" name="radioKeySigNatAfter">
             <property name="text">
-             <string>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</string>
+             <string>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</string>
             </property>
            </widget>
           </item>
