@@ -2815,7 +2815,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   if (curMeasure)
                         curMeasure = curMeasure->prev();
                   else
-                        curMeasure = lastMeasure();
+                        curMeasure = last();
                   }
             firstInRow = false;
             }
