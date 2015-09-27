@@ -1432,10 +1432,17 @@ void Chord::layoutStem()
       StaffType* tab = 0;
       if (staff() && staff()->isTabStaff()) {
             tab = staff()->staffType();
-            // require stems only if TAB is not stemless and this chord has a stem
-            if (!tab->slashStyle() && _stem) { // (duplicate code with defaultStemLength())
-                  // if stems are beside staff, apply special formatting
-                  if (!tab->stemThrough()) {
+            // if stemless TAB
+            if (tab->slashStyle()) {
+                  // if 'grid' duration symbol of MEDIALFINAL type, it is time to compute its width
+                  if (_tabDur != nullptr && _tabDur->beamGrid() == TabBeamGrid::MEDIALFINAL)
+                        _tabDur->layout2();
+                  // in all other stemless cases, do nothing
+                  return;
+                  }
+            // not a stemless TAB; if stems are beside staff, apply special formatting
+            if (!tab->stemThrough()) {
+                  if (_stem) { // (duplicate code with defaultStemLength())
                         // process stem:
                         _stem->setLen(tab->chordStemLength(this) * _spatium);
                         // process hook
@@ -1457,10 +1464,10 @@ void Chord::layoutStem()
                               _hook->setPos(x, y);
                               _hook->adjustReadPos();
                               }
-                        return;
                         }
-                  // if stems are through staff, use standard formatting
+                  return;
                   }
+            // if stems are through staff, use standard formatting
             }
 
       //
@@ -2269,18 +2276,24 @@ void Chord::layoutTablature()
             // check duration of prev. CR segm
             ChordRest * prevCR = prevChordRest(this);
             // if no previous CR
+            // OR symbol repeat set to ALWAYS
+            // OR symbol repeat condition is triggered
             // OR duration type and/or number of dots is different from current CR
+            // OR chord beam mode not AUTO
             // OR previous CR is a rest
+            // AND no not-stem
             // set a duration symbol (trying to re-use existing symbols where existing to minimize
             // symbol creation and deletion)
             TablatureSymbolRepeat symRepeat = tab->symRepeat();
-            if (prevCR == 0
+            if (  (prevCR == 0
                   || symRepeat == TablatureSymbolRepeat::ALWAYS
                   || (symRepeat == TablatureSymbolRepeat::MEASURE && measure() != prevCR->measure())
                   || (symRepeat == TablatureSymbolRepeat::SYSTEM && measure()->system() != prevCR->measure()->system())
+                  || beamMode() != Beam::Mode::AUTO
                   || prevCR->durationType().type() != durationType().type()
                   || prevCR->dots() != dots()
-                  || prevCR->type() == Element::Type::REST) {
+                  || prevCR->type() == Element::Type::REST)
+                        && !noStem() ) {
                   // symbol needed; if not exist, create; if exists, update duration
                   if (!_tabDur)
                         _tabDur = new TabDurationSymbol(score(), tab, durationType().type(), dots());
