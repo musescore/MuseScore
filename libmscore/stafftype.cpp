@@ -226,7 +226,7 @@ void StaffType::write(Xml& xml) const
             }
       else {
             xml.tag("durations",        _genDurations);
-            xml.tag("durationFontName", _durationFonts[_durationFontIdx].displayName);
+            xml.tag("durationFontName", _durationFonts[_durationFontIdx].displayName); // write font names anyway for backward compatibility
             xml.tag("durationFontSize", _durationFontSize);
             xml.tag("durationFontY",    _durationFontUserY);
             xml.tag("fretFontName",     _fretFonts[_fretFontIdx].displayName);
@@ -299,7 +299,7 @@ void StaffType::read(XmlReader& e)
                   setDurationFontSize(e.readDouble());
             else if (tag == "durationFontY")
                   setDurationFontUserY(e.readDouble());
-            else if (tag == "fretFontName")
+           else if (tag == "fretFontName")
                   setFretFontName(e.readElementText());
             else if (tag == "fretFontSize")
                   setFretFontSize(e.readDouble());
@@ -482,8 +482,12 @@ void StaffType::setDurationFontName(const QString& name)
 void StaffType::setFretFontName(const QString& name)
       {
       int idx;
+      QString locName = name;
+      // convert old names for two built-in fonts which have changed of name
+      if (name == "MuseScore Tab Late Renaiss")
+            locName = "MuseScore Phalèse";
       for (idx = 0; idx < _fretFonts.size(); idx++)
-            if (_fretFonts[idx].displayName == name)
+            if (_fretFonts[idx].displayName == locName)
                   break;
       if (idx >= _fretFonts.size())
             idx = 0;          // if name not found, use first font
@@ -902,8 +906,8 @@ void TabDurationSymbol::draw(QPainter* painter) const
 
 bool TablatureFretFont::read(XmlReader& e)
       {
-      defPitch = 9.0;
-      defYOffset = 0.0;
+      defPitch    = 9.0;
+      defYOffset  = 0.0;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
