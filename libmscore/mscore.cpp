@@ -72,6 +72,7 @@ MStyle* MScore::_baseStyle;
 QString MScore::_globalShare;
 int     MScore::_vRaster;
 int     MScore::_hRaster;
+bool    MScore::_verticalOrientation = false;
 QColor  MScore::selectColor[VOICES];
 QColor  MScore::defaultColor;
 QColor  MScore::layoutBreakColor;
