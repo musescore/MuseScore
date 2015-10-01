@@ -696,15 +696,15 @@ Palette* MuseScore::newClefsPalette(bool basic)
       sp->setMag(0.8);
       sp->setGrid(33, 60);
       sp->setYOffset(1.0);
-      // Up to ClefType::MAX-1, because ClefType::PERC2 is no longer supported
       static std::vector<ClefType> clefs1  {
             ClefType::G,   ClefType::F, ClefType::C3, ClefType::C4
             };
       static std::vector<ClefType> clefs2  {
-            ClefType::G,   ClefType::G1,    ClefType::G2,     ClefType::G3,  ClefType::G5,  ClefType::G4,
-            ClefType::C1,  ClefType::C2,    ClefType::C3,     ClefType::C4,  ClefType::C5,
-            ClefType::F,   ClefType::F_8VA, ClefType::F_15MA, ClefType::F8,  ClefType::F15,
-            ClefType::F_B, ClefType::F_C,   ClefType::PERC,   ClefType::TAB, ClefType::TAB2
+            ClefType::G,     ClefType::G1,  ClefType::G2,  ClefType::G3,    ClefType::G3_O,
+            ClefType::G5,    ClefType::G4,  ClefType::C1,  ClefType::C2,    ClefType::C3,
+            ClefType::C4,    ClefType::C5,  ClefType::F,   ClefType::F_8VA, ClefType::F_15MA,
+            ClefType::F8,    ClefType::F15, ClefType::F_B, ClefType::F_C,   ClefType::PERC,
+            ClefType::PERC2, ClefType::TAB, ClefType::TAB2
             };
       for (ClefType j : basic ? clefs1 : clefs2) {
             Clef* k = new Ms::Clef(gscore);
