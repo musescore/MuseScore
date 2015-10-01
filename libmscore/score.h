@@ -120,7 +120,7 @@ enum class Pad : char {
 
 //---------------------------------------------------------
 //   LayoutMode
-//    PAGE   The normal page view, honors page and line breaks
+//    PAGE   The normal page view, honors page and line breaks.
 //    LINE   The panoramic view, one long system
 //    FLOAT  The "reflow" mode, ignore page and line breaks
 //    SYSTEM The "never ending page", page break are turned into line break
@@ -255,7 +255,7 @@ enum class PasteStatus : char {
 //   @P title           string            title of the score (read only)
 //---------------------------------------------------------
 
-class Score : public QObject {
+class Score : public QObject, public ScoreElement {
       Q_OBJECT
       Q_PROPERTY(QString                        composer          READ composer)
       Q_PROPERTY(int                            duration          READ duration)
@@ -989,7 +989,7 @@ class Score : public QObject {
       void setSoloMute();
 
       LayoutMode layoutMode() const         { return _layoutMode; }
-      void setLayoutMode(LayoutMode lm);
+      void setLayoutMode(LayoutMode lm)     { _layoutMode = lm;   }
 
       void doLayoutSystems();
       void doLayoutPages();
@@ -1097,6 +1097,12 @@ class Score : public QObject {
 
       bool checkKeys();
       bool checkClefs();
+
+      void switchToPageMode();
+
+      virtual QVariant getProperty(P_ID) const override;
+      virtual bool setProperty(P_ID, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
       friend class ChangeSynthesizerState;
       friend class Chord;

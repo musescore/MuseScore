@@ -1337,21 +1337,6 @@ class ChangeStartEndSpanner : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeLayoutMode
-//---------------------------------------------------------
-
-class ChangeLayoutMode : public UndoCommand {
-      Score* score;
-      LayoutMode layoutMode;
-
-      void flip();
-
-   public:
-      ChangeLayoutMode(Score* s, LayoutMode m) : score(s), layoutMode(m) {}
-      UNDO_NAME("ChangeLayoutMode")
-      };
-
-//---------------------------------------------------------
 //   ChangeMetaTags
 //---------------------------------------------------------
 

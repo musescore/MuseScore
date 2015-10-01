@@ -239,7 +239,6 @@ class Staff : public QObject, public ScoreElement {
       bool genKeySig();
       bool showLedgerLines();
 
-
       QColor color() const                { return _color; }
       void setColor(const QColor& val)    { _color = val;    }
       void undoSetColor(const QColor& val);
