@@ -57,9 +57,10 @@ enum class ClefType : signed char {
       G4,
       F_8VA,
       F_15MA,
-      PERC2,            // no longer supported, but kept for compat. with old scores; rendered as PERC
+      PERC2,
       TAB2,
       G5,
+      G3_O,
       MAX
       };
 
