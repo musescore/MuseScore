@@ -4001,7 +4001,7 @@
         "description": "G clef ottava bassa with C clef"
     }, 
     "gClef8vbOld": {
-        "codepoint": "U+E055", 
+        "codepoint": "U+E053", 
         "description": "G clef ottava bassa (old style)"
     }, 
     "gClef8vbParens": {
@@ -9387,8 +9387,8 @@
         "description": "Unpitched percussion clef 1"
     }, 
     "unpitchedPercussionClef2": {
-        "alternateCodepoint": "U+1D126", 
-        "codepoint": "U+E06A", 
+        "alternateCodepoint": "U+1D125", 
+        "codepoint": "U+E069", 
         "description": "Unpitched percussion clef 2"
     }, 
     "ventiduesima": {
