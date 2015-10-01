@@ -3656,18 +3656,6 @@ void ChangeStartEndSpanner::flip()
       }
 
 //---------------------------------------------------------
-//   ChangeLayoutMode::flip
-//---------------------------------------------------------
-
-void ChangeLayoutMode::flip()
-      {
-      LayoutMode lm = score->layoutMode();
-      score->setLayoutMode(layoutMode);
-      layoutMode = lm;
-      score->setLayoutAll(true);
-      }
-
-//---------------------------------------------------------
 //   ChangeMetaTags::flip
 //---------------------------------------------------------
 

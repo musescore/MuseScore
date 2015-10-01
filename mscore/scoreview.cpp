@@ -3789,12 +3789,22 @@ void ScoreView::pageNext()
             }
       else {
             Page* page = score()->pages().back();
-            qreal x    = xoffset() - (page->width() + 25.0) * mag();
-            qreal lx   = 10.0 - page->pos().x() * mag();
-
-            if (x < lx)
-                  x = lx;
-            setOffset(x, 10.0);
+            qreal x, y;
+            if (MScore::verticalOrientation()) {
+                  x        = 10.0;
+                  y        = yoffset() - (page->height() + 25.0) * mag();
+                  qreal ly = 10.0 - page->pos().y() * mag();
+                  if (y < ly)
+                        y = ly;
+                  }
+            else {
+                  y        = 10.0;
+                  x        = xoffset() - (page->width() + 25.0) * mag();
+                  qreal lx = 10.0 - page->pos().x() * mag();
+                  if (x < lx)
+                        x = lx;
+                  }
+            setOffset(x, y);
             }
       update();
       }
@@ -3815,10 +3825,20 @@ void ScoreView::pagePrev()
             }
       else {
             Page* page = score()->pages().front();
-            qreal x    = xoffset() + (page->width() + 25.0) * mag();
-            if (x > 10.0)
-                  x = 10.0;
-            setOffset(x, 10.0);
+            qreal x, y;
+            if (MScore::verticalOrientation()) {
+                  x  = 10.0;
+                  y  = yoffset() + (page->height() + 25.0) * mag();
+                  if (y > 10.0)
+                        y = 10.0;
+                  }
+            else {
+                  y  = 10.0;
+                  x    = xoffset() + (page->width() + 25.0) * mag();
+                  if (x > 10.0)
+                        x = 10.0;
+                  }
+            setOffset(x, y);
             }
       update();
       }
@@ -3853,7 +3873,12 @@ void ScoreView::pageEnd()
       else {
             Page* lastPage = score()->pages().back();
             QPointF p(lastPage->pos());
-            setOffset(25.0 - p.x() * mag(), 25.0);
+            if (MScore::verticalOrientation()) {
+                  setOffset(25.0, 25 - p.y() * mag());
+                  }
+            else {
+                  setOffset(25.0 - p.x() * mag(), 25.0);
+                  }
             }
       update();
       }

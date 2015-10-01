@@ -332,7 +332,7 @@ void Score::init()
 //---------------------------------------------------------
 
 Score::Score()
-   : QObject(0), _is(this), _selection(this), _selectionFilter(this)
+   : QObject(0), ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
       {
       _parentScore = 0;
       init();
@@ -343,7 +343,7 @@ Score::Score()
       }
 
 Score::Score(const MStyle* s)
-   : _is(this), _selection(this), _selectionFilter(this)
+   : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
       {
       _parentScore = 0;
       init();
@@ -365,7 +365,7 @@ Score::Score(const MStyle* s)
 //
 
 Score::Score(Score* parent)
-   : _is(this), _selection(this), _selectionFilter(this)
+   : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
       {
       _parentScore = parent;
       init();
@@ -390,7 +390,7 @@ Score::Score(Score* parent)
       }
 
 Score::Score(Score* parent, const MStyle* s)
-   : _is(this), _selection(this), _selectionFilter(this)
+   : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
       {
       _parentScore = parent;
       init();
@@ -3328,15 +3328,6 @@ void Score::undo(UndoCommand* cmd) const
       }
 
 //---------------------------------------------------------
-//   setLayoutMode
-//---------------------------------------------------------
-
-void Score::setLayoutMode(LayoutMode lm)
-      {
-      _layoutMode = lm;
-      }
-
-//---------------------------------------------------------
 //   linkId
 //---------------------------------------------------------
 
@@ -4227,6 +4218,67 @@ void Score::cropPage(qreal margins)
 
                   undoChangePageFormat(&f, spatium(), pageNumberOffset());
                   }
+            }
+      }
+
+//---------------------------------------------------------
+//   switchToPageMode
+//    switch to layout mode PAGE
+//---------------------------------------------------------
+
+void Score::switchToPageMode()
+      {
+      if (layoutMode() != LayoutMode::PAGE) {
+            startCmd();
+            ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(LayoutMode::PAGE));
+            doLayout();
+            }
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Score::getProperty(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::LAYOUT_MODE:
+                  return QVariant(static_cast<int>(_layoutMode));
+            default:
+                  qDebug("Score::getProperty: unhandled id");
+                  return QVariant();
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Score::setProperty(P_ID id, const QVariant& v)
+      {
+      switch (id) {
+            case P_ID::LAYOUT_MODE:
+                  setLayoutMode(LayoutMode(v.toInt()));
+                  break;
+            default:
+                  qDebug("Score::setProperty: unhandled id");
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Score::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::LAYOUT_MODE:
+                  return static_cast<int>(LayoutMode::PAGE);
+            default:
+                  return QVariant();
             }
       }
 

@@ -344,6 +344,7 @@ void Preferences::write()
 
       s.setValue("workspace", workspace);
       s.setValue("exportPdfDpi", exportPdfDpi);
+      s.setValue("verticalPageOrientation", MScore::verticalOrientation());
 
       //update
       s.setValue("checkUpdateStartup", checkUpdateStartup);
@@ -400,12 +401,12 @@ void Preferences::read()
       playNotes               = s.value("playNotes", playNotes).toBool();
       playChordOnAddNote      = s.value("playChordOnAddNote", playChordOnAddNote).toBool();
 
-      showNavigator            = s.value("showNavigator", showNavigator).toBool();
-      showSplashScreen         = s.value("showSplashScreen", showSplashScreen).toBool();
-      showStartcenter          = s.value("showStartcenter1", showStartcenter).toBool();
-      showPlayPanel            = s.value("showPlayPanel", showPlayPanel).toBool();
+      showNavigator           = s.value("showNavigator", showNavigator).toBool();
+      showSplashScreen        = s.value("showSplashScreen", showSplashScreen).toBool();
+      showStartcenter         = s.value("showStartcenter1", showStartcenter).toBool();
+      showPlayPanel           = s.value("showPlayPanel", showPlayPanel).toBool();
 
-      showStatusBar   = s.value("showStatusBar", showStatusBar).toBool();
+      showStatusBar           = s.value("showStatusBar", showStatusBar).toBool();
 
       useAlsaAudio       = s.value("useAlsaAudio", useAlsaAudio).toBool();
       useJackAudio       = s.value("useJackAudio", useJackAudio).toBool();
@@ -423,7 +424,7 @@ void Preferences::read()
       portMidiInput      = s.value("portMidiInput", portMidiInput).toString();
       MScore::layoutBreakColor   = s.value("layoutBreakColor", MScore::layoutBreakColor).value<QColor>();
       MScore::frameMarginColor   = s.value("frameMarginColor", MScore::frameMarginColor).value<QColor>();
-      antialiasedDrawing = s.value("antialiasedDrawing", antialiasedDrawing).toBool();
+      antialiasedDrawing      = s.value("antialiasedDrawing", antialiasedDrawing).toBool();
 
       defaultStyleFile         = s.value("defaultStyle", defaultStyleFile).toString();
 
@@ -496,6 +497,7 @@ void Preferences::read()
 
       workspace          = s.value("workspace", workspace).toString();
       exportPdfDpi       = s.value("exportPdfDpi", exportPdfDpi).toInt();
+      MScore::setVerticalOrientation(s.value("verticalPageOrientation", MScore::verticalOrientation()).toBool());
 
       checkUpdateStartup = s.value("checkUpdateStartup", checkUpdateStartup).toBool();
 
@@ -986,6 +988,7 @@ void PreferenceDialog::updateValues()
             idx = 0;
       exportAudioSampleRate->setCurrentIndex(idx);
       exportPdfDpi->setValue(prefs.exportPdfDpi);
+      pageVertical->setChecked(MScore::verticalOrientation());
 
       sfChanged = false;
       }
@@ -1399,6 +1402,14 @@ void PreferenceDialog::apply()
       prefs.pngTransparent     = pngTransparent->isChecked();
       converterDpi             = prefs.pngResolution;
       prefs.exportPdfDpi       = exportPdfDpi->value();
+      if (MScore::verticalOrientation() != pageVertical->isChecked()) {
+            MScore::setVerticalOrientation(pageVertical->isChecked());
+            for (Score* s : mscore->scores()) {
+                  s->doLayout();
+                  }
+            mscore->currentScoreView()->setOffset(0.0, 0.0);
+            mscore->update();
+            }
 
       if (shortcutsChanged) {
             shortcutsChanged = false;

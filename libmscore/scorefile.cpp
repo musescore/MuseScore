@@ -35,10 +35,12 @@
 #include "mscore.h"
 #include "stafftype.h"
 #include "sym.h"
+
 #ifdef OMR
 #include "omr/omr.h"
 #include "omr/omrpage.h"
 #endif
+
 #include "sig.h"
 #include "undo.h"
 #include "imageStore.h"
@@ -472,7 +474,7 @@ QImage Score::createThumbnail()
       LayoutMode layoutMode = _layoutMode;
       if (layoutMode != LayoutMode::PAGE) {
             startCmd();
-            undo(new ChangeLayoutMode(this, LayoutMode::PAGE));
+            ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, QVariant(int(LayoutMode::PAGE)));
             doLayout();
             }
       Page* page = pages().at(0);

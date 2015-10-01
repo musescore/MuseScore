@@ -351,6 +351,7 @@ class MScore : public QObject {
       static MStyle* _baseStyle;          // buildin initial style
       static QString _globalShare;
       static int _hRaster, _vRaster;
+      static bool _verticalOrientation;
 
 #ifdef SCRIPT_INTERFACE
       static QQmlEngine* _qml;
@@ -379,6 +380,9 @@ class MScore : public QObject {
       static void setNudgeStep(qreal val)   { nudgeStep = val;     }
       static void setNudgeStep10(qreal val) { nudgeStep10 = val;   }
       static void setNudgeStep50(qreal val) { nudgeStep50 = val;   }
+
+      static bool verticalOrientation()            { return _verticalOrientation; }
+      static void setVerticalOrientation(bool val) { _verticalOrientation = val;  }
 
       static QColor selectColor[4];
       static QColor defaultColor;

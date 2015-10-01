@@ -1492,7 +1492,7 @@ void MuseScore::printFile()
       LayoutMode layoutMode = cs->layoutMode();
       if (layoutMode != LayoutMode::PAGE) {
             cs->startCmd();
-            cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+            cs->ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(LayoutMode::PAGE));
             cs->doLayout();
             }
 
@@ -1805,29 +1805,17 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             }
       else if (ext == "pdf") {
             // save as pdf file *.pdf
-            if (layoutMode != LayoutMode::PAGE) {
-                  cs->startCmd();
-                  cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
-                  cs->doLayout();
-                  }
+            cs->switchToPageMode();
             rv = savePdf(cs, fn);
             }
       else if (ext == "png") {
             // save as png file *.png
-            if (layoutMode != LayoutMode::PAGE) {
-                  cs->startCmd();
-                  cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
-                  cs->doLayout();
-                  }
+            cs->switchToPageMode();
             rv = savePng(cs, fn);
             }
       else if (ext == "svg") {
             // save as svg file *.svg
-            if (layoutMode != LayoutMode::PAGE) {
-                  cs->startCmd();
-                  cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
-                  cs->doLayout();
-                  }
+            cs->switchToPageMode();
             rv = saveSvg(cs, fn);
             }
 #ifdef HAS_AUDIOFILE
@@ -1839,20 +1827,12 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             rv = saveMp3(cs, fn);
 #endif
       else if (ext == "spos") {
-            if (layoutMode != LayoutMode::PAGE) {
-                  cs->startCmd();
-                  cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
-                  cs->doLayout();
-                  }
+            cs->switchToPageMode();
             // save positions of segments
             rv = savePositions(cs, fn, true);
             }
       else if (ext == "mpos") {
-            if (layoutMode != LayoutMode::PAGE) {
-                  cs->startCmd();
-                  cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
-                  cs->doLayout();
-                  }
+            cs->switchToPageMode();
             // save positions of measures
             rv = savePositions(cs, fn, false);
             }
@@ -1959,11 +1939,7 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       bool firstPage = true;
       for (Score* s : cs) {
             LayoutMode layoutMode = s->layoutMode();
-            if (layoutMode != LayoutMode::PAGE) {
-                  s->startCmd();
-                  s->undo(new ChangeLayoutMode(s, LayoutMode::PAGE));
-                  s->doLayout();
-                  }
+            s->switchToPageMode();
             s->setPrinting(true);
             MScore::pdfPrinting = true;
 

@@ -1398,11 +1398,12 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             return;
             }
       viewModeCombo->setEnabled(true);
+      int idx;
       if (cs->layoutMode() == LayoutMode::PAGE)
-            viewModeCombo->setCurrentIndex(0);
+            idx = 0;
       else
-            viewModeCombo->setCurrentIndex(1);
-
+            idx = 1;
+      viewModeCombo->setCurrentIndex(idx);
       selectionChanged(cs->selection().state());
 
       _sstate = STATE_DISABLED; // defeat optimization
@@ -2078,11 +2079,7 @@ static bool processNonGui()
                   cs->startCmd();
                   cs->setLayoutAll(true);
                   cs->endCmd();
-                  if (layoutMode != LayoutMode::PAGE) {
-                        cs->startCmd();
-                        cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
-                        cs->doLayout();
-                        }
+                  cs->switchToPageMode();
                   mscore->pluginTriggered(0);
                   if (layoutMode != cs->layoutMode())
                         cs->endCmd(true);       // rollback
@@ -2125,30 +2122,18 @@ static bool processNonGui()
                   return true;
                   }
             else if (fn.endsWith(".xml")) {
-                  if (layoutMode != LayoutMode::PAGE) {
-                        cs->startCmd();
-                        cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
-                        cs->doLayout();
-                        }
+                  cs->switchToPageMode();
                   rv = saveXml(cs, fn);
                   }
             else if (fn.endsWith(".mxl")) {
-                  if (layoutMode != LayoutMode::PAGE) {
-                        cs->startCmd();
-                        cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
-                        cs->doLayout();
-                        }
+                  cs->switchToPageMode();
                   rv = saveMxl(cs, fn);
                   }
             else if (fn.endsWith(".mid"))
                   return mscore->saveMidi(cs, fn);
             else if (fn.endsWith(".pdf")) {
                   if (!exportScoreParts) {
-                        if (layoutMode != LayoutMode::PAGE) {
-                              cs->startCmd();
-                              cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
-                              cs->doLayout();
-                        }
+                        cs->switchToPageMode();
                         rv = mscore->savePdf(fn);
                         }
                   else {
@@ -2176,17 +2161,13 @@ static bool processNonGui()
             else if (fn.endsWith(".png")) {
                   if (layoutMode != LayoutMode::PAGE) {
                         cs->startCmd();
-                        cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
+                        cs->ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(LayoutMode::PAGE));
                         cs->doLayout();
                         }
                   rv = mscore->savePng(cs, fn);
                   }
             else if (fn.endsWith(".svg")) {
-                  if (layoutMode != LayoutMode::PAGE) {
-                        cs->startCmd();
-                        cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
-                        cs->doLayout();
-                        }
+                  cs->switchToPageMode();
                   rv = mscore->saveSvg(cs, fn);
                   }
 #ifdef HAS_AUDIOFILE
@@ -2198,19 +2179,11 @@ static bool processNonGui()
                   return mscore->saveMp3(cs, fn);
 #endif
             else if (fn.endsWith(".spos")) {
-                  if (layoutMode != LayoutMode::PAGE) {
-                        cs->startCmd();
-                        cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
-                        cs->doLayout();
-                        }
+                  cs->switchToPageMode();
                   rv = savePositions(cs, fn, true);
                   }
             else if (fn.endsWith(".mpos")) {
-                  if (layoutMode != LayoutMode::PAGE) {
-                        cs->startCmd();
-                        cs->undo(new ChangeLayoutMode(cs, LayoutMode::PAGE));
-                        cs->doLayout();
-                        }
+                  cs->switchToPageMode();
                   rv = savePositions(cs, fn, false);
                   }
             else if (fn.endsWith(".mlog"))
@@ -4303,10 +4276,12 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             }
       else if (cmd == "viewmode") {
             if (cs) {
+                  int mode;
                   if (cs->layoutMode() == LayoutMode::PAGE)
-                        switchLayoutMode(1);
+                        mode = 1;
                   else
-                        switchLayoutMode(0);
+                        mode = 0;
+                  switchLayoutMode(mode);
                   }
             }
       else {
@@ -4447,29 +4422,39 @@ void MuseScore::changeScore(int step)
 
 void MuseScore::switchLayoutMode(int val)
       {
-      if (cs) {
-            cs->startCmd();
-            LayoutMode mode;
-            // find a measure to use as reference, if possible
-            QRectF view = cv->toLogical(QRect(0.0, 0.0, width(), height()));
-            Measure* m = cs->firstMeasure();
-            while (m && !view.intersects(m->canvasBoundingRect()))
-                  m = m->nextMeasureMM();
-            if (val == 0)
+      if (!cs)
+            return;
+
+      cs->startCmd();
+
+      // find a measure to use as reference, if possible
+      QRectF view = cv->toLogical(QRect(0.0, 0.0, width(), height()));
+      Measure* m = cs->firstMeasure();
+      while (m && !view.intersects(m->canvasBoundingRect()))
+            m = m->nextMeasureMM();
+
+      LayoutMode mode;
+      switch (val) {
+            default:
+            case 0:
                   mode = LayoutMode::PAGE;
-            else
+                  break;
+            case 1:
                   mode = LayoutMode::LINE;
-            cs->undo(new ChangeLayoutMode(cs, mode));
-            cv->loopUpdate(getAction("loop")->isChecked());
-            cs->endCmd();
-            // adjustCanvasPosition often tries to preserve Y position
-            // but this doesn't make sense when switching modes
-            // also, better positioning is usually achieved if you start from the top
-            // and there is really no better place to position canvas if we were all the way off page previously
-            cv->pageTop();
-            if (m && m != cs->firstMeasure())
-                  cv->adjustCanvasPosition(m, false);
+                  break;
             }
+      cs->ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(mode));
+
+      cv->loopUpdate(getAction("loop")->isChecked());
+      cs->endCmd();
+
+      // adjustCanvasPosition often tries to preserve Y position
+      // but this doesn't make sense when switching modes
+      // also, better positioning is usually achieved if you start from the top
+      // and there is really no better place to position canvas if we were all the way off page previously
+      cv->pageTop();
+      if (m && m != cs->firstMeasure())
+            cv->adjustCanvasPosition(m, false);
       }
 
 //---------------------------------------------------------

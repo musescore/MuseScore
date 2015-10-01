@@ -1128,7 +1128,7 @@ QVariant Staff::getProperty(P_ID id) const
             case P_ID::SMALL:
                   return small();
             default:
-                  qDebug("Staff::setProperty: unhandled id");
+                  qDebug("Staff::getProperty: unhandled id");
                   return QVariant();
             }
       }

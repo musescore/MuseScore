@@ -3273,10 +3273,18 @@ Page* Score::getEmptyPage()
       Page* page = curPage >= _pages.size() ? addPage() : _pages[curPage];
       page->setNo(curPage);
       page->layout();
-      qreal x = (curPage == 0) ? 0.0 : _pages[curPage - 1]->pos().x()
-         + page->width() + (((curPage+_pageNumberOffset) & 1) ? 50.0 : 1.0);
+      qreal x, y;
+      if (MScore::verticalOrientation()) {
+            x = 0.0;
+            y = (curPage == 0) ? 0.0 : _pages[curPage - 1]->pos().y() + page->height() + 5;
+            }
+      else {
+            y = 0.0;
+            x = (curPage == 0) ? 0.0 : _pages[curPage - 1]->pos().x()
+               + page->width() + (((curPage+_pageNumberOffset) & 1) ? 50.0 : 1.0);
+            }
       ++curPage;
-      page->setPos(x, 0.0);
+      page->setPos(x, y);
       page->systems()->clear();
       return page;
       }
