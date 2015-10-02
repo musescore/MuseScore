@@ -247,6 +247,10 @@
         "codepoint": "U+E05C", 
         "description": "C clef"
     }, 
+    "cClefCombining": {
+        "codepoint": "U+E061",
+        "description": "Combining C clef"
+    },
     "caesura": {
         "alternateCodepoint": "U+1D113", 
         "codepoint": "U+E4D1", 
@@ -420,6 +424,14 @@
         "codepoint": "U+E052", 
         "description": "G clef ottava bassa"
     }, 
+    "gClef8vbCClef": {
+        "codepoint": "U+E056",
+        "description": "G clef ottava bassa with C clef"
+    },
+    "gClef8vbOld": {
+        "codepoint": "U+E055",
+        "description": "G clef ottava bassa (old style)"
+    },
     "gClef8vbParens": {
         "codepoint": "U+E057", 
         "description": "G clef, optionally ottava bassa"
@@ -888,6 +900,14 @@
         "codepoint": "U+E04A", 
         "description": "Segno (serpent)"
     }, 
+    "semipitchedPercussionClef1": {
+        "codepoint": "U+E06B",
+        "description": "Semi-pitched percussion clef 1"
+    },
+    "semipitchedPercussionClef2": {
+        "codepoint": "U+E06C",
+        "description": "Semi-pitched percussion clef 2"
+    },
     "stringsDownBow": {
         "alternateCodepoint": "U+1D1AA", 
         "codepoint": "U+E610", 
@@ -982,6 +1002,10 @@
         "codepoint": "U+E069", 
         "description": "Unpitched percussion clef 1"
     }, 
+    "unpitchedPercussionClef2": {
+        "codepoint": "U+E06A",
+        "description": "Unpitched percussion clef 2"
+    },
     "wiggleArpeggiatoDown": {
         "codepoint": "U+EAAA", 
         "description": "Arpeggiato wiggle segment, downwards"
@@ -1062,3 +1086,4 @@
         "codepoint": "U+e1c4"
     }
 }
+
