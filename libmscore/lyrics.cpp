@@ -789,11 +789,12 @@ LyricsLineSegment::LyricsLineSegment(Score* s)
 
 void LyricsLineSegment::layout()
       {
-      Lyrics*     lyr;
-      System*     sys;
-      bool        endOfSystem = false;
+      bool        endOfSystem       = false;
       bool        isEndMelisma      = lyricsLine()->lyrics()->ticks() > 0;
+      Lyrics*     lyr, *nextLyr     = nullptr;
+      qreal       fromX, toX;             // start and end point of intra-lyrics room
       qreal       sp                = spatium();
+      System*     sys;
 
       if (lyricsLine()->ticks() <= 0) {   // if no span,
             _numOfDashes = 0;             // nothing to draw
@@ -806,7 +807,7 @@ void LyricsLineSegment::layout()
       if (!isEndMelisma && lyricsLine()->nextLyrics() != nullptr
                   && (spannerSegmentType() == SpannerSegmentType::END
                         || spannerSegmentType() == SpannerSegmentType::SINGLE)) {
-            lyr         = lyricsLine()->nextLyrics();
+            lyr         = nextLyr = lyricsLine()->nextLyrics();
             sys         = lyr->segment()->system();
             endOfSystem = (sys != system());
             // if next lyrics is on a different sytem, this line segment is at the end of its system:
@@ -815,9 +816,9 @@ void LyricsLineSegment::layout()
                   qreal lyrX        = lyr->bbox().x();
                   qreal lyrXp       = lyr->pagePos().x();
                   qreal sysXp       = sys->pagePos().x();
-                  qreal offsetX     = lyrXp - sysXp + lyrX - pos().x() - pos2().x();
-                  //                    syst.rel. X pos.   | as a delta from current end pos.
-                  offsetX           -= Lyrics::LYRICS_DASH_DEFAULT_PAD * sp;    // add ending padding
+                  toX               = lyrXp - sysXp + lyrX;       // syst.rel. X pos.
+                  qreal offsetX     = toX - pos().x() - pos2().x() - Lyrics::LYRICS_DASH_DEFAULT_PAD * sp;
+                  //                    delta from current end pos.| ending padding
                   rxpos2()          += offsetX;
                   }
             }
@@ -829,10 +830,10 @@ void LyricsLineSegment::layout()
             qreal lyrXp       = lyr->pagePos().x();
             qreal lyrW        = lyr->bbox().width();
             qreal sysXp       = sys->pagePos().x();
-            qreal offsetX     = lyrXp - sysXp + lyrX + lyrW - pos().x();
-            //               syst.rel. X pos. | lyr.advance | as a delta from current pos.
-            // add initial padding
-            offsetX           += (isEndMelisma ? Lyrics::MELISMA_DEFAULT_PAD : Lyrics::LYRICS_DASH_DEFAULT_PAD) * sp;
+            fromX             = lyrXp - sysXp + lyrX + lyrW;
+            //               syst.rel. X pos. | lyr.advance
+            qreal offsetX     = fromX - pos().x() + (isEndMelisma ? Lyrics::MELISMA_DEFAULT_PAD : Lyrics::LYRICS_DASH_DEFAULT_PAD) * sp;
+            //               delta from curr.pos. | add initial padding
             rxpos()           += offsetX;
             rxpos2()          -= offsetX;
             }
@@ -887,6 +888,10 @@ void LyricsLineSegment::layout()
                   }
             else
                   _numOfDashes = len / (Lyrics::LYRICS_DASH_DEFAULT_STEP * sp);// draw several dashes
+
+            // adjust next lyrics horiz. position if too little a space forced to skip the dash
+            if (_numOfDashes == 0 && nextLyr != nullptr && len > 0)
+                  nextLyr->rxpos() -= (toX - fromX);
             }
 
       // set bounding box
