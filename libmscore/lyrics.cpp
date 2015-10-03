@@ -868,17 +868,18 @@ void LyricsLineSegment::layout()
             _dashLength = lyr->dashLength();
 #else
             rypos()     -= lyr->bbox().height() * Lyrics::LYRICS_DASH_Y_POS_RATIO;    // set conventional dash Y pos
-            _dashLength = Lyrics::LYRICS_DASH_DEFAULT_LENGTH * sp;                    // and dash length
+            _dashLength = score()->styleS(StyleIdx::lyricsDashMaxLength).val() * sp;  // and dash length
 #endif
             qreal len         = pos2().x();
-            qreal minDashLen  = Lyrics::LYRICS_DASH_MIN_LENGTH * sp;
+            qreal minDashLen  = score()->styleS(StyleIdx::lyricsDashMinLength).val() * sp;
             if (len < minDashLen) {                                           // if no room for a dash
-                  if (endOfSystem) {                                          //   if at end of system
+                  // if at end of system or dash is forced
+                  if (endOfSystem || score()->styleB(StyleIdx::lyricsDashForce)) {
                         rxpos2()          = minDashLen;                       //     draw minimal dash
                         _numOfDashes      = 1;
                         _dashLength       = minDashLen;
                         }
-                  else                                                        //   if within system
+                  else                                                        //   if within system or dash not forced
                         _numOfDashes = 0;                                     //     draw no dash
                   }
             else if (len < (Lyrics::LYRICS_DASH_DEFAULT_STEP * TWICE * sp)) { // if no room for two dashes
