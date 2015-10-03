@@ -3825,6 +3825,8 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
       qreal minNoteDistance       = styleS(StyleIdx::minNoteDistance).val()    * _spatium;
       qreal minHarmonyDistance    = styleS(StyleIdx::minHarmonyDistance).val() * _spatium;
       qreal maxHarmonyBarDistance = styleS(StyleIdx::maxHarmonyBarDistance).val() * _spatium;
+      qreal minLyricsDashWidth    = (styleS(StyleIdx::lyricsDashMinLength).val()
+                  + Lyrics::LYRICS_DASH_DEFAULT_PAD * 2) * _spatium;
 
       qreal rest[_nstaves];   // fixed space needed from previous segment
       memset(rest, 0, _nstaves * sizeof(qreal));
@@ -3986,8 +3988,15 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                                     if (!l->isEmpty()) {
                                           lyrics = l;
                                           QRectF b(l->bbox().translated(l->pos()));
+                                          qreal brgt = b.right();
+                                          // if lyrics followed by a dash & score style requires the dash in any case,
+                                          // reserve at least the min dash length plus before and after padding
+                                          if ( (l->syllabic() == Lyrics::Syllabic::BEGIN
+                                                      || l->syllabic() == Lyrics::Syllabic::MIDDLE)
+                                                            && styleB(StyleIdx::lyricsDashForce) )
+                                                brgt += minLyricsDashWidth;
                                           llw = qMax(llw, -(b.left()+lx+cx));
-                                          rrw = qMax(rrw, b.right()+rx+cx);
+                                          rrw = qMax(rrw, brgt+rx+cx);
                                           }
                                     }
                               }
