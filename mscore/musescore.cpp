@@ -689,7 +689,7 @@ MuseScore::MuseScore()
       menuEdit->addMenu(menuMeasure);
 
       QMenu* menuTools = new QMenu(tr("&Tools"));
-      for (auto i : { "add-remove-breaks", "explode", "implode", "slash-fill", "slash-rhythm", "resequence-rehearsal-marks" })
+      for (auto i : { "add-remove-breaks", "explode", "implode", "slash-fill", "slash-rhythm", "resequence-rehearsal-marks", "copy-lyrics-to-clipboard" })
             menuTools->addAction(getAction(i));
       menuEdit->addMenu(menuTools);
 
