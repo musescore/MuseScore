@@ -413,6 +413,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdInsertMeasures(int, Element::Type);
 
       void cmdAddRemoveBreaks();
+      void cmdCopyLyricsToClipboard();
 
       ScoreState mscoreState() const;
       void setCursorVisible(bool v);

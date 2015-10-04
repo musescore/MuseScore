@@ -3040,6 +3040,9 @@ void ScoreView::cmd(const QAction* a)
       else if (cmd == "add-remove-breaks") {
             cmdAddRemoveBreaks();
             }
+      else if (cmd == "copy-lyrics-to-clipboard") {
+            cmdCopyLyricsToClipboard();
+            }
 
       // STATE_HARMONY_FIGBASS_EDIT actions
 
@@ -5913,6 +5916,15 @@ void ScoreView::cmdAddRemoveBreaks()
 
       if (noSelection)
              _score->deselectAll();
+      }
+//---------------------------------------------------------
+//   cmdCopyLyricsToClipboard
+///   Copy the score lyrics into clipboard
+//---------------------------------------------------------
+
+void ScoreView::cmdCopyLyricsToClipboard()
+      {
+      QApplication::clipboard()->setText(_score->extractLyrics());
       }
 
 //---------------------------------------------------------

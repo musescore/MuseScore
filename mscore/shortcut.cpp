@@ -3274,6 +3274,17 @@ Shortcut Shortcut::_sc[] = {
          ShortcutFlags::A_CMD
          },
       {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         "copy-lyrics-to-clipboard",
+         QT_TRANSLATE_NOOP("action","Copy Lyrics to Clipboard"),
+         QT_TRANSLATE_NOOP("action","Copy lyrics to clipboard"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
          MsWidget::MAIN_WINDOW,
          STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
          "startcenter",
