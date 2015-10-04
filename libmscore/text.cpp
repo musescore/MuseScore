@@ -2596,10 +2596,20 @@ void Text::paste()
                         else
                               insertSym(Sym::name2id(token));
                         }
+                  else if (!c.isLetter()) {
+                        state = 0;
+                        insertText("&");
+                        insertText(token);
+                        insertText(c);
+                        }
                   else
                         token += c;
                   }
             }
+      if (state == 2) {
+          insertText("&");
+          insertText(token);
+          }
       layoutEdit();
       bool lo = type() == Element::Type::INSTRUMENT_NAME;
       score()->setLayoutAll(lo);
