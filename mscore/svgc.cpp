@@ -78,6 +78,7 @@
 
 
 namespace Ms {
+
 //---------------------------------------------------------
 //   saveSvgCollection
 //---------------------------------------------------------
@@ -107,6 +108,31 @@ QString getInstrumentName(Instrument * in) {
    
    return MidiInstr::instrumentName(MidiType::GM,in->channel(0)->program,in->useDrumset());
 }
+
+void createAllExcerpts(Score * score) {
+  qWarning() << "Excerpts:" << score->rootScore()->excerpts().size() << " Parts:" << score->parts().size();
+  if (score->rootScore()->excerpts().size()>0 &&
+      score->parts().size()>1) return;
+
+  // Based on things found in excerptsdialog.cpp
+  foreach( Part * part, score->parts()) {
+    Excerpt* e = new Excerpt(score);
+    QString name = part->partName();
+    if (name.isEmpty()) name = getInstrumentName(part->instrument());
+    e->setTitle(name);
+    e->parts().append(part);
+    Score* nscore = new Score(e->oscore());
+    e->setPartScore(nscore);
+    nscore->setName(e->title()); // needed before AddExcerpt
+    nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
+    score->addExcerpt(nscore);
+    createExcerpt(e);
+  }
+  score->setExcerptsChanged(true);
+
+  qWarning() << "Created new excerpts:" << score->rootScore()->excerpts().size();
+}
+
 
 QPainter * getSvgPainter(QIODevice * device, qreal width, qreal height, qreal scale) 
    {
@@ -152,7 +178,7 @@ void stretchAudio(Score * score, const QMap<int,qreal>& t2t) {
 
     tempomap->setTempo(ptick,tempo);
  
-    qWarning() << "Change" << tempo << tempomap->tempo(ptick) << tick << ptick << t2t[tick]-t2t[0] << tempomap->tick2time(tick);
+    //qWarning() << "Change" << tempo << tempomap->tempo(ptick) << tick << ptick << t2t[tick]-t2t[0] << tempomap->tick2time(tick);
 
     ptick = tick;
   }
@@ -208,6 +234,8 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 		qDebug() << safe << endl;
 		return false;
 	}
+
+  createAllExcerpts(cs);
 
   QMap<int,qreal> tick2time, orig_t2t; // latter is bypassed, if empty!
 

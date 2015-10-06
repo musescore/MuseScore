@@ -82,6 +82,7 @@ namespace Ms {
   // From svgc.cpp
   QString checkSafety(Score * score);
   QString getInstrumentName(Instrument * in);
+  void createAllExcerpts(Score * score);
 
 
   QJsonArray stavesToJson(Score * score) {
@@ -98,7 +99,6 @@ namespace Ms {
 
       return s_ar;
   }
-
 
   QJsonObject getPartsOnsets(Score* score) {
 
@@ -195,6 +195,8 @@ namespace Ms {
         qDebug() << safe << endl;
         return false;
       }
+
+      createAllExcerpts(score);
 
       // Linearize the score (for getting all the onsets)
       Score * nscore = mscore->linearize(score);
