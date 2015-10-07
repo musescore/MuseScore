@@ -146,6 +146,7 @@ public:
         attributes.font_style = QLatin1String("normal");
         attributes.font_weight = QLatin1String("normal");
 
+        updatedState = false;
         afterFirstUpdate = false;
         numGradients = 0;
     }
@@ -159,6 +160,7 @@ public:
     QString header;
     QString defs;
     QString body;
+    bool    updatedState;
     bool    afterFirstUpdate;
 
     QBrush brush;
@@ -205,7 +207,8 @@ public:
 
     SvgPaintEngine()
         : QPaintEngine(*new SvgPaintEnginePrivate,
-                       svgEngineFeatures())
+                       svgEngineFeatures()),
+          stateStream(&stateString)
     {
     }
 
@@ -350,21 +353,24 @@ public:
         str << QLatin1String("\" ");
     }
 
-    void generateQtDefaults()
-    {
-        *d_func()->stream << QLatin1String("fill=\"none\" ");
-        *d_func()->stream << QLatin1String("stroke=\"black\" ");
-        *d_func()->stream << QLatin1String("stroke-width=\"1\" ");
-        *d_func()->stream << QLatin1String("fill-rule=\"evenodd\" ");
-        *d_func()->stream << QLatin1String("stroke-linecap=\"square\" ");
-        *d_func()->stream << QLatin1String("stroke-linejoin=\"bevel\" ");
-        *d_func()->stream << QLatin1String(">\n");
-    }
     inline QTextStream &stream()
     {
         return *d_func()->stream;
     }
 
+    void setState()
+    {
+        if (d_func()->updatedState)
+        {
+            if (d_func()->afterFirstUpdate)
+            {
+                stream() << "</g>" << endl;
+            }
+            stream() << stateString;
+            d_func()->updatedState = false;
+            d_func()->afterFirstUpdate = true;
+        }
+    }
 
     void qpenToSvg(const QPen &spen)
     {
@@ -374,7 +380,7 @@ public:
 
         switch (spen.style()) {
         case Qt::NoPen:
-            stream() << QLatin1String("stroke=\"none\" ");
+            stateStream << QLatin1String("stroke=\"none\" ");
 
             d_func()->attributes.stroke = QLatin1String("none");
             d_func()->attributes.strokeOpacity = QString();
@@ -388,8 +394,8 @@ public:
             d_func()->attributes.stroke = color;
             d_func()->attributes.strokeOpacity = colorOpacity;
 
-            stream() << QLatin1String("stroke=\"")<<color<< QLatin1String("\" ");
-            stream() << QLatin1String("stroke-opacity=\"")<<colorOpacity<< QLatin1String("\" ");
+            stateStream << QLatin1String("stroke=\"")<<color<< QLatin1String("\" ");
+            stateStream << QLatin1String("stroke-opacity=\"")<<colorOpacity<< QLatin1String("\" ");
         }
             break;
         case Qt::DashLine:
@@ -412,10 +418,10 @@ public:
             d_func()->attributes.dashPattern = dashPattern;
             d_func()->attributes.dashOffset = dashOffset;
 
-            stream() << QLatin1String("stroke=\"")<<color<< QLatin1String("\" ");
-            stream() << QLatin1String("stroke-opacity=\"")<<colorOpacity<< QLatin1String("\" ");
-            stream() << QLatin1String("stroke-dasharray=\"")<<dashPattern<< QLatin1String("\" ");
-            stream() << QLatin1String("stroke-dashoffset=\"")<<dashOffset<< QLatin1String("\" ");
+            stateStream << QLatin1String("stroke=\"")<<color<< QLatin1String("\" ");
+            stateStream << QLatin1String("stroke-opacity=\"")<<colorOpacity<< QLatin1String("\" ");
+            stateStream << QLatin1String("stroke-dasharray=\"")<<dashPattern<< QLatin1String("\" ");
+            stateStream << QLatin1String("stroke-dashoffset=\"")<<dashOffset<< QLatin1String("\" ");
             break;
         }
         default:
@@ -424,37 +430,37 @@ public:
         }
 
         if (spen.widthF() == 0)
-            stream() <<"stroke-width=\"1\" ";
+            stateStream <<"stroke-width=\"1\" ";
         else
-            stream() <<"stroke-width=\"" << spen.widthF() << "\" ";
+            stateStream <<"stroke-width=\"" << spen.widthF() << "\" ";
 
         switch (spen.capStyle()) {
         case Qt::FlatCap:
-            stream() << "stroke-linecap=\"butt\" ";
+            stateStream << "stroke-linecap=\"butt\" ";
             break;
         case Qt::SquareCap:
-            stream() << "stroke-linecap=\"square\" ";
+            stateStream << "stroke-linecap=\"square\" ";
             break;
         case Qt::RoundCap:
-            stream() << "stroke-linecap=\"round\" ";
+            stateStream << "stroke-linecap=\"round\" ";
             break;
         default:
             qWarning("Unhandled cap style");
         }
         switch (spen.joinStyle()) {
         case Qt::MiterJoin:
-            stream() << "stroke-linejoin=\"miter\" "
-                        "stroke-miterlimit=\""<<spen.miterLimit()<<"\" ";
+            stateStream << "stroke-linejoin=\"miter\" "
+                           "stroke-miterlimit=\""<<spen.miterLimit()<<"\" ";
             break;
         case Qt::BevelJoin:
-            stream() << "stroke-linejoin=\"bevel\" ";
+            stateStream << "stroke-linejoin=\"bevel\" ";
             break;
         case Qt::RoundJoin:
-            stream() << "stroke-linejoin=\"round\" ";
+            stateStream << "stroke-linejoin=\"round\" ";
             break;
         case Qt::SvgMiterJoin:
-            stream() << "stroke-linejoin=\"miter\" "
-                        "stroke-miterlimit=\""<<spen.miterLimit()<<"\" ";
+            stateStream << "stroke-linejoin=\"miter\" "
+                           "stroke-miterlimit=\""<<spen.miterLimit()<<"\" ";
             break;
         default:
             qWarning("Unhandled join style");
@@ -467,8 +473,8 @@ public:
         case Qt::SolidPattern: {
             QString color, colorOpacity;
             translate_color(sbrush.color(), &color, &colorOpacity);
-            stream() << "fill=\"" << color << "\" "
-                        "fill-opacity=\""
+            stateStream << "fill=\"" << color << "\" "
+                           "fill-opacity=\""
                      << colorOpacity << "\" ";
             d_func()->attributes.fill = color;
             d_func()->attributes.fillOpacity = colorOpacity;
@@ -478,22 +484,22 @@ public:
             saveLinearGradientBrush(sbrush.gradient());
             d_func()->attributes.fill = QString::fromLatin1("url(#%1)").arg(d_func()->currentGradientName);
             d_func()->attributes.fillOpacity = QString();
-            stream() << QLatin1String("fill=\"url(#") << d_func()->currentGradientName << QLatin1String(")\" ");
+            stateStream << QLatin1String("fill=\"url(#") << d_func()->currentGradientName << QLatin1String(")\" ");
             break;
         case Qt::RadialGradientPattern:
             saveRadialGradientBrush(sbrush.gradient());
             d_func()->attributes.fill = QString::fromLatin1("url(#%1)").arg(d_func()->currentGradientName);
             d_func()->attributes.fillOpacity = QString();
-            stream() << QLatin1String("fill=\"url(#") << d_func()->currentGradientName << QLatin1String(")\" ");
+            stateStream << QLatin1String("fill=\"url(#") << d_func()->currentGradientName << QLatin1String(")\" ");
             break;
         case Qt::ConicalGradientPattern:
             saveConicalGradientBrush(sbrush.gradient());
             d_func()->attributes.fill = QString::fromLatin1("url(#%1)").arg(d_func()->currentGradientName);
             d_func()->attributes.fillOpacity = QString();
-            stream() << QLatin1String("fill=\"url(#") << d_func()->currentGradientName << QLatin1String(")\" ");
+            stateStream << QLatin1String("fill=\"url(#") << d_func()->currentGradientName << QLatin1String(")\" ");
             break;
         case Qt::NoBrush:
-            stream() << QLatin1String("fill=\"none\" ");
+            stateStream << QLatin1String("fill=\"none\" ");
             d_func()->attributes.fill = QLatin1String("none");
             d_func()->attributes.fillOpacity = QString();
             return;
@@ -532,12 +538,15 @@ public:
         d->attributes.font_family = d->font.family();
         d->attributes.font_style = d->font.italic() ? QLatin1String("italic") : QLatin1String("normal");
 
-        *d->stream << "font-family=\"" << d->attributes.font_family << "\" "
-                      "font-size=\"" << d->attributes.font_size << "\" "
-                      "font-weight=\"" << d->attributes.font_weight << "\" "
-                      "font-style=\"" << d->attributes.font_style << "\" "
-                   << endl;
+        stateStream << "font-family=\"" << d->attributes.font_family << "\" "
+                       "font-size=\"" << d->attributes.font_size << "\" "
+                       "font-weight=\"" << d->attributes.font_weight << "\" "
+                       "font-style=\"" << d->attributes.font_style << "\" "
+                    << endl;
     }
+private:
+    QString stateString;
+    QTextStream stateStream;
 };
 
 class SvgGeneratorPrivate
@@ -908,10 +917,6 @@ bool SvgPaintEngine::begin(QPaintDevice *)
     *d->stream << "<defs>\n";
 
     d->stream->setString(&d->body);
-    // Start the initial graphics state...
-    *d->stream << "<g ";
-    generateQtDefaults();
-    *d->stream << endl;
 
     return true;
 }
@@ -931,11 +936,9 @@ bool SvgPaintEngine::end()
     *d->stream << d->header;
     *d->stream << d->defs;
     *d->stream << d->body;
-    if (d->afterFirstUpdate)
-        *d->stream << "</g>" << endl; // close the updateState
 
-    *d->stream << "</g>" << endl // close the Qt defaults
-               << "</svg>" << endl;
+    *d->stream << "</g>" << endl;
+    *d->stream << "</svg>" << endl;
 
     delete d->stream;
 
@@ -952,10 +955,12 @@ void SvgPaintEngine::drawImage(const QRectF &r, const QImage &image,
                                 const QRectF &sr,
                                 Qt::ImageConversionFlag flags)
 {
-    //Q_D(SvgPaintEngine);
-
     Q_UNUSED(sr);
     Q_UNUSED(flags);
+
+    // set state
+    setState();
+
     stream() << "<image ";
     stream() << "x=\""<<r.x()<<"\" "
                 "y=\""<<r.y()<<"\" "
@@ -981,11 +986,9 @@ void SvgPaintEngine::updateState(const QPaintEngineState &state)
     // always stream full gstate, which is not required, but...
     flags |= QPaintEngine::AllDirty;
 
-    // close old state and start a new one...
-    if (d->afterFirstUpdate)
-        *d->stream << "</g>\n\n";
-
-    *d->stream << "<g ";
+    // reset the state
+    stateString.clear();
+    stateStream << "<g ";
 
     if (flags & QPaintEngine::DirtyBrush) {
         qbrushToSvg(state.brush());
@@ -997,49 +1000,44 @@ void SvgPaintEngine::updateState(const QPaintEngineState &state)
 
     if (flags & QPaintEngine::DirtyTransform) {
         d->matrix = state.matrix();
-        *d->stream << "transform=\"matrix(" << d->matrix.m11() << ','
-                   << d->matrix.m12() << ','
-                   << d->matrix.m21() << ',' << d->matrix.m22() << ','
-                   << d->matrix.dx() << ',' << d->matrix.dy()
-                   << ")\""
-                   << endl;
-    }
-
-    if (flags & QPaintEngine::DirtyFont) {
-        qfontToSvg(state.font());
+        stateStream << "transform=\"matrix(" << d->matrix.m11() << ','
+                    << d->matrix.m12() << ','
+                    << d->matrix.m21() << ',' << d->matrix.m22() << ','
+                    << d->matrix.dx() << ',' << d->matrix.dy()
+                    << ")\" ";
     }
 
     if (flags & QPaintEngine::DirtyOpacity) {
         if (!qFuzzyIsNull(state.opacity() - 1))
-            stream() << "opacity=\""<<state.opacity()<<"\" ";
+            stateStream << "opacity=\""<<state.opacity()<<"\" ";
     }
 
-    *d->stream << '>' << endl;
+    stateStream << '>' << endl;
 
-    d->afterFirstUpdate = true;
+    d->updatedState = true;
 }
 
 void SvgPaintEngine::drawPath(const QPainterPath &p)
 {
-    Q_D(SvgPaintEngine);
+    setState();
 
-    *d->stream << "<path vector-effect=\""
-               << (state->pen().isCosmetic() ? "non-scaling-stroke" : "none")
-               << "\" fill-rule=\""
-               << (p.fillRule() == Qt::OddEvenFill ? "evenodd" : "nonzero")
-               << "\" d=\"";
+    stream() << "<path vector-effect=\""
+             << (state->pen().isCosmetic() ? "non-scaling-stroke" : "none")
+             << "\" fill-rule=\""
+             << (p.fillRule() == Qt::OddEvenFill ? "evenodd" : "nonzero")
+             << "\" d=\"";
 
     for (int i=0; i<p.elementCount(); ++i) {
         const QPainterPath::Element &e = p.elementAt(i);
         switch (e.type) {
         case QPainterPath::MoveToElement:
-            *d->stream << 'M' << e.x << ',' << e.y;
+            stream() << 'M' << e.x << ',' << e.y;
             break;
         case QPainterPath::LineToElement:
-            *d->stream << 'L' << e.x << ',' << e.y;
+            stream() << 'L' << e.x << ',' << e.y;
             break;
         case QPainterPath::CurveToElement:
-            *d->stream << 'C' << e.x << ',' << e.y;
+            stream() << 'C' << e.x << ',' << e.y;
             ++i;
             while (i < p.elementCount()) {
                 const QPainterPath::Element &e = p.elementAt(i);
@@ -1047,8 +1045,8 @@ void SvgPaintEngine::drawPath(const QPainterPath &p)
                     --i;
                     break;
                 } else
-                    *d->stream << ' ';
-                *d->stream << e.x << ',' << e.y;
+                    stream() << ' ';
+                stream() << e.x << ',' << e.y;
                 ++i;
             }
             break;
@@ -1056,11 +1054,11 @@ void SvgPaintEngine::drawPath(const QPainterPath &p)
             break;
         }
         if (i != p.elementCount() - 1) {
-            *d->stream << ' ';
+            stream() << ' ';
         }
     }
 
-    *d->stream << "\"/>" << endl;
+    stream() << "\"/>" << endl;
 }
 
 void SvgPaintEngine::drawPolygon(const QPointF *points, int pointCount,
@@ -1068,13 +1066,13 @@ void SvgPaintEngine::drawPolygon(const QPointF *points, int pointCount,
 {
     Q_ASSERT(pointCount >= 2);
 
-    //Q_D(SvgPaintEngine);
-
     QPainterPath path(points[0]);
     for (int i=1; i<pointCount; ++i)
         path.lineTo(points[i]);
 
     if (mode == PolylineMode) {
+        setState();
+
         stream() << "<polyline fill=\"none\" vector-effect=\""
                  << (state->pen().isCosmetic() ? "non-scaling-stroke" : "none")
                  << "\" points=\"";
