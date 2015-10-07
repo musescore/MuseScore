@@ -1331,7 +1331,8 @@ bool Note::acceptDrop(const DropData& data) const
          || (type == Element::Type::TEMPO_TEXT)
          || (type == Element::Type::BEND)
          || (type == Element::Type::TREMOLOBAR)
-         || (type == Element::Type::FRET_DIAGRAM));
+         || (type == Element::Type::FRET_DIAGRAM)
+         || (type == Element::Type::LYRICS));
       }
 
 //---------------------------------------------------------
