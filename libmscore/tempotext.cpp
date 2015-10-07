@@ -172,7 +172,7 @@ void TempoText::textChanged()
       QString s = plainText();
       s.replace(",", ".");
       for (const TempoPattern& pa : tp) {
-            QRegExp re(QString(pa.pattern)+"\\s*=\\s*(\\d+[.]{0,1}\\d*)");
+            QRegExp re(QString(pa.pattern)+"\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*");
             if (re.indexIn(s) != -1) {
                   QStringList sl = re.capturedTexts();
                   if (sl.size() == 2) {
