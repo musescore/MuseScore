@@ -53,7 +53,7 @@ const int   STEP_DELTA_OCTAVE       = 7;  // the number of steps in an octave
 
 enum class Prefer : char { FLATS=8, NEAREST=11, SHARPS=13 };
 enum class NoteSpellingType : char { STANDARD = 0, GERMAN, GERMAN_PURE, SOLFEGGIO, FRENCH };
-enum class NoteCaseType : char { AUTO = -1, CAPITAL = 0, LOWER, UPPER };
+enum class NoteCaseType : signed char { AUTO = -1, CAPITAL = 0, LOWER, UPPER };
 
 extern int pitch2tpc(int pitch, Key, Prefer prefer);
 

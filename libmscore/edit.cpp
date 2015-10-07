@@ -55,6 +55,7 @@
 #include "bracket.h"
 #include "ottava.h"
 #include "textframe.h"
+#include "accidental.h"
 
 namespace Ms {
 
@@ -916,15 +917,15 @@ void Score::cmdAddPitch(int step, bool addFlag)
 void Score::addPitch(int step, bool addFlag)
       {
       Position pos;
-      pos.segment   = inputState().segment();
-      pos.staffIdx  = inputState().track() / VOICES;
-      ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
-      pos.line      = relStep(step, clef);
-
       if (addFlag) {
             Element* el = selection().element();
             if (el && el->type() == Element::Type::NOTE) {
-                Chord* chord = static_cast<Note*>(el)->chord();
+                  Note* selectedNote = static_cast<Note*>(el);
+                  pos.segment   = selectedNote->chord()->segment();
+                  pos.staffIdx  = selectedNote->track() / VOICES;
+                  ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
+                  pos.line      = relStep(step, clef);
+                  Chord* chord = static_cast<Note*>(el)->chord();
                   bool error;
                   NoteVal nval = noteValForPosition(pos, error);
                   if (error)
@@ -934,7 +935,12 @@ void Score::addPitch(int step, bool addFlag)
                   return;
                   }
             }
-
+      
+      pos.segment   = inputState().segment();
+      pos.staffIdx  = inputState().track() / VOICES;
+      ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
+      pos.line      = relStep(step, clef);
+      
       if (inputState().repitchMode())
             repitchNote(pos, !addFlag);
       else
@@ -1183,7 +1189,10 @@ void Score::putNote(const QPointF& pos, bool replace)
             qDebug("cannot put note here, get position failed");
             return;
             }
-      putNote(p, replace);
+      if (inputState().repitchMode())
+            repitchNote(p, replace);
+      else
+            putNote(p, replace);
       }
 
 void Score::putNote(const Position& p, bool replace)
@@ -1307,9 +1316,18 @@ void Score::repitchNote(const Position& p, bool replace)
             nval.tpc2 = step2tpc(step % 7, acci);
             }
 
+      if (!_is.segment())
+            return;
+
       Chord* chord;
-      if (_is.cr()->type() == Element::Type::REST) { //skip rests
-            ChordRest* next = nextChordRest(_is.cr());
+      ChordRest* cr = _is.cr();
+      if (!cr) {
+            cr = _is.segment()->nextChordRest(_is.track());
+            if (!cr)
+                  return;
+            }
+      if (cr->type() == Element::Type::REST) { //skip rests
+            ChordRest* next = nextChordRest(cr);
             while(next && next->type() != Element::Type::CHORD)
                   next = nextChordRest(next);
             if (next)
@@ -1317,7 +1335,7 @@ void Score::repitchNote(const Position& p, bool replace)
             return;
             }
       else {
-            chord = static_cast<Chord*>(_is.cr());
+            chord = static_cast<Chord*>(cr);
             }
       Note* note = new Note(this);
       note->setParent(chord);
@@ -1494,24 +1512,45 @@ void Score::cmdAddTie()
 
 void Score::cmdAddOttava(Ottava::Type type)
       {
+      Selection sel = selection();
       ChordRest* cr1;
       ChordRest* cr2;
-      getSelectedChordRest2(&cr1, &cr2);
-      if (!cr1)
-            return;
-      if (cr2 == 0)
-            cr2 = cr1;
+      // add on each staff if possible
+      if (sel.isRange() && sel.staffStart() != sel.staffEnd() - 1) {
+            for (int staffIdx = sel.staffStart() ; staffIdx < sel.staffEnd(); ++staffIdx) {
+                  ChordRest* cr1 = sel.firstChordRest(staffIdx * VOICES);
+                  ChordRest* cr2 = sel.lastChordRest(staffIdx * VOICES);
+                  if (!cr1)
+                       continue;
+                  if (cr2 == 0)
+                       cr2 = cr1;
+                  Ottava* ottava = new Ottava(this);
+                  ottava->setOttavaType(type);
+                  ottava->setTrack(cr1->track());
+                  ottava->setTrack2(cr1->track());
+                  ottava->setTick(cr1->tick());
+                  ottava->setTick2(cr2->tick() + cr2->actualTicks());
+                  undoAddElement(ottava);
+                  }
+            }
+      else {
+            getSelectedChordRest2(&cr1, &cr2);
+            if (!cr1)
+                  return;
+            if (cr2 == 0)
+                  cr2 = cr1;
 
-      Ottava* ottava = new Ottava(this);
-      ottava->setOttavaType(type);
+            Ottava* ottava = new Ottava(this);
+            ottava->setOttavaType(type);
 
-      ottava->setTrack(cr1->track());
-      ottava->setTrack2(cr1->track());
-      ottava->setTick(cr1->tick());
-      ottava->setTick2(cr2->tick() + cr2->actualTicks());
-      undoAddElement(ottava);
-      if (!noteEntryMode())
-            select(ottava, SelectType::SINGLE, 0);
+            ottava->setTrack(cr1->track());
+            ottava->setTrack2(cr1->track());
+            ottava->setTick(cr1->tick());
+            ottava->setTick2(cr2->tick() + cr2->actualTicks());
+            undoAddElement(ottava);
+            if (!noteEntryMode())
+                  select(ottava, SelectType::SINGLE, 0);
+            }
       }
 
 //---------------------------------------------------------
@@ -1723,7 +1762,7 @@ void Score::deleteItem(Element* el)
                   removeChordRest(rm, false);
                   Rest* rest = new Rest(this);
                   rest->setDurationType(TDuration::DurationType::V_MEASURE);
-                  rest->setDuration(rm->measure()->len());
+                  rest->setDuration(rm->measure()->stretchedLen(rm->staff()));
                   rest->setTrack(rm->track());
                   rest->setParent(rm->parent());
                   Segment* segment = rm->segment();
@@ -1749,7 +1788,7 @@ void Score::deleteItem(Element* el)
 
             case Element::Type::ACCIDENTAL:
                   if (el->parent()->type() == Element::Type::NOTE)
-                        changeAccidental(static_cast<Note*>(el->parent()), Accidental::Type::NONE);
+                        changeAccidental(static_cast<Note*>(el->parent()), AccidentalType::NONE);
                   else
                         undoRemoveElement(el);
                   break;
@@ -1910,6 +1949,13 @@ void Score::deleteItem(Element* el)
             case Element::Type::STEM_SLASH:           // cannot delete this elements
             case Element::Type::HOOK:
                   qDebug("cannot remove %s", el->name());
+                  break;
+
+            case Element::Type::TEXT:
+                  if (el->parent()->type() == Element::Type::TBOX)
+                        undoChangeProperty(el, P_ID::TEXT, QString());
+                  else
+                        undoRemoveElement(el);
                   break;
 
             default:
@@ -2761,7 +2807,8 @@ MeasureBase* Score::insertMeasure(Element::Type type, MeasureBase* measure, bool
 
 void Score::checkSpanner(int startTick, int endTick)
       {
-      QList<Spanner*> sl;
+      QList<Spanner*> sl;     // spanners to remove
+      QList<Spanner*> sl2;    // spanners to shorten
       auto spanners = _spanner.findOverlapping(startTick, endTick);
 // printf("checkSpanner %d %d\n", startTick, endTick);
 //      for (auto i = spanners.begin(); i < spanners.end(); i++) {
@@ -2798,13 +2845,19 @@ void Score::checkSpanner(int startTick, int endTick)
                         }
                   else {
                         if (s->tick2() > lastTick)
-                              s->undoChangeProperty(P_ID::SPANNER_TICKS, lastTick - s->tick());
+                              sl2.append(s);    //s->undoChangeProperty(P_ID::SPANNER_TICKS, lastTick - s->tick());
+                        else
+                              s->computeEndElement();
                         }
-                  s->computeEndElement();
                   }
             }
       for (auto s : sl)       // actually remove scheduled spanners
             undo(new RemoveElement(s));
+      for (auto s : sl2) {    // shorten spanners that extended past end of score
+            undo(new ChangeProperty(s, P_ID::SPANNER_TICKS, lastTick - s->tick()));
+            s->computeEndElement();
+            }
       }
+
 }
 

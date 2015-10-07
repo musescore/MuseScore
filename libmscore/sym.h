@@ -15,7 +15,11 @@
 
 #include "config.h"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 class QPainter;
+
 
 namespace Ms {
 
@@ -485,7 +489,9 @@ enum class SymId {
       accidentalWyschnegradsky9TwelfthsSharp,
       accidentalXenakisOneThirdToneSharp,
       accidentalXenakisTwoThirdTonesSharp,
+      analyticsChoralmelodie,
       analyticsEndStimme,
+      analyticsHauptrhythmus,
       analyticsHauptstimme,
       analyticsInversion1,
       analyticsNebenstimme,
@@ -555,6 +561,8 @@ enum class SymId {
       articMarcatoBelow,
       articMarcatoStaccatoAbove,
       articMarcatoStaccatoBelow,
+      articMarcatoTenutoAbove,
+      articMarcatoTenutoBelow,
       articStaccatissimoAbove,
       articStaccatissimoBelow,
       articStaccatissimoStrokeAbove,
@@ -626,6 +634,9 @@ enum class SymId {
       brassLiftLong,
       brassLiftMedium,
       brassLiftShort,
+      brassLiftSmoothLong,
+      brassLiftSmoothMedium,
+      brassLiftSmoothShort,
       brassMuteClosed,
       brassMuteHalfClosed,
       brassMuteOpen,
@@ -646,8 +657,6 @@ enum class SymId {
       cClefCombining,
       cClefReversed,
       cClefSquare,
-      cClefTriangular,
-      cClefTriangularToFClef,
       caesura,
       caesuraCurved,
       caesuraShort,
@@ -882,8 +891,6 @@ enum class SymId {
       fClefArrowUp,
       fClefChange,
       fClefReversed,
-      fClefTriangular,
-      fClefTriangularToCClef,
       fClefTurned,
       fermataAbove,
       fermataBelow,
@@ -912,6 +919,7 @@ enum class SymId {
       figbass5Raised3,
       figbass6,
       figbass6Raised,
+      figbass6Raised2,
       figbass7,
       figbass7Raised1,
       figbass7Raised2,
@@ -1072,6 +1080,8 @@ enum class SymId {
       harpPedalDivider,
       harpPedalLowered,
       harpPedalRaised,
+      harpSalzedoAeolianAscending,
+      harpSalzedoAeolianDescending,
       harpSalzedoFluidicSoundsLeft,
       harpSalzedoFluidicSoundsRight,
       harpSalzedoMetallicSounds,
@@ -1407,6 +1417,30 @@ enum class SymId {
       mensuralWhiteMaxima,
       mensuralWhiteMinima,
       mensuralWhiteSemiminima,
+      metAugmentationDot,
+      metNote1024thDown,
+      metNote1024thUp,
+      metNote128thDown,
+      metNote128thUp,
+      metNote16thDown,
+      metNote16thUp,
+      metNote256thDown,
+      metNote256thUp,
+      metNote32ndDown,
+      metNote32ndUp,
+      metNote512thDown,
+      metNote512thUp,
+      metNote64thDown,
+      metNote64thUp,
+      metNote8thDown,
+      metNote8thUp,
+      metNoteDoubleWhole,
+      metNoteDoubleWholeSquare,
+      metNoteHalfDown,
+      metNoteHalfUp,
+      metNoteQuarterDown,
+      metNoteQuarterUp,
+      metNoteWhole,
       metricModulationArrowLeft,
       metricModulationArrowRight,
       miscDoNotCopy,
@@ -1714,8 +1748,18 @@ enum class SymId {
       noteheadXOrnate,
       noteheadXOrnateEllipse,
       noteheadXWhole,
+      octaveBaselineA,
+      octaveBaselineB,
+      octaveBaselineM,
+      octaveBaselineV,
+      octaveBassa,
+      octaveLoco,
       octaveParensLeft,
       octaveParensRight,
+      octaveSuperscriptA,
+      octaveSuperscriptB,
+      octaveSuperscriptM,
+      octaveSuperscriptV,
       ornamentBottomLeftConcaveStroke,
       ornamentBottomLeftConcaveStrokeLarge,
       ornamentBottomLeftConvexStroke,
@@ -1755,12 +1799,12 @@ enum class SymId {
       ornamentPrecompAppoggTrill,
       ornamentPrecompAppoggTrillSuffix,
       ornamentPrecompCadence,
-      ornamentPrecompCadenceUpperPrefix ,
+      ornamentPrecompCadenceUpperPrefix,
       ornamentPrecompCadenceUpperPrefixTurn,
-      ornamentPrecompCadenceWithTurn ,
+      ornamentPrecompCadenceWithTurn,
       ornamentPrecompDescendingSlide,
       ornamentPrecompDoubleCadenceLowerPrefix,
-      ornamentPrecompDoubleCadenceUpperPrefix ,
+      ornamentPrecompDoubleCadenceUpperPrefix,
       ornamentPrecompDoubleCadenceUpperPrefixTurn,
       ornamentPrecompInvertedMordentUpperPrefix,
       ornamentPrecompMordentRelease,
@@ -1806,6 +1850,7 @@ enum class SymId {
       ottavaAlta,
       ottavaBassa,
       ottavaBassaBa,
+      ottavaBassaVb,
       pendereckiTremolo,
       pictAgogo,
       pictAlmglocken,
@@ -2093,6 +2138,7 @@ enum class SymId {
       quindicesima,
       quindicesimaAlta,
       quindicesimaBassa,
+      quindicesimaBassaMb,
       repeat1Bar,
       repeat2Bars,
       repeat4Bars,
@@ -2121,12 +2167,17 @@ enum class SymId {
       restMaxima,
       restQuarter,
       restQuarterOld,
+      restQuarterZ,
       restWhole,
       restWholeLegerLine,
       reversedBrace,
       reversedBracketBottom,
       reversedBracketTop,
       rightRepeatSmall,
+      schaefferClef,
+      schaefferFClefToGClef,
+      schaefferGClefToFClef,
+      schaefferPreviousClef,
       segno,
       segnoSerpent1,
       segnoSerpent2,
@@ -2140,7 +2191,9 @@ enum class SymId {
       smnHistorySharp,
       smnNatural,
       smnSharp,
+      smnSharpDown,
       smnSharpWhite,
+      smnSharpWhiteDown,
       splitBarDivider,
       staff1Line,
       staff1LineNarrow,
@@ -2251,10 +2304,15 @@ enum class SymId {
       timeSig7,
       timeSig8,
       timeSig9,
+      timeSigBracketLeft,
+      timeSigBracketLeftSmall,
+      timeSigBracketRight,
+      timeSigBracketRightSmall,
       timeSigCombDenominator,
       timeSigCombNumerator,
       timeSigComma,
       timeSigCommon,
+      timeSigCut2,
       timeSigCutCommon,
       timeSigEquals,
       timeSigFractionHalf,
@@ -2272,6 +2330,7 @@ enum class SymId {
       timeSigParensRightSmall,
       timeSigPlus,
       timeSigPlusSmall,
+      timeSigSlash,
       timeSigX,
       tremolo1,
       tremolo2,
@@ -2307,6 +2366,7 @@ enum class SymId {
       ventiduesima,
       ventiduesimaAlta,
       ventiduesimaBassa,
+      ventiduesimaBassaMb,
       vocalMouthClosed,
       vocalMouthOpen,
       vocalMouthPursed,
@@ -2466,27 +2526,44 @@ enum class SymId {
 //---------------------------------------------------------
 
 class Sym {
-      QString _string;
-      QPointF _attach;
-      qreal _width;                       // cached width
-      QRectF _bbox;                       // cached bbox
+   protected:
+      int _code = -1;
+      FT_UInt _index;
+      QRectF _bbox;
+      qreal _advance;
+
+      QPointF _stemDownNW;
+      QPointF _stemUpSE;
       QPointF _cutOutNE;
       QPointF _cutOutNW;
       QPointF _cutOutSE;
       QPointF _cutOutSW;
+      QList<SymId> _ids;            // not empty if this is a compound symbol
 
    public:
       Sym() { }
 
-      const QString& string() const              { return _string;   }
-      void setString(const QString& s)           { _string = s;      }
-      bool isValid() const                       { return !_string.isEmpty(); }
-      QPointF attach() const                     { return _attach;   }
-      void setAttach(const QPointF& r)           { _attach = r;      }
-      qreal width() const                        { return _width;    }
-      void setWidth(qreal val)                   { _width = val;     }
+      bool isValid() const                       { return _code != -1; }
+
+      void setSymList(const QList<SymId>& sl)    { _ids = sl;        }
+      const QList<SymId>& symList() const        { return _ids;      }
+
+      FT_UInt index() const                      { return _index;    }
+      void setIndex(FT_UInt i)                   { _index = i; }
+
+      int code() const                           { return _code;     }
+      void setCode(int val)                      { _code = val;      }
+
       QRectF bbox() const                        { return _bbox;     }
       void setBbox(QRectF val)                   { _bbox = val;      }
+
+      qreal advance() const                      { return _advance;  }
+      void setAdvance(qreal val)                 { _advance = val;   }
+
+      QPointF stemDownNW() const                 { return _stemDownNW;   }
+      void setStemDownNW(const QPointF& r)       { _stemDownNW = r;      }
+      QPointF stemUpSE() const                   { return _stemUpSE;   }
+      void setStemUpSE(const QPointF& r)         { _stemUpSE = r;      }
       QPointF cutOutNE() const                   { return _cutOutNE; }
       void setCutOutNE(const QPointF& r)         { _cutOutNE = r;    }
       QPointF cutOutNW() const                   { return _cutOutNW; }
@@ -2501,76 +2578,109 @@ class Sym {
       static const char* id2name(SymId id);
 
       static QString id2userName(SymId id)       { return symUserNames[int(id)]; }
-      static SymId userName2id(const QString& s) { int val = symUserNames.indexOf(s);
-                                                   return (val == -1) ? SymId::noSym : (SymId)(val); }
+      static SymId userName2id(const QString& s);
 
       static QVector<const char*> symNames;
       static QVector<QString> symUserNames;
       static QHash<QString, SymId> lnhash;
       static QHash<QString, SymId> lonhash;
+      friend class ScoreFont;
       };
+
+//---------------------------------------------------------
+//   GlyphKey
+//---------------------------------------------------------
+
+struct GlyphKey {
+      FT_Face face;
+      SymId id;
+      qreal mag;
+      qreal worldScale;
+      QColor color;
+
+   public:
+      GlyphKey(FT_Face _f, SymId _id, float m, float s, QColor c)
+         : face(_f), id(_id), mag(m), worldScale(s), color(c) {}
+      bool operator==(const GlyphKey&) const;
+      };
+
+
+struct GlyphPixmap {
+      QPixmap pm;
+      QPointF offset;
+      };
+
+inline uint qHash(const GlyphKey& k)
+      {
+      return (int(k.id) << 16) + k.mag;
+      }
 
 //---------------------------------------------------------
 //   ScoreFont
 //---------------------------------------------------------
 
 class ScoreFont {
-      QFont* _font = 0;
-      QFontMetricsF* _fm = 0;
+      FT_Face face = 0;
       QVector<Sym> _symbols;
       QString _name;
       QString _family;
       QString _fontPath;
       QString _filename;
-      QString _textFace;
-      bool loaded = false;
+      QByteArray fontImage;
+      QCache<GlyphKey, GlyphPixmap>* cache { 0 };
+      mutable QFont* font { 0 };
 
       static QVector<ScoreFont> _scoreFonts;
       const Sym& sym(SymId id) const { return _symbols[int(id)]; }
       void load();
+      void computeMetrics(Sym* sym, int code);
 
    public:
       ScoreFont() {}
+      ScoreFont(const ScoreFont&);
       ScoreFont(const char* n, const char* f, const char* p, const char* fn)
          : _name(n), _family(f), _fontPath(p), _filename(fn) {
             _symbols = QVector<Sym>(int(SymId::lastSym) + 1);
             }
       ~ScoreFont();
 
-      const QString& name() const           { return _name;           }
+      const QString& name() const           { return _name;   }
+      const QString& family() const         { return _family; }
 
       static ScoreFont* fontFactory(QString);
       static ScoreFont* fallbackFont();
       static const char* fallbackTextFont();
       static const QVector<ScoreFont>& scoreFonts() { return _scoreFonts; }
 
-      const QFont& font() const { return *_font; }
-      const QString& toString(SymId id) const { return _symbols[int(id)].string(); }
+      QString toString(SymId) const;
+      QPixmap sym2pixmap(SymId, qreal) { return QPixmap(); }      // TODOxxxx
 
-      void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos = QPointF()) const;
-      void draw(const QString&, QPainter*, qreal mag, const QPointF& pos = QPointF()) const;
+      void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, qreal scale) const;
+      void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos) const;
+      void draw(const QList<SymId>&, QPainter*, qreal mag, const QPointF& pos) const;
+      void draw(const QList<SymId>&, QPainter*, qreal mag, const QPointF& pos, qreal scale) const;
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const;
 
-      QString symToHtml(SymId, int leftMargin=0, const TextStyle* ts = 0, qreal sp=10.0);
-      QString symToHtml(SymId, SymId, int leftMargin=0);
-      QPixmap sym2pixmap(SymId id, qreal mag);
+      qreal height(SymId id, qreal mag) const         { return sym(id).bbox().height() * mag; }
+      qreal width(SymId id, qreal mag) const          { return sym(id).bbox().width() * mag;  }
+      qreal advance(SymId id, qreal mag) const        { return sym(id).advance() * mag;  }
+      qreal width(const QList<SymId>&, qreal mag) const;
 
-      qreal height(SymId id, qreal mag) const         { return _fm->tightBoundingRect(toString(id)).height() * mag; }
-      qreal width(SymId id, qreal mag) const          { return _symbols[int(id)].width() * mag;  }
-      qreal width(const QString& s, qreal mag) const  { return _fm->width(s) * mag;  }
       const QRectF bbox(SymId id, qreal mag) const;
-      const QRectF bbox(const QString& s, qreal mag) const;
-      QPointF attach(SymId id, qreal mag) const       { return _symbols[int(id)].attach() * mag;   }
-      QPointF cutOutNE(SymId id, qreal mag) const     { return _symbols[int(id)].cutOutNE() * mag; }
-      QPointF cutOutNW(SymId id, qreal mag) const     { return _symbols[int(id)].cutOutNW() * mag; }
-      QPointF cutOutSE(SymId id, qreal mag) const     { return _symbols[int(id)].cutOutSE() * mag; }
-      QPointF cutOutSW(SymId id, qreal mag) const     { return _symbols[int(id)].cutOutSW() * mag; }
-      bool isValid(SymId id) const                    { return _symbols[int(id)].isValid(); }
-      const QString& family() const                   { return _family; }
+      const QRectF bbox(const QList<SymId>& s, qreal mag) const;
+      QPointF stemDownNW(SymId id, qreal mag) const   { return sym(id).stemDownNW() * mag;   }
+      QPointF stemUpSE(SymId id, qreal mag) const     { return sym(id).stemUpSE() * mag;   }
+      QPointF cutOutNE(SymId id, qreal mag) const     { return sym(id).cutOutNE() * mag; }
+      QPointF cutOutNW(SymId id, qreal mag) const     { return sym(id).cutOutNW() * mag; }
+      QPointF cutOutSE(SymId id, qreal mag) const     { return sym(id).cutOutSE() * mag; }
+      QPointF cutOutSW(SymId id, qreal mag) const     { return sym(id).cutOutSW() * mag; }
+
+      bool isValid(SymId id) const                    { return sym(id).isValid(); }
       };
 
 extern void initScoreFonts();
 
 }     // namespace Ms
+
 #endif
 

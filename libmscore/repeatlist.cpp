@@ -335,6 +335,8 @@ void RepeatList::unwind()
                               }
                         }
                   else if (endRepeat == 0) {
+                        if (m->playbackCount() >= m->repeatCount())
+                             break;
                         endRepeat   = m;
                         repeatCount = m->repeatCount();
                         loop        = 1;
@@ -353,7 +355,8 @@ void RepeatList::unwind()
                   // jump only once
                   if (jumps.contains(s)) {
                         m = m->nextMeasure();
-                        endRepeat = 0;
+                        if (endRepeat == _score->searchLabel(s->playUntil()))
+                              endRepeat = 0;
                         continue;
                         }
                   jumps.append(s);
@@ -361,9 +364,9 @@ void RepeatList::unwind()
                         Measure* nm = _score->searchLabel(s->jumpTo());
                         endRepeat   = _score->searchLabel(s->playUntil());
                         continueAt  = _score->searchLabel(s->continueAt());
-                        isGoto      = true;
 
                         if (nm && endRepeat) {
+                              isGoto      = true;
                               rs->len = m->endTick() - rs->tick;
                               append(rs);
                               rs = new RepeatSegment;

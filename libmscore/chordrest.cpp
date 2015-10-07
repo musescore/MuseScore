@@ -41,6 +41,7 @@
 #include "harmony.h"
 #include "figuredbass.h"
 #include "icon.h"
+#include "utils.h"
 
 namespace Ms {
 
@@ -158,7 +159,7 @@ void ChordRest::scanElements(void* data, void (*func)(void*, Element*), bool all
             }
       DurationElement* de = this;
       while (de->tuplet() && de->tuplet()->elements().front() == de) {
-            func(data, de->tuplet());
+            de->tuplet()->scanElements(data, func, all);
             de = de->tuplet();
             }
       if (_tabDur)
@@ -251,7 +252,7 @@ bool ChordRest::readProperties(XmlReader& e)
       if (tag == "durationType") {
             setDurationType(e.readElementText());
             if (actualDurationType().type() != TDuration::DurationType::V_MEASURE) {
-                  if ((type() == Element::Type::REST) &&
+                  if (score()->mscVersion() < 112 && (type() == Element::Type::REST) &&
                               // for backward compatibility, convert V_WHOLE rests to V_MEASURE
                               // if long enough to fill a measure.
                               // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
@@ -807,6 +808,7 @@ Element* ChordRest::drop(const DropData& data)
                   {
                   BarLine* bl = static_cast<BarLine*>(e);
                   bl->setTrack(staffIdx() * VOICES);
+                  bl->setGenerated(false);
 
                   if (tick() == m->tick())
                         return m->drop(data);
@@ -833,6 +835,10 @@ Element* ChordRest::drop(const DropData& data)
             case Element::Type::CLEF:
                   score()->cmdInsertClef(static_cast<Clef*>(e), this);
                   break;
+
+            case Element::Type::KEYSIG:
+            case Element::Type::TIMESIG:
+                  return measure()->drop(data);
 
             case Element::Type::TEMPO_TEXT:
                   {
@@ -881,7 +887,19 @@ Element* ChordRest::drop(const DropData& data)
                   break;
 
             case Element::Type::HARMONY:
-                  static_cast<Harmony*>(e)->render();
+                  {
+                  // transpose
+                  Harmony* harmony = static_cast<Harmony*>(e);
+                  Interval interval = staff()->part()->instrument()->transpose();
+                  if (!score()->styleB(StyleIdx::concertPitch) && !interval.isZero()) {
+                        interval.flip();
+                        int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
+                        int baseTpc = transposeTpc(harmony->baseTpc(), interval, true);
+                        score()->undoTransposeHarmony(harmony, rootTpc, baseTpc);
+                        }
+                  // render
+                  harmony->render();
+                  }
                   // fall through
             case Element::Type::TEXT:
             case Element::Type::STAFF_TEXT:
@@ -906,7 +924,7 @@ Element* ChordRest::drop(const DropData& data)
                   //f->setTextStyleType(st);
                   if (st >= TextStyleType::DEFAULT && fromPalette)
                         t->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
-                  if (e->type() == Element::Type::REHEARSAL_MARK)
+                  if (e->type() == Element::Type::REHEARSAL_MARK && fromPalette)
                         t->setXmlText(score()->createRehearsalMarkText(static_cast<RehearsalMark*>(e)));
                   }
                   score()->undoAddElement(e);

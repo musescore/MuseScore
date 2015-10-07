@@ -59,8 +59,6 @@ static OggVorbis_File vf;
 
 #if 0 // yet(?) unused
 static const int AUDIO_BUFFER_SIZE = 1024 * 512;  // 2 MB
-
-static const int MIN_CLICKS   = 3;        // the minimum number of 'clicks' in a count-in
 #endif
 
 //---------------------------------------------------------
@@ -513,7 +511,7 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
             if (!mute)
                   putEvent(event, framePos);
             }
-      else if (type == ME_CONTROLLER)
+      else if (type == ME_CONTROLLER || type == ME_PITCHBEND)
             putEvent(event, framePos);
       }
 
@@ -527,7 +525,7 @@ void Seq::recomputeMaxMidiOutPort() {
       if (!(preferences.useJackMidi || preferences.useAlsaAudio))
             return;
       int max = 0;
-      foreach(Score * s, mscoreCore->scores()) {
+      foreach(Score * s, MuseScoreCore::mscoreCore->scores()) {
             if (s->midiPortCount() > max)
                   max = s->midiPortCount();
             }
@@ -620,64 +618,8 @@ void Seq::addCountInClicks()
       {
       int         plPos       = cs->playPos();
       Measure*    m           = cs->tick2measure(plPos);
-      int         msrTick     = m->tick();
-      qreal       tempo       = cs->tempomap()->tempo(msrTick);
-      Fraction    timeSig     = cs->sigmap()->timesig(msrTick).nominal();
-      int         numerator   = timeSig.numerator();
-      int         denominator = timeSig.denominator();
-      int         clickTicks  = MScore::division * 4 / denominator;
-      NPlayEvent  event;
-      int         tick;
-      bool        triplets    = false;          // whether to play click-clack in triplets or not
-
-      // COMPOUND METER: if time sig is 3*n/d, convert to 3d units
-      // note: 3/8, 3/16, ... are NOT considered compound
-      if (numerator > 3 && numerator % 3 == 0) {
-            // if denominator longer than 1/8 OR tempo for compound unit slower than 60MM
-            // (i.e. each denom. unit slower than 180MM = tempo 3.0)
-            // then do not count as compound, but beat click-clack-clack triplets
-            if (denominator < 8 || tempo * denominator / 4 < 3.0)
-                  triplets = true;
-            // otherwise, count as compound meter (one beat every 3 denominator units)
-            else {
-                  numerator   /= 3;
-                  clickTicks  *= 3;
-                  }
-            }
-
-      // NUMBER OF TICKS
-      int numOfClicks = numerator;                          // default to a full measure of 'clicks'
-      int lastPause   = clickTicks;                         // the number of ticks to wait after the last 'click'
-      // if not at the beginning of a measure, add clicks for the initial measure part
-      if (msrTick < plPos) {
-            int delta    = plPos - msrTick;
-            int addClick = (delta + clickTicks - 1) / clickTicks;     // round num. of clicks up
-            numOfClicks += addClick;
-            lastPause    = delta - (addClick - 1) * clickTicks;       // anything after last click time is final pause
-            }
-      // or if measure not complete (anacrusis), add clicks for the missing measure part
-      else if (m->ticks() < clickTicks * numerator) {
-            int delta    = clickTicks * numerator - m->ticks();
-            int addClick = (delta + clickTicks - 1) / clickTicks;
-            numOfClicks += addClick;
-            lastPause    = delta - (addClick - 1) * clickTicks;
-            }
-/*
-      // MIN_CLICKS: be sure to have at least MIN_CLICKS clicks: if less, add full measures
-      while (numOfClicks < MIN_CLICKS)
-            numOfClicks += numerator;
-*/
-      // click-clack-clack triplets
-      if (triplets)
-            numerator = 3;
-
-      // add count-in events
-      for (int i = tick = 0; i < numOfClicks; i++, tick += clickTicks) {
-            event.setType( (i % numerator) == 0 ? ME_TICK1 : ME_TICK2);
-            countInEvents.insert( std::pair<int,NPlayEvent>(tick, event));
-            }
-      // add 1 empty event at the end to wait after the last click
-      tick += lastPause - clickTicks;
+      int tick = cs->renderMetronome(&countInEvents, m, plPos, 0, true);
+      NPlayEvent event;
       event.setType(ME_INVALID);
       event.setPitch(0);
       countInEvents.insert( std::pair<int,NPlayEvent>(tick, event));
@@ -977,6 +919,23 @@ void Seq::initInstruments(bool realTime)
                   else
                         sendEvent(event);
                   }
+            // Setting pitch bend sensitivity to 12 semitones for external synthesizers
+            if ((preferences.useJackMidi || preferences.useAlsaAudio) && mm.channel != 9) {
+                  if (realTime) {
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 0));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 0));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HDATA,12));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 127));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 127));
+                        }
+                  else {
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 0));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 0));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HDATA,12));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 127));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 127));
+                        }
+                  }
             }
       }
 
@@ -1177,11 +1136,15 @@ void Seq::stopNotes(int channel, bool realTime)
             for(int ch = 0; ch < cs->midiMapping()->size(); ch++) {
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_ALL_NOTES_OFF, 0));
+                  if (cs->midiChannel(ch) != 9)
+                        send(NPlayEvent(ME_PITCHBEND,  ch, 0, 64));
                   }
             }
       else {
             send(NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0));
             send(NPlayEvent(ME_CONTROLLER, channel, CTRL_ALL_NOTES_OFF, 0));
+            if (cs->midiChannel(channel) != 9)
+                  send(NPlayEvent(ME_PITCHBEND,  channel, 0, 64));
             }
       if (preferences.useAlsaAudio || preferences.useJackAudio || preferences.usePulseAudio || preferences.usePortaudioAudio)
             _synti->allNotesOff(channel);

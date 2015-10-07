@@ -2704,7 +2704,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Small&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -2931,15 +2931,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Has line value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Has line&apos; value</translation>
     </message>
     <message>
         <source>Reset Head group value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Head group&apos; value</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Direction&apos; value</translation>
     </message>
     <message>
         <source>Update range</source>
@@ -2947,7 +2947,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Head type value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Head group&apos; value</translation>
     </message>
     <message>
         <source>Normal</source>
@@ -3015,7 +3015,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Line thickness value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Line thickness&apos; value</translation>
     </message>
     <message>
         <source>[Undefined]</source>
@@ -3024,6 +3024,25 @@ space unit</extracomment>
     <message>
         <source>Ambitus</source>
         <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Reset &apos;Play&apos; value</translation>
     </message>
 </context>
 <context>
@@ -3082,15 +3101,39 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Direction&apos; value</translation>
     </message>
     <message>
         <source>Reset Anchor value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Anchor&apos; value</translation>
     </message>
     <message>
         <source>Reset Time stretch value</source>
+        <translation>Reset &apos;Time stretch&apos; value</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Reset &apos;Ornament Type&apos; value</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Reset &apos;Play&apos; value</translation>
     </message>
 </context>
 <context>
@@ -3129,7 +3172,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Type&apos; value</translation>
     </message>
     <message>
         <source>Span from</source>
@@ -3145,15 +3188,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Span value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Span&apos; value</translation>
     </message>
     <message>
         <source>Reset Span from value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Span from&apos; value</translation>
     </message>
     <message>
         <source>Reset Span to value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Span to&apos; value</translation>
     </message>
     <message>
         <source>Spantype</source>
@@ -3161,7 +3204,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Span type value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Span type&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -3212,7 +3255,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Direction&apos; value</translation>
     </message>
     <message>
         <source>Vertical position offset right</source>
@@ -3220,15 +3263,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset User position value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;User position&apos; value</translation>
     </message>
     <message>
         <source>Reset Local Relayout value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Local Relayout&apos; value</translation>
     </message>
     <message>
         <source>Reset Horizontal value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Horizontal&apos; value</translation>
     </message>
     <message>
         <source>Left</source>
@@ -3248,11 +3291,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Grow right value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Grow right&apos; value</translation>
     </message>
     <message>
         <source>Reset Grow left value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Grow left&apos; value</translation>
     </message>
     <message>
         <source>Local relayout</source>
@@ -3261,6 +3304,25 @@ space unit</extracomment>
     <message>
         <source>User position</source>
         <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Reset &apos;Play&apos; value</translation>
     </message>
 </context>
 <context>
@@ -3323,15 +3385,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Vertical offset value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Vertical offset&apos; value</translation>
     </message>
     <message>
         <source>Reset Horizontal offset value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Horizontal offset&apos; value</translation>
     </message>
     <message>
         <source>Reset Stem direction value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Stem direction&apos; value</translation>
     </message>
     <message>
         <source>Horizontal Offset</source>
@@ -3339,11 +3401,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Small Value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Small&apos; value</translation>
     </message>
     <message>
         <source>Reset Stemless value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Stemless&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -3366,7 +3428,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Show courtesy&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -3405,11 +3467,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Velocity value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Velocity&apos; value</translation>
     </message>
     <message>
         <source>Reset Dynamic range value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Dynamic range&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -3453,19 +3515,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Horizontal offset value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Horizontal offset&apos; value</translation>
     </message>
     <message>
         <source>Reset Vertical offset value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Vertical offset&apos; value</translation>
     </message>
     <message>
         <source>Reset Visible value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Visible&apos; value</translation>
     </message>
     <message>
         <source>Reset Color value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Color&apos; value</translation>
     </message>
 </context>
 <context>
@@ -3495,7 +3557,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Type&apos; value</translation>
     </message>
     <message>
         <source>Fretboard Diagram</source>
@@ -3526,7 +3588,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Type&apos; value</translation>
     </message>
     <message>
         <source>Straight</source>
@@ -3538,11 +3600,47 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show text value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Show text&apos; value</translation>
     </message>
     <message>
         <source>Show text</source>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Reset &apos;Style&apos; value</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Reset &apos;Play&apos; value</translation>
     </message>
 </context>
 <context>
@@ -3605,11 +3703,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Left gap value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Left gap&apos; value</translation>
     </message>
     <message>
         <source>Reset Right gap value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Right gap&apos; value</translation>
     </message>
 </context>
 <context>
@@ -3668,19 +3766,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Type&apos; value</translation>
     </message>
     <message>
         <source>Reset Dynamic range value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Dynamic range&apos; value</translation>
     </message>
     <message>
         <source>Reset Height value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Height&apos; value</translation>
     </message>
     <message>
         <source>Reset Circled tip value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Circled tip&apos; value</translation>
     </message>
     <message>
         <source>Crescendo</source>
@@ -3696,7 +3794,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Continue height value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Continue height&apos; value</translation>
     </message>
 </context>
 <context>
@@ -3739,11 +3837,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Scale to frame size value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Scale to frame size&apos; value</translation>
     </message>
     <message>
         <source>Reset Lock aspect ratio value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Lock aspect ratio&apos; value</translation>
     </message>
     <message>
         <source>Lock aspect ratio</source>
@@ -3759,7 +3857,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Size in staff space units value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Size in staff space units&apos; value</translation>
     </message>
 </context>
 <context>
@@ -3786,15 +3884,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Jump to value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Jump to&apos; value</translation>
     </message>
     <message>
         <source>Reset Play until value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Play until&apos; value</translation>
     </message>
     <message>
         <source>Reset Continue at value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Continue at&apos; value</translation>
     </message>
 </context>
 <context>
@@ -3813,7 +3911,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Show courtesy&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -3888,15 +3986,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Line color value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Line color&apos; value</translation>
     </message>
     <message>
         <source>Reset Allow diagonal value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Allow diagonal&apos; value</translation>
     </message>
     <message>
         <source>Reset Line style value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Line style&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -3928,11 +4026,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Line thickness value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Line thickness&apos; value</translation>
     </message>
     <message>
         <source>Reset Line visible value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Line visible&apos; value</translation>
     </message>
     <message>
         <source>Line visible</source>
@@ -3979,11 +4077,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Marker type value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Marker type&apos; value</translation>
     </message>
     <message>
         <source>Reset Label value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Label&apos; value</translation>
     </message>
     <message>
         <source>Marker Type</source>
@@ -4094,19 +4192,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Mirror head value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Mirror head&apos; value</translation>
     </message>
     <message>
         <source>Reset Velocity type value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Velocity type&apos; value</translation>
     </message>
     <message>
         <source>Reset Head type value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Head group&apos; value</translation>
     </message>
     <message>
         <source>Reset Velocity value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Velocity&apos; value</translation>
     </message>
     <message>
         <source>Mirror Head</source>
@@ -4118,11 +4216,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Head group value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Head group&apos; value</translation>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Small&apos; value</translation>
     </message>
     <message>
         <source>Reset Tuning value</source>
@@ -4130,7 +4228,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Play value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Play&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4138,7 +4236,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Dot position value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Dot position&apos; value</translation>
     </message>
     <message>
         <source>Line</source>
@@ -4205,11 +4303,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Type&apos; value</translation>
     </message>
     <message>
         <source>Reset Placement value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Placement&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4225,7 +4323,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Numbers only value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Numbers only&apos; value</translation>
     </message>
 </context>
 <context>
@@ -4244,7 +4342,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Small value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Small&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4276,11 +4374,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Leading space value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Leading space&apos; value</translation>
     </message>
     <message>
         <source>Reset Trailing space value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Trailing space&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4303,7 +4401,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Line type value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Line type&apos; value</translation>
     </message>
     <message>
         <source>Line type</source>
@@ -4347,6 +4445,78 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Height value</source>
+        <translation>Reset &apos;Height&apos; value</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Reset &apos;Top gap&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Reset &apos;Bottom gap&apos; value</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Reset &apos;Right margin&apos; value</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Reset &apos;Bottom margin&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Reset &apos;Top margin&apos; value</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Reset &apos;Left margin&apos; value</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -4374,7 +4544,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Tempo value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Tempo&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4382,7 +4552,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Follow text value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Follow text&apos; value</translation>
     </message>
 </context>
 <context>
@@ -4401,7 +4571,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Style value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Style&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4439,7 +4609,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Show courtesy&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4481,12 +4651,36 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Wavy Line</source>
+        <source>Reset value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Reset value</source>
+        <source>Ornament Style</source>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Default</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Reset &apos;Ornament Type&apos; value</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Reset &apos;Play&apos; value</translation>
     </message>
 </context>
 <context>
@@ -4537,7 +4731,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Direction&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4545,11 +4739,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Number type value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Number type&apos; value</translation>
     </message>
     <message>
         <source>Reset Bracket type value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Bracket type&apos; value</translation>
     </message>
     <message>
         <source>Number type</source>
@@ -4593,11 +4787,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Top gap value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Top gap&apos; value</translation>
     </message>
     <message>
         <source>Reset Bottom gap value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Bottom gap&apos; value</translation>
     </message>
     <message>
         <source>Bottom margin</source>
@@ -4621,19 +4815,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Left margin value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Left margin&apos; value</translation>
     </message>
     <message>
         <source>Reset Right margin value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Right margin&apos; value</translation>
     </message>
     <message>
         <source>Reset Top margin value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Top margin&apos; value</translation>
     </message>
     <message>
         <source>Reset Bottom margin value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Bottom margin&apos; value</translation>
     </message>
 </context>
 <context>
@@ -4660,7 +4854,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Type value</source>
-        <translation type="unfinished"/>
+        <translation>Reset &apos;Type&apos; value</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4860,6 +5054,13 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add time signature to palette</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6018,14 +6219,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation type="unfinished"/>
     </message>
@@ -6039,6 +6232,14 @@ failed: </source>
     </message>
     <message>
         <source>page number, if there is more than one page</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7158,6 +7359,10 @@ please choose a different name:</source>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7628,10 +7833,6 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>file not found</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>No selection</source>
         <translation type="unfinished"/>
     </message>
@@ -7641,6 +7842,10 @@ failed: %2</source>
     </message>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7948,6 +8153,11 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>Transparent background</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -10347,6 +10557,14 @@ failed: </source>
         <source>Filter</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -11173,6 +11391,14 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>System flag</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Clear</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -13521,10 +13747,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Palette</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation type="unfinished"/>
     </message>
@@ -13558,10 +13780,6 @@ failed: </source>
     </message>
     <message>
         <source>Add lyrics</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13918,10 +14136,6 @@ failed: </source>
     </message>
     <message>
         <source>Repeat selection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -15488,6 +15702,22 @@ failed: </source>
         <source>Set loop in position</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -16535,6 +16765,10 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Tablature2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -17646,10 +17880,6 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Prallprall line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wavy line</source>
         <translation type="unfinished"/>
     </message>
 </context>

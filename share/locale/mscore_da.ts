@@ -3042,6 +3042,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glisando-inspektør</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpeggio</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Afspil</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nulstil afspilningsopsætning </translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3106,6 +3125,30 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Nulstil tidsspredningsværdi</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Ornamenteringsstil</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Standard</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barok</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Nulstil ornamenteringsstil</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Afspil</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nulstil afspilningsopsætning </translation>
     </message>
 </context>
 <context>
@@ -3276,6 +3319,25 @@ space unit</extracomment>
     <message>
         <source>User position</source>
         <translation>Brugerdefineret placering</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glisando-inspektør</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Bånd</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Afspil</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nulstil afspilningsværdi</translation>
     </message>
 </context>
 <context>
@@ -3558,6 +3620,42 @@ space unit</extracomment>
     <message>
         <source>Show text</source>
         <translation>Vis tekst</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Layoutstil</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Nulstil layoutstil</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Afspilningsstil</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Kromatisk</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Hvide tangenter</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Sorte tangenter</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diatonisk</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Afspil</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nulstil afspilningsopsætning</translation>
     </message>
 </context>
 <context>
@@ -4366,6 +4464,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Tekstramme-inspektør</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Tekstramme</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Bundafstand</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Topmargen</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Nulstil værdi</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Nulstil topafstand</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Nulstil bundafstand</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Venstremargen</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Bundmargen</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Nulstil højremargenværdi</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Højremargen</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Nulstil bundmargenværdi</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Nulstil topmargenværdi</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Nulstil venstremargenværdi</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Topafstand</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>sp</translation>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4496,12 +4666,36 @@ space unit</extracomment>
         <translation>Dobbelt praltrille</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Bølgelinje</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Nulstil værdi</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Ornamenteringsstil</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Retning</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Standard</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barok</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Nulstil ornamenteringsstil</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Afspil</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nulstil afspilningsværdi</translation>
     </message>
 </context>
 <context>
@@ -4876,6 +5070,13 @@ space unit</extracomment>
     <message>
         <source>Add time signature to palette</source>
         <translation>Tilføj taktart til palette</translation>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>atonal</translation>
     </message>
 </context>
 <context>
@@ -6048,14 +6249,6 @@ fejlede:</translation>
         <translation>tegnet $ selv</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>meta data mærke</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Tilgængelige mærker og deres nuværende værdi:</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Gør gældende for alle stemmer</translation>
     </message>
@@ -6070,6 +6263,14 @@ fejlede:</translation>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>Sidenummer hvis der er mere end én side</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>meta data mærke, se nedenfor</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Tilgængelige meta data mærker og deres nuværende værdier:</translation>
     </message>
 </context>
 <context>
@@ -7199,6 +7400,10 @@ vælg et andet navn:</translation>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation>Nodearket kan ikke gemmes online. Ret de ødelagte takter og prøv igen.</translation>
     </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Bed om hjælp</translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7683,10 +7888,6 @@ fejlede: %2</translation>
         <translation>Skriv layoutfil fejlede: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>fil ikke fundet</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Intet valgt</translation>
     </message>
@@ -7697,6 +7898,10 @@ fejlede: %2</translation>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>Takt %1, nodelinje %2, stemme %3 er for lang. Forventet: %4; Fundet: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>XML læsefejl ved linje %1 kolonne %2: %3</translation>
     </message>
 </context>
 <context>
@@ -8009,6 +8214,12 @@ Vælg en serie af takter som skal slås sammen og prøv igen</translation>
     <message>
         <source>Transparent background</source>
         <translation>Gennemsigtig baggrund</translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>Kan ikke dele takten her:
+Første slag i takten</translation>
     </message>
 </context>
 <context>
@@ -10410,6 +10621,14 @@ mislykkedes:</translation>
         <source>Filter</source>
         <translation>Filter</translation>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Eksporter RPN&apos;er</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10734,7 +10953,7 @@ Besøg &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore hjemmesiden og h
     </message>
     <message>
         <source>Do you want to try to load this file anyway?</source>
-        <translation type="unfinished"/>
+        <translation>Vil du alligevel forsøge at indlæse filen? </translation>
     </message>
 </context>
 <context>
@@ -11265,6 +11484,14 @@ Vil du overskrive?</translation>
     <message>
         <source>System flag</source>
         <translation>Systemflag</translation>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation>Søg...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Ryd</translation>
     </message>
 </context>
 <context>
@@ -13614,10 +13841,6 @@ fejlede:</translation>
         <translation>Fjer-bjælke, hurtigere</translation>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Palette</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Afspilningspanel</translation>
     </message>
@@ -13652,10 +13875,6 @@ fejlede:</translation>
     <message>
         <source>Add lyrics</source>
         <translation>Tilføj sangtekst</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Tempomarkering...</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -14012,10 +14231,6 @@ fejlede:</translation>
     <message>
         <source>Repeat selection</source>
         <translation>Gentag det valgte</translation>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
-        <translation>Panorér klaverrulle</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
@@ -15582,6 +15797,22 @@ fejlede:</translation>
         <source>Set loop in position</source>
         <translation>Start ved afspilning i løkke</translation>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Paletter</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Tempomarkering</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation>Zoom til 100%</translation>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation>Panorer klaverrulle</translation>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -16632,6 +16863,10 @@ Takten er ikke tom</translation>
     <message>
         <source>Tablature2</source>
         <translation>2. Tabulatur</translation>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>Diskantnøgle valgfri 8vb</translation>
     </message>
 </context>
 <context>
@@ -17743,10 +17978,6 @@ Takten er ikke tom</translation>
     <message>
         <source>Prallprall line</source>
         <translation>Dobbelt praltrillelinje</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Bøljelinje</translation>
     </message>
 </context>
 <context>

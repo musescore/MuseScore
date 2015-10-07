@@ -152,6 +152,7 @@ void Preferences::init()
             midiRemote[i].type = MIDI_REMOTE_TYPE_INACTIVE;
 
       midiExpandRepeats        = true;
+      midiExportRPNs           = false;
       MScore::playRepeats      = true;
       MScore::panPlayback      = true;
       instrumentList1          = ":/data/instruments.xml";
@@ -214,10 +215,10 @@ void Preferences::init()
 #else
       nativeDialogs           = false;    // don't use system native file dialogs
 #endif
-
       exportAudioSampleRate   = exportAudioSampleRates[0];
 
       workspace               = "Basic";
+      exportPdfDpi            = 300;
       };
 
 //---------------------------------------------------------
@@ -284,6 +285,7 @@ void Preferences::write()
       s.setValue("defaultStyle",       defaultStyleFile);
 
       s.setValue("midiExpandRepeats",  midiExpandRepeats);
+      s.setValue("midiExportRPNs",     midiExportRPNs);
       s.setValue("playRepeats",        MScore::playRepeats);
       s.setValue("panPlayback",        MScore::panPlayback);
       s.setValue("instrumentList",     instrumentList1);
@@ -341,6 +343,7 @@ void Preferences::write()
       s.setValue("exportAudioSampleRate", exportAudioSampleRate);
 
       s.setValue("workspace", workspace);
+      s.setValue("exportPdfDpi", exportPdfDpi);
 
       //update
       s.setValue("checkUpdateStartup", checkUpdateStartup);
@@ -425,6 +428,7 @@ void Preferences::read()
       defaultStyleFile         = s.value("defaultStyle", defaultStyleFile).toString();
 
       midiExpandRepeats        = s.value("midiExpandRepeats", midiExpandRepeats).toBool();
+      midiExportRPNs           = s.value("midiExportRPNs", midiExportRPNs).toBool();
       MScore::playRepeats      = s.value("playRepeats", MScore::playRepeats).toBool();
       MScore::panPlayback      = s.value("panPlayback", MScore::panPlayback).toBool();
       alternateNoteEntryMethod = s.value("alternateNoteEntry", alternateNoteEntryMethod).toBool();
@@ -491,6 +495,7 @@ void Preferences::read()
       exportAudioSampleRate = s.value("exportAudioSampleRate", exportAudioSampleRate).toInt();
 
       workspace          = s.value("workspace", workspace).toString();
+      exportPdfDpi       = s.value("exportPdfDpi", exportPdfDpi).toInt();
 
       checkUpdateStartup = s.value("checkUpdateStartup", checkUpdateStartup).toBool();
 
@@ -828,6 +833,7 @@ void PreferenceDialog::updateValues()
             }
       sessionScore->setText(prefs.startScore);
       expandRepeats->setChecked(prefs.midiExpandRepeats);
+      exportRPNs->setChecked(prefs.midiExportRPNs);
       instrumentList1->setText(prefs.instrumentList1);
       instrumentList2->setText(prefs.instrumentList2);
 
@@ -979,6 +985,7 @@ void PreferenceDialog::updateValues()
       if (idx == n)     // if not found in table
             idx = 0;
       exportAudioSampleRate->setCurrentIndex(idx);
+      exportPdfDpi->setValue(prefs.exportPdfDpi);
 
       sfChanged = false;
       }
@@ -1371,6 +1378,7 @@ void PreferenceDialog::apply()
       prefs.exportAudioSampleRate = exportAudioSampleRates[idx];
 
       prefs.midiExpandRepeats  = expandRepeats->isChecked();
+      prefs.midiExportRPNs     = exportRPNs->isChecked();
       prefs.instrumentList1    = instrumentList1->text();
       prefs.instrumentList2    = instrumentList2->text();
 
@@ -1390,6 +1398,7 @@ void PreferenceDialog::apply()
       prefs.pngResolution      = pngResolution->value();
       prefs.pngTransparent     = pngTransparent->isChecked();
       converterDpi             = prefs.pngResolution;
+      prefs.exportPdfDpi       = exportPdfDpi->value();
 
       if (shortcutsChanged) {
             shortcutsChanged = false;
@@ -1887,6 +1896,7 @@ void PreferenceDialog::printShortcutsClicked()
       qreal y;
       qreal lh = QFontMetricsF(p.font()).lineSpacing();
 
+      // get max width for description
       QMapIterator<QString, Shortcut*> isc(localShortcuts);
       qreal col1Width = 0.0;
       while (isc.hasNext()) {
@@ -1896,9 +1906,8 @@ void PreferenceDialog::printShortcutsClicked()
             }
 
       int idx = 0;
-      isc = QMapIterator<QString, Shortcut*>(localShortcuts);
-      while (isc.hasNext()) {
-            isc.next();
+      QTreeWidgetItem* item = shortcutList->topLevelItem(0);
+      while (item) {
             if (idx == 0 || y >= (ph - bm)) {
                   y = tm;
                   if (idx)
@@ -1915,11 +1924,11 @@ void PreferenceDialog::printShortcutsClicked()
                         y += 5 * dpmm;
                         }
                   }
-            Shortcut* s = isc.value();
-            p.drawText(lm, y, s->descr());
-            p.drawText(col1Width + lm + 5 * dpmm, y, s->keysToString());
+            p.drawText(lm, y, item->text(0));
+            p.drawText(col1Width + lm + 5 * dpmm, y, item->text(1));
             y += lh;
             ++idx;
+            item = shortcutList->itemBelow(item);
             }
       p.end();
       }

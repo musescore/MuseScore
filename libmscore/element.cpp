@@ -101,7 +101,6 @@ static const ElementName elementNames[] = {
       ElementName("BarLine",              QT_TRANSLATE_NOOP("elementName", "Bar Line")),
       ElementName("StemSlash",            QT_TRANSLATE_NOOP("elementName", "Stem Slash")),
       ElementName("Line",                 QT_TRANSLATE_NOOP("elementName", "Line")),
-      ElementName("Bracket",              QT_TRANSLATE_NOOP("elementName", "Bracket")),
 
       ElementName("Arpeggio",             QT_TRANSLATE_NOOP("elementName", "Arpeggio")),
       ElementName("Accidental",           QT_TRANSLATE_NOOP("elementName", "Accidental")),
@@ -166,6 +165,7 @@ static const ElementName elementNames[] = {
       ElementName("NoteLine",             QT_TRANSLATE_NOOP("elementName", "Note Line")),
       ElementName("LyricsLine",           QT_TRANSLATE_NOOP("elementName", "Melisma Line")),
       ElementName("Glissando",            QT_TRANSLATE_NOOP("elementName", "Glissando")),
+      ElementName("Bracket",              QT_TRANSLATE_NOOP("elementName", "Bracket")),
       ElementName("Segment",              QT_TRANSLATE_NOOP("elementName", "Segment")),
       ElementName("System",               QT_TRANSLATE_NOOP("elementName", "System")),
       ElementName("Compound",             QT_TRANSLATE_NOOP("elementName", "Compound")),
@@ -232,7 +232,7 @@ qreal Element::spatium() const
 
 qreal Element::magS() const
       {
-      return mag() * (_score->spatium() /(MScore::DPI * SPATIUM20));
+      return mag() * (_score->spatium() / (MScore::DPI * SPATIUM20));
       }
 
 //---------------------------------------------------------
@@ -656,7 +656,8 @@ void Element::writeProperties(Xml& xml) const
             xml.tag("lid", _links->lid());
       if (!userOff().isNull()) {
             if (type() == Element::Type::VOLTA_SEGMENT
-                        || type() == Element::Type::GLISSANDO_SEGMENT || isChordRest())
+                || type() == Element::Type::GLISSANDO_SEGMENT || isChordRest()
+                || (xml.clipboardmode && isSLineSegment()))
                   xml.tag("offset", userOff() / spatium());
             else
                   xml.tag("pos", pos() / score()->spatium());
@@ -954,7 +955,7 @@ void StaffLines::draw(QPainter* painter) const
 qreal StaffLines::y1() const
       {
       System* system = measure()->system();
-      if (system == 0)
+      if (system == 0 || staffIdx() >= system->staves()->size())
             return 0.0;
 
       return system->staff(staffIdx())->y() + ipos().y();
@@ -1544,7 +1545,16 @@ QVariant Element::propertyDefault(P_ID id) const
 bool Element::isSLine() const
       {
       return type() == Element::Type::HAIRPIN || type() == Element::Type::OTTAVA || type() == Element::Type::PEDAL
-         || type() == Element::Type::TRILL || type() == Element::Type::VOLTA || type() == Element::Type::TEXTLINE || type() == Element::Type::NOTELINE;
+         || type() == Element::Type::TRILL || type() == Element::Type::VOLTA || type() == Element::Type::TEXTLINE || type() == Element::Type::NOTELINE || type() == Element::Type::GLISSANDO;
+      }
+
+//---------------------------------------------------------
+//   isSLine
+//---------------------------------------------------------
+
+bool Element::isSLineSegment() const
+      {
+      return type() == Element::Type::HAIRPIN_SEGMENT || type() == Element::Type::OTTAVA_SEGMENT || type() == Element::Type::PEDAL_SEGMENT || type() == Element::Type::TRILL_SEGMENT || type() == Element::Type::VOLTA_SEGMENT || type() == Element::Type::TEXTLINE_SEGMENT || type() == Element::Type::GLISSANDO_SEGMENT;
       }
 
 //---------------------------------------------------------
@@ -1691,7 +1701,7 @@ void Element::drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const
       score()->scoreFont()->draw(id, p, magS(), o, n);
       }
 
-void Element::drawSymbols(const QString& s, QPainter* p, const QPointF& o) const
+void Element::drawSymbols(const QList<SymId>& s, QPainter* p, const QPointF& o) const
       {
       score()->scoreFont()->draw(s, p, magS(), o);
       }
@@ -1713,9 +1723,18 @@ qreal Element::symWidth(SymId id) const
       {
       return score()->scoreFont()->width(id, magS());
       }
-qreal Element::symWidth(const QString& s) const
+qreal Element::symWidth(const QList<SymId>& s) const
       {
       return score()->scoreFont()->width(s, magS());
+      }
+
+//---------------------------------------------------------
+//   symAdvance
+//---------------------------------------------------------
+
+qreal Element::symAdvance(SymId id) const
+      {
+      return score()->scoreFont()->advance(id, magS());
       }
 
 //---------------------------------------------------------
@@ -1727,18 +1746,27 @@ QRectF Element::symBbox(SymId id) const
       return score()->scoreFont()->bbox(id, magS());
       }
 
-QRectF Element::symBbox(const QString& s) const
+QRectF Element::symBbox(const QList<SymId>& s) const
       {
       return score()->scoreFont()->bbox(s, magS());
       }
 
 //---------------------------------------------------------
-//   symAttach
+//   symStemDownNW
 //---------------------------------------------------------
 
-QPointF Element::symAttach(SymId id) const
+QPointF Element::symStemDownNW(SymId id) const
       {
-      return score()->scoreFont()->attach(id, magS());
+      return score()->scoreFont()->stemDownNW(id, magS());
+      }
+
+//---------------------------------------------------------
+//   symStemUpSE
+//---------------------------------------------------------
+
+QPointF Element::symStemUpSE(SymId id) const
+      {
+      return score()->scoreFont()->stemUpSE(id, magS());
       }
 
 //---------------------------------------------------------
@@ -1778,30 +1806,38 @@ bool Element::symIsValid(SymId id) const
 //   toTimeSigString
 //---------------------------------------------------------
 
-QString Element::toTimeSigString(const QString& s) const
+QList<SymId> Element::toTimeSigString(const QString& s) const
       {
-      QString d;
-      ScoreFont* f = score()->scoreFont();
+      QList<SymId> d;
       for (int i = 0; i < s.size(); ++i) {
-            switch (s[i].toLatin1()) {
-                  case '+': d += f->toString(SymId::timeSigPlusSmall); break;
-                  case '0': d += f->toString(SymId::timeSig0); break;
-                  case '1': d += f->toString(SymId::timeSig1); break;
-                  case '2': d += f->toString(SymId::timeSig2); break;
-                  case '3': d += f->toString(SymId::timeSig3); break;
-                  case '4': d += f->toString(SymId::timeSig4); break;
-                  case '5': d += f->toString(SymId::timeSig5); break;
-                  case '6': d += f->toString(SymId::timeSig6); break;
-                  case '7': d += f->toString(SymId::timeSig7); break;
-                  case '8': d += f->toString(SymId::timeSig8); break;
-                  case '9': d += f->toString(SymId::timeSig9); break;
-                  case 'C': d += f->toString(SymId::timeSigCommon); break;
-                  case 'O': d += f->toString(SymId::mensuralProlation2); break;
-                  case '(': d += f->toString(SymId::timeSigParensLeftSmall); break;
-                  case ')': d += f->toString(SymId::timeSigParensRightSmall); break;
-                  case '\xA2': d += f->toString(SymId::timeSigCutCommon); break;    // '¢'
-                  case '\xD8': d += f->toString(SymId::mensuralProlation3); break;  // 'Ø'
-                  default:  d += s[i]; break;
+            switch (s[i].unicode()) {
+                  case 43: d += SymId::timeSigPlusSmall; break; // '+'
+                  case 48: d += SymId::timeSig0; break;         // '0'
+                  case 49: d += SymId::timeSig1; break;         // '1'
+                  case 50: d += SymId::timeSig2; break;         // '2'
+                  case 51: d += SymId::timeSig3; break;         // '3'
+                  case 52: d += SymId::timeSig4; break;         // '4'
+                  case 53: d += SymId::timeSig5; break;         // '5'
+                  case 54: d += SymId::timeSig6; break;         // '6'
+                  case 55: d += SymId::timeSig7; break;         // '7'
+                  case 56: d += SymId::timeSig8; break;         // '8'
+                  case 57: d += SymId::timeSig9; break;         // '9'
+                  case 67: d += SymId::timeSigCommon; break;    // 'C'
+                  case 40: d += SymId::timeSigParensLeftSmall; break;  // '('
+                  case 41: d += SymId::timeSigParensRightSmall; break; // ')'
+                  case 162: d += SymId::timeSigCutCommon; break;    // '¢'
+                  case 59664: d += SymId::mensuralProlation1; break;
+                  case 79:                                          // 'O'
+                  case 59665: d += SymId::mensuralProlation2; break;
+                  case 216:                                        // 'Ø'
+                  case 59666: d += SymId::mensuralProlation3; break;
+                  case 59667: d += SymId::mensuralProlation4; break;
+                  case 59668: d += SymId::mensuralProlation5; break;
+                  case 59670: d += SymId::mensuralProlation7; break;
+                  case 59671: d += SymId::mensuralProlation8; break;
+                  case 59673: d += SymId::mensuralProlation10; break;
+                  case 59674: d += SymId::mensuralProlation11; break;
+                  default:  break;  // d += s[i]; break;
                   }
             }
       return d;
@@ -1847,7 +1883,7 @@ Element* Element::nextElement()
                         }
                   case Element::Type::MEASURE: {
                         Measure* m = static_cast<Measure*>(p);
-                        return m->nextElement(staffIdx());
+                        return m->nextElementStaff(staffIdx());
                         }
                   case Element::Type::SYSTEM: {
                         System* sys = static_cast<System*>(p);
@@ -1892,7 +1928,7 @@ Element* Element::prevElement()
                         }
                   case Element::Type::MEASURE: {
                         Measure* m = static_cast<Measure*>(p);
-                        return m->prevElement(staffIdx());
+                        return m->prevElementStaff(staffIdx());
                         }
                   case Element::Type::SYSTEM: {
                         System* sys = static_cast<System*>(p);

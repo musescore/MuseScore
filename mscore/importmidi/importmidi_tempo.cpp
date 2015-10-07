@@ -55,7 +55,7 @@ void setTempoToScore(Score *score, int tick, double beatsPerSecond)
 
             TempoText *tempoText = new TempoText(score);
             tempoText->setTempo(beatsPerSecond);
-            tempoText->setXmlText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(tempoInBpm));
+            tempoText->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempoInBpm));
             tempoText->setTrack(0);
 
             Measure *measure = score->tick2measure(tick);

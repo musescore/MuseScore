@@ -41,7 +41,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>The MusicXML Public License:</source>
-        <translation type="unfinished"/>
+        <translation>The MusicXML Public License:</translation>
     </message>
 </context>
 <context>
@@ -644,283 +644,283 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>G 8</source>
-        <translation type="unfinished"/>
+        <translation>G 8</translation>
     </message>
     <message>
         <source>A 8</source>
-        <translation type="unfinished"/>
+        <translation>A 8</translation>
     </message>
     <message>
         <source>B 8</source>
-        <translation type="unfinished"/>
+        <translation>B 8</translation>
     </message>
     <message>
         <source>C 7</source>
-        <translation type="unfinished"/>
+        <translation>C 7</translation>
     </message>
     <message>
         <source>D 7</source>
-        <translation type="unfinished"/>
+        <translation>D 7</translation>
     </message>
     <message>
         <source>E 7</source>
-        <translation type="unfinished"/>
+        <translation>E 7</translation>
     </message>
     <message>
         <source>F 7</source>
-        <translation type="unfinished"/>
+        <translation>F 7</translation>
     </message>
     <message>
         <source>G 7</source>
-        <translation type="unfinished"/>
+        <translation>G 7</translation>
     </message>
     <message>
         <source>A 7</source>
-        <translation type="unfinished"/>
+        <translation>A 7</translation>
     </message>
     <message>
         <source>B 7</source>
-        <translation type="unfinished"/>
+        <translation>B 7</translation>
     </message>
     <message>
         <source>C 6</source>
-        <translation type="unfinished"/>
+        <translation>C 6</translation>
     </message>
     <message>
         <source>D 6</source>
-        <translation type="unfinished"/>
+        <translation>D 6</translation>
     </message>
     <message>
         <source>E 6</source>
-        <translation type="unfinished"/>
+        <translation>E 6</translation>
     </message>
     <message>
         <source>F 6</source>
-        <translation type="unfinished"/>
+        <translation>F 6</translation>
     </message>
     <message>
         <source>G 6</source>
-        <translation type="unfinished"/>
+        <translation>G 6</translation>
     </message>
     <message>
         <source>A 6</source>
-        <translation type="unfinished"/>
+        <translation>A 6</translation>
     </message>
     <message>
         <source>B 6</source>
-        <translation type="unfinished"/>
+        <translation>B 6</translation>
     </message>
     <message>
         <source>C 5</source>
-        <translation type="unfinished"/>
+        <translation>C 5</translation>
     </message>
     <message>
         <source>D 5</source>
-        <translation type="unfinished"/>
+        <translation>D 5</translation>
     </message>
     <message>
         <source>E 5</source>
-        <translation type="unfinished"/>
+        <translation>E 5</translation>
     </message>
     <message>
         <source>F 5</source>
-        <translation type="unfinished"/>
+        <translation>F 5</translation>
     </message>
     <message>
         <source>G 5</source>
-        <translation type="unfinished"/>
+        <translation>G 5</translation>
     </message>
     <message>
         <source>A 5</source>
-        <translation type="unfinished"/>
+        <translation>A 5</translation>
     </message>
     <message>
         <source>B 5</source>
-        <translation type="unfinished"/>
+        <translation>B 5</translation>
     </message>
     <message>
         <source>C 4</source>
-        <translation type="unfinished"/>
+        <translation>C 4</translation>
     </message>
     <message>
         <source>D 4</source>
-        <translation type="unfinished"/>
+        <translation>D 4</translation>
     </message>
     <message>
         <source>E 4</source>
-        <translation type="unfinished"/>
+        <translation>E 4</translation>
     </message>
     <message>
         <source>F 4</source>
-        <translation type="unfinished"/>
+        <translation>F 4</translation>
     </message>
     <message>
         <source>G 4</source>
-        <translation type="unfinished"/>
+        <translation>G 4</translation>
     </message>
     <message>
         <source>A 4</source>
-        <translation type="unfinished"/>
+        <translation>A 4</translation>
     </message>
     <message>
         <source>B 4</source>
-        <translation type="unfinished"/>
+        <translation>B 4</translation>
     </message>
     <message>
         <source>C 3</source>
-        <translation type="unfinished"/>
+        <translation>C 3</translation>
     </message>
     <message>
         <source>D 3</source>
-        <translation type="unfinished"/>
+        <translation>D 3</translation>
     </message>
     <message>
         <source>E 3</source>
-        <translation type="unfinished"/>
+        <translation>E 3</translation>
     </message>
     <message>
         <source>F 3</source>
-        <translation type="unfinished"/>
+        <translation>F 3</translation>
     </message>
     <message>
         <source>G 3</source>
-        <translation type="unfinished"/>
+        <translation>G 3</translation>
     </message>
     <message>
         <source>A 3</source>
-        <translation type="unfinished"/>
+        <translation>A 3</translation>
     </message>
     <message>
         <source>B 3</source>
-        <translation type="unfinished"/>
+        <translation>B 3</translation>
     </message>
     <message>
         <source>C 2</source>
-        <translation type="unfinished"/>
+        <translation>C 2</translation>
     </message>
     <message>
         <source>D 2</source>
-        <translation type="unfinished"/>
+        <translation>D 2</translation>
     </message>
     <message>
         <source>E 2</source>
-        <translation type="unfinished"/>
+        <translation>E 2</translation>
     </message>
     <message>
         <source>F 2</source>
-        <translation type="unfinished"/>
+        <translation>F 2</translation>
     </message>
     <message>
         <source>G 2</source>
-        <translation type="unfinished"/>
+        <translation>G 2</translation>
     </message>
     <message>
         <source>A 2</source>
-        <translation type="unfinished"/>
+        <translation>A 2</translation>
     </message>
     <message>
         <source>B 2</source>
-        <translation type="unfinished"/>
+        <translation>B 2</translation>
     </message>
     <message>
         <source>C 1</source>
-        <translation type="unfinished"/>
+        <translation>C 1</translation>
     </message>
     <message>
         <source>D 1</source>
-        <translation type="unfinished"/>
+        <translation>D 1</translation>
     </message>
     <message>
         <source>E 1</source>
-        <translation type="unfinished"/>
+        <translation>E 1</translation>
     </message>
     <message>
         <source>F 1</source>
-        <translation type="unfinished"/>
+        <translation>F 1</translation>
     </message>
     <message>
         <source>G 1</source>
-        <translation type="unfinished"/>
+        <translation>G 1</translation>
     </message>
     <message>
         <source>A 1</source>
-        <translation type="unfinished"/>
+        <translation>A 1</translation>
     </message>
     <message>
         <source>B 1</source>
-        <translation type="unfinished"/>
+        <translation>B 1</translation>
     </message>
     <message>
         <source>C 0</source>
-        <translation type="unfinished"/>
+        <translation>C 0</translation>
     </message>
     <message>
         <source>D 0</source>
-        <translation type="unfinished"/>
+        <translation>D 0</translation>
     </message>
     <message>
         <source>E 0</source>
-        <translation type="unfinished"/>
+        <translation>E 0</translation>
     </message>
     <message>
         <source>F 0</source>
-        <translation type="unfinished"/>
+        <translation>F 0</translation>
     </message>
     <message>
         <source>G 0</source>
-        <translation type="unfinished"/>
+        <translation>G 0</translation>
     </message>
     <message>
         <source>A 0</source>
-        <translation type="unfinished"/>
+        <translation>A 0</translation>
     </message>
     <message>
         <source>B 0</source>
-        <translation type="unfinished"/>
+        <translation>B 0</translation>
     </message>
     <message>
         <source>C -1</source>
-        <translation type="unfinished"/>
+        <translation>C -1</translation>
     </message>
     <message>
         <source>D -1</source>
-        <translation type="unfinished"/>
+        <translation>D -1</translation>
     </message>
     <message>
         <source>E -1</source>
-        <translation type="unfinished"/>
+        <translation>E -1</translation>
     </message>
     <message>
         <source>F -1</source>
-        <translation type="unfinished"/>
+        <translation>F -1</translation>
     </message>
     <message>
         <source>G -1</source>
-        <translation type="unfinished"/>
+        <translation>G -1</translation>
     </message>
     <message>
         <source>A -1</source>
-        <translation type="unfinished"/>
+        <translation>A -1</translation>
     </message>
     <message>
         <source>B -1</source>
-        <translation type="unfinished"/>
+        <translation>B -1</translation>
     </message>
     <message>
         <source>C♯</source>
-        <translation type="unfinished"/>
+        <translation>C♯</translation>
     </message>
     <message>
         <source>E♭</source>
-        <translation type="unfinished"/>
+        <translation>E♭</translation>
     </message>
     <message>
         <source>F♯</source>
-        <translation type="unfinished"/>
+        <translation>F♯</translation>
     </message>
     <message>
         <source>A♭</source>
-        <translation type="unfinished"/>
+        <translation>A♭</translation>
     </message>
     <message>
         <source>B♭</source>
@@ -928,39 +928,39 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>C♯ 8</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 8</translation>
     </message>
     <message>
         <source>E♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 8</translation>
     </message>
     <message>
         <source>F♯ 8</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 8</translation>
     </message>
     <message>
         <source>A♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 8</translation>
     </message>
     <message>
         <source>B♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 8</translation>
     </message>
     <message>
         <source>C♯ 7</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 7</translation>
     </message>
     <message>
         <source>E♭ 7</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 7</translation>
     </message>
     <message>
         <source>F♯ 7</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 7</translation>
     </message>
     <message>
         <source>A♭ 7</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 7</translation>
     </message>
     <message>
         <source>B♭ 7</source>
@@ -2739,7 +2739,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>C♯</source>
-        <translation type="unfinished"/>
+        <translation>C♯</translation>
     </message>
     <message>
         <source>C♯♯</source>
@@ -2771,7 +2771,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>E♭</source>
-        <translation type="unfinished"/>
+        <translation>E♭</translation>
     </message>
     <message>
         <source>E</source>
@@ -2799,7 +2799,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>F♯</source>
-        <translation type="unfinished"/>
+        <translation>F♯</translation>
     </message>
     <message>
         <source>F♯♯</source>
@@ -2831,7 +2831,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>A♭</source>
-        <translation type="unfinished"/>
+        <translation>A♭</translation>
     </message>
     <message>
         <source>A</source>
@@ -3027,6 +3027,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpeggio</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Mängi</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3090,6 +3109,30 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Time stretch value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3260,6 +3303,25 @@ space unit</extracomment>
     </message>
     <message>
         <source>User position</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3543,6 +3605,42 @@ space unit</extracomment>
     <message>
         <source>Show text</source>
         <translation>Näita Teksti</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -4351,6 +4449,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4481,11 +4651,35 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Wavy Line</source>
+        <source>Reset value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Reset value</source>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>vaikimisi</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Mängi</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -4860,6 +5054,13 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add time signature to palette</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6018,14 +6219,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation type="unfinished"/>
     </message>
@@ -6039,6 +6232,14 @@ failed: </source>
     </message>
     <message>
         <source>page number, if there is more than one page</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7161,6 +7362,10 @@ please choose a different name:</source>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7634,10 +7839,6 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>file not found</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>No selection</source>
         <translation type="unfinished"/>
     </message>
@@ -7647,6 +7848,10 @@ failed: %2</source>
     </message>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7955,6 +8160,11 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>Transparent background</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -10354,6 +10564,14 @@ failed: </source>
         <source>Filter</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -11186,6 +11404,14 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>System flag</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Clear</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -13534,10 +13760,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Palette</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Play Panel</translation>
     </message>
@@ -13571,10 +13793,6 @@ failed: </source>
     </message>
     <message>
         <source>Add lyrics</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13931,10 +14149,6 @@ failed: </source>
     </message>
     <message>
         <source>Repeat selection</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -15501,6 +15715,22 @@ failed: </source>
         <source>Set loop in position</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -16548,6 +16778,10 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Tablature2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -17659,10 +17893,6 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Prallprall line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wavy line</source>
         <translation type="unfinished"/>
     </message>
 </context>

@@ -1743,7 +1743,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tuplets</source>
-        <translation>N-tolen</translation>
+        <translation>N-Tolen Klammern</translation>
     </message>
     <message>
         <source>Display in concert pitch</source>
@@ -3042,6 +3042,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glissando-Inspekteur</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpeggien</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Wiedergabe</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Wert für &apos;Wiedergabe&apos; zurücksetzen</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3106,6 +3125,30 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Wert für &apos;Zeitdehnung&apos; zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Ornamentstil</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Voreinstellung</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barock</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Wert für &apos;Ornamenttyp&apos; zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Wiedergabe</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Wert für &apos;Wiedergabe&apos; zurücksetzen</translation>
     </message>
 </context>
 <context>
@@ -3276,6 +3319,25 @@ space unit</extracomment>
     <message>
         <source>User position</source>
         <translation>Benutzerdefinierte Position</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glissando-Inspekteur</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Bending</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Wiedergabe</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Wert für &apos;Wiedergabe&apos; zurücksetzen</translation>
     </message>
 </context>
 <context>
@@ -3558,6 +3620,42 @@ space unit</extracomment>
     <message>
         <source>Show text</source>
         <translation>Text anzeigen</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Stil</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Wert für &apos;Stil&apos; zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Wiedergabestil</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Chromatisch</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Weiße Tasten</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Schwarze Tasten</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diatonisch</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Wiedergabe</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Wert für &apos;Wiedergabe&apos; zurücksetzen</translation>
     </message>
 </context>
 <context>
@@ -3958,7 +4056,7 @@ space unit</extracomment>
     <name>InspectorMarker</name>
     <message>
         <source>Marker</source>
-        <translation>Markierung</translation>
+        <translation>Sprungmarke</translation>
     </message>
     <message>
         <source>Label</source>
@@ -3986,15 +4084,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Marker type</source>
-        <translation>Markierungsart</translation>
+        <translation>Sprungmarkentyp</translation>
     </message>
     <message>
         <source>Marker Inspector</source>
-        <translation>Markierungsinspekteur</translation>
+        <translation>Sprungmarkeninspekteur</translation>
     </message>
     <message>
         <source>Reset Marker type value</source>
-        <translation>Wert für &apos;Markierungsart&apos; zurücksetzen</translation>
+        <translation>Wert für &apos;Sprungmarkentyp&apos; zurücksetzen</translation>
     </message>
     <message>
         <source>Reset Label value</source>
@@ -4002,7 +4100,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Marker Type</source>
-        <translation>Markierungstyp</translation>
+        <translation>Sprungmarkentyp</translation>
     </message>
     <message>
         <source>Segno variation</source>
@@ -4366,10 +4464,82 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Textrahmeninspekteur</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Textrahmen</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Abstand unten</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Oberer Rand</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Wert zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Wert für &apos;Abstand oben&apos; zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Wert für &apos;Abstand unten&apos; zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Linker Rand</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Unterer Rand</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Wert für &apos;Rechter Rand&apos; zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Rechter Rand</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Wert für &apos;Unterer Rand&apos; zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Wert für &apos;Oberer Rand&apos; zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Wert für &apos;Linker Rand&apos; zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Abstand oben</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>sp</translation>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
-        <translation>Tempo</translation>
+        <translation>Tempotext</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -4385,7 +4555,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tempo Marking Inspector</source>
-        <translation>Tempomarkierungsinspekteur</translation>
+        <translation>Tempotextinspekteur</translation>
     </message>
     <message>
         <source>Reset Tempo value</source>
@@ -4496,12 +4666,36 @@ space unit</extracomment>
         <translation>Triller</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Wellenlinie</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Wert zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Ornamentstil</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Richtung</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Voreinstellung</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barock</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Wert für &apos;Ornamenttyp&apos; zurücksetzen</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Wiedergabe</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Wert für &apos;Wiedergabe&apos; zurücksetzen</translation>
     </message>
 </context>
 <context>
@@ -4879,6 +5073,13 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>atonal</translation>
+    </message>
+</context>
+<context>
     <name>LayerManager</name>
     <message>
         <source>MuseScore: Layers</source>
@@ -5199,7 +5400,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tuplets</source>
-        <translation>N-tolen</translation>
+        <translation>N-Tolen</translation>
     </message>
     <message>
         <source>2</source>
@@ -6048,14 +6249,6 @@ fehlgeschlagen:</translation>
         <translation>das $-Zeichen selbst</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>Metadaten-Marke</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Verfügbare Marken und deren Werte:</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Auf alle Auszüge anwenden</translation>
     </message>
@@ -6070,6 +6263,14 @@ fehlgeschlagen:</translation>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>Seitennummer, wenn es mehr als eine Seite gibt</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>Metadaten-Marke, siehe unten</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Verfügbare Metadaten-Marken und deren aktuellen Werte:</translation>
     </message>
 </context>
 <context>
@@ -7200,6 +7401,10 @@ bitte wählen Sie einen anderen Namen:</translation>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation>Diese Partitur kann nicht online gespeichert werden. Bitte die korrupten Takte reparieren und dann nochmal versuchen.</translation>
     </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Hilfe erbitten</translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7685,10 +7890,6 @@ fehlgeschlagen: %</translation>
         <translation>Datei schreiben schlug fehl: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>Datei nicht gefunden</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Keine Auswahl</translation>
     </message>
@@ -7699,6 +7900,10 @@ fehlgeschlagen: %</translation>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>Takt %1, Notenzeile %2, Stimme %3 zu lang. Erwartet: %4; Gefunden: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>XML Lesefehler in Zeile %1 Spalte %2: %3</translation>
     </message>
 </context>
 <context>
@@ -8012,6 +8217,12 @@ Bitte zuerst Takte auswählen und dann nochmal probieren</translation>
     <message>
         <source>Transparent background</source>
         <translation>Transparenter Hintergrund</translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>Kann Takt hier nicht aufspalten:
+Erster Schlag des Taktes</translation>
     </message>
 </context>
 <context>
@@ -10413,6 +10624,14 @@ fehlgeschlagen: </translation>
         <source>Filter</source>
         <translation>Suchfilter</translation>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Exportiere RPNs</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -11272,6 +11491,14 @@ Soll sie überschrieben werden?</translation>
     <message>
         <source>System flag</source>
         <translation>System</translation>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation>Suchen...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Löschen</translation>
     </message>
 </context>
 <context>
@@ -13621,10 +13848,6 @@ fehlgeschlagen: </translation>
         <translation>Gefächerter Balken, schneller</translation>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Palette</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Wiedergabepult</translation>
     </message>
@@ -13661,12 +13884,8 @@ fehlgeschlagen: </translation>
         <translation>Liedtext hinzufügen</translation>
     </message>
     <message>
-        <source>Tempo Marking...</source>
-        <translation>Tempo…</translation>
-    </message>
-    <message>
         <source>Add tempo marking</source>
-        <translation>Tempo hinzufügen</translation>
+        <translation>Tempotext hinzufügen</translation>
     </message>
     <message>
         <source>System Text</source>
@@ -14021,10 +14240,6 @@ fehlgeschlagen: </translation>
         <translation>Auswahl wiederholen</translation>
     </message>
     <message>
-        <source>Pan piano roll</source>
-        <translation>Pianoroll nachführen</translation>
-    </message>
-    <message>
         <source>Toggle pan piano roll</source>
         <translation>Pianorollnachführung umschalten</translation>
     </message>
@@ -14162,11 +14377,11 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Toggle count-in playback</source>
-        <translation>Einzählwiedergabe umschalten</translation>
+        <translation>Anzählwiedergabe umschalten</translation>
     </message>
     <message>
         <source>Play count-in at playback start</source>
-        <translation>Einzählen bei Wiedergabebegin</translation>
+        <translation>Anzählen bei Wiedergabebegin</translation>
     </message>
     <message>
         <source>Figured Bass</source>
@@ -15558,7 +15773,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <source>Toggle staccato</source>
-        <translation>Stakkato umschalten</translation>
+        <translation>Staccato umschalten</translation>
     </message>
     <message>
         <source>Toggle tenuto</source>
@@ -15587,6 +15802,22 @@ fehlgeschlagen: </translation>
     <message>
         <source>Set loop in position</source>
         <translation>Schleifenanfang bestimmen</translation>
+    </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Paletten</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Tempotext</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation>Vergrößerung auf 100%</translation>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation>Pianoroll nachführen</translation>
     </message>
 </context>
 <context>
@@ -15656,7 +15887,7 @@ Takt ist nicht leer.</translation>
     </message>
     <message>
         <source>Staccatissimo</source>
-        <translation>Stacatissimo</translation>
+        <translation>Staccatissimo</translation>
     </message>
     <message>
         <source>Tenuto</source>
@@ -16639,6 +16870,10 @@ Takt ist nicht leer.</translation>
         <source>Tablature2</source>
         <translation>Tabulatur2</translation>
     </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>Violinschlüssel optional 8vb</translation>
+    </message>
 </context>
 <context>
     <name>drumset</name>
@@ -17073,7 +17308,7 @@ Takt ist nicht leer.</translation>
     </message>
     <message>
         <source>Marker</source>
-        <translation>Markierung</translation>
+        <translation>Sprungmarke</translation>
     </message>
     <message>
         <source>Jump</source>
@@ -17749,10 +17984,6 @@ Takt ist nicht leer.</translation>
     <message>
         <source>Prallprall line</source>
         <translation>Trillerlinie</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Wellenlinie</translation>
     </message>
 </context>
 <context>

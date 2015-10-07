@@ -30,13 +30,13 @@ target_link_libraries(
       qzip
       z
       ${QT_LIBRARIES}
+      ${FREETYPE_LIBRARIES}
       )
 
 if (NOT MINGW AND NOT APPLE)
    target_link_libraries(${TARGET}
       dl
-      pthread
-      freetype)
+      pthread)
 endif (NOT MINGW AND NOT APPLE)
 
 if (OMR)

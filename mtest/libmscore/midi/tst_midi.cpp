@@ -24,6 +24,7 @@
 #include "libmscore/note.h"
 #include "libmscore/keysig.h"
 #include "mscore/exportmidi.h"
+#include "mscore/preferences.h"
 #include <QIODevice>
 
 #include "libmscore/mcursor.h"
@@ -43,6 +44,7 @@ using namespace Ms;
 class TestMidi : public QObject, public MTest
       {
       Q_OBJECT
+      void midiExportTestRef(const QString& file);
 
    private slots:
       void initTestCase();
@@ -51,6 +53,9 @@ class TestMidi : public QObject, public MTest
       void midi03();
       void events_data();
       void events();
+      void midiBendsExport1() { midiExportTestRef("testBends1"); }
+      void midiBendsExport2() { midiExportTestRef("testBends2"); }      // Play property test
+      void midiPortExport()   { midiExportTestRef("testMidiPort"); }
       };
 
 //---------------------------------------------------------
@@ -83,9 +88,23 @@ void TestMidi::events_data()
       QTest::newRow("testSwingTexts") <<  "testSwingTexts";
       // ornaments
       QTest::newRow("testMordents") <<  "testMordents";
+      QTest::newRow("testBaroqueOrnaments") << "testBaroqueOrnaments";
+      QTest::newRow("testOrnamentAccidentals") << "testOrnamentAccidentals";
       QTest::newRow("testGraceBefore") <<  "testGraceBefore";
+      QTest::newRow("testKantataBWV140Excerpts") <<  "testKantataBWV140Excerpts";
+      QTest::newRow("testTrillTransposingInstrument") <<  "testTrillTransposingInstrument";
+      QTest::newRow("testAndanteExcerpts") <<  "testAndanteExcerpts";
+      QTest::newRow("testTrillLines") << "testTrillLines";
+      QTest::newRow("testTrillTempos") << "testTrillTempos";
+      QTest::newRow("testOrnaments") << "testOrnaments";
+      QTest::newRow("testTieTrill") << "testTieTrill";
+      // glissando
+      QTest::newRow("testGlissando") << "testGlissando";
+      QTest::newRow("testGlissandoAcrossStaffs") << "testGlissandoAcrossStaffs";
       // pedal
       QTest::newRow("testPedal") <<  "testPedal";
+      // multi note tremolo
+      QTest::newRow("testMultiNoteTremolo") << "testMultiNoteTremolo";
       }
 
 //---------------------------------------------------------
@@ -360,6 +379,24 @@ void TestMidi::events()
       QVERIFY(score);
       QVERIFY(compareFiles(writeFile, reference));
      // QVERIFY(saveCompareScore(score, writeFile, reference));
+      }
+
+//---------------------------------------------------------
+//   midiExportTest
+//   read a MuseScore mscx file, write to a MIDI file and verify against reference
+//---------------------------------------------------------
+
+void TestMidi::midiExportTestRef(const QString& file)
+      {
+      MScore::debugMode = true;
+      preferences.midiExportRPNs = true;
+      Score* score = readScore(DIR + file + ".mscx");
+      QVERIFY(score);
+      score->doLayout();
+      score->rebuildMidiMapping();
+      QVERIFY(saveMidi(score, QString(file) + ".mid"));
+      QVERIFY(compareFiles(QString(file) + ".mid", DIR + QString(file) + "-ref.mid"));
+      delete score;
       }
 
 QTEST_MAIN(TestMidi)

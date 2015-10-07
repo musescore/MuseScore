@@ -515,12 +515,21 @@ qreal Note::tabHeadHeight(StaffType* tab) const
       }
 
 //---------------------------------------------------------
-//   attach
+//   stemDownNW
 //---------------------------------------------------------
 
-QPointF Note::attach() const
+QPointF Note::stemDownNW() const
       {
-      return symAttach(noteHead());
+      return symStemDownNW(noteHead());
+      }
+
+//---------------------------------------------------------
+//   stemUpSE
+//---------------------------------------------------------
+
+QPointF Note::stemUpSE() const
+      {
+      return symStemUpSE(noteHead());
       }
 
 //---------------------------------------------------------
@@ -712,7 +721,7 @@ void Note::draw(QPainter* painter) const
                   foreach(MuseScoreView* view, score()->getViewer())
                         view->drawBackground(painter, bb);
 
-                  if (fretConflict()) {          //on fret conflict, draw on red background
+                  if (fretConflict() && !score()->printing()) {          //on fret conflict, draw on red background
                         painter->save();
                         painter->setPen(Qt::red);
                         painter->setBrush(QBrush(QColor(Qt::red)));
@@ -944,42 +953,42 @@ void Note::read(XmlReader& e)
                         // TODO: for backward compatibility
                         bool bracket = k & 0x8000;
                         k &= 0xfff;
-                        Accidental::Type at = Accidental::Type::NONE;
+                        AccidentalType at = AccidentalType::NONE;
                         switch(k) {
-                              case 0: at = Accidental::Type::NONE; break;
-                              case 1: at = Accidental::Type::SHARP; break;
-                              case 2: at = Accidental::Type::FLAT; break;
-                              case 3: at = Accidental::Type::SHARP2; break;
-                              case 4: at = Accidental::Type::FLAT2; break;
-                              case 5: at = Accidental::Type::NATURAL; break;
+                              case 0: at = AccidentalType::NONE; break;
+                              case 1: at = AccidentalType::SHARP; break;
+                              case 2: at = AccidentalType::FLAT; break;
+                              case 3: at = AccidentalType::SHARP2; break;
+                              case 4: at = AccidentalType::FLAT2; break;
+                              case 5: at = AccidentalType::NATURAL; break;
 
-                              case 6: at = Accidental::Type::FLAT_SLASH; break;
-                              case 7: at = Accidental::Type::FLAT_SLASH2; break;
-                              case 8: at = Accidental::Type::MIRRORED_FLAT2; break;
-                              case 9: at = Accidental::Type::MIRRORED_FLAT; break;
-                              case 10: at = Accidental::Type::MIRRORED_FLAT_SLASH; break;
-                              case 11: at = Accidental::Type::FLAT_FLAT_SLASH; break;
+                              case 6: at = AccidentalType::FLAT_SLASH; break;
+                              case 7: at = AccidentalType::FLAT_SLASH2; break;
+                              case 8: at = AccidentalType::MIRRORED_FLAT2; break;
+                              case 9: at = AccidentalType::MIRRORED_FLAT; break;
+                              case 10: at = AccidentalType::MIRRORED_FLAT_SLASH; break;
+                              case 11: at = AccidentalType::FLAT_FLAT_SLASH; break;
 
-                              case 12: at = Accidental::Type::SHARP_SLASH; break;
-                              case 13: at = Accidental::Type::SHARP_SLASH2; break;
-                              case 14: at = Accidental::Type::SHARP_SLASH3; break;
-                              case 15: at = Accidental::Type::SHARP_SLASH4; break;
+                              case 12: at = AccidentalType::SHARP_SLASH; break;
+                              case 13: at = AccidentalType::SHARP_SLASH2; break;
+                              case 14: at = AccidentalType::SHARP_SLASH3; break;
+                              case 15: at = AccidentalType::SHARP_SLASH4; break;
 
-                              case 16: at = Accidental::Type::SHARP_ARROW_UP; break;
-                              case 17: at = Accidental::Type::SHARP_ARROW_DOWN; break;
-                              case 18: at = Accidental::Type::SHARP_ARROW_BOTH; break;
-                              case 19: at = Accidental::Type::FLAT_ARROW_UP; break;
-                              case 20: at = Accidental::Type::FLAT_ARROW_DOWN; break;
-                              case 21: at = Accidental::Type::FLAT_ARROW_BOTH; break;
-                              case 22: at = Accidental::Type::NATURAL_ARROW_UP; break;
-                              case 23: at = Accidental::Type::NATURAL_ARROW_DOWN; break;
-                              case 24: at = Accidental::Type::NATURAL_ARROW_BOTH; break;
-                              case 25: at = Accidental::Type::SORI; break;
-                              case 26: at = Accidental::Type::KORON; break;
+                              case 16: at = AccidentalType::SHARP_ARROW_UP; break;
+                              case 17: at = AccidentalType::SHARP_ARROW_DOWN; break;
+                              case 18: at = AccidentalType::SHARP_ARROW_BOTH; break;
+                              case 19: at = AccidentalType::FLAT_ARROW_UP; break;
+                              case 20: at = AccidentalType::FLAT_ARROW_DOWN; break;
+                              case 21: at = AccidentalType::FLAT_ARROW_BOTH; break;
+                              case 22: at = AccidentalType::NATURAL_ARROW_UP; break;
+                              case 23: at = AccidentalType::NATURAL_ARROW_DOWN; break;
+                              case 24: at = AccidentalType::NATURAL_ARROW_BOTH; break;
+                              case 25: at = AccidentalType::SORI; break;
+                              case 26: at = AccidentalType::KORON; break;
                               }
                         _accidental->setAccidentalType(at);
                         _accidental->setHasBracket(bracket);
-                        _accidental->setRole(Accidental::Role::USER);
+                        _accidental->setRole(AccidentalRole::USER);
                         hasAccidental = true;   // we now have an accidental
                         }
                   }
@@ -1313,6 +1322,8 @@ bool Note::acceptDrop(const DropData& data) const
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BRACKETS)
          || (type == Element::Type::SYMBOL)
          || (type == Element::Type::CLEF)
+         || (type == Element::Type::KEYSIG)
+         || (type == Element::Type::TIMESIG)
          || (type == Element::Type::BAR_LINE)
          || (type == Element::Type::SLUR)
          || (type == Element::Type::HAIRPIN)
@@ -1664,38 +1675,42 @@ void Note::layout()
 
 void Note::layout2()
       {
-      // this is now done in Score::layoutChords3()
+      // for standard staves this is done in Score::layoutChords3()
       // so that the results are available there
-      // adjustReadPos();
+      if (staff()->isTabStaff())
+            adjustReadPos();
 
       int dots = chord()->dots();
       if (dots) {
             qreal d  = score()->point(score()->styleS(StyleIdx::dotNoteDistance)) * mag();
             qreal dd = score()->point(score()->styleS(StyleIdx::dotDotDistance)) * mag();
             qreal x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
-
+            bool layoutDots = true;
             // if TAB and stems through staff
             if (staff()->isTabStaff()) {
                   StaffType* tab = staff()->staffType();
-                  if (!tab->stemThrough())            // if !stemThrough, there are no dots at all:
-                        return;                       // stop here
+                  if (tab->stemThrough()) {
+                        // with TAB's, dot Y is not calculated during layoutChords3(),
+                        // as layoutChords3() is not even called for TAB's;
+                        // setDotY() actually also manages creation/deletion of NoteDot's
+                        setDotY(MScore::Direction::AUTO);
 
-                  // with TAB's, dot Y is not calculated during layoutChords3(),
-                  // as layoutChords3() is not even called for TAB's;
-                  // setDotY() actually also manages creation/deletion of NoteDot's
-                  setDotY(MScore::Direction::AUTO);
-
-                  // use TAB default note-to-dot spacing
-                  dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * spatium();
-                  d = dd * 0.5;
+                        // use TAB default note-to-dot spacing
+                        dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * spatium();
+                        d = dd * 0.5;
+                        }
+                  else {
+                        layoutDots = false; // if !stemThrough, there are no dots at all
+                        }
                   }
-
-            // apply to dots
-            for (int i = 0; i < dots; ++i) {
-                  NoteDot* dot = _dots[i];
-                  if (dot) {
-                        dot->rxpos() = x + d + dd * i;
-                        _dots[i]->adjustReadPos();
+            if (layoutDots) {
+                  // apply to dots
+                  for (int i = 0; i < dots; ++i) {
+                        NoteDot* dot = _dots[i];
+                        if (dot) {
+                              dot->rxpos() = x + d + dd * i;
+                              _dots[i]->adjustReadPos();
+                              }
                         }
                   }
             }
@@ -1759,22 +1774,22 @@ void Note::updateAccidental(AccidentalState* as)
 
       // don't touch accidentals that don't concern tpc such as
       // quarter tones
-      if (!(_accidental && _accidental->accidentalType() > Accidental::Type::NATURAL)) {
+      if (!(_accidental && _accidental->accidentalType() > AccidentalType::NATURAL)) {
             // calculate accidental
-            Accidental::Type acci = Accidental::Type::NONE;
+            AccidentalType acci = AccidentalType::NONE;
 
             AccidentalVal accVal = tpc2alter(tpc());
             if ((accVal != as->accidentalVal(relLine)) || hidden() || as->tieContext(relLine)) {
                   as->setAccidentalVal(relLine, accVal, _tieBack != 0);
                   if (_tieBack)
-                        acci = Accidental::Type::NONE;
+                        acci = AccidentalType::NONE;
                   else {
                         acci = Accidental::value2subtype(accVal);
-                        if (acci == Accidental::Type::NONE)
-                              acci = Accidental::Type::NATURAL;
+                        if (acci == AccidentalType::NONE)
+                              acci = AccidentalType::NATURAL;
                         }
                   }
-            if (acci != Accidental::Type::NONE && !_tieBack && !_hidden) {
+            if (acci != AccidentalType::NONE && !_tieBack && !_hidden) {
                   if (_accidental == 0) {
                         Accidental* a = new Accidental(score());
                         a->setParent(this);
@@ -1791,13 +1806,13 @@ void Note::updateAccidental(AccidentalState* as)
             else {
                   if (_accidental) {
                         // remove this if it was AUTO:
-                        if (_accidental->role() == Accidental::Role::AUTO)
+                        if (_accidental->role() == AccidentalRole::AUTO)
                               score()->undoRemoveElement(_accidental);
                         else {
                               // keep it, but update type if needed
                               acci = Accidental::value2subtype(accVal);
-                              if (acci == Accidental::Type::NONE)
-                                    acci = Accidental::Type::NATURAL;
+                              if (acci == AccidentalType::NONE)
+                                    acci = AccidentalType::NATURAL;
                               if (_accidental->accidentalType() != acci) {
                                     Accidental* a = _accidental->clone();
                                     a->setParent(this);
@@ -1978,16 +1993,6 @@ int Note::line() const
             return _fixedLine;
       else
             return _line + _lineOffset;
-      }
-
-//---------------------------------------------------------
-//   setAccidentalType
-//---------------------------------------------------------
-
-void Note::setAccidentalType(Accidental::Type type)
-      {
-      if (_score)
-      	_score->changeAccidental(this, type);
       }
 
 //---------------------------------------------------------
@@ -2685,5 +2690,25 @@ QList<Note*> Note::tiedNotes() const
             }
       return notes;
       }
+
+//---------------------------------------------------------
+//   accidentalType
+//---------------------------------------------------------
+
+AccidentalType Note::accidentalType() const
+      {
+      return _accidental ? _accidental->accidentalType() : AccidentalType::NONE;
+      }
+
+//---------------------------------------------------------
+//   setAccidentalType
+//---------------------------------------------------------
+
+void Note::setAccidentalType(AccidentalType type)
+      {
+      if (_score)
+      	_score->changeAccidental(this, type);
+      }
+
 
 }

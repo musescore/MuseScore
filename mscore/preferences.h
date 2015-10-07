@@ -122,6 +122,7 @@ struct Preferences {
       MidiRemote midiRemote[MIDI_REMOTES];
 
       bool midiExpandRepeats;
+      bool midiExportRPNs;
       QString instrumentList1; // file path of instrument templates
       QString instrumentList2;
 
@@ -170,6 +171,7 @@ struct Preferences {
       int exportAudioSampleRate;
 
       QString workspace;
+      int exportPdfDpi;
 
       bool dirty;
 
@@ -178,6 +180,7 @@ struct Preferences {
       bool readPluginList();
       void writePluginList();
       void updatePluginList();
+
 
       Preferences();
       void write();

@@ -33,7 +33,8 @@ class RepeatMeasure : public Rest {
    public:
       RepeatMeasure(Score*);
       RepeatMeasure &operator=(const RepeatMeasure&) = delete;
-      virtual RepeatMeasure* clone() const override  { return new RepeatMeasure(*this); }
+      virtual RepeatMeasure* clone() const override   { return new RepeatMeasure(*this); }
+      virtual Element* linkedClone() override         { return Element::linkedClone(); }
       virtual Element::Type type() const override     { return Element::Type::REPEAT_MEASURE; }
       virtual void draw(QPainter*) const override;
       virtual void layout() override;

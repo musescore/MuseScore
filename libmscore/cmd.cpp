@@ -269,47 +269,28 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
 
       undoAddElement(spanner);
       select(spanner, SelectType::SINGLE, 0);
+      }
 
-      if (spanner->type() == Element::Type::TRILL) {
-            Element* e = segment->element(staffIdx * VOICES);
-            if (e && e->type() == Element::Type::CHORD) {
-                  Chord* chord = static_cast<Chord*>(e);
-                  Fraction l = chord->duration();
-                  // if (chord->notes().size() > 1) {
-                        // trill do not work for chords
-                  //      }
-                  Note* note = chord->upNote();
-                  while (note->tieFor()) {
-                        note = note->tieFor()->endNote();
-                        l += note->chord()->duration();
-                        }
-                  Segment* s = note->chord()->segment();
-                  s = s->next1(Segment::Type::ChordRest);
-                  while (s) {
-                        Element* e = s->element(staffIdx * VOICES);
-                        if (e)
-                              break;
-                        s = s->next1(Segment::Type::ChordRest);
-                        }
-                  if (s) {
-                        for (ScoreElement* e : spanner->linkList())
-                              static_cast<Spanner*>(e)->setTick2(s->tick());
-                        }
-                  Fraction d(1,32);
-                  Fraction e = l / d;
-                  int n = e.numerator() / e.denominator();
-                  QList<NoteEvent*> events;
-                  int pitch  = chord->upNote()->ppitch();
-                  Key key    = chord->staff()->key(segment->tick());
-                  int pitch2 = diatonicUpDown(key, pitch, 1);
-                  int dpitch = pitch2 - pitch;
-                  for (int i = 0; i < n; i += 2) {
-                        events.append(new NoteEvent(0,      i * 1000 / n,    1000/n));
-                        events.append(new NoteEvent(dpitch, (i+1) *1000 / n, 1000/n));
-                        }
-                  undo(new ChangeNoteEvents(chord, events));
-                  }
-            }
+//---------------------------------------------------------
+//   cmdAddSpanner
+//    used when applying a spanner to a selection
+//---------------------------------------------------------
+
+void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment, Segment* endSegment)
+      {
+      int track = staffIdx * VOICES;
+      spanner->setTrack(track);
+      spanner->setTrack2(track);
+      spanner->setTick(startSegment->tick());
+      int tick2;
+      if (!endSegment)
+            tick2 = lastSegment()->tick();
+      else if (endSegment == startSegment)
+            tick2 = startSegment->measure()->last()->tick();
+      else
+            tick2 = endSegment->tick();
+      spanner->setTick2(tick2);
+      undoAddElement(spanner);
       }
 
 //---------------------------------------------------------
@@ -525,6 +506,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 
                   ChordRest* ncr;
                   Note* note = 0;
+                  Tie* addTie = 0;
                   if (nval.pitch == -1) {
                         nr = ncr = new Rest(this);
                         nr->setTrack(track);
@@ -537,6 +519,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                         if (tie) {
                               tie->setEndNote(note);
                               note->setTieBack(tie);
+                              addTie = tie;
                               }
                         Chord* chord = new Chord(this);
                         chord->setTrack(track);
@@ -555,6 +538,8 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                         }
                   ncr->setTuplet(cr ? cr->tuplet() : 0);
                   undoAddCR(ncr, measure, tick);
+                  if (addTie)
+                        undoAddElement(addTie);
                   _playNote = true;
                   segment = ncr->segment();
                   tick += ncr->actualTicks();
@@ -1391,7 +1376,7 @@ void Score::addArticulation(ArticulationType attr)
 ///   notes.
 //---------------------------------------------------------
 
-void Score::changeAccidental(Accidental::Type idx)
+void Score::changeAccidental(AccidentalType idx)
       {
       foreach(Note* note, selection().noteList())
             changeAccidental(note, idx);
@@ -1454,7 +1439,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
 ///   note \a note.
 //---------------------------------------------------------
 
-void Score::changeAccidental(Note* note, Accidental::Type accidental)
+void Score::changeAccidental(Note* note, AccidentalType accidental)
       {
       Chord* chord = note->chord();
       if (!chord)
@@ -1478,7 +1463,7 @@ void Score::changeAccidental(Note* note, Accidental::Type accidental)
       // accidental change may result in pitch change
       //
       AccidentalVal acc2 = measure->findAccidental(note);
-      AccidentalVal acc = (accidental == Accidental::Type::NONE) ? acc2 : Accidental::subtype2value(accidental);
+      AccidentalVal acc = (accidental == AccidentalType::NONE) ? acc2 : Accidental::subtype2value(accidental);
 
       int pitch = line2pitch(note->line(), clef, Key::C) + int(acc);
       if (!note->concertPitch())
@@ -1491,13 +1476,13 @@ void Score::changeAccidental(Note* note, Accidental::Type accidental)
 
       // delete accidental
       // both for this note and for any linked notes
-      if (accidental == Accidental::Type::NONE)
+      if (accidental == AccidentalType::NONE)
             forceRemove = true;
 
       // precautionary or microtonal accidental
       // either way, we display it unconditionally
       // both for this note and for any linked notes
-      else if (acc == acc2 || accidental > Accidental::Type::NATURAL)
+      else if (acc == acc2 || accidental > AccidentalType::NATURAL)
             forceAdd = true;
 
       for (ScoreElement* se : note->linkList()) {
@@ -1516,7 +1501,7 @@ void Score::changeAccidental(Note* note, Accidental::Type accidental)
                   Accidental* a = new Accidental(lns);
                   a->setParent(ln);
                   a->setAccidentalType(accidental);
-                  a->setRole(Accidental::Role::USER);
+                  a->setRole(AccidentalRole::USER);
                   lns->undoAddElement(a);
                   }
             changeAccidental2(ln, pitch, tpc);
@@ -1544,6 +1529,7 @@ bool Score::addArticulation(Element* el, Articulation* a)
             return false;
             }
       a->setParent(cr);
+      a->setTrack(cr->track()); // make sure it propagates between score and parts
       undoAddElement(a);
       return true;
       }
@@ -1561,19 +1547,19 @@ void Score::resetUserStretch()
       Segment* s2 = _selection.endSegment();
       // if either segment is not returned by the selection
       // (for instance, no selection) fall back to first/last measure
-      if(!s1)
-            m1 = firstMeasure();
+      if (!s1)
+            m1 = firstMeasureMM();
       else
             m1 = s1->measure();
-      if(!s2)
-            m2 = lastMeasure();
+      if (!s2)
+            m2 = lastMeasureMM();
       else
             m2 = s2->measure();
-      if(!m1 || !m2)                // should not happen!
+      if (!m1 || !m2)               // should not happen!
             return;
 
-      for (Measure* m = m1; m; m = m->nextMeasure()) {
-            undo(new ChangeStretch(m, 1.0));
+      for (Measure* m = m1; m; m = m->nextMeasureMM()) {
+            m->undoChangeProperty(P_ID::USER_STRETCH, 1.0);
             if (m == m2)
                   break;
             }
@@ -1652,7 +1638,9 @@ void Score::cmdAddStretch(qreal val)
                   break;
             qreal stretch = m->userStretch();
             stretch += val;
-            undo(new ChangeStretch(m, stretch));
+            if (stretch < 0)
+                  stretch = 0;
+            m->undoChangeProperty(P_ID::USER_STRETCH, stretch);
             }
       _layoutAll = true;
       }
@@ -1861,9 +1849,16 @@ Element* Score::move(const QString& cmd)
             if (noteEntryMode())
                   _is.moveToNextInputPos();
             el = nextChordRest(cr);
+            if (!el)
+                 el = cr;
             }
       else if (cmd == "prev-chord") {
             if (noteEntryMode() && _is.segment()) {
+                  // when there is no cr at input position for current voice,
+                  // this is a sign that input cursor has advanced into a gap / empty measure
+                  // use selected chord if present,
+                  if (inputState().cr() == nullptr && cr == selection().cr())
+                        el = cr;
                   Segment* s = _is.segment()->prev1();
                   //
                   // if _is._segment is first chord/rest segment in measure
@@ -1886,7 +1881,8 @@ Element* Score::move(const QString& cmd)
                         s = m->first(Segment::Type::ChordRest);
                   _is.moveInputPos(s);
                   }
-            el = prevChordRest(cr);
+            if (!el)
+                  el = prevChordRest(cr);
             }
       else if (cmd == "next-measure") {
             el = nextMeasure(cr);
@@ -2308,15 +2304,15 @@ void Score::cmd(const QAction* a)
       else if (cmd == "beam-32")
             cmdSetBeamMode(Beam::Mode::BEGIN32);
       else if (cmd == "sharp2")
-            changeAccidental(Accidental::Type::SHARP2);
+            changeAccidental(AccidentalType::SHARP2);
       else if (cmd == "sharp")
-            changeAccidental(Accidental::Type::SHARP);
+            changeAccidental(AccidentalType::SHARP);
       else if (cmd == "nat")
-            changeAccidental(Accidental::Type::NATURAL);
+            changeAccidental(AccidentalType::NATURAL);
       else if (cmd == "flat")
-            changeAccidental(Accidental::Type::FLAT);
+            changeAccidental(AccidentalType::FLAT);
       else if (cmd == "flat2")
-            changeAccidental(Accidental::Type::FLAT2);
+            changeAccidental(AccidentalType::FLAT2);
       else if (cmd == "repitch")
             _is.setRepitchMode(a->isChecked());
       else if (cmd == "flip")
@@ -2884,7 +2880,72 @@ void Score::cmdResequenceRehearsalMarks()
             }
 
       if (noSelection)
-             deselectAll();
+            deselectAll();
+      }
+
+//---------------------------------------------------------
+//   addRemoveBreaks
+//---------------------------------------------------------
+
+void Score::addRemoveBreaks(int interval, bool lock)
+      {
+      Segment* startSegment = selection().startSegment();
+      if (!startSegment) // empty score?
+            return;
+      Segment* endSegment   = selection().endSegment();
+      Measure* startMeasure = startSegment->measure();
+      Measure* endMeasure   = endSegment ? endSegment->measure() : lastMeasureMM();
+      Measure* lastMeasure  = lastMeasureMM();
+
+      // loop through measures in selection
+      // count mmrests as a single measure
+      int count = 0;
+      for (Measure* mm = startMeasure; mm; mm = mm->nextMeasureMM()) {
+
+            // even though we are counting mmrests as a single measure,
+            // we need to find last real measure within mmrest for the actual break
+            Measure* m = mm->isMMRest() ? mm->mmRestLast() : mm;
+
+            if (lock) {
+                  // skip last measure of score
+                  if (mm == lastMeasure)
+                        break;
+                  // skip if it already has a break
+                  if (m->lineBreak() || m->pageBreak())
+                        continue;
+                  // add break if last measure of system
+                  if (mm->system() && mm->system()->lastMeasure() == mm)
+                        m->undoSetLineBreak(true);
+                  }
+
+            else {
+                  if (interval == 0) {
+                        // remove line break if present
+                        if (m->lineBreak())
+                              m->undoSetLineBreak(false);
+                        }
+                  else {
+                        if (++count == interval) {
+                              // skip last measure of score
+                              if (mm == lastMeasure)
+                                    break;
+                              // found place for break; add if not already one present
+                              if (!(m->lineBreak() || m->pageBreak()))
+                                    m->undoSetLineBreak(true);
+                              // reset count
+                              count = 0;
+                              }
+                        else if (m->lineBreak()) {
+                              // remove line break if present in wrong place
+                              m->undoSetLineBreak(false);
+                              }
+                        }
+                  }
+
+            if (mm == endMeasure)
+                  break;
+            }
+
       }
 
 }

@@ -2083,7 +2083,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Ottava</source>
-        <translation type="unfinished"/>
+        <translation>אוקטבה</translation>
     </message>
     <message>
         <source>Pedal Line</source>
@@ -2996,7 +2996,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Sol</source>
-        <translation type="unfinished"/>
+        <translation>סול</translation>
     </message>
     <message>
         <source>La</source>
@@ -3029,6 +3029,25 @@ space unit</extracomment>
     <message>
         <source>Ambitus</source>
         <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>ארפג&apos;יו</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>נגן</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>אפס ערך נגן</translation>
     </message>
 </context>
 <context>
@@ -3095,6 +3114,30 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Time stretch value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3266,6 +3309,25 @@ space unit</extracomment>
     <message>
         <source>User position</source>
         <translation>מצב משתמש</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3504,7 +3566,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Fretboard Diagram</source>
-        <translation type="unfinished"/>
+        <translation>דיאגרמת צוואר</translation>
     </message>
 </context>
 <context>
@@ -3549,6 +3611,42 @@ space unit</extracomment>
         <source>Show text</source>
         <translation>הצג טקסט</translation>
     </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>InspectorGroupElement</name>
@@ -3581,7 +3679,7 @@ space unit</extracomment>
     <name>InspectorHBox</name>
     <message>
         <source>Horizontal Frame</source>
-        <translation type="unfinished"/>
+        <translation>מסגרת אופקית</translation>
     </message>
     <message>
         <source>sp</source>
@@ -3621,7 +3719,7 @@ space unit</extracomment>
     <name>InspectorHairpin</name>
     <message>
         <source>Hairpin</source>
-        <translation type="unfinished"/>
+        <translation>סימן קרשנדו/דימינואנדו</translation>
     </message>
     <message>
         <source>Height</source>
@@ -3956,7 +4054,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Segno</source>
-        <translation type="unfinished"/>
+        <translation>סימן</translation>
     </message>
     <message>
         <source>Coda</source>
@@ -4166,7 +4264,7 @@ space unit</extracomment>
     <name>InspectorOttava</name>
     <message>
         <source>Ottava</source>
-        <translation type="unfinished"/>
+        <translation>אוקטבה</translation>
     </message>
     <message>
         <source>Type</source>
@@ -4356,6 +4454,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>מסגרת טקסט</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4486,12 +4656,36 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Wavy Line</source>
+        <source>Reset value</source>
+        <translation>אפס ערך</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Reset value</source>
-        <translation>אפס ערך</translation>
+        <source>Direction</source>
+        <translation> כיוון</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>ברירת מחדל</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>נגן</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>אפס ערך נגן</translation>
     </message>
 </context>
 <context>
@@ -4865,6 +5059,13 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add time signature to palette</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -5349,7 +5550,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation type="unfinished"/>
+        <translation>קישוטים</translation>
     </message>
     <message>
         <source>Clefs</source>
@@ -6028,14 +6229,6 @@ failed: </source>
         <translation>סימן ה$ בעצמו</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>ישם על כל התפקידים</translation>
     </message>
@@ -6050,6 +6243,14 @@ failed: </source>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>מספר עמוד, אם יש יותר מאחד</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7173,6 +7374,10 @@ please choose a different name:</source>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7644,10 +7849,6 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>file not found</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>No selection</source>
         <translation type="unfinished"/>
     </message>
@@ -7657,6 +7858,10 @@ failed: %2</source>
     </message>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7965,6 +8170,11 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>Transparent background</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8638,7 +8848,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation type="unfinished"/>
+        <translation>קישוטים</translation>
     </message>
     <message>
         <source>Lines</source>
@@ -10364,6 +10574,14 @@ failed: </source>
         <source>Filter</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -11198,6 +11416,14 @@ Do you want to overwrite it?</source>
         <source>System flag</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Search...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SynthControl</name>
@@ -11596,7 +11822,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>סימן אקורד</translation>
     </message>
     <message>
         <source>Rehearsal Mark</source>
@@ -11636,7 +11862,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Ottava</source>
-        <translation type="unfinished"/>
+        <translation>אוקטבה</translation>
     </message>
     <message>
         <source>Bend</source>
@@ -11652,7 +11878,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Instrument Change</source>
-        <translation type="unfinished"/>
+        <translation>שינוי כלי</translation>
     </message>
     <message>
         <source>Figured Bass</source>
@@ -13485,7 +13711,7 @@ failed: </source>
     </message>
     <message>
         <source>Voice 1</source>
-        <translation type="unfinished"/>
+        <translation>קול 1</translation>
     </message>
     <message>
         <source>2</source>
@@ -13493,7 +13719,7 @@ failed: </source>
     </message>
     <message>
         <source>Voice 2</source>
-        <translation type="unfinished"/>
+        <translation>קול 2</translation>
     </message>
     <message>
         <source>3</source>
@@ -13501,7 +13727,7 @@ failed: </source>
     </message>
     <message>
         <source>Voice 3</source>
-        <translation type="unfinished"/>
+        <translation>קול 3</translation>
     </message>
     <message>
         <source>4</source>
@@ -13509,7 +13735,7 @@ failed: </source>
     </message>
     <message>
         <source>Voice 4</source>
-        <translation type="unfinished"/>
+        <translation>קול 4</translation>
     </message>
     <message>
         <source>Enable MIDI input</source>
@@ -13542,10 +13768,6 @@ failed: </source>
     <message>
         <source>Feathered beam, faster</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Palette</source>
-        <translation>סרגלי כלים</translation>
     </message>
     <message>
         <source>Play Panel</source>
@@ -13581,10 +13803,6 @@ failed: </source>
     </message>
     <message>
         <source>Add lyrics</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13944,10 +14162,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Pan piano roll</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Toggle pan piano roll</source>
         <translation type="unfinished"/>
     </message>
@@ -14285,7 +14499,7 @@ failed: </source>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>סימן אקורד</translation>
     </message>
     <message>
         <source>Add chord symbol</source>
@@ -15511,6 +15725,22 @@ failed: </source>
         <source>Set loop in position</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -15744,7 +15974,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>c#</source>
-        <translation type="unfinished"/>
+        <translation>דו#</translation>
     </message>
     <message>
         <source>d</source>
@@ -15752,7 +15982,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>d#</source>
-        <translation type="unfinished"/>
+        <translation>רה#</translation>
     </message>
     <message>
         <source>e</source>
@@ -15764,7 +15994,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>f#</source>
-        <translation type="unfinished"/>
+        <translation>פה#</translation>
     </message>
     <message>
         <source>g</source>
@@ -15772,7 +16002,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>g#</source>
-        <translation type="unfinished"/>
+        <translation>סול#</translation>
     </message>
     <message>
         <source>a</source>
@@ -15780,11 +16010,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>a#</source>
-        <translation type="unfinished"/>
+        <translation>לה#</translation>
     </message>
     <message>
         <source>b</source>
-        <translation type="unfinished"/>
+        <translation>סי</translation>
     </message>
     <message>
         <source>C</source>
@@ -15792,7 +16022,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>C#</source>
-        <translation type="unfinished"/>
+        <translation>דו#</translation>
     </message>
     <message>
         <source>D</source>
@@ -15800,7 +16030,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>D#</source>
-        <translation type="unfinished"/>
+        <translation>רה#</translation>
     </message>
     <message>
         <source>E</source>
@@ -15812,7 +16042,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"/>
+        <translation>פה#</translation>
     </message>
     <message>
         <source>G</source>
@@ -16482,15 +16712,15 @@ Measure is not empty</source>
     <name>clefTable</name>
     <message>
         <source>Treble clef</source>
-        <translation type="unfinished"/>
+        <translation>מפתח סול</translation>
     </message>
     <message>
         <source>Treble clef 8va</source>
-        <translation type="unfinished"/>
+        <translation>מפתח סול +אוקטבה</translation>
     </message>
     <message>
         <source>Treble clef 15ma</source>
-        <translation type="unfinished"/>
+        <translation>מפתח סול+2 אוקטבות</translation>
     </message>
     <message>
         <source>Treble clef 8vb</source>
@@ -16558,6 +16788,10 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Tablature2</source>
+        <translation>טאבלטורה 2</translation>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -16565,7 +16799,7 @@ Measure is not empty</source>
     <name>drumset</name>
     <message>
         <source>Acoustic Bass Drum</source>
-        <translation type="unfinished"/>
+        <translation>בייס-דראם אקוסטי</translation>
     </message>
     <message>
         <source>Side Stick</source>
@@ -16573,7 +16807,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Tambourine</source>
-        <translation type="unfinished"/>
+        <translation>תוף-מרים</translation>
     </message>
     <message>
         <source>High Q</source>
@@ -16597,75 +16831,75 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Metronome Click</source>
-        <translation type="unfinished"/>
+        <translation>קליק מטרונום</translation>
     </message>
     <message>
         <source>Metronome Bell</source>
-        <translation type="unfinished"/>
+        <translation>פעמון מטרונום</translation>
     </message>
     <message>
         <source>Bass Drum 1</source>
-        <translation type="unfinished"/>
+        <translation>בייס-דראם 1</translation>
     </message>
     <message>
         <source>Acoustic Snare</source>
-        <translation type="unfinished"/>
+        <translation>סנייר אקוסטי</translation>
     </message>
     <message>
         <source>Hand Clap</source>
-        <translation type="unfinished"/>
+        <translation>מחיאת כף</translation>
     </message>
     <message>
         <source>Electric Snare</source>
-        <translation type="unfinished"/>
+        <translation>סנייר אלקטרוני</translation>
     </message>
     <message>
         <source>Low Floor Tom</source>
-        <translation type="unfinished"/>
+        <translation>פלור נמוך</translation>
     </message>
     <message>
         <source>Closed Hi-Hat</source>
-        <translation type="unfinished"/>
+        <translation>היי-האט סגור</translation>
     </message>
     <message>
         <source>High Floor Tom</source>
-        <translation type="unfinished"/>
+        <translation>פלור גבוה</translation>
     </message>
     <message>
         <source>Pedal Hi-Hat</source>
-        <translation type="unfinished"/>
+        <translation>פדאל היי-האט</translation>
     </message>
     <message>
         <source>Low Tom</source>
-        <translation type="unfinished"/>
+        <translation>טמטם נמוך</translation>
     </message>
     <message>
         <source>Open Hi-Hat</source>
-        <translation type="unfinished"/>
+        <translation>היי-האט פתוח</translation>
     </message>
     <message>
         <source>Low-Mid Tom</source>
-        <translation type="unfinished"/>
+        <translation>טמטם בינוני-נמוך</translation>
     </message>
     <message>
         <source>Hi-Mid Tom</source>
-        <translation type="unfinished"/>
+        <translation>טמטם בינוני-גבוה</translation>
     </message>
     <message>
         <source>Crash Cymbal 1</source>
-        <translation type="unfinished"/>
+        <translation>מצילת קראש 1</translation>
     </message>
     <message>
         <source>High Tom</source>
-        <translation type="unfinished"/>
+        <translation>טמטם גבוה</translation>
     </message>
     <message>
         <source>Ride Bell</source>
-        <translation type="unfinished"/>
+        <translation>פעמון רייד</translation>
     </message>
     <message>
         <source>Cowbell</source>
-        <translation type="unfinished"/>
+        <translation>קאו-בל</translation>
     </message>
     <message>
         <source>Vibraslap</source>
@@ -16673,63 +16907,63 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Low Bongo</source>
-        <translation type="unfinished"/>
+        <translation>בונגו נמוך</translation>
     </message>
     <message>
         <source>Mute Hi Conga</source>
-        <translation type="unfinished"/>
+        <translation>קונגה גבוה מעומעם</translation>
     </message>
     <message>
         <source>Open Hi Conga</source>
-        <translation type="unfinished"/>
+        <translation>קונגה גבוה פתוח</translation>
     </message>
     <message>
         <source>Low Conga</source>
-        <translation type="unfinished"/>
+        <translation>קונגה נמוך</translation>
     </message>
     <message>
         <source>High Timbale</source>
-        <translation type="unfinished"/>
+        <translation>טימבאל גבוה</translation>
     </message>
     <message>
         <source>Low Timbale</source>
-        <translation type="unfinished"/>
+        <translation>טימבאל נמוך</translation>
     </message>
     <message>
         <source>High Agogo</source>
-        <translation type="unfinished"/>
+        <translation>אגוגו גבוה</translation>
     </message>
     <message>
         <source>Low Agogo</source>
-        <translation type="unfinished"/>
+        <translation>אגוגו נמוך</translation>
     </message>
     <message>
         <source>Cabasa</source>
-        <translation type="unfinished"/>
+        <translation>קבאסה</translation>
     </message>
     <message>
         <source>Maracas</source>
-        <translation type="unfinished"/>
+        <translation>מראקאס</translation>
     </message>
     <message>
         <source>Short Whistle</source>
-        <translation type="unfinished"/>
+        <translation>משרוקית קצרה</translation>
     </message>
     <message>
         <source>Long Whistle</source>
-        <translation type="unfinished"/>
+        <translation>משרוקית ארוכה</translation>
     </message>
     <message>
         <source>Short Guiro</source>
-        <translation type="unfinished"/>
+        <translation>גווירו קצר</translation>
     </message>
     <message>
         <source>Long Guiro</source>
-        <translation type="unfinished"/>
+        <translation>גווירו ארוך</translation>
     </message>
     <message>
         <source>Claves</source>
-        <translation type="unfinished"/>
+        <translation>קלאווה</translation>
     </message>
     <message>
         <source>Hi Wood Block</source>
@@ -16749,15 +16983,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Mute Triangle</source>
-        <translation type="unfinished"/>
+        <translation>משולש מעומעם</translation>
     </message>
     <message>
         <source>Open Triangle</source>
-        <translation type="unfinished"/>
+        <translation>משולש פתוח</translation>
     </message>
     <message>
         <source>Shaker</source>
-        <translation type="unfinished"/>
+        <translation>רשרשן</translation>
     </message>
     <message>
         <source>Bell Tree</source>
@@ -16765,35 +16999,35 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Mute Surdo</source>
-        <translation type="unfinished"/>
+        <translation>סורדו מעומעם</translation>
     </message>
     <message>
         <source>Open Surdo</source>
-        <translation type="unfinished"/>
+        <translation>סורדו פתוח</translation>
     </message>
     <message>
         <source>Ride Cymbal 1</source>
-        <translation type="unfinished"/>
+        <translation>מצילת רייד 1</translation>
     </message>
     <message>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>מצילת צ&apos;יינה</translation>
     </message>
     <message>
         <source>Splash Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>מצילת ספלאש</translation>
     </message>
     <message>
         <source>Crash Cymbal 2</source>
-        <translation type="unfinished"/>
+        <translation>מצילת קראש 2</translation>
     </message>
     <message>
         <source>Ride Cymbal 2</source>
-        <translation type="unfinished"/>
+        <translation>מצילת רייד 2</translation>
     </message>
     <message>
         <source>Castanets</source>
-        <translation type="unfinished"/>
+        <translation>קסטנייטות</translation>
     </message>
     <message>
         <source>Square Click</source>
@@ -16801,11 +17035,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Hi Bongo</source>
-        <translation type="unfinished"/>
+        <translation>בונגו גבוה</translation>
     </message>
     <message>
         <source>Sleigh Bell</source>
-        <translation type="unfinished"/>
+        <translation>פעמון מזחלת</translation>
     </message>
 </context>
 <context>
@@ -16816,7 +17050,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>C#</source>
-        <translation type="unfinished"/>
+        <translation>דו#</translation>
     </message>
     <message>
         <source>D</source>
@@ -16824,7 +17058,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Eb</source>
-        <translation type="unfinished"/>
+        <translation>מי b</translation>
     </message>
     <message>
         <source>E</source>
@@ -16836,7 +17070,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"/>
+        <translation>פה#</translation>
     </message>
     <message>
         <source>G</source>
@@ -16844,7 +17078,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ab</source>
-        <translation type="unfinished"/>
+        <translation>לה b</translation>
     </message>
     <message>
         <source>A</source>
@@ -16852,7 +17086,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Bb</source>
-        <translation>סי</translation>
+        <translation>סי b</translation>
     </message>
     <message>
         <source>B</source>
@@ -16867,7 +17101,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>C#</source>
-        <translation type="unfinished"/>
+        <translation>דו#</translation>
     </message>
     <message>
         <source>D</source>
@@ -16875,7 +17109,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Eb</source>
-        <translation type="unfinished"/>
+        <translation>מי b</translation>
     </message>
     <message>
         <source>E</source>
@@ -16887,7 +17121,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"/>
+        <translation>פה#</translation>
     </message>
     <message>
         <source>G</source>
@@ -16895,7 +17129,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ab</source>
-        <translation type="unfinished"/>
+        <translation>לה b</translation>
     </message>
     <message>
         <source>A</source>
@@ -16903,7 +17137,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Bb</source>
-        <translation>סי</translation>
+        <translation>סי b</translation>
     </message>
     <message>
         <source>B</source>
@@ -17046,7 +17280,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ottava</source>
-        <translation type="unfinished"/>
+        <translation>אוקטבה</translation>
     </message>
     <message>
         <source>Pedal</source>
@@ -17086,15 +17320,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ossia</source>
-        <translation type="unfinished"/>
+        <translation>אלטרנטיבה</translation>
     </message>
     <message>
         <source>Instrument Name</source>
-        <translation type="unfinished"/>
+        <translation>שם כלי</translation>
     </message>
     <message>
         <source>Slur Segment</source>
-        <translation type="unfinished"/>
+        <translation>מקטע קשתות</translation>
     </message>
     <message>
         <source>Staff Lines</source>
@@ -17102,7 +17336,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Bar Line</source>
-        <translation type="unfinished"/>
+        <translation>קו תיבה</translation>
     </message>
     <message>
         <source>Stem Slash</source>
@@ -17138,19 +17372,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Instrument Change</source>
-        <translation type="unfinished"/>
+        <translation>שינוי כלי</translation>
     </message>
     <message>
         <source>Hairpin Segment</source>
-        <translation type="unfinished"/>
+        <translation>מקטע קרשנדו/דימינואנדו</translation>
     </message>
     <message>
         <source>Ottava Segment</source>
-        <translation type="unfinished"/>
+        <translation>מקטע אוקטבה</translation>
     </message>
     <message>
         <source>Trill Segment</source>
-        <translation type="unfinished"/>
+        <translation>מקטע טריל</translation>
     </message>
     <message>
         <source>Text Line Segment</source>
@@ -17158,7 +17392,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Volta Segment</source>
-        <translation>וולטה</translation>
+        <translation>מקטע וולטה</translation>
     </message>
     <message>
         <source>Pedal Segment</source>
@@ -17174,11 +17408,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ledger Line</source>
-        <translation type="unfinished"/>
+        <translation>קו עזר</translation>
     </message>
     <message>
         <source>Note Head</source>
-        <translation type="unfinished"/>
+        <translation>ראש תו</translation>
     </message>
     <message>
         <source>Note Dot</source>
@@ -17194,11 +17428,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Font Symbol</source>
-        <translation type="unfinished"/>
+        <translation>סימן גופן</translation>
     </message>
     <message>
         <source>Hairpin</source>
-        <translation type="unfinished"/>
+        <translation>סימן קרשנדו/דימינואנדו</translation>
     </message>
     <message>
         <source>Text Line</source>
@@ -17222,7 +17456,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Horizontal Frame</source>
-        <translation type="unfinished"/>
+        <translation>מסגרת אופקית</translation>
     </message>
     <message>
         <source>Vertical Frame</source>
@@ -17230,7 +17464,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Text Frame</source>
-        <translation type="unfinished"/>
+        <translation>מסגרת טקסט</translation>
     </message>
     <message>
         <source>Fretboard Diagram Frame</source>
@@ -17242,7 +17476,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Fretboard Diagram</source>
-        <translation type="unfinished"/>
+        <translation>דיאגרמת צוואר</translation>
     </message>
     <message>
         <source>Ambitus</source>
@@ -17250,7 +17484,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>סימן אקורד</translation>
     </message>
     <message>
         <source>Tremolo Bar</source>
@@ -17273,19 +17507,19 @@ Measure is not empty</source>
     <name>fotomode</name>
     <message>
         <source>Resize to A</source>
-        <translation type="unfinished"/>
+        <translation>שנה גודל ל A</translation>
     </message>
     <message>
         <source>Resize to B</source>
-        <translation type="unfinished"/>
+        <translation>שנה גודל ל B</translation>
     </message>
     <message>
         <source>Resize to C</source>
-        <translation type="unfinished"/>
+        <translation>שנה גודל ל C</translation>
     </message>
     <message>
         <source>Resize to D</source>
-        <translation type="unfinished"/>
+        <translation>שנה גודל ל D</translation>
     </message>
     <message>
         <source>Set size A</source>
@@ -17308,7 +17542,7 @@ Measure is not empty</source>
     <name>images_directory</name>
     <message>
         <source>Images</source>
-        <translation>תמונה</translation>
+        <translation>תמונות</translation>
     </message>
 </context>
 <context>
@@ -17335,34 +17569,34 @@ Measure is not empty</source>
     </message>
     <message>
         <source>[Custom]</source>
-        <translation type="unfinished"/>
+        <translation>[מותאם אישית]</translation>
     </message>
 </context>
 <context>
     <name>jumpType</name>
     <message>
         <source>Da Capo</source>
-        <translation type="unfinished"/>
+        <translation>Da Capo</translation>
     </message>
     <message>
         <source>Da Capo al Fine</source>
-        <translation type="unfinished"/>
+        <translation>Da Capo al Fine</translation>
     </message>
     <message>
         <source>Da Capo al Coda</source>
-        <translation type="unfinished"/>
+        <translation>Da Capo al Coda</translation>
     </message>
     <message>
         <source>D.S. al Coda</source>
-        <translation type="unfinished"/>
+        <translation>D.S. al Coda</translation>
     </message>
     <message>
         <source>D.S. al Fine</source>
-        <translation type="unfinished"/>
+        <translation>D.S. al Fine</translation>
     </message>
     <message>
         <source>D.S.</source>
-        <translation type="unfinished"/>
+        <translation>D.S.</translation>
     </message>
 </context>
 <context>
@@ -17395,7 +17629,7 @@ Measure is not empty</source>
     <name>markerType</name>
     <message>
         <source>Segno</source>
-        <translation type="unfinished"/>
+        <translation>סימן</translation>
     </message>
     <message>
         <source>Coda</source>
@@ -17478,7 +17712,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Sol</source>
-        <translation type="unfinished"/>
+        <translation>סול</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
@@ -17489,7 +17723,7 @@ Measure is not empty</source>
     <name>plugins_directory</name>
     <message>
         <source>Plugins</source>
-        <translation type="unfinished"/>
+        <translation>פלאגינים</translation>
     </message>
 </context>
 <context>
@@ -17500,34 +17734,34 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Every Day</source>
-        <translation type="unfinished"/>
+        <translation>כל יום</translation>
     </message>
     <message>
         <source>Every 3 Days</source>
-        <translation type="unfinished"/>
+        <translation>כל 3 ימים</translation>
     </message>
     <message>
         <source>Every Week</source>
-        <translation type="unfinished"/>
+        <translation>כל שבוע</translation>
     </message>
     <message>
         <source>Every 2 Weeks</source>
-        <translation type="unfinished"/>
+        <translation>כל שבועיים</translation>
     </message>
     <message>
         <source>Every Month</source>
-        <translation type="unfinished"/>
+        <translation>כל חודש</translation>
     </message>
     <message>
         <source>Every 2 Months</source>
-        <translation type="unfinished"/>
+        <translation>כל חודשיים</translation>
     </message>
 </context>
 <context>
     <name>scores_directory</name>
     <message>
         <source>Scores</source>
-        <translation type="unfinished"/>
+        <translation>פרטיטורות</translation>
     </message>
 </context>
 <context>
@@ -17550,15 +17784,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Other Text</source>
-        <translation type="unfinished"/>
+        <translation>טקסט אחר</translation>
     </message>
     <message>
         <source>Articulations</source>
-        <translation type="unfinished"/>
+        <translation>ארטיקולציות</translation>
     </message>
     <message>
         <source>Slurs</source>
-        <translation type="unfinished"/>
+        <translation>קשתות</translation>
     </message>
     <message>
         <source>Figured Bass</source>
@@ -17566,7 +17800,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ottava</source>
-        <translation type="unfinished"/>
+        <translation>אוקטבה</translation>
     </message>
     <message>
         <source>Tremolo</source>
@@ -17574,7 +17808,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation type="unfinished"/>
+        <translation>קישוטים</translation>
     </message>
     <message>
         <source>Pedal Lines</source>
@@ -17582,7 +17816,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Other Lines</source>
-        <translation type="unfinished"/>
+        <translation>קווים אחרים</translation>
     </message>
     <message>
         <source>Arpeggios</source>
@@ -17590,7 +17824,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Glissandi</source>
-        <translation type="unfinished"/>
+        <translation>גליסנדי</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
@@ -17598,23 +17832,23 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Breath Marks</source>
-        <translation type="unfinished"/>
+        <translation>סימני נשימה</translation>
     </message>
     <message>
         <source>Voice 1</source>
-        <translation type="unfinished"/>
+        <translation>קול 1</translation>
     </message>
     <message>
         <source>Voice 2</source>
-        <translation type="unfinished"/>
+        <translation>קול 2</translation>
     </message>
     <message>
         <source>Voice 3</source>
-        <translation type="unfinished"/>
+        <translation>קול 3</translation>
     </message>
     <message>
         <source>Voice 4</source>
-        <translation type="unfinished"/>
+        <translation>קול 4</translation>
     </message>
 </context>
 <context>
@@ -17632,25 +17866,25 @@ Measure is not empty</source>
     </message>
     <message>
         <source>PERCUSSION STAFF</source>
-        <translation type="unfinished"/>
+        <translation>חמשת כלי הקשה</translation>
     </message>
     <message>
         <source>TABLATURE STAFF</source>
-        <translation type="unfinished"/>
+        <translation>שורת טאבלטורה</translation>
     </message>
 </context>
 <context>
     <name>styles_directory</name>
     <message>
         <source>Styles</source>
-        <translation>סגנון</translation>
+        <translation>סגנונות</translation>
     </message>
 </context>
 <context>
     <name>templates_directory</name>
     <message>
         <source>Templates</source>
-        <translation type="unfinished"/>
+        <translation>תבניות</translation>
     </message>
 </context>
 <context>
@@ -17671,10 +17905,6 @@ Measure is not empty</source>
         <source>Prallprall line</source>
         <translation type="unfinished"/>
     </message>
-    <message>
-        <source>Wavy line</source>
-        <translation type="unfinished"/>
-    </message>
 </context>
 <context>
     <name>utils</name>
@@ -17684,7 +17914,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>c#</source>
-        <translation type="unfinished"/>
+        <translation>דו#</translation>
     </message>
     <message>
         <source>d</source>
@@ -17692,7 +17922,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>d#</source>
-        <translation type="unfinished"/>
+        <translation>רה#</translation>
     </message>
     <message>
         <source>e</source>
@@ -17704,7 +17934,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>f#</source>
-        <translation type="unfinished"/>
+        <translation>פה#</translation>
     </message>
     <message>
         <source>g</source>
@@ -17712,7 +17942,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>g#</source>
-        <translation type="unfinished"/>
+        <translation>סול#</translation>
     </message>
     <message>
         <source>a</source>
@@ -17720,11 +17950,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>a#</source>
-        <translation type="unfinished"/>
+        <translation>לה#</translation>
     </message>
     <message>
         <source>b</source>
-        <translation type="unfinished"/>
+        <translation>סי</translation>
     </message>
     <message>
         <source>C</source>
@@ -17732,7 +17962,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>C#</source>
-        <translation type="unfinished"/>
+        <translation>דו#</translation>
     </message>
     <message>
         <source>D</source>
@@ -17740,7 +17970,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>D#</source>
-        <translation type="unfinished"/>
+        <translation>רה#</translation>
     </message>
     <message>
         <source>E</source>
@@ -17752,7 +17982,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"/>
+        <translation>פה#</translation>
     </message>
     <message>
         <source>G</source>
@@ -17760,7 +17990,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>G#</source>
-        <translation>סול דיאז</translation>
+        <translation>סול#</translation>
     </message>
     <message>
         <source>A</source>
@@ -17768,7 +17998,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>A#</source>
-        <translation>לה דיאז</translation>
+        <translation>לה#</translation>
     </message>
     <message>
         <source>B</source>

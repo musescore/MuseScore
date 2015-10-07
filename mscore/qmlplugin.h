@@ -74,6 +74,7 @@ class QmlPlugin : public QQuickItem {
       QString _dockArea;
       QString _version;
       QString _description;
+      QFile logFile;
 
    protected:
       QString _filePath;            // the path of the source file, without file name
@@ -116,6 +117,12 @@ class QmlPlugin : public QQuickItem {
       Q_INVOKABLE bool writeScore(Ms::Score*, const QString& name, const QString& ext);
       Q_INVOKABLE Ms::Score* readScore(const QString& name, bool noninteractive = false);
       Q_INVOKABLE void closeScore(Ms::Score*);
+
+      Q_INVOKABLE void log(const QString&);
+      Q_INVOKABLE void logn(const QString&);
+      Q_INVOKABLE void log2(const QString&, const QString&);
+      Q_INVOKABLE void openLog(const QString&);
+      Q_INVOKABLE void closeLog();
       };
 
 

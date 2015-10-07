@@ -56,7 +56,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>The MusicXML Public License:</source>
-        <translation>MusicXML Viešinimo Licencija:</translation>
+        <translation>MusicXML viešoji licencija:</translation>
     </message>
 </context>
 <context>
@@ -67,11 +67,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Width</source>
-        <translation>plotis</translation>
+        <translation>Plotis</translation>
     </message>
     <message>
         <source>Reflect</source>
-        <translation>atspindi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reverb</source>
@@ -79,11 +79,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Delay</source>
-        <translation>Aidas</translation>
+        <translation>Delsa</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempas</translation>
+        <translation>Metras</translation>
     </message>
     <message>
         <source>Direct</source>
@@ -107,7 +107,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Position</source>
-        <translation>pozicija</translation>
+        <translation>Pozicija</translation>
     </message>
 </context>
 <context>
@@ -134,7 +134,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>New</source>
-        <translation>Nauja</translation>
+        <translation>Nauja(s)</translation>
     </message>
     <message>
         <source>Load</source>
@@ -142,7 +142,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Print Album</source>
-        <translation>Atspausdinti albumą</translation>
+        <translation>Spausdinti albumą</translation>
     </message>
     <message>
         <source>Join Scores</source>
@@ -166,7 +166,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Remove current score</source>
-        <translation>Pašalinti iš esamos partitūros</translation>
+        <translation>Pašalinti šią partitūrą</translation>
     </message>
     <message>
         <source>Create new album</source>
@@ -240,7 +240,7 @@ p, li { white-space: pre-wrap; }
     <name>Awl::ColorLabel</name>
     <message>
         <source>MuseScore: Select Color</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: pasirinkite spalvą</translation>
     </message>
 </context>
 <context>
@@ -301,7 +301,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Number of measures</source>
-        <translation type="unfinished"/>
+        <translation>Taktų skaičius</translation>
     </message>
     <message>
         <source>measures</source>
@@ -351,7 +351,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>ID</source>
-        <translation type="unfinished"/>
+        <translation>ID</translation>
     </message>
 </context>
 <context>
@@ -386,11 +386,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Do</source>
-        <translation>do</translation>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation>re</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
@@ -421,7 +421,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Save</source>
-        <translation>Išsaugoti</translation>
+        <translation>Įrašyti</translation>
     </message>
     <message>
         <source>No.</source>
@@ -433,7 +433,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Shortcut</source>
-        <translation>Greitieji klavišai</translation>
+        <translation>Šaukinys</translation>
     </message>
     <message>
         <source>Name</source>
@@ -469,7 +469,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Shortcut:</source>
-        <translation>Greitasis klavišas:</translation>
+        <translation>Šaukinys:</translation>
     </message>
     <message>
         <source>A</source>
@@ -540,7 +540,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Name:</source>
-        <translation>Paavdinimas:</translation>
+        <translation>Pavadinimas:</translation>
     </message>
     <message>
         <source>Pitch:</source>
@@ -575,43 +575,43 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Octave 8</source>
-        <translation>Oktava 8</translation>
+        <translation>8 oktava</translation>
     </message>
     <message>
         <source>Octave 7</source>
-        <translation>Oktava 7</translation>
+        <translation>7 oktava</translation>
     </message>
     <message>
         <source>Octave 6</source>
-        <translation>Oktava 6</translation>
+        <translation>6 oktava</translation>
     </message>
     <message>
         <source>Octave 5</source>
-        <translation>Oktava 5</translation>
+        <translation>5 oktava</translation>
     </message>
     <message>
         <source>Octave 4</source>
-        <translation>Oktava 4</translation>
+        <translation>4 oktava</translation>
     </message>
     <message>
         <source>Octave 3</source>
-        <translation>Oktava 3</translation>
+        <translation>3 oktava</translation>
     </message>
     <message>
         <source>Octave 2</source>
-        <translation>Oktava 2</translation>
+        <translation>2 oktava</translation>
     </message>
     <message>
         <source>Octave 1</source>
-        <translation>Oktava 1</translation>
+        <translation>1 oktava</translation>
     </message>
     <message>
         <source>Octave 0</source>
-        <translation>Oktava 0</translation>
+        <translation>0 oktava</translation>
     </message>
     <message>
         <source>Octave -1</source>
-        <translation>Oktava -1</translation>
+        <translation>-1 oktava</translation>
     </message>
     <message>
         <source>C</source>
@@ -799,7 +799,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>G 3</source>
-        <translation type="unfinished"/>
+        <translation>G 3</translation>
     </message>
     <message>
         <source>A 3</source>
@@ -807,135 +807,135 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>B 3</source>
-        <translation type="unfinished"/>
+        <translation>B 3</translation>
     </message>
     <message>
         <source>C 2</source>
-        <translation type="unfinished"/>
+        <translation>C 2</translation>
     </message>
     <message>
         <source>D 2</source>
-        <translation type="unfinished"/>
+        <translation>D 2</translation>
     </message>
     <message>
         <source>E 2</source>
-        <translation type="unfinished"/>
+        <translation>E 2</translation>
     </message>
     <message>
         <source>F 2</source>
-        <translation type="unfinished"/>
+        <translation>F 2</translation>
     </message>
     <message>
         <source>G 2</source>
-        <translation type="unfinished"/>
+        <translation>G 2</translation>
     </message>
     <message>
         <source>A 2</source>
-        <translation type="unfinished"/>
+        <translation>A 2</translation>
     </message>
     <message>
         <source>B 2</source>
-        <translation type="unfinished"/>
+        <translation>B 2</translation>
     </message>
     <message>
         <source>C 1</source>
-        <translation type="unfinished"/>
+        <translation>C 1</translation>
     </message>
     <message>
         <source>D 1</source>
-        <translation type="unfinished"/>
+        <translation>D 1</translation>
     </message>
     <message>
         <source>E 1</source>
-        <translation type="unfinished"/>
+        <translation>E 1</translation>
     </message>
     <message>
         <source>F 1</source>
-        <translation type="unfinished"/>
+        <translation>F 1</translation>
     </message>
     <message>
         <source>G 1</source>
-        <translation type="unfinished"/>
+        <translation>G 1</translation>
     </message>
     <message>
         <source>A 1</source>
-        <translation type="unfinished"/>
+        <translation>A 1</translation>
     </message>
     <message>
         <source>B 1</source>
-        <translation type="unfinished"/>
+        <translation>B 1</translation>
     </message>
     <message>
         <source>C 0</source>
-        <translation type="unfinished"/>
+        <translation>C 0</translation>
     </message>
     <message>
         <source>D 0</source>
-        <translation type="unfinished"/>
+        <translation>D 0</translation>
     </message>
     <message>
         <source>E 0</source>
-        <translation type="unfinished"/>
+        <translation>E 0</translation>
     </message>
     <message>
         <source>F 0</source>
-        <translation type="unfinished"/>
+        <translation>F 0</translation>
     </message>
     <message>
         <source>G 0</source>
-        <translation type="unfinished"/>
+        <translation>G 0</translation>
     </message>
     <message>
         <source>A 0</source>
-        <translation type="unfinished"/>
+        <translation>A 0</translation>
     </message>
     <message>
         <source>B 0</source>
-        <translation type="unfinished"/>
+        <translation>B 0</translation>
     </message>
     <message>
         <source>C -1</source>
-        <translation type="unfinished"/>
+        <translation>C -1</translation>
     </message>
     <message>
         <source>D -1</source>
-        <translation type="unfinished"/>
+        <translation>D -1</translation>
     </message>
     <message>
         <source>E -1</source>
-        <translation type="unfinished"/>
+        <translation>E -1</translation>
     </message>
     <message>
         <source>F -1</source>
-        <translation type="unfinished"/>
+        <translation>F -1</translation>
     </message>
     <message>
         <source>G -1</source>
-        <translation type="unfinished"/>
+        <translation>G -1</translation>
     </message>
     <message>
         <source>A -1</source>
-        <translation type="unfinished"/>
+        <translation>A -1</translation>
     </message>
     <message>
         <source>B -1</source>
-        <translation type="unfinished"/>
+        <translation>B -1</translation>
     </message>
     <message>
         <source>C♯</source>
-        <translation type="unfinished"/>
+        <translation>C♯</translation>
     </message>
     <message>
         <source>E♭</source>
-        <translation type="unfinished"/>
+        <translation>E♭</translation>
     </message>
     <message>
         <source>F♯</source>
-        <translation type="unfinished"/>
+        <translation>F♯</translation>
     </message>
     <message>
         <source>A♭</source>
-        <translation type="unfinished"/>
+        <translation>A♭</translation>
     </message>
     <message>
         <source>B♭</source>
@@ -943,218 +943,218 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>C♯ 8</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 8</translation>
     </message>
     <message>
         <source>E♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 8</translation>
     </message>
     <message>
         <source>F♯ 8</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 8</translation>
     </message>
     <message>
         <source>A♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 8</translation>
     </message>
     <message>
         <source>B♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 8</translation>
     </message>
     <message>
         <source>C♯ 7</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 7</translation>
     </message>
     <message>
         <source>E♭ 7</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 7</translation>
     </message>
     <message>
         <source>F♯ 7</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 7</translation>
     </message>
     <message>
         <source>A♭ 7</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 7</translation>
     </message>
     <message>
         <source>B♭ 7</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 7</translation>
     </message>
     <message>
         <source>C♯ 6</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 6</translation>
     </message>
     <message>
         <source>E♭ 6</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 6</translation>
     </message>
     <message>
         <source>F♯ 6</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 6</translation>
     </message>
     <message>
         <source>A♭ 6</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 6</translation>
     </message>
     <message>
         <source>B♭ 6</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 6</translation>
     </message>
     <message>
         <source>C♯ 5</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 5</translation>
     </message>
     <message>
         <source>E♭ 5</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 5</translation>
     </message>
     <message>
         <source>F♯ 5</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 5</translation>
     </message>
     <message>
         <source>A♭ 5</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 5</translation>
     </message>
     <message>
         <source>B♭ 5</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 5</translation>
     </message>
     <message>
         <source>C♯ 4</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 4</translation>
     </message>
     <message>
         <source>E♭ 4</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 4</translation>
     </message>
     <message>
         <source>F♯ 4</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 4</translation>
     </message>
     <message>
         <source>A♭ 4</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 4</translation>
     </message>
     <message>
         <source>B♭ 4</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 4</translation>
     </message>
     <message>
         <source>C♯ 3</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 3</translation>
     </message>
     <message>
         <source>E♭ 3</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 3</translation>
     </message>
     <message>
         <source>F♯ 3</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 3</translation>
     </message>
     <message>
         <source>A♭ 3</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 3</translation>
     </message>
     <message>
         <source>B♭ 3</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 3</translation>
     </message>
     <message>
         <source>C♯ 2</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 2</translation>
     </message>
     <message>
         <source>E♭ 2</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 2</translation>
     </message>
     <message>
         <source>F♯ 2</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 2</translation>
     </message>
     <message>
         <source>A♭ 2</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 2</translation>
     </message>
     <message>
         <source>B♭ 2</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 2</translation>
     </message>
     <message>
         <source>C♯ 1</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 1</translation>
     </message>
     <message>
         <source>E♭ 1</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 1</translation>
     </message>
     <message>
         <source>F♯ 1</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 1</translation>
     </message>
     <message>
         <source>A♭ 1</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 1</translation>
     </message>
     <message>
         <source>B♭ 1</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 1</translation>
     </message>
     <message>
         <source>C♯ 0</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 0</translation>
     </message>
     <message>
         <source>E♭ 0</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 0</translation>
     </message>
     <message>
         <source>F♯ 0</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 0</translation>
     </message>
     <message>
         <source>A♭ 0</source>
-        <translation type="unfinished"/>
+        <translation>A♭ 0</translation>
     </message>
     <message>
         <source>B♭ 0</source>
-        <translation type="unfinished"/>
+        <translation>B♭ 0</translation>
     </message>
     <message>
         <source>C♯ -1</source>
-        <translation type="unfinished"/>
+        <translation>C♯ -1</translation>
     </message>
     <message>
         <source>E♭ -1</source>
-        <translation type="unfinished"/>
+        <translation>E♭ -1</translation>
     </message>
     <message>
         <source>F♯ -1</source>
-        <translation type="unfinished"/>
+        <translation>F♯ -1</translation>
     </message>
     <message>
         <source>A♭ -1</source>
-        <translation type="unfinished"/>
+        <translation>A♭ -1</translation>
     </message>
     <message>
         <source>B♭ -1</source>
-        <translation type="unfinished"/>
+        <translation>B♭ -1</translation>
     </message>
     <message>
         <source>»C</source>
-        <translation type="unfinished"/>
+        <translation>»C</translation>
     </message>
 </context>
 <context>
     <name>EditRaster</name>
     <message>
         <source>1 / </source>
-        <translation type="unfinished"/>
+        <translation>1 / </translation>
     </message>
     <message>
         <source>sp</source>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>MuseScore: Edit Grid</source>
@@ -1185,7 +1185,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Change Instrument...</source>
-        <translation>Pakeisti instrumentą...</translation>
+        <translation>Keisti instrumentą...</translation>
     </message>
     <message>
         <source>Instrument:</source>
@@ -1205,27 +1205,27 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>0 - Perfect Unison</source>
-        <translation>0 - Grynoji prima</translation>
+        <translation>0 - grynoji prima</translation>
     </message>
     <message>
         <source>1 - Augmented Unison</source>
-        <translation>1 - Padidinta prima</translation>
+        <translation>1 - padidinta prima</translation>
     </message>
     <message>
         <source>0 - Diminished Second</source>
-        <translation>0 - Sumažinta sekunda</translation>
+        <translation>0 - sumažinta sekunda</translation>
     </message>
     <message>
         <source>1 - Minor Second</source>
-        <translation>1 - Minorinė sekunda</translation>
+        <translation>1 - mažoji sekunda</translation>
     </message>
     <message>
         <source>2 - Major Second</source>
-        <translation>2 - Mažorinė sekunda</translation>
+        <translation>2 - didžioji sekunda</translation>
     </message>
     <message>
         <source>3 - Augmented Second</source>
-        <translation>3 - Padidinta sekunda</translation>
+        <translation>3 - padidinta sekunda</translation>
     </message>
     <message>
         <source>2 - Diminished Third</source>
@@ -1325,7 +1325,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>sp</source>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Staff line color:</source>
@@ -1432,7 +1432,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>sp</source>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>STANDARD STAFF</source>
@@ -1468,7 +1468,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Numbers</source>
-        <translation>Numeravimas</translation>
+        <translation>Skaičiai</translation>
     </message>
     <message>
         <source>Letters</source>
@@ -1484,7 +1484,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Continuous</source>
-        <translation>Tęsti</translation>
+        <translation>Ištisinis</translation>
     </message>
     <message>
         <source>Broken</source>
@@ -1528,7 +1528,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Below</source>
-        <translation>žemiau</translation>
+        <translation>Po</translation>
     </message>
     <message>
         <source>Half notes:</source>
@@ -1544,7 +1544,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Preview</source>
-        <translation>Rodinys</translation>
+        <translation>Peržiūra</translation>
     </message>
     <message>
         <source>Line distance:</source>
@@ -1564,7 +1564,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Vertical offset:</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalusis poslinkis:</translation>
     </message>
     <message>
         <source>On lines</source>
@@ -1572,7 +1572,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Above lines</source>
-        <translation>virs liniju</translation>
+        <translation>Virš linijų</translation>
     </message>
     <message>
         <source>Note symbols</source>
@@ -1580,7 +1580,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Upside down</source>
-        <translation>aukstyn kojom</translation>
+        <translation>Aukštyn kojom</translation>
     </message>
     <message>
         <source>Show rests</source>
@@ -1659,7 +1659,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Open</source>
-        <translation>Atverti...</translation>
+        <translation>Atvira(s)</translation>
     </message>
     <message>
         <source>Pitch</source>
@@ -1670,15 +1670,15 @@ p, li { white-space: pre-wrap; }
     <name>EditStyleBase</name>
     <message>
         <source>MuseScore: Edit Style</source>
-        <translation>MuseScore: Stiliaus redagavimas</translation>
+        <translation>MuseScore: Tvarkyti stilių</translation>
     </message>
     <message>
         <source>Score</source>
-        <translation>Natos</translation>
+        <translation>Partitūra</translation>
     </message>
     <message>
         <source>Page</source>
-        <translation>Lapas</translation>
+        <translation>Puslapis</translation>
     </message>
     <message>
         <source>Header, Footer, Numbers</source>
@@ -1691,7 +1691,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Measure</source>
-        <translation>Metras</translation>
+        <translation>Taktas</translation>
     </message>
     <message>
         <source>Barlines</source>
@@ -1758,15 +1758,15 @@ p, li { white-space: pre-wrap; }
         <extracomment>spatium unit
 ----------
 space unit</extracomment>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Minimum number of empty measures:</source>
-        <translation>Tuščių taktų minimalus skaičius:</translation>
+        <translation>Mažiausias tuščių taktų skaičius:</translation>
     </message>
     <message>
         <source>Hide empty staves</source>
-        <translation>Slėpti nepanaudotas penklines</translation>
+        <translation>Slėpti nenaudojamas penklines</translation>
     </message>
     <message>
         <source>Don&apos;t hide empty staves in first system</source>
@@ -1830,7 +1830,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Create courtesy key signatures</source>
-        <translation>Įterpti tonacijos pasikeitimo priminimus</translation>
+        <translation>Įterpti prieraktinių ženklų pasikeitimo priminimus</translation>
     </message>
     <message>
         <source>Lyrics line height:</source>
@@ -1866,11 +1866,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Even</source>
-        <translation>lyginis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Odd</source>
-        <translation>nelyginis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>All staves</source>
@@ -1882,7 +1882,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>System bracket distance:</source>
-        <translation>Atstumas tarp sistemos penklinių:</translation>
+        <translation>Atstumas iki sistemos akoladės:</translation>
     </message>
     <message>
         <source>Brace distance:</source>
@@ -1938,11 +1938,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Show repeat bar tips (&quot;winged&quot; repeats)</source>
-        <translation>Pakartojimus rodyti „gražiai“</translation>
+        <translation>Rodyti greitąjį kartojamų taktų užrašymą</translation>
     </message>
     <message>
         <source>Barline at start of single staff</source>
-        <translation>Takto brūkšnys atskiros penklinės pradžioje</translation>
+        <translation>Takto brūkšnys pavienės penklinės pradžioje</translation>
     </message>
     <message>
         <source>Barline at start of multiple staves</source>
@@ -1974,7 +1974,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Progression:</source>
-        <translation>progresas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Shortest stem:</source>
@@ -2018,11 +2018,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line thickness:</source>
-        <translation>linijos storis</translation>
+        <translation>Linijos storis:</translation>
     </message>
     <message>
         <source>Hook length:</source>
-        <translation>kabliuko ilgis</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Beam thickness:</source>
@@ -2114,7 +2114,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Jazz</source>
-        <translation>dziazas</translation>
+        <translation>Džiazas</translation>
     </message>
     <message>
         <source>Custom</source>
@@ -2126,7 +2126,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>German</source>
-        <translation>vokieciu</translation>
+        <translation>Vokiečių</translation>
     </message>
     <message>
         <source>Solfeggio</source>
@@ -2162,7 +2162,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Vertical position:</source>
-        <translation>vertikali pozicija</translation>
+        <translation>Vertikali pozicija:</translation>
     </message>
     <message>
         <source>from top of staff</source>
@@ -2178,11 +2178,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Top</source>
-        <translation>virsus</translation>
+        <translation>Viršus</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation>apacia</translation>
+        <translation>Apačia</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2199,7 +2199,7 @@ space unit</extracomment>
     <message>
         <source>sp</source>
         <comment>space unit</comment>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Articulation distance:</source>
@@ -2219,7 +2219,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Maximum slope:</source>
-        <translation>maksimalus nuolydis</translation>
+        <translation>Maksimalus nuolydis:</translation>
     </message>
     <message>
         <source>Vertical distance from stem:</source>
@@ -2251,11 +2251,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Chord Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Akordų simboliai</translation>
     </message>
     <message>
         <source>Chord symbols style file:</source>
-        <translation type="unfinished"/>
+        <translation>Akordų simbolių stiliaus failas:</translation>
     </message>
     <message>
         <source>Capo</source>
@@ -2295,7 +2295,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Position:</source>
-        <translation>pozicija</translation>
+        <translation>Pozicija:</translation>
     </message>
     <message>
         <source>Minimum tie length:</source>
@@ -2303,7 +2303,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Interval:</source>
-        <translation>intervalas</translation>
+        <translation>Intervalas:</translation>
     </message>
     <message>
         <source>Hide instrument name if there is only 1 instrument</source>
@@ -2331,7 +2331,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Eighth Note</source>
-        <translation>astunta nata</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Sixteenth Note</source>
@@ -2379,7 +2379,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
     <message>
         <source>Use odd/even page header</source>
@@ -2403,7 +2403,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Continuous</source>
-        <translation>Tęsti</translation>
+        <translation>ištisinis</translation>
     </message>
     <message>
         <source>Dashed</source>
@@ -2423,15 +2423,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Numbers only</source>
-        <translation>tik skaiciai</translation>
+        <translation>Tik skaičiai</translation>
     </message>
     <message>
         <source>Header Text</source>
-        <translation type="unfinished"/>
+        <translation>Antraštės tekstas</translation>
     </message>
     <message>
         <source>Footer Text</source>
-        <translation type="unfinished"/>
+        <translation>Poraštės tekstas</translation>
     </message>
     <message>
         <source>Measure Numbers</source>
@@ -2593,7 +2593,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Sound Fonts</source>
@@ -2684,7 +2684,7 @@ space unit</extracomment>
     <name>InsertMeasuresDialogBase</name>
     <message>
         <source>Mscore: Insert Measures</source>
-        <translation>MuseScore: Takto įterpimas</translation>
+        <translation>MuseScore: Įterpti taktų</translation>
     </message>
     <message>
         <source>OK</source>
@@ -2696,11 +2696,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Insert empty measures</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti tuščių taktų</translation>
     </message>
     <message>
         <source>Number of measures to insert:</source>
-        <translation type="unfinished"/>
+        <translation>Įterpiamų taktų skaičius:</translation>
     </message>
 </context>
 <context>
@@ -2723,7 +2723,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
 </context>
 <context>
@@ -2734,7 +2734,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>sp</source>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Bottom note</source>
@@ -2754,7 +2754,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>C♯</source>
-        <translation type="unfinished"/>
+        <translation>C♯</translation>
     </message>
     <message>
         <source>C♯♯</source>
@@ -2786,7 +2786,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>E♭</source>
-        <translation type="unfinished"/>
+        <translation>E♭</translation>
     </message>
     <message>
         <source>E</source>
@@ -2814,7 +2814,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>F♯</source>
-        <translation type="unfinished"/>
+        <translation>F♯</translation>
     </message>
     <message>
         <source>F♯♯</source>
@@ -2846,7 +2846,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>A♭</source>
-        <translation type="unfinished"/>
+        <translation>A♭</translation>
     </message>
     <message>
         <source>A</source>
@@ -2922,7 +2922,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Direction</source>
-        <translation>kryptis</translation>
+        <translation>Kryptis</translation>
     </message>
     <message>
         <source>Upright</source>
@@ -2930,11 +2930,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Leaning Left</source>
-        <translation>pasvire kairen</translation>
+        <translation>Pasvirę kairėn</translation>
     </message>
     <message>
         <source>Leaning Right</source>
-        <translation>pasvire desinen</translation>
+        <translation>Pasvirę dešinėn</translation>
     </message>
     <message>
         <source>Ambitus Inspector</source>
@@ -2990,11 +2990,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Do</source>
-        <translation>do</translation>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation>re</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Mi</source>
@@ -3026,7 +3026,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
     <message>
         <source>Reset Line thickness value</source>
@@ -3042,6 +3042,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpedžio</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Groti</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3049,7 +3068,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Direction</source>
-        <translation>kryptis</translation>
+        <translation>Kryptis</translation>
     </message>
     <message>
         <source>Anchor</source>
@@ -3105,6 +3124,30 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Time stretch value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3180,7 +3223,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
 </context>
 <context>
@@ -3203,19 +3246,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Direction</source>
-        <translation>kryptis</translation>
+        <translation>Kryptis</translation>
     </message>
     <message>
         <source>sp</source>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation>pozicija</translation>
+        <translation>Pozicija</translation>
     </message>
     <message>
         <source>Horizontal</source>
-        <translation>horizontalus</translation>
+        <translation>Horizontalus</translation>
     </message>
     <message>
         <source>Beam Inspector</source>
@@ -3279,6 +3322,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorBreak</name>
     <message>
         <source>Element Inspector</source>
@@ -3313,16 +3375,16 @@ space unit</extracomment>
     </message>
     <message>
         <source>Vertical offset</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalusis poslinkis</translation>
     </message>
     <message>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Horizontal offset</source>
-        <translation type="unfinished"/>
+        <translation>Horizontalusis poslinkis</translation>
     </message>
     <message>
         <source>Small</source>
@@ -3338,11 +3400,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Vertical offset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti vertikaliojo poslinkio reikšmę</translation>
     </message>
     <message>
         <source>Reset Horizontal offset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti horizontaliojo poslinkio reikšmę</translation>
     </message>
     <message>
         <source>Reset Stem direction value</source>
@@ -3350,7 +3412,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Horizontal Offset</source>
-        <translation type="unfinished"/>
+        <translation>Horizontalusis poslinkis</translation>
     </message>
     <message>
         <source>Reset Small Value</source>
@@ -3362,7 +3424,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
 </context>
 <context>
@@ -3385,14 +3447,14 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
 </context>
 <context>
     <name>InspectorDynamic</name>
     <message>
         <source>Dynamic</source>
-        <translation>Dinamikos ženklai</translation>
+        <translation>Dinamika</translation>
     </message>
     <message>
         <source>Dynamic Range</source>
@@ -3428,7 +3490,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
     <message>
         <source>Dynamic range</source>
@@ -3443,12 +3505,12 @@ space unit</extracomment>
     </message>
     <message>
         <source>Vertical offset</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalusis poslinkis</translation>
     </message>
     <message>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Color</source>
@@ -3456,7 +3518,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Horizontal offset</source>
-        <translation type="unfinished"/>
+        <translation>Horizontalusis poslinkis</translation>
     </message>
     <message>
         <source>Visible</source>
@@ -3468,11 +3530,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Horizontal offset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti horizontaliojo poslinkio reikšmę</translation>
     </message>
     <message>
         <source>Reset Vertical offset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti vertikaliojo poslinkio reikšmę</translation>
     </message>
     <message>
         <source>Reset Visible value</source>
@@ -3491,7 +3553,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Nothing selected</source>
-        <translation type="unfinished"/>
+        <translation>Nieko nepasirinkta</translation>
     </message>
 </context>
 <context>
@@ -3506,7 +3568,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
     <message>
         <source>Reset Type value</source>
@@ -3559,6 +3621,42 @@ space unit</extracomment>
         <source>Show text</source>
         <translation>Rodyti tekstą</translation>
     </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>InspectorGroupElement</name>
@@ -3591,17 +3689,16 @@ space unit</extracomment>
     <name>InspectorHBox</name>
     <message>
         <source>Horizontal Frame</source>
-        <translation>horizontalus remelis
-</translation>
+        <translation>Horizontalus rėmelis</translation>
     </message>
     <message>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation>plotis</translation>
+        <translation>Plotis</translation>
     </message>
     <message>
         <source>Horizontal Frame Inspector</source>
@@ -3609,23 +3706,23 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
     <message>
         <source>Right gap</source>
-        <translation type="unfinished"/>
+        <translation>Dešinysis tarpas</translation>
     </message>
     <message>
         <source>Left gap</source>
-        <translation type="unfinished"/>
+        <translation>Kairysis tarpas</translation>
     </message>
     <message>
         <source>Reset Left gap value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti kairiojo tarpo reikšmę</translation>
     </message>
     <message>
         <source>Reset Right gap value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti dešiniojo tarpo reikšmę</translation>
     </message>
 </context>
 <context>
@@ -3636,7 +3733,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Aukštis</translation>
     </message>
     <message>
         <source>Type</source>
@@ -3668,7 +3765,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>sp</source>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Circled tip</source>
@@ -3700,7 +3797,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Crescendo</source>
-        <translation>crescendo</translation>
+        <translation>Crescendo</translation>
     </message>
     <message>
         <source>Decrescendo</source>
@@ -3708,7 +3805,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
     <message>
         <source>Reset Continue height value</source>
@@ -3723,7 +3820,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Size</source>
-        <translation>dydis</translation>
+        <translation>Dydis</translation>
     </message>
     <message>
         <source>Scale</source>
@@ -3739,11 +3836,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Aukštis</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation>plotis</translation>
+        <translation>Plotis</translation>
     </message>
     <message>
         <source>Scale Width</source>
@@ -3763,7 +3860,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Lock aspect ratio</source>
-        <translation>laikyti tokį mastelį</translation>
+        <translation>Išlaikyti proporcijas</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
@@ -3833,18 +3930,18 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
 </context>
 <context>
     <name>InspectorLasso</name>
     <message>
         <source>Lasso</source>
-        <translation>Laso</translation>
+        <translation>Kilpa</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation>pozicija</translation>
+        <translation>Pozicija</translation>
     </message>
     <message>
         <source>mm</source>
@@ -3852,7 +3949,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Size</source>
-        <translation>dydis</translation>
+        <translation>Dydis</translation>
     </message>
     <message>
         <source>Lasso Inspector</source>
@@ -3864,11 +3961,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Aukštis</translation>
     </message>
     <message>
         <source>Width</source>
-        <translation>plotis</translation>
+        <translation>Plotis</translation>
     </message>
     <message>
         <source>Horizontal Position</source>
@@ -3884,7 +3981,7 @@ space unit</extracomment>
     <message>
         <source>sp</source>
         <extracomment>Staff space unit</extracomment>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Line color</source>
@@ -3916,7 +4013,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
     <message>
         <source>Line thickness</source>
@@ -3924,7 +4021,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Continuous</source>
-        <translation>Tęsti</translation>
+        <translation>Ištisinis</translation>
     </message>
     <message>
         <source>Dashed</source>
@@ -3975,7 +4072,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Codetta</source>
-        <translation>Kodeta</translation>
+        <translation>Kodetė</translation>
     </message>
     <message>
         <source>Fine</source>
@@ -4046,11 +4143,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Top</source>
-        <translation>virsus</translation>
+        <translation>Viršus</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation>apacia</translation>
+        <translation>Apačia</translation>
     </message>
     <message>
         <source>Whole</source>
@@ -4150,7 +4247,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
     <message>
         <source>Reset Dot position value</source>
@@ -4213,7 +4310,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Numbers only</source>
-        <translation>tik skaiciai</translation>
+        <translation>Tik skaičiai</translation>
     </message>
     <message>
         <source>Ottava Inspector</source>
@@ -4229,7 +4326,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
     <message>
         <source>Above</source>
@@ -4237,7 +4334,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Below</source>
-        <translation>zemiau</translation>
+        <translation>Žemiau</translation>
     </message>
     <message>
         <source>Reset Numbers only value</source>
@@ -4264,7 +4361,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
 </context>
 <context>
@@ -4276,15 +4373,15 @@ space unit</extracomment>
     <message>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Trailing space</source>
-        <translation type="unfinished"/>
+        <translation>Galinis tarpas</translation>
     </message>
     <message>
         <source>Leading space</source>
-        <translation type="unfinished"/>
+        <translation>Priekinis tarpas</translation>
     </message>
     <message>
         <source>Segment Inspector</source>
@@ -4292,15 +4389,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Leading space value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti priekinio tarpo reikšmę</translation>
     </message>
     <message>
         <source>Reset Trailing space value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti galinio tarpo reikšmę</translation>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
 </context>
 <context>
@@ -4327,7 +4424,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
     <message>
         <source>Continuous</source>
@@ -4350,12 +4447,12 @@ space unit</extracomment>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Aukštis</translation>
     </message>
     <message>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Spacer Inspector</source>
@@ -4367,10 +4464,82 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Teksto rėmelio tikrintuvas</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Teksto rėmelis</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Apatinis tarpas</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Viršutinė paraštė</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Atstatyti reikšmę</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Atstatyti viršutinio tarpo reikšmę</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Atstatyti apatinio tarpo reikšmę</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Kairioji paraštė</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Apatinė paraštė</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Atstatyti dešiniosios paraštės reikšmę</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Dešinioji paraštė</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Atstatyti apatinės paraštės reikšmę</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Atstatyti viršutinės paraštės reikšmę</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Atstatyti kairiosios paraštės reikšmę</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Viršutinis tarpas</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>tarp.</translation>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
-        <translation>Tempas</translation>
+        <translation>Tempo užrašas</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -4394,7 +4563,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
     <message>
         <source>Reset Follow text value</source>
@@ -4421,7 +4590,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
     <message>
         <source>Reset Text to Style</source>
@@ -4459,7 +4628,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
 </context>
 <context>
@@ -4497,11 +4666,35 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Wavy Line</source>
+        <source>Reset value</source>
+        <translation>Atstatyti reikšmę</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Reset value</source>
+        <source>Direction</source>
+        <translation>Kryptis</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>numatyta</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Groti</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -4533,7 +4726,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Direction</source>
-        <translation>kryptis</translation>
+        <translation>Kryptis</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -4557,7 +4750,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
     <message>
         <source>Reset Number type value</source>
@@ -4580,7 +4773,7 @@ space unit</extracomment>
     <name>InspectorVBox</name>
     <message>
         <source>Vertical Frame</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalusis rėmelis</translation>
     </message>
     <message>
         <source>mm</source>
@@ -4589,11 +4782,11 @@ space unit</extracomment>
     <message>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Aukštis</translation>
     </message>
     <message>
         <source>Vertical Frame Inspector</source>
@@ -4601,7 +4794,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
     <message>
         <source>Right margin</source>
@@ -4609,15 +4802,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Top gap value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti viršutinio tarpo reikšmę</translation>
     </message>
     <message>
         <source>Reset Bottom gap value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti apatinio tarpo reikšmę</translation>
     </message>
     <message>
         <source>Bottom margin</source>
-        <translation type="unfinished"/>
+        <translation>Apatinė paraštė</translation>
     </message>
     <message>
         <source>Left margin</source>
@@ -4625,31 +4818,31 @@ space unit</extracomment>
     </message>
     <message>
         <source>Top gap</source>
-        <translation type="unfinished"/>
+        <translation>Viršutinis tarpas</translation>
     </message>
     <message>
         <source>Bottom gap</source>
-        <translation type="unfinished"/>
+        <translation>Apatinis tarpas</translation>
     </message>
     <message>
         <source>Top margin</source>
-        <translation type="unfinished"/>
+        <translation>Viršutinė paraštė</translation>
     </message>
     <message>
         <source>Reset Left margin value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti kairiosios paraštės reikšmę</translation>
     </message>
     <message>
         <source>Reset Right margin value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti dešiniosios paraštės reikšmę</translation>
     </message>
     <message>
         <source>Reset Top margin value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti viršutinės paraštės reikšmę</translation>
     </message>
     <message>
         <source>Reset Bottom margin value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti apatinės paraštės reikšmę</translation>
     </message>
 </context>
 <context>
@@ -4680,7 +4873,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti reikšmę</translation>
     </message>
 </context>
 <context>
@@ -4754,11 +4947,11 @@ space unit</extracomment>
     <name>InstrumentsDialog</name>
     <message>
         <source>All instruments</source>
-        <translation type="unfinished"/>
+        <translation>Visi instrumentai</translation>
     </message>
     <message>
         <source>MuseScore: Instruments</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Instrumentai</translation>
     </message>
     <message>
         <source>Load</source>
@@ -4766,7 +4959,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Save</source>
-        <translation>Išsaugoti</translation>
+        <translation>Įrašyti</translation>
     </message>
     <message>
         <source>OK</source>
@@ -4781,7 +4974,7 @@ space unit</extracomment>
     <name>InstrumentsWidget</name>
     <message>
         <source>MuseScore: Instruments</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Instrumentai</translation>
     </message>
     <message>
         <source>Instrument List</source>
@@ -4845,7 +5038,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Instrument list</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentų sąrašas</translation>
     </message>
     <message>
         <source>Clear Search box</source>
@@ -4864,7 +5057,7 @@ space unit</extracomment>
     <name>KeyEdit</name>
     <message>
         <source>Create Key Signature</source>
-        <translation>Tonacijos apibūdinimas</translation>
+        <translation>Prieraktiniai ženklai</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -4876,6 +5069,13 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add time signature to palette</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -4939,7 +5139,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished"/>
+        <translation>8</translation>
     </message>
     <message>
         <source>9</source>
@@ -4947,15 +5147,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>10</source>
-        <translation type="unfinished"/>
+        <translation>10</translation>
     </message>
     <message>
         <source>11</source>
-        <translation type="unfinished"/>
+        <translation>11</translation>
     </message>
     <message>
         <source>12</source>
-        <translation type="unfinished"/>
+        <translation>12</translation>
     </message>
     <message>
         <source>13</source>
@@ -4963,75 +5163,75 @@ space unit</extracomment>
     </message>
     <message>
         <source>14</source>
-        <translation type="unfinished"/>
+        <translation>14</translation>
     </message>
     <message>
         <source>15</source>
-        <translation type="unfinished"/>
+        <translation>15</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished"/>
+        <translation>16</translation>
     </message>
     <message>
         <source>17</source>
-        <translation type="unfinished"/>
+        <translation>17</translation>
     </message>
     <message>
         <source>18</source>
-        <translation type="unfinished"/>
+        <translation>18</translation>
     </message>
     <message>
         <source>19</source>
-        <translation type="unfinished"/>
+        <translation>19</translation>
     </message>
     <message>
         <source>20</source>
-        <translation type="unfinished"/>
+        <translation>20</translation>
     </message>
     <message>
         <source>21</source>
-        <translation type="unfinished"/>
+        <translation>21</translation>
     </message>
     <message>
         <source>22</source>
-        <translation type="unfinished"/>
+        <translation>22</translation>
     </message>
     <message>
         <source>23</source>
-        <translation type="unfinished"/>
+        <translation>23</translation>
     </message>
     <message>
         <source>24</source>
-        <translation type="unfinished"/>
+        <translation>24</translation>
     </message>
     <message>
         <source>25</source>
-        <translation type="unfinished"/>
+        <translation>25</translation>
     </message>
     <message>
         <source>26</source>
-        <translation type="unfinished"/>
+        <translation>26</translation>
     </message>
     <message>
         <source>27</source>
-        <translation type="unfinished"/>
+        <translation>27</translation>
     </message>
     <message>
         <source>28</source>
-        <translation type="unfinished"/>
+        <translation>28</translation>
     </message>
     <message>
         <source>29</source>
-        <translation type="unfinished"/>
+        <translation>29</translation>
     </message>
     <message>
         <source>30</source>
-        <translation type="unfinished"/>
+        <translation>30</translation>
     </message>
     <message>
         <source>31</source>
-        <translation type="unfinished"/>
+        <translation>31</translation>
     </message>
     <message>
         <source>Tag</source>
@@ -5039,7 +5239,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>Aprašas</translation>
     </message>
 </context>
 <context>
@@ -5058,7 +5258,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Below</source>
-        <translation>zemiau</translation>
+        <translation>Žemiau</translation>
     </message>
     <message>
         <source>Left</source>
@@ -5066,7 +5266,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>sp</source>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Up</source>
@@ -5074,11 +5274,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>90°</source>
-        <translation type="unfinished"/>
+        <translation>90°</translation>
     </message>
     <message>
         <source>45°</source>
-        <translation type="unfinished"/>
+        <translation>45°</translation>
     </message>
     <message>
         <source>Continue</source>
@@ -5105,15 +5305,15 @@ space unit</extracomment>
     <name>LoginDialog</name>
     <message>
         <source>Log in to MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Prisijunkite prie MuseScore</translation>
     </message>
     <message>
         <source>Username or email</source>
-        <translation type="unfinished"/>
+        <translation>Naudotojo vardas ar el. paštas</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"/>
+        <translation>Slaptažodis</translation>
     </message>
 </context>
 <context>
@@ -5232,23 +5432,23 @@ space unit</extracomment>
     </message>
     <message>
         <source>12</source>
-        <translation type="unfinished"/>
+        <translation>12</translation>
     </message>
     <message>
         <source>15</source>
-        <translation type="unfinished"/>
+        <translation>15</translation>
     </message>
     <message>
         <source>21</source>
-        <translation type="unfinished"/>
+        <translation>21</translation>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished"/>
+        <translation>8</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished"/>
+        <translation>16</translation>
     </message>
     <message>
         <source>32</source>
@@ -5321,7 +5521,8 @@ pickup measure</source>
     <message>
         <source>Show
 chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti
+akordų simbolius</translation>
     </message>
 </context>
 <context>
@@ -5339,7 +5540,7 @@ chord symbols</source>
     </message>
     <message>
         <source>Save as MP3</source>
-        <translation type="unfinished"/>
+        <translation>Įrašyti kaip MP3</translation>
     </message>
     <message>
         <source>MuseScore does not export MP3 files directly, but instead uses the freely available LAME library.  You must obtain %1 separately (for details check the handbook), and then locate the file for MuseScore.
@@ -5353,11 +5554,11 @@ Would you like to locate %2 now?</source>
     <name>MasterPalette</name>
     <message>
         <source>MuseScore: Master Palette</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Pagrindinė Paletė</translation>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation>Foršlagai</translation>
+        <translation>Puošmenos</translation>
     </message>
     <message>
         <source>Clefs</source>
@@ -5365,7 +5566,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Key Signatures</source>
-        <translation>Tonacijos</translation>
+        <translation>Prieraktiniai ženklai</translation>
     </message>
     <message>
         <source>Time Signatures</source>
@@ -5437,7 +5638,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Breaks &amp; Spacers</source>
-        <translation type="unfinished"/>
+        <translation>Lūžiai ir tarpai</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
@@ -5452,7 +5653,7 @@ Would you like to locate %2 now?</source>
     <name>MeasureProperties</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>cannot change measure length:
@@ -5476,7 +5677,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Staff</source>
-        <translation>Penklinių lapas</translation>
+        <translation>Penklinė</translation>
     </message>
     <message>
         <source>Visible</source>
@@ -5520,11 +5721,11 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished"/>
+        <translation>8</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished"/>
+        <translation>16</translation>
     </message>
     <message>
         <source>32</source>
@@ -5548,7 +5749,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Layout stretch:</source>
-        <translation>išplėsčiau</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Measure number mode:</source>
@@ -5556,7 +5757,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Nominal:</source>
-        <translation>nominalas</translation>
+        <translation>nominalus</translation>
     </message>
     <message>
         <source>Actual:</source>
@@ -5599,7 +5800,7 @@ tuplet would cross measure</source>
     <name>MeasuresDialogBase</name>
     <message>
         <source>Mscore: Append Measures</source>
-        <translation>MuseScore: Taktų pridėjimas</translation>
+        <translation>MuseScore: Pridėti taktų</translation>
     </message>
     <message>
         <source>OK</source>
@@ -5611,7 +5812,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Append empty measures</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tuščių taktų</translation>
     </message>
     <message>
         <source>Number of measures to append:</source>
@@ -5660,7 +5861,7 @@ tuplet would cross measure</source>
     <name>MetaEditDialog</name>
     <message>
         <source>MuseScore Version:</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Versija:</translation>
     </message>
     <message>
         <source>Revision:</source>
@@ -5676,7 +5877,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>MuseScore: Score Information</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Partitūros Informacija</translation>
     </message>
 </context>
 <context>
@@ -5706,7 +5907,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Version: </source>
-        <translation>%1 laida </translation>
+        <translation>Versija: </translation>
     </message>
     <message>
         <source>Revision: %1</source>
@@ -5728,7 +5929,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Page</source>
-        <translation>Lapas</translation>
+        <translation>Puslapis</translation>
     </message>
     <message>
         <source>Rehearsal Mark</source>
@@ -5743,11 +5944,11 @@ tuplet would cross measure</source>
     <name>Ms::AlbumManager</name>
     <message>
         <source>MuseScore: Add Score</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: pridėti partitūrą</translation>
     </message>
     <message>
         <source>MuseScore: Load Album</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Įkelti albumą</translation>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx)</source>
@@ -5755,7 +5956,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>MuseScore Album Files (*.album)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore albumo failai (*.album)</translation>
     </message>
     <message>
         <source>Error while creating score from album.</source>
@@ -5773,7 +5974,7 @@ tuplet would cross measure</source>
     <name>Ms::ArticulationProperties</name>
     <message>
         <source>normal</source>
-        <translation>normalus</translation>
+        <translation>paprastas</translation>
     </message>
 </context>
 <context>
@@ -5795,14 +5996,14 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Breath</source>
-        <translation>Atsikvėpti</translation>
+        <translation>Atsikvėpimas</translation>
     </message>
 </context>
 <context>
     <name>Ms::ChordRest</name>
     <message>
         <source>Duplet</source>
-        <translation>Dupletas</translation>
+        <translation>Duolė</translation>
     </message>
     <message>
         <source>Triplet</source>
@@ -5814,27 +6015,27 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Sextuplet</source>
-        <translation>Sekstupletas</translation>
+        <translation>Sekstolė</translation>
     </message>
     <message>
         <source>Septuplet</source>
-        <translation>Septupletas</translation>
+        <translation>Septolė</translation>
     </message>
     <message>
         <source>Octuplet</source>
-        <translation>Oktupletas</translation>
+        <translation>Oktolė</translation>
     </message>
     <message>
         <source>Custom Tuplet</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinktina ritminė grupė</translation>
     </message>
     <message>
         <source>Quintuplet</source>
-        <translation>Kvintupletas</translation>
+        <translation>Kvintolė</translation>
     </message>
     <message>
         <source>Nonuplet</source>
-        <translation>Nontupletas</translation>
+        <translation>Nonolė</translation>
     </message>
     <message>
         <source>%1 Start of %2</source>
@@ -5861,7 +6062,7 @@ tuplet would cross measure</source>
     <name>Ms::ChordStyleEditor</name>
     <message>
         <source>MuseScore: Chord Symbols Style Editor</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Akordų Simbolių Stiliaus Redaktorius</translation>
     </message>
 </context>
 <context>
@@ -5895,7 +6096,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Velocity:</source>
-        <translation>Greitis:</translation>
+        <translation>Garso stiprumas:</translation>
     </message>
     <message>
         <source>offset</source>
@@ -5922,7 +6123,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>MuseScore: Open File</source>
-        <translation>MuseScore: Failo atvėrimas</translation>
+        <translation>MuseScore: atverti failą</translation>
     </message>
     <message>
         <source>Write File failed: </source>
@@ -5943,7 +6144,7 @@ failed: </source>
     <name>Ms::EditStaff</name>
     <message>
         <source>The instrument name is invalid.</source>
-        <translation type="unfinished"/>
+        <translation>Neteisingas instrumento pavadinimas.</translation>
     </message>
 </context>
 <context>
@@ -5951,7 +6152,7 @@ failed: </source>
     <message>
         <source>Open</source>
         <comment>string data</comment>
-        <translation>Atverti...</translation>
+        <translation>Atviras</translation>
     </message>
     <message>
         <source>Pitch</source>
@@ -6034,14 +6235,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation type="unfinished"/>
     </message>
@@ -6055,6 +6248,14 @@ failed: </source>
     </message>
     <message>
         <source>page number, if there is more than one page</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6111,7 +6312,7 @@ failed: </source>
     <name>Ms::Inspector</name>
     <message>
         <source>Inspector</source>
-        <translation>Objektų panelė</translation>
+        <translation>Objektų skydelis</translation>
     </message>
     <message>
         <source>Inspector Subwindow</source>
@@ -6122,7 +6323,7 @@ failed: </source>
     <name>Ms::InspectorBase</name>
     <message>
         <source>Inspector</source>
-        <translation>Objektų panelė</translation>
+        <translation>Objektų skydelis</translation>
     </message>
 </context>
 <context>
@@ -6202,7 +6403,7 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore: Load Instrument List</source>
-        <translation>MuseScore: Instrumentų sąrašo įkėlimas</translation>
+        <translation>MuseScore: Instrumentų komplekto įkėlimas</translation>
     </message>
     <message>
         <source>MuseScore: Open Instruments File</source>
@@ -6216,7 +6417,7 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore Instruments (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Instrumentai (*.xml)</translation>
     </message>
 </context>
 <context>
@@ -6275,19 +6476,19 @@ failed: </source>
     <name>Ms::LoginDialog</name>
     <message>
         <source>&lt;a href=&quot;%1&quot;&gt;Create an account&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Sukurti paskyrą&lt;/a&gt;</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;%1&quot;&gt;Forgot password?&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Užmiršote slaptažodį?&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Login error</source>
-        <translation type="unfinished"/>
+        <translation>Prisijungimo klaida</translation>
     </message>
     <message>
         <source>Please fill in your username and password</source>
-        <translation type="unfinished"/>
+        <translation>Prašome įvesti savo naudotojo vardą ir slaptažodį</translation>
     </message>
 </context>
 <context>
@@ -6298,11 +6499,11 @@ failed: </source>
     </message>
     <message>
         <source>Unsuccessful login. Please try again.</source>
-        <translation type="unfinished"/>
+        <translation>Prisjungimas nesėkmingas. Prašome bandyti dar kartą.</translation>
     </message>
     <message>
         <source>Sorry, wrong email address, username or password. Please check again. &lt;a href=&quot;%1&quot;&gt;Have you forgotten your password&lt;/a&gt;?</source>
-        <translation type="unfinished"/>
+        <translation>Atleiskite, neteisingas el. pašto adresas, naudotojo vardas ar slaptažodis. Prašome patikrinti dar kartą. &lt;a href=&quot;%1&quot;&gt;Užmiršote savo slaptažodį&lt;/a&gt;?</translation>
     </message>
     <message>
         <source>This account has been blocked.</source>
@@ -6334,7 +6535,7 @@ failed: </source>
     </message>
     <message>
         <source>Your MuseScore version is too old to use this feature.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Please upgrade first&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų MuseScore versija yra pernelyg sena, kad galėtų naudoti šią ypatybę.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Iš pradžių, atsinaujinkite&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Please check your Internet connection</source>
@@ -6423,17 +6624,17 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Save changes to the score &quot;%1&quot;
 before closing?</source>
-        <translation>Ar išsaugoti partitūrą &quot;%1&quot;
-prieš užbaigiant darbą?</translation>
+        <translation>Ar įrašyti partitūrą &quot;%1&quot;
+prieš ją užveriant?</translation>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Failai (*.mscz *.mscx);;</translation>
     </message>
     <message>
         <source>MusicXML Files (*.xml *.mxl);;</source>
@@ -6441,11 +6642,11 @@ prieš užbaigiant darbą?</translation>
     </message>
     <message>
         <source>MIDI Files (*.mid *.midi *.kar);;</source>
-        <translation>MIDI Failai (*.mid *.midi *.kar);;</translation>
+        <translation>MIDI failai (*.mid *.midi *.kar);;</translation>
     </message>
     <message>
         <source>Muse Data Files (*.md);;</source>
-        <translation>Muse Duomeų failai (*.md);;</translation>
+        <translation>Muse duomenų failai (*.md);;</translation>
     </message>
     <message>
         <source>Capella Files (*.cap *.capx);;</source>
@@ -6509,19 +6710,19 @@ prieš užbaigiant darbą?</translation>
     </message>
     <message>
         <source>MuseScore: Save Image</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: įrašyti paveikslą</translation>
     </message>
     <message>
         <source>MuseScore: Load Palette</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Įkelti Paletę</translation>
     </message>
     <message>
         <source>MuseScore: Save Palette</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Įrašyti Paletę</translation>
     </message>
     <message>
         <source>MuseScore Palette (*.mpal)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Paletė (*.mpal)</translation>
     </message>
     <message>
         <source>MuseScore: Load Plugin</source>
@@ -6545,7 +6746,7 @@ prieš užbaigiant darbą?</translation>
     </message>
     <message>
         <source>MuseScore Drumset File (*.drm)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Mušamųjų komplekto failas (*.drm)</translation>
     </message>
     <message>
         <source>Standard MIDI File (*.mid)</source>
@@ -6577,11 +6778,11 @@ prieš užbaigiant darbą?</translation>
     </message>
     <message>
         <source>MuseScore: Export</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Eksportavimas</translation>
     </message>
     <message>
         <source>MuseScore: Save As</source>
-        <translation>MuseScore: Rašymas</translation>
+        <translation>MuseScore: Įrašymas</translation>
     </message>
     <message>
         <source>MuseScore: Export Parts</source>
@@ -6627,7 +6828,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>Images (*.jpg *.jpeg *.png);;All (*)</source>
-        <translation type="unfinished"/>
+        <translation>Paveikslai (*.jpg *.jpeg *.png);;Visi (*)</translation>
     </message>
     <message>
         <source>Repeat measure sign</source>
@@ -6643,7 +6844,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>Section break</source>
-        <translation type="unfinished"/>
+        <translation>Sekcijų skirtukas</translation>
     </message>
     <message>
         <source>Staff spacer down</source>
@@ -6679,7 +6880,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>Breath</source>
-        <translation>Atsikvėpti</translation>
+        <translation>Atsikvėpimas</translation>
     </message>
     <message>
         <source>Caesura</source>
@@ -6715,19 +6916,19 @@ Do you want to replace it?
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Pridėti</translation>
     </message>
     <message>
         <source>&amp;Measures</source>
-        <translation type="unfinished"/>
+        <translation>T&amp;aktai</translation>
     </message>
     <message>
         <source>&amp;Frames</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Rėmeliai</translation>
     </message>
     <message>
         <source>&amp;Text</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Tekstas</translation>
     </message>
     <message>
         <source>&amp;Lines</source>
@@ -6740,7 +6941,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>synthesizer</source>
-        <translation>Sintezatorius</translation>
+        <translation>sintezatorius</translation>
     </message>
     <message>
         <source>audio track</source>
@@ -6752,19 +6953,19 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>Transport Tools</source>
-        <translation>Transportavimo įrankiai</translation>
+        <translation>Transponavimo įrankiai</translation>
     </message>
     <message>
         <source>Page View</source>
-        <translation type="unfinished"/>
+        <translation>Puslapių rodinys</translation>
     </message>
     <message>
         <source>Continuous View</source>
-        <translation type="unfinished"/>
+        <translation>Ištisinis rodinys</translation>
     </message>
     <message>
         <source>Concert Pitch</source>
-        <translation>440 derinimas</translation>
+        <translation>Užrašoma taip, kaip skamba</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -6780,35 +6981,35 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>&amp;Measure</source>
-        <translation type="unfinished"/>
+        <translation>T&amp;aktas</translation>
     </message>
     <message>
         <source>&amp;Voices</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Balsai</translation>
     </message>
     <message>
         <source>W&amp;orkspaces</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Darbo sritys</translation>
     </message>
     <message>
         <source>&amp;Preferences...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Nuostatos...</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Rodinys</translation>
     </message>
     <message>
         <source>Add N&amp;ote</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti &amp;Natą</translation>
     </message>
     <message>
         <source>Add &amp;Interval</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti &amp;Intervalą</translation>
     </message>
     <message>
         <source>T&amp;uplets</source>
-        <translation type="unfinished"/>
+        <translation>Ritminės gr&amp;upės</translation>
     </message>
     <message>
         <source>&amp;Layout</source>
@@ -6820,7 +7021,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>&amp;Plugins</source>
-        <translation type="unfinished"/>
+        <translation>P&amp;apildiniai</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -6828,7 +7029,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>&amp;Online Handbook</source>
-        <translation type="unfinished"/>
+        <translation>Ž&amp;inynas internete</translation>
     </message>
     <message>
         <source>Check for &amp;Update</source>
@@ -6846,7 +7047,7 @@ Restore session?</source>
     </message>
     <message>
         <source>MuseScore: Tuplet Error</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: ritminės grupės klaida</translation>
     </message>
     <message>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
@@ -6858,7 +7059,7 @@ Restore session?</source>
     </message>
     <message>
         <source>Undo Changes</source>
-        <translation type="unfinished"/>
+        <translation>Atšaukti pakeitimus</translation>
     </message>
     <message>
         <source>MuseScore: Read Workspace Name</source>
@@ -6883,23 +7084,23 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Chord Symbols Style File (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>Akordų simbolių stiliaus failas (*.xml)</translation>
     </message>
     <message>
         <source>MuseScore: Load Chord Symbols Style</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Įkelti Akordų Simbolių Stilių</translation>
     </message>
     <message>
         <source>MuseScore: Save Chord Symbols Style</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Įrašyti Akordų Simbolių Stilių</translation>
     </message>
     <message>
         <source>MuseScore: Insert Image</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Įterpti paveikslą</translation>
     </message>
     <message>
         <source>Report a Bug</source>
-        <translation type="unfinished"/>
+        <translation>Pranešti apie klaidą</translation>
     </message>
     <message>
         <source>System</source>
@@ -6941,15 +7142,15 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Clear Recent Files</source>
-        <translation type="unfinished"/>
+        <translation>Išvalyti paskiausius failus</translation>
     </message>
     <message>
         <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation type="unfinished"/>
+        <translation>Visi Palaikomi Failai (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
     </message>
     <message>
         <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation type="unfinished"/>
+        <translation>Visi Palaikomi Failai (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
     </message>
     <message>
         <source>Zoom</source>
@@ -6981,7 +7182,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Failas (*.mscz)</translation>
     </message>
     <message>
         <source>Uncompressed MuseScore File (*.mscx)</source>
@@ -6989,11 +7190,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MusicXML File (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML Failas (*.xml)</translation>
     </message>
     <message>
         <source>Compressed MusicXML File (*.mxl)</source>
-        <translation type="unfinished"/>
+        <translation>Glaudintas MusicXML File (*.mxl)</translation>
     </message>
     <message>
         <source>Show MIDI import panel</source>
@@ -7053,7 +7254,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Workspace name:</source>
-        <translation type="unfinished"/>
+        <translation>Darbo srities pavadinimas:</translation>
     </message>
     <message>
         <source>Score_and_Parts</source>
@@ -7093,11 +7294,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>No score</source>
-        <translation>nėra natų sąsiuvinio</translation>
+        <translation>Nėra partitūros</translation>
     </message>
     <message>
         <source>Edit mode</source>
-        <translation>redagavimas</translation>
+        <translation>Redagavimo veiksena</translation>
     </message>
     <message>
         <source>Text edit mode</source>
@@ -7125,15 +7326,15 @@ please choose a different name:</source>
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Apie...</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished"/>
+        <translation>Apie &amp;Qt...</translation>
     </message>
     <message>
         <source>About &amp;MusicXML...</source>
-        <translation type="unfinished"/>
+        <translation>Apie &amp;MusicXML...</translation>
     </message>
     <message>
         <source>Image Capture</source>
@@ -7165,7 +7366,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore:</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore:</translation>
     </message>
     <message>
         <source>Cannot write into %1</source>
@@ -7173,6 +7374,10 @@ please choose a different name:</source>
     </message>
     <message>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ask for Help</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7188,36 +7393,36 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Retry</source>
-        <translation>Pakartoti</translation>
+        <translation>Iš naujo</translation>
     </message>
     <message>
         <source>Close this permanently</source>
-        <translation>Užverti nuolatinai</translation>
+        <translation>Užverti galutinai</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizard</name>
     <message>
         <source>MuseScore: Create New Score</source>
-        <translation>MuseScore: Naujas kūrinys</translation>
+        <translation>MuseScore: nauja partitūra</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage1</name>
     <message>
         <source>Create New Score</source>
-        <translation>Partitūros sudarymas</translation>
+        <translation>Pradėti naują partitūrą</translation>
     </message>
     <message>
         <source>This wizard creates a new score</source>
-        <translation>Šis vedlys padės pradėti kūrinį</translation>
+        <translation>Šiuo vedliu pradėsite naują partitūrą</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage2</name>
     <message>
         <source>Create New Score</source>
-        <translation>Partitūros sudarymas</translation>
+        <translation>Pradėti naują partitūrą</translation>
     </message>
     <message>
         <source>Define a set of instruments. Each instrument is represented by one or more staves</source>
@@ -7228,18 +7433,18 @@ please choose a different name:</source>
     <name>Ms::NewWizardPage3</name>
     <message>
         <source>Create New Score</source>
-        <translation>Partitūros sudarymas</translation>
+        <translation>Pradėti naują partitūrą</translation>
     </message>
     <message>
         <source>Create Time Signature</source>
-        <translation>Kurti metrą</translation>
+        <translation>Naujas metras</translation>
     </message>
 </context>
 <context>
     <name>Ms::NewWizardPage4</name>
     <message>
         <source>Create New Score</source>
-        <translation>Partitūros sudarymas</translation>
+        <translation>Pradėti naują partitūrą</translation>
     </message>
     <message>
         <source>Select Template File:</source>
@@ -7250,7 +7455,7 @@ please choose a different name:</source>
     <name>Ms::NewWizardPage5</name>
     <message>
         <source>Create New Score</source>
-        <translation>Partitūros sudarymas</translation>
+        <translation>Pradėti naują partitūrą</translation>
     </message>
     <message>
         <source>Select Key Signature and Tempo:</source>
@@ -7284,7 +7489,7 @@ please choose a different name:</source>
     <name>Ms::Note</name>
     <message>
         <source>Appoggiatura</source>
-        <translation>appoggiatura</translation>
+        <translation>Appoggiatura</translation>
     </message>
     <message>
         <source>Grace note after</source>
@@ -7304,7 +7509,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Voice: %1</source>
-        <translation type="unfinished"/>
+        <translation>Balsas: %1</translation>
     </message>
     <message>
         <source>Acciaccatura</source>
@@ -7335,7 +7540,7 @@ please choose a different name:</source>
     <name>Ms::OmrPanel</name>
     <message>
         <source>OMR Panel</source>
-        <translation type="unfinished"/>
+        <translation>OMR Skydelis</translation>
     </message>
 </context>
 <context>
@@ -7369,11 +7574,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Add new workspace</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti naują darbo sritį</translation>
     </message>
     <message>
         <source>new Palette</source>
-        <translation type="unfinished"/>
+        <translation>nauja Paletė</translation>
     </message>
     <message>
         <source>Single Palette</source>
@@ -7384,11 +7589,11 @@ please choose a different name:</source>
     <name>Ms::PaletteBoxButton</name>
     <message>
         <source>Palette Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Paletės savybės...</translation>
     </message>
     <message>
         <source>Insert New Palette...</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti naują paletę...</translation>
     </message>
     <message>
         <source>Move Palette Up</source>
@@ -7404,11 +7609,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Save Palette</source>
-        <translation type="unfinished"/>
+        <translation>Įrašyti paletę</translation>
     </message>
     <message>
         <source>Load Palette</source>
-        <translation type="unfinished"/>
+        <translation>Įkelti paletę</translation>
     </message>
     <message>
         <source>Delete Palette</source>
@@ -7426,7 +7631,7 @@ please choose a different name:</source>
     <name>Ms::PianoTools</name>
     <message>
         <source>Piano Keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Pianino klaviatūra</translation>
     </message>
 </context>
 <context>
@@ -7441,7 +7646,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>untitled</source>
@@ -7473,7 +7678,7 @@ Save before closing?</source>
     <name>Ms::PreferenceDialog</name>
     <message>
         <source>The language will be changed once you restart MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>Kalba bus perjungta, kai iš naujo paleisite MuseScore.</translation>
     </message>
     <message>
         <source>Choose Notepaper</source>
@@ -7481,7 +7686,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>Choose Background Wallpaper</source>
-        <translation>Pasirinkti fono paveisklą</translation>
+        <translation>Pasirinkti fono paveikslą</translation>
     </message>
     <message>
         <source>Choose Default Style</source>
@@ -7493,7 +7698,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>Choose Instrument List</source>
-        <translation>Pasirinkti instrumentų komplektą</translation>
+        <translation>Pasirinkti instrumentų sąrašą</translation>
     </message>
     <message>
         <source>Instrument List (*.xml)</source>
@@ -7513,7 +7718,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>Choose Default Style for Imports</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite Numatytąjį Stilių Importavimams</translation>
     </message>
     <message>
         <source>Choose Score Folder</source>
@@ -7545,7 +7750,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;All (*)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Failai (*.mscz *.mscx);;Visi (*)</translation>
     </message>
     <message>
         <source>SoundFont Folders</source>
@@ -7556,7 +7761,7 @@ Save before closing?</source>
     <name>Ms::ResourceManager</name>
     <message>
         <source>Languages</source>
-        <translation type="unfinished"/>
+        <translation>Kalbos</translation>
     </message>
     <message>
         <source>%1 KB</source>
@@ -7568,26 +7773,26 @@ Save before closing?</source>
     </message>
     <message>
         <source>No update</source>
-        <translation type="unfinished"/>
+        <translation>Nėra atnaujinimo</translation>
     </message>
     <message>
         <source>Updating</source>
-        <translation type="unfinished"/>
+        <translation>Atnaujinama</translation>
     </message>
     <message>
         <source>Failed, try again</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko, bandykite dar</translation>
     </message>
     <message>
         <source>Updated</source>
-        <translation type="unfinished"/>
+        <translation>Atnaujinta</translation>
     </message>
 </context>
 <context>
     <name>Ms::Rest</name>
     <message>
         <source>Voice: %1</source>
-        <translation type="unfinished"/>
+        <translation>Balsas: %1</translation>
     </message>
     <message>
         <source>%1; Duration: %2; %3</source>
@@ -7598,14 +7803,14 @@ Save before closing?</source>
     <name>Ms::Score</name>
     <message>
         <source>The style file is not compatible with this version of MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>Stiliaus failas nėra suderinamas su šia MuseScore versija.</translation>
     </message>
     <message>
         <source>The following file is locked: 
 %1 
 
 Try saving to a different location.</source>
-        <translation>Failas %1 užsirakinęs. Pabandykite įrašyti kitoje vietoje.</translation>
+        <translation>Failas %1 užrakintas. Pabandykite įrašyti kitoje vietoje.</translation>
     </message>
     <message>
         <source>Open Temp File
@@ -7645,10 +7850,6 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>file not found</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>No selection</source>
         <translation type="unfinished"/>
     </message>
@@ -7658,6 +7859,10 @@ failed: %2</source>
     </message>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7704,7 +7909,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Create New Score</source>
-        <translation>Partitūros sudarymas</translation>
+        <translation>Pradėti naują partitūrą</translation>
     </message>
     <message>
         <source>Custom Templates</source>
@@ -7712,7 +7917,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Getting Started</source>
-        <translation type="unfinished"/>
+        <translation>Darbo pradžia</translation>
     </message>
 </context>
 <context>
@@ -7739,7 +7944,7 @@ failed: %2</source>
     </message>
     <message>
         <source>MuseScore: Save As</source>
-        <translation>MuseScore: Rašymas</translation>
+        <translation>MuseScore: Įrašyti kaip</translation>
     </message>
     <message>
         <source>Layer</source>
@@ -7807,7 +8012,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Section Break Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Sekcijų skirtuko savybės...</translation>
     </message>
     <message>
         <source>Change Instrument...</source>
@@ -7847,7 +8052,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Split Staff...</source>
-        <translation>Laužti penklinę...</translation>
+        <translation>Skaidyti penklinę...</translation>
     </message>
     <message>
         <source>Object Debugger</source>
@@ -7862,7 +8067,7 @@ first create some staves</source>
     <message>
         <source>No measure selected:
 Please select a measure and try again</source>
-        <translation>Nepasirinkote takto: Pasirinkite taktą ir pakartokite bandymą.</translation>
+        <translation>Nepasirinkote takto: Pasirinkite taktą ir bandykite dar kartą.</translation>
     </message>
     <message>
         <source>Fretboard Diagram Properties...</source>
@@ -7886,7 +8091,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>Resolution (%1 DPI)...</source>
-        <translation type="unfinished"/>
+        <translation>Raiška (%1 taškų colyje)...</translation>
     </message>
     <message>
         <source>Hide Courtesy Time Signature</source>
@@ -7941,11 +8146,11 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>Save As (Print Mode)...</source>
-        <translation type="unfinished"/>
+        <translation>Įrašyti kaip (Spausdinimo veiksena)...</translation>
     </message>
     <message>
         <source>Save As (Screenshot Mode)...</source>
-        <translation type="unfinished"/>
+        <translation>Įrašyti kaip (Ekrano kopijos veiksena)...</translation>
     </message>
     <message>
         <source>Cannot determine file type</source>
@@ -7957,7 +8162,7 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>Cannot paste into tuplet</source>
-        <translation type="unfinished"/>
+        <translation>Negalima įdėti į ritminę grupę</translation>
     </message>
     <message>
         <source>Tuplet cannot cross barlines</source>
@@ -7965,6 +8170,11 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>Transparent background</source>
+        <translation>Permatomas fonas</translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7998,7 +8208,7 @@ Please select a range of measures to join and try again</source>
     <name>Ms::SelectionListWidget</name>
     <message>
         <source>Selection filter</source>
-        <translation type="unfinished"/>
+        <translation>Žymėjimo filtras</translation>
     </message>
     <message>
         <source>Use Tab and Backtab to move through the check boxes</source>
@@ -8016,7 +8226,7 @@ Please select a range of measures to join and try again</source>
     <name>Ms::ShortcutCaptureDialog</name>
     <message>
         <source>Shortcut conflicts with </source>
-        <translation>Gretasis klavišas konfliktuoja su </translation>
+        <translation>Trumpinys konfliktuoja su </translation>
     </message>
     <message>
         <source>Shortcut conflicts with</source>
@@ -8031,7 +8241,7 @@ Please select a range of measures to join and try again</source>
     <name>Ms::StaffTextProperties</name>
     <message>
         <source>normal</source>
-        <translation>normalus</translation>
+        <translation>paprastas</translation>
     </message>
     <message>
         <source>MuseScore: System Text Properties</source>
@@ -8039,7 +8249,7 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>MuseScore: Staff Text Properties</source>
-        <translation>MuseScore: Penklinių tekstų savybės</translation>
+        <translation>MuseScore: Penklinės teksto savybės</translation>
     </message>
 </context>
 <context>
@@ -8091,7 +8301,7 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>Align left</source>
-        <translation>kairinė lygiuotė</translation>
+        <translation>Kairinė lygiuotė</translation>
     </message>
     <message>
         <source>Align center</source>
@@ -8120,14 +8330,14 @@ Please select a range of measures to join and try again</source>
     <message>
         <source>sp</source>
         <comment>spatium unit</comment>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
 </context>
 <context>
     <name>Ms::TextProperties</name>
     <message>
         <source>MuseScore: Text Properties</source>
-        <translation>MuseScore: Teksto savybės</translation>
+        <translation>MuseScore: teksto savybės</translation>
     </message>
 </context>
 <context>
@@ -8185,7 +8395,7 @@ please choose a different name:</source>
     <name>Ms::TimeDialog</name>
     <message>
         <source>MuseScore: Time Signatures</source>
-        <translation>MuseScore: Metrai</translation>
+        <translation>MuseScore: metrai</translation>
     </message>
 </context>
 <context>
@@ -8207,15 +8417,15 @@ please choose a different name:</source>
     <name>Ms::UpdateChecker</name>
     <message>
         <source>An update for MuseScore is available: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</source>
-        <translation>Programos atnaujinimo nuoroda: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</translation>
+        <translation>Yra MuseScore naujinys: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Update Available</source>
-        <translation>Yra atnaujinimų</translation>
+        <translation>Yra naujinys</translation>
     </message>
     <message>
         <source>No Update Available</source>
-        <translation>Atnaujinimų nėra</translation>
+        <translation>Nėra naujinių</translation>
     </message>
 </context>
 <context>
@@ -8297,11 +8507,11 @@ please choose a different name:</source>
     <name>Ms::Workspace</name>
     <message>
         <source>Advanced</source>
-        <translation type="unfinished"/>
+        <translation>Išplėstinės</translation>
     </message>
     <message>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>Pagrindinės</translation>
     </message>
 </context>
 <context>
@@ -8390,7 +8600,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Subtitle:</source>
-        <translation>Subtitras:</translation>
+        <translation>Paantraštė:</translation>
     </message>
     <message>
         <source>Composer:</source>
@@ -8398,7 +8608,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Lyricist:</source>
-        <translation>Poetas:</translation>
+        <translation>Žodžių autorius:</translation>
     </message>
     <message>
         <source>Copyright:</source>
@@ -8414,7 +8624,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Subtitle</source>
-        <translation>Papildomas pavadinimas</translation>
+        <translation>Paantraštė</translation>
     </message>
     <message>
         <source>Insert subtitle here</source>
@@ -8430,7 +8640,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"/>
+        <translation>Žodžių autorius</translation>
     </message>
     <message>
         <source>Insert lyricist&apos;s name here</source>
@@ -8465,7 +8675,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti</translation>
     </message>
 </context>
 <context>
@@ -8515,7 +8725,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Landscape</source>
-        <translation>Gulsčiai</translation>
+        <translation>Gulsčias</translation>
     </message>
     <message>
         <source>Height:</source>
@@ -8543,11 +8753,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Odd Page Margins</source>
-        <translation>Nelyginių lapų paraštės</translation>
+        <translation>Nelyginių puslapių paraštės</translation>
     </message>
     <message>
         <source>Even Page Margins</source>
-        <translation>Lyginių lapų paraštės</translation>
+        <translation>Lyginių puslapių paraštės</translation>
     </message>
     <message>
         <source>Preview</source>
@@ -8610,7 +8820,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Breaks &amp;&amp; Spacers</source>
-        <translation type="unfinished"/>
+        <translation>Lūžiai ir tarpai</translation>
     </message>
     <message>
         <source>Fingering</source>
@@ -8642,7 +8852,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Lines</source>
-        <translation>Penklinės ženklai</translation>
+        <translation>Linijos</translation>
     </message>
     <message>
         <source>Diminuendo</source>
@@ -8694,7 +8904,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Text line</source>
-        <translation>Teksto linija</translation>
+        <translation>Teksto eilutė</translation>
     </message>
     <message>
         <source>Line</source>
@@ -8796,15 +9006,15 @@ failed: </source>
     </message>
     <message>
         <source>Start repeat</source>
-        <translation>Pakartojimo pradžia</translation>
+        <translation>Kartojimo pradžia</translation>
     </message>
     <message>
         <source>End repeat</source>
-        <translation>Pakartojimo pabaiga</translation>
+        <translation>Kartojimo pabaiga</translation>
     </message>
     <message>
         <source>End-start repeat</source>
-        <translation>Pakartojimo pabaiga-pradžia</translation>
+        <translation>Kartojimo pabaiga-pradžia</translation>
     </message>
     <message>
         <source>Fretboard Diagrams</source>
@@ -8819,19 +9029,19 @@ failed: </source>
     </message>
     <message>
         <source>Palette Cell Properties</source>
-        <translation>Paletės laukelio savybės</translation>
+        <translation>Paletės langelio savybės</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation>Paavdinimas:</translation>
+        <translation>Pavadinimas:</translation>
     </message>
     <message>
         <source>sp</source>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Content offset</source>
-        <translation type="unfinished"/>
+        <translation>Turinio poslinkis</translation>
     </message>
     <message>
         <source>Y:</source>
@@ -8858,11 +9068,11 @@ failed: </source>
     </message>
     <message>
         <source>Name:</source>
-        <translation>Paavdinimas:</translation>
+        <translation>Pavadinimas:</translation>
     </message>
     <message>
         <source>sp</source>
-        <translation>vnt</translation>
+        <translation>tarp.</translation>
     </message>
     <message>
         <source>Scale:</source>
@@ -8925,7 +9135,7 @@ failed: </source>
     </message>
     <message>
         <source>Mute</source>
-        <translation>Tildyti</translation>
+        <translation>Nutildyti</translation>
     </message>
     <message>
         <source>Solo</source>
@@ -8933,7 +9143,7 @@ failed: </source>
     </message>
     <message>
         <source>Drumset</source>
-        <translation>Mušamieji</translation>
+        <translation>Mušamųjų rinkinys</translation>
     </message>
     <message>
         <source>Sound:</source>
@@ -9038,7 +9248,7 @@ failed: </source>
     <name>PlayPanelBase</name>
     <message>
         <source>MuseScore: Play Panel</source>
-        <translation>MuseScore: Grotuvo panelė</translation>
+        <translation>MuseScore: Grotuvo skydelis</translation>
     </message>
     <message>
         <source>001.01</source>
@@ -9115,7 +9325,7 @@ failed: </source>
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished"/>
+        <translation>Failas</translation>
     </message>
     <message>
         <source>Help</source>
@@ -9135,7 +9345,7 @@ failed: </source>
     </message>
     <message>
         <source>Save</source>
-        <translation>Išsaugoti</translation>
+        <translation>Įrašyti</translation>
     </message>
     <message>
         <source>Manual</source>
@@ -9166,7 +9376,7 @@ failed: </source>
     <name>PluginManager</name>
     <message>
         <source>Plugin Manager</source>
-        <translation type="unfinished"/>
+        <translation>Papildinių Tvarkytuvė</translation>
     </message>
     <message>
         <source>Define Shortcut</source>
@@ -9178,7 +9388,7 @@ failed: </source>
     </message>
     <message>
         <source>Version:</source>
-        <translation>%1 laida </translation>
+        <translation>Versija:</translation>
     </message>
     <message>
         <source>Name:</source>
@@ -9201,11 +9411,11 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore Preferences</source>
-        <translation>Nuostatos</translation>
+        <translation>MuseScore nuostatos</translation>
     </message>
     <message>
         <source>Reset All Preferences to Default</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti visas numatytąsias nuostatas</translation>
     </message>
     <message>
         <source>General</source>
@@ -9229,7 +9439,7 @@ failed: </source>
     </message>
     <message>
         <source>OSC remote control</source>
-        <translation type="unfinished"/>
+        <translation>OSC nuotolinis valdymas</translation>
     </message>
     <message>
         <source>Style</source>
@@ -9237,11 +9447,11 @@ failed: </source>
     </message>
     <message>
         <source>Icon size:</source>
-        <translation type="unfinished"/>
+        <translation>Piktogramos dydis:</translation>
     </message>
     <message>
         <source>Animations</source>
-        <translation type="unfinished"/>
+        <translation>Animacijos</translation>
     </message>
     <message>
         <source>Canvas</source>
@@ -9261,11 +9471,11 @@ failed: </source>
     </message>
     <message>
         <source>Paper</source>
-        <translation type="unfinished"/>
+        <translation>Popierius</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="unfinished"/>
+        <translation>Įvairūs</translation>
     </message>
     <message>
         <source>Enable MIDI input</source>
@@ -9301,7 +9511,7 @@ failed: </source>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>Rodinys</translation>
     </message>
     <message>
         <source>default scale for new score views</source>
@@ -9309,7 +9519,7 @@ failed: </source>
     </message>
     <message>
         <source>Default Files</source>
-        <translation type="unfinished"/>
+        <translation>Numatytieji Failai</translation>
     </message>
     <message>
         <source>Style:</source>
@@ -9321,7 +9531,7 @@ failed: </source>
     </message>
     <message>
         <source>Use JACK MIDI</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti JACK MIDI</translation>
     </message>
     <message>
         <source>Remember last connection(s)</source>
@@ -9449,7 +9659,7 @@ failed: </source>
     </message>
     <message>
         <source>Import layout</source>
-        <translation type="unfinished"/>
+        <translation>Importuoti išdėstymą</translation>
     </message>
     <message>
         <source>Import system and page breaks</source>
@@ -9481,7 +9691,7 @@ failed: </source>
     </message>
     <message>
         <source>Export</source>
-        <translation>Eksportas</translation>
+        <translation>Eksportavimas</translation>
     </message>
     <message>
         <source>PNG/SVG</source>
@@ -9489,7 +9699,7 @@ failed: </source>
     </message>
     <message>
         <source>Transparent background</source>
-        <translation type="unfinished"/>
+        <translation>Permatomas fonas</translation>
     </message>
     <message>
         <source>Expand repeats</source>
@@ -9517,7 +9727,7 @@ failed: </source>
     </message>
     <message>
         <source>Shortcuts</source>
-        <translation>Greitieji klavišai</translation>
+        <translation>Trumpiniai</translation>
     </message>
     <message>
         <source>Action</source>
@@ -9525,11 +9735,11 @@ failed: </source>
     </message>
     <message>
         <source>Shortcut</source>
-        <translation>Greitasis klavišas</translation>
+        <translation>Trumpinys</translation>
     </message>
     <message>
         <source>Reset Shortcut to Default</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti numatytąjį trumpinį</translation>
     </message>
     <message>
         <source>Define...</source>
@@ -9541,7 +9751,7 @@ failed: </source>
     </message>
     <message>
         <source>Update</source>
-        <translation>Atnaujinimas</translation>
+        <translation>Naujinys</translation>
     </message>
     <message>
         <source>Automatic Update Check</source>
@@ -9569,7 +9779,7 @@ failed: </source>
     </message>
     <message>
         <source>Disable antialiased drawing</source>
-        <translation>Išlyginimų išjungimas</translation>
+        <translation>Glodinimo išjungimas</translation>
     </message>
     <message>
         <source>Uncheck this to speed up drawing</source>
@@ -9577,7 +9787,7 @@ failed: </source>
     </message>
     <message>
         <source>Draw antialiased</source>
-        <translation>Rašyti su išlyginimais</translation>
+        <translation>Braižyti glodinant</translation>
     </message>
     <message>
         <source>Default duration:</source>
@@ -9585,11 +9795,11 @@ failed: </source>
     </message>
     <message>
         <source>MIDI remote control</source>
-        <translation type="unfinished"/>
+        <translation>MIDI nuotolinis valdymas</translation>
     </message>
     <message>
         <source>Rewind</source>
-        <translation>Atsukti į pradžią</translation>
+        <translation>Atsukti pradžios link</translation>
     </message>
     <message>
         <source>Toggle play</source>
@@ -9617,7 +9827,7 @@ failed: </source>
     </message>
     <message>
         <source>Tie</source>
-        <translation>Uodegėlė</translation>
+        <translation>Užlaikymas</translation>
     </message>
     <message>
         <source>Play</source>
@@ -9629,11 +9839,11 @@ failed: </source>
     </message>
     <message>
         <source>Instrument list 2:</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentų sąrašas 2:</translation>
     </message>
     <message>
         <source>Instrument list 1:</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentų sąrašas 1:</translation>
     </message>
     <message>
         <source>Style for part:</source>
@@ -9649,15 +9859,15 @@ failed: </source>
     </message>
     <message>
         <source>JACK audio server</source>
-        <translation type="unfinished"/>
+        <translation>JACK audio serveris</translation>
     </message>
     <message>
         <source>Character Set Used When Importing Binary Files</source>
-        <translation type="unfinished"/>
+        <translation>Ženklų rinkinys, naudojamas importuojant dvejetainius failus</translation>
     </message>
     <message>
         <source>Shortest note:</source>
-        <translation type="unfinished"/>
+        <translation>Trumpiausia nata:</translation>
     </message>
     <message>
         <source>Double augmentation dot</source>
@@ -9665,7 +9875,7 @@ failed: </source>
     </message>
     <message>
         <source>Save every:</source>
-        <translation>Saugoti kas</translation>
+        <translation>Įrašinėti kas</translation>
     </message>
     <message>
         <source>Proximity for selecting elements:</source>
@@ -9673,20 +9883,20 @@ failed: </source>
     </message>
     <message>
         <source>Default zoom:</source>
-        <translation type="unfinished"/>
+        <translation>Numatytasis mastelis:</translation>
     </message>
     <message>
         <source>Resolution DPI:</source>
-        <translation type="unfinished"/>
+        <translation>Raiška, taškų colyje:</translation>
     </message>
     <message>
         <source>Port number:</source>
         <extracomment>The UDP port number on which the MuseScore OSC server will listen on</extracomment>
-        <translation type="unfinished"/>
+        <translation>Prievado numeris:</translation>
     </message>
     <message>
         <source>Use JACK Audio</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti JACK Audio</translation>
     </message>
     <message>
         <source>Use JACK Transport</source>
@@ -9718,7 +9928,7 @@ failed: </source>
     </message>
     <message>
         <source>The language will be changed once you restart MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>Kalba bus pakeista, kai tik iš naujo paleisite MuseScore.</translation>
     </message>
     <message>
         <source>Start with score</source>
@@ -9742,7 +9952,7 @@ failed: </source>
     </message>
     <message>
         <source>Port number</source>
-        <translation type="unfinished"/>
+        <translation>Prievado numeris</translation>
     </message>
     <message>
         <source>Select style</source>
@@ -9894,7 +10104,7 @@ failed: </source>
     </message>
     <message>
         <source>Paper Color</source>
-        <translation type="unfinished"/>
+        <translation>Popieriaus spalva</translation>
     </message>
     <message>
         <source>Enable MIDI Input</source>
@@ -10002,7 +10212,7 @@ failed: </source>
     </message>
     <message>
         <source>Default zoom</source>
-        <translation type="unfinished"/>
+        <translation>Numatytasis mastelis</translation>
     </message>
     <message>
         <source>Choose Instrument list 1</source>
@@ -10014,11 +10224,11 @@ failed: </source>
     </message>
     <message>
         <source>Instrument list 1</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentų sąrašas 1</translation>
     </message>
     <message>
         <source>Insert path to a instrument list file</source>
-        <translation type="unfinished"/>
+        <translation>Įveskite kelią iki instrumentų komplekto failo</translation>
     </message>
     <message>
         <source>Insert path to style file</source>
@@ -10050,7 +10260,7 @@ failed: </source>
     </message>
     <message>
         <source>Instrument list 2</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentų sąrašas 2</translation>
     </message>
     <message>
         <source>Choose Instrument list 2</source>
@@ -10142,7 +10352,7 @@ failed: </source>
     </message>
     <message>
         <source>Shortest note</source>
-        <translation type="unfinished"/>
+        <translation>Trumpiausia nata</translation>
     </message>
     <message>
         <source>Choose the shortest note value</source>
@@ -10154,7 +10364,7 @@ failed: </source>
     </message>
     <message>
         <source>Resolution DPI</source>
-        <translation type="unfinished"/>
+        <translation>Raiška, taškų colyje</translation>
     </message>
     <message>
         <source>Choose resolution DPI</source>
@@ -10170,7 +10380,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset Shortcut to default</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti numatytąjį klavišą</translation>
     </message>
     <message>
         <source>Define</source>
@@ -10234,23 +10444,23 @@ failed: </source>
     </message>
     <message>
         <source>Update translations</source>
-        <translation type="unfinished"/>
+        <translation>Atnaujinti vertimus</translation>
     </message>
     <message>
         <source>Dark</source>
-        <translation type="unfinished"/>
+        <translation>Tamsus</translation>
     </message>
     <message>
         <source>Light</source>
-        <translation type="unfinished"/>
+        <translation>Šviesus</translation>
     </message>
     <message>
         <source>Enable MIDI remote control</source>
-        <translation type="unfinished"/>
+        <translation>Įjungti MIDI nuotolinį valdymą</translation>
     </message>
     <message>
         <source>Is active</source>
-        <translation type="unfinished"/>
+        <translation>Yra aktyvus</translation>
     </message>
     <message>
         <source>Record</source>
@@ -10262,23 +10472,23 @@ failed: </source>
     </message>
     <message>
         <source>Show play panel</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti grotuvo valdymo skydelį</translation>
     </message>
     <message>
         <source>Show navigator</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti žvalgiklį</translation>
     </message>
     <message>
         <source>OSC Remote Control</source>
-        <translation type="unfinished"/>
+        <translation>OSC nuotolinis valdymas</translation>
     </message>
     <message>
         <source>MIDI Remote Control</source>
-        <translation type="unfinished"/>
+        <translation>MIDI Nuotolinis Valdymas</translation>
     </message>
     <message>
         <source>Show start center</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti pradžios centrą</translation>
     </message>
     <message>
         <source>Undo is active</source>
@@ -10294,7 +10504,7 @@ failed: </source>
     </message>
     <message>
         <source>Play whole chord when adding note</source>
-        <translation type="unfinished"/>
+        <translation>Pridedant natą, groti visą akordą</translation>
     </message>
     <message>
         <source>SoundFont folders</source>
@@ -10330,27 +10540,27 @@ failed: </source>
     </message>
     <message>
         <source>Folders</source>
-        <translation type="unfinished"/>
+        <translation>Aplankai</translation>
     </message>
     <message>
         <source>Images:</source>
-        <translation type="unfinished"/>
+        <translation>Paveikslai:</translation>
     </message>
     <message>
         <source>Scores:</source>
-        <translation type="unfinished"/>
+        <translation>Partitūros:</translation>
     </message>
     <message>
         <source>Styles:</source>
-        <translation type="unfinished"/>
+        <translation>Stiliai:</translation>
     </message>
     <message>
         <source>Templates:</source>
-        <translation type="unfinished"/>
+        <translation>Šablonai</translation>
     </message>
     <message>
         <source>Plugins:</source>
-        <translation type="unfinished"/>
+        <translation>Papildiniai:</translation>
     </message>
     <message>
         <source>SoundFonts:</source>
@@ -10358,10 +10568,18 @@ failed: </source>
     </message>
     <message>
         <source>Check for new version of MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Tikrinti ar yra naujesnė MuseScore versija</translation>
     </message>
     <message>
         <source>Filter</source>
+        <translation>Filtras</translation>
+    </message>
+    <message>
+        <source>PDF</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Export RPNs</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -10387,7 +10605,7 @@ Please select a single note or lyrics and retry operation
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>No note or figured bass selected:
@@ -10502,7 +10720,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>File &apos;%1&apos; is not a valid MusicXML file</source>
-        <translation type="unfinished"/>
+        <translation>Failas &apos;%1&apos; nėra taisyklingas MusicXML failas</translation>
     </message>
     <message>
         <source>Error at line %1 column %2: %3
@@ -10512,12 +10730,14 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>Could not open MusicXML file
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko atverti MusicXML failo
+%1</translation>
     </message>
     <message>
         <source>Could not open compressed MusicXML file
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko atverti suglaudinto MusicXML failo
+%1</translation>
     </message>
     <message>
         <source>normal</source>
@@ -10610,7 +10830,8 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     <message>
         <source>Internal error: Could not open resource musicxml.xsd
 </source>
-        <translation type="unfinished"/>
+        <translation>Vidinė klaida: Nepavyko atverti ištekliaus musicxml.xsd
+</translation>
     </message>
     <message>
         <source>Tab. balalaika</source>
@@ -10689,7 +10910,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Save Album</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Įrašyti Albumą</translation>
     </message>
     <message>
         <source>Write Album failed: </source>
@@ -10721,7 +10942,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Load Style Failed</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Stiliaus įkėlimas nepavyko</translation>
     </message>
     <message>
         <source>MuseScore: Load Languages Failed:</source>
@@ -10747,11 +10968,11 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Failas (*.mscz)</translation>
     </message>
     <message>
         <source>MuseScore Files (*.album)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Failai (*.album)</translation>
     </message>
     <message>
         <source>Overwrite?</source>
@@ -10790,7 +11011,7 @@ Do you want to overwrite it?</source>
     <name>Resource</name>
     <message>
         <source>MuseScore Resources</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Ištekliai</translation>
     </message>
     <message>
         <source>Tab 1</source>
@@ -10802,15 +11023,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Filename</source>
-        <translation type="unfinished"/>
+        <translation>Failo pavadinimas</translation>
     </message>
     <message>
         <source>File Size</source>
-        <translation type="unfinished"/>
+        <translation>Failo dydis</translation>
     </message>
     <message>
         <source>Install/Update</source>
-        <translation type="unfinished"/>
+        <translation>Įdiegti/Atnaujinti</translation>
     </message>
     <message>
         <source>Tab 2</source>
@@ -10837,14 +11058,14 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Nothing selected</source>
-        <translation type="unfinished"/>
+        <translation>Nieko nepasirinkta</translation>
     </message>
 </context>
 <context>
     <name>SectionBreakProperties</name>
     <message>
         <source>MuseScore: Section Break Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Sekcijų Skirtuko Savybės</translation>
     </message>
     <message>
         <source>Pause:</source>
@@ -11069,7 +11290,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>Aprašas</translation>
     </message>
     <message>
         <source>Actions for selected channel:</source>
@@ -11176,11 +11397,11 @@ Do you want to overwrite it?</source>
     <name>Startcenter</name>
     <message>
         <source>Start Center</source>
-        <translation type="unfinished"/>
+        <translation>Pradžios Centras</translation>
     </message>
     <message>
         <source>Open a score...</source>
-        <translation type="unfinished"/>
+        <translation>Atverti partitūrą...</translation>
     </message>
     <message>
         <source>Close</source>
@@ -11195,6 +11416,14 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>System flag</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Clear</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -11391,7 +11620,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Text margin:</source>
-        <translation type="unfinished"/>
+        <translation>Teksto paraštė:</translation>
     </message>
     <message>
         <source>Border radius:</source>
@@ -11419,7 +11648,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Text color</source>
-        <translation type="unfinished"/>
+        <translation>Teksto spalva</translation>
     </message>
     <message>
         <source>Horizontal offset to reference point</source>
@@ -11459,7 +11688,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Enable text frame</source>
-        <translation type="unfinished"/>
+        <translation>Įjungti teksto rėmelį</translation>
     </message>
     <message>
         <source>Draw circled frame</source>
@@ -11479,7 +11708,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Frame inner margin</source>
-        <translation type="unfinished"/>
+        <translation>Vidinė rėmelio paraštė</translation>
     </message>
     <message>
         <source>Corner round</source>
@@ -11487,7 +11716,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Text background color</source>
-        <translation type="unfinished"/>
+        <translation>Teksto fono spalva</translation>
     </message>
     <message>
         <source>Frame color</source>
@@ -11531,7 +11760,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"/>
+        <translation>Žodžių autorius</translation>
     </message>
     <message>
         <source>Lyrics Odd Lines</source>
@@ -11595,7 +11824,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Akordo Simbolis</translation>
     </message>
     <message>
         <source>Rehearsal Mark</source>
@@ -11716,11 +11945,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished"/>
+        <translation>8</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished"/>
+        <translation>16</translation>
     </message>
     <message>
         <source>32</source>
@@ -11806,11 +12035,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>8</source>
-        <translation type="unfinished"/>
+        <translation>8</translation>
     </message>
     <message>
         <source>16</source>
-        <translation type="unfinished"/>
+        <translation>16</translation>
     </message>
     <message>
         <source>32</source>
@@ -12053,7 +12282,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Transpose chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Transponuoti akordų simbolius</translation>
     </message>
     <message>
         <source>C♭ major / A♭ minor</source>
@@ -12117,7 +12346,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>By Interval</source>
-        <translation type="unfinished"/>
+        <translation>Pagal intervalą</translation>
     </message>
     <message>
         <source>Transpose Diatonically</source>
@@ -12256,11 +12485,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>You&apos;re logged in as</source>
-        <translation type="unfinished"/>
+        <translation>Jūs esate prisijungę kaip</translation>
     </message>
     <message>
         <source>USERNAME</source>
-        <translation type="unfinished"/>
+        <translation>NAUDOTOJO VARDAS</translation>
     </message>
     <message>
         <source>Sign out</source>
@@ -12276,7 +12505,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>Aprašas</translation>
     </message>
     <message>
         <source>License</source>
@@ -12363,11 +12592,11 @@ failed: </source>
     </message>
     <message>
         <source>Invalid XML version string.</source>
-        <translation type="unfinished"/>
+        <translation>Netaisyklinga XML versijos eilutė.</translation>
     </message>
     <message>
         <source>Unsupported XML version.</source>
-        <translation type="unfinished"/>
+        <translation>Nepalaikoma XML versija.</translation>
     </message>
     <message>
         <source>The standalone pseudo attribute must appear after the encoding.</source>
@@ -12426,7 +12655,7 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>SoundFont %1 already loaded</source>
@@ -12572,7 +12801,7 @@ failed: </source>
     </message>
     <message>
         <source>Save</source>
-        <translation>Išsaugoti</translation>
+        <translation>Įrašyti</translation>
     </message>
     <message>
         <source>Save score to file</source>
@@ -12600,11 +12829,11 @@ failed: </source>
     </message>
     <message>
         <source>Save a copy of the score in addition to the current file</source>
-        <translation>Šalia darbinio partitūros failo išsaugoti papildomą kopiją.</translation>
+        <translation>Šalia darbinio partitūros failo įrašyti papildomą kopiją.</translation>
     </message>
     <message>
         <source>Export...</source>
-        <translation type="unfinished"/>
+        <translation>Eksportuoti...</translation>
     </message>
     <message>
         <source>Export score</source>
@@ -13020,7 +13249,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset Beam Mode</source>
-        <translation>Atkurti sijų veikseną</translation>
+        <translation>Atstatyti sijų veikseną</translation>
     </message>
     <message>
         <source>Reset beam mode</source>
@@ -13028,7 +13257,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset beam mode of selected measures</source>
-        <translation>Atkurti sijų veikseną pažymėtame takte</translation>
+        <translation>Atstatyti sijų veikseną pažymėtame takte</translation>
     </message>
     <message>
         <source>Flip direction</source>
@@ -13264,7 +13493,7 @@ failed: </source>
     </message>
     <message>
         <source>Append One Measure</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti vieną taktą</translation>
     </message>
     <message>
         <source>Append Measures...</source>
@@ -13276,7 +13505,7 @@ failed: </source>
     </message>
     <message>
         <source>Insert One Measure</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti vieną taktą</translation>
     </message>
     <message>
         <source>Insert Measures...</source>
@@ -13292,11 +13521,11 @@ failed: </source>
     </message>
     <message>
         <source>Insert Text Frame</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti teksto rėmelį</translation>
     </message>
     <message>
         <source>Append Text Frame</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti teksto rėmelį</translation>
     </message>
     <message>
         <source>Insert Vertical Frame</source>
@@ -13543,12 +13772,8 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Paletės</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
-        <translation>Grotuvo panelė</translation>
+        <translation>Grotuvo skydelis</translation>
     </message>
     <message>
         <source>Navigator</source>
@@ -13560,7 +13785,7 @@ failed: </source>
     </message>
     <message>
         <source>Mixer</source>
-        <translation>Mikseris</translation>
+        <translation>Maišytuvas</translation>
     </message>
     <message>
         <source>Status Bar</source>
@@ -13580,10 +13805,6 @@ failed: </source>
     </message>
     <message>
         <source>Add lyrics</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13612,7 +13833,7 @@ failed: </source>
     </message>
     <message>
         <source>Add frame text</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti rėmelio tekstą</translation>
     </message>
     <message>
         <source>Title</source>
@@ -13640,7 +13861,7 @@ failed: </source>
     </message>
     <message>
         <source>Lyricist</source>
-        <translation type="unfinished"/>
+        <translation>Žodžių autorius</translation>
     </message>
     <message>
         <source>Add lyricist text</source>
@@ -13676,7 +13897,7 @@ failed: </source>
     </message>
     <message>
         <source>Play Previous Chord</source>
-        <translation type="unfinished"/>
+        <translation>Groti ankstesnį akordą</translation>
     </message>
     <message>
         <source>Play Previous Measure</source>
@@ -13684,7 +13905,7 @@ failed: </source>
     </message>
     <message>
         <source>Play Next Chord</source>
-        <translation type="unfinished"/>
+        <translation>Groti kitą akordą</translation>
     </message>
     <message>
         <source>Play Next Measure</source>
@@ -13752,7 +13973,7 @@ failed: </source>
     </message>
     <message>
         <source>&amp;Transpose...</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Transponuoti...</translation>
     </message>
     <message>
         <source>Transpose</source>
@@ -13828,7 +14049,7 @@ failed: </source>
     </message>
     <message>
         <source>Toggle Section Break</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti sekcijų skirtuką</translation>
     </message>
     <message>
         <source>Edit Element</source>
@@ -13836,11 +14057,11 @@ failed: </source>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti</translation>
     </message>
     <message>
         <source>Reset user settings</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti naudotojo nustatymus</translation>
     </message>
     <message>
         <source>Debugger</source>
@@ -13848,7 +14069,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset Stretch</source>
-        <translation>Atkurti taktų išplėtimus</translation>
+        <translation>Atstatyti taktų išplėtimus</translation>
     </message>
     <message>
         <source>Reset measure stretch</source>
@@ -13856,11 +14077,11 @@ failed: </source>
     </message>
     <message>
         <source>Show Invisible</source>
-        <translation>Paslėptą rodyti</translation>
+        <translation>Rodyti nematomus</translation>
     </message>
     <message>
         <source>Show Unprintable</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti nespausdinamuosius</translation>
     </message>
     <message>
         <source>Show Frames</source>
@@ -13868,7 +14089,7 @@ failed: </source>
     </message>
     <message>
         <source>Show Page Margins</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti puslapio paraštes</translation>
     </message>
     <message>
         <source>Insert Special Characters...</source>
@@ -13904,7 +14125,7 @@ failed: </source>
     </message>
     <message>
         <source>Text...</source>
-        <translation type="unfinished"/>
+        <translation>Tekstas...</translation>
     </message>
     <message>
         <source>Edit text style</source>
@@ -13943,10 +14164,6 @@ failed: </source>
         <translation>Kartoti pasirinktą</translation>
     </message>
     <message>
-        <source>Pan piano roll</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Toggle pan piano roll</source>
         <translation type="unfinished"/>
     </message>
@@ -13956,7 +14173,7 @@ failed: </source>
     </message>
     <message>
         <source>Documents Side by Side</source>
-        <translation>Partitūros šalia viena kitos</translation>
+        <translation>Partitūros viena šalia kitos</translation>
     </message>
     <message>
         <source>Display documents side by side</source>
@@ -13992,11 +14209,11 @@ failed: </source>
     </message>
     <message>
         <source>Show OMR image</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti OMR paveikslą</translation>
     </message>
     <message>
         <source>Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Visas ekranas</translation>
     </message>
     <message>
         <source>Re-Pitch Mode</source>
@@ -14008,7 +14225,7 @@ failed: </source>
     </message>
     <message>
         <source>Piano Keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Pianino klavišai</translation>
     </message>
     <message>
         <source>Additional Media...</source>
@@ -14028,11 +14245,11 @@ failed: </source>
     </message>
     <message>
         <source>Album...</source>
-        <translation type="unfinished"/>
+        <translation>Albumas...</translation>
     </message>
     <message>
         <source>Album</source>
-        <translation type="unfinished"/>
+        <translation>Albumas</translation>
     </message>
     <message>
         <source>Layers...</source>
@@ -14052,7 +14269,7 @@ failed: </source>
     </message>
     <message>
         <source>Inspector</source>
-        <translation>Objektų panelė</translation>
+        <translation>Objektų skydelis</translation>
     </message>
     <message>
         <source>Show inspector</source>
@@ -14064,11 +14281,11 @@ failed: </source>
     </message>
     <message>
         <source>Toggle loop playback</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti ciklinį grojimą</translation>
     </message>
     <message>
         <source>Loop playback</source>
-        <translation type="unfinished"/>
+        <translation>Ciklinis grojimas</translation>
     </message>
     <message>
         <source>Metronome</source>
@@ -14076,11 +14293,11 @@ failed: </source>
     </message>
     <message>
         <source>Toggle metronome playback</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti metronomo grojimą</translation>
     </message>
     <message>
         <source>Play metronome during playback</source>
-        <translation type="unfinished"/>
+        <translation>Grojimo metu groti metronomą</translation>
     </message>
     <message>
         <source>Toggle count-in playback</source>
@@ -14100,11 +14317,11 @@ failed: </source>
     </message>
     <message>
         <source>Transpose Up</source>
-        <translation type="unfinished"/>
+        <translation>Transponuoti aukštyn</translation>
     </message>
     <message>
         <source>Transpose Down</source>
-        <translation type="unfinished"/>
+        <translation>Transponuoti žemyn</translation>
     </message>
     <message>
         <source>Master Palette...</source>
@@ -14276,7 +14493,7 @@ failed: </source>
     </message>
     <message>
         <source>Chord Symbols...</source>
-        <translation type="unfinished"/>
+        <translation>Akordų simboliai...</translation>
     </message>
     <message>
         <source>Edit chord symbols style</source>
@@ -14284,7 +14501,7 @@ failed: </source>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Akordo Simbolis</translation>
     </message>
     <message>
         <source>Add chord symbol</source>
@@ -14316,7 +14533,7 @@ failed: </source>
     </message>
     <message>
         <source>OMR Panel</source>
-        <translation type="unfinished"/>
+        <translation>OMR Skydelis</translation>
     </message>
     <message>
         <source>Fret 10 (TAB)</source>
@@ -14452,7 +14669,7 @@ failed: </source>
     </message>
     <message>
         <source>Insert one measure</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti vieną taktą</translation>
     </message>
     <message>
         <source>Insert horizontal frame</source>
@@ -14460,7 +14677,7 @@ failed: </source>
     </message>
     <message>
         <source>Insert text frame</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti teksto rėmelį</translation>
     </message>
     <message>
         <source>Insert vertical frame</source>
@@ -14476,7 +14693,7 @@ failed: </source>
     </message>
     <message>
         <source>Save Online...</source>
-        <translation type="unfinished"/>
+        <translation>Įrašyti internete...</translation>
     </message>
     <message>
         <source>Save score on MuseScore.com</source>
@@ -14508,7 +14725,7 @@ failed: </source>
     </message>
     <message>
         <source>Start Center</source>
-        <translation type="unfinished"/>
+        <translation>Pradžios Centras</translation>
     </message>
     <message>
         <source>Toggle create multimeasure rest</source>
@@ -14548,11 +14765,11 @@ failed: </source>
     </message>
     <message>
         <source>Plugin Manager...</source>
-        <translation type="unfinished"/>
+        <translation>Papildinių Tvarkytuvė...</translation>
     </message>
     <message>
         <source>Resource Manager...</source>
-        <translation type="unfinished"/>
+        <translation>Išteklių tvarkytuvė</translation>
     </message>
     <message>
         <source>Add/Remove Line Breaks...</source>
@@ -14572,7 +14789,7 @@ failed: </source>
     </message>
     <message>
         <source>File: Save as</source>
-        <translation type="unfinished"/>
+        <translation>Failas: Įrašyti kaip</translation>
     </message>
     <message>
         <source>Save selection</source>
@@ -14748,11 +14965,11 @@ failed: </source>
     </message>
     <message>
         <source>Append one measure</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti vieną taktą</translation>
     </message>
     <message>
         <source>Append text frame</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti teksto rėmelį</translation>
     </message>
     <message>
         <source>Insert fretboard diagram frame</source>
@@ -14804,7 +15021,7 @@ failed: </source>
     </message>
     <message>
         <source>Eighth Note</source>
-        <translation>astunta nata</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Note duration: Eighth</source>
@@ -14936,7 +15153,7 @@ failed: </source>
     </message>
     <message>
         <source>Selection filter</source>
-        <translation type="unfinished"/>
+        <translation>Žymėjimo filtras</translation>
     </message>
     <message>
         <source>MIDI import panel</source>
@@ -14952,7 +15169,7 @@ failed: </source>
     </message>
     <message>
         <source>Play previous chord</source>
-        <translation type="unfinished"/>
+        <translation>Groti ankstesnį akordą</translation>
     </message>
     <message>
         <source>Play previous measure</source>
@@ -14960,7 +15177,7 @@ failed: </source>
     </message>
     <message>
         <source>Play next chord</source>
-        <translation type="unfinished"/>
+        <translation>Groti kitą akordą</translation>
     </message>
     <message>
         <source>Play next measure</source>
@@ -14984,27 +15201,27 @@ failed: </source>
     </message>
     <message>
         <source>Exchange voice 1-2</source>
-        <translation type="unfinished"/>
+        <translation>Sukeisti balsus 1-2</translation>
     </message>
     <message>
         <source>Exchange voice 1-3</source>
-        <translation type="unfinished"/>
+        <translation>Sukeisti balsus 1-3</translation>
     </message>
     <message>
         <source>Exchange voice 1-4</source>
-        <translation type="unfinished"/>
+        <translation>Sukeisti balsus 1-4</translation>
     </message>
     <message>
         <source>Exchange voice 2-3</source>
-        <translation type="unfinished"/>
+        <translation>Sukeisti balsus 2-3</translation>
     </message>
     <message>
         <source>Exchange voice 2-4</source>
-        <translation type="unfinished"/>
+        <translation>Sukeisti balsus 2-4</translation>
     </message>
     <message>
         <source>Exchange voice 3-4</source>
-        <translation type="unfinished"/>
+        <translation>Sukeisti balsus 3-4</translation>
     </message>
     <message>
         <source>Repeat Last Command</source>
@@ -15020,7 +15237,7 @@ failed: </source>
     </message>
     <message>
         <source>Toggle section break</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti sekcijų skirtuką</translation>
     </message>
     <message>
         <source>Edit element</source>
@@ -15032,15 +15249,15 @@ failed: </source>
     </message>
     <message>
         <source>Show unprintable</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti nespausdinamuosius</translation>
     </message>
     <message>
         <source>Show frames</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti rėmelius</translation>
     </message>
     <message>
         <source>Show page margins</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti puslapio paraštes</translation>
     </message>
     <message>
         <source>Insert special characters</source>
@@ -15080,11 +15297,11 @@ failed: </source>
     </message>
     <message>
         <source>Zoom in</source>
-        <translation type="unfinished"/>
+        <translation>Didinti</translation>
     </message>
     <message>
         <source>Zoom out</source>
-        <translation type="unfinished"/>
+        <translation>Mažinti</translation>
     </message>
     <message>
         <source>Mirror Note Head</source>
@@ -15124,11 +15341,11 @@ failed: </source>
     </message>
     <message>
         <source>Show OMR Image</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti OMR Paveikslą</translation>
     </message>
     <message>
         <source>Full screen</source>
-        <translation type="unfinished"/>
+        <translation>Visas ekranas</translation>
     </message>
     <message>
         <source>Enable Snap to Horizontal Grid</source>
@@ -15144,7 +15361,7 @@ failed: </source>
     </message>
     <message>
         <source>Piano keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Pianino klavišai</translation>
     </message>
     <message>
         <source>Split measure</source>
@@ -15160,11 +15377,11 @@ failed: </source>
     </message>
     <message>
         <source>Next score</source>
-        <translation type="unfinished"/>
+        <translation>Kita partitūra</translation>
     </message>
     <message>
         <source>Previous score</source>
-        <translation type="unfinished"/>
+        <translation>Ankstesnė partitūra</translation>
     </message>
     <message>
         <source>Plugin creator</source>
@@ -15172,15 +15389,15 @@ failed: </source>
     </message>
     <message>
         <source>Plugin manager</source>
-        <translation type="unfinished"/>
+        <translation>Papildinių tvarkytuvė</translation>
     </message>
     <message>
         <source>Resource manager</source>
-        <translation type="unfinished"/>
+        <translation>Išteklių tvarkytuvė</translation>
     </message>
     <message>
         <source>Show OMR panel</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti OMR skydelį</translation>
     </message>
     <message>
         <source>Loop In</source>
@@ -15200,11 +15417,11 @@ failed: </source>
     </message>
     <message>
         <source>Transpose up</source>
-        <translation type="unfinished"/>
+        <translation>Transponuoti aukštyn</translation>
     </message>
     <message>
         <source>Transpose down</source>
-        <translation type="unfinished"/>
+        <translation>Transponuoti žemyn</translation>
     </message>
     <message>
         <source>Toggle view mode</source>
@@ -15388,7 +15605,7 @@ failed: </source>
     </message>
     <message>
         <source>Start center</source>
-        <translation type="unfinished"/>
+        <translation>Pradžios centras</translation>
     </message>
     <message>
         <source>Longa Advance (F.B./Chord Symbol)</source>
@@ -15496,7 +15713,7 @@ failed: </source>
     </message>
     <message>
         <source>Import PDF...</source>
-        <translation type="unfinished"/>
+        <translation>Importuoti PDF...</translation>
     </message>
     <message>
         <source>Import PDF</source>
@@ -15510,12 +15727,28 @@ failed: </source>
         <source>Set loop in position</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Paletės</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Tempo užrašas</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Cannot rewrite measures:
@@ -15743,7 +15976,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>c#</source>
-        <translation type="unfinished"/>
+        <translation>c#</translation>
     </message>
     <message>
         <source>d</source>
@@ -15751,7 +15984,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>d#</source>
-        <translation type="unfinished"/>
+        <translation>d#</translation>
     </message>
     <message>
         <source>e</source>
@@ -15763,7 +15996,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>f#</source>
-        <translation type="unfinished"/>
+        <translation>f#</translation>
     </message>
     <message>
         <source>g</source>
@@ -15771,7 +16004,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>g#</source>
-        <translation type="unfinished"/>
+        <translation>g#</translation>
     </message>
     <message>
         <source>a</source>
@@ -15779,11 +16012,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>a#</source>
-        <translation type="unfinished"/>
+        <translation>a#</translation>
     </message>
     <message>
         <source>b</source>
-        <translation type="unfinished"/>
+        <translation>b</translation>
     </message>
     <message>
         <source>C</source>
@@ -15791,7 +16024,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>C#</source>
-        <translation type="unfinished"/>
+        <translation>C#</translation>
     </message>
     <message>
         <source>D</source>
@@ -15799,7 +16032,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>D#</source>
-        <translation type="unfinished"/>
+        <translation>D#</translation>
     </message>
     <message>
         <source>E</source>
@@ -15811,7 +16044,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"/>
+        <translation>F#</translation>
     </message>
     <message>
         <source>G</source>
@@ -15819,7 +16052,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>G#</source>
-        <translation type="unfinished"/>
+        <translation>G#</translation>
     </message>
     <message>
         <source>A</source>
@@ -15827,7 +16060,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>A#</source>
-        <translation type="unfinished"/>
+        <translation>A#</translation>
     </message>
     <message>
         <source>B</source>
@@ -16559,6 +16792,10 @@ Measure is not empty</source>
         <source>Tablature2</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>drumset</name>
@@ -16580,7 +16817,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Slap</source>
-        <translation type="unfinished"/>
+        <translation>Pliaukštelėjimas</translation>
     </message>
     <message>
         <source>Scratch Push</source>
@@ -16612,7 +16849,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Hand Clap</source>
-        <translation type="unfinished"/>
+        <translation>Pliaukštelėjimas delnais</translation>
     </message>
     <message>
         <source>Electric Snare</source>
@@ -16664,7 +16901,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Cowbell</source>
-        <translation type="unfinished"/>
+        <translation>Kleketas</translation>
     </message>
     <message>
         <source>Vibraslap</source>
@@ -16704,11 +16941,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Cabasa</source>
-        <translation type="unfinished"/>
+        <translation>Kabasa</translation>
     </message>
     <message>
         <source>Maracas</source>
-        <translation type="unfinished"/>
+        <translation>Marakos</translation>
     </message>
     <message>
         <source>Short Whistle</source>
@@ -16728,7 +16965,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Claves</source>
-        <translation type="unfinished"/>
+        <translation>Strypeliai</translation>
     </message>
     <message>
         <source>Hi Wood Block</source>
@@ -16776,11 +17013,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Kiniška lėkštė</translation>
     </message>
     <message>
         <source>Splash Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Aukšta lėkštė</translation>
     </message>
     <message>
         <source>Crash Cymbal 2</source>
@@ -16792,7 +17029,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Castanets</source>
-        <translation type="unfinished"/>
+        <translation>Kastanjetės</translation>
     </message>
     <message>
         <source>Square Click</source>
@@ -16815,7 +17052,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>C#</source>
-        <translation type="unfinished"/>
+        <translation>C#</translation>
     </message>
     <message>
         <source>D</source>
@@ -16823,7 +17060,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Eb</source>
-        <translation type="unfinished"/>
+        <translation>Eb</translation>
     </message>
     <message>
         <source>E</source>
@@ -16835,7 +17072,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"/>
+        <translation>F#</translation>
     </message>
     <message>
         <source>G</source>
@@ -16843,7 +17080,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ab</source>
-        <translation type="unfinished"/>
+        <translation>Ab</translation>
     </message>
     <message>
         <source>A</source>
@@ -16866,7 +17103,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>C#</source>
-        <translation type="unfinished"/>
+        <translation>C#</translation>
     </message>
     <message>
         <source>D</source>
@@ -16874,7 +17111,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Eb</source>
-        <translation type="unfinished"/>
+        <translation>Eb</translation>
     </message>
     <message>
         <source>E</source>
@@ -16886,7 +17123,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"/>
+        <translation>F#</translation>
     </message>
     <message>
         <source>G</source>
@@ -16894,7 +17131,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ab</source>
-        <translation type="unfinished"/>
+        <translation>Ab</translation>
     </message>
     <message>
         <source>A</source>
@@ -17221,16 +17458,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Horizontal Frame</source>
-        <translation>horizontalus remelis
-</translation>
+        <translation>Horizontalus rėmelis</translation>
     </message>
     <message>
         <source>Vertical Frame</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalusis rėmelis</translation>
     </message>
     <message>
         <source>Text Frame</source>
-        <translation type="unfinished"/>
+        <translation>Teksto rėmelis</translation>
     </message>
     <message>
         <source>Fretboard Diagram Frame</source>
@@ -17250,7 +17486,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Chord Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Akordo Simbolis</translation>
     </message>
     <message>
         <source>Tremolo Bar</source>
@@ -17273,19 +17509,19 @@ Measure is not empty</source>
     <name>fotomode</name>
     <message>
         <source>Resize to A</source>
-        <translation type="unfinished"/>
+        <translation>Keisti dydį į A</translation>
     </message>
     <message>
         <source>Resize to B</source>
-        <translation type="unfinished"/>
+        <translation>Keisti dydį į B</translation>
     </message>
     <message>
         <source>Resize to C</source>
-        <translation type="unfinished"/>
+        <translation>Keisti dydį į C</translation>
     </message>
     <message>
         <source>Resize to D</source>
-        <translation type="unfinished"/>
+        <translation>Keisti dydį į D</translation>
     </message>
     <message>
         <source>Set size A</source>
@@ -17458,11 +17694,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Do</source>
-        <translation>do</translation>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation>re</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
@@ -17546,7 +17782,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Chord Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Akordų simboliai</translation>
     </message>
     <message>
         <source>Other Text</source>
@@ -17602,19 +17838,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Voice 1</source>
-        <translation type="unfinished"/>
+        <translation>Balsas 1</translation>
     </message>
     <message>
         <source>Voice 2</source>
-        <translation type="unfinished"/>
+        <translation>Balsas 2</translation>
     </message>
     <message>
         <source>Voice 3</source>
-        <translation type="unfinished"/>
+        <translation>Balsas 3</translation>
     </message>
     <message>
         <source>Voice 4</source>
-        <translation type="unfinished"/>
+        <translation>Balsas 4</translation>
     </message>
 </context>
 <context>
@@ -17643,7 +17879,7 @@ Measure is not empty</source>
     <name>styles_directory</name>
     <message>
         <source>Styles</source>
-        <translation>Stlius</translation>
+        <translation>Stiliai</translation>
     </message>
 </context>
 <context>
@@ -17671,10 +17907,6 @@ Measure is not empty</source>
         <source>Prallprall line</source>
         <translation type="unfinished"/>
     </message>
-    <message>
-        <source>Wavy line</source>
-        <translation type="unfinished"/>
-    </message>
 </context>
 <context>
     <name>utils</name>
@@ -17684,7 +17916,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>c#</source>
-        <translation type="unfinished"/>
+        <translation>c#</translation>
     </message>
     <message>
         <source>d</source>
@@ -17692,7 +17924,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>d#</source>
-        <translation type="unfinished"/>
+        <translation>d#</translation>
     </message>
     <message>
         <source>e</source>
@@ -17704,7 +17936,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>f#</source>
-        <translation type="unfinished"/>
+        <translation>f#</translation>
     </message>
     <message>
         <source>g</source>
@@ -17712,7 +17944,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>g#</source>
-        <translation type="unfinished"/>
+        <translation>g#</translation>
     </message>
     <message>
         <source>a</source>
@@ -17720,11 +17952,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>a#</source>
-        <translation type="unfinished"/>
+        <translation>a#</translation>
     </message>
     <message>
         <source>b</source>
-        <translation type="unfinished"/>
+        <translation>b</translation>
     </message>
     <message>
         <source>C</source>
@@ -17732,7 +17964,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>C#</source>
-        <translation type="unfinished"/>
+        <translation>C#</translation>
     </message>
     <message>
         <source>D</source>
@@ -17740,7 +17972,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>D#</source>
-        <translation type="unfinished"/>
+        <translation>D#</translation>
     </message>
     <message>
         <source>E</source>
@@ -17752,7 +17984,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>F#</source>
-        <translation type="unfinished"/>
+        <translation>F#</translation>
     </message>
     <message>
         <source>G</source>
@@ -17760,7 +17992,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>G#</source>
-        <translation type="unfinished"/>
+        <translation>G#</translation>
     </message>
     <message>
         <source>A</source>
@@ -17768,7 +18000,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>A#</source>
-        <translation type="unfinished"/>
+        <translation>A#</translation>
     </message>
     <message>
         <source>B</source>

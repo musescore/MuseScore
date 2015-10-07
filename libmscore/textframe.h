@@ -33,10 +33,12 @@ class TBox : public VBox {
       virtual Element::Type type() const { return Element::Type::TBOX;       }
       virtual void write(Xml&) const override;
       virtual void read(XmlReader&) override;
+      virtual Element* drop(const DropData&) override;
+      virtual void add(Element* e) override;
+      virtual void remove(Element* el) override;
 
       virtual void layout();
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
-      virtual void remove(Element* el);
       Text* text()                        { return _text; }
       };
 

@@ -7,7 +7,7 @@
     </message>
     <message>
         <source>Copy revision number</source>
-        <translation type="unfinished"/>
+        <translation>Sürüm numarasını kopyala</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -48,7 +48,7 @@ p, li { white-space: pre-wrap; }
     <name>AeolusGui</name>
     <message>
         <source>Azimuth</source>
-        <translation type="unfinished"/>
+        <translation>Azimut</translation>
     </message>
     <message>
         <source>Width</source>
@@ -99,7 +99,7 @@ p, li { white-space: pre-wrap; }
     <name>AlbumManager</name>
     <message>
         <source>MuseScore: Album Manager</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Albüm Düzenleyici</translation>
     </message>
     <message>
         <source>Add Score</source>
@@ -123,11 +123,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Load</source>
-        <translation>Yükle</translation>
+        <translation>Aç</translation>
     </message>
     <message>
         <source>Print Album</source>
-        <translation type="unfinished"/>
+        <translation>Albümü Yazdır</translation>
     </message>
     <message>
         <source>Join Scores</source>
@@ -135,7 +135,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Album name:</source>
-        <translation type="unfinished"/>
+        <translation>Albüm adı:</translation>
     </message>
     <message>
         <source>Move current score down in list</source>
@@ -147,7 +147,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Album name</source>
-        <translation type="unfinished"/>
+        <translation>Albüm adı</translation>
     </message>
     <message>
         <source>Remove current score</source>
@@ -155,18 +155,18 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Create new album</source>
-        <translation type="unfinished"/>
+        <translation>Yeni albüm oluştur</translation>
     </message>
     <message>
         <source>Load an existing album</source>
-        <translation type="unfinished"/>
+        <translation>Mevcut bir albümü aç</translation>
     </message>
 </context>
 <context>
     <name>ArticulationProperties</name>
     <message>
         <source>MuseScore: Articulations Properties</source>
-        <translation>MuseScore: Nota İşaretleri Özellikleri</translation>
+        <translation>MuseScore: Artikülasyon Özellikleri</translation>
     </message>
     <message>
         <source>Appearance</source>
@@ -371,23 +371,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Si</translation>
     </message>
 </context>
 <context>
@@ -442,15 +442,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>3</source>
-        <translation type="unfinished"/>
+        <translation>3</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>Shortcut:</source>
@@ -541,7 +541,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Short name:</source>
-        <translation type="unfinished"/>
+        <translation>Kısa isim:</translation>
     </message>
     <message>
         <source>MIDI program:</source>
@@ -556,7 +556,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Select Note:</source>
-        <translation type="unfinished"/>
+        <translation>Nota Seç</translation>
     </message>
     <message>
         <source>Octave 8</source>
@@ -1162,23 +1162,23 @@ p, li { white-space: pre-wrap; }
     <name>EditStaffBase</name>
     <message>
         <source>MuseScore: Edit Staff/Part Properties</source>
-        <translation>MuseScore: Porte/Parça Özelliklerini Düzenle</translation>
+        <translation>MuseScore: Porte/Bölüm Özelliklerini Düzenle</translation>
     </message>
     <message>
         <source>Part Properties</source>
-        <translation>Parça Özellikleri</translation>
+        <translation>Bölüm Özellikleri</translation>
     </message>
     <message>
         <source>Change Instrument...</source>
-        <translation>Çalgı değiştir</translation>
+        <translation>Çalgı değiştir...</translation>
     </message>
     <message>
         <source>Instrument:</source>
-        <translation>Enstrüman:</translation>
+        <translation>Çalgı:</translation>
     </message>
     <message>
         <source>Amateur:</source>
-        <translation>Amatör</translation>
+        <translation>Amatör:</translation>
     </message>
     <message>
         <source>-</source>
@@ -1186,7 +1186,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Professional:</source>
-        <translation>Mesleki</translation>
+        <translation>Profesyonel:</translation>
     </message>
     <message>
         <source>0 - Perfect Unison</source>
@@ -1318,7 +1318,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Part name:</source>
-        <translation type="unfinished"/>
+        <translation>Bölüm adı:</translation>
     </message>
     <message>
         <source>Long instrument name:</source>
@@ -1700,7 +1700,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Slurs/Ties</source>
-        <translation type="unfinished"/>
+        <translation>Cümle Bağları/Uzatma Bağları</translation>
     </message>
     <message>
         <source>Sizes</source>
@@ -1720,7 +1720,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Articulations, Ornaments</source>
-        <translation>Nota İşaretleri, Süslemeler</translation>
+        <translation>Artikülasyonlar, Süslemeler</translation>
     </message>
     <message>
         <source>Accidentals</source>
@@ -1863,7 +1863,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Every system</source>
-        <translation>her sistem</translation>
+        <translation>Her sistem</translation>
     </message>
     <message>
         <source>System bracket distance:</source>
@@ -1935,7 +1935,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Ölçü çizgisi kalınlığı</translation>
     </message>
     <message>
         <source>End barline thickness:</source>
@@ -2083,7 +2083,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Pedal Line</source>
-        <translation type="unfinished"/>
+        <translation>Pedal Çizgisi</translation>
     </message>
     <message>
         <source>Trill Line</source>
@@ -2099,7 +2099,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Jazz</source>
-        <translation type="unfinished"/>
+        <translation>Caz</translation>
     </message>
     <message>
         <source>Custom</source>
@@ -2115,7 +2115,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Solfeggio</source>
-        <translation type="unfinished"/>
+        <translation>Solfej</translation>
     </message>
     <message>
         <source>Lower case minor chords</source>
@@ -2188,7 +2188,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Articulation distance:</source>
-        <translation type="unfinished"/>
+        <translation>Artikülasyon uzaklığı:</translation>
     </message>
     <message>
         <source>Note head distance:</source>
@@ -2196,7 +2196,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Articulation size:</source>
-        <translation type="unfinished"/>
+        <translation>Artikülasyon boyutu:</translation>
     </message>
     <message>
         <source>Accidental</source>
@@ -2244,7 +2244,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Capo</source>
-        <translation type="unfinished"/>
+        <translation>Kapo</translation>
     </message>
     <message>
         <source>Vertical distance from note head:</source>
@@ -2288,7 +2288,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Interval:</source>
-        <translation type="unfinished"/>
+        <translation>Aralık</translation>
     </message>
     <message>
         <source>Hide instrument name if there is only 1 instrument</source>
@@ -2527,7 +2527,7 @@ space unit</extracomment>
     <name>ExcerptsDialog</name>
     <message>
         <source>MuseScore: Parts</source>
-        <translation>MuseScore: Parçalar</translation>
+        <translation>MuseScore: Bölümler</translation>
     </message>
     <message>
         <source>Instrument:</source>
@@ -2547,15 +2547,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Part title:</source>
-        <translation type="unfinished"/>
+        <translation>Bölüm başlığı:</translation>
     </message>
     <message>
         <source>Edit Part</source>
-        <translation type="unfinished"/>
+        <translation>Bölümü düzenle</translation>
     </message>
     <message>
         <source>Select Part</source>
-        <translation type="unfinished"/>
+        <translation>Bölüm Seç</translation>
     </message>
 </context>
 <context>
@@ -2578,7 +2578,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Sound Fonts</source>
@@ -2975,11 +2975,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>D</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Mi</source>
@@ -2987,7 +2987,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>Sol</source>
@@ -2995,11 +2995,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Si</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
@@ -3027,10 +3027,29 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpej</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Oynat</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
-        <translation type="unfinished"/>
+        <translation>Artikülasyon</translation>
     </message>
     <message>
         <source>Direction</source>
@@ -3090,6 +3109,30 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Time stretch value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3264,6 +3307,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorBreak</name>
     <message>
         <source>Element Inspector</source>
@@ -3393,7 +3455,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Part</source>
-        <translation type="unfinished"/>
+        <translation>Bölüm</translation>
     </message>
     <message>
         <source>System</source>
@@ -3544,6 +3606,42 @@ space unit</extracomment>
         <source>Show text</source>
         <translation>Metni Göster</translation>
     </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>InspectorGroupElement</name>
@@ -3636,7 +3734,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Part</source>
-        <translation type="unfinished"/>
+        <translation>Bölüm</translation>
     </message>
     <message>
         <source>System</source>
@@ -4351,6 +4449,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4481,11 +4651,35 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Wavy Line</source>
+        <source>Reset value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Reset value</source>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>varsayılan</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Oynat</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -4711,11 +4905,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>3</source>
-        <translation type="unfinished"/>
+        <translation>3</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>Instrument wizard</source>
@@ -4742,7 +4936,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>MuseScore: Instruments</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Çalgılar</translation>
     </message>
     <message>
         <source>Load</source>
@@ -4765,7 +4959,7 @@ space unit</extracomment>
     <name>InstrumentsWidget</name>
     <message>
         <source>MuseScore: Instruments</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Çalgılar</translation>
     </message>
     <message>
         <source>Instrument List</source>
@@ -4837,7 +5031,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Partitur List</source>
-        <translation type="unfinished"/>
+        <translation>Partisyon Listesi</translation>
     </message>
     <message>
         <source>Staff linked to previous</source>
@@ -4860,6 +5054,13 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add time signature to palette</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -4899,15 +5100,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>3</source>
-        <translation type="unfinished"/>
+        <translation>3</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>5</source>
@@ -5089,7 +5290,7 @@ space unit</extracomment>
     <name>LoginDialog</name>
     <message>
         <source>Log in to MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore&apos;da oturum aç</translation>
     </message>
     <message>
         <source>Username or email</source>
@@ -5188,15 +5389,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>3</source>
-        <translation type="unfinished"/>
+        <translation>3</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>5</source>
@@ -5373,7 +5574,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Articulations &amp; Ornaments</source>
-        <translation type="unfinished"/>
+        <translation>Artikülasyonlar &amp; Süslemeler</translation>
     </message>
     <message>
         <source>Accidentals</source>
@@ -5436,7 +5637,7 @@ Would you like to locate %2 now?</source>
     <name>MeasureProperties</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>cannot change measure length:
@@ -5496,11 +5697,11 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>8</source>
@@ -5644,7 +5845,7 @@ tuplet would cross measure</source>
     <name>MetaEditDialog</name>
     <message>
         <source>MuseScore Version:</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore sürümü:</translation>
     </message>
     <message>
         <source>Revision:</source>
@@ -5735,7 +5936,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore dosyaları (*.mscz *.mscx)</translation>
     </message>
     <message>
         <source>MuseScore Album Files (*.album)</source>
@@ -6018,16 +6219,8 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Tüm Bölümlere Uygula</translation>
     </message>
     <message>
         <source>last modification time</source>
@@ -6039,6 +6232,14 @@ failed: </source>
     </message>
     <message>
         <source>page number, if there is more than one page</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6362,7 +6563,7 @@ failed: </source>
     <name>Ms::MediaDialog</name>
     <message>
         <source>MuseScore: Additional Media</source>
-        <translation>MuseScore: </translation>
+        <translation>MuseScore: Ek Medya</translation>
     </message>
 </context>
 <context>
@@ -6407,7 +6608,7 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Save changes to the score &quot;%1&quot;
@@ -6457,7 +6658,7 @@ kaydetmek ister misiniz?</translation>
     </message>
     <message>
         <source>MuseScore: Save File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Dosyayı Kaydet</translation>
     </message>
     <message>
         <source>Untitled</source>
@@ -6569,7 +6770,7 @@ kaydetmek ister misiniz?</translation>
     </message>
     <message>
         <source>MuseScore: Export Parts</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Bölümleri Kaydet</translation>
     </message>
     <message>
         <source>&quot;%1&quot; already exists.
@@ -6595,7 +6796,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>Parts were successfully exported</source>
-        <translation type="unfinished"/>
+        <translation>Bölümler başarıyla kaydedildi</translation>
     </message>
     <message>
         <source>MuseScore: Save a Copy</source>
@@ -7042,7 +7243,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Score_and_Parts</source>
-        <translation type="unfinished"/>
+        <translation>Partisyon_ve_Bölümler</translation>
     </message>
     <message>
         <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</source>
@@ -7078,7 +7279,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>No score</source>
-        <translation>nota yok</translation>
+        <translation>Nota yok</translation>
     </message>
     <message>
         <source>Edit mode</source>
@@ -7158,6 +7359,10 @@ please choose a different name:</source>
     </message>
     <message>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ask for Help</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7426,7 +7631,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>untitled</source>
@@ -7474,7 +7679,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>Choose Default Style for Parts</source>
-        <translation type="unfinished"/>
+        <translation>Bölümler İçin Varsayılan Stili Seçin</translation>
     </message>
     <message>
         <source>Choose Instrument List</source>
@@ -7490,7 +7695,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>MuseScore Shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Kısayolları</translation>
     </message>
     <message>
         <source>Print Shortcuts</source>
@@ -7630,10 +7835,6 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>file not found</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>No selection</source>
         <translation type="unfinished"/>
     </message>
@@ -7643,6 +7844,10 @@ failed: %2</source>
     </message>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7953,6 +8158,11 @@ Please select a range of measures to join and try again</source>
         <source>Transparent background</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::SearchComboBox</name>
@@ -8129,7 +8339,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Tüm Bölümlere Uygula</translation>
     </message>
     <message>
         <source>Text style name:</source>
@@ -8561,7 +8771,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Apply to all Parts</source>
-        <translation type="unfinished"/>
+        <translation>Tüm Bölümlere Uygula</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
@@ -8927,11 +9137,11 @@ failed: </source>
     </message>
     <message>
         <source>MIDI sound for part</source>
-        <translation>bu parça için midi ses</translation>
+        <translation>Bu bölüm için MIDI ses</translation>
     </message>
     <message>
         <source>Part name</source>
-        <translation type="unfinished"/>
+        <translation>Bölüm adı</translation>
     </message>
     <message>
         <source>Panorama position</source>
@@ -8943,7 +9153,7 @@ failed: </source>
     </message>
     <message>
         <source>Part Name</source>
-        <translation>Parça Adı</translation>
+        <translation>Bölüm Adı</translation>
     </message>
     <message>
         <source>Use arrows to modify</source>
@@ -9623,7 +9833,7 @@ failed: </source>
     </message>
     <message>
         <source>Style for part:</source>
-        <translation type="unfinished"/>
+        <translation>Bölüm stili:</translation>
     </message>
     <message>
         <source>ALSA audio</source>
@@ -10020,19 +10230,19 @@ failed: </source>
     </message>
     <message>
         <source>Style for part</source>
-        <translation type="unfinished"/>
+        <translation>Bölüm stili</translation>
     </message>
     <message>
         <source>Insert path to style file for part</source>
-        <translation type="unfinished"/>
+        <translation>Bölüm stili için dosya konumunu girin</translation>
     </message>
     <message>
         <source>Choose style for part</source>
-        <translation type="unfinished"/>
+        <translation>Bölüm stili seç</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a style file for part</source>
-        <translation type="unfinished"/>
+        <translation>Bölüm için stil dosyası seçmeniz için bir pencere açar</translation>
     </message>
     <message>
         <source>Instrument list 2</source>
@@ -10344,10 +10554,18 @@ failed: </source>
     </message>
     <message>
         <source>Check for new version of MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore&apos;un yeni sürümünü kontrol edin</translation>
     </message>
     <message>
         <source>Filter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>PDF</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Export RPNs</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -10373,7 +10591,7 @@ Please select a single note or lyrics and retry operation
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>No note or figured bass selected:
@@ -10668,7 +10886,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Save File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Dosyayı Kaydet</translation>
     </message>
     <message>
         <source>Quit</source>
@@ -10704,7 +10922,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Load MIDI</source>
-        <translation>MuseScore: midi yükle</translation>
+        <translation>MuseScore: MIDI Aç</translation>
     </message>
     <message>
         <source>MuseScore: Load Style Failed</source>
@@ -11036,15 +11254,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>3</source>
-        <translation type="unfinished"/>
+        <translation>3</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>Channel:</source>
@@ -11182,6 +11400,14 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>System flag</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Clear</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -11542,7 +11768,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Instrument Name (Part)</source>
-        <translation type="unfinished"/>
+        <translation>Çalgı İsmi (Bölüm)</translation>
     </message>
     <message>
         <source>Dynamics</source>
@@ -11695,11 +11921,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>8</source>
@@ -11785,11 +12011,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>8</source>
@@ -12413,7 +12639,7 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>SoundFont %1 already loaded</source>
@@ -12603,11 +12829,11 @@ failed: </source>
     </message>
     <message>
         <source>Export Parts...</source>
-        <translation type="unfinished"/>
+        <translation>Bölümleri Kaydet...</translation>
     </message>
     <message>
         <source>Save a copy of the score&apos;s parts in various formats</source>
-        <translation type="unfinished"/>
+        <translation>Partisyon bölümlerinin bir kopyasını çeşitli formatlarda kaydedin</translation>
     </message>
     <message>
         <source>Close</source>
@@ -13187,7 +13413,7 @@ failed: </source>
     </message>
     <message>
         <source>Add slur</source>
-        <translation type="unfinished"/>
+        <translation>Bağ ekle</translation>
     </message>
     <message>
         <source>Crescendo</source>
@@ -13231,7 +13457,7 @@ failed: </source>
     </message>
     <message>
         <source>Delete contents of the selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Seçili ölçülerin içeriklerini sil</translation>
     </message>
     <message>
         <source>Timewise delete</source>
@@ -13475,7 +13701,7 @@ failed: </source>
     </message>
     <message>
         <source>2</source>
-        <translation type="unfinished"/>
+        <translation>2</translation>
     </message>
     <message>
         <source>Voice 2</source>
@@ -13483,7 +13709,7 @@ failed: </source>
     </message>
     <message>
         <source>3</source>
-        <translation type="unfinished"/>
+        <translation>3</translation>
     </message>
     <message>
         <source>Voice 3</source>
@@ -13491,7 +13717,7 @@ failed: </source>
     </message>
     <message>
         <source>4</source>
-        <translation type="unfinished"/>
+        <translation>4</translation>
     </message>
     <message>
         <source>Voice 4</source>
@@ -13530,10 +13756,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Paletler</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation type="unfinished"/>
     </message>
@@ -13567,10 +13789,6 @@ failed: </source>
     </message>
     <message>
         <source>Add lyrics</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13930,10 +14148,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Pan piano roll</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Toggle pan piano roll</source>
         <translation type="unfinished"/>
     </message>
@@ -13959,11 +14173,11 @@ failed: </source>
     </message>
     <message>
         <source>Parts...</source>
-        <translation type="unfinished"/>
+        <translation>Bölümler...</translation>
     </message>
     <message>
         <source>Manage parts</source>
-        <translation type="unfinished"/>
+        <translation>Bölümleri düzenle</translation>
     </message>
     <message>
         <source>Enharmonic up</source>
@@ -14455,11 +14669,11 @@ failed: </source>
     </message>
     <message>
         <source>Part Name</source>
-        <translation>Parça Adı</translation>
+        <translation>Bölüm Adı</translation>
     </message>
     <message>
         <source>Add part name</source>
-        <translation type="unfinished"/>
+        <translation>Bölüm adı ekle</translation>
     </message>
     <message>
         <source>Save Online...</source>
@@ -14571,7 +14785,7 @@ failed: </source>
     </message>
     <message>
         <source>Export parts</source>
-        <translation type="unfinished"/>
+        <translation>Bölümleri kaydet</translation>
     </message>
     <message>
         <source>File: Close</source>
@@ -15497,12 +15711,28 @@ failed: </source>
         <source>Set loop in position</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Cannot rewrite measures:
@@ -16546,6 +16776,10 @@ Measure is not empty</source>
         <source>Tablature2</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>drumset</name>
@@ -16599,7 +16833,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Hand Clap</source>
-        <translation type="unfinished"/>
+        <translation>Alkış</translation>
     </message>
     <message>
         <source>Electric Snare</source>
@@ -16960,7 +17194,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Articulation</source>
-        <translation type="unfinished"/>
+        <translation>Artikülasyon</translation>
     </message>
     <message>
         <source>Dynamic</source>
@@ -17444,23 +17678,23 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>D</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Si</translation>
     </message>
     <message>
         <source>Sol</source>
@@ -17540,7 +17774,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Articulations</source>
-        <translation type="unfinished"/>
+        <translation>Artikülasyonlar</translation>
     </message>
     <message>
         <source>Slurs</source>
@@ -17655,10 +17889,6 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Prallprall line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wavy line</source>
         <translation type="unfinished"/>
     </message>
 </context>

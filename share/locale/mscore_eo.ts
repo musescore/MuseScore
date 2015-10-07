@@ -285,38 +285,38 @@ p, li { white-space: pre-wrap; }
     <name>BreaksDialog</name>
     <message>
         <source>MuseScore: Add/Remove Line Breaks</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Aldoni/Forigi liniorompojn</translation>
     </message>
     <message>
         <source>Break lines every</source>
-        <translation type="unfinished"/>
+        <translation>Disrompi liniojn je ĉiu</translation>
     </message>
     <message>
         <source>Number of measures</source>
-        <translation type="unfinished"/>
+        <translation>Nombro de mezuroj</translation>
     </message>
     <message>
         <source>measures</source>
-        <translation type="unfinished"/>
+        <translation>mezuroj</translation>
     </message>
     <message>
         <source>Add line breaks at end of each system</source>
-        <translation type="unfinished"/>
+        <translation>Almeti liniorompojn post ĉiuj liniargrupoj.</translation>
     </message>
     <message>
         <source>Remove current line breaks</source>
-        <translation type="unfinished"/>
+        <translation>Forigi nunan linirompojn</translation>
     </message>
     <message>
         <source>Break lines every X measures</source>
-        <translation type="unfinished"/>
+        <translation>Disrompi liniojn je ĉiu X-a mezuro</translation>
     </message>
 </context>
 <context>
     <name>ChordBase</name>
     <message>
         <source>Glissando end</source>
-        <translation type="unfinished"/>
+        <translation>Glitfino</translation>
     </message>
 </context>
 <context>
@@ -370,7 +370,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Slash</source>
-        <translation type="unfinished"/>
+        <translation>Oblikva streko</translation>
     </message>
     <message>
         <source>XCircle</source>
@@ -528,7 +528,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>Nuligi</translation>
     </message>
     <message>
         <source>Name:</source>
@@ -552,7 +552,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>MIDI program:</source>
-        <translation type="unfinished"/>
+        <translation>MIDI-programaro:</translation>
     </message>
 </context>
 <context>
@@ -1305,7 +1305,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staff Properties</source>
-        <translation>Stave Properties</translation>
+        <translation>Notliniarecoj</translation>
     </message>
     <message>
         <source>Invisible staff lines</source>
@@ -1321,7 +1321,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staff line color:</source>
-        <translation type="unfinished"/>
+        <translation>Notlinia koloro:</translation>
     </message>
     <message>
         <source>Part name:</source>
@@ -1357,7 +1357,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Edit String Data...</source>
-        <translation type="unfinished"/>
+        <translation>Redakti signovicajn datumojn...</translation>
     </message>
     <message>
         <source>Show time signature</source>
@@ -1365,11 +1365,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Style group:</source>
-        <translation type="unfinished"/>
+        <translation>Stilgrupo:</translation>
     </message>
     <message>
         <source>Show barlines</source>
-        <translation type="unfinished"/>
+        <translation>Montri taktostrekojn</translation>
     </message>
     <message>
         <source>Show clef</source>
@@ -1393,7 +1393,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Do not hide if system is empty</source>
-        <translation type="unfinished"/>
+        <translation>Ne kaŝu iun se la liniargrupo estas vaka</translation>
     </message>
     <message>
         <source>Scale</source>
@@ -1409,7 +1409,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Hide system barline</source>
-        <translation type="unfinished"/>
+        <translation>Kaŝu liniargrupan taktostrekon.</translation>
     </message>
 </context>
 <context>
@@ -1432,7 +1432,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Stemless</source>
-        <translation>stemless</translation>
+        <translation>Senlinieta</translation>
     </message>
     <message>
         <source>Create a new staff type of current group.</source>
@@ -1496,11 +1496,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Stems and beams</source>
-        <translation type="unfinished"/>
+        <translation>Linietoj kaj traboj</translation>
     </message>
     <message>
         <source>Stem style:</source>
-        <translation type="unfinished"/>
+        <translation>Linieta stilo:</translation>
     </message>
     <message>
         <source>Beside staff</source>
@@ -1512,7 +1512,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Stem position:</source>
-        <translation type="unfinished"/>
+        <translation>Linieta pozicio:</translation>
     </message>
     <message>
         <source>Above</source>
@@ -1528,11 +1528,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>As short stem</source>
-        <translation type="unfinished"/>
+        <translation>Kiel mallonga linieto</translation>
     </message>
     <message>
         <source>As slashed stem</source>
-        <translation type="unfinished"/>
+        <translation>Kiel strekita linieto</translation>
     </message>
     <message>
         <source>Preview</source>
@@ -1552,7 +1552,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show barlines</source>
-        <translation type="unfinished"/>
+        <translation>Montri taktostrekojn</translation>
     </message>
     <message>
         <source>Vertical offset:</source>
@@ -1612,7 +1612,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>At new system</source>
-        <translation type="unfinished"/>
+        <translation>Ĉe nova liniargrupo</translation>
     </message>
     <message>
         <source>At new meas.</source>
@@ -1627,7 +1627,7 @@ p, li { white-space: pre-wrap; }
     <name>EditStringDataBase</name>
     <message>
         <source>String Data</source>
-        <translation type="unfinished"/>
+        <translation>Signovicaj datumoj</translation>
     </message>
     <message>
         <source>Strings Tuning:</source>
@@ -1679,7 +1679,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>System</source>
         <extracomment>a music system, a line of music</extracomment>
-        <translation>Sistemo</translation>
+        <translation>Liniargrupo</translation>
     </message>
     <message>
         <source>Measure</source>
@@ -1687,7 +1687,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Barlines</source>
-        <translation>Bar lines</translation>
+        <translation>Taktostrekoj</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -1703,7 +1703,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Beams</source>
-        <translation>Beams</translation>
+        <translation>Traboj</translation>
     </message>
     <message>
         <source>Slurs/Ties</source>
@@ -1715,7 +1715,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Hairpins, Volta, Ottava</source>
-        <translation type="unfinished"/>
+        <translation>Harpingloj, Ripeto, Oktigo</translation>
     </message>
     <message>
         <source>Pedal, Trill</source>
@@ -1735,7 +1735,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tuplets</source>
-        <translation>Tuplets</translation>
+        <translation>Duoloj</translation>
     </message>
     <message>
         <source>Display in concert pitch</source>
@@ -1774,7 +1774,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Create clef for all systems</source>
-        <translation>Create clef for all systems</translation>
+        <translation>Krei kleon por ĉiuj liniargrupoj</translation>
     </message>
     <message>
         <source>Music bottom margin:</source>
@@ -1782,7 +1782,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Notliniara distanco:</translation>
     </message>
     <message>
         <source>Grand staff distance:</source>
@@ -1790,7 +1790,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Min. system distance:</source>
-        <translation type="unfinished"/>
+        <translation>Minimuma liniargrupdistanco:</translation>
     </message>
     <message>
         <source>Lyrics top margin:</source>
@@ -1830,11 +1830,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Max. system distance:</source>
-        <translation type="unfinished"/>
+        <translation>Maksimuma liniargrupdistanco:</translation>
     </message>
     <message>
         <source>Last system fill threshold:</source>
-        <translation>Last system fill threshold</translation>
+        <translation>Plenolimino de la lasta liniargrupo:</translation>
     </message>
     <message>
         <source>Show first</source>
@@ -1870,11 +1870,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Every system</source>
-        <translation>every system</translation>
+        <translation>Ĉiu liniargrupo</translation>
     </message>
     <message>
         <source>System bracket distance:</source>
-        <translation>System Bracket Distance:</translation>
+        <translation>Liniargrupa krampdistanco:</translation>
     </message>
     <message>
         <source>Brace distance:</source>
@@ -1890,15 +1890,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Note to barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanco de noto al taktostreko:</translation>
     </message>
     <message>
         <source>Barline to note distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanco de taktostreko al noto:</translation>
     </message>
     <message>
         <source>Clef left margin:</source>
-        <translation type="unfinished"/>
+        <translation>Klea maldekstra marĝeno:</translation>
     </message>
     <message>
         <source>Minimum note distance:</source>
@@ -1906,11 +1906,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Key signature left margin:</source>
-        <translation type="unfinished"/>
+        <translation>Maldekstra marĝeno de gamsigno:</translation>
     </message>
     <message>
         <source>Time signature left margin:</source>
-        <translation type="unfinished"/>
+        <translation>Maldekstra marĝeno de taktosigno:</translation>
     </message>
     <message>
         <source>Clef/Key right margin:</source>
@@ -1918,7 +1918,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Clef to barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanco de kleo al taktostreko:</translation>
     </message>
     <message>
         <source>Staff line thickness:</source>
@@ -1926,7 +1926,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Barline to accidental distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distanco de taktostreko al kromsigno:</translation>
     </message>
     <message>
         <source>Show repeat bar tips (&quot;winged&quot; repeats)</source>
@@ -1942,7 +1942,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Taktostreka diko:</translation>
     </message>
     <message>
         <source>End barline thickness:</source>
@@ -1954,15 +1954,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Double barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Duobla taktostreka diko:</translation>
     </message>
     <message>
         <source>Double barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Duobla taktostreka distanco:</translation>
     </message>
     <message>
         <source>Shorten stems</source>
-        <translation type="unfinished"/>
+        <translation>Mallongigi linietojn</translation>
     </message>
     <message>
         <source>Progression:</source>
@@ -1970,7 +1970,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Shortest stem:</source>
-        <translation type="unfinished"/>
+        <translation>Plej mallonga linieto:</translation>
     </message>
     <message>
         <source>Accidental note distance:</source>
@@ -1998,7 +1998,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Stem thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Linieta diko:</translation>
     </message>
     <message>
         <source>Dot size:</source>
@@ -2018,23 +2018,23 @@ space unit</extracomment>
     </message>
     <message>
         <source>Beam thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Trabdiko:</translation>
     </message>
     <message>
         <source>Beam distance (in beam thickness units):</source>
-        <translation type="unfinished"/>
+        <translation>Trabdiko (en trabaj dikunitoj):</translation>
     </message>
     <message>
         <source>Broken beam minimum length:</source>
-        <translation type="unfinished"/>
+        <translation>Minimuma longo de disrompa trabo:</translation>
     </message>
     <message>
         <source>Flatten all beams</source>
-        <translation type="unfinished"/>
+        <translation>Ebenigi ĉiujn trabojn</translation>
     </message>
     <message>
         <source>Line thickness at end:</source>
-        <translation type="unfinished"/>
+        <translation>Liniodiko je la fino:</translation>
     </message>
     <message>
         <source>Line thickness middle:</source>
@@ -2054,15 +2054,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Grace note size:</source>
-        <translation type="unfinished"/>
+        <translation>Notetgrando:</translation>
     </message>
     <message>
         <source>Small clef size:</source>
-        <translation type="unfinished"/>
+        <translation>Kleeta grando:</translation>
     </message>
     <message>
         <source>Hairpins</source>
-        <translation>Hairpins</translation>
+        <translation>Harpingloj</translation>
     </message>
     <message>
         <source>Height:</source>
@@ -2074,7 +2074,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Volta</source>
-        <translation>Volta</translation>
+        <translation>Ripetosigno</translation>
     </message>
     <message>
         <source>Hook height:</source>
@@ -2082,11 +2082,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line style:</source>
-        <translation>Line style:</translation>
+        <translation>Liniostilo:</translation>
     </message>
     <message>
         <source>Ottava</source>
-        <translation>Ottava</translation>
+        <translation>Oktigo</translation>
     </message>
     <message>
         <source>Pedal Line</source>
@@ -2303,7 +2303,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Maximum barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Maksimuma taktostreka distanco:</translation>
     </message>
     <message>
         <source>Standard TAB clef</source>
@@ -2343,7 +2343,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Select swing ratio:</source>
-        <translation>Elekti svingritma rejŝon:</translation>
+        <translation>Elekti svingritma rilaton:</translation>
     </message>
     <message>
         <source>Musical text font:</source>
@@ -2383,7 +2383,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>System bracket thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Liniargrupa krampdiko:</translation>
     </message>
     <message>
         <source>Brace thickness:</source>
@@ -2435,7 +2435,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Naturals in Key Signatures</source>
-        <translation type="unfinished"/>
+        <translation>Bekvadratoj en gamsignoj</translation>
     </message>
     <message>
         <source>Vertical Distance from the Notes</source>
@@ -2527,7 +2527,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Barline to grace note distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distance de taktostreko al noteto:</translation>
     </message>
 </context>
 <context>
@@ -2585,7 +2585,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Sound Fonts</source>
@@ -2597,7 +2597,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cannot load SoundFont %1</source>
-        <translation type="unfinished"/>
+        <translation>Ŝargi sontiparon %1 ne eblas</translation>
     </message>
 </context>
 <context>
@@ -2623,25 +2623,25 @@ space unit</extracomment>
     </message>
     <message>
         <source>Show Text</source>
-        <translation>Show Text</translation>
+        <translation>Montri tekston</translation>
     </message>
     <message>
         <source>Text:</source>
-        <translation>Text:</translation>
+        <translation>Teksto:</translation>
     </message>
 </context>
 <context>
     <name>GreendotButton</name>
     <message>
         <source>Record</source>
-        <translation>record</translation>
+        <translation>rikordo</translation>
     </message>
 </context>
 <context>
     <name>ImportMidiPanel</name>
     <message>
         <source>Close MIDI import panel</source>
-        <translation type="unfinished"/>
+        <translation>Fermi MIDI-enportopanelon</translation>
     </message>
     <message>
         <source>Move track up</source>
@@ -2653,11 +2653,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Text charset:</source>
-        <translation type="unfinished"/>
+        <translation>Teksta signaro:</translation>
     </message>
     <message>
         <source>Apply MIDI import operations</source>
-        <translation type="unfinished"/>
+        <translation>Apliki MIDI-enportajn operaciojn</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -2665,11 +2665,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cancel not applied MIDI import operations</source>
-        <translation type="unfinished"/>
+        <translation>Nuligi neaplikitajn MIDI-enportajn operaciojn</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>Nuligi</translation>
     </message>
 </context>
 <context>
@@ -2684,7 +2684,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>Nuligi</translation>
     </message>
     <message>
         <source>Insert empty measures</source>
@@ -2707,7 +2707,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Accidental Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Alteraciila reviziilo</translation>
     </message>
     <message>
         <source>Reset Small value</source>
@@ -2930,7 +2930,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Ambitus Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Tonampleksa reviziilo</translation>
     </message>
     <message>
         <source>Oct</source>
@@ -2950,7 +2950,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Update range</source>
-        <translation type="unfinished"/>
+        <translation>Ĝisdatiga amplekso</translation>
     </message>
     <message>
         <source>Reset Head type value</source>
@@ -2974,7 +2974,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Slash</source>
-        <translation type="unfinished"/>
+        <translation>Oblikva streko</translation>
     </message>
     <message>
         <source>XCircle</source>
@@ -3034,6 +3034,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glitoreviziilo</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpeggio</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Ludi</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3085,7 +3104,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Articulation Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Artikulacia reviziilo</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
@@ -3099,12 +3118,36 @@ space unit</extracomment>
         <source>Reset Time stretch value</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>InspectorBarLine</name>
     <message>
         <source>Barline</source>
-        <translation type="unfinished"/>
+        <translation>Taktostreko</translation>
     </message>
     <message>
         <source>Style:</source>
@@ -3128,7 +3171,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Barline Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Taktostreka reviziilo</translation>
     </message>
     <message>
         <source>Type</source>
@@ -3179,7 +3222,7 @@ space unit</extracomment>
     <name>InspectorBeam</name>
     <message>
         <source>Beam</source>
-        <translation>Beam</translation>
+        <translation>Trabo</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -3211,7 +3254,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Beam Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Traboreviziilo</translation>
     </message>
     <message>
         <source>Vertical position offset left</source>
@@ -3231,7 +3274,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Local Relayout value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki valoron de loka rearanĝo</translation>
     </message>
     <message>
         <source>Reset Horizontal value</source>
@@ -3263,7 +3306,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Local relayout</source>
-        <translation type="unfinished"/>
+        <translation>Loka rearanĝo</translation>
     </message>
     <message>
         <source>User position</source>
@@ -3271,14 +3314,33 @@ space unit</extracomment>
     </message>
 </context>
 <context>
-    <name>InspectorBreak</name>
+    <name>InspectorBend</name>
     <message>
-        <source>Element Inspector</source>
+        <source>Glissando Inspector</source>
+        <translation>Glitoreviziilo</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Flekso</translation>
+    </message>
+    <message>
+        <source>Play</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Layout Break</source>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>InspectorBreak</name>
+    <message>
+        <source>Element Inspector</source>
+        <translation>Eroreviziilo</translation>
+    </message>
+    <message>
+        <source>Layout Break</source>
+        <translation>Aranĝosalto</translation>
     </message>
 </context>
 <context>
@@ -3322,11 +3384,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Stemless</source>
-        <translation>stemless</translation>
+        <translation>Senlinieta</translation>
     </message>
     <message>
         <source>Chord Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Akordoreviziilo</translation>
     </message>
     <message>
         <source>Reset Vertical offset value</source>
@@ -3369,7 +3431,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Clef Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Kleoreviziilo</translation>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
@@ -3404,11 +3466,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>System</source>
-        <translation>System</translation>
+        <translation>Liniargrupo</translation>
     </message>
     <message>
         <source>Dynamic Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Dinamika reviziilo</translation>
     </message>
     <message>
         <source>Reset Velocity value</source>
@@ -3431,7 +3493,7 @@ space unit</extracomment>
     <name>InspectorElement</name>
     <message>
         <source>Element</source>
-        <translation>Element</translation>
+        <translation>Ero</translation>
     </message>
     <message>
         <source>Vertical offset</source>
@@ -3456,7 +3518,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Element Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Eroreviziilo</translation>
     </message>
     <message>
         <source>Reset Horizontal offset value</source>
@@ -3479,7 +3541,7 @@ space unit</extracomment>
     <name>InspectorEmpty</name>
     <message>
         <source>Empty Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Vaka reviziilo</translation>
     </message>
     <message>
         <source>Nothing selected</source>
@@ -3490,7 +3552,7 @@ space unit</extracomment>
     <name>InspectorFret</name>
     <message>
         <source>Ottava Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Oktiga reviziilo</translation>
     </message>
     <message>
         <source>Scale</source>
@@ -3525,7 +3587,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Glissando Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Glitoreviziilo</translation>
     </message>
     <message>
         <source>Reset Text value</source>
@@ -3551,12 +3613,48 @@ space unit</extracomment>
         <source>Show text</source>
         <translation>Show Text</translation>
     </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>InspectorGroupElement</name>
     <message>
         <source>Element Group</source>
-        <translation type="unfinished"/>
+        <translation>Ergrupo</translation>
     </message>
     <message>
         <source>Set Color</source>
@@ -3572,7 +3670,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Element Group Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Ergrupa reviziilo</translation>
     </message>
     <message>
         <source>Color</source>
@@ -3647,7 +3745,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>System</source>
-        <translation>System</translation>
+        <translation>Liniargrupo</translation>
     </message>
     <message>
         <source>Velocity change</source>
@@ -3667,7 +3765,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Hairpin Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Harpingla reviziilo</translation>
     </message>
     <message>
         <source>Reset Velocity change value</source>
@@ -3691,11 +3789,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Crescendo</source>
-        <translation>crescendo</translation>
+        <translation>Kresĉendo</translation>
     </message>
     <message>
         <source>Decrescendo</source>
-        <translation>decrescendo</translation>
+        <translation>Diminuendo</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -3722,7 +3820,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Image Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Bildoreviziilo</translation>
     </message>
     <message>
         <source>Scale to frame size</source>
@@ -3750,11 +3848,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Lock aspect ratio value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki ŝlosilon de ekranformata valoron</translation>
     </message>
     <message>
         <source>Lock aspect ratio</source>
-        <translation>lock aspect ratio</translation>
+        <translation>Ŝlosi ekranformaton</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
@@ -3789,7 +3887,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Jump Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Saltoreviziilo</translation>
     </message>
     <message>
         <source>Reset Jump to value</source>
@@ -3816,7 +3914,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Key Signature Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Gamsigna reviziilo</translation>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
@@ -3847,7 +3945,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Lasso Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Lazoreviziilo</translation>
     </message>
     <message>
         <source>Vertical position</source>
@@ -3891,7 +3989,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Linia reviziilo</translation>
     </message>
     <message>
         <source>Reset Line color value</source>
@@ -4097,7 +4195,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Note Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Notoreviziilo</translation>
     </message>
     <message>
         <source>Reset Mirror head value</source>
@@ -4168,7 +4266,7 @@ space unit</extracomment>
     <name>InspectorOttava</name>
     <message>
         <source>Ottava</source>
-        <translation>Ottava</translation>
+        <translation>Oktigo</translation>
     </message>
     <message>
         <source>Type</source>
@@ -4208,7 +4306,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Ottava Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Oktiga reviziilo</translation>
     </message>
     <message>
         <source>Reset Type value</source>
@@ -4247,7 +4345,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Rest Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Silentoreviziilo</translation>
     </message>
     <message>
         <source>Reset Small value</source>
@@ -4306,7 +4404,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Slur Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Ligarka reviziilo</translation>
     </message>
     <message>
         <source>Reset Line type value</source>
@@ -4358,6 +4456,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Supra marĝeno</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Maldekstra marĝeno</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Malsupra marĝeno</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Dekstra marĝeno</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4404,7 +4574,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Text Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Tekstoreviziilo</translation>
     </message>
     <message>
         <source>Reset Style value</source>
@@ -4427,7 +4597,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Text Line Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Tekstlinia reviziilo</translation>
     </message>
 </context>
 <context>
@@ -4442,7 +4612,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Time Signature Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Taktosigna reviziilo</translation>
     </message>
     <message>
         <source>Reset Show courtesy value</source>
@@ -4488,11 +4658,35 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Wavy Line</source>
+        <source>Reset value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Reset value</source>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>default</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Ludi</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -4500,7 +4694,7 @@ space unit</extracomment>
     <name>InspectorTuplet</name>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Duolo</translation>
     </message>
     <message>
         <source>Number</source>
@@ -4520,7 +4714,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Bracket</source>
-        <translation>Bracket</translation>
+        <translation>Krampo</translation>
     </message>
     <message>
         <source>Direction</source>
@@ -4540,7 +4734,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tuplet Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Duola reviziilo</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
@@ -4564,7 +4758,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Bracket type</source>
-        <translation type="unfinished"/>
+        <translation>Kramptipo</translation>
     </message>
 </context>
 <context>
@@ -4596,7 +4790,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Right margin</source>
-        <translation>Right margin</translation>
+        <translation>Dekstra marĝeno</translation>
     </message>
     <message>
         <source>Reset Top gap value</source>
@@ -4608,11 +4802,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Bottom margin</source>
-        <translation type="unfinished"/>
+        <translation>Malsupra marĝeno</translation>
     </message>
     <message>
         <source>Left margin</source>
-        <translation>Left margin</translation>
+        <translation>Maldekstra marĝeno</translation>
     </message>
     <message>
         <source>Top gap</source>
@@ -4624,7 +4818,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Top margin</source>
-        <translation type="unfinished"/>
+        <translation>Supra marĝeno</translation>
     </message>
     <message>
         <source>Reset Left margin value</source>
@@ -4647,7 +4841,7 @@ space unit</extracomment>
     <name>InspectorVolta</name>
     <message>
         <source>Volta</source>
-        <translation>Volta</translation>
+        <translation>Ripetosigno</translation>
     </message>
     <message>
         <source>Open</source>
@@ -4663,7 +4857,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Volta Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Ripetosigna reviziilo</translation>
     </message>
     <message>
         <source>Reset Type value</source>
@@ -4698,7 +4892,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Up</source>
-        <translation>Up</translation>
+        <translation>Supren</translation>
     </message>
     <message>
         <source>Down</source>
@@ -4706,11 +4900,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add Staff</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni notliniaron</translation>
     </message>
     <message>
         <source>Add Linked Staff</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni ligitan notliniaron</translation>
     </message>
     <message>
         <source>1</source>
@@ -4765,7 +4959,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>Nuligi</translation>
     </message>
 </context>
 <context>
@@ -4804,11 +4998,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add Staff</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni notliniaron</translation>
     </message>
     <message>
         <source>Add Linked Staff</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni ligitan notliniaron</translation>
     </message>
     <message>
         <source>Staves</source>
@@ -4828,7 +5022,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Staff type</source>
-        <translation type="unfinished"/>
+        <translation>Notliniara tipo</translation>
     </message>
     <message>
         <source>Instrument Genre Filter</source>
@@ -4867,6 +5061,13 @@ space unit</extracomment>
     </message>
     <message>
         <source>Add time signature to palette</source>
+        <translation>Aldoni taktosignon al paletro</translation>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -5061,7 +5262,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Up</source>
-        <translation>Up</translation>
+        <translation>Supren</translation>
     </message>
     <message>
         <source>90°</source>
@@ -5077,7 +5278,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>End</source>
-        <translation>End</translation>
+        <translation>Fino</translation>
     </message>
     <message>
         <source>Place:</source>
@@ -5151,7 +5352,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Import</source>
-        <translation>Import</translation>
+        <translation>Enporti</translation>
     </message>
     <message>
         <source>Staff name</source>
@@ -5191,7 +5392,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tuplets</source>
-        <translation>Tuplets</translation>
+        <translation>Duoloj</translation>
     </message>
     <message>
         <source>2</source>
@@ -5349,7 +5550,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation>Grace Notes</translation>
+        <translation>Notetoj</translation>
     </message>
     <message>
         <source>Clefs</source>
@@ -5357,7 +5558,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Key Signatures</source>
-        <translation>Key Signatures</translation>
+        <translation>Gamsignoj</translation>
     </message>
     <message>
         <source>Time Signatures</source>
@@ -5365,7 +5566,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Barlines</source>
-        <translation>Bar lines</translation>
+        <translation>Taktostrekoj</translation>
     </message>
     <message>
         <source>Lines</source>
@@ -5377,7 +5578,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Brackets</source>
-        <translation>Brackets</translation>
+        <translation>Krampoj</translation>
     </message>
     <message>
         <source>Articulations &amp; Ornaments</source>
@@ -5413,7 +5614,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Beam Properties</source>
-        <translation>Beam Properties</translation>
+        <translation>Trabecoj</translation>
     </message>
     <message>
         <source>Frames &amp; Measures</source>
@@ -5429,7 +5630,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Breaks &amp; Spacers</source>
-        <translation type="unfinished"/>
+        <translation>Rompoj kaj interlinioj</translation>
     </message>
     <message>
         <source>Bagpipe Embellishments</source>
@@ -5444,19 +5645,20 @@ Would you like to locate %2 now?</source>
     <name>MeasureProperties</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>cannot change measure length:
 tuplet would cross measure</source>
-        <translation type="unfinished"/>
+        <translation>Ŝanĝi mezurlongon ne eblas:
+Duolo transpasus mezuron</translation>
     </message>
 </context>
 <context>
     <name>MeasurePropertiesBase</name>
     <message>
         <source>MuseScore: Measure Properties</source>
-        <translation>MuseScore: Measure Properties</translation>
+        <translation>MuseScore: Mezurecoj</translation>
     </message>
     <message>
         <source>Staves</source>
@@ -5468,7 +5670,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Staff</source>
-        <translation>Stave</translation>
+        <translation>Notliniaro</translation>
     </message>
     <message>
         <source>Visible</source>
@@ -5476,7 +5678,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Stemless</source>
-        <translation>Stemless</translation>
+        <translation>Senlinieta</translation>
     </message>
     <message>
         <source>a</source>
@@ -5544,7 +5746,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Measure number mode:</source>
-        <translation type="unfinished"/>
+        <translation>Muzurnumera modalo:</translation>
     </message>
     <message>
         <source>Nominal:</source>
@@ -5556,7 +5758,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Add to measure number:</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni al mezurnumero:</translation>
     </message>
     <message>
         <source>Do not count</source>
@@ -5584,7 +5786,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Break multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>Disrompi plurmezuran silenton</translation>
     </message>
 </context>
 <context>
@@ -5599,7 +5801,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>Nuligi</translation>
     </message>
     <message>
         <source>Append empty measures</source>
@@ -5607,7 +5809,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Number of measures to append:</source>
-        <translation>Number of bars to append</translation>
+        <translation>Nombro de mezuroj almetenda:</translation>
     </message>
 </context>
 <context>
@@ -5776,7 +5978,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>%1 End of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 Fino de %2</translation>
     </message>
 </context>
 <context>
@@ -5794,39 +5996,39 @@ tuplet would cross measure</source>
     <name>Ms::ChordRest</name>
     <message>
         <source>Duplet</source>
-        <translation>Duonnotaro</translation>
+        <translation>Duolo</translation>
     </message>
     <message>
         <source>Triplet</source>
-        <translation>Trionnotaro</translation>
+        <translation>Triolo</translation>
     </message>
     <message>
         <source>Quadruplet</source>
-        <translation>Kvaronnotaro</translation>
+        <translation>Kvarolo</translation>
     </message>
     <message>
         <source>Sextuplet</source>
-        <translation>Sesonnotaro</translation>
+        <translation>Sesolo</translation>
     </message>
     <message>
         <source>Septuplet</source>
-        <translation>Seponnotaro</translation>
+        <translation>Sepolo</translation>
     </message>
     <message>
         <source>Octuplet</source>
-        <translation>Okonnotaro</translation>
+        <translation>Okolo</translation>
     </message>
     <message>
         <source>Custom Tuplet</source>
-        <translation type="unfinished"/>
+        <translation>Propra duolo</translation>
     </message>
     <message>
         <source>Quintuplet</source>
-        <translation>Kvinonnotaro</translation>
+        <translation>Kvinolo</translation>
     </message>
     <message>
         <source>Nonuplet</source>
-        <translation>Naŭonnotaro</translation>
+        <translation>Naŭolo</translation>
     </message>
     <message>
         <source>%1 Start of %2</source>
@@ -5834,7 +6036,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>%1 End of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 Fino de %2</translation>
     </message>
     <message>
         <source>Dotted %1</source>
@@ -6026,14 +6228,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation type="unfinished"/>
     </message>
@@ -6048,6 +6242,14 @@ failed: </source>
     <message>
         <source>page number, if there is more than one page</source>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>metadatuma marko; vidu jen</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Haveblaj metadatumaj markoj kaj siaj nunaj valoroj:</translation>
     </message>
 </context>
 <context>
@@ -6070,11 +6272,11 @@ failed: </source>
     <name>Ms::Hairpin</name>
     <message>
         <source>Crescendo</source>
-        <translation>crescendo</translation>
+        <translation>Kresĉendo</translation>
     </message>
     <message>
         <source>Descrescendo</source>
-        <translation>decrescendo</translation>
+        <translation>Diminuendo</translation>
     </message>
     <message>
         <source>Custom</source>
@@ -6107,7 +6309,7 @@ failed: </source>
     </message>
     <message>
         <source>Inspector Subwindow</source>
-        <translation type="unfinished"/>
+        <translation>Reviziila subfenestro</translation>
     </message>
 </context>
 <context>
@@ -6156,15 +6358,15 @@ failed: </source>
     </message>
     <message>
         <source>Stem</source>
-        <translation>Stem</translation>
+        <translation>Linieto</translation>
     </message>
     <message>
         <source>Beam</source>
-        <translation>Beam</translation>
+        <translation>Trabo</translation>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Duolo</translation>
     </message>
 </context>
 <context>
@@ -6175,7 +6377,7 @@ failed: </source>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Duolo</translation>
     </message>
 </context>
 <context>
@@ -6215,7 +6417,7 @@ failed: </source>
     <name>Ms::InstrumentsWidget</name>
     <message>
         <source>Staff %1</source>
-        <translation>Stave %1</translation>
+        <translation>Notliniaro %1</translation>
     </message>
     <message>
         <source>Staves</source>
@@ -6227,7 +6429,7 @@ failed: </source>
     </message>
     <message>
         <source>Staff type</source>
-        <translation type="unfinished"/>
+        <translation>Notliniara tipo</translation>
     </message>
     <message>
         <source>Visible</source>
@@ -6242,7 +6444,7 @@ failed: </source>
     <name>Ms::KeyEditor</name>
     <message>
         <source>MuseScore: Key Signatures</source>
-        <translation>MuseScore: Key Signatures</translation>
+        <translation>MuseScore: Gamsignoj</translation>
     </message>
 </context>
 <context>
@@ -6318,11 +6520,11 @@ failed: </source>
     </message>
     <message>
         <source>Cannot upload: %1</source>
-        <translation type="unfinished"/>
+        <translation>Alŝuti ne eblas: %1</translation>
     </message>
     <message>
         <source>Please upgrade</source>
-        <translation type="unfinished"/>
+        <translation>Bonvole plibonigu</translation>
     </message>
     <message>
         <source>Your MuseScore version is too old to use this feature.&lt;br/&gt; &lt;a href=&quot;%1&quot;&gt;Please upgrade first&lt;/a&gt;.</source>
@@ -6341,7 +6543,7 @@ failed: </source>
     <name>Ms::MScore</name>
     <message>
         <source>you cannot create an element</source>
-        <translation type="unfinished"/>
+        <translation>Vi ne povas krei eron</translation>
     </message>
 </context>
 <context>
@@ -6363,7 +6565,7 @@ failed: </source>
     </message>
     <message>
         <source>stemless</source>
-        <translation type="unfinished"/>
+        <translation>senlinieta</translation>
     </message>
 </context>
 <context>
@@ -6415,7 +6617,7 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Save changes to the score &quot;%1&quot;
@@ -6432,11 +6634,11 @@ before closing?</source>
     </message>
     <message>
         <source>MIDI Files (*.mid *.midi *.kar);;</source>
-        <translation>MIDI Files (*.mid *.midi *.kar);;</translation>
+        <translation>MIDI-dosieroj (*.mid *.midi *.kar);;</translation>
     </message>
     <message>
         <source>Muse Data Files (*.md);;</source>
-        <translation>Muse Data Files (*.md);;</translation>
+        <translation>Datumdosieroj de Muse (*.md);;</translation>
     </message>
     <message>
         <source>Capella Files (*.cap *.capx);;</source>
@@ -6512,7 +6714,7 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore Palette (*.mpal)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Paletro: (*.mpal)</translation>
     </message>
     <message>
         <source>MuseScore: Load Plugin</source>
@@ -6540,7 +6742,7 @@ before closing?</source>
     </message>
     <message>
         <source>Standard MIDI File (*.mid)</source>
-        <translation>Standard MIDI File (*.mid)</translation>
+        <translation>MIDI-norma dosiero (*.mid)</translation>
     </message>
     <message>
         <source>PDF File (*.pdf)</source>
@@ -6568,7 +6770,7 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore: Export</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Elporti</translation>
     </message>
     <message>
         <source>MuseScore: Save As</source>
@@ -6576,7 +6778,7 @@ before closing?</source>
     </message>
     <message>
         <source>MuseScore: Export Parts</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Elporti partojn</translation>
     </message>
     <message>
         <source>&quot;%1&quot; already exists.
@@ -6624,7 +6826,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>Repeat measure sign</source>
-        <translation>Repeat bar sign</translation>
+        <translation>Ripeti mezursignon</translation>
     </message>
     <message>
         <source>Line break</source>
@@ -6632,11 +6834,11 @@ Do you want to replace it?
     </message>
     <message>
         <source>Page break</source>
-        <translation>Page break</translation>
+        <translation>Paĝsalto</translation>
     </message>
     <message>
         <source>Section break</source>
-        <translation type="unfinished"/>
+        <translation>Sekciosalto</translation>
     </message>
     <message>
         <source>Staff spacer down</source>
@@ -6656,7 +6858,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>Bracket</source>
-        <translation>Bracket</translation>
+        <translation>Krampo</translation>
     </message>
     <message>
         <source>Brace</source>
@@ -6729,7 +6931,8 @@ Do you want to replace it?
     <message>
         <source>No measure selected:
 Please select a measure and try again</source>
-        <translation>No Measure selected: please select a measure and try again.</translation>
+        <translation>Neniu mezuro selektiĝis:
+Bonvole selektu mezuron kaj reprovu.</translation>
     </message>
     <message>
         <source>synthesizer</source>
@@ -6741,7 +6944,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>File Operations</source>
-        <translation>File Operations</translation>
+        <translation>Dosieroperacioj</translation>
     </message>
     <message>
         <source>Transport Tools</source>
@@ -6765,7 +6968,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>Open &amp;Recent</source>
-        <translation>Open &amp;Recent</translation>
+        <translation>Malfermi &amp;Lastatempa</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
@@ -6801,11 +7004,11 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>T&amp;uplets</source>
-        <translation type="unfinished"/>
+        <translation>D&amp;uoloj</translation>
     </message>
     <message>
         <source>&amp;Layout</source>
-        <translation>&amp;Layout</translation>
+        <translation>&amp;Aranĝo</translation>
     </message>
     <message>
         <source>&amp;Style</source>
@@ -6839,11 +7042,11 @@ Restore session?</source>
     </message>
     <message>
         <source>MuseScore: Tuplet Error</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Eraro je duolo</translation>
     </message>
     <message>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
-        <translation type="unfinished"/>
+        <translation>Krei duolon kun rilato %1 por daŭro %2 ne eblas</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -6898,7 +7101,7 @@ bonvole elektu malsaman nomon:</translation>
     <message>
         <source>System</source>
         <extracomment>The default language of the operating system. NOT a music system.</extracomment>
-        <translation>System</translation>
+        <translation>Liniargrupo</translation>
     </message>
     <message>
         <source>Please select one or more measures</source>
@@ -6939,11 +7142,11 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation type="unfinished"/>
+        <translation>Ĉiuj subtenataj dosieroj (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
     </message>
     <message>
         <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
-        <translation type="unfinished"/>
+        <translation>Ĉiuj subtenataj dosieroj (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</translation>
     </message>
     <message>
         <source>Zoom</source>
@@ -6959,7 +7162,7 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Key Signatures</source>
-        <translation>Key Signatures</translation>
+        <translation>Gamsignoj</translation>
     </message>
     <message>
         <source>Time Signatures</source>
@@ -6971,7 +7174,7 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Cannot create tuplet: Note value is too short</source>
-        <translation type="unfinished"/>
+        <translation>Krei duolon ne eblas: Notvaloro estas tro mallonga</translation>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
@@ -6991,7 +7194,7 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Show MIDI import panel</source>
-        <translation type="unfinished"/>
+        <translation>Montri MIDI-enportopanelon</translation>
     </message>
     <message>
         <source>Tempo text</source>
@@ -6999,11 +7202,11 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Staff text</source>
-        <translation type="unfinished"/>
+        <translation>Notliniara teksto</translation>
     </message>
     <message>
         <source>System text</source>
-        <translation type="unfinished"/>
+        <translation>Liniargrupa teksto</translation>
     </message>
     <message>
         <source>Rehearsal mark</source>
@@ -7023,7 +7226,7 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Change staff type</source>
-        <translation type="unfinished"/>
+        <translation>Ŝanĝi notliniaran tipon</translation>
     </message>
     <message>
         <source>Change instrument</source>
@@ -7163,10 +7366,14 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Cannot write into %1</source>
-        <translation type="unfinished"/>
+        <translation>Skribi en dosieron %1 ne eblas</translation>
     </message>
     <message>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ask for Help</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7248,7 +7455,7 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Select Key Signature and Tempo:</source>
-        <translation type="unfinished"/>
+        <translation>Selekti gamsignon kaj tempon:</translation>
     </message>
     <message>
         <source>Key Signature</source>
@@ -7310,7 +7517,7 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>%1 End of %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 Fino de %2</translation>
     </message>
     <message>
         <source>%1; Pitch: %2; Duration: %3%4</source>
@@ -7318,11 +7525,11 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Beat Slash</source>
-        <translation type="unfinished"/>
+        <translation>Pulsostreko</translation>
     </message>
     <message>
         <source>Rhythm Slash</source>
-        <translation type="unfinished"/>
+        <translation>Ritmostreko</translation>
     </message>
 </context>
 <context>
@@ -7340,7 +7547,7 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Properties...</source>
-        <translation>Properties…</translation>
+        <translation>Ecoj…</translation>
     </message>
     <message>
         <source>More Elements...</source>
@@ -7351,7 +7558,7 @@ bonvole elektu malsaman nomon:</translation>
     <name>Ms::PaletteBox</name>
     <message>
         <source>Palettes</source>
-        <translation>Palettes</translation>
+        <translation>Paletroj</translation>
     </message>
     <message>
         <source>Select workspace</source>
@@ -7367,18 +7574,18 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>new Palette</source>
-        <translation type="unfinished"/>
+        <translation>nova paletro</translation>
     </message>
     <message>
         <source>Single Palette</source>
-        <translation type="unfinished"/>
+        <translation>Unuopa paletro</translation>
     </message>
 </context>
 <context>
     <name>Ms::PaletteBoxButton</name>
     <message>
         <source>Palette Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Paletrecoj...</translation>
     </message>
     <message>
         <source>Insert New Palette...</source>
@@ -7386,11 +7593,11 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Move Palette Up</source>
-        <translation>Move Palette Up</translation>
+        <translation>Suprenmovi paletron</translation>
     </message>
     <message>
         <source>Move Palette Down</source>
-        <translation>Move Palette Down</translation>
+        <translation>Malsuprenmovi paletron</translation>
     </message>
     <message>
         <source>Enable Editing</source>
@@ -7427,15 +7634,15 @@ bonvole elektu malsaman nomon:</translation>
     <name>Ms::PluginCreator</name>
     <message>
         <source>File Operations</source>
-        <translation>File Operations</translation>
+        <translation>Dosieroperacioj</translation>
     </message>
     <message>
         <source>Edit Operations</source>
-        <translation type="unfinished"/>
+        <translation>Redakti operaciojn</translation>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>untitled</source>
@@ -7507,7 +7714,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>Choose Default Style for Imports</source>
-        <translation type="unfinished"/>
+        <translation>Elekti defaŭltostilo por enportoj</translation>
     </message>
     <message>
         <source>Choose Score Folder</source>
@@ -7558,7 +7765,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>Update</source>
-        <translation>Update</translation>
+        <translation>Ĝisdatigi</translation>
     </message>
     <message>
         <source>No update</source>
@@ -7641,10 +7848,6 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>file not found</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>No selection</source>
         <translation type="unfinished"/>
     </message>
@@ -7654,6 +7857,10 @@ failed: %2</source>
     </message>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7677,7 +7884,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Measure: %1</source>
-        <translation type="unfinished"/>
+        <translation>Mezuro: %1</translation>
     </message>
     <message>
         <source>Start Measure: %1; Start Beat: %2</source>
@@ -7685,11 +7892,11 @@ failed: %2</source>
     </message>
     <message>
         <source>End Measure: %1; End Beat: %2</source>
-        <translation type="unfinished"/>
+        <translation>Fina mezuro: %1; fina takto: %2</translation>
     </message>
     <message>
         <source>Staff %1</source>
-        <translation>Stave %1</translation>
+        <translation>Notliniaro %1</translation>
     </message>
 </context>
 <context>
@@ -7751,7 +7958,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Bend Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Fleksecoj...</translation>
     </message>
     <message>
         <source>Add</source>
@@ -7759,7 +7966,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Volta Properties...</source>
-        <translation>Volta Properties…</translation>
+        <translation>Ripetecoj…</translation>
     </message>
     <message>
         <source>Time Signature Properties...</source>
@@ -7767,11 +7974,11 @@ failed: %2</source>
     </message>
     <message>
         <source>Line Properties...</source>
-        <translation>Line Properties…</translation>
+        <translation>Liniecoj…</translation>
     </message>
     <message>
         <source>Staff Text Properties...</source>
-        <translation>Stave Text Properties...</translation>
+        <translation>Notliniaraj tekstecoj...</translation>
     </message>
     <message>
         <source>Change Instrument Properties...</source>
@@ -7783,7 +7990,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Staff Properties...</source>
-        <translation>Stave Properties...</translation>
+        <translation>Notliniarecoj...</translation>
     </message>
     <message>
         <source>Measure</source>
@@ -7791,7 +7998,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Measure Properties...</source>
-        <translation>Measure Properties…</translation>
+        <translation>Mezurecoj…</translation>
     </message>
     <message>
         <source>Style...</source>
@@ -7803,7 +8010,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Section Break Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Sekciosaltaj ecoj...</translation>
     </message>
     <message>
         <source>Change Instrument...</source>
@@ -7811,7 +8018,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Glissando Properties...</source>
-        <translation>Glissando Properties…</translation>
+        <translation>Glitecoj…</translation>
     </message>
     <message>
         <source>Select</source>
@@ -7843,7 +8050,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Split Staff...</source>
-        <translation>Split Stave...</translation>
+        <translation>Disigi notliniaron...</translation>
     </message>
     <message>
         <source>Object Debugger</source>
@@ -7878,7 +8085,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <source>System Text Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Liniargrupaj tekstecoj...</translation>
     </message>
     <message>
         <source>Resolution (%1 DPI)...</source>
@@ -7963,6 +8170,11 @@ Please select a range of measures to join and try again</source>
         <source>Transparent background</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::SearchComboBox</name>
@@ -7983,7 +8195,7 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>End of </source>
-        <translation type="unfinished"/>
+        <translation>Fino de</translation>
     </message>
     <message>
         <source>Annotations:</source>
@@ -8031,7 +8243,7 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>MuseScore: System Text Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Liniargrupaj tekstecoj</translation>
     </message>
     <message>
         <source>MuseScore: Staff Text Properties</source>
@@ -8208,7 +8420,7 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Update Available</source>
-        <translation>Update Available</translation>
+        <translation>Ĝisdatigo haveblas</translation>
     </message>
     <message>
         <source>No Update Available</source>
@@ -8267,7 +8479,7 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Finished! &lt;a href=&quot;%1&quot;&gt;Go to my score&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Finis! &lt;a href=&quot;%1&quot;&gt;Iri al mia partituro&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Error</source>
@@ -8540,11 +8752,11 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Odd Page Margins</source>
-        <translation>Odd Page Margins</translation>
+        <translation>Neparaj paĝmarĝenoj</translation>
     </message>
     <message>
         <source>Even Page Margins</source>
-        <translation>Even Page Margins</translation>
+        <translation>Paraj paĝmarĝenoj</translation>
     </message>
     <message>
         <source>Preview</source>
@@ -8560,7 +8772,7 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>Nuligi</translation>
     </message>
     <message>
         <source>Two sided</source>
@@ -8587,7 +8799,7 @@ bonvole elektu malsaman nomon:</translation>
     <name>Palette</name>
     <message>
         <source>Beam Properties</source>
-        <translation>Beam Properties</translation>
+        <translation>Trabecoj</translation>
     </message>
     <message>
         <source>Dynamics</source>
@@ -8603,11 +8815,11 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Barlines</source>
-        <translation>Bar lines</translation>
+        <translation>Taktostrekoj</translation>
     </message>
     <message>
         <source>Breaks &amp;&amp; Spacers</source>
-        <translation type="unfinished"/>
+        <translation>Rompoj kaj interlinioj</translation>
     </message>
     <message>
         <source>Fingering</source>
@@ -8623,7 +8835,7 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Brackets</source>
-        <translation>Brackets</translation>
+        <translation>Krampoj</translation>
     </message>
     <message>
         <source>Breaths &amp;&amp; Pauses</source>
@@ -8635,7 +8847,7 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation>Grace Notes</translation>
+        <translation>Notetoj</translation>
     </message>
     <message>
         <source>Lines</source>
@@ -8647,19 +8859,19 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Prima volta</source>
-        <translation>Prima volta</translation>
+        <translation>Unua ripeto</translation>
     </message>
     <message>
         <source>Seconda volta</source>
-        <translation>Seconda volta</translation>
+        <translation>Dua ripeto</translation>
     </message>
     <message>
         <source>Terza volta</source>
-        <translation>Terza volta</translation>
+        <translation>Tria ripeto</translation>
     </message>
     <message>
         <source>Seconda volta 2</source>
-        <translation>Seconda volta 2</translation>
+        <translation>Dua ripeto 2</translation>
     </message>
     <message>
         <source>8va</source>
@@ -8711,7 +8923,7 @@ bonvole elektu malsaman nomon:</translation>
     </message>
     <message>
         <source>Staff Changes</source>
-        <translation type="unfinished"/>
+        <translation>Notliniaraj ŝanĝoj</translation>
     </message>
     <message>
         <source>Arpeggios &amp;&amp; Glissandi</source>
@@ -8789,7 +9001,7 @@ failed: </source>
     </message>
     <message>
         <source>Double barline</source>
-        <translation type="unfinished"/>
+        <translation>Duobla taktostreko</translation>
     </message>
     <message>
         <source>Start repeat</source>
@@ -8938,7 +9150,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI sound for part</source>
-        <translation>midi sound for part</translation>
+        <translation>MIDI-sono por parto</translation>
     </message>
     <message>
         <source>Part name</source>
@@ -8950,7 +9162,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI sound</source>
-        <translation type="unfinished"/>
+        <translation>MIDI-sono</translation>
     </message>
     <message>
         <source>Part Name</source>
@@ -9266,7 +9478,7 @@ failed: </source>
     </message>
     <message>
         <source>Enable MIDI input</source>
-        <translation>Enable MIDI input</translation>
+        <translation>Ebligi enigon de MIDI</translation>
     </message>
     <message>
         <source>Play notes when editing</source>
@@ -9318,7 +9530,7 @@ failed: </source>
     </message>
     <message>
         <source>Use JACK MIDI</source>
-        <translation type="unfinished"/>
+        <translation>Uzi MIDI-programaron JACK</translation>
     </message>
     <message>
         <source>Remember last connection(s)</source>
@@ -9414,7 +9626,7 @@ failed: </source>
     </message>
     <message>
         <source>Import</source>
-        <translation>Import</translation>
+        <translation>Enporti</translation>
     </message>
     <message>
         <source>Style Used for Import</source>
@@ -9434,11 +9646,11 @@ failed: </source>
     </message>
     <message>
         <source>Overture import character set:</source>
-        <translation type="unfinished"/>
+        <translation>Signaro por enporti de dosiero Overture</translation>
     </message>
     <message>
         <source>Guitar Pro import character set:</source>
-        <translation type="unfinished"/>
+        <translation>Signaro por enporti de dosiero Guitar Pro</translation>
     </message>
     <message>
         <source>MusicXML</source>
@@ -9446,15 +9658,15 @@ failed: </source>
     </message>
     <message>
         <source>Import layout</source>
-        <translation type="unfinished"/>
+        <translation>Enporti aranĝon</translation>
     </message>
     <message>
         <source>Import system and page breaks</source>
-        <translation type="unfinished"/>
+        <translation>Enporti liniargrupajn kaj paĝajn saltojn</translation>
     </message>
     <message>
         <source>MIDI</source>
-        <translation type="unfinished"/>
+        <translation>MIDI — ‘Muzik-Instrumenta digitala interfaco’</translation>
     </message>
     <message>
         <source>Quarter</source>
@@ -9478,7 +9690,7 @@ failed: </source>
     </message>
     <message>
         <source>Export</source>
-        <translation>Export</translation>
+        <translation>Elporti</translation>
     </message>
     <message>
         <source>PNG/SVG</source>
@@ -9498,19 +9710,19 @@ failed: </source>
     </message>
     <message>
         <source>Export layout</source>
-        <translation type="unfinished"/>
+        <translation>Elporti aranĝon</translation>
     </message>
     <message>
         <source>Export all system and page breaks</source>
-        <translation type="unfinished"/>
+        <translation>Elporti ĉiujn liniargrupajn kaj paĝajn saltojn</translation>
     </message>
     <message>
         <source>Export manually added system and page breaks only</source>
-        <translation type="unfinished"/>
+        <translation>Nur elporti mane aldonitajn liniargrupajn kaj paĝajn saltajn</translation>
     </message>
     <message>
         <source>Do not export system or page breaks</source>
-        <translation type="unfinished"/>
+        <translation>Ne elportu liniargrupajn aŭ paĝajn saltojn</translation>
     </message>
     <message>
         <source>Shortcuts</source>
@@ -9538,7 +9750,7 @@ failed: </source>
     </message>
     <message>
         <source>Update</source>
-        <translation>Update</translation>
+        <translation>Ĝisdatigi </translation>
     </message>
     <message>
         <source>Automatic Update Check</source>
@@ -9546,7 +9758,7 @@ failed: </source>
     </message>
     <message>
         <source>Start empty</source>
-        <translation>start empty</translation>
+        <translation>Starti vake</translation>
     </message>
     <message>
         <source>Continue last session</source>
@@ -9582,7 +9794,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI remote control</source>
-        <translation type="unfinished"/>
+        <translation>MIDI-teleregilo</translation>
     </message>
     <message>
         <source>Rewind</source>
@@ -9650,7 +9862,7 @@ failed: </source>
     </message>
     <message>
         <source>Character Set Used When Importing Binary Files</source>
-        <translation type="unfinished"/>
+        <translation>Signaro uzita dum la enporto de duumaj dosieroj</translation>
     </message>
     <message>
         <source>Shortest note:</source>
@@ -9695,7 +9907,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI Input:</source>
-        <translation type="unfinished"/>
+        <translation>Enigo de MIDI:</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -9895,7 +10107,7 @@ failed: </source>
     </message>
     <message>
         <source>Enable MIDI Input</source>
-        <translation>MIDI_a enigon ebligi</translation>
+        <translation>Ebligi enigon de MIDI</translation>
     </message>
     <message>
         <source>Default duration</source>
@@ -10071,11 +10283,11 @@ failed: </source>
     </message>
     <message>
         <source>MIDI Input</source>
-        <translation type="unfinished"/>
+        <translation>Enigo de MIDI</translation>
     </message>
     <message>
         <source>Choose MIDI Input</source>
-        <translation type="unfinished"/>
+        <translation>Selekti enigon de MIDI</translation>
     </message>
     <message>
         <source>Device</source>
@@ -10111,7 +10323,7 @@ failed: </source>
     </message>
     <message>
         <source>Import Tab</source>
-        <translation type="unfinished"/>
+        <translation>Enporti langeton</translation>
     </message>
     <message>
         <source>Build in style</source>
@@ -10123,19 +10335,19 @@ failed: </source>
     </message>
     <message>
         <source>Overture import character set</source>
-        <translation type="unfinished"/>
+        <translation>Enportsignaro por dosiero Overture</translation>
     </message>
     <message>
         <source>Choose Overture import character set</source>
-        <translation type="unfinished"/>
+        <translation>Elekti enportsignaron por dosiero Overture</translation>
     </message>
     <message>
         <source>Guitar Pro import character set</source>
-        <translation type="unfinished"/>
+        <translation>Enportsignaro por dosiero Guitar Pro</translation>
     </message>
     <message>
         <source>Choose Guitar Pro import character set</source>
-        <translation type="unfinished"/>
+        <translation>Elekti enportsignaron por dosiero Guitar Pro</translation>
     </message>
     <message>
         <source>Shortest note</source>
@@ -10243,7 +10455,7 @@ failed: </source>
     </message>
     <message>
         <source>Enable MIDI remote control</source>
-        <translation type="unfinished"/>
+        <translation>Ebligi MIDI-teleregilon</translation>
     </message>
     <message>
         <source>Is active</source>
@@ -10271,7 +10483,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI Remote Control</source>
-        <translation>MIDI Remote Control</translation>
+        <translation>MIDI-teleregilo</translation>
     </message>
     <message>
         <source>Show start center</source>
@@ -10315,15 +10527,15 @@ failed: </source>
     </message>
     <message>
         <source>Note input</source>
-        <translation type="unfinished"/>
+        <translation>Noton enigi</translation>
     </message>
     <message>
         <source>Note input is active</source>
-        <translation type="unfinished"/>
+        <translation>Notenigo estas aktiva</translation>
     </message>
     <message>
         <source>Note input record</source>
-        <translation type="unfinished"/>
+        <translation>Noteniga rikordo</translation>
     </message>
     <message>
         <source>Folders</source>
@@ -10361,6 +10573,14 @@ failed: </source>
         <source>Filter</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Elporti RPN-ojn</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10368,7 +10588,9 @@ failed: </source>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
-        <translation type="unfinished"/>
+        <translation>Nek noto nek liriko estis elektita:
+Bonvole elektu unuopan noton aŭ lirikon, kaj reprovi la operacion.
+</translation>
     </message>
     <message>
         <source>Please select a single note or slur and retry operation
@@ -10384,7 +10606,7 @@ Please select a single note or lyrics and retry operation
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>No note or figured bass selected:
@@ -10454,7 +10676,8 @@ failed: %2</source>
     <message>
         <source>Cannot read file %1:
 </source>
-        <translation type="unfinished"/>
+        <translation>Legi dosieron %1 ne eblas:
+</translation>
     </message>
     <message>
         <source>bad format</source>
@@ -10701,7 +10924,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Import Capella</source>
-        <translation>MuseScore: Import Capella</translation>
+        <translation>MuseScore: Enporti de dosiero Capella</translation>
     </message>
     <message>
         <source>Load failed: </source>
@@ -10709,11 +10932,11 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Import Guitar Pro</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Enporti de dosiero Guitar Pro</translation>
     </message>
     <message>
         <source>MuseScore: Load MIDI</source>
-        <translation>MuseScore: load MIDI</translation>
+        <translation>MuseScore: Ŝargi MIDI-datumoj</translation>
     </message>
     <message>
         <source>MuseScore: Load Style Failed</source>
@@ -10840,7 +11063,7 @@ Do you want to overwrite it?</source>
     <name>SectionBreakProperties</name>
     <message>
         <source>MuseScore: Section Break Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: sekciosaltaj ecoj</translation>
     </message>
     <message>
         <source>Pause:</source>
@@ -10856,7 +11079,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Start new section with measure number one</source>
-        <translation type="unfinished"/>
+        <translation>Komenci novan sekcion kun mezurnumero unu.</translation>
     </message>
 </context>
 <context>
@@ -10875,11 +11098,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Element type:</source>
-        <translation type="unfinished"/>
+        <translation>Ertipo:</translation>
     </message>
     <message>
         <source>Same staff</source>
-        <translation type="unfinished"/>
+        <translation>Sama notliniaro</translation>
     </message>
     <message>
         <source>Same voice</source>
@@ -10891,7 +11114,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Same system</source>
-        <translation type="unfinished"/>
+        <translation>Sama liniargrupo</translation>
     </message>
     <message>
         <source>Replace selection</source>
@@ -10980,7 +11203,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>Nuligi</translation>
     </message>
     <message>
         <source>Enter Shortcut Sequence</source>
@@ -11007,7 +11230,7 @@ Do you want to overwrite it?</source>
     <name>SplitStaff</name>
     <message>
         <source>MuseScore: Edit Staff/Part Properties</source>
-        <translation>MuseScore: Edit Stave/Part Properties</translation>
+        <translation>MuseScore: Redakti notliniaraj/partaj ecoj</translation>
     </message>
     <message>
         <source>Split Staff</source>
@@ -11099,7 +11322,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>MIDI Action</source>
-        <translation>MIDI’a ago</translation>
+        <translation>Ago de MIDI</translation>
     </message>
     <message>
         <source>Voice:</source>
@@ -11192,6 +11415,14 @@ Do you want to overwrite it?</source>
     <message>
         <source>System flag</source>
         <translation>Liniargrupa flago</translation>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -11387,7 +11618,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Text margin:</source>
-        <translation type="unfinished"/>
+        <translation>Teksta marĝeno:</translation>
     </message>
     <message>
         <source>Border radius:</source>
@@ -11579,11 +11810,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Duolo</translation>
     </message>
     <message>
         <source>System</source>
-        <translation>System</translation>
+        <translation>Liniargrupo</translation>
     </message>
     <message>
         <source>Staff</source>
@@ -11611,7 +11842,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Volta</source>
-        <translation>Volta</translation>
+        <translation>Ripetosigno</translation>
     </message>
     <message>
         <source>Frame</source>
@@ -11631,7 +11862,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Ottava</source>
-        <translation>Ottava</translation>
+        <translation>Oktigo</translation>
     </message>
     <message>
         <source>Bend</source>
@@ -11736,7 +11967,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Add time signature to palette</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni taktosignon al paletro</translation>
     </message>
 </context>
 <context>
@@ -11782,7 +12013,7 @@ Do you want to overwrite it?</source>
     <name>TimesigWizard</name>
     <message>
         <source>Enter Time Signature:</source>
-        <translation>Enter Time Signature:</translation>
+        <translation>Enigi taktosignon:</translation>
     </message>
     <message>
         <source>/</source>
@@ -11854,7 +12085,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Enter Number of Measures</source>
-        <translation type="unfinished"/>
+        <translation>Enigi la nombron de mezuroj</translation>
     </message>
     <message>
         <source>Measures</source>
@@ -11897,7 +12128,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Up</source>
-        <translation>Up</translation>
+        <translation>Supren</translation>
     </message>
     <message>
         <source>Down</source>
@@ -12041,7 +12272,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Keep degree alterations</source>
-        <translation type="unfinished"/>
+        <translation>Konservi gradaliigojn</translation>
     </message>
     <message>
         <source>Options</source>
@@ -12097,11 +12328,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Single Sharps and Flats Only</source>
-        <translation type="unfinished"/>
+        <translation>Nur unuopaj diesoj kaj bemoloj</translation>
     </message>
     <message>
         <source>Use Double Sharps and Flats</source>
-        <translation type="unfinished"/>
+        <translation>Uzi duoblajn diesojn kaj bemolojn</translation>
     </message>
     <message>
         <source>Transpose Chromatically</source>
@@ -12124,19 +12355,19 @@ Do you want to overwrite it?</source>
     <name>Tremolo</name>
     <message>
         <source>Eighth through stem</source>
-        <translation type="unfinished"/>
+        <translation>Oka tra linieto</translation>
     </message>
     <message>
         <source>16th through stem</source>
-        <translation type="unfinished"/>
+        <translation>16-a tra linieto</translation>
     </message>
     <message>
         <source>32nd through stem</source>
-        <translation type="unfinished"/>
+        <translation>32-a tra linieto</translation>
     </message>
     <message>
         <source>64th through stem</source>
-        <translation type="unfinished"/>
+        <translation>64-a tra linieto</translation>
     </message>
     <message>
         <source>Eighth between notes</source>
@@ -12198,14 +12429,14 @@ Do you want to overwrite it?</source>
     <name>TupletBase</name>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Duolo</translation>
     </message>
 </context>
 <context>
     <name>TupletDialog</name>
     <message>
         <source>MuseScore: Create Tuplet</source>
-        <translation>MuseScore: create tuplet</translation>
+        <translation>MuseScore: Krei duolon</translation>
     </message>
     <message>
         <source>Type</source>
@@ -12225,7 +12456,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Bracket</source>
-        <translation>Bracket</translation>
+        <translation>Krampo</translation>
     </message>
     <message>
         <source>Relation:</source>
@@ -12241,7 +12472,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Auto bracket</source>
-        <translation>auto bracket</translation>
+        <translation>Aŭtomate krampi</translation>
     </message>
 </context>
 <context>
@@ -12295,7 +12526,7 @@ Do you want to overwrite it?</source>
     <name>VoltaPropertyBase</name>
     <message>
         <source>Volta Properties</source>
-        <translation>Volta Properties</translation>
+        <translation>Ripetecoj</translation>
     </message>
     <message>
         <source>Text:</source>
@@ -12323,7 +12554,7 @@ failed: </source>
     <name>XmlStream</name>
     <message>
         <source>Extra content at end of document.</source>
-        <translation type="unfinished"/>
+        <translation>Ekstra enhavo en dokumentfino</translation>
     </message>
     <message>
         <source>Invalid entity value.</source>
@@ -12347,7 +12578,7 @@ failed: </source>
     </message>
     <message>
         <source>Illegal namespace declaration.</source>
-        <translation type="unfinished"/>
+        <translation>Malpermesita nomspaca deklaro.</translation>
     </message>
     <message>
         <source>Attribute redefined.</source>
@@ -12359,7 +12590,7 @@ failed: </source>
     </message>
     <message>
         <source>Invalid XML version string.</source>
-        <translation type="unfinished"/>
+        <translation>Nevalida XML-versia signovico.</translation>
     </message>
     <message>
         <source>Unsupported XML version.</source>
@@ -12383,11 +12614,11 @@ failed: </source>
     </message>
     <message>
         <source>Invalid attribute in XML declaration.</source>
-        <translation type="unfinished"/>
+        <translation>Nevalida atribuo en XML-deklaro.</translation>
     </message>
     <message>
         <source>Premature end of document.</source>
-        <translation type="unfinished"/>
+        <translation>Antaŭtempa dokumentfino</translation>
     </message>
     <message>
         <source>Invalid document.</source>
@@ -12407,7 +12638,7 @@ failed: </source>
     </message>
     <message>
         <source>Expected character data.</source>
-        <translation type="unfinished"/>
+        <translation>Signodatumoj esperiĝis.</translation>
     </message>
 </context>
 <context>
@@ -12422,7 +12653,7 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>SoundFont %1 already loaded</source>
@@ -12430,7 +12661,7 @@ failed: </source>
     </message>
     <message>
         <source>Cannot load SoundFont %1</source>
-        <translation type="unfinished"/>
+        <translation>Ŝargi sontiparon %1 ne eblas</translation>
     </message>
 </context>
 <context>
@@ -12461,11 +12692,11 @@ failed: </source>
     </message>
     <message>
         <source>Flat-slash</source>
-        <translation type="unfinished"/>
+        <translation>Bemolostreko</translation>
     </message>
     <message>
         <source>Flat-slash2</source>
-        <translation type="unfinished"/>
+        <translation>Bemolostreko 2</translation>
     </message>
     <message>
         <source>Mirrored-flat2</source>
@@ -12513,15 +12744,15 @@ failed: </source>
     </message>
     <message>
         <source>Flat arrow up</source>
-        <translation type="unfinished"/>
+        <translation>Supren bemolsago</translation>
     </message>
     <message>
         <source>Flat arrow down</source>
-        <translation type="unfinished"/>
+        <translation>Malsupren bemolsago</translation>
     </message>
     <message>
         <source>Flat arrow both</source>
-        <translation type="unfinished"/>
+        <translation>Ambaŭen bemolsago</translation>
     </message>
     <message>
         <source>Natural arrow up</source>
@@ -12600,11 +12831,11 @@ failed: </source>
     </message>
     <message>
         <source>Export...</source>
-        <translation type="unfinished"/>
+        <translation>Elporti...</translation>
     </message>
     <message>
         <source>Export score</source>
-        <translation type="unfinished"/>
+        <translation>Elporti partituron</translation>
     </message>
     <message>
         <source>Save a copy of the score in various formats</source>
@@ -12612,7 +12843,7 @@ failed: </source>
     </message>
     <message>
         <source>Export Parts...</source>
-        <translation type="unfinished"/>
+        <translation>Elporti partojn...</translation>
     </message>
     <message>
         <source>Save a copy of the score&apos;s parts in various formats</source>
@@ -13020,7 +13251,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset beam mode</source>
-        <translation type="unfinished"/>
+        <translation>Trabreĝimon reeki</translation>
     </message>
     <message>
         <source>Reset beam mode of selected measures</source>
@@ -13032,7 +13263,7 @@ failed: </source>
     </message>
     <message>
         <source>Up</source>
-        <translation>Up</translation>
+        <translation>Supren</translation>
     </message>
     <message>
         <source>Pitch up or move text or articulation up</source>
@@ -13184,11 +13415,11 @@ failed: </source>
     </message>
     <message>
         <source>Add staff above to selection</source>
-        <translation>liniaron aldoni super elektaĵo</translation>
+        <translation>Aldoni supran liniaron al elektaĵo</translation>
     </message>
     <message>
         <source>Add staff below to selection</source>
-        <translation>liniaron aldoni malsuper elektaĵo</translation>
+        <translation>Aldoni malsupran liniaron al elektaĵo</translation>
     </message>
     <message>
         <source>Slur</source>
@@ -13200,35 +13431,35 @@ failed: </source>
     </message>
     <message>
         <source>Crescendo</source>
-        <translation>crescendo</translation>
+        <translation>Kresĉendo</translation>
     </message>
     <message>
         <source>Add crescendo</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni kresĉendon</translation>
     </message>
     <message>
         <source>Decrescendo</source>
-        <translation>decrescendo</translation>
+        <translation>Diminuendo</translation>
     </message>
     <message>
         <source>Add decrescendo</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni diminuendon</translation>
     </message>
     <message>
         <source>Ottava 8va</source>
-        <translation type="unfinished"/>
+        <translation>Oktigo 8va</translation>
     </message>
     <message>
         <source>Add ottava 8va</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni oktigon 8va</translation>
     </message>
     <message>
         <source>Ottava 8vb</source>
-        <translation type="unfinished"/>
+        <translation>Oktigo 8vb</translation>
     </message>
     <message>
         <source>Add ottava 8vb</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni oktigon 8vb</translation>
     </message>
     <message>
         <source>Escape</source>
@@ -13272,7 +13503,7 @@ failed: </source>
     </message>
     <message>
         <source>Insert One Measure</source>
-        <translation type="unfinished"/>
+        <translation>Enmeti unu mezuron</translation>
     </message>
     <message>
         <source>Insert Measures...</source>
@@ -13292,7 +13523,7 @@ failed: </source>
     </message>
     <message>
         <source>Append Text Frame</source>
-        <translation type="unfinished"/>
+        <translation>Almeti tekstokadron</translation>
     </message>
     <message>
         <source>Insert Vertical Frame</source>
@@ -13308,35 +13539,35 @@ failed: </source>
     </message>
     <message>
         <source>Duplet</source>
-        <translation>Duonnotaro</translation>
+        <translation>Duolo</translation>
     </message>
     <message>
         <source>Triplet</source>
-        <translation>Trionnotaro</translation>
+        <translation>Triolo</translation>
     </message>
     <message>
         <source>Quadruplet</source>
-        <translation>Kvaronnotaro</translation>
+        <translation>Kvarolo</translation>
     </message>
     <message>
         <source>Quintuplet</source>
-        <translation>Kvinonnotaro</translation>
+        <translation>Kvinolo</translation>
     </message>
     <message>
         <source>Sextuplet</source>
-        <translation>Sesonnotaro</translation>
+        <translation>Sesolo</translation>
     </message>
     <message>
         <source>Septuplet</source>
-        <translation>Seponnotaro</translation>
+        <translation>Sepolo</translation>
     </message>
     <message>
         <source>Octuplet</source>
-        <translation>Okonnotaro</translation>
+        <translation>Okolo</translation>
     </message>
     <message>
         <source>Nonuplet</source>
-        <translation>Naŭonnotaro</translation>
+        <translation>Naŭolo</translation>
     </message>
     <message>
         <source>Other...</source>
@@ -13344,7 +13575,7 @@ failed: </source>
     </message>
     <message>
         <source>Other tuplets</source>
-        <translation>Aliaj notaroj</translation>
+        <translation>Aliaj duoloj</translation>
     </message>
     <message>
         <source>Longa</source>
@@ -13456,23 +13687,23 @@ failed: </source>
     </message>
     <message>
         <source>Grace: quarter</source>
-        <translation type="unfinished"/>
+        <translation>Noteto: kvarona</translation>
     </message>
     <message>
         <source>Grace: 16th</source>
-        <translation type="unfinished"/>
+        <translation>Noteto: 16-a</translation>
     </message>
     <message>
         <source>Add 16th grace note</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni 16-an noteton</translation>
     </message>
     <message>
         <source>Grace: 32nd</source>
-        <translation type="unfinished"/>
+        <translation>Noteto: 32-a</translation>
     </message>
     <message>
         <source>Add 32nd grace note</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni 32-an noteton</translation>
     </message>
     <message>
         <source>1</source>
@@ -13508,7 +13739,7 @@ failed: </source>
     </message>
     <message>
         <source>Enable MIDI input</source>
-        <translation>Enable MIDI input</translation>
+        <translation>Ebligi enigon de MIDI</translation>
     </message>
     <message>
         <source>Beam start</source>
@@ -13516,7 +13747,7 @@ failed: </source>
     </message>
     <message>
         <source>Beam middle</source>
-        <translation type="unfinished"/>
+        <translation>Trabmezo</translation>
     </message>
     <message>
         <source>No beam</source>
@@ -13528,7 +13759,7 @@ failed: </source>
     </message>
     <message>
         <source>Auto beam</source>
-        <translation>memtrabi</translation>
+        <translation>Aŭtomate trabi</translation>
     </message>
     <message>
         <source>Feathered beam, slower</source>
@@ -13537,10 +13768,6 @@ failed: </source>
     <message>
         <source>Feathered beam, faster</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Palette</source>
-        <translation>Paletro</translation>
     </message>
     <message>
         <source>Play Panel</source>
@@ -13552,7 +13779,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI Import Panel</source>
-        <translation type="unfinished"/>
+        <translation>MIDI-enportopanelo</translation>
     </message>
     <message>
         <source>Mixer</source>
@@ -13579,10 +13806,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Tempo Marking...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Add tempo marking</source>
         <translation type="unfinished"/>
     </message>
@@ -13592,7 +13815,7 @@ failed: </source>
     </message>
     <message>
         <source>Add system text</source>
-        <translation>Liniararan tekston aldoni</translation>
+        <translation>Aldoni liniargrupan tekston</translation>
     </message>
     <message>
         <source>Staff Text</source>
@@ -13600,7 +13823,7 @@ failed: </source>
     </message>
     <message>
         <source>Add staff text</source>
-        <translation>Liniaran tekston aldoni</translation>
+        <translation>Aldoni liniaran tekston</translation>
     </message>
     <message>
         <source>Text</source>
@@ -13824,7 +14047,7 @@ failed: </source>
     </message>
     <message>
         <source>Toggle Section Break</source>
-        <translation type="unfinished"/>
+        <translation>Baskuligi sekciosalton</translation>
     </message>
     <message>
         <source>Edit Element</source>
@@ -13864,7 +14087,7 @@ failed: </source>
     </message>
     <message>
         <source>Show Page Margins</source>
-        <translation type="unfinished"/>
+        <translation>Montri paĝmarĝenojn</translation>
     </message>
     <message>
         <source>Insert Special Characters...</source>
@@ -13937,10 +14160,6 @@ failed: </source>
     <message>
         <source>Repeat selection</source>
         <translation>Ripeti la elektaĵon</translation>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
@@ -14016,7 +14235,7 @@ failed: </source>
     </message>
     <message>
         <source>Split Measure</source>
-        <translation type="unfinished"/>
+        <translation>Disrompi mezuron</translation>
     </message>
     <message>
         <source>Page Settings...</source>
@@ -14052,7 +14271,7 @@ failed: </source>
     </message>
     <message>
         <source>Show inspector</source>
-        <translation type="unfinished"/>
+        <translation>Montri reviziilon</translation>
     </message>
     <message>
         <source>Loop</source>
@@ -14164,7 +14383,7 @@ failed: </source>
     </message>
     <message>
         <source>Decrease active duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Malkreski aktiva daŭro (TAB)</translation>
     </message>
     <message>
         <source>Rest (TAB)</source>
@@ -14268,7 +14487,7 @@ failed: </source>
     </message>
     <message>
         <source>Add quarter grace note</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni kvaronnoteton</translation>
     </message>
     <message>
         <source>Chord Symbols...</source>
@@ -14380,7 +14599,7 @@ failed: </source>
     </message>
     <message>
         <source>Add brackets to element</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni krampojn al ero</translation>
     </message>
     <message>
         <source>Selection Filter</source>
@@ -14400,11 +14619,11 @@ failed: </source>
     </message>
     <message>
         <source>Go to the first element</source>
-        <translation type="unfinished"/>
+        <translation>Iri al la unua ero</translation>
     </message>
     <message>
         <source>Go to the last element</source>
-        <translation type="unfinished"/>
+        <translation>Iri al la lasta ero</translation>
     </message>
     <message>
         <source>Key Signatures...</source>
@@ -14412,7 +14631,7 @@ failed: </source>
     </message>
     <message>
         <source>Show key signature palette</source>
-        <translation type="unfinished"/>
+        <translation>Montri gamsignan paletron</translation>
     </message>
     <message>
         <source>Time Signatures...</source>
@@ -14420,7 +14639,7 @@ failed: </source>
     </message>
     <message>
         <source>Show time signature palette</source>
-        <translation type="unfinished"/>
+        <translation>Montri taktosignan paletron</translation>
     </message>
     <message>
         <source>Symbols...</source>
@@ -14428,7 +14647,7 @@ failed: </source>
     </message>
     <message>
         <source>Show symbol palette</source>
-        <translation type="unfinished"/>
+        <translation>Montri simbolaran paletron</translation>
     </message>
     <message>
         <source>Grace: eighth after</source>
@@ -14448,7 +14667,7 @@ failed: </source>
     </message>
     <message>
         <source>Insert one measure</source>
-        <translation type="unfinished"/>
+        <translation>Enmeti unu mezuron</translation>
     </message>
     <message>
         <source>Insert horizontal frame</source>
@@ -14472,7 +14691,7 @@ failed: </source>
     </message>
     <message>
         <source>Save Online...</source>
-        <translation type="unfinished"/>
+        <translation>Enrete konservi...</translation>
     </message>
     <message>
         <source>Save score on MuseScore.com</source>
@@ -14496,11 +14715,11 @@ failed: </source>
     </message>
     <message>
         <source>Fill With Slashes</source>
-        <translation type="unfinished"/>
+        <translation>Plenigi je oblikvaj strekoj</translation>
     </message>
     <message>
         <source>Toggle Rhythmic Slash Notation</source>
-        <translation type="unfinished"/>
+        <translation>Baskuligi ritmostrekan notacion</translation>
     </message>
     <message>
         <source>Start Center</source>
@@ -14552,7 +14771,7 @@ failed: </source>
     </message>
     <message>
         <source>Add/Remove Line Breaks...</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni/Forigi liniorompojn...</translation>
     </message>
     <message>
         <source>File: Open</source>
@@ -14564,7 +14783,7 @@ failed: </source>
     </message>
     <message>
         <source>File: Save online</source>
-        <translation type="unfinished"/>
+        <translation>Dosieron: Enrete konservi</translation>
     </message>
     <message>
         <source>File: Save as</source>
@@ -14580,7 +14799,7 @@ failed: </source>
     </message>
     <message>
         <source>Export parts</source>
-        <translation type="unfinished"/>
+        <translation>Elporti partojn</translation>
     </message>
     <message>
         <source>File: Close</source>
@@ -14592,7 +14811,7 @@ failed: </source>
     </message>
     <message>
         <source>Note input</source>
-        <translation type="unfinished"/>
+        <translation>Noton enigi</translation>
     </message>
     <message>
         <source>Respell pitches</source>
@@ -14620,7 +14839,7 @@ failed: </source>
     </message>
     <message>
         <source>Next Element</source>
-        <translation type="unfinished"/>
+        <translation>Sekva ero</translation>
     </message>
     <message>
         <source>Accessibility: Next element</source>
@@ -14636,11 +14855,11 @@ failed: </source>
     </message>
     <message>
         <source>First Element</source>
-        <translation type="unfinished"/>
+        <translation>Unua ero</translation>
     </message>
     <message>
         <source>Last Element</source>
-        <translation type="unfinished"/>
+        <translation>Lasta ero</translation>
     </message>
     <message>
         <source>Move Down</source>
@@ -14700,7 +14919,7 @@ failed: </source>
     </message>
     <message>
         <source>Select to End of Line</source>
-        <translation type="unfinished"/>
+        <translation>Selekti ĝis liniofino </translation>
     </message>
     <message>
         <source>Select to Beginning of Score</source>
@@ -14708,15 +14927,15 @@ failed: </source>
     </message>
     <message>
         <source>Select to End of Score</source>
-        <translation type="unfinished"/>
+        <translation>Selekti ĝis fino de partituro</translation>
     </message>
     <message>
         <source>Add Staff Above to Selection</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni supran liniaron al elektaĵo</translation>
     </message>
     <message>
         <source>Add Staff Below to Selection</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni malsupran liniaron al elektaĵo</translation>
     </message>
     <message>
         <source>Page: Previous</source>
@@ -14732,7 +14951,7 @@ failed: </source>
     </message>
     <message>
         <source>Page: End</source>
-        <translation type="unfinished"/>
+        <translation>Paĝo: Fino</translation>
     </message>
     <message>
         <source>Full measure rest</source>
@@ -14744,7 +14963,7 @@ failed: </source>
     </message>
     <message>
         <source>Append one measure</source>
-        <translation type="unfinished"/>
+        <translation>Almeti unu mezuron</translation>
     </message>
     <message>
         <source>Append text frame</source>
@@ -14764,7 +14983,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Longa</source>
-        <translation type="unfinished"/>
+        <translation>Notodaŭro: longa</translation>
     </message>
     <message>
         <source>Double Whole Note</source>
@@ -14772,7 +14991,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Double whole</source>
-        <translation type="unfinished"/>
+        <translation>Notodaŭro: duobla</translation>
     </message>
     <message>
         <source>Whole Note</source>
@@ -14780,7 +14999,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Whole</source>
-        <translation type="unfinished"/>
+        <translation>Notodaŭro: plena</translation>
     </message>
     <message>
         <source>Half Note</source>
@@ -14788,7 +15007,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Half</source>
-        <translation type="unfinished"/>
+        <translation>Notodaŭro: duona</translation>
     </message>
     <message>
         <source>Quarter Note</source>
@@ -14796,7 +15015,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Quarter</source>
-        <translation type="unfinished"/>
+        <translation>Notodaŭro: kvarona</translation>
     </message>
     <message>
         <source>Eighth Note</source>
@@ -14804,7 +15023,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Eighth</source>
-        <translation type="unfinished"/>
+        <translation>Notodaŭro: okona</translation>
     </message>
     <message>
         <source>16th Note</source>
@@ -14824,11 +15043,11 @@ failed: </source>
     </message>
     <message>
         <source>Increase Active Duration</source>
-        <translation type="unfinished"/>
+        <translation>Kreskigi aktivan daŭron</translation>
     </message>
     <message>
         <source>Decrease Active Duration</source>
-        <translation type="unfinished"/>
+        <translation>Malkreski aktivan daŭron</translation>
     </message>
     <message>
         <source>Augmentation Dot</source>
@@ -14856,35 +15075,35 @@ failed: </source>
     </message>
     <message>
         <source>Double Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Duobla dieso</translation>
     </message>
     <message>
         <source>Note input: Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Notenigo: Duobla dieso</translation>
     </message>
     <message>
         <source>Note input: Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Notenigo: Dieso</translation>
     </message>
     <message>
         <source>Note input: Natural</source>
-        <translation type="unfinished"/>
+        <translation>Notenigo: Bekvadrato</translation>
     </message>
     <message>
         <source>Note input: Flat</source>
-        <translation type="unfinished"/>
+        <translation>Noton enigi: Bemolo</translation>
     </message>
     <message>
         <source>Double Flat</source>
-        <translation type="unfinished"/>
+        <translation>Duobla bemolo</translation>
     </message>
     <message>
         <source>Note input: Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Noton enigi: Duobla bemolo</translation>
     </message>
     <message>
         <source>Grace: Quarter</source>
-        <translation type="unfinished"/>
+        <translation>Noteto: kvarona</translation>
     </message>
     <message>
         <source>Grace: Eighth after</source>
@@ -14892,19 +15111,19 @@ failed: </source>
     </message>
     <message>
         <source>MIDI Input</source>
-        <translation type="unfinished"/>
+        <translation>Enigo de MIDI</translation>
     </message>
     <message>
         <source>Beam Start</source>
-        <translation type="unfinished"/>
+        <translation>Trabeko</translation>
     </message>
     <message>
         <source>Beam Middle</source>
-        <translation type="unfinished"/>
+        <translation>Trabmezo</translation>
     </message>
     <message>
         <source>No Beam</source>
-        <translation type="unfinished"/>
+        <translation>Neniu trabo</translation>
     </message>
     <message>
         <source>Beam 16th Sub</source>
@@ -14916,7 +15135,7 @@ failed: </source>
     </message>
     <message>
         <source>Auto Beam</source>
-        <translation type="unfinished"/>
+        <translation>Aŭtomate trabi</translation>
     </message>
     <message>
         <source>Feathered Beam, Slower</source>
@@ -14936,7 +15155,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI import panel</source>
-        <translation type="unfinished"/>
+        <translation>MIDI-enportopanelo</translation>
     </message>
     <message>
         <source>Status bar</source>
@@ -15008,19 +15227,19 @@ failed: </source>
     </message>
     <message>
         <source>Toggle system break</source>
-        <translation type="unfinished"/>
+        <translation>Baskuligi liniargrupan salton</translation>
     </message>
     <message>
         <source>Toggle page break</source>
-        <translation type="unfinished"/>
+        <translation>Baskuligi paĝsalton</translation>
     </message>
     <message>
         <source>Toggle section break</source>
-        <translation type="unfinished"/>
+        <translation>Baskuligi sekciosalton</translation>
     </message>
     <message>
         <source>Edit element</source>
-        <translation type="unfinished"/>
+        <translation>Redakti eron</translation>
     </message>
     <message>
         <source>Show invisible</source>
@@ -15036,7 +15255,7 @@ failed: </source>
     </message>
     <message>
         <source>Show page margins</source>
-        <translation type="unfinished"/>
+        <translation>Montri paĝmarĝenojn</translation>
     </message>
     <message>
         <source>Insert special characters</source>
@@ -15088,11 +15307,11 @@ failed: </source>
     </message>
     <message>
         <source>Double Duration</source>
-        <translation type="unfinished"/>
+        <translation>Duobla daŭro</translation>
     </message>
     <message>
         <source>Half Duration</source>
-        <translation type="unfinished"/>
+        <translation>Duona daŭro</translation>
     </message>
     <message>
         <source>Repeat Selection</source>
@@ -15144,7 +15363,7 @@ failed: </source>
     </message>
     <message>
         <source>Split measure</source>
-        <translation type="unfinished"/>
+        <translation>Disrompi mezuron</translation>
     </message>
     <message>
         <source>Join measures</source>
@@ -15240,7 +15459,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Longa (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Notodaŭro: longa (TAB)</translation>
     </message>
     <message>
         <source>Double Whole Note (TAB)</source>
@@ -15248,7 +15467,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Double whole (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Notodaŭro: duobla (TAB)</translation>
     </message>
     <message>
         <source>Whole Note (TAB)</source>
@@ -15256,7 +15475,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Whole (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Notodaŭro: plena (TAB)</translation>
     </message>
     <message>
         <source>Half Note (TAB)</source>
@@ -15264,7 +15483,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Half (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Notodaŭro: duona (TAB)</translation>
     </message>
     <message>
         <source>Quarter Note (TAB)</source>
@@ -15272,7 +15491,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Quarter (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Notodaŭro: kvarona (TAB)</translation>
     </message>
     <message>
         <source>Eighth Note (TAB)</source>
@@ -15280,7 +15499,7 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Eighth (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Notodaŭro: okona (TAB)</translation>
     </message>
     <message>
         <source>16th Note (TAB)</source>
@@ -15300,11 +15519,11 @@ failed: </source>
     </message>
     <message>
         <source>Increase Active Duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Kreskigi aktivan daŭron (TAB)</translation>
     </message>
     <message>
         <source>Decrease Active Duration (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Malkreski aktivan daŭron (TAB)</translation>
     </message>
     <message>
         <source>Note input: Rest (TAB)</source>
@@ -15328,7 +15547,7 @@ failed: </source>
     </message>
     <message>
         <source>Add Brackets to Element</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni krampojn al ero</translation>
     </message>
     <message>
         <source>Toggle Create Multimeasure Rest</source>
@@ -15368,15 +15587,15 @@ failed: </source>
     </message>
     <message>
         <source>Fill with slashes</source>
-        <translation type="unfinished"/>
+        <translation>Plenigi je oblikvaj strekoj</translation>
     </message>
     <message>
         <source>Toggle rhythmic slash notation</source>
-        <translation type="unfinished"/>
+        <translation>Baskuligi ritmostrekan notacion</translation>
     </message>
     <message>
         <source>Add/remove line breaks</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni/Forigi liniorompojn</translation>
     </message>
     <message>
         <source>Resequence rehearsal marks</source>
@@ -15492,18 +15711,34 @@ failed: </source>
     </message>
     <message>
         <source>Import PDF...</source>
-        <translation type="unfinished"/>
+        <translation>Enporti PDF-dosieron...</translation>
     </message>
     <message>
         <source>Import PDF</source>
-        <translation type="unfinished"/>
+        <translation>Enporti PDF-dosieron</translation>
     </message>
     <message>
         <source>Import a PDF file with an experimental service on musescore.com</source>
-        <translation type="unfinished"/>
+        <translation>Enporti PDF-dosieron per eksperimenta servo de musescore.com</translation>
     </message>
     <message>
         <source>Set loop in position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Paletroj</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -15511,17 +15746,19 @@ failed: </source>
     <name>addRemoveTimeSig</name>
     <message>
         <source>MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore</translation>
     </message>
     <message>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
-        <translation type="unfinished"/>
+        <translation>Reskribi mezurojn ne eblas:
+Duolo transpasus mezuron</translation>
     </message>
     <message>
         <source>Cannot change local time signature:
 Measure is not empty</source>
-        <translation type="unfinished"/>
+        <translation>Ŝanĝi lokan taktosignon ne eblas:
+Mezuro ne estas vaka</translation>
     </message>
 </context>
 <context>
@@ -16553,6 +16790,10 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Tablature2</source>
+        <translation>Tablaturo 2</translation>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -16925,7 +17166,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Bracket</source>
-        <translation>Bracket</translation>
+        <translation>Krampo</translation>
     </message>
     <message>
         <source>Arpeggio</source>
@@ -16977,7 +17218,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Beam</source>
-        <translation>Beam</translation>
+        <translation>Trabo</translation>
     </message>
     <message>
         <source>Hook</source>
@@ -17001,7 +17242,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Duolo</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -17013,7 +17254,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Volta</source>
-        <translation>Volta</translation>
+        <translation>Ripetosigno</translation>
     </message>
     <message>
         <source>Spacer</source>
@@ -17025,7 +17266,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Measure</source>
-        <translation>Measure</translation>
+        <translation>Mezuro</translation>
     </message>
     <message>
         <source>Selection</source>
@@ -17041,7 +17282,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ottava</source>
-        <translation>Ottava</translation>
+        <translation>Oktigo</translation>
     </message>
     <message>
         <source>Pedal</source>
@@ -17057,7 +17298,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>System</source>
-        <translation>System</translation>
+        <translation>Liniargrupo</translation>
     </message>
     <message>
         <source>Compound</source>
@@ -17073,7 +17314,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Element</source>
-        <translation>Element</translation>
+        <translation>Ero</translation>
     </message>
     <message>
         <source>Icon</source>
@@ -17093,27 +17334,27 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Staff Lines</source>
-        <translation type="unfinished"/>
+        <translation>Notliniareroj</translation>
     </message>
     <message>
         <source>Bar Line</source>
-        <translation type="unfinished"/>
+        <translation>Taktostreko</translation>
     </message>
     <message>
         <source>Stem Slash</source>
-        <translation type="unfinished"/>
+        <translation>Linieta streko</translation>
     </message>
     <message>
         <source>Key Signature</source>
-        <translation>Key Signature</translation>
+        <translation>Gamsigno</translation>
     </message>
     <message>
         <source>Time Signature</source>
-        <translation>Enter Time Signature:</translation>
+        <translation>Taktosigno</translation>
     </message>
     <message>
         <source>Repeat Measure</source>
-        <translation type="unfinished"/>
+        <translation>Ripeti mezuron</translation>
     </message>
     <message>
         <source>Chord Line</source>
@@ -17141,7 +17382,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ottava Segment</source>
-        <translation type="unfinished"/>
+        <translation>Oktiga segmento</translation>
     </message>
     <message>
         <source>Trill Segment</source>
@@ -17153,7 +17394,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Volta Segment</source>
-        <translation>Volta</translation>
+        <translation>Ripetosegmento</translation>
     </message>
     <message>
         <source>Pedal Segment</source>
@@ -17161,11 +17402,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Layout Break</source>
-        <translation type="unfinished"/>
+        <translation>Aranĝosalto</translation>
     </message>
     <message>
         <source>Staff State</source>
-        <translation type="unfinished"/>
+        <translation>Notliniara stato</translation>
     </message>
     <message>
         <source>Ledger Line</source>
@@ -17205,15 +17446,15 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Element List</source>
-        <translation type="unfinished"/>
+        <translation>Erlisto</translation>
     </message>
     <message>
         <source>Staff List</source>
-        <translation type="unfinished"/>
+        <translation>Notliniara listo</translation>
     </message>
     <message>
         <source>Measure List</source>
-        <translation type="unfinished"/>
+        <translation>Mezurlisto</translation>
     </message>
     <message>
         <source>Horizontal Frame</source>
@@ -17310,7 +17551,7 @@ Measure is not empty</source>
     <name>inspector</name>
     <message>
         <source>Staff default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlta notliniaro</translation>
     </message>
     <message>
         <source>Tick 1</source>
@@ -17368,7 +17609,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Crescendo</source>
-        <translation>crescendo</translation>
+        <translation>Kresĉendo</translation>
     </message>
 </context>
 <context>
@@ -17445,7 +17686,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Slash</source>
-        <translation type="unfinished"/>
+        <translation>Oblikva streko</translation>
     </message>
     <message>
         <source>XCircle</source>
@@ -17561,7 +17802,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Ottava</source>
-        <translation>Ottava</translation>
+        <translation>Oktigo</translation>
     </message>
     <message>
         <source>Tremolo</source>
@@ -17569,7 +17810,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Grace Notes</source>
-        <translation>Grace Notes</translation>
+        <translation>Notetoj</translation>
     </message>
     <message>
         <source>Pedal Lines</source>
@@ -17631,7 +17872,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>TABLATURE STAFF</source>
-        <translation type="unfinished"/>
+        <translation>TABLATURA NOTLINIARO</translation>
     </message>
 </context>
 <context>
@@ -17664,10 +17905,6 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Prallprall line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wavy line</source>
         <translation type="unfinished"/>
     </message>
 </context>

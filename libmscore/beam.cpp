@@ -142,7 +142,25 @@ QPointF Beam::canvasPos() const
 //   add
 //---------------------------------------------------------
 
-void Beam::add(ChordRest* a)
+void Beam::add(Element* e) {
+      if (e && e->isChordRest())
+            addChordRest(static_cast<ChordRest*>(e));
+      }
+
+//---------------------------------------------------------
+//   remove
+//---------------------------------------------------------
+
+void Beam::remove(Element* e) {
+      if (e && e->isChordRest())
+            removeChordRest(static_cast<ChordRest*>(e));
+      }
+
+//---------------------------------------------------------
+//   addChordRest
+//---------------------------------------------------------
+
+void Beam::addChordRest(ChordRest* a)
       {
       a->setBeam(this);
       if (!_elements.contains(a)) {
@@ -166,10 +184,10 @@ void Beam::add(ChordRest* a)
       }
 
 //---------------------------------------------------------
-//   remove
+//   removeChordRest
 //---------------------------------------------------------
 
-void Beam::remove(ChordRest* a)
+void Beam::removeChordRest(ChordRest* a)
       {
       if (!_elements.removeOne(a))
             qDebug("Beam::remove(): cannot find ChordRest");
@@ -199,11 +217,11 @@ void Beam::draw(QPainter* painter) const
 //   move
 //---------------------------------------------------------
 
-void Beam::move(qreal x, qreal y)
+void Beam::move(const QPointF& offset)
       {
-      Element::move(x, y);
+      Element::move(offset);
       foreach (QLineF* bs, beamSegments)
-            bs->translate(x, y);
+            bs->translate(offset);
       }
 
 //---------------------------------------------------------
@@ -1585,7 +1603,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                         else
                               yDownMax = qMax(y, yDownMax);
                         }
-                  qreal slant = _spatium;
+                  qreal slant = hasNoSlope() ? 0 : _spatium;
                   if (crl.front()->up())
                         slant = -slant;
                   py1   = yUpMin + (yDownMax - yUpMin) * .5 - slant * .5;
@@ -1630,7 +1648,7 @@ void Beam::layout2(QList<ChordRest*>crl, SpannerSegmentType, int frag)
                   // loop through chordrests looking for end
                   int c1 = i;
                   ++i;
-                  bool b32, b64;
+                  bool b32 = false, b64 = false;
                   for (; i < n; ++i) {
                         ChordRest* c = crl[i];
                         ChordRest* p = i ? crl[i - 1] : 0;

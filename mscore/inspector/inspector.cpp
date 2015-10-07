@@ -24,6 +24,7 @@
 #include "inspectorMarker.h"
 #include "inspectorJump.h"
 #include "inspectorGlissando.h"
+#include "inspectorArpeggio.h"
 #include "inspectorNote.h"
 #include "inspectorAmbitus.h"
 #include "inspectorFret.h"
@@ -149,9 +150,11 @@ void Inspector::setElements(const QList<Element*>& l)
             else if (_element) {
                   switch(_element->type()) {
                         case Element::Type::FBOX:
-                        case Element::Type::TBOX:
                         case Element::Type::VBOX:
                               ie = new InspectorVBox(this);
+                              break;
+                        case Element::Type::TBOX:
+                              ie = new InspectorTBox(this);
                               break;
                         case Element::Type::HBOX:
                               ie = new InspectorHBox(this);
@@ -241,6 +244,12 @@ void Inspector::setElements(const QList<Element*>& l)
                               break;
                         case Element::Type::LAYOUT_BREAK:
                               ie = new InspectorBreak(this);
+                              break;
+                        case Element::Type::BEND:
+                              ie = new InspectorBend(this);
+                              break;
+                        case Element::Type::ARPEGGIO:
+                              ie = new InspectorArpeggio(this);
                               break;
                         default:
                               if (_element->isText())
@@ -360,6 +369,26 @@ InspectorVBox::InspectorVBox(QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   InspectorTBox
+//---------------------------------------------------------
+
+InspectorTBox::InspectorTBox(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      tb.setupUi(addWidget());
+
+      iList = {
+            { P_ID::TOP_GAP,       0, 0, tb.topGap,       tb.resetTopGap       },
+            { P_ID::BOTTOM_GAP,    0, 0, tb.bottomGap,    tb.resetBottomGap    },
+            { P_ID::LEFT_MARGIN,   0, 0, tb.leftMargin,   tb.resetLeftMargin   },
+            { P_ID::RIGHT_MARGIN,  0, 0, tb.rightMargin,  tb.resetRightMargin  },
+            { P_ID::TOP_MARGIN,    0, 0, tb.topMargin,    tb.resetTopMargin    },
+            { P_ID::BOTTOM_MARGIN, 0, 0, tb.bottomMargin, tb.resetBottomMargin },
+            };
+      mapSignals();
+      }
+
+//---------------------------------------------------------
 //   InspectorHBox
 //---------------------------------------------------------
 
@@ -394,7 +423,9 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
             { P_ID::USER_OFF,            1, 0, e.offsetY,      e.resetY          },
             { P_ID::ARTICULATION_ANCHOR, 0, 0, ar.anchor,      ar.resetAnchor    },
             { P_ID::DIRECTION,           0, 0, ar.direction,   ar.resetDirection },
-            { P_ID::TIME_STRETCH,        0, 0, ar.timeStretch, ar.resetTimeStretch }
+            { P_ID::TIME_STRETCH,        0, 0, ar.timeStretch, ar.resetTimeStretch },
+            { P_ID::ORNAMENT_STYLE,      0, 0, ar.ornamentStyle, ar.resetOrnamentStyle },
+            { P_ID::PLAY,                0, 0, ar.playArticulation, ar.resetPlayArticulation}
             };
       mapSignals();
       }
@@ -605,6 +636,27 @@ InspectorAccidental::InspectorAccidental(QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   InspectorBend
+//---------------------------------------------------------
+
+InspectorBend::InspectorBend(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      e.setupUi(addWidget());
+      g.setupUi(addWidget());
+
+      iList = {
+            { P_ID::COLOR,        0, 0, e.color,       e.resetColor       },
+            { P_ID::VISIBLE,      0, 0, e.visible,     e.resetVisible     },
+            { P_ID::USER_OFF,     0, 0, e.offsetX,     e.resetX           },
+            { P_ID::USER_OFF,     1, 0, e.offsetY,     e.resetY           },
+            { P_ID::PLAY,         0, 0, g.playBend,    g.resetPlayBend    }
+            };
+
+      mapSignals();
+      }
+
+//---------------------------------------------------------
 //   InspectorClef
 //---------------------------------------------------------
 
@@ -708,7 +760,7 @@ void InspectorTempoText::setElement()
       int n = ts.size();
       for (int i = 0; i < n; ++i) {
             if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
-                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toLatin1().data()), i);
+                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toUtf8().data()), i);
             }
       t.style->blockSignals(false);
       InspectorBase::setElement();
@@ -720,7 +772,10 @@ void InspectorTempoText::setElement()
 
 void InspectorTempoText::postInit()
       {
-      tt.tempo->setDisabled(tt.followText->isChecked());
+      bool followText = tt.followText->isChecked();
+      //tt.resetFollowText->setDisabled(followText);
+      tt.tempo->setDisabled(followText);
+      tt.resetTempo->setDisabled(followText);
       }
 
 //---------------------------------------------------------
@@ -761,7 +816,7 @@ void InspectorDynamic::setElement()
       int n = ts.size();
       for (int i = 0; i < n; ++i) {
             if (!(ts.at(i).hidden() & TextStyleHidden::IN_LISTS) )
-                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toLatin1().data()), i);
+                  t.style->addItem(qApp->translate("TextStyle",ts.at(i).name().toUtf8().data()), i);
             }
       t.style->blockSignals(false);
       InspectorBase::setElement();

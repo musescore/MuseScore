@@ -25,7 +25,7 @@ class Segment;
 //   @@ Dynamic
 ///    dynamics marker; determines midi velocity
 //
-//   @P range  Ms::Dynamic::Range (STAFF, PART, SYSTEM)
+//   @P range  enum (Dynamic.STAFF, .PART, .SYSTEM)
 //-----------------------------------------------------------------------------
 
 class Dynamic : public Text {
@@ -107,8 +107,6 @@ class Dynamic : public Text {
       Range dynRange() const    { return _dynRange; }
       void setDynRange(Range t) { _dynRange = t;    }
       void undoSetDynRange(Range t);
-
-      virtual QLineF dragAnchor() const override;
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool     setProperty(P_ID propertyId, const QVariant&) override;

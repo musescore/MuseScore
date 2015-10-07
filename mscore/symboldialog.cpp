@@ -49,12 +49,18 @@ void SymbolDialog::createSymbols()
       {
       int currentIndex = fontList->currentIndex();
       const ScoreFont* f = &ScoreFont::scoreFonts()[currentIndex];
+      // init the font if not done yet
+      ScoreFont::fontFactory(f->name());
       sp->clear();
       for (int i = 0; i < int(SymId::lastSym); ++i) {
             if (f->isValid(SymId(i))) {
                   Symbol* s = new Symbol(gscore);
                   s->setSym(SymId(i), f);
-                  sp->append(s, Sym::id2userName(SymId(i)));
+                  bool match = true;
+                  if (!search->text().isEmpty())
+                        match = Sym::id2userName(SymId(i)).contains(search->text(), Qt::CaseInsensitive);
+                  if (match)
+                        sp->append(s, Sym::id2userName(SymId(i)));
                   }
             }
       }
@@ -115,6 +121,18 @@ void SymbolDialog::systemFlagChanged(int state)
 
 void SymbolDialog::systemFontChanged(int)
       {
+      createSymbols();
+      }
+
+void SymbolDialog::on_search_textChanged(const QString &searchPhrase)
+      {
+      Q_UNUSED(searchPhrase);
+      createSymbols();
+      }
+
+void SymbolDialog::on_clearSearch_clicked()
+      {
+      search->clear();
       createSymbols();
       }
 

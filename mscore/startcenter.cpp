@@ -54,7 +54,7 @@ Startcenter::Startcenter()
       //init webview
       if (!noWebView) {
             _webView = new MyWebView(this);
-            _webView->setUrl(QUrl("https://connect2.musescore.com/"));
+            _webView->setUrl(QUrl(QString("https://connect2.musescore.com/?version=%1").arg(VERSION)));
             horizontalLayout->addWidget(_webView);
             }
 
@@ -154,7 +154,7 @@ void Startcenter::writeSettings(QSettings& settings)
 void Startcenter::readSettings(QSettings& settings)
       {
       settings.beginGroup("Startcenter");
-      resize(settings.value("size", QSize(670, 520)).toSize());
+      resize(settings.value("size", QSize(690, 520)).toSize());
       move(settings.value("pos", QPoint(200, 100)).toPoint());
       settings.endGroup();
       }
@@ -168,7 +168,6 @@ QNetworkReply* MyNetworkAccessManager::createRequest(Operation op,
                                           QIODevice * outgoingData)
       {
       QNetworkRequest new_req(req);
-      new_req.setRawHeader("User-Agent",  QString("MuseScore %1").arg(VERSION).toAscii());
       new_req.setRawHeader("Accept-Language",  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toAscii());
       return QNetworkAccessManager::createRequest(op, new_req, outgoingData);
       }
@@ -196,7 +195,7 @@ MyWebView::MyWebView(QWidget *parent):
 
       setZoomFactor(guiScaling);
 
-      if(!enableExperimental)
+      if (!enableExperimental)
             setContextMenuPolicy(Qt::NoContextMenu);
 
       //set cookie jar for persistent cookies

@@ -23,6 +23,7 @@
 #include "libmscore/stafftext.h"
 #include "libmscore/system.h"
 #include "libmscore/staff.h"
+#include "globals.h"
 
 namespace Ms {
 
@@ -35,11 +36,11 @@ static void initChannelCombo(QComboBox* cb, StaffText* st)
       {
       Part* part = st->staff()->part();
       int tick = static_cast<Segment*>(st->parent())->tick();
-      foreach(const Channel* a, part->instrument(tick)->channel()) {
+      for (const Channel* a : part->instrument(tick)->channel()) {
             if (a->name.isEmpty() || a->name == "normal")
                   cb->addItem(QObject::tr("normal"));
             else
-                  cb->addItem(a->name);
+                  cb->addItem(qApp->translate("InstrumentsXML", a->name.toUtf8().data()));
             }
       }
 
@@ -51,36 +52,64 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
    : QDialog(parent)
       {
       setupUi(this);
-      if (st->systemFlag())
+      if (st->systemFlag()) {
             setWindowTitle(tr("MuseScore: System Text Properties"));
-      else
+            tabWidget->removeTab(2); // Aeolus settings  for staff text only
+            //if (!enableExperimental) tabWidget->removeTab(1); // MIDI action
+            tabWidget->removeTab(0); // Channel switching  for staff text only
+            }
+      else {
             setWindowTitle(tr("MuseScore: Staff Text Properties"));
+            //tabWidget->removeTab(3); // Swing settings for system text only, could be disabled here, if desired
+#ifndef AEOLUS
+            tabWidget->removeTab(2);
+#endif
+            //if (!enableExperimental) tabWidget->removeTab(1); // MIDI action
+            }
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       _staffText = static_cast<StaffText*>(st->clone());
 
-#ifndef AEOLUS
-	tabWidget->removeTab(2);
-#endif
+      const char* vbsh { "QToolButton:checked, QToolButton:pressed { color: white; background:%1;}" };
 
+      QString voice1ss = QString(vbsh).arg(MScore::selectColor[0].name());
       vb[0][0] = voice1_1;
+      voice1_1->setStyleSheet(voice1ss);
       vb[0][1] = voice1_2;
+      voice1_2->setStyleSheet(voice1ss);
       vb[0][2] = voice1_3;
+      voice1_3->setStyleSheet(voice1ss);
       vb[0][3] = voice1_4;
+      voice1_4->setStyleSheet(voice1ss);
 
+      QString voice2ss = QString(vbsh).arg(MScore::selectColor[1].name());
       vb[1][0] = voice2_1;
+      voice2_1->setStyleSheet(voice2ss);
       vb[1][1] = voice2_2;
+      voice2_2->setStyleSheet(voice2ss);
       vb[1][2] = voice2_3;
+      voice2_3->setStyleSheet(voice2ss);
       vb[1][3] = voice2_4;
+      voice2_4->setStyleSheet(voice2ss);
 
+      QString voice3ss = QString(vbsh).arg(MScore::selectColor[2].name());
       vb[2][0] = voice3_1;
+      voice3_1->setStyleSheet(voice3ss);
       vb[2][1] = voice3_2;
+      voice3_2->setStyleSheet(voice3ss);
       vb[2][2] = voice3_3;
+      voice3_3->setStyleSheet(voice3ss);
       vb[2][3] = voice3_4;
+      voice3_4->setStyleSheet(voice3ss);
 
+      QString voice4ss = QString(vbsh).arg(MScore::selectColor[3].name());
       vb[3][0] = voice4_1;
+      voice4_1->setStyleSheet(voice4ss);
       vb[3][1] = voice4_2;
+      voice4_2->setStyleSheet(voice4ss);
       vb[3][2] = voice4_3;
+      voice4_3->setStyleSheet(voice4ss);
       vb[3][3] = voice4_4;
+      voice4_4->setStyleSheet(voice4ss);
 
       channelCombo[0] = channelCombo1;
       channelCombo[1] = channelCombo2;
@@ -164,8 +193,8 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
             if (a->name.isEmpty() || a->name == "normal")
                   item->setText(0, tr("normal"));
             else
-                  item->setText(0, a->name);
-            item->setText(1, a->descr);
+                  item->setText(0, qApp->translate("InstrumentsXML", a->name.toUtf8().data()));
+            item->setText(1, qApp->translate("InstrumentsXML", a->descr.toUtf8().data()));
             if (i == 0)
                   selectedItem = item;
             }
@@ -250,7 +279,7 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   StaffTextProperties
+//   ~StaffTextProperties
 //---------------------------------------------------------
 
 StaffTextProperties::~StaffTextProperties()
@@ -259,7 +288,7 @@ StaffTextProperties::~StaffTextProperties()
       }
 
 //---------------------------------------------------------
-//   setSwingParameters
+//   setSwingControls
 //---------------------------------------------------------
 
 void StaffTextProperties::setSwingControls(bool checked)
@@ -361,28 +390,40 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
       Channel* channel    = part->instrument(tick)->channel(channelIdx);
       QString channelName = channel->name;
 
-      foreach(const NamedEventList& e, part->instrument(tick)->midiActions()) {
+      for (const NamedEventList& e : part->instrument(tick)->midiActions()) {
             QTreeWidgetItem* item = new QTreeWidgetItem(actionList);
-            if (e.name.isEmpty() || e.name == "normal")
+            if (e.name.isEmpty() || e.name == "normal") {
                   item->setText(0, tr("normal"));
-            else
-                  item->setText(0, e.name);
-            item->setText(1, e.descr);
+                  item->setData(0, Qt::UserRole, "normal");
+                  }
+            else {
+                  item->setText(0, qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
+                  item->setData(0, Qt::UserRole, e.name);
+                  }
+            item->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
             }
-      foreach(const NamedEventList& e, channel->midiActions) {
+      for (const NamedEventList& e : channel->midiActions) {
             QTreeWidgetItem* item = new QTreeWidgetItem(actionList);
-            if (e.name.isEmpty() || e.name == "normal")
+            if (e.name.isEmpty() || e.name == "normal") {
                   item->setText(0, tr("normal"));
-            else
-                  item->setText(0, e.name);
-            item->setText(1, e.descr);
+                  item->setData(0, Qt::UserRole, "normal");
+                  }
+            else {
+                  item->setText(0, qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
+                  item->setData(0, Qt::UserRole, e.name);
+                  }
+            item->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
             }
-      foreach(const ChannelActions& ca, *_staffText->channelActions()) {
+      for (const ChannelActions& ca : *_staffText->channelActions()) {
             if (ca.channel == channelIdx) {
-                  foreach(QString s, ca.midiActionNames) {
-                        QList<QTreeWidgetItem*> items = actionList->findItems(s, Qt::MatchExactly);
-                        foreach(QTreeWidgetItem* item, items)
-                              item->setSelected(true);
+                  for (QString s : ca.midiActionNames) {
+                        QList<QTreeWidgetItem*> items;
+                        for (int i = 0; i < actionList->topLevelItemCount(); i++) {
+                              QTreeWidgetItem* item = actionList->topLevelItem(i);
+                              if (item->data(0, Qt::UserRole) == s) {
+                                    item->setSelected(true);
+                                    }
+                              }
                         }
                   }
             }

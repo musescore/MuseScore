@@ -13,9 +13,9 @@
 #ifndef __AMBITUS_H__
 #define __AMBITUS_H__
 
-#include "accidental.h"
 #include "element.h"
 #include "note.h"
+#include "accidental.h"
 
 class QPainter;
 
@@ -53,7 +53,7 @@ class Ambitus : public Element {
       virtual Element::Type type() const override     { return Element::Type::AMBITUS;    }
       NoteHead::Group noteHeadGroup() const           { return _noteHeadGroup;}
       NoteHead::Type noteHeadType() const             { return _noteHeadType; }
-      MScore::DirectionH direction() const                    { return _dir;          }
+      MScore::DirectionH direction() const            { return _dir;          }
       bool hasLine() const                            { return _hasLine;      }
       qreal lineWidth() const                         { return _lineWidth;    }
       int topOctave() const                           { return _topPitch / 12;}

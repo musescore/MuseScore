@@ -57,7 +57,7 @@ void TestJoin::initTestCase()
       }
 
 //---------------------------------------------------------
-//   beam
+//   join
 //---------------------------------------------------------
 
 void TestJoin::join(const char* p1, const char* p2)
@@ -113,7 +113,7 @@ void TestJoin::join1(const char* p1)
       Segment* s = score->firstSegment(Segment::Type::ChordRest);
 
       for (int i = 0; i < 8; ++i) {
-            Note* note = static_cast<Chord*>(s->element(0))->upNote();
+            Note* note = static_cast<Ms::Chord*>(s->element(0))->upNote();
             QVERIFY(note->line() == 6);
             s = s->next1(Segment::Type::ChordRest);
             }

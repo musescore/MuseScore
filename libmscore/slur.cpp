@@ -419,7 +419,7 @@ void SlurSegment::editDrag(const EditData& ed)
 //   writeProperties
 //---------------------------------------------------------
 
-void SlurSegment::write(Xml& xml, int no) const
+void SlurSegment::writeSlur(Xml& xml, int no) const
       {
       if (ups(Grip::START).off.isNull()
          && ups(Grip::END).off.isNull()
@@ -592,7 +592,7 @@ void Slur::computeBezier(SlurSegment* ss, QPointF p6o)
 //    p1, p2  are in System coordinates
 //---------------------------------------------------------
 
-void SlurSegment::layout(const QPointF& p1, const QPointF& p2)
+void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       {
       ups(Grip::START).p = p1;
       ups(Grip::END).p   = p2;
@@ -1030,7 +1030,7 @@ void SlurTie::writeProperties(Xml& xml) const
             xml.tag("track2", track2());
       int idx = 0;
       foreach(const SpannerSegment* ss, spannerSegments())
-            ((SlurSegment*)ss)->write(xml, idx++);
+            ((SlurSegment*)ss)->writeSlur(xml, idx++);
       if (_slurDirection != MScore::Direction::AUTO)
             xml.tag("up", int(_slurDirection));
       if (_lineType)
@@ -1349,12 +1349,12 @@ void Slur::layout()
                   s = frontSegment();
                   }
             s->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-            s->layout(QPointF(0, 0), QPointF(_spatium * 6, 0));
+            s->layoutSegment(QPointF(0, 0), QPointF(_spatium * 6, 0));
             setbbox(frontSegment()->bbox());
             return;
             }
 
-      if (startCR() == 0) {
+      if (startCR() == 0 || startCR()->measure() == 0) {
             qDebug("Slur::layout(): track %d-%d  %p - %p tick %d-%d null start anchor",
                track(), track2(), startCR(), endCR(), tick(), tick2());
             return;
@@ -1453,13 +1453,13 @@ void Slur::layout()
             // case 1: one segment
             if (sPos.system1 == sPos.system2) {
                   segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-                  segment->layout(sPos.p1, sPos.p2);
+                  segment->layoutSegment(sPos.p1, sPos.p2);
                   }
             // case 2: start segment
             else if (i == 0) {
                   segment->setSpannerSegmentType(SpannerSegmentType::BEGIN);
                   qreal x = system->bbox().width();
-                  segment->layout(sPos.p1, QPointF(x, sPos.p1.y()));
+                  segment->layoutSegment(sPos.p1, QPointF(x, sPos.p1.y()));
                   }
             // case 3: middle segment
             else if (i != 0 && system != sPos.system2) {
@@ -1467,13 +1467,13 @@ void Slur::layout()
                   qreal x1 = firstNoteRestSegmentX(system);
                   qreal x2 = system->bbox().width();
                   qreal y  = system->staff(staffIdx())->y();
-                  segment->layout(QPointF(x1, y), QPointF(x2, y));
+                  segment->layoutSegment(QPointF(x1, y), QPointF(x2, y));
                   }
             // case 4: end segment
             else {
                   segment->setSpannerSegmentType(SpannerSegmentType::END);
                   qreal x = firstNoteRestSegmentX(system);
-                  segment->layout(QPointF(x, sPos.p2.y()), sPos.p2);
+                  segment->layoutSegment(QPointF(x, sPos.p2.y()), sPos.p2);
                   }
             if (system == sPos.system2)
                   break;

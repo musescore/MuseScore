@@ -43,6 +43,8 @@ class SymbolDialog : public QWidget, Ui::SymbolDialogBase {
    private slots:
       void systemFlagChanged(int);
       void systemFontChanged(int);
+      void on_search_textChanged(const QString &searchPhrase);
+      void on_clearSearch_clicked();
 
    public:
       SymbolDialog(QWidget* parent = 0);

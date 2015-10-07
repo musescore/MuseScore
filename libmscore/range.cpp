@@ -333,6 +333,7 @@ bool TrackList::write(Measure* measure) const
                   // split note/rest
                   //
 
+                  bool firstpart = true;
                   while (duration.numerator() > 0) {
                         if ((e->type() == Element::Type::REST || e->type() == Element::Type::REPEAT_MEASURE)
                            && (duration >= rest || e == back())
@@ -375,6 +376,8 @@ bool TrackList::write(Measure* measure) const
                               else if (e->type() == Element::Type::CHORD) {
                                     segment = m->getSegment(e, m->tick() + pos.ticks());
                                     Chord* c = static_cast<Chord*>(e)->clone();
+                                    if (!firstpart)
+                                          c->removeMarkings(true);
                                     c->setScore(score);
                                     c->setTrack(_track);
                                     c->setDuration(d);
@@ -428,6 +431,7 @@ bool TrackList::write(Measure* measure) const
                                           }
                                     }
                               }
+                        firstpart = false;
                         }
                   }
             else if (e->type() == Element::Type::BAR_LINE) {
@@ -456,10 +460,11 @@ bool TrackList::write(Measure* measure) const
       //
 
       for (Segment* s = measure->first(); s; s = s->next1()) {
-            Chord* chord = static_cast<Chord*>(s->element(_track));
-            if (chord == 0 || chord->type() != Element::Type::CHORD)
+            Element* e = s->element(_track);
+            if (e == 0 || e->type() != Element::Type::CHORD)
                   continue;
-            foreach (Note* n, chord->notes()) {
+            Chord* chord = static_cast<Chord*>(e);
+            for (Note* n : chord->notes()) {
                   Tie* tie = n->tieFor();
                   if (!tie)
                         continue;
@@ -546,7 +551,8 @@ bool ScoreRange::write(Score* score, int tick) const
             int track = dl->track();
             if (!dl->write(score->tick2measure(tick)))
                   return false;
-            if ((track % VOICES) == 0) {
+            if ((track % VOICES) == VOICES - 1)  {
+                  // clone staff if appropriate after all voices have been copied
                   int staffIdx = track / VOICES;
                   Staff* ostaff = score->staff(staffIdx);
                   LinkedStaves* linkedStaves = ostaff->linkedStaves();

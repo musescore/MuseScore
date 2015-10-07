@@ -3042,6 +3042,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Інспектор: Ґлісандо</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Арпеджіо</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Грати</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Скинути значення «Грати»</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3106,6 +3125,30 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Скинути значення «Розтягнення часу»</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Стиль орнаменту</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>За промовчанням</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Бароко</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Скинути значення типу орнамента</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Грати</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Скинути значення «Грати»</translation>
     </message>
 </context>
 <context>
@@ -3276,6 +3319,25 @@ space unit</extracomment>
     <message>
         <source>User position</source>
         <translation>Позиція на вибір</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -3558,6 +3620,42 @@ space unit</extracomment>
     <message>
         <source>Show text</source>
         <translation>Показати текст</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Стиль</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Скинути значення стилю</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Стиль гри</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Хроматично</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Білі клавіші</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Чорні клавіші</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Діатонічно</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Грати</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Скинути значення «Грати»</translation>
     </message>
 </context>
 <context>
@@ -4366,6 +4464,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4496,12 +4666,36 @@ space unit</extracomment>
         <translation>Подвійний мордент</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Хвиляста лінія</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Скинути значення</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Стиль орнаменту</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Напрям</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>За промовчанням</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Бароко</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Скинути значення типу орнамента</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Грати</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Скинути значення «Грати»</translation>
     </message>
 </context>
 <context>
@@ -4876,6 +5070,13 @@ space unit</extracomment>
     <message>
         <source>Add time signature to palette</source>
         <translation>Додати тактовий розмір до палітри</translation>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>атонічно</translation>
     </message>
 </context>
 <context>
@@ -6048,14 +6249,6 @@ failed: </source>
         <translation>знак $</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>теґ метаданих</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Доступні теґи та їхні поточні значення:</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Застосувати до всіх партій</translation>
     </message>
@@ -6070,6 +6263,14 @@ failed: </source>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>номер сторінки, якщо їх більше одної</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>теґ метаданих, дивись нижче</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Доступні мета-теги та їх поточні значення:</translation>
     </message>
 </context>
 <context>
@@ -7198,6 +7399,10 @@ please choose a different name:</source>
     </message>
     <message>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation>Цю партитуру не можна зберегти онлайн. Будь ласка виправте такт з помилкою та збережіть знову.</translation>
+    </message>
+    <message>
+        <source>Ask for Help</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7683,10 +7888,6 @@ failed: %2</source>
         <translation>Не вдалося записати стиль: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>файл не знайдено</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Не вибрано</translation>
     </message>
@@ -7697,6 +7898,10 @@ failed: %2</source>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>Такт %1, нотоносець %2, голос %3 занадто довгий. Очікувалося: %4; Знайдено: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>Помилка читання XML у рядку %1 колонка %2: %3</translation>
     </message>
 </context>
 <context>
@@ -8010,6 +8215,12 @@ Please select a range of measures to join and try again</source>
     <message>
         <source>Transparent background</source>
         <translation>Прозорий фон</translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>Неможливо розділити такт тут:
+Перша доля такта</translation>
     </message>
 </context>
 <context>
@@ -10411,6 +10622,14 @@ failed: </source>
         <source>Filter</source>
         <translation>Фільтр</translation>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Експортувати RPN</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10733,11 +10952,11 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Upload Error</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Помилка відвантаження</translation>
     </message>
     <message>
         <source>Do you want to try to load this file anyway?</source>
-        <translation type="unfinished"/>
+        <translation>Всерівно бажаєте спробувати завантажити цей файл?</translation>
     </message>
 </context>
 <context>
@@ -11268,6 +11487,14 @@ Do you want to overwrite it?</source>
     <message>
         <source>System flag</source>
         <translation>Системний прапорець</translation>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation>Пошук...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Очистити</translation>
     </message>
 </context>
 <context>
@@ -13617,10 +13844,6 @@ failed: </source>
         <translation>Розширення в’язок, прискорення</translation>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Палітра</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Пульт програвання</translation>
     </message>
@@ -13655,10 +13878,6 @@ failed: </source>
     <message>
         <source>Add lyrics</source>
         <translation>Додати слова</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Маркування темпу…</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -14015,10 +14234,6 @@ failed: </source>
     <message>
         <source>Repeat selection</source>
         <translation>Повторити вибране</translation>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
-        <translation>Панорама матричного редактора</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
@@ -15584,6 +15799,22 @@ failed: </source>
         <source>Set loop in position</source>
         <translation>Вказати початкову позицію зациклення</translation>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -16634,6 +16865,10 @@ Measure is not empty</source>
     <message>
         <source>Tablature2</source>
         <translation>Табулатура2</translation>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>Скрипковий ключ, октавою вище 8vb за вибором</translation>
     </message>
 </context>
 <context>
@@ -17745,10 +17980,6 @@ Measure is not empty</source>
     <message>
         <source>Prallprall line</source>
         <translation>Подвійний мордент</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Хвиляста лінія</translation>
     </message>
 </context>
 <context>

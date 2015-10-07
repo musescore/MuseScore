@@ -180,7 +180,9 @@
             "articUnstressAbove", 
             "articUnstressBelow", 
             "articLaissezVibrerAbove", 
-            "articLaissezVibrerBelow"
+            "articLaissezVibrerBelow", 
+            "articMarcatoTenutoAbove", 
+            "articMarcatoTenutoBelow"
         ], 
         "range_end": "U+E4BF", 
         "range_start": "U+E4A0"
@@ -572,10 +574,10 @@
             "semipitchedPercussionClef2", 
             "6stringTabClef", 
             "4stringTabClef", 
-            "cClefTriangular", 
-            "fClefTriangular", 
-            "cClefTriangularToFClef", 
-            "fClefTriangularToCClef", 
+            "schaefferClef", 
+            "schaefferPreviousClef", 
+            "schaefferGClefToFClef", 
+            "schaefferFClefToGClef", 
             "gClefReversed", 
             "gClefTurned", 
             "cClefReversed", 
@@ -985,7 +987,8 @@
             "figbassParensRight", 
             "figbassPlus", 
             "figbassCombiningRaising", 
-            "figbassCombiningLowering"
+            "figbassCombiningLowering", 
+            "figbass6Raised2"
         ], 
         "range_end": "U+EA6F", 
         "range_start": "U+EA50"
@@ -1789,6 +1792,37 @@
         "range_end": "U+E70F", 
         "range_start": "U+E700"
     }, 
+    "metronomeMarks": {
+        "description": "Metronome marks", 
+        "glyphs": [
+            "metNoteDoubleWhole", 
+            "metNoteDoubleWholeSquare", 
+            "metNoteWhole", 
+            "metNoteHalfUp", 
+            "metNoteHalfDown", 
+            "metNoteQuarterUp", 
+            "metNoteQuarterDown", 
+            "metNote8thUp", 
+            "metNote8thDown", 
+            "metNote16thUp", 
+            "metNote16thDown", 
+            "metNote32ndUp", 
+            "metNote32ndDown", 
+            "metNote64thUp", 
+            "metNote64thDown", 
+            "metNote128thUp", 
+            "metNote128thDown", 
+            "metNote256thUp", 
+            "metNote256thDown", 
+            "metNote512thUp", 
+            "metNote512thDown", 
+            "metNote1024thUp", 
+            "metNote1024thDown", 
+            "metAugmentationDot"
+        ], 
+        "range_end": "U+ECBF", 
+        "range_start": "U+ECA0"
+    }, 
     "miscellaneousPercussionInstrumentPictograms": {
         "description": "Miscellaneous percussion instrument pictograms", 
         "glyphs": [
@@ -2199,7 +2233,15 @@
     "octavesSupplement": {
         "description": "Octaves supplement", 
         "glyphs": [
-            "octaveLoco"
+            "octaveLoco", 
+            "octaveBaselineA", 
+            "octaveSuperscriptA", 
+            "octaveBaselineB", 
+            "octaveSuperscriptB", 
+            "octaveBaselineM", 
+            "octaveSuperscriptM", 
+            "octaveBaselineV", 
+            "octaveSuperscriptV"
         ], 
         "range_end": "U+EC9F", 
         "range_start": "U+EC90"
@@ -2363,11 +2405,11 @@
             "ornamentPrecompPortDeVoixMordent", 
             "ornamentPrecompTrillWithMordent", 
             "ornamentPrecompCadence", 
-            "ornamentPrecompCadenceWithTurn ", 
+            "ornamentPrecompCadenceWithTurn", 
             "ornamentPrecompDoubleCadenceLowerPrefix", 
-            "ornamentPrecompCadenceUpperPrefix ", 
+            "ornamentPrecompCadenceUpperPrefix", 
             "ornamentPrecompCadenceUpperPrefixTurn", 
-            "ornamentPrecompDoubleCadenceUpperPrefix ", 
+            "ornamentPrecompDoubleCadenceUpperPrefix", 
             "ornamentPrecompDoubleCadenceUpperPrefixTurn", 
             "ornamentPrecompMordentRelease", 
             "ornamentPrecompMordentUpperPrefix", 
@@ -2554,7 +2596,8 @@
             "restQuarterOld", 
             "restDoubleWholeLegerLine", 
             "restWholeLegerLine", 
-            "restHalfLegerLine"
+            "restHalfLegerLine", 
+            "restQuarterZ"
         ], 
         "range_end": "U+E4FF", 
         "range_start": "U+E4E0"

@@ -3042,6 +3042,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Inspector Glissando</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpegio</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Reproduïx</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restaurar valor Reproduïx</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3106,6 +3125,30 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Restaura valor Expansio temporal</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Estil Ornaments</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Per defecte</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barroc</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Restaura valor Tipo Estil Ornaments</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Reproduïx</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restaurar valor Reproduïx</translation>
     </message>
 </context>
 <context>
@@ -3276,6 +3319,25 @@ space unit</extracomment>
     <message>
         <source>User position</source>
         <translation>Puesto usuari</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Inspector Glissando</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Estirar - Bend</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Reproduïx</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restaurar valor Reproduïx</translation>
     </message>
 </context>
 <context>
@@ -3558,6 +3620,42 @@ space unit</extracomment>
     <message>
         <source>Show text</source>
         <translation>Vore text</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Estil</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Restaura valor Estil</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Reproduïx Estil</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Cromatic</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Tecles blanques</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Tecles negres</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diatonic</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Reproduïx</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restaurar valor Reproduïx</translation>
     </message>
 </context>
 <context>
@@ -4366,6 +4464,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Inspector Text del Caixo</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Caixo Text</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Buit inferior</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Marge de dalt</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Restaurar valor</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Restaura valor Buit Superior</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Restaura valor Buit Inferior</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Marge esquerro</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Marge de baix</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Restaura valor marge dret</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Marge dret</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Restaura valor Marge de baix</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Restaura valor Marge de dalt</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Restaura valor Marge esquerro</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Buit superior</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>sp</translation>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4496,12 +4666,36 @@ space unit</extracomment>
         <translation>Mordent Doble</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Llínea en forma d&apos;on</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Restaurar valor</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Estil Ornaments</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Direccio</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Per defecte</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barroc</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Restaura valor Tipo Estil Ornaments</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Reproduïx</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restaurar valor Reproduïx</translation>
     </message>
 </context>
 <context>
@@ -4876,6 +5070,13 @@ space unit</extracomment>
     <message>
         <source>Add time signature to palette</source>
         <translation>Afig unitat de Tempo a la paleta</translation>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>atonal</translation>
     </message>
 </context>
 <context>
@@ -6048,14 +6249,6 @@ errat: </translation>
         <translation>el $ indica a si mateixa</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>rótul meta-senyes</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Rótuls disponibles i els seus valors actuals</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Aplica a totes les Parts</translation>
     </message>
@@ -6070,6 +6263,14 @@ errat: </translation>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>número de plana, si n&apos;hi ha més de una</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>rótul meta-senyes, vore davall</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Rótuls meta-senyes disponibles i els seus valors actuals:</translation>
     </message>
 </context>
 <context>
@@ -7200,6 +7401,10 @@ per favor elegix un atre nom:</translation>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation>Esta partitura no es pot guardar on-line. Per favor corregix els compassos roins i fes de nou</translation>
     </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Pregunta per a l&apos;Ajuda</translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7683,10 +7888,6 @@ erro: %2</translation>
         <translation>Escriu Estil errat: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>archiu no trobat</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Sense seleccio</translation>
     </message>
@@ -7697,6 +7898,10 @@ erro: %2</translation>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>Compas %1, pentagrama %2, veu %3 massa llarga. S&apos;aguarda: %4; Trobat: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>Erro al llegir XML en la llínea %1 columna %2: %3</translation>
     </message>
 </context>
 <context>
@@ -8010,6 +8215,12 @@ Per favor selecciona el ranc de compassos a juntar i ho fas de nou</translation>
     <message>
         <source>Transparent background</source>
         <translation>Fondo transparent</translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>No es pot dividir el compas ací:
+Primer colp del compas</translation>
     </message>
 </context>
 <context>
@@ -10411,6 +10622,14 @@ erro: </translation>
         <source>Filter</source>
         <translation>Filtre</translation>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Exportar RPNs</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10737,7 +10956,7 @@ Ves a la &lt;a href=&quot;http://musescore.org&quot;&gt;website de MuseScore&lt;
     </message>
     <message>
         <source>Do you want to try to load this file anyway?</source>
-        <translation type="unfinished"/>
+        <translation>¿Vols intentar pujar este achiu de totes formes?</translation>
     </message>
 </context>
 <context>
@@ -11268,6 +11487,14 @@ Do you want to overwrite it?</source>
     <message>
         <source>System flag</source>
         <translation>Marca de sistema</translation>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation>Busca...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Borrar</translation>
     </message>
 </context>
 <context>
@@ -13322,11 +13549,11 @@ erro: </translation>
     </message>
     <message>
         <source>Timewise delete</source>
-        <translation>Borrar a lo llarc del temps</translation>
+        <translation>Eliminar a lo llarc del temps</translation>
     </message>
     <message>
         <source>Timewise Delete</source>
-        <translation>Borrar a lo Llarc del Temps</translation>
+        <translation>eliminar a lo Llarc del Temps</translation>
     </message>
     <message>
         <source>Delete element and duration</source>
@@ -13617,10 +13844,6 @@ erro: </translation>
         <translation>Barra en àngul, més rapit</translation>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Paleta</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Panel de reproduccio</translation>
     </message>
@@ -13655,10 +13878,6 @@ erro: </translation>
     <message>
         <source>Add lyrics</source>
         <translation>Afig lletres</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Indicacio de Tempo...</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -14015,10 +14234,6 @@ erro: </translation>
     <message>
         <source>Repeat selection</source>
         <translation>Repetix seleccio</translation>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
-        <translation>Piano-roll panoramic</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
@@ -15584,6 +15799,22 @@ erro: </translation>
         <source>Set loop in position</source>
         <translation>Establix lloc inici bucle</translation>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Paletes</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Indicacio de Tempo</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -16634,6 +16865,10 @@ El compas no esta buit</translation>
     <message>
         <source>Tablature2</source>
         <translation>Tab 2</translation>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>Clau de Sol 8vb opcional</translation>
     </message>
 </context>
 <context>
@@ -17745,10 +17980,6 @@ El compas no esta buit</translation>
     <message>
         <source>Prallprall line</source>
         <translation>Regló mordent doble</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Llínea en forma d&apos;ona</translation>
     </message>
 </context>
 <context>

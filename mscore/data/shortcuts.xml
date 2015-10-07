@@ -383,10 +383,12 @@
   <SC>
     <key>delete-measures</key>
     <seq>Ctrl+Del</seq>
+    <seq>Ctrl+Backspace</seq>
     </SC>
   <SC>
     <key>full-measure-rest</key>
     <seq>Ctrl+Shift+Del</seq>
+    <seq>Ctrl+Shift+Backspace</seq>
     </SC>
   <SC>
     <key>append-measure</key>
@@ -635,6 +637,10 @@
   <SC>
     <key>zoomout</key>
     <seq>Ctrl+-</seq>
+    </SC>
+  <SC>
+    <key>zoom100</key>
+    <seq>Ctrl+0</seq>
     </SC>
   <SC>
     <key>mirror-note</key>

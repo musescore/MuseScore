@@ -170,7 +170,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"/>
+        <translation>Itxura</translation>
     </message>
     <message>
         <source>Direction:</source>
@@ -225,7 +225,7 @@ p, li { white-space: pre-wrap; }
     <name>Awl::ColorLabel</name>
     <message>
         <source>MuseScore: Select Color</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Kolorea Aukeratu</translation>
     </message>
 </context>
 <context>
@@ -286,11 +286,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Number of measures</source>
-        <translation type="unfinished"/>
+        <translation>Konpas kopurua</translation>
     </message>
     <message>
         <source>measures</source>
-        <translation type="unfinished"/>
+        <translation>konpasak</translation>
     </message>
     <message>
         <source>Add line breaks at end of each system</source>
@@ -359,7 +359,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"/>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Slash</source>
@@ -371,23 +371,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Si</translation>
     </message>
 </context>
 <context>
@@ -533,19 +533,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Transpose:</source>
-        <translation type="unfinished"/>
+        <translation>Transposizioa egin:</translation>
     </message>
     <message>
         <source>Staves:</source>
-        <translation type="unfinished"/>
+        <translation>Pentagramak:</translation>
     </message>
     <message>
         <source>Short name:</source>
-        <translation type="unfinished"/>
+        <translation>Izen motza:</translation>
     </message>
     <message>
         <source>MIDI program:</source>
-        <translation type="unfinished"/>
+        <translation>Midi programa:</translation>
     </message>
 </context>
 <context>
@@ -1294,7 +1294,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Number of strings:</source>
-        <translation type="unfinished"/>
+        <translation>Soka kopurua:</translation>
     </message>
     <message>
         <source>Staff Properties</source>
@@ -1314,11 +1314,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Staff line color:</source>
-        <translation type="unfinished"/>
+        <translation>Pentagramako lerroen kolorea:</translation>
     </message>
     <message>
         <source>Part name:</source>
-        <translation type="unfinished"/>
+        <translation>Partearen izena:</translation>
     </message>
     <message>
         <source>Long instrument name:</source>
@@ -1354,7 +1354,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show time signature</source>
-        <translation type="unfinished"/>
+        <translation>Konpas neurria erakutsi</translation>
     </message>
     <message>
         <source>Style group:</source>
@@ -1362,11 +1362,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show barlines</source>
-        <translation type="unfinished"/>
+        <translation>Zatilerroak erakutsi</translation>
     </message>
     <message>
         <source>Show clef</source>
-        <translation type="unfinished"/>
+        <translation>Klabea erakutsi</translation>
     </message>
     <message>
         <source>Lines:</source>
@@ -1382,15 +1382,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Never hide</source>
-        <translation type="unfinished"/>
+        <translation>Inoiz ez ezkutatu</translation>
     </message>
     <message>
         <source>Do not hide if system is empty</source>
-        <translation type="unfinished"/>
+        <translation>Ez ezkutatu sistema hutsik baldin badago</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"/>
+        <translation>Eskala</translation>
     </message>
     <message>
         <source>%</source>
@@ -1409,7 +1409,7 @@ p, li { white-space: pre-wrap; }
     <name>EditStaffType</name>
     <message>
         <source>MuseScore: Edit Staff Type</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Pentagrama mota editatu</translation>
     </message>
     <message>
         <source>Lines:</source>
@@ -1477,11 +1477,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Note Values</source>
-        <translation type="unfinished"/>
+        <translation>Noten Balioak</translation>
     </message>
     <message>
         <source>Shown as:</source>
-        <translation type="unfinished"/>
+        <translation>Honela erakutsi:</translation>
     </message>
     <message>
         <source>None</source>
@@ -1537,15 +1537,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show clef</source>
-        <translation type="unfinished"/>
+        <translation>Klabea erakutsi</translation>
     </message>
     <message>
         <source>Show time signature</source>
-        <translation type="unfinished"/>
+        <translation>Konpas neurria erakutsi</translation>
     </message>
     <message>
         <source>Show barlines</source>
-        <translation type="unfinished"/>
+        <translation>Zatilerroak erakutsi</translation>
     </message>
     <message>
         <source>Vertical offset:</source>
@@ -1569,7 +1569,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show rests</source>
-        <translation type="unfinished"/>
+        <translation>Isiluneak erakutsi</translation>
     </message>
     <message>
         <source>Add to Templates</source>
@@ -1577,11 +1577,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Template:</source>
-        <translation type="unfinished"/>
+        <translation>Txantiloia:</translation>
     </message>
     <message>
         <source>Show key signature</source>
-        <translation type="unfinished"/>
+        <translation>Armadura erakutsi</translation>
     </message>
     <message>
         <source>Show ledger lines</source>
@@ -1589,7 +1589,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Show Key signature</source>
-        <translation type="unfinished"/>
+        <translation>Armadura erakutsi</translation>
     </message>
     <message>
         <source>&lt; Reset to Template</source>
@@ -1597,7 +1597,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Repeat:</source>
-        <translation type="unfinished"/>
+        <translation>Errepikatu:</translation>
     </message>
     <message>
         <source>Never</source>
@@ -1613,7 +1613,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Always</source>
-        <translation type="unfinished"/>
+        <translation>Beti</translation>
     </message>
 </context>
 <context>
@@ -1628,15 +1628,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>New String...</source>
-        <translation type="unfinished"/>
+        <translation>Soka Berria...</translation>
     </message>
     <message>
         <source>Edit String...</source>
-        <translation type="unfinished"/>
+        <translation>Soka Editatu...</translation>
     </message>
     <message>
         <source>Delete String</source>
-        <translation type="unfinished"/>
+        <translation>Soka Ezabatu</translation>
     </message>
     <message>
         <source>Number of frets:</source>
@@ -1755,7 +1755,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Don&apos;t hide empty staves in first system</source>
-        <translation type="unfinished"/>
+        <translation>Ez ezkutatu lenen systemako pentagrama hutsak</translation>
     </message>
     <message>
         <source>Display note values across measure bar (EXPERIMENTAL, early music only!)</source>
@@ -1787,11 +1787,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Lyrics top margin:</source>
-        <translation type="unfinished"/>
+        <translation>Hitzen goiko marjina:</translation>
     </message>
     <message>
         <source>Lyrics bottom margin:</source>
-        <translation type="unfinished"/>
+        <translation>Hitzen azpiko marjina:</translation>
     </message>
     <message>
         <source>Vertical frame top margin:</source>
@@ -1803,7 +1803,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Create courtesy clefs</source>
-        <translation type="unfinished"/>
+        <translation>Kortesiazko klabeak sortu</translation>
     </message>
     <message>
         <source>Create courtesy time signatures</source>
@@ -1811,7 +1811,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Create key signature for all systems</source>
-        <translation type="unfinished"/>
+        <translation>Sortu armadura sistema guztietan</translation>
     </message>
     <message>
         <source>Create courtesy key signatures</source>
@@ -1859,7 +1859,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>All staves</source>
-        <translation type="unfinished"/>
+        <translation>Pentagrama guztiak</translation>
     </message>
     <message>
         <source>Every system</source>
@@ -1891,19 +1891,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Clef left margin:</source>
-        <translation type="unfinished"/>
+        <translation>Klabearen ezker marjina:</translation>
     </message>
     <message>
         <source>Minimum note distance:</source>
-        <translation type="unfinished"/>
+        <translation>Noten arteko gutxiengo tartea:</translation>
     </message>
     <message>
         <source>Key signature left margin:</source>
-        <translation type="unfinished"/>
+        <translation>Armaduraren ezker marjina:</translation>
     </message>
     <message>
         <source>Time signature left margin:</source>
-        <translation type="unfinished"/>
+        <translation>Konpas neurriaren ezker marjina:</translation>
     </message>
     <message>
         <source>Clef/Key right margin:</source>
@@ -1999,7 +1999,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Distance to note:</source>
-        <translation type="unfinished"/>
+        <translation>Notarainoko tartea:</translation>
     </message>
     <message>
         <source>Line thickness:</source>
@@ -2043,15 +2043,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Small note size:</source>
-        <translation type="unfinished"/>
+        <translation>Nota txikien tamaina:</translation>
     </message>
     <message>
         <source>Grace note size:</source>
-        <translation type="unfinished"/>
+        <translation>Apaindura noten tamaina:</translation>
     </message>
     <message>
         <source>Small clef size:</source>
-        <translation type="unfinished"/>
+        <translation>Tamaina txikiko klabea:</translation>
     </message>
     <message>
         <source>Hairpins</source>
@@ -2091,7 +2091,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"/>
+        <translation>Itxura</translation>
     </message>
     <message>
         <source>Standard</source>
@@ -2099,7 +2099,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Jazz</source>
-        <translation type="unfinished"/>
+        <translation>Jazz</translation>
     </message>
     <message>
         <source>Custom</source>
@@ -2200,7 +2200,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Accidental</source>
-        <translation type="unfinished"/>
+        <translation>Akzidentala</translation>
     </message>
     <message>
         <source>Maximum slope:</source>
@@ -2288,7 +2288,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Interval:</source>
-        <translation type="unfinished"/>
+        <translation>Bitartea:</translation>
     </message>
     <message>
         <source>Hide instrument name if there is only 1 instrument</source>
@@ -2396,7 +2396,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>Puntutxoduna</translation>
     </message>
     <message>
         <source>Dash-dotted</source>
@@ -2408,11 +2408,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Numbers only</source>
-        <translation type="unfinished"/>
+        <translation>Zenbakiak bakarrik</translation>
     </message>
     <message>
         <source>Header Text</source>
-        <translation type="unfinished"/>
+        <translation>Goiburuko testua</translation>
     </message>
     <message>
         <source>Footer Text</source>
@@ -2547,15 +2547,15 @@ space unit</extracomment>
     </message>
     <message>
         <source>Part title:</source>
-        <translation type="unfinished"/>
+        <translation>Partearen izenburua:</translation>
     </message>
     <message>
         <source>Edit Part</source>
-        <translation type="unfinished"/>
+        <translation>Partea editatu</translation>
     </message>
     <message>
         <source>Select Part</source>
-        <translation type="unfinished"/>
+        <translation>Partea Aukeratu</translation>
     </message>
 </context>
 <context>
@@ -2597,7 +2597,7 @@ space unit</extracomment>
     <name>FretDiagramProperties</name>
     <message>
         <source>Strings:</source>
-        <translation type="unfinished"/>
+        <translation>Sokak:</translation>
     </message>
     <message>
         <source>Frets:</source>
@@ -2681,18 +2681,18 @@ space unit</extracomment>
     </message>
     <message>
         <source>Insert empty measures</source>
-        <translation type="unfinished"/>
+        <translation>Konpas hutsak txertatu</translation>
     </message>
     <message>
         <source>Number of measures to insert:</source>
-        <translation type="unfinished"/>
+        <translation>Txertatzeko konpas kopurua:</translation>
     </message>
 </context>
 <context>
     <name>InspectorAccidental</name>
     <message>
         <source>Accidental</source>
-        <translation type="unfinished"/>
+        <translation>Akzidentala</translation>
     </message>
     <message>
         <source>Small</source>
@@ -2975,31 +2975,31 @@ space unit</extracomment>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"/>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>Sol</source>
-        <translation type="unfinished"/>
+        <translation>Sol</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Si</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
@@ -3019,10 +3019,29 @@ space unit</extracomment>
     </message>
     <message>
         <source>[Undefined]</source>
-        <translation type="unfinished"/>
+        <translation>[Definitu gabea]</translation>
     </message>
     <message>
         <source>Ambitus</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpegio</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Play</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3092,12 +3111,36 @@ space unit</extracomment>
         <source>Reset Time stretch value</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>InspectorBarLine</name>
     <message>
         <source>Barline</source>
-        <translation type="unfinished"/>
+        <translation>Zatilerroa</translation>
     </message>
     <message>
         <source>Style:</source>
@@ -3200,7 +3243,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Horizontal</source>
-        <translation type="unfinished"/>
+        <translation>Horizontala</translation>
     </message>
     <message>
         <source>Beam Inspector</source>
@@ -3260,6 +3303,25 @@ space unit</extracomment>
     </message>
     <message>
         <source>User position</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3385,7 +3447,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Velocity</source>
-        <translation type="unfinished"/>
+        <translation>Abiadura</translation>
     </message>
     <message>
         <source>Staff</source>
@@ -3393,7 +3455,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Part</source>
-        <translation type="unfinished"/>
+        <translation>Partea</translation>
     </message>
     <message>
         <source>System</source>
@@ -3487,7 +3549,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"/>
+        <translation>Eskala</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -3544,6 +3606,42 @@ space unit</extracomment>
         <source>Show text</source>
         <translation>Testua Erakutsi</translation>
     </message>
+    <message>
+        <source>Style</source>
+        <translation>Estiloa</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Kromatikoa</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diatonikoa</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>InspectorGroupElement</name>
@@ -3553,7 +3651,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Set Color</source>
-        <translation type="unfinished"/>
+        <translation>Kolorea ezarri</translation>
     </message>
     <message>
         <source>Set Visible</source>
@@ -3620,7 +3718,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Altuera</translation>
     </message>
     <message>
         <source>Type</source>
@@ -3636,7 +3734,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Part</source>
-        <translation type="unfinished"/>
+        <translation>Partea</translation>
     </message>
     <message>
         <source>System</source>
@@ -3711,7 +3809,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"/>
+        <translation>Eskala</translation>
     </message>
     <message>
         <source>Image Inspector</source>
@@ -3723,7 +3821,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Altuera</translation>
     </message>
     <message>
         <source>Width</source>
@@ -3770,7 +3868,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Jump to</source>
-        <translation type="unfinished"/>
+        <translation>Hona jauzi egin</translation>
     </message>
     <message>
         <source>Play until</source>
@@ -3848,7 +3946,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Altuera</translation>
     </message>
     <message>
         <source>Width</source>
@@ -3876,7 +3974,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Line style</source>
-        <translation type="unfinished"/>
+        <translation>Lerroaren estiloa</translation>
     </message>
     <message>
         <source>Allow diagonal</source>
@@ -3916,7 +4014,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>Puntutxoduna</translation>
     </message>
     <message>
         <source>Dash-dotted</source>
@@ -3947,7 +4045,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Label</source>
-        <translation type="unfinished"/>
+        <translation>Etiketa</translation>
     </message>
     <message>
         <source>Segno</source>
@@ -4018,7 +4116,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Velocity</source>
-        <translation type="unfinished"/>
+        <translation>Abiadura</translation>
     </message>
     <message>
         <source>Mirror head</source>
@@ -4086,7 +4184,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Small </source>
-        <translation type="unfinished"/>
+        <translation>Txikia</translation>
     </message>
     <message>
         <source>Note Inspector</source>
@@ -4197,7 +4295,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Numbers only</source>
-        <translation type="unfinished"/>
+        <translation>Zenbakiak bakarrik</translation>
     </message>
     <message>
         <source>Ottava Inspector</source>
@@ -4291,7 +4389,7 @@ space unit</extracomment>
     <name>InspectorSlur</name>
     <message>
         <source>Line type:</source>
-        <translation type="unfinished"/>
+        <translation>Lerro mota:</translation>
     </message>
     <message>
         <source>Slur/Tie</source>
@@ -4319,7 +4417,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>Puntutxoduna</translation>
     </message>
     <message>
         <source>Dashed</source>
@@ -4334,7 +4432,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Altuera</translation>
     </message>
     <message>
         <source>sp</source>
@@ -4347,6 +4445,78 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Height value</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -4481,11 +4651,35 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Wavy Line</source>
+        <source>Reset value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Reset value</source>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>lehenetsia</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Play</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -4509,7 +4703,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished"/>
+        <translation>Automatikoa</translation>
     </message>
     <message>
         <source>Bracket</source>
@@ -4577,7 +4771,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"/>
+        <translation>Altuera</translation>
     </message>
     <message>
         <source>Vertical Frame Inspector</source>
@@ -4675,7 +4869,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Bilatu</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -4738,11 +4932,11 @@ space unit</extracomment>
     <name>InstrumentsDialog</name>
     <message>
         <source>All instruments</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentu guztiak</translation>
     </message>
     <message>
         <source>MuseScore: Instruments</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Instrumentuak</translation>
     </message>
     <message>
         <source>Load</source>
@@ -4765,7 +4959,7 @@ space unit</extracomment>
     <name>InstrumentsWidget</name>
     <message>
         <source>MuseScore: Instruments</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Instrumentuak</translation>
     </message>
     <message>
         <source>Instrument List</source>
@@ -4773,7 +4967,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Bilatu</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -4821,7 +5015,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Staff type</source>
-        <translation type="unfinished"/>
+        <translation>Pentagrama mota</translation>
     </message>
     <message>
         <source>Instrument Genre Filter</source>
@@ -4829,7 +5023,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Instrument list</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentuen zerrenda</translation>
     </message>
     <message>
         <source>Clear Search box</source>
@@ -4864,6 +5058,13 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>LayerManager</name>
     <message>
         <source>MuseScore: Layers</source>
@@ -4875,7 +5076,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Create</source>
-        <translation type="unfinished"/>
+        <translation>Sortu</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -5023,7 +5224,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>Deskribapena</translation>
     </message>
 </context>
 <context>
@@ -5097,7 +5298,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"/>
+        <translation>Pasahitza</translation>
     </message>
 </context>
 <context>
@@ -5132,11 +5333,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>None (1:1)</source>
-        <translation type="unfinished"/>
+        <translation>Bat ere ez (1:1)</translation>
     </message>
     <message>
         <source>Swing (2:1)</source>
-        <translation type="unfinished"/>
+        <translation>Swing (2:1)</translation>
     </message>
     <message>
         <source>Shuffle (3:1)</source>
@@ -5148,7 +5349,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Staff name</source>
-        <translation type="unfinished"/>
+        <translation>Pentagrama izena</translation>
     </message>
     <message>
         <source>Sound</source>
@@ -5240,7 +5441,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Time signature</source>
-        <translation type="unfinished"/>
+        <translation>Konpas neurria</translation>
     </message>
     <message>
         <source>2x less
@@ -5319,11 +5520,11 @@ chord symbols</source>
     <name>MP3Exporter</name>
     <message>
         <source>Where is %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Non dago %1?</translation>
     </message>
     <message>
         <source>Save as MP3</source>
-        <translation type="unfinished"/>
+        <translation>MP3 bezala gorde</translation>
     </message>
     <message>
         <source>MuseScore does not export MP3 files directly, but instead uses the freely available LAME library.  You must obtain %1 separately (for details check the handbook), and then locate the file for MuseScore.
@@ -5429,7 +5630,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <source>Repeats &amp; Jumps</source>
-        <translation type="unfinished"/>
+        <translation>Errepikapenak eta jauziak</translation>
     </message>
 </context>
 <context>
@@ -5556,23 +5757,23 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished"/>
+        <translation>Automatikoa</translation>
     </message>
     <message>
         <source>Always Show</source>
-        <translation type="unfinished"/>
+        <translation>Beti Erakutsi</translation>
     </message>
     <message>
         <source>Always Hide</source>
-        <translation type="unfinished"/>
+        <translation>Beti Ezkutatu</translation>
     </message>
     <message>
         <source>Go to previous measure</source>
-        <translation type="unfinished"/>
+        <translation>Aurreko konpasera joan</translation>
     </message>
     <message>
         <source>Go to next measure</source>
-        <translation type="unfinished"/>
+        <translation>Hurrengo konpasera joan</translation>
     </message>
     <message>
         <source>Break multimeasure rest</source>
@@ -5720,14 +5921,14 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>Not found </source>
-        <translation type="unfinished"/>
+        <translation>Ez aurkitua</translation>
     </message>
 </context>
 <context>
     <name>Ms::AlbumManager</name>
     <message>
         <source>MuseScore: Add Score</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Partitura Gehitu</translation>
     </message>
     <message>
         <source>MuseScore: Load Album</source>
@@ -5735,7 +5936,7 @@ tuplet would cross measure</source>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Fitxategiak (*.mscz *.mscx)</translation>
     </message>
     <message>
         <source>MuseScore Album Files (*.album)</source>
@@ -5852,7 +6053,7 @@ tuplet would cross measure</source>
     <name>Ms::DrumTools</name>
     <message>
         <source>Drum Tools</source>
-        <translation type="unfinished"/>
+        <translation>Perkusio Tresnak</translation>
     </message>
     <message>
         <source>Edit Drumset</source>
@@ -5902,7 +6103,7 @@ tuplet would cross measure</source>
     <name>Ms::EditDrumset</name>
     <message>
         <source>invalid</source>
-        <translation type="unfinished"/>
+        <translation>baliogabea</translation>
     </message>
     <message>
         <source>MuseScore: Open File</source>
@@ -5927,7 +6128,7 @@ failed: </source>
     <name>Ms::EditStaff</name>
     <message>
         <source>The instrument name is invalid.</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentuaren izena baliogabea da.</translation>
     </message>
 </context>
 <context>
@@ -5987,11 +6188,11 @@ failed: </source>
     </message>
     <message>
         <source>number of pages</source>
-        <translation type="unfinished"/>
+        <translation>orrialde kopurua</translation>
     </message>
     <message>
         <source>file name</source>
-        <translation type="unfinished"/>
+        <translation>fitxategi izena</translation>
     </message>
     <message>
         <source>file path+name</source>
@@ -6007,22 +6208,14 @@ failed: </source>
     </message>
     <message>
         <source>copyright, on first page only</source>
-        <translation type="unfinished"/>
+        <translation>copyright, lehen orrialdean bakarrik</translation>
     </message>
     <message>
         <source>copyright, on all pages</source>
-        <translation type="unfinished"/>
+        <translation>copyright, orrialde guztietan</translation>
     </message>
     <message>
         <source>the $ sign itself</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>meta data tag</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -6039,6 +6232,14 @@ failed: </source>
     </message>
     <message>
         <source>page number, if there is more than one page</source>
+        <translation>orrialde zenbakia, orrialde bat baino gehiago baldin badago</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6055,7 +6256,7 @@ failed: </source>
     <name>Ms::Fingering</name>
     <message>
         <source>String number</source>
-        <translation type="unfinished"/>
+        <translation>Soka zenbakia</translation>
     </message>
 </context>
 <context>
@@ -6077,18 +6278,18 @@ failed: </source>
     <name>Ms::Harmony</name>
     <message>
         <source>sharp</source>
-        <translation type="unfinished"/>
+        <translation>sostengatua</translation>
     </message>
     <message>
         <source>flat</source>
-        <translation type="unfinished"/>
+        <translation>bemola</translation>
     </message>
 </context>
 <context>
     <name>Ms::HelpQuery</name>
     <message>
         <source>Search for: </source>
-        <translation type="unfinished"/>
+        <translation>Hau bilatu:</translation>
     </message>
 </context>
 <context>
@@ -6121,7 +6322,7 @@ failed: </source>
     </message>
     <message>
         <source>Rests</source>
-        <translation type="unfinished"/>
+        <translation>Isiluneak</translation>
     </message>
 </context>
 <context>
@@ -6190,7 +6391,7 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore: Open Instruments File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Instrumentuen Fitxategia Ireki</translation>
     </message>
     <message>
         <source>Open Instruments File
@@ -6200,7 +6401,7 @@ failed: </source>
     </message>
     <message>
         <source>MuseScore Instruments (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Instrumentuak (*.xml)</translation>
     </message>
 </context>
 <context>
@@ -6219,7 +6420,7 @@ failed: </source>
     </message>
     <message>
         <source>Staff type</source>
-        <translation type="unfinished"/>
+        <translation>Pentagrama mota</translation>
     </message>
     <message>
         <source>Visible</source>
@@ -6259,11 +6460,11 @@ failed: </source>
     <name>Ms::LoginDialog</name>
     <message>
         <source>&lt;a href=&quot;%1&quot;&gt;Create an account&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Kontua sortu&lt;/a&gt;</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;%1&quot;&gt;Forgot password?&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Pasahitza ahaztu duzu?&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Login error</source>
@@ -6278,7 +6479,7 @@ failed: </source>
     <name>Ms::LoginManager</name>
     <message>
         <source>Network error</source>
-        <translation type="unfinished"/>
+        <translation>Sareko errorea</translation>
     </message>
     <message>
         <source>Unsuccessful login. Please try again.</source>
@@ -6347,7 +6548,7 @@ failed: </source>
     <name>Ms::MeasureProperties</name>
     <message>
         <source>MuseScore: Measure Properties for Measure %1</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Konpasaren ezaugarriak %1 Konpasarentzako</translation>
     </message>
     <message>
         <source>visible</source>
@@ -6380,7 +6581,7 @@ failed: </source>
     <name>Ms::Mixer</name>
     <message>
         <source>MuseScore: Mixer</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Nahasgailua</translation>
     </message>
 </context>
 <context>
@@ -6417,7 +6618,7 @@ itxi aurretik?</translation>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Fitxategiak (*.mscz *.mscx);;</translation>
     </message>
     <message>
         <source>MusicXML Files (*.xml *.mxl);;</source>
@@ -6433,7 +6634,7 @@ itxi aurretik?</translation>
     </message>
     <message>
         <source>Capella Files (*.cap *.capx);;</source>
-        <translation type="unfinished"/>
+        <translation>Capella Fitxategiak (*.cap *.capx);;</translation>
     </message>
     <message>
         <source>BB Files &lt;experimental&gt; (*.mgu *.MGU *.sgu *.SGU);;</source>
@@ -6557,11 +6758,11 @@ itxi aurretik?</translation>
     </message>
     <message>
         <source>MP3 Audio (*.mp3)</source>
-        <translation type="unfinished"/>
+        <translation>MP3 Audioa (*.mp3)</translation>
     </message>
     <message>
         <source>MuseScore: Export</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Esportatu</translation>
     </message>
     <message>
         <source>MuseScore: Save As</source>
@@ -6569,7 +6770,7 @@ itxi aurretik?</translation>
     </message>
     <message>
         <source>MuseScore: Export Parts</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Parteak Esportatu</translation>
     </message>
     <message>
         <source>&quot;%1&quot; already exists.
@@ -6611,7 +6812,7 @@ Do you want to replace it?
     </message>
     <message>
         <source>Images (*.jpg *.jpeg *.png);;All (*)</source>
-        <translation type="unfinished"/>
+        <translation>Irudiak (*.jpg *.jpeg *.png);;Guztia (*)</translation>
     </message>
     <message>
         <source>Repeat measure sign</source>
@@ -6745,7 +6946,7 @@ Aukeratu konpas bat eta berriro saiatu</translation>
     </message>
     <message>
         <source>Continuous View</source>
-        <translation type="unfinished"/>
+        <translation>Ikuspegi jarraia</translation>
     </message>
     <message>
         <source>Concert Pitch</source>
@@ -6845,7 +7046,7 @@ Saioa berreskuratu?</translation>
     </message>
     <message>
         <source>Undo Changes</source>
-        <translation type="unfinished"/>
+        <translation>Aldaketak Desegin</translation>
     </message>
     <message>
         <source>MuseScore: Read Workspace Name</source>
@@ -6858,15 +7059,15 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Ogg Audio File (*.ogg);;All (*)</source>
-        <translation type="unfinished"/>
+        <translation>Ogg Audio Fitxategia (*.ogg);;Guztia (*)</translation>
     </message>
     <message>
         <source>MuseScore: Choose Ogg Audio File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Ogg Audio Fitxategia Aukeratu</translation>
     </message>
     <message>
         <source>FLAC Audio (*.flac)</source>
-        <translation type="unfinished"/>
+        <translation>FLAC Audioa (*.flac)</translation>
     </message>
     <message>
         <source>Chord Symbols Style File (*.xml)</source>
@@ -6895,7 +7096,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Please select one or more measures</source>
-        <translation type="unfinished"/>
+        <translation>Aukeratu konpas bat edo gehiago, mesedez</translation>
     </message>
     <message>
         <source>Error Opening LAME library</source>
@@ -6968,19 +7169,19 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Fitxategia (*.mscz)</translation>
     </message>
     <message>
         <source>Uncompressed MuseScore File (*.mscx)</source>
-        <translation type="unfinished"/>
+        <translation>Konprimatu Gabeko MuseScore Fitxategia (*.mscx)</translation>
     </message>
     <message>
         <source>MusicXML File (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML Fitxategia (*.xml)</translation>
     </message>
     <message>
         <source>Compressed MusicXML File (*.mxl)</source>
-        <translation type="unfinished"/>
+        <translation>Konprimatutako MusicXML Fitxategia (*.mxl)</translation>
     </message>
     <message>
         <source>Show MIDI import panel</source>
@@ -6992,7 +7193,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Staff text</source>
-        <translation type="unfinished"/>
+        <translation>Pentagramako testua</translation>
     </message>
     <message>
         <source>System text</source>
@@ -7016,11 +7217,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Change staff type</source>
-        <translation type="unfinished"/>
+        <translation>Pentagrama mota aldatu</translation>
     </message>
     <message>
         <source>Change instrument</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentua aldatu</translation>
     </message>
     <message>
         <source>Fretboard diagram</source>
@@ -7048,11 +7249,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</source>
-        <translation type="unfinished"/>
+        <translation>Guitar Pro (*.GTP *.GP3 *.GP4 *.GP5 *.GPX)</translation>
     </message>
     <message>
         <source>MuseScore Styles (*.mss)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Estiloak (*.mss)</translation>
     </message>
     <message>
         <source>MuseScore Plugin (*.qml)</source>
@@ -7162,6 +7363,10 @@ please choose a different name:</source>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7241,7 +7446,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Select Key Signature and Tempo:</source>
-        <translation type="unfinished"/>
+        <translation>Armadura eta Tempo-a aukeratu:</translation>
     </message>
     <message>
         <source>Key Signature</source>
@@ -7283,7 +7488,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Invalid note</source>
-        <translation type="unfinished"/>
+        <translation>Nota baliogabea</translation>
     </message>
     <message>
         <source>Note</source>
@@ -7291,7 +7496,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Voice: %1</source>
-        <translation type="unfinished"/>
+        <translation>Ahotsa: %1</translation>
     </message>
     <message>
         <source>Acciaccatura</source>
@@ -7337,7 +7542,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>More Elements...</source>
-        <translation type="unfinished"/>
+        <translation>Elementu Gehiago...</translation>
     </message>
 </context>
 <context>
@@ -7413,7 +7618,7 @@ please choose a different name:</source>
     <name>Ms::PianoTools</name>
     <message>
         <source>Piano Keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Piano Teklatua</translation>
     </message>
 </context>
 <context>
@@ -7532,7 +7737,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>MuseScore Files (*.mscz *.mscx);;All (*)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Fitxategiak (*.mscz *.mscx);;Guztiak (*)</translation>
     </message>
     <message>
         <source>SoundFont Folders</source>
@@ -7547,7 +7752,7 @@ Save before closing?</source>
     </message>
     <message>
         <source>%1 KB</source>
-        <translation type="unfinished"/>
+        <translation>%1 KB</translation>
     </message>
     <message>
         <source>Update</source>
@@ -7555,11 +7760,11 @@ Save before closing?</source>
     </message>
     <message>
         <source>No update</source>
-        <translation type="unfinished"/>
+        <translation>Eguneratzerik ez</translation>
     </message>
     <message>
         <source>Updating</source>
-        <translation type="unfinished"/>
+        <translation>Eguneratzen</translation>
     </message>
     <message>
         <source>Failed, try again</source>
@@ -7574,7 +7779,7 @@ Save before closing?</source>
     <name>Ms::Rest</name>
     <message>
         <source>Voice: %1</source>
-        <translation type="unfinished"/>
+        <translation>Ahotsa: %1</translation>
     </message>
     <message>
         <source>%1; Duration: %2; %3</source>
@@ -7635,10 +7840,6 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>file not found</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>No selection</source>
         <translation type="unfinished"/>
     </message>
@@ -7648,6 +7849,10 @@ failed: %2</source>
     </message>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7671,7 +7876,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Measure: %1</source>
-        <translation type="unfinished"/>
+        <translation>Konpasa: %1</translation>
     </message>
     <message>
         <source>Start Measure: %1; Start Beat: %2</source>
@@ -7690,7 +7895,7 @@ failed: %2</source>
     <name>Ms::ScoreBrowser</name>
     <message>
         <source>Choose Instruments</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentuak aukeratu</translation>
     </message>
     <message>
         <source>Create New Score</source>
@@ -7757,7 +7962,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Time Signature Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Konpas Neurrien Ezaugarriak...</translation>
     </message>
     <message>
         <source>Line Properties...</source>
@@ -7769,7 +7974,7 @@ failed: %2</source>
     </message>
     <message>
         <source>Change Instrument Properties...</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentuaren Ezaugarriak Aldatu...</translation>
     </message>
     <message>
         <source>Staff</source>
@@ -7869,7 +8074,7 @@ Aukeratu konpas bat eta berriro saiatu</translation>
     </message>
     <message>
         <source>Text Style...</source>
-        <translation type="unfinished"/>
+        <translation>Testu estiloa...</translation>
     </message>
     <message>
         <source>System Text Properties...</source>
@@ -7916,11 +8121,11 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>Hide Courtesy Clef</source>
-        <translation type="unfinished"/>
+        <translation>Ezkutatu Kortesiazko Armadura</translation>
     </message>
     <message>
         <source>Show Courtesy Clef</source>
-        <translation type="unfinished"/>
+        <translation>Erakutsi Kortesiazko Armadura</translation>
     </message>
     <message>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
@@ -7956,6 +8161,11 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>Transparent background</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8026,7 +8236,7 @@ Please select a range of measures to join and try again</source>
     </message>
     <message>
         <source>MuseScore: System Text Properties</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Sistemako Testuaren Ezaugarriak</translation>
     </message>
     <message>
         <source>MuseScore: Staff Text Properties</source>
@@ -8070,15 +8280,15 @@ Please select a range of measures to join and try again</source>
     <name>Ms::TextEditor</name>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"/>
+        <translation>Lodia</translation>
     </message>
     <message>
         <source>Italic</source>
-        <translation type="unfinished"/>
+        <translation>Etzana</translation>
     </message>
     <message>
         <source>Underline</source>
-        <translation type="unfinished"/>
+        <translation>Azpimarratu</translation>
     </message>
     <message>
         <source>Align left</source>
@@ -8153,15 +8363,15 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"/>
+        <translation>Lodia</translation>
     </message>
     <message>
         <source>Italic</source>
-        <translation type="unfinished"/>
+        <translation>Etzana</translation>
     </message>
     <message>
         <source>Underline</source>
-        <translation type="unfinished"/>
+        <translation>Azpimarratu</translation>
     </message>
     <message>
         <source>Subscript</source>
@@ -8241,7 +8451,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Public Domain</source>
-        <translation type="unfinished"/>
+        <translation>Domeinu Publikoa</translation>
     </message>
     <message>
         <source>Creative Commons Zero</source>
@@ -8269,7 +8479,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>&lt;a href=&quot;%1&quot;&gt;What does this mean?&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;a href=&quot;%1&quot;&gt;Honek zer esan nahi du?&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Respect the &lt;a href=&quot;%1&quot;&gt;community guidelines&lt;/a&gt;. Only make your scores accessible to anyone with permission from the right holders.</source>
@@ -8401,7 +8611,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert title here</source>
-        <translation type="unfinished"/>
+        <translation>Idatzi izenburua hemen</translation>
     </message>
     <message>
         <source>Subtitle</source>
@@ -8409,7 +8619,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert subtitle here</source>
-        <translation type="unfinished"/>
+        <translation>Idatzi azpi izenburua hemen</translation>
     </message>
     <message>
         <source>Composer</source>
@@ -8417,7 +8627,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert composer&apos;s name here</source>
-        <translation type="unfinished"/>
+        <translation>Idatzi konposatzailearen izena hemen</translation>
     </message>
     <message>
         <source>Lyricist</source>
@@ -8425,7 +8635,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Insert lyricist&apos;s name here</source>
-        <translation type="unfinished"/>
+        <translation>Idatzi hitzen egilearen izena hemen</translation>
     </message>
     <message>
         <source>Copyright</source>
@@ -8483,7 +8693,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Show lines</source>
-        <translation type="unfinished"/>
+        <translation>Lerroak erakutsi</translation>
     </message>
     <message>
         <source>Distance between two lines on a standard 5-line staff</source>
@@ -8562,7 +8772,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>First page number:</source>
-        <translation type="unfinished"/>
+        <translation>Lehenengo orrialdearen zenbakia:</translation>
     </message>
     <message>
         <source>Apply to all Parts</source>
@@ -8936,7 +9146,7 @@ failed: </source>
     </message>
     <message>
         <source>Part name</source>
-        <translation type="unfinished"/>
+        <translation>Partearen izena</translation>
     </message>
     <message>
         <source>Panorama position</source>
@@ -8944,7 +9154,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI sound</source>
-        <translation type="unfinished"/>
+        <translation>MIDI soinua</translation>
     </message>
     <message>
         <source>Part Name</source>
@@ -9436,7 +9646,7 @@ failed: </source>
     </message>
     <message>
         <source>MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML</translation>
     </message>
     <message>
         <source>Import layout</source>
@@ -9448,7 +9658,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI</source>
-        <translation type="unfinished"/>
+        <translation>MIDI</translation>
     </message>
     <message>
         <source>Quarter</source>
@@ -9648,7 +9858,7 @@ failed: </source>
     </message>
     <message>
         <source>Shortest note:</source>
-        <translation type="unfinished"/>
+        <translation>Notarik motzena:</translation>
     </message>
     <message>
         <source>Double augmentation dot</source>
@@ -9673,7 +9883,7 @@ failed: </source>
     <message>
         <source>Port number:</source>
         <extracomment>The UDP port number on which the MuseScore OSC server will listen on</extracomment>
-        <translation type="unfinished"/>
+        <translation>Portu zenbakia:</translation>
     </message>
     <message>
         <source>Use JACK Audio</source>
@@ -9689,7 +9899,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI Input:</source>
-        <translation type="unfinished"/>
+        <translation>MIDI Sarrera:</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -9733,11 +9943,11 @@ failed: </source>
     </message>
     <message>
         <source>Port number</source>
-        <translation type="unfinished"/>
+        <translation>Portu zenbakia</translation>
     </message>
     <message>
         <source>Select style</source>
-        <translation type="unfinished"/>
+        <translation>Estiloa aukeratu</translation>
     </message>
     <message>
         <source>Icon Height</source>
@@ -10005,7 +10215,7 @@ failed: </source>
     </message>
     <message>
         <source>Instrument list 1</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentuen zerrenda 1</translation>
     </message>
     <message>
         <source>Insert path to a instrument list file</source>
@@ -10017,7 +10227,7 @@ failed: </source>
     </message>
     <message>
         <source>Choose style</source>
-        <translation type="unfinished"/>
+        <translation>Estiloa aukeratu</translation>
     </message>
     <message>
         <source>Opens a file dialog for selecting a style file</source>
@@ -10041,11 +10251,11 @@ failed: </source>
     </message>
     <message>
         <source>Instrument list 2</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentuen zerrenda 2</translation>
     </message>
     <message>
         <source>Choose Instrument list 2</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentuen 2. Zerrenda aukeratu</translation>
     </message>
     <message>
         <source>I/O Tab</source>
@@ -10065,7 +10275,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI Input</source>
-        <translation type="unfinished"/>
+        <translation>MIDI Sarrera</translation>
     </message>
     <message>
         <source>Choose MIDI Input</source>
@@ -10133,7 +10343,7 @@ failed: </source>
     </message>
     <message>
         <source>Shortest note</source>
-        <translation type="unfinished"/>
+        <translation>Notarik motzena</translation>
     </message>
     <message>
         <source>Choose the shortest note value</source>
@@ -10165,7 +10375,7 @@ failed: </source>
     </message>
     <message>
         <source>Define</source>
-        <translation type="unfinished"/>
+        <translation>Definitu</translation>
     </message>
     <message>
         <source>Update Tab</source>
@@ -10229,11 +10439,11 @@ failed: </source>
     </message>
     <message>
         <source>Dark</source>
-        <translation type="unfinished"/>
+        <translation>Iluna</translation>
     </message>
     <message>
         <source>Light</source>
-        <translation type="unfinished"/>
+        <translation>Argia</translation>
     </message>
     <message>
         <source>Enable MIDI remote control</source>
@@ -10309,7 +10519,7 @@ failed: </source>
     </message>
     <message>
         <source>Note input</source>
-        <translation type="unfinished"/>
+        <translation>Notak Sartu</translation>
     </message>
     <message>
         <source>Note input is active</source>
@@ -10325,19 +10535,19 @@ failed: </source>
     </message>
     <message>
         <source>Images:</source>
-        <translation type="unfinished"/>
+        <translation>Irudiak:</translation>
     </message>
     <message>
         <source>Scores:</source>
-        <translation type="unfinished"/>
+        <translation>Partiturak:</translation>
     </message>
     <message>
         <source>Styles:</source>
-        <translation type="unfinished"/>
+        <translation>Estiloak:</translation>
     </message>
     <message>
         <source>Templates:</source>
-        <translation type="unfinished"/>
+        <translation>Txantiloiak:</translation>
     </message>
     <message>
         <source>Plugins:</source>
@@ -10349,10 +10559,18 @@ failed: </source>
     </message>
     <message>
         <source>Check for new version of MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>MuseScoreren eguneratzea bilatu</translation>
     </message>
     <message>
         <source>Filter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -10470,7 +10688,7 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>File not found %1</source>
-        <translation type="unfinished"/>
+        <translation>Fitxategi ez aurkitua %1</translation>
     </message>
     <message>
         <source>MuseScore: Load Error</source>
@@ -10584,19 +10802,19 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>double flat</source>
-        <translation type="unfinished"/>
+        <translation>bemol bikoitza</translation>
     </message>
     <message>
         <source>flat</source>
-        <translation type="unfinished"/>
+        <translation>bemola</translation>
     </message>
     <message>
         <source>sharp</source>
-        <translation type="unfinished"/>
+        <translation>sostengatua</translation>
     </message>
     <message>
         <source>double sharp</source>
-        <translation type="unfinished"/>
+        <translation>sostengatu bikoitza</translation>
     </message>
     <message>
         <source>Internal error: Could not open resource musicxml.xsd
@@ -10740,7 +10958,7 @@ huts egin du:</translation>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Fitxategia (*.mscz)</translation>
     </message>
     <message>
         <source>MuseScore Files (*.album)</source>
@@ -10795,7 +11013,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Filename</source>
-        <translation type="unfinished"/>
+        <translation>Fitxategi izena</translation>
     </message>
     <message>
         <source>File Size</source>
@@ -10872,15 +11090,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Element type:</source>
-        <translation type="unfinished"/>
+        <translation>Elementu mota:</translation>
     </message>
     <message>
         <source>Same staff</source>
-        <translation type="unfinished"/>
+        <translation>Pentagrama berdina</translation>
     </message>
     <message>
         <source>Same voice</source>
-        <translation type="unfinished"/>
+        <translation>Ahots berdina</translation>
     </message>
     <message>
         <source>Same subtype:</source>
@@ -10888,7 +11106,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Same system</source>
-        <translation type="unfinished"/>
+        <translation>Sistema berdina</translation>
     </message>
     <message>
         <source>Replace selection</source>
@@ -10915,7 +11133,7 @@ Do you want to overwrite it?</source>
     <name>SelectInstrument</name>
     <message>
         <source>MuseScore: Select Instrument</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Instrumentua aukeratu</translation>
     </message>
     <message>
         <source>0</source>
@@ -10923,7 +11141,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Bilatu</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -10945,7 +11163,7 @@ Do you want to overwrite it?</source>
     <name>SfzListDialog</name>
     <message>
         <source>SFZ Files</source>
-        <translation type="unfinished"/>
+        <translation>SFZ Fitxategiak</translation>
     </message>
 </context>
 <context>
@@ -11062,7 +11280,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>Deskribapena</translation>
     </message>
     <message>
         <source>Actions for selected channel:</source>
@@ -11139,7 +11357,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Save Templates</source>
-        <translation type="unfinished"/>
+        <translation>Txantiloiak gorde</translation>
     </message>
     <message>
         <source>Load Templates</source>
@@ -11173,7 +11391,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Open a score...</source>
-        <translation type="unfinished"/>
+        <translation>Partitura ireki...</translation>
     </message>
     <message>
         <source>Close</source>
@@ -11188,6 +11406,14 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>System flag</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation>Bilatu...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -11400,19 +11626,19 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"/>
+        <translation>Lodia</translation>
     </message>
     <message>
         <source>Italic</source>
-        <translation type="unfinished"/>
+        <translation>Etzana</translation>
     </message>
     <message>
         <source>Underline</source>
-        <translation type="unfinished"/>
+        <translation>Azpimarratu</translation>
     </message>
     <message>
         <source>Text color</source>
-        <translation type="unfinished"/>
+        <translation>Testuaren kolorea</translation>
     </message>
     <message>
         <source>Horizontal offset to reference point</source>
@@ -11540,15 +11766,15 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Instrument Name (Long)</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentuaren izena (Luzea)</translation>
     </message>
     <message>
         <source>Instrument Name (Short)</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentuaren izena (Motza)</translation>
     </message>
     <message>
         <source>Instrument Name (Part)</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentuaren Izena (Partea)</translation>
     </message>
     <message>
         <source>Dynamics</source>
@@ -11636,7 +11862,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Header</source>
-        <translation type="unfinished"/>
+        <translation>Goiburua</translation>
     </message>
     <message>
         <source>Footer</source>
@@ -11644,7 +11870,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Instrument Change</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentu Aldaketa</translation>
     </message>
     <message>
         <source>Figured Bass</source>
@@ -11740,7 +11966,7 @@ Do you want to overwrite it?</source>
     <name>TimeSigProperties</name>
     <message>
         <source>Time Signature Properties</source>
-        <translation type="unfinished"/>
+        <translation>Konpas Neurrien Ezaugarriak</translation>
     </message>
     <message>
         <source>/</source>
@@ -11756,11 +11982,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Values</source>
-        <translation type="unfinished"/>
+        <translation>Balioak</translation>
     </message>
     <message>
         <source>Appearance</source>
-        <translation type="unfinished"/>
+        <translation>Itxura</translation>
     </message>
     <message>
         <source>Other:</source>
@@ -11851,7 +12077,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Enter Number of Measures</source>
-        <translation type="unfinished"/>
+        <translation>Sartu Konpas Kopurua</translation>
     </message>
     <message>
         <source>Measures</source>
@@ -12094,11 +12320,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Single Sharps and Flats Only</source>
-        <translation type="unfinished"/>
+        <translation>Sostengatu eta bemol bakunak bakarrik</translation>
     </message>
     <message>
         <source>Use Double Sharps and Flats</source>
-        <translation type="unfinished"/>
+        <translation>Sostengatu eta bemol bikoitzak erabili</translation>
     </message>
     <message>
         <source>Transpose Chromatically</source>
@@ -12253,7 +12479,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>USERNAME</source>
-        <translation type="unfinished"/>
+        <translation>ERABILTZAILE IZENA</translation>
     </message>
     <message>
         <source>Sign out</source>
@@ -12269,11 +12495,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>Deskribapena</translation>
     </message>
     <message>
         <source>License</source>
-        <translation type="unfinished"/>
+        <translation>Lizentzia</translation>
     </message>
     <message>
         <source>Tags</source>
@@ -12285,7 +12511,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Make this score private</source>
-        <translation type="unfinished"/>
+        <translation>Partitura hau pribatua bihurtu</translation>
     </message>
 </context>
 <context>
@@ -12609,7 +12835,7 @@ failed: </source>
     </message>
     <message>
         <source>Export Parts...</source>
-        <translation type="unfinished"/>
+        <translation>Parteak Esportatu...</translation>
     </message>
     <message>
         <source>Save a copy of the score&apos;s parts in various formats</source>
@@ -13536,10 +13762,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Paleta</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Play panela</translation>
     </message>
@@ -13573,11 +13795,7 @@ failed: </source>
     </message>
     <message>
         <source>Add lyrics</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation type="unfinished"/>
+        <translation>Hitzak gehitu</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -13653,7 +13871,7 @@ failed: </source>
     </message>
     <message>
         <source>Add picture</source>
-        <translation type="unfinished"/>
+        <translation>Irudia gehitu</translation>
     </message>
     <message>
         <source>Play</source>
@@ -13889,7 +14107,7 @@ failed: </source>
     </message>
     <message>
         <source>General...</source>
-        <translation type="unfinished"/>
+        <translation>Orokorra...</translation>
     </message>
     <message>
         <source>Edit general style</source>
@@ -13934,10 +14152,6 @@ failed: </source>
     <message>
         <source>Repeat selection</source>
         <translation>Errepikatu aukeraketa</translation>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
@@ -13989,7 +14203,7 @@ failed: </source>
     </message>
     <message>
         <source>Full Screen</source>
-        <translation type="unfinished"/>
+        <translation>Pantaila Osoa</translation>
     </message>
     <message>
         <source>Re-Pitch Mode</source>
@@ -14001,7 +14215,7 @@ failed: </source>
     </message>
     <message>
         <source>Piano Keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Piano Teklatua</translation>
     </message>
     <message>
         <source>Additional Media...</source>
@@ -14305,7 +14519,7 @@ failed: </source>
     </message>
     <message>
         <source>Join Measures</source>
-        <translation type="unfinished"/>
+        <translation>Konpasak lotu</translation>
     </message>
     <message>
         <source>OMR Panel</source>
@@ -14417,7 +14631,7 @@ failed: </source>
     </message>
     <message>
         <source>Show time signature palette</source>
-        <translation type="unfinished"/>
+        <translation>Konpas neurrien paleta erakutsi</translation>
     </message>
     <message>
         <source>Symbols...</source>
@@ -14465,7 +14679,7 @@ failed: </source>
     </message>
     <message>
         <source>Add part name</source>
-        <translation type="unfinished"/>
+        <translation>Partearen izena gehitu</translation>
     </message>
     <message>
         <source>Save Online...</source>
@@ -14473,7 +14687,7 @@ failed: </source>
     </message>
     <message>
         <source>Save score on MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Partitura MuseScore.com-en gorde</translation>
     </message>
     <message>
         <source>Explode</source>
@@ -14553,43 +14767,43 @@ failed: </source>
     </message>
     <message>
         <source>File: Open</source>
-        <translation type="unfinished"/>
+        <translation>Fitxategia: Ireki</translation>
     </message>
     <message>
         <source>File: Save</source>
-        <translation type="unfinished"/>
+        <translation>Fitxategia: Gorde</translation>
     </message>
     <message>
         <source>File: Save online</source>
-        <translation type="unfinished"/>
+        <translation>Fitxategia: Online gorde</translation>
     </message>
     <message>
         <source>File: Save as</source>
-        <translation type="unfinished"/>
+        <translation>Fitxategia: Honela gorde</translation>
     </message>
     <message>
         <source>Save selection</source>
-        <translation type="unfinished"/>
+        <translation>Aukeraketa gorde</translation>
     </message>
     <message>
         <source>File: Save a copy</source>
-        <translation type="unfinished"/>
+        <translation>Fitxategia: Kopia bat gorde</translation>
     </message>
     <message>
         <source>Export parts</source>
-        <translation type="unfinished"/>
+        <translation>Parteak esportatu</translation>
     </message>
     <message>
         <source>File: Close</source>
-        <translation type="unfinished"/>
+        <translation>Fitxategia: Itxi</translation>
     </message>
     <message>
         <source>File: New</source>
-        <translation type="unfinished"/>
+        <translation>Fitxategia: Berria</translation>
     </message>
     <message>
         <source>Note input</source>
-        <translation type="unfinished"/>
+        <translation>Notak Sartu</translation>
     </message>
     <message>
         <source>Respell pitches</source>
@@ -14617,7 +14831,7 @@ failed: </source>
     </message>
     <message>
         <source>Next Element</source>
-        <translation type="unfinished"/>
+        <translation>Hurrengo elementua</translation>
     </message>
     <message>
         <source>Accessibility: Next element</source>
@@ -14625,7 +14839,7 @@ failed: </source>
     </message>
     <message>
         <source>Previous Element</source>
-        <translation type="unfinished"/>
+        <translation>Aurreko elementua</translation>
     </message>
     <message>
         <source>Accessibility: Previous element</source>
@@ -14633,11 +14847,11 @@ failed: </source>
     </message>
     <message>
         <source>First Element</source>
-        <translation type="unfinished"/>
+        <translation>Lehenengo elementua</translation>
     </message>
     <message>
         <source>Last Element</source>
-        <translation type="unfinished"/>
+        <translation>Azkenengo elementua</translation>
     </message>
     <message>
         <source>Move Down</source>
@@ -14853,15 +15067,15 @@ failed: </source>
     </message>
     <message>
         <source>Double Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Sostengatu Bikoitza</translation>
     </message>
     <message>
         <source>Note input: Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Notak sartu: Sostengatu bikoitza</translation>
     </message>
     <message>
         <source>Note input: Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Notak sartu: Sostengatua</translation>
     </message>
     <message>
         <source>Note input: Natural</source>
@@ -14869,15 +15083,15 @@ failed: </source>
     </message>
     <message>
         <source>Note input: Flat</source>
-        <translation type="unfinished"/>
+        <translation>Notak sartu: Bemola</translation>
     </message>
     <message>
         <source>Double Flat</source>
-        <translation type="unfinished"/>
+        <translation>Bemol bikoitza</translation>
     </message>
     <message>
         <source>Note input: Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Notak sartu: Bemol bikoitza</translation>
     </message>
     <message>
         <source>Grace: Quarter</source>
@@ -14889,7 +15103,7 @@ failed: </source>
     </message>
     <message>
         <source>MIDI Input</source>
-        <translation type="unfinished"/>
+        <translation>MIDI Sarrera</translation>
     </message>
     <message>
         <source>Beam Start</source>
@@ -14977,27 +15191,27 @@ failed: </source>
     </message>
     <message>
         <source>Exchange voice 1-2</source>
-        <translation type="unfinished"/>
+        <translation>1-2 ahotsak trukatu</translation>
     </message>
     <message>
         <source>Exchange voice 1-3</source>
-        <translation type="unfinished"/>
+        <translation>1-3 ahotsak trukatu</translation>
     </message>
     <message>
         <source>Exchange voice 1-4</source>
-        <translation type="unfinished"/>
+        <translation>1-4 ahotsak trukatu</translation>
     </message>
     <message>
         <source>Exchange voice 2-3</source>
-        <translation type="unfinished"/>
+        <translation>2-3 ahotsak trukatu</translation>
     </message>
     <message>
         <source>Exchange voice 2-4</source>
-        <translation type="unfinished"/>
+        <translation>2-4 ahotsak trukatu</translation>
     </message>
     <message>
         <source>Exchange voice 3-4</source>
-        <translation type="unfinished"/>
+        <translation>3-4 ahotsak trukatu</translation>
     </message>
     <message>
         <source>Repeat Last Command</source>
@@ -15017,11 +15231,11 @@ failed: </source>
     </message>
     <message>
         <source>Edit element</source>
-        <translation type="unfinished"/>
+        <translation>Elementua editatu</translation>
     </message>
     <message>
         <source>Show invisible</source>
-        <translation type="unfinished"/>
+        <translation>Ikusezina erakutsi</translation>
     </message>
     <message>
         <source>Show unprintable</source>
@@ -15121,7 +15335,7 @@ failed: </source>
     </message>
     <message>
         <source>Full screen</source>
-        <translation type="unfinished"/>
+        <translation>Pantaila osoa</translation>
     </message>
     <message>
         <source>Enable Snap to Horizontal Grid</source>
@@ -15137,7 +15351,7 @@ failed: </source>
     </message>
     <message>
         <source>Piano keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Piano teklatua</translation>
     </message>
     <message>
         <source>Split measure</source>
@@ -15145,7 +15359,7 @@ failed: </source>
     </message>
     <message>
         <source>Join measures</source>
-        <translation type="unfinished"/>
+        <translation>Konpasak lotu</translation>
     </message>
     <message>
         <source>Page settings</source>
@@ -15153,11 +15367,11 @@ failed: </source>
     </message>
     <message>
         <source>Next score</source>
-        <translation type="unfinished"/>
+        <translation>Hurrengo partitura</translation>
     </message>
     <message>
         <source>Previous score</source>
-        <translation type="unfinished"/>
+        <translation>Aurreko partitura</translation>
     </message>
     <message>
         <source>Plugin creator</source>
@@ -15341,11 +15555,11 @@ failed: </source>
     </message>
     <message>
         <source>Italic</source>
-        <translation type="unfinished"/>
+        <translation>Etzana</translation>
     </message>
     <message>
         <source>Underline</source>
-        <translation type="unfinished"/>
+        <translation>Azpimarratu</translation>
     </message>
     <message>
         <source>Move Word Left</source>
@@ -15489,11 +15703,11 @@ failed: </source>
     </message>
     <message>
         <source>Import PDF...</source>
-        <translation type="unfinished"/>
+        <translation>PDA-a inportatu...</translation>
     </message>
     <message>
         <source>Import PDF</source>
-        <translation type="unfinished"/>
+        <translation>PDA-a inportatu</translation>
     </message>
     <message>
         <source>Import a PDF file with an experimental service on musescore.com</source>
@@ -15501,6 +15715,22 @@ failed: </source>
     </message>
     <message>
         <source>Set loop in position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Palettes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -16552,6 +16782,10 @@ Measure is not empty</source>
         <source>Tablature2</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>drumset</name>
@@ -16906,7 +17140,7 @@ Measure is not empty</source>
     <name>elementName</name>
     <message>
         <source>invalid</source>
-        <translation type="unfinished"/>
+        <translation>baliogabea</translation>
     </message>
     <message>
         <source>Symbol</source>
@@ -16930,7 +17164,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Accidental</source>
-        <translation type="unfinished"/>
+        <translation>Akzidentala</translation>
     </message>
     <message>
         <source>Stem</source>
@@ -17082,7 +17316,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Instrument Name</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentuaren Izena</translation>
     </message>
     <message>
         <source>Slur Segment</source>
@@ -17130,7 +17364,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Instrument Change</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentu Aldaketa</translation>
     </message>
     <message>
         <source>Hairpin Segment</source>
@@ -17170,7 +17404,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Note Head</source>
-        <translation type="unfinished"/>
+        <translation>Notaren Burua</translation>
     </message>
     <message>
         <source>Note Dot</source>
@@ -17206,7 +17440,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Staff List</source>
-        <translation type="unfinished"/>
+        <translation>Pentagrama Zerrenda</translation>
     </message>
     <message>
         <source>Measure List</source>
@@ -17438,7 +17672,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Mi</source>
-        <translation type="unfinished"/>
+        <translation>Mi</translation>
     </message>
     <message>
         <source>Slash</source>
@@ -17450,27 +17684,27 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Do</source>
-        <translation type="unfinished"/>
+        <translation>Do</translation>
     </message>
     <message>
         <source>Re</source>
-        <translation type="unfinished"/>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Fa</source>
-        <translation type="unfinished"/>
+        <translation>Fa</translation>
     </message>
     <message>
         <source>La</source>
-        <translation type="unfinished"/>
+        <translation>La</translation>
     </message>
     <message>
         <source>Ti</source>
-        <translation type="unfinished"/>
+        <translation>Si</translation>
     </message>
     <message>
         <source>Sol</source>
-        <translation type="unfinished"/>
+        <translation>Sol</translation>
     </message>
     <message>
         <source>Alt. Brevis</source>
@@ -17492,27 +17726,27 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Every Day</source>
-        <translation type="unfinished"/>
+        <translation>Egunero</translation>
     </message>
     <message>
         <source>Every 3 Days</source>
-        <translation type="unfinished"/>
+        <translation>3 egunean behin</translation>
     </message>
     <message>
         <source>Every Week</source>
-        <translation type="unfinished"/>
+        <translation>Astero</translation>
     </message>
     <message>
         <source>Every 2 Weeks</source>
-        <translation type="unfinished"/>
+        <translation>2 astean behin</translation>
     </message>
     <message>
         <source>Every Month</source>
-        <translation type="unfinished"/>
+        <translation>Hilabetero</translation>
     </message>
     <message>
         <source>Every 2 Months</source>
-        <translation type="unfinished"/>
+        <translation>2 hilabetean behin</translation>
     </message>
 </context>
 <context>
@@ -17546,11 +17780,11 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Articulations</source>
-        <translation type="unfinished"/>
+        <translation>Artikulazioak</translation>
     </message>
     <message>
         <source>Slurs</source>
-        <translation type="unfinished"/>
+        <translation>Ligaturak</translation>
     </message>
     <message>
         <source>Figured Bass</source>
@@ -17594,26 +17828,26 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Voice 1</source>
-        <translation type="unfinished"/>
+        <translation>1 ahotsa</translation>
     </message>
     <message>
         <source>Voice 2</source>
-        <translation type="unfinished"/>
+        <translation>2 ahotsa</translation>
     </message>
     <message>
         <source>Voice 3</source>
-        <translation type="unfinished"/>
+        <translation>3 ahotsa</translation>
     </message>
     <message>
         <source>Voice 4</source>
-        <translation type="unfinished"/>
+        <translation>4 ahotsa</translation>
     </message>
 </context>
 <context>
     <name>soundfonts_directory</name>
     <message>
         <source>Soundfonts</source>
-        <translation type="unfinished"/>
+        <translation>SoundFont-ak</translation>
     </message>
 </context>
 <context>
@@ -17642,7 +17876,7 @@ Measure is not empty</source>
     <name>templates_directory</name>
     <message>
         <source>Templates</source>
-        <translation type="unfinished"/>
+        <translation>Txantiloiak</translation>
     </message>
 </context>
 <context>
@@ -17661,10 +17895,6 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Prallprall line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wavy line</source>
         <translation type="unfinished"/>
     </message>
 </context>

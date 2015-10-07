@@ -1385,7 +1385,7 @@ Shortcut Shortcut::_sc[] = {
          Qt::WindowShortcut,
          ShortcutFlags::A_CMD
          },
-       {
+      {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY_PITCHED | STATE_NOTE_ENTRY_DRUM,
          "flat",
@@ -1430,45 +1430,45 @@ Shortcut Shortcut::_sc[] = {
          ShortcutFlags::A_CHECKABLE
          },
       {
-        MsWidget::SCORE_TAB,
+         MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
-       /* no stroke: 4th*/
-        "grace4",
-        QT_TRANSLATE_NOOP("action","Grace: Quarter"),
-        QT_TRANSLATE_NOOP("action","Add quarter grace note"),
-        QT_TRANSLATE_NOOP("action","Grace: quarter"),
-        Icons::grace4_ICON,
+         /* no stroke: 4th*/
+         "grace4",
+         QT_TRANSLATE_NOOP("action","Grace: Quarter"),
+         QT_TRANSLATE_NOOP("action","Add quarter grace note"),
+         QT_TRANSLATE_NOOP("action","Grace: quarter"),
+         Icons::grace4_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_CHECKABLE
          },
-     {
-        MsWidget::SCORE_TAB,
-        STATE_NORMAL | STATE_NOTE_ENTRY,
-      /* no stroke: 16th*/
-        "grace16",
-        QT_TRANSLATE_NOOP("action","Grace: 16th"),
-        QT_TRANSLATE_NOOP("action","Add 16th grace note"),
-        QT_TRANSLATE_NOOP("action","Grace: 16th"),
-        Icons::grace16_ICON,
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         /* no stroke: 16th*/
+         "grace16",
+         QT_TRANSLATE_NOOP("action","Grace: 16th"),
+         QT_TRANSLATE_NOOP("action","Add 16th grace note"),
+         QT_TRANSLATE_NOOP("action","Grace: 16th"),
+         Icons::grace16_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_CHECKABLE
          },
-     {
-        MsWidget::SCORE_TAB,
-        STATE_NORMAL | STATE_NOTE_ENTRY,
-      /* no stroke: 32nd*/
-        "grace32",
-        QT_TRANSLATE_NOOP("action","Grace: 32nd"),
-        QT_TRANSLATE_NOOP("action","Add 32nd grace note"),
-        QT_TRANSLATE_NOOP("action","Grace: 32nd"),
-        Icons::grace32_ICON,
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         /* no stroke: 32nd*/
+         "grace32",
+         QT_TRANSLATE_NOOP("action","Grace: 32nd"),
+         QT_TRANSLATE_NOOP("action","Add 32nd grace note"),
+         QT_TRANSLATE_NOOP("action","Grace: 32nd"),
+         Icons::grace32_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_CHECKABLE
          },
-        {
-          MsWidget::SCORE_TAB,
-          STATE_NORMAL | STATE_NOTE_ENTRY,
-        /* no stroke: Eighth*/
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         /* no stroke: Eighth*/
          "grace8after",
          QT_TRANSLATE_NOOP("action","Grace: Eighth after"),
          QT_TRANSLATE_NOOP("action","Add Eighth grace note after"),
@@ -1480,7 +1480,7 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
-       /* no stroke: 16th*/
+         /* no stroke: 16th*/
          "grace16after",
          QT_TRANSLATE_NOOP("action","Grace: 16th after"),
          QT_TRANSLATE_NOOP("action","Add 16th grace note after"),
@@ -1492,7 +1492,7 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
-       /* no stroke: 32nd*/
+         /* no stroke: 32nd*/
          "grace32after",
          QT_TRANSLATE_NOOP("action","Grace: 32nd after"),
          QT_TRANSLATE_NOOP("action","Add 32nd grace note after"),
@@ -1632,7 +1632,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
          "toggle-palette",
-         QT_TRANSLATE_NOOP("action","Palette"),
+         QT_TRANSLATE_NOOP("action","Palettes"),
          0,
          0,
          Icons::Invalid_ICON,
@@ -1742,7 +1742,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "tempo",
-         QT_TRANSLATE_NOOP("action","Tempo Marking..."),
+         QT_TRANSLATE_NOOP("action","Tempo Marking"),
          QT_TRANSLATE_NOOP("action","Add tempo marking"),
          0,
          Icons::Invalid_ICON,
@@ -2268,6 +2268,13 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Zoom out")
          },
       {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_LYRICS_EDIT | STATE_PLAY,
+         "zoom100",
+         QT_TRANSLATE_NOOP("action","Zoom to 100%"),
+         QT_TRANSLATE_NOOP("action","Zoom to 100%")
+         },
+      {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "mirror-note",
@@ -2373,10 +2380,12 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          "follow",
-         QT_TRANSLATE_NOOP("action","Pan piano roll"),
+         QT_TRANSLATE_NOOP("action","Pan Piano Roll"),
          QT_TRANSLATE_NOOP("action","Toggle pan piano roll"),
          QT_TRANSLATE_NOOP("action","Pan roll during playback"),
-         Icons::pan_ICON
+         Icons::pan_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_SCORE | ShortcutFlags::A_CHECKABLE | ShortcutFlags::A_CHECKED
          },
       {
          MsWidget::MAIN_WINDOW,

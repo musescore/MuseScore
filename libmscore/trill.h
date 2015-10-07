@@ -29,7 +29,7 @@ class Accidental;
 class TrillSegment : public LineSegment {
       Q_OBJECT
 
-      QString _symbols;
+      QList<SymId> _symbols;
 
       void symbolLine(SymId start, SymId fill);
       void symbolLine(SymId start, SymId fill, SymId end);
@@ -51,13 +51,13 @@ class TrillSegment : public LineSegment {
       virtual void remove(Element*) override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all) override;
 
-      QString symbols() const           { return _symbols; }
-      void setSymbols(const QString& s) { _symbols = s; }
+      QList<SymId> symbols() const           { return _symbols; }
+      void setSymbols(const QList<SymId>& s) { _symbols = s; }
       };
 
 //---------------------------------------------------------
 //   @@ Trill
-//   @P trillType  Ms::Trill::Type  (TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE, PURE_LINE)
+//   @P trillType  enum (Trill.DOWNPRALL_LINE, .PRALLPRALL_LINE, .PURE_LINE, .TRILL_LINE, .UPPRALL_LINE)
 //---------------------------------------------------------
 
 class Trill : public SLine {
@@ -66,13 +66,15 @@ class Trill : public SLine {
 
    public:
       enum class Type : char {
-            TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE, PURE_LINE
+            TRILL_LINE, UPPRALL_LINE, DOWNPRALL_LINE, PRALLPRALL_LINE
             };
 
    private:
       Q_PROPERTY(Ms::Trill::Type trillType READ trillType WRITE undoSetTrillType)
       Type _trillType;
       Accidental* _accidental;
+      MScore::OrnamentStyle _ornamentStyle; // for use in ornaments such as trill
+      bool _playArticulation;
 
    public:
       Trill(Score* s);
@@ -91,6 +93,10 @@ class Trill : public SLine {
       void undoSetTrillType(Type val);
       void setTrillType(Type tt)          { _trillType = tt; }
       Type trillType() const              { return _trillType; }
+      void setOrnamentStyle(MScore::OrnamentStyle val) { _ornamentStyle = val;}
+      MScore::OrnamentStyle ornamentStyle() const { return _ornamentStyle;}
+      void setPlayArticulation(bool val)  { _playArticulation = val;}
+      bool playArticulation() const       { return _playArticulation; }
       QString trillTypeName() const;
       QString trillTypeUserName();
       Accidental* accidental() const      { return _accidental; }

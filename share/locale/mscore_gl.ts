@@ -3042,6 +3042,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Inspector de glissandi</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpexo</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Reproducir</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restaurar o valor de reprodución</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3106,6 +3125,30 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Restaurar a anchura do tempo</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Tipo de ornamentación</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Predefinido</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barroco</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Restaurar o valor do ornamento</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Reproducir</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restaurar o valor de reprodución</translation>
     </message>
 </context>
 <context>
@@ -3276,6 +3319,25 @@ space unit</extracomment>
     <message>
         <source>User position</source>
         <translation>Posición do usuario</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Inspector de glissandi</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Curvar</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Reproducir</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restaurar o valor de reprodución</translation>
     </message>
 </context>
 <context>
@@ -3558,6 +3620,42 @@ space unit</extracomment>
     <message>
         <source>Show text</source>
         <translation>Mostrar texto</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Estilo</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Restaurar o valor do estilo</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Estilo de reprodución</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Cromático</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Teclas brancas</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Teclas negras</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diatónico</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Reproducir</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restaurar o valor de reprodución</translation>
     </message>
 </context>
 <context>
@@ -4366,6 +4464,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Inspector de molduras de texto</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Moldura de texto</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Oco inferior</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Marxe superior</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Restaurar o valor</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Restaurar o valor do oco superior</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Restaurar o valor do oco inferior</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Marxe esquerda</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Marxe inferior</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Restaurar o valor da marxe dereita</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Marxe dereita</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Restaurar o valor da marxe inferior</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Restaurar o valor da marxe superior</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Restaurar o valor da marxe esquerda</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Oco superior</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>sp</translation>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4496,12 +4666,36 @@ space unit</extracomment>
         <translation>Mordente duplo superior</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Liña ondulada</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Restaurar o valor</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Tipo de ornamentación</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Dirección</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>predefinido</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barroco</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Restaurar o valor do ornamento</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Reproducir</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restaurar o valor de reprodución</translation>
     </message>
 </context>
 <context>
@@ -4876,6 +5070,13 @@ space unit</extracomment>
     <message>
         <source>Add time signature to palette</source>
         <translation>Engadir armadura á paleta</translation>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>atonal</translation>
     </message>
 </context>
 <context>
@@ -5601,7 +5802,7 @@ a quiáltera atravesaría os compases</translation>
     </message>
     <message>
         <source>Break multimeasure rest</source>
-        <translation>Qebrar o silencio de varios compases</translation>
+        <translation>Quebrar un silencio de varios compases</translation>
     </message>
 </context>
 <context>
@@ -6045,14 +6246,6 @@ produciu un fallo: </translation>
         <translation>o símbolo $ mesmo</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>etiqueta de meta-datos</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Etiquetas dispoñíbeis e os seus valores actuais:</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Aplicar a todas as partes</translation>
     </message>
@@ -6067,6 +6260,14 @@ produciu un fallo: </translation>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>número de páxina, de haber máis de unha</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>etiqueta de meta-datos, ver embaixo</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Etiquetas de meta-datos dispoñíbeis e os seus valores actuais:</translation>
     </message>
 </context>
 <context>
@@ -7195,6 +7396,10 @@ escolla un nome diferente:</translation>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation>Non foi posíbel gardar esta partitura na rede. Solucione os compases corrompidos e ténteo de novo.</translation>
     </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Solicitar axuda</translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7676,10 +7881,6 @@ o ficheiro de estilo %1:
         <translation>Produciuse un fallo ao escribir o estilo: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>non foi posíbel abrir o ficheiro</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Non hai ningunha selección</translation>
     </message>
@@ -7690,6 +7891,10 @@ o ficheiro de estilo %1:
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>Compás %1, pentagrama 2%, voz %3 demasiado longo. Esperado: %4; Atopado: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>Erro de lectura de XML na liña %1, columna %2: %3</translation>
     </message>
 </context>
 <context>
@@ -8001,6 +8206,12 @@ Seleccione un intervalo de compases que unir e ténteo de novo</translation>
     <message>
         <source>Transparent background</source>
         <translation>Fondo transparente</translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>Non é posíbel quebrar o compás aquí:
+É o primeiro pulso do compás</translation>
     </message>
 </context>
 <context>
@@ -8999,7 +9210,7 @@ produciu un erro:</translation>
     </message>
     <message>
         <source>Use arrows to modify</source>
-        <translation>Use as flechas para modificar</translation>
+        <translation>Use as frechas para modificar</translation>
     </message>
     <message>
         <source>Sound</source>
@@ -10402,6 +10613,14 @@ produciu un erro:</translation>
         <source>Filter</source>
         <translation>Filtro</translation>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Export RPN</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10723,7 +10942,7 @@ Visite o &lt;a href=&quot;http://musescore.org/gl&quot;&gt;sitio web do MuseScor
     </message>
     <message>
         <source>Do you want to try to load this file anyway?</source>
-        <translation type="unfinished"/>
+        <translation>Queres cargar este ficheiro en calquera caso?</translation>
     </message>
 </context>
 <context>
@@ -11254,6 +11473,14 @@ Desexa substituílo?</translation>
     <message>
         <source>System flag</source>
         <translation>Bandeira de sistema</translation>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation>Buscar...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Limpar</translation>
     </message>
 </context>
 <context>
@@ -13603,10 +13830,6 @@ produciu un fallo: </translation>
         <translation>Barra inclinada, máis rápido</translation>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Paleta</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Panel de reprodución</translation>
     </message>
@@ -13641,10 +13864,6 @@ produciu un fallo: </translation>
     <message>
         <source>Add lyrics</source>
         <translation>Engadir a letra</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Marca de tempo...</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -14001,10 +14220,6 @@ produciu un fallo: </translation>
     <message>
         <source>Repeat selection</source>
         <translation>Repetir a selección</translation>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
-        <translation>Desprazar a pianola</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
@@ -15570,6 +15785,22 @@ produciu un fallo: </translation>
         <source>Set loop in position</source>
         <translation>Establecer o inicio do bucle</translation>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Paletas</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Marca de tempo</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation>Aumentar ao 100%</translation>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation>Desprazar a pianola</translation>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -16619,6 +16850,10 @@ O compás non está baleiro</translation>
     <message>
         <source>Tablature2</source>
         <translation>Tabulatura2</translation>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>Clave de sol 8vb</translation>
     </message>
 </context>
 <context>
@@ -17730,10 +17965,6 @@ O compás non está baleiro</translation>
     <message>
         <source>Prallprall line</source>
         <translation>Liña de mordente duplo superior</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Liña ondulada</translation>
     </message>
 </context>
 <context>

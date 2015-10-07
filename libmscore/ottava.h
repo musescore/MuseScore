@@ -54,7 +54,7 @@ class OttavaSegment : public TextLineSegment {
 
 //---------------------------------------------------------
 //   @@ Ottava
-//   @P ottavaType  Ms::Ottava::Type  (OTTAVA_8VA, OTTAVA_15MA, OTTAVA_8VB, OTTAVA_15MB, OTTAVA_22MA, OTTAVA_22MB)
+//   @P ottavaType  enum (Ottava.OTTAVA_8VA, .OTTAVA_8VB, .OTTAVA_15MA, .OTTAVA_15MB, .OTTAVA_22MA, .OTTAVA_22MB)
 //---------------------------------------------------------
 
 class Ottava : public TextLine {

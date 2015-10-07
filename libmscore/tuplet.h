@@ -95,6 +95,7 @@ class Tuplet : public DurationElement {
       void clear()                                    { _elements.clear(); }
 
       virtual void layout();
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
       Text* number() const { return _number; }
 
       void read(XmlReader&);

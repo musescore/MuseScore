@@ -1538,7 +1538,7 @@
     }, 
     "accidentalQuarterToneSharpBusotti": {
         "codepoint": "U+E472", 
-        "description": "Quarter tone sharp (Busotti)"
+        "description": "Quarter tone sharp (Bussotti)"
     }, 
     "accidentalQuarterToneSharpNaturalArrowUp": {
         "alternateCodepoint": "U+1D12E", 
@@ -1660,11 +1660,11 @@
     }, 
     "accidentalTavenerFlat": {
         "codepoint": "U+E477", 
-        "description": "Byzantine-style slashed flat (Tavener)"
+        "description": "Byzantine-style Bakiye flat (Tavener)"
     }, 
     "accidentalTavenerSharp": {
         "codepoint": "U+E476", 
-        "description": "Byzantine-style slashed sharp (Tavener)"
+        "description": "Byzantine-style Bu\u0308yu\u0308k mu\u0308cenneb sharp (Tavener)"
     }, 
     "accidentalThreeQuarterTonesFlatArrowDown": {
         "alternateCodepoint": "U+1D12D", 
@@ -1702,7 +1702,7 @@
     }, 
     "accidentalThreeQuarterTonesSharpBusotti": {
         "codepoint": "U+E474", 
-        "description": "Three quarter tones sharp (Busotti)"
+        "description": "Three quarter tones sharp (Bussotti)"
     }, 
     "accidentalThreeQuarterTonesSharpStein": {
         "codepoint": "U+E283", 
@@ -1828,10 +1828,18 @@
         "codepoint": "U+E471", 
         "description": "Two-third-tones sharp (Xenakis)"
     }, 
+    "analyticsChoralmelodie": {
+        "codepoint": "U+E86A", 
+        "description": "Choralmelodie (Berg)"
+    }, 
     "analyticsEndStimme": {
         "alternateCodepoint": "U+1D1A8", 
         "codepoint": "U+E863", 
         "description": "End of stimme"
+    }, 
+    "analyticsHauptrhythmus": {
+        "codepoint": "U+E86B", 
+        "description": "Hauptrhythmus (Berg)"
     }, 
     "analyticsHauptstimme": {
         "alternateCodepoint": "U+1D1A6", 
@@ -2116,6 +2124,14 @@
     "articMarcatoStaccatoBelow": {
         "codepoint": "U+E4AF", 
         "description": "Marcato-staccato below"
+    }, 
+    "articMarcatoTenutoAbove": {
+        "codepoint": "U+E4BC", 
+        "description": "Marcato-tenuto above"
+    }, 
+    "articMarcatoTenutoBelow": {
+        "codepoint": "U+E4BD", 
+        "description": "Marcato-tenuto below"
     }, 
     "articStaccatissimoAbove": {
         "alternateCodepoint": "U+1D17E", 
@@ -2418,6 +2434,18 @@
         "codepoint": "U+E5D1", 
         "description": "Lift, short"
     }, 
+    "brassLiftSmoothLong": {
+        "codepoint": "U+E5EE", 
+        "description": "Smooth lift, long"
+    }, 
+    "brassLiftSmoothMedium": {
+        "codepoint": "U+E5ED", 
+        "description": "Smooth lift, medium"
+    }, 
+    "brassLiftSmoothShort": {
+        "codepoint": "U+E5EC", 
+        "description": "Smooth lift, short"
+    }, 
     "brassMuteClosed": {
         "codepoint": "U+E5E5", 
         "description": "Muted (closed)"
@@ -2501,14 +2529,6 @@
         "codepoint": "U+E060", 
         "description": "C clef (19th century)"
     }, 
-    "cClefTriangular": {
-        "codepoint": "U+E06F", 
-        "description": "Triangular C clef"
-    }, 
-    "cClefTriangularToFClef": {
-        "codepoint": "U+E071", 
-        "description": "C clef to F clef change"
-    }, 
     "caesura": {
         "alternateCodepoint": "U+1D113", 
         "codepoint": "U+E4D1", 
@@ -2551,6 +2571,7 @@
         "description": "Caesura"
     }, 
     "chantCclef": {
+        "alternateCodepoint": "U+1D1D0", 
         "codepoint": "U+E906", 
         "description": "Plainchant C clef"
     }, 
@@ -2655,6 +2676,7 @@
         "description": "Episema"
     }, 
     "chantFclef": {
+        "alternateCodepoint": "U+1D1D1", 
         "codepoint": "U+E902", 
         "description": "Plainchant F clef"
     }, 
@@ -3472,14 +3494,6 @@
         "codepoint": "U+E076", 
         "description": "Reversed F clef"
     }, 
-    "fClefTriangular": {
-        "codepoint": "U+E070", 
-        "description": "Triangular F clef"
-    }, 
-    "fClefTriangularToCClef": {
-        "codepoint": "U+E072", 
-        "description": "F clef to C clef change"
-    }, 
     "fClefTurned": {
         "codepoint": "U+E077", 
         "description": "Turned F clef"
@@ -3593,6 +3607,10 @@
     "figbass6Raised": {
         "codepoint": "U+EA5C", 
         "description": "Figured bass 6 raised by half-step"
+    }, 
+    "figbass6Raised2": {
+        "codepoint": "U+EA6F", 
+        "description": "Figured bass 6 raised by half-step 2"
     }, 
     "figbass7": {
         "codepoint": "U+EA5D", 
@@ -4247,6 +4265,14 @@
     "harpPedalRaised": {
         "codepoint": "U+E680", 
         "description": "Harp pedal raised (flat)"
+    }, 
+    "harpSalzedoAeolianAscending": {
+        "codepoint": "U+E695", 
+        "description": "Ascending aeolian chords (Salzedo)"
+    }, 
+    "harpSalzedoAeolianDescending": {
+        "codepoint": "U+E696", 
+        "description": "Descending aeolian chords (Salzedo)"
     }, 
     "harpSalzedoFluidicSoundsLeft": {
         "codepoint": "U+E68D", 
@@ -4980,9 +5006,10 @@
     }, 
     "medRenFlatHardB": {
         "codepoint": "U+E9E1", 
-        "description": "Natural, hard b (mi)"
+        "description": "Flat, hard b (mi)"
     }, 
     "medRenFlatSoftB": {
+        "alternateCodepoint": "U+1D1D2", 
         "codepoint": "U+E9E0", 
         "description": "Flat, soft b (fa)"
     }, 
@@ -5626,9 +5653,105 @@
         "description": "White mensural minima"
     }, 
     "mensuralWhiteSemiminima": {
-        "alternateCodepoint": "U+1D1BE", 
+        "alternateCodepoint": "U+1D1BC", 
         "codepoint": "U+E960", 
         "description": "White mensural semiminima"
+    }, 
+    "metAugmentationDot": {
+        "codepoint": "U+ECB7", 
+        "description": "Augmentation dot"
+    }, 
+    "metNote1024thDown": {
+        "codepoint": "U+ECB6", 
+        "description": "1024th note (semihemidemisemihemidemisemiquaver) stem down"
+    }, 
+    "metNote1024thUp": {
+        "codepoint": "U+ECB5", 
+        "description": "1024th note (semihemidemisemihemidemisemiquaver) stem up"
+    }, 
+    "metNote128thDown": {
+        "codepoint": "U+ECB0", 
+        "description": "128th note (semihemidemisemiquaver) stem down"
+    }, 
+    "metNote128thUp": {
+        "codepoint": "U+ECAF", 
+        "description": "128th note (semihemidemisemiquaver) stem up"
+    }, 
+    "metNote16thDown": {
+        "codepoint": "U+ECAA", 
+        "description": "16th note (semiquaver) stem down"
+    }, 
+    "metNote16thUp": {
+        "codepoint": "U+ECA9", 
+        "description": "16th note (semiquaver) stem up"
+    }, 
+    "metNote256thDown": {
+        "codepoint": "U+ECB2", 
+        "description": "256th note (demisemihemidemisemiquaver) stem down"
+    }, 
+    "metNote256thUp": {
+        "codepoint": "U+ECB1", 
+        "description": "256th note (demisemihemidemisemiquaver) stem up"
+    }, 
+    "metNote32ndDown": {
+        "codepoint": "U+ECAC", 
+        "description": "32nd note (demisemiquaver) stem down"
+    }, 
+    "metNote32ndUp": {
+        "codepoint": "U+ECAB", 
+        "description": "32nd note (demisemiquaver) stem up"
+    }, 
+    "metNote512thDown": {
+        "codepoint": "U+ECB4", 
+        "description": "512th note (hemidemisemihemidemisemiquaver) stem down"
+    }, 
+    "metNote512thUp": {
+        "codepoint": "U+ECB3", 
+        "description": "512th note (hemidemisemihemidemisemiquaver) stem up"
+    }, 
+    "metNote64thDown": {
+        "codepoint": "U+ECAE", 
+        "description": "64th note (hemidemisemiquaver) stem down"
+    }, 
+    "metNote64thUp": {
+        "codepoint": "U+ECAD", 
+        "description": "64th note (hemidemisemiquaver) stem up"
+    }, 
+    "metNote8thDown": {
+        "codepoint": "U+ECA8", 
+        "description": "Eighth note (quaver) stem down"
+    }, 
+    "metNote8thUp": {
+        "codepoint": "U+ECA7", 
+        "description": "Eighth note (quaver) stem up"
+    }, 
+    "metNoteDoubleWhole": {
+        "codepoint": "U+ECA0", 
+        "description": "Double whole note (breve)"
+    }, 
+    "metNoteDoubleWholeSquare": {
+        "codepoint": "U+ECA1", 
+        "description": "Double whole note (square)"
+    }, 
+    "metNoteHalfDown": {
+        "codepoint": "U+ECA4", 
+        "description": "Half note (minim) stem down"
+    }, 
+    "metNoteHalfUp": {
+        "codepoint": "U+ECA3", 
+        "description": "Half note (minim) stem up"
+    }, 
+    "metNoteQuarterDown": {
+        "codepoint": "U+ECA6", 
+        "description": "Quarter note (crotchet) stem down"
+    }, 
+    "metNoteQuarterUp": {
+        "codepoint": "U+ECA5", 
+        "description": "Quarter note (crotchet) stem up"
+    }, 
+    "metNoteWhole": {
+        "codepoint": "U+ECA2", 
+        "description": "Whole note (semibreve)"
     }, 
     "metricModulationArrowLeft": {
         "codepoint": "U+EC63", 
@@ -6160,11 +6283,11 @@
     }, 
     "noteShapeSquareBlack": {
         "codepoint": "U+E1B3", 
-        "description": "Square black (4-shape la; Aiken 7-shape la)"
+        "description": "Square black (4-shape la; Aikin 7-shape la)"
     }, 
     "noteShapeSquareWhite": {
         "codepoint": "U+E1B2", 
-        "description": "Square white (4-shape la; Aiken 7-shape la)"
+        "description": "Square white (4-shape la; Aikin 7-shape la)"
     }, 
     "noteShapeTriangleLeftBlack": {
         "codepoint": "U+E1B7", 
@@ -6893,6 +7016,30 @@
         "codepoint": "U+E0A7", 
         "description": "X notehead whole"
     }, 
+    "octaveBaselineA": {
+        "codepoint": "U+EC91", 
+        "description": "a (baseline)"
+    }, 
+    "octaveBaselineB": {
+        "codepoint": "U+EC93", 
+        "description": "b (baseline)"
+    }, 
+    "octaveBaselineM": {
+        "codepoint": "U+EC95", 
+        "description": "m (baseline)"
+    }, 
+    "octaveBaselineV": {
+        "codepoint": "U+EC97", 
+        "description": "v (baseline)"
+    }, 
+    "octaveBassa": {
+        "codepoint": "U+E51F", 
+        "description": "Bassa"
+    }, 
+    "octaveLoco": {
+        "codepoint": "U+EC90", 
+        "description": "Loco"
+    }, 
     "octaveParensLeft": {
         "codepoint": "U+E51A", 
         "description": "Left parenthesis for octave signs"
@@ -6900,6 +7047,22 @@
     "octaveParensRight": {
         "codepoint": "U+E51B", 
         "description": "Right parenthesis for octave signs"
+    }, 
+    "octaveSuperscriptA": {
+        "codepoint": "U+EC92", 
+        "description": "a (superscript)"
+    }, 
+    "octaveSuperscriptB": {
+        "codepoint": "U+EC94", 
+        "description": "b (superscript)"
+    }, 
+    "octaveSuperscriptM": {
+        "codepoint": "U+EC96", 
+        "description": "m (superscript)"
+    }, 
+    "octaveSuperscriptV": {
+        "codepoint": "U+EC98", 
+        "description": "v (superscript)"
     }, 
     "ornamentBottomLeftConcaveStroke": {
         "codepoint": "U+E59A", 
@@ -7064,7 +7227,7 @@
         "codepoint": "U+E5BE", 
         "description": "Cadence"
     }, 
-    "ornamentPrecompCadenceUpperPrefix ": {
+    "ornamentPrecompCadenceUpperPrefix": {
         "codepoint": "U+E5C1", 
         "description": "Cadence with upper prefix"
     }, 
@@ -7072,7 +7235,7 @@
         "codepoint": "U+E5C2", 
         "description": "Cadence with upper prefix and turn"
     }, 
-    "ornamentPrecompCadenceWithTurn ": {
+    "ornamentPrecompCadenceWithTurn": {
         "codepoint": "U+E5BF", 
         "description": "Cadence with turn"
     }, 
@@ -7084,7 +7247,7 @@
         "codepoint": "U+E5C0", 
         "description": "Double cadence with lower prefix"
     }, 
-    "ornamentPrecompDoubleCadenceUpperPrefix ": {
+    "ornamentPrecompDoubleCadenceUpperPrefix": {
         "codepoint": "U+E5C3", 
         "description": "Double cadence with upper prefix"
     }, 
@@ -7278,6 +7441,10 @@
     "ottavaBassaBa": {
         "codepoint": "U+E513", 
         "description": "Ottava bassa (ba)"
+    }, 
+    "ottavaBassaVb": {
+        "codepoint": "U+E51C", 
+        "description": "Ottava bassa (8vb)"
     }, 
     "pendereckiTremolo": {
         "codepoint": "U+E22B", 
@@ -8117,7 +8284,7 @@
     }, 
     "pictRimShotOnStem": {
         "codepoint": "U+E7FD", 
-        "description": "Rim shot (on stem)"
+        "description": "Rim shot for stem"
     }, 
     "pictSandpaperBlocks": {
         "codepoint": "U+E762", 
@@ -8391,7 +8558,7 @@
     }, 
     "pluckedDampOnStem": {
         "codepoint": "U+E63B", 
-        "description": "Damp (on stem)"
+        "description": "Damp for stem"
     }, 
     "pluckedFingernailFlick": {
         "codepoint": "U+E637", 
@@ -8432,6 +8599,10 @@
         "alternateCodepoint": "U+1D139", 
         "codepoint": "U+E516", 
         "description": "Quindicesima bassa"
+    }, 
+    "quindicesimaBassaMb": {
+        "codepoint": "U+E51D", 
+        "description": "Quindicesima bassa (mb)"
     }, 
     "repeat1Bar": {
         "alternateCodepoint": "U+1D10E", 
@@ -8559,6 +8730,10 @@
         "codepoint": "U+E4F2", 
         "description": "Old-style quarter (crotchet) rest"
     }, 
+    "restQuarterZ": {
+        "codepoint": "U+E4F6", 
+        "description": "Z-style quarter (crotchet) rest"
+    }, 
     "restWhole": {
         "alternateCodepoint": "U+1D13B", 
         "codepoint": "U+E4E3", 
@@ -8583,6 +8758,22 @@
     "rightRepeatSmall": {
         "codepoint": "U+E04D", 
         "description": "Right repeat sign within bar"
+    }, 
+    "schaefferClef": {
+        "codepoint": "U+E06F", 
+        "description": "Sch\u00e4ffer clef"
+    }, 
+    "schaefferFClefToGClef": {
+        "codepoint": "U+E072", 
+        "description": "Sch\u00e4ffer F clef to G clef change"
+    }, 
+    "schaefferGClefToFClef": {
+        "codepoint": "U+E071", 
+        "description": "Sch\u00e4ffer G clef to F clef change"
+    }, 
+    "schaefferPreviousClef": {
+        "codepoint": "U+E070", 
+        "description": "Sch\u00e4ffer previous clef"
     }, 
     "segno": {
         "alternateCodepoint": "U+1D10B", 
@@ -8635,11 +8826,19 @@
     }, 
     "smnSharp": {
         "codepoint": "U+EC50", 
-        "description": "Sharp"
+        "description": "Sharp stem up"
+    }, 
+    "smnSharpDown": {
+        "codepoint": "U+EC59", 
+        "description": "Sharp stem down"
     }, 
     "smnSharpWhite": {
         "codepoint": "U+EC51", 
-        "description": "Sharp (white)"
+        "description": "Sharp (white) stem up"
+    }, 
+    "smnSharpWhiteDown": {
+        "codepoint": "U+EC5A", 
+        "description": "Sharp (white) stem down"
     }, 
     "splitBarDivider": {
         "codepoint": "U+E00A", 
@@ -9092,6 +9291,22 @@
         "codepoint": "U+E089", 
         "description": "Time signature 9"
     }, 
+    "timeSigBracketLeft": {
+        "codepoint": "U+EC80", 
+        "description": "Left bracket for whole time signature"
+    }, 
+    "timeSigBracketLeftSmall": {
+        "codepoint": "U+EC82", 
+        "description": "Left bracket for numerator only"
+    }, 
+    "timeSigBracketRight": {
+        "codepoint": "U+EC81", 
+        "description": "Right bracket for whole time signature"
+    }, 
+    "timeSigBracketRightSmall": {
+        "codepoint": "U+EC83", 
+        "description": "Right bracket for numerator only"
+    }, 
     "timeSigCombDenominator": {
         "codepoint": "U+E09F", 
         "description": "Control character for denominator digit"
@@ -9108,6 +9323,10 @@
         "alternateCodepoint": "U+1D134", 
         "codepoint": "U+E08A", 
         "description": "Common time"
+    }, 
+    "timeSigCut2": {
+        "codepoint": "U+EC85", 
+        "description": "Cut time (Bach)"
     }, 
     "timeSigCutCommon": {
         "alternateCodepoint": "U+1D135", 
@@ -9177,6 +9396,10 @@
     "timeSigPlusSmall": {
         "codepoint": "U+E08D", 
         "description": "Time signature + (for numerators)"
+    }, 
+    "timeSigSlash": {
+        "codepoint": "U+EC84", 
+        "description": "Time signature slash separator"
     }, 
     "timeSigX": {
         "codepoint": "U+E09C", 
@@ -9326,6 +9549,10 @@
     "ventiduesimaBassa": {
         "codepoint": "U+E519", 
         "description": "Ventiduesima bassa"
+    }, 
+    "ventiduesimaBassaMb": {
+        "codepoint": "U+E51E", 
+        "description": "Ventiduesima bassa (mb)"
     }, 
     "vocalMouthClosed": {
         "codepoint": "U+E640", 
@@ -9689,7 +9916,7 @@
     }, 
     "windFlatEmbouchure": {
         "codepoint": "U+E5FB", 
-        "description": "Sharper embouchure"
+        "description": "Flatter embouchure"
     }, 
     "windHalfClosedHole1": {
         "codepoint": "U+E5F6", 
@@ -9745,7 +9972,7 @@
     }, 
     "windSharpEmbouchure": {
         "codepoint": "U+E5FC", 
-        "description": "Flatter embouchure"
+        "description": "Sharper embouchure"
     }, 
     "windStrongAirPressure": {
         "codepoint": "U+E603", 

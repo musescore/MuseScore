@@ -325,6 +325,9 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "P. Cl."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Soprano Clarinet"),
 //: Soprano Clarinet
 QT_TRANSLATE_NOOP("InstrumentsXML", "S. Cl."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "C Clarinet"),
+//: C Clarinet
+QT_TRANSLATE_NOOP("InstrumentsXML", "C Cl."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "D Clarinet"),
 //: D Clarinet
 QT_TRANSLATE_NOOP("InstrumentsXML", "D Cl."),
@@ -582,9 +585,11 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ ba Hn."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Cornet"),
 //: E♭ Cornet
 QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Cnt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Cornet"),
 //: B♭ Cornet
 QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Cnt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Saxhorn"),
 //: Saxhorn
 QT_TRANSLATE_NOOP("InstrumentsXML", "Saxhorn"),
@@ -610,48 +615,62 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "AlpHn."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Trumpet"),
 //: Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Piccolo Trumpet"),
 //: Piccolo Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "P. Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Piccolo Trumpet in B♭"),
 //: Piccolo Trumpet in B♭
 QT_TRANSLATE_NOOP("InstrumentsXML", "P. Tpt. B♭"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Piccolo Trumpet in A"),
 //: Piccolo Trumpet in A
 QT_TRANSLATE_NOOP("InstrumentsXML", "P. Tpt. A"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Trumpet"),
 //: E♭ Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "D Trumpet"),
 //: D Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "D Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "C Trumpet"),
 //: C Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "C Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Trumpet"),
 //: B♭ Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Pocket Trumpet"),
 //: Pocket Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "Pkt. Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Slide Trumpet"),
 //: Slide Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "Sl.Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tenor Trumpet"),
 //: Tenor Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "Tnr. Tpt."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Bass Trumpet"),
 //: Bass Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "B. Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ Bass Trumpet"),
 //: E♭ Bass Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "E♭ B. Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Bass Trumpet in C"),
 //: Bass Trumpet in C
 QT_TRANSLATE_NOOP("InstrumentsXML", "B. Tpt. C"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ Bass Trumpet"),
 //: B♭ Bass Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "B♭ B. Tpt."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "mute"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Baroque Trumpet"),
 //: Baroque Trumpet
 QT_TRANSLATE_NOOP("InstrumentsXML", "Bq. Tpt."),
@@ -1236,6 +1255,14 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Electronic Instruments"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Effect Synthesizer"),
 //: Effect Synthesizer
 QT_TRANSLATE_NOOP("InstrumentsXML", "Synth."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "rain"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "soundtrack"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "crystal"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "atmosphere"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "brightness"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "goblins"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "echoes"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "scifi"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Atmosphere Synthesizer"),
 //: Atmosphere Synthesizer
 QT_TRANSLATE_NOOP("InstrumentsXML", "Synth."),
@@ -1263,6 +1290,14 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Synth."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Pad Synthesizer"),
 //: Pad Synthesizer
 QT_TRANSLATE_NOOP("InstrumentsXML", "Synth."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "new age"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "warm"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "polysynth"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "choir"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "bowed"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "metallic"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "halo"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "sweep"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "New Age Synthesizer"),
 //: New Age Synthesizer
 QT_TRANSLATE_NOOP("InstrumentsXML", "Synth."),
@@ -1305,12 +1340,18 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Mal. Syn."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Bass Synthesizer"),
 //: Bass Synthesizer
 QT_TRANSLATE_NOOP("InstrumentsXML", "Synth."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "synth-bass-1"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "synth-bass-2"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Brass Synthesizer"),
 //: Brass Synthesizer
 QT_TRANSLATE_NOOP("InstrumentsXML", "Synth."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "synth-brass-1"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "synth-brass-2"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "String Synthesizer"),
 //: String Synthesizer
 QT_TRANSLATE_NOOP("InstrumentsXML", "Synth."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "synth-string-1"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "synth-string-2"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Theremin"),
 //: Theremin
 QT_TRANSLATE_NOOP("InstrumentsXML", "Thmn."),
@@ -1474,6 +1515,8 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Bass Guitar [Tablature]"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Acoustic Bass"),
 //: Acoustic Bass
 QT_TRANSLATE_NOOP("InstrumentsXML", "Bass"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "arco"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Electric Bass"),
 //: Electric Bass
 QT_TRANSLATE_NOOP("InstrumentsXML", "El. B."),
@@ -1489,31 +1532,50 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "Strings"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Erhu"),
 //: Erhu
 QT_TRANSLATE_NOOP("InstrumentsXML", "Eh."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Violin"),
 //: Violin
 QT_TRANSLATE_NOOP("InstrumentsXML", "Vln."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Violins"),
 //: Violins
 QT_TRANSLATE_NOOP("InstrumentsXML", "Vlns."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Viola"),
 //: Viola
 QT_TRANSLATE_NOOP("InstrumentsXML", "Vla."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Violas"),
 //: Violas
 QT_TRANSLATE_NOOP("InstrumentsXML", "Vlas."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Violoncello"),
 //: Violoncello
 QT_TRANSLATE_NOOP("InstrumentsXML", "Vlc."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Violoncellos"),
 //: Violoncellos
 QT_TRANSLATE_NOOP("InstrumentsXML", "Vlcs."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Contrabass"),
 //: Contrabass
 QT_TRANSLATE_NOOP("InstrumentsXML", "Cb."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Contrabasses"),
 //: Contrabasses
 QT_TRANSLATE_NOOP("InstrumentsXML", "Cbs."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "pizzicato"),
+QT_TRANSLATE_NOOP("InstrumentsXML", "tremolo"),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Double Bass"),
+//: Double Bass
 QT_TRANSLATE_NOOP("InstrumentsXML", "Db."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Pardessus de viole"),
 //: Pardessus de viole

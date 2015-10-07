@@ -51,7 +51,7 @@ class PositionCursor;
 class ContinuousPanel;
 class Tuplet;
 
-enum class Grip : char;
+enum class Grip : signed char;
 enum class POS : char;
 enum class MagIdx : char;
 
@@ -181,8 +181,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       QColor _bgColor;
       QColor _fgColor;
-      QPixmap* bgPixmap;
-      QPixmap* fgPixmap;
+      QPixmap* _bgPixmap;
+      QPixmap* _fgPixmap;
 
       virtual void paintEvent(QPaintEvent*);
       void paint(const QRect&, QPainter&);
@@ -313,6 +313,8 @@ class ScoreView : public QWidget, public MuseScoreView {
    public:
       ScoreView(QWidget* parent = 0);
       ~ScoreView();
+
+      QPixmap* fgPixmap() { return _fgPixmap; }
 
       virtual void startEdit(Element*, Grip);
       void startEdit(Element*);

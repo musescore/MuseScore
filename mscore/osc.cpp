@@ -38,7 +38,6 @@
 
 #ifdef OSC
 #include "ofqf/qoscserver.h"
-static int oscPort = 5282;
 #endif
 
 namespace Ms {
@@ -64,11 +63,7 @@ void MuseScore::initOsc()
       {
       if (!preferences.useOsc)
             return;
-      int port;
-      if (oscPort)
-            port = oscPort;
-      else
-            port = preferences.oscPort;
+      int port = preferences.oscPort;
       QOscServer* osc = new QOscServer(port, qApp);
 
       PathObject* oo = new PathObject( "/addpitch", QVariant::Int, osc);

@@ -18,14 +18,15 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  chord-layout-6,chord-layout-7,chord-layout-8,chord-layout-9,chord-layout-10, ^
  chord-layout-11,chord-layout-12,chord-layout-13,chord-layout-14,chord-layout-15,chord-layout-16,cross-1, ^
  accidental-1,accidental-2,accidental-3,accidental-4,accidental-5, ^
- accidental-6,accidental-7,accidental-8,accidental-9, ^
+ accidental-6,accidental-7,accidental-8,accidental-9,accidental-10, ^
  tie-1,tie-2,tie-3,grace-1,grace-2,grace-3,grace-4,tuplets-1,tuplets-2,breath-1, ^
- harmony-1,harmony-2,harmony-3,harmony-4,harmony-5,harmony-6,harmony-7,harmony-8,harmony-9,harmony-10,harmony-11, ^
+ harmony-1,harmony-2,harmony-3,harmony-4,harmony-5,harmony-6,harmony-7, ^
+ harmony-8,harmony-9,harmony-10,harmony-11,harmony-12, ^
  beams-1,beams-2,beams-3,beams-4,beams-5,beams-6,beams-7,beams-8,beams-9,beams-10, ^
  beams-11,beams-12,beams-13,beams-14,beams-15,beams-16,beams-17, ^
  user-offset-1,user-offset-2,chord-space-1,chord-space-2,tablature-1,image-1, ^
  lyrics-1,lyrics-2,lyrics-3,lyrics-4,lyrics-5,lyrics-6,voice-1,voice-2,slash-1,slash-2, ^
- system-1,system-2,system-3,system-4
+ system-1,system-2,system-3,system-4,small-1,system-5,tremolo-1
 
 set MSCORE=..\win32install\bin\musescore.exe
 set DPI=130

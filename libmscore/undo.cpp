@@ -487,7 +487,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
             Interval interval = staff->part()->instrument()->transpose();
             KeySigEvent nkey = key;
             bool concertPitch = score->styleB(StyleIdx::concertPitch);
-            if (interval.chromatic && !concertPitch && !nkey.custom()) {
+            if (interval.chromatic && !concertPitch && !nkey.custom() && !nkey.isAtonal()) {
                   interval.flip();
                   nkey.setKey(transposeKey(key.key(), interval));
                   }
@@ -1572,7 +1572,7 @@ const char* AddElement::name() const
       {
       static char buffer[64];
       if (element->isText())
-            snprintf(buffer, 64, "Add: %s <%s>", element->name(), qPrintable(static_cast<Text*>(element)->text()));
+            snprintf(buffer, 64, "Add: %s <%s>", element->name(), qPrintable(static_cast<Text*>(element)->plainText()));
       else
             snprintf(buffer, 64, "Add: %s", element->name());
       return buffer;
@@ -1634,6 +1634,12 @@ RemoveElement::RemoveElement(Element* e)
                               score->undo(new RemoveElement(note->tieFor()));
                         if (note->tieBack())
                               score->undo(new RemoveElement(note->tieBack()));
+                        for (Spanner* s : note->spannerBack()) {
+                              score->undo(new RemoveElement(s));
+                              }
+                        for (Spanner* s : note->spannerFor()) {
+                              score->undo(new RemoveElement(s));
+                              }
                         }
                   }
             }
@@ -1704,7 +1710,7 @@ const char* RemoveElement::name() const
       {
       static char buffer[64];
       if (element->isText())
-            snprintf(buffer, 64, "Rem: %s <%s>", element->name(), qPrintable(static_cast<Text*>(element)->text()));
+            snprintf(buffer, 64, "Rem: %s <%s>", element->name(), qPrintable(static_cast<Text*>(element)->plainText()));
       else
             snprintf(buffer, 64, "Rem: %s", element->name());
       return buffer;
@@ -2663,27 +2669,6 @@ void AddTextStyle::redo()
       }
 
 //---------------------------------------------------------
-//   ChangeStretch
-//---------------------------------------------------------
-
-ChangeStretch::ChangeStretch(Measure* m, qreal s)
-   : measure(m), stretch(s)
-      {
-      }
-
-//---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-
-void ChangeStretch::flip()
-      {
-      qreal oStretch = measure->userStretch();
-      measure->setUserStretch(stretch);
-      measure->score()->setLayoutAll(true);
-      stretch = oStretch;
-      }
-
-//---------------------------------------------------------
 //   ChangeStyle
 //---------------------------------------------------------
 
@@ -2994,6 +2979,15 @@ void InsertRemoveMeasures::insertMeasures()
       if (fm->type() == Element::Type::MEASURE) {
             score->fixTicks();
             score->insertTime(fm->tick(), lm->endTick() - fm->tick());
+
+            // move ownership of Instrument back to part
+            for (Segment* s = static_cast<Measure*>(fm)->first(); s != static_cast<Measure*>(lm)->last(); s = s->next1()) {
+                  for (Element* e : s->annotations()) {
+                        if (e->type() == Element::Type::INSTRUMENT_CHANGE) {
+                              e->part()->setInstrument(static_cast<InstrumentChange*>(e)->instrument(), s->tick());
+                              }
+                        }
+                  }
             for (Clef* clef : clefs)
                   clef->staff()->setClef(clef);
             for (KeySig* key : keys)
@@ -3044,6 +3038,22 @@ void InsertRemoveMeasures::removeMeasures()
       score->fixTicks();
       if (fm->type() == Element::Type::MEASURE) {
             score->setPlaylistDirty();
+
+            // check if there is a clef at the end of last measure
+            // remove clef from staff cleflist
+
+            if (lm->type() == Element::Type::MEASURE) {
+                  Measure* m = static_cast<Measure*>(lm);
+                  Segment* s = m->findSegment(Segment::Type::Clef, tick2);
+                  if (s) {
+                        for (int staffIdx = 0; staffIdx <= score->nstaves(); ++staffIdx) {
+                              Clef* clef = static_cast<Clef*>(s->element(staffIdx * VOICES));
+                              if (clef)
+                                    score->staff(staffIdx)->removeClef(clef);
+                              }
+                        }
+                  }
+
             score->insertTime(tick1, -(tick2 - tick1));
             score->setLayoutAll(true);
             for (Spanner* sp : score->unmanagedSpanners())

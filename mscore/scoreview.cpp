@@ -672,8 +672,8 @@ ScoreView::ScoreView(QWidget* parent)
       curElement  = 0;
       _bgColor    = Qt::darkBlue;
       _fgColor    = Qt::white;
-      fgPixmap    = 0;
-      bgPixmap    = 0;
+      _fgPixmap    = 0;
+      _bgPixmap    = 0;
       curGrip     = Grip::NO_GRIP;
       defaultGrip = Grip::NO_GRIP;
       lasso       = new Lasso(_score);
@@ -990,8 +990,8 @@ ScoreView::~ScoreView()
       delete _continuousPanel;
       delete _curLoopIn;
       delete _curLoopOut;
-      delete bgPixmap;
-      delete fgPixmap;
+      delete _bgPixmap;
+      delete _fgPixmap;
       delete shadowNote;
       }
 
@@ -1089,9 +1089,8 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       int staffIdx;
       int pitch;
       Segment* seg;
-      QPointF offset;
 
-      if (!_score->pos2measure(data.startMove, &staffIdx, &pitch, &seg, &offset))
+      if (!_score->pos2measure(data.startMove, &staffIdx, &pitch, &seg, 0))
             return;
       if (staffIdx == -1) {
             qDebug("ScoreView::measurePopup: staffIdx == -1!");
@@ -1277,15 +1276,15 @@ void ScoreView::setEditPos(const QPointF& pt)
 
 void ScoreView::setBackground(QPixmap* pm)
       {
-      delete bgPixmap;
-      bgPixmap = pm;
+      delete _bgPixmap;
+      _bgPixmap = pm;
       update();
       }
 
 void ScoreView::setBackground(const QColor& color)
       {
-      delete bgPixmap;
-      bgPixmap = 0;
+      delete _bgPixmap;
+      _bgPixmap = 0;
       _bgColor = color;
       update();
       }
@@ -1296,15 +1295,15 @@ void ScoreView::setBackground(const QColor& color)
 
 void ScoreView::setForeground(QPixmap* pm)
       {
-      delete fgPixmap;
-      fgPixmap = pm;
+      delete _fgPixmap;
+      _fgPixmap = pm;
       update();
       }
 
 void ScoreView::setForeground(const QColor& color)
       {
-      delete fgPixmap;
-      fgPixmap = 0;
+      delete _fgPixmap;
+      _fgPixmap = 0;
       _fgColor = color;
       update();
       }
@@ -1328,7 +1327,6 @@ void ScoreView::moveCursor(int tick)
       Measure* measure = score()->tick2measureMM(tick);
       if (measure == 0)
             return;
-      int offset = 0;
 
       qreal x;
       Segment* s;
@@ -1351,8 +1349,6 @@ void ScoreView::moveCursor(int tick)
                   else
                         x2 = measure->canvasPos().x() + measure->width(); //safety, should not happen
                   }
-            t1 += offset;
-            t2 += offset;
             if (tick >= t1 && tick < t2) {
                   int   dt = t2 - t1;
                   qreal dx = x2 - x1;
@@ -1389,7 +1385,7 @@ void ScoreView::moveCursor(int tick)
             SysStaff* ss = system->staff(i);
             if (!ss->show() || !_score->staff(i)->show())
                   continue;
-            y2 = ss->y() + ss->bbox().height();
+            y2 = ss->bbox().bottom();
             }
       h += y2;
       x -= _spatium;
@@ -1530,7 +1526,6 @@ void ScoreView::setLoopCursor(PositionCursor *curLoop, int tick, bool isInPos)
       if (measure == 0)
             return;
       qreal x;
-      int offset = 0;
 
       Segment* s;
       for (s = measure->first(Segment::Type::ChordRest); s;) {
@@ -1547,8 +1542,6 @@ void ScoreView::setLoopCursor(PositionCursor *curLoop, int tick, bool isInPos)
                   t2 = measure->endTick();
                   x2 = measure->canvasPos().x() + measure->width();
                   }
-            t1 += offset;
-            t2 += offset;
             if (tick >= t1 && tick < t2) {
                   int   dt = t2 - t1;
                   qreal dx = x2 - x1;
@@ -1746,10 +1739,10 @@ void ScoreView::drawBackground(QPainter* p, const QRectF& r) const
             p->fillRect(r, Qt::white);
             return;
             }
-      if (fgPixmap == 0 || fgPixmap->isNull())
+      if (_fgPixmap == 0 || _fgPixmap->isNull())
             p->fillRect(r, _fgColor);
       else {
-            p->drawTiledPixmap(r, *fgPixmap, r.topLeft()
+            p->drawTiledPixmap(r, *_fgPixmap, r.topLeft()
                - QPoint(lrint(_matrix.dx()), lrint(_matrix.dy())));
             }
       }
@@ -1861,10 +1854,10 @@ void ScoreView::paintPageBorder(QPainter& p, Page* page)
 void ScoreView::paint(const QRect& r, QPainter& p)
       {
       p.save();
-      if (fgPixmap == 0 || fgPixmap->isNull())
+      if (_fgPixmap == 0 || _fgPixmap->isNull())
             p.fillRect(r, _fgColor);
       else {
-            p.drawTiledPixmap(r, *fgPixmap, r.topLeft()
+            p.drawTiledPixmap(r, *_fgPixmap, r.topLeft()
                - QPoint(lrint(_matrix.dx()), lrint(_matrix.dy())));
             }
 
@@ -2002,10 +1995,10 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       p.setMatrixEnabled(false);
       if ((_score->layoutMode() != LayoutMode::LINE) && !r1.isEmpty()) {
             p.setClipRegion(r1);  // only background
-            if (bgPixmap == 0 || bgPixmap->isNull())
+            if (_bgPixmap == 0 || _bgPixmap->isNull())
                   p.fillRect(r, _bgColor);
             else
-                  p.drawTiledPixmap(r, *bgPixmap, r.topLeft() - QPoint(_matrix.m31(), _matrix.m32()));
+                  p.drawTiledPixmap(r, *_bgPixmap, r.topLeft() - QPoint(_matrix.m31(), _matrix.m32()));
             }
       p.restore();
       }
@@ -2323,7 +2316,7 @@ void ScoreView::drawElements(QPainter& painter, const QList<Element*>& el)
 
 void ScoreView::setMag(qreal nmag)
       {
-      qreal m = mag();
+      qreal m = _matrix.m11();
 
       if (nmag == m)
             return;
@@ -2960,7 +2953,12 @@ void ScoreView::cmd(const QAction* a)
                   if (e->type() == Element::Type::NOTE)
                         e = static_cast<Note*>(e)->chord();
                   ChordRest* cr = static_cast<ChordRest*>(e);
-                  if (cr->segment()->splitsTuplet()) {
+                  if (cr->segment()->rtick() == 0) {
+                        QMessageBox::warning(0, "MuseScore",
+                           tr("Cannot split measure here:\n"
+                           "First beat of measure"));
+                        }
+                  else if (cr->segment()->splitsTuplet()) {
                         QMessageBox::warning(0, "MuseScore",
                            tr("Cannot split measure here:\n"
                            "Cannot split tuplet"));
@@ -2992,19 +2990,25 @@ void ScoreView::cmd(const QAction* a)
             }
       else if (cmd == "toggle-visible") {
             _score->startCmd();
-            foreach(Element* e, _score->selection().elements())
-                  _score->undo(new ChangeProperty(e, P_ID::VISIBLE, !e->getProperty(P_ID::VISIBLE).toBool()));
+            QSet<Element*> spanners;
+            for (Element* e : _score->selection().elements()) {
+                  bool spannerSegment = e->isSpannerSegment();
+                  if (!spannerSegment || !spanners.contains(static_cast<SpannerSegment*>(e)->spanner()))
+                        _score->undo(new ChangeProperty(e, P_ID::VISIBLE, !e->getProperty(P_ID::VISIBLE).toBool()));
+                  if (spannerSegment)
+                        spanners.insert(static_cast<SpannerSegment*>(e)->spanner());
+                  }
             _score->endCmd();
             }
       else if (cmd == "set-visible") {
             _score->startCmd();
-            foreach(Element* e, _score->selection().elements())
+            for (Element* e : _score->selection().elements())
                   _score->undo(new ChangeProperty(e, P_ID::VISIBLE, true));
             _score->endCmd();
             }
       else if (cmd == "unset-visible") {
             _score->startCmd();
-            foreach(Element* e, _score->selection().elements())
+            for (Element* e : _score->selection().elements())
                   _score->undo(new ChangeProperty(e, P_ID::VISIBLE, false));
             _score->endCmd();
             }
@@ -4137,7 +4141,7 @@ void ScoreView::startUndoRedo()
 
 //---------------------------------------------------------
 //   cmdAddSlur
-//    'S' typed on keyboard
+//    command invoked, or icon double clicked
 //---------------------------------------------------------
 
 void ScoreView::cmdAddSlur()
@@ -4150,8 +4154,10 @@ void ScoreView::cmdAddSlur()
             is.setSlur(nullptr);
             return;
             }
+      bool undoActive = _score->undo()->active();
       if (_score->selection().isRange()) {
-            _score->startCmd();
+            if (!undoActive)
+                  _score->startCmd();
             int startTrack = _score->selection().staffStart() * VOICES;
             int endTrack   = _score->selection().staffEnd() * VOICES;
             for (int track = startTrack; track < endTrack; ++track) {
@@ -4180,7 +4186,8 @@ void ScoreView::cmdAddSlur()
                         _score->undoAddElement(slur);
                         }
                   }
-            _score->endCmd();
+            if (!undoActive)
+                  _score->endCmd();
             mscore->endCmd();
             }
       else {
@@ -4235,6 +4242,10 @@ void ScoreView::cmdAddNoteLine()
             qDebug("addNoteLine: no note %p %p", firstNote, lastNote);
             return;
             }
+      if (firstNote == lastNote) {
+           qDebug("addNoteLine: no support for note to same note line %p", firstNote);
+           return;
+           }
       TextLine* tl = new TextLine(_score);
       tl->setParent(firstNote);
       tl->setStartElement(firstNote);
@@ -4316,6 +4327,14 @@ void ScoreView::cmdAddSlur(Note* firstNote, Note* lastNote)
 void ScoreView::cmdAddHairpin(bool decrescendo)
       {
       Selection selection = _score->selection();
+      // special case for two selected chordrests on same staff
+      bool twoNotesSameStaff = false;
+      if (selection.isList() && selection.elements().size() == 2) {
+            ChordRest* cr1 = selection.firstChordRest();
+            ChordRest* cr2 = selection.lastChordRest();
+            if (cr1 && cr2 && cr1 != cr2 && cr1->staffIdx() == cr2->staffIdx())
+                  twoNotesSameStaff = true;
+            }
       // add hairpin on each staff if possible
       if (selection.isRange() && selection.staffStart() != selection.staffEnd() - 1) {
             _score->startCmd();
@@ -4331,7 +4350,9 @@ void ScoreView::cmdAddHairpin(bool decrescendo)
             _score->endCmd();
             _score->startCmd();
             }
-      else {
+      else if (selection.isRange() || selection.isSingle() || twoNotesSameStaff) {
+            // for single staff range selection, or single selection,
+            // find start & end elements elements
             ChordRest* cr1;
             ChordRest* cr2;
             _score->getSelectedChordRest2(&cr1, &cr2);
@@ -4341,7 +4362,8 @@ void ScoreView::cmdAddHairpin(bool decrescendo)
                   cr2 = cr1;
 
             _score->startCmd();
-            Hairpin* pin = _score->addHairpin(decrescendo, cr1->tick(), cr2->tick() + cr2->actualTicks(), cr1->track());
+            int tick2 = twoNotesSameStaff ? cr2->tick() : cr2->tick() + cr2->actualTicks();
+            Hairpin* pin = _score->addHairpin(decrescendo, cr1->tick(), tick2, cr1->track());
             pin->layout();
             _score->endCmd();
             _score->startCmd();
@@ -4358,6 +4380,11 @@ void ScoreView::cmdAddHairpin(bool decrescendo)
                   else
                         _score->endCmd();
                   }
+            }
+      else {
+            // do not attempt for list selection
+            // or we will keep adding hairpins to the same chordrests
+            return;
             }
       }
 
@@ -5852,57 +5879,13 @@ void ScoreView::cmdAddRemoveBreaks()
       else if (!_score->selection().isRange())
             return;
 
-      Segment* startSegment = _score->selection().startSegment();
-      if (!startSegment) // empty score?
-            return;
-      Segment* endSegment = _score->selection().endSegment();
-      Measure* startMeasure = startSegment->measure();
-      Measure* endMeasure = endSegment ? endSegment->measure() : _score->lastMeasure();
-
       BreaksDialog bd;
       if (!bd.exec())
             return;
 
-      int interval = bd.interval;
-      bool lock = bd.lock;
-      bool remove = bd.remove;
+      int interval = bd.remove || bd.lock ? 0 : bd.interval;
 
-      // loop through measures in selection
-      int count = 0;
-      for (Measure* m = startMeasure; m; m = m->nextMeasure()) {
-            if (lock) {
-                  // skip if it already has a break
-                  if (m->lineBreak() || m->pageBreak())
-                        continue;
-                  // add break if last measure of system
-                  if (m == m->system()->lastMeasure())
-                        m->undoSetLineBreak(true);
-                  }
-            else {
-                  if (remove) {
-                        // remove line break if present
-                        if (m->lineBreak())
-                             m->undoSetLineBreak(false);
-                        }
-                  else {
-                        // skip last measure in score (even if in selection)
-                        if (++count == interval) {
-                              // found place for break; add if not already one present
-                              // but skip last measure in score (even if in selection)
-                              if (!(m->lineBreak() || m->pageBreak() || m == m->system()->lastMeasure()))
-                                    m->undoSetLineBreak(true);
-                              // reset count
-                              count = 0;
-                              }
-                        else if (m->lineBreak()) {
-                              // remove line break if present in wrong place
-                              m->undoSetLineBreak(false);
-                              }
-                        }
-                  }
-            if (m == endMeasure)
-                  break;
-            }
+      _score->addRemoveBreaks(interval, bd.lock);
 
       if (noSelection)
              _score->deselectAll();

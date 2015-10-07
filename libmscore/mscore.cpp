@@ -53,6 +53,7 @@
 #include "hook.h"
 #include "stem.h"
 #include "stemslash.h"
+#include "fraction.h"
 #include "excerpt.h"
 
 namespace Ms {
@@ -94,6 +95,7 @@ int     MScore::mtcType;
 
 bool    MScore::noExcerpts = false;
 bool    MScore::noImages = false;
+bool    MScore::pdfPrinting = false;
 
 #ifdef SCRIPT_INTERFACE
 QQmlEngine* MScore::_qml = 0;
@@ -118,8 +120,8 @@ void MScore::init()
       qRegisterMetaType<MScore::Direction>("Direction");
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
       qRegisterMetaType<Element::Placement>("Placement");
-      qRegisterMetaType<Accidental::Role>("AccidentalRole");
-      qRegisterMetaType<Accidental::Type>("AccidentalType");
+//      qRegisterMetaType<AccidentalRole>("AccidentalRole");
+//      qRegisterMetaType<AccidentalType>("AccidentalType");
       qRegisterMetaType<Spanner::Anchor>("Anchor");
       qRegisterMetaType<NoteHead::Group>("NoteHeadGroup");
       qRegisterMetaType<NoteHead::Type>("NoteHeadType");
@@ -138,7 +140,6 @@ void MScore::init()
       qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
       qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
       qRegisterMetaType<Glissando::Type>("GlissandoType");
-//      qRegisterMetaType<TextStyle>("TextStyle");
 #endif
 
       DPMM = DPI / INCH;       // dots/mm
@@ -338,6 +339,9 @@ QQmlEngine* MScore::qml()
             qmlRegisterType<StemSlash>  ("MuseScore", 1, 0, "StemSlash");
             qmlRegisterType<Beam>       ("MuseScore", 1, 0, "Beam");
             qmlRegisterType<Excerpt>    ("MuseScore", 1, 0, "Excerpt");
+            qmlRegisterType<FractionWrapper>   ("MuseScore", 1, 1, "Fraction");
+            qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
+
             qmlRegisterUncreatableType<Element>("MuseScore", 1, 0,
                "Element", tr("you cannot create an element"));
 

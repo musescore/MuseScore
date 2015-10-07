@@ -44,6 +44,7 @@ before_install:
   - "unzip -qq qt5.zip -d qt5"
   - "export PATH=`pwd`/qt5/bin:$PATH"
   - "export QT_PLUGIN_PATH=`pwd`/qt5/plugins"
+  - "export QML2_IMPORT_PATH=`pwd`/qt5/qml"
 before_script:
   #compatibility between ruby travis artefact and GO one
   - "export ARTIFACTS_KEY=$ARTIFACTS_AWS_ACCESS_KEY_ID"

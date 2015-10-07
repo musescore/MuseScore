@@ -234,10 +234,14 @@ void TextLineSegment::layout1()
             _endText = 0;
             }
 
-      if (_text)
+      if (_text) {
+            _text->setTrack(track());
             _text->layout();
-      if (_endText)
+            }
+      if (_endText) {
+            _endText->setTrack(track());
             _endText->layout();
+            }
 
       QPointF pp1;
       QPointF pp2(pos2());

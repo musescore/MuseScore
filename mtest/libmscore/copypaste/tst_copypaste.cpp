@@ -61,15 +61,15 @@ class TestCopyPaste : public QObject, public MTest
       void copyPasteOnlySecondVoice();
       void copypaste19() { copypaste("19"); }       // chord symbols
       void copyPasteShortTremolo() { copypastevoice("21", 1); } // remove tremolo on shorten note #30411
-      
+
 
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 
       void copyPastePartial();
-      
+
       void copyPasteTuplet01() { copypastetuplet("01"); }
       void copyPasteTuplet02() { copypastetuplet("02"); }
-      
+
       };
 
 //---------------------------------------------------------
@@ -204,7 +204,7 @@ void TestCopyPaste::copyPaste2Voice()
 
       // select 2 chord rests at the start of the first measure
       Segment* s = m1->first(Segment::Type::ChordRest);
-      score->select(static_cast<Chord*>(s->element(0))->notes().at(0));
+      score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
       s = s->next(Segment::Type::ChordRest);
       score->select(s->element(0), SelectType::RANGE);
 
@@ -248,7 +248,7 @@ void TestCopyPaste::copypastevoice(const char* idx, int voice)
       // create a range selection on 2 and 3 beat of first measure
       Segment::Type segTypeCR = Segment::Type::ChordRest;
       Segment* s = m1->first(segTypeCR)->next1(segTypeCR);
-      score->select(static_cast<Chord*>(s->element(voice))->notes().at(0));
+      score->select(static_cast<Ms::Chord*>(s->element(voice))->notes().at(0));
       s = s->next(Segment::Type::ChordRest);
       score->select(s->element(voice), SelectType::RANGE);
 
@@ -284,7 +284,7 @@ void TestCopyPaste::copyPaste2Voice5()
       // create a range selection from 2 eighth note to the end of first measure
       Segment::Type segTypeCR = Segment::Type::ChordRest;
       Segment* s = m1->first(segTypeCR)->next1(segTypeCR);
-      score->select(static_cast<Chord*>(s->element(0))->notes().at(0));
+      score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
 
       s = m1->last()->prev(Segment::Type::ChordRest);
       score->select(s->element(0), SelectType::RANGE);
@@ -365,7 +365,7 @@ void TestCopyPaste::copypaste2Voice6()
       // create a range selection from 2nd eighth note to the end of first measure
       Segment::Type segTypeCR = Segment::Type::ChordRest;
       Segment* s = m1->first(segTypeCR)->next1(segTypeCR);
-      score->select(static_cast<Chord*>(s->element(0))->notes().at(0));
+      score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
 
       s = m1->last()->prev(Segment::Type::ChordRest);
       score->select(s->element(1), SelectType::RANGE);
@@ -403,7 +403,7 @@ void TestCopyPaste::copypastetuplet(const char* idx)
       Measure* m2 = m1->nextMeasure();
 
       Segment* s = m1->first(Segment::Type::ChordRest);
-      score->select(static_cast<Chord*>(s->element(0))->notes().at(0));
+      score->select(static_cast<Ms::Chord*>(s->element(0))->notes().at(0));
       s = s->next(Segment::Type::ChordRest);
       score->select(s->element(0), SelectType::RANGE);
       QVERIFY(score->selection().canCopy());

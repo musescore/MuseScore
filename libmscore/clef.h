@@ -59,6 +59,7 @@ enum class ClefType : signed char {
       F_15MA,
       PERC2,            // no longer supported, but kept for compat. with old scores; rendered as PERC
       TAB2,
+      G5,
       MAX
       };
 
@@ -111,8 +112,8 @@ class ClefInfo {
 //   @@ Clef
 ///    Graphic representation of a clef.
 //
-//   @P showCourtesy  bool
-//   @P small         bool  set by layout (read only)
+//   @P showCourtesy  bool    show/hide courtesy clef when applicable
+//   @P small         bool    small, mid-staff clef (read only, set by layout)
 //---------------------------------------------------------
 
 class Clef : public Element {

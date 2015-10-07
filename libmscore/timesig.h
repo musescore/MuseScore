@@ -35,26 +35,26 @@ enum class TimeSigType : char {
 //   @@ TimeSig
 ///    This class represents a time signature.
 //
-//   @P numeratorString     QString    text of numerator
-//   @P denominatorString   QString    text of denominator
-//   @P showCourtesySig     bool       show courtesy time signature for this sig if appropriate
-//   @P numerator           int        (read only)
-//   @P denominator         int        (read only)
-//   @P numeratorStretch    int        (read only)
-//   @P denominatorStretch  int        (read only)
-//   @P groups              Ms::Groups
+//   @P denominator         int           (read only)
+//   @P denominatorStretch  int           (read only)
+//   @P denominatorString   string        text of denominator
+//   @P groups              Groups
+//   @P numerator           int           (read only)
+//   @P numeratorStretch    int           (read only)
+//   @P numeratorString     string        text of numerator
+//   @P showCourtesySig     bool          show courtesy time signature for this sig if appropriate
 //---------------------------------------------------------------------------------------
 
 class TimeSig : public Element {
       Q_OBJECT
-      Q_PROPERTY(QString numeratorString   READ numeratorString   WRITE undoSetNumeratorString)
-      Q_PROPERTY(QString denominatorString READ denominatorString WRITE undoSetDenominatorString)
-      Q_PROPERTY(bool showCourtesySig      READ showCourtesySig   WRITE undoSetShowCourtesySig)
-      Q_PROPERTY(int numerator             READ numerator)
       Q_PROPERTY(int denominator           READ denominator)
-      Q_PROPERTY(int numeratorStretch      READ numeratorStretch)
       Q_PROPERTY(int denominatorStretch    READ denominatorStretch)
+      Q_PROPERTY(QString denominatorString READ denominatorString WRITE undoSetDenominatorString)
       Q_PROPERTY(Ms::Groups groups         READ groups            WRITE undoSetGroups)
+      Q_PROPERTY(int numerator             READ numerator)
+      Q_PROPERTY(int numeratorStretch      READ numeratorStretch)
+      Q_PROPERTY(QString numeratorString   READ numeratorString   WRITE undoSetNumeratorString)
+      Q_PROPERTY(bool showCourtesySig      READ showCourtesySig   WRITE undoSetShowCourtesySig)
 
       TimeSigType _timeSigType;
       QString _numeratorString;     // calculated from actualSig() if !customText
@@ -92,6 +92,7 @@ class TimeSig : public Element {
 
       Fraction sig() const               { return _sig; }
       void setSig(const Fraction& f, TimeSigType st = TimeSigType::NORMAL);
+      //@ sets the time signature
       Q_INVOKABLE void setSig(int z, int n, TimeSigType st = TimeSigType::NORMAL) { setSig(Fraction(z, n), st); }
       int numerator() const              { return _sig.numerator(); }
       int denominator() const            { return _sig.denominator(); }

@@ -17,7 +17,14 @@
 #include "xml.h"
 #include "mscore.h"
 
+#include FT_GLYPH_H
+#include FT_IMAGE_H
+#include FT_BBOX_H
+
+static FT_Library ftlib;
+
 namespace Ms {
+
 
 //---------------------------------------------------------
 //   scoreFonts
@@ -26,7 +33,7 @@ namespace Ms {
 
 static const int FALLBACK_FONT = 2;       // Bravura
 
-QVector<ScoreFont> ScoreFont::_scoreFonts = {
+QVector<ScoreFont> ScoreFont::_scoreFonts {
       ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",   "mscore.ttf"   ),
       ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf" ),
       ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",  "Bravura.otf"  )
@@ -494,7 +501,9 @@ QVector<const char*> Sym::symNames = {
       "accidentalWyschnegradsky9TwelfthsSharp",
       "accidentalXenakisOneThirdToneSharp",
       "accidentalXenakisTwoThirdTonesSharp",
+      "analyticsChoralmelodie",
       "analyticsEndStimme",
+      "analyticsHauptrhythmus",
       "analyticsHauptstimme",
       "analyticsInversion1",
       "analyticsNebenstimme",
@@ -564,6 +573,8 @@ QVector<const char*> Sym::symNames = {
       "articMarcatoBelow",
       "articMarcatoStaccatoAbove",
       "articMarcatoStaccatoBelow",
+      "articMarcatoTenutoAbove",
+      "articMarcatoTenutoBelow",
       "articStaccatissimoAbove",
       "articStaccatissimoBelow",
       "articStaccatissimoStrokeAbove",
@@ -635,6 +646,9 @@ QVector<const char*> Sym::symNames = {
       "brassLiftLong",
       "brassLiftMedium",
       "brassLiftShort",
+      "brassLiftSmoothLong",
+      "brassLiftSmoothMedium",
+      "brassLiftSmoothShort",
       "brassMuteClosed",
       "brassMuteHalfClosed",
       "brassMuteOpen",
@@ -655,8 +669,6 @@ QVector<const char*> Sym::symNames = {
       "cClefCombining",
       "cClefReversed",
       "cClefSquare",
-      "cClefTriangular",
-      "cClefTriangularToFClef",
       "caesura",
       "caesuraCurved",
       "caesuraShort",
@@ -891,8 +903,6 @@ QVector<const char*> Sym::symNames = {
       "fClefArrowUp",
       "fClefChange",
       "fClefReversed",
-      "fClefTriangular",
-      "fClefTriangularToCClef",
       "fClefTurned",
       "fermataAbove",
       "fermataBelow",
@@ -921,6 +931,7 @@ QVector<const char*> Sym::symNames = {
       "figbass5Raised3",
       "figbass6",
       "figbass6Raised",
+      "figbass6Raised2",
       "figbass7",
       "figbass7Raised1",
       "figbass7Raised2",
@@ -1081,6 +1092,8 @@ QVector<const char*> Sym::symNames = {
       "harpPedalDivider",
       "harpPedalLowered",
       "harpPedalRaised",
+      "harpSalzedoAeolianAscending",
+      "harpSalzedoAeolianDescending",
       "harpSalzedoFluidicSoundsLeft",
       "harpSalzedoFluidicSoundsRight",
       "harpSalzedoMetallicSounds",
@@ -1416,6 +1429,30 @@ QVector<const char*> Sym::symNames = {
       "mensuralWhiteMaxima",
       "mensuralWhiteMinima",
       "mensuralWhiteSemiminima",
+      "metAugmentationDot",
+      "metNote1024thDown",
+      "metNote1024thUp",
+      "metNote128thDown",
+      "metNote128thUp",
+      "metNote16thDown",
+      "metNote16thUp",
+      "metNote256thDown",
+      "metNote256thUp",
+      "metNote32ndDown",
+      "metNote32ndUp",
+      "metNote512thDown",
+      "metNote512thUp",
+      "metNote64thDown",
+      "metNote64thUp",
+      "metNote8thDown",
+      "metNote8thUp",
+      "metNoteDoubleWhole",
+      "metNoteDoubleWholeSquare",
+      "metNoteHalfDown",
+      "metNoteHalfUp",
+      "metNoteQuarterDown",
+      "metNoteQuarterUp",
+      "metNoteWhole",
       "metricModulationArrowLeft",
       "metricModulationArrowRight",
       "miscDoNotCopy",
@@ -1723,8 +1760,18 @@ QVector<const char*> Sym::symNames = {
       "noteheadXOrnate",
       "noteheadXOrnateEllipse",
       "noteheadXWhole",
+      "octaveBaselineA",
+      "octaveBaselineB",
+      "octaveBaselineM",
+      "octaveBaselineV",
+      "octaveBassa",
+      "octaveLoco",
       "octaveParensLeft",
       "octaveParensRight",
+      "octaveSuperscriptA",
+      "octaveSuperscriptB",
+      "octaveSuperscriptM",
+      "octaveSuperscriptV",
       "ornamentBottomLeftConcaveStroke",
       "ornamentBottomLeftConcaveStrokeLarge",
       "ornamentBottomLeftConvexStroke",
@@ -1764,12 +1811,12 @@ QVector<const char*> Sym::symNames = {
       "ornamentPrecompAppoggTrill",
       "ornamentPrecompAppoggTrillSuffix",
       "ornamentPrecompCadence",
-      "ornamentPrecompCadenceUpperPrefix ",
+      "ornamentPrecompCadenceUpperPrefix",
       "ornamentPrecompCadenceUpperPrefixTurn",
-      "ornamentPrecompCadenceWithTurn ",
+      "ornamentPrecompCadenceWithTurn",
       "ornamentPrecompDescendingSlide",
       "ornamentPrecompDoubleCadenceLowerPrefix",
-      "ornamentPrecompDoubleCadenceUpperPrefix ",
+      "ornamentPrecompDoubleCadenceUpperPrefix",
       "ornamentPrecompDoubleCadenceUpperPrefixTurn",
       "ornamentPrecompInvertedMordentUpperPrefix",
       "ornamentPrecompMordentRelease",
@@ -1815,6 +1862,7 @@ QVector<const char*> Sym::symNames = {
       "ottavaAlta",
       "ottavaBassa",
       "ottavaBassaBa",
+      "ottavaBassaVb",
       "pendereckiTremolo",
       "pictAgogo",
       "pictAlmglocken",
@@ -2102,6 +2150,7 @@ QVector<const char*> Sym::symNames = {
       "quindicesima",
       "quindicesimaAlta",
       "quindicesimaBassa",
+      "quindicesimaBassaMb",
       "repeat1Bar",
       "repeat2Bars",
       "repeat4Bars",
@@ -2130,12 +2179,17 @@ QVector<const char*> Sym::symNames = {
       "restMaxima",
       "restQuarter",
       "restQuarterOld",
+      "restQuarterZ",
       "restWhole",
       "restWholeLegerLine",
       "reversedBrace",
       "reversedBracketBottom",
       "reversedBracketTop",
       "rightRepeatSmall",
+      "schaefferClef",
+      "schaefferFClefToGClef",
+      "schaefferGClefToFClef",
+      "schaefferPreviousClef",
       "segno",
       "segnoSerpent1",
       "segnoSerpent2",
@@ -2149,7 +2203,9 @@ QVector<const char*> Sym::symNames = {
       "smnHistorySharp",
       "smnNatural",
       "smnSharp",
+      "smnSharpDown",
       "smnSharpWhite",
+      "smnSharpWhiteDown",
       "splitBarDivider",
       "staff1Line",
       "staff1LineNarrow",
@@ -2260,10 +2316,15 @@ QVector<const char*> Sym::symNames = {
       "timeSig7",
       "timeSig8",
       "timeSig9",
+      "timeSigBracketLeft",
+      "timeSigBracketLeftSmall",
+      "timeSigBracketRight",
+      "timeSigBracketRightSmall",
       "timeSigCombDenominator",
       "timeSigCombNumerator",
       "timeSigComma",
       "timeSigCommon",
+      "timeSigCut2",
       "timeSigCutCommon",
       "timeSigEquals",
       "timeSigFractionHalf",
@@ -2281,6 +2342,7 @@ QVector<const char*> Sym::symNames = {
       "timeSigParensRightSmall",
       "timeSigPlus",
       "timeSigPlusSmall",
+      "timeSigSlash",
       "timeSigX",
       "tremolo1",
       "tremolo2",
@@ -2316,6 +2378,7 @@ QVector<const char*> Sym::symNames = {
       "ventiduesima",
       "ventiduesimaAlta",
       "ventiduesimaBassa",
+      "ventiduesimaBassaMb",
       "vocalMouthClosed",
       "vocalMouthOpen",
       "vocalMouthPursed",
@@ -2850,7 +2913,7 @@ QVector<QString> Sym::symUserNames = {
       "Quarter-tone flat (van Blankenburg)",
       "Quarter-tone sharp",
       "Quarter-tone sharp",
-      "Quarter tone sharp (Busotti)",
+      "Quarter tone sharp (Bussotti)",
       "Quarter-tone sharp",
       "Half sharp (quarter-tone sharp) (Stein)",
       "Quarter tone sharp with wiggly tail",
@@ -2880,8 +2943,8 @@ QVector<QString> Sym::symUserNames = {
       "1/6 tone low",
       "1/6 tone high",
       "Sori (quarter tone sharp)",
-      "Byzantine-style slashed flat (Tavener)",
-      "Byzantine-style slashed sharp (Tavener)",
+      "Byzantine-style Bakiye flat (Tavener)",
+      "Byzantine-style Bu\u0308yu\u0308k mu\u0308cenneb sharp (Tavener)",
       "Three-quarter-tones flat",
       "Three-quarter-tones flat",
       "Three-quarter-tones flat (Couper)",
@@ -2890,7 +2953,7 @@ QVector<QString> Sym::symUserNames = {
       "Reversed flat and flat (three-quarter-tones flat) (Zimmermann)",
       "Three-quarter-tones sharp",
       "Three-quarter-tones sharp",
-      "Three quarter tones sharp (Busotti)",
+      "Three quarter tones sharp (Bussotti)",
       "One and a half sharps (three-quarter-tones sharp) (Stein)",
       "Triple flat",
       "Triple sharp",
@@ -2922,7 +2985,9 @@ QVector<QString> Sym::symUserNames = {
       "3/4 tone sharp",
       "One-third-tone sharp (Xenakis)",
       "Two-third-tones sharp (Xenakis)",
+      "Choralmelodie (Berg)",
       "End of stimme",
+      "Hauptrhythmus (Berg)",
       "Hauptstimme",
       "Inversion 1",
       "Nebenstimme",
@@ -2992,6 +3057,8 @@ QVector<QString> Sym::symUserNames = {
       "Marcato below",
       "Marcato-staccato above",
       "Marcato-staccato below",
+      "Marcato-tenuto above",
+      "Marcato-tenuto below",
       "Staccatissimo above",
       "Staccatissimo below",
       "Staccatissimo stroke above",
@@ -3063,6 +3130,9 @@ QVector<QString> Sym::symUserNames = {
       "Lift, long",
       "Lift, medium",
       "Lift, short",
+      "Smooth lift, long",
+      "Smooth lift, medium",
+      "Smooth lift, short",
       "Muted (closed)",
       "Half-muted (half-closed)",
       "Open",
@@ -3083,8 +3153,6 @@ QVector<QString> Sym::symUserNames = {
       "Combining C clef",
       "Reversed C clef",
       "C clef (19th century)",
-      "Triangular C clef",
-      "C clef to F clef change",
       "Caesura",
       "Curved caesura",
       "Short caesura",
@@ -3319,8 +3387,6 @@ QVector<QString> Sym::symUserNames = {
       "F clef, arrow up",
       "F clef change",
       "Reversed F clef",
-      "Triangular F clef",
-      "F clef to C clef change",
       "Turned F clef",
       "Fermata above",
       "Fermata below",
@@ -3349,6 +3415,7 @@ QVector<QString> Sym::symUserNames = {
       "Figured bass diminished 5",
       "Figured bass 6",
       "Figured bass 6 raised by half-step",
+      "Figured bass 6 raised by half-step 2",
       "Figured bass 7",
       "Figured bass 7 raised by half-step",
       "Figured bass 7 raised by a half-step 2",
@@ -3509,6 +3576,8 @@ QVector<QString> Sym::symUserNames = {
       "Harp pedal divider",
       "Harp pedal lowered (sharp)",
       "Harp pedal raised (flat)",
+      "Ascending aeolian chords (Salzedo)",
+      "Descending aeolian chords (Salzedo)",
       "Fluidic sounds, left hand (Salzedo)",
       "Fluidic sounds, right hand (Salzedo)",
       "Metallic sounds (Salzedo)",
@@ -3688,7 +3757,7 @@ QVector<QString> Sym::symUserNames = {
       "Wide elision",
       "Baseline hyphen",
       "Non-breaking baseline hyphen",
-      "Natural, hard b (mi)",
+      "Flat, hard b (mi)",
       "Flat, soft b (fa)",
       "Flat with dot",
       "G clef (Corpus Monodicum)",
@@ -3844,6 +3913,30 @@ QVector<QString> Sym::symUserNames = {
       "White mensural maxima",
       "White mensural minima",
       "White mensural semiminima",
+      "Augmentation dot",
+      "1024th note (semihemidemisemihemidemisemiquaver) stem down",
+      "1024th note (semihemidemisemihemidemisemiquaver) stem up",
+      "128th note (semihemidemisemiquaver) stem down",
+      "128th note (semihemidemisemiquaver) stem up",
+      "16th note (semiquaver) stem down",
+      "16th note (semiquaver) stem up",
+      "256th note (demisemihemidemisemiquaver) stem down",
+      "256th note (demisemihemidemisemiquaver) stem up",
+      "32nd note (demisemiquaver) stem down",
+      "32nd note (demisemiquaver) stem up",
+      "512th note (hemidemisemihemidemisemiquaver) stem down",
+      "512th note (hemidemisemihemidemisemiquaver) stem up",
+      "64th note (hemidemisemiquaver) stem down",
+      "64th note (hemidemisemiquaver) stem up",
+      "Eighth note (quaver) stem down",
+      "Eighth note (quaver) stem up",
+      "Double whole note (breve)",
+      "Double whole note (square)",
+      "Half note (minim) stem down",
+      "Half note (minim) stem up",
+      "Quarter note (crotchet) stem down",
+      "Quarter note (crotchet) stem up",
+      "Whole note (semibreve)",
       "Left-pointing arrow for metric modulation",
       "Right-pointing arrow for metric modulation",
       "Do not copy",
@@ -3974,8 +4067,8 @@ QVector<QString> Sym::symUserNames = {
       "Quarter moon white (Walker 7-shape re)",
       "Round black (4-shape sol; 7-shape so)",
       "Round white (4-shape sol; 7-shape so)",
-      "Square black (4-shape la; Aiken 7-shape la)",
-      "Square white (4-shape la; Aiken 7-shape la)",
+      "Square black (4-shape la; Aikin 7-shape la)",
+      "Square white (4-shape la; Aikin 7-shape la)",
       "Triangle left black (stem up; 4-shape fa; 7-shape fa)",
       "Triangle left white (stem up; 4-shape fa; 7-shape fa)",
       "Triangle right black (stem down; 4-shape fa; 7-shape fa)",
@@ -4151,8 +4244,18 @@ QVector<QString> Sym::symUserNames = {
       "Ornate X notehead",
       "Ornate X notehead in ellipse",
       "X notehead whole",
+      "a (baseline)",
+      "b (baseline)",
+      "m (baseline)",
+      "v (baseline)",
+      "Bassa",
+      "Loco",
       "Left parenthesis for octave signs",
       "Right parenthesis for octave signs",
+      "a (superscript)",
+      "b (superscript)",
+      "m (superscript)",
+      "v (superscript)",
       "Ornament bottom left concave stroke",
       "Ornament bottom left concave stroke, large",
       "Ornament bottom left convex stroke",
@@ -4243,6 +4346,7 @@ QVector<QString> Sym::symUserNames = {
       "Ottava alta",
       "Ottava bassa",
       "Ottava bassa (ba)",
+      "Ottava bassa (8vb)",
       "Penderecki unmeasured tremolo",
       "Agogo",
       "Almglocken",
@@ -4452,7 +4556,7 @@ QVector<QString> Sym::symUserNames = {
       "Rim or edge (Weinberg)",
       "Rim (Ghent)",
       "Rim (Caltabiano)",
-      "Rim shot (on stem)",
+      "Rim shot for stem",
       "Sandpaper blocks",
       "Scrape around rim",
       "Scrape from center to edge",
@@ -4520,7 +4624,7 @@ QVector<QString> Sym::symUserNames = {
       "Buzz pizzicato",
       "Damp",
       "Damp all",
-      "Damp (on stem)",
+      "Damp for stem",
       "Fingernail flick",
       "Left-hand pizzicato",
       "Plectrum",
@@ -4530,6 +4634,7 @@ QVector<QString> Sym::symUserNames = {
       "Quindicesima",
       "Quindicesima alta",
       "Quindicesima bassa",
+      "Quindicesima bassa (mb)",
       "Repeat last bar",
       "Repeat last two bars",
       "Repeat last four bars",
@@ -4558,12 +4663,17 @@ QVector<QString> Sym::symUserNames = {
       "Maxima rest",
       "Quarter (crotchet) rest",
       "Old-style quarter (crotchet) rest",
+      "Z-style quarter (crotchet) rest",
       "Whole (semibreve) rest",
       "Whole rest on leger line",
       "Reversed brace",
       "Reversed bracket bottom",
       "Reversed bracket top",
       "Right repeat sign within bar",
+      "Sch\u00e4ffer clef",
+      "Sch\u00e4ffer F clef to G clef change",
+      "Sch\u00e4ffer G clef to F clef change",
+      "Sch\u00e4ffer previous clef",
       "Segno",
       "Segno (serpent)",
       "Segno (serpent with vertical lines)",
@@ -4576,8 +4686,10 @@ QVector<QString> Sym::symUserNames = {
       "Flat history sign",
       "Sharp history sign",
       "Natural (N)",
-      "Sharp",
-      "Sharp (white)",
+      "Sharp stem up",
+      "Sharp stem down",
+      "Sharp (white) stem up",
+      "Sharp (white) stem down",
       "Split bar divider (bar spans a system break)",
       "1-line staff",
       "1-line staff (narrow)",
@@ -4688,10 +4800,15 @@ QVector<QString> Sym::symUserNames = {
       "Time signature 7",
       "Time signature 8",
       "Time signature 9",
+      "Left bracket for whole time signature",
+      "Left bracket for numerator only",
+      "Right bracket for whole time signature",
+      "Right bracket for numerator only",
       "Control character for denominator digit",
       "Control character for numerator digit",
       "Time signature comma",
       "Common time",
+      "Cut time (Bach)",
       "Cut time",
       "Time signature equals",
       "Time signature fraction \u00bd",
@@ -4709,6 +4826,7 @@ QVector<QString> Sym::symUserNames = {
       "Right parenthesis for numerator only",
       "Time signature +",
       "Time signature + (for numerators)",
+      "Time signature slash separator",
       "Open time signature",
       "Combining tremolo 1",
       "Combining tremolo 2",
@@ -4744,6 +4862,7 @@ QVector<QString> Sym::symUserNames = {
       "Ventiduesima",
       "Ventiduesima alta",
       "Ventiduesima bassa",
+      "Ventiduesima bassa (mb)",
       "Mouth closed",
       "Mouth open",
       "Mouth pursed",
@@ -4834,7 +4953,7 @@ QVector<QString> Sym::symUserNames = {
       "Narrow wavy line segment",
       "Wide wavy line segment",
       "Closed hole",
-      "Sharper embouchure",
+      "Flatter embouchure",
       "Half-closed hole",
       "Half-closed hole 2",
       "Half-open hole",
@@ -4848,7 +4967,7 @@ QVector<QString> Sym::symUserNames = {
       "Normal reed position",
       "Very little reed (pull outwards)",
       "Relaxed embouchure",
-      "Flatter embouchure",
+      "Sharper embouchure",
       "Very tight embouchure / strong air pressure",
       "Three-quarters closed hole",
       "Tight embouchure",
@@ -5162,118 +5281,151 @@ QVector<oldName> oldNames = {
 };
 
 //---------------------------------------------------------
-//   sym2pixmap
+//   userName2id
 //---------------------------------------------------------
 
-QPixmap ScoreFont::sym2pixmap(SymId id, qreal mag)
+SymId Sym::userName2id(const QString& s)
       {
-      QString string = toString(id);
-      QRectF  bb(bbox(id, mag));
-      bb.setRect(bb.x() * mag, bb.y() * mag, bb.width() * mag, bb.height() * mag);
+      int val = symUserNames.indexOf(s);
+      return (val == -1) ? SymId::noSym : (SymId)(val);
+      }
 
-      bb.adjust(-5, -5, 5, 5);
-      int w = lrint(bb.width());
-      int h = lrint(bb.height());
-      QPixmap pm(w, h);
-      pm.fill(QColor(0, 0, 0, 0));
-      QPainter painter;
-      painter.begin(&pm);
-      painter.setPen(Qt::black);
-      draw(id, &painter, mag, -bb.topLeft() + QPointF(2.0, 2.0));
-      painter.end();
-      return pm;
+//---------------------------------------------------------
+//   GlyphKey operator==
+//---------------------------------------------------------
+
+bool GlyphKey::operator==(const GlyphKey& k) const
+      {
+      return (face == k.face) && (id == k.id)
+         && (mag == k.mag) && (worldScale == k.worldScale) && (color == k.color);
       }
 
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
-void ScoreFont::draw(const QString& s, QPainter* painter, qreal mag, const QPointF& pos) const
-      {
-#if defined(Q_OS_WIN) && (QT_VERSION == QT_VERSION_CHECK(5,4,0))
-      if (dynamic_cast<QPrinter*>(painter->device()) &&
-          painter->device()->paintEngine()->type() == QPaintEngine::Pdf)
-            mag *= 4.333;
-#endif
-      qreal imag = 1.0 / mag;
-      painter->scale(mag, mag);
-      painter->setFont(font());
-      painter->drawText(pos * imag, s);
-      painter->scale(imag, imag);
-      }
-
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos) const
       {
-      draw(toString(id), painter, mag, pos);
+      qreal worldScale = painter->worldTransform().m11();
+      draw(id, painter, mag, pos, worldScale);
+      }
+
+void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, qreal worldScale) const
+      {
+      if (!sym(id).symList().isEmpty()) {  // is this a compound symbol?
+            draw(sym(id).symList(), painter, mag, pos);
+            return;
+            }
+      if (!isValid(id)) {
+            qDebug("ScoreFont::draw: invalid sym %d\n", int(id));
+            return;
+            }
+      int rv = FT_Load_Glyph(face, sym(id).index(), FT_LOAD_DEFAULT);
+      if (rv) {
+            qDebug("load glyph id %d, failed: 0x%x", int(id), rv);
+            return;
+            }
+
+      if (MScore::pdfPrinting) {
+            if (font == 0) {
+                  QString s(_fontPath+_filename);
+                  if (-1 == QFontDatabase::addApplicationFont(s)) {
+                        qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(s));
+                        return;
+                        }
+                  font = new QFont;
+                  font->setWeight(QFont::Normal);
+                  font->setItalic(false);
+                  font->setFamily(_family);
+                  font->setStyleStrategy(QFont::NoFontMerging);
+                  font->setHintingPreference(QFont::PreferVerticalHinting);
+                  qreal size = 20.0 * MScore::DPI / PPI;
+                  font->setPixelSize(lrint(size));
+                  }
+            qreal imag = 1.0 / mag;
+            painter->scale(mag, mag);
+            painter->setFont(*font);
+            painter->drawText(pos * imag, toString(id));
+            painter->scale(imag, imag);
+            return;
+            }
+
+      QColor color(painter->pen().color());
+
+      int pr           = painter->device()->devicePixelRatio();
+      qreal pixelRatio = qreal(pr > 0 ? pr : 1);
+      worldScale      *= pixelRatio;
+//      if (worldScale < 1.0)
+//            worldScale = 1.0;
+      int scale16      = lrint(worldScale * 6553.6 * mag);
+
+      GlyphKey gk(face, id, mag, worldScale, color);
+      GlyphPixmap* pm = cache->object(gk);
+      if (!pm) {
+            FT_Matrix matrix {
+                  scale16, 0,
+                  0,       scale16
+                  };
+
+            FT_Glyph glyph;
+            FT_Get_Glyph(face->glyph, &glyph);
+            FT_Glyph_Transform(glyph, &matrix, 0);
+            rv = FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1);
+            if (rv) {
+                  qDebug("glyph to bitmap failed: 0x%x", rv);
+                  return;
+                  }
+
+            FT_BitmapGlyph gb = (FT_BitmapGlyph)glyph;
+            FT_Bitmap* bm     = &gb->bitmap;
+
+            if (bm->width == 0 || bm->rows == 0) {
+                  qDebug("zero glyph");
+                  return;
+                  }
+            QImage img(QSize(bm->width, bm->rows), QImage::Format_ARGB32);
+            img.fill(Qt::transparent);
+
+            for (int y = 0; y < int(bm->rows); ++y) {
+                  unsigned* dst      = (unsigned*)img.scanLine(y);
+                  unsigned char* src = (unsigned char*)(bm->buffer) + bm->pitch * y;
+                  for (int x = 0; x < int(bm->width); ++x) {
+                        unsigned val = *src++;
+                        color.setAlpha(val);
+                        *dst++ = color.rgba();
+                        }
+                  }
+            pm = new GlyphPixmap;
+            pm->pm = QPixmap::fromImage(img, Qt::NoFormatConversion);
+            pm->pm.setDevicePixelRatio(worldScale);
+            pm->offset = QPointF(qreal(gb->left), -qreal(gb->top)) / worldScale;
+            if (!cache->insert(gk, pm))
+                  qDebug("cannot cache glyph");
+            FT_Done_Glyph(glyph);
+            }
+      painter->drawPixmap(pos + pm->offset, pm->pm);
       }
 
 void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const
       {
-      QString s = toString(id);
-      QString d;
+      QList<SymId> d;
       for (int i = 0; i < n; ++i)
-            d += s;
+            d += id;
       draw(d, painter, mag, pos);
       }
 
-//---------------------------------------------------------
-//   symToHtml
-//    transform symbol into html code suitable
-//    for QDocument->setHtml()
-//---------------------------------------------------------
-
-QString ScoreFont::symToHtml(SymId s, int leftMargin, const TextStyle* ts, qreal _spatium)
+void ScoreFont::draw(const QList<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos, qreal scale) const
       {
-      qreal size;
-      if (ts) {
-            size = ts->font(_spatium).pointSizeF();
+      QPointF pos(_pos);
+      for (SymId id : ids) {
+            draw(id, p, mag, pos, scale);
+            pos.rx() += (sym(id).advance() * mag);
             }
-      else {
-            size = _font->pixelSize();
-            }
-
-      QString family = _font->family();
-      return QString(
-      "<data>"
-        "<html>"
-          "<head>"
-            "<meta name=\"qrichtext\" content=\"1\" >"
-            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf8\" />"
-            "<style type=\"text/css\">"
-              "p, li { white-space: pre-wrap; }"
-              "</style>"
-            "</head>"
-          "<body style=\" font-family:'%1'; font-size:%2pt;\">"
-            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:%3px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
-                "&#%4;"
-              "</p>"
-            "</body>"
-          "</html>"
-      "</data>").arg(family).arg(size).arg(leftMargin).arg(toString(s));
       }
-
-QString ScoreFont::symToHtml(SymId s1, SymId s2, int leftMargin)
+void ScoreFont::draw(const QList<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos) const
       {
-      qreal size = _font->pixelSize();
-      QString family = _font->family();
-
-      return QString(
-      "<data>"
-        "<html>"
-          "<head>"
-            "<meta name=\"qrichtext\" content=\"1\" >"
-            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf8\" />"
-            "<style type=\"text/css\">"
-              "p, li { white-space: pre-wrap; }"
-              "</style>"
-            "</head>"
-          "<body style=\" font-family:'%1'; font-size:%2pt;\">"
-            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:%3px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
-                "&#%4;&#%5;"
-              "</p>"
-            "</body>"
-          "</html>"
-      "</data>").arg(family).arg(size).arg(leftMargin).arg(toString(s1)).arg(toString(s2));
+      qreal scale = p->worldTransform().m11();
+      draw(ids, p, mag, _pos, scale);
       }
 
 //---------------------------------------------------------
@@ -5292,16 +5444,19 @@ const char* Sym::id2name(SymId id)
 
 void initScoreFonts()
       {
+      int error = FT_Init_FreeType(&ftlib);
+      if (!ftlib || error)
+            qFatal("init freetype library failed");
+      qDebug("initScoreFonts %p", ftlib);
       int index = 0;
       for (auto i : Sym::symNames)
             Sym::lnhash.insert(i, SymId(index++));
-      ScoreFont::fontFactory("Bravura");       // load reference font
       for (oldName i : oldNames)
             Sym::lonhash.insert(i.name, SymId(i.symId));
-      QFont::insertSubstitution("MScore Text", "Bravura Text");
+      QFont::insertSubstitution("MScore Text",    "Bravura Text");
       QFont::insertSubstitution("Gootville Text", "Bravura Text");
-      QFont::insertSubstitution("ScoreFont", "Bravura Text");
-      QFont::insertSubstitution("MuseJazz", "Bravura Text");
+      QFont::insertSubstitution("ScoreFont",      "Bravura Text");
+      QFont::insertSubstitution("MuseJazz",       "Bravura Text");
       }
 
 //---------------------------------------------------------
@@ -5321,42 +5476,58 @@ static QString codeToString(int code)
       }
 
 //---------------------------------------------------------
+//   toString
+//---------------------------------------------------------
+
+QString ScoreFont::toString(SymId id) const
+      {
+      return codeToString(sym(id).code());
+      }
+
+//---------------------------------------------------------
+//   computeMetrics
+//---------------------------------------------------------
+
+void ScoreFont::computeMetrics(Sym* sym, int code)
+      {
+      FT_UInt index = FT_Get_Char_Index(face, code);
+      if (index != 0) {
+            if (FT_Load_Glyph(face, index, FT_LOAD_DEFAULT) == 0) {
+                  FT_BBox bb;
+                  if (FT_Outline_Get_BBox(&face->glyph->outline, &bb) == 0) {
+                        QRectF bbox;
+                        bbox.setCoords(bb.xMin/640.0, -bb.yMax/640.0, bb.xMax/640.0, -bb.yMin/640.0);
+                        sym->setIndex(index);
+                        sym->setCode(code);
+                        sym->setBbox(bbox);
+                        sym->setAdvance(face->glyph->linearHoriAdvance / 655360.0);
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   load
 //---------------------------------------------------------
 
 void ScoreFont::load()
       {
-      //qDebug() << "load" << _filename;
-#if !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
-      if (-1 == QFontDatabase::addApplicationFont(_fontPath + _filename)) {
-            qDebug("ScoreFont: fatal error: cannot load internal font <%s>", qPrintable(_fontPath + _filename));
-            if (!QFile(_fontPath + _filename).exists())
-                  qDebug("   file not found");
-            if (!MScore::debugMode)
-                  exit(-1);
+      QString facePath = _fontPath + _filename;
+      QFile f(facePath);
+      if (!f.open(QIODevice::ReadOnly)) {
+            qDebug("ScoreFont::load(): open failed <%s>", qPrintable(facePath));
+            return;
             }
-#endif
-      _font = new QFont();
-      _font->setWeight(QFont::Normal);  // if not set we get system default
-      _font->setItalic(false);
-      _font->setFamily(_family);
-      _font->setStyleStrategy(QFont::NoFontMerging);
+      fontImage = f.readAll();
+      int rval = FT_New_Memory_Face(ftlib, (FT_Byte*)fontImage.data(), fontImage.size(), 0, &face);
+      if (rval) {
+            qDebug("freetype: cannot create face <%s>: %d", qPrintable(facePath), rval);
+            return;
+            }
+      cache = new QCache<GlyphKey, GlyphPixmap>(100);
 
-      // horizontal hinting is bad as note hooks do not attach to stems
-      // properly at some magnifications
-      _font->setHintingPreference(QFont::PreferVerticalHinting);
-
-      qreal size = 20.0 * MScore::DPI / PPI;
-      QFont font2(font());                  // See comment below
-      _font->setPixelSize(lrint(size));
-      font2.setPixelSize(lrint(size)*100);  // See comment below
-      // Since under Windows HintingPreferences always behave as PreferFullHinting (integer result)
-      // unless DirectWrite is enabled during Qt compilation (and it would work only for Windows 7
-      // and above or Vista with Platform Update; it wouldn't work for XP), a trick is used to
-      // retrieve the actual real-number width of the character: the character is scaled up by a
-      // factor 100, its width is extracted with QFontMetricsF::width and then this width is re-scaled
-      // down by a factor 100. See issue #25142: "Stem slightly misaligned on upstem notes"
-      // TODO : Investigate the possible use of QGlyphRun instead
+      qreal pixelSize = 200.0 * MScore::DPI/PPI;
+      FT_Set_Pixel_Sizes(face, 0, int(pixelSize+.5));
 
       QFile fi(_fontPath + "glyphnames.json");
       if (!fi.open(QIODevice::ReadOnly))
@@ -5367,8 +5538,6 @@ void ScoreFont::load()
             qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
                error.offset, qPrintable(error.errorString()));
 
-      _fm = new QFontMetricsF(font());
-      QFontMetrics fm2(font2);         // See comment above
       for (auto i : o.keys()) {
             bool ok;
             int code = o.value(i).toObject().value("codepoint").toString().mid(2).toInt(&ok, 16);
@@ -5377,9 +5546,7 @@ void ScoreFont::load()
             if (Sym::lnhash.contains(i)) {
                   SymId symId = Sym::lnhash.value(i);
                   Sym* sym = &_symbols[int(symId)];
-                  sym->setString(codeToString(code));
-                  sym->setWidth((fm2.width(sym->string()))/100.0); // Renormalization; see comment above
-                  sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
+                  computeMetrics(sym, code);
                   }
             //else
             //      qDebug("unknown glyph: %s", qPrintable(i));
@@ -5407,13 +5574,14 @@ void ScoreFont::load()
             Sym* sym = &_symbols[int(symId)];
             for (auto i : ooo.keys()) {
                   if (i == "stemDownNW") {
-                        //qreal x = ooo.value(i).toArray().at(0).toDouble();
-                        //qreal y = ooo.value(i).toArray().at(1).toDouble();
+                        qreal x = ooo.value(i).toArray().at(0).toDouble();
+                        qreal y = ooo.value(i).toArray().at(1).toDouble();
+                        sym->setStemDownNW(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
                         }
                   else if (i == "stemUpSE") {
                         qreal x = ooo.value(i).toArray().at(0).toDouble();
                         qreal y = ooo.value(i).toArray().at(1).toDouble();
-                        sym->setAttach(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
+                        sym->setStemUpSE(QPointF(4.0 * x * MScore::DPI/PPI, 4.0 * -y * MScore::DPI/PPI));
                         }
                   else if (i == "cutOutNE") {
                         qreal x = ooo.value(i).toArray().at(0).toDouble() * scale;
@@ -5508,11 +5676,11 @@ void ScoreFont::load()
       for (const Composed& c : composed) {
             if (!_symbols[int(c.id)].isValid()) {
                   Sym* sym = &_symbols[int(c.id)];
-                  QString s;
+                  QList<SymId> s;
                   for (SymId id : c.rids)
-                        s += _symbols[int(id)].string();
-                  sym->setString(s);
-                  sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
+                        s += id;
+                  sym->setSymList(s);
+                  sym->setBbox(bbox(s, 1.0));
                   }
             }
 
@@ -5527,6 +5695,26 @@ void ScoreFont::load()
                   {     QString("6stringTabClef"),
                         QString("6stringTabClefSerif"),
                         SymId::sixStringTabClefSerif
+                  },
+                  {     QString("noteheadBlack"),
+                        QString("noteheadBlackOversized"),
+                        SymId::noteheadBlack
+                  },
+                  {     QString("noteheadHalf"),
+                        QString("noteheadHalfOversized"),
+                        SymId::noteheadHalf
+                  },
+                  {     QString("noteheadWhole"),
+                        QString("noteheadWholeOversized"),
+                        SymId::noteheadWhole
+                  },
+                  {     QString("noteheadDoubleWhole"),
+                        QString("noteheadDoubleWholeOversized"),
+                        SymId::noteheadDoubleWhole
+                  },
+                  {     QString("noteheadDoubleWholeSquare"),
+                        QString("noteheadDoubleWholeSquareOversized"),
+                        SymId::noteheadDoubleWholeSquare
                   },
                   {     QString("noteheadDoubleWhole"),
                         QString("noteheadDoubleWholeAlt"),
@@ -5544,19 +5732,17 @@ void ScoreFont::load()
                   // locate the relevant altKey in alternate array
                   for (auto j : oaa) {
                         QJsonObject jo = j.toObject();
-                        if(jo.value("name") == c.altKey) {
+                        if (jo.value("name") == c.altKey) {
                               Sym* sym = &_symbols[int(c.id)];
                               int code = jo.value("codepoint").toString().mid(2).toInt(&ok, 16);
-                              if (ok) {
-                                    QString s = codeToString(code);
-                                    sym->setString(s);
-                                    sym->setBbox(QRectF(_fm->tightBoundingRect(s)));
-                                    }
+                              if (ok)
+                                    computeMetrics(sym, code);
                               break;
                               }
                         }
                   }
             }
+
       // Unicode
       struct UnicodeAlternate {
             SymId       id;
@@ -5577,22 +5763,19 @@ void ScoreFont::load()
 
       for (const UnicodeAlternate& unicode : unicodes) {
             Sym* sym = &_symbols[int(unicode.id)];
-            sym->setString(unicode.string);
-            sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
+            uint code = QChar::surrogateToUcs4(unicode.string[0], unicode.string[1]);
+            computeMetrics(sym, code);
             }
-
 
       // add space symbol
       Sym* sym = &_symbols[int(SymId::space)];
-      sym->setString("\u0020");
-      sym->setBbox(QRectF(_fm->tightBoundingRect(sym->string())));
+      computeMetrics(sym, 32);
 
       /*for (int i = 1; i < int(SymId::lastSym); ++i) {
             Sym sym = _symbols[i];
             if (!sym.isValid())
                   qDebug("invalid symbol %s", Sym::id2name(SymId(i)));
             }*/
-      loaded = true;
       }
 
 //---------------------------------------------------------
@@ -5610,7 +5793,7 @@ ScoreFont* ScoreFont::fontFactory(QString s)
             }
       Q_ASSERT(f);
 
-      if (!f->loaded)
+      if (!f->face)
             f->load();
       return f;
       }
@@ -5622,7 +5805,7 @@ ScoreFont* ScoreFont::fontFactory(QString s)
 ScoreFont* ScoreFont::fallbackFont()
       {
       ScoreFont* f = &_scoreFonts[FALLBACK_FONT];
-      if (!f->loaded)
+      if (!f->face)
             f->load();
       return f;
       }
@@ -5646,17 +5829,43 @@ const QRectF ScoreFont::bbox(SymId id, qreal mag) const
       return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
       }
 
-const QRectF ScoreFont::bbox(const QString& s, qreal mag) const
+const QRectF ScoreFont::bbox(const QList<SymId>& s, qreal mag) const
       {
-      QRectF r(_fm->tightBoundingRect(s));
-      return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
+      QRectF r;
+      QPointF pos;
+      for (SymId id : s) {
+            r |= bbox(id, mag).translated(pos);
+            pos.rx() += sym(id).advance() * mag;
+            }
+      return r;
+      }
+
+qreal ScoreFont::width(const QList<SymId>& s, qreal mag) const
+      {
+      return bbox(s, mag).width();
       }
 
 //---------------------------------------------------------
-//   ~ScoreFont
+//   ScoreFont
 //---------------------------------------------------------
+
+ScoreFont::ScoreFont(const ScoreFont& f)
+      {
+      face = 0;
+      _symbols  = f._symbols;
+      _name     = f._name;
+      _family   = f._family;
+      _fontPath = f._fontPath;
+      _filename = f._filename;
+
+      // fontImage;
+      cache = 0;
+      }
 
 ScoreFont::~ScoreFont()
       {
+      delete cache;
       }
 }
+
+

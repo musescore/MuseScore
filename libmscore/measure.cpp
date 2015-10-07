@@ -412,7 +412,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
       for (Segment* segment = first(st); segment; segment = segment->next(st)) {
-            if (segment == s) {
+            if (segment == s && staff->isPitchedStaff()) {
                   ClefType clef = staff->clef(s->tick());
                   int l = relStep(line, clef);
                   return tversatz.accidentalVal(l);
@@ -452,7 +452,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line) const
 ///   Note: minWidth = width - stretch
 //---------------------------------------------------------
 
-void Measure::layout(qreal width)
+void Measure::layoutWidth(qreal width)
       {
       int nstaves = _score->nstaves();
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
@@ -1515,6 +1515,8 @@ RepeatMeasure* Measure::cmdInsertRepeatMeasure(int staffIdx)
       RepeatMeasure* rm = new RepeatMeasure(_score);
       rm->setTrack(staffIdx * VOICES);
       rm->setParent(seg);
+      rm->setDurationType(TDuration::DurationType::V_MEASURE);
+      rm->setDuration(stretchedLen(_score->staff(staffIdx)));
       _score->undoAddCR(rm, this, tick());
       foreach (Element* el, _el) {
             if (el->type() == Element::Type::SLUR && el->staffIdx() == staffIdx)
@@ -2115,9 +2117,9 @@ void Measure::read(XmlReader& e, int staffIdx)
                   ks->setTrack(e.track());
                   ks->read(e);
                   int curTick = e.tick();
-                  if (!ks->isCustom() && ks->key() == Key::C && curTick == 0) {
+                  if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick == 0) {
                         // ignore empty key signature
-                        //qDebug("remove keysig c at tick 0");
+                        qDebug("remove keysig c at tick 0");
                         delete ks;
                         }
                   else {
@@ -2220,8 +2222,12 @@ void Measure::read(XmlReader& e, int staffIdx)
                         }
                   }
             //----------------------------------------------------
-            else if (tag == "stretch")
-                  _userStretch = e.readDouble();
+            else if (tag == "stretch") {
+                  double val = e.readDouble();
+                  if (val < 0.0)
+                        val = 0;
+                  setUserStretch(val);
+                  }
             else if (tag == "LayoutBreak") {
                   LayoutBreak* lb = new LayoutBreak(score());
                   lb->read(e);
@@ -2550,7 +2556,7 @@ bool Measure::createEndBarLines()
       BarLine* bl = 0;
       int span    = 0;        // span counter
       int aspan   = 0;        // actual span
-      bool mensur = false;    // keep note of mensurstrich case
+      bool mensur = false;    // keep note of Mensurstrich case
       int spanTot;            // to keep track of the target span
       int spanFrom;
       int spanTo;
@@ -2577,7 +2583,7 @@ bool Measure::createEndBarLines()
                         }
                   else {                              // otherwise, get from staff
                         span        = staff->barLineSpan();
-                        // if some span OR last staff (span=0) of a mensurstrich case, get From/To from staff
+                        // if some span OR last staff (span=0) of a Mensurstrich case, get From/To from staff
                         if (span || mensur) {
                               spanFrom    = staff->barLineFrom();
                               spanTo      = staff->barLineTo();
@@ -2640,14 +2646,14 @@ bool Measure::createEndBarLines()
                         // and the bar line for this staff (cbl) is not needed:
                         // DELETE it
                         if (cbl && cbl != bl) {
-                              // mensurstrich special case:
+                              // Mensurstrich special case:
                               // if span arrives inside the end staff (spanTo>0) OR
                               //          span is not multi-staff (spanTot<=1) OR
                               //          current staff is not the last spanned staff (span!=1) OR
                               //          staff is the last score staff
                               //    remove bar line for this staff
                               // If NONE of the above conditions holds, the staff is the last staff of
-                              // a mensurstrich(-like) span: keep its bar line, as it may span to next staff
+                              // a Mensurstrich(-like) span: keep its bar line, as it may span to next staff
                               if (spanTo > 0 || spanTot <= 1 || span != 1 || staffIdx == nstaves-1) {
                                     score()->undoRemoveElement(cbl);
                                     changed = true;
@@ -2684,7 +2690,7 @@ bool Measure::createEndBarLines()
                   --span;
                   }
             // if just finished (span==0) a multi-staff span (spanTot>1) ending at the top of a staff (spanTo<=0)
-            // scan this staff again, as it may have its own bar lines (mensurstich(-like) span)
+            // scan this staff again, as it may have its own bar lines (Mensurstrich(-like) span)
             if (spanTot > 1 && spanTo <= 0 && span == 0) {
                   mensur = true;
                   staffIdx--;
@@ -2865,12 +2871,11 @@ bool Measure::isFullMeasureRest()
 //   isRepeatMeasure
 //---------------------------------------------------------
 
-bool Measure::isRepeatMeasure(Part* part)
+bool Measure::isRepeatMeasure(Staff* staff)
       {
-      int firstStaffIdx = score()->staffIdx(part);
-      int nextStaffIdx  = firstStaffIdx + part->nstaves();
-      int strack        = firstStaffIdx * VOICES;
-      int etrack        = nextStaffIdx * VOICES;
+      int staffIdx = score()->staffIdx(staff);
+      int strack        = staffIdx * VOICES;
+      int etrack        = (staffIdx + 1) * VOICES;
       Segment* s        = first(Segment::Type::ChordRest);
 
       if (s == 0)
@@ -3372,7 +3377,7 @@ void Measure::layoutX(qreal stretch)
                               }
                         if ((segType == Segment::Type::Clef) && (pt != Segment::Type::ChordRest))
                               minDistance = score()->styleS(StyleIdx::clefLeftMargin).val() * _spatium;
-                        else if (segType == Segment::Type::StartRepeatBarLine)
+                        else if (segType == Segment::Type::StartRepeatBarLine && pSeg)
                               minDistance = .5 * _spatium;
                         else if (segType == Segment::Type::TimeSig && pt == Segment::Type::Clef) {
                               // missing key signature, but allocate default margin anyhow
@@ -3414,16 +3419,15 @@ void Measure::layoutX(qreal stretch)
                         rest2[staffIdx] = true;
 
                   // space chord symbols separately from segments
-                  if (hFound || eFound) {
+                  if (hFound || spaceHarmony) {
                         qreal sp = 0.0;
 
                         // space chord symbols unless they miss each other vertically
-                        if (eFound || (hFound && hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top()))
+                        if (hFound && hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top())
                               sp = hRest[staffIdx] + minHarmonyDistance + hSpace.lw();
-
                         // barline: limit space to maxHarmonyBarDistance
-                        if (eFound && !hFound && spaceHarmony)
-                              sp = qMin(sp, maxHarmonyBarDistance);
+                        else if (spaceHarmony)
+                              sp = qMin(hRest[staffIdx], maxHarmonyBarDistance);
 
                         hLastBbox[staffIdx] = hBbox;
                         hRest[staffIdx] = hSpace.rw();
@@ -3533,7 +3537,7 @@ void Measure::layoutX(qreal stretch)
                   if (stt->slashStyle())        // if no stems
                         distAbove = stt->genDurations() ? -stt->durationBoxY() : 0.0;
                   else {                        // if stems
-                        if (stt->stemsDown())
+                        if (stt->stemsDown() && !mstaff(staffIdx)->hasVoices)
                               distBelow = (STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_DEFAULTSTEMDIST_UP)*_spatium;
                         else
                               distAbove = (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN + STAFFTYPE_TAB_DEFAULTSTEMDIST_DN)*_spatium;
@@ -4156,7 +4160,7 @@ qreal Measure::userStretch() const
       return (score()->layoutMode() == LayoutMode::FLOAT ? 1.0 : _userStretch);
       }
 
-Element* Measure::nextElement(int staff)
+Element* Measure::nextElementStaff(int staff)
       {
       Segment* firstSeg = segments()->first();
       if (firstSeg)
@@ -4164,7 +4168,7 @@ Element* Measure::nextElement(int staff)
       return score()->firstElement();
       }
 
-Element* Measure::prevElement(int staff)
+Element* Measure::prevElementStaff(int staff)
       {
       Measure* prevM = prevMeasureMM();
       if (prevM) {

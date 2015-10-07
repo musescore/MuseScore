@@ -2435,7 +2435,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Measure Numbers</source>
-        <translation>Numerotaţie măsuri</translation>
+        <translation>Numerotare Măsuri</translation>
     </message>
     <message>
         <source>Default TAB Clef</source>
@@ -3042,6 +3042,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Inspector de glissando</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpegiatto</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Redare</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restabilește valoare &quot;Redare&quot;</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3106,6 +3125,30 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Restabilește Întindere Timpului</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Stil Ornament</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Implicit</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Baroc</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Restabilește Tipul Ornamentului</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Redare</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restabilește valoare &quot;Redare&quot;</translation>
     </message>
 </context>
 <context>
@@ -3276,6 +3319,25 @@ space unit</extracomment>
     <message>
         <source>User position</source>
         <translation>Poziție dată de utilizator</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Inspector de Glissando</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Bend</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Redare</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restabilește valoare &quot;Redare&quot;</translation>
     </message>
 </context>
 <context>
@@ -3558,6 +3620,42 @@ space unit</extracomment>
     <message>
         <source>Show text</source>
         <translation>Arată text</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Stil</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Restabilește Stilul</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Stil Redare</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Cromatic</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Clape Albe</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Clape Negre</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diatonic</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Redare</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restabilește valoare &quot;Redare&quot;</translation>
     </message>
 </context>
 <context>
@@ -4366,6 +4464,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Inspector de Cadru de Text</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Cadru Text</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Golul de jos</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Magine sus</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Restabilește valoarea</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Restabilește Golul de sus</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Restabilește Golul de jos</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Margine stânga</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Margine jos</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Restabilește Marginea din dreapta</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Margine dreapta</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Restabilește Marginea de jos</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Restabilește Marginea de sus</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Restabilește Marginea din stânga</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Golul de sus</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>sp</translation>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4496,12 +4666,36 @@ space unit</extracomment>
         <translation>Prall Prall</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Linie ondulată</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Restabilește valoarea</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Stil Ornament</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Direcție</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Implicit</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Baroc</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Restabilește Tipul Ornamentului</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Redare</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restabilește valoare &quot;Redare&quot;</translation>
     </message>
 </context>
 <context>
@@ -4876,6 +5070,13 @@ space unit</extracomment>
     <message>
         <source>Add time signature to palette</source>
         <translation>Adaugă metrul la paletă</translation>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>atonal</translation>
     </message>
 </context>
 <context>
@@ -6048,14 +6249,6 @@ a eșuat:</translation>
         <translation>semnul de $ însuși</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>etichetă meta data</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Etichete disponibile și valorile lor curente:</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Aplică tuturor știmelor</translation>
     </message>
@@ -6070,6 +6263,14 @@ a eșuat:</translation>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>numărul paginii, dacă este mai mult de o pagină</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>etichetă meta data, vedeți dedesupt</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Etichete meta data disponibile și valorile lor curente:</translation>
     </message>
 </context>
 <context>
@@ -7198,7 +7399,11 @@ alegeți un nume diferit:</translation>
     </message>
     <message>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Această partitură nu poate fi salvata online. Reparați măsurile corupte și încercați din nou.</translation>
+    </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Cereți Ajutor</translation>
     </message>
 </context>
 <context>
@@ -7402,7 +7607,7 @@ alegeți un nume diferit:</translation>
     </message>
     <message>
         <source>Single Palette</source>
-        <translation type="unfinished"/>
+        <translation>Paletă Singură</translation>
     </message>
 </context>
 <context>
@@ -7683,10 +7888,6 @@ a eșuat: %2</translation>
         <translation>Scrierea Stilul a eșuat: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>fișier negăsit</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Nicio selecție</translation>
     </message>
@@ -7697,6 +7898,10 @@ a eșuat: %2</translation>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>Măsura %1, portativul %2, vocea %3 este prea lungă. Așteptat: %4; Găsit: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>Eroare de citire XML la linia %1 coloana %2: %3</translation>
     </message>
 </context>
 <context>
@@ -8010,6 +8215,12 @@ Selectați mai multe măsuri consecutive pt. a le uni și încercați din nou</t
     <message>
         <source>Transparent background</source>
         <translation>Fundal transparent</translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>Nu se poate sparge măsura aici:
+Prima bătaie a măsurii</translation>
     </message>
 </context>
 <context>
@@ -10409,7 +10620,15 @@ a eșuat:</translation>
     </message>
     <message>
         <source>Filter</source>
-        <translation type="unfinished"/>
+        <translation>Filtru</translation>
+    </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Export RPN-uri</translation>
     </message>
 </context>
 <context>
@@ -10733,11 +10952,11 @@ Vizitați &lt;a href=&quot;http://musescore.org&quot;&gt;website-ul MuseScore &l
     </message>
     <message>
         <source>MuseScore: Upload Error</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Eroare de upload</translation>
     </message>
     <message>
         <source>Do you want to try to load this file anyway?</source>
-        <translation type="unfinished"/>
+        <translation>Doriți să se încerce totuși încărcarea fișierului?</translation>
     </message>
 </context>
 <context>
@@ -11268,6 +11487,14 @@ Doriți să-l suprascrieți?</translation>
     <message>
         <source>System flag</source>
         <translation>Flag de sistem</translation>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation>Caută...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Şterge</translation>
     </message>
 </context>
 <context>
@@ -13617,10 +13844,6 @@ a eșuat:</translation>
         <translation>Ligatură împănată, mai rapidă</translation>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Paletă</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Panou Redare</translation>
     </message>
@@ -13655,10 +13878,6 @@ a eșuat:</translation>
     <message>
         <source>Add lyrics</source>
         <translation>Adaugă versuri</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Marcaj Tempo...</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -14015,10 +14234,6 @@ a eșuat:</translation>
     <message>
         <source>Repeat selection</source>
         <translation>Repetare Selecţie</translation>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
-        <translation>Pan-ează Pianina</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
@@ -15584,6 +15799,22 @@ a eșuat:</translation>
         <source>Set loop in position</source>
         <translation>Stabilește poziție loop in</translation>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Palete</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Marcaj Tempo</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation>Mărire la 100%</translation>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation>Pan-ează Pianina</translation>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -16634,6 +16865,10 @@ Măsura nu este vidă.</translation>
     <message>
         <source>Tablature2</source>
         <translation>Tabulatură 2</translation>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>Cheia Sol 8vb optional</translation>
     </message>
 </context>
 <context>
@@ -17745,10 +17980,6 @@ Măsura nu este vidă.</translation>
     <message>
         <source>Prallprall line</source>
         <translation>PrallPrall linie</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Linie ondulată</translation>
     </message>
 </context>
 <context>

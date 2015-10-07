@@ -3042,6 +3042,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glissandoovervåker</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpeggio</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spill av</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nullstill &quot;Spill&quot;</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3106,6 +3125,30 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Nullstill tidsforskyvning</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Standard</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barokk</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spill av</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nullstill &quot;Spill&quot;</translation>
     </message>
 </context>
 <context>
@@ -3276,6 +3319,25 @@ space unit</extracomment>
     <message>
         <source>User position</source>
         <translation>Brukerstyrt posisjon</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glissandoovervåker</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Bøy</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spill av</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nullstill &quot;Spill&quot;</translation>
     </message>
 </context>
 <context>
@@ -3558,6 +3620,42 @@ space unit</extracomment>
     <message>
         <source>Show text</source>
         <translation>Vis tekst</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Stil</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Nullstill stil</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Kromatisk</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Hvite tangenter</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Sorte tangenter</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diatonisk</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spill av</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nullstill &quot;Spill&quot;</translation>
     </message>
 </context>
 <context>
@@ -4366,6 +4464,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Tekstrammeovervåker</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Tekstramme</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Bunnmellomrom</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Toppmarg</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Nullstill verdi</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Nullstill toppmellomrom</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Nullstill bunnmellomrom</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Venstre marg</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Bunnmarg</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Nullstill høyremarg</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Høyre marg</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Nullstill bunnmarg</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Nullstill toppmarg</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Nullstill venstremarg</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Toppmellomrom</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>pkt</translation>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4496,12 +4666,36 @@ space unit</extracomment>
         <translation>Lang praltrille</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Bølgende linje</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Nullstill verdi</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Retning</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Standard</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barokk</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spill av</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Nullstill &quot;Spill&quot;</translation>
     </message>
 </context>
 <context>
@@ -4879,6 +5073,13 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>atonal</translation>
+    </message>
+</context>
+<context>
     <name>LayerManager</name>
     <message>
         <source>MuseScore: Layers</source>
@@ -5175,7 +5376,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>2-plets</source>
-        <translation type="unfinished"/>
+        <translation>Duoler</translation>
     </message>
     <message>
         <source>3-plets</source>
@@ -6048,14 +6249,6 @@ feilet: </translation>
         <translation>Dollartegnet</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>Metadatamerkelapp</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Tilgjengelige merkelapper og deres innhold:</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Bruk på alle enkeltstemmer</translation>
     </message>
@@ -6070,6 +6263,14 @@ feilet: </translation>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>sidetall, hvis det er flere enn en side</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Tilgjengelige metadatamerkelapper og deres innhold:</translation>
     </message>
 </context>
 <context>
@@ -6859,7 +7060,7 @@ vennligst velg en takt og prøv igjen</translation>
         <source>The previous session quit unexpectedly.
 
 Restore session?</source>
-        <translation>Forrige økt ble uventet avbrutt.
+        <translation>Forrige økt ble avbrutt uventet .
 
 Gjenopprett økt?</translation>
     </message>
@@ -7198,7 +7399,11 @@ vennligst velg et annet navn:</translation>
     </message>
     <message>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Dette partituret kan ikke lagres på nettet. Vennligst reparer korrupte takter og prøv igjen.</translation>
+    </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Spør om hjelp</translation>
     </message>
 </context>
 <context>
@@ -7683,10 +7888,6 @@ feilet: %2</translation>
         <translation>Skriving av stil feilet: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>fila ble ikke funnet</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Intet utvalg</translation>
     </message>
@@ -7697,6 +7898,10 @@ feilet: %2</translation>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>Takt %1, notesystem %2, stemme %3 for lang. Forventet: %4; Funnet: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7727,7 +7932,7 @@ feilet: %2</translation>
     </message>
     <message>
         <source>End Measure: %1; End Beat: %2</source>
-        <translation>Slutttakt: %1; Sluttslag: %2</translation>
+        <translation>Sluttakt: %1; Sluttslag: %2</translation>
     </message>
     <message>
         <source>Staff %1</source>
@@ -8010,6 +8215,11 @@ Vennligst velg takter som skal slås sammen og prøv igjen</translation>
     <message>
         <source>Transparent background</source>
         <translation>Gjennomsiktig bakgrunn</translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -10409,7 +10619,15 @@ feilet: </translation>
     </message>
     <message>
         <source>Filter</source>
-        <translation type="unfinished"/>
+        <translation>Filter</translation>
+    </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Eksporter RPN-er</translation>
     </message>
 </context>
 <context>
@@ -10729,15 +10947,15 @@ Besøk &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScores nettside&lt;/a&
     </message>
     <message>
         <source>File corrupted %1</source>
-        <translation>Fil korrupt  %1</translation>
+        <translation>Filen er korrupt:  %1</translation>
     </message>
     <message>
         <source>MuseScore: Upload Error</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Noe gikk galt under opplasting</translation>
     </message>
     <message>
         <source>Do you want to try to load this file anyway?</source>
-        <translation type="unfinished"/>
+        <translation>Vil du uansett prøve å laste filen?</translation>
     </message>
 </context>
 <context>
@@ -11267,6 +11485,14 @@ Vil du overskrive den?</translation>
     <message>
         <source>System flag</source>
         <translation>Systemflagg</translation>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation>Søk...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Rens</translation>
     </message>
 </context>
 <context>
@@ -13616,10 +13842,6 @@ feilet: </translation>
         <translation>Fjærbjelke, raskere</translation>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Palett</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Avspillingsvindu</translation>
     </message>
@@ -13654,10 +13876,6 @@ feilet: </translation>
     <message>
         <source>Add lyrics</source>
         <translation>Legg til sangtekst</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Tempo...</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -14014,10 +14232,6 @@ feilet: </translation>
     <message>
         <source>Repeat selection</source>
         <translation>Repeter utvalg</translation>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
-        <translation>Panorér pianorull</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
@@ -15583,6 +15797,22 @@ feilet: </translation>
         <source>Set loop in position</source>
         <translation>Sett repeteringsstartpunkt</translation>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Paletter</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Tempo</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation>Zoom til 100%</translation>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -16634,6 +16864,10 @@ Takten er ikke tom</translation>
         <source>Tablature2</source>
         <translation>Tabulatur2</translation>
     </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>drumset</name>
@@ -16807,11 +17041,11 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Hi Wood Block</source>
-        <translation type="unfinished"/>
+        <translation>Høy wood block</translation>
     </message>
     <message>
         <source>Low Wood Block</source>
-        <translation type="unfinished"/>
+        <translation>Lav wood block</translation>
     </message>
     <message>
         <source>Mute Cuica</source>
@@ -16831,11 +17065,11 @@ Takten er ikke tom</translation>
     </message>
     <message>
         <source>Shaker</source>
-        <translation type="unfinished"/>
+        <translation>Shaker</translation>
     </message>
     <message>
         <source>Bell Tree</source>
-        <translation type="unfinished"/>
+        <translation>Bell tree</translation>
     </message>
     <message>
         <source>Mute Surdo</source>
@@ -17744,10 +17978,6 @@ Takten er ikke tom</translation>
     <message>
         <source>Prallprall line</source>
         <translation>Lang praltrillelinje</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Bølgende linje</translation>
     </message>
 </context>
 <context>

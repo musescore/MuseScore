@@ -225,7 +225,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Chord Automatic</source>
-        <translation>Acorde Automático</translation>
+        <translation>Ajuste Automático</translation>
     </message>
     <message>
         <source>Above Chord</source>
@@ -3042,6 +3042,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Inspetor de Glissando</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpejo</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Tocar</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restaurar o valor de tocar</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3106,6 +3125,30 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Reiniciar o valor de dilatação de tempo</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Estilo de ornamento</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Padrão</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barroco</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Restaurar o valor do tipo de ornamento</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Tocar</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restaurar o valor de tocar</translation>
     </message>
 </context>
 <context>
@@ -3276,6 +3319,25 @@ space unit</extracomment>
     <message>
         <source>User position</source>
         <translation>Posição do usuário</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Inspetor de Glissando</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Bend</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Tocar</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Reajustar valor de Tocar</translation>
     </message>
 </context>
 <context>
@@ -3558,6 +3620,42 @@ space unit</extracomment>
     <message>
         <source>Show text</source>
         <translation>Mostrar texto</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Estilo</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Restaurar o valor do Estilo</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Estilo de tocar</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Cromático</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Teclas brancas</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Teclas pretas</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diationico</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Tocar</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restaurar o valor de tocar</translation>
     </message>
 </context>
 <context>
@@ -4366,6 +4464,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Inspetor de Moldura de Texto</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Moldura de Texto</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Lacuna inferior</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Margem superior</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Reajustar valor</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Reajustar valor da lacuna superior</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Reajustar valor da lacuna inferior</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Margem esquerda</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Margem inferior</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Reajustar valor da margem direita</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Margem direita</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Reajustar valor da margem inferior</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Reajustar valor da margem superior</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Reajustar valor da margem esquerda</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Lacuna superior</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>sp</translation>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4496,12 +4666,36 @@ space unit</extracomment>
         <translation>Mordente duplo superior</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Linha Ondulada</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Restaurar o valor</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Estilo de ornamento</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Direção</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Padrão</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barroco</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Restaurar o valor do tipo de ornamento</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Tocar</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Restaurar o valor de tocar</translation>
     </message>
 </context>
 <context>
@@ -4876,6 +5070,13 @@ space unit</extracomment>
     <message>
         <source>Add time signature to palette</source>
         <translation>Adicionar fórmula de compasso à paleta</translation>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>atonal</translation>
     </message>
 </context>
 <context>
@@ -6048,14 +6249,6 @@ falhou: </translation>
         <translation>o próprio símbolo $</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>rótulo de metadados</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Rótulos disponíveis e seus valores atuais:</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Aplicar a todas as Partes</translation>
     </message>
@@ -6070,6 +6263,14 @@ falhou: </translation>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>número de página, se existir mais de uma página</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>Etiqueta de meta-dados, veja abaixo</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Rótulos de meta-dados disponíveis e seus respectivos valores</translation>
     </message>
 </context>
 <context>
@@ -7201,6 +7402,10 @@ por favor, escolha um nome diferente:</translation>
         <translation>Esta partitura não pode ser salva online. 
 Por favor, corrija os compassos corrompidos e tente novamente.</translation>
     </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Peça Ajuda</translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7684,10 +7889,6 @@ falhou: %2</translation>
         <translation>Erro ao gravar estilo: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>arquivo não encontrado</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Nenhuma seleção</translation>
     </message>
@@ -7698,6 +7899,10 @@ falhou: %2</translation>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>O compasso %1 da pauta %2 e voz %3 está muito longo. Espectativa: %4; Encontrado: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>Erro de leitura XML na linha %1 coluna %2: %3</translation>
     </message>
 </context>
 <context>
@@ -8011,6 +8216,12 @@ Por favor, selecione uma faixa de compassos a unir e tente novamente</translatio
     <message>
         <source>Transparent background</source>
         <translation>Plano de fundo transparente</translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>Não é possível dividir o compasso:
+Primeiro tempo do compasso</translation>
     </message>
 </context>
 <context>
@@ -10412,6 +10623,14 @@ falhou: </translation>
         <source>Filter</source>
         <translation>Filtro</translation>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Exportar RPNs</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10738,7 +10957,7 @@ Visite a &lt;a href=&quot;http://musescore.org&quot;&gt;página na internet Muse
     </message>
     <message>
         <source>Do you want to try to load this file anyway?</source>
-        <translation type="unfinished"/>
+        <translation>Você quer tentar carregar este arquivo mesmo assim?</translation>
     </message>
 </context>
 <context>
@@ -11270,6 +11489,14 @@ Deseja sobrescrevê-lo?
     <message>
         <source>System flag</source>
         <translation>Indicador de Sistema</translation>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation>Pesquisar...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Limpar</translation>
     </message>
 </context>
 <context>
@@ -13619,10 +13846,6 @@ falhou: </translation>
         <translation>Barra de ligação emplumada, rápida</translation>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Paleta</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Painel de reprodução</translation>
     </message>
@@ -13657,10 +13880,6 @@ falhou: </translation>
     <message>
         <source>Add lyrics</source>
         <translation>Adicionar letra</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Andamento...</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -14017,10 +14236,6 @@ falhou: </translation>
     <message>
         <source>Repeat selection</source>
         <translation>Repetir seleção</translation>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
-        <translation>Deslocar piano roll</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
@@ -15586,6 +15801,22 @@ falhou: </translation>
         <source>Set loop in position</source>
         <translation>Configura posição de início de repetição</translation>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Paletas</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Marcação de Andamento</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation>Aumentar 100%</translation>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation>Pan Piano Roll</translation>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -16637,6 +16868,10 @@ O compasso não está vazio</translation>
     <message>
         <source>Tablature2</source>
         <translation>Tablatura2</translation>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>Clave de sol 8vb opcional</translation>
     </message>
 </context>
 <context>
@@ -17748,10 +17983,6 @@ O compasso não está vazio</translation>
     <message>
         <source>Prallprall line</source>
         <translation>Apogiatura e mordente superior duplo</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Linha ondulada</translation>
     </message>
 </context>
 <context>

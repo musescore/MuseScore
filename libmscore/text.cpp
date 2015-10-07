@@ -28,7 +28,7 @@ namespace Ms {
 
 static const qreal subScriptSize   = 0.6;
 static const qreal subScriptOffset = 0.5;       // of x-height
-static const qreal superScriptOffset = -0.5;       // of x-height
+static const qreal superScriptOffset = -.9;      // of x-height
 
 //static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
 
@@ -303,12 +303,10 @@ void TextBlock::layout(Text* t)
                   QFontMetricsF fm(f.font(t));
                   if (f.format.valign() != VerticalAlignment::AlignNormal) {
                         qreal voffset = fm.xHeight() / subScriptSize;   // use original height
-                        if (f.format.valign() != VerticalAlignment::AlignNormal) {
-                              if (f.format.valign() == VerticalAlignment::AlignSubScript)
-                                    voffset *= subScriptOffset;
-                              else
-                                    voffset *= superScriptOffset;
-                              }
+                        if (f.format.valign() == VerticalAlignment::AlignSubScript)
+                              voffset *= subScriptOffset;
+                        else
+                              voffset *= superScriptOffset;
                         f.pos.setY(voffset);
                         }
                   else
@@ -450,11 +448,7 @@ int TextBlock::column(qreal x, Text* t) const
                   if (c.isHighSurrogate())
                         continue;
                   QFontMetricsF fm(f.font(t));
-                  qreal xo;
-                  if (f.format.type() == CharFormatType::TEXT)
-                        xo = fm.width(f.text.left(idx));
-                  else
-                        xo = t->symWidth(f.text.left(idx));
+                  qreal xo = fm.width(f.text.left(idx));
                   if (x <= f.pos.x() + px + (xo-px)*.5)
                         return col;
                   ++col;
@@ -639,6 +633,8 @@ void TextBlock::simplify()
 
 QString TextBlock::remove(int start, int n)
       {
+      if (n == 0)
+            return QString();
       int col = 0;
       QString s;
       for (auto i = _text.begin(); i != _text.end();) {
@@ -994,8 +990,8 @@ QRectF Text::cursorRect() const
       QFont font;
       if (fragment) {
             font = fragment->font(this);
-            if (font.family() == score()->scoreFont()->font().family())
-                  font = _textStyle.fontPx(spatium());
+//TODOxxxx            if (font.family() == score()->scoreFont()->font().family())
+//                  font = _textStyle.fontPx(spatium());
             }
       else
             font = _textStyle.fontPx(spatium());
@@ -1048,7 +1044,9 @@ void Text::insert(TextCursor* cursor, QChar c)
             deleteSelectedText();
       if (cursor->line() >= _layout.size())
             _layout.append(TextBlock());
-      if (c == QChar::LineFeed) {
+      if (c == QChar::Tabulation)
+            c = QChar::Space;
+      else if (c == QChar::LineFeed) {
             _layout[cursor->line()].setEol(true);
             cursor->setLine(cursor->line() + 1);
             cursor->setColumn(0);
@@ -1558,8 +1556,9 @@ void Text::endEdit()
                   // when we called it for the linked elements
                   // by also checking for empty old text, we avoid creating an unnecessary element on undo stack
                   // that returns us to the initial empty text created upon startEdit()
+                  // (except this is needed for empty text frames to ensure that adding text marks score dity)
 
-                  if (!oldText.isEmpty()) {
+                  if (!oldText.isEmpty() || (parent() && parent()->type() == Element::Type::TBOX)) {
                         // oldText is good for original element
                         // but use original text for each linked element
                         // these can differ (eg, for chord symbols in transposing parts)
@@ -1731,6 +1730,7 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                         s.clear();
                         break;
 
+                  case Qt::Key_Tab:
                   case Qt::Key_Space:
                         s = " ";
                         modifiers = 0;
@@ -2157,7 +2157,7 @@ void Text::deleteSelectedText()
                   qSwap(c1, c2);
             }
       int rows = _layout.size();
-      QList<TextBlock> toDelete;
+
       for (int row = 0; row < rows; ++row) {
             TextBlock& t = _layout[row];
             if (row >= r1 && row <= r2) {
@@ -2167,22 +2167,14 @@ void Text::deleteSelectedText()
                         t.remove(c1, t.columns() - c1);
                   else if (row == r2)
                         t.remove(0, c2);
-                  else {
-                        toDelete.append(t);
-                        }
                   }
             }
       if (r1 != r2) {
-            TextBlock& l1 = _layout[r1];
+            TextBlock& l1       = _layout[r1];
             const TextBlock& l2 = _layout[r2];
             for (const TextFragment& f : l2.fragments())
                   l1.fragments().append(f);
-            _layout.removeAt(r2);
-            QMutableListIterator<TextBlock> i(_layout);
-            while (i.hasNext()) {
-                  if (toDelete.contains(i.next()))
-                        i.remove();
-                  }
+            _layout.erase(_layout.begin() + r1 + 1, _layout.begin() + r2 + 1);
             if (_layout.last() == l1)
                   l1.setEol(false);
             }
@@ -2226,8 +2218,14 @@ void Text::writeProperties(Xml& xml, bool writeText, bool writeStyle) const
                   xml.tag("style", textStyle().name());
             _textStyle.writeProperties(xml, score()->textStyle(_styleIndex));
             }
-      if (writeText)
-            xml.writeXml("text", xmlText());
+      if (writeText) {
+            // Make sure we don't write metNote and metAugmentationDot symbols,
+            // they are not supported in 2.0 and 2.0.1
+            QString t = xmlText();
+            t.replace("<sym>metN",       "<sym>unicodeN");
+            t.replace("<sym>metA",       "<sym>unicodeA");
+            xml.writeXml("text", t);
+            }
       }
 
 //---------------------------------------------------------
@@ -2306,8 +2304,11 @@ bool Text::readProperties(XmlReader& e)
             e.readElementText();
       else if (tag == "html")
             setPlainText(QTextDocumentFragment::fromHtml(e.readXml()).toPlainText());
-      else if (tag == "text")
+      else if (tag == "text") {
             _text = e.readXml();
+            // 2.0 and 2.0.1 had unicode symbols
+            _text.replace("<sym>unicode", "<sym>met");
+            }
       else if (tag == "html-data")
             setXmlText(convertFromHtml(e.readXml()));
       else if (tag == "subtype")          // obsolete
@@ -2438,6 +2439,27 @@ void Text::dragTo(const QPointF& p)
       }
 
 //---------------------------------------------------------
+//   dragAnchor
+//---------------------------------------------------------
+
+QLineF Text::dragAnchor() const
+      {
+      qreal xp = 0.0;
+      for (Element* e = parent(); e; e = e->parent())
+            xp += e->x();
+      qreal yp;
+      if (parent()->type() == Element::Type::SEGMENT)
+            yp = static_cast<Segment*>(parent())->measure()->system()->staffYpage(staffIdx());
+      else
+            yp = parent()->canvasPos().y();
+      QPointF p1(xp, yp);
+      QPointF p2 = canvasPos();
+      if (layoutToParentWidth())
+            p2 += bbox().topLeft();
+      return QLineF(p1, p2);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -2548,7 +2570,7 @@ void Text::paste()
                         if (symState)
                               sym += c;
                         else
-                              insertText(c);
+                              insert(&_cursor, c);
                         }
                   }
             else if (state == 1) {
@@ -2823,20 +2845,20 @@ QString Text::convertFromHtml(const QString& ss) const
             }
 
       if (score() && score()->mscVersion() <= 114) {
-            s.replace(QChar(0xe10e), QString("<sym>accidentalNatural</sym>"));    //natural
+            s.replace(QChar(0xe10e), QString("<sym>accidentalNatural</sym>"));  //natural
             s.replace(QChar(0xe10c), QString("<sym>accidentalSharp</sym>"));    // sharp
-            s.replace(QChar(0xe10d), QString("<sym>accidentalFlat</sym>"));    // flat
-            s.replace(QChar(0xe104), QString("<sym>unicodeNoteHalfUp</sym>")),    // note2_Sym
-            s.replace(QChar(0xe105), QString("<sym>unicodeNoteQuarterUp</sym>"));    // note4_Sym
-            s.replace(QChar(0xe106), QString("<sym>unicodeNote8thUp</sym>"));    // note8_Sym
-            s.replace(QChar(0xe107), QString("<sym>unicodeNote16thUp</sym>"));    // note16_Sym
-            s.replace(QChar(0xe108), QString("<sym>unicodeNote32ndUp</sym>"));    // note32_Sym
-            s.replace(QChar(0xe109), QString("<sym>unicodeNote64thUp</sym>"));    // note64_Sym
-            s.replace(QChar(0xe10a), QString("<sym>unicodeAugmentationDot</sym>"));    // dot
-            s.replace(QChar(0xe10b), QString("<sym>unicodeAugmentationDot</sym> <sym>unicodeAugmentationDot</sym>"));    // dotdot
-            s.replace(QChar(0xe167), QString("<sym>segno</sym>"));    // segno
-            s.replace(QChar(0xe168), QString("<sym>coda</sym>"));    // coda
-            s.replace(QChar(0xe169), QString("<sym>codaSquare</sym>"));    // varcoda
+            s.replace(QChar(0xe10d), QString("<sym>accidentalFlat</sym>"));     // flat
+            s.replace(QChar(0xe104), QString("<sym>metNoteHalfUp</sym>")),      // note2_Sym
+            s.replace(QChar(0xe105), QString("<sym>metNoteQuarterUp</sym>"));   // note4_Sym
+            s.replace(QChar(0xe106), QString("<sym>metNote8thUp</sym>"));       // note8_Sym
+            s.replace(QChar(0xe107), QString("<sym>metNote16thUp</sym>"));      // note16_Sym
+            s.replace(QChar(0xe108), QString("<sym>metNote32ndUp</sym>"));      // note32_Sym
+            s.replace(QChar(0xe109), QString("<sym>metNote64thUp</sym>"));      // note64_Sym
+            s.replace(QChar(0xe10a), QString("<sym>metAugmentationDot</sym>")); // dot
+            s.replace(QChar(0xe10b), QString("<sym>metAugmentationDot</sym><sym>space</sym><sym>metAugmentationDot</sym>"));    // dotdot
+            s.replace(QChar(0xe167), QString("<sym>segno</sym>"));              // segno
+            s.replace(QChar(0xe168), QString("<sym>coda</sym>"));               // coda
+            s.replace(QChar(0xe169), QString("<sym>codaSquare</sym>"));         // varcoda
             }
       return s;
       }

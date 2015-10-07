@@ -1551,6 +1551,19 @@
                         <program value="71"/>
                   </Channel>
             </Instrument>
+            <Instrument id="c-clarinet">
+                  <longName>C Clarinet</longName>
+                  <shortName>C Cl.</shortName>
+                  <description>C Clarinet</description>
+                  <musicXMLid>wind.reed.clarinet</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>52-89</aPitchRange>
+                  <pPitchRange>52-94</pPitchRange>
+                  <Channel>
+                        <program value="71"/>
+                  </Channel>
+            </Instrument>
             <Instrument id="d-clarinet">
                   <longName>D Clarinet</longName>
                   <shortName>D Cl.</shortName>
@@ -3666,7 +3679,7 @@
             </Instrument>
             <Instrument id="trombone">
                   <longName>Trombone</longName>
-                  <shortName>Trb.</shortName>
+                  <shortName>Tbn.</shortName>
                   <description>Trombone</description>
                   <musicXMLid>brass.trombone</musicXMLid>
                   <clef>F</clef>
@@ -3683,7 +3696,7 @@
             <Instrument id="trombone-treble">
                   <trackName>Trombone (Treble Clef)</trackName>
                   <longName>Trombone</longName>
-                  <shortName>Trb.</shortName>
+                  <shortName>Tbn.</shortName>
                   <description>Trombone</description>
                   <musicXMLid>brass.trombone</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -3699,7 +3712,7 @@
             </Instrument>
             <Instrument id="soprano-trombone">
                   <longName>Soprano Trombone</longName>
-                  <shortName>S. Trb.</shortName>
+                  <shortName>S. Tbn.</shortName>
                   <description>Soprano Trombone</description>
                   <musicXMLid>brass.trombone</musicXMLid>
                   <clef>G</clef>
@@ -3712,7 +3725,7 @@
             </Instrument>
             <Instrument id="alto-trombone">
                   <longName>Alto Trombone</longName>
-                  <shortName>A. Trb.</shortName>
+                  <shortName>A. Tbn.</shortName>
                   <description>Alto Trombone</description>
                   <musicXMLid>brass.trombone.alto</musicXMLid>
                   <clef>C3</clef>
@@ -3726,7 +3739,7 @@
             </Instrument>
             <Instrument id="tenor-trombone">
                   <longName>Tenor Trombone</longName>
-                  <shortName>T. Trb.</shortName>
+                  <shortName>T. Tbn.</shortName>
                   <description>Tenor Trombone</description>
                   <musicXMLid>brass.trombone.tenor</musicXMLid>
                   <clef>F</clef>
@@ -3741,7 +3754,7 @@
             </Instrument>
             <Instrument id="bass-trombone">
                   <longName>Bass Trombone</longName>
-                  <shortName>B. Trb.</shortName>
+                  <shortName>B. Tbn.</shortName>
                   <description>Bass Trombone</description>
                   <musicXMLid>brass.trombone.bass</musicXMLid>
                   <clef>F</clef>
@@ -3757,7 +3770,7 @@
             </Instrument>
             <Instrument id="contrabass-trombone">
                   <longName>Contrabass Trombone</longName>
-                  <shortName>Cb. Trb.</shortName>
+                  <shortName>Cb. Tbn.</shortName>
                   <description>Contrabass Trombone</description>
                   <musicXMLid>brass.trombone.contrabass</musicXMLid>
                   <clef>F</clef>
@@ -9196,7 +9209,7 @@
             </Instrument>
             <Instrument id="violoncello">
                   <longName>Violoncello</longName>
-                  <shortName>Vlc.</shortName>
+                  <shortName>Vc.</shortName>
                   <description>Violoncello</description>
                   <musicXMLid>strings.cello</musicXMLid>
                   <clef>F</clef>
@@ -9218,7 +9231,7 @@
             </Instrument>
             <Instrument id="violoncellos">
                   <longName>Violoncellos</longName>
-                  <shortName>Vlcs.</shortName>
+                  <shortName>Vcs.</shortName>
                   <description>Violoncellos</description>
                   <musicXMLid>strings.group</musicXMLid>
                   <clef>F</clef>
@@ -9298,6 +9311,12 @@
                   <Channel>
                         <program value="40"/>
                   </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="treble-viol">
@@ -9320,6 +9339,12 @@
                   <pPitchRange>50-91</pPitchRange>
                   <Channel>
                         <program value="40"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -9344,6 +9369,12 @@
                   <Channel>
                         <program value="41"/>
                   </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="tenor-viol">
@@ -9367,6 +9398,12 @@
                   <Channel>
                         <program value="41"/>
                   </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="viola-da-gamba">
@@ -9389,6 +9426,12 @@
                   <pPitchRange>33-79</pPitchRange>
                   <Channel>
                         <program value="42"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -9424,6 +9467,12 @@
                   <Channel>
                         <program value="43"/>
                   </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="d-violone">
@@ -9446,6 +9495,12 @@
                   <pPitchRange>26-59</pPitchRange>
                   <Channel>
                         <program value="43"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>

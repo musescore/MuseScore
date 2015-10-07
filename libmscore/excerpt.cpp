@@ -39,6 +39,7 @@
 #include "beam.h"
 #include "utils.h"
 #include "tremolo.h"
+#include "barline.h"
 #include "undo.h"
 
 namespace Ms {
@@ -235,22 +236,26 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
 
             ns->setStartElement(0);
             ns->setEndElement(0);
-            for (ScoreElement* e : *cr1->links()) {
-                  ChordRest* cr = static_cast<ChordRest*>(e);
-                  if (cr == cr1)
-                        continue;
-                  if ((cr->score() == score) && (cr->tick() == ns->tick()) && cr->track() == dstTrack) {
-                        ns->setStartElement(cr);
-                        break;
+            if (cr1->links()) {
+                  for (ScoreElement* e : *cr1->links()) {
+                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        if (cr == cr1)
+                              continue;
+                        if ((cr->score() == score) && (cr->tick() == ns->tick()) && cr->track() == dstTrack) {
+                              ns->setStartElement(cr);
+                              break;
+                              }
                         }
                   }
-            for (ScoreElement* e : *cr2->links()) {
-                  ChordRest* cr = static_cast<ChordRest*>(e);
-                  if (cr == cr2)
-                        continue;
-                  if ((cr->score() == score) && (cr->tick() == ns->tick2()) && cr->track() == dstTrack2) {
-                        ns->setEndElement(cr);
-                        break;
+            if (cr2->links()) {
+                  for (ScoreElement* e : *cr2->links()) {
+                        ChordRest* cr = static_cast<ChordRest*>(e);
+                        if (cr == cr2)
+                              continue;
+                        if ((cr->score() == score) && (cr->tick() == ns->tick2()) && cr->track() == dstTrack2) {
+                              ns->setEndElement(cr);
+                              break;
+                              }
                         }
                   }
             if (!ns->startElement())
@@ -393,6 +398,37 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     continue;
 
                               Element* oe = oseg->element(srcTrack);
+                              int adjustedBarlineSpan = 0;
+                              if (srcTrack % VOICES == 0 && oseg->segmentType() == Segment::Type::BarLine) {
+                                    // mid-measure barline segment
+                                    // may need to clone barline from a previous staff and/or adjust span
+                                    int oIdx = srcTrack / VOICES;
+                                    if (!oe) {
+                                          // no barline on this staff in original score,
+                                          // but check previous staves
+                                          for (int i = oIdx - 1; i >= 0; --i) {
+                                                oe = oseg->element(i * VOICES);
+                                                if (oe)
+                                                      break;
+                                                }
+                                          }
+                                    if (oe) {
+                                          // barline found, now check span
+                                          BarLine* bl = static_cast<BarLine*>(oe);
+                                          int oSpan1 = bl->staff()->idx();
+                                          int oSpan2 = oSpan1 + bl->span();
+                                          if (oSpan1 <= oIdx && oIdx < oSpan2) {
+                                                // this staff is within span
+                                                // calculate adjusted span for excerpt
+                                                int oSpan = oSpan2 - oIdx;
+                                                adjustedBarlineSpan = qMin(oSpan, score->nstaves());
+                                                }
+                                          else {
+                                                // this staff is not within span
+                                                oe = nullptr;
+                                                }
+                                          }
+                                    }
                               if (oe == 0)
                                     continue;
                               Element* ne;
@@ -403,7 +439,11 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                               ne->setTrack(track);
                               ne->scanElements(score, localSetScore);   //necessary?
                               ne->setScore(score);
-                              if (oe->isChordRest()) {
+                              if (oe->type() == Element::Type::BAR_LINE && adjustedBarlineSpan) {
+                                    BarLine* nbl = static_cast<BarLine*>(ne);
+                                    nbl->setSpan(adjustedBarlineSpan);
+                                    }
+                              else if (oe->isChordRest()) {
                                     ChordRest* ocr = static_cast<ChordRest*>(oe);
                                     ChordRest* ncr = static_cast<ChordRest*>(ne);
 
@@ -772,7 +812,7 @@ void cloneStaff(Staff* srcStaff, Staff* dstStaff)
 
 //---------------------------------------------------------
 //   cloneStaff2
-//    staves are in different scores
+//    staves are potentially in different scores
 //---------------------------------------------------------
 
 void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
@@ -903,5 +943,36 @@ void cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
             }
       }
 
-}
+QList<Excerpt*> Excerpt::createAllExcerpt(Score *score) {
+      QList<Excerpt*> all;
+      for (Part* part : score->parts()) {
+            if (part->show()) {
+                  Excerpt* e   = new Excerpt(score);
+                  e->parts().append(part);
+                  QString name = createName(part->partName(), all);
+                  e->setTitle(name);
+                  all.append(e);
+                  }
+            }
+      return all;
+      }
 
+QString Excerpt::createName(const QString& partName, QList<Excerpt*> excerptList) {
+      QString n = partName.simplified();
+      QString name;
+      int count = excerptList.count();
+      for (int i = 0;; ++i) {
+            name = i ? QString("%1-%2").arg(n).arg(i) : QString("%1").arg(n);
+            Excerpt* ee = 0;
+            for (int k = 0; k < count; ++k) {
+                  ee = excerptList[k];
+                  if (ee->title() == name)
+                        break;
+                  }
+            if ((ee == 0) || (ee->title() != name))
+                  break;
+            }
+      return name;
+      }
+
+}

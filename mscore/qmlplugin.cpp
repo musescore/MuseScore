@@ -22,8 +22,6 @@
 
 namespace Ms {
 
-// extern MuseScoreCore* mscoreCore;
-
 //---------------------------------------------------------
 //   QmlPlugin
 //---------------------------------------------------------
@@ -147,6 +145,61 @@ void QmlPlugin::cmd(const QString& s)
       }
 
 //---------------------------------------------------------
+//   openLog
+//---------------------------------------------------------
+
+void QmlPlugin::openLog(const QString& name)
+      {
+      if (logFile.isOpen())
+            logFile.close();
+      logFile.setFileName(name);
+      if (!logFile.open(QIODevice::WriteOnly))
+            qDebug("QmlPlugin::openLog: failed");
+      }
+
+//---------------------------------------------------------
+//   closeLog
+//---------------------------------------------------------
+
+void QmlPlugin::closeLog()
+      {
+      if (logFile.isOpen())
+            logFile.close();
+      }
+
+//---------------------------------------------------------
+//   log
+//---------------------------------------------------------
+
+void QmlPlugin::log(const QString& txt)
+      {
+      if (logFile.isOpen())
+            logFile.write(txt.toLocal8Bit());
+      }
+
+//---------------------------------------------------------
+//   logn
+//---------------------------------------------------------
+
+void QmlPlugin::logn(const QString& txt)
+      {
+      log(txt);
+      if (logFile.isOpen())
+            logFile.write("\n");
+      }
+
+//---------------------------------------------------------
+//   log2
+//---------------------------------------------------------
+
+void QmlPlugin::log2(const QString& txt, const QString& txt2)
+      {
+      logFile.write(txt.toLocal8Bit());
+      logFile.write(txt2.toLocal8Bit());
+      logFile.write("\n");
+      }
+
+//---------------------------------------------------------
 //   newQProcess
 //---------------------------------------------------------
 
@@ -154,6 +207,7 @@ MsProcess* QmlPlugin::newQProcess()
       {
       return 0; // TODO: new MsProcess(this);
       }
+
 }
 #endif
 

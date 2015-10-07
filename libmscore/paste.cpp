@@ -180,6 +180,18 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                     e.incTick(cr->actualTicks());
                                     if (cr->type() == Element::Type::CHORD) {
                                           Chord* chord = static_cast<Chord*>(cr);
+                                          // disallow tie across barline within two-note tremolo
+                                          // tremolos can potentially still straddle the barline if no tie is required
+                                          // but these will be removed later
+                                          if (chord->tremolo() && chord->tremolo()->twoNotes()) {
+                                                Measure* m = tick2measure(tick);
+                                                int ticks = cr->actualTicks();
+                                                int rticks = m->endTick() - tick;
+                                                if (rticks < ticks || (rticks != ticks && rticks < ticks * 2)) {
+                                                      qDebug("tremolo does not fit in measure");
+                                                      return false;
+                                                      }
+                                                }
                                           for (int i = 0; i < graceNotes.size(); ++i) {
                                                 Chord* gc = graceNotes[i];
                                                 gc->setGraceIndex(i);
@@ -201,7 +213,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                                       }
                                                 }
                                           }
-                                    //shorten last cr to fit in the space made by makeGap
+                                    // shorten last cr to fit in the space made by makeGap
                                     if ((tick - dstTick) + cr->actualTicks() > tickLen) {
                                           int newLength = tickLen - (tick - dstTick);
                                           // check previous CR on same track, if it has tremolo, delete the tremolo
@@ -461,6 +473,8 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                   while (rest) {
                         measure = tick2measure(tick);
                         Chord* c2 = firstpart ? c : static_cast<Chord*>(c->clone());
+                        if (!firstpart)
+                              c2->removeMarkings(true);
                         int mlen = measure->tick() + measure->ticks() - tick;
                         int len = mlen > rest ? rest : mlen;
                         QList<TDuration> dl = toDurationList(Fraction::fromTicks(len), true);
@@ -782,7 +796,7 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
             qDebug("no application mime data");
             return PasteStatus::NO_MIME;
             }
-      if ((_selection.isSingle()|| _selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
+      if ((_selection.isSingle() || _selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
             QByteArray data(ms->data(mimeSymbolFormat));
             XmlReader e(data);
             QPointF dragOffset;
@@ -807,9 +821,11 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                                     ddata.view       = view;
                                     ddata.element    = nel;
                                     ddata.duration   = duration;
-                                    target->drop(ddata);
-                                    if (_selection.element())
-                                          addRefresh(_selection.element()->abbox());
+                                    if (target->acceptDrop(ddata)) {
+                                          target->drop(ddata);
+                                          if (_selection.element())
+                                                addRefresh(_selection.element()->abbox());
+                                          }
                                     }
                               }
                               delete el;

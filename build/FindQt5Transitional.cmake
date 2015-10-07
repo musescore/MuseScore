@@ -7,9 +7,6 @@ if (Qt5Core_FOUND)
         Core
         Gui
         Designer
-        Declarative
-        Script
-        ScriptTools
         Network
         Test
         Qml

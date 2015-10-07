@@ -313,8 +313,16 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
             drawSymbol(SymId::repeatDot, painter, QPointF(x, 3.0 * _spatium));
             }
       else if (parent()->type() == Element::Type::SEGMENT) {
-            System* s = static_cast<Segment*>(parent())->measure()->system();
+            System* system = static_cast<Segment*>(parent())->measure()->system();
             int staffIdx1    = staffIdx();
+            // find first visible staff
+            Staff* staff1 = score()->staff(staffIdx1);
+            SysStaff* sysStaff1 = system->staff(staffIdx1);
+            while ( staff1 && sysStaff1 && !(sysStaff1->show() && staff1->show()) ) {
+                  staffIdx1++;
+                  staff1 = score()->staff(staffIdx1);
+                  sysStaff1 = system->staff(staffIdx1);
+                  }
             int staffIdx2    = staffIdx1 + _span - 1;
             int sp = _span;
             if (staffIdx2 >= score()->nstaves()) {
@@ -322,17 +330,20 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
                   staffIdx2 = score()->nstaves() - 1;
                   sp = staffIdx2 - staffIdx1 + 1;
                   }
-            qreal dy  = s->staff(staffIdx1)->y();
+            qreal dy  = sysStaff1->y();
             for (int i = 0; i < sp; ++i) {
                   Staff* staff  = score()->staff(staffIdx1 + i);
-                  StaffType* st = staff->staffType();
-                  qreal doty1   = (st->doty1() + .5) * _spatium;
-                  qreal doty2   = (st->doty2() + .5) * _spatium;
+                  SysStaff* sysStaff = system->staff(staffIdx1 + i);
+                  if (sysStaff->show()) {
+                        StaffType* st = staff->staffType();
+                        qreal doty1   = (st->doty1() + .5) * _spatium;
+                        qreal doty2   = (st->doty2() + .5) * _spatium;
 
-                  qreal staffy  = s->staff(staffIdx1 + i)->y() - dy;
+                        qreal staffy  = sysStaff->y() - dy;
 
-                  drawSymbol(SymId::repeatDot, painter, QPointF(x, staffy + doty1));
-                  drawSymbol(SymId::repeatDot, painter, QPointF(x, staffy + doty2));
+                        drawSymbol(SymId::repeatDot, painter, QPointF(x, staffy + doty1));
+                        drawSymbol(SymId::repeatDot, painter, QPointF(x, staffy + doty2));
+                        }
                   }
             }
       }
@@ -557,7 +568,7 @@ void BarLine::read(XmlReader& e)
                   _span     = e.readInt();
 
                   if (_spanTo == UNKNOWN_BARLINE_TO)
-                        _spanTo = staff() ? (staff()->lines() -1) * _span : 4 * _span;
+                        _spanTo = staff() ? (staff()->lines() - 1) * 2 : 8;
 
                   // WARNING: following statements assume staff and staff bar line spans are correctly set
                   // ws: _spanTo can be UNKNOWN_BARLINE_TO
@@ -737,6 +748,13 @@ void BarLine::endEdit()
       // if bar line belongs to a system (system-initial bar line), edit is local
       if (parent() && parent()->type() == Element::Type::SYSTEM)
             ctrlDrag = true;
+      // for mid-measure barlines, edit is local
+      bool midMeasure = false;
+      if (parent()->type() == Element::Type::SEGMENT
+          && static_cast<Segment*>(parent())->segmentType() == Segment::Type::BarLine) {
+            ctrlDrag = true;
+            midMeasure = true;
+            }
 
       if (ctrlDrag) {                      // if single bar line edit
             ctrlDrag = false;
@@ -747,6 +765,55 @@ void BarLine::endEdit()
             _span             = _origSpan;      // restore original span values
             _spanFrom         = _origSpanFrom;
             _spanTo           = _origSpanTo;
+            // for mid-measure barline in root score, update parts
+            if (midMeasure && score()->parentScore() == nullptr && score()->excerpts().size() > 0) {
+                  int currIdx = staffIdx();
+                  Measure* m = static_cast<Segment*>(parent())->measure();
+                  // change linked barlines as necessary
+                  int lastIdx = currIdx + qMax(_span, newSpan);
+                  for (int idx = currIdx; idx < lastIdx; ++idx) {
+                        Staff* staff = score()->staff(idx);
+                        LinkedStaves* ls = staff->linkedStaves();
+                        if (ls) {
+                              for (Staff* lstaff : ls->staves()) {
+                                    Score* lscore = lstaff->score();
+                                    // don't change barlines in root score
+                                    if (lscore == staff->score())
+                                          continue;
+                                    // change barline only in top staff of part
+                                    if (lstaff != lscore->staff(0))
+                                          continue;
+                                    int spannedStaves = qMax(currIdx + newSpan - idx, 0);
+                                    int lNewSpan = qMin(spannedStaves, lscore->nstaves());
+                                    Measure* lm = lscore->tick2measure(m->tick());
+                                    Segment* lseg = lm->undoGetSegment(Segment::Type::BarLine, tick());
+                                    BarLine* lbl = static_cast<BarLine*>(lseg->element(0));
+                                    if (lbl) {
+                                          // already a barline here
+                                          if (lNewSpan > 0) {
+                                                // keep barline, but update span if necessary
+                                                if (lbl->span() != lNewSpan)
+                                                      lbl->undoChangeProperty(P_ID::BARLINE_SPAN, lNewSpan);
+                                                }
+                                          else {
+                                                // remove barline
+                                                lbl->unlink();
+                                                lbl->score()->undoRemoveElement(lbl);
+                                                }
+                                          }
+                                    else {
+                                          // new barline needed
+                                          lbl = static_cast<BarLine*>(linkedClone());
+                                          lbl->setSpan(lNewSpan);
+                                          lbl->setTrack(lstaff->idx() * VOICES);
+                                          lbl->setScore(lscore);
+                                          lbl->setParent(lseg);
+                                          lscore->undoAddElement(lbl);
+                                          }
+                                    }
+                              }
+                        }
+                  }
             score()->undoChangeSingleBarLineSpan(this, newSpan, newSpanFrom, newSpanTo);
             return;
             }
@@ -763,7 +830,7 @@ void BarLine::endEdit()
                   int idx2 = idx1 + _span;
                   // set span 0 to all additional staves
                   for (int idx = idx1 + 1; idx < idx2; ++idx)
-                        // mensurstrich special case:
+                        // Mensurstrich special case:
                         // if line spans to top line of a stave AND current staff is
                         //    the last spanned staff BUT NOT the last score staff
                         //          keep its bar lines
@@ -777,8 +844,13 @@ void BarLine::endEdit()
                   int idx1 = staffIdx() + _span;
                   int idx2 = staffIdx() + staff()->barLineSpan();
                   // set standard span for each no-longer-spanned staff
-                  for (int idx = idx1; idx < idx2; ++idx)
-                        score()->undoChangeBarLineSpan(score()->staff(idx), 1, 0, (score()->staff(idx)->lines()-1)*2);
+                  for (int idx = idx1; idx < idx2; ++idx) {
+                        Staff* staff = score()->staff(idx);
+                        int lines = staff->lines();
+                        int spanFrom = lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
+                        int spanTo = lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (lines - 1) * 2;
+                        score()->undoChangeBarLineSpan(staff, 1, spanFrom, spanTo);
+                        }
                   }
             }
 
@@ -1214,7 +1286,7 @@ void BarLine::updateCustomType()
                   }
             }
       _customSubtype = (_barLineType != refType);
-      updateGenerated(!_customSubtype);         // if _customSubType, _genereated is surely false
+      updateGenerated(!_customSubtype);         // if _customSubType, _generated is surely false
       }
 
 //---------------------------------------------------------

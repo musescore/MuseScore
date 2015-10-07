@@ -378,7 +378,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Slash</source>
-        <translation>Slash</translation>
+        <translation>Schuine Streep</translation>
     </message>
     <message>
         <source>XCircle</source>
@@ -1743,7 +1743,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tuplets</source>
-        <translation>Tuplets</translation>
+        <translation>Antimetrisch figuur</translation>
     </message>
     <message>
         <source>Display in concert pitch</source>
@@ -2918,7 +2918,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Update Range</source>
-        <translation>Update bereik</translation>
+        <translation>Bereik bijwerken</translation>
     </message>
     <message>
         <source>Direction</source>
@@ -2958,7 +2958,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Update range</source>
-        <translation>Update bereik</translation>
+        <translation>Bereik bijwerken</translation>
     </message>
     <message>
         <source>Reset Head type value</source>
@@ -2982,7 +2982,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Slash</source>
-        <translation>Slash</translation>
+        <translation>Schuine Streep</translation>
     </message>
     <message>
         <source>XCircle</source>
@@ -3042,6 +3042,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glissando-instellingen</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpeggio</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Afspelen</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Reset afspeelwaarde</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3089,7 +3108,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Time stretch</source>
-        <translation>Time stretch</translation>
+        <translation>Tijd rekken</translation>
     </message>
     <message>
         <source>Articulation Inspector</source>
@@ -3106,6 +3125,31 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Herstel time-stretchwaarde</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Versieringsstijl</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Standaard
+</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barok</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Reset Versieringstype-waarde</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Afspelen</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Reset afspeelwaarde</translation>
     </message>
 </context>
 <context>
@@ -3279,6 +3323,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glissando-instellingen</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Buig</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Afspelen</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Afspeelwaarde herstellen</translation>
+    </message>
+</context>
+<context>
     <name>InspectorBreak</name>
     <message>
         <source>Element Inspector</source>
@@ -3286,7 +3349,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Layout Break</source>
-        <translation>Lay-outonderbreking</translation>
+        <translation>Lay-out onderbreking</translation>
     </message>
 </context>
 <context>
@@ -3558,6 +3621,42 @@ space unit</extracomment>
     <message>
         <source>Show text</source>
         <translation>Toon tekst</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Stijl</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Reset stijlwaarde</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Speel stijl af</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Chromatisch</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Witte toetsen</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Zwarte toetsen</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diatonisch</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Afspelen</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Reset afspeelwaarde</translation>
     </message>
 </context>
 <context>
@@ -4366,10 +4465,82 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Tekstkader instellingen</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Tekstkader</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Onderruimte</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Bovenmarge</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Waarde herstellen</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Herstel waarde bovenmarge</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Herstel waarde ondermarge</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Linkermarge</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Ondermarge</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Herstel waarde rechtermarge</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Rechtermarge</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Herstel waarde ondermarge</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Herstel waarde bovenmarge</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Herstel waarde linkermarge</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Bovenruimte</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>sp</translation>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
-        <translation>Tempo</translation>
+        <translation>Tempo Markering</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -4496,19 +4667,43 @@ space unit</extracomment>
         <translation>Trillende triller</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Golvende lijn</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Waarde herstellen</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Versieringsstijl</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Richting</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Standaard</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barok</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Reset Versieringstype-waarde</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Afspelen</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Afspeelwaarde herstellen</translation>
     </message>
 </context>
 <context>
     <name>InspectorTuplet</name>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Antimetrisch figuur</translation>
     </message>
     <message>
         <source>Number</source>
@@ -4548,7 +4743,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tuplet Inspector</source>
-        <translation>Tupletinstellingen</translation>
+        <translation>Antimetrisch figuur instellingen</translation>
     </message>
     <message>
         <source>Reset Direction value</source>
@@ -4596,7 +4791,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Vertical Frame Inspector</source>
-        <translation>Istellingen verticaal frame</translation>
+        <translation>Instellingen verticaal frame</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4879,6 +5074,13 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>Atonaal</translation>
+    </message>
+</context>
+<context>
     <name>LayerManager</name>
     <message>
         <source>MuseScore: Layers</source>
@@ -5127,19 +5329,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>16th</source>
-        <translation>1/16</translation>
+        <translation>16e</translation>
     </message>
     <message>
         <source>32nd</source>
-        <translation>1/32</translation>
+        <translation>32ste</translation>
     </message>
     <message>
         <source>64th</source>
-        <translation>1/64</translation>
+        <translation>64ste</translation>
     </message>
     <message>
         <source>128th</source>
-        <translation>1/128</translation>
+        <translation>128ste</translation>
     </message>
     <message>
         <source>Detect swing</source>
@@ -5199,7 +5401,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tuplets</source>
-        <translation>Tuplets</translation>
+        <translation>Antimetrisch figuur</translation>
     </message>
     <message>
         <source>2</source>
@@ -5623,7 +5825,7 @@ tuplet zou maat overschrijden</translation>
     </message>
     <message>
         <source>Append empty measures</source>
-        <translation>Hecht lege maten aan</translation>
+        <translation>Lege maten toevoegen</translation>
     </message>
     <message>
         <source>Number of measures to append:</source>
@@ -5838,7 +6040,7 @@ tuplet zou maat overschrijden</translation>
     </message>
     <message>
         <source>Custom Tuplet</source>
-        <translation>Eigen tuplet</translation>
+        <translation>Eigen figuur</translation>
     </message>
     <message>
         <source>Quintuplet</source>
@@ -6048,14 +6250,6 @@ mislukt:</translation>
         <translation>het $ symbool zelf</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>metadata-etiket</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Beschikbare etiketten en hun huidige waarden:</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Toepassen op alle partijen</translation>
     </message>
@@ -6070,6 +6264,14 @@ mislukt:</translation>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>paginanummer, als er meer dan één pagina is</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>Metadatatag, zie hieronder</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Beschikbare metadatatags en de huidige waardes:</translation>
     </message>
 </context>
 <context>
@@ -6188,7 +6390,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Antimetrisch figuur</translation>
     </message>
 </context>
 <context>
@@ -6199,7 +6401,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Antimetrisch figuur</translation>
     </message>
 </context>
 <context>
@@ -6829,7 +7031,7 @@ selecteer eerst een maat en probeer het dan opnieuw</translation>
     </message>
     <message>
         <source>T&amp;uplets</source>
-        <translation>Tuplets</translation>
+        <translation>Antimetrisch fig&amp;uur</translation>
     </message>
     <message>
         <source>&amp;Layout</source>
@@ -6853,7 +7055,7 @@ selecteer eerst een maat en probeer het dan opnieuw</translation>
     </message>
     <message>
         <source>Check for &amp;Update</source>
-        <translation>Controleer op &amp;updates</translation>
+        <translation>Controleer op nieuwe versie</translation>
     </message>
     <message>
         <source>The previous session quit unexpectedly.
@@ -6869,11 +7071,11 @@ Sessie herstellen?</translation>
     </message>
     <message>
         <source>MuseScore: Tuplet Error</source>
-        <translation>MuseScore: Tuplet-fout</translation>
+        <translation>MuseScore: Antimetrisch figuur-fout</translation>
     </message>
     <message>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
-        <translation>Kan geen tuplet creëren met ratio %1 voor duur %2</translation>
+        <translation>Kan geen antimetrisch figuur creëren met ratio %1 voor duur %2</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -7002,7 +7204,7 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>Cannot create tuplet: Note value is too short</source>
-        <translation>Kan geen tuplet creëren: nootwaarde is te kort</translation>
+        <translation>Kan geen antimetrisch figuur creëren: nootwaarde is te kort</translation>
     </message>
     <message>
         <source>MuseScore File (*.mscz)</source>
@@ -7199,6 +7401,10 @@ kies een andere naam:</translation>
     <message>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation>Deze partituur kan niet online opgeslagen worden. Corrigeer de corrupte maten en probeer opnieuw.</translation>
+    </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Vraag om hulp</translation>
     </message>
 </context>
 <context>
@@ -7451,7 +7657,7 @@ kies een andere naam:</translation>
     <name>Ms::PianoTools</name>
     <message>
         <source>Piano Keyboard</source>
-        <translation>Pianotoestenbord</translation>
+        <translation>Pianotoetsenbord</translation>
     </message>
 </context>
 <context>
@@ -7590,11 +7796,11 @@ Opslaan voor sluiten?</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation>Updaten</translation>
+        <translation>Bijwerken</translation>
     </message>
     <message>
         <source>No update</source>
-        <translation>Geen update</translation>
+        <translation>Geen nieuwe versie</translation>
     </message>
     <message>
         <source>Updating</source>
@@ -7683,10 +7889,6 @@ mislukt: %2</translation>
         <translation>Schrijven van stijl mislukt: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>bestand niet gevonden</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Geen selectie</translation>
     </message>
@@ -7697,6 +7899,10 @@ mislukt: %2</translation>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>Maat %1, staf %2, stem %3 te lang. Verwacht: %4; Gevonden: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>XML leesfout op lijn %1 kolom %2: %3</translation>
     </message>
 </context>
 <context>
@@ -7793,7 +7999,7 @@ mislukt: %2</translation>
     </message>
     <message>
         <source>Bend Properties...</source>
-        <translation>Bendeigenschappen...</translation>
+        <translation>Boogeigenschappen...</translation>
     </message>
     <message>
         <source>Add</source>
@@ -7955,7 +8161,7 @@ selecteer een akkoord/rust en probeer opnieuw</translation>
         <source>Cannot split measure here:
 Cannot split tuplet</source>
         <translation>Kan hier geen maat splitsen:
-Kan een tuplet niet splitsen</translation>
+Kan een antimetrisch figuur niet splitsen</translation>
     </message>
     <message>
         <source>No measures selected:
@@ -7977,7 +8183,7 @@ selecteer een bereik van maten om samen te voegen en probeer opnieuw</translatio
     </message>
     <message>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
-        <translation>Selecteer de volledige tuplet/tremolo en probeer het opnieuw</translation>
+        <translation>Selecteer de volledige antimetrisch figuur/tremolo en probeer het opnieuw</translation>
     </message>
     <message>
         <source>Image Capture</source>
@@ -8001,15 +8207,21 @@ selecteer een bereik van maten om samen te voegen en probeer opnieuw</translatio
     </message>
     <message>
         <source>Cannot paste into tuplet</source>
-        <translation>Kan niet plakken in een tuplet</translation>
+        <translation>Kan niet plakken in een antimetrisch figuur</translation>
     </message>
     <message>
         <source>Tuplet cannot cross barlines</source>
-        <translation>Tuplet kan geen maatstrepen overschrijden</translation>
+        <translation>Antimetrisch figuur kan geen maatstrepen overschrijden</translation>
     </message>
     <message>
         <source>Transparent background</source>
         <translation>Transparante achtergrond</translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>
+</translation>
     </message>
 </context>
 <context>
@@ -8139,7 +8351,7 @@ selecteer een bereik van maten om samen te voegen en probeer opnieuw</translatio
     </message>
     <message>
         <source>Align center</source>
-        <translation>Centraal uitlijnen</translation>
+        <translation>Midden uitlijnen</translation>
     </message>
     <message>
         <source>Align right</source>
@@ -8252,15 +8464,15 @@ kies een andere naam:</translation>
     <name>Ms::UpdateChecker</name>
     <message>
         <source>An update for MuseScore is available: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</source>
-        <translation>Er is een update voor MuseScore beschikbaar: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</translation>
+        <translation>Er is een nieuwe versie voor MuseScore beschikbaar: &lt;a href=&quot;%1&quot;&gt;MuseScore %2 r.%3&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Update Available</source>
-        <translation>Update beschikbaar</translation>
+        <translation>Nieuwe versie beschikbaar</translation>
     </message>
     <message>
         <source>No Update Available</source>
-        <translation>Geen update beschikbaar</translation>
+        <translation>Geen nieuwe versie</translation>
     </message>
 </context>
 <context>
@@ -8443,7 +8655,7 @@ kies een andere naam:</translation>
     </message>
     <message>
         <source>Lyricist:</source>
-        <translation>Dichter:</translation>
+        <translation>Tesktschrijver:</translation>
     </message>
     <message>
         <source>Copyright:</source>
@@ -9336,7 +9548,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>32nd note</source>
-        <translation>32e noot</translation>
+        <translation>32ste noot</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -9516,15 +9728,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>16th</source>
-        <translation>1/16</translation>
+        <translation>16e</translation>
     </message>
     <message>
         <source>32nd</source>
-        <translation>1/32</translation>
+        <translation>32ste</translation>
     </message>
     <message>
         <source>64th</source>
-        <translation>1/64</translation>
+        <translation>64ste</translation>
     </message>
     <message>
         <source>Export</source>
@@ -9588,11 +9800,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation>Update</translation>
+        <translation>Bijwerken</translation>
     </message>
     <message>
         <source>Automatic Update Check</source>
-        <translation>Automatische Updatecheck</translation>
+        <translation>Automatische Bijwerken</translation>
     </message>
     <message>
         <source>Start empty</source>
@@ -10037,11 +10249,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>32nd note is active</source>
-        <translation>32e noot is actief</translation>
+        <translation>32ste noot is actief</translation>
     </message>
     <message>
         <source>32nd note record</source>
-        <translation>32e noot opnemen</translation>
+        <translation>32ste noot opnemen</translation>
     </message>
     <message>
         <source>Score Tab</source>
@@ -10225,7 +10437,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Update Tab</source>
-        <translation>Update tab</translation>
+        <translation>Bijwerken tab</translation>
     </message>
     <message>
         <source>Eighth note</source>
@@ -10249,15 +10461,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>64th note</source>
-        <translation>64e noot</translation>
+        <translation>64ste noot</translation>
     </message>
     <message>
         <source>64th note is active</source>
-        <translation>64e noot is actief</translation>
+        <translation>64ste noot is actief</translation>
     </message>
     <message>
         <source>64th note record</source>
-        <translation>64e noot opnemen</translation>
+        <translation>64ste noot opnemen</translation>
     </message>
     <message>
         <source>Here you can configure shortcuts for actions</source>
@@ -10281,7 +10493,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Update translations</source>
-        <translation>Update vertalingen</translation>
+        <translation>Bijwerken vertalingen</translation>
     </message>
     <message>
         <source>Dark</source>
@@ -10410,6 +10622,14 @@ mislukt:</translation>
     <message>
         <source>Filter</source>
         <translation>Filter</translation>
+    </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Exporteer RPNs</translation>
     </message>
 </context>
 <context>
@@ -10618,31 +10838,31 @@ Bezoek &lt;a href=&quot;http://musescore.org&quot;&gt;de website van MuseScore&l
     </message>
     <message>
         <source>16th</source>
-        <translation>1/16</translation>
+        <translation>16e</translation>
     </message>
     <message>
         <source>32nd</source>
-        <translation>1/32</translation>
+        <translation>32ste</translation>
     </message>
     <message>
         <source>64th</source>
-        <translation>1/64</translation>
+        <translation>64ste</translation>
     </message>
     <message>
         <source>128th</source>
-        <translation>1/128</translation>
+        <translation>128ste</translation>
     </message>
     <message>
         <source>256th</source>
-        <translation>1/256</translation>
+        <translation>256ste</translation>
     </message>
     <message>
         <source>512th</source>
-        <translation>1/512</translation>
+        <translation>512ste</translation>
     </message>
     <message>
         <source>1024th</source>
-        <translation>1/1024</translation>
+        <translation>1024ste</translation>
     </message>
     <message>
         <source>Zero</source>
@@ -10879,7 +11099,7 @@ Wil je dit overschrijven?</translation>
     </message>
     <message>
         <source>Install/Update</source>
-        <translation>Installeren/updaten</translation>
+        <translation>Installeren/bijwerken</translation>
     </message>
     <message>
         <source>Tab 2</source>
@@ -11268,6 +11488,14 @@ Wil je dit overschrijven?</translation>
         <source>System flag</source>
         <translation>Systeemvlag</translation>
     </message>
+    <message>
+        <source>Search...</source>
+        <translation>Zoeken...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Maak leeg</translation>
+    </message>
 </context>
 <context>
     <name>SynthControl</name>
@@ -11654,7 +11882,7 @@ Wil je dit overschrijven?</translation>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Antimetrisch figuur</translation>
     </message>
     <message>
         <source>System</source>
@@ -12184,7 +12412,7 @@ Wil je dit overschrijven?</translation>
     </message>
     <message>
         <source>By Key</source>
-        <translation>Op sleutel</translation>
+        <translation>Op toonsoort</translation>
     </message>
     <message>
         <source>By Interval</source>
@@ -12207,11 +12435,11 @@ Wil je dit overschrijven?</translation>
     </message>
     <message>
         <source>32nd through stem</source>
-        <translation>32e door stok</translation>
+        <translation>32ste door stok</translation>
     </message>
     <message>
         <source>64th through stem</source>
-        <translation>64e door stok</translation>
+        <translation>64ste door stok</translation>
     </message>
     <message>
         <source>Eighth between notes</source>
@@ -12223,18 +12451,18 @@ Wil je dit overschrijven?</translation>
     </message>
     <message>
         <source>32nd between notes</source>
-        <translation>32e tussen noten</translation>
+        <translation>32ste tussen noten</translation>
     </message>
     <message>
         <source>64th between notes</source>
-        <translation>64e tussen noten</translation>
+        <translation>64ste tussen noten</translation>
     </message>
 </context>
 <context>
     <name>TremoloBarDialog</name>
     <message>
         <source>Bend type:</source>
-        <translation>Buigingstype:</translation>
+        <translation>Boogtype:</translation>
     </message>
     <message>
         <source>Click to add or remove some points</source>
@@ -12254,7 +12482,7 @@ Wil je dit overschrijven?</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation>Return</translation>
+        <translation>Terug</translation>
     </message>
     <message>
         <source>MuseScore: Tremolo Bar Properties</source>
@@ -12273,14 +12501,14 @@ Wil je dit overschrijven?</translation>
     <name>TupletBase</name>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Antimetrisch figuur</translation>
     </message>
 </context>
 <context>
     <name>TupletDialog</name>
     <message>
         <source>MuseScore: Create Tuplet</source>
-        <translation>MuseScore: Creëer tuplet</translation>
+        <translation>MuseScore: Maak antimetrisch figuur</translation>
     </message>
     <message>
         <source>Type</source>
@@ -12359,7 +12587,7 @@ Wil je dit overschrijven?</translation>
     </message>
     <message>
         <source>Update the existing score </source>
-        <translation>Update de bestaande partituur</translation>
+        <translation>Bestaande partituur bijwerken</translation>
     </message>
     <message>
         <source>Make this score private</source>
@@ -13421,7 +13649,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Other tuplets</source>
-        <translation>Andere tuplets</translation>
+        <translation>Andere figuren</translation>
     </message>
     <message>
         <source>Longa</source>
@@ -13453,27 +13681,27 @@ mislukt:</translation>
     </message>
     <message>
         <source>32nd note</source>
-        <translation>32e noot</translation>
+        <translation>32ste noot</translation>
     </message>
     <message>
         <source>Note duration: 32nd</source>
-        <translation>Duur noot: 32e</translation>
+        <translation>Duur noot: 32ste</translation>
     </message>
     <message>
         <source>64th note</source>
-        <translation>64e noot</translation>
+        <translation>64ste noot</translation>
     </message>
     <message>
         <source>Note duration: 64th</source>
-        <translation>Duur noot: 64e</translation>
+        <translation>Duur noot: 64ste</translation>
     </message>
     <message>
         <source>128th note</source>
-        <translation>128e noot</translation>
+        <translation>128ste noot</translation>
     </message>
     <message>
         <source>Note duration: 128th</source>
-        <translation>Duur noot: 128e</translation>
+        <translation>Duur noot: 128ste</translation>
     </message>
     <message>
         <source>Increase active duration</source>
@@ -13537,19 +13765,19 @@ mislukt:</translation>
     </message>
     <message>
         <source>Grace: 16th</source>
-        <translation>Voorslag: 1/16</translation>
+        <translation>Voorslag: 16e</translation>
     </message>
     <message>
         <source>Add 16th grace note</source>
-        <translation>Voeg 1/16 voorslag toe</translation>
+        <translation>Voeg 16e voorslag toe</translation>
     </message>
     <message>
         <source>Grace: 32nd</source>
-        <translation>Voorslag: 1/32</translation>
+        <translation>Voorslag: 32ste</translation>
     </message>
     <message>
         <source>Add 32nd grace note</source>
-        <translation>Voeg 1/32 voorslag toe</translation>
+        <translation>Voeg 32ste voorslag toe</translation>
     </message>
     <message>
         <source>1</source>
@@ -13601,7 +13829,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Beam 32nd sub</source>
-        <translation>32e noot waardestreep onder</translation>
+        <translation>32ste noot waardestreep onder</translation>
     </message>
     <message>
         <source>Auto beam</source>
@@ -13614,10 +13842,6 @@ mislukt:</translation>
     <message>
         <source>Feathered beam, faster</source>
         <translation>Vertragende waardestrepen</translation>
-    </message>
-    <message>
-        <source>Palette</source>
-        <translation>Palet</translation>
     </message>
     <message>
         <source>Play Panel</source>
@@ -13654,10 +13878,6 @@ mislukt:</translation>
     <message>
         <source>Add lyrics</source>
         <translation>Teksten toevoegen</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Tempomarkering...</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -14016,10 +14236,6 @@ mislukt:</translation>
         <translation>Selectie herhalen</translation>
     </message>
     <message>
-        <source>Pan piano roll</source>
-        <translation>Meelopen met piano rol</translation>
-    </message>
-    <message>
         <source>Toggle pan piano roll</source>
         <translation>Schakel meelopen piano rol in/uit</translation>
     </message>
@@ -14081,7 +14297,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Piano Keyboard</source>
-        <translation>Piano-toestenbord</translation>
+        <translation>Pianotoetsenbord</translation>
     </message>
     <message>
         <source>Additional Media...</source>
@@ -14225,15 +14441,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>Note duration: 32nd (TAB)</source>
-        <translation>Nootduur: 32e (TAB)</translation>
+        <translation>Nootduur: 32ste (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 64th (TAB)</source>
-        <translation>Nootduur: 64e (TAB)</translation>
+        <translation>Nootduur: 64ste (TAB)</translation>
     </message>
     <message>
         <source>Note duration: 128th (TAB)</source>
-        <translation>Noot duur: 128e (TAB)</translation>
+        <translation>Noot duur: 128ste (TAB)</translation>
     </message>
     <message>
         <source>Increase active duration (TAB)</source>
@@ -14433,19 +14649,19 @@ mislukt:</translation>
     </message>
     <message>
         <source>Grace: 16th after</source>
-        <translation>Voorslag: 1/16 erna </translation>
+        <translation>Voorslag: 16e erna </translation>
     </message>
     <message>
         <source>Add 16th grace note after</source>
-        <translation>Voeg 1/16 voorslag erna toe</translation>
+        <translation>Voeg 16e voorslag erna toe</translation>
     </message>
     <message>
         <source>Grace: 32nd after</source>
-        <translation>Voorslag: 1/32 erna</translation>
+        <translation>Voorslag: 32ste erna</translation>
     </message>
     <message>
         <source>Add 32nd grace note after</source>
-        <translation>Voeg 1/32 voorslag erna toe</translation>
+        <translation>Voeg 32ste voorslag erna toe</translation>
     </message>
     <message>
         <source>All Similar Elements in Range Selection</source>
@@ -14469,7 +14685,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Add Eighth grace note after</source>
-        <translation>Voeg 1/8 voorslag erna toe</translation>
+        <translation>Voeg achtste voorslag erna toe</translation>
     </message>
     <message>
         <source>Beam 16th sub</source>
@@ -14509,7 +14725,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Grace: eighth after</source>
-        <translation>Voorslag: 1/8 erna</translation>
+        <translation>Voorslag: achtste erna</translation>
     </message>
     <message>
         <source>Enable snap to horizontal grid</source>
@@ -14573,7 +14789,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Fill With Slashes</source>
-        <translation>Vul met slashes</translation>
+        <translation>Vul met schuine strepen</translation>
     </message>
     <message>
         <source>Toggle Rhythmic Slash Notation</source>
@@ -14889,15 +15105,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>32nd Note</source>
-        <translation>32e noot</translation>
+        <translation>32ste noot</translation>
     </message>
     <message>
         <source>64th Note</source>
-        <translation>64e noot</translation>
+        <translation>64ste noot</translation>
     </message>
     <message>
         <source>128th Note</source>
-        <translation>128e noot</translation>
+        <translation>128ste noot</translation>
     </message>
     <message>
         <source>Increase Active Duration</source>
@@ -14965,7 +15181,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Grace: Eighth after</source>
-        <translation>Voorslag: 1/8 erna</translation>
+        <translation>Voorslag: achtste erna</translation>
     </message>
     <message>
         <source>MIDI Input</source>
@@ -14985,11 +15201,11 @@ mislukt:</translation>
     </message>
     <message>
         <source>Beam 16th Sub</source>
-        <translation>Waardestreep 16th Sub</translation>
+        <translation>Waardestreep 16e Sub</translation>
     </message>
     <message>
         <source>Beam 32nd Sub</source>
-        <translation>Waardestreep 32nd Sub</translation>
+        <translation>Waardestreep 32ste Sub</translation>
     </message>
     <message>
         <source>Auto Beam</source>
@@ -15217,7 +15433,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Piano keyboard</source>
-        <translation>Pianotoestenbord</translation>
+        <translation>Pianotoetsenbord</translation>
     </message>
     <message>
         <source>Split measure</source>
@@ -15365,15 +15581,15 @@ mislukt:</translation>
     </message>
     <message>
         <source>32nd Note (TAB)</source>
-        <translation>32e noot (TAB)</translation>
+        <translation>32ste noot (TAB)</translation>
     </message>
     <message>
         <source>64th Note (TAB)</source>
-        <translation>64e noot (TAB)</translation>
+        <translation>64ste noot (TAB)</translation>
     </message>
     <message>
         <source>128th Note (TAB)</source>
-        <translation>128e noot (TAB)</translation>
+        <translation>128ste noot (TAB)</translation>
     </message>
     <message>
         <source>Increase Active Duration (TAB)</source>
@@ -15445,7 +15661,7 @@ mislukt:</translation>
     </message>
     <message>
         <source>Fill with slashes</source>
-        <translation>Vul met slashes</translation>
+        <translation>Vul met schuine strepen</translation>
     </message>
     <message>
         <source>Toggle rhythmic slash notation</source>
@@ -15583,6 +15799,22 @@ mislukt:</translation>
         <source>Set loop in position</source>
         <translation>Zet lus in positie</translation>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Paletten</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Tempomarkering</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation>Zoom naar 100%</translation>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation>Meelopen met piano rol</translation>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -15594,7 +15826,7 @@ mislukt:</translation>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
         <translation>Kan geen maten herschrijven:
-tuplet zou maat kruisen</translation>
+antimetrisch figuur zou maat kruisen</translation>
     </message>
     <message>
         <source>Cannot change local time signature:
@@ -16634,6 +16866,10 @@ De maat is niet leeg</translation>
         <source>Tablature2</source>
         <translation>Tablatuur2</translation>
     </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>G-sleutel optionele 8vb</translation>
+    </message>
 </context>
 <context>
     <name>drumset</name>
@@ -16695,7 +16931,7 @@ De maat is niet leeg</translation>
     </message>
     <message>
         <source>Low Floor Tom</source>
-        <translation>Low Floor Tom</translation>
+        <translation>Lage Floor Tom</translation>
     </message>
     <message>
         <source>Closed Hi-Hat</source>
@@ -16703,7 +16939,7 @@ De maat is niet leeg</translation>
     </message>
     <message>
         <source>High Floor Tom</source>
-        <translation>High Floor Tom</translation>
+        <translation>Hoge Floor Tom</translation>
     </message>
     <message>
         <source>Pedal Hi-Hat</source>
@@ -16719,11 +16955,11 @@ De maat is niet leeg</translation>
     </message>
     <message>
         <source>Low-Mid Tom</source>
-        <translation>Low-Mid Tom</translation>
+        <translation>Lage-Mid Tom</translation>
     </message>
     <message>
         <source>Hi-Mid Tom</source>
-        <translation>Hi-Mid Tom</translation>
+        <translation>Hoge-Mid Tom</translation>
     </message>
     <message>
         <source>Crash Cymbal 1</source>
@@ -16739,7 +16975,7 @@ De maat is niet leeg</translation>
     </message>
     <message>
         <source>Cowbell</source>
-        <translation>Koeienbel</translation>
+        <translation>Koe bel</translation>
     </message>
     <message>
         <source>Vibraslap</source>
@@ -16763,19 +16999,19 @@ De maat is niet leeg</translation>
     </message>
     <message>
         <source>High Timbale</source>
-        <translation>High Timbale</translation>
+        <translation>Hoge Timbale</translation>
     </message>
     <message>
         <source>Low Timbale</source>
-        <translation>Low Timbale</translation>
+        <translation>Lage Timbale</translation>
     </message>
     <message>
         <source>High Agogo</source>
-        <translation>High Agogo</translation>
+        <translation>Hoge Agogo</translation>
     </message>
     <message>
         <source>Low Agogo</source>
-        <translation>Low Agogo</translation>
+        <translation>Lage Agogo</translation>
     </message>
     <message>
         <source>Cabasa</source>
@@ -16807,11 +17043,11 @@ De maat is niet leeg</translation>
     </message>
     <message>
         <source>Hi Wood Block</source>
-        <translation>Hi Wood Block</translation>
+        <translation>Hoog Wood Blok</translation>
     </message>
     <message>
         <source>Low Wood Block</source>
-        <translation>Low Wood Block</translation>
+        <translation>Laag Wood Blok</translation>
     </message>
     <message>
         <source>Mute Cuica</source>
@@ -16827,7 +17063,7 @@ De maat is niet leeg</translation>
     </message>
     <message>
         <source>Open Triangle</source>
-        <translation>Open Triangle</translation>
+        <translation>Open Triangel</translation>
     </message>
     <message>
         <source>Shaker</source>
@@ -17080,7 +17316,7 @@ De maat is niet leeg</translation>
     </message>
     <message>
         <source>Tuplet</source>
-        <translation>Tuplet</translation>
+        <translation>Antimetrisch figuur</translation>
     </message>
     <message>
         <source>Tempo</source>
@@ -17508,7 +17744,7 @@ De maat is niet leeg</translation>
     </message>
     <message>
         <source>Cross</source>
-        <translation>Overgaan</translation>
+        <translation>Kruis</translation>
     </message>
     <message>
         <source>Diamond</source>
@@ -17524,7 +17760,7 @@ De maat is niet leeg</translation>
     </message>
     <message>
         <source>Slash</source>
-        <translation>Slash</translation>
+        <translation>Schuine Streep</translation>
     </message>
     <message>
         <source>XCircle</source>
@@ -17744,10 +17980,6 @@ De maat is niet leeg</translation>
     <message>
         <source>Prallprall line</source>
         <translation>Trillende trillerlijn</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Golvende lijn</translation>
     </message>
 </context>
 <context>

@@ -36,6 +36,7 @@ Arpeggio::Arpeggio(Score* s)
       _span     = 1;
       _userLen1 = 0.0;
       _userLen2 = 0.0;
+      _playArpeggio = true;
       }
 
 //---------------------------------------------------------
@@ -64,6 +65,7 @@ void Arpeggio::write(Xml& xml) const
             xml.tag("userLen2", _userLen2 / spatium());
       if (_span != 1)
             xml.tag("span", _span);
+      writeProperty(xml, P_ID::PLAY);
       xml.etag();
       }
 
@@ -83,6 +85,8 @@ void Arpeggio::read(XmlReader& e)
                   _userLen2 = e.readDouble() * spatium();
             else if (tag == "span")
                   _span = e.readInt();
+            else if (tag == "play")
+                 _playArpeggio = e.readBool();
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -100,15 +104,14 @@ void Arpeggio::symbolLine(SymId end, SymId fill)
       qreal w   = y2 - y1;
       qreal mag = magS();
       ScoreFont* f = score()->scoreFont();
-      const QString& fillString = f->toString(fill);
 
       symbols.clear();
-      symbols.append(f->toString(end));
-      qreal w1 = f->bbox(end, mag).width();
-      qreal w2 = f->width(fill, mag);
+      symbols.append(end);
+      qreal w1 = f->advance(end, mag);
+      qreal w2 = f->advance(fill, mag);
       int n    = lrint((w - w1) / w2);
       for (int i = 0; i < n; ++i)
-           symbols.prepend(fillString);
+           symbols.prepend(fill);
       }
 
 //---------------------------------------------------------
@@ -120,6 +123,8 @@ void Arpeggio::layout()
       qreal y1 = -_userLen1;
       qreal y2 = _height + _userLen2;
 
+      if (staff())
+            setMag(staff()->mag());
       switch (arpeggioType()) {
             case ArpeggioType::NORMAL: {
                   symbolLine(SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);
@@ -181,8 +186,6 @@ void Arpeggio::draw(QPainter* p) const
       {
       qreal _spatium = spatium();
 
-      p->setPen(curColor());
-
       qreal y1 = -_userLen1;
       qreal y2 = _height + _userLen2;
 
@@ -190,23 +193,24 @@ void Arpeggio::draw(QPainter* p) const
          score()->styleS(StyleIdx::ArpeggioLineWidth).val() * _spatium,
          Qt::SolidLine, Qt::RoundCap));
 
+      p->save();
       switch (arpeggioType()) {
             case ArpeggioType::NORMAL:
             case ArpeggioType::UP:
                   {
                   QRectF r(symBbox(symbols));
+                  qreal scale = p->worldTransform().m11();
                   p->rotate(-90.0);
-                  drawSymbols(symbols, p, QPointF(-r.right() - y1, -r.bottom() + r.height()));
-                  p->rotate(90.0);
+                  score()->scoreFont()->draw(symbols, p, magS(), QPointF(-r.right() - y1, -r.bottom() + r.height()), scale);
                   }
                   break;
 
             case ArpeggioType::DOWN:
                   {
                   QRectF r(symBbox(symbols));
+                  qreal scale = p->worldTransform().m11();
                   p->rotate(90.0);
-                  drawSymbols(symbols, p, QPointF(-r.left() + y1, -r.top() - r.height()));
-                  p->rotate(-90.0);
+                  score()->scoreFont()->draw(symbols, p, magS(), QPointF(-r.left() + y1, -r.top() - r.height()), scale);
                   }
                   break;
 
@@ -240,6 +244,7 @@ void Arpeggio::draw(QPainter* p) const
                   }
                   break;
             }
+      p->restore();
       }
 
 //---------------------------------------------------------
@@ -400,6 +405,8 @@ QVariant Arpeggio::getProperty(P_ID propertyId) const
                   return userLen1();
             case P_ID::ARP_USER_LEN2:
                   return userLen2();
+            case P_ID::PLAY:
+                  return _playArpeggio;
             default:
                   break;
             }
@@ -419,6 +426,9 @@ bool Arpeggio::setProperty(P_ID propertyId, const QVariant& val)
             case P_ID::ARP_USER_LEN2:
                   setUserLen2(val.toDouble());
                   break;
+            case P_ID::PLAY:
+                  setPlayArpeggio(val.toBool());
+                  break;
             default:
                   if (!Element::setProperty(propertyId, val))
                         return false;
@@ -428,6 +438,23 @@ bool Arpeggio::setProperty(P_ID propertyId, const QVariant& val)
       return true;
       }
 
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
 
+QVariant Arpeggio::propertyDefault(P_ID propertyId) const
+      {
+      switch(propertyId) {
+            case P_ID::ARP_USER_LEN1:
+                  return 0.0;
+            case P_ID::ARP_USER_LEN2:
+                  return 0.0;
+            case P_ID::PLAY:
+                  return true;
+            default:
+                  break;
+            }
+      return Element::propertyDefault(propertyId);
+      }
 }
 

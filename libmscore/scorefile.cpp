@@ -185,6 +185,13 @@ void Score::write(Xml& xml, bool selectionOnly)
       if (selectionOnly) {
             staffStart   = _selection.staffStart();
             staffEnd     = _selection.staffEnd();
+            // make sure we select full parts
+            Staff* sStaff = staff(staffStart);
+            Part* sPart = sStaff->part();
+            Staff* eStaff = staff(staffEnd - 1);
+            Part* ePart = eStaff->part();
+            staffStart = staffIdx(sPart);
+            staffEnd = staffIdx(ePart) + ePart->nstaves();
             measureStart = _selection.startSegment()->measure();
             if (_selection.endSegment())
                   measureEnd   = _selection.endSegment()->measure()->next();
@@ -466,6 +473,12 @@ void Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
 
 QImage Score::createThumbnail()
       {
+      LayoutMode layoutMode = _layoutMode;
+      if (layoutMode != LayoutMode::PAGE) {
+            startCmd();
+            undo(new ChangeLayoutMode(this, LayoutMode::PAGE));
+            doLayout();
+            }
       Page* page = pages().at(0);
       QRectF fr  = page->abbox();
       qreal mag  = 256.0 / qMax(fr.width(), fr.height());
@@ -482,6 +495,8 @@ QImage Score::createThumbnail()
       p.scale(mag, mag);
       print(&p, 0);
       p.end();
+      if (layoutMode != _layoutMode)
+            endCmd(true);       // rollback
       return pm;
       }
 
@@ -723,14 +738,9 @@ QString readRootFile(MQZipReader* uz, QList<QString>& images)
 //    return false on error
 //---------------------------------------------------------
 
-Score::FileError Score::loadCompressedMsc(QString name, bool ignoreVersionError)
+Score::FileError Score::loadCompressedMsc(QIODevice* io, bool ignoreVersionError)
       {
-      MQZipReader uz(name);
-      if (!uz.exists()) {
-            qDebug("loadCompressedMsc: <%s> not found", qPrintable(name));
-            MScore::lastError = tr("file not found");
-            return FileError::FILE_NOT_FOUND;
-            }
+      MQZipReader uz(io);
 
       QList<QString> sl;
       QString rootfile = readRootFile(&uz, sl);
@@ -801,18 +811,30 @@ Score::FileError Score::loadMsc(QString name, bool ignoreVersionError)
       {
       info.setFile(name);
 
-      if (name.endsWith(".mscz"))
-            return loadCompressedMsc(name, ignoreVersionError);
-
       QFile f(name);
       if (!f.open(QIODevice::ReadOnly)) {
             MScore::lastError = f.errorString();
             return FileError::FILE_OPEN_ERROR;
             }
 
-      XmlReader xml(&f);
-      FileError retval = read1(xml, ignoreVersionError);
-      return retval;
+      if (name.endsWith(".mscz"))
+            return loadCompressedMsc(&f, ignoreVersionError);
+      else {
+            XmlReader r(&f);
+            return read1(r, ignoreVersionError);
+            }
+      }
+
+Score::FileError Score::loadMsc(QString name, QIODevice* io, bool ignoreVersionError)
+      {
+      info.setFile(name);
+
+      if (name.endsWith(".mscz"))
+            return loadCompressedMsc(io, ignoreVersionError);
+      else {
+            XmlReader r(io);
+            return read1(r, ignoreVersionError);
+            }
       }
 
 //---------------------------------------------------------
@@ -1160,6 +1182,7 @@ bool Score::read(XmlReader& e)
             qDebug("%s: xml read error at line %lld col %lld: %s",
                qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
                e.name().toUtf8().data());
+            MScore::lastError = tr("XML read error at line %1 column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(e.name().toString());
             return false;
             }
 
@@ -1236,6 +1259,7 @@ bool Score::read(XmlReader& e)
 void Score::print(QPainter* painter, int pageNo)
       {
       _printing  = true;
+      MScore::pdfPrinting = true;
       Page* page = pages().at(pageNo);
       QRectF fr  = page->abbox();
 
@@ -1249,6 +1273,7 @@ void Score::print(QPainter* painter, int pageNo)
             e->draw(painter);
             painter->restore();
             }
+      MScore::pdfPrinting = false;
       _printing = false;
       }
 

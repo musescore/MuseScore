@@ -50,6 +50,7 @@
 #include "xml.h"
 #include "staff.h"
 #include "part.h"
+#include "accidental.h"
 
 namespace Ms {
 

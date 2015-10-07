@@ -26,6 +26,7 @@ include_directories(
       ${PROJECT_SOURCE_DIR}
       ${PROJECT_SOURCE_DIR}/thirdparty
       ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
+      ${FREETYPE_INCLUDE_DIRS}
       )
 
 if (SCRIPT_INTERFACE)
@@ -87,6 +88,7 @@ QT5_WRAP_UI (ui_headers
 
       inspector/inspector_element.ui
       inspector/inspector_vbox.ui
+      inspector/inspector_tbox.ui
       inspector/inspector_articulation.ui
       inspector/inspector_spacer.ui
       inspector/inspector_hbox.ui
@@ -121,11 +123,13 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_empty.ui
       inspector/inspector_fret.ui
       inspector/inspector_break.ui
+      inspector/inspector_bend.ui
+      inspector/inspector_arpeggio.ui
       ${SCRIPT_UI}
       )
 
 if (APPLE)
-      QT5_ADD_RESOURCES (qrc_files musescore.qrc)
+      QT5_ADD_RESOURCES (qrc_files musescore.qrc musescorefonts-Mac.qrc)
 else (APPLE)
       QT5_ADD_RESOURCES (qrc_files musescore.qrc
             musescorefonts-MScore.qrc
@@ -157,6 +161,10 @@ endif (USE_PULSEAUDIO)
 if (USE_PORTMIDI)
       set (AUDIO ${AUDIO} pm.cpp)
 endif (USE_PORTMIDI)
+
+if (USE_LAME)
+      set (AUDIO ${AUDIO} exportmp3.cpp)
+endif (USE_LAME)
 
 if (USE_JACK)
       set (AUDIO ${AUDIO} jackaudio.cpp jackweakapi.cpp)
@@ -209,7 +217,9 @@ add_executable ( ${ExecutableName}
 
       recordbutton.h greendotbutton prefsdialog.h
       scoreview.cpp editinstrument.cpp editstyle.cpp
-      icons.cpp importbww.cpp instrdialog.cpp instrwidget.cpp
+      icons.cpp importbww.cpp
+      importmxml.cpp importmxmlpass1.cpp importmxmlpass2.cpp
+      instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
       mixer.cpp playpanel.cpp selectionwindow.cpp preferences.cpp measureproperties.cpp
@@ -226,7 +236,7 @@ add_executable ( ${ExecutableName}
       importgtp.cpp importgtp-gp4.cpp importgtp-gp5.cpp importgtp-gp6.cpp fotomode.cpp drumtools.cpp
       selinstrument.cpp texteditor.cpp editstafftype.cpp texttools.cpp
       editpitch.cpp editstringdata.cpp editraster.cpp pianotools.cpp mediadialog.cpp
-      workspace.cpp exportmp3.cpp chordview.cpp
+      workspace.cpp chordview.cpp
       album.cpp albummanager.cpp
       textstyle.cpp
       lineproperties.cpp stafftextproperties.cpp splitstaff.cpp
@@ -248,6 +258,7 @@ add_executable ( ${ExecutableName}
       musicxmlfonthandler.cpp musicxmlsupport.cpp exportxml.cpp importxml.cpp importxmlfirstpass.cpp
       savePositions.cpp inspector/inspectorJump.cpp inspector/inspectorMarker.cpp
       inspector/inspectorGlissando.cpp inspector/inspectorNote.cpp inspector/inspectorAmbitus.cpp
+      inspector/inspectorArpeggio.cpp
       paletteBoxButton.cpp driver.cpp exportmidi.cpp noteGroups.cpp
       pathlistdialog.cpp exampleview.cpp inspector/inspectorTextLine.cpp miconengine.cpp
       importmidi/importmidi.cpp
@@ -295,6 +306,7 @@ target_link_libraries(mscore
       qzip
       beatroot
       kqoauth
+      ${FREETYPE_LIBRARIES}
       )
 
 if (MINGW)
@@ -408,8 +420,6 @@ if (MINGW)
       ${CROSSQT}/bin/Qt5XmlPatterns.dll
       ${CROSSQT}/bin/Qt5Qml.dll
       ${CROSSQT}/bin/Qt5Quick.dll
-      ${CROSSQT}/bin/Qt5QuickWidgets.dll
-      ${CROSSQT}/bin/Qt5Script.dll
       ${CROSSQT}/bin/Qt5Sql.dll
       ${CROSSQT}/bin/Qt5Positioning.dll
       ${CROSSQT}/bin/Qt5PrintSupport.dll
@@ -422,6 +432,8 @@ if (MINGW)
       ${CROSSQT}/bin/icudt53.dll
       ${CROSSQT}/bin/Qt5Help.dll
       ${CROSSQT}/bin/Qt5CLucene.dll
+      $ENV{FREETYPE_DIR}/bin/freetype6.dll
+      $ENV{FREETYPE_DIR}/bin/zlib1.dll
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
 
@@ -514,8 +526,30 @@ else (MINGW)
      install (FILES data/mscore.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
      install (FILES data/musescoreDocument.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
    else (APPLE)
+     # Linux: install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
      install( TARGETS mscore RUNTIME DESTINATION bin )
-     install( FILES   data/mscore.png DESTINATION share/pixmaps)
+     # install MuseScore icons (use SVGs where possible, but install PNGs as backup for systems that don't support SVG)
+     install( FILES   ../assets/musescore-icon-round.svg RENAME mscore.svg DESTINATION share/icons/hicolor/scalable/apps)
+     install( FILES   ../assets/musescore-icon-round-64.png RENAME mscore.png DESTINATION share/icons/hicolor/64x64/apps)
+     # install MIME (filetype) icons for each mimetype on Linux
+     install( FILES   ../assets/mscz-icon.svg RENAME application-x-musescore.svg
+        DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCZ files
+     install( FILES   ../assets/mscz-icon-48.png RENAME application-x-musescore.png
+        DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MSCZ files
+     install( FILES   ../assets/mscx-icon.svg RENAME application-x-musescore+xml.svg
+        DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCX files
+     install( FILES   ../assets/mscx-icon-48.png RENAME application-x-musescore+xml.png
+        DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MSCX files
+     # use a custom icon for MusicXML files (there isn't a standard icon for MusicXML files)
+     install( FILES   ../assets/mxl-icon.svg RENAME application-vnd.recordare.musicxml.svg
+        DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MXL (compressed MusicXML) files
+     install( FILES   ../assets/mxl-icon-48.png RENAME application-vnd.recordare.musicxml.png
+        DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MXL (compressed MusicXML) files
+     install( FILES   ../assets/xml-icon.svg RENAME application-vnd.recordare.musicxml+xml.svg
+        DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .XML (MusicXML) files
+     install( FILES   ../assets/xml-icon-48.png RENAME application-vnd.recordare.musicxml+xml.png
+        DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .XML (MusicXML) files
+     # Note: must now run "gtk-update-icon-cache" to set the new icons. This is done in the Makefile.
    endif (APPLE)
 endif (MINGW)
 

@@ -41,17 +41,16 @@ class Spanner;
 //   @@ ChordRest
 ///    Virtual base class. Chords and rests can be part of a beam
 //
+//   @P beamMode      enum (Beam.AUTO, .BEGIN, .MID, .END, .NONE, .BEGIN32, .BEGIN64, .INVALID)
 //   @P durationType  int
-//   @P beamMode      Ms::Beam::Mode (AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID)
 //   @P small         bool           small chord/rest
 //-------------------------------------------------------------------
 
 class ChordRest : public DurationElement {
       Q_OBJECT
-      Q_PROPERTY(int            durationType  READ durationTypeTicks  WRITE setDurationType)
       Q_PROPERTY(Ms::Beam::Mode beamMode      READ beamMode           WRITE undoSetBeamMode)
+      Q_PROPERTY(int            durationType  READ durationTypeTicks  WRITE setDurationType)
       Q_PROPERTY(bool           small         READ small              WRITE undoSetSmall)
-      Q_ENUMS(Ms::Beam::Mode)
 
       TDuration _durationType;
       int _staffMove;         // -1, 0, +1, used for crossbeaming

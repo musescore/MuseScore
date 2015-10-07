@@ -1512,7 +1512,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Beside staff</source>
-        <translation>En-dessous de la portée</translation>
+        <translation>Au-dessous de la portée</translation>
     </message>
     <message>
         <source>Through staff</source>
@@ -3042,6 +3042,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Inspecteur de glissando</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpège</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Lecture</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Réinitialiser la lecture</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3106,6 +3125,30 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Réinitialiser l&apos;étirement du temps</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Style d&apos;ornement</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Défaut</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Baroque</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Réinitialiser le style d&apos;ornement</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Lecture</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Réinitialiser la lecture</translation>
     </message>
 </context>
 <context>
@@ -3276,6 +3319,25 @@ space unit</extracomment>
     <message>
         <source>User position</source>
         <translation>Position personnalisée</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Inspecteur de glissando</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Bend</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Lecture</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Réinitialiser la lecture</translation>
     </message>
 </context>
 <context>
@@ -3559,6 +3621,42 @@ space unit</extracomment>
         <source>Show text</source>
         <translation>Afficher le texte</translation>
     </message>
+    <message>
+        <source>Style</source>
+        <translation>Style</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Réinitialiser le style</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Style de lecture</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Chromatique</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Touches blanches</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Touches noires</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diatonique</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Lecture</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Réinitialiser la lecture</translation>
+    </message>
 </context>
 <context>
     <name>InspectorGroupElement</name>
@@ -3612,19 +3710,19 @@ space unit</extracomment>
     </message>
     <message>
         <source>Right gap</source>
-        <translation>Espacement à droite</translation>
+        <translation>Marge droite</translation>
     </message>
     <message>
         <source>Left gap</source>
-        <translation>Espacement à gauche</translation>
+        <translation>Marge gauche</translation>
     </message>
     <message>
         <source>Reset Left gap value</source>
-        <translation>Réinitialiser l&apos;espacement à gauche</translation>
+        <translation>Réinitialiser la marge gauche</translation>
     </message>
     <message>
         <source>Reset Right gap value</source>
-        <translation>Réinitialiser l&apos;espacement à droite</translation>
+        <translation>Réinitialiser la marge droite</translation>
     </message>
 </context>
 <context>
@@ -4366,6 +4464,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Inspecteur de cadre de texte</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Cadre de texte</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Marge inférieure</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Marge du haut</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Réinitialiser la valeur</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Réinitialiser la marge supérieure</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Réinitialiser la marge inférieure</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Marge de gauche</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Marge du bas</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Réinitialiser la marge de droite</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Marge de droite</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Réinitialiser la marge du bas</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Réinitialiser la marge du haut</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Réinitialiser la marge gauche</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Marge supérieure</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>esp.</translation>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4496,12 +4666,36 @@ space unit</extracomment>
         <translation>Trille</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Ligne de trille</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Remettre à zéro la valeur</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Style d&apos;ornement</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Direction</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Défaut</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Baroque</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Réinitialiser le style d&apos;ornement</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Lecture</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Réinitialiser la lecture</translation>
     </message>
 </context>
 <context>
@@ -4608,11 +4802,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Top gap value</source>
-        <translation>Réinitialiser l&apos;espacement du haut</translation>
+        <translation>Réinitialiser la marge supérieure</translation>
     </message>
     <message>
         <source>Reset Bottom gap value</source>
-        <translation>Réinitialiser l&apos;espacement du bas</translation>
+        <translation>Réinitialiser la marge inférieure</translation>
     </message>
     <message>
         <source>Bottom margin</source>
@@ -4624,11 +4818,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Top gap</source>
-        <translation>Espacement du haut</translation>
+        <translation>Marge supérieure</translation>
     </message>
     <message>
         <source>Bottom gap</source>
-        <translation>Espacement du bas</translation>
+        <translation>Marge inférieure</translation>
     </message>
     <message>
         <source>Top margin</source>
@@ -4879,6 +5073,13 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>atonal</translation>
+    </message>
+</context>
+<context>
     <name>LayerManager</name>
     <message>
         <source>MuseScore: Layers</source>
@@ -5057,7 +5258,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Below</source>
-        <translation>En-dessous</translation>
+        <translation>Au-dessous</translation>
     </message>
     <message>
         <source>Left</source>
@@ -5301,7 +5502,7 @@ pointées</translation>
         <source>Show
 tempo text</source>
         <translation>Afficher
-le texte de tempo</translation>
+l&apos;indication de tempo</translation>
     </message>
     <message>
         <source>Recognize
@@ -6048,14 +6249,6 @@ a échoué :</translation>
         <translation>Le signe $ lui-même</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>Balise de métadonnées</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Balises disponibles et leurs valeurs actuelles :</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Appliquer à l&apos;ensemble des parties</translation>
     </message>
@@ -6070,6 +6263,14 @@ a échoué :</translation>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>Numéro de page, s&apos;il y a plus d&apos;une page</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>Balise de métadonnées, voir ci-dessous</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Balises de métadonnées disponibles et leurs valeurs :</translation>
     </message>
 </context>
 <context>
@@ -6675,11 +6876,11 @@ Voulez-vous le remplacer ?
     </message>
     <message>
         <source>Fingering %1</source>
-        <translation>Doigté </translation>
+        <translation>Doigté %1</translation>
     </message>
     <message>
         <source>String number %1</source>
-        <translation>Numéro de corde </translation>
+        <translation>Corde %1</translation>
     </message>
     <message>
         <source>Bracket</source>
@@ -7200,6 +7401,10 @@ veuillez choisir un nom différent :</translation>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation>La partition ne peut pas être enregistrée en ligne. Merci de corriger les mesures corrompues et essayez de nouveau.</translation>
     </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Demander de l&apos;aide</translation>
+    </message>
 </context>
 <context>
     <name>Ms::MyWebView</name>
@@ -7683,10 +7888,6 @@ a échoué : %2</translation>
         <translation>Échec lors de l&apos;écriture du style : %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>Fichier non trouvé</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Aucune sélection</translation>
     </message>
@@ -7697,6 +7898,10 @@ a échoué : %2</translation>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>Mesure %1, portée %2, voix %3 trop longue. Attendu : %4 ; Trouvé : %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>Erreur de lecture XML à la ligne %1 colonne %2: %3</translation>
     </message>
 </context>
 <context>
@@ -8011,6 +8216,12 @@ Veuillez sélectionner un ensemble de mesures et réessayer</translation>
         <source>Transparent background</source>
         <translation>Arrière-plan transparent</translation>
     </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>Impossible de diviser la mesure ici :
+premier temps de la mesure</translation>
+    </message>
 </context>
 <context>
     <name>Ms::SearchComboBox</name>
@@ -8104,7 +8315,7 @@ Veuillez sélectionner un ensemble de mesures et réessayer</translation>
     <name>Ms::TempoText</name>
     <message>
         <source>note = %1</source>
-        <translation>note = %1</translation>
+        <translation> = %1</translation>
     </message>
     <message>
         <source>Dotted %1</source>
@@ -9135,7 +9346,7 @@ a échoué :</translation>
     </message>
     <message>
         <source>Relative Tempo to 120 beats per minute</source>
-        <translation>Tempo relatif par rapport à 120 tic par minute</translation>
+        <translation>Tempo relatif par rapport à 120 pulsations par minute</translation>
     </message>
     <message>
         <source>Use up and down arrows to change value</source>
@@ -9147,7 +9358,7 @@ a échoué :</translation>
     </message>
     <message>
         <source>Relative tempo to 120 beats per minute</source>
-        <translation>Tempo relatif par rapport à 120 tic par minute</translation>
+        <translation>Tempo relatif par rapport à 120 pulsations par minute</translation>
     </message>
 </context>
 <context>
@@ -10411,6 +10622,14 @@ a échoué :</translation>
         <source>Filter</source>
         <translation>Filtre</translation>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Exporter les RPNs</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -11269,6 +11488,14 @@ Voulez-vous le remplacer ?</translation>
         <source>System flag</source>
         <translation>Texte de système</translation>
     </message>
+    <message>
+        <source>Search...</source>
+        <translation>Chercher...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Effacer</translation>
+    </message>
 </context>
 <context>
     <name>SynthControl</name>
@@ -11302,7 +11529,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Tuning</source>
-        <translation>Décalage de la hauteur tonale</translation>
+        <translation>Réglage du diapason</translation>
     </message>
     <message>
         <source>Hz</source>
@@ -11311,7 +11538,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Change Tuning</source>
-        <translation>Changer le décalage de la hauteur tonale</translation>
+        <translation>Changer la fréquence du diapason</translation>
     </message>
     <message>
         <source>Master volume</source>
@@ -11327,7 +11554,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Master tuning:</source>
-        <translation>Fréquence de l&apos;accord de référence :</translation>
+        <translation>Fréquence du diapason :</translation>
     </message>
     <message>
         <source>Save to score</source>
@@ -11359,7 +11586,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Master tuning</source>
-        <translation>Fréquence d&apos;accord de référence</translation>
+        <translation>Fréquence du diapason</translation>
     </message>
 </context>
 <context>
@@ -12543,19 +12770,19 @@ a échoué :</translation>
     </message>
     <message>
         <source>Flat-slash2</source>
-        <translation>Bémol double-barré</translation>
+        <translation>Bémol double barré</translation>
     </message>
     <message>
         <source>Mirrored-flat2</source>
-        <translation>Bémol-miroir double</translation>
+        <translation>Bémol miroir double</translation>
     </message>
     <message>
         <source>Mirrored-flat</source>
-        <translation>Bémol-miroir</translation>
+        <translation>Bémol miroir</translation>
     </message>
     <message>
         <source>Mirrored-flat-slash</source>
-        <translation>Bémol-miroir barré</translation>
+        <translation>Bémol miroir barré</translation>
     </message>
     <message>
         <source>Flat-flat-slash</source>
@@ -13046,11 +13273,11 @@ a échoué :</translation>
     </message>
     <message>
         <source>Insert E</source>
-        <translation>Insérer MI</translation>
+        <translation>Insérer Mi</translation>
     </message>
     <message>
         <source>Insert note E</source>
-        <translation>Insérer la note MI</translation>
+        <translation>Insérer la note Mi</translation>
     </message>
     <message>
         <source>Insert F</source>
@@ -13617,10 +13844,6 @@ a échoué :</translation>
         <translation>Ligature en accélérant</translation>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Palettes</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Fenêtre de lecture</translation>
     </message>
@@ -13655,10 +13878,6 @@ a échoué :</translation>
     <message>
         <source>Add lyrics</source>
         <translation>Ajouter des paroles</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Indication de tempo</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -14015,10 +14234,6 @@ a échoué :</translation>
     <message>
         <source>Repeat selection</source>
         <translation>Répéter la selection</translation>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
-        <translation>Suivre la musique</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
@@ -15584,6 +15799,22 @@ a échoué :</translation>
         <source>Set loop in position</source>
         <translation>Définir la position initiale de la boucle</translation>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Palettes</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Indication de tempo</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation>Zoom à 100%</translation>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation>Suivre la musique</translation>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -16634,6 +16865,10 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <source>Tablature2</source>
         <translation>Tablature 2</translation>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>Clef de Sol optionnelle 8vb</translation>
     </message>
 </context>
 <context>
@@ -17745,10 +17980,6 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <source>Prallprall line</source>
         <translation>Ligne de trille long</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Ligne de trille</translation>
     </message>
 </context>
 <context>

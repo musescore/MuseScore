@@ -253,7 +253,9 @@ Palette* MuseScore::newKeySigPalette(bool basic)
       if (!basic) {
             // atonal key signature
             KeySigEvent nke;
+            nke.setKey(Key::C);
             nke.setCustom(true);
+            nke.setMode(KeyMode::NONE);
             KeySig* nk = new KeySig(gscore);
             nk->setKeySigEvent(nke);
             sp->append(nk, qApp->translate("MuseScore", keyNames[15]));
@@ -273,24 +275,24 @@ Palette* MuseScore::newAccidentalsPalette(bool basic)
       sp->setDrawGrid(true);
 
       if (basic) {
-            static Accidental::Type types[] = {
-                  Accidental::Type::NONE,
-                  Accidental::Type::SHARP,
-                  Accidental::Type::FLAT,
-                  Accidental::Type::SHARP2,
-                  Accidental::Type::FLAT2,
-                  Accidental::Type::NATURAL
+            static AccidentalType types[] = {
+                  AccidentalType::NONE,
+                  AccidentalType::SHARP,
+                  AccidentalType::FLAT,
+                  AccidentalType::SHARP2,
+                  AccidentalType::FLAT2,
+                  AccidentalType::NATURAL
                   };
             for (auto i : types) {
                   Accidental* s = new Accidental(gscore);
-                  s->setAccidentalType(Accidental::Type(i));
+                  s->setAccidentalType(AccidentalType(i));
                   sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
                   }
             }
       else {
-            for (int i = int(Accidental::Type::SHARP); i < int(Accidental::Type::END); ++i) {
+            for (int i = int(AccidentalType::SHARP); i < int(AccidentalType::END); ++i) {
                   Accidental* s = new Accidental(gscore);
-                  s->setAccidentalType(Accidental::Type(i));
+                  s->setAccidentalType(AccidentalType(i));
                   if (s->symbol() != SymId::noSym)
                         sp->append(s, qApp->translate("accidental", s->subtypeUserName()));
                   else
@@ -699,7 +701,7 @@ Palette* MuseScore::newClefsPalette(bool basic)
             ClefType::G,   ClefType::F, ClefType::C3, ClefType::C4
             };
       static std::vector<ClefType> clefs2  {
-            ClefType::G,   ClefType::G1,    ClefType::G2,     ClefType::G3,  ClefType::G4,
+            ClefType::G,   ClefType::G1,    ClefType::G2,     ClefType::G3,  ClefType::G5,  ClefType::G4,
             ClefType::C1,  ClefType::C2,    ClefType::C3,     ClefType::C4,  ClefType::C5,
             ClefType::F,   ClefType::F_8VA, ClefType::F_15MA, ClefType::F8,  ClefType::F15,
             ClefType::F_B, ClefType::F_C,   ClefType::PERC,   ClefType::TAB, ClefType::TAB2
@@ -868,7 +870,19 @@ Palette* MuseScore::newLinesPalette(bool basic)
             pedal = new Pedal(gscore);
             pedal->setLen(w);
             pedal->setBeginText("<sym>keyboardPedalPed</sym>");
+            pedal->setContinueText("(<sym>keyboardPedalPed</sym>)");
             pedal->setEndHook(true);
+            sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
+
+            pedal = new Pedal(gscore);
+            pedal->setLen(w);
+            pedal->setBeginText("<sym>keyboardPedalPed</sym>");
+            pedal->setContinueText("(<sym>keyboardPedalPed</sym>)");
+            pedal->setEndText("<sym>keyboardPedalUp</sym>");
+            Align align = pedal->endTextElement()->textStyle().align();
+            align = (align & AlignmentFlags::VMASK) | AlignmentFlags::HCENTER;
+            pedal->endTextElement()->textStyle().setAlign(align);
+            pedal->setLineVisible(false);
             sp->append(pedal, QT_TRANSLATE_NOOP("Palette", "Pedal"));
             }
 
@@ -964,12 +978,12 @@ Palette* MuseScore::newTempoPalette()
       sp->setDrawGrid(true);
 
       static const TempoPattern tp[] = {
-            TempoPattern("<sym>unicodeNoteHalfUp</sym> = 80", 80.0/30.0),                        // 1/2
-            TempoPattern("<sym>unicodeNoteQuarterUp</sym> = 80", 80.0/60.0),                     // 1/4
-            TempoPattern("<sym>unicodeNote8thUp</sym> = 80", 80.0/120.0),                    // 1/8
-            TempoPattern("<sym>unicodeNoteHalfUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
-            TempoPattern("<sym>unicodeNoteQuarterUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
-            TempoPattern("<sym>unicodeNote8thUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80", 120/120.0),   // dotted 1/8
+            TempoPattern("<sym>metNoteHalfUp</sym> = 80", 80.0/30.0),                    // 1/2
+            TempoPattern("<sym>metNoteQuarterUp</sym> = 80", 80.0/60.0),                 // 1/4
+            TempoPattern("<sym>metNote8thUp</sym> = 80", 80.0/120.0),                    // 1/8
+            TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/30.0),       // dotted 1/2
+            TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/60.0),    // dotted 1/4
+            TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80", 120/120.0),       // dotted 1/8
             };
       for (unsigned i = 0; i < sizeof(tp)/sizeof(*tp); ++i) {
             TempoText* tt = new TempoText(gscore);
@@ -1210,7 +1224,7 @@ QMenu* MuseScore::genCreateMenu(QWidget* parent)
       frames->addAction(getAction("insert-hbox"));
       frames->addAction(getAction("insert-vbox"));
       frames->addAction(getAction("insert-textframe"));
-      if(enableExperimental)
+      if (enableExperimental)
             frames->addAction(getAction("insert-fretframe"));
       frames->addSeparator();
       frames->addAction(getAction("append-hbox"));
@@ -1257,40 +1271,40 @@ void MuseScore::addTempo()
 
       SigEvent event = cs->sigmap()->timesig(cr->tick());
       Fraction f = event.nominal();
-      QString text("<sym>unicodeNoteQuarterUp</sym> = 80");
+      QString text("<sym>metNoteQuarterUp</sym> = 80");
       switch (f.denominator()) {
             case 1:
-                  text = "<sym>unicodeNoteWhole</sym> = 80";
+                  text = "<sym>metNoteWhole</sym> = 80";
                   break;
             case 2:
-                  text = "<sym>unicodeNoteHalfUp</sym> = 80";
+                  text = "<sym>metNoteHalfUp</sym> = 80";
                   break;
             case 4:
-                  text = "<sym>unicodeNoteQuarterUp</sym> = 80";
+                  text = "<sym>metNoteQuarterUp</sym> = 80";
                   break;
             case 8:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>unicodeNoteQuarterUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym> = 80";
+                        text = "<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>unicodeNote8thUp</sym> = 80";
+                        text = "<sym>metNote8thUp</sym> = 80";
                   break;
             case 16:
                   if(f.numerator() % 3 == 0)
-                        text = text = "<sym>unicodeNote8thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
+                        text = "<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>unicodeNote16thUp</sym> = 80";
+                        text = "<sym>metNote16thUp</sym> = 80";
                   break;
             case 32:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>unicodeNote16thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
+                        text = "<sym>metNote16thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>unicodeNote32thUp</sym> = 80";
+                        text = "<sym>metNote32ndUp</sym> = 80";
                   break;
             case 64:
                   if(f.numerator() % 3 == 0)
-                        text = "<sym>unicodeNote32thUp</sym><sym>unicodeAugmentationDot</sym> = 80";
+                        text = "<sym>metNote32ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
                   else
-                        text = "<sym>unicodeNote64thUp</sym> = 80";
+                        text = "<sym>metNote64thUp</sym> = 80";
                   break;
             default:
                   break;

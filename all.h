@@ -162,5 +162,16 @@
 #include <QWidgetAction>
 #include <QHelpIndexModel>
 #include <QTextBrowser>
+
+
+// change Q_ASSERT to NOP if not debugging
+
+#ifdef QT_NO_DEBUG
+#undef Q_ASSERT_X
+#define Q_ASSERT_X(a,b,c)
+#undef Q_ASSERT
+#define Q_ASSERT(a)
+#endif
+
 #endif
 

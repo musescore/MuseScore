@@ -1161,7 +1161,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>sp</source>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>MuseScore: Edit Grid</source>
@@ -1332,7 +1332,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>sp</source>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Staff line color:</source>
@@ -1439,7 +1439,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>sp</source>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>STANDARD STAFF</source>
@@ -1765,7 +1765,7 @@ p, li { white-space: pre-wrap; }
         <extracomment>spatium unit
 ----------
 space unit</extracomment>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Minimum number of empty measures:</source>
@@ -1897,7 +1897,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Spacing (1=tight):</source>
-        <translation>Spridning (1=tätt):</translation>
+        <translation>Utrymme (1=tätt):</translation>
     </message>
     <message>
         <source>Minimum measure width:</source>
@@ -2206,7 +2206,7 @@ space unit</extracomment>
     <message>
         <source>sp</source>
         <comment>space unit</comment>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Articulation distance:</source>
@@ -2741,7 +2741,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>sp</source>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Bottom note</source>
@@ -3049,6 +3049,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glissandoinspektor</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpeggio</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spela upp</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Återställ uppspelningsvärde</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3113,6 +3132,30 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Återställ tidssträckningsvärde</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Ornamentstil</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Standard</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barock</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Återställ värde för Ornamenttyp</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spela</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Återställ värde för Spela</translation>
     </message>
 </context>
 <context>
@@ -3214,7 +3257,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>sp</source>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Position</source>
@@ -3286,6 +3329,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glissandoinspektor</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Bänd</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spela</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Återställ värde för Spela</translation>
+    </message>
+</context>
+<context>
     <name>InspectorBreak</name>
     <message>
         <source>Element Inspector</source>
@@ -3325,7 +3387,7 @@ space unit</extracomment>
     <message>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Horizontal offset</source>
@@ -3455,7 +3517,7 @@ space unit</extracomment>
     <message>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Color</source>
@@ -3566,6 +3628,42 @@ space unit</extracomment>
         <source>Show text</source>
         <translation>Visa text</translation>
     </message>
+    <message>
+        <source>Style</source>
+        <translation>Stil</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Återställ värde för Stil</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Spelstil</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Kromatisk</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Vita tangenter</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Svarta tangenter</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diatonisk</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spela</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Återställ värde för Spela</translation>
+    </message>
 </context>
 <context>
     <name>InspectorGroupElement</name>
@@ -3603,7 +3701,7 @@ space unit</extracomment>
     <message>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Width</source>
@@ -3674,7 +3772,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>sp</source>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Circled tip</source>
@@ -3777,11 +3875,11 @@ space unit</extracomment>
     </message>
     <message>
         <source>Size in staff space units</source>
-        <translation>Storlek mätt i mellanrum</translation>
+        <translation>Storlek i ackoladrymdenheter</translation>
     </message>
     <message>
         <source>Reset Size in staff space units value</source>
-        <translation>Återställ Storleksvärde i mellanrum</translation>
+        <translation>Återställ Storleksvärde i ackoladrymdenheter</translation>
     </message>
 </context>
 <context>
@@ -3890,7 +3988,7 @@ space unit</extracomment>
     <message>
         <source>sp</source>
         <extracomment>Staff space unit</extracomment>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Line color</source>
@@ -4282,7 +4380,7 @@ space unit</extracomment>
     <message>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Trailing space</source>
@@ -4361,7 +4459,7 @@ space unit</extracomment>
     <message>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Spacer Inspector</source>
@@ -4370,6 +4468,78 @@ space unit</extracomment>
     <message>
         <source>Reset Height value</source>
         <translation>Återställ höjdvärde</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Textraminspektor</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Textram</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Nedre lucka</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Övre marginal</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Återställ värde</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Återställ värde för Övre lucka</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Återställ värde för Nedre lucka</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Vänster marginal</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Nedre marginal</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Återställ värde för högermarginal</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Högermarginal</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Återställ värde för nedre marginal</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Återställ värde för övre marginal</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Återställ värde för vänstermarginal</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Övre lucka</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>re</translation>
     </message>
 </context>
 <context>
@@ -4503,12 +4673,36 @@ space unit</extracomment>
         <translation>Prallprall</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Vågig linje</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Återställ värde</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Ornamentstil</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Riktning</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Standard</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barock</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Återställ värde för Ornamenttyp</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Spela</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Återställ värde för Spela</translation>
     </message>
 </context>
 <context>
@@ -4595,7 +4789,7 @@ space unit</extracomment>
     <message>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Height</source>
@@ -4886,6 +5080,13 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>atonal</translation>
+    </message>
+</context>
+<context>
     <name>LayerManager</name>
     <message>
         <source>MuseScore: Layers</source>
@@ -5072,7 +5273,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>sp</source>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Up</source>
@@ -6054,14 +6255,6 @@ failed: </source>
         <translation>$-tecknet</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>metadataetikett</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Tillgängliga etiketter och deras aktuella värden:</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Använd i alla stämmor</translation>
     </message>
@@ -6076,6 +6269,14 @@ failed: </source>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>sidnummer, om det finns fler än en sida</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>metadataetikett, se nedanför</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Tillgängliga metadataetiketter och deras aktuella värden:</translation>
     </message>
 </context>
 <context>
@@ -6673,11 +6874,11 @@ Vill du ersätta den?
     </message>
     <message>
         <source>Staff spacer down</source>
-        <translation>Systemavstånd nedåt</translation>
+        <translation>Ackoladavstånd nedåt</translation>
     </message>
     <message>
         <source>Staff spacer up</source>
-        <translation>Systemavstånd uppåt</translation>
+        <translation>Ackoladavstånd uppåt</translation>
     </message>
     <message>
         <source>Fingering %1</source>
@@ -7204,7 +7405,11 @@ välj ett annat namn:</translation>
     </message>
     <message>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Detta partitur kan inte sparas online. Åtgärda de trasiga takterna och försök igen.</translation>
+    </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Be om hjälp</translation>
     </message>
 </context>
 <context>
@@ -7355,11 +7560,11 @@ välj ett annat namn:</translation>
     </message>
     <message>
         <source>Beat Slash</source>
-        <translation type="unfinished"/>
+        <translation>Slagstreck</translation>
     </message>
     <message>
         <source>Rhythm Slash</source>
-        <translation type="unfinished"/>
+        <translation>Rytmstreck</translation>
     </message>
 </context>
 <context>
@@ -7688,10 +7893,6 @@ stilfil %1:
         <translation>Kunde inte skriva stil: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>filen finns inte</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Ingen markering</translation>
     </message>
@@ -7702,6 +7903,10 @@ stilfil %1:
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>Takt %1, system %2, stämma %3 för lång. Förväntades: %4; Hittades: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>XML-läsfel på rad %1 kolumn %2: %3</translation>
     </message>
 </context>
 <context>
@@ -8016,6 +8221,12 @@ Markera ett taktintervall att foga samman och försök igen</translation>
         <source>Transparent background</source>
         <translation>Genomskinlig bakgrund</translation>
     </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>Kan inte dela takt här:
+Första slag i takten</translation>
+    </message>
 </context>
 <context>
     <name>Ms::SearchComboBox</name>
@@ -8169,7 +8380,7 @@ Markera ett taktintervall att foga samman och försök igen</translation>
     <message>
         <source>sp</source>
         <comment>spatium unit</comment>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
 </context>
 <context>
@@ -8347,11 +8558,11 @@ välj ett annat namn:</translation>
     <name>Ms::Workspace</name>
     <message>
         <source>Advanced</source>
-        <translation>Avancerat</translation>
+        <translation>Avancerad</translation>
     </message>
     <message>
         <source>Basic</source>
-        <translation>Grundläggande</translation>
+        <translation>Enkel</translation>
     </message>
 </context>
 <context>
@@ -8550,7 +8761,7 @@ välj ett annat namn:</translation>
     </message>
     <message>
         <source>Staff space:</source>
-        <translation>Mellanrum:</translation>
+        <translation>Ackoladavstånd:</translation>
     </message>
 </context>
 <context>
@@ -8633,7 +8844,7 @@ välj ett annat namn:</translation>
     </message>
     <message>
         <source>Staff space:</source>
-        <translation>Mellanrum:</translation>
+        <translation>Ackoladavstånd:</translation>
     </message>
 </context>
 <context>
@@ -8879,7 +9090,7 @@ palettfil
     </message>
     <message>
         <source>sp</source>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Content offset</source>
@@ -8914,7 +9125,7 @@ palettfil
     </message>
     <message>
         <source>sp</source>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Scale:</source>
@@ -10416,6 +10627,14 @@ palettfil
         <source>Filter</source>
         <translation>Filter</translation>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Exportera RPN:er</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10738,11 +10957,11 @@ Gå till &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScores webbsida&lt;/
     </message>
     <message>
         <source>MuseScore: Upload Error</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: uppladdningsfel</translation>
     </message>
     <message>
         <source>Do you want to try to load this file anyway?</source>
-        <translation type="unfinished"/>
+        <translation>Vill du försöka läsa in filen ändå?</translation>
     </message>
 </context>
 <context>
@@ -11274,6 +11493,14 @@ Vill du skriva över den?</translation>
         <source>System flag</source>
         <translation>Ackoladflagga</translation>
     </message>
+    <message>
+        <source>Search...</source>
+        <translation>Sök...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Rensa</translation>
+    </message>
 </context>
 <context>
     <name>SynthControl</name>
@@ -11448,7 +11675,7 @@ Vill du skriva över den?</translation>
     </message>
     <message>
         <source>sp</source>
-        <translation>mellanrum</translation>
+        <translation>re</translation>
     </message>
     <message>
         <source>Foreground color:</source>
@@ -11576,16 +11803,16 @@ Vill du skriva över den?</translation>
     </message>
     <message>
         <source>Offset in staff space units</source>
-        <translation>Förskjutning mätt i mellanrum</translation>
+        <translation>Förskjutning mätt i ackoladrymdenheter</translation>
     </message>
     <message>
         <source>Staff space</source>
         <extracomment>spatium unit</extracomment>
-        <translation>Mellanrum</translation>
+        <translation>Ackoladavstånd</translation>
     </message>
     <message>
         <source>Size follows &apos;Staff space&apos; setting</source>
-        <translation>Storlek följer inställning för &apos;Mellanrum&apos;</translation>
+        <translation>Storlek följer inställning för &apos;Ackoladavstånd&apos;</translation>
     </message>
     <message>
         <source>Align baseline of text to reference point</source>
@@ -13622,10 +13849,6 @@ arbetsytefil
         <translation>Fjäderbalk, snabbare</translation>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>&amp;Palett</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>&amp;Spelkontrollfönster</translation>
     </message>
@@ -13660,10 +13883,6 @@ arbetsytefil
     <message>
         <source>Add lyrics</source>
         <translation>Lägg till sångtext</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Tempoangivelse...</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -14020,10 +14239,6 @@ arbetsytefil
     <message>
         <source>Repeat selection</source>
         <translation>Repetera markering</translation>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
-        <translation>Följ i pianorulle</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
@@ -14587,7 +14802,7 @@ arbetsytefil
     </message>
     <message>
         <source>Start Center</source>
-        <translation>Starcentral</translation>
+        <translation>Startcentral</translation>
     </message>
     <message>
         <source>Toggle create multimeasure rest</source>
@@ -15091,7 +15306,7 @@ arbetsytefil
     </message>
     <message>
         <source>Toggle system break</source>
-        <translation>Notsystembrytning på/av</translation>
+        <translation>Ackoladbrytning på/av</translation>
     </message>
     <message>
         <source>Toggle page break</source>
@@ -15588,6 +15803,22 @@ arbetsytefil
     <message>
         <source>Set loop in position</source>
         <translation>Ange slinga i position</translation>
+    </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Paletter</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Tempoangivelse</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation>Zooma till 100%</translation>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation>Följ i pianorulle</translation>
     </message>
 </context>
 <context>
@@ -16640,6 +16871,10 @@ Takt inte tom</translation>
         <source>Tablature2</source>
         <translation>Tablatur2</translation>
     </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>Diskantklav valfri 8vb</translation>
+    </message>
 </context>
 <context>
     <name>drumset</name>
@@ -16649,7 +16884,7 @@ Takt inte tom</translation>
     </message>
     <message>
         <source>Side Stick</source>
-        <translation type="unfinished"/>
+        <translation>Sidostock</translation>
     </message>
     <message>
         <source>Tambourine</source>
@@ -17750,10 +17985,6 @@ Takt inte tom</translation>
     <message>
         <source>Prallprall line</source>
         <translation>Prallprall linje</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Vågig linje</translation>
     </message>
 </context>
 <context>

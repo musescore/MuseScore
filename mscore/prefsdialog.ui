@@ -22,8 +22,8 @@
   <property name="accessibleName">
    <string>MuseScore Preferences</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3">
-   <item row="3" column="0">
+  <layout class="QGridLayout" name="gridLayout_10">
+   <item row="1" column="0">
     <layout class="QHBoxLayout">
      <property name="spacing">
       <number>6</number>
@@ -3018,8 +3018,21 @@
       <attribute name="title">
        <string>Export</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_7">
-       <item>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="4" column="0">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_9">
          <property name="title">
           <string>PNG/SVG</string>
@@ -3059,7 +3072,7 @@
            </spacer>
           </item>
           <item row="0" column="1">
-           <widget class="QDoubleSpinBox" name="pngResolution">
+           <widget class="QSpinBox" name="pngResolution">
             <property name="accessibleName">
              <string>Resolution DPI</string>
             </property>
@@ -3067,20 +3080,20 @@
              <string>Choose resolution DPI</string>
             </property>
             <property name="minimum">
-             <double>32.000000000000000</double>
+             <number>32</number>
             </property>
             <property name="maximum">
-             <double>5000.000000000000000</double>
+             <number>5000</number>
             </property>
             <property name="value">
-             <double>300.000000000000000</double>
+             <number>300</number>
             </property>
            </widget>
           </item>
          </layout>
         </widget>
        </item>
-       <item>
+       <item row="1" column="0">
         <widget class="QGroupBox" name="groupBox_8">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -3108,10 +3121,17 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QCheckBox" name="exportRPNs">
+            <property name="text">
+             <string>Export RPNs</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
-       <item>
+       <item row="1" column="1">
         <widget class="QGroupBox" name="groupBox_16">
          <property name="accessibleName">
           <string>Audio</string>
@@ -3163,7 +3183,7 @@
          </layout>
         </widget>
        </item>
-       <item>
+       <item row="3" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_22">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -3232,18 +3252,53 @@
          </layout>
         </widget>
        </item>
-       <item>
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>PDF</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+         <layout class="QGridLayout" name="gridLayout_11">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Resolution DPI:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="exportPdfDpi">
+            <property name="accessibleName">
+             <string>Resolution DPI</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose resolution DPI</string>
+            </property>
+            <property name="minimum">
+             <number>75</number>
+            </property>
+            <property name="maximum">
+             <number>2400</number>
+            </property>
+            <property name="value">
+             <number>300</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -3613,7 +3668,6 @@
   <tabstop>shortestNote</tabstop>
   <tabstop>pngResolution</tabstop>
   <tabstop>pngTransparent</tabstop>
-  <tabstop>expandRepeats</tabstop>
   <tabstop>exportAudioSampleRate</tabstop>
   <tabstop>exportLayout</tabstop>
   <tabstop>exportAllBreaks</tabstop>

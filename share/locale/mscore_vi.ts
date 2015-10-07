@@ -1774,7 +1774,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Display note values across measure bar (EXPERIMENTAL, early music only!)</source>
-        <translation>Cho thấy giá trị các nốt ngân qua vạch nhịp (THỬ NGHIỆM, dành cho âm nhạc gần đây!)</translation>
+        <translation>Cho thấy giá trị các nốt ngân qua vạch nhịp (THỬ NGHIỆM, dành cho âm nhạc cổ-thuở đầu!)</translation>
     </message>
     <message>
         <source>Music top margin:</source>
@@ -2291,7 +2291,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Fret offset number font size:</source>
-        <translation>Độ lớn chỉ số của phím chặn:</translation>
+        <translation>Độ lớn chỉ số của phím:</translation>
     </message>
     <message>
         <source>Position:</source>
@@ -2531,7 +2531,7 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
     </message>
     <message>
         <source>Barré line thickness:</source>
-        <translation>Độ dày vạch kẻ:</translation>
+        <translation>Độ dày vạch chặn dây:</translation>
     </message>
     <message>
         <source>Scale barlines to staff size</source>
@@ -3046,6 +3046,25 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Bảng kiểm soát dấu Vuốt</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Dấu rải hợp âm</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Phát</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Trả &quot;Cho chơi&quot; về m/định</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3110,6 +3129,30 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
     <message>
         <source>Reset Time stretch value</source>
         <translation>Trả &quot;Kéo dài thời gian&quot; về m/định</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Định kiểu Nét hoa mỹ</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Mặc định</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Ba-rốc</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Trả &quot;Kiểu hoa mỹ&quot; về mặc định</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Phát</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Trả &quot;Cho chơi&quot; về m/định</translation>
     </message>
 </context>
 <context>
@@ -3280,6 +3323,25 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
     <message>
         <source>User position</source>
         <translation>Tùy chỉnh vị trí</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Bảng kiểm soát dấu Vuốt</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Đẩy dây</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Phát</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Trả &quot;Cho chơi&quot; về m/định</translation>
     </message>
 </context>
 <context>
@@ -3563,6 +3625,42 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
         <source>Show text</source>
         <translation>Hiển thị chữ viết</translation>
     </message>
+    <message>
+        <source>Style</source>
+        <translation>Kiểu</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Trả về kiểu mặc định</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Kiểu chơi</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Chromatic</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Các phím trắng</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Các phím đen</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diatonic</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Phát</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Trả &quot;Cho chơi&quot; về m/định</translation>
+    </message>
 </context>
 <context>
     <name>InspectorGroupElement</name>
@@ -3774,11 +3872,11 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
     </message>
     <message>
         <source>Size in staff space units</source>
-        <translation>Kích cỡ tính theo cỡ-khe-nhạc</translation>
+        <translation>Kích cỡ tính theo đơn vị khe-nhạc</translation>
     </message>
     <message>
         <source>Reset Size in staff space units value</source>
-        <translation>Trả &quot;Kích cỡ tính theo cỡ-khe-nhạc&quot; về m/định</translation>
+        <translation>Trả &quot;Kích cỡ tính theo đơn vị khe-nhạc&quot; về m/định</translation>
     </message>
 </context>
 <context>
@@ -4370,6 +4468,78 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Bảng kiểu soát khung chữ</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Khung chữ</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Khoảng trống dưới</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Lề trên</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Trả lại mặc định</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Trả &quot;Khoảng trống trên&quot; về m/định</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Trả &quot;Khoảng trống dưới&quot; về m/định</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Lề trái</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Lề dưới</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Trả &quot;Lề phải&quot; về m/định</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Lề phải</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Trả &quot;Lề dưới&quot; về m/định</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Trả &quot;Lề trên&quot; về m/định</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Trả &quot;Lề trái&quot; về m/định</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Khoảng trống trên</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>sp</translation>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4500,12 +4670,36 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
         <translation>Prall Prall</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Nét gợn sóng</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Trả lại mặc định</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Định kiểu Nét hoa mỹ</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Hướng</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Mặc định</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Ba-rốc</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Trả &quot;Kiểu hoa mỹ&quot; về mặc định</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Phát</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Trả &quot;Cho chơi&quot; về m/định</translation>
     </message>
 </context>
 <context>
@@ -4880,6 +5074,13 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
     <message>
         <source>Add time signature to palette</source>
         <translation>Thêm số chỉ nhịp vào bảng</translation>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>atonal</translation>
     </message>
 </context>
 <context>
@@ -6052,14 +6253,6 @@ bị lỗi:</translation>
         <translation>hiển thị dấu $</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>thẻ siêu dữ liệu. Ví dụ: $:arranger:</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Các &lt;b&gt;tag&lt;/b&gt; hiện có và dữ liệu của chúng là:</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Áp dụng cho mọi Bè</translation>
     </message>
@@ -6074,6 +6267,14 @@ bị lỗi:</translation>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>số đếm trang, nếu có hơn 1 trang</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>thẻ siêu dữ liệu, xem bên dưới</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Các thẻ siêu dữ liệu hiện có và giá trị hiện tại của chúng là:</translation>
     </message>
 </context>
 <context>
@@ -6245,7 +6446,7 @@ bị lỗi:</translation>
     <name>Ms::InstrumentsWidget</name>
     <message>
         <source>Staff %1</source>
-        <translation>Khuông nhạc %1</translation>
+        <translation>Khuông %1</translation>
     </message>
     <message>
         <source>Staves</source>
@@ -6785,7 +6986,7 @@ Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
     </message>
     <message>
         <source>Continuous View</source>
-        <translation>Xem theo dòng</translation>
+        <translation>Xem liền dòng</translation>
     </message>
     <message>
         <source>Concert Pitch</source>
@@ -7203,6 +7404,10 @@ vui lòng chọn một tên khác:</translation>
     <message>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation>Bản nhạc này không thể lưu trực tuyến. Vui lòng sửa các ô nhịp bị sai và thử lại.</translation>
+    </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Yêu cầu giúp đỡ</translation>
     </message>
 </context>
 <context>
@@ -7686,10 +7891,6 @@ lỗi: %2</translation>
         <translation>Lỗi soạn thảo Định kiểu: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>không tìm thấy tập tin</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Chưa chọn gì</translation>
     </message>
@@ -7700,6 +7901,10 @@ lỗi: %2</translation>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>Ô nhịp %1, khuông %2, giọng %3 quá dài. Chỉ số nhịp cần là: %4; Nhưng hiện tại là: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>XML đọc lỗi tại dòng %1 cột %2: %3</translation>
     </message>
 </context>
 <context>
@@ -7734,7 +7939,7 @@ lỗi: %2</translation>
     </message>
     <message>
         <source>Staff %1</source>
-        <translation>Khuông nhạc %1</translation>
+        <translation>Khuông %1</translation>
     </message>
 </context>
 <context>
@@ -8013,6 +8218,12 @@ Vui lòng chọn dãy ô nhịp muốn ghép nối và thử lại lần nữa</
     <message>
         <source>Transparent background</source>
         <translation>Nền trong suốt</translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>Không thể tách ô nhịp tại đây:
+Phách đầu tiên của ô nhịp</translation>
     </message>
 </context>
 <context>
@@ -8434,7 +8645,7 @@ vui lòng chọn một tên khác:</translation>
     <name>NewWizard</name>
     <message>
         <source>Title:</source>
-        <translation>Tên:</translation>
+        <translation>Tựa đề:</translation>
     </message>
     <message>
         <source>Subtitle:</source>
@@ -8548,7 +8759,7 @@ vui lòng chọn một tên khác:</translation>
     </message>
     <message>
         <source>Staff space:</source>
-        <translation>Cỡ-khe-nhạc:</translation>
+        <translation>Cỡ khe-nhạc:</translation>
     </message>
 </context>
 <context>
@@ -8631,7 +8842,7 @@ vui lòng chọn một tên khác:</translation>
     </message>
     <message>
         <source>Staff space:</source>
-        <translation>Cỡ-khe-nhạc:</translation>
+        <translation>Cỡ khe-nhạc:</translation>
     </message>
 </context>
 <context>
@@ -8710,7 +8921,7 @@ vui lòng chọn một tên khác:</translation>
     </message>
     <message>
         <source>Seconda volta 2</source>
-        <translation>Volta 2 thứ 2</translation>
+        <translation>Volta 2 dạng 2</translation>
     </message>
     <message>
         <source>8va</source>
@@ -8940,7 +9151,7 @@ báo lỗi:</translation>
     </message>
     <message>
         <source>Show grid</source>
-        <translation>Hiển thị dạng lưới</translation>
+        <translation>Hiển thị lưới</translation>
     </message>
     <message>
         <source>Show &apos;More Elements...&apos;</source>
@@ -10421,6 +10632,14 @@ một kỹ thuật trong xử lý đồ họa</translation>
         <source>Filter</source>
         <translation>Bộ lọc</translation>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Xuất RPNs</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -11279,6 +11498,14 @@ Bạn muốn ghi đè không?</translation>
         <source>System flag</source>
         <translation>System flag</translation>
     </message>
+    <message>
+        <source>Search...</source>
+        <translation>Tra tìm...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Xóa</translation>
+    </message>
 </context>
 <context>
     <name>SynthControl</name>
@@ -11581,16 +11808,16 @@ Bạn muốn ghi đè không?</translation>
     </message>
     <message>
         <source>Offset in staff space units</source>
-        <translation>Độ lệch tính theo cỡ-khe-nhạc</translation>
+        <translation>Độ lệch tính theo đơn vị khe-nhạc</translation>
     </message>
     <message>
         <source>Staff space</source>
         <extracomment>spatium unit</extracomment>
-        <translation>Cỡ-khe-nhạc</translation>
+        <translation>Khe-nhạc</translation>
     </message>
     <message>
         <source>Size follows &apos;Staff space&apos; setting</source>
-        <translation>Độ lớn tính theo cỡ-khe-nhạc</translation>
+        <translation>Độ lớn tính theo đơn vị &apos;Khe-nhạc&apos;</translation>
     </message>
     <message>
         <source>Align baseline of text to reference point</source>
@@ -12127,7 +12354,7 @@ Bạn muốn ghi đè không?</translation>
     </message>
     <message>
         <source>Keep degree alterations</source>
-        <translation>Keep degree alterations</translation>
+        <translation>Duy trì sự dịch đổi của bậc</translation>
     </message>
     <message>
         <source>Options</source>
@@ -12135,7 +12362,7 @@ Bạn muốn ghi đè không?</translation>
     </message>
     <message>
         <source>Transpose chord symbols</source>
-        <translation>Chuyển ký hiệu gam theo tông</translation>
+        <translation>Ký hiệu gam cũng được chuyển theo</translation>
     </message>
     <message>
         <source>C♭ major / A♭ minor</source>
@@ -12700,7 +12927,7 @@ bị lỗi:</translation>
     </message>
     <message>
         <source>Export Parts...</source>
-        <translation>Xuất Các bè ra...</translation>
+        <translation>Xuất các bè nhạc...</translation>
     </message>
     <message>
         <source>Save a copy of the score&apos;s parts in various formats</source>
@@ -12724,7 +12951,7 @@ bị lỗi:</translation>
     </message>
     <message>
         <source>Print...</source>
-        <translation>In ra...</translation>
+        <translation>In ấn...</translation>
     </message>
     <message>
         <source>Print</source>
@@ -13120,7 +13347,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <source>Flip direction</source>
-        <translation>Đổi chiều</translation>
+        <translation>Đảo chiều</translation>
     </message>
     <message>
         <source>Up</source>
@@ -13140,7 +13367,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <source>Pitch up octave</source>
-        <translation>Tăng âm độ lên quãng tám (octave)</translation>
+        <translation>Tăng cao độ lên quãng tám</translation>
     </message>
     <message>
         <source>Pitch up by an octave or move text or articulation up</source>
@@ -13536,7 +13763,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <source>Add acciaccatura</source>
-        <translation>Thêm acciaccatura</translation>
+        <translation>Thêm nốt dựa acciaccatura</translation>
     </message>
     <message>
         <source>Appoggiatura</source>
@@ -13631,10 +13858,6 @@ trong chuỗi thao tác đã làm
         <translation>Dấu nối cờ dạng xòe phải</translation>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Bảng công cụ</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Bảng điều khiển Chơi nhạc</translation>
     </message>
@@ -13669,10 +13892,6 @@ trong chuỗi thao tác đã làm
     <message>
         <source>Add lyrics</source>
         <translation>Thêm lời cho bản nhạc</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Dấu Nhịp độ...</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -13981,7 +14200,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <source>Mirror note head</source>
-        <translation>Đảo chiều đầu nốt</translation>
+        <translation>Đảo hướng đầu nốt</translation>
     </message>
     <message>
         <source>General...</source>
@@ -14030,10 +14249,6 @@ trong chuỗi thao tác đã làm
     <message>
         <source>Repeat selection</source>
         <translation>Lặp lại vùng được chọn</translation>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
-        <translation>Bảng cuộn Piano: Cuộn tự động</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
@@ -14089,11 +14304,11 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <source>Re-Pitch Mode</source>
-        <translation>Chế độ hiệu chỉnh cao độ</translation>
+        <translation>Chế độ nhập lại cao độ</translation>
     </message>
     <message>
         <source>Replace pitches without changing rhythms</source>
-        <translation>Thay thế các cao độ mà không đổi tiết tấu
+        <translation>Chỉnh lại cao độ mà không đổi tiết nhịp
 </translation>
     </message>
     <message>
@@ -14694,7 +14909,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <source>Flip Direction</source>
-        <translation>Đổi chiều</translation>
+        <translation>Đảo chiều</translation>
     </message>
     <message>
         <source>Diatonic Up</source>
@@ -15178,7 +15393,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <source>Mirror Note Head</source>
-        <translation>Đảo chiều Đầu nốt</translation>
+        <translation>Đảo hướng Đầu nốt</translation>
     </message>
     <message>
         <source>Double Duration</source>
@@ -15599,6 +15814,22 @@ trong chuỗi thao tác đã làm
     <message>
         <source>Set loop in position</source>
         <translation>Lặp liên tục: Chọn điểm đầu</translation>
+    </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Các bảng công cụ</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Nhãn Nhịp độ</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation>Phóng tới 100%</translation>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation>Bảng cuộn Piano</translation>
     </message>
 </context>
 <context>
@@ -16650,6 +16881,10 @@ Measure is not empty</source>
     <message>
         <source>Tablature2</source>
         <translation>Dạng TAB 2</translation>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>Khóa Treble tùy chọn 8vb</translation>
     </message>
 </context>
 <context>
@@ -17761,10 +17996,6 @@ Measure is not empty</source>
     <message>
         <source>Prallprall line</source>
         <translation>Nét Prallprall</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Nét gợn sóng</translation>
     </message>
 </context>
 <context>

@@ -31,6 +31,14 @@
 #include "ottava.h"
 #include "harmony.h"
 
+// #define DEBUG_CLEFS
+
+#ifdef DEBUG_CLEFS
+#define DUMP_CLEFS(s) dumpClefs(s)
+#else
+#define DUMP_CLEFS(s)
+#endif
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -264,7 +272,7 @@ void Staff::setClef(Clef* clef)
                   }
             }
       clefs.setClef(clef->segment()->tick(), clef->clefTypeList());
-//      dumpClefs("setClef");
+      DUMP_CLEFS("setClef");
       }
 
 //---------------------------------------------------------
@@ -292,7 +300,7 @@ void Staff::removeClef(Clef* clef)
                   break;
                   }
             }
-//      dumpClefs("removeClef");
+      DUMP_CLEFS("removeClef");
       }
 
 //---------------------------------------------------------
@@ -368,7 +376,7 @@ void Staff::clearTimeSig()
       }
 
 //---------------------------------------------------------
-//   Staff::key
+//   Staff::keySigEvent
 //
 //    locates the key sig currently in effect at tick
 //---------------------------------------------------------
@@ -714,7 +722,7 @@ void Staff::setLines(int val)
       }
 
 //---------------------------------------------------------
-//   line distance
+//   lineDistance
 //---------------------------------------------------------
 
 qreal Staff::lineDistance() const
@@ -820,19 +828,28 @@ bool Staff::isLinked(Staff* staff)
 //---------------------------------------------------------
 //   primaryStaff
 ///   if there are linked staves, the primary staff is
-///   the one who is played back
+///   the one who is played back and it's not a tab staff
+///   because we don't have enough information  to play
+///   e.g ornaments. NOTE: it's not necessarily the top staff!
 //---------------------------------------------------------
 
 bool Staff::primaryStaff() const
       {
-      QList<Staff*> s;
       if (!_linkedStaves)
             return true;
+      QList<Staff*> s;
+      QList<Staff*> ss;
       foreach(Staff* staff, _linkedStaves->staves()) {
-            if (staff->score() == score())
+            if (staff->score() == score()) {
                   s.append(staff);
+                  if (!staff->isTabStaff())
+                        ss.append(staff);
+                  }
             }
-      return s.front() == this;
+      if (s.size() == 1) // the linked staves are in different scores
+      	return s.front() == this;
+      else // return a non tab linked staff in this score
+      	return ss.front() == this;
       }
 
 //---------------------------------------------------------
@@ -1019,15 +1036,40 @@ void Staff::insertTime(int tick, int len)
             }
       _keys.insert(kl2.begin(), kl2.end());
 
+      // check if there is a clef at the end of measure
+      // before tick
+      Clef* clef = 0;
+      Measure* m = _score->tick2measure(tick);
+      if (m && (m->tick() == tick) && (m->prevMeasure())) {
+            m = m->prevMeasure();
+            Segment* s = m->findSegment(Segment::Type::Clef, tick);
+            if (s) {
+                  int track = idx() * VOICES;
+                  clef = static_cast<Clef*>(s->element(track));
+                  }
+            }
+
       ClefList cl2;
       for (auto i = clefs.lower_bound(tick); i != clefs.end();) {
             ClefTypeList ctl = i->second;
-            int tick = i->first;
+            int t = i->first;
+            if (clef && tick == t) {
+                  ++i;
+                  continue;
+                  }
             clefs.erase(i++);
-            cl2.setClef(tick + len, ctl);
+            cl2.setClef(t + len, ctl);
             }
       clefs.insert(cl2.begin(), cl2.end());
+
+      // check if there is a clef at the end of measure
+      // before tick: do not remove from clefs list
+
+      if (clef)
+            setClef(clef);
+
       updateOttava();
+      DUMP_CLEFS("  insertTime");
       }
 
 //---------------------------------------------------------

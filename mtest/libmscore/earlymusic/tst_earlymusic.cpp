@@ -23,7 +23,7 @@
 using namespace Ms;
 
 //---------------------------------------------------------
-//   TestSpanners
+//   TestEarlymusic
 //---------------------------------------------------------
 
 class TestEarlymusic : public QObject, public MTest
@@ -61,7 +61,7 @@ void TestEarlymusic::earlymusic01()
       QVERIFY(msr);
       Segment*    seg   = msr->findSegment(Segment::Type::ChordRest, 0);
       QVERIFY(seg);
-      Chord*      chord = static_cast<Chord*>(seg->element(0));
+      Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == Element::Type::CHORD);
       QVERIFY(chord->crossMeasure() == CrossMeasure::UNKNOWN);
       TDuration cmDur   = chord->crossMeasureDurationType();

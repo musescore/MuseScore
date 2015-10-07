@@ -598,6 +598,17 @@ void Tuplet::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
+//   scanElements
+//---------------------------------------------------------
+
+void Tuplet::scanElements(void* data, void (*func)(void*, Element*), bool all)
+      {
+      func(data, this);
+      if (_number && all)
+            func(data, _number);
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 

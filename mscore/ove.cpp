@@ -2516,6 +2516,14 @@ int OctaveShift::getEndTick() const {
       return endTick_;
       }
 
+void OctaveShift::setOctaveShiftPosition(OctaveShiftPosition position) {
+      octaveShiftPosition_ = position;
+      }
+
+OctaveShiftPosition OctaveShift::getOctaveShiftPosition() const {
+      return octaveShiftPosition_;
+      }
+
 ///////////////////////////////////////////////////////////////////////////////
 OctaveShiftEndPoint::OctaveShiftEndPoint() {
       musicDataType_ = MusicDataType::OctaveShift_EndPoint;
@@ -5293,7 +5301,8 @@ bool BarsParse::parseNoteRest(MeasureData* measureData, int length, BdatType typ
                   thisByte = placeHolder.toUnsignedInt();
                   notePtr->setAccidental(getLowNibble(thisByte));
                   // accidental 0: influenced by key, 4: influenced by previous accidental in measure
-                  bool notShow = ( getHighNibble(thisByte) == 0 ) || ( getHighNibble(thisByte) == 4 );
+                  //bool notShow = ( getHighNibble(thisByte) == 0 ) || ( getHighNibble(thisByte) == 4 );
+                  bool notShow = !(getHighNibble(thisByte)&0x1);
                   notePtr->setShowAccidental(!notShow);
 
                   if( !jump(1) ) { return false; }

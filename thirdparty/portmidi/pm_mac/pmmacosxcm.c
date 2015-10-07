@@ -900,7 +900,7 @@ PmError pm_macosxcm_init(void)
         
         /* Register this device with PortMidi */
         pm_add_device("CoreMIDI", cm_get_full_endpoint_name(endpoint),
-                      TRUE, (void*)endpoint, &pm_macosx_in_dictionary);
+                      TRUE, (void*)(long)endpoint, &pm_macosx_in_dictionary);
     }
 
     /* Iterate over the MIDI output devices */
@@ -916,7 +916,7 @@ PmError pm_macosxcm_init(void)
 
         /* Register this device with PortMidi */
         pm_add_device("CoreMIDI", cm_get_full_endpoint_name(endpoint),
-                      FALSE, (void*)endpoint, &pm_macosx_out_dictionary);
+                      FALSE, (void*)(long) endpoint, &pm_macosx_out_dictionary);
     }
     return pmNoError;
     

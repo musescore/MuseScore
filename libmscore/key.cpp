@@ -26,6 +26,7 @@ namespace Ms {
 KeySigEvent::KeySigEvent(const KeySigEvent& k)
       {
       _key        = k._key;
+      _mode       = k._mode;
       _custom     = k._custom;
       _keySymbols = k._keySymbols;
       }
@@ -61,7 +62,9 @@ void KeySigEvent::print() const
       if (!isValid())
             qDebug("invalid>");
       else {
-            if (custom())
+            if (isAtonal())
+                  qDebug("atonal>");
+            else if (custom())
                   qDebug("custom>");
             else
                   qDebug("accidental %d>", int(_key));
@@ -85,9 +88,9 @@ void KeySigEvent::setKey(Key v)
 
 bool KeySigEvent::operator==(const KeySigEvent& e) const
       {
-      if (e._custom != _custom)
+      if (e._custom != _custom || e._mode != _mode)
             return false;
-      if (_custom) {
+      if (_custom && !isAtonal()) {
             if (e._keySymbols.size() != _keySymbols.size())
                   return false;
             for (int i = 0; i < _keySymbols.size(); ++i) {

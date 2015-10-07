@@ -73,7 +73,7 @@ void TempoText::read(XmlReader& e)
             }
       // check sanity
       if (xmlText().isEmpty()) {
-            setXmlText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(lrint(60 * _tempo)));
+            setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(lrint(60 * _tempo)));
             setVisible(false);
             }
       }
@@ -92,15 +92,44 @@ struct TempoPattern {
 // note: findTempoDuration requires the longer patterns to be before the shorter patterns in tp
 
 static const TempoPattern tp[] = {
-      TempoPattern("<sym>unicodeNoteHalfUp</sym>\\s*<sym>unicodeAugmentationDot</sym>",    1.5/30.0,  TDuration::DurationType::V_HALF, 1),    // dotted 1/2
+      TempoPattern("<sym>metNoteWhole</sym><sym>space</sym><sym>metAugmentationDot</sym>",  1.5/15.0, TDuration::DurationType::V_WHOLE, 1),    // dotted whole
+      TempoPattern("<sym>metNoteWhole</sym>\\s*<sym>metAugmentationDot</sym>",              1.5/15.0, TDuration::DurationType::V_WHOLE, 1),    // dotted whole
+      TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym><sym>space</sym><sym>metAugmentationDot</sym>", 1.75/30.0, TDuration::DurationType::V_HALF, 2), // double dotted 1/2
+      TempoPattern("<sym>metNoteHalfUp</sym>\\s*<sym>metAugmentationDot</sym>\\s*<sym>metAugmentationDot</sym>",                         1.75/30.0, TDuration::DurationType::V_HALF, 2), // double dotted 1/2
+      TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym>", 1.5/30.0,  TDuration::DurationType::V_HALF, 1),    // dotted 1/2
+      TempoPattern("<sym>metNoteHalfUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5/30.0,  TDuration::DurationType::V_HALF, 1),    // dotted 1/2
+      TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym><sym>space</sym><sym>metAugmentationDot</sym>", 1.75/60.0, TDuration::DurationType::V_QUARTER, 2), // double dotted 1/4
+      TempoPattern("<sym>metNoteQuarterUp</sym>\\s*<sym>metAugmentationDot</sym>\\s*<sym>metAugmentationDot</sym>",                         1.75/60.0, TDuration::DurationType::V_QUARTER, 2), // double dotted 1/4
+      TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym>",         1.5/60.0,  TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
+      TempoPattern("<sym>metNoteQuarterUp</sym>\\s*<sym>metAugmentationDot</sym>",          1.5/60.0,  TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
+      TempoPattern("<sym>metNote8thUp</sym><sym>metAugmentationDot</sym><sym>space</sym><sym>metAugmentationDot</sym>", 1.75/120.0, TDuration::DurationType::V_EIGHTH, 2), // double dotted 1/8
+      TempoPattern("<sym>metNote8thUp</sym>\\s*<sym>metAugmentationDot</sym>\\s*<sym>metAugmentationDot</sym>",         1.75/120.0, TDuration::DurationType::V_EIGHTH, 2), // double dotted 1/8
+      TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym>",  1.5/120.0, TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
+      TempoPattern("<sym>metNote8thUp</sym>\\s*<sym>metAugmentationDot</sym>",              1.5/120.0, TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
+      TempoPattern("<sym>metNote16thUp</sym><sym>space</sym><sym>metAugmentationDot</sym>", 1.5/240.0, TDuration::DurationType::V_16TH, 1),  // dotted 1/16
+      TempoPattern("<sym>metNote16thUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5/240.0, TDuration::DurationType::V_16TH, 1),  // dotted 1/16
+      TempoPattern("<sym>metNote32ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym>", 1.5/480.0, TDuration::DurationType::V_32ND, 1),  // dotted 1/32
+      TempoPattern("<sym>metNote32ndUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5/480.0, TDuration::DurationType::V_32ND, 1),  // dotted 1/32
+      TempoPattern("<sym>metNoteWhole</sym>",                                               1.0/15.0, TDuration::DurationType::V_WHOLE),    // whole
+      TempoPattern("<sym>metNoteHalfUp</sym>",                                              1.0/30.0,  TDuration::DurationType::V_HALF),       // 1/2
+      TempoPattern("<sym>metNoteQuarterUp</sym>",                                           1.0/60.0,  TDuration::DurationType::V_QUARTER),    // 1/4
+      TempoPattern("<sym>metNote8thUp</sym>",                                               1.0/120.0, TDuration::DurationType::V_EIGHTH),     // 1/8
+      TempoPattern("<sym>metNote16thUp</sym>",                                              1.0/240.0, TDuration::DurationType::V_16TH),     // 1/16
+      TempoPattern("<sym>metNote32ndUp</sym>",                                              1.0/480.0, TDuration::DurationType::V_32ND),     // 1/32
+      TempoPattern("<sym>metNote64thUp</sym>",                                              1.0/960.0, TDuration::DurationType::V_64TH),     // 1/64
+      // keep the below for backward compatibility
       TempoPattern("<sym>unicodeNoteHalfUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym>",    1.5/30.0,  TDuration::DurationType::V_HALF, 1),    // dotted 1/2
-      TempoPattern("<sym>unicodeNoteQuarterUp</sym>\\s*<sym>unicodeAugmentationDot</sym>", 1.5/60.0,  TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
+      TempoPattern("<sym>unicodeNoteHalfUp</sym>\\s*<sym>unicodeAugmentationDot</sym>",     1.5/30.0,  TDuration::DurationType::V_HALF, 1),    // dotted 1/2
       TempoPattern("<sym>unicodeNoteQuarterUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym>", 1.5/60.0,  TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
-      TempoPattern("<sym>unicodeNote8thUp</sym>\\s*<sym>unicodeAugmentationDot</sym>",     1.5/120.0, TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
+      TempoPattern("<sym>unicodeNoteQuarterUp</sym>\\s*<sym>unicodeAugmentationDot</sym>",  1.5/60.0,  TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
       TempoPattern("<sym>unicodeNote8thUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym>",     1.5/120.0, TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
-      TempoPattern("<sym>unicodeNoteHalfUp</sym>",                                      1.0/30.0,  TDuration::DurationType::V_HALF),       // 1/2
-      TempoPattern("<sym>unicodeNoteQuarterUp</sym>",                                   1.0/60.0,  TDuration::DurationType::V_QUARTER),    // 1/4
-      TempoPattern("<sym>unicodeNote8thUp</sym>",                                       1.0/120.0, TDuration::DurationType::V_EIGHTH),     // 1/8
+      TempoPattern("<sym>unicodeNote8thUp</sym>\\s*<sym>unicodeAugmentationDot</sym>",      1.5/120.0, TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
+      TempoPattern("<sym>unicodeNoteHalfUp</sym>",                                          1.0/30.0,  TDuration::DurationType::V_HALF),       // 1/2
+      TempoPattern("<sym>unicodeNoteQuarterUp</sym>",                                       1.0/60.0,  TDuration::DurationType::V_QUARTER),    // 1/4
+      TempoPattern("<sym>unicodeNote8thUp</sym>",                                           1.0/120.0, TDuration::DurationType::V_EIGHTH),     // 1/8
+      TempoPattern("<sym>unicodeNote16thUp</sym>",                                          1.0/240.0, TDuration::DurationType::V_16TH),     // 1/16
+	TempoPattern("<sym>unicodeNote32ndUp</sym>",                                          1.0/480.0, TDuration::DurationType::V_32ND),     // 1/32
+      TempoPattern("<sym>unicodeNote64thUp</sym>",                                          1.0/480.0, TDuration::DurationType::V_64TH),     // 1/64
       };
 
 //---------------------------------------------------------
@@ -153,7 +182,7 @@ void TempoText::textChanged()
       {
       if (!_followText)
             return;
-      QString s = xmlText();
+      QString s = plainText();
       s.replace(",", ".");
       for (const TempoPattern& pa : tp) {
             QRegExp re(QString(pa.pattern)+"\\s*=\\s*(\\d+[.]{0,1}\\d*)");

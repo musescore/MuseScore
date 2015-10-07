@@ -38,6 +38,7 @@ Bend::Bend(Score* s)
    : Element(s)
       {
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
+      setPlayBend(true);
       }
 
 //---------------------------------------------------------
@@ -162,7 +163,7 @@ void Bend::draw(QPainter* painter) const
       {
       QPen pen(curColor(), _lw, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
       painter->setPen(pen);
-      painter->setBrush(QBrush(Qt::black));
+      painter->setBrush(QBrush(curColor()));
 
       qreal _spatium = spatium();
       const TextStyle* st = &score()->textStyle(TextStyleType::BENCH);
@@ -179,7 +180,7 @@ void Bend::draw(QPainter* painter) const
       arrowUp << QPointF(0, 0) << QPointF(aw*.5, aw) << QPointF(-aw*.5, aw);
       QPolygonF arrowDown;
       arrowDown << QPointF(0, 0) << QPointF(aw*.5, -aw) << QPointF(-aw*.5, -aw);
-
+      QFontMetrics fm(f);
       for (int pt = 0; pt < n; ++pt) {
             if (pt == (n-1))
                   break;
@@ -189,12 +190,15 @@ void Bend::draw(QPainter* painter) const
                   x2 = x;
                   painter->drawLine(QLineF(x, y, x2, y2));
 
-                  painter->setBrush(QBrush(Qt::black));
-                  painter->drawPolygon(arrowUp.translated(x2, y2 + _spatium * .2));
+                  painter->setBrush(curColor());
+                  painter->drawPolygon(arrowUp.translated(x2, y2));
 
                   int idx = (pitch + 12)/25;
                   const char* l = label[idx];
-                  painter->drawText(QRectF(x2, y2, .0, .0), Qt::AlignVCenter|Qt::TextDontClip, QString(l));
+                  QString s(l);
+                  qreal textWidth = fm.width(s);
+                  qreal textHeight = fm.height();
+                  painter->drawText(QRectF(x2 - textWidth / 2, y2 - textHeight / 2, .0, .0), Qt::AlignVCenter|Qt::TextDontClip, s);
 
                   y = y2;
                   }
@@ -218,8 +222,8 @@ void Bend::draw(QPainter* painter) const
                   painter->setBrush(Qt::NoBrush);
                   painter->drawPath(path);
 
-                  painter->setBrush(QBrush(Qt::black));
-                  painter->drawPolygon(arrowUp.translated(x2, y2 + _spatium * .2));
+                  painter->setBrush(curColor());
+                  painter->drawPolygon(arrowUp.translated(x2, y2 ));
 
                   int idx = (_points[pt+1].pitch + 12)/25;
                   const char* l = label[idx];
@@ -240,8 +244,8 @@ void Bend::draw(QPainter* painter) const
                   painter->setBrush(Qt::NoBrush);
                   painter->drawPath(path);
 
-                  painter->setBrush(QBrush(Qt::black));
-                  painter->drawPolygon(arrowDown.translated(x2, y2 - _spatium * .2));
+                  painter->setBrush(curColor());
+                  painter->drawPolygon(arrowDown.translated(x2, y2));
                   }
             x = x2;
             y = y2;
@@ -259,6 +263,8 @@ void Bend::write(Xml& xml) const
             xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
                .arg(v.time).arg(v.pitch).arg(v.vibrato));
             }
+      writeProperty(xml, P_ID::PLAY);
+      Element::writeProperties(xml);
       xml.etag();
       }
 
@@ -277,8 +283,56 @@ void Bend::read(XmlReader& e)
                   _points.append(pv);
                   e.readNext();
                   }
-            else
+            else if (e.name() == "play") {
+                  setPlayBend(e.readBool());
+                  }
+            else if (!Element::readProperties(e))
                   e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Bend::getProperty(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::PLAY:
+                  return bool(playBend());
+            default:
+                  return Element::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Bend::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            case P_ID::PLAY:
+                 setPlayBend(v.toBool());
+                 break;
+            default:
+                  return Element::setProperty(propertyId, v);
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Bend::propertyDefault(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::PLAY:
+                  return true;
+            default:
+                  return Element::propertyDefault(propertyId);
             }
       }
 

@@ -169,6 +169,8 @@ static const PropertyData propertyList[] = {
       { P_ID::LASSO_SIZE,          false, 0,               P_TYPE::SIZE_MM  },
 
       { P_ID::TIME_STRETCH,        false, 0,               P_TYPE::REAL     },
+      { P_ID::ORNAMENT_STYLE,      false, "ornamentStyle", P_TYPE::ORNAMENT_STYLE},
+
       { P_ID::TIMESIG,             false, 0,               P_TYPE::FRACTION },
       { P_ID::TIMESIG_GLOBAL,      false, 0,               P_TYPE::FRACTION },
       { P_ID::TIMESIG_STRETCH,     false, 0,               P_TYPE::FRACTION },
@@ -200,8 +202,8 @@ static const PropertyData propertyList[] = {
       { P_ID::NO_OFFSET,           false, "noOffset",              P_TYPE::INT  },
       { P_ID::IRREGULAR,           true,  "irregular",             P_TYPE::BOOL },
       { P_ID::ANCHOR,              false,  "anchor",               P_TYPE::INT },
-      { P_ID::SLUR_UOFF1,          false,  "o1",                   P_TYPE::POINT  },
 
+      { P_ID::SLUR_UOFF1,          false,  "o1",                   P_TYPE::POINT  },
       { P_ID::SLUR_UOFF2,          false,  "o2",                   P_TYPE::POINT  },
       { P_ID::SLUR_UOFF3,          false,  "o3",                   P_TYPE::POINT  },
       { P_ID::SLUR_UOFF4,          false,  "o4",                   P_TYPE::POINT  },
@@ -225,6 +227,7 @@ static const PropertyData propertyList[] = {
       { P_ID::ROLE,                false, "role",                  P_TYPE::INT },
       { P_ID::TRACK,               false, 0,                       P_TYPE::INT },
 
+      { P_ID::GLISSANDO_STYLE,     false, "glissandoStyle",        P_TYPE::GLISSANDO_STYLE},
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };
 
@@ -234,7 +237,9 @@ static const PropertyData propertyList[] = {
 
 P_TYPE propertyType(P_ID id)
       {
-      return propertyList[int(id)].type;
+          Q_ASSERT( propertyList[int(id)].id == id);
+
+          return propertyList[int(id)].type;
       }
 
 //---------------------------------------------------------
@@ -243,7 +248,8 @@ P_TYPE propertyType(P_ID id)
 
 bool propertyLink(P_ID id)
       {
-      return propertyList[int(id)].link;
+          Q_ASSERT( propertyList[int(id)].id == id);
+          return propertyList[int(id)].link;
       }
 
 //---------------------------------------------------------
@@ -252,7 +258,8 @@ bool propertyLink(P_ID id)
 
 const char* propertyName(P_ID id)
       {
-      return propertyList[int(id)].name;
+          Q_ASSERT( propertyList[int(id)].id == id);
+          return propertyList[int(id)].name;
       }
 
 //---------------------------------------------------------
@@ -283,6 +290,27 @@ QVariant getProperty(P_ID id, XmlReader& e)
                   return QVariant(e.readSize());
             case P_TYPE::STRING:
                   return QVariant(e.readElementText());
+            case P_TYPE::GLISSANDO_STYLE: {
+                QString value(e.readElementText());
+                if ( value == "whitekeys")
+                    return QVariant(int(MScore::GlissandoStyle::WHITE_KEYS));
+                else if ( value == "blackkeys")
+                    return QVariant(int(MScore::GlissandoStyle::BLACK_KEYS));
+                else if ( value == "diatonic")
+                    return QVariant(int(MScore::GlissandoStyle::DIATONIC));
+                else // e.g., normally "Chromatic"
+                    return QVariant(int(MScore::GlissandoStyle::CHROMATIC));
+            }
+              break;
+            case P_TYPE::ORNAMENT_STYLE:
+                  {
+                      QString value(e.readElementText());
+                      if ( value == "baroque")
+                          return QVariant(int(MScore::OrnamentStyle::BAROQUE));
+                      
+                      return QVariant(int(MScore::OrnamentStyle::DEFAULT));
+                  }
+                  break; // break is really not necessary because of the default return
             case P_TYPE::DIRECTION:
                   {
                   QString value(e.readElementText());

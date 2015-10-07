@@ -106,8 +106,8 @@ enum class MeasureNumberMode : char {
 //   @@ Measure
 ///    one measure in a system
 //
-//   @P firstSegment    Ms::Segment       the first segment of the measure (read-only)
-//   @P lastSegment     Ms::Segment       the last segment of the measure (read-only)
+//   @P firstSegment    Segment       the first segment of the measure (read-only)
+//   @P lastSegment     Segment       the last segment of the measure (read-only)
 //---------------------------------------------------------
 
 class Measure : public MeasureBase {
@@ -168,6 +168,7 @@ class Measure : public MeasureBase {
 
       void read(XmlReader&, int idx);
       void read(XmlReader& d) { read(d, 0); }
+      virtual void write(Xml& xml) const override { Element::write(xml); }
       void write(Xml&, int, bool writeSystemElements) const;
       void writeBox(Xml&) const;
       void readBox(XmlReader&);
@@ -219,10 +220,10 @@ class Measure : public MeasureBase {
       SegmentList* segments()                   { return &_segments; }
 
       qreal userStretch() const;
-      void setUserStretch(qreal v)              { _userStretch = v;    }
+      void setUserStretch(qreal v)              { _userStretch = v; }
 
       void layoutX(qreal stretch);
-      void layout(qreal width);
+      void layoutWidth(qreal width);
       void layout2();
 
       Chord* findChord(int tick, int track);
@@ -289,7 +290,7 @@ class Measure : public MeasureBase {
       bool hasVoice(int track) const;
       bool isMeasureRest(int staffIdx);
       bool isFullMeasureRest();
-      bool isRepeatMeasure(Part* part);
+      bool isRepeatMeasure(Staff* staff);
       bool visible(int staffIdx) const;
       bool slashStyle(int staffIdx) const;
 
@@ -322,8 +323,8 @@ class Measure : public MeasureBase {
       Measure* mmRestFirst() const;
       Measure* mmRestLast() const;
 
-      Element* nextElement(int staff);
-      Element* prevElement(int staff);
+      Element* nextElementStaff(int staff);
+      Element* prevElementStaff(int staff);
       virtual QString accessibleInfo() override;
       };
 

@@ -45,7 +45,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      cs     = s;
+      cs = s;
 
       styleWidgets = {
             { StyleIdx::staffUpperBorder,        staffUpperBorder       },
@@ -210,7 +210,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       // figured bass init
       QList<QString> fbFontNames = FiguredBass::fontNames();
-      foreach(const QString& family, fbFontNames)
+      for (const QString& family: fbFontNames)
             comboFBFont->addItem(family);
       comboFBFont->setCurrentIndex(0);
       connect(comboFBFont, SIGNAL(currentIndexChanged(int)), SLOT(on_comboFBFont_currentIndexChanged(int)));
@@ -250,11 +250,18 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             + QString("</i></td></tr><tr><td>$$</td><td>-</td><td><i>")
             + tr("the $ sign itself")
             + QString("</i></td></tr><tr><td>$:tag:</td><td>-</td><td><i>")
-            + tr("meta data tag")
+            + tr("meta data tag, see below")
             + QString("</i></td></tr></table><p>")
-            + tr("Available tags and their current values:")
+            + tr("Available meta data tags and their current values:")
             + QString("</p><table>");
-      // shown all tags for curent score, see also Score::init()
+      // show all tags for current score/part, see also Score::init()
+      if (cs->parentScore()) {
+            QMapIterator<QString, QString> j(cs->parentScore()->metaTags());
+            while (j.hasNext()) {
+                  j.next();
+                  toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(j.key()).arg(j.value());
+                  }
+            }
       QMapIterator<QString, QString> i(cs->metaTags());
       while (i.hasNext()) {
             i.next();
@@ -723,7 +730,7 @@ void EditStyle::setValues()
 
       QString mfont(lstyle.value(StyleIdx::MusicalSymbolFont).toString());
       int idx = 0;
-      for (auto i : ScoreFont::scoreFonts()) {
+      for (const auto& i : ScoreFont::scoreFonts()) {
             if (i.name().toLower() == mfont.toLower()) {
                   musicalSymbolFont->setCurrentIndex(idx);
                   break;

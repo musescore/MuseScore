@@ -51,17 +51,17 @@ const PaperSize paperSizes[] = {
       PaperSize("A7",        MM(74),   MM(105)),
       PaperSize("A8",        MM(52),   MM(74)),
       PaperSize("A9",        MM(37),   MM(52)),
+      PaperSize("A10",       MM(26),   MM(37)),
       PaperSize("B0",        MM(1000), MM(1414)),
       PaperSize("B1",        MM(707),  MM(1000)),
-      PaperSize("B10",       MM(31),   MM(44)),
       PaperSize("B2",        MM(500),  MM(707)),
       PaperSize("B3",        MM(353),  MM(500)),
       PaperSize("B4",        MM(250),  MM(353)),
-      PaperSize("B5",        MM(125),  MM(176)),
-      PaperSize("B6",        MM(88),   MM(125)),
-      PaperSize("B7",        MM(62),   MM(88)),
-      PaperSize("B8",        MM(44),   MM(62)),
-      PaperSize("B9",        MM(163),  MM(229)),
+      PaperSize("B6",        MM(125),  MM(176)),
+      PaperSize("B7",        MM(88),   MM(125)),
+      PaperSize("B8",        MM(62),   MM(88)),
+      PaperSize("B9",        MM(44),   MM(62)),
+      PaperSize("B10",       MM(31),   MM(44)),
       PaperSize("Comm10E",   MM(105),  MM(241)),
       PaperSize("DLE",       MM(110),  MM(220)),
       PaperSize("Folio",     MM(210),  MM(330)),
@@ -130,6 +130,7 @@ Page::Page(Score* s)
    : Element(s),
    _no(0)
       {
+      setFlags(0);
       bspTreeValid = false;
       }
 
@@ -149,6 +150,7 @@ QList<Element*> Page::items(const QRectF& r)
       QList<Element*> el = bspTree.items(r);
       return el;
 #else
+      Q_UNUSED(r)
       return QList<Element*>();
 #endif
       }
@@ -160,6 +162,7 @@ QList<Element*> Page::items(const QPointF& p)
             doRebuildBspTree();
       return bspTree.items(p);
 #else
+      Q_UNUSED(p)
       return QList<Element*>();
 #endif
       }

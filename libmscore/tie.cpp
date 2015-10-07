@@ -368,7 +368,7 @@ void Tie::layout()
             segment->setSystem(startNote()->chord()->segment()->measure()->system());
             SlurPos sPos;
             slurPos(&sPos);
-            segment->layout(sPos.p1, sPos.p2);
+            segment->layoutSegment(sPos.p1, sPos.p2);
             return;
             }
 
@@ -421,20 +421,20 @@ void Tie::layout()
 
             // case 1: one segment
             if (sPos.system1 == sPos.system2) {
-                  segment->layout(sPos.p1, sPos.p2);
+                  segment->layoutSegment(sPos.p1, sPos.p2);
                   segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
                   }
             // case 2: start segment
             else if (i == 0) {
                   qreal x = system->bbox().width();
-                  segment->layout(sPos.p1, QPointF(x, sPos.p1.y()));
+                  segment->layoutSegment(sPos.p1, QPointF(x, sPos.p1.y()));
                   segment->setSpannerSegmentType(SpannerSegmentType::BEGIN);
                   }
             // case 4: end segment
             else {
                   qreal x = firstNoteRestSegmentX(system);
 
-                  segment->layout(QPointF(x, sPos.p2.y()), sPos.p2);
+                  segment->layoutSegment(QPointF(x, sPos.p2.y()), sPos.p2);
                   segment->setSpannerSegmentType(SpannerSegmentType::END);
                   }
             ++i;

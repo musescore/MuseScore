@@ -50,7 +50,6 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
 include (UsePkgConfig1)
 include (TargetDoc)
 include (FindPulseAudio)
-include (FindLame)
 include (GetCompilerVersion)
 include (CreatePrecompiledHeader)
 
@@ -71,8 +70,9 @@ option(OMR           "enable PDF import"  OFF)                 # OMR - optical m
 # for installation see: http://ubuntuforums.org/showthread.php?t=1647350
 option(OCR           "enable OCR, requires OMR" OFF)           # requires tesseract 3.0, needs work on mac/win
 option(SOUNDFONT3    "ogg vorbis compressed fonts" ON)         # enable ogg vorbis compressed fonts, require ogg & vorbis
-option(HAS_AUDIOFILE "enable audio export" ON)               # requires libsndfile
+option(HAS_AUDIOFILE "enable audio export" ON)                 # requires libsndfile
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
+option(BUILD_LAME    "enable mp3 export" ON)                   # requires libmp3lame
 
 SET(JACK_LONGNAME "jack (jack audio connection kit)")
 SET(JACK_MIN_VERSION "0.98.0")
@@ -137,7 +137,7 @@ set(CMAKE_SKIP_RULE_DEPENDENCY TRUE)
 SET (MUSESCORE_NAME "MuseScore")
 SET(MUSESCORE_VERSION_MAJOR  "2")
 SET(MUSESCORE_VERSION_MINOR  "0")
-SET(MUSESCORE_VERSION_PATCH  "1")
+SET(MUSESCORE_VERSION_PATCH  "2")
 SET(MUSESCORE_VERSION       "${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}")
 SET(MUSESCORE_NAME_VERSION "${MUSESCORE_NAME} ${MUSESCORE_VERSION_MAJOR}")
 #
@@ -169,11 +169,26 @@ SET(QT_USE_QTNETWORK     TRUE)
 SET(QT_USE_QTDESIGNER    TRUE)
 SET(QT_USE_QTWEBKIT      TRUE)
 SET(QT_USE_QTXMLPATTERNS TRUE)
-SET(QT_USE_QTDECLARATIVE TRUE)
 SET(QT_USE_QTHELP        TRUE)
 
 #find_package(Qt5 COMPONENTS Widgets Xml Svg Network Designer WebKit Declarative)
 
+##
+## freetype2 >= 2.5.2
+##
+
+if (APPLE)
+      PKGCONFIG (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
+      if (FREETYPE_INCLUDE_DIRS)
+          STRING(REGEX REPLACE  "\"" "" FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
+          STRING(REGEX REPLACE  "\"" "" FREETYPE_LIBDIR ${FREETYPE_LIBDIR})
+          message("freetype2 detected ${FREETYPE_INCLUDE_DIRS} ${FREETYPE_LIBDIR} ${FREETYPE_LIBRARIES}")
+      else (FREETYPE_INCLUDE_DIRS)
+          message(FATAL_ERROR "freetype >= 2.5.2 is required\n")
+      endif (FREETYPE_INCLUDE_DIRS)
+else (APPLE)
+    find_package(Freetype REQUIRED)
+endif (APPLE)
 
 ##
 ## alsa >= 1.0.0
@@ -210,6 +225,28 @@ else (APPLE OR MINGW)
       endif (PULSEAUDIO_FOUND)
 endif (APPLE OR MINGW)
 
+##
+## lame
+##
+if (APPLE OR MINGW)
+      IF (BUILD_LAME)
+            include (FindLame)
+            set (USE_LAME 1)
+      ENDIF (BUILD_LAME)
+else (APPLE OR MINGW)
+      IF (BUILD_LAME)
+            include (FindLame)
+            IF (LAME_FOUND)
+                  set(USE_LAME 1)
+                  MESSAGE("LAME found.")
+            ELSE (LAME_FOUND)
+                  set(USE_LAME 0)
+                  MESSAGE("LAME not found.")
+            ENDIF (LAME_FOUND)
+      ELSE (BUILD_LAME)
+            MESSAGE(STATUS "LAME mp3 support disabled")
+      ENDIF (BUILD_LAME)
+endif (APPLE OR MINGW)
 
 ##
 ## find jack >= JACK_MIN_VERSION
@@ -364,6 +401,40 @@ if (NOT MINGW AND NOT APPLE)
     set (CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath=${_qt5Core_install_prefix}/lib")
     # install desktop file
     install( FILES build/mscore.desktop DESTINATION share/applications)
+    # compress man pages if gzip is installed (don't on OpenBSD)
+    # note: compressing man pages is normal on Linux but not OpenBSD
+    set(MAN_TARGET ${PROJECT_SOURCE_DIR}/build/mscore.1)
+    find_program( GZIP_EXECUTABLE gzip DOC "A tool for compressing manpages (optional)." )
+    if (GZIP_EXECUTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
+        message(STATUS "Found gzip. Man pages will be compressed.")
+        set(MAN_BUILD ${PROJECT_BINARY_DIR}/mscore.1.gz)
+        add_custom_command(
+            OUTPUT ${MAN_BUILD}
+            DEPENDS ${MAN_TARGET}
+            COMMAND ${GZIP_EXECUTABLE} < ${MAN_TARGET} > ${MAN_BUILD}
+            )
+        add_custom_target(manpages
+            DEPENDS ${MAN_BUILD}
+            COMMAND echo "Man pages have been compressed ready for installation."
+            VERBATIM
+            )
+        set(MAN_TARGET ${MAN_BUILD})
+    else (GZIP_EXECUTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
+        if (CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
+            message(STATUS "System is OpenBSD: Man pages will not be compressed.")
+        else (CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
+            message(STATUS "gzip not found (it is optional). Man pages will not be compressed.")
+        endif (CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
+        add_custom_target(manpages
+            COMMAND echo "Man pages will be installed uncompressed."
+            VERBATIM
+            )
+    endif (GZIP_EXECUTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
+    # install man pages in either compressed or uncompressed form
+    install( FILES ${MAN_TARGET} DESTINATION share/man/man1 COMPONENT doc)
+    # add .MSCZ and .MSCX to MIME database (informs system that filetypes .MSCZ & .MSCX are MuseScore files)
+    install( FILES ${PROJECT_SOURCE_DIR}/build/musescore.xml DESTINATION share/mime/packages COMPONENT doc)
+    # Note: must now run "update-mime-database" to apply changes. This is done in the Makefile.
 endif (NOT MINGW AND NOT APPLE)
 
 #
@@ -444,6 +515,7 @@ include_directories(
    ${VORBIS_INCDIR}
    ${SNDFILE_INCDIR}
    ${LAME_INCLUDE_DIR}
+   ${FREETYPE_INCLUDE_DIRS}
 )
 
 ##
@@ -458,9 +530,9 @@ include(Packaging)
 
 add_custom_target(lupdate
    COMMAND ${PROJECT_SOURCE_DIR}/build/gen-qt-projectfile ${PROJECT_SOURCE_DIR} > mscore.pro
-   COMMAND ${QT_LUPDATE_EXECUTABLE} -noobsolete ${PROJECT_BINARY_DIR}/mscore.pro
+   COMMAND ${QT_LUPDATE_EXECUTABLE} ${PROJECT_BINARY_DIR}/mscore.pro
    COMMAND ${PROJECT_SOURCE_DIR}/build/gen-instruments-projectfile ${PROJECT_SOURCE_DIR}/share/instruments > instruments.pro
-   COMMAND ${QT_LUPDATE_EXECUTABLE} -noobsolete ${PROJECT_BINARY_DIR}/instruments.pro
+   COMMAND ${QT_LUPDATE_EXECUTABLE} ${PROJECT_BINARY_DIR}/instruments.pro
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
 

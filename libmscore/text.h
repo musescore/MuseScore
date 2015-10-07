@@ -178,7 +178,7 @@ class TextBlock {
 //   @@ Text
 ///    Graphic representation of a text.
 //
-//   @P text  Qstring  the raw text
+//   @P text  string  the raw text
 //---------------------------------------------------------
 
 class Text : public Element {
@@ -291,7 +291,9 @@ class Text : public Element {
 
       virtual void write(Xml& xml) const override;
       virtual void read(XmlReader&) override;
-      void writeProperties(Xml&, bool = true, bool = true) const;
+      virtual void writeProperties(Xml& xml) const { writeProperties(xml, true, true); }
+      void writeProperties(Xml& xml, bool writeText) const { writeProperties(xml, writeText, true); }
+      void writeProperties(Xml&, bool, bool) const;
       bool readProperties(XmlReader&);
 
       void spellCheckUnderline(bool) {}
@@ -305,6 +307,8 @@ class Text : public Element {
 
       void setAbove(bool val) {  textStyle().setYoff(val ? -2.0 : 7.0); }
       void dragTo(const QPointF&);
+
+      virtual QLineF dragAnchor() const override;
 
       QVariant getProperty(P_ID propertyId) const;
       bool setProperty(P_ID propertyId, const QVariant& v);

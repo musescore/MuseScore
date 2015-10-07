@@ -21,7 +21,7 @@
 using namespace Ms;
 
 //---------------------------------------------------------
-//   TestNote
+//   TestText
 //---------------------------------------------------------
 
 class TestText : public QObject, public MTest
@@ -34,6 +34,7 @@ class TestText : public QObject, public MTest
       void testSpecialSymbols();
       void testTextProperties();
       void testCompatibility();
+      void testDelete();
       };
 
 //---------------------------------------------------------
@@ -44,6 +45,28 @@ void TestText::initTestCase()
       {
       initMTest();
       }
+
+//---------------------------------------------------------
+//   testDelete
+//---------------------------------------------------------
+
+void TestText::testDelete()
+      {
+      Text* text = new Text(score);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
+
+      text->setPlainText("aaa bbb ccc\nddd eee fff\nggg hhh iii");
+      text->layout();
+      QCOMPARE(text->xmlText(), QString("aaa bbb ccc\nddd eee fff\nggg hhh iii"));
+
+      text->startEdit(0, QPoint());
+      text->moveCursorToStart();
+      QVERIFY(text->movePosition(QTextCursor::Down, QTextCursor::KeepAnchor, 2));
+      text->deleteSelectedText();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("ggg hhh iii"));
+      }
+
 
 //---------------------------------------------------------
 ///   testText

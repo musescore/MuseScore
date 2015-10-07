@@ -3042,6 +3042,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glissando-vizsgáló</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Arpeggio</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Lejátszás</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Lejátszás visszaállítása</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3106,6 +3125,30 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Időbeli nyújtás visszaállítása</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Díszítés stílusa</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Alapértelmezett</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barokk</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Díszítés típusának visszaállítása</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Lejátszás</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Lejátszási érték visszaállítása</translation>
     </message>
 </context>
 <context>
@@ -3276,6 +3319,25 @@ space unit</extracomment>
     <message>
         <source>User position</source>
         <translation>Felhasználói pozíció</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Glissando-vizsgáló</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Hajlítás</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Lejátszás</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Lejátszási érték visszaállítása</translation>
     </message>
 </context>
 <context>
@@ -3558,6 +3620,42 @@ space unit</extracomment>
     <message>
         <source>Show text</source>
         <translation>Mutasd a szöveget</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Stílus</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Stílusérték visszaállítása</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Lejátszás stílusa</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Kromatikus</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Fehér billentyűk</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Fekete billentyűk</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Diatonikus</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Lejátszás</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Lejátszási érték visszaállítása</translation>
     </message>
 </context>
 <context>
@@ -4366,6 +4464,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Szövegkeret-vizsgáló</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Szövegkeret</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Alsó térköz</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Felső margó</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Érték visszaállítása</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Felső térköz visszaállítása</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Alsó térköz visszaállítása</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Bal margó</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Alsó margó</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Jobb margóérték visszaállítása</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Jobb margó</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Alsó margóérték visszaállítása</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Felső margóérték visszaállítása</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Bal margóérték visszaállítása</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Felső térköz</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>sp</translation>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4496,12 +4666,36 @@ space unit</extracomment>
         <translation>Kettős paránytrilla</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Hullámos vonal</translation>
-    </message>
-    <message>
         <source>Reset value</source>
         <translation>Érték visszaállítása</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Díszítés stílusa</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Irány</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Alapértelmezett</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Barokk</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Díszítés típusának visszaállítása</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Lejátszás</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Lejátszási érték visszaállítása</translation>
     </message>
 </context>
 <context>
@@ -4876,6 +5070,13 @@ space unit</extracomment>
     <message>
         <source>Add time signature to palette</source>
         <translation>Ütemmutató-paletta hozzáadása</translation>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>atonális</translation>
     </message>
 </context>
 <context>
@@ -6048,14 +6249,6 @@ sikertelen:</translation>
         <translation>a $ jel maga</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>metaadat-címke</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Elérhető címkék és aktuális értékük:</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Alkalmazás minden kivonatra</translation>
     </message>
@@ -6070,6 +6263,14 @@ sikertelen:</translation>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>oldalszám, ha több mint egy oldal van</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>metaadat-címke, lásd alább</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Elérhető metaadat-címkék és aktuális értékük:</translation>
     </message>
 </context>
 <context>
@@ -7198,7 +7399,11 @@ válassz egy másik nevet:</translation>
     </message>
     <message>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
-        <translation type="unfinished"/>
+        <translation>A kotta nem menthető online. Javítsa a hibás ütemeket és próbálja újra.</translation>
+    </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Kérjen segítséget</translation>
     </message>
 </context>
 <context>
@@ -7683,10 +7888,6 @@ nem sikerült: %2</translation>
         <translation>A stílus írása nem sikerült: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>fájl nem található</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Nincs kijelölés</translation>
     </message>
@@ -7697,6 +7898,10 @@ nem sikerült: %2</translation>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>%2. sor %1. ütem %3. szólam túl hosszú. Várt: %4; Kapott: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>XML-olvasási hiba az %1. sor %2. oszlopában: %3 </translation>
     </message>
 </context>
 <context>
@@ -8010,6 +8215,12 @@ Jelöld ki az egyesítendő ütemeket és próbáld újra</translation>
     <message>
         <source>Transparent background</source>
         <translation>Átlátszó háttér</translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>Az ütemet nem lehet itt elválasztani:
+Az ütem első időegysége</translation>
     </message>
 </context>
 <context>
@@ -10410,6 +10621,14 @@ paletta-fájl írása sikertelen:</translation>
         <source>Filter</source>
         <translation>Szűrő</translation>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>RPN értékek exportálása</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10732,11 +10951,11 @@ Látogass el a &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore weboldal
     </message>
     <message>
         <source>MuseScore: Upload Error</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: Feltöltési hiba</translation>
     </message>
     <message>
         <source>Do you want to try to load this file anyway?</source>
-        <translation type="unfinished"/>
+        <translation>Megpróbálja mindenképp betölteni a fájlt?</translation>
     </message>
 </context>
 <context>
@@ -11267,6 +11486,14 @@ Szeretnéd felülírni?</translation>
     <message>
         <source>System flag</source>
         <translation>Sorcsoportjelzés</translation>
+    </message>
+    <message>
+        <source>Search...</source>
+        <translation>Keresés...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Törlés</translation>
     </message>
 </context>
 <context>
@@ -13615,10 +13842,6 @@ munkaterület-fájl írása sikertelen:</translation>
         <translation>Tollas gerenda, gyorsabb</translation>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Paletta</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Lejátszás panel</translation>
     </message>
@@ -13653,10 +13876,6 @@ munkaterület-fájl írása sikertelen:</translation>
     <message>
         <source>Add lyrics</source>
         <translation>Dalszöveg hozzáadása</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Tempójelzés...</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -14015,16 +14234,12 @@ munkaterület-fájl írása sikertelen:</translation>
         <translation>Kijelölés ismétlése</translation>
     </message>
     <message>
-        <source>Pan piano roll</source>
-        <translation>Zongora-leporelló követése</translation>
-    </message>
-    <message>
         <source>Toggle pan piano roll</source>
-        <translation>Zongora-leporelló követése ki/be</translation>
+        <translation>Zongorahenger követése ki/be</translation>
     </message>
     <message>
         <source>Pan roll during playback</source>
-        <translation>A zongora-leporelló követése lejátszás alatt</translation>
+        <translation>Zongorahenger követése lejátszás alatt</translation>
     </message>
     <message>
         <source>Documents Side by Side</source>
@@ -15582,6 +15797,22 @@ munkaterület-fájl írása sikertelen:</translation>
         <source>Set loop in position</source>
         <translation>Újrakezdés elejének pozíciója</translation>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Eszköztárak</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Tempójelzés</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation>Nagyítás 100%-ra</translation>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation>Zongorahenger görgetése</translation>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -16632,6 +16863,10 @@ az ütem nem üres</translation>
     <message>
         <source>Tablature2</source>
         <translation>Tabulatúra 2</translation>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>Violinkulcs opcionális 8vb</translation>
     </message>
 </context>
 <context>
@@ -17743,10 +17978,6 @@ az ütem nem üres</translation>
     <message>
         <source>Prallprall line</source>
         <translation>Kettős paránytrilla vonal</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Hullámos vonal</translation>
     </message>
 </context>
 <context>

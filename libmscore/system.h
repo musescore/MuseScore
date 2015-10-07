@@ -44,6 +44,7 @@ class BarLine;
 
 class SysStaff {
       QRectF _bbox;           ///< Bbox of StaffLines.
+      qreal _yOff;            ///< offset of top staff line within bbox
       qreal _distanceUp;      ///< distance to previous staff
       qreal _distanceDown;    ///< distance to next staff
       bool _show;             ///< derived from Staff or false if empty
@@ -55,9 +56,10 @@ class SysStaff {
       const QRectF& bbox() const    { return _bbox; }
       QRectF& bbox()                { return _bbox; }
       QRectF& rbb()                 { return _bbox; }
-      qreal y() const               { return _bbox.y(); }
       qreal right() const           { return _bbox.right(); }
       void setbbox(const QRectF& r) { _bbox = r; }
+      qreal y() const;
+      void setYOff(qreal offset);
 
       qreal distanceUp() const      { return _distanceUp;   }
       void setDistanceUp(qreal v)   { _distanceUp = v;      }
@@ -117,7 +119,7 @@ class System : public Element {
 
       Page* page() const                 { return (Page*)parent(); }
 
-      virtual void layout(qreal xoffset);
+      virtual void layoutSystem(qreal xoffset);
       void layout2();                     ///< Called after Measure layout.
       void clear();                       ///< Clear measure list.
 

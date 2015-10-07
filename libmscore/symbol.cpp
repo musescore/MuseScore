@@ -30,7 +30,6 @@ Symbol::Symbol(Score* s)
    : BSymbol(s)
       {
       _sym = SymId::accidentalSharp;        // arbitrary valid default
-      setZ(int(Element::Type::SYMBOL) * 100);
       }
 
 Symbol::Symbol(const Symbol& s)
@@ -38,7 +37,6 @@ Symbol::Symbol(const Symbol& s)
       {
       _sym       = s._sym;
       _scoreFont = s._scoreFont;
-      setZ(int(Element::Type::SYMBOL) * 100);
       }
 
 //---------------------------------------------------------

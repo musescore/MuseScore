@@ -153,10 +153,7 @@ set(QT_QTGUI_LIBRARY ${QT_QTGUI_LIBRARIES})
 
 set(_qt_modules
   Core
-  Declarative
   Widgets
-  Script
-  ScriptTools
   Network
   Test
   Designer

@@ -189,7 +189,7 @@ p, li { white-space: pre-wrap; }
     <name>ArticulationProperties</name>
     <message>
         <source>MuseScore: Articulations Properties</source>
-        <translation>MuseScore: Параметры штрихов</translation>
+        <translation>MuseScore: Свойства артикуляции</translation>
     </message>
     <message>
         <source>Appearance</source>
@@ -325,7 +325,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Break lines every X measures</source>
-        <translation>Перенос строки каждые Х тактов</translation>
+        <translation>Разрыв строки каждые Х тактов</translation>
     </message>
 </context>
 <context>
@@ -3051,6 +3051,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Инспектор глиссандо</translation>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>Арпеджио</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Играть</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Сбросить значение</translation>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3115,6 +3134,30 @@ space unit</extracomment>
     <message>
         <source>Reset Time stretch value</source>
         <translation>Сбросить значение растяжения времени</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation>Стиль орнаментики</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>По умолчанию</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Барочный</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Сбросить значение</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Играть</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Сбросить значение</translation>
     </message>
 </context>
 <context>
@@ -3285,6 +3328,25 @@ space unit</extracomment>
     <message>
         <source>User position</source>
         <translation>Пользовательская позиция</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation>Инспектор глиссандо</translation>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>Бенд</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Играть</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Сбросить значение</translation>
     </message>
 </context>
 <context>
@@ -3567,6 +3629,42 @@ space unit</extracomment>
     <message>
         <source>Show text</source>
         <translation>Показать текст</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Стиль</translation>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation>Сбросить значение</translation>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation>Играть стиль</translation>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation>Хроматический</translation>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation>Белые клавиши</translation>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation>Черные клавиши</translation>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation>Диатонический</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Играть</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation>Сбросить значение</translation>
     </message>
 </context>
 <context>
@@ -4038,7 +4136,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Tuning</source>
-        <translation>Настройка</translation>
+        <translation>Строй</translation>
     </message>
     <message>
         <source>Velocity</source>
@@ -4375,6 +4473,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation>Инспектор текстовой рамки</translation>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>Текстовая рамка</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation>Отступ снизу</translation>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>Верхнее поле</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>Сбросить значение</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation>Сбросить значение верхнего отступа</translation>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation>Сбросить значение нижнего отступа</translation>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation>Левое поле</translation>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation>мм</translation>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation>Нижнее поле</translation>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation>Сбросить значение правого поля</translation>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation>Правое поле</translation>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation>Сбросить значение нижнего поля</translation>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation>Сбросить значение верхнего поля</translation>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation>Сбросить значение левого поля</translation>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation>Отступ сверху</translation>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation>инт</translation>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4505,11 +4675,35 @@ space unit</extracomment>
         <translation>Двойной мордент</translation>
     </message>
     <message>
-        <source>Wavy Line</source>
-        <translation>Волнистая линия</translation>
+        <source>Reset value</source>
+        <translation>Сбросить значение</translation>
     </message>
     <message>
-        <source>Reset value</source>
+        <source>Ornament Style</source>
+        <translation>Стиль орнаментики</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Направление</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>По умолчанию</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation>Барочный</translation>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation>Сбросить значение</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>Играть</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation>Сбросить значение</translation>
     </message>
 </context>
@@ -4885,6 +5079,13 @@ space unit</extracomment>
     <message>
         <source>Add time signature to palette</source>
         <translation>Добавить тактовый размер в палитру</translation>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation>атональный</translation>
     </message>
 </context>
 <context>
@@ -6059,14 +6260,6 @@ failed: </source>
         <translation>  $ сам знак</translation>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>метка метаданных</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation>Доступные метки и их текущие значения:</translation>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>Применить ко всем партиям</translation>
     </message>
@@ -6081,6 +6274,14 @@ failed: </source>
     <message>
         <source>page number, if there is more than one page</source>
         <translation>номер страницы, если страниц больше одной</translation>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation>тег метадаты, смотри ниже</translation>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
+        <translation>Доступные метки метаданных и их текущие значения:</translation>
     </message>
 </context>
 <context>
@@ -7124,7 +7325,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>&amp;Инструменты</translation>
+        <translation>&amp;Действия</translation>
     </message>
     <message>
         <source>No score</source>
@@ -7208,7 +7409,11 @@ please choose a different name:</source>
     </message>
     <message>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Эта партитура не может быть загружена на сервер. Пожалуйста, исправьте такты с ошибками и попробуйте еще раз.</translation>
+    </message>
+    <message>
+        <source>Ask for Help</source>
+        <translation>Вызов Справки</translation>
     </message>
 </context>
 <context>
@@ -7412,7 +7617,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Single Palette</source>
-        <translation type="unfinished"/>
+        <translation>Одна палитра</translation>
     </message>
 </context>
 <context>
@@ -7693,10 +7898,6 @@ failed: %2</source>
         <translation>Запись стиля не удалась: %1</translation>
     </message>
     <message>
-        <source>file not found</source>
-        <translation>файл не найден:</translation>
-    </message>
-    <message>
         <source>No selection</source>
         <translation>Нет выделения</translation>
     </message>
@@ -7707,6 +7908,10 @@ failed: %2</source>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
         <translation>Такт %1, нотоносец %2, голос %3 слишком длинный. Ожидается: %4; Сейчас: %5</translation>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
+        <translation>Ошибка чтения XML в строке %1, колонке %2: %3</translation>
     </message>
 </context>
 <context>
@@ -8020,6 +8225,12 @@ Please select a range of measures to join and try again</source>
     <message>
         <source>Transparent background</source>
         <translation>Прозрачный фон</translation>
+    </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>Невозможно разделить такт в этом месте:
+Первая доля такта</translation>
     </message>
 </context>
 <context>
@@ -10420,6 +10631,14 @@ failed: </source>
         <source>Filter</source>
         <translation>Фильтр</translation>
     </message>
+    <message>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <source>Export RPNs</source>
+        <translation>Экспорт RPN</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -10742,11 +10961,11 @@ Visit the &lt;a href=&quot;http://musescore.org&quot;&gt;MuseScore website&lt;/a
     </message>
     <message>
         <source>MuseScore: Upload Error</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore: ошибка загрузки на сервер</translation>
     </message>
     <message>
         <source>Do you want to try to load this file anyway?</source>
-        <translation type="unfinished"/>
+        <translation>Хотите попробовать загрузить файл несмотря на это?</translation>
     </message>
 </context>
 <context>
@@ -11277,6 +11496,14 @@ Do you want to overwrite it?</source>
         <source>System flag</source>
         <translation>Системный флаг</translation>
     </message>
+    <message>
+        <source>Search...</source>
+        <translation>Найти...</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Очистить</translation>
+    </message>
 </context>
 <context>
     <name>SynthControl</name>
@@ -11310,7 +11537,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Tuning</source>
-        <translation>Настройка</translation>
+        <translation>Строй</translation>
     </message>
     <message>
         <source>Hz</source>
@@ -11367,7 +11594,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Master tuning</source>
-        <translation>Общая настройка</translation>
+        <translation>Общий строй</translation>
     </message>
 </context>
 <context>
@@ -13624,10 +13851,6 @@ failed: </source>
         <translation>Расширение вязок, ускорение</translation>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>Палитра</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>Панель воспроизведения</translation>
     </message>
@@ -13662,10 +13885,6 @@ failed: </source>
     <message>
         <source>Add lyrics</source>
         <translation>Добавить вокальный текст</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation>Темп...</translation>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -14022,10 +14241,6 @@ failed: </source>
     <message>
         <source>Repeat selection</source>
         <translation>Повторить выделение</translation>
-    </message>
-    <message>
-        <source>Pan piano roll</source>
-        <translation>Панорама матричного редактора</translation>
     </message>
     <message>
         <source>Toggle pan piano roll</source>
@@ -15591,6 +15806,22 @@ failed: </source>
         <source>Set loop in position</source>
         <translation>Установить начало цикла</translation>
     </message>
+    <message>
+        <source>Palettes</source>
+        <translation>Палитры</translation>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation>Обозначение темпа</translation>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation>Масштаб 100%</translation>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>addRemoveTimeSig</name>
@@ -16640,6 +16871,10 @@ Measure is not empty</source>
     <message>
         <source>Tablature2</source>
         <translation>Табулатура2</translation>
+    </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation>Скрипичный ключ, 8vb по желанию</translation>
     </message>
 </context>
 <context>
@@ -17751,10 +17986,6 @@ Measure is not empty</source>
     <message>
         <source>Prallprall line</source>
         <translation>Двойной мордент</translation>
-    </message>
-    <message>
-        <source>Wavy line</source>
-        <translation>Волнистая линия</translation>
     </message>
 </context>
 <context>

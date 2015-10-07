@@ -1028,7 +1028,7 @@ void GuitarPro::setTempo(int tempo, Measure* measure)
       {
       TempoText* tt = new TempoText(score);
       tt->setTempo(double(tempo)/60.0);
-      tt->setXmlText(QString("<sym>unicodeNoteQuarterUp</sym> = %1").arg(tempo));
+      tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempo));
 
       tt->setTrack(0);
       Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
@@ -1126,7 +1126,7 @@ void GuitarPro::createSlur(bool hasSlur, int staffIdx, ChordRest* cr)
       }
 
 //---------------------------------------------------------
-//   createSlur
+//   createOttava
 //---------------------------------------------------------
 
 void GuitarPro::createOttava(bool hasOttava, int track, ChordRest* cr, QString value)
@@ -2143,6 +2143,10 @@ void GuitarPro3::read(QFile* fp)
             }
       }
 
+//---------------------------------------------------------
+//   readBeatEffects
+//---------------------------------------------------------
+
 int GuitarPro3::readBeatEffects(int track, Segment* segment)
       {
       int effects = 0;
@@ -2394,10 +2398,13 @@ Score::FileError importGTP(Score* score, const QString& name)
                   p->setStaves(2);
                   Staff* s1 = p->staff(1);
 
-                  StaffType st = *StaffType::preset(StaffTypes::TAB_DEFAULT);
-                  st.setSlashStyle(true);
+                  int lines = staff->part()->instrument()->stringData()->strings();
+                  StaffTypes sts = StaffTypes::TAB_DEFAULT;
+                  if (lines == 4)
+                        sts = StaffTypes::TAB_4COMMON;
+                  StaffType st = *StaffType::preset(sts);
                   s1->setStaffType(&st);
-                  s1->setLines(staff->part()->instrument()->stringData()->strings());
+                  s1->setLines(lines);
                   cloneStaff(s,s1);
                   p->staves()->front()->addBracket(BracketItem(BracketType::NORMAL, 2));
                   }
@@ -2409,12 +2416,6 @@ Score::FileError importGTP(Score* score, const QString& name)
             excerpt->setTitle(part->partName());
             excerpt->parts().append(part);
             score->excerpts().append(excerpt);
-
-            if (staff->part()->instrument()->stringData()->strings() > 0 && part->staves()->front()->staffType()->group() == StaffGroup::STANDARD) {
-                  Staff* staff2 = pscore->staff(1);
-                  staff2->setStaffType(StaffType::preset(StaffTypes::TAB_DEFAULT));
-                  staff2->setLines(staff->part()->instrument()->stringData()->strings());
-            }
 
             //
             // create excerpt title

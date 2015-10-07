@@ -18,6 +18,7 @@
 #include "segment.h"
 #include "measure.h"
 #include "undo.h"
+#include "staff.h"
 
 namespace Ms {
 
@@ -538,10 +539,14 @@ void Spanner::computeEndElement()
                         qDebug("%s no end element for tick %d", name(), tick2());
                         return;
                         }
-                  int nticks = endCR()->tick() + endCR()->actualTicks() - _tick;
-                  if (_ticks != nticks) {
-                        qDebug("%s ticks changed, %d -> %d", name(), _ticks, nticks);
-                        setTicks(nticks);
+                  if (!endCR()->measure()->isMMRest()) {
+                        int nticks = endCR()->tick() + endCR()->actualTicks() - _tick;
+                        if (_ticks != nticks) {
+                              qDebug("%s ticks changed, %d -> %d", name(), _ticks, nticks);
+                              setTicks(nticks);
+                              if (type() == Element::Type::OTTAVA)
+                                    staff()->updateOttava();
+                              }
                         }
                   }
                   break;

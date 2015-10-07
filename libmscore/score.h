@@ -24,7 +24,6 @@
 #include "synthesizerstate.h"
 #include "mscoreview.h"
 #include "segment.h"
-#include "accidental.h"
 #include "ottava.h"
 #include "spannermap.h"
 #include "rehearsalmark.h"
@@ -230,51 +229,57 @@ enum class PasteStatus : char {
 
 //---------------------------------------------------------
 //   @@ Score
-//   @P firstMeasure    Ms::Measure       the first measure of the score (read only)
-//   @P firstMeasureMM  Ms::Measure       the first multi-measure rest measure of the score (read only)
-//   @P lastMeasure     Ms::Measure       the last measure of the score (read only)
-//   @P lastMeasureMM   Ms::Measure       the last multi-measure rest measure of the score (read only)
-//   @P lastSegment     Ms::Segment       the last score segment (read-only)
-//   @P name            QString           name of the score
+//   @P composer        string            composer of the score (read only)
+//   @P duration        int               duration of score in seconds (read only)
+//   @P excerpts        array[Excerpt]    the list of the excerpts (linked parts)
+//   @P firstMeasure    Measure           the first measure of the score (read only)
+//   @P firstMeasureMM  Measure           the first multi-measure rest measure of the score (read only)
+//   @P harmonyCount    int               number of harmony items (read only)
+//   @P hasHarmonies    bool              score has chord symbols (read only)
+//   @P hasLyrics       bool              score has lyrics (read only)
+//   @P keysig          int               key signature at the start of the score (read only)
+//   @P lastMeasure     Measure           the last measure of the score (read only)
+//   @P lastMeasureMM   Measure           the last multi-measure rest measure of the score (read only)
+//   @P lastSegment     Segment           the last score segment (read-only)
+//   @P lyricCount      int               number of lyric items (read only)
+//   @P name            string            name of the score
+//   @P nmeasures       int               number of measures (read only)
 //   @P npages          int               number of pages (read only)
 //   @P nstaves         int               number of staves (read only)
 //   @P ntracks         int               number of tracks (staves * 4) (read only)
-//   @P nmeasures       int               number of measures (read only)
-//   @P parts           array[Ms::Part]   the list of parts (read only)
-//   @P title           QString           title of the score (read only)
-//   @P subtitle        QString           subtitle of the score (read only)
-//   @P composer        QString           composer of the score (read only)
-//   @P poet            QString           poet of the score (read only)
-//   @P hasLyrics       bool              score has lyrics (read only)
-//   @P hasHarmonies    bool              score has chord symbols (read only)
-//   @P keysig          int               key signature at the start of the score (read only)
-//   @P duration        int               duration of score in seconds (read only)
-//   @P excerpts        array[Ms::Excerpt] the list of the excerpts (linked parts)
+// not to be documented?
+//   @  pageFormat      PageFormat        the page format for the score
+//   @P parts           array[Part]       the list of parts (read only)
+//   @P poet            string            poet of the score (read only)
+//   @P subtitle        string            subtitle of the score (read only)
+//   @P title           string            title of the score (read only)
 //---------------------------------------------------------
 
 class Score : public QObject {
       Q_OBJECT
-      Q_PROPERTY(Ms::Measure*           firstMeasure      READ firstMeasure)
-      Q_PROPERTY(Ms::Measure*           firstMeasureMM    READ firstMeasureMM)
-      Q_PROPERTY(Ms::Measure*           lastMeasure       READ lastMeasure)
-      Q_PROPERTY(Ms::Measure*           lastMeasureMM     READ lastMeasureMM)
-      Q_PROPERTY(Ms::Segment*           lastSegment       READ lastSegment)
-      Q_PROPERTY(QString                name              READ name           WRITE setName)
-      Q_PROPERTY(int                    npages            READ npages)
-      Q_PROPERTY(int                    nstaves           READ nstaves)
-      Q_PROPERTY(int                    ntracks           READ ntracks)
-      Q_PROPERTY(int                    nmeasures         READ nmeasures)
-      Q_PROPERTY(QQmlListProperty<Ms::Part> parts     READ qmlParts)
-      Q_PROPERTY(QString                title             READ title)
-      Q_PROPERTY(QString                subtitle          READ subtitle)
-      Q_PROPERTY(QString                composer          READ composer)
-      Q_PROPERTY(QString                poet              READ poet)
-      Q_PROPERTY(bool                   hasLyrics         READ hasLyrics)
-      Q_PROPERTY(bool                   hasHarmonies      READ hasHarmonies)
-      Q_PROPERTY(int                    keysig            READ keysig)
-      Q_PROPERTY(int                    duration          READ duration)
-      Q_PROPERTY(QQmlListProperty<Ms::Excerpt> excerpts   READ qmlExcerpts)
-      Q_PROPERTY(Ms::PageFormat*        pageFormat        READ pageFormat     WRITE undoChangePageFormat)
+      Q_PROPERTY(QString                        composer          READ composer)
+      Q_PROPERTY(int                            duration          READ duration)
+      Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
+      Q_PROPERTY(Ms::Measure*                   firstMeasure      READ firstMeasure)
+      Q_PROPERTY(Ms::Measure*                   firstMeasureMM    READ firstMeasureMM)
+      Q_PROPERTY(int                            harmonyCount      READ harmonyCount)
+      Q_PROPERTY(bool                           hasHarmonies      READ hasHarmonies)
+      Q_PROPERTY(bool                           hasLyrics         READ hasLyrics)
+      Q_PROPERTY(int                            keysig            READ keysig)
+      Q_PROPERTY(Ms::Measure*                   lastMeasure       READ lastMeasure)
+      Q_PROPERTY(Ms::Measure*                   lastMeasureMM     READ lastMeasureMM)
+      Q_PROPERTY(Ms::Segment*                   lastSegment       READ lastSegment)
+      Q_PROPERTY(int                            lyricCount        READ lyricCount)
+      Q_PROPERTY(QString                        name              READ name           WRITE setName)
+      Q_PROPERTY(int                            nmeasures         READ nmeasures)
+      Q_PROPERTY(int                            npages            READ npages)
+      Q_PROPERTY(int                            nstaves           READ nstaves)
+      Q_PROPERTY(int                            ntracks           READ ntracks)
+      Q_PROPERTY(Ms::PageFormat*                pageFormat        READ pageFormat     WRITE undoChangePageFormat)
+      Q_PROPERTY(QQmlListProperty<Ms::Part>     parts             READ qmlParts)
+      Q_PROPERTY(QString                        poet              READ poet)
+      Q_PROPERTY(QString                        subtitle          READ subtitle)
+      Q_PROPERTY(QString                        title             READ title)
 
    public:
       enum class FileError : char {
@@ -478,9 +483,14 @@ class Score : public QObject {
 
       QQmlListProperty<Ms::Part> qmlParts() { return QQmlListProperty<Ms::Part>(this, _parts); }
       QQmlListProperty<Ms::Excerpt> qmlExcerpts() { return QQmlListProperty<Ms::Excerpt>(this, _excerpts); }
+      FileError loadCompressedMsc(QIODevice*, bool ignoreVersionError);
+      FileError read114(XmlReader&);
+      FileError read1(XmlReader&, bool ignoreVersionError);
 
    protected:
       void createPlayEvents(Chord*);
+      void createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord, int& ontime);
+
       SynthesizerState _synthesizerState;
 
    signals:
@@ -513,6 +523,8 @@ class Score : public QObject {
       void cmdAddOttava(Ottava::Type);
       void cmdAddStretch(qreal);
 
+      void addRemoveBreaks(int interval, bool lock);
+
       bool transpose(Note* n, Interval, bool useSharpsFlats);
       void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&);
       bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
@@ -524,9 +536,6 @@ class Score : public QObject {
 
       void write(Xml&, bool onlySelection);
       bool read(XmlReader&);
-      FileError read114(XmlReader&);
-      FileError read1(XmlReader&, bool ignoreVersionError);
-      FileError loadCompressedMsc(QString name, bool ignoreVersionError);
 
       QList<Staff*>& staves()                { return _staves; }
       const QList<Staff*>& staves() const    { return _staves; }
@@ -603,8 +612,8 @@ class Score : public QObject {
 
       // undo/redo ops
       void addArticulation(ArticulationType);
-      void changeAccidental(Accidental::Type);
-      void changeAccidental(Note* oNote, Ms::Accidental::Type);
+      void changeAccidental(AccidentalType);
+      void changeAccidental(Note* oNote, Ms::AccidentalType);
 
       void addElement(Element*);
       void removeElement(Element*);
@@ -625,7 +634,9 @@ class Score : public QObject {
       void repitchNote(const Position& pos, bool replace);
       void cmdAddPitch(int pitch, bool addFlag);
 
+      //@ to be used at least once by plugins of type "dialog" before score modifications to make them undoable
       Q_INVOKABLE void startCmd();        // start undoable command
+      //@ to be used at least once by plugins of type "dialog" after score modifications to make them undoable
       Q_INVOKABLE void endCmd(bool rollback = false);          // end undoable command
       void end();             // layout & update canvas
       void end1();
@@ -664,6 +675,7 @@ class Score : public QObject {
       void setShowVBox(bool v)            { _showVBox = v;            }
 
       FileError loadMsc(QString name, bool ignoreVersionError);
+      FileError loadMsc(QString name, QIODevice*, bool ignoreVersionError);
 
       bool saveFile(QFileInfo& info);
       void saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false);
@@ -774,6 +786,7 @@ class Score : public QObject {
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
       void renderSpanners(EventMap* events, int staffIdx);
+      int renderMetronome(EventMap* events, Measure* m, int playPos, int tickOffset, bool countIn);
 
       int mscVersion() const    { return _mscVersion; }
       void setMscVersion(int v) { _mscVersion = v; }
@@ -834,6 +847,7 @@ class Score : public QObject {
       RepeatList* repeatList() const;
       qreal utick2utime(int tick) const;
       int utime2utick(qreal utime) const;
+      //@ ??
       Q_INVOKABLE void updateRepeatList(bool expandRepeats);
 
       void nextInputPos(ChordRest* cr, bool);
@@ -861,6 +875,7 @@ class Score : public QObject {
       Ms::Measure* lastMeasureMM() const;
       MeasureBase* measure(int idx) const;
 
+      //@ returns the first segment of the score of the given type (use Segment.Clef, ... enum)
       Q_INVOKABLE Ms::Segment* firstSegment(Segment::Type s = Segment::Type::All) const;
       Ms::Segment* firstSegmentMM(Segment::Type s = Segment::Type::All) const;
       Ms::Segment* lastSegment() const;
@@ -895,6 +910,7 @@ class Score : public QObject {
       void removeAudio();
       void enqueueMidiEvent(MidiInputEvent ev) { midiInputQueue.enqueue(ev); }
 
+      //@ ??
       Q_INVOKABLE void doLayout();
       void layoutSystems();
       void layoutSystems2();
@@ -930,7 +946,9 @@ class Score : public QObject {
       QMap<QString, QString>& metaTags()               { return _metaTags; }
       void setMetaTags(const QMap<QString,QString>& t) { _metaTags = t; }
 
-      Q_INVOKABLE QString metaTag(const QString& s) const;
+      //@ returns as a string the metatag named 'tag'
+      Q_INVOKABLE QString metaTag(const QString& tag) const;
+      //@ sets the metatag named 'tag' to 'val'
       Q_INVOKABLE void setMetaTag(const QString& tag, const QString& val);
 
       QMap<int, LinkedElements*>& links();
@@ -993,10 +1011,14 @@ class Score : public QObject {
       QList<Score*> scoreList();
       bool switchLayer(const QString& s);
       void layoutPage(const PageContext&,  qreal);
+      //@ appends to the score a named part as last part
       Q_INVOKABLE void appendPart(const QString&);
+      //@ appends to the score a number of measures
       Q_INVOKABLE void appendMeasures(int);
 #ifdef SCRIPT_INTERFACE
+      //@ ??
       Q_INVOKABLE void addText(const QString&, const QString&);
+      //@ creates and returns a cursor to be used to navigate the score
       Q_INVOKABLE Ms::Cursor* newCursor();
 #endif
       qreal computeMinWidth(Segment* fs, bool firstMeasureInSystem);
@@ -1007,7 +1029,8 @@ class Score : public QObject {
       bool isSpannerStartEnd(int tick, int track) const;
       void removeSpanner(Spanner*);
       void addSpanner(Spanner*);
-      void cmdAddSpanner(Spanner* e, const QPointF& pos);
+      void cmdAddSpanner(Spanner* spanner, const QPointF& pos);
+      void cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment, Segment* endSegment);
       void checkSpanner(int startTick, int lastTick);
       const std::set<Spanner*>unmanagedSpanners() { return _unmanagedSpanner; }
       void addUnmanagedSpanner(Spanner*);
@@ -1046,6 +1069,9 @@ class Score : public QObject {
       int nmeasures();
       bool hasLyrics();
       bool hasHarmonies();
+      int  lyricCount();
+      int  harmonyCount();
+      Q_INVOKABLE QString extractLyrics();
       int keysig();
       int duration();
 
@@ -1064,6 +1090,7 @@ class Score : public QObject {
       QString createRehearsalMarkText(RehearsalMark* current) const;
       QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 
+      //@ ??
       Q_INVOKABLE void cropPage(qreal margins);
       bool sanityCheck(const QString& name = nullptr);
 

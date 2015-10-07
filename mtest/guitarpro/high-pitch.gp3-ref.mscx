@@ -341,7 +341,7 @@
             <useNumbers>1</useNumbers>
             </StaffType>
           <bracket type="-1" span="0"/>
-          <barLineSpan from="0" to="12">1</barLineSpan>
+          <barLineSpan from="0" to="10">1</barLineSpan>
           </Staff>
         <trackName></trackName>
         <Instrument>

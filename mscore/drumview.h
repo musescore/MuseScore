@@ -34,7 +34,7 @@ class Note;
 //---------------------------------------------------------
 
 class DrumItem : public QGraphicsPolygonItem {
-      Note* note;
+      Note* _note;
 
       virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 

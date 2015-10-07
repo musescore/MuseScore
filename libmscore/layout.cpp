@@ -1663,7 +1663,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
             bool needKeysig =        // keep key sigs in TABs: TABs themselves should hide them
                isFirstSystem || styleB(StyleIdx::genKeysig);
 
-            if (needKeysig && !keysig && ((keyIdx.key() != Key::C) || keyIdx.custom())) {
+            if (needKeysig && !keysig && ((keyIdx.key() != Key::C) || keyIdx.custom() || keyIdx.isAtonal())) {
                   //
                   // create missing key signature
                   //
@@ -1676,7 +1676,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                   keysig->layout();
                   undo(new AddElement(keysig));
                   }
-            else if (!needKeysig && keysig)
+            else if (!needKeysig && keysig && keysig->generated())
                   undoRemoveElement(keysig);
             else if (keysig && !(keysig->keySigEvent() == keyIdx))
                   undo(new ChangeKeySig(keysig, keyIdx, keysig->showCourtesy()));
@@ -2187,7 +2187,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
             xo = point(static_cast<Box*>(curMeasure)->boxWidth());
 
       system->setInstrumentNames(longName);
-      system->layout(xo);
+      system->layoutSystem(xo);
 
       qreal minMeasureWidth = point(styleS(StyleIdx::minMeasureWidth));
       minWidth              = system->leftMargin();
@@ -2263,6 +2263,8 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                               }
                         }
                   qreal stretch = m->userStretch() * measureSpacing;
+                  if (stretch < 1.0)
+                        stretch = 1.0;
                   ww            *= stretch;
                   cautionaryW   = cautionaryWidth(m, hasCourtesy) * stretch;
 
@@ -2452,7 +2454,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
             xo = point(static_cast<Box*>(curMeasure)->boxWidth());
 
       system->setInstrumentNames(longName);
-      system->layout(xo);
+      system->layoutSystem(xo);
 
       qreal minMeasureWidth = point(styleS(StyleIdx::minMeasureWidth));
       minWidth              = system->leftMargin();
@@ -2498,7 +2500,10 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
                   else
                         ww = m->minWidth1();
 
-                  ww *= m->userStretch() * styleD(StyleIdx::measureSpacing);
+                  qreal stretch = m->userStretch() * styleD(StyleIdx::measureSpacing);
+                  if (stretch < 1.0)
+                        stretch = 1.0;
+                  ww *= stretch;
                   if (ww < minMeasureWidth)
                         ww = minMeasureWidth;
                   isFirstMeasure = false;
@@ -2545,6 +2550,7 @@ bool Score::layoutSystem1(qreal& minWidth, bool isFirstSystem, bool longName)
 
 void Score::removeGeneratedElements(Measure* sm, Measure* em)
       {
+      Measure* sectionStart = sm;
       for (Measure* m = sm; m; m = m->nextMeasureMM()) {
             //
             // remove generated elements from all measures in [sm;em]
@@ -2552,6 +2558,8 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
             //    - do not remove end bar lines
             //    - set size of clefs to small
             //
+            if (m->sectionBreak() && m->nextMeasureMM())
+                  sectionStart = m->nextMeasureMM();
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                   Segment::Type st = seg->segmentType();
                   if (st == Segment::Type::EndBarLine)
@@ -2569,9 +2577,9 @@ void Score::removeGeneratedElements(Measure* sm, Measure* em)
                               continue;
 
                         // courtesy time sigs and key sigs: remove if not in last measure (generated or not!)
-                        // clefs & keysig: remove if generated and not at beginning of first measure
+                        // clefs & keysig: remove if generated and not at beginning of first measure of a section
                         if ( ((st == Segment::Type::TimeSigAnnounce || st == Segment::Type::KeySigAnnounce) && m != em)
-                              || ((el->type() == Element::Type::CLEF || el->type() == Element::Type::KEYSIG) && el->generated() && seg->tick() != sm->tick())
+                              || ((el->type() == Element::Type::CLEF || el->type() == Element::Type::KEYSIG) && el->generated() && seg->tick() != sectionStart->tick())
                         )
                               {
                               undoRemoveElement(el);
@@ -2659,9 +2667,8 @@ void Score::connectTies(bool silent)
                                     }
                               }
                         // connect a glissando without initial note (old glissando format)
-                        for (Spanner* spanner : n->spannerBack())
-                              if (spanner->type() == Element::Type::GLISSANDO
-                                          && spanner->startElement() == nullptr) {
+                        for (Spanner* spanner : n->spannerBack()) {
+                              if (spanner->type() == Element::Type::GLISSANDO && spanner->startElement() == nullptr) {
                                     Note* initialNote = Glissando::guessInitialNote(n->chord());
                                     n->removeSpannerBack(spanner);
                                     if (initialNote != nullptr) {
@@ -2674,9 +2681,18 @@ void Score::connectTies(bool silent)
                                           spanner->setParent(initialNote);
                                           initialNote->add(spanner);
                                           }
-                                    else
+                                    else {
                                           delete spanner;
+                                          }
                                     }
+                              }
+                        // spanner with no end element can happen during copy/paste
+                        for (Spanner* spanner : n->spannerFor()) {
+                              if (spanner->endElement() == nullptr) {
+                                    n->removeSpannerFor(spanner);
+                                    delete spanner;
+                                    }
+                              }
                         }
                   // connect two note tremolos
                   Tremolo* tremolo = c->tremolo();
@@ -2690,6 +2706,11 @@ void Score::connectTies(bool silent)
                               else {
                                     nc->setTremolo(tremolo);
                                     tremolo->setChords(c, nc);
+                                    // cross-measure tremolos are not supported
+                                    // but can accidentally result from copy & paste
+                                    // remove them now
+                                    if (c->measure() != nc->measure())
+                                          c->remove(tremolo);
                                     }
                               break;
                               }
@@ -2779,16 +2800,29 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
 
       qreal ww = rowWidth;
       qreal minWidth;
+      bool firstInRow = true;
       for (bool a = true; a;) {
             a = layoutSystem(minWidth, ww, isFirstSystem, useLongName);
-            sl.append(_systems[curSystem]);
-            ++curSystem;
-            ww -= minWidth;
+            if ((0.0 < minWidth && minWidth <= ww) || firstInRow) {
+                  // system fits on this row, or we need to take it anyhow
+                  sl.append(_systems[curSystem]);
+                  ++curSystem;
+                  ww -= minWidth;
+                  }
+            else {
+                  // system does not fit on this row, and we don't need it to
+                  // reset to add to next row
+                  if (curMeasure)
+                        curMeasure = curMeasure->prev();
+                  else
+                        curMeasure = lastMeasure();
+                  }
+            firstInRow = false;
             }
       //
-      // dont stretch last system row, if minWidth is <= lastSystemFillLimit
+      // dont stretch last system row, if accumulated minWidth is <= lastSystemFillLimit
       //
-      if (curMeasure == 0 && ((minWidth / rowWidth) <= styleD(StyleIdx::lastSystemFillLimit)))
+      if (curMeasure == 0 && (((rowWidth - ww) / rowWidth) <= styleD(StyleIdx::lastSystemFillLimit)))
             raggedRight = true;
 
       //-------------------------------------------------------
@@ -2974,7 +3008,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   if (mb->type() == Element::Type::HBOX)
                         minWidth += point(((Box*)mb)->boxWidth());
                   else if (mb->type() == Element::Type::MEASURE) {
-                        Measure* m = (Measure*)mb;
+                        Measure* m = static_cast<Measure*>(mb);
                         if (needRelayout)
                               m->setDirty();
                         minWidth    += m->minWidth2();
@@ -2983,6 +3017,20 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   }
             minWidth += system->leftMargin();
             }
+      bool zeroStretch;
+      if (totalWeight < 0.01) {
+            zeroStretch = true;
+            foreach(System* system, sl) {
+                  foreach (MeasureBase* mb, system->measures()) {
+                        if (mb->type() == Element::Type::MEASURE) {
+                              Measure* m = static_cast<Measure*>(mb);
+                              totalWeight += m->ticks();
+                              }
+                        }
+                  }
+            }
+      else
+            zeroStretch = false;
 
       // stretch incomplete row
       qreal rest;
@@ -3014,9 +3062,9 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               }
                         mb->setPos(pos);
                         Measure* m    = static_cast<Measure*>(mb);
-                        qreal weight = m->ticks() * m->userStretch();
+                        qreal weight = m->ticks() * (zeroStretch ? 1.0 : m->userStretch());
                         ww           = m->minWidth2() + rest * weight;
-                        m->layout(ww);
+                        m->layoutWidth(ww);
                         }
                   else if (mb->type() == Element::Type::HBOX) {
                         mb->setPos(pos);
@@ -3127,16 +3175,15 @@ void Score::layoutLinear()
                   xo += point(static_cast<Box*>(m)->boxWidth());
             }
 
-      system->layout(xo);
+      system->layoutSystem(xo);
       system->setPos(0.0, spatium() * 10.0);
       curPage = 0;
       Page* page = getEmptyPage();
       page->appendSystem(system);
 
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
-            Element::Type t = curMeasure->type();
+            Element::Type t = mb->type();
             if (t == Element::Type::VBOX || t == Element::Type::TBOX || t == Element::Type::FBOX) {
-                  curMeasure = curMeasure->next();
                   continue;
                   }
             if (styleB(StyleIdx::createMultiMeasureRests) && mb->type() == Element::Type::MEASURE) {
@@ -3150,6 +3197,11 @@ void Score::layoutLinear()
       if (system->measures().isEmpty())
             return;
       addSystemHeader(firstMeasureMM(), true);
+      // also add a system header after a section break
+      for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
+            if (m->sectionBreak() && m->nextMeasureMM())
+                  addSystemHeader(m->nextMeasureMM(), true);
+            }
       removeGeneratedElements(firstMeasureMM(), lastMeasureMM());
 
       QPointF pos(0.0, 0.0);
@@ -3187,7 +3239,7 @@ void Score::layoutLinear()
                   qreal minMeasureWidth = point(styleS(StyleIdx::minMeasureWidth));
                   if (w < minMeasureWidth)
                         w = minMeasureWidth;
-                  m->layout(w);
+                  m->layoutWidth(w);
                   isFirstMeasure = false;
                   }
             else {
@@ -3201,7 +3253,7 @@ void Score::layoutLinear()
       system->setWidth(pos.x());
       page->setWidth(pos.x());
       system->layout2();
-      page->setHeight(system->height() + 12 * spatium());
+      page->setHeight(system->height() + 20 * spatium());
 
       while (_pages.size() > 1)
             _pages.takeLast();
@@ -3473,7 +3525,7 @@ void Score::layoutPage(const PageContext& pC, qreal d)
                   int n = page->systems()->size();
                   for (int i = 0; i < n; ++i) {
                         System* system = page->systems()->at(i);
-                        system->move(0, y);
+                        system->move(QPointF(0.0, y));
                         }
                   }
             return;
@@ -3560,7 +3612,7 @@ void Score::layoutPage(const PageContext& pC, qreal d)
       qreal y = 0.0;
 
       for (System* system : *page->systems()) {
-            system->move(0, y);
+            system->move(QPointF(0.0, y));
             if (system->addStretch())
                   y += system->stretchDistance();
             }
@@ -3917,8 +3969,8 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                               }
                         if ((segType == Segment::Type::Clef) && (pt != Segment::Type::ChordRest))
                               minDistance = styleP(StyleIdx::clefLeftMargin);
-                        else if (segType == Segment::Type::StartRepeatBarLine)
-                              minDistance = .5 * _spatium;
+                        else if (segType == Segment::Type::StartRepeatBarLine && pSeg)
+                              minDistance = .5 * _spatium;  // TODO: make style parameter
                         else if (segType == Segment::Type::TimeSig && pt == Segment::Type::Clef) {
                               // missing key signature, but allocate default margin anyhow
                               minDistance = styleP(StyleIdx::keysigLeftMargin);
@@ -3958,16 +4010,15 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                         rest2[staffIdx] = true;
 
                   // space chord symbols separately from segments
-                  if (hFound || eFound) {
+                  if (hFound || spaceHarmony) {
                         qreal sp = 0.0;
 
                         // space chord symbols unless they miss each other vertically
-                        if (eFound || (hFound && hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top()))
+                        if (hFound && hBbox.top() < hLastBbox[staffIdx].bottom() && hBbox.bottom() > hLastBbox[staffIdx].top())
                               sp = hRest[staffIdx] + minHarmonyDistance + hSpace.lw();
-
                         // barline: limit space to maxHarmonyBarDistance
-                        if (eFound && !hFound && spaceHarmony)
-                              sp = qMin(sp, maxHarmonyBarDistance);
+                        else if (spaceHarmony)
+                              sp = qMin(hRest[staffIdx], maxHarmonyBarDistance);
 
                         hLastBbox[staffIdx] = hBbox;
                         hRest[staffIdx] = hSpace.rw();

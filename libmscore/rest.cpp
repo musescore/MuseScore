@@ -113,9 +113,9 @@ void Rest::draw(QPainter* painter) const
             painter->drawLine(QLineF(x1, y-_spatium, x1, y+_spatium));
             painter->drawLine(QLineF(x2, y-_spatium, x2, y+_spatium));
 
-            painter->setFont(score()->scoreFont()->font());
-            QFontMetricsF fm(score()->scoreFont()->font());
-            QString s = toTimeSigString(QString("%1").arg(n));
+//            painter->setFont(score()->scoreFont()->font());
+//            QFontMetricsF fm(score()->scoreFont()->font());
+            QList<SymId> s = toTimeSigString(QString("%1").arg(n));
             y  = -_spatium * 1.5 - staff()->height() *.5;
             qreal x = center(x1, x2);
             x -= symBbox(s).width() * .5;
@@ -189,7 +189,7 @@ bool Rest::acceptDrop(const DropData& data) const
       Element* e = data.element;
       Element::Type type = e->type();
       if (
-         (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
+            (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::SBEAM)
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::MBEAM)
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::NBEAM)
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::BEAM32)
@@ -197,10 +197,13 @@ bool Rest::acceptDrop(const DropData& data) const
          || (type == Element::Type::ICON && static_cast<Icon*>(e)->iconType() == IconType::AUTOBEAM)
          || (type == Element::Type::ARTICULATION && static_cast<Articulation*>(e)->isFermata())
          || (type == Element::Type::CLEF)
+         || (type == Element::Type::KEYSIG)
+         || (type == Element::Type::TIMESIG)
          || (type == Element::Type::STAFF_TEXT)
          || (type == Element::Type::BAR_LINE)
          || (type == Element::Type::BREATH)
          || (type == Element::Type::CHORD)
+         || (type == Element::Type::NOTE)
          || (type == Element::Type::STAFF_STATE)
          || (type == Element::Type::INSTRUMENT_CHANGE)
          || (type == Element::Type::DYNAMIC)
@@ -212,11 +215,10 @@ bool Rest::acceptDrop(const DropData& data) const
          || (type == Element::Type::TREMOLOBAR)
          || (type == Element::Type::IMAGE)
          || (type == Element::Type::SYMBOL)
+         || (type == Element::Type::REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)
          ) {
             return true;
             }
-      if(type == Element::Type::REPEAT_MEASURE && durationType().type() == TDuration::DurationType::V_MEASURE)
-            return true;
       return false;
       }
 

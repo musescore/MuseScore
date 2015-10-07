@@ -63,7 +63,8 @@ class HPiano : public QGraphicsView {
       void setScale(qreal);
 
    signals:
-      void keyPressed(int pitch, bool chord);
+      void keyPressed(int pitch, bool chord, int velo);
+      void keyReleased(int pitch, bool chord, int velo);
 
    public:
       HPiano(QWidget* parent = 0);
@@ -82,7 +83,8 @@ class PianoTools : public QDockWidget {
       HPiano* _piano;
 
    signals:
-      void keyPressed(int pitch, bool ctrl);
+      void keyPressed(int pitch, bool ctrl, int vel);
+      void keyReleased(int pitch, bool ctrl, int vel);
 
    public:
       PianoTools(QWidget* parent = 0);

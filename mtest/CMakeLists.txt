@@ -17,6 +17,7 @@ enable_testing()
 include_directories(
       ${PROJECT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
+      ${FREETYPE_INCLUDE_DIRS}
       )
 
 if (OMR)
@@ -78,6 +79,9 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_instrument.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmidi/importmidi_chordname.cpp
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmxml.cpp               # required by importxml.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmxmlpass1.cpp          # required by importxml.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmxmlpass2.cpp          # required by importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxmlfirstpass.cpp
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlfonthandler.cpp
@@ -151,7 +155,8 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-subdirs (libmscore importmidi capella biab musicxml guitarpro testoves)
+subdirs (libmscore importmidi capella biab musicxml guitarpro scripting testoves)
+
 
 install(FILES
       ../share/styles/chords_std.xml

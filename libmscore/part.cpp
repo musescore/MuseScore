@@ -345,7 +345,7 @@ void Part::removeInstrument(int tick)
       }
 
 //---------------------------------------------------------
-//   instr
+//   instrument
 //---------------------------------------------------------
 
 Instrument* Part::instrument(int tick)
@@ -354,7 +354,7 @@ Instrument* Part::instrument(int tick)
       }
 
 //---------------------------------------------------------
-//   instr
+//   instrument
 //---------------------------------------------------------
 
 const Instrument* Part::instrument(int tick) const
@@ -520,6 +520,119 @@ int Part::startTrack() const
 int Part::endTrack() const
       {
       return _staves.back()->idx() * VOICES + VOICES;
+      }
+
+//---------------------------------------------------------
+//   insertTime
+//---------------------------------------------------------
+
+void Part::insertTime(int tick, int len)
+      {
+      if (len == 0)
+            return;
+
+      // move all instruments
+
+      if (len < 0) {
+            // remove instruments between tickpos >= tick and tickpos < (tick+len)
+            // ownership goes back to class InstrumentChange()
+
+            auto si = _instruments.lower_bound(tick);
+            auto ei = _instruments.lower_bound(tick-len);
+            _instruments.erase(si, ei);
+            }
+
+      InstrumentList il;
+      for (auto i = _instruments.lower_bound(tick); i != _instruments.end();) {
+            Instrument* instrument = i->second;
+            int tick = i->first;
+            _instruments.erase(i++);
+            _instruments[tick + len] = instrument;
+            }
+      _instruments.insert(il.begin(), il.end());
+      }
+
+//---------------------------------------------------------
+//   lyricCount
+//---------------------------------------------------------
+
+int Part::lyricCount()
+      {
+      if (!score())
+            return 0;
+      int count = 0;
+      Segment::Type st = Segment::Type::ChordRest;
+      for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
+            for (int i = startTrack(); i < endTrack() ; ++i) {
+                  if (seg->lyricsList(i))
+                        count += seg->lyricsList(i)->size();
+                  }
+            }
+      return count;
+      }
+
+//---------------------------------------------------------
+//   harmonyCount
+//---------------------------------------------------------
+
+int Part::harmonyCount()
+      {
+      if (!score())
+            return 0;
+      int count = 0;
+      Segment::Type st = Segment::Type::ChordRest;
+      for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
+            for (Element* e : seg->annotations()) {
+                  if (e->type() == Element::Type::HARMONY && e->track() >= startTrack() && e->track() < endTrack())
+                        count++;
+                  }
+            }
+      return count;
+      }
+
+//---------------------------------------------------------
+//   hasPitchedStaff
+//---------------------------------------------------------
+
+bool Part::hasPitchedStaff()
+      {
+      if (!staves())
+            return false;
+      for (Staff* s : *staves()) {
+            if (s && s->isPitchedStaff())
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   hasTabStaff
+//---------------------------------------------------------
+
+bool Part::hasTabStaff()
+      {
+      if (!staves())
+            return false;
+      for (Staff* s : *staves()) {
+            if (s && s->isTabStaff())
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   hasDrumStaff
+//---------------------------------------------------------
+
+bool Part::hasDrumStaff()
+      {
+      if (!staves())
+            return false;
+      for (Staff* s : *staves()) {
+            if (s && s->isDrumStaff())
+                  return true;
+            }
+      return false;
       }
 }
 

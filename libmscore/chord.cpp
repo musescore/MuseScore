@@ -502,6 +502,12 @@ void Chord::remove(Element* e)
                               if (note->tieFor()->endNote())
                                     note->tieFor()->endNote()->setTieBack(0);
                               }
+                        for (Spanner* s : note->spannerBack()) {
+                              note->removeSpannerBack(s);
+                              }
+                        for (Spanner* s : note->spannerFor()) {
+                              note->removeSpannerFor(s);
+                              }
                         }
                   else
                         qDebug("Chord::remove() note %p not found!", e);
@@ -805,8 +811,9 @@ void Chord::computeUp()
             // if no stems or stem beside staves
             if (tab->slashStyle() || !tab->stemThrough()) {
                   // if measure has voices, set stem direction according to voice
+                  // reverse the logic if stemsDown (#63561)
                   if (measure()->mstaff(staffIdx())->hasVoices)
-                        _up = !(track() % 2);
+                        _up = !tab->stemsDown() ? !(track() % 2) : (track() % 2);
                   else                          // if only voice 1,
                         _up = !tab->stemsDown();// unconditionally set _up according to TAB stem direction
                   return;                       // (if no stems, _up does not really matter!)
@@ -1214,6 +1221,134 @@ void Chord::setScore(Score* s)
       processSiblings([s] (Element* e) { e->setScore(s); } );
       }
 
+//-----------------------------------------------------------------------------
+//   defaultStemLength
+///   Get the default stem length for this chord
+//-----------------------------------------------------------------------------
+
+qreal Chord::defaultStemLength() {
+      qreal _spatium = spatium();
+      Note* downnote;
+      int dl, ul;
+      qreal stemLen;
+      int hookIdx       = durationType().hooks();
+      downnote          = downNote();
+      ul = upLine();
+      dl = downLine();
+
+      StaffType* tab = 0;
+      if (staff() && staff()->isTabStaff()) {
+            tab = staff()->staffType();
+            // require stems only if TAB is not stemless and this chord has a stem
+            if (!tab->slashStyle() && _stem) {
+                  // if stems are beside staff, apply special formatting
+                  if (!tab->stemThrough()) {
+                        // process stem:
+                        return tab->chordStemLength(this) * _spatium;
+                  }
+            }
+      }
+
+      if (tab && !tab->onLines()) {       // if TAB and frets above strings, move 1 position up
+            --ul;
+            --dl;
+            }
+      bool shortenStem = score()->styleB(StyleIdx::shortenStem);
+      if (hookIdx >= 2 || _tremolo)
+            shortenStem = false;
+
+      Spatium progression(score()->styleS(StyleIdx::shortStemProgression));
+      qreal shortest(score()->styleS(StyleIdx::shortestStem).val());
+
+      qreal normalStemLen = small() ? 2.5 : 3.5;
+      switch(hookIdx) {
+            case 3: normalStemLen += small() ? .5  : 0.75; break; //32nd notes
+            case 4: normalStemLen += small() ? 1.0 : 1.5;  break; //64th notes
+            case 5: normalStemLen += small() ? 1.5 : 2.25; break; //128th notes
+            }
+      if (_hook && tab == 0) {
+            if (up() && durationType().dots()) {
+                  //
+                  // avoid collision of dot with hook
+                  //
+                  if (!(ul & 1))
+                        normalStemLen += .5;
+                  shortenStem = false;
+                  }
+            }
+
+      if (_noteType != NoteType::NORMAL) {
+            // grace notes stems are not subject to normal
+            // stem rules
+            stemLen =  qAbs(ul - dl) * .5;
+            stemLen += normalStemLen * score()->styleD(StyleIdx::graceNoteMag);
+            if (up())
+                  stemLen *= -1;
+            }
+      else {
+            // normal note (not grace)
+            qreal staffHeight = staff() ? (staff()->lines()- 1) : 4;
+            qreal staffHlfHgt = staffHeight * 0.5;
+            if (up()) {                   // stem up
+                  qreal dy  = dl * .5;                      // note-side vert. pos.
+                  qreal sel = ul * .5 - normalStemLen;      // stem end vert. pos
+
+                  // if stem ends above top line (with some exceptions), shorten it
+                  if (shortenStem && (sel < 0.0)
+                              && (hookIdx == 0 || tab || !downnote->mirror()))
+                        sel -= sel  * progression.val();
+                  if (sel > staffHlfHgt)                    // if stem ends below ('>') staff mid position,
+                        sel = staffHlfHgt;                  // stretch it to mid position
+                  stemLen = sel - dy;                       // actual stem length
+                  if (-stemLen < shortest)                  // is stem too short,
+                        stemLen = -shortest;                // lengthen it to shortest possible length
+                  }
+            else {                        // stem down
+                  qreal uy  = ul * .5;                      // note-side vert. pos.
+                  qreal sel = dl * .5 + normalStemLen;      // stem end vert. pos.
+
+                  // if stem ends below bottom line (with some exceptions), shorten it
+                  if (shortenStem && (sel > staffHeight)
+                     && (hookIdx == 0 || tab || downnote->mirror()))
+                        sel -= (sel - staffHeight)  * progression.val();
+                  if (sel < staffHlfHgt)                    // if stem ends above ('<') staff mid position,
+                        sel = staffHlfHgt;                  // stretch it to mid position
+                  stemLen = sel - uy;                       // actual stem length
+                  if (stemLen < shortest)                   // if stem too short,
+                        stemLen = shortest;                 // lengthen it to shortest possible position
+                  }
+            }
+
+      // adjust stem len for tremolo
+      if (_tremolo && !_tremolo->twoNotes()) {
+            // hook up odd lines
+            int tab[2][2][2][4] = {
+                  { { { 0, 0, 0,  1 },  // stem - down - even - lines
+                      { 0, 0, 0,  2 }   // stem - down - odd - lines
+                      },
+                    { { 0, 0, 0, -1 },  // stem - up - even - lines
+                      { 0, 0, 0, -2 }   // stem - up - odd - lines
+                      }
+                    },
+                  { { { 0, 0, 1, 2 },   // hook - down - even - lines
+                      { 0, 0, 1, 2 }    // hook - down - odd - lines
+                      },
+                    { { 0, 0, -1, -2 }, // hook - up - even - lines
+                      { 0, 0, -1, -2 }  // hook - up - odd - lines
+                      }
+                    }
+                  };
+            int odd = (up() ? upLine() : downLine()) & 1;
+            int n = tab[_hook ? 1 : 0][up() ? 1 : 0][odd][_tremolo->lines()-1];
+            stemLen += n * .5;
+            }
+      // scale stemLen according to staff line spacing
+      if (staff())
+            stemLen *= staff()->staffType()->lineDistance().val();
+
+      return stemLen * _spatium;
+}
+
 //---------------------------------------------------------
 //   layoutStem1
 ///   Layout _stem and _stemSlash
@@ -1297,7 +1432,7 @@ void Chord::layoutStem()
       if (staff() && staff()->isTabStaff()) {
             tab = staff()->staffType();
             // require stems only if TAB is not stemless and this chord has a stem
-            if (!tab->slashStyle() && _stem) {
+            if (!tab->slashStyle() && _stem) { // (duplicate code with defaultStemLength())
                   // if stems are beside staff, apply special formatting
                   if (!tab->stemThrough()) {
                         // process stem:
@@ -1306,7 +1441,7 @@ void Chord::layoutStem()
                         int   hookIdx = durationType().hooks();
                         if (!up())
                               hookIdx = -hookIdx;
-                        if (hookIdx) {
+                        if (hookIdx && _hook) {
                               _hook->setHookType(hookIdx);
                               qreal x = _stem->pos().x() + _stem->lineWidth() * .5;;
                               qreal y = _stem->pos().y();
@@ -1337,110 +1472,7 @@ void Chord::layoutStem()
             }
 
       if (_stem) {
-            Note* downnote;
-            int dl, ul;
-            qreal stemLen;
-            int hookIdx       = durationType().hooks();
-            downnote          = downNote();
-            ul = upLine();
-            dl = downLine();
-            if (tab && !tab->onLines()) {       // if TAB and frets above strings, move 1 position up
-                  --ul;
-                  --dl;
-                  }
-            bool shortenStem = score()->styleB(StyleIdx::shortenStem);
-            if (hookIdx >= 2 || _tremolo)
-                  shortenStem = false;
-
-            Spatium progression(score()->styleS(StyleIdx::shortStemProgression));
-            qreal shortest(score()->styleS(StyleIdx::shortestStem).val());
-
-            qreal normalStemLen = small() ? 2.5 : 3.5;
-            switch(hookIdx) {
-                  case 3: normalStemLen += small() ? .5  : 0.75; break; //32nd notes
-                  case 4: normalStemLen += small() ? 1.0 : 1.5;  break; //64th notes
-                  case 5: normalStemLen += small() ? 1.5 : 2.25; break; //128th notes
-                  }
-            if (_hook && tab == 0) {
-                  if (up() && durationType().dots()) {
-                        //
-                        // avoid collision of dot with hook
-                        //
-                        if (!(ul & 1))
-                              normalStemLen += .5;
-                        shortenStem = false;
-                        }
-                  }
-
-            if (_noteType != NoteType::NORMAL) {
-                  // grace notes stems are not subject to normal
-                  // stem rules
-                  stemLen =  qAbs(ul - dl) * .5;
-                  stemLen += normalStemLen * score()->styleD(StyleIdx::graceNoteMag);
-                  if (up())
-                        stemLen *= -1;
-                  }
-            else {
-                  // normal note (not grace)
-                  qreal staffHeight = staff() ? (staff()->lines()- 1) : 4;
-                  qreal staffHlfHgt = staffHeight * 0.5;
-                  if (up()) {                   // stem up
-                        qreal dy  = dl * .5;                      // note-side vert. pos.
-                        qreal sel = ul * .5 - normalStemLen;      // stem end vert. pos
-
-                        // if stem ends above top line (with some exceptions), shorten it
-                        if (shortenStem && (sel < 0.0)
-                                    && (hookIdx == 0 || tab || !downnote->mirror()))
-                              sel -= sel  * progression.val();
-                        if (sel > staffHlfHgt)                    // if stem ends below ('>') staff mid position,
-                              sel = staffHlfHgt;                  // stretch it to mid position
-                        stemLen = sel - dy;                       // actual stem length
-                        if (-stemLen < shortest)                  // is stem too short,
-                              stemLen = -shortest;                // lengthen it to shortest possible length
-                        }
-                  else {                        // stem down
-                        qreal uy  = ul * .5;                      // note-side vert. pos.
-                        qreal sel = dl * .5 + normalStemLen;      // stem end vert. pos.
-
-                        // if stem ends below bottom line (with some exceptions), shorten it
-                        if (shortenStem && (sel > staffHeight)
-                           && (hookIdx == 0 || tab || downnote->mirror()))
-                              sel -= (sel - staffHeight)  * progression.val();
-                        if (sel < staffHlfHgt)                    // if stem ends above ('<') staff mid position,
-                              sel = staffHlfHgt;                  // stretch it to mid position
-                        stemLen = sel - uy;                       // actual stem length
-                        if (stemLen < shortest)                   // if stem too short,
-                              stemLen = shortest;                 // lengthen it to shortest possible position
-                        }
-                  }
-
-            // adjust stem len for tremolo
-            if (_tremolo && !_tremolo->twoNotes()) {
-                  // hook up odd lines
-                  int tab[2][2][2][4] = {
-                        { { { 0, 0, 0,  1 },  // stem - down - even - lines
-                            { 0, 0, 0,  2 }   // stem - down - odd - lines
-                            },
-                          { { 0, 0, 0, -1 },  // stem - up - even - lines
-                            { 0, 0, 0, -2 }   // stem - up - odd - lines
-                            }
-                          },
-                        { { { 0, 0, 1, 2 },   // hook - down - even - lines
-                            { 0, 0, 1, 2 }    // hook - down - odd - lines
-                            },
-                          { { 0, 0, -1, -2 }, // hook - up - even - lines
-                            { 0, 0, -1, -2 }  // hook - up - odd - lines
-                            }
-                          }
-                        };
-                  int odd = (up() ? upLine() : downLine()) & 1;
-                  int n = tab[_hook ? 1 : 0][up() ? 1 : 0][odd][_tremolo->lines()-1];
-                  stemLen += n * .5;
-                  }
-            // scale stemLen according to staff line spacing
-            if (staff())
-                  stemLen *= staff()->staffType()->lineDistance().val();
-           _stem->setLen(stemLen * _spatium);
+           _stem->setLen(defaultStemLength());
             // if (isGrace())
             //      abort();
             if (_hook) {
@@ -2139,9 +2171,10 @@ void Chord::layoutTablature()
       if (segment())
             segment()->setDotPosX(staffIdx(), headWidth);
       // if tab type is stemless or chord is stemless (possible when imported from MusicXML)
+      // or measure is stemless
       // or duration longer than half (if halves have stems) or duration longer than crochet
       // remove stems
-      if (tab->slashStyle() || _noStem || durationType().type() <
+      if (tab->slashStyle() || _noStem || measure()->slashStyle(staffIdx()) || durationType().type() <
          (tab->minimStyle() != TablatureMinimStyle::NONE ? TDuration::DurationType::V_HALF : TDuration::DurationType::V_QUARTER) ) {
             // delete _stem;
             // delete _hook;
@@ -2900,6 +2933,34 @@ void Chord::setSlash(bool flag, bool stemless)
       }
 
 //---------------------------------------------------------
+//   removeMarkings
+//    - this is normally called after cloning a chord to tie a note over the barline
+//    - there is no special undo handling; the assumption is that undo will simply remove the cloned chord
+//    - two note tremolos are converted into simple notes
+//    - single note tremolos are optionally retained
+//---------------------------------------------------------
+
+void Chord::removeMarkings(bool keepTremolo)
+      {
+      if (tremolo() && !keepTremolo)
+            remove(tremolo());
+      if (arpeggio())
+            remove(arpeggio());
+      for (Element* e : el())
+            remove(e);
+      for (Element* e : articulations())
+            remove(e);
+      for (Element* e : lyricsList())
+            remove(e);
+      for (Element* e : graceNotes())
+            remove(e);
+      for (Note* n : notes()) {
+            for (Element* e : n->el())
+                  n->remove(e);
+            }
+      }
+
+//---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
@@ -3085,4 +3146,3 @@ QString Chord::accessibleExtraInfo()
       return QString("%1 %2").arg(rez).arg(ChordRest::accessibleExtraInfo());
       }
 }
-

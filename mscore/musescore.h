@@ -426,6 +426,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void aboutQt();
       void aboutMusicXML();
       void reportBug();
+      void askForHelp();
       void openRecentMenu();
       void selectScore(QAction*);
       void startPreferenceDialog();
@@ -480,7 +481,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void checkForUpdate();
       QMenu* fileMenu() const  { return _fileMenu; }
       void midiNoteReceived(int channel, int pitch, int velo);
-      void midiNoteReceived(int pitch, bool ctrl);
+      void midiNoteReceived(int pitch, bool ctrl, int velo);
       void instrumentChanged();
       void showMasterPalette(const QString& = 0);
       void selectionChanged(SelState);
@@ -527,6 +528,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QFileDialog* saveCopyDialog();
 
       QString lastSaveCopyDirectory;
+      QString lastSaveCopyFormat;
       QString lastSaveDirectory;
       SynthControl* getSynthControl() const       { return synthControl; }
       void editInPianoroll(Staff* staff);
@@ -577,7 +579,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QString getAudioFile(const QString&);
       QString getDrumsetFilename(bool open);
       QString getPluginFilename(bool open);
-      QString getPaletteFilename(bool open);
+      QString getPaletteFilename(bool open, const QString& name = "");
       QString getWallpaper(const QString& caption);
 
       bool hRaster() const { return hRasterAction->isChecked(); }
@@ -709,8 +711,6 @@ extern QAction* getAction(const char*);
 extern Shortcut* midiActionMap[128];
 extern void loadTranslation(QString fileName, QString localeName);
 extern void setMscoreLocale(QString localeName);
-extern QPixmap sym2pixmap(const Sym* s, qreal mag);
-
 extern bool saveMxl(Score*, const QString& name);
 extern bool saveXml(Score*, const QString& name);
 

@@ -641,7 +641,7 @@ class ChangePatch : public UndoCommand {
    public:
       ChangePatch(Score* s, Channel* c, const MidiPatch* pt)
          : score(s), channel(c), patch(*pt) {}
-      UNDO_NAME("ChangePitch")
+      UNDO_NAME("ChangePatch")
       };
 
 //---------------------------------------------------------
@@ -742,20 +742,6 @@ class AddTextStyle : public UndoCommand {
       virtual void undo();
       virtual void redo();
       UNDO_NAME("AddTextStyle")
-      };
-
-//---------------------------------------------------------
-//   ChangeStretch
-//---------------------------------------------------------
-
-class ChangeStretch : public UndoCommand {
-      Measure* measure;
-      qreal stretch;
-      void flip();
-
-   public:
-      ChangeStretch(Measure*, qreal);
-      UNDO_NAME("ChangeStretch")
       };
 
 //---------------------------------------------------------
@@ -1286,7 +1272,7 @@ class LinkUnlink : public UndoCommand {
 class Unlink : public LinkUnlink {
 
    public:
-      Unlink(ScoreElement* e) : LinkUnlink(e, nullptr) {};
+      Unlink(ScoreElement* e) : LinkUnlink(e, nullptr) {}
       virtual void undo() override { doLink();   }
       virtual void redo() override { doUnlink(); }
       UNDO_NAME("Unlink")

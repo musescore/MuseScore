@@ -20,10 +20,14 @@
 
 REVISION  = `cat mscore/revision.h`
 CPUS      = `grep -c processor /proc/cpuinfo`
+# Avoid build errors when processor=0 (as in m68k)
+ifeq ($(CPUS), 0)
+  CPUS=1
+endif
 
 PREFIX    = "/usr/local"
-#VERSION   = "2.0.1b-${REVISION}"
-VERSION = 2.0.1
+#VERSION   = "2.0.2b-${REVISION}"
+VERSION = 2.0.2
 
 #
 # change path to include your Qt5 installation
@@ -37,6 +41,7 @@ release:
       cmake -DCMAKE_BUILD_TYPE=RELEASE	       \
   	  -DCMAKE_INSTALL_PREFIX="${PREFIX}" ..;   \
       make lrelease;                             \
+      make manpages;                             \
       make -j ${CPUS};                           \
 
 
@@ -47,6 +52,7 @@ debug:
       cmake -DCMAKE_BUILD_TYPE=DEBUG	                  \
   	  -DCMAKE_INSTALL_PREFIX="${PREFIX}" ..;              \
       make lrelease;                                        \
+      make manpages;                                        \
       make -j ${CPUS};                                      \
 
 
@@ -89,10 +95,28 @@ version:
 	@echo ${VERSION}
 
 install: release
-	cd build.release; make install/strip
+	cd build.release \
+	&& make install/strip \
+	&& update-mime-database "${PREFIX}/share/mime" \
+	&& gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"
 
 installdebug: debug
-	cd build.debug; make install
+	cd build.debug \
+	&& make install \
+	&& update-mime-database "${PREFIX}/share/mime" \
+	&& gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"
+
+uninstall:
+	cd build.release \
+	&& xargs rm < install_manifest.txt \
+	&& update-mime-database "${PREFIX}/share/mime" \
+	&& gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"
+
+uninstalldebug:
+	cd build.debug \
+	&& xargs rm < install_manifest.txt \
+	&& update-mime-database "${PREFIX}/share/mime" \
+	&& gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"
 
 #
 #  linux

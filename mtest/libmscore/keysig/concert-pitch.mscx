@@ -53,8 +53,8 @@
         </Staff>
       <trackName>Alto Saxophone</trackName>
       <Instrument>
-        <longName pos="0">Alto Saxophone</longName>
-        <shortName pos="0">A. Sax.</shortName>
+        <longName>Alto Saxophone</longName>
+        <shortName>A. Sax.</shortName>
         <trackName>Alto Saxophone</trackName>
         <minPitchP>49</minPitchP>
         <maxPitchP>87</maxPitchP>
@@ -107,8 +107,8 @@
         </Staff>
       <trackName>Tenor Saxophone</trackName>
       <Instrument>
-        <longName pos="0">Tenor Saxophone</longName>
-        <shortName pos="0">T. Sax.</shortName>
+        <longName>Tenor Saxophone</longName>
+        <shortName>T. Sax.</shortName>
         <trackName>Tenor Saxophone</trackName>
         <minPitchP>44</minPitchP>
         <maxPitchP>82</maxPitchP>
@@ -184,6 +184,25 @@
           <durationType>measure</durationType>
           <duration z="4" n="4"/>
           </Rest>
+        </Measure>
+      <Measure number="4">
+        <KeySig>
+          <accidental>2</accidental>
+          </KeySig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="5">
+        <KeySig>
+          <custom>1</custom>
+          <mode>none</mode>
+          </KeySig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>
@@ -217,6 +236,25 @@
       <Measure number="3">
         <KeySig>
           <accidental>2</accidental>
+          </KeySig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <KeySig>
+          <accidental>1</accidental>
+          </KeySig>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="5">
+        <KeySig>
+          <custom>1</custom>
+          <mode>none</mode>
           </KeySig>
         <Rest>
           <durationType>measure</durationType>

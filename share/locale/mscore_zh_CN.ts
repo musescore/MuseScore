@@ -1770,7 +1770,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Don&apos;t hide empty staves in first system</source>
-        <translation>第一谱表组中不隐藏空谱表</translation>
+        <translation>第一行谱表组中不隐藏空谱表</translation>
     </message>
     <message>
         <source>Display note values across measure bar (EXPERIMENTAL, early music only!)</source>
@@ -2207,7 +2207,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Note head distance:</source>
-        <translation type="unfinished"/>
+        <translation>符头距离：</translation>
     </message>
     <message>
         <source>Articulation size:</source>
@@ -2954,7 +2954,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"/>
+        <translation>重置方向值</translation>
     </message>
     <message>
         <source>Update range</source>
@@ -3042,6 +3042,25 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorArpeggio</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Arpeggio</source>
+        <translation>琶音</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>播放</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorArticulation</name>
     <message>
         <source>Articulation</source>
@@ -3097,7 +3116,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"/>
+        <translation>重置方向值</translation>
     </message>
     <message>
         <source>Reset Anchor value</source>
@@ -3105,6 +3124,30 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Time stretch value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ornament Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3227,7 +3270,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"/>
+        <translation>重置方向值</translation>
     </message>
     <message>
         <source>Vertical position offset right</source>
@@ -3235,7 +3278,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset User position value</source>
-        <translation type="unfinished"/>
+        <translation>重置用户位置值</translation>
     </message>
     <message>
         <source>Reset Local Relayout value</source>
@@ -3275,6 +3318,25 @@ space unit</extracomment>
     </message>
     <message>
         <source>User position</source>
+        <translation>用户位置</translation>
+    </message>
+</context>
+<context>
+    <name>InspectorBend</name>
+    <message>
+        <source>Glissando Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bend</source>
+        <translation>滑音</translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3558,6 +3620,42 @@ space unit</extracomment>
     <message>
         <source>Show text</source>
         <translation>显示文字</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Style value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chromatic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>White keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Black keys</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Diatonic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -4366,6 +4464,78 @@ space unit</extracomment>
     </message>
 </context>
 <context>
+    <name>InspectorTBox</name>
+    <message>
+        <source>Text Frame Inspector</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Text Frame</source>
+        <translation>文本框</translation>
+    </message>
+    <message>
+        <source>Bottom gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top margin</source>
+        <translation>上边距</translation>
+    </message>
+    <message>
+        <source>Reset value</source>
+        <translation>重置值</translation>
+    </message>
+    <message>
+        <source>Reset Top gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom gap value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Left margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>mm</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Bottom margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Right margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Right margin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Bottom margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Top margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Left margin value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Top gap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>sp</source>
+        <extracomment>spatium unit</extracomment>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>InspectorTempoText</name>
     <message>
         <source>Tempo Marking</source>
@@ -4496,12 +4666,36 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Wavy Line</source>
+        <source>Reset value</source>
+        <translation>重置</translation>
+    </message>
+    <message>
+        <source>Ornament Style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Reset value</source>
-        <translation>重置</translation>
+        <source>Direction</source>
+        <translation>方向</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>默认</translation>
+    </message>
+    <message>
+        <source>Baroque</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reset Ornament Type value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation>播放</translation>
+    </message>
+    <message>
+        <source>Reset Play value</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -4552,7 +4746,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Reset Direction value</source>
-        <translation type="unfinished"/>
+        <translation>重置方向值</translation>
     </message>
     <message>
         <source>Reset value</source>
@@ -4848,7 +5042,7 @@ space unit</extracomment>
     </message>
     <message>
         <source>Clear Search box</source>
-        <translation type="unfinished"/>
+        <translation>清除搜索框</translation>
     </message>
     <message>
         <source>Partitur List</source>
@@ -4876,6 +5070,13 @@ space unit</extracomment>
     <message>
         <source>Add time signature to palette</source>
         <translation>将拍号添加到面板</translation>
+    </message>
+</context>
+<context>
+    <name>KeySig</name>
+    <message>
+        <source>atonal</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -5289,7 +5490,8 @@ staccato</source>
     <message>
         <source>Dotted
 notes</source>
-        <translation type="unfinished"/>
+        <translation>附点
+音符</translation>
     </message>
     <message>
         <source>Show
@@ -6035,14 +6237,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>meta data tag</source>
-        <translation>元数据标签</translation>
-    </message>
-    <message>
-        <source>Available tags and their current values:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Apply to all Parts</source>
         <translation>应用到全部分谱</translation>
     </message>
@@ -6056,6 +6250,14 @@ failed: </source>
     </message>
     <message>
         <source>page number, if there is more than one page</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>meta data tag, see below</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Available meta data tags and their current values:</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6950,7 +7152,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Clear Recent Files</source>
-        <translation type="unfinished"/>
+        <translation>清除最近的文件</translation>
     </message>
     <message>
         <source>All Supported Files (*.mscz *.mscx *.xml *.mxl *.mid *.midi *.kar *.md *.mgu *.MGU *.sgu *.SGU *.cap *.capx *.pdf *.ove *.scw *.bww *.GTP *.GP3 *.GP4 *.GP5 *.GPX);;</source>
@@ -7014,7 +7216,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Staff text</source>
-        <translation type="unfinished"/>
+        <translation>谱表文字</translation>
     </message>
     <message>
         <source>System text</source>
@@ -7174,7 +7376,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>MuseScore:</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore:</translation>
     </message>
     <message>
         <source>Cannot write into %1</source>
@@ -7182,6 +7384,10 @@ please choose a different name:</source>
     </message>
     <message>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Ask for Help</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7252,7 +7458,7 @@ please choose a different name:</source>
     </message>
     <message>
         <source>Select Template File:</source>
-        <translation>选择模板文件</translation>
+        <translation>选择模板文件：</translation>
     </message>
 </context>
 <context>
@@ -7659,10 +7865,6 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>file not found</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>No selection</source>
         <translation type="unfinished"/>
     </message>
@@ -7672,6 +7874,10 @@ failed: %2</source>
     </message>
     <message>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>XML read error at line %1 column %2: %3</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7982,6 +8188,11 @@ Please select a range of measures to join and try again</source>
         <source>Transparent background</source>
         <translation>透明背景</translation>
     </message>
+    <message>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::SearchComboBox</name>
@@ -8075,7 +8286,7 @@ Please select a range of measures to join and try again</source>
     <name>Ms::TempoText</name>
     <message>
         <source>note = %1</source>
-        <translation type="unfinished"/>
+        <translation>音符 = %1</translation>
     </message>
     <message>
         <source>Dotted %1</source>
@@ -9206,7 +9417,7 @@ failed: </source>
     </message>
     <message>
         <source>Clear Shortcut</source>
-        <translation type="unfinished"/>
+        <translation>清除快捷键</translation>
     </message>
 </context>
 <context>
@@ -9301,11 +9512,11 @@ failed: </source>
     </message>
     <message>
         <source>16th note</source>
-        <translation type="unfinished"/>
+        <translation>十六分音符</translation>
     </message>
     <message>
         <source>32nd note</source>
-        <translation type="unfinished"/>
+        <translation>三十二分音符</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -9545,7 +9756,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset Shortcut to Default</source>
-        <translation type="unfinished"/>
+        <translation>将快捷键重置为默认值</translation>
     </message>
     <message>
         <source>Define...</source>
@@ -9617,11 +9828,11 @@ failed: </source>
     </message>
     <message>
         <source>Half note</source>
-        <translation type="unfinished"/>
+        <translation>二分音符</translation>
     </message>
     <message>
         <source>Quarter note</source>
-        <translation type="unfinished"/>
+        <translation>四分音符</translation>
     </message>
     <message>
         <source>Rest</source>
@@ -10186,7 +10397,7 @@ failed: </source>
     </message>
     <message>
         <source>Reset Shortcut to default</source>
-        <translation type="unfinished"/>
+        <translation>将快捷键重置为默认值</translation>
     </message>
     <message>
         <source>Define</source>
@@ -10218,7 +10429,7 @@ failed: </source>
     </message>
     <message>
         <source>64th note</source>
-        <translation type="unfinished"/>
+        <translation>六十四分音符</translation>
     </message>
     <message>
         <source>64th note is active</source>
@@ -10234,7 +10445,7 @@ failed: </source>
     </message>
     <message>
         <source>Resets the shortcuts to their default assignment</source>
-        <translation type="unfinished"/>
+        <translation>将快捷键重置为默认指派</translation>
     </message>
     <message>
         <source>Clears the shortcut assignment for the selected action</source>
@@ -10334,7 +10545,7 @@ failed: </source>
     </message>
     <message>
         <source>Note input</source>
-        <translation type="unfinished"/>
+        <translation>音符输入</translation>
     </message>
     <message>
         <source>Note input is active</source>
@@ -10378,6 +10589,14 @@ failed: </source>
     </message>
     <message>
         <source>Filter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>PDF</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Export RPNs</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -11154,7 +11373,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Sixteenth note</source>
-        <translation type="unfinished"/>
+        <translation>十六分音符</translation>
     </message>
 </context>
 <context>
@@ -11216,6 +11435,14 @@ Do you want to overwrite it?</source>
         <source>System flag</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Search...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>SynthControl</name>
@@ -11225,11 +11452,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Save to Score</source>
-        <translation type="unfinished"/>
+        <translation>保存到乐谱</translation>
     </message>
     <message>
         <source>Load from Score</source>
-        <translation type="unfinished"/>
+        <translation>从乐谱装入</translation>
     </message>
     <message>
         <source>Vol</source>
@@ -11266,7 +11493,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Set as Default</source>
-        <translation type="unfinished"/>
+        <translation>设定为默认值</translation>
     </message>
     <message>
         <source>Load Default</source>
@@ -11278,11 +11505,11 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Save to score</source>
-        <translation type="unfinished"/>
+        <translation>保存到乐谱</translation>
     </message>
     <message>
         <source>Load from score</source>
-        <translation type="unfinished"/>
+        <translation>从乐谱装入</translation>
     </message>
     <message>
         <source>Use up and down arrows to modify</source>
@@ -11845,7 +12072,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <source>Duration:</source>
-        <translation type="unfinished"/>
+        <translation>时长：</translation>
     </message>
     <message>
         <source>Enter Number of Measures:</source>
@@ -13375,7 +13602,7 @@ failed: </source>
     </message>
     <message>
         <source>Double whole note</source>
-        <translation type="unfinished"/>
+        <translation>二全音符</translation>
     </message>
     <message>
         <source>Whole note</source>
@@ -13383,43 +13610,43 @@ failed: </source>
     </message>
     <message>
         <source>Half note</source>
-        <translation type="unfinished"/>
+        <translation>二分音符</translation>
     </message>
     <message>
         <source>Quarter note</source>
-        <translation type="unfinished"/>
+        <translation>四分音符</translation>
     </message>
     <message>
         <source>16th note</source>
-        <translation type="unfinished"/>
+        <translation>十六分音符</translation>
     </message>
     <message>
         <source>Note duration: 16th</source>
-        <translation type="unfinished"/>
+        <translation>音符时长：十六分</translation>
     </message>
     <message>
         <source>32nd note</source>
-        <translation type="unfinished"/>
+        <translation>三十二分音符</translation>
     </message>
     <message>
         <source>Note duration: 32nd</source>
-        <translation type="unfinished"/>
+        <translation>音符时长：三十二分</translation>
     </message>
     <message>
         <source>64th note</source>
-        <translation type="unfinished"/>
+        <translation>六十四分音符</translation>
     </message>
     <message>
         <source>Note duration: 64th</source>
-        <translation type="unfinished"/>
+        <translation>音符时长：六十四分</translation>
     </message>
     <message>
         <source>128th note</source>
-        <translation type="unfinished"/>
+        <translation>一百二十八分音符</translation>
     </message>
     <message>
         <source>Note duration: 128th</source>
-        <translation type="unfinished"/>
+        <translation>音符时长：一百二十八分</translation>
     </message>
     <message>
         <source>Increase active duration</source>
@@ -13562,10 +13789,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Palette</source>
-        <translation>符号面板</translation>
-    </message>
-    <message>
         <source>Play Panel</source>
         <translation>播放面板</translation>
     </message>
@@ -13591,7 +13814,7 @@ failed: </source>
     </message>
     <message>
         <source>Zoom canvas</source>
-        <translation type="unfinished"/>
+        <translation>缩放画布</translation>
     </message>
     <message>
         <source>Lyrics</source>
@@ -13600,10 +13823,6 @@ failed: </source>
     <message>
         <source>Add lyrics</source>
         <translation>添加歌词</translation>
-    </message>
-    <message>
-        <source>Tempo Marking...</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Add tempo marking</source>
@@ -13787,7 +14006,7 @@ failed: </source>
     </message>
     <message>
         <source>Bass Clef</source>
-        <translation type="unfinished"/>
+        <translation>低音谱号</translation>
     </message>
     <message>
         <source>Add bass clef</source>
@@ -13962,10 +14181,6 @@ failed: </source>
         <translation>反复选中区域</translation>
     </message>
     <message>
-        <source>Pan piano roll</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Toggle pan piano roll</source>
         <translation type="unfinished"/>
     </message>
@@ -14099,7 +14314,7 @@ failed: </source>
     </message>
     <message>
         <source>Play metronome during playback</source>
-        <translation type="unfinished"/>
+        <translation>回放时播放节拍器声音</translation>
     </message>
     <message>
         <source>Toggle count-in playback</source>
@@ -14395,11 +14610,11 @@ failed: </source>
     </message>
     <message>
         <source>All Similar Elements in Range Selection</source>
-        <translation type="unfinished"/>
+        <translation>范围选区中的所有相似元素</translation>
     </message>
     <message>
         <source>Select all similar elements in the range selection</source>
-        <translation type="unfinished"/>
+        <translation>选择范围选区中的所有相似元素</translation>
     </message>
     <message>
         <source>Add brackets to element</source>
@@ -14579,11 +14794,11 @@ failed: </source>
     </message>
     <message>
         <source>File: Open</source>
-        <translation type="unfinished"/>
+        <translation>文件：打开</translation>
     </message>
     <message>
         <source>File: Save</source>
-        <translation type="unfinished"/>
+        <translation>文件：保存</translation>
     </message>
     <message>
         <source>File: Save online</source>
@@ -14591,7 +14806,7 @@ failed: </source>
     </message>
     <message>
         <source>File: Save as</source>
-        <translation type="unfinished"/>
+        <translation>文件：另存为</translation>
     </message>
     <message>
         <source>Save selection</source>
@@ -14599,7 +14814,7 @@ failed: </source>
     </message>
     <message>
         <source>File: Save a copy</source>
-        <translation type="unfinished"/>
+        <translation>文件：保存副本</translation>
     </message>
     <message>
         <source>Export parts</source>
@@ -14611,11 +14826,11 @@ failed: </source>
     </message>
     <message>
         <source>File: New</source>
-        <translation type="unfinished"/>
+        <translation>文件：新建</translation>
     </message>
     <message>
         <source>Note input</source>
-        <translation type="unfinished"/>
+        <translation>音符输入</translation>
     </message>
     <message>
         <source>Respell pitches</source>
@@ -14791,35 +15006,35 @@ failed: </source>
     </message>
     <message>
         <source>Double Whole Note</source>
-        <translation type="unfinished"/>
+        <translation>二全音符</translation>
     </message>
     <message>
         <source>Note duration: Double whole</source>
-        <translation type="unfinished"/>
+        <translation>音符时长：二全</translation>
     </message>
     <message>
         <source>Whole Note</source>
-        <translation type="unfinished"/>
+        <translation>全音符</translation>
     </message>
     <message>
         <source>Note duration: Whole</source>
-        <translation type="unfinished"/>
+        <translation>音符时长：全</translation>
     </message>
     <message>
         <source>Half Note</source>
-        <translation type="unfinished"/>
+        <translation>二分音符</translation>
     </message>
     <message>
         <source>Note duration: Half</source>
-        <translation type="unfinished"/>
+        <translation>音符时长：二分</translation>
     </message>
     <message>
         <source>Quarter Note</source>
-        <translation type="unfinished"/>
+        <translation>四分音符</translation>
     </message>
     <message>
         <source>Note duration: Quarter</source>
-        <translation type="unfinished"/>
+        <translation>音符时长：四分</translation>
     </message>
     <message>
         <source>Eighth Note</source>
@@ -14827,23 +15042,23 @@ failed: </source>
     </message>
     <message>
         <source>Note duration: Eighth</source>
-        <translation type="unfinished"/>
+        <translation>音符时长：八分</translation>
     </message>
     <message>
         <source>16th Note</source>
-        <translation type="unfinished"/>
+        <translation>十六分音符</translation>
     </message>
     <message>
         <source>32nd Note</source>
-        <translation type="unfinished"/>
+        <translation>三十二分音符</translation>
     </message>
     <message>
         <source>64th Note</source>
-        <translation type="unfinished"/>
+        <translation>六十四分音符</translation>
     </message>
     <message>
         <source>128th Note</source>
-        <translation type="unfinished"/>
+        <translation>一百二十八分音符</translation>
     </message>
     <message>
         <source>Increase Active Duration</source>
@@ -14875,7 +15090,7 @@ failed: </source>
     </message>
     <message>
         <source>Note input: Rest</source>
-        <translation type="unfinished"/>
+        <translation>音符输入：休止</translation>
     </message>
     <message>
         <source>Double Sharp</source>
@@ -14883,19 +15098,19 @@ failed: </source>
     </message>
     <message>
         <source>Note input: Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>音符输入：重升号</translation>
     </message>
     <message>
         <source>Note input: Sharp</source>
-        <translation type="unfinished"/>
+        <translation>音符输入：升号</translation>
     </message>
     <message>
         <source>Note input: Natural</source>
-        <translation type="unfinished"/>
+        <translation>音符输入：还原记号</translation>
     </message>
     <message>
         <source>Note input: Flat</source>
-        <translation type="unfinished"/>
+        <translation>音符输入：降号</translation>
     </message>
     <message>
         <source>Double Flat</source>
@@ -14903,7 +15118,7 @@ failed: </source>
     </message>
     <message>
         <source>Note input: Double flat</source>
-        <translation type="unfinished"/>
+        <translation>音符输入：重降号</translation>
     </message>
     <message>
         <source>Grace: Quarter</source>
@@ -15071,7 +15286,7 @@ failed: </source>
     </message>
     <message>
         <source>Note input: Whole rest</source>
-        <translation type="unfinished"/>
+        <translation>音符输入：全休止符</translation>
     </message>
     <message>
         <source>Half Rest</source>
@@ -15079,7 +15294,7 @@ failed: </source>
     </message>
     <message>
         <source>Note input: Half rest</source>
-        <translation type="unfinished"/>
+        <translation>音符输入：二分休止符</translation>
     </message>
     <message>
         <source>Quarter Rest</source>
@@ -15087,7 +15302,7 @@ failed: </source>
     </message>
     <message>
         <source>Note input: Quarter rest</source>
-        <translation type="unfinished"/>
+        <translation>音符输入：四分休止符</translation>
     </message>
     <message>
         <source>Eighth Rest</source>
@@ -15095,15 +15310,15 @@ failed: </source>
     </message>
     <message>
         <source>Note input: Eighth rest</source>
-        <translation type="unfinished"/>
+        <translation>音符输入：八分休止符</translation>
     </message>
     <message>
         <source>Zoom in</source>
-        <translation type="unfinished"/>
+        <translation>放大</translation>
     </message>
     <message>
         <source>Zoom out</source>
-        <translation type="unfinished"/>
+        <translation>缩小</translation>
     </message>
     <message>
         <source>Mirror Note Head</source>
@@ -15527,6 +15742,22 @@ failed: </source>
     </message>
     <message>
         <source>Set loop in position</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Palettes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Tempo Marking</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Zoom to 100%</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pan Piano Roll</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -16578,6 +16809,10 @@ Measure is not empty</source>
         <source>Tablature2</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Treble clef optional 8vb</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>drumset</name>
@@ -17196,7 +17431,7 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Note Head</source>
-        <translation type="unfinished"/>
+        <translation>符头</translation>
     </message>
     <message>
         <source>Note Dot</source>
@@ -17620,19 +17855,19 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Voice 1</source>
-        <translation type="unfinished"/>
+        <translation>声部 1</translation>
     </message>
     <message>
         <source>Voice 2</source>
-        <translation type="unfinished"/>
+        <translation>声部 2</translation>
     </message>
     <message>
         <source>Voice 3</source>
-        <translation type="unfinished"/>
+        <translation>声部 3</translation>
     </message>
     <message>
         <source>Voice 4</source>
-        <translation type="unfinished"/>
+        <translation>声部 4</translation>
     </message>
 </context>
 <context>
@@ -17687,10 +17922,6 @@ Measure is not empty</source>
     </message>
     <message>
         <source>Prallprall line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Wavy line</source>
         <translation type="unfinished"/>
     </message>
 </context>

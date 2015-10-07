@@ -284,6 +284,9 @@
     "gClef8vb": {
         "codepoint": "U+e1d7"
     },
+    "gClef8vbParens": {
+        "codepoint": "U+E057"
+    },
     "graceNoteSlashStemDown": {
         "codepoint": "U+e196"
     },

@@ -32,6 +32,7 @@ NICE-TO-HAVE TODO:
 #include "style.h"
 #include "sym.h"
 #include "xml.h"
+#include "accidental.h"
 
 namespace Ms {
 
@@ -49,6 +50,8 @@ static const qreal      GLISS_PALETTE_HEIGHT          = 4.0;
 
 void GlissandoSegment::layout()
       {
+      if (staff())
+            setMag(staff()->mag());
       QRectF r = QRectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
       qreal lw = spatium() * glissando()->lineWidth().val() * .5;
       setbbox(r.adjusted(-lw, -lw, lw, lw));
@@ -75,6 +78,7 @@ void GlissandoSegment::draw(QPainter* painter) const
       qreal h     = pos2().y();
       qreal l     = sqrt(w * w + h * h);
       qreal wi = asin(-h / l) * 180.0 / M_PI;
+      qreal scale = painter->worldTransform().m11();
       painter->rotate(-wi);
 
       if (glissando()->glissandoType() == Glissando::Type::STRAIGHT) {
@@ -82,11 +86,17 @@ void GlissandoSegment::draw(QPainter* painter) const
             }
       else if (glissando()->glissandoType() == Glissando::Type::WAVY) {
             QRectF b = symBbox(SymId::wiggleTrill);
-//            qreal h  = symHeight(SymId::wiggleTrill);     // DEBUG
-            qreal w  = symWidth(SymId::wiggleTrill);
+            qreal w  = symAdvance(SymId::wiggleTrill);
             int n    = (int)(l / w);      // always round down (truncate) to avoid overlap
             qreal x  = (l - n*w) * 0.5;   // centre line in available space
-            drawSymbol(SymId::wiggleTrill, painter, QPointF(x, b.height()*.70), n);
+            QList<SymId> ids;
+            for (int i = 0; i < n; ++i)
+                  ids.append(SymId::wiggleTrill);
+            // this is very ugly but fix #68846 for now
+            bool tmp = MScore::pdfPrinting;
+            MScore::pdfPrinting = true;
+            score()->scoreFont()->draw(ids, painter, magS(), QPointF(x, b.height() * .7), scale *2.0);
+            MScore::pdfPrinting = tmp;
             }
       if (glissando()->showText()) {
             const TextStyle& st = score()->textStyle(TextStyleType::GLISSANDO);
@@ -96,7 +106,7 @@ void GlissandoSegment::draw(QPainter* painter) const
             if (r.width() < l) {
                   qreal yOffset = r.height() + r.y();       // find text descender height
                   // raise text slightly above line and slightly more with WAVY than with STRAIGHT
-                  yOffset += _spatium * (glissando()->glissandoType() == Glissando::Type::WAVY ? 0.5 : 0.1);
+                  yOffset += _spatium * (glissando()->glissandoType() == Glissando::Type::WAVY ? 0.8 : 0.1);
                   painter->setFont(f);
                   qreal x = (l - r.width()) * 0.5;
                   painter->drawText(QPointF(x, -yOffset), glissando()->text());
@@ -116,6 +126,8 @@ QVariant GlissandoSegment::getProperty(P_ID id) const
             case P_ID::GLISS_TYPE:
             case P_ID::GLISS_TEXT:
             case P_ID::GLISS_SHOW_TEXT:
+            case P_ID::GLISSANDO_STYLE:
+            case P_ID::PLAY:
                   return glissando()->getProperty(id);
             default:
                   return LineSegment::getProperty(id);
@@ -132,6 +144,8 @@ bool GlissandoSegment::setProperty(P_ID id, const QVariant& v)
             case P_ID::GLISS_TYPE:
             case P_ID::GLISS_TEXT:
             case P_ID::GLISS_SHOW_TEXT:
+            case P_ID::GLISSANDO_STYLE:
+            case P_ID::PLAY:
                   return glissando()->setProperty(id, v);
             default:
                   return LineSegment::setProperty(id, v);
@@ -148,6 +162,8 @@ QVariant GlissandoSegment::propertyDefault(P_ID id) const
       case P_ID::GLISS_TYPE:
       case P_ID::GLISS_TEXT:
       case P_ID::GLISS_SHOW_TEXT:
+      case P_ID::GLISSANDO_STYLE:
+      case P_ID::PLAY:
                   return glissando()->propertyDefault(id);
             default:
                   return LineSegment::propertyDefault(id);
@@ -167,6 +183,8 @@ Glissando::Glissando(Score* s)
       _text          = "gliss.";
       _showText      = true;
       setDiagonal(true);
+      setGlissandoStyle(MScore::GlissandoStyle::CHROMATIC);
+      setPlayGlissando(true);
       setLineWidth(Spatium(GLISS_DEFAULT_LINE_TICKNESS));
       setAnchor(Spanner::Anchor::NOTE);
       }
@@ -175,6 +193,8 @@ Glissando::Glissando(const Glissando& g)
    : SLine(g)
       {
       _glissandoType = g._glissandoType;
+      _glissandoStyle = g._glissandoStyle;
+      _playGlissando = g._playGlissando;
       _text          = g._text;
       _showText      = g._showText;
       }
@@ -366,6 +386,8 @@ void Glissando::write(Xml& xml) const
       if (_showText && !_text.isEmpty())
             xml.tag("text", _text);
       xml.tag("subtype", int(_glissandoType));
+      writeProperty(xml, P_ID::PLAY);
+      writeProperty(xml, P_ID::GLISSANDO_STYLE);
       SLine::writeProperties(xml);
       xml.etag();
       }
@@ -389,6 +411,11 @@ void Glissando::read(XmlReader& e)
                   }
             else if (tag == "subtype")
                   _glissandoType = Type(e.readInt());
+            else if (tag == "glissandoStyle") {
+                setProperty(P_ID::GLISSANDO_STYLE, Ms::getProperty(P_ID::GLISSANDO_STYLE, e));
+            } else if ( tag == "play") {
+                setPlayGlissando(e.readBool());
+            }
             else if (!SLine::readProperties(e))
                   e.unknown();
             }
@@ -715,6 +742,10 @@ QVariant Glissando::getProperty(P_ID propertyId) const
                   return text();
             case P_ID::GLISS_SHOW_TEXT:
                   return showText();
+            case P_ID::GLISSANDO_STYLE:
+                  return int(glissandoStyle());
+            case P_ID::PLAY:
+                  return bool(playGlissando());
             default:
                   break;
             }
@@ -737,6 +768,12 @@ bool Glissando::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::GLISS_SHOW_TEXT:
                   setShowText(v.toBool());
                   break;
+            case P_ID::GLISSANDO_STYLE:
+                 setGlissandoStyle(MScore::GlissandoStyle(v.toInt()));
+                 break;
+            case P_ID::PLAY:
+                 setPlayGlissando(v.toBool());
+                 break;
             default:
                   if (!SLine::setProperty(propertyId, v))
                         return false;
@@ -759,11 +796,14 @@ QVariant Glissando::propertyDefault(P_ID propertyId) const
                   return "gliss.";
             case P_ID::GLISS_SHOW_TEXT:
                   return true;
+            case P_ID::GLISSANDO_STYLE:
+                  return int(MScore::GlissandoStyle::CHROMATIC);
+            case P_ID::PLAY:
+                  return true;
             default:
                   break;
             }
       return SLine::propertyDefault(propertyId);
       }
-
 }
 

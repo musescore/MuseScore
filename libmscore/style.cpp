@@ -209,6 +209,8 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::tremoloBoxHeight,            StyleType("tremoloBoxHeight",        StyleValueType::SPATIUM) },
       { StyleIdx::tremoloStrokeWidth,          StyleType("tremoloLineWidth",        StyleValueType::SPATIUM) },
       { StyleIdx::tremoloDistance,             StyleType("tremoloDistance",         StyleValueType::SPATIUM) },
+      // TODO { StyleIdx::tremoloBeamLengthMultiplier, StyleType("tremoloBeamLengthMultiplier", StyleValueType::DOUBLE) },
+      // TODO { StyleIdx::tremoloMaxBeamLength,        StyleType("tremoloMaxBeamLength", StyleValueType::SPATIUM) },
       { StyleIdx::linearStretch,               StyleType("linearStretch",           StyleValueType::DOUBLE) },
       { StyleIdx::crossMeasureValues,          StyleType("crossMeasureValues",      StyleValueType::BOOL) },
       { StyleIdx::keySigNaturals,              StyleType("keySigNaturals",          StyleValueType::INT) },
@@ -557,8 +559,10 @@ StyleData::StyleData()
             { StyleIdx::tabClef,                     QVariant(int(ClefType::TAB)) },
             { StyleIdx::tremoloWidth,                QVariant(1.2) },  // tremolo stroke width: note head width
             { StyleIdx::tremoloBoxHeight,            QVariant(0.65) },
-            { StyleIdx::tremoloStrokeWidth,          QVariant(0.35) },
+            { StyleIdx::tremoloStrokeWidth,          QVariant(0.5) },  // was 0.35
             { StyleIdx::tremoloDistance,             QVariant(0.8) },
+            // TODO { StyleIdx::tremoloBeamLengthMultiplier, QVariant(0.62) },
+            // TODO { StyleIdx::tremoloMaxBeamLength,        QVariant(12.0) },
             { StyleIdx::linearStretch,               QVariant(qreal(1.5)) },
             { StyleIdx::crossMeasureValues,          QVariant(false) },
             { StyleIdx::keySigNaturals,              QVariant(int(KeySigNatural::NONE)) },
@@ -1110,7 +1114,7 @@ void StyleData::load(XmlReader& e)
 
                                     }
                               if (idx2 >= int(ArticulationType::ARTICULATIONS))
-                                    e.unknown();
+                                    continue;
                               }
                         }
                   }
@@ -1647,4 +1651,3 @@ void MStyle::setArticulationAnchor(int id, ArticulationAnchor val)
       }
 
 }
-
