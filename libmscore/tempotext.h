@@ -44,7 +44,7 @@ class TempoText : public Text  {
       Measure* measure() const   { return (Measure*)parent()->parent(); }
 
       qreal tempo() const        { return _tempo;      }
-      void setTempo(qreal v)     { _tempo = v;         }
+      void setTempo(qreal v);
       void undoSetTempo(qreal v);
 
       bool followText() const    { return _followText; }
