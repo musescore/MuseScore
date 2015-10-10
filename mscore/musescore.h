@@ -567,7 +567,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreTab* getTab1() const { return tab1; }
       ScoreTab* getTab2() const { return tab2; }
       QList<LanguageItem>& languages() { return _languages; }
-      Score * linearize(Score *);
+      Score * linearize(Score *, bool inplace);
       bool newLinearized(Score*);
 
       QStringList getOpenScoreNames(const QString& filter, const QString& title);

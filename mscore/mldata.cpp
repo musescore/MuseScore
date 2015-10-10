@@ -178,9 +178,7 @@ QJsonObject collectMLData(Score* score, const QMap<int,qreal>& t2t) {
 
       score->repeatList()->unwind();
       if (score->repeatList()->size()>1) {
-        Score * nscore = mscore->linearize(score);
-        delete score;
-        score = nscore;
+        score = mscore->linearize(score,true);
       }
 
       QJsonObject qts = QJsonObject();

@@ -143,26 +143,29 @@ namespace Ms {
       score->doLayout();
    }
 
-   Score * MuseScore::linearize(Score* old_score)
+   Score * MuseScore::linearize(Score* original, bool in_place)
       {
 
-      Score* score = old_score->clone();
+      Score* score;
+      if (in_place) score = original;
+      else score = original->clone();
       
       //old_score->deselectAll(); 
       // Figure out repeat structure and traverse it
-      old_score->repeatList()->unwind();
-      old_score->setPlaylistDirty();
+      score->repeatList()->unwind();
+      score->setPlaylistDirty();
+
+      Measure * rem_first, * rem_last;
 
       bool copy=false;
-      foreach (const RepeatSegment* rs, *(old_score->repeatList()) ) {
+      foreach (const RepeatSegment* rs, *(score->repeatList()) ) {
          int startTick  = rs->tick;
          int endTick    = startTick + rs->len;
 
          qDebug("Segment %i-%i",startTick,endTick);
 
-         Measure * mf = old_score->tick2measure(startTick);
+         Measure * mf = score->tick2measure(startTick);
          Measure * ml = ml;
-
 
          if (!copy && startTick==0) ml = score->tick2measure(startTick);
 
@@ -180,18 +183,23 @@ namespace Ms {
             }
 
             // Remove all measures past the first jump
-            if (ml) {  
-               score->startCmd();
-               score->select(ml,SelectType::SINGLE);
-               score->select(score->lastMeasure(),SelectType::RANGE);
-               score->cmdDeleteSelectedMeasures();
-               score->endCmd(); 
+            if (ml) {
+               rem_first = ml;
+               rem_last = score->lastMeasure();
             }
          }
          
          if (copy) appendCopiesOfMeasures(score,mf,ml);
 
          copy = true;;
+      }
+
+      if (rem_first) {
+         score->startCmd();
+         score->select(rem_first,SelectType::SINGLE);
+         score->select(rem_last,SelectType::RANGE);
+         score->cmdDeleteSelectedMeasures();
+         score->endCmd(); 
       }
 
       post_linearize(score);
@@ -204,7 +212,7 @@ namespace Ms {
 
    bool MuseScore::newLinearized(Score* old_score)
    {
-      Score * score = linearize(old_score);
+      Score * score = linearize(old_score, false);
       setCurrentScoreView(appendScore(score));
 
       return true;

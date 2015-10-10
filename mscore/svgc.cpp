@@ -244,9 +244,7 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
     cs->repeatList()->unwind();
     if (cs->repeatList()->size()>1) {
        if (do_linearize) {
-          Score * nscore = mscore->linearize(cs);
-          delete cs;
-          cs = nscore;
+          cs = mscore->linearize(cs, true);
        }
        else {
           QMessageBox::critical(0, QObject::tr("SVC export Failed"),

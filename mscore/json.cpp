@@ -199,10 +199,8 @@ namespace Ms {
       createAllExcerpts(score);
 
       // Linearize the score (for getting all the onsets)
-      Score * nscore = mscore->linearize(score);
-      delete score;
-      score = nscore;
-
+      score = mscore->linearize(score, true);
+      
       QFile file(saveName);
       file.open(QIODevice::WriteOnly | QIODevice::Text);
       
