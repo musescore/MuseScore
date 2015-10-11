@@ -1254,16 +1254,21 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                  * see one in the current note when we are tracking one then end the ottava. */
                                                 if (ottavaFound == 2 || (ottavaFound == 1 && currentNode.parentNode().firstChildElement("Ottavia").isNull())) {
                                                       Segment* prevSeg = segment->prev1(Segment::Type::ChordRest);
-                                                      Element* e = prevSeg->element(track);
-                                                      if (e)
-                                                            if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST) {
-                                                                  ChordRest* crPrev = static_cast<Chord*>(e);
-                                                                  createOttava(false, track, crPrev, ottavaValue);
-                                                                  }
-                                                      ottavaFound = 1;
+                                                      if (prevSeg == NULL) { // This is sad, but when this value is NULL, we shouldn't do anything
+                                                          ottavaFound = 0;
+                                                          }
+                                                      else {
+                                                          Element* e = prevSeg->element(track);
+                                                          if (e)
+                                                                if (e->type() == Element::Type::CHORD || e->type() == Element::Type::REST) {
+                                                                      ChordRest* crPrev = static_cast<Chord*>(e);
+                                                                      createOttava(false, track, crPrev, ottavaValue);
+                                                                      }
+                                                          ottavaFound = 0; // When we hit that, we should say that the transaction is closed
+                                                          }
                                                       }
                                                 if (ottavaFound) {
-                                                      createOttava(ottavaFound, track, cr, ottavaValue);
+                                                      createOttava(true, track, cr, ottavaValue);
                                                       int pitch = note->pitch();
                                                       Ottava::Type type = ottava[track]->ottavaType();
                                                       if (type == Ottava::Type::OTTAVA_8VA)
