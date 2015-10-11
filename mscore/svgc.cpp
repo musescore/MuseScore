@@ -119,6 +119,8 @@ void createAllExcerpts(Score * score) {
   if (score->rootScore()->excerpts().size()>0 ||
       score->parts().size()==1) return;
 
+  score->startCmd();
+
   // Based on things found in excerptsdialog.cpp
   foreach( Part * part, score->parts()) {
     Excerpt* e = new Excerpt(score);
@@ -128,12 +130,15 @@ void createAllExcerpts(Score * score) {
     e->parts().append(part);
     Score* nscore = new Score(e->oscore());
     e->setPartScore(nscore);
-    nscore->setName(e->title()); // needed before AddExcerpt
+    nscore->setName(name); // needed before AddExcerpt
     nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
-    score->addExcerpt(nscore);
     createExcerpt(e);
+    score->addExcerpt(nscore); // This actually copies the e created before
+    delete e;
   }
+
   score->setExcerptsChanged(true);
+  score->endCmd();
 
   qWarning() << "Created new excerpts:" << score->rootScore()->excerpts().size();
 }

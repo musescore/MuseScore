@@ -202,6 +202,7 @@ namespace Ms {
       score = mscore->linearize(score, true);
 
       createAllExcerpts(score);
+
       
       QFile file(saveName);
       file.open(QIODevice::WriteOnly | QIODevice::Text);
@@ -221,6 +222,7 @@ namespace Ms {
           p_ar.append(pobj);
       }
       obj["parts"] = p_ar;
+
 
 
       // List all excerpts
