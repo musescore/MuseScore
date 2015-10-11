@@ -34,6 +34,7 @@
 #include "page.h"
 #include "part.h"
 #include "repeat.h"
+#include "repeatlist.h"
 #include "score.h"
 #include "segment.h"
 #include "sig.h"
@@ -2993,6 +2994,95 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                               m->setEndBarLineType(BarLineType::START_REPEAT, m->endBarLineGenerated());
                         else if (m->endBarLineGenerated())
                               m->setEndBarLineType(BarLineType::NORMAL, m->endBarLineGenerated());
+                        }
+                  if(m->repeatFlags() & Repeat::END) {
+                        bool showCourtesyKeySig = styleB(StyleIdx::genCourtesyKeysig) && !(m->sectionBreak() && _layoutMode != LayoutMode::FLOAT);
+                        bool showCourtesyTimeSig = styleB(StyleIdx::genCourtesyTimesig) && !(m->sectionBreak() && _layoutMode != LayoutMode::FLOAT);
+                        int n = _staves.size();
+                        for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
+                              Staff* staff = _staves[staffIdx];
+                              int track = staffIdx * VOICES;
+                              Measure* rm = m;
+                              while (true) {
+                                    if (rm->repeatFlags() & Repeat::START)
+                                          break;
+
+                                    if (rm == _score->firstMeasure())
+                                          break;
+
+                                    if (rm->prevMeasure()->sectionBreak())
+                                          break;
+
+                                    rm = rm->prevMeasure();
+                                    }
+                              int tick = m->tick() + m->ticks();
+                              int reptick = rm->tick();
+                              KeySigEvent key1 = staff->keySigEvent(tick-1);
+                              KeySigEvent key2 = staff->keySigEvent(reptick);
+                              Fraction time1 = m->timesig();
+                              Fraction time2 = rm->timesig();
+                              if (showCourtesyKeySig && !(key1 == key2)) {
+                                    // Place repeat courtesy just before repeat barline
+                                    s = m->undoGetSegment(Segment::Type::KeySigAnnounce, tick-1);
+                                    KeySig* ks = static_cast<KeySig*>(s->element(track));
+                                    if (!ks) {
+                                          ks = new KeySig(this);
+                                          ks->setKeySigEvent(key2);
+                                          ks->setTrack(track);
+                                          ks->setGenerated(true);
+                                          ks->setParent(s);
+                                          undo(new AddElement(ks));
+                                          }
+                                    }
+                              if (!showCourtesyKeySig) {
+                                    // remove any existent courtesy key signature
+                                    Segment* s = m->findSegment(Segment::Type::KeySigAnnounce, tick-1);
+                                    if (s && s->element(track))
+                                          undoRemoveElement(s->element(track));
+                                    }
+                              if (showCourtesyTimeSig && !(time1 == time2)) {
+                                    Measure* tsm = rm;
+                                    Segment* tss;
+                                    TimeSig* ts1;
+                                    while (true) {
+                                          tss = tsm->findSegment(Segment::Type::TimeSig, tsm->tick());
+                                          if (tss)
+                                                ts1 = static_cast<TimeSig*>(tss->element(0));
+                                                break;
+
+                                          if (tsm == _score->firstMeasure())
+                                                break;
+
+                                          if (tsm->prevMeasure()->sectionBreak())
+                                                break;
+
+                                          tsm = tsm->prevMeasure();
+                                          }
+                                    s  = m->undoGetSegment(Segment::Type::TimeSigAnnounce, tick-1);
+                                    int nstaves = Score::nstaves();
+                                    for (int track = 0; track < nstaves * VOICES; track += VOICES) {
+                                          TimeSig* ts2 = static_cast<TimeSig*>(s->element(track));
+                                          if (ts2 == 0) {
+                                                ts2 = new TimeSig(this);
+                                                ts2->setTrack(track);
+                                                ts2->setGenerated(true);
+                                                ts2->setParent(s);
+                                                undoAddElement(ts2);
+                                                }
+                                          if (ts1) {
+                                                ts2->setFrom(ts1);
+                                                }
+                                          m->setDirty();
+                                          }
+                                    }
+                              else {
+                                    // remove any existing time signatures
+                                    Segment* tss = m->findSegment(Segment::Type::TimeSigAnnounce, tick-1);
+                                    if (tss) {
+                                          undoRemoveElement(s->element(track));
+                                          }
+                                    }
+                              }
                         }
                   if (m->createEndBarLines())
                         m->setDirty();
