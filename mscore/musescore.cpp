@@ -4664,7 +4664,8 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"t", "test-mode"}, "Set testMode flag for all files"));
       parser.addOption(QCommandLineOption({"M", "midi-operations"}, "Specify MIDI import operations file", "file"));
       parser.addOption(QCommandLineOption({"w", "no-webview"}, "No web view in start center"));
-      parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "used with -o <file>.pdf, export score + parts"));
+      //parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "used with -o <file>.pdf, export score + parts"));
+      parser.addOption(QCommandLineOption({"P", "partsfile"}, "used with -o <file>.{svc|json}","pname"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -4753,9 +4754,10 @@ int main(int argc, char* av[])
             preferences.midiImportOperations.setOperationsFile(temp);
             }
       noWebView = parser.isSet("w");
-      exportScoreParts = parser.isSet("export-score-parts");
-      if (exportScoreParts && !converterMode)
-            parser.showHelp(EXIT_FAILURE);
+
+      //exportScoreParts = parser.isSet("export-score-parts");
+      //if (exportScoreParts && !converterMode)
+      //      parser.showHelp(EXIT_FAILURE);
 
       QStringList argv = parser.positionalArguments();
 

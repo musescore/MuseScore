@@ -86,16 +86,21 @@ namespace Ms {
 // Check if the file might be a clever construction that would take ages to parse
 QString checkSafety(Score * score) {
 
+
   if (score->rootScore()->excerpts().size() > 20) return QString("Too many parts");
 
   score->repeatList()->unwind();
   if (score->repeatList()->size() > 100) return QString("Too many repeats");
 
-  RepeatSegment * rs = score->repeatList()->last();
-  int endTick= rs->tick + rs->len;
-  qreal endtime = score->tempomap()->tick2time(endTick);
+  if (!score->repeatList()->isEmpty()) {
+    RepeatSegment * rs = score->repeatList()->last();
+    int endTick= rs->tick + rs->len;
+    qreal endtime = score->tempomap()->tick2time(endTick);
 
-  if (endtime>60*10) return QString("Piece lasts too long");
+    if (endtime>60*10) return QString("Piece lasts too long");
+  }
+
+  if (score->lastMeasure() == NULL) return QString("No notes");
 
   // Empty string to signify 'no complaints'
   return QString();
@@ -111,8 +116,8 @@ QString getInstrumentName(Instrument * in) {
 
 void createAllExcerpts(Score * score) {
   qWarning() << "Excerpts:" << score->rootScore()->excerpts().size() << " Parts:" << score->parts().size();
-  if (score->rootScore()->excerpts().size()>0 &&
-      score->parts().size()>1) return;
+  if (score->rootScore()->excerpts().size()>0 ||
+      score->parts().size()==1) return;
 
   // Based on things found in excerptsdialog.cpp
   foreach( Part * part, score->parts()) {
@@ -235,8 +240,6 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
 		return false;
 	}
 
-  createAllExcerpts(cs);
-
   QMap<int,qreal> tick2time, orig_t2t; // latter is bypassed, if empty!
 
   MQZipWriter uz(saveName);
@@ -253,6 +256,7 @@ bool MuseScore::saveSvgCollection(Score * cs, const QString& saveName, const boo
        }
     }
 
+    createAllExcerpts(cs);
 
     Score* thisScore = cs->rootScore();
     if (partsinfo.isEmpty()) {

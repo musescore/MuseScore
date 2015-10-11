@@ -178,6 +178,8 @@ namespace Ms {
       onset_obj["nonrest_ticks"] = nrar;
       onset_obj["beg_tick"] = firstNonRest[key];
       onset_obj["end_tick"] = lastNonRest[key];
+      onset_obj["duration"] = tempomap->tick2time(lastNonRest[key]) -
+                              tempomap->tick2time(firstNonRest[key]);
 
       jsonobj[key] = onset_obj;
     }
@@ -196,10 +198,10 @@ namespace Ms {
         return false;
       }
 
-      createAllExcerpts(score);
-
       // Linearize the score (for getting all the onsets)
       score = mscore->linearize(score, true);
+
+      createAllExcerpts(score);
       
       QFile file(saveName);
       file.open(QIODevice::WriteOnly | QIODevice::Text);

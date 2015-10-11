@@ -645,10 +645,13 @@ static Score::FileError doImport(Score* score, const QString& name, QIODevice* d
 static Score::FileError doValidateAndImport(Score* score, const QString& name, QIODevice* dev)
       {
       // validate the file
-      Score::FileError res;
-      res = doValidate(name, dev);
+      Score::FileError res = Score::FileError::FILE_NO_ERROR;
+
+      // Validator takes 5x more time than loader according to valgrind
+      // Disabling it for that reason
+      /*res = doValidate(name, dev);
       if (res != Score::FileError::FILE_NO_ERROR)
-            return res;
+            return res;*/
 
 #ifdef PULL_PARSER
       importMusicXMLfromBuffer(score, name, dev);

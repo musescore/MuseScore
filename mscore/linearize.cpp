@@ -90,7 +90,6 @@ namespace Ms {
       mimeData->setData(mimeType, fscore->selection().mimeData());
       fscore->deselectAll();
 
-
       Measure * last = 0;
       last = static_cast<Measure*>(score->insertMeasure(Element::Type::MEASURE,0,false));
 
@@ -145,17 +144,17 @@ namespace Ms {
 
    Score * MuseScore::linearize(Score* original, bool in_place)
       {
-
+      
       Score* score;
       if (in_place) score = original;
-      else score = original->clone();
+      else score = original->clone(); // This is actually pretty costly
       
       //old_score->deselectAll(); 
       // Figure out repeat structure and traverse it
       score->repeatList()->unwind();
       score->setPlaylistDirty();
 
-      Measure * rem_first, * rem_last;
+      Measure * rem_first = NULL, * rem_last = NULL;
 
       bool copy=false;
       foreach (const RepeatSegment* rs, *(score->repeatList()) ) {
@@ -164,10 +163,7 @@ namespace Ms {
 
          qDebug("Segment %i-%i",startTick,endTick);
 
-         Measure * mf = score->tick2measure(startTick);
-         Measure * ml = ml;
-
-         if (!copy && startTick==0) ml = score->tick2measure(startTick);
+         Measure * mf = score->tick2measure(startTick), * ml;
 
          for (ml=mf; ml; ml = ml->nextMeasure()) {
             if (ml->tick() + ml->ticks() >= endTick) break;
@@ -176,7 +172,7 @@ namespace Ms {
          // First segment can be done in-place
          if (!copy) {
             if (startTick==0) // keep first segment in place
-               ml = ml?ml->nextMeasure():ml;
+               ml = ml?ml->nextMeasure():NULL;
             else { // remove everything and copy things over
                copy=true;
                ml = score->firstMeasure();
