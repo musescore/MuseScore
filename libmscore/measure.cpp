@@ -2029,6 +2029,9 @@ void Measure::read(XmlReader& e, int staffIdx)
                   rm->read(e);
                   segment = getSegment(Segment::Type::ChordRest, e.tick());
                   segment->add(rm);
+                  if (rm->actualDuration().isZero()) { // might happen with 1.3 scores
+                        rm->setDuration(len());
+                        }
                   lastTick = e.tick();
                   e.incTick(ticks());
                   }
