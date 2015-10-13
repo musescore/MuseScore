@@ -565,10 +565,10 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
       //
       // return true if beam spans a rest
       //
-      for(const ChordRest* cr : cl) {
-            if (cr->type() != Element::Type::CHORD)
-                  return true;
-            }
+//      for(const ChordRest* cr : cl) {
+//            if (cr->type() != Element::Type::CHORD)
+//                  return true;
+//            }
       int l1 = cl.front()->line();
       int le = cl.back()->line();
 
@@ -600,6 +600,9 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
       if (cl.size() >= 3) {
             int l4 = cl[1]->line(_up);
             for (int i = 1; i < cl.size()-1; ++i) {
+                  // Don't consider interior rests
+                  if (cl[i]->type() != Element::Type::CHORD)
+                        continue;
                   int l3 = cl[i]->line(_up);
                   if (l3 != l4)
                         sameLine = false;
@@ -612,7 +615,7 @@ bool Beam::slopeZero(const QList<ChordRest*>& cl)
                               return true;
                         }
                   }
-            if (sameLine && (l1 == l4 || le == l4)) {
+            if (sameLine && (l1 == l4 || le == l4) && cl[1]->type() == Element::Type::CHORD) {
                   if (_up) {
                         if (l1 == l4 && l1 < le)
                               return true;
