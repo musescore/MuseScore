@@ -1709,6 +1709,7 @@ void MusicXMLParserPass1::scorePart()
                   // It is displayed by default, but can be suppressed (print-object=”no”)
                   // As of MusicXML 3.0, formatting is deprecated, with part-name in plain text
                   // and the formatted version in the part-abbreviation-display element
+                  QString name = _e.readElementText();
                   if (!(_e.attributes().value("print-object") == "no"))
                         _partMap[id]->setPlainShortName(_e.readElementText());
                   }
