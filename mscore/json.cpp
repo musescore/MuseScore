@@ -113,6 +113,18 @@ namespace Ms {
 
     QMap<QString,int> firstNonRest, lastNonRest;
 
+    Measure* lastm = score->lastMeasure();
+    int final_tick = lastm->tick()+lastm->ticks();
+
+    foreach(const Part * p, score->parts()) {
+        QString pid = p->id();
+        ponsets[pid] = QList<int>();
+        pisrest[pid] = QList<bool>();
+        plt[pid] = -1;
+        firstNonRest[pid] = final_tick;
+        lastNonRest[pid] = 0;
+    }
+
     foreach(const Element * e, elems) {
        if (e->type() == Element::Type::NOTE || 
            e->type() == Element::Type::REST) {
@@ -124,27 +136,18 @@ namespace Ms {
 
           QString pid = cr->part()->id();
 
-          if (!plt.contains(pid))  {
-            ponsets[pid] = QList<int>();
-            pisrest[pid] = QList<bool>();
-            plt[pid] = -1;
-          }
-
-
           // Update the bounds for actual audio
           if (e->type() == Element::Type::NOTE) {
-            if (!firstNonRest.contains(pid) || tick<firstNonRest[pid]) 
+            if (tick<firstNonRest[pid]) 
               firstNonRest[pid] = tick;
             int dur = cr->durationTypeTicks();
-            if (!lastNonRest.contains(pid) || tick+dur > lastNonRest[pid]) 
+            if (tick+dur > lastNonRest[pid]) 
               lastNonRest[pid] = tick+dur;
           }
 
           if (tick > plt[pid]) {
              ponsets[pid].push_back(tick);
-
              pisrest[pid].push_back(e->type() == Element::Type::REST);
-
              plt[pid] = tick;
           }
           else if (tick == plt[pid]) {
@@ -176,10 +179,12 @@ namespace Ms {
       onset_obj["ticks"] = tar;
       onset_obj["times"] = ar;
       onset_obj["nonrest_ticks"] = nrar;
+
       onset_obj["beg_tick"] = firstNonRest[key];
       onset_obj["end_tick"] = lastNonRest[key];
-      onset_obj["duration"] = tempomap->tick2time(lastNonRest[key]) -
-                              tempomap->tick2time(firstNonRest[key]);
+
+      onset_obj["beg_time"] = tempomap->tick2time(firstNonRest[key]);
+      onset_obj["end_time"] = tempomap->tick2time(lastNonRest[key]);
 
       jsonobj[key] = onset_obj;
     }
