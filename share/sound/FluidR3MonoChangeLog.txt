@@ -1,8 +1,12 @@
+Version 2.110 Fix panning position of Drawbar Organ
+Version 2.109 Increase Contrabass range to A5 (MIDI #81)
+Version 2.108 Withdrawn
 Version 2.107 Add Mellow Yamaha Grand at Bank #8 Patch #0
 Version 2.106 Fix Alto Sax range issue
 Version 2.105 Fix Recorder range issue
 Version 2.104 Tweak tuning for Violin preset
-Version 2.103 Remove Burst Noise preset which was overloading FluidSynth
+Version 2.103 Remove Burst Noise preset which was overloading 
+                      FluidSynth
 Version 2.102 Fix name problem for Bass & Lead
 Version 2.101 Fix typo in Accordion def
 Version 2.10   Raise level of drumkits

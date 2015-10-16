@@ -41,7 +41,7 @@ SynthControl::SynthControl(QWidget* parent)
       _score = 0;
 
       setWindowFlags(Qt::Tool);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+//      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       int idx = 0;
       for (Synthesizer* s : synti->synthesizer()) {
@@ -79,14 +79,16 @@ SynthControl::SynthControl(QWidget* parent)
             settings.beginGroup("SynthControl");
             resize(settings.value("size", QSize(746, 268)).toSize());
             move(settings.value("pos", QPoint(10, 10)).toPoint());
+            tabWidget->setCurrentIndex(settings.value("tab", 0).toInt());
             settings.endGroup();
             }
+      else
+            tabWidget->setCurrentIndex(0);
       metronome->setDefaultAction(getAction("metronome"));
       mgain->setValue(seq->metronomeGain());
 
       updateGui();
 
-      tabWidget->setCurrentIndex(0);
       storeButton->setEnabled(false);
       recallButton->setEnabled(false);
       changeTuningButton->setEnabled(false);
@@ -402,6 +404,7 @@ void SynthControl::writeSettings()
       settings.beginGroup("SynthControl");
       settings.setValue("size", size());
       settings.setValue("pos", pos());
+      settings.setValue("tab", tabWidget->currentIndex());
       settings.endGroup();
       }
 }

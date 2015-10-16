@@ -388,14 +388,14 @@
           <head>0</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Short Guiro</name>
+          <name>Short Güiro</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="74">
           <head>0</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Long Guiro</name>
+          <name>Long Güiro</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="75">
@@ -534,7 +534,7 @@
         <Tempo>
           <tempo>2.4</tempo>
           <lid>5</lid>
-          <text><sym>unicodeNoteQuarterUp</sym> = 144</text>
+          <text><sym>metNoteQuarterUp</sym> = 144</text>
           </Tempo>
         <Beam id="1">
           <l1>17</l1>
@@ -1678,14 +1678,14 @@
             <head>0</head>
             <line>3</line>
             <voice>0</voice>
-            <name>Short Guiro</name>
+            <name>Short Güiro</name>
             <stem>1</stem>
             </Drum>
           <Drum pitch="74">
             <head>0</head>
             <line>3</line>
             <voice>0</voice>
-            <name>Long Guiro</name>
+            <name>Long Güiro</name>
             <stem>1</stem>
             </Drum>
           <Drum pitch="75">
@@ -1828,7 +1828,7 @@
           <Tempo>
             <tempo>2.4</tempo>
             <lid>5</lid>
-            <text><sym>unicodeNoteQuarterUp</sym> = 144</text>
+            <text><sym>metNoteQuarterUp</sym> = 144</text>
             </Tempo>
           <Beam id="2">
             <l1>17</l1>

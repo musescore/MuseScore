@@ -290,6 +290,39 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
       else
             tick2 = endSegment->tick();
       spanner->setTick2(tick2);
+
+      if (spanner->type() == Element::Type::TEXTLINE
+          || spanner->type() == Element::Type::NOTELINE
+          || spanner->type() == Element::Type::OTTAVA
+          || spanner->type() == Element::Type::PEDAL
+          || spanner->type() == Element::Type::HAIRPIN
+          || spanner->type() == Element::Type::VOLTA) {
+            // rebase text elements to score style
+            TextLine* tl = static_cast<TextLine*>(spanner);
+            TextStyleType st;
+            Text* t;
+            // begin
+            t = tl->beginTextElement();
+            if (t) {
+                  st = t->textStyleType();
+                  if (st >= TextStyleType::DEFAULT)
+                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), textStyle(st));
+                  }
+            // continue
+            t = tl->continueTextElement();
+            if (t) {
+                  st = t->textStyleType();
+                  if (st >= TextStyleType::DEFAULT)
+                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), textStyle(st));
+                  }
+            // end
+            t = tl->endTextElement();
+            if (t) {
+                  st = t->textStyleType();
+                  if (st >= TextStyleType::DEFAULT)
+                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), textStyle(st));
+                  }
+            }
       undoAddElement(spanner);
       }
 
@@ -299,6 +332,10 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
 
 void Score::expandVoice(Segment* s, int track)
       {
+      if (!s) {
+            qDebug("expand voice: no segment");
+            return;
+            }
       if (s->element(track)) {
             ChordRest* cr = (ChordRest*)(s->element(track));
             qDebug("expand voice: found %s %s", cr->name(), qPrintable(cr->duration().print()));
@@ -1811,7 +1848,7 @@ Element* Score::move(const QString& cmd)
                         // segment for sure contains chords/rests,
                         int size = seg->elist().size();
                         // if segment has a chord/rest in original element track, use it
-                        if(track > -1 && track < size && seg->element(track)) {
+                        if (track > -1 && track < size && seg->element(track)) {
                               trg  = seg->element(track);
                               cr = static_cast<ChordRest*>(trg);
                               break;
@@ -1845,44 +1882,86 @@ Element* Score::move(const QString& cmd)
             }
 
       Element* el = 0;
+      Segment* ois = noteEntryMode() ? _is.segment() : nullptr;
+      Measure* oim = ois ? ois->measure() : nullptr;
+
       if (cmd == "next-chord") {
+            // note input cursor
             if (noteEntryMode())
                   _is.moveToNextInputPos();
+
+            // selection "cursor"
+            // find next chordrest, which might be a grace note
+            // this may override note input cursor
             el = nextChordRest(cr);
-            if (!el)
-                 el = cr;
+            if (el && noteEntryMode()) {
+                  // do not use if not in original or new measure (don't skip measures)
+                  Measure* m = static_cast<ChordRest*>(el)->measure();
+                  Segment* nis = _is.segment();
+                  Measure* nim = nis ? nis->measure() : nullptr;
+                  if (m != oim && m != nim)
+                        el = cr;
+                  // do not use if new input segment is current cr
+                  // this means input cursor just caught up to current selection
+                  else if (cr && nis == cr->segment())
+                        el = cr;
+                  }
+            else if (!el)
+                  el = cr;
             }
       else if (cmd == "prev-chord") {
+
+            // note input cursor
             if (noteEntryMode() && _is.segment()) {
-                  // when there is no cr at input position for current voice,
-                  // this is a sign that input cursor has advanced into a gap / empty measure
-                  // use selected chord if present,
-                  if (inputState().cr() == nullptr && cr == selection().cr())
-                        el = cr;
+
+                  // back up until we find a ChordRest segment
                   Segment* s = _is.segment()->prev1();
-                  //
-                  // if _is._segment is first chord/rest segment in measure
-                  // make sure "m" points to previous measure
-                  //
                   while (s && s->segmentType() != Segment::Type::ChordRest)
                         s = s->prev1();
                   if (s == 0)
                         return 0;
+
+                  // this is the right measure
                   Measure* m = s->measure();
 
-                  int track  = _is.track();
-                  for (; s; s = s->prev1()) {
+                  // keep backing up until we find a chordrest in right track
+                  // or until we leave the right measure
+                  int track = _is.track();
+                  for ( ; s; s = s->prev1()) {
                         if (s->segmentType() != Segment::Type::ChordRest)
                               continue;
                         if (s->element(track) || s->measure() != m)
                               break;
                         }
-                  if (s && !s->element(track))
+
+                  // if we did not find a chordrest in right track in right measure
+                  // then use first chordrest segment of right measure
+                  if (!s || s->measure() != m)
                         s = m->first(Segment::Type::ChordRest);
+
+                  // move input cursor
                   _is.moveInputPos(s);
                   }
-            if (!el)
-                  el = prevChordRest(cr);
+
+            // selection "cursor"
+            // find previous chordrest, which might be a grace note
+            // this may override note input cursor
+            el = prevChordRest(cr);
+            if (el && noteEntryMode()) {
+                  // do not use if not in original or new measure (don't skip measures)
+                  Measure* m = static_cast<ChordRest*>(el)->measure();
+                  Segment* nis = _is.segment();
+                  Measure* nim = nis ? nis->measure() : nullptr;
+                  if (m != oim && m != nim)
+                        el = cr;
+                  // do not use if new input segment is current cr
+                  // this means input cursor just caught up to current selection
+                  else if (cr && nis == cr->segment())
+                        el = cr;
+                  }
+            else if (!el)
+                  el = cr;
+
             }
       else if (cmd == "next-measure") {
             el = nextMeasure(cr);
@@ -1904,14 +1983,24 @@ Element* Score::move(const QString& cmd)
             if (noteEntryMode())
                   _is.moveInputPos(el);
             }
+
       if (el) {
             if (el->type() == Element::Type::CHORD)
                   el = static_cast<Chord*>(el)->upNote();       // originally downNote
             _playNote = true;
-            select(el, SelectType::SINGLE, 0);
             if (noteEntryMode()) {
-                  foreach (MuseScoreView* view ,viewer)
+                  // if cursor moved into a gap, selection cannot follow
+                  // only select & play el if it was not already selected (does not normally happen)
+                  ChordRest* cr = _is.cr();
+                  if (cr || !el->selected())
+                        select(el, SelectType::SINGLE, 0);
+                  else
+                        _playNote = false;
+                  for (MuseScoreView* view : viewer)
                         view->moveCursor();
+                  }
+            else {
+                  select(el, SelectType::SINGLE, 0);
                   }
             }
       return el;
@@ -2796,7 +2885,7 @@ void Score::cmdSlashFill()
                   s = setNoteRest(s, track + voice, nv, f);
                   Chord* c = static_cast<Chord*>(s->element(track + voice));
                   if (c->links()) {
-                        foreach (ScoreElement* e, *c->links()) {
+                        for (ScoreElement* e : *c->links()) {
                               Chord* lc = static_cast<Chord*>(e);
                               lc->setSlash(true, true);
                               }
@@ -2830,7 +2919,14 @@ void Score::cmdSlashRhythm()
       foreach (Element* e, selection().elements()) {
             if (e->voice() >= 2 && e->type() == Element::Type::REST) {
                   Rest* r = static_cast<Rest*>(e);
-                  r->setAccent(!r->accent());
+                  if (r->links()) {
+                        for (ScoreElement* e : *r->links()) {
+                              Rest* lr = static_cast<Rest*>(e);
+                              lr->setAccent(!lr->accent());
+                              }
+                        }
+                  else
+                        r->setAccent(!r->accent());
                   continue;
                   }
             else if (e->type() == Element::Type::NOTE) {
@@ -2843,7 +2939,14 @@ void Score::cmdSlashRhythm()
                         continue;
                   chords.append(c);
                   // toggle slash setting
-                  c->setSlash(!c->slash(), false);
+                  if (c->links()) {
+                        for (ScoreElement* e : *c->links()) {
+                              Chord* lc = static_cast<Chord*>(e);
+                              lc->setSlash(!lc->slash(), false);
+                              }
+                        }
+                  else
+                        c->setSlash(!c->slash(), false);
                   }
             }
       setLayoutAll(true);

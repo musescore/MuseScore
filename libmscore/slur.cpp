@@ -818,10 +818,13 @@ void Slur::slurPos(SlurPos* sp)
             return;
             }
 
-      bool useTablature = staff() != nullptr && staff()->isTabStaff();
-      StaffType* stt = nullptr;
-      if (useTablature)
-            stt = staff()->staffType();
+      bool        useTablature      = staff() != nullptr && staff()->isTabStaff();
+      bool        staffHasStems     = true;     // assume staff uses stems
+      StaffType*  stt               = nullptr;
+      if (useTablature) {
+            stt               = staff()->staffType();
+            staffHasStems     = stt->stemThrough();   // if tab with stems beside, stems do not count for slur pos
+            }
 
       ChordRest* scr = startCR();
       ChordRest* ecr = endCR();
@@ -853,14 +856,16 @@ void Slur::slurPos(SlurPos* sp)
 
       qreal xo, yo;
 
-      Stem* stem1 = sc?sc->stem():0;
-      Stem* stem2 = ec?ec->stem():0;
+      Stem* stem1 = sc && staffHasStems ? sc->stem() : 0;
+      Stem* stem2 = ec && staffHasStems ? ec->stem() : 0;
 
       enum class SlurAnchor : char {
             NONE, STEM
             };
       SlurAnchor sa1 = SlurAnchor::NONE;
       SlurAnchor sa2 = SlurAnchor::NONE;
+      // if slur is 'embedded' between either stem or both (as it might happens with voices)
+      // link corresponding slur end to stem position
       if ((scr->up() == ecr->up()) && !scr->beam() && !ecr->beam() && (_up == scr->up())) {
             if (stem1)
                   sa1 = SlurAnchor::STEM;
@@ -869,17 +874,27 @@ void Slur::slurPos(SlurPos* sp)
             }
 
       qreal __up = _up ? -1.0 : 1.0;
+      qreal hw1 = note1 ? note1->tabHeadWidth(stt) : startCR()->width();      // if stt == 0, tabHeadWidth()
+      qreal hw2 = note2 ? note2->tabHeadWidth(stt) : endCR()->width();        // defaults to headWidth()
+      QPointF pt;
       switch (sa1) {
-            case SlurAnchor::STEM: //sc can't be null
-                  sp->p1 += sc->stemPos() - sc->pagePos() + sc->stem()->p2();
-                  sp->p1 += QPointF(0.35 * _spatium, 0.25 * _spatium);
+            case SlurAnchor::STEM:        //sc can't be null
+                  // place slur starting point at stem base point
+                  pt = sc->stemPos() - sc->pagePos() + sc->stem()->p2();
+                  if (useTablature)                   // in tabs, stems are centred on note:
+                        pt.rx() = hw1 * 0.5;          // skip half note head to touch stem
+                  sp->p1 += pt;
+                  sp->p1 += QPointF(0.35 * _spatium, 0.25 * _spatium);  // clear the stem (x) and the note head (y)
                   break;
             case SlurAnchor::NONE:
                   break;
             }
       switch(sa2) {
-            case SlurAnchor::STEM: //ec can't be null
-                  sp->p2 += ec->stemPos() - ec->pagePos() + ec->stem()->p2();
+            case SlurAnchor::STEM:        //ec can't be null
+                  pt = ec->stemPos() - ec->pagePos() + ec->stem()->p2();
+                  if (useTablature)
+                        pt.rx() = hw2 * 0.5;
+                  sp->p2 += pt;
                   sp->p2 += QPointF(-0.35 * _spatium, 0.25 * _spatium);
                   break;
             case SlurAnchor::NONE:
@@ -892,131 +907,133 @@ void Slur::slurPos(SlurPos* sp)
       //    vertical:   _spatium * .4 above/below note head
       //
       //------p1
-      bool stemPos = false;   // p1 starts at chord stem side
-      qreal hw = note1 ? note1->tabHeadWidth(stt) : startCR()->width();     // if stt == 0, tabHeadWidth()
-      xo = hw * .5;                                                           // defaults to headWidth()
-      if (note1)
-            yo = note1->pos().y();
-      else if(_up)
-            yo = startCR()->bbox().top();
-      else
-            yo = startCR()->bbox().top() + startCR()->height();
-      yo += _spatium * .9 * __up;
+      // Compute x0, y0 and stemPos
+      if (sa1 == SlurAnchor::NONE || sa2 == SlurAnchor::NONE) { // need stemPos if sa2 == SlurAnchor::NONE
+            bool stemPos = false;   // p1 starts at chord stem side
+            xo = hw1 * .5;
+            if (note1)
+                  yo = note1->pos().y();
+            else if(_up)
+                  yo = startCR()->bbox().top();
+            else
+                  yo = startCR()->bbox().top() + startCR()->height();
+            yo += _spatium * .9 * __up;
 
-      if (stem1) { //sc not null
-            Beam* beam1 = sc->beam();
-            if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
-                  qreal sh = stem1->height() + _spatium;
-                  if (_up)
-                        yo = sc->downNote()->pos().y() - sh;
-                  else
-                        yo = sc->upNote()->pos().y() + sh;
-                  xo       = stem1->pos().x();
-                  stemPos  = true;
-                  }
-            else {
-                  if (sc->up() && _up)
-                        xo = hw + _spatium * .3;
-                  //
-                  // handle case: stem up   - stem down
-                  //              stem down - stem up
-                  //
-                  if ((sc->up() != ecr->up()) && (sc->up() == _up)) {
-                        Note* n1  = sc->up() ? sc->downNote() : sc->upNote();
-                        Note* n2  = 0;
-                        if(ec)
-                              n2 = ec->up() ? ec->downNote() : ec->upNote();
-                        qreal yd  = (n2 ? n2->pos().y() : endCR()->pos().y()) - n1->pos().y();
-
-                        yd *= .5;
-
-                        qreal sh = stem1->height();    // limit y move
-                        if (yd > 0.0) {
-                              if (yd > sh)
-                                    yd = sh;
-                              }
-                        else {
-                              if (yd < - sh)
-                                    yd = -sh;
-                              }
-                        stemPos = true;
-                        if ((_up && (yd < -_spatium)) || (!_up && (yd > _spatium)))
-                              yo += yd;
-                        }
-                  else if (sc->up() != _up)
-                        yo = fixArticulations(yo, sc, __up);
-                  }
-            }
-      else if (sc && sc->up() != _up)
-            yo = fixArticulations(yo, sc, __up);
-
-      if (sa1 == SlurAnchor::NONE)
-            sp->p1 += QPointF(xo, yo);
-
-      //------p2
-      hw = note2 ? note2->tabHeadWidth(stt) : endCR()->width();
-      xo = hw * .5;
-      if (note2)
-            yo = note2->pos().y();
-      else if(_up)
-            yo = endCR()->bbox().top();
-      else
-            yo = endCR()->bbox().top() + endCR()->height();
-      yo += _spatium * .9 * __up;
-
-      if (stem2) { //ec can't be null
-            Beam* beam2 = ec->beam();
-            if ((stemPos && (scr->up() == ec->up()))
-               || (beam2
-                 && (!beam2->elements().isEmpty())
-                 && (beam2->elements().front() != ec)
-                 && (ec->up() == _up)
-                 && sc && (sc->noteType() == NoteType::NORMAL)
-                 )
-                  ) {
-                  qreal sh = stem2->height() + _spatium;
-                  if (_up)
-                        yo = ec->downNote()->pos().y() - sh;
-                  else
-                        yo = ec->upNote()->pos().y() + sh;
-                  xo = stem2->pos().x();
-                  }
-            else if (!ec->up() && !_up)
-                  xo = -_spatium * .3 + note2->x();
-            //
-            // handle case: stem up   - stem down
-            //              stem down - stem up
-            //
-            if ((scr->up() != ec->up()) && (ec->up() == _up)) {
-                  Note* n1 = 0;
-                  if(sc)
-                        sc->up() ? sc->downNote() : sc->upNote();
-                  Note* n2 = ec->up() ? ec->downNote() : ec->upNote();
-                  qreal yd = n2->pos().y() - (n1 ? n1->pos().y() : startCR()->pos().y());
-
-                  yd *= .5;
-
-                  qreal mh = stem2->height();    // limit y move
-                  if (yd > 0.0) {
-                        if (yd > mh)
-                              yd = mh;
+            if (stem1) { //sc not null
+                  Beam* beam1 = sc->beam();
+                  if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
+                        qreal sh = stem1->height() + _spatium;
+                        if (_up)
+                              yo = sc->downNote()->pos().y() - sh;
+                        else
+                              yo = sc->upNote()->pos().y() + sh;
+                        xo       = stem1->pos().x();
+                        stemPos  = true;
                         }
                   else {
-                        if (yd < - mh)
-                              yd = -mh;
+                        if (sc->up() && _up)
+                              xo = hw1 + _spatium * .3;
+                        //
+                        // handle case: stem up   - stem down
+                        //              stem down - stem up
+                        //
+                        if ((sc->up() != ecr->up()) && (sc->up() == _up)) {
+                              Note* n1  = sc->up() ? sc->downNote() : sc->upNote();
+                              Note* n2  = 0;
+                              if(ec)
+                                    n2 = ec->up() ? ec->downNote() : ec->upNote();
+                              qreal yd  = (n2 ? n2->pos().y() : endCR()->pos().y()) - n1->pos().y();
+
+                              yd *= .5;
+
+                              qreal sh = stem1->height();    // limit y move
+                              if (yd > 0.0) {
+                                    if (yd > sh)
+                                          yd = sh;
+                                    }
+                              else {
+                                    if (yd < - sh)
+                                          yd = -sh;
+                                    }
+                              stemPos = true;
+                              if ((_up && (yd < -_spatium)) || (!_up && (yd > _spatium)))
+                                    yo += yd;
+                              }
+                        else if (sc->up() != _up)
+                              yo = fixArticulations(yo, sc, __up);
                         }
-
-                  if ((_up && (yd > _spatium)) || (!_up && (yd < -_spatium)))
-                        yo -= yd;
                   }
-            else if (ec->up() != _up)
-                  yo = fixArticulations(yo, ec, __up);
-            }
-      else if (ec && ec->up() != _up)
-            yo = fixArticulations(yo, ec, __up);
+            else if (sc && sc->up() != _up)
+                  yo = fixArticulations(yo, sc, __up);
 
-      if (sa2 == SlurAnchor::NONE)
-            sp->p2 += QPointF(xo, yo);
+            if (sa1 == SlurAnchor::NONE)
+                  sp->p1 += QPointF(xo, yo);
+
+            //------p2
+            if (sa2 == SlurAnchor::NONE) {
+                  xo = hw2 * .5;
+                  if (note2)
+                        yo = note2->pos().y();
+                  else if(_up)
+                        yo = endCR()->bbox().top();
+                  else
+                        yo = endCR()->bbox().top() + endCR()->height();
+                  yo += _spatium * .9 * __up;
+
+                  if (stem2) { //ec can't be null
+                        Beam* beam2 = ec->beam();
+                        if ((stemPos && (scr->up() == ec->up()))
+                           || (beam2
+                             && (!beam2->elements().isEmpty())
+                             && (beam2->elements().front() != ec)
+                             && (ec->up() == _up)
+                             && sc && (sc->noteType() == NoteType::NORMAL)
+                             )
+                              ) {
+                              qreal sh = stem2->height() + _spatium;
+                              if (_up)
+                                    yo = ec->downNote()->pos().y() - sh;
+                              else
+                                    yo = ec->upNote()->pos().y() + sh;
+                              xo = stem2->pos().x();
+                              }
+                        else if (!ec->up() && !_up)
+                              xo = -_spatium * .3 + note2->x();
+                        //
+                        // handle case: stem up   - stem down
+                        //              stem down - stem up
+                        //
+                        if ((scr->up() != ec->up()) && (ec->up() == _up)) {
+                              Note* n1 = 0;
+                              if(sc)
+                                    n1 = sc->up() ? sc->downNote() : sc->upNote();
+                              Note* n2 = ec->up() ? ec->downNote() : ec->upNote();
+                              qreal yd = n2->pos().y() - (n1 ? n1->pos().y() : startCR()->pos().y());
+
+                              yd *= .5;
+
+                              qreal mh = stem2->height();    // limit y move
+                              if (yd > 0.0) {
+                                    if (yd > mh)
+                                          yd = mh;
+                                    }
+                              else {
+                                    if (yd < - mh)
+                                          yd = -mh;
+                                    }
+
+                              if ((_up && (yd > _spatium)) || (!_up && (yd < -_spatium)))
+                                    yo -= yd;
+                              }
+                        else if (ec->up() != _up)
+                              yo = fixArticulations(yo, ec, __up);
+                        }
+                  else if (ec && ec->up() != _up)
+                        yo = fixArticulations(yo, ec, __up);
+
+                  sp->p2 += QPointF(xo, yo);
+                  }
+            }
       }
 
 //---------------------------------------------------------

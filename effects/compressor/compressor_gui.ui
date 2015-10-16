@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CompressorGui</class>
+ <widget class="QWidget" name="CompressorGui">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>644</width>
+    <height>95</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>644</width>
+    <height>95</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>644</width>
+    <height>95</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string notr="true"/>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="horizontalSpacing">
+    <number>20</number>
+   </property>
+   <property name="verticalSpacing">
+    <number>0</number>
+   </property>
+   <item row="2" column="1">
+    <widget class="QLabel" name="label1">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Attack</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="4">
+    <widget class="QLabel" name="label4">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Ratio</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QLabel" name="label2">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Release</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="5">
+    <widget class="QLabel" name="label5">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Knee</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>RMS</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="Awl::Knob" name="attack" native="true">
+     <property name="toolTip">
+      <string>Attack time (ms)</string>
+     </property>
+     <property name="whatsThis">
+      <string>The attack time in milliseconds.</string>
+     </property>
+     <property name="value" stdset="0">
+      <double>1.500000000000000</double>
+     </property>
+     <property name="scaleWidth" stdset="0">
+      <number>5</number>
+     </property>
+     <property name="scaleColor" stdset="0">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+     <property name="id" stdset="0">
+      <number>1</number>
+     </property>
+     <property name="minValue" stdset="0">
+      <double>1.500000000000000</double>
+     </property>
+     <property name="maxValue" stdset="0">
+      <double>400.000000000000000</double>
+     </property>
+     <property name="lineStep" stdset="0">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="pageStep" stdset="0">
+      <double>20.000000000000000</double>
+     </property>
+     <property name="dclickValue1" stdset="0">
+      <double>1.500000000000000</double>
+     </property>
+     <property name="text" stdset="0">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3">
+    <widget class="QLabel" name="label3">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Threshold</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="6">
+    <widget class="QLabel" name="label6">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Gain</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="Awl::Knob" name="release" native="true">
+     <property name="toolTip">
+      <string>Release time (ms)</string>
+     </property>
+     <property name="whatsThis">
+      <string>The release time in milliseconds.</string>
+     </property>
+     <property name="value" stdset="0">
+      <double>2.000000000000000</double>
+     </property>
+     <property name="scaleWidth" stdset="0">
+      <number>5</number>
+     </property>
+     <property name="scaleColor" stdset="0">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+     <property name="id" stdset="0">
+      <number>2</number>
+     </property>
+     <property name="minValue" stdset="0">
+      <double>2.000000000000000</double>
+     </property>
+     <property name="maxValue" stdset="0">
+      <double>800.000000000000000</double>
+     </property>
+     <property name="lineStep" stdset="0">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="pageStep" stdset="0">
+      <double>20.000000000000000</double>
+     </property>
+     <property name="dclickValue1" stdset="0">
+      <double>2.000000000000000</double>
+     </property>
+     <property name="text" stdset="0">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="7" rowspan="3">
+    <widget class="QLabel" name="label_8">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="palette">
+      <palette>
+       <active>
+        <colorrole role="WindowText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </active>
+       <inactive>
+        <colorrole role="WindowText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </inactive>
+       <disabled>
+        <colorrole role="WindowText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>165</red>
+           <green>167</green>
+           <blue>169</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </disabled>
+      </palette>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>15</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string notr="true">SC4</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="Awl::Knob" name="ratio" native="true">
+     <property name="toolTip">
+      <string>Ratio (1:n)</string>
+     </property>
+     <property name="whatsThis">
+      <string>The gain reduction ratio used when the signal level exceeds the threshold.</string>
+     </property>
+     <property name="value" stdset="0">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="scaleWidth" stdset="0">
+      <number>5</number>
+     </property>
+     <property name="scaleColor" stdset="0">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+     <property name="id" stdset="0">
+      <number>4</number>
+     </property>
+     <property name="minValue" stdset="0">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="maxValue" stdset="0">
+      <double>20.000000000000000</double>
+     </property>
+     <property name="lineStep" stdset="0">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="pageStep" stdset="0">
+      <double>5.000000000000000</double>
+     </property>
+     <property name="dclickValue1" stdset="0">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="dclickValue2" stdset="0">
+      <double>1.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="5">
+    <widget class="Awl::Knob" name="knee" native="true">
+     <property name="toolTip">
+      <string>Knee radius (dB)</string>
+     </property>
+     <property name="whatsThis">
+      <string>The distance from the threshold where the knee curve starts.</string>
+     </property>
+     <property name="value" stdset="0">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="scaleWidth" stdset="0">
+      <number>5</number>
+     </property>
+     <property name="scaleColor" stdset="0">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+     <property name="id" stdset="0">
+      <number>5</number>
+     </property>
+     <property name="minValue" stdset="0">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="maxValue" stdset="0">
+      <double>10.000000000000000</double>
+     </property>
+     <property name="lineStep" stdset="0">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="pageStep" stdset="0">
+      <double>5.000000000000000</double>
+     </property>
+     <property name="dclickValue1" stdset="0">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="text" stdset="0">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="Awl::Knob" name="rms" native="true">
+     <property name="toolTip">
+      <string>RMS</string>
+     </property>
+     <property name="statusTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and  peak is better for heavier, fast compression and percussion.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="value" stdset="0">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="scaleWidth" stdset="0">
+      <number>5</number>
+     </property>
+     <property name="scaleColor" stdset="0">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+     <property name="markSize" stdset="0">
+      <number>6</number>
+     </property>
+     <property name="border" stdset="0">
+      <number>2</number>
+     </property>
+     <property name="text" stdset="0">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="6">
+    <widget class="Awl::Knob" name="gain" native="true">
+     <property name="toolTip">
+      <string>Makeup gain (dB)</string>
+     </property>
+     <property name="whatsThis">
+      <string>Controls the gain of the makeup input signal in dB's.</string>
+     </property>
+     <property name="value" stdset="0">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="scaleWidth" stdset="0">
+      <number>5</number>
+     </property>
+     <property name="scaleColor" stdset="0">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+     <property name="id" stdset="0">
+      <number>6</number>
+     </property>
+     <property name="maxValue" stdset="0">
+      <double>24.000000000000000</double>
+     </property>
+     <property name="lineStep" stdset="0">
+      <double>3.000000000000000</double>
+     </property>
+     <property name="pageStep" stdset="0">
+      <double>6.000000000000000</double>
+     </property>
+     <property name="text" stdset="0">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="Awl::Knob" name="threshold" native="true">
+     <property name="toolTip">
+      <string>Threshhold level (dB)</string>
+     </property>
+     <property name="whatsThis">
+      <string>The point at which the compressor will start to kick in.</string>
+     </property>
+     <property name="value" stdset="0">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="scaleWidth" stdset="0">
+      <number>5</number>
+     </property>
+     <property name="scaleColor" stdset="0">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+     <property name="id" stdset="0">
+      <number>3</number>
+     </property>
+     <property name="minValue" stdset="0">
+      <double>-30.000000000000000</double>
+     </property>
+     <property name="maxValue" stdset="0">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="dclickValue1" stdset="0">
+      <double>-2.000000000000000</double>
+     </property>
+     <property name="dclickValue2" stdset="0">
+      <double>-5.000000000000000</double>
+     </property>
+     <property name="text" stdset="0">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QDoubleSpinBox" name="rmsSpinBox">
+     <property name="frame">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="maximum">
+      <double>1.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QDoubleSpinBox" name="attackSpinBox">
+     <property name="frame">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="suffix">
+      <string>ms</string>
+     </property>
+     <property name="decimals">
+      <number>1</number>
+     </property>
+     <property name="minimum">
+      <double>1.500000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>400.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QDoubleSpinBox" name="releaseSpinBox">
+     <property name="frame">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="suffix">
+      <string>ms</string>
+     </property>
+     <property name="decimals">
+      <number>1</number>
+     </property>
+     <property name="minimum">
+      <double>2.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>800.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QDoubleSpinBox" name="thresholdSpinBox">
+     <property name="frame">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="suffix">
+      <string>dB</string>
+     </property>
+     <property name="decimals">
+      <number>1</number>
+     </property>
+     <property name="minimum">
+      <double>-30.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>0.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4">
+    <widget class="QDoubleSpinBox" name="ratioSpinBox">
+     <property name="frame">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="minimum">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>20.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
+    <widget class="QDoubleSpinBox" name="kneeSpinBox">
+     <property name="frame">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="suffix">
+      <string>dB</string>
+     </property>
+     <property name="decimals">
+      <number>1</number>
+     </property>
+     <property name="minimum">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>10.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="6">
+    <widget class="QDoubleSpinBox" name="gainSpinBox">
+     <property name="frame">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::UpDownArrows</enum>
+     </property>
+     <property name="suffix">
+      <string>dB</string>
+     </property>
+     <property name="decimals">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <double>24.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Awl::Knob</class>
+   <extends>QWidget</extends>
+   <header>awl/knob.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

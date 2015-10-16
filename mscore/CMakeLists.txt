@@ -311,6 +311,8 @@ target_link_libraries(mscore
 
 if (MINGW)
       set(MSCORE_OUTPUT_NAME ${MUSESCORE_NAME})
+elseif (MSCORE_INSTALL_SUFFIX)
+      set(MSCORE_OUTPUT_NAME "${ExecutableName}${MSCORE_INSTALL_SUFFIX}")
 endif (MINGW)
 
 #if MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by the user), the output executable will be
@@ -526,28 +528,42 @@ else (MINGW)
      install (FILES data/mscore.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
      install (FILES data/musescoreDocument.icns DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
    else (APPLE)
-     # Linux: install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
+     #### PACKAGING for Linux and BSD based systems (more in top-level CMakeLists.txt) ####
+     # install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
      install( TARGETS mscore RUNTIME DESTINATION bin )
+     if (LN_EXECUTABLE)
+        add_custom_target(mscore_alias
+            COMMAND echo "Creating symlink alias for mscore executable."
+            COMMAND ${LN_EXECUTABLE} -sf "mscore${MSCORE_INSTALL_SUFFIX}" "musescore${MSCORE_INSTALL_SUFFIX}"
+            COMMAND echo 'Symlink alias: musescore${MSCORE_INSTALL_SUFFIX} -> mscore${MSCORE_INSTALL_SUFFIX}'
+            )
+        install( FILES ${PROJECT_BINARY_DIR}/mscore/musescore${MSCORE_INSTALL_SUFFIX} DESTINATION bin)
+     else (LN_EXECUTABLE)
+        add_custom_target(mscore_alias
+            COMMAND echo "No symlink aliases will be created."
+            VERBATIM
+            )
+     endif (LN_EXECUTABLE)
      # install MuseScore icons (use SVGs where possible, but install PNGs as backup for systems that don't support SVG)
-     install( FILES   ../assets/musescore-icon-round.svg RENAME mscore.svg DESTINATION share/icons/hicolor/scalable/apps)
-     install( FILES   ../assets/musescore-icon-round-64.png RENAME mscore.png DESTINATION share/icons/hicolor/64x64/apps)
+     install( FILES   ../assets/musescore-icon-round.svg RENAME mscore${MSCORE_INSTALL_SUFFIX}.svg DESTINATION share/icons/hicolor/scalable/apps)
+     install( FILES   ../assets/musescore-icon-round-64.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/64x64/apps)
      # install MIME (filetype) icons for each mimetype on Linux
-     install( FILES   ../assets/mscz-icon.svg RENAME application-x-musescore.svg
+     install( FILES   ../assets/mscz-icon.svg RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.svg
         DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCZ files
-     install( FILES   ../assets/mscz-icon-48.png RENAME application-x-musescore.png
+     install( FILES   ../assets/mscz-icon-48.png RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.png
         DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MSCZ files
-     install( FILES   ../assets/mscx-icon.svg RENAME application-x-musescore+xml.svg
+     install( FILES   ../assets/mscx-icon.svg RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}+xml.svg
         DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCX files
-     install( FILES   ../assets/mscx-icon-48.png RENAME application-x-musescore+xml.png
+     install( FILES   ../assets/mscx-icon-48.png RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}+xml.png
         DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MSCX files
      # use a custom icon for MusicXML files (there isn't a standard icon for MusicXML files)
-     install( FILES   ../assets/mxl-icon.svg RENAME application-vnd.recordare.musicxml.svg
+     install( FILES   ../assets/mxl-icon.svg RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}.svg
         DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MXL (compressed MusicXML) files
-     install( FILES   ../assets/mxl-icon-48.png RENAME application-vnd.recordare.musicxml.png
+     install( FILES   ../assets/mxl-icon-48.png RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}.png
         DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MXL (compressed MusicXML) files
-     install( FILES   ../assets/xml-icon.svg RENAME application-vnd.recordare.musicxml+xml.svg
+     install( FILES   ../assets/xml-icon.svg RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml.svg
         DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .XML (MusicXML) files
-     install( FILES   ../assets/xml-icon-48.png RENAME application-vnd.recordare.musicxml+xml.png
+     install( FILES   ../assets/xml-icon-48.png RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml.png
         DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .XML (MusicXML) files
      # Note: must now run "gtk-update-icon-cache" to set the new icons. This is done in the Makefile.
    endif (APPLE)
@@ -555,9 +571,7 @@ endif (MINGW)
 
 if (APPLE)
      install (FILES
-      ../fonts/gootville/Gootville.otf
       ../fonts/gootville/GootvilleText.otf
-      ../fonts/mscore/mscore.ttf
       ../fonts/mscore/MScoreText.ttf
       ../fonts/MuseJazz.ttf
       ../fonts/FreeSerif.ttf
@@ -567,7 +581,6 @@ if (APPLE)
       ../fonts/FreeSans.ttf
       ../fonts/mscoreTab.ttf
       ../fonts/mscore-BC.ttf
-      ../fonts/bravura/Bravura.otf
       ../fonts/bravura/BravuraText.otf
      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
      )

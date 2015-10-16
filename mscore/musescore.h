@@ -396,8 +396,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showInspector(bool);
       void showOmrPanel(bool);
       void showNavigator(bool);
-      void showMixer(bool);
-      void showSynthControl(bool);
       void showSelectionWindow(bool);
       void showSearchDialog();
       void splitWindow(bool horizontal);
@@ -697,6 +695,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QHelpEngine*  helpEngine() const { return _helpEngine;   }
 
       void updateInspector();
+      void showSynthControl(bool);
+      void showMixer(bool);
       };
 
 extern MuseScore* mscore;

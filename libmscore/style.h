@@ -187,6 +187,14 @@ enum class StyleIdx : unsigned char {
       bracketDistance,
       akkoladeWidth,
       akkoladeBarDistance,
+      dividerLeft,
+      dividerLeftSym,
+      dividerLeftX,
+      dividerLeftY,
+      dividerRight,
+      dividerRightSym,
+      dividerRightX,
+      dividerRightY,
 
       clefLeftMargin,
       keysigLeftMargin,
@@ -359,6 +367,7 @@ enum class StyleIdx : unsigned char {
       tupletStemRightDistance,
       tupletNoteLeftDistance,
       tupletNoteRightDistance,
+      tupletBracketWidth,
 
       barreLineWidth,
       fretMag,

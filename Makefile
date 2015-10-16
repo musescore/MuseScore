@@ -26,8 +26,16 @@ ifeq ($(CPUS), 0)
 endif
 
 PREFIX    = "/usr/local"
-#VERSION   = "2.0.2b-${REVISION}"
-VERSION = 2.0.2
+VERSION   = "2.1b-${REVISION}"
+#VERSION = 2.1.0
+
+# Override SUFFIX and LABEL when multiple versions are installed to avoid conflicts.
+SUFFIX=""# E.g.: SUFFIX="dev" --> "mscore" becomes "mscoredev"
+LABEL=""# E.g.: LABEL="Development Build" --> "MuseScore 2" becomes "MuseScore 2 Development Build"
+
+BUILD_LAME="ON"# Non-free, required for MP3 support. Override with "OFF" to disable.
+UPDATE_CACHE="TRUE"# Override if building a DEB or RPM, or when installing to a non-standard location.
+NO_RPATH="FALSE"# Package maintainers may want to override this (e.g. Debian)
 
 #
 # change path to include your Qt5 installation
@@ -39,9 +47,14 @@ release:
       cd build.release;                          \
       export PATH=${BINPATH};                    \
       cmake -DCMAKE_BUILD_TYPE=RELEASE	       \
-  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}" ..;   \
+  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"       \
+  	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"      \
+  	  -DMUSESCORE_LABEL="${LABEL}"             \
+  	  -DBUILD_LAME="${BUILD_LAME}"             \
+  	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..; \
       make lrelease;                             \
       make manpages;                             \
+      make mscore_alias;                         \
       make -j ${CPUS};                           \
 
 
@@ -49,10 +62,15 @@ debug:
 	if test ! -d build.debug; then mkdir build.debug; fi; \
       cd build.debug;                                       \
       export PATH=${BINPATH};                               \
-      cmake -DCMAKE_BUILD_TYPE=DEBUG	                  \
-  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}" ..;              \
+      cmake -DCMAKE_BUILD_TYPE=DEBUG	                    \
+  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"                  \
+  	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"                 \
+  	  -DMUSESCORE_LABEL="${LABEL}"                        \
+  	  -DBUILD_LAME="${BUILD_LAME}"                        \
+  	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..;            \
       make lrelease;                                        \
       make manpages;                                        \
+      make mscore_alias;                                    \
       make -j ${CPUS};                                      \
 
 
@@ -97,26 +115,38 @@ version:
 install: release
 	cd build.release \
 	&& make install/strip \
-	&& update-mime-database "${PREFIX}/share/mime" \
-	&& gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"
+	&& if [ ${UPDATE_CACHE} = "TRUE" ]; then \
+	     update-mime-database "${PREFIX}/share/mime"; \
+	     gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"; \
+	fi
 
 installdebug: debug
 	cd build.debug \
 	&& make install \
-	&& update-mime-database "${PREFIX}/share/mime" \
-	&& gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"
+	&& if [ ${UPDATE_CACHE} = "TRUE" ]; then \
+	     update-mime-database "${PREFIX}/share/mime"; \
+	     gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"; \
+	fi
 
 uninstall:
 	cd build.release \
 	&& xargs rm < install_manifest.txt \
-	&& update-mime-database "${PREFIX}/share/mime" \
-	&& gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"
+	&& if [ ${UPDATE_CACHE} = "TRUE" ]; then \
+	     update-mime-database "${PREFIX}/share/mime"; \
+	     gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"; \
+	   fi \
+	&& xargs ../build/rm-empty-dirs < install_manifest.txt \
+	&& rm install_manifest.txt
 
 uninstalldebug:
 	cd build.debug \
 	&& xargs rm < install_manifest.txt \
-	&& update-mime-database "${PREFIX}/share/mime" \
-	&& gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"
+	&& if [ ${UPDATE_CACHE} = "TRUE" ]; then \
+	     update-mime-database "${PREFIX}/share/mime"; \
+	     gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"; \
+	   fi \
+	&& xargs ../build/rm-empty-dirs < install_manifest.txt \
+	&& rm install_manifest.txt
 
 #
 #  linux

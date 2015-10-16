@@ -164,7 +164,7 @@
           </Text>
         </VBox>
       <Measure number="1" len="1/4">
-        <irregular/>
+        <irregular>1</irregular>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>

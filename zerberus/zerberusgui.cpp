@@ -96,8 +96,9 @@ ZerberusGui::ZerberusGui(Ms::Synthesizer* s)
       connect(add, SIGNAL(clicked()), SLOT(addClicked()));
       connect(remove, SIGNAL(clicked()), SLOT(removeClicked()));
       connect(&_futureWatcher, SIGNAL(finished()), this, SLOT(onSoundFontLoaded()));
-      _progressDialog = new QProgressDialog("Loading...", "", 0, 100, 0, Qt::FramelessWindowHint);
-      _progressDialog->setCancelButton(0);
+      _progressDialog = new QProgressDialog(tr("Loading..."), tr("Cancel"), 0, 100, 0, Qt::FramelessWindowHint);
+      _progressDialog->reset(); // required for Qt 5.5, see QTBUG-47042
+      connect(_progressDialog, SIGNAL(canceled()), this, SLOT(cancelLoadClicked()));
       _progressTimer = new QTimer(this);
       connect(_progressTimer, SIGNAL(timeout()), this, SLOT(updateProgress()));
       connect(files, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtons()));
@@ -151,6 +152,8 @@ QFileInfoList Zerberus::sfzFiles()
 
 void ZerberusGui::addClicked()
       {
+      zerberus()->setLoadWasCanceled(false);
+
       QFileInfoList l = Zerberus::sfzFiles();
 
       SfzListDialog ld(this);
@@ -184,6 +187,15 @@ void ZerberusGui::addClicked()
       }
 
 //---------------------------------------------------------
+//   cancelLoad
+//---------------------------------------------------------
+
+void ZerberusGui::cancelLoadClicked()
+      {
+      zerberus()->setLoadWasCanceled(true);
+      }
+
+//---------------------------------------------------------
 //   updateProgress
 //---------------------------------------------------------
 
@@ -209,21 +221,22 @@ void ZerberusGui::updateButtons()
 void ZerberusGui::onSoundFontLoaded()
       {
       bool loaded = _futureWatcher.result();
+      bool wasNotCanceled = !_progressDialog->wasCanceled();
       _progressTimer->stop();
       _progressDialog->reset();
-      if (!loaded) {
-            QMessageBox::warning(this,
-            tr("MuseScore"),
-            tr("Cannot load SoundFont %1").arg(_loadedSfPath));
-            }
-      else {
+      if (loaded) {
             QListWidgetItem* item = new QListWidgetItem;
             item->setText(_loadedSfName);
             item->setData(Qt::UserRole, _loadedSfPath);
             files->insertItem(0, item);
+            emit valueChanged();
+            emit sfChanged();
             }
-      emit valueChanged();
-      emit sfChanged();
+      else if (wasNotCanceled) {
+            QMessageBox::warning(this,
+            tr("MuseScore"),
+            tr("Cannot load SoundFont %1").arg(_loadedSfPath));
+            }
       }
 
 //---------------------------------------------------------

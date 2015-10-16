@@ -19,6 +19,9 @@
 
 namespace Ms {
 
+#define MIN_TEMPO 5.0/60
+#define MAX_TEMPO 999.0/60
+
 //---------------------------------------------------------
 //   TempoText
 //---------------------------------------------------------
@@ -55,7 +58,7 @@ void TempoText::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "tempo")
-                  _tempo = e.readDouble();
+                  setTempo(e.readDouble());
             else if (tag == "followText")
                   _followText = e.readInt();
             else if (!Text::readProperties(e))
@@ -117,19 +120,7 @@ static const TempoPattern tp[] = {
       TempoPattern("<sym>metNote16thUp</sym>",                                              1.0/240.0, TDuration::DurationType::V_16TH),     // 1/16
       TempoPattern("<sym>metNote32ndUp</sym>",                                              1.0/480.0, TDuration::DurationType::V_32ND),     // 1/32
       TempoPattern("<sym>metNote64thUp</sym>",                                              1.0/960.0, TDuration::DurationType::V_64TH),     // 1/64
-      // keep the below for backward compatibility
-      TempoPattern("<sym>unicodeNoteHalfUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym>",    1.5/30.0,  TDuration::DurationType::V_HALF, 1),    // dotted 1/2
-      TempoPattern("<sym>unicodeNoteHalfUp</sym>\\s*<sym>unicodeAugmentationDot</sym>",     1.5/30.0,  TDuration::DurationType::V_HALF, 1),    // dotted 1/2
-      TempoPattern("<sym>unicodeNoteQuarterUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym>", 1.5/60.0,  TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
-      TempoPattern("<sym>unicodeNoteQuarterUp</sym>\\s*<sym>unicodeAugmentationDot</sym>",  1.5/60.0,  TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
-      TempoPattern("<sym>unicodeNote8thUp</sym><sym>space</sym><sym>unicodeAugmentationDot</sym>",     1.5/120.0, TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
-      TempoPattern("<sym>unicodeNote8thUp</sym>\\s*<sym>unicodeAugmentationDot</sym>",      1.5/120.0, TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
-      TempoPattern("<sym>unicodeNoteHalfUp</sym>",                                          1.0/30.0,  TDuration::DurationType::V_HALF),       // 1/2
-      TempoPattern("<sym>unicodeNoteQuarterUp</sym>",                                       1.0/60.0,  TDuration::DurationType::V_QUARTER),    // 1/4
-      TempoPattern("<sym>unicodeNote8thUp</sym>",                                           1.0/120.0, TDuration::DurationType::V_EIGHTH),     // 1/8
-      TempoPattern("<sym>unicodeNote16thUp</sym>",                                          1.0/240.0, TDuration::DurationType::V_16TH),     // 1/16
-	TempoPattern("<sym>unicodeNote32ndUp</sym>",                                          1.0/480.0, TDuration::DurationType::V_32ND),     // 1/32
-      TempoPattern("<sym>unicodeNote64thUp</sym>",                                          1.0/480.0, TDuration::DurationType::V_64TH),     // 1/64
+
       };
 
 //---------------------------------------------------------
@@ -185,13 +176,13 @@ void TempoText::textChanged()
       QString s = plainText();
       s.replace(",", ".");
       for (const TempoPattern& pa : tp) {
-            QRegExp re(QString(pa.pattern)+"\\s*=\\s*(\\d+[.]{0,1}\\d*)");
+            QRegExp re(QString(pa.pattern)+"\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*");
             if (re.indexIn(s) != -1) {
                   QStringList sl = re.capturedTexts();
                   if (sl.size() == 2) {
                         qreal nt = qreal(sl[1].toDouble()) * pa.f;
                         if (nt != _tempo) {
-                              _tempo = qreal(sl[1].toDouble()) * pa.f;
+                              setTempo(qreal(sl[1].toDouble()) * pa.f);
                               if(segment())
                                     score()->setTempo(segment(), _tempo);
                               score()->setPlaylistDirty();
@@ -200,6 +191,19 @@ void TempoText::textChanged()
                         }
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   setTempo
+//---------------------------------------------------------
+
+void TempoText::setTempo(qreal v)
+      {
+      if (v < MIN_TEMPO)
+            v = MIN_TEMPO;
+      else if (v > MAX_TEMPO)
+            v = MAX_TEMPO;
+      _tempo = v;
       }
 
 //---------------------------------------------------------
@@ -242,7 +246,7 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
             case P_ID::TEMPO:
-                  _tempo = v.toDouble();
+                  setTempo(v.toDouble());
                   score()->setTempo(segment(), _tempo);
                   break;
             case P_ID::TEMPO_FOLLOW_TEXT:

@@ -135,6 +135,7 @@ static const PropertyData propertyList[] = {
       { P_ID::NUMBERS_ONLY,        false, "numbersOnly",   P_TYPE::BOOL   },
       { P_ID::TRILL_TYPE,          false, "",              P_TYPE::INT    },
 
+      { P_ID::HAIRPIN_TEXTLINE,    false, "useTextLine",   P_TYPE::BOOL   },
       { P_ID::HAIRPIN_CIRCLEDTIP,  false, "hairpinCircledTip", P_TYPE::BOOL     },
       { P_ID::HAIRPIN_TYPE,        true,  "",              P_TYPE::INT     },
       { P_ID::HAIRPIN_HEIGHT,      false, "hairpinHeight",     P_TYPE::SPATIUM },
@@ -228,6 +229,9 @@ static const PropertyData propertyList[] = {
       { P_ID::TRACK,               false, 0,                       P_TYPE::INT },
 
       { P_ID::GLISSANDO_STYLE,     false, "glissandoStyle",        P_TYPE::GLISSANDO_STYLE},
+
+      { P_ID::LAYOUT_MODE,         false, 0,                       P_TYPE::INT },
+
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };
 
@@ -307,7 +311,8 @@ QVariant getProperty(P_ID id, XmlReader& e)
                       QString value(e.readElementText());
                       if ( value == "baroque")
                           return QVariant(int(MScore::OrnamentStyle::BAROQUE));
-                      
+
+
                       return QVariant(int(MScore::OrnamentStyle::DEFAULT));
                   }
                   break; // break is really not necessary because of the default return

@@ -27,6 +27,7 @@ MuseScore {
     menuPath: "Plugins.ABC Import"
     version: "2.0"
     description: qsTr("This plugin imports ABC text from a file or the clipboard. Internet connection is required.")
+    requiresScore: false
     pluginType: "dialog"
 
     id:window

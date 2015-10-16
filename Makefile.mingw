@@ -20,9 +20,9 @@
 
 
 REVISION  = $(shell type mscore\revision.h)
-#VERSION   = 2.0.2b-${REVISION}
-VERSION = 2.0.2
-CPUS = 1
+VERSION   = 2.1b-${REVISION}
+#VERSION = 2.1.0
+CPUS = %NUMBER_OF_PROCESSORS%
 
 release:
 	if not exist build.release\nul mkdir build.release

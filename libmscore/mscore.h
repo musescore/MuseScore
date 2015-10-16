@@ -17,8 +17,8 @@
 
 namespace Ms {
 
-#define MSC_VERSION     "2.06"
-static const int MSCVERSION = 206;
+#define MSC_VERSION     "2.07"
+static const int MSCVERSION = 207;
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -53,7 +53,8 @@ static const int MSCVERSION = 206;
 //    2.03  save Box topGap, bottomGap in spatium units
 //    2.04  added hideSystemBarLine flag to Staff
 //    2.05  breath segment changed to use tick of following chord rather than preceding chord
-//    2.06  Glissando moved from final chord to start note
+//    2.06  Glissando moved from final chord to start note (Version 2.0.x)
+//    2.07  irregular, breakMMrest, more style options, system divider, bass string for tab (2.1)
 
 
 class MStyle;
@@ -73,11 +74,14 @@ static const qreal SPATIUM20 = 5.0 / PPI; // size of Spatium for 20pt font in in
 static const int MAX_STAVES = 4;
 #define MMSP(x)  Spatium((x) * .1)
 
+static const int  SHADOW_NOTE_LIGHT       = 120;
+
 static const char mimeSymbolFormat[]      = "application/musescore/symbol";
 static const char mimeSymbolListFormat[]  = "application/musescore/symbollist";
 static const char mimeStaffListFormat[]   = "application/musescore/stafflist";
 
-static const int  VISUAL_STRING_NONE      = -2;       // no ordinal for the visual repres. of string (0 = topmost in TAB)
+static const int  VISUAL_STRING_NONE      = -100;     // no ordinal for the visual repres. of string (topmost in TAB
+                                                      // varies according to visual order and presence of bass strings)
 static const int  STRING_NONE             = -1;       // no ordinal for a physical string (0 = topmost in instrument)
 static const int  FRET_NONE               = -1;       // no ordinal for a fret
 
@@ -304,6 +308,7 @@ enum class TextStyleType : char {
       GLISSANDO,
       OTTAVA,
       PEDAL,
+      HAIRPIN,
       BENCH,
       HEADER,
       FOOTER,
@@ -347,6 +352,7 @@ class MScore : public QObject {
       static MStyle* _baseStyle;          // buildin initial style
       static QString _globalShare;
       static int _hRaster, _vRaster;
+      static bool _verticalOrientation;
 
 #ifdef SCRIPT_INTERFACE
       static QQmlEngine* _qml;
@@ -375,6 +381,9 @@ class MScore : public QObject {
       static void setNudgeStep(qreal val)   { nudgeStep = val;     }
       static void setNudgeStep10(qreal val) { nudgeStep10 = val;   }
       static void setNudgeStep50(qreal val) { nudgeStep50 = val;   }
+
+      static bool verticalOrientation()            { return _verticalOrientation; }
+      static void setVerticalOrientation(bool val) { _verticalOrientation = val;  }
 
       static QColor selectColor[4];
       static QColor defaultColor;

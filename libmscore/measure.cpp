@@ -350,20 +350,41 @@ void Measure::layoutCR0(ChordRest* cr, qreal mm, AccidentalState* as)
 
 AccidentalVal Measure::findAccidental(Note* note) const
       {
+      Chord* chord = note->chord();
       AccidentalState tversatz;  // state of already set accidentals for this measure
-      tversatz.init(note->chord()->staff()->key(tick()));
+      tversatz.init(chord->staff()->key(tick()));
 
-      Segment::Type st = Segment::Type::ChordRest;
-      for (Segment* segment = first(st); segment; segment = segment->next(st)) {
-            int startTrack = note->staffIdx() * VOICES;
-            int endTrack   = startTrack + VOICES;
-            for (int track = startTrack; track < endTrack; ++track) {
-                  Element* e = segment->element(track);
-                  if (!e || e->type() != Element::Type::CHORD)
+      for (Segment* segment = first(); segment; segment = segment->next()) {
+            int startTrack = chord->staffIdx() * VOICES;
+            if (segment->segmentType() == Segment::Type::KeySig) {
+                  KeySig* ks = static_cast<KeySig*>(segment->element(startTrack));
+                  if (!ks)
                         continue;
-                  Chord* chord = static_cast<Chord*>(e);
-                  for (Chord* chord1 : chord->graceNotes()) {
-                        for (Note* note1 : chord1->notes()) {
+                  tversatz.init(chord->staff()->key(segment->tick()));
+                  }
+            else if (segment->segmentType() == Segment::Type::ChordRest) {
+                  int endTrack   = startTrack + VOICES;
+                  for (int track = startTrack; track < endTrack; ++track) {
+                        Element* e = segment->element(track);
+                        if (!e || e->type() != Element::Type::CHORD)
+                              continue;
+                        Chord* chord = static_cast<Chord*>(e);
+                        for (Chord* chord1 : chord->graceNotes()) {
+                              for (Note* note1 : chord1->notes()) {
+                                    if (note1->tieBack())
+                                          continue;
+                                    //
+                                    // compute accidental
+                                    //
+                                    int tpc  = note1->tpc();
+                                    int line = absStep(tpc, note1->epitch());
+
+                                    if (note == note1)
+                                          return tversatz.accidentalVal(line);
+                                    tversatz.setAccidentalVal(line, tpc2alter(tpc));
+                                    }
+                              }
+                        for (Note* note1 : chord->notes()) {
                               if (note1->tieBack())
                                     continue;
                               //
@@ -376,19 +397,6 @@ AccidentalVal Measure::findAccidental(Note* note) const
                                     return tversatz.accidentalVal(line);
                               tversatz.setAccidentalVal(line, tpc2alter(tpc));
                               }
-                        }
-                  for (Note* note1 : chord->notes()) {
-                        if (note1->tieBack())
-                              continue;
-                        //
-                        // compute accidental
-                        //
-                        int tpc  = note1->tpc();
-                        int line = absStep(tpc, note1->epitch());
-
-                        if (note == note1)
-                              return tversatz.accidentalVal(line);
-                        tversatz.setAccidentalVal(line, tpc2alter(tpc));
                         }
                   }
             }
@@ -1295,12 +1303,14 @@ bool Measure::acceptDrop(const DropData& data) const
 Element* Measure::drop(const DropData& data)
       {
       Element* e = data.element;
-      int staffIdx;
+      int staffIdx = -1;
       Segment* seg;
       _score->pos2measure(data.pos, &staffIdx, 0, &seg, 0);
 
       if (e->systemFlag())
             staffIdx = 0;
+      if (staffIdx < 0)
+            return 0;
 #if 0 // yet(?) unused
       QPointF mrp(data.pos - pagePos());
 #endif
@@ -1709,9 +1719,8 @@ void Measure::write(Xml& xml, int staff, bool writeSystemElements) const
       int strack = staff * VOICES;
       int etrack = strack + VOICES;
       foreach (const Element* el, _el) {
-            if (!el->generated() && ((el->staffIdx() == staff) || (el->systemFlag() && writeSystemElements))) {
+            if (!el->generated() && ((el->staffIdx() == staff) || (el->systemFlag() && writeSystemElements)))
                   el->write(xml);
-                  }
             }
       Q_ASSERT(first());
       Q_ASSERT(last());
@@ -2022,6 +2031,9 @@ void Measure::read(XmlReader& e, int staffIdx)
                   rm->read(e);
                   segment = getSegment(Segment::Type::ChordRest, e.tick());
                   segment->add(rm);
+                  if (rm->actualDuration().isZero()) { // might happen with 1.3 scores
+                        rm->setDuration(len());
+                        }
                   lastTick = e.tick();
                   e.incTick(ticks());
                   }
@@ -2124,7 +2136,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                         }
                   else {
                         // if key sig not at beginning of measure => courtesy key sig
-                        bool courtesySig = (curTick > tick());
+//                        bool courtesySig = (curTick > tick());
+                        bool courtesySig = (curTick == endTick());
                         segment = getSegment(courtesySig ? Segment::Type::KeySigAnnounce : Segment::Type::KeySig, curTick);
                         segment->add(ks);
                         if (!courtesySig)
@@ -2306,6 +2319,11 @@ void Measure::read(XmlReader& e, int staffIdx)
                   noText->setTrack(e.track());
                   noText->setParent(this);
                   staves[noText->staffIdx()]->setNoText(noText);
+                  }
+            else if (tag == "SystemDivider") {
+                  SystemDivider* sd = new SystemDivider(score());
+                  sd->read(e);
+                  add(sd);
                   }
             else if (tag == "Ambitus") {
                   Ambitus* range = new Ambitus(score());
@@ -3537,10 +3555,16 @@ void Measure::layoutX(qreal stretch)
                   if (stt->slashStyle())        // if no stems
                         distAbove = stt->genDurations() ? -stt->durationBoxY() : 0.0;
                   else {                        // if stems
-                        if (stt->stemsDown() && !mstaff(staffIdx)->hasVoices)
+                        if (mstaff(staffIdx)->hasVoices) {  // reserve space both above and below
                               distBelow = (STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_DEFAULTSTEMDIST_UP)*_spatium;
-                        else
                               distAbove = (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN + STAFFTYPE_TAB_DEFAULTSTEMDIST_DN)*_spatium;
+                              }
+                        else {                              // if no voices, reserve space on stem side
+                              if (stt->stemsDown())
+                                    distBelow = (STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_DEFAULTSTEMDIST_UP)*_spatium;
+                              else
+                                    distAbove = (STAFFTYPE_TAB_DEFAULTSTEMLEN_DN + STAFFTYPE_TAB_DEFAULTSTEMDIST_DN)*_spatium;
+                              }
                         }
                   if (distAbove > staves[staffIdx]->distanceUp)
                      staves[staffIdx]->distanceUp = distAbove;
@@ -3796,7 +3820,13 @@ void Measure::layoutStage1()
                               }
                         }
 
-                  if (segment->segmentType() == Segment::Type::ChordRest) {
+                  if (segment->segmentType() == Segment::Type::KeySig) {
+                        KeySig* ks = static_cast<KeySig*>(segment->element(staffIdx * VOICES));
+                        if (!ks)
+                              continue;
+                        as.init(staff->key(segment->tick()));
+                        }
+                  else if (segment->segmentType() == Segment::Type::ChordRest) {
                         Staff* staff     = score()->staff(staffIdx);
                         qreal staffMag  = staff->mag();
 

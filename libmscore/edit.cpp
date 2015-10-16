@@ -963,7 +963,6 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
       const Instrument* instr = st->part()->instrument(s->tick());
       NoteVal nval;
       const StringData* stringData = 0;
-      StaffType* tab = 0;
 
       switch (st->staffType()->group()) {
             case StaffGroup::PERCUSSION: {
@@ -988,21 +987,26 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
                         return nval;
                         }
                   stringData = instr->stringData();
-                  tab = st->staffType();
-                  int string = tab->visualStringToPhys(line);
-                  if (string < 0 || string >= stringData->strings()) {
+                  if (line < 0 || line >= stringData->strings()) {
                         error = true;
                         return nval;
                         }
-                  // build a default NoteVal for that line
-                  nval.string = string;
-                  if (pos.fret != FRET_NONE)       // if a fret is given, use it
+                  // build a default NoteVal for that string
+                  nval.string = line;
+                  if (pos.fret != FRET_NONE)          // if a fret is given, use it
                         nval.fret = pos.fret;
-                  else {                        // if no fret, use 0 as default
+                  else {                              // if no fret, use 0 as default
                         _is.setString(line);
                         nval.fret = 0;
                         }
-                  nval.pitch = stringData->getPitch(string, nval.fret, st, tick);
+                  // reduce within fret limit
+                  if (nval.fret > stringData->frets())
+                        nval.fret = stringData->frets();
+                  // for open strings, only accepts fret 0 (strings in StringData are from bottom to top)
+                  int   strgDataIdx = stringData->strings() - line - 1;
+                  if (nval.fret > 0 && stringData->stringList().at(strgDataIdx).open == true)
+                        nval.fret = 0;
+                  nval.pitch = stringData->getPitch(line, nval.fret, st, tick);
                   break;
                   }
 
@@ -1165,7 +1169,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
             setLayoutAll(true);
             }
       if (_is.repitchMode()) {
-            // move cursor to next note, but skip tied ntoes (they were already repitched above)
+            // move cursor to next note, but skip tied notes (they were already repitched above)
             ChordRest* next = lastTiedNote ? nextChordRest(lastTiedNote->chord()) : nextChordRest(_is.cr());
             while (next && next->type() != Element::Type::CHORD)
                   next = nextChordRest(next);
@@ -1410,8 +1414,13 @@ void Score::cmdAddTie()
       {
       QList<Note*> noteList;
       Element* el = selection().element();
-      if (el && el->type() == Element::Type::NOTE)
-            noteList.append(static_cast<Note*>(el));
+      if (el && el->type() == Element::Type::NOTE) {
+            Note* n = static_cast<Note*>(el);
+            if (noteEntryMode())
+                  noteList = n->chord()->notes();
+            else
+                  noteList.append(n);
+            }
       else if (el && el->type() == Element::Type::STEM) {
             Chord* chord = static_cast<Stem*>(el)->chord();
             noteList = chord->notes();
@@ -1424,41 +1433,70 @@ void Score::cmdAddTie()
             }
 
       startCmd();
-      foreach (Note* note, noteList) {
+      Chord* lastAddedChord = nullptr;
+      for (Note* note : noteList) {
             if (note->tieFor()) {
                   qDebug("cmdAddTie: note %p has already tie? noteFor: %p", note, note->tieFor());
                   continue;
                   }
-            Chord* chord = note->chord();
 
             if (noteEntryMode()) {
-                  if (chord == _is.cr())      // if noteentry is started
-                        break;
+                  // set cursor at position after note
+                  _is.setSegment(note->chord()->segment());
+                  _is.moveToNextInputPos();
+                  _is.setLastSegment(_is.segment());
 
                   if (_is.cr() == 0)
                         expandVoice();
-                  if (_is.cr() == 0)
+                  ChordRest* cr = _is.cr();
+                  if (cr == 0)
                         break;
 
-                  bool addFlag = false; // _is.cr()->type() == Element::Type::CHORD;
+                  bool addFlag = lastAddedChord != nullptr;
 
+                  // try to re-use existing note or chord
+                  Note* n = nullptr;
+                  if (cr->isChord()) {
+                        Chord* c = static_cast<Chord*>(cr);
+                        Note* nn = c->findNote(note->pitch());
+                        if (nn && nn->tpc() == note->tpc())
+                              n = nn;           // re-use note
+                        else
+                              addFlag = true;   // re-use chord
+                        }
+
+                  // if no note to re-use, create one
                   NoteVal nval(note->noteVal());
-                  Note* n = addPitch(nval, addFlag);
+                  if (!n)
+                        n = addPitch(nval, addFlag);
+                  else
+                        select(n);
+
                   if (n) {
+                        if (!lastAddedChord)
+                              lastAddedChord = n->chord();
                         // n is not necessarily next note if duration span over measure
                         Note* nnote = searchTieNote(note);
-                        if (nnote) {
-                              n->setLine(note->line());
-                              n->setTpc(note->tpc());
+                        while (nnote) {
+                              // DEBUG: if duration spans over measure
+                              // this does not set line for intermediate notes
+                              // tpc was set correctly already
+                              //n->setLine(note->line());
+                              //n->setTpc(note->tpc());
                               Tie* tie = new Tie(this);
                               tie->setStartNote(note);
                               tie->setEndNote(nnote);
                               tie->setTrack(note->track());
                               undoAddElement(tie);
-                              nextInputPos(n->chord(), false);
+                              if (!addFlag || nnote->chord() == lastAddedChord) {
+                                    break;
+                                    }
+                              else {
+                                    note = nnote;
+                                    _is.setLastSegment(_is.segment());
+                                    nnote = addPitch(nval, true);
+                                    }
                               }
-                        else
-                              qDebug("cmdAddTie: no next note?");
                         }
                   }
             else {
@@ -1503,6 +1541,8 @@ void Score::cmdAddTie()
                         }
                   }
             }
+      if (lastAddedChord)
+            nextInputPos(lastAddedChord, false);
       endCmd();
       }
 
@@ -1746,6 +1786,7 @@ void Score::deleteItem(Element* el)
                                           }
                                     }
                               }
+                        //select(rest, SelectType::SINGLE, 0);
                         }
                   else  {
                         // remove segment if empty
@@ -2067,6 +2108,8 @@ void Score::cmdDeleteSelectedMeasures()
 
 void Score::cmdDeleteSelection()
       {
+      ChordRest* cr = nullptr;      // select something after deleting notes
+
       if (selection().isRange()) {
             Segment* s1 = selection().startSegment();
             Segment* s2 = selection().endSegment();
@@ -2189,18 +2232,22 @@ void Score::cmdDeleteSelection()
                                     Staff* staff = Score::staff(track / VOICES);
                                     int tick = m->tick();
                                     Fraction f = staff->timeSig(tick)->sig();
-                                    setRest(tick, track, f, false, 0);
+                                    Rest* r = setRest(tick, track, f, false, 0);
+                                    if (!cr)
+                                          cr = r;
                                     if (s2 && (m == s2->measure()))
                                           break;
                                     }
                               }
                         else {
-                              setRest(tick, track, f, false, tuplet);
+                              Rest* r = setRest(tick, track, f, false, tuplet);
+                              if (!cr)
+                                    cr = r;
                               }
                         }
                   }
             s1 = tick2segment(stick1);
-            s2 = tick2segment(stick2,true);
+            s2 = tick2segment(stick2, true);
             if (s1 == 0 || s2 == 0)
                   deselectAll();
             else {
@@ -2220,15 +2267,28 @@ void Score::cmdDeleteSelection()
             // so we don't try to delete them twice if they are also in selection
             QList<ScoreElement*> deletedElements;
 
+
             for (Element* e : el) {
                   // these are the linked elements we are about to delete
                   QList<ScoreElement*> links;
                   if (e->links())
                         links = *e->links();
 
+                  // find location of element to select after deleting notes
+                  int tick = -1;
+                  int track = -1;
+                  if (!cr && e->type() == Element::Type::NOTE) {
+                        tick = static_cast<Note*>(e)->chord()->tick();
+                        track = e->track();
+                        }
+
                   // delete element if we have not done so already
                   if (!deletedElements.contains(e))
                         deleteItem(e);
+
+                  // find element to select
+                  if (!cr && tick >= 0 && track >= 0)
+                        cr = findCR(tick, track);
 
                   // add these linked elements to list of already-deleted elements
                   for (ScoreElement* se : links)
@@ -2236,7 +2296,18 @@ void Score::cmdDeleteSelection()
                   }
 
             }
+
       deselectAll();
+      // make new selection if appropriate
+      if (_is.noteEntryMode())
+            cr = _is.cr();
+      if (cr) {
+            if (cr->type() == Element::Type::CHORD)
+                  select(static_cast<Chord*>(cr)->upNote(), SelectType::SINGLE);
+            else
+                  select(cr, SelectType::SINGLE);
+            }
+
       _layoutAll = true;
       }
 
@@ -2352,6 +2423,8 @@ Hairpin* Score::addHairpin(bool decrescendo, int tickStart, int tickEnd, int tra
       {
       Hairpin* pin = new Hairpin(this);
       pin->setHairpinType(decrescendo ? Hairpin::Type::DECRESCENDO : Hairpin::Type::CRESCENDO);
+      pin->setBeginText(decrescendo ? "dim." : "cresc.");
+      pin->setContinueText(decrescendo ? "(dim.)" : "(cresc.)");
       pin->setTrack(track);
       pin->setTrack2(track);
       pin->setTick(tickStart);

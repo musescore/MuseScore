@@ -57,9 +57,10 @@ enum class ClefType : signed char {
       G4,
       F_8VA,
       F_15MA,
-      PERC2,            // no longer supported, but kept for compat. with old scores; rendered as PERC
+      PERC2,
       TAB2,
       G5,
+      G3_O,
       MAX
       };
 
@@ -92,7 +93,7 @@ class ClefInfo {
       int _line;               ///< Line for musicXml.
       int _octChng;            ///< Octave change for musicXml.
       int _pitchOffset;        ///< Pitch offset for line 0.
-      char _lines[14];
+      signed char _lines[14];
       const char* _name;
       StaffGroup _staffGroup;
 
@@ -102,7 +103,7 @@ class ClefInfo {
       static int line(ClefType t)              { return clefTable[int(t)]._line;        }
       static int octChng(ClefType t)           { return clefTable[int(t)]._octChng;     }
       static int pitchOffset(ClefType t)       { return clefTable[int(t)]._pitchOffset; }
-      static const char* lines(ClefType t)     { return clefTable[int(t)]._lines;       }
+      static const signed char* lines(ClefType t)     { return clefTable[int(t)]._lines;       }
       static const char* name(ClefType t)      { return clefTable[int(t)]._name;        }
       static StaffGroup staffGroup(ClefType t) { return clefTable[int(t)]._staffGroup;  }
       static ClefType tag2type(const QString&);

@@ -42,6 +42,8 @@
 #include "figuredbass.h"
 #include "icon.h"
 #include "utils.h"
+#include "keysig.h"
+#include "page.h"
 
 namespace Ms {
 
@@ -353,7 +355,7 @@ bool ChordRest::readProperties(XmlReader& e)
                   if (atype == "stop") {
                         SpannerValues sv;
                         sv.spannerId = id;
-                        sv.track2    = e.track();
+                        sv.track2    = track();
                         sv.tick2     = e.tick();
                         e.addSpannerValues(sv);
                         }
@@ -836,9 +838,17 @@ Element* ChordRest::drop(const DropData& data)
                   score()->cmdInsertClef(static_cast<Clef*>(e), this);
                   break;
 
-            case Element::Type::KEYSIG:
             case Element::Type::TIMESIG:
-                  return measure()->drop(data);
+                  if (measure()->system()) {
+                        // convert page-relative pos to score-relative
+                        DropData ndd = data;
+                        ndd.pos += measure()->system()->page()->pos();
+                        return measure()->drop(ndd);
+                        }
+                  else {
+                        delete e;
+                        return 0;
+                        }
 
             case Element::Type::TEMPO_TEXT:
                   {
@@ -976,6 +986,17 @@ Element* ChordRest::drop(const DropData& data)
                         }
                   }
                   delete e;
+                  break;
+
+            case Element::Type::KEYSIG:
+                  {
+                  KeySig* ks    = static_cast<KeySig*>(e);
+                  KeySigEvent k = ks->keySigEvent();
+                  delete ks;
+
+                  // apply only to this stave
+                  score()->undoChangeKeySig(staff(), tick(), k);
+                  }
                   break;
 
             default:

@@ -44,7 +44,7 @@ TextLineSegment::~TextLineSegment()
 
 void TextLineSegment::setSelected(bool f)
       {
-      Element::setSelected(f);
+      SpannerSegment::setSelected(f);
       if (_text) {
             if (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN) {
                   if (textLine()->_beginText)
@@ -75,16 +75,15 @@ void TextLineSegment::draw(QPainter* painter) const
 
       QPointF pp2(pos2());
 
+      // color for line (text color comes from the text properties)
       QColor color;
-      bool normalColor = false;
       if (selected() && !(score() && score()->printing()))
             color = (track() > -1) ? MScore::selectColor[voice()] : MScore::selectColor[0];
-      else if (!tl->visible())
+      else if (!tl->visible() || !tl->lineVisible())
             color = Qt::gray;
-      else {
-            color = tl->curColor();
-            normalColor = true;
-            }
+      else
+            color = tl->lineColor();
+
       qreal l = 0.0;
       if (_text) {
             SpannerSegmentType st = spannerSegmentType();
@@ -111,9 +110,18 @@ void TextLineSegment::draw(QPainter* painter) const
             }
 
       if (tl->lineVisible() || !score()->printing()) {
-            QPen pen(normalColor ? tl->lineColor() : color, textlineLineWidth, tl->lineStyle());
-            if (!tl->lineVisible())
-                  pen.setColor(Qt::gray);
+            QPen pen(color, textlineLineWidth, tl->lineStyle());
+            if (tl->lineStyle() == Qt::CustomDashLine) {
+                  bool palette = !(parent() && parent()->parent());     // hack for palette
+                  QVector<qreal> pattern;
+                  if (palette)
+                        pattern << 5.0 << 5.0;
+                  else
+                        pattern << 5.0 << 20.0;
+                  pen.setDashPattern(pattern);
+                  if (!palette)
+                        pen.setDashOffset(15.0);
+                  }
             painter->setPen(pen);
 
             QPointF pp1(l, 0.0);
@@ -202,6 +210,7 @@ void TextLineSegment::layout1()
       TextLine* tl = textLine();
       if (parent() && tl && tl->type() != Element::Type::OTTAVA
                   && tl->type() != Element::Type::PEDAL
+                  && tl->type() != Element::Type::HAIRPIN
                   && tl->type() != Element::Type::VOLTA)
             rypos() += -5.0 * spatium();
 
@@ -443,6 +452,21 @@ TextLine::~TextLine()
       delete _beginText;
       delete _continueText;
       delete _endText;
+      }
+
+//---------------------------------------------------------
+//   setScore
+//---------------------------------------------------------
+
+void TextLine::setScore(Score* s)
+      {
+      Spanner::setScore(s);
+      if (_beginText)
+            _beginText->setScore(s);
+      if (_continueText)
+            _continueText->setScore(s);
+      if (_endText)
+            _endText->setScore(s);
       }
 
 //---------------------------------------------------------

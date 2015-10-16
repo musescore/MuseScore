@@ -169,6 +169,17 @@
       </measure>
     <measure number="3">
       <note>
+        <rest/>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <fermata type="upright"/>
+          </notations>
+        </note>
+      </measure>
+    <measure number="4">
+      <note>
         <pitch>
           <step>E</step>
           <octave>4</octave>
@@ -229,7 +240,7 @@
           </notations>
         </note>
       </measure>
-    <measure number="4">
+    <measure number="5">
       <note>
         <pitch>
           <step>G</step>

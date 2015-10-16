@@ -166,7 +166,7 @@
           </Text>
         </VBox>
       <Measure number="1" len="1/4">
-        <irregular/>
+        <irregular>1</irregular>
         <TimeSig>
           <lid>2</lid>
           <sigN>4</sigN>
@@ -407,7 +407,7 @@
             </Text>
           </VBox>
         <Measure number="1" len="1/4">
-          <irregular/>
+          <irregular>1</irregular>
           <KeySig>
             <accidental>2</accidental>
             </KeySig>
@@ -594,7 +594,7 @@
             </Text>
           </VBox>
         <Measure number="1" len="1/4">
-          <irregular/>
+          <irregular>1</irregular>
           <TimeSig>
             <lid>18</lid>
             <sigN>4</sigN>

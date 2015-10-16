@@ -977,10 +977,7 @@ bool Staff::genKeySig()
 
 bool Staff::showLedgerLines()
       {
-      if (_staffType.group() == StaffGroup::TAB)
-            return false;
-      else
-            return _staffType.showLedgerLines();
+      return _staffType.showLedgerLines();
       }
 
 //---------------------------------------------------------
@@ -1128,7 +1125,7 @@ QVariant Staff::getProperty(P_ID id) const
             case P_ID::SMALL:
                   return small();
             default:
-                  qDebug("Staff::setProperty: unhandled id");
+                  qDebug("Staff::getProperty: unhandled id");
                   return QVariant();
             }
       }

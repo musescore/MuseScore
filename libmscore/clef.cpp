@@ -52,9 +52,10 @@ const ClefInfo ClefInfo::clefTable[] = {
 { "G1",   "G",         1,  0, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, QT_TRANSLATE_NOOP("clefTable", "French violin clef"),     StaffGroup::STANDARD  }, // G4
 { "F8va", "F",         4,  1, 40, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, QT_TRANSLATE_NOOP("clefTable", "Bass clef 8va"),          StaffGroup::STANDARD  }, // F_8VA
 { "F15ma","F",         4,  2, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, QT_TRANSLATE_NOOP("clefTable", "Bass clef 15ma"),         StaffGroup::STANDARD  }, // F_15MA
-{ "PERC2","percussion",2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Percussion"),             StaffGroup::PERCUSSION}, // PERC2 placeholder
+{ "PERC2","percussion",2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Percussion2"),            StaffGroup::PERCUSSION}, // PERC2
 { "TAB2", "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Tablature2"),             StaffGroup::TAB       },
 { "G8vbp","G",         2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Treble clef optional 8vb"),StaffGroup::STANDARD }, // G5
+{ "G8vbo","G",         2, -1, 38, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, QT_TRANSLATE_NOOP("clefTable", "Treble clef 8vb Old"),    StaffGroup::STANDARD  },
       };
 
 
@@ -250,6 +251,10 @@ void Clef::layout1()
                   symbol->setSym(SymId::gClef8vb);
                   yoff = 3.0 * curLineDist;
                   break;
+            case ClefType::G3_O:                            // double G clef 8vb on 2nd line
+                  symbol->setSym(SymId::gClef8vbOld);
+                  yoff = 3.0 * curLineDist;
+                  break;
             case ClefType::F:                              // F clef on penultimate line
                   symbol->setSym(SymId::fClef);
                   yoff = 1.0 * curLineDist;
@@ -301,8 +306,11 @@ void Clef::layout1()
                   yoff = curLineDist * (curLines - 1) * .5;
                   break;
             case ClefType::PERC:                           // percussion clefs
-            case ClefType::PERC2:         // no longer supported: fall back to same glyph as PERC
                   symbol->setSym(SymId::unpitchedPercussionClef1);
+                  yoff = curLineDist * (curLines - 1) * 0.5;
+                  break;
+            case ClefType::PERC2:
+                  symbol->setSym(SymId::unpitchedPercussionClef2);
                   yoff = curLineDist * (curLines - 1) * 0.5;
                   break;
             case ClefType::G4:                             // G clef in 1st line

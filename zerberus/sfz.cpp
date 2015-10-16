@@ -18,7 +18,6 @@
 #include <sndfile.h>
 
 #include "libmscore/xml.h"
-// #include "zip/qzipreader_p.h"
 
 #include "instrument.h"
 #include "zone.h"
@@ -54,8 +53,8 @@ struct SfzRegion {
 
       void init(const QString&);
       bool isEmpty() const { return sample.isEmpty(); }
-      int readKey(const QByteArray&) const;
-      void readOp(const QByteArray&);
+      int readKey(const QString&) const;
+      void readOp(const QString& token, const QString& data);
       void setZone(Zone*) const;
       };
 
@@ -132,7 +131,7 @@ void SfzRegion::setZone(Zone* z) const
       z->offBy        = off_by;
       z->group        = group;
       if (note_offset || octave_offset) {
-            printf("=========================offsets %d %d\n", note_offset, octave_offset);
+            qDebug("=========================offsets %d %d", note_offset, octave_offset);
             }
       }
 
@@ -140,13 +139,13 @@ void SfzRegion::setZone(Zone* z) const
 //   readKey
 //---------------------------------------------------------
 
-int SfzRegion::readKey(const QByteArray& s) const
+int SfzRegion::readKey(const QString& s) const
       {
       bool ok;
       int i = s.toInt(&ok);
       if (ok)
             return i;
-       switch (tolower(s[0])) {
+       switch (s[0].toLower().toLatin1()) {
             case 'c': i = 0; break;
             case 'd': i = 2; break;
             case 'e': i = 4; break;
@@ -159,11 +158,11 @@ int SfzRegion::readKey(const QByteArray& s) const
                   return 0;
             }
       int idx = 1;
-      if (s[idx] == '#') {
+      if (s[idx].toLatin1() == '#') {
             i++;
             ++idx;
             }
-      else if (tolower(s[idx]) == 'b') {
+      else if (s[idx].toLower().toLatin1() == 'b') {
             i--;
             ++idx;
             }
@@ -199,7 +198,7 @@ void ZInstrument::addRegion(SfzRegion& r)
 //   readDouble
 //---------------------------------------------------------
 
-static void readDouble(const QByteArray& data, double* val)
+static void readDouble(const QString& data, double* val)
       {
       bool ok;
       double d = data.toDouble(&ok);
@@ -211,19 +210,16 @@ static void readDouble(const QByteArray& data, double* val)
 //   readOp
 //---------------------------------------------------------
 
-void SfzRegion::readOp(const QByteArray& bb)
+void SfzRegion::readOp(const QString& b, const QString& data)
       {
-      QList<QByteArray> b2 = bb.split('=');
-      if (b2.size() != 2)
-            return;
-      QByteArray b = b2[0];
-      QByteArray data = b2[1];
       int i = data.toInt();
 
-      if (b == "amp_veltrack")       readDouble(data, &amp_veltrack);
-      else if (b == "ampeg_release") readDouble(data, &ampeg_release);
+      if (b == "amp_veltrack")
+            readDouble(data, &amp_veltrack);
+      else if (b == "ampeg_release")
+            readDouble(data, &ampeg_release);
       else if (b == "sample") {
-            sample = path + "/" + b2[1];
+            sample = path + "/" + data;
             sample.replace("\\", "/");
             }
       else if (b == "key") {
@@ -283,25 +279,44 @@ void SfzRegion::readOp(const QByteArray& bb)
             else if (data == "normal")
                   off_mode = OffMode::NORMAL;
             }
-      else if (b == "tune")            tune = i;
-      else if (b == "rt_decay")        readDouble(data, &rt_decay);
-      else if (b == "hirand")          readDouble(data, &hirand);
-      else if (b == "lorand")          readDouble(data, &lorand);
-      else if (b == "volume")          readDouble(data, &volume);
-      else if (b == "pitch_keycenter") pitch_keycenter = readKey(data);
-      else if (b == "lokey")           lokey = readKey(data);
-      else if (b == "hikey")           hikey = readKey(data);
-      else if (b == "lovel")           lovel = i;
-      else if (b == "hivel")           hivel = i;
-      else if (b == "off_by")          off_by = i;
-      else if (b == "group")           group = i;
-      else if (b == "lochan")          lochan = i;
-      else if (b == "hichan")          hichan = i;
-      else if (b == "note_offset")     note_offset = i;
-      else if (b == "octave_offset")   octave_offset = i;
-      else if (b == "seq_length")      seq_length = i;
-      else if (b == "seq_position")    seq_position = i;
-      else if (b == "transpose")       transpose = i;
+      else if (b == "tune")
+            tune = i;
+      else if (b == "rt_decay")
+            readDouble(data, &rt_decay);
+      else if (b == "hirand")
+            readDouble(data, &hirand);
+      else if (b == "lorand")
+            readDouble(data, &lorand);
+      else if (b == "volume")
+            readDouble(data, &volume);
+      else if (b == "pitch_keycenter")
+            pitch_keycenter = readKey(data);
+      else if (b == "lokey")
+            lokey = readKey(data);
+      else if (b == "hikey")
+            hikey = readKey(data);
+      else if (b == "lovel")
+            lovel = i;
+      else if (b == "hivel")
+            hivel = i;
+      else if (b == "off_by")
+            off_by = i;
+      else if (b == "group")
+            group = i;
+      else if (b == "lochan")
+            lochan = i;
+      else if (b == "hichan")
+            hichan = i;
+      else if (b == "note_offset")
+            note_offset = i;
+      else if (b == "octave_offset")
+            octave_offset = i;
+      else if (b == "seq_length")
+            seq_length = i;
+      else if (b == "seq_position")
+            seq_position = i;
+      else if (b == "transpose")
+            transpose = i;
       else
             qDebug("SfzRegion: unknown opcode <%s>", qPrintable(b));
       }
@@ -336,30 +351,46 @@ bool ZInstrument::loadSfz(const QString& s)
             QByteArray ba = f.readLine();
             zerberus->setLoadProgress(((qreal)f.pos() * 100) / total);
             ba = ba.simplified();
+
             if (ba.isEmpty() || ba.startsWith("//"))
                   continue;
-            QList<QByteArray> bal = ba.split(' ');
-            foreach(const QByteArray& bb, bal) {
-                  if (bb == "<group>") {
-                        if (!groupMode && !r.isEmpty())
-                              addRegion(r);
-                        g.init(path);
-                        r.init(path);
-                        groupMode = true;
+            if (zerberus->loadWasCanceled())
+                  return false;
+            if (ba.startsWith("<group>")) {
+                  if (!groupMode && !r.isEmpty())
+                        addRegion(r);
+                  g.init(path);
+                  r.init(path);
+                  groupMode = true;
+                  ba = ba.mid(7);
+                  }
+            else if (ba.startsWith("<region>")) {
+                  if (groupMode) {
+                        g = r;
+                        groupMode = false;
                         }
-                  else if (bb == "<region>") {
-                        if (groupMode) {
-                              g = r;
-                              groupMode = false;
-                              }
-                        else {
-                              if (!r.isEmpty())
-                                    addRegion(r);
-                              r = g;  // initialize next region with group values
-                              }
+                  else {
+                        if (!r.isEmpty())
+                              addRegion(r);
+                        r = g;  // initialize next region with group values
+                        }
+                  ba = ba.mid(8);
+                  }
+            QRegularExpression re("\\s?(\\w+)=");
+            QRegularExpressionMatchIterator i = re.globalMatch(ba);
+
+            while (i.hasNext()) {
+                  QRegularExpressionMatch match = i.next();
+                  int si = match.capturedEnd();
+                  int ei;
+                  if (i.hasNext()) {
+                        QRegularExpressionMatch nextMatch = i.peekNext();
+                        ei = nextMatch.capturedStart();
                         }
                   else
-                        r.readOp(bb);
+                        ei = ba.size();
+                  QString s = ba.mid(si, ei-si);
+                  r.readOp(match.captured(1), s);
                   }
             }
       zerberus->setLoadProgress(100);

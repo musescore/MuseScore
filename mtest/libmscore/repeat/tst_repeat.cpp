@@ -67,6 +67,21 @@ class TestRepeat : public QObject, public MTest
       
       void repeat26() { repeat("repeat26.mscx", "1;1;2;2;3"); } // empty and garbage jump
 
+      void repeat27() { repeat("repeat27.mscx", "1;2;2;1"); }       // #73486 single-measure repeat at end of section
+      void repeat28() { repeat("repeat28.mscx", "1;2;2;1;2;1"); }   // #73486 single-measure repeat at end of section w/DC
+      void repeat29() { repeat("repeat29.mscx", "1;2;3;3;2;3;1"); } // #73486 single-measure repeat at end of section w/DS
+
+      void repeat30() { repeat("repeat30.mscx", "1;1;2;1;2"); }     // #73496 single measure section at beginning of score followed by a section with end repeat (without beginning repeat)
+
+      void repeat31() { repeat("repeat31.mscx", "1;2;2;1;2"); }               // #73531 ending measure has jump and repeat m1 |: m2 DC :|
+      void repeat32() { repeat("repeat32.mscx", "1;2;3;3;2;3"); }             // #73531 ending measure has jump and repeat m1 |S m2 |: m3 DS :|
+      void repeat33() { repeat("repeat33.mscx", "1;2;3;2;3;1;2;3"); }         // #73531 ending measure has jump and repeat m1 |: m2 | m3 DC :|
+      void repeat34() { repeat("repeat34.mscx", "1;2;3;2;4;5;5;1;2;4;5"); }   // #73531 ending measure has jump and repeat m1 |: m2 |1e m3 :| 2e m4 |: m5 | DC :|
+
+      void repeat35() { repeat("repeat35.mscx", "1;2;1;2; 1;2;3;4;2;3; 1;2;3;1;2; 1;2;3;4;2;3;5"); } // #65161 multiple sections, each with possible DC, DS, al Fine
+      void repeat36() { repeat("repeat36.mscx", "1;2;3;2;3;4;5;6; 1;2;2;3;4;5;6; 1;2;1;2;3;4;5;6; 1;2;3;2;3;4;2;3;4;5;6; 1;2;3;2;3;2;3;4;2;3;4;5;6; 1;2;3;2;4;5;6; 1;2;3;4;5;6;1;2;3; 1;2;3;4;5;6;2;3;4;7;8;9;10;11; 1;2;3;2;4;2;5;6; 1;2;3;4;1;2;5;6;7;8;1;2;9;10;1;2;11;12; 1;2;3;4;2;3;5;6;7;8;2;9;10; 1;2;3;4;3;5;6;2;3;5;6;7; 1;2;3;4;5;6;7;8;9;10; 2;3;4;5;6;7;8;11;12; 2;3;4;5;6;7;8;13;14;15; 16;17;18; 16;17;18; 19;20;21;22;23; 5;6;7; 24;25;26; 1;2;2;2;2;2;2;2;2;3; 1;2;3;4;4;1;2; 1;2;1;3;4;5;4;6;7;8;7;9; 1;2;1;3;4;5;6;5;7;8; 1;2;3;4;1;2;4; 1;2;3;1;4;5;6;7;8;5;6; 1;2;3;1;2;3;4;5;6;7;5;8; 1;2;3;2;3;4;5;5;6; 1;2;1;2;3;2;3;4;5;6;7;6;7;8;9;10;11;9;10;12;12;13;14;13;14;15;16;13;14; 1;2;3;4;2;3;4;5;3;4;5;6; 1;2;1;2;3;4;2;3;4;5;4;5; 1;1;2;2;3; 1;2;2;1; 1;2;2;1;2;1; 1;2;3;3;2;3;1; 1;1;2;1;2; 1;2;2;1;2; 1;2;3;3;2;3; 1;2;3;2;3;1;2;3; 1;2;3;2;4;5;5;1;2;4;5; 1;2;1;2; 1;2;3;4;2;3; 1;2;3;1;2; 1;2;3;4;2;3;5"); } // #65161 entire album of 01-35, except 13.
+
+      void repeat37() { repeat("repeat37.mscx", "1;2;1; 1;2;1; 1;2;1; 1;2;1; 1;2;1"); } // #65161, with section breaks occuring on non-meausure frames
       };
 
 //---------------------------------------------------------

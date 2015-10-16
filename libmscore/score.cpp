@@ -332,7 +332,7 @@ void Score::init()
 //---------------------------------------------------------
 
 Score::Score()
-   : QObject(0), _is(this), _selection(this), _selectionFilter(this)
+   : QObject(0), ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
       {
       _parentScore = 0;
       init();
@@ -343,7 +343,7 @@ Score::Score()
       }
 
 Score::Score(const MStyle* s)
-   : _is(this), _selection(this), _selectionFilter(this)
+   : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
       {
       _parentScore = 0;
       init();
@@ -365,7 +365,7 @@ Score::Score(const MStyle* s)
 //
 
 Score::Score(Score* parent)
-   : _is(this), _selection(this), _selectionFilter(this)
+   : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
       {
       _parentScore = parent;
       init();
@@ -375,14 +375,18 @@ Score::Score(Score* parent)
       else {
             // inherit most style settings from parent
             _style = *parent->style();
+
             // but borrow defaultStyle page layout settings
             const PageFormat* pf = MScore::defaultStyle()->pageFormat();
             qreal sp = MScore::defaultStyle()->spatium();
             _style.setPageFormat(*pf);
             _style.setSpatium(sp);
 
-            //concert pitch is off for parts
+            // and force some style settings that just make sense for parts
             _style.set(StyleIdx::concertPitch, false);
+            _style.set(StyleIdx::createMultiMeasureRests, true);
+            _style.set(StyleIdx::dividerLeft, false);
+            _style.set(StyleIdx::dividerRight, false);
             }
 
       _synthesizerState = parent->_synthesizerState;
@@ -390,7 +394,7 @@ Score::Score(Score* parent)
       }
 
 Score::Score(Score* parent, const MStyle* s)
-   : _is(this), _selection(this), _selectionFilter(this)
+   : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
       {
       _parentScore = parent;
       init();
@@ -642,6 +646,8 @@ MeasureBase* Score::pos2measure(const QPointF& p, int* rst, int* pitch,
       // search for segment + offset
       QPointF pppp = p - m->canvasPos();
       int strack = i * VOICES;
+      if (!staff(i))
+            return nullptr;
       int etrack = staff(i)->part()->nstaves() * VOICES + strack;
 
       SysStaff* sstaff = m->system()->staff(i);
@@ -2060,7 +2066,7 @@ bool Score::appendScore(Score* score)
       MeasureBase* lastMeasure = last();
       if (!lastMeasure)
             return false;
-      int tickLen = lastMeasure->endTick();
+      int tickOfAppend = lastMeasure->endTick();
 
       if (!lastMeasure->lineBreak() && !lastMeasure->pageBreak()) {
             lastMeasure->undoSetBreak(true, LayoutBreak::Type::LINE);
@@ -2088,10 +2094,11 @@ bool Score::appendScore(Score* score)
             _measures.add(nmb);
             }
       fixTicks();
+      Measure* firstAppendedMeasure = tick2measure(tickOfAppend);
 
       // if the appended score has less staves,
       // make sure the measures have full measure rest
-      for (Measure* m = tick2measure(tickLen); m; m = m->nextMeasure()) {
+      for (Measure* m = firstAppendedMeasure; m; m = m->nextMeasure()) {
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                   Fraction f;
                   for (Segment* s = m->first(Segment::Type::ChordRest); s; s = s->next(Segment::Type::ChordRest)) {
@@ -2108,29 +2115,30 @@ bool Score::appendScore(Score* score)
             }
 
       // adjust key signatures
-      for (Staff* st : score->staves()) {
-            int staffIdx = score->staffIdx(st);
-            Staff* joinedStaff = staff(staffIdx);
-            // special case for initial "C" key signature - these have no explicit element
-            Measure* m = tick2measure(tickLen);
-            Segment* seg = m->getSegment(Segment::Type::KeySig, tickLen);
-            if (!seg->element(staffIdx * VOICES)) {
-                  // no need to create new initial "C" key sig
-                  // if staff already ends in that key
-                  if (joinedStaff->key(tickLen - 1) == Key::C)
-                        continue;
-                  Key key = Key::C;
-                  KeySig* ks = new KeySig(this);
-                  ks->setTrack(staffIdx * VOICES);
-                  ks->setKey(key);
-                  ks->setParent(seg);
-                  addElement(ks);
-                  }
-            // other key signatures (initial other than "C", non-initial)
-            for (auto k : *(st->keyList())) {
-                  int tick = k.first;
-                  KeySigEvent key = k.second;
-                  joinedStaff->setKey(tick + tickLen, key);
+      if (firstAppendedMeasure) {
+            Segment* seg = firstAppendedMeasure->getSegment(Segment::Type::KeySig, tickOfAppend);
+            for (Staff* st : score->staves()) {
+                  int staffIdx = score->staffIdx(st);
+                  Staff* joinedStaff = staff(staffIdx);
+                  // special case for initial "C" key signature - these have no explicit element
+                  if (!seg->element(staffIdx * VOICES)) {
+                        // no need to create new initial "C" key sig
+                        // if staff already ends in that key
+                        if (joinedStaff->key(tickOfAppend - 1) == Key::C)
+                              continue;
+                        Key key = Key::C;
+                        KeySig* ks = new KeySig(this);
+                        ks->setTrack(staffIdx * VOICES);
+                        ks->setKey(key);
+                        ks->setParent(seg);
+                        addElement(ks);
+                        }
+                  // other key signatures (initial other than "C", non-initial)
+                  for (auto k : *(st->keyList())) {
+                        int tick = k.first;
+                        KeySigEvent key = k.second;
+                        joinedStaff->setKey(tick + tickOfAppend, key);
+                        }
                   }
             }
 
@@ -2140,8 +2148,8 @@ bool Score::appendScore(Score* score)
             Spanner* ns = static_cast<Spanner*>(spanner->clone());
             ns->setScore(this);
             ns->setParent(0);
-            ns->setTick(spanner->tick() + tickLen);
-            ns->setTick2(spanner->tick2() + tickLen);
+            ns->setTick(spanner->tick() + tickOfAppend);
+            ns->setTick2(spanner->tick2() + tickOfAppend);
             if (ns->type() == Element::Type::SLUR) {
                   // set start/end element for slur
                   ns->setStartElement(0);
@@ -3304,15 +3312,6 @@ void Score::undo(UndoCommand* cmd) const
       }
 
 //---------------------------------------------------------
-//   setLayoutMode
-//---------------------------------------------------------
-
-void Score::setLayoutMode(LayoutMode lm)
-      {
-      _layoutMode = lm;
-      }
-
-//---------------------------------------------------------
 //   linkId
 //---------------------------------------------------------
 
@@ -3584,36 +3583,42 @@ ChordRest* Score::findCR(int tick, int track) const
 
 //---------------------------------------------------------
 //   findCRinStaff
-//    find chord/rest <= tick in staff
-//    prefer shortest duration (so it does not overlap next chordrest segment)
+//    find last chord/rest on staff that ends before tick
 //---------------------------------------------------------
 
-ChordRest* Score::findCRinStaff(int tick, int track) const
+ChordRest* Score::findCRinStaff(int tick, int staffIdx) const
       {
-      Measure* m = tick2measureMM(tick);
+      int ptick = tick - 1;
+      Measure* m = tick2measureMM(ptick);
       if (!m) {
-            qDebug("findCRinStaff: no measure for tick %d", tick);
+            qDebug("findCRinStaff: no measure for tick %d", ptick);
             return nullptr;
             }
       // attach to first rest all spanner when mmRest
       if (m->isMMRest())
-            tick = m->tick();
+            ptick = m->tick();
       Segment* s = m->first(Segment::Type::ChordRest);
-      int strack = (track / VOICES) * VOICES;
+      int strack = staffIdx * VOICES;
       int etrack = strack + VOICES;
       int actualTrack = strack;
 
+      int lastTick = -1;
       for (Segment* ns = s; ; ns = ns->next(Segment::Type::ChordRest)) {
-            if (ns == 0 || ns->tick() > tick)
+            if (ns == 0 || ns->tick() > ptick)
                   break;
-            // found a segment; now find shortest chordrest on this staff (if any)
-            ChordRest* shortestCR = 0;
+            // found a segment; now find longest cr on this staff that does not overlap tick
             for (int t = strack; t < etrack; ++t) {
                   ChordRest* cr = static_cast<ChordRest*>(ns->element(t));
-                  if (cr && (!shortestCR || cr->actualTicks() < shortestCR->actualTicks())) {
-                        shortestCR = cr;
-                        s = ns;
-                        actualTrack = t;
+                  if (cr) {
+                        int endTick = cr->tick() + cr->actualTicks();
+                        // allow fudge factor for tuplets
+                        // TODO: replace with fraction-based calculation
+                        int fudge = cr->tuplet() ? 5 : 0;
+                        if (endTick + fudge >= lastTick && endTick - fudge <= tick) {
+                              s = ns;
+                              actualTrack = t;
+                              lastTick = endTick;
+                              }
                         }
                   }
             }
@@ -4197,6 +4202,67 @@ void Score::cropPage(qreal margins)
 
                   undoChangePageFormat(&f, spatium(), pageNumberOffset());
                   }
+            }
+      }
+
+//---------------------------------------------------------
+//   switchToPageMode
+//    switch to layout mode PAGE
+//---------------------------------------------------------
+
+void Score::switchToPageMode()
+      {
+      if (layoutMode() != LayoutMode::PAGE) {
+            startCmd();
+            ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(LayoutMode::PAGE));
+            doLayout();
+            }
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Score::getProperty(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::LAYOUT_MODE:
+                  return QVariant(static_cast<int>(_layoutMode));
+            default:
+                  qDebug("Score::getProperty: unhandled id");
+                  return QVariant();
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Score::setProperty(P_ID id, const QVariant& v)
+      {
+      switch (id) {
+            case P_ID::LAYOUT_MODE:
+                  setLayoutMode(LayoutMode(v.toInt()));
+                  break;
+            default:
+                  qDebug("Score::setProperty: unhandled id");
+                  break;
+            }
+      score()->setLayoutAll(true);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Score::propertyDefault(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::LAYOUT_MODE:
+                  return static_cast<int>(LayoutMode::PAGE);
+            default:
+                  return QVariant();
             }
       }
 

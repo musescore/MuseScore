@@ -53,6 +53,7 @@ class ZerberusGui : public Ms::SynthesizerGui, Ui::ZerberusGui {
 
    private slots:
       void addClicked();
+      void cancelLoadClicked();
       void removeClicked();
       void onSoundFontLoaded();
       void updateProgress();

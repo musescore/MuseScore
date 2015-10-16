@@ -30,7 +30,6 @@
 #include "pitchlabel.h"
 
 #include <QtCore/QtPlugin>
-#include <QtDesigner/QDesignerCustomWidgetInterface>
 
 QWidget* KnobPlugin::createWidget(QWidget* parent)
 	{

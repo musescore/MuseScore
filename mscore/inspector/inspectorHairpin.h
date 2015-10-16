@@ -34,6 +34,7 @@ class InspectorHairpin : public InspectorBase {
 
    public:
       InspectorHairpin(QWidget* parent);
+      virtual void postInit() override;
       };
 
 

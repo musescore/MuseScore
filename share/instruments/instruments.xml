@@ -285,7 +285,7 @@
             </Instrument>
             <Instrument id="f-dizi">
                   <longName>F Dizi</longName>
-                  <shortName>A Di.</shortName>
+                  <shortName>F Di.</shortName>
                   <description>F Dizi</description>
                   <musicXMLid>wind.flutes.di-zi</musicXMLid>
                   <clef>G</clef>
@@ -5679,9 +5679,9 @@
                   <genre>ethnic</genre>
             </Instrument>
             <Instrument id="guiro">
-                  <longName>Guiro</longName>
+                  <longName>Güiro</longName>
                   <shortName>Gro.</shortName>
-                  <description>Guiro</description>
+                  <description>Güiro</description>
                   <musicXMLid>wood.guiro</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
@@ -5691,7 +5691,7 @@
                         <head>0</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Short Guiro</name>
+                        <name>Short Güiro</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -5852,7 +5852,7 @@
                         <head>0</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Short Guiro</name>
+                        <name>Short Güiro</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -9113,7 +9113,7 @@
                   <aPitchRange>62-93</aPitchRange>
                   <pPitchRange>62-105</pPitchRange>
                   <Channel>
-                        <program value="40"/>
+                        <program value="110"/>
                   </Channel>
                   <Channel name="pizzicato">
                         <program value="45"/>

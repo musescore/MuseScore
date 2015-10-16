@@ -1250,7 +1250,7 @@ void Score::undoAddElement(Element* element)
                   // accounting for grace notes and cross-staff notation
                   int sm = 0;
                   if (cr1->staffIdx() != cr2->staffIdx())
-                        sm = cr1->staffMove() + cr2->staffMove();
+                        sm = cr2->staffIdx() - cr1->staffIdx();
                   Chord* c1 = findLinkedChord(cr1, score->staff(staffIdx));
                   Chord* c2 = findLinkedChord(cr2, score->staff(staffIdx + sm));
                   Note* nn1 = c1->findNote(n1->pitch());
@@ -3595,18 +3595,6 @@ void ChangeStartEndSpanner::flip()
       spanner->setEndElement(end);
       start = s;
       end   = e;
-      }
-
-//---------------------------------------------------------
-//   ChangeLayoutMode::flip
-//---------------------------------------------------------
-
-void ChangeLayoutMode::flip()
-      {
-      LayoutMode lm = score->layoutMode();
-      score->setLayoutMode(layoutMode);
-      layoutMode = lm;
-      score->setLayoutAll(true);
       }
 
 //---------------------------------------------------------

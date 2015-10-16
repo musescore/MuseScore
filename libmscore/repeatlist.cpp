@@ -62,6 +62,30 @@ Measure* Score::searchLabel(const QString& s)
       }
 
 //---------------------------------------------------------
+//   searchLabelWithinSectionFirst
+//---------------------------------------------------------
+
+Measure* Score::searchLabelWithinSectionFirst(const QString& s, Measure* sectionStartMeasure, Measure* sectionEndMeasure)
+      {
+      if (s == "start")
+            return sectionStartMeasure;
+      else if (s == "end")
+            return sectionEndMeasure;
+      for (Measure* m = sectionStartMeasure; m && (m != sectionEndMeasure->nextMeasure()); m = m->nextMeasure()) {
+            for (auto e : m->el()) {
+                  if (e->type() == Element::Type::MARKER) {
+                        const Marker* marker = static_cast<const Marker*>(e);
+                        if (marker->label() == s)
+                              return m;
+                        }
+                  }
+            }
+
+      // if did not find label within section, then search for label in entire score
+      return searchLabel(s);
+      }
+
+//---------------------------------------------------------
 //   RepeatLoop
 //---------------------------------------------------------
 
@@ -259,26 +283,80 @@ void RepeatList::unwind()
       if (!fm)
             return;
 
-// qDebug("unwind===================");
-      QList<Jump*> jumps; // take the jumps only once so store them
-      rs                  = new RepeatSegment;
-      rs->tick            = 0;
-      Measure* endRepeat  = 0; // measure where the current repeat should stop
-      Measure* continueAt = 0; // measure where the playback should continue after the repeat (To coda)
-      int loop            = 0;
-      int repeatCount     = 0;
-      bool isGoto         = false;
+ //qDebug("unwind===================");
 
       for (Measure* m = fm; m; m = m->nextMeasure())
             m->setPlaybackCount(0);
 
-      for (Measure* m = fm; m;) {
+      MeasureBase* sectionStartMeasureBase = NULL; // NULL indicates haven't discovered starting Measure of section
+      MeasureBase* sectionEndMeasureBase = NULL;
+
+      // partition score by section breaks and unwind individual sections seperately
+      // note: section breaks may occur on non-Measure frames, so must seach list of all MeasureBases
+      for (MeasureBase* mb = _score->first(); mb; mb = mb->next()) {
+
+            // unwindSection only deals with real Measures, so sectionEndMeasureBase and sectionStartMeasureBase will only point to real Measures
+            if (mb->isMeasure()) {
+                  sectionEndMeasureBase = mb; // ending measure of section is the most recently encountered actual Measure
+            
+                  // starting measure of section will be the first non-NULL actual Measure encountered
+                  if (sectionStartMeasureBase == NULL)
+                        sectionStartMeasureBase = mb;
+            }
+
+            // if found section break or reached final MeasureBase of score, then unwind
+            if (mb->sectionBreak() || !mb->nextMeasure()) {
+
+                  // only unwind if section starts and ends with actual real measure
+                  if (sectionStartMeasureBase && sectionEndMeasureBase) {
+                        unwindSection(reinterpret_cast<Measure*>(sectionStartMeasureBase), reinterpret_cast<Measure*>(sectionEndMeasureBase));
+                        sectionStartMeasureBase = sectionEndMeasureBase = NULL; // reset to NULL to indicate that don't know starting Measure of next section after starting new section
+                        }
+                  else {
+                        qDebug( "Will not unroll a section that doesn't start or end with an actual measure. sectionStartMeasureBase = %p, sectionEndMeasureBase = %p",
+                                    sectionStartMeasureBase, sectionEndMeasureBase);
+                        }
+                  }
+            }
+
+      update();
+      dump();
+      }
+
+//---------------------------------------------------------
+//   unwindSection
+//    unwinds from sectionStartMeasure through sectionEndMeasure
+//    appends repeat segments to rs
+//---------------------------------------------------------
+
+void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEndMeasure)
+      {
+//      qDebug("unwind %d-measure section starting %p through %p", sectionEndMeasure->no()+1, sectionStartMeasure, sectionEndMeasure);
+
+      QList<Jump*> jumps; // take the jumps only once so store them
+
+      rs         = new RepeatSegment;
+      rs->tick   = sectionStartMeasure->tick(); // prepare initial repeat segment for start of this section
+
+      Measure* endRepeat  = 0; // measure where the current repeat should stop
+      Measure* continueAt = 0; // measure where the playback should continue after the repeat (To coda)
+      Measure* m          = 0;
+      int loop            = 0; // keeps track of how many times have repeated a :| (Repeat::END)
+      int repeatCount     = 0;
+      bool isGoto         = false;
+
+      for (Measure* nm = sectionStartMeasure; nm; ) {
+            m = nm;
             m->setPlaybackCount(m->playbackCount() + 1);
             Repeat flags = m->repeatFlags();
             bool doJump = false; // process jump after endrepeat
 
-// qDebug("repeat m%d(%d) lc%d loop %d repeatCount %d isGoto %d endRepeat %p flags 0x%x",
-//               m->no(), m->tick(), m->playbackCount(), loop, repeatCount, isGoto, endRepeat, int(flags));
+            // during any DC or DS, will take last time through repeat
+            if (isGoto && (flags & Repeat::END))
+                  loop = m->repeatCount() - 1;
+
+//            qDebug("m%d(tick %7d) %p: playbackCount %d loop %d repeatCount %d isGoto %d endRepeat %p continueAt %p flags 0x%x",
+//                   m->no()+1, m->tick(), m, m->playbackCount(), loop, repeatCount, isGoto, endRepeat, continueAt, int(flags));
 
             if (endRepeat) {
                   Volta* volta = _score->searchVolta(m->tick());
@@ -302,22 +380,13 @@ void RepeatList::unwind()
                   
 
             if (isGoto && (endRepeat == m)) {
-                  if (continueAt == 0) {
-// qDebug("  isGoto && endReapeat == %p, continueAt == 0", m);
-                        rs->len = m->endTick() - rs->tick;
-                        if (rs->len)
-                              append(rs);
-                        else
-                              delete rs;
-                        update();
-                        dump();
-                        return;
-                        }
+                  if (continueAt == 0)
+                        break;
                   rs->len = m->endTick() - rs->tick;
                   append(rs);
                   rs       = new RepeatSegment;
                   rs->tick = continueAt->tick();
-                  m        = continueAt;
+                  nm       = continueAt;
                   isGoto   = false;
                   endRepeat = 0;
                   continue;
@@ -330,7 +399,7 @@ void RepeatList::unwind()
                               loop = 0;
                               }
                         else {
-                              m = jumpToStartRepeat(m);
+                              nm = jumpToStartRepeat(m);
                               continue;
                               }
                         }
@@ -340,7 +409,7 @@ void RepeatList::unwind()
                         endRepeat   = m;
                         repeatCount = m->repeatCount();
                         loop        = 1;
-                        m = jumpToStartRepeat(m);
+                        nm = jumpToStartRepeat(m);
                         continue;
                         }
                   }
@@ -354,16 +423,20 @@ void RepeatList::unwind()
                         }
                   // jump only once
                   if (jumps.contains(s)) {
-                        m = m->nextMeasure();
-                        if (endRepeat == _score->searchLabel(s->playUntil()))
+                        if (endRepeat == _score->searchLabelWithinSectionFirst(s->playUntil(), sectionStartMeasure, sectionEndMeasure))
                               endRepeat = 0;
-                        continue;
+
+                        nm = m->nextMeasure();
+                        if (nm == sectionEndMeasure->nextMeasure())
+                              break;
+                        else
+                              continue;
                         }
                   jumps.append(s);
                   if (s) {
-                        Measure* nm = _score->searchLabel(s->jumpTo());
-                        endRepeat   = _score->searchLabel(s->playUntil());
-                        continueAt  = _score->searchLabel(s->continueAt());
+                        nm          = _score->searchLabelWithinSectionFirst(s->jumpTo()    , sectionStartMeasure, sectionEndMeasure);
+                        endRepeat   = _score->searchLabelWithinSectionFirst(s->playUntil() , sectionStartMeasure, sectionEndMeasure);
+                        continueAt  = _score->searchLabelWithinSectionFirst(s->continueAt(), sectionStartMeasure, sectionEndMeasure);
 
                         if (nm && endRepeat) {
                               isGoto      = true;
@@ -371,26 +444,27 @@ void RepeatList::unwind()
                               append(rs);
                               rs = new RepeatSegment;
                               rs->tick  = nm->tick();
-                              m = nm;
                               continue;
                               }
                         }
                   else
                         qDebug("Jump not found");
                   }
-            m = m->nextMeasure();
+
+            // keep looping until reach end of score or end of the section
+            nm = m->nextMeasure();
+            if (nm == sectionEndMeasure->nextMeasure())
+                  break;
             }
 
+      // append the final repeat segment of that section
       if (rs) {
-            Measure* lm = _score->lastMeasure();
-            rs->len     = lm->endTick() - rs->tick;
+            rs->len = m->endTick() - rs->tick;
             if (rs->len)
                   append(rs);
             else
                   delete rs;
             }
-      update();
-      dump();
       }
 
 //---------------------------------------------------------
@@ -399,24 +473,29 @@ void RepeatList::unwind()
 
 Measure* RepeatList::jumpToStartRepeat(Measure* m)
       {
-      Measure* nm;
-      //
-      // go back to start of repeat or section break
-      // handle special case of end repeat (Measure m) has a section break
-      //
-      for (nm = m; nm && nm != _score->firstMeasure(); nm = nm->prevMeasure()) {
-            if (nm->repeatFlags() & Repeat::START || (nm->sectionBreak() && m != nm)) {
-                  if (nm->sectionBreak() && nm->nextMeasure())
-                        nm = nm->nextMeasure();
-                  break;
-                  }
-            }
+      // finalize the previous repeat segment
       rs->len = m->tick() + m->ticks() - rs->tick;
       append(rs);
 
+      // search backwards until find start of repeat
+      while (true) {
+
+            if (m->repeatFlags() & Repeat::START)
+                  break;
+
+            if (m == _score->firstMeasure())
+                  break;
+
+            if (m->prevMeasure()->sectionBreak())
+                  break;
+
+            m = m->prevMeasure();
+            }
+
+      // initialize the next repeat segment
       rs        = new RepeatSegment;
-      rs->tick  = nm->tick();
-      return nm;
+      rs->tick  = m->tick();
+      return m;
       }
 
 }

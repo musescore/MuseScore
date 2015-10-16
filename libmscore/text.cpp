@@ -2602,10 +2602,20 @@ void Text::paste()
                         else
                               insertSym(Sym::name2id(token));
                         }
+                  else if (!c.isLetter()) {
+                        state = 0;
+                        insertText("&");
+                        insertText(token);
+                        insertText(c);
+                        }
                   else
                         token += c;
                   }
             }
+      if (state == 2) {
+          insertText("&");
+          insertText(token);
+          }
       layoutEdit();
       bool lo = type() == Element::Type::INSTRUMENT_NAME;
       score()->setLayoutAll(lo);
@@ -2693,7 +2703,12 @@ Element* Text::drop(const DropData& data)
                   delete e;
 
                   if (_editMode) {
-                        insert(&_cursor, QChar(code));
+                        if (code & 0xffff0000) {
+                              insert(&_cursor, QChar::highSurrogate(code));
+                              insert(&_cursor, QChar::lowSurrogate(code));
+                              }
+                        else
+                              insert(&_cursor, QChar(code));
                         layout1();
                         static const qreal w = 2.0; // 8.0 / view->matrix().m11();
                         score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));

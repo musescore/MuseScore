@@ -1454,12 +1454,12 @@ void Score::doLayout()
                   Measure* measure = static_cast<Measure*>(m);
                   measureNo += measure->noOffset();
                   measure->setNo(measureNo);
-                  if (measure->sectionBreak() && measure->sectionBreak()->startWithMeasureOne())
-                        measureNo = 0;
-                  else if (!measure->irregular())      // dont count measure
+                  if (!measure->irregular())      // dont count measure
                         ++measureNo;
                   measure->layoutStage1();
                   }
+            if (m->sectionBreak() && m->sectionBreak()->startWithMeasureOne())
+                  measureNo = 0;
             }
 
       if (styleB(StyleIdx::createMultiMeasureRests))
@@ -2815,7 +2815,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   if (curMeasure)
                         curMeasure = curMeasure->prev();
                   else
-                        curMeasure = lastMeasure();
+                        curMeasure = last();
                   }
             firstInRow = false;
             }
@@ -3268,10 +3268,18 @@ Page* Score::getEmptyPage()
       Page* page = curPage >= _pages.size() ? addPage() : _pages[curPage];
       page->setNo(curPage);
       page->layout();
-      qreal x = (curPage == 0) ? 0.0 : _pages[curPage - 1]->pos().x()
-         + page->width() + (((curPage+_pageNumberOffset) & 1) ? 50.0 : 1.0);
+      qreal x, y;
+      if (MScore::verticalOrientation()) {
+            x = 0.0;
+            y = (curPage == 0) ? 0.0 : _pages[curPage - 1]->pos().y() + page->height() + 5;
+            }
+      else {
+            y = 0.0;
+            x = (curPage == 0) ? 0.0 : _pages[curPage - 1]->pos().x()
+               + page->width() + (((curPage+_pageNumberOffset) & 1) ? 50.0 : 1.0);
+            }
       ++curPage;
-      page->setPos(x, 0.0);
+      page->setPos(x, y);
       page->systems()->clear();
       return page;
       }
@@ -3343,6 +3351,7 @@ struct PageContext {
       qreal y;
       int gaps;
       SystemRow sr;
+      SystemRow prevSR;
 
       System* lastSystem;
       qreal prevDist;
@@ -3395,6 +3404,7 @@ PAGEDBG("  system %d", i);
             //
             // collect system row
             //
+            pC.prevSR = pC.sr;
             pC.sr.clear();
             for (;;) {
                   System* system = _systems[i];
@@ -3528,6 +3538,17 @@ void Score::layoutPage(const PageContext& pC, qreal d)
                         system->move(QPointF(0.0, y));
                         }
                   }
+            // remove system dividers
+            for (System* s : *page->systems()) {
+                  for (MeasureBase* mb : s->measures()) {
+                        if (!mb->isMeasure())
+                              continue;
+                        for (Element* e : mb->el()) {
+                              if (e->type() == Element::Type::SYSTEM_DIVIDER)
+                                    mb->remove(e);
+                              }
+                        }
+                  }
             return;
             }
 
@@ -3551,7 +3572,12 @@ void Score::layoutPage(const PageContext& pC, qreal d)
                   // we could strip this off too, but then the lyrics might crowd the page margin too much
                   // TODO: consider another style parameter here
                   qreal allowableMargin = d;    // + styleP(StyleIdx::lyricsMinBottomDistance);
-                  qreal extra = qMax(pC.sr.extraDistance(lastVisible) - allowableMargin, 0.0);
+                  qreal lastSRextraDistance = 0.0;
+                  if (pC.prevSR.systems.contains(lastSystem))
+                        lastSRextraDistance = pC.prevSR.extraDistance(lastVisible);
+                  else if (pC.sr.systems.contains(lastSystem))
+                        lastSRextraDistance = pC.sr.extraDistance(lastVisible);
+                  qreal extra = qMax(lastSRextraDistance - allowableMargin, 0.0);
                   // for last staff of system, this distance has not been accounted for at all
                   // for interior staves (with last staves hidden), this is only partially accounted for
                   if (lastVisible == lastStaff)
@@ -3615,6 +3641,57 @@ void Score::layoutPage(const PageContext& pC, qreal d)
             system->move(QPointF(0.0, y));
             if (system->addStretch())
                   y += system->stretchDistance();
+
+            if (system->isVbox())
+                  continue;
+
+            // add / remove system dividers
+            bool divideLeft = styleB(StyleIdx::dividerLeft);
+            bool divideRight = styleB(StyleIdx::dividerRight);
+            if (system == page->systems()->last()) {
+                  // no dividers for last system of page
+                  divideLeft = false;
+                  divideRight = false;
+                  }
+            MeasureBase* first = system->firstMeasure();
+            MeasureBase* last = system->lastMeasure();
+            for (MeasureBase* mb : system->measures()) {
+                  if (!mb->isMeasure())
+                        continue;
+                  SystemDivider* divider1 = nullptr;
+                  SystemDivider* divider2 = nullptr;
+                  for (Element* e : mb->el()) {
+                        if (e->type() != Element::Type::SYSTEM_DIVIDER)
+                              continue;
+                        SystemDivider* sd = static_cast<SystemDivider*>(e);
+                        if (sd->generated())
+                              mb->remove(sd);
+                        else if (mb == first && divideLeft && sd->dividerType() == SystemDivider::Type::LEFT)
+                              divider1 = sd;
+                        else if (mb == last && divideRight && sd->dividerType() == SystemDivider::Type::RIGHT)
+                              divider2 = sd;
+                        else  // this was non-generated, but no longer applies
+                              mb->remove(sd);
+                        }
+                  if (mb == first && divideLeft) {
+                        if (!divider1) {
+                              divider1 = new SystemDivider(this);
+                              divider1->setGenerated(true);
+                              divider1->setParent(mb);
+                              addElement(divider1);
+                              }
+                        divider1->setDividerType(SystemDivider::Type::LEFT);
+                        }
+                  if (mb == last && divideRight) {
+                        if (!divider2) {
+                              divider2 = new SystemDivider(this);
+                              divider2->setGenerated(true);
+                              divider2->setParent(mb);
+                              addElement(divider2);
+                              }
+                        divider2->setDividerType(SystemDivider::Type::RIGHT);
+                        }
+                  }
             }
       }
 

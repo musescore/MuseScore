@@ -32,6 +32,7 @@ class TestText : public QObject, public MTest
       void initTestCase();
       void testText();
       void testSpecialSymbols();
+      void testPaste();
       void testTextProperties();
       void testCompatibility();
       void testDelete();
@@ -185,6 +186,54 @@ void TestText::testSpecialSymbols()
       QCOMPARE(text->xmlText(), QString("&amp;gt;"));
       }
 
+//---------------------------------------------------------
+///   testPaste
+//---------------------------------------------------------
+
+void TestText::testPaste()
+      {
+      Text* text = new Text(score);
+      text->setTextStyle(score->textStyle(TextStyleType::DYNAMICS));
+
+      text->startEdit(0, QPoint());
+      text->layout();
+      text->moveCursorToEnd();
+
+      QApplication::clipboard()->setText("copy & paste");
+      text->paste();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("copy &amp; paste"));
+
+      text->selectAll();
+      text->deleteSelectedText();
+      text->startEdit(0, QPoint());
+      text->layout();
+      text->moveCursorToEnd();
+      QApplication::clipboard()->setText("copy &aa paste");
+      text->paste();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("copy &amp;aa paste"));
+
+      text->selectAll();
+      text->deleteSelectedText();
+      text->startEdit(0, QPoint());
+      text->layout();
+      text->moveCursorToEnd();
+      QApplication::clipboard()->setText("&");
+      text->paste();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("&amp;"));
+
+      text->selectAll();
+      text->deleteSelectedText();
+      text->startEdit(0, QPoint());
+      text->layout();
+      text->moveCursorToEnd();
+      QApplication::clipboard()->setText("&sometext");
+      text->paste();
+      text->endEdit();
+      QCOMPARE(text->xmlText(), QString("&amp;sometext"));
+      }
 //---------------------------------------------------------
 ///   testTextProperties
 //---------------------------------------------------------

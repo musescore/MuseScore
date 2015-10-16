@@ -968,8 +968,8 @@ int totalTiedNoteTicks(Note* note)
             }
       return total;
       };
-      
-      
+
+
 //---------------------------------------------------------
 //   renderNoteArticulation
 // tickspernote, number of ticks, either _16h or _32nd, i.e., MScore::division/4 or MScore::division/8
@@ -996,7 +996,7 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
       int b = body.size();
       int s = suffix.size();
       int ticksPerNote = 0;
-            
+
       if (p + b + s <= 0 )
             return false;
 
@@ -1006,7 +1006,7 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
 
       int minTicksPerNote = int(ticksPerSecond / fastestFreq);
       int maxTicksPerNote = (0 == slowestFreq) ? 0 : int(ticksPerSecond / slowestFreq);
-            
+
       // for fast tempos, we have to slow down the tremblement frequency, i.e., increase the ticks per note
       if (requestedTicksPerNote >= minTicksPerNote)
             ;
@@ -1018,7 +1018,7 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
             if (ticksPerNote > maxTicksPerNote)
                   ticksPerNote = minTicksPerNote;
             }
-            
+
       ticksPerNote = max(requestedTicksPerNote, minTicksPerNote);
 
       if (slowestFreq <= 0) // no slowest freq given such as something silly like glissando with 4 notes over 8 counts.
@@ -1097,100 +1097,102 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
       // render the suffix
       for (int j = 0; j < s; j++)
             ontime = makeEvent(suffix[j], ontime, tieForward(j,suffix));
-            
+
       return true;
       }
 
-      
 //---------------------------------------------------------
 //   renderNoteArticulation
 //---------------------------------------------------------
-      
+
 bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, ArticulationType articulationType, MScore::OrnamentStyle ornamentStyle)
       {
-            // This struct specifies how to render an articulation.
-            //   atype - the articulation type to implement, such as ArticulationType::Turn
-            //   ostyles - the actual ornament has a property called ornamentStyle whose value is
-            //             a value of type MScore::OrnamentStyle.  This ostyles field indicates the
-            //             the set of ornamentStyles which apply to this rendition.
-            //   duration - the default duration for each note in the rendition, the final duration
-            //            rendered might be less than this if an articulation is attached to a note of
-            //            short duration.
-            //   prefix - vector of integers. indicating which notes to play at the beginning of rendering the
-            //            articulation.  0 represents the principle note, 1==> the note diatonically 1 above
-            //            -1 ==> the note diatonically 1 below.  E.g., in the key of G, if a turn articulation
-            //            occures above the note F#, then 0==>F#, 1==>G, -1==>E.
-            //            These integers indicate which notes actual notes to play when rendering the ornamented
-            //            note.   However, if the same integer appears several times adjacently such as {0,0,0,1}
-            //            That means play the notes tied.  e.g., F# followed by G, but the duration of F# is 3x the
-            //            duration of the G.
-            //    body   - notes to play comprising the body of the rendered ornament.
-            //            The body differs from the prefix and suffix in several ways.
-            //            * body does not support tied notes: {0,0,0,1} means play 4 distinct notes (not tied).
-            //            * if there is sufficient duration in the principle note, AND repeatep is true, then body
-            //               will be rendered multiple times, as the duration allows.
-            //            * to avoid a time gap (or rest) in rendering the articulation, if sustainp is true,
-            //               then the final note of the body will be sustained to fill the left-over time.
-            //    suffix - similar to prefix but played once at the end of the rendered ornament.
-            //    repeatp  - whether the body is repeatable in its entirety.
-            //    sustainp - whether the final note of the body should be sustained to fill the remaining duration.
-            struct OrnamentExcursion {
-                  ArticulationType atype;
-                  set<MScore::OrnamentStyle> ostyles;
-                  int duration;
-                  vector<int> prefix;
-                  vector<int> body;
-                  bool repeatp;
-                  bool sustainp;
-                  vector<int> suffix;
-            };
-            int _16th = MScore::division / 4;
-            int _32nd = _16th / 2;
-            vector<int> emptypattern = {};
-            set<MScore::OrnamentStyle> baroque  = {MScore::OrnamentStyle::BAROQUE};
-            set<MScore::OrnamentStyle> defstyle = {MScore::OrnamentStyle::DEFAULT};
-            set<MScore::OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
-            
-            vector<OrnamentExcursion> excursions = {
-                  //  articulation type           set of  duration       body         repeatp      suffix
-                  //                              styles          prefix                    sustainp
-                   {ArticulationType::Turn,        any,     _32nd, {},    {1,0,-1,0},   false, true, {}}
-                  ,{ArticulationType::Reverseturn, any,     _32nd, {},    {-1,0,1,0},   false, true, {}}
-                  ,{ArticulationType::Trill,       baroque, _32nd, {1,0}, {1,0},        true,  true, {}}
-                  ,{ArticulationType::Trill,       defstyle,_32nd, {0,1}, {0,1},        true,  true, {}}
-                  ,{ArticulationType::Plusstop,    baroque, _32nd, {0,-1},{0, -1},      true,  true, {}}
-                  ,{ArticulationType::Mordent,     any,     _32nd, {},    {0,-1,0},     false, true, {}}
-                  ,{ArticulationType::Prall,       any,     _32nd, {},    {0,1,0},      false, true, {}} // inverted mordent
-                  ,{ArticulationType::PrallPrall,  any,     _32nd, {1,0}, {1,0},        false, true, {}}
-                  ,{ArticulationType::PrallMordent,any,     _32nd, {},    {1,0,-1,0},   false, true, {}}
-                  ,{ArticulationType::LinePrall,   any,     _32nd, {2,2,2},{1,0},       true,  true, {}}
-                  ,{ArticulationType::UpPrall,     any,     _16th, {-1,0},{1,0},        true,  true, {1,0}} // p 144 Ex 152 [1]
-                  ,{ArticulationType::UpMordent,   any,     _16th, {-1,0},{1,0},        true,  true, {-1,0}} // p 144 Ex 152 [1]
-                  ,{ArticulationType::DownPrall,   any,     _16th, {1,1,1,0}, {1,0},    true,  true, {}} // p136 Cadence Appuyee [1] [2]
-                  ,{ArticulationType::DownMordent, any,     _16th, {1,1,1,0}, {1,0},    true,  true, {-1, 0}} // p136 Cadence Appuyee + mordent [1] [2]
-                  ,{ArticulationType::PrallUp,     any,     _16th, {1,0}, {1,0},        true,  true, {-1,0}} // p136 Double Cadence [1]
-                  ,{ArticulationType::PrallDown,   any,     _16th, {1,0}, {1,0},        true,  true, {-1,0,0,0}} // p144 ex 153 [1]
-                  ,{ArticulationType::Schleifer,   any,     _32nd, {},    {0},          false, true, {}}
-            };
-            
-            // [1] Some of the articulations/ornaments in the excursions table above come from
-            // Baroque Music, Style and Performance A Handbook, by Robert Donington,(c) 1982
-            // ISBN 0-393-30052-8, W. W. Norton & Company, Inc.
-            
-            // [2] In some cases, the example from [1] does not preserve the timing.
-            // For example, illustrates 2+1/4 counts per half note.
-            
-            for (auto & oe: excursions) {
-                  if (oe.atype == articulationType
-                      && ( 0 == oe.ostyles.size()
-                          || oe.ostyles.end() != oe.ostyles.find(ornamentStyle))) {
-                        return renderNoteArticulation(events, note, chromatic, oe.duration,
-                                                      oe.prefix, oe.body, oe.repeatp, oe.sustainp, oe.suffix);
-                      }
-            }
+      if (!note->staff()->isPitchedStaff()) // not enough info in tab staff
             return false;
+      // This struct specifies how to render an articulation.
+      //   atype - the articulation type to implement, such as ArticulationType::Turn
+      //   ostyles - the actual ornament has a property called ornamentStyle whose value is
+      //             a value of type MScore::OrnamentStyle.  This ostyles field indicates the
+      //             the set of ornamentStyles which apply to this rendition.
+      //   duration - the default duration for each note in the rendition, the final duration
+      //            rendered might be less than this if an articulation is attached to a note of
+      //            short duration.
+      //   prefix - vector of integers. indicating which notes to play at the beginning of rendering the
+      //            articulation.  0 represents the principle note, 1==> the note diatonically 1 above
+      //            -1 ==> the note diatonically 1 below.  E.g., in the key of G, if a turn articulation
+      //            occures above the note F#, then 0==>F#, 1==>G, -1==>E.
+      //            These integers indicate which notes actual notes to play when rendering the ornamented
+      //            note.   However, if the same integer appears several times adjacently such as {0,0,0,1}
+      //            That means play the notes tied.  e.g., F# followed by G, but the duration of F# is 3x the
+      //            duration of the G.
+      //    body   - notes to play comprising the body of the rendered ornament.
+      //            The body differs from the prefix and suffix in several ways.
+      //            * body does not support tied notes: {0,0,0,1} means play 4 distinct notes (not tied).
+      //            * if there is sufficient duration in the principle note, AND repeatep is true, then body
+      //               will be rendered multiple times, as the duration allows.
+      //            * to avoid a time gap (or rest) in rendering the articulation, if sustainp is true,
+      //               then the final note of the body will be sustained to fill the left-over time.
+      //    suffix - similar to prefix but played once at the end of the rendered ornament.
+      //    repeatp  - whether the body is repeatable in its entirety.
+      //    sustainp - whether the final note of the body should be sustained to fill the remaining duration.
+      struct OrnamentExcursion {
+            ArticulationType atype;
+            set<MScore::OrnamentStyle> ostyles;
+            int duration;
+            vector<int> prefix;
+            vector<int> body;
+            bool repeatp;
+            bool sustainp;
+            vector<int> suffix;
+      };
+      int _16th = MScore::division / 4;
+      int _32nd = _16th / 2;
+      vector<int> emptypattern = {};
+      set<MScore::OrnamentStyle> baroque  = {MScore::OrnamentStyle::BAROQUE};
+      set<MScore::OrnamentStyle> defstyle = {MScore::OrnamentStyle::DEFAULT};
+      set<MScore::OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
+
+      vector<OrnamentExcursion> excursions = {
+            //  articulation type           set of  duration       body         repeatp      suffix
+            //                              styles          prefix                    sustainp
+             {ArticulationType::Turn,        any,     _32nd, {},    {1,0,-1,0},   false, true, {}}
+            ,{ArticulationType::Reverseturn, any,     _32nd, {},    {-1,0,1,0},   false, true, {}}
+            ,{ArticulationType::Trill,       baroque, _32nd, {1,0}, {1,0},        true,  true, {}}
+            ,{ArticulationType::Trill,       defstyle,_32nd, {0,1}, {0,1},        true,  true, {}}
+            ,{ArticulationType::Plusstop,    baroque, _32nd, {0,-1},{0, -1},      true,  true, {}}
+            ,{ArticulationType::Mordent,     any,     _32nd, {},    {0,-1,0},     false, true, {}}
+            ,{ArticulationType::Prall,       defstyle,_32nd, {},    {0,1,0},      false, true, {}} // inverted mordent
+            ,{ArticulationType::Prall,       baroque, _32nd, {1,0,1},{0},         false, true, {}} // short trill
+            ,{ArticulationType::PrallPrall,  any,     _32nd, {1,0}, {1,0},        false, true, {}}
+            ,{ArticulationType::PrallMordent,any,     _32nd, {},    {1,0,-1,0},   false, true, {}}
+            ,{ArticulationType::LinePrall,   any,     _32nd, {2,2,2},{1,0},       true,  true, {}}
+            ,{ArticulationType::UpPrall,     any,     _16th, {-1,0},{1,0},        true,  true, {1,0}} // p 144 Ex 152 [1]
+            ,{ArticulationType::UpMordent,   any,     _16th, {-1,0},{1,0},        true,  true, {-1,0}} // p 144 Ex 152 [1]
+            ,{ArticulationType::DownPrall,   any,     _16th, {1,1,1,0}, {1,0},    true,  true, {}} // p136 Cadence Appuyee [1] [2]
+            ,{ArticulationType::DownMordent, any,     _16th, {1,1,1,0}, {1,0},    true,  true, {-1, 0}} // p136 Cadence Appuyee + mordent [1] [2]
+            ,{ArticulationType::PrallUp,     any,     _16th, {1,0}, {1,0},        true,  true, {-1,0}} // p136 Double Cadence [1]
+            ,{ArticulationType::PrallDown,   any,     _16th, {1,0}, {1,0},        true,  true, {-1,0,0,0}} // p144 ex 153 [1]
+            ,{ArticulationType::Schleifer,   any,     _32nd, {},    {0},          false, true, {}}
+      };
+
+      // [1] Some of the articulations/ornaments in the excursions table above come from
+      // Baroque Music, Style and Performance A Handbook, by Robert Donington,(c) 1982
+      // ISBN 0-393-30052-8, W. W. Norton & Company, Inc.
+
+      // [2] In some cases, the example from [1] does not preserve the timing.
+      // For example, illustrates 2+1/4 counts per half note.
+
+      for (auto & oe: excursions) {
+            if (oe.atype == articulationType
+                && ( 0 == oe.ostyles.size()
+                    || oe.ostyles.end() != oe.ostyles.find(ornamentStyle))) {
+                  return renderNoteArticulation(events, note, chromatic, oe.duration,
+                                                oe.prefix, oe.body, oe.repeatp, oe.sustainp, oe.suffix);
+                }
       }
-      
+      return false;
+      }
+
 //---------------------------------------------------------
 //   renderNoteArticulation
 //---------------------------------------------------------
@@ -1208,7 +1210,7 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
       else
             return renderNoteArticulation(events, note, chromatic, it->second, ornamentStyle);
       }
-      
+
 //---------------------------------------------------------
 //   noteHasGlissando
 // true if note is the end of a glissando
@@ -1233,7 +1235,7 @@ void renderGlissando(NoteEventList* events, Note *notestart)
       {
       vector<int> empty = {};
       int Cnote = 60; // pitch of middle C
-      int pitchstart = notestart->epitch();
+      int pitchstart = notestart->ppitch();
       int linestart = notestart->line();
 
       set<int> blacknotes = {  1,  3,    6, 8, 10};
@@ -1248,15 +1250,15 @@ void renderGlissando(NoteEventList* events, Note *notestart)
                   if (glissando->playGlissando() && Element::Type::NOTE == ee->type()) {
                         vector<int> body;
                         Note *noteend = static_cast<Note *>(ee);
-                        int pitchend   = noteend->epitch();
+                        int pitchend   = noteend->ppitch();
                         bool direction= pitchend >  pitchstart;
                         if (pitchend == pitchstart)
                               continue; // next spanner
                         if (glissandoStyle == MScore::GlissandoStyle::DIATONIC) { // scale obeying accidentals
                               int line;
-                              int lineend = convertLine(noteend->line(), noteend, notestart);
                               int p = pitchstart;
-                              for (line = linestart; (direction) ? (line>lineend) : (line<lineend);
+                              // iterate as long as we haven't past the pitchend.
+                              for (line = linestart; (direction) ? (p<pitchend) : (p>pitchend);
                                  (direction) ? line-- : line++) {
                                     int halfsteps = articulationExcursion(notestart, noteend, linestart - line);
                                     p = pitchstart + halfsteps;
@@ -1296,7 +1298,7 @@ void renderGlissando(NoteEventList* events, Note *notestart)
 //  search the spanners in the score, finding the first one
 //  which overlaps this chord and is of type Element::Type::TRILL
 //---------------------------------------------------------
-      
+
 Trill* findFirstTrill(Chord *chord) {
       for (auto i : chord->score()->spannerMap().findOverlapping(1+chord->tick(), chord->tick() + chord->actualTicks() - 1)) {
             if (i.value->type() != Element::Type::TRILL)
@@ -1311,7 +1313,7 @@ Trill* findFirstTrill(Chord *chord) {
       return nullptr;
       }
 
-      
+
 //---------------------------------------------------------
 //   renderChordArticulation
 //---------------------------------------------------------
@@ -1326,13 +1328,10 @@ void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gat
             NoteEventList* events = &ell[k];
             Note *note = chord->notes()[k];
             Trill *trill;
-            
+
             if (noteHasGlissando(note))
                   renderGlissando(events, note);
-            else if (! chord->staff()->isPitchedStaff()) {
-                  ;
-            }
-            else if ((trill = findFirstTrill(chord)) != nullptr) {
+            else if (chord->staff()->isPitchedStaff()  && (trill = findFirstTrill(chord)) != nullptr) {
                   renderNoteArticulation(events, note, false, trill->trillType(), trill->ornamentStyle());
                   }
             else {
@@ -1366,7 +1365,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             }
       else if (chord->arpeggio() && chord->arpeggio()->playArpeggio()) {
             renderArpeggio(chord, ell);
-	      return ell;  // dont apply gateTime to arpeggio events
+            return ell;  // dont apply gateTime to arpeggio events
             }
       else
             renderChordArticulation(chord, ell, gateTime);
@@ -1383,7 +1382,6 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             }
       return ell;
       }
-
 
 void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord, int &ontime)
       {

@@ -130,6 +130,7 @@ enum class P_ID : unsigned char {
       NUMBERS_ONLY,
       TRILL_TYPE,
 
+      HAIRPIN_TEXTLINE,
       HAIRPIN_CIRCLEDTIP,
       HAIRPIN_TYPE,
       HAIRPIN_HEIGHT,
@@ -222,6 +223,8 @@ enum class P_ID : unsigned char {
       TRACK,
 
       GLISSANDO_STYLE,
+
+      LAYOUT_MODE,
 
       END
       };

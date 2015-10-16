@@ -418,17 +418,17 @@ void createSvgCollection(MQZipWriter * uz, Score* score, const QString& prefix, 
       LayoutMode layout_mode = score->layoutMode();
 
       // Weird hack for it - but done this way pretty much all over :P
-      score->undo(new ChangeLayoutMode(score, LayoutMode::PAGE));
+      score->ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(LayoutMode::PAGE));
       score->doLayout();
       
       qts["systems"] = createSvgs(score,uz,orig_t2t,t0,prefix+QString("Page"));   
 
-      score->undo(new ChangeLayoutMode(score, LayoutMode::LINE));
+      score->ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(LayoutMode::LINE));
       score->doLayout();
 
       qts["csystem"] = createSvgs(score,uz,orig_t2t,t0,prefix+QString("Line"))[0];
 
-      score->undo(new ChangeLayoutMode(score, layout_mode));
+      score->ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(layout_mode));
       score->doLayout();
 
       score->setPrinting(false);

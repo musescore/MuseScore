@@ -696,15 +696,15 @@ Palette* MuseScore::newClefsPalette(bool basic)
       sp->setMag(0.8);
       sp->setGrid(33, 60);
       sp->setYOffset(1.0);
-      // Up to ClefType::MAX-1, because ClefType::PERC2 is no longer supported
       static std::vector<ClefType> clefs1  {
             ClefType::G,   ClefType::F, ClefType::C3, ClefType::C4
             };
       static std::vector<ClefType> clefs2  {
-            ClefType::G,   ClefType::G1,    ClefType::G2,     ClefType::G3,  ClefType::G5,  ClefType::G4,
-            ClefType::C1,  ClefType::C2,    ClefType::C3,     ClefType::C4,  ClefType::C5,
-            ClefType::F,   ClefType::F_8VA, ClefType::F_15MA, ClefType::F8,  ClefType::F15,
-            ClefType::F_B, ClefType::F_C,   ClefType::PERC,   ClefType::TAB, ClefType::TAB2
+            ClefType::G,     ClefType::G1,  ClefType::G2,  ClefType::G3,    ClefType::G3_O,
+            ClefType::G5,    ClefType::G4,  ClefType::C1,  ClefType::C2,    ClefType::C3,
+            ClefType::C4,    ClefType::C5,  ClefType::F,   ClefType::F_8VA, ClefType::F_15MA,
+            ClefType::F8,    ClefType::F15, ClefType::F_B, ClefType::F_C,   ClefType::PERC,
+            ClefType::PERC2, ClefType::TAB, ClefType::TAB2
             };
       for (ClefType j : basic ? clefs1 : clefs2) {
             Clef* k = new Ms::Clef(gscore);
@@ -786,12 +786,34 @@ Palette* MuseScore::newLinesPalette(bool basic)
       Hairpin* gabel0 = new Hairpin(gscore);
       gabel0->setHairpinType(Hairpin::Type::CRESCENDO);
       gabel0->setLen(w);
-      sp->append(gabel0, qApp->translate("lines", "Crescendo"));
+      gabel0->setBeginText("cresc.");
+      gabel0->setContinueText("(cresc.)");
+      sp->append(gabel0, qApp->translate("lines", "Crescendo hairpin"));
 
       Hairpin* gabel1 = new Hairpin(gscore);
       gabel1->setHairpinType(Hairpin::Type::DECRESCENDO);
       gabel1->setLen(w);
-      sp->append(gabel1, QT_TRANSLATE_NOOP("Palette", "Diminuendo"));
+      gabel1->setBeginText("dim.");
+      gabel1->setContinueText("(dim.)");
+      sp->append(gabel1, QT_TRANSLATE_NOOP("Palette", "Diminuendo hairpin"));
+
+      Hairpin* gabel2 = new Hairpin(gscore);
+      gabel2->setHairpinType(Hairpin::Type::CRESCENDO);
+      gabel2->setLen(w);
+      gabel2->setUseTextLine(true);
+      gabel2->setLineStyle(Qt::CustomDashLine);
+      gabel2->setBeginText("cresc.");
+      gabel2->setContinueText("(cresc.)");
+      sp->append(gabel2, qApp->translate("lines", "Crescendo line"));
+
+      Hairpin* gabel3 = new Hairpin(gscore);
+      gabel3->setHairpinType(Hairpin::Type::DECRESCENDO);
+      gabel3->setLen(w);
+      gabel3->setUseTextLine(true);
+      gabel3->setLineStyle(Qt::CustomDashLine);
+      gabel3->setBeginText("dim.");
+      gabel3->setContinueText("(dim.)");
+      sp->append(gabel3, QT_TRANSLATE_NOOP("Palette", "Diminuendo line"));
 
       Volta* volta = new Volta(gscore);
       volta->setVoltaType(Volta::Type::CLOSED);
