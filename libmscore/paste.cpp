@@ -584,6 +584,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
       int   startTick   = dst->tick();    // the initial tick and track where to start pasting
       int   startTrack  = dst->track();
       int   maxTrack    = ntracks();
+      int   lastTick    = lastSegment()->tick();
 
       while (e.readNextStartElement()) {
             if (done)
@@ -621,12 +622,15 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                           harmSegm = harmSegm->nextCR())
                                     ;
                               // if destTick overshot, no dest. segment: create one
-                              if (!harmSegm || harmSegm->tick() > destTick) {
+                              if (destTick >= lastTick) {
+                                    harmSegm = nullptr;
+                                    }
+                              else if (!harmSegm || harmSegm->tick() > destTick) {
                                     Measure* meas     = tick2measure(destTick);
-                                    harmSegm          = meas->getSegment(Segment::Type::ChordRest, destTick);
+                                    harmSegm          = meas ? meas->getSegment(Segment::Type::ChordRest, destTick) : nullptr;
                               }
-                              if (destTrack >= maxTrack) {
-                                    qDebug("PasteSymbols: no track for %s", tag.toUtf8().data());
+                              if (destTrack >= maxTrack || harmSegm == nullptr) {
+                                    qDebug("PasteSymbols: no track or segment for %s", tag.toUtf8().data());
                                     e.skipCurrentElement();       // ignore
                                     continue;
                                     }
