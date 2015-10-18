@@ -760,9 +760,9 @@ Note* searchTieNote(Note* note)
                   QList<Chord*> gnb = c->graceNotesBefore();
                   if (!gnb.isEmpty()) {
                         Chord* gc = gnb[0];
-                        note2 = gc->findNote(note->pitch());
-                        if (note2)
-                              return note2;
+                        Note* gn2 = gc->findNote(note->pitch());
+                        if (gn2)
+                              return gn2;
                         }
                   int staffIdx = c->staffIdx() + c->staffMove();
                   if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?
