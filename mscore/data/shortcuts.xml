@@ -197,6 +197,10 @@
     <seq>Ctrl+Alt+O</seq>
     </SC>
   <SC>
+    <key>add-sforzato</key>
+    <seq>Shift+V</seq>
+    </SC>
+  <SC>
     <key>stretch+</key>
     <seq>}</seq>
     </SC>
