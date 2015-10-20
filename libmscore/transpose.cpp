@@ -590,23 +590,34 @@ void Score::transposeSemitone(int step)
 void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals)
       {
       // compute note current absolute step
-      int alter1;
-      int alter2;
+      int alter;
       int tick     = chord()->segment()->tick();
-      Key key      = !staff() ? Key::C : staff()->key(tick);
-      int absStep1 = pitch2absStepByKey(pitch(),                 tpc1(), key, &alter1);
-      int absStep2 = pitch2absStepByKey(pitch()-transposition(), tpc2(), key, &alter2);
+      Key key      = staff() ? staff()->key(tick) : Key::C;
+      int absStep  = pitch2absStepByKey(epitch(), tpc(), key, &alter);
 
       // get pitch and tcp corresponding to unaltered degree for this key
-      int newPitch = absStep2pitchByKey(absStep1 + interval, key);
-      int newTpc1  = step2tpcByKey((absStep1 + interval) % STEP_DELTA_OCTAVE, key);
-      int newTpc2  = step2tpcByKey((absStep2 + interval) % STEP_DELTA_OCTAVE, key);
+      int newPitch = absStep2pitchByKey(absStep + interval, key);
+      int newTpc   = step2tpcByKey((absStep + interval) % STEP_DELTA_OCTAVE, key);
 
       // if required, transfer original degree alteration to new pitch and tpc
       if (keepAlterations) {
-            newPitch += alter1;
-            newTpc1  += alter1 * TPC_DELTA_SEMITONE;
-            newTpc2  += alter2 * TPC_DELTA_SEMITONE;
+            newPitch += alter;
+            newTpc  += alter * TPC_DELTA_SEMITONE;
+            }
+
+      // transpose appropriately
+      int newTpc1 = TPC_INVALID;
+      int newTpc2 = TPC_INVALID;
+      Interval v   = staff() ? staff()->part()->instrument(tick)->transpose() : Interval(0);
+      if (concertPitch()) {
+            v.flip();
+            newTpc1 = newTpc;
+            newTpc2 = Ms::transposeTpc(newTpc, v, true);
+            }
+      else {
+            newPitch += v.chromatic;
+            newTpc1 = Ms::transposeTpc(newTpc, v, true);
+            newTpc2 = newTpc;
             }
 
       // check results are in ranges
