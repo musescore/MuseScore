@@ -1147,7 +1147,8 @@ void MuseScore::selectionChanged(SelState selectionState)
             pianorollEditor->changeSelection(selectionState);
       if (drumrollEditor)
             drumrollEditor->changeSelection(selectionState);
-      updateInspector();
+      if (_inspector && _inspector->isVisible())
+            updateInspector();
       }
 
 //---------------------------------------------------------
