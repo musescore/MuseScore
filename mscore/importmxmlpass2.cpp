@@ -2021,6 +2021,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
       Beam* beam = 0;       // current beam
       QString cv = "1";       // current voice for chords, default is 1
       FiguredBassList fbl;               // List of figured bass elements under a single note
+      QString tempo;
 
       // collect candidates for courtesy accidentals to work out at measure end
       QMap<Note*, int> alterMap;
@@ -2077,6 +2078,26 @@ void MusicXMLParserPass2::measure(const QString& partId,
                               mTime.set(0, 1);
                               }
                         }
+                  }
+            else if (_e.name() == "sound") {
+                  tempo = _e.attributes().value("tempo").toString();
+                  qWarning() << "SOUND TEMPO" << tempo;
+                  if (!tempo.isEmpty()) {
+                        double tpo = tempo.toDouble()/60;
+                        int tick = (time+mTime).ticks();
+
+                        Text * t = new TempoText(_score);
+                        ((TempoText*) t)->setTempo(tpo);
+                        ((TempoText*) t)->setFollowText(true);
+
+                        qWarning() << "SET TEMPO AT" << tick << tpo << _score->tempo(tick);
+                        _score->setTempo(tick, tpo);
+                        qWarning() << "SET TEMPO AT" << tick << tpo << _score->tempo(tick);
+                        Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
+                        s->add(t);
+                        //addElemOffset(t, track, placement, measure, tick);
+                        }
+                  skipLogCurrElem();
                   }
             else if (_e.name() == "barline")
                   barline(partId, measure);
