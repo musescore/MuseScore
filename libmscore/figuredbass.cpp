@@ -27,6 +27,12 @@
 
 namespace Ms {
 
+static constexpr qreal  FB_CONTLINE_HEIGHT            = 0.875;    // the % of font EM to raise the cont. line at
+                                                                  // (0 = top of font; 1 = bottom of font)
+static constexpr qreal  FB_CONTLINE_LEFT_PADDING      = 0.1875;   // (3/16sp) the blank space at the left of a cont. line (in sp)
+static constexpr qreal  FB_CONTLINE_OVERLAP           = 0.125;    // (1/8sp)  the overlap of an extended cont. line (in sp)
+static constexpr qreal  FB_CONTLINE_THICKNESS         = 0.09375;  // (3/32sp) the thickness of a cont. line (in sp)
+
 // the array of configured fonts
 static QList<FiguredBassFont> g_FBFonts;
 
@@ -444,9 +450,17 @@ void FiguredBassItem::layout()
       // contruct font metrics
       int   fontIdx = 0;
       QFont f(g_FBFonts.at(fontIdx).family);
+
+      // font size in pixels, scaled according to spatium()
+      // (use the same font selection as used in draw() below)
+      qreal m = score()->styleD(StyleIdx::figuredBassFontSize) * MScore::DPI / PPI;
+      m *= spatium() / (SPATIUM20 * MScore::DPI);     // make spatium dependent
+      f.setPixelSize(lrint(m));
+/* USING POINTS RATHER PIXELS MAKES FOR COARSER STEPS IN Qt ROUNDING TO INTEGER FONT SIZES
       // font size in points, scaled according to spatium()
       qreal m = score()->styleD(StyleIdx::figuredBassFontSize) * spatium() / ( SPATIUM20 * MScore::DPI);
       f.setPointSizeF(m);
+*/
       QFontMetrics      fm(f);
 
       QString           str = QString();
@@ -545,30 +559,36 @@ void FiguredBassItem::layout()
 
 void FiguredBassItem::draw(QPainter* painter) const
       {
-      int font = 0;
+      int   font = 0;
+      qreal _spatium = spatium();
       // set font from general style
       QFont f(g_FBFonts.at(font).family);
 #ifdef USE_GLYPHS
       f.setHintingPreference(QFont::PreferVerticalHinting);
 #endif
       // font size in pixels, scaled according to spatium()
+      // (use the same font selection as used in layout() above)
       qreal m = score()->styleD(StyleIdx::figuredBassFontSize) * MScore::DPI / PPI;
       m *= spatium() / (SPATIUM20 * MScore::DPI);     // make spatium dependent
       f.setPixelSize(lrint(m));
-
+/* USING POINTS RATHER PIXELS MAKES FOR COARSER STEPS IN Qt ROUNDING TO INTEGER FONT SIZES
+      // font size in points, scaled according to spatium()
+      qreal m = score()->styleD(StyleIdx::figuredBassFontSize) * spatium() / ( SPATIUM20 * MScore::DPI);
+      f.setPointSizeF(m);
+*/
       painter->setFont(f);
       painter->setBrush(Qt::NoBrush);
-      painter->setPen(figuredBass()->curColor());
+      QPen pen(figuredBass()->curColor(), FB_CONTLINE_THICKNESS * _spatium, Qt::SolidLine, Qt::RoundCap);
+      painter->setPen(pen);
       painter->drawText(bbox(), Qt::TextDontClip | Qt::AlignLeft | Qt::AlignTop, displayText());
 
       // continuation line
       qreal lineEndX = 0.0;
       if (_contLine > ContLine::NONE) {
-            qreal _spatium = spatium();
             qreal lineStartX   = textWidth;                       // by default, line starts right after text
             if (lineStartX > 0.0)
-                  lineStartX += _spatium * 0.1;                   // if some text, give some room after it
-            lineEndX = figuredBass()->printedLineLength();        // by default, line ends
+                  lineStartX += _spatium * FB_CONTLINE_LEFT_PADDING;    // if some text, give some room after it
+            lineEndX = figuredBass()->printedLineLength();        // by default, line ends with item duration
             if(lineEndX - lineStartX < 1.0)                       // if line length < 1 sp, ignore it
                   lineEndX = 0.0;
 
@@ -583,14 +603,15 @@ void FiguredBassItem::draw(QPainter* painter) const
                         qreal nextContPageX = nextFB->additionalContLineX(pgPos.y());
                         // if an additional cont. line has been found, extend up to its initial X coord
                         if (nextContPageX > 0)
-                              lineEndX = nextContPageX - pgPos.x() + _spatium*0.125;  // with a little bit of overlap
+                              lineEndX = nextContPageX - pgPos.x() + _spatium*FB_CONTLINE_OVERLAP;
+                                                                              // with a little bit of overlap
                         else
-                              lineEndX = figuredBass()->lineLength(0);              // if none found, draw to the duration end
+                              lineEndX = figuredBass()->lineLength(0);        // if none found, draw to the duration end
                         }
                   }
             // if some line, draw it
             if (lineEndX > 0.0) {
-                  qreal h = bbox().height() * 0.875;
+                  qreal h = bbox().height() * FB_CONTLINE_HEIGHT;
                   painter->drawLine(lineStartX, h, lineEndX - ipos().x(), h);
                   }
             }
