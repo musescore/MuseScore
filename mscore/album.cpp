@@ -37,7 +37,7 @@ AlbumItem::AlbumItem()
       this->score = nullptr;
       }
 
-AlbumItem::AlbumItem(QString path)
+AlbumItem::AlbumItem(const QString& path)
       {
       this->path = path;
       this->score = nullptr;
@@ -69,8 +69,10 @@ void Album::print()
       printer.setOutputFormat(QPrinter::NativeFormat);
 
       QPrintDialog pd(&printer, 0);
-      if (!pd.exec())
+      if (!pd.exec()) {
+            unloadScores();
             return;
+            }
 
       QPainter painter(&printer);
       painter.setRenderHint(QPainter::Antialiasing, true);
@@ -131,6 +133,7 @@ void Album::print()
             score->setPageNumberOffset(oldPageOffset);
             }
       painter.end();
+      unloadScores();
       }
 
 //---------------------------------------------------------
@@ -144,6 +147,7 @@ bool Album::createScore(const QString& fn)
       Score* firstScore = _scores[0]->score;
       if (!firstScore) {
             qDebug("First score is NULL. Will not attempt to join scores.");
+            unloadScores();
             return false;
             }
 
@@ -155,6 +159,7 @@ bool Album::createScore(const QString& fn)
                   }
             else {
                   qDebug("First score has excerpts, but excerpt %d is NULL.  Will not attempt to join scores.", i);
+                  unloadScores();
                   return false;
                   }
             }
@@ -163,7 +168,7 @@ bool Album::createScore(const QString& fn)
 
       int excerptCount = firstScore->excerpts().count();
       bool joinExcerpt = true;
-	for (AlbumItem* item : _scores) {
+      for (AlbumItem* item : _scores) {
             if (item->score == 0 || item->score == firstScore)
                   continue;
             if (item->score->excerpts().count() != excerptCount) {
@@ -187,6 +192,7 @@ bool Album::createScore(const QString& fn)
             if (!score->appendScore(item->score)) {
                   qDebug("Cannot append root score of album item \"%s\".", qPrintable(item->name));
                   delete score;
+                  unloadScores();
                   return false;
                   }
 
@@ -199,6 +205,7 @@ bool Album::createScore(const QString& fn)
                               if (!score->excerpts().at(i)->partScore()->appendScore(currentScoreExcerpt)) {
                                     qDebug("Cannot append excerpt %d of album item \"%s\".", i, qPrintable(item->name));
                                     delete score;
+                                    unloadScores();
                                     return false;
                                     }
                               }
@@ -206,6 +213,7 @@ bool Album::createScore(const QString& fn)
                               qDebug("First score has excerpts, but excerpt %d of album item \"%s\" is NULL.  Will not attempt to join scores.",
                                           i, qPrintable(item->name));
                               delete score;
+                              unloadScores();
                               return false;
                               }
                         }
@@ -221,8 +229,10 @@ bool Album::createScore(const QString& fn)
                   score->saveFile(*score->fileInfo());
             }
       catch (QString s) {
+            unloadScores();
             return false;
             }
+      unloadScores();
       return true;
       }
 
@@ -307,9 +317,22 @@ void Album::loadScores()
                   QFileInfo f(_path);
                   ip = f.path() + "/" + item->path;
                   }
-            Score* score = new Score(MScore::baseStyle());  // start with built-in style
-            score->loadMsc(item->path, false);
-            item->score = score;
+            item->score = new Score(MScore::baseStyle());  // start with built-in style
+            item->score->loadMsc(item->path, false);
+            }
+      }
+
+//---------------------------------------------------------
+//   unloadScores
+//---------------------------------------------------------
+
+void Album::unloadScores()
+      {
+      for (AlbumItem* item : _scores) {
+            if (item->score) {
+                  delete item->score;
+                  item->score = nullptr;
+                  }
             }
       }
 

@@ -37,7 +37,7 @@ struct AlbumItem {
       Score* score;
 
       AlbumItem();
-      AlbumItem(QString path);
+      AlbumItem(const QString& path);
       };
 
 //---------------------------------------------------------
@@ -53,6 +53,7 @@ class Album {
       void load(XmlReader&);
       void save(Xml&);
       void loadScores();
+      void unloadScores();
 
    public:
       Album();
