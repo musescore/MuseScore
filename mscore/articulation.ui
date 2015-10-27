@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MuseScore: Articulations Properties</string>
+   <string>MuseScore: Articulation Properties</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
@@ -156,9 +156,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
