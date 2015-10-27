@@ -373,7 +373,9 @@ enum class StyleIdx : unsigned char {
       fretMag,
       scaleBarlines,
       barGraceDistance,
-
+      lyricsDashMinLength,
+      lyricsDashMaxLength,
+      lyricsDashForce,
 
       STYLES
       };
