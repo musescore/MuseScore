@@ -30,17 +30,12 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   AlbumItem
+//   ~AlbumItem
 //---------------------------------------------------------
-AlbumItem::AlbumItem()
-      {
-      this->score = nullptr;
-      }
 
-AlbumItem::AlbumItem(QString path)
+AlbumItem::~AlbumItem()
       {
-      this->path = path;
-      this->score = nullptr;
+      delete score;
       }
 
 //---------------------------------------------------------
@@ -50,6 +45,11 @@ AlbumItem::AlbumItem(QString path)
 Album::Album()
       {
       _dirty = false;
+      }
+
+Album::~Album()
+      {
+      qDeleteAll(_scores);
       }
 
 //---------------------------------------------------------
