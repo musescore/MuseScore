@@ -840,8 +840,11 @@ Element* ChordRest::drop(const DropData& data)
 
             case Element::Type::TIMESIG:
                   if (measure()->system()) {
-                        // convert page-relative pos to score-relative
                         DropData ndd = data;
+                        // adding from palette sets pos, but normal paste does not
+                        if (!fromPalette)
+                              ndd.pos = pagePos();
+                        // convert page-relative pos to score-relative
                         ndd.pos += measure()->system()->page()->pos();
                         return measure()->drop(ndd);
                         }
