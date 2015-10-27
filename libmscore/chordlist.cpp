@@ -281,7 +281,7 @@ void HChord::add(const QList<HDegree>& degreeList)
                         }
                   }
             else
-                  qDebug("degree type %hhd not supported", d.type());
+                  qDebug("degree type %d not supported", static_cast<int>(d.type()));
 
 // qDebug("  HCHord::added  "); print();
             }

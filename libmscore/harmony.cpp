@@ -1342,7 +1342,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                         }
                   }
             else
-                  qDebug("========unknown render action %hhd", a.type);
+                  qDebug("Harmony::render(): unknown render action %d", static_cast<int>(a.type));
             }
       }
 
