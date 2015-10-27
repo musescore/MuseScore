@@ -68,6 +68,8 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void toggleFooterOddEven(bool);
       void buttonClicked(QAbstractButton*);
       void setSwingParams(bool);
+      void lyricsDashMinLengthValueChanged(double val);
+      void lyricsDashMaxLengthValueChanged(double val);
       void resetStyleValue(int i);
 
       void on_comboFBFont_currentIndexChanged(int index);
