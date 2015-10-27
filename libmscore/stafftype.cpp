@@ -11,10 +11,12 @@
 //=============================================================================
 
 #include "stafftype.h"
+
+#include "chord.h"
+#include "mscore.h"
+#include "navigate.h"
 #include "staff.h"
 #include "xml.h"
-#include "mscore.h"
-#include "chord.h"
 
 #define TAB_DEFAULT_LINE_SP   (1.5)
 #define TAB_RESTSYMBDISPL     2.0
@@ -404,18 +406,27 @@ void StaffType::setDurationMetrics()
       if (_durationMetricsValid && _refDPI == MScore::DPI)           // metrics are still valid
             return;
 
-      QFontMetricsF fm(durationFont());
+// QFontMetrics[F]() returns results unreliably rounded to integral pixels;
+// use a scaled up font and then scale computed values down
+//      QFontMetricsF fm(durationFont());
+      QFont font(durationFont());
+      qreal pixelSize = _durationFontSize * MScore::DPI / PPI;
+      font.setPixelSize(lrint(pixelSize) * 100.0);
+      QFontMetricsF fm(font);
       QString txt(_durationFonts[_durationFontIdx].displayValue, int(TabVal::NUM_OF));
       QRectF bb( fm.tightBoundingRect(txt) );
+      // raise symbols by a default margin and, if marks are above lines, by half the line distance
+      // (converted from spatium units to raster units)
+      _durationGridYOffset    = ( TAB_DEFAULT_DUR_YOFFS - (_onLines ? 0.0 : lineDistance().val()/2.0) )
+                  * MScore::DPI*SPATIUM20;
+      // this is the bottomest point of any duration sign
+      _durationYOffset        = _durationGridYOffset;
       // move symbols so that the lowest margin 'sits' on the base line:
       // move down by the whole part above (negative) the base line
-      // ( -bb.y() ) then up by the whole height ( -bb.height()/2 )
-      _durationYOffset = -bb.y() - bb.height()
-      // then move up by a default margin and, if marks are above lines, by half the line distance
-      // (converted from spatium units to raster units)
-            + ( TAB_DEFAULT_DUR_YOFFS - (_onLines ? 0.0 : lineDistance().val()/2.0) ) * MScore::DPI*SPATIUM20;
-      _durationBoxH = bb.height();
-      _durationBoxY = bb.y()  + _durationYOffset;
+      // ( -bb.y() ) then up by the whole height ( -bb.height() )
+      _durationYOffset        -= (bb.height() + bb.y()) / 100.0;
+      _durationBoxH           = bb.height() / 100.0;
+      _durationBoxY           = _durationGridYOffset - bb.height() / 100.0;
       // keep track of the conditions under which metrics have been computed
       _refDPI = MScore::DPI;
       _durationMetricsValid = true;
@@ -839,8 +850,10 @@ TabDurationSymbol::TabDurationSymbol(Score* s)
       {
       setFlags(flags() & ~(ElementFlag::MOVABLE | ElementFlag::SELECTABLE) );
       setGenerated(true);
-      _tab  = 0;
-      _text = QString();
+      _beamGrid   = TabBeamGrid::NONE;
+      _beamLength = 0.0;
+      _tab        = 0;
+      _text       = QString();
       }
 
 TabDurationSymbol::TabDurationSymbol(Score* s, StaffType* tab, TDuration::DurationType type, int dots)
@@ -848,6 +861,8 @@ TabDurationSymbol::TabDurationSymbol(Score* s, StaffType* tab, TDuration::Durati
       {
       setFlags(flags() & ~(ElementFlag::MOVABLE | ElementFlag::SELECTABLE) );
       setGenerated(true);
+      _beamGrid   = TabBeamGrid::NONE;
+      _beamLength = 0.0;
       setDuration(type, dots, tab);
       }
 
@@ -868,18 +883,85 @@ void TabDurationSymbol::layout()
             setbbox(QRectF());
             return;
             }
-      QFontMetricsF fm(_tab->durationFont());
-      qreal mags  = magS();
-      qreal wbb   = fm.width(_text);
-      qreal ybb   = _tab->durationBoxY();
-      qreal ypos  = _tab->durationFontYOffset();
-      // with rests, move symbol down by half its displacement from staff
-      if(parent() && parent()->type() == Element::Type::REST) {
-            ybb  += TAB_RESTSYMBDISPL * spatium();
-            ypos += TAB_RESTSYMBDISPL * spatium();
+      qreal _spatium    = spatium();
+      qreal hbb, wbb, xbb, ybb;     // bbox sizes
+      qreal xpos, ypos;             // position coords
+
+      _beamGrid = TabBeamGrid::NONE;
+      Chord* chord = static_cast<Chord*>(parent());
+      // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
+      if (!chord || chord->type() != Element::Type::CHORD ||
+            (chord->beamMode() != Beam::Mode::BEGIN && chord->beamMode() != Beam::Mode::MID &&
+                  chord->beamMode() != Beam::Mode::END) ) {
+            QFontMetricsF fm(_tab->durationFont());
+            hbb   = _tab->durationBoxH();
+            wbb   = fm.width(_text);
+            xbb   = 0.0;
+            xpos  = 0.0;
+            ypos  = _tab->durationFontYOffset();
+            ybb   = _tab->durationBoxY() - ypos;
+            // with rests, move symbol down by half its displacement from staff
+            if(parent() && parent()->type() == Element::Type::REST) {
+                  ybb  += TAB_RESTSYMBDISPL * _spatium;
+                  ypos += TAB_RESTSYMBDISPL * _spatium;
+                  }
             }
-      bbox().setRect(0.0, ybb * mags, wbb * mags, _tab->durationBoxH() * mags);
-      setPos(0.0, ypos*mags);
+      // if on a chord with special beam mode, layout an 'English'-style duration grid
+      else {
+            TablatureDurationFont font = _tab->_durationFonts[_tab->_durationFontIdx];
+            hbb   = font.gridStemHeight * _spatium;         // bbox height is stem height
+            wbb   = font.gridStemWidth  * _spatium;         // bbox width is stem width
+            xbb   = -wbb * 0.5;                             // bbox is half at left and half at right of stem centre
+            ybb   = -hbb;                                   // bbox top is at top of stem height
+            xpos  = 0.75 * _spatium;                        // conventional centring of stem on fret marks
+            ypos  = _tab->durationGridYOffset();            // stem start is at bottom
+            if (chord->beamMode() == Beam::Mode::BEGIN) {
+                  _beamGrid   = TabBeamGrid::INITIAL;
+                  _beamLength = 0.0;
+                  }
+            else if (chord->beamMode() == Beam::Mode::MID || chord->beamMode() == Beam::Mode::END) {
+                  _beamLevel  = (int)(chord->durationType().type()) - (int)(font.zeroBeamLevel);
+                  _beamGrid   = (_beamLevel < 1 ? TabBeamGrid::INITIAL : TabBeamGrid::MEDIALFINAL);
+                  // _beamLength and bbox x and width will be set in layout2(),
+                  // once horiz. positions of chords are known
+                  }
+            }
+      // set this' mag from parent chord mag (include staff mag)
+      qreal mag = chord != nullptr ? chord->mag() : 1.0;
+      setMag(mag);
+      mag = magS();           // local mag * score mag
+      // set magnified bbox and position
+      bbox().setRect(xbb * mag, ybb * mag, wbb * mag, hbb * mag);
+      setPos(xpos*mag, ypos*mag);
+      }
+
+//---------------------------------------------------------
+//   layout2
+//
+//    Second step: after horizontal positions of elements involved are defined,
+//    compute width of 'grid beams'
+//---------------------------------------------------------
+
+void TabDurationSymbol::layout2()
+      {
+      // if not within a TAB or not a MEDIALFINAL grid element, do nothing
+      if(!_tab || _beamGrid != TabBeamGrid::MEDIALFINAL)
+            return;
+
+      // get 'grid' beam length from page positions of this' chord and previous chord
+      Chord*      chord       = static_cast<Chord*>(parent());
+      ChordRest*  prevChord   = prevChordRest(chord, true);
+      if (chord == nullptr || prevChord == nullptr)
+            return;
+      qreal       mags        = magS();
+      qreal       beamLen     = prevChord->pagePos().x() - chord->pagePos().x();    // negative
+      // page pos. difference already includes any magnification in effect:
+      // scale it down, as it will be magnified again during drawing
+      _beamLength = beamLen / mags;
+      // update bbox x and w, but keep current y and h
+      bbox().setX(beamLen);
+      // set bbox width to half a stem width (magnified) plus beam length (already magnified)
+      bbox().setWidth(_tab->_durationFonts[_tab->_durationFontIdx].gridStemWidth * spatium() * 0.5 * mags - beamLen);
       }
 
 //---------------------------------------------------------
@@ -893,10 +975,40 @@ void TabDurationSymbol::draw(QPainter* painter) const
       qreal mag = magS();
       qreal imag = 1.0 / mag;
 
-      painter->setPen(curColor());
+      QPen  pen(curColor());
+      painter->setPen(pen);
       painter->scale(mag, mag);
-      painter->setFont(_tab->durationFont());
-      painter->drawText(QPointF(0.0, 0.0), _text);
+      if (_beamGrid == TabBeamGrid::NONE) {
+            // if no beam grid, draw symbol
+            painter->setFont(_tab->durationFont());
+            painter->drawText(QPointF(0.0, 0.0), _text);
+            }
+      else {
+            // if beam grid, draw stem line
+            TablatureDurationFont& font = _tab->_durationFonts[_tab->_durationFontIdx];
+            qreal _spatium = spatium();
+            pen.setCapStyle(Qt::FlatCap);
+            pen.setWidthF(font.gridStemWidth * _spatium);
+            painter->setPen(pen);
+            // take stem height from bbox, but de-magnify it, as drawing is already magnified
+            qreal h     = bbox().y() / mag;
+            painter->drawLine(QPointF(0.0, h), QPointF(0.0, 0.0) );
+            // if beam grid is medial/final, draw beam lines too: lines go from mid of
+            // previous stem (delta x stored in _beamLength) to mid of this' stem (0.0)
+            if (_beamGrid == TabBeamGrid::MEDIALFINAL) {
+                  pen.setWidthF(font.gridBeamWidth * _spatium);
+                  painter->setPen(pen);
+                  // lower heigth available to beams by half a beam width,
+                  // so that top beam upper border aligns with stem top
+                  h += (font.gridBeamWidth * _spatium) * 0.5;
+                  // draw beams equally spaced within the stem height (this is
+                  // different from modern engraving, but common in historic prints)
+                  qreal step  = -h / _beamLevel;
+                  qreal y     = h;
+                  for (int i = 0; i < _beamLevel; i++, y += step)
+                        painter->drawLine(QPointF(_beamLength, y), QPointF(0.0, y) );
+                  }
+            }
       painter->scale(imag, imag);
       }
 
@@ -973,6 +1085,39 @@ bool TablatureDurationFont::read(XmlReader& e)
                   defPitch = e.readDouble();
             else if (tag == "defaultYOffset")
                   defYOffset = e.readDouble();
+            else if (tag == "beamWidth")
+                  gridBeamWidth = e.readDouble();
+            else if (tag == "stemHeight")
+                  gridStemHeight = e.readDouble();
+            else if (tag == "stemWidth")
+                  gridStemWidth = e.readDouble();
+            else if (tag == "zeroBeamValue") {
+                  QString val(e.readElementText());
+                  if (val == "longa")
+                        zeroBeamLevel = TDuration::DurationType::V_LONG;
+                  else if (val == "brevis")
+                        zeroBeamLevel = TDuration::DurationType::V_BREVE;
+                  else if (val == "semibrevis")
+                        zeroBeamLevel = TDuration::DurationType::V_WHOLE;
+                  else if (val == "minima")
+                        zeroBeamLevel = TDuration::DurationType::V_HALF;
+                  else if (val == "semiminima")
+                        zeroBeamLevel = TDuration::DurationType::V_QUARTER;
+                  else if (val == "fusa")
+                        zeroBeamLevel = TDuration::DurationType::V_EIGHTH;
+                  else if (val == "semifusa")
+                        zeroBeamLevel = TDuration::DurationType::V_16TH;
+                  else if (val == "32")
+                        zeroBeamLevel = TDuration::DurationType::V_32ND;
+                  else if (val == "64")
+                        zeroBeamLevel = TDuration::DurationType::V_64TH;
+                  else if (val == "128")
+                        zeroBeamLevel = TDuration::DurationType::V_128TH;
+                  else if (val == "256")
+                        zeroBeamLevel = TDuration::DurationType::V_256TH;
+                  else
+                        e.unknown();
+                  }
             else if (tag == "duration") {
                   QString val = e.attribute("value");
                   QString txt(e.readElementText());
