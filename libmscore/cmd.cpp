@@ -2258,6 +2258,8 @@ void Score::cmd(const QAction* a)
             addArticulation(ArticulationType::Tenuto);
       else if (cmd == "add-marcato")
             addArticulation(ArticulationType::Marcato);
+      else if (cmd == "add-sforzato")
+            addArticulation(ArticulationType::Sforzatoaccent);
       else if (cmd == "add-trill")
             addArticulation(ArticulationType::Trill);
       else if (cmd == "add-8va")
