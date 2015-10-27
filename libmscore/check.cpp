@@ -245,7 +245,8 @@ bool Score::checkKeys()
                               k = static_cast<KeySig*>(element)->key();
                         }
                   if (staff(i)->key(m->tick()) != k) {
-                        qDebug("measure %d (tick %d) : key %d, map %d", m->no(), m->tick(), k, staff(i)->key(m->tick()));
+                        qDebug("measure %d (tick %d) : key %d, map %d", m->no(), m->tick(), int(k),
+                           int(staff(i)->key(m->tick())));
                         rc = false;
                         }
                   }
@@ -274,7 +275,8 @@ bool Score::checkClefs()
                               }
                         }
                   if (staff(i)->clef(m->tick()) != clef) {
-                        qDebug("measure %d (tick %d) : clef %hhd, map %hhd", m->no(), m->tick(), clef, staff(i)->clef(m->tick()));
+                        qDebug("measure %d (tick %d) : clef %d, map %d", m->no(), m->tick(), int(clef),
+                           int(staff(i)->clef(m->tick())));
                         rc = false;
                         }
                   cm = m;

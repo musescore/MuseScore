@@ -321,7 +321,7 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
             case TDuration::DurationType::V_1024TH:
                   return SymId::rest1024th;
             default:
-                  qDebug("unknown rest type %hhd", type);
+                  qDebug("unknown rest type %d", int(type));
                   return SymId::restQuarter;
             }
       }

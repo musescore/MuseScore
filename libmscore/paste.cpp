@@ -933,8 +933,8 @@ PasteStatus Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
             delete image;
             }
       else {
-            qDebug("cannot paste selState %hhd staffList %s",
-               _selection.state(), (ms->hasFormat(mimeStaffListFormat))? "true" : "false");
+            qDebug("cannot paste selState %d staffList %s",
+               int(_selection.state()), (ms->hasFormat(mimeStaffListFormat))? "true" : "false");
             foreach(const QString& s, ms->formats())
                   qDebug("  format %s", qPrintable(s));
             }
