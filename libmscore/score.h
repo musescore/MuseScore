@@ -526,7 +526,7 @@ class Score : public QObject, public ScoreElement {
       void addRemoveBreaks(int interval, bool lock);
 
       bool transpose(Note* n, Interval, bool useSharpsFlats);
-      void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&);
+      void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&, bool useInstrument = false, bool flip = false);
       bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
          bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
 
@@ -1051,7 +1051,7 @@ class Score : public QObject, public ScoreElement {
       void setNoteHeadWidth( qreal n) { _noteHeadWidth = n; }
 
       QList<int> uniqueStaves() const;
-      void transpositionChanged(Part*, Interval);
+      void transpositionChanged(Part*, Interval, int tickStart = 0, int tickEnd = -1);
 
       void moveUp(ChordRest*);
       void moveDown(ChordRest*);
