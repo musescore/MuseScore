@@ -108,7 +108,7 @@ MStaff::MStaff(const MStaff& m)
       _noText      = 0;
       distanceUp   = m.distanceUp;
       distanceDown = m.distanceDown;
-      lines        = m.lines;
+      lines        = new StaffLines(*m.lines);
       hasVoices    = m.hasVoices;
       _vspacerUp   = 0;
       _vspacerDown = 0;
