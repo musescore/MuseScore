@@ -482,8 +482,10 @@ void Staff::write(Xml& xml) const
             xml.tag("small", small());
       if (invisible())
             xml.tag("invisible", invisible());
-      if (neverHide())
-            xml.tag("neverHide", neverHide());
+      if (hideWhenEmpty() != HideMode::AUTO)
+            xml.tag("hideWhenEmpty", int(hideWhenEmpty()));
+      if (cutaway())
+            xml.tag("cutaway", cutaway());
       if (showIfEmpty())
             xml.tag("showIfSystemEmpty", showIfEmpty());
       if (_hideSystemBarLine)
@@ -561,8 +563,15 @@ void Staff::read(XmlReader& e)
                   setSmall(e.readInt());
             else if (tag == "invisible")
                   setInvisible(e.readInt());
-            else if (tag == "neverHide")
-                  setNeverHide(e.readInt());
+            else if (tag == "hideWhenEmpty")
+                  setHideWhenEmpty(HideMode(e.readInt()));
+            else if (tag == "neverHide") {      // 2.0 compatibility
+                  bool v = e.readInt();
+                  if (v)
+                        setHideWhenEmpty(HideMode::NEVER);
+                  }
+            else if (tag == "cutaway")
+                  setCutaway(e.readInt());
             else if (tag == "showIfSystemEmpty")
                   setShowIfEmpty(e.readInt());
             else if (tag == "hideSystemBarLine")
@@ -919,7 +928,8 @@ void Staff::init(const Staff* s)
       _barLineFrom       = s->_barLineFrom;
       _barLineTo         = s->_barLineTo;
       _invisible         = s->_invisible;
-      _neverHide         = s->_neverHide;
+      _hideWhenEmpty     = s->_hideWhenEmpty;
+      _cutaway           = s->_cutaway;
       _showIfEmpty       = s->_showIfEmpty;
       _hideSystemBarLine = s->_hideSystemBarLine;
       _color             = s->_color;

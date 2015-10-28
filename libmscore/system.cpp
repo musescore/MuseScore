@@ -337,9 +337,12 @@ void System::layout2()
       qreal _spatium = spatium();
 
       qreal y = 0.0;
-      int lastStaffIdx  = 0;   // last visible staff
-      int firstStaffIdx = -1;
+      int firstStaffIdx = -1;             // first/last visible staff
+      int lastStaffIdx  = 0;
+      int firstStaffInitialIdx = -1;      // first/last staff for initial barline
+      int lastStaffInitialIdx = 0;
       qreal lastStaffDistanceDown = 0.0;
+      Measure* fm = firstMeasure();
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* staff = score()->staff(staffIdx);
             StyleIdx downDistance;
@@ -397,9 +400,16 @@ void System::layout2()
             lastStaffDistanceDown = distDown - nominalDistDown;
             if (firstStaffIdx == -1)
                   firstStaffIdx = staffIdx;
+            if (fm && fm->visible(staffIdx)) {
+                  lastStaffInitialIdx = staffIdx;
+                  if (firstStaffInitialIdx == -1)
+                        firstStaffInitialIdx = staffIdx;
+                  }
             }
       if (firstStaffIdx == -1)
             firstStaffIdx = 0;
+      if (firstStaffInitialIdx == -1)
+            firstStaffInitialIdx = 0;
 
       qreal systemHeight = staff(lastStaffIdx)->bbox().bottom();
       if (lastStaffIdx < nstaves - 1)
@@ -421,15 +431,15 @@ void System::layout2()
             }
 
       if (_barLine) {
-            _barLine->setTrack(firstStaffIdx * VOICES);
-            _barLine->setSpan(lastStaffIdx - firstStaffIdx + 1);
-            if (score()->staff(firstStaffIdx)->lines() == 1)
+            _barLine->setTrack(firstStaffInitialIdx * VOICES);
+            _barLine->setSpan(lastStaffInitialIdx - firstStaffInitialIdx + 1);
+            if (score()->staff(firstStaffInitialIdx)->lines() == 1)
                   _barLine->setSpanFrom(BARLINE_SPAN_1LINESTAFF_FROM);
             else
                   _barLine->setSpanFrom(0);
-            int spanTo = (score()->staff(lastStaffIdx)->lines() == 1) ?
+            int spanTo = (score()->staff(lastStaffInitialIdx)->lines() == 1) ?
                               BARLINE_SPAN_1LINESTAFF_TO :
-                              (score()->staff(lastStaffIdx)->lines()-1)*2;
+                              (score()->staff(lastStaffInitialIdx)->lines() - 1) * 2;
             _barLine->setSpanTo(spanTo);
             _barLine->layout();
             }
