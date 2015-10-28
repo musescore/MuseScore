@@ -576,6 +576,7 @@ class Element : public QObject, public ScoreElement {
       void drawSymbol(SymId id, QPainter* p, const QPointF& o = QPointF()) const;
       void drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const;
       void drawSymbols(const std::vector<SymId>&, QPainter* p, const QPointF& o = QPointF()) const;
+      void drawShadowSymbols(const QList<SymId>&, QPainter* p, const QPointF& o = QPointF()) const;
       qreal symHeight(SymId id) const;
       qreal symWidth(SymId id) const;
       qreal symWidth(const std::vector<SymId>&) const;

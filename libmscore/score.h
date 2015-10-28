@@ -513,6 +513,7 @@ class Score : public QObject, public ScoreElement {
    signals:
       void posChanged(POS, unsigned);
       void playlistChanged();
+      void updateShadow();
 
    public:
       Score();

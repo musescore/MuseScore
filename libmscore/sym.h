@@ -2649,6 +2649,8 @@ class ScoreFont {
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos) const;
       void draw(const std::vector<SymId>&, QPainter*, qreal mag, const QPointF& pos) const;
       void draw(const std::vector<SymId>&, QPainter*, qreal mag, const QPointF& pos, qreal scale) const;
+      void drawShadow(const QList<SymId>&, QPainter*, qreal mag, const QPointF& pos) const;
+      void drawShadow(const QList<SymId>&, QPainter*, qreal mag, const QPointF& pos, qreal scale) const;
       void draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const;
 
       qreal height(SymId id, qreal mag) const         { return sym(id).bbox().height() * mag; }

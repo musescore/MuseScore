@@ -367,6 +367,9 @@ void MuseScore::updateInputState(Score* score)
       getAction("beam32")->setChecked(is.beamMode()     == Beam::Mode::BEGIN32);
       getAction("auto-beam")->setChecked(is.beamMode()  == Beam::Mode::AUTO);
       getAction("repitch")->setChecked(is.repitchMode());
+
+      if(is.noteEntryMode() && !is.rest())
+            emit score->updateShadow();
       }
 }
 

@@ -5390,18 +5390,58 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
       draw(d, painter, mag, pos);
       }
 
-void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos, qreal scale) const
+
+
+void ScoreFont::drawShadow(const QList<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos, qreal scale) const
       {
       QPointF pos(_pos);
-      for (SymId id : ids) {
-            draw(id, p, mag, pos, scale);
-            pos.rx() += (sym(id).advance() * mag);
+      qreal penWidth=p->pen().width();
+      draw(ids[0], p, mag, pos, scale);
+      pos.rx() += ((sym(ids[0]).advance() - penWidth/3) * mag);
+      qreal yOffset = -((sym(ids[0]).bbox().height())/4);
+
+      if(ids[1]!=SymId::noSym) {
+            if(ids[1]!=SymId::flagInternalUp) {
+                  pos.ry() -= (sym(ids[1]).bbox().height());
+                  p->drawLine(QLineF(pos.rx(), yOffset, pos.rx(), pos.ry()-yOffset));
+                  pos.rx() -= penWidth/3;
+                  draw(ids[1], p, mag, pos, scale);
+                  }
+            else {
+                  p->drawLine(QLineF(pos.rx(), yOffset, pos.rx(), -18));
+                  }
             }
+
       }
+
 void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos) const
       {
       qreal scale = p->worldTransform().m11();
       draw(ids, p, mag, _pos, scale);
+      }
+
+void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos, qreal scale) const
+      {
+      QPointF pos(_pos);
+      int x=0;
+      for (SymId id : ids) {
+            if(x!=0)
+                  pos.ry() -= (sym(id).bbox().height());
+
+            draw(id, p, mag, pos, scale);
+
+            if(x==0)
+                  pos.rx() += (sym(id).advance() * mag);
+
+            x++;
+            }
+
+      }
+
+void ScoreFont::drawShadow(const QList<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos) const
+      {
+      qreal scale = p->worldTransform().m11();
+      drawShadow(ids, p, mag, _pos, scale);
       }
 
 //---------------------------------------------------------

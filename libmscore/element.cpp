@@ -1746,6 +1746,11 @@ void Element::drawSymbols(const std::vector<SymId>& s, QPainter* p, const QPoint
       score()->scoreFont()->draw(s, p, magS(), o);
       }
 
+void Element::drawShadowSymbols(const QList<SymId>& s, QPainter* p, const QPointF& o) const
+      {
+      score()->scoreFont()->drawShadow(s, p, magS(), o);
+      }
+
 //---------------------------------------------------------
 //   symHeight
 //---------------------------------------------------------

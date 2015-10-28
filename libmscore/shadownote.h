@@ -14,6 +14,7 @@
 #define __SHADOWNOTE_H__
 
 #include "element.h"
+#include "shadownotesymbol.h"
 
 class QPainter;
 
@@ -32,7 +33,7 @@ class ShadowNote : public Element {
       Q_OBJECT
 
       int _line;
-      SymId sym;
+      ShadowNoteSymbol symbols;
 
    public:
       ShadowNote(Score*);
@@ -42,7 +43,8 @@ class ShadowNote : public Element {
       int line() const                   { return _line;   }
       void setLine(int n)                { _line = n;      }
       virtual void draw(QPainter*) const;
-      void setSym(SymId id)              { sym = id;     }
+      void setSym(SymId id);
+      void setSymbols(TDuration::DurationType type, SymId noteSymbol);
       };
 
 
