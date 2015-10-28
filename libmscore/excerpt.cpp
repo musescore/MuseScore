@@ -174,11 +174,15 @@ void createExcerpt(Excerpt* excerpt)
             for (Staff* staff : score->staves()) {
                   if (staff->staffType()->group() == StaffGroup::PERCUSSION)
                         continue;
+                  // if this staff has no transposition, and no instrument changes, we can skip it
                   Interval interval = staff->part()->instrument()->transpose();
-                  if (interval.isZero())
+                  if (interval.isZero() && staff->part()->instruments()->size() == 1)
                         continue;
-                  if (oscore->styleB(StyleIdx::concertPitch))
-                        interval.flip();
+                  bool flip = false;
+                  if (oscore->styleB(StyleIdx::concertPitch)) {
+                        interval.flip();  // flip the transposition for the original instrument
+                        flip = true;      // transposeKeys() will flip transposition for each instrument change
+                        }
 
                   int staffIdx   = staff->idx();
                   int startTrack = staffIdx * VOICES;
@@ -187,9 +191,15 @@ void createExcerpt(Excerpt* excerpt)
                   int endTick = 0;
                   if (score->lastSegment())
                         endTick = score->lastSegment()->tick();
-                  score->transposeKeys(staffIdx, staffIdx+1, 0, endTick, interval);
+                  score->transposeKeys(staffIdx, staffIdx+1, 0, endTick, interval, true, flip);
 
                   for (auto segment = score->firstSegment(Segment::Type::ChordRest); segment; segment = segment->next1(Segment::Type::ChordRest)) {
+                        Interval interval = staff->part()->instrument(segment->tick())->transpose();
+                        if (interval.isZero())
+                              continue;
+                        if (oscore->styleB(StyleIdx::concertPitch))
+                              interval.flip();
+
                         for (auto e : segment->annotations()) {
                               if ((e->type() != Element::Type::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
                                     continue;

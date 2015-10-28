@@ -47,7 +47,7 @@ extern bool useFactorySettings;
 //   EditStaff
 //---------------------------------------------------------
 
-EditStaff::EditStaff(Staff* s, QWidget* parent)
+EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
    : QDialog(parent)
       {
       orgStaff = s;
@@ -62,7 +62,7 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       maxPitchPSelect->setIcon(editIcon);
 
       Part* part        = orgStaff->part();
-      instrument        = *part->instrument();
+      instrument        = *part->instrument(/*tick*/);
       Score* score      = part->score();
       staff             = new Staff(score);
       staff->setSmall(orgStaff->small());
@@ -75,6 +75,22 @@ EditStaff::EditStaff(Staff* s, QWidget* parent)
       staff->setShowIfEmpty(orgStaff->showIfEmpty());
       staff->setUserMag(orgStaff->userMag());
       staff->setHideSystemBarLine(orgStaff->hideSystemBarLine());
+
+      // get tick range for instrument
+      auto i = part->instruments()->upper_bound(0);   // tick
+      if (i == part->instruments()->end())
+            _tickEnd = -1;
+      else
+            _tickEnd = i->first;
+#if 1
+      _tickStart = -1;
+#else
+      --i;
+      if (i == part->instruments()->begin())
+            _tickStart = 0;
+      else
+            _tickStart = i->first;
+#endif
 
       // hide string data controls if instrument has no strings
       stringDataFrame->setVisible(instrument.stringData() && instrument.stringData()->strings() > 0);
@@ -287,6 +303,7 @@ void EditStaff::apply()
 
       QString newPartName = partName->text().simplified();
       if (!(instrument == *part->instrument()) || part->partName() != newPartName) {
+            // instrument has changed
             Interval v1 = instrument.transpose();
             Interval v2 = part->instrument()->transpose();
 
@@ -294,7 +311,7 @@ void EditStaff::apply()
             emit instrumentChanged();
 
             if (v1 != v2)
-                  score->transpositionChanged(part, v2);
+                  score->transpositionChanged(part, v2, _tickStart, _tickEnd);
             }
       orgStaff->undoChangeProperty(P_ID::MAG, mag->value() / 100.0);
       orgStaff->undoChangeProperty(P_ID::COLOR, color->color());

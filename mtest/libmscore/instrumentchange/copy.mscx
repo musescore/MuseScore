@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.00">
+<museScore version="2.07">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -27,10 +27,15 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Instrument Change</metaTag>
     <PageList>
@@ -43,13 +48,15 @@
       </PageList>
     <Part>
       <Staff id="1">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName pos="0">Flute</longName>
-        <shortName pos="0">Fl.</shortName>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -78,13 +85,15 @@
       </Part>
     <Part>
       <Staff id="2">
-        <type>0</type>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
         <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Oboe</trackName>
       <Instrument>
-        <longName pos="0">Oboe</longName>
-        <shortName pos="0">Ob.</shortName>
+        <longName>Oboe</longName>
+        <shortName>Ob.</shortName>
         <trackName>Oboe</trackName>
         <minPitchP>58</minPitchP>
         <maxPitchP>93</maxPitchP>
@@ -124,9 +133,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -146,16 +152,12 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="2">
         <InstrumentChange>
           <Instrument>
-            <longName pos="0">B♭ Trumpet</longName>
-            <shortName pos="0">B♭ Tpt.</shortName>
+            <longName>B♭ Trumpet</longName>
+            <shortName>B♭ Tpt.</shortName>
             <trackName>B♭ Trumpet</trackName>
             <minPitchP>52</minPitchP>
             <maxPitchP>85</maxPitchP>
@@ -163,17 +165,30 @@
             <maxPitchA>80</maxPitchA>
             <transposeDiatonic>-1</transposeDiatonic>
             <transposeChromatic>-2</transposeChromatic>
+            <instrumentId>brass.trumpet.bflat</instrumentId>
             <Articulation>
               <velocity>100</velocity>
               <gateTime>100</gateTime>
               </Articulation>
+            <Articulation name="staccatissimo">
+              <velocity>100</velocity>
+              <gateTime>33</gateTime>
+              </Articulation>
             <Articulation name="staccato">
               <velocity>100</velocity>
-              <gateTime>85</gateTime>
+              <gateTime>50</gateTime>
+              </Articulation>
+            <Articulation name="portato">
+              <velocity>100</velocity>
+              <gateTime>67</gateTime>
               </Articulation>
             <Articulation name="tenuto">
               <velocity>100</velocity>
               <gateTime>100</gateTime>
+              </Articulation>
+            <Articulation name="marcato">
+              <velocity>120</velocity>
+              <gateTime>67</gateTime>
               </Articulation>
             <Articulation name="sforzato">
               <velocity>120</velocity>
@@ -186,7 +201,6 @@
               <program value="59"/>
               </Channel>
             </Instrument>
-          <style>Instrument Change</style>
           <text>Trumpet</text>
           </InstrumentChange>
         <Chord>
@@ -194,6 +208,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -201,12 +216,9 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Chord>
@@ -214,6 +226,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -221,12 +234,9 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <Chord>
@@ -234,6 +244,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -241,12 +252,9 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="5">
         <Chord>
@@ -254,6 +262,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -261,12 +270,9 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="6">
         <Chord>
@@ -274,6 +280,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -281,12 +288,9 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="7">
         <Chord>
@@ -294,6 +298,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -301,12 +306,9 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="8">
         <Chord>
@@ -314,6 +316,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <Chord>
@@ -321,6 +324,7 @@
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
+            <tpc2>16</tpc2>
             </Note>
           </Chord>
         <BarLine>
@@ -335,9 +339,6 @@
           <concertClefType>G</concertClefType>
           <transposingClefType>G</transposingClefType>
           </Clef>
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
@@ -357,10 +358,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="2">
         <Chord>
@@ -377,10 +374,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="3">
         <Chord>
@@ -397,10 +390,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="4">
         <Chord>
@@ -417,10 +406,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="5">
         <Chord>
@@ -437,10 +422,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="6">
         <Chord>
@@ -457,10 +438,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="7">
         <Chord>
@@ -477,10 +454,6 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
         </Measure>
       <Measure number="8">
         <Chord>
