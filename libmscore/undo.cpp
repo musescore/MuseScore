@@ -2415,7 +2415,6 @@ void ChangePatch::flip()
       channel->program = patch.prog;
       channel->bank    = patch.bank;
       channel->synti   = patch.synti;
-      channel->updateInitList();
 
       patch            = op;
 

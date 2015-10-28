@@ -93,9 +93,13 @@
           </Articulation>
         <Channel name="synth-string-1">
           <program value="50"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
           </Channel>
         <Channel name="synth-string-2">
           <program value="51"/>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -152,6 +156,8 @@
           </Articulation>
         <Channel>
           <program value="0"/>
+          <midiPort>1</midiPort>
+          <midiChannel>1</midiChannel>
           </Channel>
         </Instrument>
       </Part>

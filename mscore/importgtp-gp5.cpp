@@ -394,7 +394,7 @@ void GuitarPro5::readTracks()
                   }
             for (int j = strings; j < GP_MAX_STRING_NUMBER; ++j)
                   readInt();
-            /*int midiPort     =*/ readInt();   // -1
+            int midiPort     = readInt() - 1;
             int midiChannel  = readInt() - 1;
             /*int midiChannel2 =*/ readInt();   // -1
 
@@ -464,6 +464,7 @@ void GuitarPro5::readTracks()
             ch->pan     = channelDefaults[midiChannel].pan;
             ch->chorus  = channelDefaults[midiChannel].chorus;
             ch->reverb  = channelDefaults[midiChannel].reverb;
+            staff->part()->setMidiChannel(midiChannel, midiPort);
             //qDebug("default2: %d", channelDefaults[i].reverb);
             // missing: phase, tremolo
             ch->updateInitList();

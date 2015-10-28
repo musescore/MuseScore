@@ -1717,8 +1717,24 @@ void MusicXMLParserPass1::scorePart()
                   _e.skipCurrentElement();  // skip but don't log
             else if (_e.name() == "score-instrument")
                   scoreInstrument(id);
-            else if (_e.name() == "midi-device")
-                  _e.skipCurrentElement();  // skip but don't log
+            else if (_e.name() == "midi-device") {
+                  if (!_e.attributes().hasAttribute("port")) {
+                        _e.readElementText(); // empty string
+                        continue;
+                        }
+                  QString instrId = _e.attributes().value("id").toString();
+                  QString port = _e.attributes().value("port").toString();
+                  // If instrId is missing, the device assignment affects all
+                  // score-instrument elements in the score-part
+                  if (instrId.isEmpty()) {
+                        for (auto it = _drumsets[id].cbegin(); it != _drumsets[id].cend(); ++it)
+                              _drumsets[id][it.key()].midiPort = port.toInt() - 1;
+                        }
+                  else if (_drumsets[id].contains(instrId))
+                        _drumsets[id][instrId].midiPort = port.toInt() - 1;
+
+                  _e.readElementText(); // empty string
+                  }
             else if (_e.name() == "midi-instrument")
                   midiInstrument(id);
             else
