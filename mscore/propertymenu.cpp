@@ -563,6 +563,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             if (si.exec()) {
                   const InstrumentTemplate* it = si.instrTemplate();
                   if (it) {
+                        //Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
                         ic->setInstrument(Instrument::fromTemplate(it));
                         score()->undo(new ChangeInstrument(ic, ic->instrument()));
                         score()->updateChannel();
@@ -593,7 +594,14 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             vp.exec();
             }
       else if (cmd == "staff-props") {
-            EditStaff editStaff(e->staff(), 0);
+            int tick = -1;
+            if (e->isChordRest())
+                  tick = static_cast<ChordRest*>(e)->tick();
+            else if (e->type() == Element::Type::NOTE)
+                  tick = static_cast<Note*>(e)->chord()->tick();
+            else if (e->type() == Element::Type::MEASURE)
+                  tick = static_cast<Measure*>(e)->tick();
+            EditStaff editStaff(e->staff(), tick, 0);
             connect(&editStaff, SIGNAL(instrumentChanged()), mscore, SLOT(instrumentChanged()));
             editStaff.exec();
             }

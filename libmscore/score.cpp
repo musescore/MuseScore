@@ -1441,7 +1441,16 @@ void Score::addElement(Element* element)
 
             case Element::Type::INSTRUMENT_CHANGE: {
                   InstrumentChange* ic = static_cast<InstrumentChange*>(element);
-                  ic->part()->setInstrument(ic->instrument(), ic->segment()->tick());
+                  int tickStart = ic->segment()->tick();
+                  auto i = ic->part()->instruments()->upper_bound(tickStart);
+                  int tickEnd;
+                  if (i == ic->part()->instruments()->end())
+                        tickEnd = -1;
+                  else
+                        tickEnd = i->first;
+                  Interval oldV = ic->part()->instrument(tickStart)->transpose();
+                  ic->part()->setInstrument(ic->instrument(), tickStart);
+                  transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
                   rebuildMidiMapping();
                   _instrumentsChanged = true;
                   }
@@ -1591,7 +1600,16 @@ void Score::removeElement(Element* element)
                   break;
             case Element::Type::INSTRUMENT_CHANGE: {
                   InstrumentChange* ic = static_cast<InstrumentChange*>(element);
-                  ic->part()->removeInstrument(ic->segment()->tick());
+                  int tickStart = ic->segment()->tick();
+                  auto i = ic->part()->instruments()->upper_bound(tickStart);
+                  int tickEnd;
+                  if (i == ic->part()->instruments()->end())
+                        tickEnd = -1;
+                  else
+                        tickEnd = i->first;
+                  Interval oldV = ic->part()->instrument(tickStart)->transpose();
+                  ic->part()->removeInstrument(tickStart);
+                  transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
                   rebuildMidiMapping();
                   _instrumentsChanged = true;
                   }
@@ -2496,7 +2514,7 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
                         continue;
                   KeySigEvent oKey = i->second;
                   KeySigEvent nKey = oKey;
-                  int diff = -staff->part()->instrument()->transpose().chromatic;
+                  int diff = -staff->part()->instrument(tick)->transpose().chromatic;
                   if (diff != 0 && !styleB(StyleIdx::concertPitch) && !oKey.custom() && !oKey.isAtonal())
                         nKey.setKey(transposeKey(nKey.key(), diff));
                   staff->setKey(tick, nKey);
@@ -2604,8 +2622,9 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
       for (Staff* staff : _staves) {
             if (staff->staffType()->group() == StaffGroup::PERCUSSION)
                   continue;
+            // if this staff has no transposition, and no instrument changes, we can skip it
             Interval interval = staff->part()->instrument()->transpose();
-            if (interval.isZero())
+            if (interval.isZero() && staff->part()->instruments()->size() == 1)
                   continue;
             if (!flag)
                   interval.flip();
@@ -2614,9 +2633,12 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
             int startTrack = staffIdx * VOICES;
             int endTrack   = startTrack + VOICES;
 
-            transposeKeys(staffIdx, staffIdx+1, 0, lastSegment()->tick(), interval);
+            transposeKeys(staffIdx, staffIdx + 1, 0, lastSegment()->tick(), interval, true, !flag);
 
             for (Segment* segment = firstSegment(Segment::Type::ChordRest); segment; segment = segment->next1(Segment::Type::ChordRest)) {
+                  interval = staff->part()->instrument(segment->tick())->transpose();
+                  if (!flag)
+                        interval.flip();
                   for (Element* e : segment->annotations()) {
                         if ((e->type() != Element::Type::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
                               continue;
