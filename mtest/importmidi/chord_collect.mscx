@@ -96,6 +96,8 @@
           </Articulation>
         <Channel>
           <program value="25"/>
+          <midiPort>0</midiPort>
+          <midiChannel>8</midiChannel>
           </Channel>
         </Instrument>
       </Part>

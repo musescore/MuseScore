@@ -130,6 +130,7 @@ struct MusicXMLDrumInstrument {
       int pitch;                       // pitch read from MusicXML
       QString name;                    // name read from MusicXML
       int midiChannel;                 // channel read from MusicXML
+      int midiPort;                    // port read from MusicXML
       int midiProgram;                 // program read from MusicXML
       int midiVolume;                  // volume read from MusicXML
       int midiPan;                     // pan value read from MusicXML
@@ -140,13 +141,13 @@ struct MusicXMLDrumInstrument {
       QString toString() const;
 
       MusicXMLDrumInstrument()
-            : pitch(-1), name(), midiChannel(-1), midiProgram(-1), midiVolume(100), midiPan(63),
+            : pitch(-1), name(), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
               notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(MScore::Direction::AUTO) {}
       MusicXMLDrumInstrument(QString s)
-            : pitch(-1), name(s), midiChannel(-1), midiProgram(-1), midiVolume(100), midiPan(63),
+            : pitch(-1), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
               notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(MScore::Direction::AUTO) {}
       MusicXMLDrumInstrument(int p, QString s, NoteHead::Group nh, int l, MScore::Direction d)
-            : pitch(p), name(s), midiChannel(-1), midiProgram(-1), midiVolume(100), midiPan(63),
+            : pitch(p), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
               notehead(nh), line(l), stemDirection(d) {}
       };
 
