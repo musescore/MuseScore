@@ -3042,6 +3042,25 @@ void Chord::setSlash(bool flag, bool stemless)
       }
 
 //---------------------------------------------------------
+//  updateEndsGlissando
+//    sets/resets the chord _endsGlissando according any glissando (or more)
+//    end into this chord or no.
+//---------------------------------------------------------
+
+void Chord::updateEndsGlissando()
+      {
+      _endsGlissando = false;       // assume no glissando ends here
+      // scan all chord notes for glissandi ending on this chord
+      for (Note* note : notes()) {
+            for (Spanner* sp : note->spannerBack())
+                  if (sp->type() == Element::Type::GLISSANDO) {
+                        _endsGlissando = true;
+                        return;
+                        }
+            }
+      }
+
+//---------------------------------------------------------
 //   removeMarkings
 //    - this is normally called after cloning a chord to tie a note over the barline
 //    - there is no special undo handling; the assumption is that undo will simply remove the cloned chord

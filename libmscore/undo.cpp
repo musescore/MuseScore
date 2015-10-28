@@ -3468,12 +3468,70 @@ void RemoveBracket::undo()
 
 void ChangeSpannerElements::flip()
       {
-      Element* se = spanner->startElement();
-      Element* ee = spanner->endElement();
-      spanner->setStartElement(startElement);
-      spanner->setEndElement(endElement);
-      startElement = se;
-      endElement   = ee;
+      Element*    oldStartElement   = spanner->startElement();
+      Element*    oldEndElement     = spanner->endElement();
+      if (spanner->anchor() == Spanner::Anchor::NOTE) {
+            // be sure new spanner elements are of the right type
+            if (startElement->type() != Element::Type::NOTE || endElement->type() != Element::Type::NOTE)
+                  return;
+            Note* newStartNote;
+            Note* newEndNote;
+            Note* oldStartNote;
+            Note* oldEndNote;
+            int   startDeltaTrack   = oldStartElement->track() - startElement->track();
+            int   endDeltaTrack     = oldEndElement->track() - endElement->track();
+            // scan all spanners linked to this one
+            for (ScoreElement* el : spanner->linkList()) {
+                  Spanner*    sp    = static_cast<Spanner*>(el);
+                  newStartNote      = newEndNote = nullptr;
+                  oldStartNote      = static_cast<Note*>(sp->startElement());
+                  oldEndNote        = static_cast<Note*>(sp->endElement());
+                  // if not the current spanner, but one linked to it, determine its new start and end notes
+                  // as modifications 'parallel' to the modifications of the current spanner's start and end notes
+                  if (sp != spanner) {
+                        // determine the track where to expect the 'parallel' start element
+                        int   newTrack    = sp->startElement()->track() + startDeltaTrack;
+                        // look in notes linked to new start note for a note with
+                        // same score as linked spanner and appropriate track
+                        for (ScoreElement* newEl : startElement->linkList())
+                              if (static_cast<Note*>(newEl)->score() == sp->score()
+                                          && static_cast<Note*>(newEl)->track() == newTrack) {
+                                    newStartNote = static_cast<Note*>(newEl);
+                                    break;
+                                    }
+                        // similarly to determine the 'parallel' end element
+                        newTrack    = sp->endElement()->track() + endDeltaTrack;
+                        for (ScoreElement* newEl : endElement->linkList())
+                              if (static_cast<Note*>(newEl)->score() == sp->score()
+                                          && static_cast<Note*>(newEl)->track() == newTrack) {
+                                    newEndNote = static_cast<Note*>(newEl);
+                                    break;
+                                    }
+                        }
+                  // if current spanner, just use stored start and end elements
+                  else {
+                        newStartNote      = static_cast<Note*>(startElement);
+                        newEndNote        = static_cast<Note*>(endElement);
+                        }
+                  // update spanner's start and end notes
+                  if (newStartNote != nullptr && newEndNote != nullptr) {
+                        oldStartNote->removeSpannerFor(sp);
+                        oldEndNote->removeSpannerBack(sp);
+                        sp->setNoteSpan(newStartNote, newEndNote);
+                        newStartNote->addSpannerFor(sp);
+                        newEndNote->addSpannerBack(sp);
+
+                        if (sp->type() == Element::Type::GLISSANDO)
+                              oldEndNote->chord()->updateEndsGlissando();
+                        }
+                  }
+            }
+      else {
+            spanner->setStartElement(startElement);
+            spanner->setEndElement(endElement);
+            }
+      startElement = oldStartElement;
+      endElement   = oldEndElement;
       if (spanner->type() == Element::Type::TIE) {
             Tie* tie = static_cast<Tie*>(spanner);
             static_cast<Note*>(endElement)->setTieBack(0);

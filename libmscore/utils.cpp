@@ -290,6 +290,62 @@ Segment* prevSeg1(Segment* seg, int& track)
       }
 
 //---------------------------------------------------------
+// next/prevChordNote
+//
+//    returns the top note of the next/previous chord. If a chord exists in the same track as note,
+//    it is used. If not, the topmost existing chord is used.
+//    May return nullptr if there is no next/prev note
+//---------------------------------------------------------
+
+Note* nextChordNote(Note* note)
+      {
+      int         track       = note->track();
+      int         fromTrack   = (track / VOICES) * VOICES;
+      int         toTrack     = fromTrack + VOICES;
+      // TODO : limit to same instrument, not simply to same staff!
+      Segment*    seg   = note->chord()->segment()->nextCR(track, true);
+      while (seg) {
+            Element*    targetElement = seg->elementAt(track);
+            // if a chord exists in the same track, return its top note
+            if (targetElement != nullptr && targetElement->type() == Element::Type::CHORD)
+                  return static_cast<Chord*>(targetElement)->upNote();
+            // if not, return topmost chord in track range
+            for (int i = fromTrack ; i < toTrack; i++) {
+                  targetElement = seg->elementAt(i);
+                  if (targetElement != nullptr && targetElement->type() == Element::Type::CHORD)
+                        return static_cast<Chord*>(targetElement)->upNote();
+                  }
+            seg = seg->nextCR(track, true);
+            }
+      return nullptr;
+      }
+
+Note* prevChordNote(Note* note)
+      {
+      int         track       = note->track();
+      int         fromTrack   = (track / VOICES) * VOICES;
+      int         toTrack     = fromTrack + VOICES;
+      // TODO : limit to same instrument, not simply to same staff!
+      Segment*    seg   = note->chord()->segment()->prev1();
+      while (seg) {
+            if (seg->segmentType() == Segment::Type::ChordRest) {
+                  Element*    targetElement = seg->elementAt(track);
+                  // if a chord exists in the same track, return its top note
+                  if (targetElement != nullptr && targetElement->type() == Element::Type::CHORD)
+                        return static_cast<Chord*>(targetElement)->upNote();
+                  // if not, return topmost chord in track range
+                  for (int i = fromTrack ; i < toTrack; i++) {
+                        targetElement = seg->elementAt(i);
+                        if (targetElement != nullptr && targetElement->type() == Element::Type::CHORD)
+                              return static_cast<Chord*>(targetElement)->upNote();
+                        }
+                  }
+            seg = seg->prev1();
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
 //   pitchKeyAdjust
 //    change entered note to sounding pitch dependend
 //    on key.
