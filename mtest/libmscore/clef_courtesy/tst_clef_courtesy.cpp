@@ -33,6 +33,7 @@ class TestClefCourtesy : public QObject, public MTest
       void initTestCase();
       void clef_courtesy01();
       void clef_courtesy02();
+      void clef_courtesy_78196();
       };
 
 //---------------------------------------------------------
@@ -155,6 +156,51 @@ void TestClefCourtesy::clef_courtesy02()
 
       QVERIFY(saveCompareScore(score, "clef_courtesy02.mscx", DIR + "clef_courtesy02-ref.mscx"));
       delete score;
+      }
+
+//---------------------------------------------------------
+//   clef_courtesy_78196
+//    input score has section breaks on non-measure MeasureBase objects.
+//    should not display courtesy clefs at the end of final measure of each section (meas 2, 4, & 6), even if section break occurs on subsequent non-measure frame.
+//---------------------------------------------------------
+
+void TestClefCourtesy::clef_courtesy_78196()
+      {
+      Score* score = readScore(DIR + "clef_courtesy_78196.mscx");
+      score->doLayout();
+
+      Measure* m1 = score->firstMeasure();
+      Measure* m2 = m1->nextMeasure();
+      Measure* m3 = m2->nextMeasure();
+      Measure* m4 = m3->nextMeasure();
+      Measure* m5 = m4->nextMeasure();
+      Measure* m6 = m5->nextMeasure();
+      Measure* m7 = m6->nextMeasure();
+
+      // check both clef elements are there, but none is shown
+      Clef*    clefCourt = nullptr;
+      Segment* seg = nullptr;
+
+      // verify clef exists in segment of final tick of m2, but that it is not visible
+      seg = m2->findSegment(Segment::Type::Clef, m3->tick());
+      QVERIFY2(seg != nullptr, "No SegClef at end of measure 2.");
+      clefCourt = static_cast<Clef*>(seg->element(0));
+      QVERIFY2(clefCourt != nullptr, "No courtesy clef at end of measure 2.");
+      QVERIFY2(clefCourt->bbox().width() == 0, "Courtesy clef at end of measure 2 is NOT hidden.");
+
+      // verify clef exists in segment of final tick of m4, but that it is not visible
+      seg = m4->findSegment(Segment::Type::Clef, m5->tick());
+      QVERIFY2(seg != nullptr, "No SegClef at end of measure 4.");
+      clefCourt = static_cast<Clef*>(seg->element(0));
+      QVERIFY2(clefCourt != nullptr, "No courtesy clef at end of measure 4.");
+      QVERIFY2(clefCourt->bbox().width() == 0, "Courtesy clef at end of measure 4 is NOT hidden.");
+
+      // verify clef exists in segment of final tick of m6, but that it is not visible
+      seg = m6->findSegment(Segment::Type::Clef, m7->tick());
+      QVERIFY2(seg != nullptr, "No SegClef at end of measure 6.");
+      clefCourt = static_cast<Clef*>(seg->element(0));
+      QVERIFY2(clefCourt != nullptr, "No courtesy clef at end of measure 6.");
+      QVERIFY2(clefCourt->bbox().width() == 0, "Courtesy clef at end of measure 6 is NOT hidden.");
       }
 
 QTEST_MAIN(TestClefCourtesy)
