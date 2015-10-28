@@ -22,9 +22,11 @@
 
 namespace Ms {
 
-int Spanner::editTick;
-int Spanner::editTick2;
-int Spanner::editTrack2;
+int   Spanner::editTick;
+int   Spanner::editTick2;
+int   Spanner::editTrack2;
+Note* Spanner::editEndNote;
+Note* Spanner::editStartNote;
 QList<QPointF> Spanner::userOffsets2;
 QList<QPointF> Spanner::userOffsets;
 
@@ -379,6 +381,10 @@ void Spanner::startEdit(MuseScoreView*, const QPointF&)
       editTick   = _tick;
       editTick2  = tick2();
       editTrack2 = _track2;
+      if (_anchor == Spanner::Anchor::NOTE) {
+            editEndNote       = static_cast<Note*>(_endElement);
+            editStartNote     = static_cast<Note*>(_startElement);
+            }
 
       userOffsets.clear();
       userOffsets2.clear();
@@ -395,18 +401,31 @@ void Spanner::startEdit(MuseScoreView*, const QPointF&)
 void Spanner::endEdit()
       {
       bool rebuild = false;
-      if (editTick != tick()) {
-            score()->undoPropertyChanged(this, P_ID::SPANNER_TICK, editTick);
-            rebuild = true;
+      if (_anchor == Spanner::Anchor::NOTE) {
+            if (_endElement != editEndNote || _startElement != editStartNote) {
+                  // swap original anchor elements into the spanner
+                  // and set the new one via an undoable operation
+                  Note* newStartNote      = static_cast<Note*>(_startElement);
+                  Note* newEndNote        = static_cast<Note*>(_endElement);
+                  _startElement           = editStartNote;
+                  _endElement             = editEndNote;
+                  score()->undo(new ChangeSpannerElements(this, newStartNote, newEndNote));
+                  }
             }
-      // ticks may also change by moving initial anchor, without moving ending anchor
-      if (editTick2 != tick2() || editTick2 - editTick != tick2() - tick()) {
-            score()->undoPropertyChanged(this, P_ID::SPANNER_TICKS, editTick2 - editTick);
-            rebuild = true;
-            }
-      if (editTrack2 != track2()) {
-            score()->undoPropertyChanged(this, P_ID::SPANNER_TRACK2, editTrack2);
-            rebuild = true;
+      else {
+            if (editTick != tick()) {
+                  score()->undoPropertyChanged(this, P_ID::SPANNER_TICK, editTick);
+                  rebuild = true;
+                  }
+            // ticks may also change by moving initial anchor, without moving ending anchor
+            if (editTick2 != tick2() || editTick2 - editTick != tick2() - tick()) {
+                  score()->undoPropertyChanged(this, P_ID::SPANNER_TICKS, editTick2 - editTick);
+                  rebuild = true;
+                  }
+            if (editTrack2 != track2()) {
+                  score()->undoPropertyChanged(this, P_ID::SPANNER_TRACK2, editTrack2);
+                  rebuild = true;
+                  }
             }
 
       if (rebuild)

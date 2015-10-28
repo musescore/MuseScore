@@ -226,7 +226,7 @@ Note* Score::upAltCtrl(Note* note) const
 //---------------------------------------------------------
 //   downAlt
 //    return next lower pitched note in chord
-//    move to previous track if at bottom of chord
+//    move to next track if at bottom of chord
 //---------------------------------------------------------
 
 Element* Score::downAlt(Element* element)
