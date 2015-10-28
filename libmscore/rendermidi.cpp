@@ -685,11 +685,16 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
             }
       }
 
-//--------------------------------------------------------
-//   swingAdjustParams
-//--------------------------------------------------------
+//---------------------------------------------------------
+// swingAdjustParams
+//    chord       the chord for which to adjust swing parameters
+//    ontime      IN/OUT, the chord on-time (in 1/1000 of nominal chord duration)
+//    gateTime    IN/OUT, the chord off-time (in 1/1000 of nominal chord duration)
+//    swingUnit   the type of notes to which swing is applied (8th, 16th, ..., in ticks)
+//    swingRatio  the swing ratio (in percent of nominal beat duration)
+//---------------------------------------------------------
 
-void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swingUnit, int swingRatio)
+void Score::swingAdjustParams(Chord* chord, int& ontime, int& gateTime, int swingUnit, int swingRatio)
       {
       int tick = chord->rtick();
       // adjust for anacrusis
@@ -713,12 +718,12 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
       //Check the position of the chord to apply changes accordingly
       if (tick % swingBeat == swingUnit) {
             if (!isSubdivided(chord,swingUnit)) {
-                  ontime = ontime + swingActualAdjust;
+                  ontime += swingActualAdjust;
                   }
             }
       int endTick = tick + ticksDuration;
       if ((endTick % swingBeat == swingUnit) && (!isSubdivided(ncr,swingUnit))) {
-            gateTime = gateTime + (swingActualAdjust/10);
+            gateTime += swingActualAdjust;
             }
       }
 
@@ -955,46 +960,84 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
       }
 
 //---------------------------------------------------------
-// totalTiedNoteTicks
-//      return the total of the actualTicks of the given note plus
-//      the chain of zero or more notes tied to it to the right.
+// some useful constants
 //---------------------------------------------------------
-int totalTiedNoteTicks(Note* note)
+static const int  PERCENT2PERTHOUSAND     = 10;
+static const int  SEC2MSEC                = 1000;
+static const int  TICKS2TICK1000          = 1000;
+static const int  TIME_OFFSETS_SCALE      = 1000;
+static const int  FULL_NOTE_RENDERING_GATE= (FULL_NOTE_TIME_GATE * PERCENT2PERTHOUSAND);
+
+//---------------------------------------------------------
+// totalTiedNoteTicks
+//    note        initial note
+//    defOnTime   default on-time (in 1/1000 of nominal note duration)
+//    defGateTime default off-time (in 1/1000 of nominal note duration)
+//
+//    returns the total of the actualTicks of the given note plus
+//    the chain of zero or more notes tied to it to the right.
+//    Takes into account initial note on time and final note off time
+//---------------------------------------------------------
+
+int totalTiedNoteTicks(Note* note, int defOnTime, int defGateTime)
       {
-      int total = note->chord()->actualTicks();
+      int   total       = note->chord()->actualTicks();
+      // use initial note on-time if set, or default on-time if not set
+      int   timeOffset  = (note->onTimeOffset() != DEFAULT_NOTE_ONTIME_OFFSET ?
+                  note->onTimeOffset() * PERCENT2PERTHOUSAND : defOnTime);
+      total -= (timeOffset * total) / FULL_NOTE_RENDERING_GATE;     // convert perthousand to ticks
+
       while (note->tieFor() && (note->chord()->tick() < note->tieFor()->endNote()->chord()->tick())) {
             note = note->tieFor()->endNote();
             total += note->chord()->actualTicks();
             }
-      return total;
-      };
 
+      // use final note off-time if set, or defalt gate time if not set
+      if (note) {
+            timeOffset = (note->offTimeOffset() != DEFAULT_NOTE_OFFTIME_OFFSET
+                        ? note->offTimeOffset()*PERCENT2PERTHOUSAND
+                        : defGateTime - FULL_NOTE_RENDERING_GATE);
+            total += (timeOffset * note->chord()->actualTicks()) / FULL_NOTE_RENDERING_GATE; // perthousand to ticks
+            }
+      return total;
+      }
 
 //---------------------------------------------------------
-//   renderNoteArticulation
-// tickspernote, number of ticks, either _16h or _32nd, i.e., MScore::division/4 or MScore::division/8
-// repeatp, true means repeat the body as many times as possible to fill the time slice.
-// sustainp, true means the last note of the body is sustained to fill remaining time slice
+// renderNoteArticulation (lower level)
+//    events            NoteEventList where to accumulate events rendering the note
+//    note              note to render
+//    chromatic         whether the ornament is chromatic or not
+//    requestedTicksPerNote   default ornament event duration (in ticks), may be adjusted
+//    prefix, body, suffix    vectors defining the ornament pattern
+//    repeatp           whether the body has to be repeated to fill the note or not
+//    sustainp          whether the body has to be sustained to fill the note or not (ignored)
+//    defOntime         default note on-time, may be overridden by note offset (in 1/1000 of nominal note duration)
+//    defGateTime       default note off-time, may be overridden by note offset (in 1/1000 of nominal note duration)
+//    fastestFreq       the fastest acceptable freq. for ornament events (in Hz; defaults to 16Hz)
+//    slowestFreq       the slowest acceptable freq. for ornament events (in Hz; defaults to 8Hz)
 //---------------------------------------------------------
 
 bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, int requestedTicksPerNote,
    const vector<int> & prefix, const vector<int> & body,
-   bool repeatp, bool sustainp, const vector<int> & suffix,
+   bool repeatp, bool /*sustainp*/, const vector<int> & suffix,
+   int defOnTime, int defGateTime,
    int fastestFreq=16, int slowestFreq=8 // 16 Hz and 8 Hz
    )
       {
-
       events->clear();
-      Chord *chord = note->chord();
-      int maxticks = totalTiedNoteTicks(note);
-      int space = 1000 * maxticks;
-      int numrepeat = 1;
-      int sustain   = 0;
-      int ontime    = 0;
+      Chord *chord      = note->chord();
+      int   maxticks    = totalTiedNoteTicks(note, defOnTime, defGateTime);
+      int   space       = TICKS2TICK1000 * maxticks;        // in 1/1000 of ticks
+      int   numrepeat   = 1;
+//      int   sustain     = 0;
+      // apply note on-time offset, if any
+      int   ontime      = ((note->onTimeOffset() ? note->onTimeOffset()*PERCENT2PERTHOUSAND : defOnTime)
+                  // and convert to 1/1000 of ticks
+                  * note->chord()->actualTicks() * TICKS2TICK1000) / FULL_NOTE_RENDERING_GATE;
 
-      int p = prefix.size();
-      int b = body.size();
-      int s = suffix.size();
+      int   p = prefix.size();
+      int   b = body.size();
+      int   s = suffix.size();
       int ticksPerNote = 0;
 
       if (p + b + s <= 0 )
@@ -1072,43 +1115,54 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
                return ontime + duration;
                };
 
-      // calculate the number of times to repeat the body, and sustain the last note of the body
-      // 1000 = P + numrepeat*B+sustain + S
+      int   prefSuffLength    = millespernote*(p + s);
+      int   bodyRepLength     = millespernote * b;
+      // calculate the number of times to repeat the body, and sustain the last note
+      // 1000 = P + numrepeat*B + S + sustain
       if (repeatp)
-            numrepeat = (space - millespernote*(p + s)) / (millespernote * b);
-      if (sustainp)
-            sustain   = space - millespernote*(p + numrepeat * b + s);
+            numrepeat = (space - prefSuffLength) / bodyRepLength;
+//      if (sustainp)
+//            sustain   = space - millespernote*(p + numrepeat * b + s);
       // render the prefix
       for (int j=0; j < p; j++)
             ontime = makeEvent(prefix[j], ontime, tieForward(j,prefix));
 
       if (b > 0) {
-            // render the body, but not the final repetion
-            for (int r = 0; r < numrepeat-1; r++) {
+            // render the body
+            for (int r = 0; r < numrepeat; r++) {
                   for (int j=0; j < b; j++)
                         ontime = makeEvent(body[j], ontime, millespernote);
                   }
-            // render the final repetion of body, but not the final note of the repition
-            for (int j = 0; j < b - 1; j++)
-                  ontime = makeEvent(body[j], ontime, millespernote);
-            // render the final note of the final repeat of body
-            ontime = makeEvent(body[b-1], ontime, millespernote+sustain);
             }
       // render the suffix
       for (int j = 0; j < s; j++)
             ontime = makeEvent(suffix[j], ontime, tieForward(j,suffix));
-
+      // check we have filled the entire note
+      int padding = space - prefSuffLength - bodyRepLength * numrepeat;
+      // if some part of the note not filled yet, extend least event
+      if (padding > 0) {
+            NoteEvent   &ne   = (*events)[events->count() - 1];
+            int         pad   = padding/chord->actualTicks();
+            ne.setLen(ne.len() + pad);
+            }
       return true;
       }
 
 //---------------------------------------------------------
-//   renderNoteArticulation
+// renderNoteArticulation (higher level)
+//    events            NoteEventList where to accumulate events rendering the note
+//    note              note to render
+//    chromatic         whether the ornament is chromatic or not
+//    articulationType  type of articulation (trill, mordent, ..., staccato, ...)
+//    ornamentStyle
+//    defOntime         default note on-time, may be overridden by note offset (in 1/1000 of nominal note duration)
+//    defGateTime       default note off-time, may be overridden by note offset (in 1/1000 of nominal note duration)
 //---------------------------------------------------------
 
-bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, ArticulationType articulationType, MScore::OrnamentStyle ornamentStyle)
+bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic,
+      ArticulationType articulationType, MScore::OrnamentStyle ornamentStyle,
+      int defOnTime, int defGateTime)
       {
-      if (!note->staff()->isPitchedStaff()) // not enough info in tab staff
-            return false;
       // This struct specifies how to render an articulation.
       //   atype - the articulation type to implement, such as ArticulationType::Turn
       //   ostyles - the actual ornament has a property called ornamentStyle whose value is
@@ -1147,7 +1201,7 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
       };
       int _16th = MScore::division / 4;
       int _32nd = _16th / 2;
-      vector<int> emptypattern = {};
+//      vector<int> emptypattern = {};
       set<MScore::OrnamentStyle> baroque  = {MScore::OrnamentStyle::BAROQUE};
       set<MScore::OrnamentStyle> defstyle = {MScore::OrnamentStyle::DEFAULT};
       set<MScore::OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
@@ -1187,16 +1241,17 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
                 && ( 0 == oe.ostyles.size()
                     || oe.ostyles.end() != oe.ostyles.find(ornamentStyle))) {
                   return renderNoteArticulation(events, note, chromatic, oe.duration,
-                                                oe.prefix, oe.body, oe.repeatp, oe.sustainp, oe.suffix);
+                        oe.prefix, oe.body, oe.repeatp, oe.sustainp, oe.suffix, defOnTime, defGateTime);
                 }
-      }
+            }
       return false;
       }
 
 //---------------------------------------------------------
-//   renderNoteArticulation
+//   renderTrillLine
 //---------------------------------------------------------
-bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, Trill::Type trillType, MScore::OrnamentStyle ornamentStyle)
+bool renderTrillLine(NoteEventList* events, Note * note, bool chromatic, Trill::Type trillType,
+            MScore::OrnamentStyle ornamentStyle, int ontime, int gateTime)
       {
       map<Trill::Type,ArticulationType> articulationMap = {
             {Trill::Type::TRILL_LINE,      ArticulationType::Trill}
@@ -1208,7 +1263,7 @@ bool renderNoteArticulation(NoteEventList* events, Note * note, bool chromatic, 
       if (it == articulationMap.cend() )
             return false;
       else
-            return renderNoteArticulation(events, note, chromatic, it->second, ornamentStyle);
+            return renderNoteArticulation(events, note, chromatic, it->second, ornamentStyle, ontime, gateTime);
       }
 
 //---------------------------------------------------------
@@ -1228,10 +1283,17 @@ bool noteHasGlissando(Note *note)
       }
 
 //---------------------------------------------------------
+// renderGlissando
+//    events            NoteEventList where to accumulate events rendering the note
+//    notestart         note to start the glissando from
+//    ontime            note on-time (in 1/1000 of nominal note duration)
+//---------------------------------------------------------
+
+//---------------------------------------------------------
 //   renderGlissando
 //---------------------------------------------------------
 
-void renderGlissando(NoteEventList* events, Note *notestart)
+void renderGlissando(NoteEventList* events, Note *notestart, int ontime)
       {
       vector<int> empty = {};
       int Cnote = 60; // pitch of middle C
@@ -1287,19 +1349,20 @@ void renderGlissando(NoteEventList* events, Note *notestart)
                                           body.push_back(p - pitchstart);
                                     }
                               }
-                        renderNoteArticulation(events, notestart, true, MScore::division, empty, body, false, true, empty, 16, 0);
+                        renderNoteArticulation(events, notestart, true, MScore::division, empty, body,
+                              false, true, empty, ontime, FULL_NOTE_RENDERING_GATE, 16, 0);
                         }
                   }
             }
       }
 
 //---------------------------------------------------------
-// findFirstTrill
+// findFirstTrillLine
 //  search the spanners in the score, finding the first one
 //  which overlaps this chord and is of type Element::Type::TRILL
 //---------------------------------------------------------
 
-Trill* findFirstTrill(Chord *chord) {
+Trill* findFirstTrillLine(Chord *chord) {
       for (auto i : chord->score()->spannerMap().findOverlapping(1+chord->tick(), chord->tick() + chord->actualTicks() - 1)) {
             if (i.value->type() != Element::Type::TRILL)
                   continue;
@@ -1313,44 +1376,66 @@ Trill* findFirstTrill(Chord *chord) {
       return nullptr;
       }
 
-
 //---------------------------------------------------------
-//   renderChordArticulation
+// renderChordArticulation
+//    chord       chord to render
+//    ell         list of NoteEventList's where to accumulate note events rendering the chord
+//    ontime      on-time of the chord (in 1/1000 of nominal chord duration)
+//    gateTime    IN/OUT: off-time of the chord (in 1/1000 of nominal chord duration)
 //---------------------------------------------------------
 
-void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int & gateTime)
+void renderChordArticulation(Chord *chord, QList<NoteEventList> & ell, int ontime, int & gateTime)
       {
-      Segment* seg = chord->segment();
-      Instrument* instr = chord->part()->instrument(seg->tick());
-      int channel  = 0;  // note->subchannel();
+      Segment*    seg         = chord->segment();
+      Instrument* instr       = chord->part()->instrument(seg->tick());
+      int         channel     = 0;        // note->subchannel();
+      bool        retVal;
 
       for (int k = 0; k < chord->notes().size(); ++k) {
-            NoteEventList* events = &ell[k];
-            Note *note = chord->notes()[k];
-            Trill *trill;
+            NoteEventList     *events     = &ell[k];
+            Note              *note       = chord->notes()[k];
+            int               noteOnTime  = note->onTimeOffset();
+            int               noteOffTime = note->offTimeOffset();
+            Trill             *trill;
+            retVal      = false;          // assume articulation rendering false
+            if (noteOnTime != DEFAULT_NOTE_ONTIME_OFFSET)
+                  ontime = noteOnTime * PERCENT2PERTHOUSAND;
+            if (noteOffTime != DEFAULT_NOTE_OFFTIME_OFFSET)
+                  gateTime = (FULL_NOTE_TIME_GATE + noteOffTime) * PERCENT2PERTHOUSAND;
 
             if (noteHasGlissando(note))
-                  renderGlissando(events, note);
-            else if (chord->staff()->isPitchedStaff()  && (trill = findFirstTrill(chord)) != nullptr) {
-                  renderNoteArticulation(events, note, false, trill->trillType(), trill->ornamentStyle());
+                  renderGlissando(events, note, ontime);
+            else if (chord->staff()->isPitchedStaff()  && (trill = findFirstTrillLine(chord)) != nullptr) {
+                  retVal = renderTrillLine(events, note, false, trill->trillType(), trill->ornamentStyle(),
+                              ontime, gateTime);
                   }
             else {
                   for (Articulation* a : chord->articulations()) {
                         if ( false == a->playArticulation())
                               continue;
-                        if (! renderNoteArticulation(events, note, false, a->articulationType(), a->ornamentStyle()))
-                              instr->updateGateTime(&gateTime, channel, a->subtypeName());
+                        retVal = renderNoteArticulation(events, note, false, a->articulationType(), a->ornamentStyle(),
+                                    ontime, gateTime);
+                        // if articulation was not an ornament (like staccato, ...)
+                        // and note has not a custom off-time,
+                        // set gate time to articulation specifics
+                        if (!retVal && noteOffTime == DEFAULT_NOTE_OFFTIME_OFFSET)
+                              gateTime = instr->gateTime(gateTime / PERCENT2PERTHOUSAND,
+                                          channel, a->subtypeName()) * PERCENT2PERTHOUSAND;
                         }
                   }
+            if (events->count() < 1)
+                  events->append( NoteEvent(0, ontime, gateTime-ontime) );
             }
       }
 
 //---------------------------------------------------------
-//   renderChord
-//    ontime in 1/1000 of duration
+// renderChord
+//    chord       chord to render
+//    ontime      on-time of the chord (in 1/1000 of nominal chord duration)
+//    gateTime    off-time of the chord (in 1/1000 of nominal chord duration)
 //---------------------------------------------------------
 
-static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
+static QList<NoteEventList> renderChord(Chord* chord, int ontime, int gateTime)
       {
       QList<NoteEventList> ell;
       if (chord->notes().isEmpty())
@@ -1368,7 +1453,9 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             return ell;  // dont apply gateTime to arpeggio events
             }
       else
-            renderChordArticulation(chord, ell, gateTime);
+            renderChordArticulation(chord, ell, ontime, gateTime);
+/* Removed 'time gating' of individual note events;
+ * 'time gating' of the note whole event block is now in renderChordArticulation()
       //
       //    apply gateTime
       //
@@ -1380,8 +1467,17 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime)
             for ( NoteEvent &e : ell[i])
                   e.setLen(e.len() * gateTime / 100);
             }
+*/
       return ell;
       }
+
+//---------------------------------------------------------
+// createGraceNotesPlayEvents
+//    gnb         list of grace note chords
+//    tick        time tick of the cmain chord (used to find tempo)
+//    chord       main chord to which graces belong
+//    ontime      OUT: on-time offset of the main chord after grace duration (in 1/1000 of duration)
+//---------------------------------------------------------
 
 void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord, int &ontime)
       {
@@ -1400,10 +1496,8 @@ void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord
             if (graceChord->noteType() ==  NoteType::ACCIACCATURA) {
                   qreal ticksPerSecond = tempo(tick) * MScore::division;
                   int graceTimeMS = 65 * n;     // value determined empirically (TODO: make instrument-specific, like articulations)
-                  // 1000 occurs below for two different reasons:
-                  // number of milliseconds per second, also unit for ontime
-                  qreal chordTimeMS = (chord->actualTicks() / ticksPerSecond) * 1000;
-                  ontime = qMin(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
+                  qreal chordTimeMS = (chord->actualTicks() / ticksPerSecond) * SEC2MSEC;
+                  ontime = qMin(SEC2MSEC/2, static_cast<int>((graceTimeMS / chordTimeMS) * TIME_OFFSETS_SCALE));
                   }
             else if (chord->dots() == 1)
                   ontime = 667;
@@ -1443,7 +1537,9 @@ void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord
 
 void Score::createPlayEvents(Chord* chord)
       {
-      int gateTime = 100;
+      // start and end chord duration in 1/1000 of nominal chord duration
+      int ontime        = 0;
+      int gateTime      = FULL_NOTE_TIME_GATE;
 
       int tick = chord->tick();
       Slur* slur = 0;
@@ -1459,10 +1555,9 @@ void Score::createPlayEvents(Chord* chord)
       // gateTime is 100% for slured notes
       if (!slur) {
             Instrument* instr = chord->part()->instrument(tick);
-            instr->updateGateTime(&gateTime, 0, "");
+            gateTime = instr->gateTime(gateTime, 0, "");
             }
-
-      int ontime = 0;
+      gateTime *= PERCENT2PERTHOUSAND;
 
       Score::createGraceNotesPlayEvents(chord->graceNotesBefore(), tick, chord, ontime);
 
@@ -1471,12 +1566,12 @@ void Score::createPlayEvents(Chord* chord)
       int ratio = st.swingRatio;
       // Check if swing needs to be applied
       if (unit) {
-            swingAdjustParams(chord, gateTime, ontime, unit, ratio);
+            swingAdjustParams(chord, ontime, gateTime, unit, ratio);
             }
       //
       //    render normal (and articulated) chords
       //
-      QList<NoteEventList> el = renderChord(chord, gateTime, ontime);
+      QList<NoteEventList> el = renderChord(chord, ontime, gateTime);
       if (chord->playEventType() == PlayEventType::InvalidUser) {
             chord->score()->undo(new ChangeEventList(chord, el));
             }

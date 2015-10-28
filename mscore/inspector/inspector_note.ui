@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>257</width>
-    <height>309</height>
+    <height>335</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -116,7 +116,7 @@
        </property>
       </widget>
      </item>
-     <item row="11" column="1">
+     <item row="13" column="1">
       <widget class="QSpinBox" name="fixedLine">
        <property name="accessibleName">
         <string>Line</string>
@@ -323,7 +323,7 @@
        </property>
       </widget>
      </item>
-     <item row="10" column="0">
+     <item row="12" column="0">
       <widget class="QCheckBox" name="fixed">
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
@@ -333,6 +333,25 @@
        </property>
        <property name="text">
         <string>Fix to line</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="2">
+      <widget class="QToolButton" name="resetVelocityType">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Velocity type value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -386,41 +405,6 @@
        </item>
       </widget>
      </item>
-     <item row="8" column="2">
-      <widget class="QToolButton" name="resetVelocityType">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="toolTip">
-        <string>Reset value</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset Velocity type value</string>
-       </property>
-       <property name="text">
-        <string notr="true">...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Head group</string>
-       </property>
-       <property name="buddy">
-        <cstring>noteHeadGroup</cstring>
-       </property>
-      </widget>
-     </item>
      <item row="5" column="2">
       <widget class="QToolButton" name="resetDotPosition">
        <property name="sizePolicy">
@@ -440,10 +424,26 @@
        </property>
       </widget>
      </item>
-     <item row="11" column="0">
+     <item row="13" column="0">
       <widget class="QLabel" name="fixedLineLabel">
        <property name="text">
         <string>Line</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Head group</string>
+       </property>
+       <property name="buddy">
+        <cstring>noteHeadGroup</cstring>
        </property>
       </widget>
      </item>
@@ -485,6 +485,19 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QCheckBox" name="small">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="accessibleName">
+        <string>Small</string>
+       </property>
+       <property name="text">
+        <string>Small </string>
+       </property>
+      </widget>
+     </item>
      <item row="9" column="0">
       <widget class="QLabel" name="label_9">
        <property name="sizePolicy">
@@ -498,35 +511,6 @@
        </property>
        <property name="buddy">
         <cstring>velocity</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Tuning</string>
-       </property>
-       <property name="buddy">
-        <cstring>tuning</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="2">
-      <widget class="QCheckBox" name="small">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-       <property name="accessibleName">
-        <string>Small</string>
-       </property>
-       <property name="text">
-        <string>Small </string>
        </property>
       </widget>
      </item>
@@ -549,8 +533,8 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_8">
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_5">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -558,10 +542,10 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Velocity type</string>
+        <string>Tuning</string>
        </property>
        <property name="buddy">
-        <cstring>velocityType</cstring>
+        <cstring>tuning</cstring>
        </property>
       </widget>
      </item>
@@ -603,7 +587,23 @@
        </property>
       </widget>
      </item>
-     <item row="10" column="2">
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Velocity type</string>
+       </property>
+       <property name="buddy">
+        <cstring>velocityType</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="2">
       <widget class="QToolButton" name="resetFixed">
        <property name="toolTip">
         <string>Reset value</string>
@@ -616,13 +616,109 @@
        </property>
       </widget>
      </item>
-     <item row="11" column="2">
+     <item row="13" column="2">
       <widget class="QToolButton" name="resetFixedLine">
        <property name="toolTip">
         <string>Reset value</string>
        </property>
        <property name="accessibleName">
         <string>Reset Line</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>On Time Offset</string>
+       </property>
+       <property name="buddy">
+        <cstring>onOffset</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Off Time Offset</string>
+       </property>
+       <property name="buddy">
+        <cstring>offOffset</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="QSpinBox" name="onOffset">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Velocity</string>
+       </property>
+       <property name="suffix">
+        <string>%</string>
+       </property>
+       <property name="minimum">
+        <number>-500</number>
+       </property>
+       <property name="maximum">
+        <number>1500</number>
+       </property>
+       <property name="singleStep">
+        <number>50</number>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="1">
+      <widget class="QSpinBox" name="offOffset">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="accessibleName">
+        <string>Velocity</string>
+       </property>
+       <property name="suffix">
+        <string>%</string>
+       </property>
+       <property name="minimum">
+        <number>-500</number>
+       </property>
+       <property name="maximum">
+        <number>1500</number>
+       </property>
+       <property name="singleStep">
+        <number>50</number>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="2">
+      <widget class="QToolButton" name="resetOnOffset">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Velocity value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="2">
+      <widget class="QToolButton" name="resetOffOffset">
+       <property name="toolTip">
+        <string>Reset value</string>
+       </property>
+       <property name="accessibleName">
+        <string>Reset Velocity value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -652,6 +748,14 @@
   <tabstop>resetVelocityType</tabstop>
   <tabstop>velocity</tabstop>
   <tabstop>resetVelocity</tabstop>
+  <tabstop>onOffset</tabstop>
+  <tabstop>resetOnOffset</tabstop>
+  <tabstop>offOffset</tabstop>
+  <tabstop>resetOffOffset</tabstop>
+  <tabstop>fixed</tabstop>
+  <tabstop>resetFixed</tabstop>
+  <tabstop>fixedLine</tabstop>
+  <tabstop>resetFixedLine</tabstop>
  </tabstops>
  <resources/>
  <connections/>

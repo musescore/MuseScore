@@ -43,7 +43,10 @@ class StaffType;
 enum class SymId;
 enum class AccidentalType : char;
 
-static const int MAX_DOTS = 3;
+static const int  MAX_DOTS                      = 3;
+static const int  DEFAULT_NOTE_ONTIME_OFFSET    = 0;
+static const int  DEFAULT_NOTE_OFFTIME_OFFSET   = 0;
+static const int  FULL_NOTE_TIME_GATE           = 100;
 
 //---------------------------------------------------------
 //   @@ NoteHead
@@ -127,6 +130,8 @@ struct NoteVal {
 //   @P hidden           bool             hidden, not played note (read only)
 //   @P line             int              notehead position (read only)
 //   @P mirror           bool             mirror note head on x axis (read only)
+//   @P onTimeOffset     int              offset of the note on-time (in % of total note duration)
+//   @P offTimeOffset    int              offset of the note off-time (in % of total note duration)
 //   @P pitch            int              midi pitch
 //   @P play             bool             play note
 //   @P ppitch           int              actual played midi pitch (honoring ottavas) (read only)
@@ -159,6 +164,8 @@ class Note : public Element {
       Q_PROPERTY(bool                           hidden            READ hidden)
       Q_PROPERTY(int                            line              READ line)
       Q_PROPERTY(bool                           mirror            READ mirror)
+      Q_PROPERTY(int                            onTimeOffset      READ onTimeOffset       WRITE undoSetOnTimeOffset)
+      Q_PROPERTY(int                            offTimeOffset     READ offTimeOffset      WRITE undoSetOffTimeOffset)
       Q_PROPERTY(int                            pitch             READ pitch              WRITE undoSetPitch)
       Q_PROPERTY(bool                           play              READ play               WRITE undoSetPlay)
       Q_PROPERTY(int                            ppitch            READ ppitch)
@@ -218,8 +225,11 @@ class Note : public Element {
       ValueType _veloType { ValueType::OFFSET_VAL };
       int _veloOffset     { 0 };    ///< velocity user offset in percent, or absolute velocity for this note
       int _fixedLine      { 0 };    // fixed line number if _fixed == true
-      int _offTimeType    { 0 };    // compatibility only 1 - user(absolute), 2 - offset (%)
-      int _onTimeType     { 0 };    // compatibility only 1 - user, 2 - offset
+// time offset types no longed used; only offset is used; other types in older scores are converted to this
+//      int _offTimeType    { 0 };    // compatibility only 1 - user(absolute), 2 - offset (%)
+//      int _onTimeType     { 0 };    // compatibility only 1 - user, 2 - offset
+      int _onTimeOffset   { DEFAULT_NOTE_ONTIME_OFFSET };     // in % of note duration; 0 = default
+      int _offTimeOffset  { DEFAULT_NOTE_OFFTIME_OFFSET };    // in % of note duration; 0 = default
       int _lineOffset     { 0 };    ///< Used during mouse dragging.
       qreal _tuning       { 0.0 };  ///< pitch offset in cent, playable only by internal synthesizer
 
@@ -381,17 +391,19 @@ class Note : public Element {
 
       void reset();
 
-      ValueType veloType() const            { return _veloType;          }
-      void setVeloType(ValueType v)         { _veloType = v;             }
-      int veloOffset() const                { return _veloOffset;        }
-      void setVeloOffset(int v)             { _veloOffset = v;           }
+      ValueType veloType() const                { return _veloType;     }
+      void setVeloType(ValueType v)             { _veloType = v;        }
+      int veloOffset() const                    { return _veloOffset;   }
+      void setVeloOffset(int v)                 { _veloOffset = v;      }
 
-      void setOnTimeOffset(int v);
-      void setOffTimeOffset(int v);
+      int   onTimeOffset() const                { return _onTimeOffset; }
+      void  setOnTimeOffset(int v);
+      int   offTimeOffset() const               { return _offTimeOffset;}
+      void  setOffTimeOffset(int v);
 
       int customizeVelocity(int velo) const;
-      NoteDot* dot(int n)                       { return _dots[n];           }
-      QQmlListProperty<Ms::NoteDot> qmlDots() { return QQmlListProperty<Ms::NoteDot>(this, _dots);  }
+      NoteDot* dot(int n)                       { return _dots[n];      }
+      QQmlListProperty<Ms::NoteDot> qmlDots()   { return QQmlListProperty<Ms::NoteDot>(this, _dots); }
       int qmlDotsCount();
       void updateAccidental(AccidentalState*);
       void updateLine();
@@ -420,8 +432,8 @@ class Note : public Element {
       void undoSetTuning(qreal);
       void undoSetVeloType(ValueType);
       void undoSetVeloOffset(int);
-      void undoSetOnTimeUserOffset(int);
-      void undoSetOffTimeUserOffset(int);
+      void undoSetOnTimeOffset(int val)   { undoChangeProperty(P_ID::ONTIME_OFFSET, val); }
+      void undoSetOffTimeOffset(int val)  { undoChangeProperty(P_ID::OFFTIME_OFFSET, val);}
       void undoSetUserMirror(MScore::DirectionH);
       void undoSetUserDotPosition(MScore::Direction);
       void undoSetHeadGroup(NoteHead::Group);

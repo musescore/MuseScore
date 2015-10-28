@@ -663,17 +663,18 @@ void Instrument::updateVelocity(int* velocity, int /*channelIdx*/, const QString
       }
 
 //---------------------------------------------------------
-//   updateGateTime
+//   gateTime
 //---------------------------------------------------------
 
-void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const QString& name)
+int Instrument::gateTime(int gateTime, int /*channelIdx*/, const QString& name)
       {
       foreach(const MidiArticulation& a, _articulation) {
             if (a.name == name) {
-                  *gateTime = a.gateTime;
+                  gateTime = a.gateTime;
                   break;
                   }
             }
+      return gateTime;
       }
 
 //---------------------------------------------------------

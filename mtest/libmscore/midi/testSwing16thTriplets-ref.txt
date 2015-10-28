@@ -10,7 +10,7 @@ Tick  =    960   Type  =   144   Pitch  =    67   Velocity  =    80   Channel  =
 Tick  =    960   Type  =     4   Pitch  =     0   Velocity  =     0   Channel  =     0    
 Tick  =   1121   Type  =   144   Pitch  =    67   Velocity  =     0   Channel  =     0    
 Tick  =   1128   Type  =   144   Pitch  =    64   Velocity  =    80   Channel  =     0    
-Tick  =   1195   Type  =   144   Pitch  =    64   Velocity  =     0   Channel  =     0    
+Tick  =   1193   Type  =   144   Pitch  =    64   Velocity  =     0   Channel  =     0    
 Tick  =   1200   Type  =   144   Pitch  =    65   Velocity  =    80   Channel  =     0    
 Tick  =   1361   Type  =   144   Pitch  =    65   Velocity  =     0   Channel  =     0    
 Tick  =   1440   Type  =     4   Pitch  =     0   Velocity  =     0   Channel  =     0    
