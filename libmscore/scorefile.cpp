@@ -1371,6 +1371,18 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
    Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick)
       {
       int endTick = ls == 0 ? lastMeasure()->endTick() : ls->tick();
+      // in clipboard mode, ls might be in an mmrest
+      // since we are traversing regular measures,
+      // force ls to last segment of the corresponding regular measure
+      // if it is not in same measure as fs
+      Measure* lm = ls ? ls->measure() : 0;
+      if (clip && lm && lm->isMMRest() && lm != fs->measure()) {
+            lm = tick2measure(ls->measure()->tick());
+            if (lm)
+                  ls = lm->last();
+            else
+                  qDebug("writeSegments: no measure for end segment in mmrest");
+            }
       for (int track = strack; track < etrack; ++track) {
             if (!xml.canWriteVoice(track))
                   continue;
@@ -1398,7 +1410,7 @@ void Score::writeSegments(Xml& xml, int strack, int etrack,
                                     }
                               }
                         }
-                  foreach (Element* e, segment->annotations()) {
+                  for (Element* e : segment->annotations()) {
                         if (e->track() != track || e->generated()
                            || (e->systemFlag() && !writeSystemElements)) {
                               continue;
