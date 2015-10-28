@@ -69,6 +69,11 @@ void Spacer::layout0()
       if (spacerType() == SpacerType::DOWN) {
             path.lineTo(w, 0.0);
             path.moveTo(b, 0.0);
+            if (absolute()) {
+                  path.lineTo(w, b);
+                  path.moveTo(0.0, b);
+                  path.lineTo(b, 0.0);
+                  }
             path.lineTo(b, h);
             path.lineTo(0.0, h-b);
             path.moveTo(b, h);

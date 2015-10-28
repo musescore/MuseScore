@@ -808,7 +808,7 @@ void Measure::add(Element* el)
                         staves[idx]->_vspacerUp = sp;
                   else {
                         // calculate appropriate initial size
-                        if (system()) {
+                        if (sp->absolute() && system()) {
                               int n = _score->nstaves();
                               int idx2 = 0;
                               // find next visible staff
