@@ -1165,7 +1165,8 @@ void Beam::computeStemLen(const QList<ChordRest*>& cl, qreal& py1, int beamLevel
       {
       qreal _spatium      = spatium();
       qreal _spatium4     = _spatium * .25;
-      qreal _spStaff4     = _spatium4 * staff()->lineDistance();  // scaled to staff line distance for vert. pos. within a staff
+      // TAB: scale to staff line distance for vert. pos. within a staff
+      qreal _spStaff4     = staff()->isTabStaff() ? _spatium4 * staff()->lineDistance() : _spatium4;
       const ChordRest* c1 = cl.front();
       const ChordRest* c2 = cl.back();
       qreal dx            = c2->pagePos().x() - c1->pagePos().x();
