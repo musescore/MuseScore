@@ -75,6 +75,14 @@ void Part::read(XmlReader& e)
                   Instrument* instr = new Instrument;
                   instr->read(e);
                   setInstrument(instr, -1);
+                  Staff* s = staff(0);
+                  // adjust drumset line numbers for pre-2.1 scores
+                  Drumset* ds = instr->drumset();
+                  int lld = s ? qRound(s->logicalLineDistance()) : 1;
+                  if (_score->mscVersion() < 207 && ds && lld > 1) {
+                        for (int i = 0; i < DRUM_INSTRUMENTS; ++i)
+                              ds->drum(i).line /= lld;
+                        }
                   }
             else if (tag == "name")
                   instrument()->setLongName(e.readElementText());

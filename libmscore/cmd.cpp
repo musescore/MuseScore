@@ -2866,7 +2866,7 @@ void Score::cmdSlashFill()
                   if (staff(staffIdx)->staffType()->group() == StaffGroup::TAB)
                         line = staff(staffIdx)->lines() / 2;
                   else
-                        line = staff(staffIdx)->lines() - 1;
+                        line = staff(staffIdx)->middleLine();     // staff(staffIdx)->lines() - 1;
                   if (staff(staffIdx)->staffType()->group() == StaffGroup::PERCUSSION) {
                         nv.pitch = 0;
                         nv.headGroup = NoteHead::Group::HEAD_SLASH;
