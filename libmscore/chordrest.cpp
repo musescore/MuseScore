@@ -474,8 +474,12 @@ void ChordRest::layoutArticulations()
       {
       if (parent() == 0 || _articulations.isEmpty())
             return;
-      qreal _spatium  = spatium();
-      qreal _spStaff  = _spatium * staff()->lineDistance(); // scaled to staff line distance for vert. pos. within a staff
+      qreal _spatium = spatium();
+      bool scale     = staff()->scaleNotesToLines();
+      qreal pld      = staff()->lineDistance();
+      qreal lld      = staff()->logicalLineDistance();
+      qreal _spStaff = _spatium * pld;    // scaled to staff line distance for vert. pos. within a staff
+      qreal _spDist  = _spatium;          // scaling for distance between articulations
 
       if (type() == Element::Type::CHORD) {
             if (_articulations.size() == 1) {
@@ -499,7 +503,9 @@ void ChordRest::layoutArticulations()
                   if ((st1 == ArticulationType::Tenuto || st1 == ArticulationType::Staccato)
                      && (st2 == ArticulationType::Marcato)) {
                         QPointF pt = static_cast<Chord*>(this)->layoutArticulation(a1);
-                        pt.ry() += a1->up() ? -_spStaff * .5 : _spStaff * .5;
+                        //if (pt.y() < 0 || pt.y() > staff()->height())
+                        //      _spDist = _spatium;
+                        pt.ry() += a1->up() ? -_spDist * .5 : _spDist * .5;
                         a2->layout();
                         a2->setUp(a1->up());
                         a2->setPos(pt);
@@ -517,7 +523,9 @@ void ChordRest::layoutArticulations()
                   if ((st1 == ArticulationType::Tenuto || st1 == ArticulationType::Staccato)
                      && (st2 == ArticulationType::Sforzatoaccent)) {
                         QPointF pt = static_cast<Chord*>(this)->layoutArticulation(a1);
-                        pt.ry() += a1->up() ? -_spStaff * .7 : _spStaff * .7;
+                        //if (pt.y() < 0 || pt.y() > staff()->height())
+                        //      _spDist = _spatium;
+                        pt.ry() += a1->up() ? -_spDist * .7 : _spDist * .7;
                         a2->layout();
                         a2->setUp(a1->up());
                         a2->setPos(pt);
@@ -613,6 +621,8 @@ void ChordRest::layoutArticulations()
             Chord* chord = static_cast<Chord*>(this);
             if (bottom) {
                   int line = downLine();
+                  if (!scale)
+                        line = ceil((line * lld) / pld);
                   y = chordBotY + dy;
                   if (!headSide && type() == Element::Type::CHORD && chord->stem()) {
                         Stem* stem = chord->stem();
@@ -622,23 +632,25 @@ void ChordRest::layoutArticulations()
                         // aligning horizontally to stem makes sense only for staccato
                         // and only if no other articulations on this side
                         //x = stem->pos().x();
-                        int line   = lrint((y+0.5*_spatium) / _spatium);
-                        if (line <= 4)    // align between staff lines
-                              y = line * _spatium + _spatium * .5;
+                        int line   = lrint((y+0.5*_spStaff) / _spStaff);
+                        if (line < staff()->lines())  // align between staff lines
+                              y = line * _spStaff + _spatium * .5;
                         else
                               y += _spatium;
                         }
                   else {
                         int lines = (staff()->lines() - 1) * 2;
                         if (line < lines)
-                              y = (line & ~1) + 3;
+                              y = ((line & ~1) + 3) * _spStaff;
                         else
-                              y = line + 2;
-                        y *= _spatium * .5;
+                              y = line * _spStaff + 2 * _spatium;
+                        y *= .5;
                         }
                   }
             else {
                   int line = upLine();
+                  if (!scale)
+                        line = floor((line * lld) / pld);
                   y = chordTopY - dy;
                   if (!headSide && type() == Element::Type::CHORD && chord->stem()) {
                         Stem* stem = chord->stem();
@@ -648,18 +660,18 @@ void ChordRest::layoutArticulations()
                         // aligning horizontally to stem makes sense only for staccato
                         // and only if no other articulations on this side
                         //x = stem->pos().x();
-                        int line   = lrint((y-0.5*_spatium) / _spatium);
+                        int line   = lrint((y-0.5*_spStaff) / _spStaff);
                         if (line >= 0)    // align between staff lines
-                              y = line * _spatium - _spatium * .5;
+                              y = line * _spStaff - _spatium * .5;
                         else
                               y -= _spatium;
                         }
                   else {
                         if (line > 0)
-                              y = ((line+1) & ~1) - 3;
+                              y = (((line+1) & ~1) - 3) * _spStaff;
                         else
-                              y = line - 2;
-                        y *= _spatium * .5;
+                              y = line * _spStaff - 2 * _spatium;
+                        y *= .5;
                         }
                   }
             dy += _spatium * .5;
@@ -722,7 +734,7 @@ void ChordRest::layoutArticulations()
             if (bottom) {
                   qreal y = chordBotY + dy;
                   if (staffLineCT && (y <= staffBotY -.1 - dy)) {
-                        qreal l = y / _spatium;
+                        qreal l = y / _spStaff;
                         qreal delta = fabs(l - round(l));
                         if (delta < 0.4) {
                               y  += _spatium * .5;
@@ -734,7 +746,7 @@ void ChordRest::layoutArticulations()
             else {
                   qreal y = chordTopY - dy;
                   if (staffLineCT && (y >= (staffTopY +.1 + dy))) {
-                        qreal l = y / _spatium;
+                        qreal l = y / _spStaff;
                         qreal delta = fabs(l - round(l));
                         if (delta < 0.4) {
                               y  -= _spatium * .5;

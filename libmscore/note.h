@@ -317,6 +317,7 @@ class Note : public Element {
 
       int line() const;
       void setLine(int n);
+      int physicalLine() const;
 
       int fret() const                { return _fret;   }
       void setFret(int val)           { _fret = val;    }
