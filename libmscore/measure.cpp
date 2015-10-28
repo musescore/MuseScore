@@ -2412,12 +2412,14 @@ void Measure::read(XmlReader& e, int staffIdx)
 
 bool Measure::visible(int staffIdx) const
       {
-      if (system() && (system()->staves()->isEmpty() || !system()->staff(staffIdx)->show()))
-            return false;
       if (staffIdx >= score()->staves().size()) {
             qDebug("Measure::visible: bad staffIdx: %d", staffIdx);
             return false;
             }
+      if (system() && (system()->staves()->isEmpty() || !system()->staff(staffIdx)->show()))
+            return false;
+      if (score()->staff(staffIdx)->cutaway() && isMeasureRest(staffIdx))
+            return false;
       return score()->staff(staffIdx)->show() && staves[staffIdx]->_visible;
       }
 
@@ -2847,7 +2849,7 @@ bool Measure::hasVoice(int track) const
 ///   all staves.
 //-------------------------------------------------------------------
 
-bool Measure::isMeasureRest(int staffIdx)
+bool Measure::isMeasureRest(int staffIdx) const
       {
       int strack;
       int etrack;
@@ -2875,7 +2877,7 @@ bool Measure::isMeasureRest(int staffIdx)
 //    rests.
 //---------------------------------------------------------
 
-bool Measure::isFullMeasureRest()
+bool Measure::isFullMeasureRest() const
       {
       int strack = 0;
       int etrack = score()->nstaves() * VOICES;
@@ -2898,7 +2900,7 @@ bool Measure::isFullMeasureRest()
 //   isRepeatMeasure
 //---------------------------------------------------------
 
-bool Measure::isRepeatMeasure(Staff* staff)
+bool Measure::isRepeatMeasure(Staff* staff) const
       {
       int staffIdx = score()->staffIdx(staff);
       int strack        = staffIdx * VOICES;

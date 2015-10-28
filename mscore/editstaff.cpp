@@ -71,7 +71,8 @@ EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
       staff->setColor(orgStaff->color());
       staff->setStaffType(orgStaff->staffType());
       staff->setPart(part);
-      staff->setNeverHide(orgStaff->neverHide());
+      staff->setCutaway(orgStaff->cutaway());
+      staff->setHideWhenEmpty(orgStaff->hideWhenEmpty());
       staff->setShowIfEmpty(orgStaff->showIfEmpty());
       staff->setUserMag(orgStaff->userMag());
       staff->setHideSystemBarLine(orgStaff->hideSystemBarLine());
@@ -100,7 +101,8 @@ EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
       small->setChecked(staff->small());
       color->setColor(s->color());
       partName->setText(part->partName());
-      neverHide->setChecked(staff->neverHide());
+      cutaway->setChecked(staff->cutaway());
+      hideMode->setCurrentIndex(int(staff->hideWhenEmpty()));
       showIfEmpty->setChecked(staff->showIfEmpty());
       hideSystemBarLine->setChecked(staff->hideSystemBarLine());
       mag->setValue(staff->userMag() * 100.0);
@@ -297,9 +299,10 @@ void EditStaff::apply()
 
       bool inv       = invisible->isChecked();
       qreal userDist = spinExtraDistance->value();
-      bool nhide     = neverHide->isChecked();
       bool ifEmpty   = showIfEmpty->isChecked();
       bool hideSystemBL = hideSystemBarLine->isChecked();
+      bool cutAway      = cutaway->isChecked();
+      Staff::HideMode hideEmpty = Staff::HideMode(hideMode->currentIndex());
 
       QString newPartName = partName->text().simplified();
       if (!(instrument == *part->instrument()) || part->partName() != newPartName) {
@@ -319,11 +322,12 @@ void EditStaff::apply()
 
       if (inv != orgStaff->invisible()
          || userDist != orgStaff->userDist()
-         || nhide != orgStaff->neverHide()
+         || cutAway != orgStaff->cutaway()
+         || hideEmpty != orgStaff->hideWhenEmpty()
          || ifEmpty != orgStaff->showIfEmpty()
          || hideSystemBL != orgStaff->hideSystemBarLine()
          ) {
-            score->undo(new ChangeStaff(orgStaff, inv, userDist * score->spatium(), nhide, ifEmpty, hideSystemBL));
+            score->undo(new ChangeStaff(orgStaff, inv, userDist * score->spatium(), hideEmpty, ifEmpty, cutAway, hideSystemBL));
             }
 
       if ( !(*orgStaff->staffType() == *staff->staffType()) ) {

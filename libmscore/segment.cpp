@@ -1003,7 +1003,7 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
                   if (e == 0)             // if no element, skip
                         continue;
                   // if staff not visible
-                  if (!all && !(measure()->visible(staffIdx) && _score->staff(staffIdx)->show())) {
+                  if (!all && !(/*measure()->visible(staffIdx) && */_score->staff(staffIdx)->show())) {
                         // if bar line spans just this staff...
                         if (static_cast<BarLine*>(e)->span() <= 1
                             // ...or span another staff but without entering INTO it...
