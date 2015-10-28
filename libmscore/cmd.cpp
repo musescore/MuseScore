@@ -322,13 +322,7 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
                         t->textStyle().restyle(MScore::baseStyle()->textStyle(st), textStyle(st));
                   }
             }
-      // original spanner may have been cloned from palette
-      // this results in different behavior from drag & drop for ottava
-      // we can simulate drag & drop by cloning the clone
-      // see https://musescore.org/en/node/68271
-      Spanner* nsp = static_cast<Spanner*>(spanner->clone());
-      delete spanner;
-      undoAddElement(nsp);
+      undoAddElement(spanner);
       }
 
 //---------------------------------------------------------
