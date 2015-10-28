@@ -1655,18 +1655,23 @@ void ScoreView::setShadowNote(const QPointF& p)
                   noteheadGroup = ds->noteHead(pitch);
                   }
             }
+
       shadowNote->setLine(line);
-      SymId s;
+      SymId symNotehead;
+      TDuration d(is.duration());
+
       if (is.rest()) {
             int yo;
-            TDuration d(is.duration());
             Rest rest(gscore, d.type());
             rest.setDuration(d.fraction());
-            s = rest.getSymbol(is.duration().type(), 0, staff->lines(), &yo);
+            symNotehead = rest.getSymbol(is.duration().type(), 0, staff->lines(), &yo);
+            shadowNote->setSym(symNotehead);
             }
-      else
-            s = Note::noteHead(0, noteheadGroup, noteHead);
-      shadowNote->setSym(s);
+      else {
+            symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
+            shadowNote->setSymbols(d.type(), symNotehead);
+            }
+
       shadowNote->layout();
       shadowNote->setPos(pos.pos);
       }
@@ -4173,6 +4178,12 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
                   showRect.setHeight(r.height());
                   }
             }
+      if (mscore->state() == ScoreState::STATE_NOTE_ENTRY
+                || mscore->state() == ScoreState::STATE_NOTE_ENTRY_DRUM
+                || mscore->state() == ScoreState::STATE_NOTE_ENTRY_PITCHED
+                || mscore->state() == ScoreState::STATE_NOTE_ENTRY_TAB) {
+            setShadowNote(p);
+            }
 
       if (r.contains(showRect))
             return;
@@ -6149,6 +6160,12 @@ void ScoreView::updateContinuousPanel()
       {
       if (_score->layoutMode() == LayoutMode::LINE)
             update();
+      }
+
+
+void ScoreView::updateShadowNotes()
+      {
+      setShadowNote(shadowNote->pos());
       }
 
 }

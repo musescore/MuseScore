@@ -14,6 +14,7 @@
 #define __SHADOWNOTE_H__
 
 #include "element.h"
+#include "durationtype.h"
 
 class QPainter;
 
@@ -32,7 +33,8 @@ class ShadowNote : public Element {
       Q_OBJECT
 
       int _line;
-      SymId sym;
+      SymId _notehead;
+      SymId _flag;
 
    public:
       ShadowNote(Score*);
@@ -42,7 +44,14 @@ class ShadowNote : public Element {
       int line() const                   { return _line;   }
       void setLine(int n)                { _line = n;      }
       virtual void draw(QPainter*) const;
-      void setSym(SymId id)              { sym = id;     }
+
+      void setSym(SymId id);
+      void setSymbols(TDuration::DurationType type, SymId noteSymbol);
+
+      SymId notehead() const { return _notehead; }
+      SymId flag() const { return _flag; }
+      bool isValid() const;
+      bool noFlag() const;
       };
 
 
