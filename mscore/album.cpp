@@ -211,6 +211,7 @@ bool Album::createScore(const QString& fn)
                         }
                   }
             }
+
       score->fileInfo()->setFile(fn);
       qDebug("Album::createScore: save file");
       try {
