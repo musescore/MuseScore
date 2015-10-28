@@ -182,6 +182,9 @@ void StaffType::setLines(int val)
       {
       _lines = val;
       if (_group != StaffGroup::TAB) {
+#if 1
+            _stepOffset = 0;
+#else
             switch(_lines) {
                   case 1:
                         _stepOffset = 0;
@@ -194,6 +197,7 @@ void StaffType::setLines(int val)
                         _stepOffset = 0;
                         break;
                   }
+#endif
             }
       else
             _stepOffset = (val / 2 - 2) * 2;    // tab staff
