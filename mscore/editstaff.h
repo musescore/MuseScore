@@ -43,6 +43,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       Staff*      orgStaff;
       Instrument  instrument;
       int         _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
+      int         _tickStart, _tickEnd;
 
       virtual void closeEvent(QCloseEvent*);
       void apply();
@@ -72,7 +73,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
       void instrumentChanged();
 
    public:
-      EditStaff(Staff*, QWidget* parent = 0);
+      EditStaff(Staff*, int tick, QWidget* parent = 0);
       };
 
 
