@@ -27,7 +27,8 @@ class Spanner;
 //   @@ DurationElement
 ///    Virtual base class for Chord, Rest and Tuplet.
 //
-//   @P duration  int  duration in ticks
+//   @P duration       Fraction  duration (as written)
+//   @P globalDuration Fraction  played duration
 //---------------------------------------------------------
 
 class DurationElement : public Element {
@@ -37,9 +38,11 @@ class DurationElement : public Element {
 #ifdef SCRIPT_INTERFACE
       Q_OBJECT
       Q_PROPERTY(FractionWrapper* duration READ durationW WRITE setDurationW)
+      Q_PROPERTY(FractionWrapper* globalDuration READ globalDurW)
 
       void setDurationW(FractionWrapper* f)  { _duration = f->fraction(); }
       FractionWrapper* durationW() const     { return new FractionWrapper(_duration); }
+      FractionWrapper* globalDurW() const    { return new FractionWrapper(globalDuration()); }
 #endif
 
    public:
