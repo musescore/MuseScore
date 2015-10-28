@@ -18,6 +18,8 @@
 #include "stringdata.h"
 #include "instrtemplate.h"
 #include "mscore.h"
+#include "part.h"
+#include "score.h"
 
 namespace Ms {
 
@@ -185,7 +187,7 @@ void StaffName::read(XmlReader& e)
 //   Instrument::write
 //---------------------------------------------------------
 
-void Instrument::write(Xml& xml) const
+void Instrument::write(Xml& xml, Part* part) const
       {
       xml.stag("Instrument");
       _longNames.write(xml, "longName");
@@ -242,7 +244,7 @@ void Instrument::write(Xml& xml) const
       foreach(const MidiArticulation& a, _articulation)
             a.write(xml);
       for (const Channel* a : _channel)
-            a->write(xml);
+            a->write(xml, part);
       xml.etag();
       }
 
@@ -250,7 +252,7 @@ void Instrument::write(Xml& xml) const
 //   Instrument::read
 //---------------------------------------------------------
 
-void Instrument::read(XmlReader& e)
+void Instrument::read(XmlReader& e, Part* part)
       {
       int program = -1;
       int bank    = 0;
@@ -333,7 +335,7 @@ void Instrument::read(XmlReader& e)
                   }
             else if (tag == "Channel" || tag == "channel") {
                   Channel* a = new Channel;
-                  a->read(e);
+                  a->read(e, part);
                   _channel.append(a);
                   }
             else if (tag == "clef") {           // sets both transposing and concert clef
@@ -432,7 +434,7 @@ Channel::Channel()
 //   write
 //---------------------------------------------------------
 
-void Channel::write(Xml& xml) const
+void Channel::write(Xml& xml, Part* part) const
       {
       if (name.isEmpty() || name == "normal")
             xml.stag("Channel");
@@ -468,6 +470,10 @@ void Channel::write(Xml& xml) const
             xml.tag("mute", mute);
       if (solo)
             xml.tag("solo", solo);
+      if (part && part->score()->exportMidiMapping()) {
+            xml.tag("midiPort",    part->score()->midiMapping(channel)->port);
+            xml.tag("midiChannel", part->score()->midiMapping(channel)->channel);
+            }
       foreach(const NamedEventList& a, midiActions)
             a.write(xml, "MidiAction");
       foreach(const MidiArticulation& a, articulation)
@@ -479,7 +485,7 @@ void Channel::write(Xml& xml) const
 //   read
 //---------------------------------------------------------
 
-void Channel::read(XmlReader& e)
+void Channel::read(XmlReader& e, Part* part)
       {
       // synti = 0;
       name = e.attribute("name");
@@ -547,6 +553,23 @@ void Channel::read(XmlReader& e)
                   mute = e.readInt();
             else if (tag == "solo")
                   solo = e.readInt();
+            else if (tag == "midiPort") {
+                  int midiPort = e.readInt();
+                  if (part) {
+                        MidiMapping mm;
+                        mm.port = midiPort;
+                        mm.channel = -1;
+                        mm.part = part;
+                        mm.articulation = this;
+                        part->score()->midiMapping()->append(mm);
+                        channel = part->score()->midiMapping()->size() - 1;
+                        }
+                  }
+            else if (tag == "midiChannel") {
+                  int midiChannel = e.readInt();
+                  if (part)
+                        part->score()->midiMapping(channel)->channel = midiChannel;
+                  }
             else
                   e.unknown();
             }

@@ -207,6 +207,8 @@ void Score::write(Xml& xml, bool selectionOnly)
             measureEnd   = 0;
             }
 
+      // Let's decide: write midi mapping to a file or not
+      checkMidiMapping();
       foreach(const Part* part, _parts) {
             if (!selectionOnly || ((staffIdx(part) >= staffStart) && (staffEnd >= staffIdx(part) + part->nstaves())))
                   part->write(xml);

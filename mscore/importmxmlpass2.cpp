@@ -467,7 +467,7 @@ static void setFirstInstrument(Part* part, const QString& partId,
                   qDebug("setFirstInstrument: initial instrument '%s' not found in part '%s'", qPrintable(instrId), qPrintable(partId)); // TODO
                   instr = mxmlDrumset.first();
                   }
-            // part->setMidiChannel(instr.midiChannel); not required (is a NOP anyway)
+            part->setMidiChannel(instr.midiChannel, instr.midiPort);
             part->setMidiProgram(instr.midiProgram);
             part->setPan(instr.midiPan);
             part->setVolume(instr.midiVolume);
@@ -548,7 +548,6 @@ static void setPartInstruments(Part* part, const QString& partId,
                   else {
                         MusicXMLDrumInstrument mxmlInstr = mxmlDrumset.value(instrId);
                         Instrument instr;
-                        // part->setMidiChannel(instr.midiChannel); not required (is a NOP anyway)
                         instr.channel(0)->program = mxmlInstr.midiProgram;
                         instr.channel(0)->pan = mxmlInstr.midiPan;
                         instr.channel(0)->volume = mxmlInstr.midiVolume;
@@ -560,6 +559,9 @@ static void setPartInstruments(Part* part, const QString& partId,
                         QString text = findDeleteStaffText(segment, track);
                         ic->setXmlText(text.isEmpty() ? "Instrument" : text);
                         segment->add(ic);
+
+                        int key = part->instruments()->rbegin()->first;
+                        part->setMidiChannel(mxmlInstr.midiChannel, mxmlInstr.midiPort, key);
                         }
                   }
             }

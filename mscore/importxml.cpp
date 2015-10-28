@@ -360,6 +360,5 @@ QString VoiceDesc::toString() const
             res += QString(" staff %1 voice %2").arg(_staff + 1).arg(_voice + 1);
       return res;
       }
-
 } // namespace Ms
 

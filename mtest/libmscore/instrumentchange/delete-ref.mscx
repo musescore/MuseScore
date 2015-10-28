@@ -80,6 +80,8 @@
           </Articulation>
         <Channel>
           <program value="73"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -117,6 +119,8 @@
           </Articulation>
         <Channel>
           <program value="68"/>
+          <midiPort>0</midiPort>
+          <midiChannel>3</midiChannel>
           </Channel>
         </Instrument>
       </Part>
