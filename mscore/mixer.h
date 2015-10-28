@@ -41,14 +41,16 @@ class PartEdit : public QWidget, public Ui::PartEditBase {
       Part* part;
 
    private slots:
-      void patchChanged(int);
-      void volChanged(double);
-      void panChanged(double);
-      void reverbChanged(double);
-      void chorusChanged(double);
-      void muteChanged(bool);
-      void soloToggled(bool);
-      void drumsetToggled(bool);
+      void patchChanged(int, bool syncControls = true);
+      void volChanged(double, bool syncControls = true);
+      void panChanged(double, bool syncControls = true);
+      void reverbChanged(double, bool syncControls = true);
+      void chorusChanged(double, bool syncControls = true);
+      void muteChanged(bool, bool syncControls = true);
+      void soloToggled(bool, bool syncControls = true);
+      void drumsetToggled(bool, bool syncControls = true);
+      void midiChannelChanged(int);
+      void sync(bool syncControls);
 
    public slots:
 
@@ -82,6 +84,7 @@ class Mixer : public QScrollArea
 
    public slots:
       void patchListChanged();
+      void midiPrefsChanged(bool showMidiControls);
 
    signals:
       void closed(bool);

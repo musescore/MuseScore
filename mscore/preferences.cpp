@@ -172,6 +172,7 @@ void Preferences::init()
       language                 = "system";
 
       mag                     = 1.0;
+      showMidiControls        = false;
 
       checkUpdateStartup      = true;
 
@@ -315,6 +316,7 @@ void Preferences::write()
       s.setValue("spatium",     MScore::defaultStyle()->spatium() / MScore::DPI);
 
       s.setValue("mag", mag);
+      s.setValue("showMidiControls", showMidiControls);
 
       s.setValue("defaultPlayDuration", MScore::defaultPlayDuration);
       s.setValue("importStyleFile", importStyleFile);
@@ -453,6 +455,7 @@ void Preferences::read()
             musicxmlExportBreaks = MusicxmlExportBreaks::NO;
 
       mag                    = s.value("mag", mag).toDouble();
+      showMidiControls       = s.value("showMidiControls", showMidiControls).toBool();
 
       MScore::defaultPlayDuration = s.value("defaultPlayDuration", MScore::defaultPlayDuration).toInt();
       importStyleFile        = s.value("importStyleFile", importStyleFile).toString();
@@ -548,6 +551,8 @@ void MuseScore::startPreferenceDialog()
             preferenceDialog = new PreferenceDialog(this);
             connect(preferenceDialog, SIGNAL(preferencesChanged()),
                SLOT(preferencesChanged()));
+            connect(preferenceDialog, SIGNAL(mixerPreferencesChanged(bool)),
+               SLOT(mixerPreferencesChanged(bool)));
             }
       preferenceDialog->setPreferences(preferences);
       preferenceDialog->show();
@@ -917,6 +922,7 @@ void PreferenceDialog::updateValues()
       // score settings
       //
       scale->setValue(prefs.mag*100.0);
+      showMidiControls->setChecked(prefs.showMidiControls);
 
       defaultPlayDuration->setValue(MScore::defaultPlayDuration);
       importStyleFile->setText(prefs.importStyleFile);
@@ -1432,6 +1438,9 @@ void PreferenceDialog::apply()
       prefs.checkUpdateStartup = checkUpdateStartup->isChecked();
 
       prefs.mag         = scale->value()/100.0;
+      prefs.showMidiControls = showMidiControls->isChecked();
+      if (prefs.showMidiControls != preferences.showMidiControls)
+            emit mixerPreferencesChanged(prefs.showMidiControls);
 
       MScore::defaultPlayDuration = defaultPlayDuration->value();
 
