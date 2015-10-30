@@ -57,6 +57,9 @@
      <layout class="QVBoxLayout">
       <item>
        <widget class="QListWidget" name="excerptList">
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SingleSelection</enum>
+        </property>
         <property name="uniformItemSizes">
          <bool>true</bool>
         </property>
@@ -83,6 +86,20 @@
            </size>
           </property>
          </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="moveUpButton">
+          <property name="text">
+           <string>Up</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="moveDownButton">
+          <property name="text">
+           <string>Down</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QPushButton" name="newAllButton">
