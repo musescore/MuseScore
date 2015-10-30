@@ -69,6 +69,8 @@ class ExcerptsDialog : public QDialog, private Ui::ExcerptsDialog {
       void deleteClicked();
       void newClicked();
       void newAllClicked();
+      void moveUpClicked();
+      void moveDownClicked();
       void excerptChanged(QListWidgetItem* cur, QListWidgetItem* prev);
       void partDoubleClicked(QListWidgetItem*);
       void partClicked(QListWidgetItem*);
