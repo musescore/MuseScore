@@ -80,6 +80,8 @@ ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
       connect(newButton, SIGNAL(clicked()), SLOT(newClicked()));
       connect(newAllButton, SIGNAL(clicked()), SLOT(newAllClicked()));
       connect(deleteButton, SIGNAL(clicked()), SLOT(deleteClicked()));
+      connect(moveUpButton, SIGNAL(clicked()), SLOT(moveUpClicked()));
+      connect(moveDownButton, SIGNAL(clicked()), SLOT(moveDownClicked()));
       connect(excerptList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
          SLOT(excerptChanged(QListWidgetItem*, QListWidgetItem*)));
       connect(partList, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
@@ -186,6 +188,47 @@ void ExcerptsDialog::newAllClicked()
             excerptList->selectionModel()->clearSelection();
             excerptList->setCurrentItem(ei, QItemSelectionModel::SelectCurrent);
             }
+      }
+
+//---------------------------------------------------------
+//   moveUpClicked
+//---------------------------------------------------------
+
+void ExcerptsDialog::moveUpClicked()
+      {
+      QListWidgetItem* cur = excerptList->currentItem();
+      if (cur == 0)
+            return;
+      int currentRow = excerptList->currentRow();
+      if (currentRow <= 0)
+            return;
+      QListWidgetItem* currentItem = excerptList->takeItem(currentRow);
+      excerptList->insertItem(currentRow - 1, currentItem);
+      excerptList->setCurrentRow(currentRow - 1);
+
+      score->excerpts().swap(currentRow, currentRow-1);
+      score->setExcerptsChanged(true);
+      }
+
+//---------------------------------------------------------
+//   moveDownClicked
+//---------------------------------------------------------
+
+void ExcerptsDialog::moveDownClicked()
+      {
+      QListWidgetItem* cur = excerptList->currentItem();
+      if (cur == 0)
+            return;
+      int currentRow = excerptList->currentRow();
+      int nbRows = excerptList->count();
+      if (currentRow >= nbRows - 1)
+            return;
+      QListWidgetItem* currentItem = excerptList->takeItem(currentRow);
+      excerptList->insertItem(currentRow + 1, currentItem);
+      excerptList->setCurrentRow(currentRow + 1);
+
+      score->excerpts().swap(currentRow, currentRow+1);
+      score->setExcerptsChanged(true);
       }
 
 //---------------------------------------------------------
