@@ -34,10 +34,11 @@ class XmlReader;
 struct AlbumItem {
       QString name;
       QString path;
-      Score* score;
+      Score* score { 0 };
 
-      AlbumItem();
-      AlbumItem(QString path);
+      AlbumItem() {}
+      AlbumItem(const QString& p) : path(p) {}
+      ~AlbumItem();
       };
 
 //---------------------------------------------------------
@@ -56,6 +57,8 @@ class Album {
 
    public:
       Album();
+      ~Album();
+
       void print();
       bool createScore(const QString& fn);
       bool read(const QString& path);

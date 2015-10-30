@@ -367,7 +367,7 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
             case AccidentalVal::FLAT:    return AccidentalType::FLAT;
             case AccidentalVal::FLAT2:   return AccidentalType::FLAT2;
             default:
-                  qFatal("value2subtype: illegal accidental val %hhd", v);
+                  qFatal("value2subtype: illegal accidental val %d", static_cast<int>(v));
             }
       return AccidentalType::NONE;
       }

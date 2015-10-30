@@ -73,8 +73,16 @@ void Part::read(XmlReader& e)
                   }
             else if (tag == "Instrument") {
                   Instrument* instr = new Instrument;
-                  instr->read(e);
+                  instr->read(e, this);
                   setInstrument(instr, -1);
+                  Staff* s = staff(0);
+                  // adjust drumset line numbers for pre-2.1 scores
+                  Drumset* ds = instr->drumset();
+                  int lld = s ? qRound(s->logicalLineDistance()) : 1;
+                  if (_score->mscVersion() < 207 && ds && lld > 1) {
+                        for (int i = 0; i < DRUM_INSTRUMENTS; ++i)
+                              ds->drum(i).line /= lld;
+                        }
                   }
             else if (tag == "name")
                   instrument()->setLongName(e.readElementText());
@@ -103,7 +111,7 @@ void Part::write(Xml& xml) const
       if (!_show)
             xml.tag("show", _show);
       xml.tag("trackName", _partName);
-      instrument()->write(xml);
+      instrument()->write(xml, const_cast<Part*>(this)); // Safe, we do not write anything to it
       xml.etag();
       }
 
@@ -304,12 +312,44 @@ int Part::midiPort() const
 
 //---------------------------------------------------------
 //   setMidiChannel
-//    called from importmusicxml
+//   Called from importmusicxml, importMidi and importGtp*.
+//   Specify tick to set MIDI channel to an InstrumentChange element.
+//   Usage:
+//   setMidiChannel(channel)       to set channel
+//   setMidiChannel(-1, port)      to set port
+//   setMidiChannel(channel, port) to set both
 //---------------------------------------------------------
 
-void Part::setMidiChannel(int) const
+void Part::setMidiChannel(int ch, int port, int tick)
       {
-      // TODO
+      Channel* channel = instrument(tick)->channel(0);
+      if (channel->channel == -1) {
+            // Add new mapping
+            MidiMapping mm;
+            mm.part = this;
+            mm.articulation = channel;
+            mm.channel = -1;
+            mm.port = -1;
+            if (ch != -1)
+                  mm.channel = ch;
+            if (port != -1)
+                  mm.port = port;
+            channel->channel = score()->midiMapping()->size();
+            score()->midiMapping()->append(mm);
+            }
+      else {
+            // Update existing mapping
+            if (channel->channel >= score()->midiMapping()->size()) {
+                  qDebug()<<"Can't' set midi channel: midiMapping is empty!";
+                  return;
+                  }
+
+            if (ch != -1)
+                  score()->midiMapping(channel->channel)->channel = ch;
+            if (port != -1)
+                  score()->midiMapping(channel->channel)->port = port;
+            score()->midiMapping(channel->channel)->part = this;
+            }
       }
 
 //---------------------------------------------------------

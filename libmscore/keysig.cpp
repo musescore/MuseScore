@@ -76,9 +76,10 @@ qreal KeySig::mag() const
 
 void KeySig::addLayout(SymId sym, qreal x, int line)
       {
+      qreal stepDistance = staff() ? staff()->logicalLineDistance() * 0.5 : 0.5;
       KeySym ks;
       ks.sym    = sym;
-      ks.spos   = QPointF(x, qreal(line) * .5);
+      ks.spos   = QPointF(x, qreal(line) * stepDistance);
       _sig.keySymbols().append(ks);
       }
 
@@ -160,7 +161,7 @@ void KeySig::layout()
                         case 1: naturals = 0x1;  break;
                         case 0: naturals = 0;    break;
                         default:
-                              qDebug("illegal t2 key %d", t2);
+                              qDebug("illegal t2 key %d", int(t2));
                               break;
                         }
                   // remove redundant naturals

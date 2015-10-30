@@ -1176,7 +1176,8 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
             mscore->editInPianoroll(staff);
             }
       else if (cmd == "staff-properties") {
-            EditStaff editStaff(staff, this);
+            int tick = obj ? obj->tick() : -1;
+            EditStaff editStaff(staff, tick, this);
             connect(&editStaff, SIGNAL(instrumentChanged()), mscore, SLOT(instrumentChanged()));
             editStaff.exec();
             }
@@ -1461,16 +1462,16 @@ void ScoreView::moveCursor()
             Segment*    seg   = is.segment();
             int         minTrack = (is.track() / VOICES) * VOICES;
             int         maxTrack = minTrack + VOICES;
-            // get selected chordrest, if one exists and is in this segment
+            // get selected chord, if one exists and is in this segment
             ChordRest* scr = _score->selection().cr();
-            if (scr && scr->segment() != seg)
+            if (scr && (scr->type() != Element::Type::CHORD || scr->segment() != seg))
                   scr = nullptr;
             // get the physical string corresponding to current visual string
             for (int t = minTrack; t < maxTrack; t++) {
                   Element* e = seg->element(t);
                   if (e != nullptr && e->type() == Element::Type::CHORD) {
-                        // if there is a selected chordrest in this segment on this track but it is not e
-                        // then the selected chordrest must be a grace note chord, and we should use it
+                        // if there is a selected chord in this segment on this track but it is not e
+                        // then the selected chord must be a grace note chord, and we should use it
                         if (scr && scr->track() == t && scr != e)
                               e = scr;
                         // search notes looking for one on current string
@@ -1938,12 +1939,12 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   // this can happen in mmrests
                   // first chordrest segment of mmrest instead
                   const Measure* mmr = ss->measure()->mmRest1();
-                  if (mmr)
+                  if (mmr && mmr->system())
                         ss = mmr->first(Segment::Type::ChordRest);
                   else
-                        return;                 // not an mmrest?
+                        return;                 // still no system?
                   if (!ss)
-                        return;                 // mmrest has no chordrest segment?
+                        return;                 // no chordrest segment?
                   }
 
             p.setBrush(Qt::NoBrush);
@@ -1984,11 +1985,22 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             System* system1 = system2;
             double x1;
 
-            for (Segment* s = ss; s && (s != es);) {
+            for (Segment* s = ss; s && (s != es); ) {
                   Segment* ns = s->next1MM();
                   system1  = system2;
                   system2  = s->measure()->system();
-                  pt       = s->pagePos();
+                  if (!system2) {
+                        // as before, use mmrest if necessary
+                        const Measure* mmr = s->measure()->mmRest1();
+                        if (mmr)
+                              system2 = mmr->system();
+                        if (!system2)
+                              break;
+                        // extend rectangle to end of mmrest
+                        pt = mmr->last()->pagePos();
+                        }
+                  else
+                        pt = s->pagePos();
                   x1  = x2;
                   x2  = pt.x() + _spatium * 2;
 
@@ -4515,7 +4527,7 @@ void ScoreView::cmdChangeEnharmonic(bool up)
                         }
                   else {
                         n->undoSetTpc(tpc);
-                        if (up || staff->part()->instrument()->transpose().isZero()) {
+                        if (up || staff->part()->instrument(n->chord()->tick())->transpose().isZero()) {
                               // change both spellings
                               int t = n->transposeTpc(tpc);
                               if (n->concertPitch())

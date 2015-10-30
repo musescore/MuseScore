@@ -35,6 +35,7 @@ class TestTimesig : public QObject, public MTest
       void timesig02();
       void timesig03();
       void timesig04();
+      void timesig_78216();
       };
 
 //---------------------------------------------------------
@@ -124,6 +125,28 @@ void TestTimesig::timesig04()
 
       QVERIFY(saveCompareScore(score, "timesig-04.mscx", DIR + "timesig-04-ref.mscx"));
       delete score;
+      }
+
+
+//---------------------------------------------------------
+//   timesig_78216
+//    input score has section breaks on non-measure MeasureBase objects.
+//    should not display courtesy timesig at the end of final measure of each section (meas 1, 2, & 3), even if section break occurs on subsequent non-measure frame.
+//---------------------------------------------------------
+
+void TestTimesig::timesig_78216()
+      {
+      Score* score = readScore(DIR + "timesig_78216.mscx");
+      score->doLayout();
+
+      Measure* m1 = score->firstMeasure();
+      Measure* m2 = m1->nextMeasure();
+      Measure* m3 = m2->nextMeasure();
+
+      // verify no timesig exists in segment of final tick of m1, m2, m3
+      QVERIFY2(m1->findSegment(Segment::Type::TimeSig, m1->endTick()) == nullptr, "Should be no timesig at end of measure 1.");
+      QVERIFY2(m2->findSegment(Segment::Type::TimeSig, m2->endTick()) == nullptr, "Should be no timesig at end of measure 2.");
+      QVERIFY2(m3->findSegment(Segment::Type::TimeSig, m3->endTick()) == nullptr, "Should be no timesig at end of measure 3.");
       }
 
 QTEST_MAIN(TestTimesig)

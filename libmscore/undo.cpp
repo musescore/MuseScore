@@ -484,7 +484,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
             int track    = staffIdx * VOICES;
             KeySig* ks   = static_cast<KeySig*>(s->element(track));
 
-            Interval interval = staff->part()->instrument()->transpose();
+            Interval interval = staff->part()->instrument(tick)->transpose();
             KeySigEvent nkey = key;
             bool concertPitch = score->styleB(StyleIdx::concertPitch);
             if (interval.chromatic && !concertPitch && !nkey.custom() && !nkey.isAtonal()) {
@@ -1149,7 +1149,7 @@ void Score::undoAddElement(Element* element)
                         Harmony* h = static_cast<Harmony*>(ne);
                         if (score->styleB(StyleIdx::concertPitch) != element->score()->styleB(StyleIdx::concertPitch)) {
                               Part* partDest = h->part();
-                              Interval interval = partDest->instrument()->transpose();
+                              Interval interval = partDest->instrument(tick)->transpose();
                               if (!interval.isZero()) {
                                     if (!score->styleB(StyleIdx::concertPitch))
                                           interval.flip();
@@ -2415,7 +2415,6 @@ void ChangePatch::flip()
       channel->program = patch.prog;
       channel->bank    = patch.bank;
       channel->synti   = patch.synti;
-      channel->updateInitList();
 
       patch            = op;
 
@@ -2495,13 +2494,14 @@ void ChangePageFormat::flip()
 //---------------------------------------------------------
 
 ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible,
-   qreal _userDist, bool _neverHide, bool _showIfEmpty, bool hide)
+   qreal _userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway, bool hide)
       {
       staff       = _staff;
       invisible   = _invisible;
       userDist    = _userDist;
-      neverHide   = _neverHide;
+      hideMode    = _hideMode;
       showIfEmpty = _showIfEmpty;
+      cutaway     = _cutaway;
       hideSystemBarLine = hide;
       }
 
@@ -2526,20 +2526,23 @@ void ChangeStaff::flip()
 
       bool oldInvisible   = staff->invisible();
       qreal oldUserDist   = staff->userDist();
-      bool oldNeverHide   = staff->neverHide();
+      Staff::HideMode oldHideMode    = staff->hideWhenEmpty();
       bool oldShowIfEmpty = staff->showIfEmpty();
+      bool oldCutaway     = staff->cutaway();
       bool hide           = staff->hideSystemBarLine();
 
       staff->setInvisible(invisible);
       staff->setUserDist(userDist);
-      staff->setNeverHide(neverHide);
+      staff->setHideWhenEmpty(hideMode);
       staff->setShowIfEmpty(showIfEmpty);
+      staff->setCutaway(cutaway);
       staff->setHideSystemBarLine(hideSystemBarLine);
 
       invisible   = oldInvisible;
       userDist    = oldUserDist;
-      neverHide   = oldNeverHide;
+      hideMode    = oldHideMode;
       showIfEmpty = oldShowIfEmpty;
+      cutaway     = oldCutaway;
       hideSystemBarLine = hide;
 
       Score* score = staff->score();
@@ -3217,8 +3220,19 @@ void Score::undoChangeBarLine(Measure* m, BarLineType barType)
 
 void ChangeInstrument::flip()
       {
-      Instrument* oi = is->instrument();
-      is->setInstrument(instrument);
+      Instrument* oi = is->instrument();  //new Instrument(*is->instrument());
+      is->setInstrument(instrument);      //*instrument
+
+      // transpose
+      int tickStart = is->segment()->tick();
+      auto i = is->staff()->part()->instruments()->find(tickStart);
+      ++i;
+      int tickEnd;
+      if (i == is->staff()->part()->instruments()->end())
+            tickEnd = -1;
+      else
+            tickEnd = i->first;
+      is->score()->transpositionChanged(is->staff()->part(), oi->transpose(), tickStart, tickEnd);
 
       is->score()->rebuildMidiMapping();
       is->score()->setInstrumentsChanged(true);
@@ -3454,12 +3468,70 @@ void RemoveBracket::undo()
 
 void ChangeSpannerElements::flip()
       {
-      Element* se = spanner->startElement();
-      Element* ee = spanner->endElement();
-      spanner->setStartElement(startElement);
-      spanner->setEndElement(endElement);
-      startElement = se;
-      endElement   = ee;
+      Element*    oldStartElement   = spanner->startElement();
+      Element*    oldEndElement     = spanner->endElement();
+      if (spanner->anchor() == Spanner::Anchor::NOTE) {
+            // be sure new spanner elements are of the right type
+            if (startElement->type() != Element::Type::NOTE || endElement->type() != Element::Type::NOTE)
+                  return;
+            Note* newStartNote;
+            Note* newEndNote;
+            Note* oldStartNote;
+            Note* oldEndNote;
+            int   startDeltaTrack   = oldStartElement->track() - startElement->track();
+            int   endDeltaTrack     = oldEndElement->track() - endElement->track();
+            // scan all spanners linked to this one
+            for (ScoreElement* el : spanner->linkList()) {
+                  Spanner*    sp    = static_cast<Spanner*>(el);
+                  newStartNote      = newEndNote = nullptr;
+                  oldStartNote      = static_cast<Note*>(sp->startElement());
+                  oldEndNote        = static_cast<Note*>(sp->endElement());
+                  // if not the current spanner, but one linked to it, determine its new start and end notes
+                  // as modifications 'parallel' to the modifications of the current spanner's start and end notes
+                  if (sp != spanner) {
+                        // determine the track where to expect the 'parallel' start element
+                        int   newTrack    = sp->startElement()->track() + startDeltaTrack;
+                        // look in notes linked to new start note for a note with
+                        // same score as linked spanner and appropriate track
+                        for (ScoreElement* newEl : startElement->linkList())
+                              if (static_cast<Note*>(newEl)->score() == sp->score()
+                                          && static_cast<Note*>(newEl)->track() == newTrack) {
+                                    newStartNote = static_cast<Note*>(newEl);
+                                    break;
+                                    }
+                        // similarly to determine the 'parallel' end element
+                        newTrack    = sp->endElement()->track() + endDeltaTrack;
+                        for (ScoreElement* newEl : endElement->linkList())
+                              if (static_cast<Note*>(newEl)->score() == sp->score()
+                                          && static_cast<Note*>(newEl)->track() == newTrack) {
+                                    newEndNote = static_cast<Note*>(newEl);
+                                    break;
+                                    }
+                        }
+                  // if current spanner, just use stored start and end elements
+                  else {
+                        newStartNote      = static_cast<Note*>(startElement);
+                        newEndNote        = static_cast<Note*>(endElement);
+                        }
+                  // update spanner's start and end notes
+                  if (newStartNote != nullptr && newEndNote != nullptr) {
+                        oldStartNote->removeSpannerFor(sp);
+                        oldEndNote->removeSpannerBack(sp);
+                        sp->setNoteSpan(newStartNote, newEndNote);
+                        newStartNote->addSpannerFor(sp);
+                        newEndNote->addSpannerBack(sp);
+
+                        if (sp->type() == Element::Type::GLISSANDO)
+                              oldEndNote->chord()->updateEndsGlissando();
+                        }
+                  }
+            }
+      else {
+            spanner->setStartElement(startElement);
+            spanner->setEndElement(endElement);
+            }
+      startElement = oldStartElement;
+      endElement   = oldEndElement;
       if (spanner->type() == Element::Type::TIE) {
             Tie* tie = static_cast<Tie*>(spanner);
             static_cast<Note*>(endElement)->setTieBack(0);

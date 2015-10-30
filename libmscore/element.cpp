@@ -1507,8 +1507,8 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   _placement = Placement(v.toInt());
                   break;
             default:
-                  qFatal("Element::setProperty: unknown <%s>(%hhd), data <%s>",
-                     propertyName(propertyId), propertyId, qPrintable(v.toString()));
+                  qFatal("Element::setProperty: unknown <%s>(%d), data <%s>",
+                     propertyName(propertyId), static_cast<int>(propertyId), qPrintable(v.toString()));
                   return false;
             }
       setGenerated(false);

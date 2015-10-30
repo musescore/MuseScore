@@ -778,7 +778,7 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
       int columnBottom[7] = { -1, -1, -1, -1, -1, -1, -1 };
 
       qreal sp           = staff->spatium();
-      qreal stepDistance = sp * .5;
+      qreal stepDistance = sp * staff->logicalLineDistance() * .5;
       int stepOffset     = staff->staffType()->stepOffset();
 
       qreal lx                = 10000.0;  // leftmost note head position
@@ -2213,6 +2213,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
             bool hasCourtesy;
             qreal cautionaryW = 0.0;
             qreal ww          = 0.0;
+            bool systemWasNotEmpty = !system->measures().isEmpty();
 
             if (curMeasure->type() == Element::Type::HBOX) {
                   ww = point(static_cast<Box*>(curMeasure)->boxWidth());
@@ -2238,6 +2239,7 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
                   if (isFirstMeasure) {
                         firstMeasure = m;
                         addSystemHeader(m, isFirstSystem);
+                        system->measures().append(curMeasure);    // append measure to system before minWidth2() performs courtesy clef layout calculation
                         ww = m->minWidth2();
                         }
                   else
@@ -2276,21 +2278,23 @@ bool Score::layoutSystem(qreal& minWidth, qreal systemWidth, bool isFirstSystem,
 
                   if (ww < minMeasureWidth)
                         ww = minMeasureWidth;
-                  isFirstMeasure = false;
                   }
 
             // collect at least one measure
-            bool empty = system->measures().isEmpty();
-
-            if (!empty && (minWidth + ww > systemWidth)) {
+            if (systemWasNotEmpty && (minWidth + ww > systemWidth)) {
                   curMeasure->setSystem(oldSystem);
                   continueFlag = false;
                   break;
                   }
+
             if (curMeasure->type() == Element::Type::MEASURE)
                   lastMeasure = static_cast<Measure*>(curMeasure);
 
-            system->measures().append(curMeasure);
+            // append measure if did not already append measure
+            if (curMeasure->type() == Element::Type::MEASURE && isFirstMeasure)
+                  isFirstMeasure = false;
+            else
+                  system->measures().append(curMeasure);
 
             Element::Type nt;
             if (_showVBox)
@@ -2364,11 +2368,12 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
       foreach (Staff* staff, _staves) {
             SysStaff* s  = system->staff(staffIdx);
             bool oldShow = s->show();
-            if (styleB(StyleIdx::hideEmptyStaves)
-               && (staves > 1)
-               && !(isFirstSystem && styleB(StyleIdx::dontHideStavesInFirstSystem))
-               && !staff->neverHide()
-               ) {
+            Staff::HideMode hideMode = staff->hideWhenEmpty();
+            if (hideMode == Staff::HideMode::ALWAYS
+                || (styleB(StyleIdx::hideEmptyStaves)
+                    && (staves > 1)
+                    && !(isFirstSystem && styleB(StyleIdx::dontHideStavesInFirstSystem))
+                    && hideMode != Staff::HideMode::NEVER)) {
                   bool hideStaff = true;
                   foreach(MeasureBase* m, system->measures()) {
                         if (m->type() != Element::Type::MEASURE)
@@ -2833,7 +2838,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
 
       bool needRelayout = false;
 
-      foreach (System* system, sl) {
+      for (System* system : sl) {
             // set system initial bar line type here, as in System::layout...() methods
             // it is either too early (in System::layout() measures are not added to the system yet)
             // or too late (in System::layout2(), horizontal spacing has already been done
@@ -2856,12 +2861,13 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
 
             if (m && nm) {
                   int tick = m->tick() + m->ticks();
+                  bool isFinalMeasureOfSection = m->isFinalMeasureOfSection();
 
                   // locate a time sig. in the next measure and, if found,
                   // check if it has cout. sig. turned off
                   TimeSig* ts;
                   Segment* tss         = nm->findSegment(Segment::Type::TimeSig, tick);
-                  bool showCourtesySig = tss && styleB(StyleIdx::genCourtesyTimesig) && !(m->sectionBreak() && _layoutMode != LayoutMode::FLOAT);
+                  bool showCourtesySig = tss && styleB(StyleIdx::genCourtesyTimesig) && !(isFinalMeasureOfSection && _layoutMode != LayoutMode::FLOAT);
                   if (showCourtesySig) {
                         ts = static_cast<TimeSig*>(tss->element(0));
                         if (ts && !ts->showCourtesySig())
@@ -2900,7 +2906,7 @@ QList<System*> Score::layoutSystemRow(qreal rowWidth, bool isFirstSystem, bool u
                   for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
                         int track = staffIdx * VOICES;
                         Staff* staff = _staves[staffIdx];
-                        showCourtesySig = styleB(StyleIdx::genCourtesyKeysig) && !(m->sectionBreak() && _layoutMode != LayoutMode::FLOAT);
+                        showCourtesySig = styleB(StyleIdx::genCourtesyKeysig) && !(isFinalMeasureOfSection && _layoutMode != LayoutMode::FLOAT);
 
                         KeySigEvent key1 = staff->keySigEvent(tick - 1);
                         KeySigEvent key2 = staff->keySigEvent(tick);
@@ -3833,6 +3839,8 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
       qreal minNoteDistance       = styleS(StyleIdx::minNoteDistance).val()    * _spatium;
       qreal minHarmonyDistance    = styleS(StyleIdx::minHarmonyDistance).val() * _spatium;
       qreal maxHarmonyBarDistance = styleS(StyleIdx::maxHarmonyBarDistance).val() * _spatium;
+      qreal minLyricsDashWidth    = (styleS(StyleIdx::lyricsDashMinLength).val()
+                  + Lyrics::LYRICS_DASH_DEFAULT_PAD * 2) * _spatium;
 
       qreal rest[_nstaves];   // fixed space needed from previous segment
       memset(rest, 0, _nstaves * sizeof(qreal));
@@ -3994,8 +4002,15 @@ qreal Score::computeMinWidth(Segment* fs, bool firstMeasureInSystem)
                                     if (!l->isEmpty()) {
                                           lyrics = l;
                                           QRectF b(l->bbox().translated(l->pos()));
+                                          qreal brgt = b.right();
+                                          // if lyrics followed by a dash & score style requires the dash in any case,
+                                          // reserve at least the min dash length plus before and after padding
+                                          if ( (l->syllabic() == Lyrics::Syllabic::BEGIN
+                                                      || l->syllabic() == Lyrics::Syllabic::MIDDLE)
+                                                            && styleB(StyleIdx::lyricsDashForce) )
+                                                brgt += minLyricsDashWidth;
                                           llw = qMax(llw, -(b.left()+lx+cx));
-                                          rrw = qMax(rrw, b.right()+rx+cx);
+                                          rrw = qMax(rrw, brgt+rx+cx);
                                           }
                                     }
                               }
