@@ -1258,8 +1258,10 @@ bool Measure::acceptDrop(const DropData& data) const
             case Element::Type::TIMESIG:
                   if (data.modifiers & Qt::ControlModifier)
                         viewer->setDropRectangle(staffR);
-                  else
+                  else {
                         viewer->setDropRectangle(canvasBoundingRect());
+                        viewer->setDropStaffRectangle(staffR);
+                        }
                   return true;
 
             case Element::Type::BRACKET:

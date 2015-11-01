@@ -72,6 +72,10 @@ void ScoreView::setDropTarget(const Element* el)
             _score->addRefresh(dropRectangle);
             dropRectangle = QRectF();
             }
+      if (dropStaffRectangle.isValid()) {
+            _score->addRefresh(dropStaffRectangle);
+            dropStaffRectangle = QRectF();
+            }
       }
 
 //---------------------------------------------------------
@@ -95,6 +99,19 @@ void ScoreView::setDropRectangle(const QRectF& r)
             _score->addRefresh(r.normalized());
             dropAnchor = QLineF();
             }
+      _score->addRefresh(r);
+      }
+
+//---------------------------------------------------------
+//   setDropStaffRectangle
+//      Used to highlight the staff where the key signature will be dropped
+//---------------------------------------------------------
+
+void ScoreView::setDropStaffRectangle(const QRectF& r)
+      {
+      if (dropStaffRectangle.isValid())
+            _score->addRefresh(dropStaffRectangle);
+      dropStaffRectangle = r;
       _score->addRefresh(r);
       }
 

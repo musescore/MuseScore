@@ -55,6 +55,7 @@ class MuseScoreView {
       virtual int gripCount() const { return 0; }
       virtual const QRectF& getGrip(Grip) const = 0;
       virtual void setDropRectangle(const QRectF&) {};
+      virtual void setDropStaffRectangle(const QRectF&) {};
       virtual void cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/) {};
       virtual void cmdAddHairpin(bool) {};
       virtual void startEdit() {};

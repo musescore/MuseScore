@@ -137,6 +137,7 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       const Element* dropTarget;    ///< current drop target during dragMove
       QRectF dropRectangle;         ///< current drop rectangle during dragMove
+      QRectF dropStaffRectangle;         ///< current drop rectangle during dragMove
       QLineF dropAnchor;            ///< line to current anchor point during dragMove
 
       QTransform _matrix, imatrix;
@@ -369,6 +370,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void onEditPasteTransition(QMouseEvent* ev);
 
       virtual void setDropRectangle(const QRectF&);
+      virtual void setDropStaffRectangle(const QRectF& r);
       virtual void setDropTarget(const Element*) override;
       void setDropAnchor(const QLineF&);
       const QTransform& matrix() const  { return _matrix; }

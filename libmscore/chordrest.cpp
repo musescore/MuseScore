@@ -1010,6 +1010,15 @@ Element* ChordRest::drop(const DropData& data)
                   delete ks;
 
                   // apply only to this stave
+
+                  // Take consideration of transposed instrument if not in ConcertPitch
+                  if (!concertPitch()) {
+                        Interval interval = staff()->part()->instrument()->transpose();
+                        if (interval.chromatic && !k.custom() && !k.isAtonal()) {
+                              k.setKey(transposeKey(k.key(), interval));
+                              }
+                        }
+
                   score()->undoChangeKeySig(staff(), tick(), k);
                   }
                   break;

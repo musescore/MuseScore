@@ -1909,6 +1909,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             }
       if (dropRectangle.isValid())
             p.fillRect(dropRectangle, QColor(80, 0, 0, 80));
+      if (dropStaffRectangle.isValid())
+            p.fillRect(dropStaffRectangle, QColor(40, 0, 0, 80));
 
       //
       // frame text in edit mode, except for text in a text frame
