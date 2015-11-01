@@ -13,6 +13,7 @@
 #include "sym.h"
 #include "staff.h"
 #include "clef.h"
+#include "part.h"
 #include "keysig.h"
 #include "measure.h"
 #include "segment.h"
@@ -282,6 +283,15 @@ Element* KeySig::drop(const DropData& data)
             }
       KeySigEvent k = ks->keySigEvent();
       delete ks;
+
+      // Take consideration of transposed instrument if not in ConcertPitch
+      if (!concertPitch()) {
+            Interval interval = staff()->part()->instrument()->transpose();
+            if (interval.chromatic && !k.custom() && !k.isAtonal()) {
+                  k.setKey(transposeKey(k.key(), interval));
+                  }
+            }
+
       if (data.modifiers & Qt::ControlModifier) {
             // apply only to this stave
             if (!(k == keySigEvent()))
