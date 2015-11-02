@@ -226,6 +226,11 @@ enum class P_ID : unsigned char {
 
       LAYOUT_MODE,
 
+      FRET_STRINGS,
+      FRET_FRETS,
+      FRET_BARRE,
+      FRET_OFFSET,
+
       END
       };
 
@@ -257,7 +262,7 @@ enum class P_TYPE : char {
       SYMID,
       TEXT_STYLE,
       INT_LIST,
-      GLISSANDO_STYLE
+      GLISSANDO_STYLE,
       };
 
 extern QVariant getProperty(P_ID type, XmlReader& e);

@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>InspectorFret</class>
- <widget class="QWidget" name="InspectorFret">
+ <class>InspectorFretDiagram</class>
+ <widget class="QWidget" name="InspectorFretDiagram">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>252</width>
-    <height>110</height>
+    <width>329</width>
+    <height>141</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string/>
   </property>
   <property name="accessibleName">
-   <string>Ottava Inspector</string>
+   <string>Element Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
+   </property>
+   <property name="sizeConstraint">
+    <enum>QLayout::SetNoConstraint</enum>
    </property>
    <property name="leftMargin">
     <number>0</number>
@@ -41,23 +50,10 @@
       </font>
      </property>
      <property name="text">
-      <string>Fretboard Diagram</string>
+      <string>FretDiagram</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::HLine</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <property name="lineWidth">
-      <number>2</number>
      </property>
     </widget>
    </item>
@@ -75,6 +71,9 @@
      <property name="verticalSpacing">
       <number>0</number>
      </property>
+     <item row="0" column="1">
+      <widget class="QDoubleSpinBox" name="mag"/>
+     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
@@ -82,32 +81,73 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
+     <item row="0" column="2">
       <widget class="QToolButton" name="resetMag">
-       <property name="toolTip">
-        <string>Reset value</string>
-       </property>
        <property name="accessibleName">
-        <string>Reset Type value</string>
+        <string>Reset Size in staff space units value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="mag">
-       <property name="minimum">
-        <double>0.100000000000000</double>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>barre</string>
        </property>
-       <property name="maximum">
-        <double>10.000000000000000</double>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>strings</string>
        </property>
-       <property name="singleStep">
-        <double>0.200000000000000</double>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>frets</string>
        </property>
-       <property name="value">
-        <double>1.000000000000000</double>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QSpinBox" name="barre"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="QSpinBox" name="strings"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSpinBox" name="frets"/>
+     </item>
+     <item row="1" column="2">
+      <widget class="QToolButton" name="resetStrings">
+       <property name="accessibleName">
+        <string>Reset Size in staff space units value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QToolButton" name="resetFrets">
+       <property name="accessibleName">
+        <string>Reset Size in staff space units value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QToolButton" name="resetBarre">
+       <property name="accessibleName">
+        <string>Reset Size in staff space units value</string>
+       </property>
+       <property name="text">
+        <string notr="true">...</string>
        </property>
       </widget>
      </item>
@@ -115,9 +155,8 @@
    </item>
   </layout>
  </widget>
- <tabstops>
-  <tabstop>resetMag</tabstop>
- </tabstops>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -240,7 +240,7 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorAmbitus(this);
                               break;
                         case Element::Type::FRET_DIAGRAM:
-                              ie = new InspectorFret(this);
+                              ie = new InspectorFretDiagram(this);
                               break;
                         case Element::Type::LAYOUT_BREAK:
                               ie = new InspectorBreak(this);
