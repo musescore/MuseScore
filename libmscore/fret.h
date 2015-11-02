@@ -61,11 +61,11 @@ class FretDiagram : public Element {
       int _frets         { DEFAULT_FRETS };
       int _fretOffset    { 0  };
       int _maxFrets      { 24 };
+      int _barre         { 0 };
 
       char* _dots        { 0 };
       char* _marker      { 0 };
       char* _fingering   { 0 };
-      int _barre         { 0 };
 
       Harmony* _harmony  { 0 };
 
