@@ -229,6 +229,14 @@ static const PropertyData propertyList[] = {
       { P_ID::TRACK,               false, 0,                       P_TYPE::INT },
 
       { P_ID::GLISSANDO_STYLE,     false, "glissandoStyle",        P_TYPE::GLISSANDO_STYLE},
+
+      { P_ID::LAYOUT_MODE,         false, 0,                       P_TYPE::INT },
+
+      { P_ID::FRET_STRINGS,        false, "strings",               P_TYPE::INT },
+      { P_ID::FRET_FRETS,          false, "frets",                 P_TYPE::INT },
+      { P_ID::FRET_BARRE,          false, "barre",                 P_TYPE::INT },
+      { P_ID::FRET_OFFSET,         false, "fretOffset",            P_TYPE::INT },
+
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };
 
@@ -308,7 +316,7 @@ QVariant getProperty(P_ID id, XmlReader& e)
                       QString value(e.readElementText());
                       if ( value == "baroque")
                           return QVariant(int(MScore::OrnamentStyle::BAROQUE));
-                      
+
                       return QVariant(int(MScore::OrnamentStyle::DEFAULT));
                   }
                   break; // break is really not necessary because of the default return

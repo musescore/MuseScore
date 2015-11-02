@@ -72,10 +72,10 @@ class Cursor : public QObject {
       Cursor(Score* c = 0);
       Cursor(Score*, bool);
 
-      Score* score() const                    { return _score;    }
+      Score* score() const          { return _score;    }
       void setScore(Score* s);
 
-      int track() const                       { return _track;    }
+      int track() const             { return _track;    }
       void setTrack(int v);
 
       int staffIdx() const;
@@ -84,11 +84,11 @@ class Cursor : public QObject {
       int voice() const;
       void setVoice(int v);
 
-      int filter() const    { return int(_filter); }
-      void setFilter(int f) { _filter = Segment::Type(f); }
+      int filter() const            { return int(_filter); }
+      void setFilter(int f)         { _filter = Segment::Type(f); }
 
       Element* element() const;
-      Segment* segment() const                { return _segment;  }
+      Segment* segment() const      { return _segment;  }
       Measure* measure() const;
 
       int tick();

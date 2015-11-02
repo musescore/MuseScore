@@ -18,10 +18,10 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorFret
+//   InspectorFretDiagram
 //---------------------------------------------------------
 
-InspectorFret::InspectorFret(QWidget* parent)
+InspectorFretDiagram::InspectorFretDiagram(QWidget* parent)
    : InspectorBase(parent)
       {
       e.setupUi(addWidget());
@@ -33,6 +33,9 @@ InspectorFret::InspectorFret(QWidget* parent)
             { P_ID::USER_OFF,     0, 0, e.offsetX,     e.resetX          },
             { P_ID::USER_OFF,     1, 0, e.offsetY,     e.resetY          },
             { P_ID::MAG,          0, 0, f.mag,         f.resetMag        },
+            { P_ID::FRET_STRINGS, 0, 0, f.strings,     f.resetStrings    },
+            { P_ID::FRET_FRETS,   0, 0, f.frets,       f.resetFrets      },
+            { P_ID::FRET_BARRE,   0, 0, f.barre,       f.resetBarre      }
             };
 
       mapSignals();
