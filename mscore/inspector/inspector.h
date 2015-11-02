@@ -39,6 +39,7 @@
 #include "ui_inspector_slur.h"
 #include "ui_inspector_empty.h"
 #include "ui_inspector_text.h"
+#include "ui_inspector_fret.h"
 
 namespace Ms {
 

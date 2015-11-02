@@ -347,12 +347,9 @@ void FretDiagram::write(Xml& xml) const
       xml.stag("FretDiagram");
       Element::writeProperties(xml);
 
-      if (_strings != DEFAULT_STRINGS)
-            xml.tag("strings", _strings);
-      if (_frets != DEFAULT_FRETS)
-            xml.tag("frets", _frets);
-      if (_fretOffset)
-            xml.tag("fretOffset", _fretOffset);
+      writeProperty(xml, P_ID::FRET_STRINGS);
+      writeProperty(xml, P_ID::FRET_FRETS);
+      writeProperty(xml, P_ID::FRET_OFFSET);
       for (int i = 0; i < _strings; ++i) {
             if ((_dots && _dots[i]) || (_marker && _marker[i]) || (_fingering && _fingering[i])) {
                   xml.stag(QString("string no=\"%1\"").arg(i));
@@ -365,8 +362,7 @@ void FretDiagram::write(Xml& xml) const
                   xml.etag();
                   }
             }
-      if (_barre)
-            xml.tag("barre", _barre);
+      writeProperty(xml, P_ID::FRET_BARRE);
       writeProperty(xml, P_ID::MAG);
       if (_harmony)
             _harmony->write(xml);
@@ -607,8 +603,8 @@ void FretDiagram::writeMusicXML(Xml& xml) const
                         xml.tag("string", strings() - i);
                         xml.tag("fret", _dots[i]);
                         xml.etag();
+                        }
                   }
-            }
             qDebug("FretDiagram::writeMusicXML() this %p dots %s marker %s fingering %s",
                    this, qPrintable(strDots), qPrintable(strMarker), qPrintable(strFingering));
             /*
@@ -621,6 +617,51 @@ void FretDiagram::writeMusicXML(Xml& xml) const
       }
 
 //---------------------------------------------------------
+//   undoSetUserMag
+//---------------------------------------------------------
+
+void FretDiagram::undoSetUserMag(qreal val)
+      {
+      score()->undoChangeProperty(this, P_ID::MAG, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetStrings
+//---------------------------------------------------------
+
+void FretDiagram::undoSetStrings(int val)
+      {
+      score()->undoChangeProperty(this, P_ID::FRET_STRINGS, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetFrets
+//---------------------------------------------------------
+
+void FretDiagram::undoSetFrets(int val)
+      {
+      score()->undoChangeProperty(this, P_ID::FRET_FRETS, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetBarre
+//---------------------------------------------------------
+
+void FretDiagram::undoSetBarre(int val)
+      {
+      score()->undoChangeProperty(this, P_ID::FRET_BARRE, val);
+      }
+
+//---------------------------------------------------------
+//   undoSetFretOffset
+//---------------------------------------------------------
+
+void FretDiagram::undoSetFretOffset(int val)
+      {
+      score()->undoChangeProperty(this, P_ID::FRET_OFFSET, val);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -628,6 +669,10 @@ QVariant FretDiagram::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::MAG:            return userMag();
+            case P_ID::FRET_STRINGS:         return strings();
+            case P_ID::FRET_FRETS:           return frets();
+            case P_ID::FRET_BARRE:           return barre();
+            case P_ID::FRET_OFFSET:          return fretOffset();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -641,6 +686,10 @@ QVariant FretDiagram::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::MAG:            return 1.0;
+            case P_ID::FRET_STRINGS:         return DEFAULT_STRINGS;
+            case P_ID::FRET_FRETS:           return DEFAULT_FRETS;
+            case P_ID::FRET_BARRE:           return 0;
+            case P_ID::FRET_OFFSET:          return 0;
             default:
                   return Element::propertyDefault(propertyId);
             }
@@ -656,9 +705,22 @@ bool FretDiagram::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::MAG:
                   setUserMag(v.toDouble());
                   break;
+            case P_ID::FRET_STRINGS:
+                  setStrings(v.toInt());
+                  break;
+            case P_ID::FRET_FRETS:
+                  setFrets(v.toInt());
+                  break;
+            case P_ID::FRET_BARRE:
+                  setBarre(v.toInt());
+                  break;
+            case P_ID::FRET_OFFSET:
+                  setOffset(v.toInt());
+                  break;
             default:
                   return Element::setProperty(propertyId, v);
             }
+      score()->setLayoutAll(true);
       return true;
       }
 
