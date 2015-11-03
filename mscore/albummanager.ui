@@ -40,19 +40,6 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="4" column="1">
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
      <item row="5" column="1">
       <widget class="QPushButton" name="add">
        <property name="text">
@@ -70,26 +57,64 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0" rowspan="5">
+     <item row="1" column="0" rowspan="6">
       <widget class="QListWidget" name="scoreList"/>
      </item>
-     <item row="3" column="1">
-      <widget class="QPushButton" name="down">
-       <property name="toolTip">
-        <string>Move current score down in list</string>
+     <item row="4" column="1">
+      <spacer name="verticalSpacer2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
-       <property name="text">
-        <string>Down</string>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
        </property>
-      </widget>
+      </spacer>
      </item>
      <item row="2" column="1">
-      <widget class="QPushButton" name="up">
+      <widget class="QToolButton" name="up">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="toolTip">
         <string>Move current score up in list</string>
        </property>
        <property name="text">
-        <string>Up</string>
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <spacer name="verticalSpacer2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="3" column="1">
+      <widget class="QToolButton" name="down">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Move current score down in list</string>
+       </property>
+       <property name="text">
+        <string notr="true"/>
        </property>
       </widget>
      </item>

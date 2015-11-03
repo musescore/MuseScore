@@ -4956,6 +4956,8 @@ int main(int argc, char* av[])
       else
             noSeq = true;
 
+      genIcons();
+
       // Do not create sequencer and audio drivers if run with '-s'
       if (!noSeq) {
             seq            = new Seq();
@@ -5002,8 +5004,6 @@ int main(int argc, char* av[])
       // rastral size of font is 20pt = 20/72 inch = 20*DPI/72 dots
       //   staff has 5 lines = 4 * _spatium
       //   _spatium    = SPATIUM20  * DPI;     // 20.0 / 72.0 * DPI / 4.0;
-
-      genIcons();
 
       if (!MScore::noGui) {
 #ifndef Q_OS_MAC
