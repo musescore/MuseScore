@@ -24,6 +24,7 @@
 #include "libmscore/part.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/undo.h"
+#include "icons.h"
 
 namespace Ms {
 
@@ -76,6 +77,9 @@ ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
             PartItem* item = new PartItem(p);
             partList->addItem(item);
             }
+
+      moveUpButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      moveDownButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
 
       connect(newButton, SIGNAL(clicked()), SLOT(newClicked()));
       connect(newAllButton, SIGNAL(clicked()), SLOT(newAllClicked()));
@@ -206,7 +210,8 @@ void ExcerptsDialog::moveUpClicked()
       excerptList->insertItem(currentRow - 1, currentItem);
       excerptList->setCurrentRow(currentRow - 1);
 
-      score->excerpts().swap(currentRow, currentRow-1);
+      if (currentRow < score->excerpts().size())
+            score->excerpts().swap(currentRow, currentRow-1);
       score->setExcerptsChanged(true);
       }
 
@@ -227,7 +232,8 @@ void ExcerptsDialog::moveDownClicked()
       excerptList->insertItem(currentRow + 1, currentItem);
       excerptList->setCurrentRow(currentRow + 1);
 
-      score->excerpts().swap(currentRow, currentRow+1);
+      if (currentRow + 1 < score->excerpts().size())
+            score->excerpts().swap(currentRow, currentRow+1);
       score->setExcerptsChanged(true);
       }
 
@@ -325,6 +331,16 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       score->undo(new AddExcerpt(nscore));
       createExcerpt(e);
       score->endCmd();
+      // a new excerpt is created in AddExcerpt, make sure the parts are filed
+      for (Excerpt* ee : e->oscore()->excerpts()) {
+            if (ee->partScore() == nscore) {
+                  ee->parts().clear();
+                  ee->parts().append(e->parts());
+                  }
+            }
+      // the excerpt is not useful anymore,
+      // we created a new one in AddExcerpt
+      delete e;
 
       partList->setEnabled(false);
       title->setEnabled(false);
