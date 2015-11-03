@@ -50,7 +50,7 @@
       </font>
      </property>
      <property name="text">
-      <string>FretDiagram</string>
+      <string>Fretboard Diagram</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -94,21 +94,21 @@
      <item row="3" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>barre</string>
+        <string>Barre</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>strings</string>
+        <string>Strings</string>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>frets</string>
+        <string>Frets</string>
        </property>
       </widget>
      </item>
@@ -124,7 +124,7 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetStrings">
        <property name="accessibleName">
-        <string>Reset Size in staff space units value</string>
+        <string>Reset Stings value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -134,7 +134,7 @@
      <item row="2" column="2">
       <widget class="QToolButton" name="resetFrets">
        <property name="accessibleName">
-        <string>Reset Size in staff space units value</string>
+        <string>Reset Frets value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -144,7 +144,7 @@
      <item row="3" column="2">
       <widget class="QToolButton" name="resetBarre">
        <property name="accessibleName">
-        <string>Reset Size in staff space units value</string>
+        <string>Reset Barre value</string>
        </property>
        <property name="text">
         <string notr="true">...</string>
@@ -155,8 +155,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
