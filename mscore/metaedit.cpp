@@ -41,6 +41,15 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
       revision->setValue(score->mscoreRevision());
 
       int idx = 0;
+      // Show current score file path
+      QLabel* label = new QLabel;
+      label->setText(tr("File path"));
+      QLineEdit* text = new QLineEdit(score->importedFilePath(), 0);
+      text->setReadOnly(true);
+      grid->addWidget(label, 0, 0);
+      grid->addWidget(text, 0, 1);
+      ++idx;
+
       QMapIterator<QString, QString> i(s->metaTags());
       while (i.hasNext()) {
             i.next();
