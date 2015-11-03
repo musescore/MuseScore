@@ -37,6 +37,9 @@ QT_TRANSLATE_NOOP("InstrumentsXML", "D. Cb. Fl."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Hyperbass Flute"),
 //: Hyperbass Flute
 QT_TRANSLATE_NOOP("InstrumentsXML", "Hb. Fl."),
+QT_TRANSLATE_NOOP("InstrumentsXML", "Baroque Flute"),
+//: Baroque Flute
+QT_TRANSLATE_NOOP("InstrumentsXML", "Bq. Fl."),
 QT_TRANSLATE_NOOP("InstrumentsXML", "Danso"),
 //: Danso
 QT_TRANSLATE_NOOP("InstrumentsXML", "Da."),
