@@ -38,6 +38,8 @@ AlbumManager::AlbumManager(QWidget* parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      up->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      down->setIcon(*icons[int(Icons::arrowDown_ICON)]);
 
       album = 0;
       connect(add,         SIGNAL(clicked()), SLOT(addClicked()));
