@@ -14,6 +14,8 @@
 #include "musescore.h"
 #include "libmscore/fret.h"
 #include "libmscore/score.h"
+#include "fretproperties.h"
+#include "scoreview.h"
 
 namespace Ms {
 
@@ -32,13 +34,26 @@ InspectorFretDiagram::InspectorFretDiagram(QWidget* parent)
             { P_ID::VISIBLE,      0, 0, e.visible,     e.resetVisible    },
             { P_ID::USER_OFF,     0, 0, e.offsetX,     e.resetX          },
             { P_ID::USER_OFF,     1, 0, e.offsetY,     e.resetY          },
-            { P_ID::MAG,          0, 0, f.mag,         f.resetMag        },
-            { P_ID::FRET_STRINGS, 0, 0, f.strings,     f.resetStrings    },
-            { P_ID::FRET_FRETS,   0, 0, f.frets,       f.resetFrets      },
-            { P_ID::FRET_BARRE,   0, 0, f.barre,       f.resetBarre      }
+            { P_ID::MAG,          0, 0, f.mag,         f.resetMag        }
             };
 
       mapSignals();
+      connect(f.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
       }
+
+//---------------------------------------------------------
+//   propertiesClicked
+//---------------------------------------------------------
+
+void InspectorFretDiagram::propertiesClicked()
+      {
+      FretDiagram* fd = static_cast<FretDiagram*>(inspector->element());
+      Score* score = fd->score();
+      score->startCmd();
+      mscore->currentScoreView()->editFretDiagram(fd);
+      score->setLayoutAll(true);
+      score->endCmd();
+      }
+
 }
 
