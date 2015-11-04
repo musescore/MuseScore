@@ -3403,6 +3403,7 @@ void Score::layoutPages()
       pC.newPage();
 
       int nSystems = _systems.size();
+      bool breakPages = layoutMode() != LayoutMode::SYSTEM;
 
 PAGEDBG("layoutPages");
       for (int i = 0; i < nSystems; ++i) {
@@ -3460,7 +3461,7 @@ PAGEDBG("   y:%f + h:%f + tm:%f + qMax(bm:%f,%f)[=%f] > %f",
     pC.ey   / MScore::DPMM
     );
 
-            if (pC.lastSystem && (pC.y + h + tmargin + qMax(bmargin, slb) > pC.ey)) {
+            if (breakPages && pC.lastSystem && (pC.y + h + tmargin + qMax(bmargin, slb) > pC.ey)) {
 PAGEDBG("      == page break");
                   //
                   // prepare next page
@@ -3497,7 +3498,7 @@ PAGEDBG("      == page break");
                   }
 
             pC.y += h;
-            if (pC.sr.pageBreak() && (_layoutMode == LayoutMode::PAGE)) {
+            if (breakPages && pC.sr.pageBreak() && (_layoutMode == LayoutMode::PAGE)) {
                   if ((i + 1) == nSystems)
                         break;
                   pC.layoutPage();
@@ -3535,7 +3536,7 @@ void Score::layoutPage(const PageContext& pC, qreal d)
       int gaps         = pC.gaps;
       qreal restHeight = pC.ey - pC.y - d;
 
-      if (!gaps || MScore::layoutDebug) {
+      if (!gaps || MScore::layoutDebug || layoutMode() == LayoutMode::SYSTEM) {
             if (_layoutMode == LayoutMode::FLOAT) {
                   qreal y = restHeight * .5;
                   int n = page->systems()->size();
