@@ -213,17 +213,17 @@
                         <program value="73"/>
                   </Channel>
             </Instrument>
-            <Instrument id="baroque-flute">
-                  <longName>Baroque Flute</longName>
-                  <shortName>Bq. Fl.</shortName>
-                  <description>Baroque Traverse Flute</description>
+            <Instrument id="traverso">
+                  <longName>Traverso</longName>
+                  <shortName>Trv.</shortName>
+                  <description>Traverso</description>
                   <musicXMLid>wind.flutes.flute</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>62-88</aPitchRange>
                   <pPitchRange>62-93</pPitchRange>
                   <Channel>
-                        <program value="74"/>
+                        <program value="73"/>
                   </Channel>
                   <Articulation>
                         <velocity>100</velocity>
