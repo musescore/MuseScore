@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>InspectorFretDiagram</class>
- <widget class="QWidget" name="InspectorFretDiagram">
+ <class>InspectorTremoloBar</class>
+ <widget class="QWidget" name="InspectorTremoloBar">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -50,7 +50,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Fretboard Diagram</string>
+      <string>TremoloBar</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -131,6 +131,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>

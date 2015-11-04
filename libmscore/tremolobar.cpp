@@ -101,8 +101,8 @@ void TremoloBar::draw(QPainter* painter) const
        *  timeFactor and pitchFactor below to reduce these values down
        *  consistently to values that make sense to draw with the
        *  Musescore scale. */
-      int timeFactor = 10;
-      int pitchFactor = 25;
+      qreal timeFactor  = 10;  // * _userMag;
+      qreal pitchFactor = 25;  // * _userMag;
       for (int pt = 1; pt < n; ++pt) {
             painter->drawLine(QLineF(previousTime/timeFactor, -previousPitch/pitchFactor-_spatium*3,
                                      _points[pt].time/timeFactor, -_points[pt].pitch/pitchFactor-_spatium*3));
@@ -118,7 +118,8 @@ void TremoloBar::draw(QPainter* painter) const
 void TremoloBar::write(Xml& xml) const
       {
       xml.stag("TremoloBar");
-      foreach(const PitchValue& v, _points) {
+      writeProperty(xml, P_ID::MAG);
+      for (const PitchValue& v : _points) {
             xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
                .arg(v.time).arg(v.pitch).arg(v.vibrato));
             }
@@ -140,9 +141,63 @@ void TremoloBar::read(XmlReader& e)
                   _points.append(pv);
                   e.readNext();
                   }
+            else if (e.name() == "mag")
+                  _userMag = e.readDouble(0.1, 10.0);
             else
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   undoSetUserMag
+//---------------------------------------------------------
+
+void TremoloBar::undoSetUserMag(qreal val)
+      {
+      score()->undoChangeProperty(this, P_ID::MAG, val);
+      }
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant TremoloBar::getProperty(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::MAG:            return userMag();
+            default:
+                  return Element::getProperty(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant TremoloBar::propertyDefault(P_ID propertyId) const
+      {
+      switch (propertyId) {
+            case P_ID::MAG:            return 1.0;
+            default:
+                  return Element::propertyDefault(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool TremoloBar::setProperty(P_ID propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            case P_ID::MAG:
+                  setUserMag(v.toDouble());
+                  break;
+            default:
+                  return Element::setProperty(propertyId, v);
+            }
+      score()->setLayoutAll(true);
+      return true;
       }
 
 }

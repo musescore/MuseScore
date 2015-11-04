@@ -40,6 +40,7 @@
 #include "ui_inspector_empty.h"
 #include "ui_inspector_text.h"
 #include "ui_inspector_fret.h"
+#include "ui_inspector_tremolo.h"
 
 namespace Ms {
 
@@ -48,7 +49,6 @@ class Note;
 class Inspector;
 class Segment;
 class Chord;
-
 
 //---------------------------------------------------------
 //   InspectorElement
@@ -253,8 +253,28 @@ class InspectorBend : public InspectorBase {
       UiInspectorElement e;
       Ui::InspectorBend g;
 
+   private slots:
+      void propertiesClicked();
+
    public:
       InspectorBend(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorTremoloBar
+//---------------------------------------------------------
+
+class InspectorTremoloBar : public InspectorBase {
+      Q_OBJECT
+
+      UiInspectorElement e;
+      Ui::InspectorTremoloBar g;
+
+   private slots:
+      void propertiesClicked();
+
+   public:
+      InspectorTremoloBar(QWidget* parent);
       };
 
 //---------------------------------------------------------

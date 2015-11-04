@@ -1037,14 +1037,9 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       a = popup->addAction(tr("Help"));
       a->setData("help");
 
-#ifdef NDEBUG
-      if (enableExperimental) {
-#endif
-            popup->addSeparator();
-            a = popup->addAction(tr("Debugger"));
-            a->setData("list");
-#ifdef NDEBUG
-            }
+#ifndef NDEBUG
+      popup->addSeparator();
+      popup->addAction(tr("Debugger"))->setData("list");
 #endif
 
       a = popup->exec(pos);
@@ -1136,7 +1131,9 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       a->setEnabled(!obj->isMMRest());
       popup->addSeparator();
 
+#ifndef NDEBUG
       popup->addAction(tr("Object Debugger"))->setData("list");
+#endif
 
       a = popup->exec(gpos);
       if (a == 0)
