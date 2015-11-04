@@ -543,8 +543,10 @@ MuseScore::MuseScore()
 #endif
       viewModeCombo->setAccessibleName(tr("View Mode"));
       viewModeCombo->setFixedHeight(preferences.iconHeight + 8);  // hack
-      viewModeCombo->addItem(tr("Page View"));
-      viewModeCombo->addItem(tr("Continuous View"));
+      viewModeCombo->addItem(tr("Page View"), int(LayoutMode::PAGE));
+      viewModeCombo->addItem(tr("Continuous View"), int(LayoutMode::LINE));
+      if (enableExperimental)
+            viewModeCombo->addItem(tr("Single Page"), int(LayoutMode::SYSTEM));
       connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
       fileTools->addWidget(viewModeCombo);
 
@@ -1379,13 +1381,10 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             changeState(STATE_DISABLED);
             return;
             }
+
       viewModeCombo->setEnabled(true);
-      int idx;
-      if (cs->layoutMode() == LayoutMode::PAGE)
-            idx = 0;
-      else
-            idx = 1;
-      viewModeCombo->setCurrentIndex(idx);
+      updateViewModeCombo();
+
       selectionChanged(cs->selection().state());
 
       _sstate = STATE_DISABLED; // defeat optimization
@@ -1423,6 +1422,28 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       if (_navigator && _navigator->widget())
             navigator()->setScoreView(view);
       ScoreAccessibility::instance()->updateAccessibilityInfo();
+      }
+
+//---------------------------------------------------------
+//   updateViewModeCombo
+//---------------------------------------------------------
+
+void MuseScore::updateViewModeCombo()
+      {
+      int idx;
+      switch (cs->layoutMode()) {
+            case LayoutMode::PAGE:
+            case LayoutMode::FLOAT:
+                  idx = 0;
+                  break;
+            case LayoutMode::LINE:
+                  idx = 1;
+                  break;
+            case LayoutMode::SYSTEM:
+                  idx = 2;
+                  break;
+            }
+      viewModeCombo->setCurrentIndex(idx);
       }
 
 //---------------------------------------------------------
@@ -3977,11 +3998,7 @@ void MuseScore::endCmd()
 
             if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();
-            if (cs->layoutMode() == LayoutMode::PAGE)
-                  viewModeCombo->setCurrentIndex(0);
-            else
-                  viewModeCombo->setCurrentIndex(1);
-
+            updateViewModeCombo();
             cs->end();
             ScoreAccessibility::instance()->updateAccessibilityInfo();
             }
@@ -4429,6 +4446,7 @@ void MuseScore::changeScore(int step)
 
 //---------------------------------------------------------
 //   switchLayoutMode
+//    val is index in QComboBox viewModeCombo
 //---------------------------------------------------------
 
 void MuseScore::switchLayoutMode(int val)
@@ -4444,16 +4462,7 @@ void MuseScore::switchLayoutMode(int val)
       while (m && !view.intersects(m->canvasBoundingRect()))
             m = m->nextMeasureMM();
 
-      LayoutMode mode;
-      switch (val) {
-            default:
-            case 0:
-                  mode = LayoutMode::PAGE;
-                  break;
-            case 1:
-                  mode = LayoutMode::LINE;
-                  break;
-            }
+      LayoutMode mode = static_cast<LayoutMode>(viewModeCombo->itemData(val).toInt());
       cs->ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(mode));
 
       cv->loopUpdate(getAction("loop")->isChecked());
