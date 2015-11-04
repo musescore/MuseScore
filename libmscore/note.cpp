@@ -1184,7 +1184,7 @@ void Note::read(XmlReader& e)
       // but since there are other causes of tpc corruption (eg, https://musescore.org/en/node/74746)
       // including perhaps some we don't know about yet,
       // we will attempt to fix some problems here regardless of version
-      if (!e.pasteMode() && !MScore::testMode) {
+      if (staff() && !staff()->isDrumStaff() && !e.pasteMode() && !MScore::testMode) {
             int tpc1Pitch = (tpc2pitch(_tpc[0]) + 12) % 12;
             int tpc2Pitch = (tpc2pitch(_tpc[1]) + 12) % 12;
             int concertPitch = _pitch % 12;
@@ -1192,18 +1192,16 @@ void Note::read(XmlReader& e)
                   qDebug("bad tpc1 - concertPitch = %d, tpc1 = %d", concertPitch, tpc1Pitch);
                   _pitch += tpc1Pitch - concertPitch;
                   }
-            if (staff()) {
-                  Interval v = staff()->part()->instrument(e.tick())->transpose();
-                  int transposedPitch = (_pitch - v.chromatic) % 12;
-                  if (tpc2Pitch != transposedPitch) {
-                        qDebug("bad tpc2 - transposedPitch = %d, tpc2 = %d", transposedPitch, tpc2Pitch);
-                        // just in case the staff transposition info is not reliable here,
-                        // do not attempt to correct tpc
-                        // except for older scores where we know there are tpc problems
-                        if (score()->mscVersion() <= 206) {
-                              v.flip();
-                              _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
-                              }
+            Interval v = staff()->part()->instrument(e.tick())->transpose();
+            int transposedPitch = (_pitch - v.chromatic) % 12;
+            if (tpc2Pitch != transposedPitch) {
+                  qDebug("bad tpc2 - transposedPitch = %d, tpc2 = %d", transposedPitch, tpc2Pitch);
+                  // just in case the staff transposition info is not reliable here,
+                  // do not attempt to correct tpc
+                  // except for older scores where we know there are tpc problems
+                  if (score()->mscVersion() <= 206) {
+                        v.flip();
+                        _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
                         }
                   }
             }
