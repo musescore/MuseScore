@@ -27,7 +27,7 @@ namespace Ms {
 TremoloBar::TremoloBar(Score* s)
    : Element(s)
       {
-      setFlag(ElementFlag::ON_STAFF, true);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
 //---------------------------------------------------------
@@ -38,6 +38,7 @@ void TremoloBar::layout()
       {
       qreal _spatium = spatium();
 
+      setPos(0.0, 0.0);
       if (staff() && !staff()->isTabStaff()) {
             setbbox(QRectF());
             if (!parent()) {
@@ -92,7 +93,7 @@ void TremoloBar::draw(QPainter* painter) const
 
       int n    = _points.size();
 
-      int previousTime = _points[0].time;
+      int previousTime  = _points[0].time;
       int previousPitch = _points[0].pitch;
       /* we place the tremolo bars starting slightly before the
        *  notehead, and end it slightly after, drawing above the
@@ -101,8 +102,8 @@ void TremoloBar::draw(QPainter* painter) const
        *  timeFactor and pitchFactor below to reduce these values down
        *  consistently to values that make sense to draw with the
        *  Musescore scale. */
-      qreal timeFactor  = 10;  // * _userMag;
-      qreal pitchFactor = 25;  // * _userMag;
+      qreal timeFactor  = 10.0 / _userMag;
+      qreal pitchFactor = 25.0 / _userMag;
       for (int pt = 1; pt < n; ++pt) {
             painter->drawLine(QLineF(previousTime/timeFactor, -previousPitch/pitchFactor-_spatium*3,
                                      _points[pt].time/timeFactor, -_points[pt].pitch/pitchFactor-_spatium*3));
