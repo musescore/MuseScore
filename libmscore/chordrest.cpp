@@ -893,7 +893,6 @@ Element* ChordRest::drop(const DropData& data)
             case Element::Type::FRET_DIAGRAM:
             case Element::Type::TREMOLOBAR:
             case Element::Type::SYMBOL:
-printf("drop %s\n", e->name());
                   e->setTrack(track());
                   e->setParent(segment());
                   score()->undoAddElement(e);
