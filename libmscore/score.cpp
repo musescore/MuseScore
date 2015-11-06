@@ -2868,6 +2868,8 @@ void Score::selectAdd(Element* e)
 void Score::selectRange(Element* e, int staffIdx)
       {
       int activeTrack = e->track();
+      // current selection is range extending to end of score?
+      bool endRangeSelected = selection().isRange() && selection().endSegment() == nullptr;
       if (e->type() == Element::Type::MEASURE) {
             Measure* m = static_cast<Measure*>(e);
             int tick  = m->tick();
@@ -2975,7 +2977,7 @@ void Score::selectRange(Element* e, int staffIdx)
                   qDebug("sel state %hhd", _selection.state());
                   return;
                   }
-            if (!_selection.endSegment())
+            if (!endRangeSelected && !_selection.endSegment())
                   _selection.setEndSegment(cr->segment()->nextCR());
             if (!_selection.startSegment())
                   _selection.setStartSegment(cr->segment());
