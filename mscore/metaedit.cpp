@@ -37,9 +37,13 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
       dirty = false;
 
       level->setValue(score->mscVersion());
+      level->setDisabled(true);
       version->setText(score->mscoreVersion());
+      version->setDisabled(true);
       revision->setValue(score->mscoreRevision());
+      revision->setDisabled(true);
       filePath->setText(score->importedFilePath());
+      filePath->setDisabled(true);
 
       int idx = 0;
       QMapIterator<QString, QString> i(s->metaTags());
