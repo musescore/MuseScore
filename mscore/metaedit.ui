@@ -15,25 +15,21 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="version"/>
+     </item>
+     <item row="1" column="0">
       <widget class="QLabel" name="label_7">
        <property name="text">
         <string>MuseScore Version:</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QLineEdit" name="version"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>Revision:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
+     <item row="1" column="3">
       <widget class="QSpinBox" name="revision">
        <property name="readOnly">
         <bool>true</bool>
@@ -46,14 +42,21 @@
        </property>
       </widget>
      </item>
-     <item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Revision:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
       <widget class="QLabel" name="label_9">
        <property name="text">
         <string>API-Level:</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="1" column="5">
       <widget class="QSpinBox" name="level">
        <property name="buttonSymbols">
         <enum>QAbstractSpinBox::NoButtons</enum>
@@ -63,23 +66,39 @@
        </property>
       </widget>
      </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>FilePath:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" colspan="5">
+      <widget class="QLineEdit" name="filePath">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
-    <layout class="QGridLayout" name="grid"/>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+     <widget class="QWidget" name="scrollWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>646</width>
+        <height>244</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout"/>
+     </widget>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
