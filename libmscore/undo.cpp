@@ -943,7 +943,7 @@ void Score::undoAddElement(Element* element)
                   }
             if (links == 0) {
                   undo(new AddElement(element));
-                  if (element->type() == Element::Type::FINGERING && element->userOff().isNull())
+                  if (element->type() == Element::Type::FINGERING && !element->isNudged())
                         element->score()->layoutFingering(static_cast<Fingering*>(element));
                   else if (element->type() == Element::Type::CHORD) {
 #ifndef QT_NO_DEBUG
