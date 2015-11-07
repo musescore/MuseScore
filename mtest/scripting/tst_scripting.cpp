@@ -30,11 +30,12 @@ class TestScripting : public QObject, public MTest
       {
       Q_OBJECT
 
-      void read1(const char*, const char*);
+      void read1(const QString&, const QString&);
 
    private slots:
       void initTestCase();
-      void test1() { read1("s1", "p1"); }
+      void test1() { read1("s1", "p1"); }       // scan note rest
+      void test2() { read1("s2", "p2"); }       // scan segment attributes
       };
 
 //---------------------------------------------------------
@@ -53,7 +54,7 @@ void TestScripting::initTestCase()
 //    reference
 //---------------------------------------------------------
 
-void TestScripting::read1(const char* file, const char* script)
+void TestScripting::read1(const QString& file, const QString& script)
       {
       Score* score = readScore(DIR + file + ".mscx");
       MuseScoreCore::mscoreCore->setCurrentScore(score);
@@ -83,7 +84,7 @@ void TestScripting::read1(const char* file, const char* script)
       QmlPlugin* item = qobject_cast<QmlPlugin*>(obj);
       item->runPlugin();
 
-      QVERIFY(compareFiles("p1.log", DIR + "p1.log.ref"));
+      QVERIFY(compareFiles(script + ".log", DIR + script + ".log.ref"));
       delete score;
       }
 

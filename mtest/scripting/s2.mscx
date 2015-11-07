@@ -59,8 +59,8 @@
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
-        <longName pos="0">Piano</longName>
-        <shortName pos="0">Pno.</shortName>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -111,26 +111,36 @@
           </Text>
         </VBox>
       <Measure number="1">
-        <KeySig>
-          <accidental>2</accidental>
-          </KeySig>
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <FretDiagram>
+          <string no="0">
+            <marker>88</marker>
+            </string>
+          <string no="1">
+            <dot>3</dot>
+            </string>
+          <string no="2">
+            <dot>2</dot>
+            </string>
+          <string no="3">
+            <marker>79</marker>
+            </string>
+          <string no="4">
+            <dot>1</dot>
+            </string>
+          <string no="5">
+            <marker>79</marker>
+            </string>
+          </FretDiagram>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
-            <Accidental>
-              <subtype>sharp</subtype>
-              </Accidental>
-            <pitch>68</pitch>
-            <tpc>22</tpc>
-            </Note>
-          <Note>
-            <pitch>74</pitch>
-            <tpc>16</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
         <Rest>

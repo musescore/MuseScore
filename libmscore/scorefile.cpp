@@ -1176,6 +1176,8 @@ bool Score::read(XmlReader& e)
                   QString s = e.readElementText();
                   if (s == "line")
                         _layoutMode = LayoutMode::LINE;
+                  else if (s == "system")
+                        _layoutMode = LayoutMode::SYSTEM;
                   else
                         qDebug("layoutMode: %s", qPrintable(s));
                   }

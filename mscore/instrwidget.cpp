@@ -355,6 +355,8 @@ InstrumentsWidget::InstrumentsWidget(QWidget* parent)
    : QWidget(parent)
       {
       setupUi(this);
+      upButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      downButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
       splitter->setStretchFactor(0, 10);
       splitter->setStretchFactor(1, 0);
       splitter->setStretchFactor(2, 15);

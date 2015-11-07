@@ -14,14 +14,16 @@
 #include "musescore.h"
 #include "libmscore/fret.h"
 #include "libmscore/score.h"
+#include "fretproperties.h"
+#include "scoreview.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorFret
+//   InspectorFretDiagram
 //---------------------------------------------------------
 
-InspectorFret::InspectorFret(QWidget* parent)
+InspectorFretDiagram::InspectorFretDiagram(QWidget* parent)
    : InspectorBase(parent)
       {
       e.setupUi(addWidget());
@@ -32,10 +34,26 @@ InspectorFret::InspectorFret(QWidget* parent)
             { P_ID::VISIBLE,      0, 0, e.visible,     e.resetVisible    },
             { P_ID::USER_OFF,     0, 0, e.offsetX,     e.resetX          },
             { P_ID::USER_OFF,     1, 0, e.offsetY,     e.resetY          },
-            { P_ID::MAG,          0, 0, f.mag,         f.resetMag        },
+            { P_ID::MAG,          0, 0, f.mag,         f.resetMag        }
             };
 
       mapSignals();
+      connect(f.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
       }
+
+//---------------------------------------------------------
+//   propertiesClicked
+//---------------------------------------------------------
+
+void InspectorFretDiagram::propertiesClicked()
+      {
+      FretDiagram* fd = static_cast<FretDiagram*>(inspector->element());
+      Score* score = fd->score();
+      score->startCmd();
+      mscore->currentScoreView()->editFretDiagram(fd);
+      score->setLayoutAll(true);
+      score->endCmd();
+      }
+
 }
 

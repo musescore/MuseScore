@@ -31,6 +31,7 @@
 #include "inspectorText.h"
 #include "musescore.h"
 #include "scoreview.h"
+#include "bendproperties.h"
 
 #include "libmscore/element.h"
 #include "libmscore/score.h"
@@ -51,6 +52,8 @@
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/tuplet.h"
+#include "libmscore/bend.h"
+#include "libmscore/tremolobar.h"
 
 namespace Ms {
 
@@ -240,13 +243,16 @@ void Inspector::setElements(const QList<Element*>& l)
                               ie = new InspectorAmbitus(this);
                               break;
                         case Element::Type::FRET_DIAGRAM:
-                              ie = new InspectorFret(this);
+                              ie = new InspectorFretDiagram(this);
                               break;
                         case Element::Type::LAYOUT_BREAK:
                               ie = new InspectorBreak(this);
                               break;
                         case Element::Type::BEND:
                               ie = new InspectorBend(this);
+                              break;
+                        case Element::Type::TREMOLOBAR:
+                              ie = new InspectorTremoloBar(this);
                               break;
                         case Element::Type::ARPEGGIO:
                               ie = new InspectorArpeggio(this);
@@ -654,6 +660,58 @@ InspectorBend::InspectorBend(QWidget* parent)
             };
 
       mapSignals();
+      connect(g.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
+      }
+
+//---------------------------------------------------------
+//   propertiesClicked
+//---------------------------------------------------------
+
+void InspectorBend::propertiesClicked()
+      {
+      Bend* b = static_cast<Bend*>(inspector->element());
+      Score* score = b->score();
+      score->startCmd();
+      mscore->currentScoreView()->editBendProperties(b);
+      score->setLayoutAll(true);
+      score->endCmd();
+      }
+
+//---------------------------------------------------------
+//   InspectorTremoloBar
+//---------------------------------------------------------
+
+InspectorTremoloBar::InspectorTremoloBar(QWidget* parent)
+   : InspectorBase(parent)
+      {
+      e.setupUi(addWidget());
+      g.setupUi(addWidget());
+
+      iList = {
+            { P_ID::COLOR,        0, 0, e.color,       e.resetColor       },
+            { P_ID::VISIBLE,      0, 0, e.visible,     e.resetVisible     },
+            { P_ID::USER_OFF,     0, 0, e.offsetX,     e.resetX           },
+            { P_ID::USER_OFF,     1, 0, e.offsetY,     e.resetY           },
+//            { P_ID::PLAY,         0, 0, g.playBend,    g.resetPlayBend    }
+            { P_ID::MAG,          0, 0, g.mag,         g.resetMag        }
+            };
+
+      mapSignals();
+      connect(g.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
+      }
+
+//---------------------------------------------------------
+//   propertiesClicked
+//---------------------------------------------------------
+
+void InspectorTremoloBar::propertiesClicked()
+      {
+      Bend* b = static_cast<Bend*>(inspector->element());
+      Score* score = b->score();
+      score->startCmd();
+      mscore->currentScoreView()->editBendProperties(b);
+      score->setLayoutAll(true);
+      score->endCmd();
       }
 
 //---------------------------------------------------------

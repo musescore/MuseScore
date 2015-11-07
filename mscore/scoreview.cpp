@@ -1038,14 +1038,9 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       a = popup->addAction(tr("Help"));
       a->setData("help");
 
-#ifdef NDEBUG
-      if (enableExperimental) {
-#endif
-            popup->addSeparator();
-            a = popup->addAction(tr("Debugger"));
-            a->setData("list");
-#ifdef NDEBUG
-            }
+#ifndef NDEBUG
+      popup->addSeparator();
+      popup->addAction(tr("Debugger"))->setData("list");
 #endif
 
       a = popup->exec(pos);
@@ -1137,7 +1132,9 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       a->setEnabled(!obj->isMMRest());
       popup->addSeparator();
 
+#ifndef NDEBUG
       popup->addAction(tr("Object Debugger"))->setData("list");
+#endif
 
       a = popup->exec(gpos);
       if (a == 0)
@@ -1883,7 +1880,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       QRectF fr = imatrix.mapRect(QRectF(r));
 
       QRegion r1(r);
-      if (_score->layoutMode() == LayoutMode::LINE) {
+      if ((_score->layoutMode() == LayoutMode::LINE) || (_score->layoutMode() == LayoutMode::SYSTEM)) {
             Page* page = _score->pages().front();
             QList<Element*> ell = page->items(fr);
             qStableSort(ell.begin(), ell.end(), elementLessThan);
@@ -2036,7 +2033,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             p.drawLine(QLineF(x2, y1, x2, y2).translated(system2->page()->pos()));
             }
       p.setMatrixEnabled(false);
-      if ((_score->layoutMode() != LayoutMode::LINE) && !r1.isEmpty()) {
+      if (_score->layoutMode() != LayoutMode::LINE && _score->layoutMode() != LayoutMode::SYSTEM && !r1.isEmpty()) {
             p.setClipRegion(r1);  // only background
             if (_bgPixmap == 0 || _bgPixmap->isNull())
                   p.fillRect(r, _bgColor);
@@ -2195,6 +2192,8 @@ void ScoreView::wheelEvent(QWheelEvent* event)
 
 void ScoreView::constraintCanvas (int* dxx, int* dyy)
       {
+      if (score()->layoutMode() == LayoutMode::SYSTEM)
+            return;
       int dx = *dxx;
       int dy = *dyy;
       QRectF rect = QRectF(0, 0, width(), height());
