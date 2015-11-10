@@ -128,11 +128,12 @@ enum class ArticulationType : char {
       LinePrall,
       Schleifer,
       Snappizzicato,
+      ARTICULATIONS_PROPER,
 //      Tapping,
 //      Slapping,
 //      Popping,
       // Fingerings
-      ThumbPosition,
+      ThumbPosition = ARTICULATIONS_PROPER,
       LuteFingThumb,
       LuteFingFirst,
       LuteFingSecond,
