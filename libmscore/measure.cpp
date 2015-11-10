@@ -3062,6 +3062,8 @@ qreal Measure::minWidth1() const
                   s = s->next();
                   }
             _minWidth1 = score()->computeMinWidth(s, false);
+            if (MScore::debugMode)
+                  qDebug("Measure::minWidth1: %d %f", no(), _minWidth1);
             }
       return _minWidth1;
       }
@@ -3074,8 +3076,11 @@ qreal Measure::minWidth1() const
 
 qreal Measure::minWidth2() const
       {
-      if (_minWidth2 == 0.0)
+      if (_minWidth2 == 0.0) {
             _minWidth2 = score()->computeMinWidth(first(), system()->firstMeasure() == this);
+            if (MScore::debugMode)
+                  qDebug("Measure::minWidth2: %d %f", no(), _minWidth2);
+            }
       return _minWidth2;
       }
 
