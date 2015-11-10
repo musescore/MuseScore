@@ -288,11 +288,12 @@ class Measure : public MeasureBase {
       void exchangeVoice(int voice1, int voice2, int staffIdx);
       void checkMultiVoices(int staffIdx);
       bool hasVoice(int track) const;
-      bool isMeasureRest(int staffIdx);
-      bool isFullMeasureRest();
-      bool isRepeatMeasure(Staff* staff);
+      bool isMeasureRest(int staffIdx) const;
+      bool isFullMeasureRest() const;
+      bool isRepeatMeasure(Staff* staff) const;
       bool visible(int staffIdx) const;
       bool slashStyle(int staffIdx) const;
+      bool isFinalMeasureOfSection() const;
 
       bool breakMultiMeasureRest() const        { return _breakMultiMeasureRest | _breakMMRest; }
       bool breakMMRest() const                  { return _breakMMRest; }
@@ -302,7 +303,6 @@ class Measure : public MeasureBase {
 
       bool isEmpty() const;
       bool isOnlyRests(int track) const;
-
 
       void layoutStage1();
       int playbackCount() const      { return _playbackCount; }

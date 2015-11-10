@@ -234,7 +234,10 @@ static const StyleTypes2 styleTypes2[] = {
       { StyleIdx::barreLineWidth,              StyleType("barreLineWidth",          StyleValueType::DOUBLE)  },
       { StyleIdx::fretMag,                     StyleType("fretMag",                 StyleValueType::DOUBLE)  },
       { StyleIdx::scaleBarlines,               StyleType("scaleBarlines",           StyleValueType::BOOL)    },
-      { StyleIdx::barGraceDistance,            StyleType("barGraceDistance",        StyleValueType::SPATIUM) }
+      { StyleIdx::barGraceDistance,            StyleType("barGraceDistance",        StyleValueType::SPATIUM) },
+      { StyleIdx::lyricsDashMinLength,         StyleType("lyricsDashMinLength",     StyleValueType::SPATIUM) },
+      { StyleIdx::lyricsDashMaxLength,         StyleType("lyricsDashMaxLegth",      StyleValueType::SPATIUM) },
+      { StyleIdx::lyricsDashForce,             StyleType("lyricsDashForce",         StyleValueType::BOOL)    }
       };
 
 class StyleTypes {
@@ -598,6 +601,9 @@ StyleData::StyleData()
             { StyleIdx::fretMag,                     QVariant(1.0) },
             { StyleIdx::scaleBarlines,               QVariant(true) },
             { StyleIdx::barGraceDistance,            QVariant(.6) },
+            { StyleIdx::lyricsDashMinLength,         QVariant(0.4) },
+            { StyleIdx::lyricsDashMaxLength,         QVariant(0.8) },
+            { StyleIdx::lyricsDashForce,             QVariant(true) }
             };
       for (unsigned i = 0; i < sizeof(values2)/sizeof(*values2); ++i)
             _values[int(values2[i].idx)] = values2[i].val;

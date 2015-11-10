@@ -108,7 +108,7 @@ MStaff::MStaff(const MStaff& m)
       _noText      = 0;
       distanceUp   = m.distanceUp;
       distanceDown = m.distanceDown;
-      lines        = m.lines;
+      lines        = new StaffLines(*m.lines);
       hasVoices    = m.hasVoices;
       _vspacerUp   = 0;
       _vspacerDown = 0;
@@ -1315,6 +1315,7 @@ Element* Measure::drop(const DropData& data)
       QPointF mrp(data.pos - pagePos());
 #endif
       Staff* staff = score()->staff(staffIdx);
+      bool fromPalette = (e->track() == -1);
 
       switch(e->type()) {
             case Element::Type::MEASURE_LIST:
@@ -1332,6 +1333,16 @@ qDebug("drop staffList");
             case Element::Type::JUMP:
                   e->setParent(this);
                   e->setTrack(0);
+                  {
+                  // code borrowed from ChordRest::drop()
+                  Text* t = static_cast<Text*>(e);
+                  TextStyleType st = t->textStyleType();
+                  // for palette items, we want to use current score text style settings
+                  // except where the source element had explicitly overridden these via text properties
+                  // palette text style will be relative to baseStyle, so rebase this to score
+                  if (st >= TextStyleType::DEFAULT && fromPalette)
+                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
+                  }
                   score()->undoAddElement(e);
                   return e;
 
@@ -2401,12 +2412,14 @@ void Measure::read(XmlReader& e, int staffIdx)
 
 bool Measure::visible(int staffIdx) const
       {
-      if (system() && (system()->staves()->isEmpty() || !system()->staff(staffIdx)->show()))
-            return false;
       if (staffIdx >= score()->staves().size()) {
             qDebug("Measure::visible: bad staffIdx: %d", staffIdx);
             return false;
             }
+      if (system() && (system()->staves()->isEmpty() || !system()->staff(staffIdx)->show()))
+            return false;
+      if (score()->staff(staffIdx)->cutaway() && isMeasureRest(staffIdx))
+            return false;
       return score()->staff(staffIdx)->show() && staves[staffIdx]->_visible;
       }
 
@@ -2417,6 +2430,26 @@ bool Measure::visible(int staffIdx) const
 bool Measure::slashStyle(int staffIdx) const
       {
       return score()->staff(staffIdx)->slashStyle() || staves[staffIdx]->_slashStyle || score()->staff(staffIdx)->staffType()->slashStyle();
+      }
+
+//---------------------------------------------------------
+//   isFinalMeasureOfSection
+//    returns true if this measure is final actual measure of a section
+//    takes into consideration fact that subsequent measures base objects may have section break before encountering next actual measure
+//---------------------------------------------------------
+
+bool Measure::isFinalMeasureOfSection() const
+      {
+      const MeasureBase* mb = static_cast<const MeasureBase*>(this);
+
+      do {
+            if (mb->sectionBreak())
+                  return true;
+
+            mb = mb->next();
+            } while (mb && !mb->isMeasure());   // loop until reach next actual measure or end of score
+
+      return false;
       }
 
 //---------------------------------------------------------
@@ -2573,13 +2606,17 @@ bool Measure::createEndBarLines()
       int span    = 0;        // span counter
       int aspan   = 0;        // actual span
       bool mensur = false;    // keep note of Mensurstrich case
-      int spanTot;            // to keep track of the target span
+      int spanTot;            // to keep track of the target span as we count down
+      int lastIdx;
       int spanFrom;
       int spanTo;
+      static const int unknownSpanFrom = 9999;
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            Staff* staff = score()->staff(staffIdx);
-            int track    = staffIdx * VOICES;
+            Staff* staff      = score()->staff(staffIdx);
+            int track         = staffIdx * VOICES;
+            int staffLines    = staff->lines();
+            //bool show         = system() ? staff->show() && system()->staff(staffIdx)->show() : staff->show();
 
             // get existing bar line for this staff, if any
             BarLine* cbl = static_cast<BarLine*>(seg->element(track));
@@ -2588,18 +2625,18 @@ bool Measure::createEndBarLines()
             // and forget about any previous bar line
 
             if (span == 0) {
-                  if (cbl && cbl->customSpan()) {      // if there is a bar line and has custom span,
+                  if (cbl && cbl->customSpan()) {     // if there is a bar line and has custom span,
                         span        = cbl->span();    // get span values from it
                         spanFrom    = cbl->spanFrom();
                         spanTo      = cbl->spanTo();
                         // if bar span values == staff span values, set bar as not custom
-                        if(span == staff->barLineSpan() && spanFrom == staff->barLineFrom()
+                        if (span == staff->barLineSpan() && spanFrom == staff->barLineFrom()
                            && spanTo == staff->barLineTo())
                               cbl->setCustomSpan(false);
                         }
                   else {                              // otherwise, get from staff
-                        span        = staff->barLineSpan();
-                        // if some span OR last staff (span=0) of a Mensurstrich case, get From/To from staff
+                        span = staff->barLineSpan();
+                        // if some span OR last staff (span==0) of a Mensurstrich case, get From/To from staff
                         if (span || mensur) {
                               spanFrom    = staff->barLineFrom();
                               spanTo      = staff->barLineTo();
@@ -2608,20 +2645,32 @@ bool Measure::createEndBarLines()
                         // but if staff is set to no span, a multi-staff spanning bar line
                         // has been shortened to span less staves and following staves left without bars;
                         // set bar line span values to default
-                        else {
+                        else if (staff->show()) {
                               span        = 1;
-                              spanFrom    = 0;
-                              spanTo      = (staff->lines()-1)*2;
+                              spanFrom    = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
+                              spanTo      = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staff->lines() - 1) * 2;
                               }
                         }
-                  if ((staffIdx + span) > nstaves)
+                  if (!staff->show()) {
+                        // this staff is not visible
+                        // we should recalculate spanFrom when we find a valid staff
+                        spanFrom = unknownSpanFrom;
+                        }
+                  if ((staffIdx + span) > nstaves)    // sanity check, don't span more than available staves
                         span = nstaves - staffIdx;
                   spanTot     = span;
-                  bl = 0;
+                  lastIdx     = staffIdx + span - 1;
+                  bl          = nullptr;
+                  }
+            else if (spanFrom == unknownSpanFrom && staff->show()) {
+                  // we started a span earlier, but had not found a valid staff yet
+                  spanFrom = staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0;
                   }
             if (staff->show() && span) {
                   //
                   // there should be a barline in this staff
+                  // this is true even for a staff not shown because of hide empty staves
+                  // but not for a staff not shown because it is made invisible
                   //
                   // if we already have a bar line, keep extending this bar line down until span exhausted;
                   // if no barline yet, re-use the bar line existing in this staff if any,
@@ -2692,15 +2741,17 @@ bool Measure::createEndBarLines()
             if (span) {
                   if (bl) {
                         ++aspan;
-                        if (staff->show()) {          // update only if visible
-                              bl->setSpan(aspan);
+                        if (staff->show()) {          // count visible staves only (whether hidden or not)
+                              bl->setSpan(aspan);     // need to update span & spanFrom even for hidden staves
                               bl->setSpanFrom(spanFrom);
+                              //if (show) {             // but don't update spanTo for hidden staves
                               // if current actual span < target span, set spanTo to full staff height
-                              if(aspan < spanTot)
-                                    bl->setSpanTo((staff->lines()-1)*2);
+                              if (aspan < spanTot && staffIdx < lastIdx)
+                                    bl->setSpanTo(staffLines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (staffLines - 1) * 2);
                               // if we reached target span, set spanTo to intended value
                               else
                                     bl->setSpanTo(spanTo);
+                              //      }
                               }
                         }
                   --span;
@@ -2836,7 +2887,7 @@ bool Measure::hasVoice(int track) const
 ///   all staves.
 //-------------------------------------------------------------------
 
-bool Measure::isMeasureRest(int staffIdx)
+bool Measure::isMeasureRest(int staffIdx) const
       {
       int strack;
       int etrack;
@@ -2864,7 +2915,7 @@ bool Measure::isMeasureRest(int staffIdx)
 //    rests.
 //---------------------------------------------------------
 
-bool Measure::isFullMeasureRest()
+bool Measure::isFullMeasureRest() const
       {
       int strack = 0;
       int etrack = score()->nstaves() * VOICES;
@@ -2887,7 +2938,7 @@ bool Measure::isFullMeasureRest()
 //   isRepeatMeasure
 //---------------------------------------------------------
 
-bool Measure::isRepeatMeasure(Staff* staff)
+bool Measure::isRepeatMeasure(Staff* staff) const
       {
       int staffIdx = score()->staffIdx(staff);
       int strack        = staffIdx * VOICES;
@@ -3042,6 +3093,8 @@ qreal Measure::minWidth1() const
                   s = s->next();
                   }
             _minWidth1 = score()->computeMinWidth(s, false);
+            if (MScore::debugMode)
+                  qDebug("Measure::minWidth1: %d %f", no(), _minWidth1 / MScore::DPMM);
             }
       return _minWidth1;
       }
@@ -3054,8 +3107,11 @@ qreal Measure::minWidth1() const
 
 qreal Measure::minWidth2() const
       {
-      if (_minWidth2 == 0.0)
+      if (_minWidth2 == 0.0) {
             _minWidth2 = score()->computeMinWidth(first(), system()->firstMeasure() == this);
+            if (MScore::debugMode)
+                  qDebug("Measure::minWidth2: %d %f", no(), _minWidth2 / MScore::DPMM);
+            }
       return _minWidth2;
       }
 
@@ -3131,6 +3187,8 @@ void Measure::layoutX(qreal stretch)
       qreal clefKeyRightMargin    = score()->styleS(StyleIdx::clefKeyRightMargin).val() * _spatium;
       qreal minHarmonyDistance    = score()->styleS(StyleIdx::minHarmonyDistance).val() * _spatium;
       qreal maxHarmonyBarDistance = score()->styleS(StyleIdx::maxHarmonyBarDistance).val() * _spatium;
+      qreal minLyricsDashWidth    = (score()->styleS(StyleIdx::lyricsDashMinLength).val()
+                  + Lyrics::LYRICS_DASH_DEFAULT_PAD * 2) * _spatium;
 
       qreal rest[nstaves];    // fixed space needed from previous segment
       memset(rest, 0, nstaves * sizeof(qreal));
@@ -3327,8 +3385,15 @@ void Measure::layoutX(qreal stretch)
                                           continue;
                                     lyrics = l;
                                     QRectF b(l->bbox().translated(l->pos()));
+                                    qreal brgt = b.right();
+                                    // if lyrics followed by a dash & score style requires the dash in any case,
+                                    // reserve at least the min dash length plus before and after padding
+                                    if ( (l->syllabic() == Lyrics::Syllabic::BEGIN
+                                                || l->syllabic() == Lyrics::Syllabic::MIDDLE)
+                                                      && score()->styleB(StyleIdx::lyricsDashForce) )
+                                          brgt += minLyricsDashWidth;
                                     llw = qMax(llw, -(b.left()+lx+cx));
-                                    rrw = qMax(rrw, b.right()+rx+cx);
+                                    rrw = qMax(rrw, brgt+rx+cx);
                                     }
                               }
                         if (lyrics) {

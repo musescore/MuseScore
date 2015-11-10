@@ -460,7 +460,7 @@ void Staff::write(Xml& xml) const
 
       // for copy/paste we need to know the actual transposition
       if (xml.clipboardmode) {
-            Interval v = part()->instrument()->transpose();
+            Interval v = part()->instrument()->transpose(); // TODO: tick?
             if (v.diatonic)
                   xml.tag("transposeDiatonic", v.diatonic);
             if (v.chromatic)
@@ -482,8 +482,10 @@ void Staff::write(Xml& xml) const
             xml.tag("small", small());
       if (invisible())
             xml.tag("invisible", invisible());
-      if (neverHide())
-            xml.tag("neverHide", neverHide());
+      if (hideWhenEmpty() != HideMode::AUTO)
+            xml.tag("hideWhenEmpty", int(hideWhenEmpty()));
+      if (cutaway())
+            xml.tag("cutaway", cutaway());
       if (showIfEmpty())
             xml.tag("showIfSystemEmpty", showIfEmpty());
       if (_hideSystemBarLine)
@@ -561,8 +563,15 @@ void Staff::read(XmlReader& e)
                   setSmall(e.readInt());
             else if (tag == "invisible")
                   setInvisible(e.readInt());
-            else if (tag == "neverHide")
-                  setNeverHide(e.readInt());
+            else if (tag == "hideWhenEmpty")
+                  setHideWhenEmpty(HideMode(e.readInt()));
+            else if (tag == "neverHide") {      // 2.0 compatibility
+                  bool v = e.readInt();
+                  if (v)
+                        setHideWhenEmpty(HideMode::NEVER);
+                  }
+            else if (tag == "cutaway")
+                  setCutaway(e.readInt());
             else if (tag == "showIfSystemEmpty")
                   setShowIfEmpty(e.readInt());
             else if (tag == "hideSystemBarLine")
@@ -723,11 +732,63 @@ void Staff::setLines(int val)
 
 //---------------------------------------------------------
 //   lineDistance
+//    distance between staff lines
 //---------------------------------------------------------
 
 qreal Staff::lineDistance() const
       {
       return _staffType.lineDistance().val();
+      }
+
+//---------------------------------------------------------
+//   logicalLineDistance
+//    distance between logical (note) lines
+//---------------------------------------------------------
+
+qreal Staff::logicalLineDistance() const
+      {
+      return scaleNotesToLines() ? _staffType.lineDistance().val() : 1.0;
+      }
+
+//---------------------------------------------------------
+//   scaleNotesToLines
+//    returns true if logical line = physical line
+//---------------------------------------------------------
+
+bool Staff::scaleNotesToLines() const
+      {
+      // TODO: make style option
+      return !isDrumStaff();
+      }
+
+//---------------------------------------------------------
+//   middleLine
+//    returns logical line number of middle staff line
+//---------------------------------------------------------
+
+int Staff::middleLine() const
+      {
+      int line = lines() - 1;
+      if (scaleNotesToLines())
+            return line;
+      else
+            return line * lineDistance() / logicalLineDistance();
+      //return isTabStaff() ? line : line * lineDistance() / logicalLineDistance();
+      }
+
+//---------------------------------------------------------
+//   bottomLine
+//    returns logical line number of bottom staff line
+//---------------------------------------------------------
+
+int Staff::bottomLine() const
+      {
+      int line = (lines() - 1) * 2;
+      if (scaleNotesToLines())
+            return line;
+      else
+            return line * lineDistance() / logicalLineDistance();
+      //return isTabStaff() ? line : line * lineDistance() / logicalLineDistance();
       }
 
 //---------------------------------------------------------
@@ -919,7 +980,8 @@ void Staff::init(const Staff* s)
       _barLineFrom       = s->_barLineFrom;
       _barLineTo         = s->_barLineTo;
       _invisible         = s->_invisible;
-      _neverHide         = s->_neverHide;
+      _hideWhenEmpty     = s->_hideWhenEmpty;
+      _cutaway           = s->_cutaway;
       _showIfEmpty       = s->_showIfEmpty;
       _hideSystemBarLine = s->_hideSystemBarLine;
       _color             = s->_color;

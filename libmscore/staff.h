@@ -95,6 +95,10 @@ struct SwingParameters {
 class Staff : public QObject, public ScoreElement {
       Q_OBJECT
 
+public:
+      enum class HideMode { AUTO, ALWAYS, NEVER };
+
+private:
       Part* _part       { 0 };
 
       ClefList clefs;
@@ -109,9 +113,10 @@ class Staff : public QObject, public ScoreElement {
       int _barLineTo;                  ///< line of end staff to draw the bar line to (0= staff top line, ...)
       bool _small        { false };
       bool _invisible    { false };
-      bool _neverHide    { false };    ///< always show this staff, even if empty and hideEmptyStaves is true
+      bool _cutaway      { false };
       bool _showIfEmpty  { false };    ///< show this staff if system is empty and hideEmptyStaves is true
       bool _hideSystemBarLine  { false }; // no system barline if not preceeded by staff with barline
+      HideMode _hideWhenEmpty  { HideMode::AUTO };    // hide empty staves
 
       QColor _color      { MScore::defaultColor };
       qreal _userDist    { 0.0   };        ///< user edited extra distance
@@ -183,18 +188,24 @@ class Staff : public QObject, public ScoreElement {
       void setSmall(bool val)        { _small = val;        }
       bool invisible() const         { return _invisible;   }
       void setInvisible(bool val)    { _invisible = val;    }
-      bool neverHide() const         { return _neverHide;   }
-      void setNeverHide(bool val)    { _neverHide = val;    }
+      bool cutaway() const           { return _cutaway;     }
+      void setCutaway(bool val)      { _cutaway = val;      }
       bool showIfEmpty() const       { return _showIfEmpty; }
       void setShowIfEmpty(bool val)  { _showIfEmpty = val;  }
 
-      void setHideSystemBarLine(bool val) { _hideSystemBarLine = val;  }
       bool hideSystemBarLine() const      { return _hideSystemBarLine; }
+      void setHideSystemBarLine(bool val) { _hideSystemBarLine = val;  }
+      HideMode hideWhenEmpty() const      { return _hideWhenEmpty;     }
+      void setHideWhenEmpty(HideMode v)   { _hideWhenEmpty = v;        }
 
       void setSlashStyle(bool val);
       int lines() const;
       void setLines(int);
       qreal lineDistance() const;
+      qreal logicalLineDistance() const;
+      bool scaleNotesToLines() const;
+      int middleLine() const;
+      int bottomLine() const;
       int barLineSpan() const        { return _barLineSpan; }
       int barLineFrom() const        { return _barLineFrom; }
       int barLineTo() const          { return _barLineTo;   }

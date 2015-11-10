@@ -94,6 +94,9 @@ private:
 
 class FretDiagram;
 class FiguredBassItem;
+class Glissando;
+class Pedal;
+class Trill;
 
 class MusicXMLParserPass2 {
 public:

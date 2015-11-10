@@ -392,6 +392,10 @@
       <displayName>MuseScore Tab Modern</displayName>
       <defaultPitch>15</defaultPitch>
       <defaultYOffset>0</defaultYOffset>
+      <beamWidth>0.5</beamWidth>
+      <stemHeight>3</stemHeight>
+      <stemWidth>0.1</stemWidth>
+      <zeroBeamValue>semiminima</zeroBeamValue>
       <duration value="longa">Ƞ</duration>
       <duration value="brevis">ȡ</duration>
       <duration value="semibrevis">Ȣ</duration>
@@ -410,6 +414,10 @@
       <displayName>MuseScore Tab Italian</displayName>
       <defaultPitch>15</defaultPitch>
       <defaultYOffset>0</defaultYOffset>
+      <beamWidth>0.15</beamWidth>
+      <stemHeight>1.75</stemHeight>
+      <stemWidth>0.15</stemWidth>
+      <zeroBeamValue>semibrevis</zeroBeamValue>
       <duration value="longa">Ȁ</duration>
       <duration value="brevis">ȁ</duration>
       <duration value="semibrevis">Ȃ</duration>
@@ -428,6 +436,10 @@
       <displayName>MuseScore Tab French</displayName>
       <defaultPitch>15</defaultPitch>
       <defaultYOffset>0</defaultYOffset>
+      <beamWidth>0.30</beamWidth>
+      <stemHeight>3.125</stemHeight>
+      <stemWidth>0.21</stemWidth>
+      <zeroBeamValue>semiminima</zeroBeamValue>
       <duration value="longa">Ȑ</duration>
       <duration value="brevis">ȑ</duration>
       <duration value="semibrevis">Ȓ</duration>

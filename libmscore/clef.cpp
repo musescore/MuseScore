@@ -191,7 +191,7 @@ void Clef::layout()
                         // if courtesy clef: show if score has courtesy clefs on
                         || ( score()->styleB(StyleIdx::genCourtesyClef)
                               // AND measure is not at the end of a repeat or of a section
-                              && !( (meas->repeatFlags() & Repeat::END) || meas->sectionBreak() )
+                              && !( (meas->repeatFlags() & Repeat::END) || meas->isFinalMeasureOfSection() )
                               // AND this clef has courtesy clef turned on
                               && showCourtesy() );
                   bHide |= !showClef;
@@ -206,6 +206,10 @@ void Clef::layout()
                   }
 
             lines = staffType->lines();         // init values from staff type
+#if 0
+            // with fewer than 5 lines, keep clef toward top of staff (ignore line spacing)
+            if (!stf->isPitchedStaff() || lines >= 5)
+#endif
             lineDist = staffType->lineDistance().val();
             }
 

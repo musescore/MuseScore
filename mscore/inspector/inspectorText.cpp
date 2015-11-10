@@ -68,7 +68,8 @@ void InspectorText::resetToStyle()
       for (Element* e : inspector->el()) {
             Text* text = static_cast<Text*>(e);
             text->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue(score->textStyle(text->textStyleType())));
-            text->undoChangeProperty(P_ID::TEXT, text->plainText());
+            // Preserve <sym> tags
+            text->undoChangeProperty(P_ID::TEXT, text->plainText().toHtmlEscaped().replace("&lt;sym&gt;","<sym>").replace("&lt;/sym&gt;","</sym>"));
             }
       score->endCmd();
       }

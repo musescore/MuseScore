@@ -62,11 +62,10 @@ class Lyrics : public Text {
       static constexpr qreal  MELISMA_DEFAULT_PAD                 = 0.10;     // the empty space before a melisma line
       static constexpr qreal  LYRICS_DASH_DEFAULT_STEP            = 16.0;     // the max. distance between dashes
       static constexpr qreal  LYRICS_DASH_DEFAULT_PAD             = 0.05;     // the min. empty space before and after a dash
-      static constexpr qreal  LYRICS_DASH_MIN_LENGTH              = 0.25;     // below this length, the dash is skipped
-      static constexpr qreal  LYRICS_WORD_MIN_DISTANCE            = 0.33;     // min. distance between lyrics from different words
+// WORD_MIN_DISTANCE has never been implemented
+//      static constexpr qreal  LYRICS_WORD_MIN_DISTANCE            = 0.33;     // min. distance between lyrics from different words
       // These values are used when USE_FONT_DASH_METRIC is not defined
 #if !defined(USE_FONT_DASH_METRIC)
-      static constexpr qreal  LYRICS_DASH_DEFAULT_LENGTH          = 0.80;     // in sp. units
       static constexpr qreal  LYRICS_DASH_DEFAULT_LINE_THICKNESS  = 0.15;     // in sp. units
       static constexpr qreal  LYRICS_DASH_Y_POS_RATIO             = 0.25;     // the fraction of lyrics font tot. height to
                                                                               // raise the dashes above text base line;

@@ -238,18 +238,24 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                   Staff* staff2 = score()->staff(staffIdx2);
                   SysStaff* sysStaff1 = system->staff(staffIdx1);
                   SysStaff* sysStaff2 = system->staff(staffIdx2);
+                  SysStaff* sysStaff1a = nullptr;     // first staff that is shown, even if it has invisible measures
+                  Measure* nm = measure->nextMeasure();
+                  if (nm && nm->system() != measure->system())
+                        nm = nullptr;
                   while (span > 0) {
+                        bool show1 = sysStaff1->show() && staff1->show();
                         // if start staff not shown, reduce span and move one staff down
-
-                        if ( !(sysStaff1->show() && staff1->show()) ) {
+                        if (!(show1 && (measure->visible(staffIdx1) || (nm && nm->visible(staffIdx1))))) {
                               span--;
+                              if (show1 && !sysStaff1a)
+                                    sysStaff1a = sysStaff1;       // use for its y offset
                               if (staffIdx1 >= nstaves-1)         // running out of staves?
                                     break;
                               sysStaff1 = system->staff(++staffIdx1);
                               staff1    = score()->staff(staffIdx1);
                               }
                         // if end staff not shown, reduce span and move one staff up
-                        else if ( !(sysStaff2->show() && staff2->show()) ) {
+                        else if (!(sysStaff2->show() && staff2->show() && (measure->visible(staffIdx2) || (nm && nm->visible(staffIdx2))))) {
                               span--;
                               if (staffIdx2 == 0)
                                     break;
@@ -280,7 +286,8 @@ void BarLine::getY(qreal* y1, qreal* y2) const
                         // ordinary barline within system, parent is measure
                         // base y on top visible staff in barline span
                         // after skipping ones with hideSystemBarLine set
-                        yp = sysStaff1->y();
+                        // and accounting for staves that are shown but have invisible measures
+                        yp = sysStaff1a ? sysStaff1a->y() : sysStaff1->y();
                         }
                   *y1 = l1->y1() - yp;
                   *y1 += (_spanFrom * staff1->lineDistance() * staff1->spatium()) / 2;
@@ -1242,7 +1249,10 @@ void BarLine::updateCustomSpan()
       // span is custom if barline belongs to a staff and any of the staff span params is different from barline's
       // if no staff or same span params as staff, span is not custom
       Staff* stf = staff();
-      _customSpan = stf && (stf->barLineSpan() != _span || stf->barLineFrom() != _spanFrom || stf->barLineTo() != _spanTo);
+      if (!stf)
+            _customSpan = false;
+      else
+            _customSpan = stf->barLineSpan() != _span || stf->barLineFrom() != _spanFrom || stf->barLineTo() != _spanTo;
       updateGenerated(!_customSpan);
       }
 
@@ -1325,6 +1335,7 @@ void BarLine::updateGenerated(bool canBeTrue)
                   && _visible       == true
                   && generatedType  == true
                   && _customSpan    == false
+                  && !isNudged()
                   );
             }
       }

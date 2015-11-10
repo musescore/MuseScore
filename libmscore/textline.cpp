@@ -623,7 +623,11 @@ void TextLine::read(XmlReader& e)
 
 LineSegment* TextLine::createLineSegment()
       {
-      return new TextLineSegment(score());
+      TextLineSegment* seg = new TextLineSegment(score());
+      // note-anchored line segments are relative to system not to staff
+      if (anchor() == Spanner::Anchor::NOTE)
+            seg->setFlag(ElementFlag::ON_STAFF, false);
+      return seg;
       }
 
 //---------------------------------------------------------

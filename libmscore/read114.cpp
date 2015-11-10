@@ -232,7 +232,7 @@ void Part::read114(XmlReader& e)
                   }
             else if (tag == "Instrument") {
                   Instrument* i = instrument();
-                  i->read(e);
+                  i->read(e, nullptr);
                   // add string data from MIDI program number, if possible
                   if (i->stringData()->strings() == 0
                      && i->channel().count() > 0
@@ -255,8 +255,15 @@ void Part::read114(XmlReader& e)
                         int n = 0;
                         if (st->lines() == 1)
                               n = 4;
-                        for (int  i = 0; i < DRUM_INSTRUMENTS; ++i)
+                        // TODO: logicalLineDistance will not return a reasonable value
+                        // since the staff type is not set yet
+                        // for now, assume 1
+                        int lld = 1;      //qRound(st->logicalLineDistance());
+                        for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
                               d->drum(i).line -= n;
+                              if (lld > 1)
+                                    d->drum(i).line /= lld;
+                              }
                         }
                   }
             else if (tag == "name") {

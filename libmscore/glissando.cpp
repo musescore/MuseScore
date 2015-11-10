@@ -95,7 +95,7 @@ void GlissandoSegment::draw(QPainter* painter) const
             // this is very ugly but fix #68846 for now
             bool tmp = MScore::pdfPrinting;
             MScore::pdfPrinting = true;
-            score()->scoreFont()->draw(ids, painter, magS(), QPointF(x, b.height() * .7), scale *2.0);
+            score()->scoreFont()->draw(ids, painter, magS(), QPointF(x, -(b.y() + b.height()*0.5) ), scale /**2.0*/);
             MScore::pdfPrinting = tmp;
             }
       if (glissando()->showText()) {
@@ -106,7 +106,7 @@ void GlissandoSegment::draw(QPainter* painter) const
             if (r.width() < l) {
                   qreal yOffset = r.height() + r.y();       // find text descender height
                   // raise text slightly above line and slightly more with WAVY than with STRAIGHT
-                  yOffset += _spatium * (glissando()->glissandoType() == Glissando::Type::WAVY ? 0.8 : 0.1);
+                  yOffset += _spatium * (glissando()->glissandoType() == Glissando::Type::WAVY ? 0.4 : 0.1);
                   painter->setFont(f);
                   qreal x = (l - r.width()) * 0.5;
                   painter->drawText(QPointF(x, -yOffset), glissando()->text());

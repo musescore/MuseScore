@@ -186,13 +186,6 @@ class Note : public Element {
       void qmlSetAccidentalType(int t) { setAccidentalType(static_cast<AccidentalType>(t)); }
 
    private:
-      int _subchannel     { 0  };   ///< articulation
-      int _line           { 0  };   ///< y-Position; 0 - top line.
-      int _fret           { -1 };   ///< for tablature view
-      int _string         { -1 };
-      mutable int _tpc[2] { Tpc::TPC_INVALID, Tpc::TPC_INVALID }; ///< tonal pitch class  (concert/transposing)
-      mutable int _pitch  { 0  };   ///< Note pitch as midi value (0 - 127).
-
       bool _ghost         { false };      ///< ghost note (guitar: death note)
       bool _hidden        { false };      ///< markes this note as the hidden one if there are
                                           ///< overlapping notes; hidden notes are not played
@@ -216,10 +209,19 @@ class Note : public Element {
       NoteHead::Type  _headType  { NoteHead::Type::HEAD_AUTO    };
 
       ValueType _veloType { ValueType::OFFSET_VAL };
+
+      char _offTimeType    { 0 };    // compatibility only 1 - user(absolute), 2 - offset (%)
+      char _onTimeType     { 0 };    // compatibility only 1 - user, 2 - offset
+
+      int _subchannel     { 0  };   ///< articulation
+      int _line           { 0  };   ///< y-Position; 0 - top line.
+      int _fret           { -1 };   ///< for tablature view
+      int _string         { -1 };
+      mutable int _tpc[2] { Tpc::TPC_INVALID, Tpc::TPC_INVALID }; ///< tonal pitch class  (concert/transposing)
+      mutable int _pitch  { 0  };   ///< Note pitch as midi value (0 - 127).
+
       int _veloOffset     { 0 };    ///< velocity user offset in percent, or absolute velocity for this note
       int _fixedLine      { 0 };    // fixed line number if _fixed == true
-      int _offTimeType    { 0 };    // compatibility only 1 - user(absolute), 2 - offset (%)
-      int _onTimeType     { 0 };    // compatibility only 1 - user, 2 - offset
       int _lineOffset     { 0 };    ///< Used during mouse dragging.
       qreal _tuning       { 0.0 };  ///< pitch offset in cent, playable only by internal synthesizer
 
@@ -317,6 +319,7 @@ class Note : public Element {
 
       int line() const;
       void setLine(int n);
+      int physicalLine() const;
 
       int fret() const                { return _fret;   }
       void setFret(int val)           { _fret = val;    }

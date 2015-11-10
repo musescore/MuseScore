@@ -50,6 +50,9 @@ class OmrView;
 class PositionCursor;
 class ContinuousPanel;
 class Tuplet;
+class FretDiagram;
+class Bend;
+class TremoloBar;
 
 enum class Grip : signed char;
 enum class POS : char;
@@ -438,6 +441,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       Element* getEditObject()    { return editObject; }
       void setEditObject(Element* e) { editObject = e; }
       virtual Element* elementNear(QPointF);
+      void editFretDiagram(FretDiagram*);
+      void editBendProperties(Bend*);
+      void editTremoloBarProperties(TremoloBar*);
       };
 
 //---------------------------------------------------------
