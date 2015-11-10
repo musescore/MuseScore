@@ -569,6 +569,17 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
+         "add-sforzato",
+         QT_TRANSLATE_NOOP("action","Sforzato"),
+         QT_TRANSLATE_NOOP("action","Toggle sforzato"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CMD
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "stretch+",
          QT_TRANSLATE_NOOP("action","Increase Stretch"),
          QT_TRANSLATE_NOOP("action","Increase stretch"),

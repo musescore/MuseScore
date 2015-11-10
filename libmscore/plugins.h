@@ -45,8 +45,10 @@ class FileIO : public QObject {
       Q_INVOKABLE bool write(const QString& data);
       //@ removes the file
       Q_INVOKABLE bool remove();
+      //@ returns user's home directory
+      Q_INVOKABLE QString homePath() {QDir dir; return dir.homePath();}
       //@ returns a path suitable for a temporary file
-      Q_INVOKABLE QString tempPath() {QDir dir; return dir.tempPath();};
+      Q_INVOKABLE QString tempPath() {QDir dir; return dir.tempPath();}
       //@ returns the file modification time
       Q_INVOKABLE int modifiedTime();
 

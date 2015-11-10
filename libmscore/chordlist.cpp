@@ -281,7 +281,7 @@ void HChord::add(const QList<HDegree>& degreeList)
                         }
                   }
             else
-                  qDebug("degree type %hhd not supported", d.type());
+                  qDebug("degree type %d not supported", static_cast<int>(d.type()));
 
 // qDebug("  HCHord::added  "); print();
             }
@@ -1182,8 +1182,10 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
             _quality = "augmented";
       else if (kind == "half-diminished") {
             _quality = "half-diminished";
-            extension = 7;
-            extend = true;
+            if (symbols) {
+                  extension = 7;
+                  extend = true;
+                  }
             }
       else if (kind == "diminished-seventh") {
             _quality = "diminished";
@@ -1304,7 +1306,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
             _extension = QString("%1").arg(extension);
 
       // validate kindText
-      if (kindText != "" && kind != "none") {
+      if (kindText != "" && kind != "none" && kind != "other") {
             ParsedChord validate;
             validate.parse(kindText, cl, false);
             // kindText should parse to produce same kind, no degrees

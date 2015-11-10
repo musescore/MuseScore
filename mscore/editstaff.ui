@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>920</width>
-    <height>606</height>
+    <width>986</width>
+    <height>668</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -575,131 +575,6 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QGridLayout" name="grid_StaffProps">
-        <item row="0" column="2">
-         <widget class="QCheckBox" name="showIfEmpty">
-          <property name="text">
-           <string>Do not hide if system is empty</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QCheckBox" name="showTimesig">
-          <property name="text">
-           <string>Show time signature</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <layout class="QHBoxLayout" name="hLayout_LineColor">
-          <item>
-           <widget class="QLabel" name="labelColor">
-            <property name="text">
-             <string>Staff line color:</string>
-            </property>
-            <property name="buddy">
-             <cstring>color</cstring>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="Awl::ColorLabel" name="color">
-            <property name="focusPolicy">
-             <enum>Qt::TabFocus</enum>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="5" column="2">
-         <widget class="QToolButton" name="changeStaffType">
-          <property name="text">
-           <string>Advanced Style Properties...</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="1">
-         <layout class="QHBoxLayout" name="hLayout_StyleGroup">
-          <item>
-           <widget class="QLabel" name="labelStaffGroup">
-            <property name="text">
-             <string>Style group:</string>
-            </property>
-            <property name="textFormat">
-             <enum>Qt::PlainText</enum>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="buddy">
-             <cstring>staffGroupName</cstring>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="staffGroupName">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="inputMask">
-             <string notr="true"/>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-            <property name="placeholderText">
-             <string notr="true"/>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="2" column="2">
-         <widget class="QCheckBox" name="invisible">
-          <property name="text">
-           <string>Invisible staff lines</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QCheckBox" name="showBarlines">
-          <property name="text">
-           <string>Show barlines</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="showClef">
-          <property name="text">
-           <string>Show clef</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QCheckBox" name="small">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Small staff</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QCheckBox" name="neverHide">
-          <property name="text">
-           <string>Never hide</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="0" rowspan="4">
          <layout class="QFormLayout" name="formLayout">
           <property name="fieldGrowthPolicy">
@@ -829,12 +704,167 @@
           </item>
          </layout>
         </item>
+        <item row="4" column="2">
+         <widget class="QCheckBox" name="cutaway">
+          <property name="text">
+           <string>Cutaway</string>
+          </property>
+         </widget>
+        </item>
         <item row="4" column="1">
          <widget class="QCheckBox" name="hideSystemBarLine">
           <property name="text">
            <string>Hide system barline</string>
           </property>
          </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QCheckBox" name="small">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Small staff</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="showClef">
+          <property name="text">
+           <string>Show clef</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <layout class="QHBoxLayout" name="hLayout_LineColor">
+          <item>
+           <widget class="QLabel" name="labelColor">
+            <property name="text">
+             <string>Staff line color:</string>
+            </property>
+            <property name="buddy">
+             <cstring>color</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Awl::ColorLabel" name="color">
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="3" column="1">
+         <widget class="QCheckBox" name="showBarlines">
+          <property name="text">
+           <string>Show barlines</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="showTimesig">
+          <property name="text">
+           <string>Show time signature</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QToolButton" name="changeStaffType">
+          <property name="text">
+           <string>Advanced Style Properties...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QCheckBox" name="showIfEmpty">
+          <property name="text">
+           <string>Do not hide if system is empty</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <layout class="QHBoxLayout" name="hLayout_StyleGroup">
+          <item>
+           <widget class="QLabel" name="labelStaffGroup">
+            <property name="text">
+             <string>Style group:</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::PlainText</enum>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>staffGroupName</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="staffGroupName">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="inputMask">
+             <string notr="true"/>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string notr="true"/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="2">
+         <widget class="QCheckBox" name="invisible">
+          <property name="text">
+           <string>Invisible staff lines</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Hide when empty</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="hideMode">
+            <item>
+             <property name="text">
+              <string>Auto</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Always</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Never</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
@@ -856,7 +886,7 @@
   <tabstop>lineDistance</tabstop>
   <tabstop>spinExtraDistance</tabstop>
   <tabstop>mag</tabstop>
-  <tabstop>neverHide</tabstop>
+  <tabstop>hideMode</tabstop>
   <tabstop>showClef</tabstop>
   <tabstop>showTimesig</tabstop>
   <tabstop>showBarlines</tabstop>
@@ -865,6 +895,7 @@
   <tabstop>small</tabstop>
   <tabstop>invisible</tabstop>
   <tabstop>color</tabstop>
+  <tabstop>cutaway</tabstop>
   <tabstop>staffGroupName</tabstop>
   <tabstop>changeStaffType</tabstop>
   <tabstop>partName</tabstop>

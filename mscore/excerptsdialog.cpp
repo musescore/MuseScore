@@ -24,6 +24,7 @@
 #include "libmscore/part.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/undo.h"
+#include "icons.h"
 
 namespace Ms {
 
@@ -77,9 +78,14 @@ ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
             partList->addItem(item);
             }
 
+      moveUpButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      moveDownButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
+
       connect(newButton, SIGNAL(clicked()), SLOT(newClicked()));
       connect(newAllButton, SIGNAL(clicked()), SLOT(newAllClicked()));
       connect(deleteButton, SIGNAL(clicked()), SLOT(deleteClicked()));
+      connect(moveUpButton, SIGNAL(clicked()), SLOT(moveUpClicked()));
+      connect(moveDownButton, SIGNAL(clicked()), SLOT(moveDownClicked()));
       connect(excerptList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
          SLOT(excerptChanged(QListWidgetItem*, QListWidgetItem*)));
       connect(partList, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
@@ -87,8 +93,11 @@ ExcerptsDialog::ExcerptsDialog(Score* s, QWidget* parent)
       connect(partList, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(partClicked(QListWidgetItem*)));
       connect(title, SIGNAL(textChanged(const QString&)), SLOT(titleChanged(const QString&)));
 
-      if (score->excerpts().size() > 0)
+      int n = score->excerpts().size();
+      if (n > 0)
             excerptList->setCurrentRow(0);
+      moveDownButton->setEnabled(n > 1);
+      moveUpButton->setEnabled(false);
       bool flag = excerptList->currentItem() != 0;
       editGroup->setEnabled(flag);
       deleteButton->setEnabled(flag);
@@ -189,6 +198,49 @@ void ExcerptsDialog::newAllClicked()
       }
 
 //---------------------------------------------------------
+//   moveUpClicked
+//---------------------------------------------------------
+
+void ExcerptsDialog::moveUpClicked()
+      {
+      QListWidgetItem* cur = excerptList->currentItem();
+      if (cur == 0)
+            return;
+      int currentRow = excerptList->currentRow();
+      if (currentRow <= 0)
+            return;
+      QListWidgetItem* currentItem = excerptList->takeItem(currentRow);
+      excerptList->insertItem(currentRow - 1, currentItem);
+      excerptList->setCurrentRow(currentRow - 1);
+
+      if (currentRow < score->excerpts().size())
+            score->excerpts().swap(currentRow, currentRow-1);
+      score->setExcerptsChanged(true);
+      }
+
+//---------------------------------------------------------
+//   moveDownClicked
+//---------------------------------------------------------
+
+void ExcerptsDialog::moveDownClicked()
+      {
+      QListWidgetItem* cur = excerptList->currentItem();
+      if (cur == 0)
+            return;
+      int currentRow = excerptList->currentRow();
+      int nbRows = excerptList->count();
+      if (currentRow >= nbRows - 1)
+            return;
+      QListWidgetItem* currentItem = excerptList->takeItem(currentRow);
+      excerptList->insertItem(currentRow + 1, currentItem);
+      excerptList->setCurrentRow(currentRow + 1);
+
+      if (currentRow + 1 < score->excerpts().size())
+            score->excerpts().swap(currentRow, currentRow+1);
+      score->setExcerptsChanged(true);
+      }
+
+//---------------------------------------------------------
 //   excerptChanged
 //---------------------------------------------------------
 
@@ -222,6 +274,10 @@ void ExcerptsDialog::excerptChanged(QListWidgetItem* cur, QListWidgetItem*)
       title->setEnabled(b);
 
       bool flag = excerptList->currentItem() != 0;
+      int n = excerptList->count();
+      int idx = excerptList->currentIndex().row();
+      moveUpButton->setEnabled(idx > 0);
+      moveDownButton->setEnabled(idx < (n-1));
       editGroup->setEnabled(flag);
       deleteButton->setEnabled(flag);
       }
@@ -281,6 +337,16 @@ void ExcerptsDialog::createExcerptClicked(QListWidgetItem* cur)
       score->undo(new AddExcerpt(nscore));
       createExcerpt(e);
       score->endCmd();
+      // a new excerpt is created in AddExcerpt, make sure the parts are filed
+      for (Excerpt* ee : e->oscore()->excerpts()) {
+            if (ee->partScore() == nscore) {
+                  ee->parts().clear();
+                  ee->parts().append(e->parts());
+                  }
+            }
+      // the excerpt is not useful anymore,
+      // we created a new one in AddExcerpt
+      delete e;
 
       partList->setEnabled(false);
       title->setEnabled(false);

@@ -85,12 +85,18 @@
           </Articulation>
         <Channel>
           <program value="48"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
           </Channel>
         <Channel name="tremolo">
           <program value="44"/>
+          <midiPort>0</midiPort>
+          <midiChannel>2</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -141,9 +147,13 @@
           </Articulation>
         <Channel>
           <program value="56"/>
+          <midiPort>1</midiPort>
+          <midiChannel>0</midiChannel>
           </Channel>
         <Channel name="mute">
           <program value="59"/>
+          <midiPort>0</midiPort>
+          <midiChannel>3</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -194,6 +204,8 @@
           </Articulation>
         <Channel>
           <program value="57"/>
+          <midiPort>1</midiPort>
+          <midiChannel>2</midiChannel>
           </Channel>
         </Instrument>
       </Part>

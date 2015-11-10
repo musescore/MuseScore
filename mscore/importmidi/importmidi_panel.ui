@@ -107,7 +107,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButtonUp">
+         <widget class="QToolButton" name="pushButtonUp">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -130,7 +130,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButtonDown">
+         <widget class="QToolButton" name="pushButtonDown">
           <property name="minimumSize">
            <size>
             <width>0</width>

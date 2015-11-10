@@ -86,7 +86,7 @@ class Chord : public ChordRest {
 
       Arpeggio*           _arpeggio;
       Tremolo*            _tremolo;
-      bool                _endsGlissando;///< true if this chord is the ending point of a glissando (nneeded for layout)
+      bool                _endsGlissando;///< true if this chord is the ending point of a glissando (needed for layout)
       ElementList         _el;           ///< chordline, slur
       QList<Chord*>       _graceNotes;
       int                 _graceIndex;   ///< if this is a grace note, index in parent list
@@ -156,9 +156,9 @@ class Chord : public ChordRest {
       Arpeggio* arpeggio() const             { return _arpeggio;  }
       Tremolo* tremolo() const               { return _tremolo;   }
       void setTremolo(Tremolo* t)            { _tremolo = t;      }
-//      Glissando* glissando() const           { return _glissando; }
       bool endsGlissando() const             { return _endsGlissando; }
       void setEndsGlissando (bool val)       { _endsGlissando = val; }
+      void updateEndsGlissando();
       StemSlash* stemSlash() const           { return _stemSlash; }
       bool slash();
       void setSlash(bool flag, bool stemless);

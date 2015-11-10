@@ -34,6 +34,7 @@
 #include "synthesizerstate.h"
 #include "bracket.h"
 #include "dynamic.h"
+#include "staff.h"
 #include "stafftype.h"
 #include "cleflist.h"
 #include "note.h"
@@ -669,18 +670,19 @@ class ChangePageFormat : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeStaff : public UndoCommand {
-      Staff* staff;
-      bool   invisible;
-      qreal  userDist;
-      bool   neverHide;
-      bool   showIfEmpty;
-      bool   hideSystemBarLine;
+      Staff*   staff;
+      bool     invisible;
+      qreal    userDist;
+      Staff::HideMode hideMode;
+      bool     showIfEmpty;
+      bool     cutaway;
+      bool     hideSystemBarLine;
 
       void flip();
 
    public:
-      ChangeStaff(Staff*, bool invisible, qreal userDist, bool _neverHide,
-         bool _showIfEmpty, bool hide);
+      ChangeStaff(Staff*, bool invisible, qreal userDist, Staff::HideMode _hideMode,
+         bool _showIfEmpty, bool _cutaway, bool hide);
       UNDO_NAME("ChangeStaff")
       };
 

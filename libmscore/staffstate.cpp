@@ -52,7 +52,7 @@ void StaffState::write(Xml& xml) const
       xml.stag(name());
       xml.tag("subtype", int(_staffStateType));
       if (staffStateType() == StaffStateType::INSTRUMENT)
-            _instrument->write(xml);
+            _instrument->write(xml, nullptr);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -68,7 +68,7 @@ void StaffState::read(XmlReader& e)
             if (tag == "subtype")
                   _staffStateType = StaffStateType(e.readInt());
             else if (tag == "Instrument")
-                  _instrument->read(e);
+                  _instrument->read(e, nullptr);
             else if (!Element::readProperties(e))
                   e.unknown();
             }

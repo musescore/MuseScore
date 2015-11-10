@@ -304,9 +304,10 @@ int Note::tpc1default(int p) const
       {
       Key key = Key::C;
       if (staff() && chord()) {
-            key = staff()->key(chord()->tick());
+            int tick = chord()->tick();
+            key = staff()->key(tick);
             if (!concertPitch()) {
-                  Interval interval = part()->instrument()->transpose();
+                  Interval interval = part()->instrument(tick)->transpose();
                   if (!interval.isZero()) {
                         interval.flip();
                         key = transposeKey(key, interval);
@@ -324,9 +325,10 @@ int Note::tpc2default(int p) const
       {
       Key key = Key::C;
       if (staff() && chord()) {
-            key = staff()->key(chord()->tick());
+            int tick = chord()->tick();
+            key = staff()->key(tick);
             if (concertPitch()) {
-                  Interval interval = part()->instrument()->transpose();
+                  Interval interval = part()->instrument(tick)->transpose();
                   if (!interval.isZero())
                         key = transposeKey(key, interval);
                   }
@@ -341,7 +343,8 @@ int Note::tpc2default(int p) const
 void Note::setTpcFromPitch()
       {
       // works best if note is already added to score, otherwise we can't determine transposition or key
-      Interval v = staff() ? part()->instrument()->transpose() : Interval();
+      int tick = chord() ? chord()->tick() : -1;
+      Interval v = staff() ? part()->instrument(tick)->transpose() : Interval();
       Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
       // convert key to concert pitch
       if (!concertPitch() && !v.isZero())
@@ -416,7 +419,8 @@ QString Note::tpcUserName(bool explicitAccidental)
 
 int Note::transposeTpc(int tpc)
       {
-      Interval v = part()->instrument()->transpose();
+      int tick = chord() ? chord()->tick() : -1;
+      Interval v = part()->instrument(tick)->transpose();
       if (v.isZero())
             return tpc;
       if (concertPitch()) {
@@ -448,7 +452,7 @@ SymId Note::noteHead() const
 
       SymId t = noteHead(up, _headGroup, ht);
       if (t == SymId::noSym) {
-            qDebug("invalid note head %hhd/%hhd", _headGroup, ht);
+            qDebug("invalid note head %d/%d", int(_headGroup), int(ht));
             t = noteHead(up, NoteHead::Group::HEAD_NORMAL, ht);
             }
       return t;
@@ -572,7 +576,7 @@ void Note::removeSpanner(Spanner* l)
                   // abort();
                   }
             if (l->type() == Element::Type::GLISSANDO)
-                 e->chord()->setEndsGlissando(false);
+                 e->chord()->updateEndsGlissando();
             }
       if (!removeSpannerFor(l)) {
             qDebug("Note(%p): cannot remove spannerFor %s %p", this, l->name(), l);
@@ -748,7 +752,7 @@ void Note::draw(QPainter* painter) const
             //
             if (chord() && chord()->segment() && staff() && !selected()
                && !score()->printing() && MScore::warnPitchRange) {
-                  const Instrument* in = part()->instrument();
+                  const Instrument* in = part()->instrument(chord()->tick());
                   int i = ppitch();
                   if (i < in->minPitchP() || i > in->maxPitchP())
                         painter->setPen(Qt::red);
@@ -1159,7 +1163,8 @@ void Note::read(XmlReader& e)
                   _tpc[1] = tpc;
             }
       if (!(tpcIsValid(_tpc[0]) && tpcIsValid(_tpc[1]))) {
-            Interval v = staff() ? part()->instrument()->transpose() : Interval();
+            int tick = chord() ? chord()->tick() : -1;
+            Interval v = staff() ? part()->instrument(tick)->transpose() : Interval();
             if (tpcIsValid(_tpc[0])) {
                   v.flip();
                   if (v.isZero())
@@ -1174,6 +1179,35 @@ void Note::read(XmlReader& e)
                         _tpc[0] = Ms::transposeTpc(_tpc[1], v, true);
                   }
             }
+      // check consistency of pitch, tpc1, tpc2, and transposition
+      // see note in InstrumentChange::read() about a known case of tpc corruption produced in 2.0.x
+      // but since there are other causes of tpc corruption (eg, https://musescore.org/en/node/74746)
+      // including perhaps some we don't know about yet,
+      // we will attempt to fix some problems here regardless of version
+      if (!e.pasteMode() && !MScore::testMode) {
+            int tpc1Pitch = (tpc2pitch(_tpc[0]) + 12) % 12;
+            int tpc2Pitch = (tpc2pitch(_tpc[1]) + 12) % 12;
+            int concertPitch = _pitch % 12;
+            if (tpc1Pitch != concertPitch) {
+                  qDebug("bad tpc1 - concertPitch = %d, tpc1 = %d", concertPitch, tpc1Pitch);
+                  _pitch += tpc1Pitch - concertPitch;
+                  }
+            if (staff()) {
+                  Interval v = staff()->part()->instrument(e.tick())->transpose();
+                  int transposedPitch = (_pitch - v.chromatic) % 12;
+                  if (tpc2Pitch != transposedPitch) {
+                        qDebug("bad tpc2 - transposedPitch = %d, tpc2 = %d", transposedPitch, tpc2Pitch);
+                        // just in case the staff transposition info is not reliable here,
+                        // do not attempt to correct tpc
+                        // except for older scores where we know there are tpc problems
+                        if (score()->mscVersion() <= 206) {
+                              v.flip();
+                              _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
+                              }
+                        }
+                  }
+            }
+      return;
       }
 
 //---------------------------------------------------------
@@ -1201,7 +1235,8 @@ QRectF Note::drag(EditData* data)
 
 int Note::transposition() const
       {
-      return staff() ? part()->instrument()->transpose().chromatic : 0;
+      int tick = chord() ? chord()->tick() : -1;
+      return staff() ? part()->instrument(tick)->transpose().chromatic : 0;
       }
 
 //---------------------------------------------------------
@@ -1251,7 +1286,7 @@ void Note::endDrag()
             // determine new pitch of dragged note
             int nPitch = line2pitch(nLine, clef, key);
             if (!concertPitch()) {
-                  Interval interval = staff->part()->instrument()->transpose();
+                  Interval interval = staff->part()->instrument(tick)->transpose();
                   nPitch += interval.chromatic;
                   }
             int tpc1 = pitch2tpc(nPitch, key, Prefer::NEAREST);
@@ -2008,6 +2043,20 @@ void Note::setLine(int n)
       }
 
 //---------------------------------------------------------
+//   physicalLine
+//---------------------------------------------------------
+
+int Note::physicalLine() const
+      {
+      int l = line();
+      Staff *st = staff();
+      if (st && !st->scaleNotesToLines())
+            return l * (st->logicalLineDistance() / st->lineDistance());
+      else
+            return l;
+      }
+
+//---------------------------------------------------------
 //   setString
 //---------------------------------------------------------
 
@@ -2131,10 +2180,10 @@ void Note::setNval(const NoteVal& nval, int tick)
       _tpc[0] = nval.tpc1;
       _tpc[1] = nval.tpc2;
 
-      Interval v = part()->instrument()->transpose();
+      if (tick == -1 && chord())
+            tick = chord()->tick();
+      Interval v = part()->instrument(tick)->transpose();
       if (nval.tpc1 == Tpc::TPC_INVALID) {
-            if (tick == -1)
-                  tick = chord()->tick();
             Key key = staff()->key(tick);
             if (!concertPitch() && !v.isZero())
                   key = transposeKey(key, v);

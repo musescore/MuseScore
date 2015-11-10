@@ -4,3 +4,4 @@ P=../../build.debug
 #P=../../../../MuseScore-build
 
 cp $P/mtest/scripting/p1.log p1.log.ref
+cp $P/mtest/scripting/p2.log p2.log.ref

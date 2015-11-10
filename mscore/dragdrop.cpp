@@ -376,6 +376,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case Element::Type::HARMONY:
                   case Element::Type::BAGPIPE_EMBELLISHMENT:
                   case Element::Type::AMBITUS:
+                  case Element::Type::TREMOLOBAR:
                         {
                         QList<Element*> el = elementsAt(pos);
                         bool found = false;
@@ -564,6 +565,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case Element::Type::SLUR:
                   case Element::Type::BAGPIPE_EMBELLISHMENT:
                   case Element::Type::AMBITUS:
+                  case Element::Type::TREMOLOBAR:
                         {
                         Element* el = 0;
                         for (const Element* e : elementsAt(pos)) {

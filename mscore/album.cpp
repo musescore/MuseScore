@@ -30,17 +30,12 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   AlbumItem
+//   ~AlbumItem
 //---------------------------------------------------------
-AlbumItem::AlbumItem()
-      {
-      this->score = nullptr;
-      }
 
-AlbumItem::AlbumItem(QString path)
+AlbumItem::~AlbumItem()
       {
-      this->path = path;
-      this->score = nullptr;
+      delete score;
       }
 
 //---------------------------------------------------------
@@ -50,6 +45,11 @@ AlbumItem::AlbumItem(QString path)
 Album::Album()
       {
       _dirty = false;
+      }
+
+Album::~Album()
+      {
+      qDeleteAll(_scores);
       }
 
 //---------------------------------------------------------
@@ -211,6 +211,7 @@ bool Album::createScore(const QString& fn)
                         }
                   }
             }
+
       score->fileInfo()->setFile(fn);
       qDebug("Album::createScore: save file");
       try {
@@ -221,8 +222,10 @@ bool Album::createScore(const QString& fn)
                   score->saveFile(*score->fileInfo());
             }
       catch (QString s) {
+            delete score;
             return false;
             }
+      delete score;
       return true;
       }
 
@@ -299,7 +302,7 @@ void Album::load(XmlReader& e)
 void Album::loadScores()
       {
       for (AlbumItem* item : _scores) {
-            if (item->path.isEmpty())
+            if (item->score || item->path.isEmpty())
                   continue;
             QString ip = item->path;
             if (ip[0] != '/') {
@@ -359,7 +362,7 @@ void Album::append(AlbumItem* item)
 
 void Album::remove(int idx)
       {
-      _scores.removeAt(idx);
+      delete _scores.takeAt(idx);
       _dirty = true;
       }
 

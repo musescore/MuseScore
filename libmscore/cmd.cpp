@@ -422,7 +422,7 @@ void Score::cmdAddInterval(int val, const QList<Note*>& nl)
                   npitch        = line2pitch(line, clef, key);
 
                   int ntpc   = pitch2tpc(npitch, key, Prefer::NEAREST);
-                  Interval v = on->part()->instrument()->transpose();
+                  Interval v = on->part()->instrument(tick)->transpose();
                   if (v.isZero())
                         ntpc1 = ntpc2 = ntpc;
                   else {
@@ -2259,6 +2259,8 @@ void Score::cmd(const QAction* a)
             addArticulation(ArticulationType::Tenuto);
       else if (cmd == "add-marcato")
             addArticulation(ArticulationType::Marcato);
+      else if (cmd == "add-sforzato")
+            addArticulation(ArticulationType::Sforzatoaccent);
       else if (cmd == "add-trill")
             addArticulation(ArticulationType::Trill);
       else if (cmd == "add-8va")
@@ -2865,7 +2867,7 @@ void Score::cmdSlashFill()
                   if (staff(staffIdx)->staffType()->group() == StaffGroup::TAB)
                         line = staff(staffIdx)->lines() / 2;
                   else
-                        line = staff(staffIdx)->lines() - 1;
+                        line = staff(staffIdx)->middleLine();     // staff(staffIdx)->lines() - 1;
                   if (staff(staffIdx)->staffType()->group() == StaffGroup::PERCUSSION) {
                         nv.pitch = 0;
                         nv.headGroup = NoteHead::Group::HEAD_SLASH;

@@ -128,7 +128,10 @@ class Spanner : public Element {
 
    protected:
       QList<SpannerSegment*> segments;
+      // used to store spanner properties as they were at start of editing
+      // and detect edit changes when edit is over
       static int editTick, editTick2, editTrack2;
+      static Note * editEndNote, * editStartNote;
 
    public:
       Spanner(Score* = 0);

@@ -412,12 +412,7 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
                   {
                   const OttavaDefault* def = &ottavaDefault[int(_ottavaType)];
                   SymId id = _numbersOnly ? def->numbersOnlyId : def->id;
-                  QString s;
-                  if (symIsValid(id))
-                        s = QString("<sym>%1</sym>").arg(Sym::id2name(id));
-                  else
-                        s = _numbersOnly ? def->numbersOnlyName : def->name;
-                  return s;
+                  return QString("<sym>%1</sym>").arg(Sym::id2name(id));
                   }
 
             case P_ID::END_TEXT:

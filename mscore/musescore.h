@@ -415,6 +415,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void addRecentScore(const QString& scorePath);
 
       void updateNewWizard();
+      void updateViewModeCombo();
 
    private slots:
       void cmd(QAction* a, const QString& cmd);
@@ -485,6 +486,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void selectionChanged(SelState);
       void createNewWorkspace();
       void changeWorkspace(Workspace* p);
+      void mixerPreferencesChanged(bool showMidiControls);
 
    public:
       MuseScore();

@@ -199,7 +199,9 @@ void Harmony::write(Xml& xml) const
             int rRootTpc = _rootTpc;
             int rBaseTpc = _baseTpc;
             if (staff()) {
-                  const Interval& interval = part()->instrument()->transpose();
+                  Segment* segment = static_cast<Segment*>(parent());
+                  int tick = segment ? segment->tick() : -1;
+                  const Interval& interval = part()->instrument(tick)->transpose();
                   if (xml.clipboardmode && !score()->styleB(StyleIdx::concertPitch) && interval.chromatic) {
                         rRootTpc = transposeTpc(_rootTpc, interval, true);
                         rBaseTpc = transposeTpc(_baseTpc, interval, true);
@@ -743,7 +745,9 @@ void Harmony::endEdit()
                   // we may now need to change the TPC's and the text, and re-render
                   if (score()->styleB(StyleIdx::concertPitch) != h->score()->styleB(StyleIdx::concertPitch)) {
                         Part* partDest = h->part();
-                        Interval interval = partDest->instrument()->transpose();
+                        Segment* segment = static_cast<Segment*>(parent());
+                        int tick = segment ? segment->tick() : -1;
+                        Interval interval = partDest->instrument(tick)->transpose();
                         if (!interval.isZero()) {
                               if (!h->score()->styleB(StyleIdx::concertPitch))
                                     interval.flip();
@@ -1342,7 +1346,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                         }
                   }
             else
-                  qDebug("========unknown render action %hhd", a.type);
+                  qDebug("Harmony::render(): unknown render action %d", static_cast<int>(a.type));
             }
       }
 

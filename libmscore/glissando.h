@@ -32,9 +32,6 @@ class GlissandoSegment : public LineSegment {
       Q_OBJECT
 
    protected:
-      // make glissando segment non-editable, until proper support is added for
-      // anchor selection
-      virtual bool isEditable() const override              { return false; }
 
    public:
       GlissandoSegment(Score* s) : LineSegment(s)           {}
@@ -77,10 +74,6 @@ class Glissando : public SLine {
       bool _playGlissando;
 
    protected:
-      // make glissando non-editable, until proper support is added for anchor selection
-      // (in some occasions, trying to edit a single-segment glissando, redirects into
-      // editing the whole glissando)
-      virtual bool isEditable() const override              { return false; }
 
    public:
       Glissando(Score* s);

@@ -288,6 +288,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(swingEighth, SIGNAL(toggled(bool)), SLOT(setSwingParams(bool)));
       connect(swingSixteenth, SIGNAL(toggled(bool)), SLOT(setSwingParams(bool)));
       connect(hideEmptyStaves, SIGNAL(clicked(bool)), dontHideStavesInFirstSystem, SLOT(setEnabled(bool)));
+      connect(lyricsDashMinLength, SIGNAL(valueChanged(double)), SLOT(lyricsDashMinLengthValueChanged(double)));
+      connect(lyricsDashMaxLength, SIGNAL(valueChanged(double)), SLOT(lyricsDashMaxLengthValueChanged(double)));
 
       QSignalMapper* mapper = new QSignalMapper(this);
 
@@ -439,6 +441,9 @@ void EditStyle::getValues()
       lstyle.set(StyleIdx::smallStaffMag,           smallStaffSize->value() / 100.0);
       lstyle.set(StyleIdx::smallNoteMag,            smallNoteSize->value() / 100.0);
       lstyle.set(StyleIdx::smallClefMag,            smallClefSize->value() / 100.0);
+      lstyle.set(StyleIdx::lyricsDashMinLength,     lyricsDashMinLength->value());
+      lstyle.set(StyleIdx::lyricsDashMaxLength,     lyricsDashMaxLength->value());
+      lstyle.set(StyleIdx::lyricsDashForce,         lyricsDashForce->isChecked());
       lstyle.set(StyleIdx::lastSystemFillLimit,     lastSystemFillThreshold->value() / 100.0);
       lstyle.set(StyleIdx::genClef,                 genClef->isChecked());
       lstyle.set(StyleIdx::genKeysig,               genKeysig->isChecked());
@@ -658,6 +663,9 @@ void EditStyle::setValues()
       smallStaffSize->setValue(lstyle.value(StyleIdx::smallStaffMag).toDouble() * 100.0);
       smallNoteSize->setValue(lstyle.value(StyleIdx::smallNoteMag).toDouble() * 100.0);
       smallClefSize->setValue(lstyle.value(StyleIdx::smallClefMag).toDouble() * 100.0);
+      lyricsDashMinLength->setValue(lstyle.value(StyleIdx::lyricsDashMinLength).toDouble());
+      lyricsDashMaxLength->setValue(lstyle.value(StyleIdx::lyricsDashMaxLength).toDouble());
+      lyricsDashForce->setChecked(lstyle.value(StyleIdx::lyricsDashForce).toBool());
       lastSystemFillThreshold->setValue(lstyle.value(StyleIdx::lastSystemFillLimit).toDouble() * 100.0);
 
       genClef->setChecked(lstyle.value(StyleIdx::genClef).toBool());
@@ -910,6 +918,26 @@ void EditStyle::toggleFooterOddEven(bool checked)
       else
             labelOddFooter->setText(odd + "\n" + even); // replace
       return;
+      }
+
+//---------------------------------------------------------
+//   lyricsDashMin/MaxLengthValueChanged
+//
+//    Ensure lyricsDashMinLength <= lyricsDashMaxLength
+//---------------------------------------------------------
+
+void EditStyle::lyricsDashMaxLengthValueChanged(double val)
+      {
+      double otherVal = lyricsDashMinLength->value();
+      if (otherVal > val)
+            lyricsDashMaxLength->setValue(otherVal);
+      }
+
+void EditStyle::lyricsDashMinLengthValueChanged(double val)
+      {
+      double otherVal = lyricsDashMaxLength->value();
+      if (otherVal < val)
+            lyricsDashMaxLength->setValue(otherVal);
       }
 
 //---------------------------------------------------------

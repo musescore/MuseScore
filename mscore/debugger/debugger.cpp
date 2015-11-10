@@ -860,9 +860,7 @@ void SegmentView::setElement(Element* e)
       sb.spannerBack->clear();
       sb.annotations->clear();
       foreach(Element* sp, s->annotations()) {
-            QString s;
-            s.setNum(qptrdiff(sp), 16);
-            QListWidgetItem* item = new QListWidgetItem(s);
+            QListWidgetItem* item = new QListWidgetItem(QString("%1 %2").arg(qptrdiff(sp), 8, 16).arg(sp->name()));
             item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)sp));
             sb.annotations->addItem(item);
             }

@@ -275,7 +275,7 @@ static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octa
       //const Staff* staff = n->score()->staff(track / VOICES);
       //const Instrument* instr = staff->part()->instr();
 
-      const Interval intval = instr->transpose();
+      const Interval intval = instr->transpose();     // TODO: tick
 
       //qDebug("  staff=%p instr=%p dia=%d chro=%d",
       //       staff, instr, (int) intval.diatonic, (int) intval.chromatic);
@@ -467,7 +467,7 @@ static void setFirstInstrument(Part* part, const QString& partId,
                   qDebug("setFirstInstrument: initial instrument '%s' not found in part '%s'", qPrintable(instrId), qPrintable(partId)); // TODO
                   instr = mxmlDrumset.first();
                   }
-            // part->setMidiChannel(instr.midiChannel); not required (is a NOP anyway)
+            part->setMidiChannel(instr.midiChannel, instr.midiPort);
             part->setMidiProgram(instr.midiProgram);
             part->setPan(instr.midiPan);
             part->setVolume(instr.midiVolume);
@@ -548,7 +548,6 @@ static void setPartInstruments(Part* part, const QString& partId,
                   else {
                         MusicXMLDrumInstrument mxmlInstr = mxmlDrumset.value(instrId);
                         Instrument instr;
-                        // part->setMidiChannel(instr.midiChannel); not required (is a NOP anyway)
                         instr.channel(0)->program = mxmlInstr.midiProgram;
                         instr.channel(0)->pan = mxmlInstr.midiPan;
                         instr.channel(0)->volume = mxmlInstr.midiVolume;
@@ -560,6 +559,9 @@ static void setPartInstruments(Part* part, const QString& partId,
                         QString text = findDeleteStaffText(segment, track);
                         ic->setXmlText(text.isEmpty() ? "Instrument" : text);
                         segment->add(ic);
+
+                        int key = part->instruments()->rbegin()->first;
+                        part->setMidiChannel(mxmlInstr.midiChannel, mxmlInstr.midiPort, key);
                         }
                   }
             }
@@ -819,8 +821,8 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
             offsBelow = -0.75;
             }
       else
-            qDebug("addElem el %p unsupported type %hhd",
-                   el, el->type());  //TODO
+            qDebug("addElem el %p unsupported type %d",
+                   el, int(el->type()));  //TODO
 
       // move to correct position
       // TODO: handle rx, ry
@@ -1342,8 +1344,8 @@ static void setSLinePlacement(SLine* sli, const QString placement)
             // ignore
             }
       else
-            qDebug("setSLinePlacement sli %p unsupported type %hhd",
-                   sli, sli->type());
+            qDebug("setSLinePlacement sli %p unsupported type %d",
+                   sli, int(sli->type()));
 
       // move to correct position
       qreal y = 0;
@@ -1589,7 +1591,7 @@ Score::FileError MusicXMLParserPass2::parse(QIODevice* device)
       qDebug("MusicXMLParserPass2::parse()");
       _e.setDevice(device);
       Score::FileError res = parse();
-      qDebug("MusicXMLParserPass2::parse() res %hhd", res);
+      qDebug("MusicXMLParserPass2::parse() res %d", int(res));
       return res;
       }
 
@@ -1867,8 +1869,8 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const MScor
                   beam->add(cr);
                   }
             else {
-                  qDebug("handleBeamAndStemDir() from track %d to track %d bm %hhd -> abort beam",
-                         beam->track(), cr->track(), bm);
+                  qDebug("handleBeamAndStemDir() from track %d to track %d bm %d -> abort beam",
+                         beam->track(), cr->track(), int(bm));
                   // ... or reset beam mode for all elements and remove the beam
                   removeBeam(beam);
                   }

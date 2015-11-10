@@ -27,21 +27,45 @@ static const int DEFAULT_FRETS = 5;
 //---------------------------------------------------------
 //   @@ FretDiagram
 ///    Fretboard diagram
+//
+//   @P userMag    qreal
+//   @P strings    int  number of strings
+//   @P frets      int  number of frets
+//   @P barre      int  barre
+//   @P fretOffset int
 //---------------------------------------------------------
 
 class FretDiagram : public Element {
+
+#ifdef SCRIPT_INTERFACE
       Q_OBJECT
+
+      Q_PROPERTY(qreal userMag  READ userMag    WRITE undoSetUserMag)
+      Q_PROPERTY(int strings    READ strings    WRITE undoSetStrings)
+      Q_PROPERTY(int frets      READ frets      WRITE undoSetFrets)
+      Q_PROPERTY(int barre      READ barre      WRITE undoSetBarre)
+      Q_PROPERTY(int fretOffset READ fretOffset WRITE undoSetFretOffset)
+
+   public:
+      void undoSetUserMag(qreal val);
+      void undoSetStrings(int val);
+      void undoSetFrets(int val);
+      void undoSetBarre(int val);
+      void undoSetFretOffset(int val);
+
+   private:
+#endif
 
       int _strings       { DEFAULT_STRINGS };
       int maxStrings     { 0 };
       int _frets         { DEFAULT_FRETS };
       int _fretOffset    { 0  };
       int _maxFrets      { 24 };
+      int _barre         { 0 };
 
       char* _dots        { 0 };
       char* _marker      { 0 };
       char* _fingering   { 0 };
-      int _barre         { 0 };
 
       Harmony* _harmony  { 0 };
 

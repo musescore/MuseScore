@@ -335,6 +335,10 @@ class Score : public QObject, public ScoreElement {
 
       QQueue<MidiInputEvent> midiInputQueue;
       QList<MidiMapping> _midiMapping;
+      bool isSimpleMidiMaping; // midi mapping is simple if all ports and channels
+                               // don't decrease and don't have gaps
+      QSet<int> occupiedMidiChannels;     // each entry is port*16+channel, port range: 0-inf, channel: 0-15
+      unsigned int searchMidiMappingFrom; // makes getting next free MIDI mapping faster
 
       RepeatList* _repeatList;
       TimeSigMap* _sigmap;
@@ -487,6 +491,10 @@ class Score : public QObject, public ScoreElement {
       FileError read114(XmlReader&);
       FileError read1(XmlReader&, bool ignoreVersionError);
 
+      void reorderMidiMapping();
+      void removeDeletedMidiMapping();
+      int updateMidiMapping();
+
    protected:
       void createPlayEvents(Chord*);
       void createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord, int& ontime);
@@ -526,7 +534,7 @@ class Score : public QObject, public ScoreElement {
       void addRemoveBreaks(int interval, bool lock);
 
       bool transpose(Note* n, Interval, bool useSharpsFlats);
-      void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&);
+      void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&, bool useInstrument = false, bool flip = false);
       bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
          bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
 
@@ -801,6 +809,10 @@ class Score : public QObject, public ScoreElement {
       QList<MidiMapping>* midiMapping()       { return &_midiMapping;          }
       MidiMapping* midiMapping(int channel)   { return &_midiMapping[channel]; }
       void rebuildMidiMapping();
+      void checkMidiMapping();
+      bool exportMidiMapping() { return !isSimpleMidiMaping; }
+      int getNextFreeMidiMapping(int p = -1, int ch = -1);
+      int getNextFreeDrumMidiMapping();
       void updateChannel();
       void updateSwing();
       void createPlayEvents();
@@ -1051,7 +1063,7 @@ class Score : public QObject, public ScoreElement {
       void setNoteHeadWidth( qreal n) { _noteHeadWidth = n; }
 
       QList<int> uniqueStaves() const;
-      void transpositionChanged(Part*, Interval);
+      void transpositionChanged(Part*, Interval, int tickStart = 0, int tickEnd = -1);
 
       void moveUp(ChordRest*);
       void moveDown(ChordRest*);

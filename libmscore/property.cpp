@@ -232,6 +232,11 @@ static const PropertyData propertyList[] = {
 
       { P_ID::LAYOUT_MODE,         false, 0,                       P_TYPE::INT },
 
+      { P_ID::FRET_STRINGS,        false, "strings",               P_TYPE::INT },
+      { P_ID::FRET_FRETS,          false, "frets",                 P_TYPE::INT },
+      { P_ID::FRET_BARRE,          false, "barre",                 P_TYPE::INT },
+      { P_ID::FRET_OFFSET,         false, "fretOffset",            P_TYPE::INT },
+
       { P_ID::END,                 false, "",                      P_TYPE::INT }
       };
 
