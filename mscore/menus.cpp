@@ -464,6 +464,12 @@ Palette* MuseScore::newFingeringPalette()
             f->setXmlText(QString(stringnumber[i]));
             sp->append(f, tr("String number %1").arg(stringnumber[i]));
             }
+      // include additional symbol-based fingerings (temporarily?) implemented as articulations
+      for (int i = int(ArticulationType::ARTICULATIONS_PROPER); i < int(ArticulationType::ARTICULATIONS); ++i) {
+            Articulation* s = new Articulation(gscore);
+            s->setArticulationType(ArticulationType(i));
+            sp->append(s, qApp->translate("Fingering", s->subtypeUserName().toUtf8().constData()));
+            }
       return sp;
       }
 
@@ -545,7 +551,8 @@ Palette* MuseScore::newArticulationsPalette(bool basic)
                   }
             }
       else {
-            for (int i = 0; i < int(ArticulationType::ARTICULATIONS); ++i) {
+            // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
+            for (int i = 0; i < int(ArticulationType::ARTICULATIONS_PROPER); ++i) {
                   Articulation* s = new Articulation(gscore);
                   s->setArticulationType(ArticulationType(i));
                   sp->append(s, qApp->translate("articulation", s->subtypeUserName().toUtf8().constData()));
