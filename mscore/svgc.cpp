@@ -76,6 +76,7 @@
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
 
+#include <cstdlib>
 
 namespace Ms {
 
@@ -177,7 +178,7 @@ void stretchAudio(Score * score, const QMap<int,qreal>& t2t) {
     // NB! Constant (0.022) has to be less than one sample or very freaky stuff can happen
     // (negative tempo etc)
     if (ptick != 0 && // Make sure to set the tempo in the beginning!!
-        (ptick<0 || abs((t2t[tick]-t2t[0])-tempomap->tick2time(tick))<0.022)) {
+        (ptick<0 || labs((t2t[tick]-t2t[0])-tempomap->tick2time(tick))<0.022)) {
       //qWarning() << "Skipping tempo change";
       ptick = tick;
       continue;

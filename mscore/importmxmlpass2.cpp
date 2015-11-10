@@ -2025,6 +2025,9 @@ void MusicXMLParserPass2::measure(const QString& partId,
       FiguredBassList fbl;               // List of figured bass elements under a single note
       QString tempo;
 
+      QString placement = _e.attributes().value("placement").toString();
+      int track = _pass1.trackForPart(partId);
+
       // collect candidates for courtesy accidentals to work out at measure end
       QMap<Note*, int> alterMap;
 
@@ -2083,7 +2086,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                   }
             else if (_e.name() == "sound") {
                   tempo = _e.attributes().value("tempo").toString();
-                  qWarning() << "SOUND TEMPO" << tempo;
+                  
                   if (!tempo.isEmpty()) {
                         double tpo = tempo.toDouble()/60;
                         int tick = (time+mTime).ticks();
@@ -2092,14 +2095,12 @@ void MusicXMLParserPass2::measure(const QString& partId,
                         ((TempoText*) t)->setTempo(tpo);
                         ((TempoText*) t)->setFollowText(true);
 
-                        qWarning() << "SET TEMPO AT" << tick << tpo << _score->tempo(tick);
                         _score->setTempo(tick, tpo);
-                        qWarning() << "SET TEMPO AT" << tick << tpo << _score->tempo(tick);
-                        Segment* s = measure->getSegment(Segment::Type::ChordRest, tick);
-                        s->add(t);
-                        //addElemOffset(t, track, placement, measure, tick);
+                        //qDebug() << "SET TEMPO AT" << tick << tpo << _score->tempo(tick);
+                        
+                        addElemOffset(t, track, placement, measure, tick);
                         }
-                  skipLogCurrElem();
+                  _e.skipCurrentElement();
                   }
             else if (_e.name() == "barline")
                   barline(partId, measure);

@@ -1,11 +1,11 @@
-VERSION=2.0.2
+VERSION=2.0
 APPNAME=mscore
 LONG_NAME=MuseScore
 LONGER_NAME="MuseScore 2"
 
 WORKING_DIRECTORY=applebuild
 BACKGROUND=build/packaging/musescore-dmg-background.tiff
-APP_PATH=applebuild/${APPNAME}.app
+APP_PATH=/usr/local/${APPNAME}.app
  
 VOLNAME=${LONG_NAME}-${VERSION}
 DMGNAME=${VOLNAME}Uncompressed.dmg
@@ -47,12 +47,13 @@ EOF
 }
   
 rm ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
+mkdir ${WORKING_DIRECTORY}
 
 #tip: increase the size if error on copy or macdeployqt
-hdiutil create -size 300m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
+hdiutil create -size 600m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
  
 # Mount the disk image
-hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME}
+hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME} -readwrite
  
 # Obtain device information
 DEVS=$(hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME} | cut -f 1)
