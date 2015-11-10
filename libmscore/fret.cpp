@@ -616,6 +616,8 @@ void FretDiagram::writeMusicXML(Xml& xml) const
             xml.etag();
       }
 
+#ifdef SCRIPT_INTERFACE
+
 //---------------------------------------------------------
 //   undoSetUserMag
 //---------------------------------------------------------
@@ -660,6 +662,8 @@ void FretDiagram::undoSetFretOffset(int val)
       {
       score()->undoChangeProperty(this, P_ID::FRET_OFFSET, val);
       }
+
+#endif // SCRIPT_INTERFACE
 
 //---------------------------------------------------------
 //   getProperty
