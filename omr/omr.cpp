@@ -43,6 +43,7 @@ Pattern* Omr::flatPattern;
 Pattern* Omr::naturalPattern;
 Pattern* Omr::trebleclefPattern;
 Pattern* Omr::bassclefPattern;
+Pattern* Omr::timesigPattern[10];
 
 //---------------------------------------------------------
 //   Omr
@@ -54,6 +55,7 @@ Omr::Omr(Score* s)
 #ifdef OCR
       _ocr = 0;
 #endif
+      ActionNames = QList<QString>()<< QWidget::tr("Loading Pdf") << QWidget::tr("Initializing Staves") << QWidget::tr("Identifying Systems");
       initUtils();
       }
 
@@ -62,6 +64,7 @@ Omr::Omr(const QString& p, Score* s)
       _score        = s;
       _path         = p;
       _ocr          = 0;
+      ActionNames = QList<QString>()<< QWidget::tr("Loading Pdf") << QWidget::tr("Initializing Staves") << QWidget::tr("Load Parameters") << QWidget::tr("Identifying Systems");
       initUtils();
       }
 
@@ -139,70 +142,123 @@ int Omr::pagesInDocument() const
 
 bool Omr::readPdf()
       {
+      QProgressDialog *progress = new QProgressDialog(QWidget::tr("Reading PDF..."), QWidget::tr("Cancel"), 0, 100, 0, Qt::FramelessWindowHint);
+      progress->setWindowModality(Qt::ApplicationModal);
+      progress->show();
+      progress->setRange(0, ACTION_NUM);
+
 #ifdef OCR
       if (_ocr == 0)
             _ocr = new Ocr;
       _ocr->init();
 #endif
+      int ID = READ_PDF;
+      int page = 0;
+      bool val;
+      while (ID < ACTION_NUM) {
+            if(ID != INIT_PAGE && ID != SYSTEM_IDENTIFICATION) {
+                  page = 0;
+                  progress->setLabelText(QWidget::tr("%1 at Page %2").arg(ActionNames.at(ID+1)).arg(1));
+                  val = omrActions(ID);
+                  }
+            else {
+                  progress->setLabelText(QWidget::tr("%1 at Page %2").arg(ActionNames.at(ID)).arg(page+1));
+                  val = omrActions(ID,page);
+                  page++;
+                  }
 
-      _doc = new Pdf();
-      if (!_doc->open(_path)) {
-            delete _doc;
-            _doc = 0;
-            return false;
+            if (!val || progress->wasCanceled()) {
+                  progress->close();
+                  return false;
+                  }
+            else {
+                  if (ID < ACTION_NUM) progress->setValue(ID);
+                  else progress->setValue(ACTION_NUM - 1);
+                  qApp->processEvents();
+                  }
             }
-
-      int n = _doc->numPages();
-      printf("readPdf: %d pages\n", n);
-      for (int i = 0; i < n; ++i) {
-            OmrPage* page = new OmrPage(this);
-            QImage image = _doc->page(i);
-            page->setImage(image);
-            _pages.append(page);
-            }
-      process();
+      progress->close();
       return true;
       }
 
 //---------------------------------------------------------
-//   process
+//   actions
 //---------------------------------------------------------
 
-void Omr::process()
+bool Omr::omrActions(int &ID, int page)
       {
-      double sp = 0;
-      double w  = 0;
-
-      int pages = 0;
-      int n = _pages.size();
-      for (int i = 0; i < n; ++i) {
-            _pages[i]->read();
-            if (_pages[i]->systems().size() > 0) {
-                  sp += _pages[i]->spatium();
-                  ++pages;
+      if(ID == READ_PDF) {
+            _doc = new Pdf();
+            if (!_doc->open(_path)) {
+                  delete _doc;
+                  _doc = 0;
+                  return false;
                   }
-            w  += _pages[i]->width();
-            }
-      _spatium = sp / pages;
-      w       /= n;
-      _dpmm    = w / 210.0;            // PaperSize A4
-
-// printf("*** spatium: %f mm  dpmm: %f\n", spatiumMM(), _dpmm);
-
-      quartheadPattern  = new Pattern(quartheadSym, &symbols[0][quartheadSym], _spatium);
-      halfheadPattern   = new Pattern(halfheadSym, &symbols[0][halfheadSym], _spatium);
-      sharpPattern      = new Pattern(sharpSym, &symbols[0][sharpSym], _spatium);
-      flatPattern       = new Pattern(flatSym, &symbols[0][flatSym], _spatium);
-      naturalPattern    = new Pattern(naturalSym, &symbols[0][naturalSym], _spatium);
-      trebleclefPattern = new Pattern(trebleclefSym, &symbols[0][trebleclefSym],  _spatium);
-      bassclefPattern   = new Pattern(bassclefSym, &symbols[0][bassclefSym],  _spatium);
-
-      for (int i = 0; i < n; ++i) {
-            OmrPage* page = _pages[i];
-            if (!page->systems().isEmpty()) {
-                  page->readBarLines(i);
+            int n = _doc->numPages();
+            printf("readPdf: %d pages\n", n);
+            for (int i = 0; i < n; ++i) {
+                  OmrPage* page = new OmrPage(this);
+                  QImage image = _doc->page(i);
+                  page->setImage(image);
+                  _pages.append(page);
                   }
+
+            _spatium = 15.0; //constant spatium, image will be rescaled according to this parameter
+            ID++;
+            return true;
             }
+      else if(ID == INIT_PAGE) {
+            //load one page and rescale
+            _pages[page]->read();
+
+            //do the rescaling of image here
+            int new_w = _pages[page]->image().width()*_spatium/_pages[page]->spatium();
+            int new_h = _pages[page]->image().height()*_spatium/_pages[page]->spatium();
+            QImage image = _pages[page]->image().scaled(new_w,new_h, Qt::KeepAspectRatio);
+            _pages[page]->setImage(image);
+            _pages[page]->read();
+
+            if(page == _pages.size()-1) ID++;
+            return true;
+            }
+      else if(ID == FINALIZE_PARMS) {
+            int n = _pages.size();
+            double w = 0;
+            for (int i = 0; i < n; ++i) {
+                  w  += _pages[i]->width();
+                  }
+            w       /= n;
+            _dpmm    = w / 210.0;            // PaperSize A4
+
+            //quartheadPattern  = new Pattern(_score, SymId::noteheadBlack,  _spatium);
+            quartheadPattern  = new Pattern(_score, "solid_note_head");
+            halfheadPattern   = new Pattern(_score, SymId::noteheadHalf,  _spatium);
+            sharpPattern      = new Pattern(_score, SymId::accidentalSharp, _spatium);
+            flatPattern       = new Pattern(_score, SymId::accidentalFlat, _spatium);
+            naturalPattern    = new Pattern(_score, SymId::accidentalNatural,_spatium);
+            trebleclefPattern = new Pattern(_score, SymId::gClef,_spatium);
+            bassclefPattern   = new Pattern(_score, SymId::fClef,_spatium);
+            timesigPattern[0] = new Pattern(_score, SymId::timeSig0, _spatium);
+            timesigPattern[1] = new Pattern(_score, SymId::timeSig1, _spatium);
+            timesigPattern[2] = new Pattern(_score, SymId::timeSig2, _spatium);
+            timesigPattern[3] = new Pattern(_score, SymId::timeSig3, _spatium);
+            timesigPattern[4] = new Pattern(_score, SymId::timeSig4, _spatium);
+            timesigPattern[5] = new Pattern(_score, SymId::timeSig5, _spatium);
+            timesigPattern[6] = new Pattern(_score, SymId::timeSig6, _spatium);
+            timesigPattern[7] = new Pattern(_score, SymId::timeSig7, _spatium);
+            timesigPattern[8] = new Pattern(_score, SymId::timeSig8, _spatium);
+            timesigPattern[9] = new Pattern(_score, SymId::timeSig9, _spatium);
+
+            ID++;
+            return true;
+
+            }
+      else if(ID == SYSTEM_IDENTIFICATION) {
+            _pages[page]->identifySystems();
+            if(page == _pages.size()-1) ID++;
+            return true;
+            }
+      return false;
       }
 
 //---------------------------------------------------------

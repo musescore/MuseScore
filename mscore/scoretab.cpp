@@ -173,9 +173,9 @@ void ScoreTab::setCurrent(int n)
 #ifdef OMR
       if (v) {
             Score* score = v->score();
-            if (score->showOmr() && score->omr()) {
+            if (score->masterScore()->showOmr() && score->masterScore()->omr()) {
                   if (vs->count() < 2) {
-                        Omr* omr    = score->omr();
+                        Omr* omr    = score->masterScore()->omr();
                         OmrView* sv = omr->newOmrView(v);
                         v->setOmrView(sv);
                         vs->addWidget(sv);
