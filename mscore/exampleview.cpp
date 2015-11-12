@@ -35,7 +35,7 @@ ExampleView::ExampleView(QWidget* parent)
       qreal _spatium = SPATIUM20 * mag;
       // example would normally be 10sp from top of page; this leaves 3sp margin above
 //      _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 7.0);
-      _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 9.0);
+      _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 10.0);
       imatrix  = _matrix.inverted();
       _fgPixmap = nullptr;
       if (preferences.fgUseColor)
@@ -45,6 +45,28 @@ ExampleView::ExampleView(QWidget* parent)
             if (_fgPixmap == 0 || _fgPixmap->isNull())
                   qDebug("no valid pixmap %s", qPrintable(preferences.fgWallpaper));
             }
+      // setup drag canvas state
+      sm          = new QStateMachine(this);
+      QState* stateActive = new QState;
+
+      QState* s1 = new QState(stateActive);
+      s1->setObjectName("example-normal");
+      s1->assignProperty(this, "cursor", QCursor(Qt::ArrowCursor));
+
+      QState* s = new QState(stateActive);
+      s->setObjectName("example-drag");
+      s->assignProperty(this, "cursor", QCursor(Qt::SizeAllCursor));
+      QEventTransition* cl = new QEventTransition(this, QEvent::MouseButtonRelease);
+      cl->setTargetState(s1);
+      s->addTransition(cl);
+      s1->addTransition(new DragTransitionExampleView(this));
+
+
+      sm->addState(stateActive);
+      stateActive->setInitialState(s1);
+      sm->setInitialState(stateActive);
+
+      sm->start();
       }
 
 //---------------------------------------------------------
@@ -349,7 +371,9 @@ void ExampleView::dropEvent(QDropEvent* event)
 
 void ExampleView::mousePressEvent(QMouseEvent* event)
       {
+      startMove  = imatrix.map(QPointF(event->pos()));
       QPointF pos(imatrix.map(QPointF(event->pos())));
+
       foreach (Element* e, elementsAt(pos)) {
             if (e->type() == ElementType::NOTE) {
                   emit noteClicked(static_cast<Note*>(e));
@@ -373,6 +397,70 @@ QSize ExampleView::sizeHint() const
       return QSize(1000 * mag, height);
       }
 
+//---------------------------------------------------------
+//   dragExampleView
+//---------------------------------------------------------
+
+void ExampleView::dragExampleView(QMouseEvent* ev)
+      {
+      QPoint d = ev->pos() - _matrix.map(startMove).toPoint();
+      int dx   = d.x();
+      if (dx == 0)
+            return;
+      // Constraint scrolling
+      // This part of code is directly taken from mscore/scoreview.cpp
+      QRectF rect = QRectF(0, 0, width(), height());
+      Page* firstPage = _score->pages().front();
+      Page* lastPage = _score->pages().back();
+      if (firstPage && lastPage) {
+            QPointF offsetPt(_matrix.dx(), 0);
+            QRectF firstPageRect(firstPage->pos().x() * _matrix.m11(),
+                                      firstPage->pos().y() * _matrix.m11(),
+                                      firstPage->width() * _matrix.m11(),
+                                      firstPage->height() * _matrix.m11());
+            QRectF lastPageRect(lastPage->pos().x() * _matrix.m11(),
+                                         lastPage->pos().y() * _matrix.m11(),
+                                         lastPage->width() * _matrix.m11(),
+                                         lastPage->height() * _matrix.m11());
+            QRectF pagesRect = firstPageRect.united(lastPageRect).translated(offsetPt);
+            qreal hmargin = width() * 0.25;
+            pagesRect.adjust(0, 0, hmargin, 0);
+            QRectF toPagesRect = pagesRect.translated(dx, 0);
+            // move right
+            if (dx > 0) {
+                  if (toPagesRect.right() > rect.right() && toPagesRect.left() > rect.left()) {
+                        if(pagesRect.width() <= rect.width()) {
+                              dx = rect.right() - pagesRect.right();
+                              }
+                        else {
+                              dx = rect.left() - pagesRect.left();
+                              }
+                        }
+                  }
+            else { // move left, dx < 0
+                  if (toPagesRect.left() < rect.left() && toPagesRect.right() < rect.right()) {
+                        if (pagesRect.width() <= rect.width()) {
+                              dx = rect.left() - pagesRect.left();
+                              }
+                        else {
+                              dx = rect.right() - pagesRect.right();
+                              }
+                        }
+                  }
+            }
+      // Performs the actual scrolling
+      _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
+         _matrix.m22(), _matrix.m23(), _matrix.dx()+dx, _matrix.dy(), _matrix.m33());
+      imatrix = _matrix.inverted();
+      scroll(dx, 0, QRect(0, 0, width(), height()));
+      }
+
+void DragTransitionExampleView::onTransition(QEvent* e)
+      {
+      QStateMachine::WrappedEvent* we = static_cast<QStateMachine::WrappedEvent*>(e);
+      QMouseEvent* me = static_cast<QMouseEvent*>(we->event());
+      canvas->dragExampleView(me);
+      }
 
 }
 
