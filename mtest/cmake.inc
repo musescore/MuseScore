@@ -40,7 +40,7 @@ if (NOT MINGW AND NOT APPLE)
 endif (NOT MINGW AND NOT APPLE)
 
 if (OMR)
-      target_link_libraries(${TARGET} omr fitz openjpeg jbig2dec jpeg fontconfig)
+      target_link_libraries(${TARGET} omr mupdf openjpeg jbig2dec jpeg)
       if (OCR)
             target_link_libraries(${TARGET} tesseract_api)
       endif (OCR)

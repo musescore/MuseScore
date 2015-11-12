@@ -28,7 +28,7 @@
 #include "ocr.h"
 #endif
 #include "utils.h"
-#include "pattern.h"
+//#include "pattern.h"
 
 namespace Ms {
 
@@ -36,13 +36,13 @@ namespace Ms {
 
 class ScoreView;
 
-Pattern* Omr::quartheadPattern;
-Pattern* Omr::halfheadPattern;
-Pattern* Omr::sharpPattern;
-Pattern* Omr::flatPattern;
-Pattern* Omr::naturalPattern;
-Pattern* Omr::trebleclefPattern;
-Pattern* Omr::bassclefPattern;
+//Pattern* Omr::quartheadPattern;
+//Pattern* Omr::halfheadPattern;
+//Pattern* Omr::sharpPattern;
+//Pattern* Omr::flatPattern;
+//Pattern* Omr::naturalPattern;
+//Pattern* Omr::trebleclefPattern;
+//Pattern* Omr::bassclefPattern;
 
 //---------------------------------------------------------
 //   Omr
@@ -189,13 +189,13 @@ void Omr::process()
 
 // printf("*** spatium: %f mm  dpmm: %f\n", spatiumMM(), _dpmm);
 
-      quartheadPattern  = new Pattern(quartheadSym, &symbols[0][quartheadSym], _spatium);
-      halfheadPattern   = new Pattern(halfheadSym, &symbols[0][halfheadSym], _spatium);
-      sharpPattern      = new Pattern(sharpSym, &symbols[0][sharpSym], _spatium);
-      flatPattern       = new Pattern(flatSym, &symbols[0][flatSym], _spatium);
-      naturalPattern    = new Pattern(naturalSym, &symbols[0][naturalSym], _spatium);
-      trebleclefPattern = new Pattern(trebleclefSym, &symbols[0][trebleclefSym],  _spatium);
-      bassclefPattern   = new Pattern(bassclefSym, &symbols[0][bassclefSym],  _spatium);
+//      quartheadPattern  = new Pattern(quartheadSym, &symbols[0][quartheadSym], _spatium);
+//      halfheadPattern   = new Pattern(halfheadSym, &symbols[0][halfheadSym], _spatium);
+//      sharpPattern      = new Pattern(sharpSym, &symbols[0][sharpSym], _spatium);
+//      flatPattern       = new Pattern(flatSym, &symbols[0][flatSym], _spatium);
+//      naturalPattern    = new Pattern(naturalSym, &symbols[0][naturalSym], _spatium);
+//      trebleclefPattern = new Pattern(trebleclefSym, &symbols[0][trebleclefSym],  _spatium);
+//      bassclefPattern   = new Pattern(bassclefSym, &symbols[0][bassclefSym],  _spatium);
 
       for (int i = 0; i < n; ++i) {
             OmrPage* page = _pages[i];

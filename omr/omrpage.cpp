@@ -30,7 +30,7 @@
 #include "libmscore/measurebase.h"
 #include "libmscore/box.h"
 #include "libmscore/sym.h"
-#include "pattern.h"
+//#include "pattern.h"
 
 namespace Ms {
 
@@ -129,276 +129,277 @@ void OmrPage::read()
 
 void OmrPage::readBarLines(int pageNo)
       {
-      QFuture<void> bl = QtConcurrent::map(_systems, &OmrSystem::searchBarLines);
-      bl.waitForFinished();
-
-      int numStaves    = staves.size();
-      int stavesSystem = 2;
-      int systems = numStaves / stavesSystem;
-
-      for (int i = 0; i < systems; ++i) {
-            OmrSystem* system = &_systems[i];
-            int n = system->barLines.size();
-            for (int k = 0; k < n-1; ++k) {
-                  const QLine& l1 = system->barLines[k];
-                  const QLine& l2 = system->barLines[k+1];
-                  OmrMeasure m(l1.x1(), l2.x1());
-                  for (int k = 0; k < system->staves().size(); ++k) {
-                        OmrStaff& staff = system->staves()[k];
-                        QList<OmrChord> chords;
-                        int nx   = 0;
-                        int nsym = -1;
-                        OmrChord chord;
-                        foreach(OmrNote* n, staff.notes()) {
-                              int x = n->x();
-                              if (x >= m.x2())
-                                    break;
-                              if (x >= m.x1() && x < m.x2()) {
-                                    if (qAbs(x - nx) > int(_spatium/2) || (nsym != n->sym)) {
-                                          if (!chord.notes.isEmpty()) {
-                                                int sym = chord.notes.front()->sym;
-                                                if (sym == quartheadSym)
-                                                      chord.duration.setType(TDuration::V_QUARTER);
-                                                else if (sym == halfheadSym)
-                                                      chord.duration.setType(TDuration::V_HALF);
-                                                chords.append(chord);
-                                                chord.notes.clear();
-                                                }
-                                          }
-                                    nx   = x;
-                                    nsym = n->sym;
-                                    chord.notes.append(n);
-                                    }
-                              }
-                        if (!chord.notes.isEmpty()) {
-                              int sym = chord.notes.front()->sym;
-                              if (sym == quartheadSym)
-                                    chord.duration.setType(TDuration::V_QUARTER);
-                              else if (sym == halfheadSym)
-                                    chord.duration.setType(TDuration::V_HALF);
-                              chords.append(chord);
-                              }
-                        m.chords().append(chords);
-                        }
-                  system->measures().append(m);
-                  }
-            }
-
-      //--------------------------------------------------
-      //    search clef/keysig
-      //--------------------------------------------------
-
-      if (pageNo == 0) {
-            OmrSystem* s = &_systems[0];
-            for (int i = 0; i < s->staves().size(); ++i) {
-                  OmrStaff* staff = &s->staves()[i];
-                  OmrClef clef = searchClef(s, staff);
-                  staff->setClef(clef);
-
-                  searchKeySig(s, staff);
-                  }
-
-
-            //--------------------------------------------------
-            //    search time signature
-            //--------------------------------------------------
-
-            if (!s->staves().isEmpty()) {
-                  OmrTimesig* ts = searchTimeSig(s);
-                  s->measures()[0].setTimesig(ts);
-                  }
-            }
+//      QFuture<void> bl = QtConcurrent::map(_systems, &OmrSystem::searchBarLines);
+//      bl.waitForFinished();
+//
+//      int numStaves    = staves.size();
+//      int stavesSystem = 2;
+//      int systems = numStaves / stavesSystem;
+//
+//      for (int i = 0; i < systems; ++i) {
+//            OmrSystem* system = &_systems[i];
+//            int n = system->barLines.size();
+//            for (int k = 0; k < n-1; ++k) {
+//                  const QLine& l1 = system->barLines[k];
+//                  const QLine& l2 = system->barLines[k+1];
+//                  OmrMeasure m(l1.x1(), l2.x1());
+//                  for (int k = 0; k < system->staves().size(); ++k) {
+//                        OmrStaff& staff = system->staves()[k];
+//                        QList<OmrChord> chords;
+//                        int nx   = 0;
+//                        int nsym = -1;
+//                        OmrChord chord;
+//                        foreach(OmrNote* n, staff.notes()) {
+//                              int x = n->x();
+//                              if (x >= m.x2())
+//                                    break;
+//                              if (x >= m.x1() && x < m.x2()) {
+//                                    if (qAbs(x - nx) > int(_spatium/2) || (nsym != n->sym)) {
+//                                          if (!chord.notes.isEmpty()) {
+//                                                int sym = chord.notes.front()->sym;
+//                                                if (sym == quartheadSym)
+//                                                      chord.duration.setType(TDuration::V_QUARTER);
+//                                                else if (sym == halfheadSym)
+//                                                      chord.duration.setType(TDuration::V_HALF);
+//                                                chords.append(chord);
+//                                                chord.notes.clear();
+//                                                }
+//                                          }
+//                                    nx   = x;
+//                                    nsym = n->sym;
+//                                    chord.notes.append(n);
+//                                    }
+//                              }
+//                        if (!chord.notes.isEmpty()) {
+//                              int sym = chord.notes.front()->sym;
+//                              if (sym == quartheadSym)
+//                                    chord.duration.setType(TDuration::V_QUARTER);
+//                              else if (sym == halfheadSym)
+//                                    chord.duration.setType(TDuration::V_HALF);
+//                              chords.append(chord);
+//                              }
+//                        m.chords().append(chords);
+//                        }
+//                  system->measures().append(m);
+//                  }
+//            }
+//
+//      //--------------------------------------------------
+//      //    search clef/keysig
+//      //--------------------------------------------------
+//
+//      if (pageNo == 0) {
+//            OmrSystem* s = &_systems[0];
+//            for (int i = 0; i < s->staves().size(); ++i) {
+//                  OmrStaff* staff = &s->staves()[i];
+//                  //OmrClef clef = searchClef(s, staff);
+//                  staff->setClef(clef);
+//
+//                  //searchKeySig(s, staff);
+//                  }
+//
+//
+//            //--------------------------------------------------
+//            //    search time signature
+//            //--------------------------------------------------
+//
+//            if (!s->staves().isEmpty()) {
+////                  OmrTimesig* ts = searchTimeSig(s);
+////                  s->measures()[0].setTimesig(ts);
+//                  }
+//            }
       }
 
 //---------------------------------------------------------
 //   searchClef
 //---------------------------------------------------------
 
-OmrClef OmrPage::searchClef(OmrSystem* system, OmrStaff* staff)
-      {
-      std::vector<Pattern*> pl = {
-            Omr::trebleclefPattern,
-            Omr::bassclefPattern
-            };
-      const OmrMeasure& m = system->measures().front();
-printf("search clef %d   %d-%d\n", staff->y(), m.x1(), m.x2());
-
-      int x1 = m.x1() + 2;
-      int x2 = x1 + (m.x2() - x1)/2;
-      OmrPattern p = searchPattern(pl, staff->y(), x1, x2);
-
-      OmrClef clef(p);
-      if (p.sym == trebleclefSym)
-            clef.type = CLEF_G;
-      else if (p.sym == bassclefSym)
-            clef.type = CLEF_F;
-      else
-            clef.type = CLEF_G;
-      return clef;
-      }
+//OmrClef OmrPage::searchClef(OmrSystem* system, OmrStaff* staff)
+//      {
+//      std::vector<Pattern*> pl = {
+//            Omr::trebleclefPattern,
+//            Omr::bassclefPattern
+//            };
+//      const OmrMeasure& m = system->measures().front();
+//printf("search clef %d   %d-%d\n", staff->y(), m.x1(), m.x2());
+//
+//      int x1 = m.x1() + 2;
+//      int x2 = x1 + (m.x2() - x1)/2;
+//      //OmrPattern p = searchPattern(pl, staff->y(), x1, x2);
+//
+////      OmrClef clef(p);
+////      if (p.sym == trebleclefSym)
+////            clef.type = CLEF_G;
+////      else if (p.sym == bassclefSym)
+////            clef.type = CLEF_F;
+////      else
+////            clef.type = CLEF_G;
+////      return clef;
+//            return ClefType::G;
+//      }
 
 //---------------------------------------------------------
 //   searchPattern
 //---------------------------------------------------------
 
-OmrPattern OmrPage::searchPattern(const std::vector<Pattern*>& pl, int y, int x1, int x2)
-      {
-      OmrPattern p;
-      p.sym  = -1;
-      p.prob = 0.0;
-      for (Pattern* pattern : pl) {
-            double val = 0.0;
-            int xx = 0;
-            int hw = pattern->w();
-
-            for (int x = x1; x < (x2 - hw); ++x) {
-                  double val1 = pattern->match(&image(), x - pattern->base().x(), y - pattern->base().y());
-                  if (val1 > val) {
-                        val = val1;
-                        xx  = x;
-                        }
-                  }
-
-            if (val > p.prob) {
-                  p.setRect(xx, y, pattern->w(), pattern->h());
-                  p.sym  = pattern->id();
-                  p.prob = val;
-                  }
-            printf("Pattern found %d %f %d\n", pattern->id(), val, xx);
-            }
-      return p;
-      }
+//OmrPattern OmrPage::searchPattern(const std::vector<Pattern*>& pl, int y, int x1, int x2)
+//      {
+//      OmrPattern p;
+//      p.sym  = -1;
+//      p.prob = 0.0;
+//      for (Pattern* pattern : pl) {
+//            double val = 0.0;
+//            int xx = 0;
+//            int hw = pattern->w();
+//
+//            for (int x = x1; x < (x2 - hw); ++x) {
+//                  double val1 = pattern->match(&image(), x - pattern->base().x(), y - pattern->base().y());
+//                  if (val1 > val) {
+//                        val = val1;
+//                        xx  = x;
+//                        }
+//                  }
+//
+//            if (val > p.prob) {
+//                  p.setRect(xx, y, pattern->w(), pattern->h());
+//                  p.sym  = pattern->id();
+//                  p.prob = val;
+//                  }
+//            printf("Pattern found %d %f %d\n", pattern->id(), val, xx);
+//            }
+//      return p;
+//      }
 
 //---------------------------------------------------------
 //   searchTimeSig
 //---------------------------------------------------------
 
-OmrTimesig* OmrPage::searchTimeSig(OmrSystem* system)
-      {
-      Pattern pl[10];
-      pl[0] = Pattern(zeroSym,  &symbols[0][zeroSym],  _spatium);
-      pl[1] = Pattern(oneSym,   &symbols[0][oneSym],   _spatium);
-      pl[2] = Pattern(twoSym,   &symbols[0][twoSym],   _spatium);
-      pl[3] = Pattern(threeSym, &symbols[0][threeSym], _spatium);
-      pl[4] = Pattern(fourSym,  &symbols[0][fourSym],  _spatium);
-      pl[5] = Pattern(fiveSym,  &symbols[0][fiveSym],  _spatium);
-      pl[6] = Pattern(sixSym,   &symbols[0][sixSym],   _spatium);
-      pl[7] = Pattern(sevenSym, &symbols[0][sevenSym], _spatium);
-      pl[8] = Pattern(eightSym, &symbols[0][eightSym], _spatium);
-      pl[9] = Pattern(nineSym,  &symbols[0][nineSym],  _spatium);
-
-      int z = -1;
-      int n = -1;
-      double zval = 0;
-      double nval = 0;
-      QRect rz, rn;
-
-      int y         = system->staves().front().y();
-      OmrMeasure* m = &system->measures().front();
-      int x1        = m->x1();
-
-      for (int i = 0; i < 10; ++i) {
-            Pattern* pattern = &pl[i];
-            double val = 0.0;
-            int hh     = pattern->h();
-            int hw     = pattern->w();
-            int x2     = m->x2() - hw;
-            QRect r;
-
-            for (int x = x1; x < x2; ++x) {
-                  double val1 = pattern->match(&image(), x, y);
-                  if (val1 > val) {
-                        val = val1;
-                        r = QRect(x, y, hw, hh);
-                        }
-                  }
-
-            if (val > timesigTH && val > zval) {
-                  z = i;
-                  zval = val;
-                  rz   = r;
-                  }
-//            printf("   found %d %f\n", i, val);
-            }
-
-      if (z < 0)
-            return 0;
-      y = system->staves().front().y() + lrint(_spatium * 2);
-
-      x1 = rz.x();
-      int x2 = x1 + 1;
-      OmrTimesig* ts = 0;
-      for (int i = 0; i < 10; ++i) {
-            Pattern* pattern = &pl[i];
-            double val = 0.0;
-            int hh     = pattern->h();
-            int hw     = pattern->w();
-            QRect r;
-
-            for (int x = x1; x < x2; ++x) {
-                  double val1 = pattern->match(&image(), x, y);
-                  if (val1 > val) {
-                        val = val1;
-                        r   = QRect(x, y, hw, hh);
-                        }
-                  }
-
-            if (val > timesigTH && val > nval) {
-                  n = i;
-                  nval = val;
-                  rn   = r;
-                  }
-//            printf("   found %d %f\n", i, val);
-            }
-      if (n > 0) {
-            ts = new OmrTimesig(rz | rn);
-            ts->timesig = Fraction(z, n);
-            printf("timesig  %d/%d\n", z, n);
-            }
-      return ts;
-      }
+//OmrTimesig* OmrPage::searchTimeSig(OmrSystem* system)
+//      {
+//      Pattern pl[10];
+//      pl[0] = Pattern(zeroSym,  &symbols[0][zeroSym],  _spatium);
+//      pl[1] = Pattern(oneSym,   &symbols[0][oneSym],   _spatium);
+//      pl[2] = Pattern(twoSym,   &symbols[0][twoSym],   _spatium);
+//      pl[3] = Pattern(threeSym, &symbols[0][threeSym], _spatium);
+//      pl[4] = Pattern(fourSym,  &symbols[0][fourSym],  _spatium);
+//      pl[5] = Pattern(fiveSym,  &symbols[0][fiveSym],  _spatium);
+//      pl[6] = Pattern(sixSym,   &symbols[0][sixSym],   _spatium);
+//      pl[7] = Pattern(sevenSym, &symbols[0][sevenSym], _spatium);
+//      pl[8] = Pattern(eightSym, &symbols[0][eightSym], _spatium);
+//      pl[9] = Pattern(nineSym,  &symbols[0][nineSym],  _spatium);
+//
+//      int z = -1;
+//      int n = -1;
+//      double zval = 0;
+//      double nval = 0;
+//      QRect rz, rn;
+//
+//      int y         = system->staves().front().y();
+//      OmrMeasure* m = &system->measures().front();
+//      int x1        = m->x1();
+//
+//      for (int i = 0; i < 10; ++i) {
+//            Pattern* pattern = &pl[i];
+//            double val = 0.0;
+//            int hh     = pattern->h();
+//            int hw     = pattern->w();
+//            int x2     = m->x2() - hw;
+//            QRect r;
+//
+//            for (int x = x1; x < x2; ++x) {
+//                  double val1 = pattern->match(&image(), x, y);
+//                  if (val1 > val) {
+//                        val = val1;
+//                        r = QRect(x, y, hw, hh);
+//                        }
+//                  }
+//
+//            if (val > timesigTH && val > zval) {
+//                  z = i;
+//                  zval = val;
+//                  rz   = r;
+//                  }
+////            printf("   found %d %f\n", i, val);
+//            }
+//
+//      if (z < 0)
+//            return 0;
+//      y = system->staves().front().y() + lrint(_spatium * 2);
+//
+//      x1 = rz.x();
+//      int x2 = x1 + 1;
+//      OmrTimesig* ts = 0;
+//      for (int i = 0; i < 10; ++i) {
+//            Pattern* pattern = &pl[i];
+//            double val = 0.0;
+//            int hh     = pattern->h();
+//            int hw     = pattern->w();
+//            QRect r;
+//
+//            for (int x = x1; x < x2; ++x) {
+//                  double val1 = pattern->match(&image(), x, y);
+//                  if (val1 > val) {
+//                        val = val1;
+//                        r   = QRect(x, y, hw, hh);
+//                        }
+//                  }
+//
+//            if (val > timesigTH && val > nval) {
+//                  n = i;
+//                  nval = val;
+//                  rn   = r;
+//                  }
+////            printf("   found %d %f\n", i, val);
+//            }
+//      if (n > 0) {
+//            ts = new OmrTimesig(rz | rn);
+//            ts->timesig = Fraction(z, n);
+//            printf("timesig  %d/%d\n", z, n);
+//            }
+//      return ts;
+//      }
 
 //---------------------------------------------------------
 //   searchKeySig
 //---------------------------------------------------------
 
-void OmrPage::searchKeySig(OmrSystem* system, OmrStaff* staff)
-      {
-      Pattern* pl[2];
-      pl[0] = Omr::sharpPattern;
-      pl[1] = Omr::flatPattern;
-
-      double zval = 0;
-
-      int y         = system->staves().front().y();
-      OmrMeasure* m = &system->measures().front();
-      int x1        = m->x1();
-
-      for (int i = 0; i < 2; ++i) {
-            Pattern* pattern = pl[i];
-            double val = 0.0;
-            int hh     = pattern->h();
-            int hw     = pattern->w();
-            int x2     = m->x2() - hw;
-            QRect r;
-
-            for (int x = x1; x < x2; ++x) {
-                  double val1 = pattern->match(&image(), x, y - hh/2);
-                  if (val1 > val) {
-                        val = val1;
-                        r = QRect(x, y, hw, hh);
-                        }
-                  }
-
-            if (val > keysigTH && val > zval) {
-                  zval = val;
-                  OmrKeySig key(r);
-                  key.type = i == 0 ? 1 : -1;
-                  staff->setKeySig(key);
-                  }
-            printf(" key found %d %f\n", i, val);
-            }
-      }
+//void OmrPage::searchKeySig(OmrSystem* system, OmrStaff* staff)
+//      {
+//      Pattern* pl[2];
+//      pl[0] = Omr::sharpPattern;
+//      pl[1] = Omr::flatPattern;
+//
+//      double zval = 0;
+//
+//      int y         = system->staves().front().y();
+//      OmrMeasure* m = &system->measures().front();
+//      int x1        = m->x1();
+//
+//      for (int i = 0; i < 2; ++i) {
+//            Pattern* pattern = pl[i];
+//            double val = 0.0;
+//            int hh     = pattern->h();
+//            int hw     = pattern->w();
+//            int x2     = m->x2() - hw;
+//            QRect r;
+//
+//            for (int x = x1; x < x2; ++x) {
+//                  double val1 = pattern->match(&image(), x, y - hh/2);
+//                  if (val1 > val) {
+//                        val = val1;
+//                        r = QRect(x, y, hw, hh);
+//                        }
+//                  }
+//
+//            if (val > keysigTH && val > zval) {
+//                  zval = val;
+//                  OmrKeySig key(r);
+//                  key.type = i == 0 ? 1 : -1;
+//                  staff->setKeySig(key);
+//                  }
+//            printf(" key found %d %f\n", i, val);
+//            }
+//      }
 
 //---------------------------------------------------------
 //   maxP
@@ -472,7 +473,7 @@ void OmrSystem::searchBarLines()
                   }
             }
 
-      searchNotes();
+      //searchNotes();
 
       //
       // remove false positive barlines:
@@ -536,38 +537,38 @@ static bool intersectFuzz(const QRect& a, const QRect& b, int fuzz)
 //   searchNotes
 //---------------------------------------------------------
 
-void OmrSystem::searchNotes()
-      {
-      for (int i = 0; i < _staves.size(); ++i) {
-            OmrStaff* r = &_staves[i];
-            int x1 = r->x();
-            int x2 = x1 + r->width();
-
-            //
-            // search notes on a range of vertical line position
-            //
-            for (int line = -5; line < 14; ++line)
-                  searchNotes(&r->notes(), x1, x2, r->y(), line);
-
-            //
-            // detect collisions
-            //
-            int fuzz = int(_page->spatium()) / 2;
-            foreach(OmrNote* n, r->notes()) {
-                  foreach(OmrNote* m, r->notes()) {
-                        if (m == n)
-                              continue;
-                        if (intersectFuzz(*m, *n, fuzz)) {
-                              if (m->prob > n->prob)
-                                    r->notes().removeOne(n);
-                              else
-                                    r->notes().removeOne(m);
-                              }
-                        }
-                  }
-            qSort(r->notes().begin(), r->notes().end(), noteCompare);
-            }
-      }
+//void OmrSystem::searchNotes()
+//      {
+//      for (int i = 0; i < _staves.size(); ++i) {
+//            OmrStaff* r = &_staves[i];
+//            int x1 = r->x();
+//            int x2 = x1 + r->width();
+//
+//            //
+//            // search notes on a range of vertical line position
+//            //
+////            for (int line = -5; line < 14; ++line)
+////                  searchNotes(&r->notes(), x1, x2, r->y(), line);
+//
+//            //
+//            // detect collisions
+//            //
+//            int fuzz = int(_page->spatium()) / 2;
+//            foreach(OmrNote* n, r->notes()) {
+//                  foreach(OmrNote* m, r->notes()) {
+//                        if (m == n)
+//                              continue;
+//                        if (intersectFuzz(*m, *n, fuzz)) {
+//                              if (m->prob > n->prob)
+//                                    r->notes().removeOne(n);
+//                              else
+//                                    r->notes().removeOne(m);
+//                              }
+//                        }
+//                  }
+//            qSort(r->notes().begin(), r->notes().end(), noteCompare);
+//            }
+//      }
 
 //---------------------------------------------------------
 //   addText
@@ -1056,59 +1057,59 @@ void OmrPage::getStaffLines()
 //   searchNotes
 //---------------------------------------------------------
 
-void OmrSystem::searchNotes(QList<OmrNote*>* noteList, int x1, int x2, int y, int line)
-      {
-      double _spatium = _page->spatium();
-      y += line * _spatium * .5;
-
-      Pattern* patternList[2];
-      patternList[0] = Omr::quartheadPattern;
-      patternList[1] = Omr::halfheadPattern;
-
-      QList<Peak> notePeaks;
-
-      for (int k = 0; k < 2; ++k) {
-            Pattern* pattern = patternList[k];
-            int hh = pattern->h();
-            int hw = pattern->w();
-            bool found = false;
-            int xx1;
-            double val;
-
-            for (int x = x1; x < (x2 - hw); ++x) {
-                  double val1 = pattern->match(&_page->image(), x, y - hh/2);
-                  if (val1 >= noteTH) {
-                        if (!found || (val1 > val)) {
-                              xx1 = x;
-                              val = val1;
-                              found = true;
-                              }
-                        }
-                  else {
-                        if (found) {
-                              notePeaks.append(Peak(xx1, val, k));
-                              found = false;
-                              }
-                        }
-                  }
-            }
-
-      qSort(notePeaks);
-      int n = notePeaks.size();
-      for (int i = 0; i < n; ++i) {
-            if (notePeaks[i].val < noteTH)
-                  break;
-            OmrNote* note = new OmrNote;
-            int sym = notePeaks[i].sym;
-            int hh = patternList[sym]->h();
-            int hw = patternList[sym]->w();
-            note->setRect(notePeaks[i].x, y - hh/2, hw, hh);
-            note->line = line;
-            note->sym  = patternList[sym]->id();
-            note->prob = notePeaks[i].val;
-            noteList->append(note);
-            }
-      }
+//void OmrSystem::searchNotes(QList<OmrNote*>* noteList, int x1, int x2, int y, int line)
+//      {
+//      double _spatium = _page->spatium();
+//      y += line * _spatium * .5;
+//
+//      Pattern* patternList[2];
+//      patternList[0] = Omr::quartheadPattern;
+//      patternList[1] = Omr::halfheadPattern;
+//
+//      QList<Peak> notePeaks;
+//
+//      for (int k = 0; k < 2; ++k) {
+//            Pattern* pattern = patternList[k];
+//            int hh = pattern->h();
+//            int hw = pattern->w();
+//            bool found = false;
+//            int xx1;
+//            double val;
+//
+//            for (int x = x1; x < (x2 - hw); ++x) {
+//                  double val1 = pattern->match(&_page->image(), x, y - hh/2);
+//                  if (val1 >= noteTH) {
+//                        if (!found || (val1 > val)) {
+//                              xx1 = x;
+//                              val = val1;
+//                              found = true;
+//                              }
+//                        }
+//                  else {
+//                        if (found) {
+//                              notePeaks.append(Peak(xx1, val, k));
+//                              found = false;
+//                              }
+//                        }
+//                  }
+//            }
+//
+//      qSort(notePeaks);
+//      int n = notePeaks.size();
+//      for (int i = 0; i < n; ++i) {
+//            if (notePeaks[i].val < noteTH)
+//                  break;
+//            OmrNote* note = new OmrNote;
+//            int sym = notePeaks[i].sym;
+//            int hh = patternList[sym]->h();
+//            int hw = patternList[sym]->w();
+//            note->setRect(notePeaks[i].x, y - hh/2, hw, hh);
+//            note->line = line;
+//            note->sym  = patternList[sym]->id();
+//            note->prob = notePeaks[i].val;
+//            noteList->append(note);
+//            }
+//      }
 
 //---------------------------------------------------------
 //   staffDistance

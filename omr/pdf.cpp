@@ -20,7 +20,8 @@
 
 #include "pdf.h"
 extern "C" {
-#include <fitz.h>
+//#include <fitz.h>
+#include "mupdf/fitz.h"
 // #include <mupdf.h>
       }
 
@@ -35,7 +36,7 @@ static fz_context* ctx;
 
 int Pdf::numPages() const
       {
-      return fz_count_pages(doc);
+      return fz_count_pages(ctx,doc);
       }
 
 //---------------------------------------------------------
@@ -61,7 +62,7 @@ bool Pdf::open(const QString& path)
             doc = fz_open_document(ctx, name);
             }
       fz_catch(ctx) {
-            fz_close_document(doc);
+            fz_drop_document(ctx,doc);
             doc = 0;
             return false;
             }
@@ -75,11 +76,11 @@ bool Pdf::open(const QString& path)
 Pdf::~Pdf()
       {
       if (doc)
-            fz_close_document(doc);
+            fz_drop_document(ctx,doc);
       doc = 0;
       --references;
       if (references == 0) {
-            fz_free_context(ctx);
+            fz_drop_context(ctx);
             ctx = 0;
             }
       }
@@ -90,7 +91,7 @@ Pdf::~Pdf()
 
 QImage Pdf::page(int i)
       {
-      fz_page* page = fz_load_page(doc, i);
+      fz_page* page = fz_load_page(ctx, doc, i);
       if (page == 0) {
             printf("cannot load page %d\n", i);
             return QImage();
@@ -99,7 +100,7 @@ QImage Pdf::page(int i)
       const float zoom = resolution / 72.0;
       fz_rect bounds;
 
-      fz_bound_page(doc, page, &bounds);
+      fz_bound_page(ctx, page, &bounds);
       fz_matrix ctm;
 
       fz_pre_scale(fz_rotate(&ctm, 0.0), zoom, zoom);
@@ -108,12 +109,12 @@ QImage Pdf::page(int i)
       fz_rect tbounds;
       tbounds = bounds;
       fz_round_rect(&ibounds, fz_transform_rect(&tbounds, &ctm));
-      fz_pixmap* pix = fz_new_pixmap_with_bbox(ctx, fz_device_gray, &ibounds);
+      fz_pixmap* pix = fz_new_pixmap_with_bbox(ctx, fz_device_gray(ctx), &ibounds);
 
       fz_clear_pixmap_with_value(ctx, pix, 255);
       fz_device* dev = fz_new_draw_device(ctx, pix);
-      fz_run_page(doc, page, dev, &ctm, NULL);
-      fz_free_device(dev);
+      fz_run_page(ctx, page, dev, &ctm, NULL);
+      fz_drop_device(ctx,dev);
       dev = NULL;
 
       int w = fz_pixmap_width(ctx, pix);

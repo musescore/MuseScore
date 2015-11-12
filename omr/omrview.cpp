@@ -237,11 +237,11 @@ void OmrView::paintEvent(QPaintEvent* event)
 
                   foreach (const OmrStaff& staff, system.staves()) {
                         foreach (const OmrNote* n, staff.notes()) {
-                              if (n->sym == quartheadSym)
-                                    p.setPen(QPen(QColor(255, 0, 0), 2.0));
-                              else
-                                    p.setPen(QPen(QColor(0, 0, 255), 2.0));
-                              p.drawRect(*n);
+//                              if (n->sym == quartheadSym)
+//                                    p.setPen(QPen(QColor(255, 0, 0), 2.0));
+//                              else
+//                                    p.setPen(QPen(QColor(0, 0, 255), 2.0));
+//                              p.drawRect(*n);
                               }
                         }
                   }

@@ -36,7 +36,7 @@
 #define VERSION           "2.0.0"
 
 #define AEOLUS
-// #define OMR
+/* #undef OMR */
 /* #undef OCR */
 #define OSC
 /* #undef OPENGL */

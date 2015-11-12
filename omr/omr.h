@@ -33,7 +33,7 @@ class Ocr;
 class Score;
 class ScoreView;
 class XmlReader;
-class Pattern;
+//class Pattern;
 
 #ifdef OMR
 
@@ -83,13 +83,13 @@ class Omr {
       const QString& path() const          { return _path;      }
       void process();
 
-      static Pattern* quartheadPattern;
-      static Pattern* halfheadPattern;
-      static Pattern* sharpPattern;
-      static Pattern* flatPattern;
-      static Pattern* naturalPattern;
-      static Pattern* trebleclefPattern;
-      static Pattern* bassclefPattern;
+//      static Pattern* quartheadPattern;
+//      static Pattern* halfheadPattern;
+//      static Pattern* sharpPattern;
+//      static Pattern* flatPattern;
+//      static Pattern* naturalPattern;
+//      static Pattern* trebleclefPattern;
+//      static Pattern* bassclefPattern;
       };
 
 #else
