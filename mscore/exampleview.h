@@ -39,6 +39,9 @@ class ExampleView : public QFrame, public MuseScoreView {
       QRectF dropRectangle;               ///< current drop rectangle during dragMove
       QLineF dropAnchor;                  ///< line to current anchor point during dragMove
 
+      QStateMachine* sm;
+      QPointF startMove;
+
       void drawElements(QPainter& painter, const QList<Element*>& el);
       void setDropTarget(const Element* el);
 
@@ -74,8 +77,24 @@ class ExampleView : public QFrame, public MuseScoreView {
       virtual void startEdit(Element*, Grip);
       virtual Element* elementNear(QPointF);
       virtual void drawBackground(QPainter*, const QRectF&) const;
+      void dragExampleView(QMouseEvent* ev);
       };
 
+//---------------------------------------------------------
+//   DragTransitionExampleView
+//---------------------------------------------------------
+
+class DragTransitionExampleView : public QEventTransition
+      {
+      ExampleView* canvas;
+
+   protected:
+      virtual void onTransition(QEvent* e);
+
+   public:
+      DragTransitionExampleView(ExampleView* c)
+         : QEventTransition(c, QEvent::MouseMove), canvas(c) {}
+      };
 
 } // namespace Ms
 #endif
