@@ -11,8 +11,8 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#include "omrpanel.h"
 #include "musescore.h"
+#include "omrpanel.h"
 #include "scoreview.h"
 #include "omr/omrview.h"
 #include "omr/omr.h"
@@ -190,10 +190,12 @@ void OmrPanel::setOmrView(OmrView* v)
 void OmrPanel::processClicked()
       {
       if (omrView) {
-            omrView->omr()->process();
+            //omrView->omr()->process();
             omrView->update();
             setOmrView(omrView);    // update values
             }
       }
+
 }
+
 

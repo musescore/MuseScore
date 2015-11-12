@@ -11,6 +11,8 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#include "config.h"
+
 #ifdef OMR
 
 #ifndef __OMRPANEL_H__
@@ -27,7 +29,7 @@ class OmrView;
 //---------------------------------------------------------
 
 class OmrPanel : public QDockWidget {
-      //Q_OBJECT
+      Q_OBJECT
 
       Ui::OmrPanel op;
 
@@ -53,9 +55,9 @@ class OmrPanel : public QDockWidget {
    public:
       OmrPanel(QWidget* parent = 0);
       void setOmrView(OmrView*);
-      };
+   };
 
 
-} // namespace Ms
+}// namespace Ms
 #endif
 #endif

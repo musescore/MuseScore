@@ -54,7 +54,11 @@ class Omr {
 
       void process1(int page);
 
-   public:
+
+      enum ActionID { READ_PDF, INIT_PAGE, FINALIZE_PARMS, SYSTEM_IDENTIFICATION, ACTION_NUM};
+      QList<QString>ActionNames;
+
+public:
       Omr(Score*);
       Omr(const QString& path, Score*);
 
@@ -62,26 +66,46 @@ class Omr {
 
       bool readPdf();
       int pagesInDocument() const;
-      int numPages() const                 { return _pages.size();          }
-      OmrPage* page(int idx)               { return _pages[idx];            }
+      int numPages() const {
+            return _pages.size();
+            }
+      OmrPage* page(int idx)               {
+            return _pages[idx];
+            }
       OmrView* newOmrView(ScoreView*);
-      const QList<OmrPage*>& pages() const { return _pages; }
+      const QList<OmrPage*>& pages() const {
+            return _pages;
+            }
 #ifdef OCR
-      Ocr* ocr() const                     { return _ocr; }
+      Ocr* ocr() const {
+            return _ocr;
+            }
 #endif
       void write(Xml&) const;
       void read(XmlReader&);
 
       double spatiumMM() const;           // spatium in millimeter
-      double spatium() const               { return _spatium;   }
-      void setSpatium(double val)          { _spatium = val;    }
-      double dpmm() const                  { return _dpmm;      }
-      void setDpmm(double val)             { _dpmm = val;       }
+      double spatium() const {
+            return _spatium;
+            }
+      void setSpatium(double val)          {
+            _spatium = val;
+            }
+      double dpmm() const {
+            return _dpmm;
+            }
+      void setDpmm(double val)             {
+            _dpmm = val;
+            }
       double staffDistance() const;
       double systemDistance() const;
-      Score* score() const                 { return _score;     }
-      const QString& path() const          { return _path;      }
-      void process();
+      Score* score() const {
+            return _score;
+            }
+      const QString& path() const {
+            return _path;
+            }
+      bool omrActions(int &ID, int page = 0);
 
       static Pattern* quartheadPattern;
       static Pattern* halfheadPattern;
@@ -90,6 +114,7 @@ class Omr {
       static Pattern* naturalPattern;
       static Pattern* trebleclefPattern;
       static Pattern* bassclefPattern;
+      static Pattern* timesigPattern[10];
       };
 
 #else
@@ -101,28 +126,60 @@ class Omr {
       QString _path;
       QList<OmrPage*> _pages;
 
-   public:
-      Omr(Score*)                          {}
-      Omr(const QString&, Score*)          {}
-      bool readPdf()                       { return false; }
-      int pagesInDocument() const          { return 0; }
-      int numPages() const                 { return 0; }
-      OmrPage* page(int)                   { return 0; }
-      const QList<OmrPage*>& pages() const { return _pages; }
-      OmrView* newOmrView(ScoreView*)      { return 0; }
+public:
+      Omr(Score*)                          {
+            }
+      Omr(const QString&, Score*)          {
+            }
+      bool readPdf()                       {
+            return false;
+            }
+      int pagesInDocument() const {
+            return 0;
+            }
+      int numPages() const {
+            return 0;
+            }
+      OmrPage* page(int)                   {
+            return 0;
+            }
+      const QList<OmrPage*>& pages() const {
+            return _pages;
+            }
+      OmrView* newOmrView(ScoreView*)      {
+            return 0;
+            }
 #ifdef OCR
-      Ocr* ocr() const                     { return 0; }
+      Ocr* ocr() const {
+            return 0;
+            }
 #endif
-      void write(Xml&) const               {}
-      void read(XmlReader&)                {}
+      void write(Xml&) const {
+            }
+      void read(XmlReader&)                {
+            }
 
-      double spatiumMM() const             { return 0; }
-      double spatium() const               { return 0; }
-      double dpmm() const                  { return 0; }
-      double staffDistance() const         { return 0; }
-      double systemDistance() const        { return 0; }
-      Score* score() const                 { return 0; }
-      const QString& path() const          { return _path; }
+      double spatiumMM() const {
+            return 0;
+            }
+      double spatium() const {
+            return 0;
+            }
+      double dpmm() const {
+            return 0;
+            }
+      double staffDistance() const {
+            return 0;
+            }
+      double systemDistance() const {
+            return 0;
+            }
+      Score* score() const {
+            return 0;
+            }
+      const QString& path() const {
+            return _path;
+            }
       };
 
 #endif

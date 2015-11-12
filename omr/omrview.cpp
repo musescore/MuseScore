@@ -72,7 +72,7 @@ void OmrView::setOmr(Omr* s)
       Score* score         = _scoreView->score();
       const PageFormat* pf = score->pageFormat();
       double mag           = _omr->spatium() / score->spatium();
-      pageWidth            = lrint(pf->width()  * mag * MScore::DPI);
+      pageWidth            = lrint(pf->width()  * mag * DPI);
 
       int htiles = ((pageWidth + TILE_W - 1) / TILE_W);
       pageWidth  = htiles * TILE_W;
@@ -157,7 +157,7 @@ void OmrView::paintEvent(QPaintEvent* event)
 
       const PageFormat* pf = score->pageFormat();
       int w = pageWidth;
-      int h = lrint(pf->height() * mag * MScore::DPI);
+      int h = lrint(pf->height() * mag * DPI);
       int n = _omr->numPages();
 
       int nx = (w * n) / TILE_W;
@@ -232,12 +232,13 @@ void OmrView::paintEvent(QPaintEvent* event)
                   if (_showBarlines) {
                         p.setPen(QPen(Qt::blue, 3.0));
                         foreach(const QLineF& l, system.barLines)
-                              p.drawLine(l);
+                            for(int w = 0; w < 10; w++)
+                              p.drawLine(l.x1()+w, l.y1(), l.x2()+w, l.y2() ); //add width to barline
                         }
 
                   foreach (const OmrStaff& staff, system.staves()) {
                         foreach (const OmrNote* n, staff.notes()) {
-                              if (n->sym == quartheadSym)
+                            if (n->sym == SymId::noteheadBlack)
                                     p.setPen(QPen(QColor(255, 0, 0), 2.0));
                               else
                                     p.setPen(QPen(QColor(0, 0, 255), 2.0));
