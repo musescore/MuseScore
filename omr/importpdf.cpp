@@ -230,24 +230,24 @@ Score::FileError importPdf(Score* score, const QString& path)
       qreal sp = omr->spatiumMM();
       if (sp == 0.0)
             sp = 1.5;
-      score->setSpatium(sp * MScore::DPMM);
+      score->setSpatium(sp * DPMM);
       score->style()->set(StyleIdx::lastSystemFillLimit, 0.0);
           score->style()->set(StyleIdx::staffLowerBorder, 0.0);
           score->style()->set(StyleIdx::measureSpacing, 1.0);
 
       PageFormat pF;
       pF.copy(*score->pageFormat());
-      pF.setEvenLeftMargin(5.0 * MScore::DPMM / MScore::DPI);
+      pF.setEvenLeftMargin(5.0 * DPMM / DPI);
       pF.setEvenTopMargin(0);
       pF.setEvenBottomMargin(0);
-      pF.setOddLeftMargin(5.0 * MScore::DPMM / MScore::DPI);
+      pF.setOddLeftMargin(5.0 * DPMM / DPI);
       pF.setOddTopMargin(0);
       pF.setOddBottomMargin(0);
       score->setPageFormat(pF);
 
-          score->style()->set(StyleIdx::minSystemDistance,   Spatium(omr->systemDistance()));
-          score->style()->set(StyleIdx::maxSystemDistance,   Spatium(omr->systemDistance()));
-          score->style()->set(StyleIdx::akkoladeDistance,    Spatium(omr->staffDistance()));
+      score->style()->set(StyleIdx::minSystemDistance,   Spatium(omr->systemDistance()));
+      score->style()->set(StyleIdx::maxSystemDistance,   Spatium(omr->systemDistance()));
+      score->style()->set(StyleIdx::akkoladeDistance,    Spatium(omr->staffDistance()));
 
       Part* part   = new Part(score);
       Staff* staff1 = new Staff(score);
@@ -281,8 +281,8 @@ Score::FileError importPdf(Score* score, const QString& path)
 
       //---create bracket
 
-      score->staff(0)->setBracket(0, BracketType::BRACE);
-      score->staff(0)->setBracketSpan(0, 2);
+      //score->staff(0)->setBracket(0, BRACKET_BRACE);
+      //score->staff(0)->setBracketSpan(0, 2);//liang
 
       score->setShowOmr(true);
       omr->page(0)->readHeader(score);

@@ -104,7 +104,7 @@ Pattern::Pattern(Score *s, SymId id, double spatium)
           QFont f("Bravura");
           f.setPixelSize(lrint(spatium * 4));
           QFontMetrics fm(f);
-          QRectF r = _score->scoreFont()->bbox(id, 1);
+          QRectF r = _score->scoreFont()->bbox(id, 9.0);
           int _w = r.right() - r.left() + 2;
           int _h = ((r.height() + 1) / 2) * 2;
           _base = QPoint(-r.left(), -r.top());
