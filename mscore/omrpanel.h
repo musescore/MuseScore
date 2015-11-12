@@ -53,9 +53,9 @@ class OmrPanel : public QDockWidget {
    public:
       OmrPanel(QWidget* parent = 0);
       void setOmrView(OmrView*);
-      };
+   };
 
 
-} // namespace Ms
+}// namespace Ms
 #endif
 #endif
