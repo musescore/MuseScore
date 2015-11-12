@@ -90,6 +90,7 @@ class Omr {
       static Pattern* naturalPattern;
       static Pattern* trebleclefPattern;
       static Pattern* bassclefPattern;
+      static Pattern* timesigPattern[10];
       };
 
 #else

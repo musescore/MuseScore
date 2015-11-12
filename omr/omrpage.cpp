@@ -31,7 +31,7 @@
 #include "libmscore/box.h"
 #include "libmscore/sym.h"
 #include "libmscore/note.h"
-//#include "pattern.h"
+#include "pattern.h"
 
 namespace Ms {
 
@@ -148,7 +148,7 @@ void OmrPage::readBarLines(int pageNo)
                         OmrStaff& staff = system->staves()[ss];
                         QList<OmrChord> chords;
                         int nx   = 0;
-                        int nsym = -1;
+                        SymId nsym = SymId::noSym;
                         OmrChord chord;
                         foreach(OmrNote* n, staff.notes()) {
                               int x = n->x();
@@ -157,10 +157,10 @@ void OmrPage::readBarLines(int pageNo)
                               if (x >= m.x1() && x < m.x2()) {
                                     if (qAbs(x - nx) > int(_spatium/2) || (nsym != n->sym)) {
                                           if (!chord.notes.isEmpty()) {
-                                                int sym = chord.notes.front()->sym;
-                                                if (sym == (int)NoteHead::Type::HEAD_QUARTER)
+                                                SymId sym = chord.notes.front()->sym;
+                                              if (sym == SymId::noteheadBlack)
                                                     chord.duration.setType(TDuration::DurationType::V_QUARTER);
-                                                else if (sym == (int)NoteHead::Type::HEAD_HALF)
+                                                else if (sym == SymId::noteheadHalf)
                                                     chord.duration.setType(TDuration::DurationType::V_HALF);
                                                 chords.append(chord);
                                                 chord.notes.clear();
@@ -172,10 +172,10 @@ void OmrPage::readBarLines(int pageNo)
                                     }
                               }
                         if (!chord.notes.isEmpty()) {
-                              int sym = chord.notes.front()->sym;
-                              if (sym == (int)NoteHead::Type::HEAD_QUARTER)
+                              SymId sym = chord.notes.front()->sym;
+                              if (sym == SymId::noteheadBlack)
                                   chord.duration.setType(TDuration::DurationType::V_QUARTER);
-                              else if (sym == (int)NoteHead::Type::HEAD_HALF)
+                              else if (sym == SymId::noteheadHalf)
                                   chord.duration.setType(TDuration::DurationType::V_HALF);
                               chords.append(chord);
                               }
@@ -189,218 +189,207 @@ void OmrPage::readBarLines(int pageNo)
       //    search clef/keysig
       //--------------------------------------------------
 
-//      if (pageNo == 0) {
-//            OmrSystem* s = &_systems[0];
-//            for (int i = 0; i < s->staves().size(); ++i) {
-//                  OmrStaff* staff = &s->staves()[i];
-//                  //OmrClef clef = searchClef(s, staff);
-//                  //staff->setClef(clef);
-//
-//                  //searchKeySig(s, staff);
-//                  }
-//
-//
-//            //--------------------------------------------------
-//            //    search time signature
-//            //--------------------------------------------------
-//
-//            if (!s->staves().isEmpty()) {
-////                  OmrTimesig* ts = searchTimeSig(s);
-////                  s->measures()[0].setTimesig(ts);
-//                  }
-//            }
+      if (pageNo == 0) {
+            OmrSystem* s = &_systems[0];
+            for (int i = 0; i < s->staves().size(); ++i) {
+                  OmrStaff* staff = &s->staves()[i];
+                  OmrClef clef = searchClef(s, staff);
+                  staff->setClef(clef);
+
+                  searchKeySig(s, staff);
+                  }
+
+
+            //--------------------------------------------------
+            //    search time signature
+            //--------------------------------------------------
+
+            if (!s->staves().isEmpty()) {
+                  OmrTimesig* ts = searchTimeSig(s);
+                  s->measures()[0].setTimesig(ts);
+                  }
+            }
       }
 
 //---------------------------------------------------------
 //   searchClef
 //---------------------------------------------------------
 
-//OmrClef OmrPage::searchClef(OmrSystem* system, OmrStaff* staff)
-//      {
-//      std::vector<Pattern*> pl = {
-//            Omr::trebleclefPattern,
-//            Omr::bassclefPattern
-//            };
-//      const OmrMeasure& m = system->measures().front();
-//printf("search clef %d   %d-%d\n", staff->y(), m.x1(), m.x2());
-//
-//      int x1 = m.x1() + 2;
-//      int x2 = x1 + (m.x2() - x1)/2;
-//      //OmrPattern p = searchPattern(pl, staff->y(), x1, x2);
-//
-////      OmrClef clef(p);
-////      if (p.sym == trebleclefSym)
-////            clef.type = CLEF_G;
-////      else if (p.sym == bassclefSym)
-////            clef.type = CLEF_F;
-////      else
-////            clef.type = CLEF_G;
-////      return clef;
-//            return ClefType::G;
-//      }
+OmrClef OmrPage::searchClef(OmrSystem* system, OmrStaff* staff)
+      {
+      std::vector<Pattern*> pl = {
+            Omr::trebleclefPattern,
+            Omr::bassclefPattern
+            };
+      const OmrMeasure& m = system->measures().front();
+printf("search clef %d   %d-%d\n", staff->y(), m.x1(), m.x2());
+
+      int x1 = m.x1() + 2;
+      int x2 = x1 + (m.x2() - x1)/2;
+      OmrPattern p = searchPattern(pl, staff->y(), x1, x2);
+
+      OmrClef clef(p);
+      if (p.sym == SymId::gClef)
+          clef.type = ClefType::G;
+      else if (p.sym == SymId::fClef)
+            clef.type = ClefType::F;
+      else
+            clef.type = ClefType::G;
+      return clef;
+      }
 
 //---------------------------------------------------------
 //   searchPattern
 //---------------------------------------------------------
 
-//OmrPattern OmrPage::searchPattern(const std::vector<Pattern*>& pl, int y, int x1, int x2)
-//      {
-//      OmrPattern p;
-//      p.sym  = -1;
-//      p.prob = 0.0;
-//      for (Pattern* pattern : pl) {
-//            double val = 0.0;
-//            int xx = 0;
-//            int hw = pattern->w();
-//
-//            for (int x = x1; x < (x2 - hw); ++x) {
-//                  double val1 = pattern->match(&image(), x - pattern->base().x(), y - pattern->base().y());
-//                  if (val1 > val) {
-//                        val = val1;
-//                        xx  = x;
-//                        }
-//                  }
-//
-//            if (val > p.prob) {
-//                  p.setRect(xx, y, pattern->w(), pattern->h());
-//                  p.sym  = pattern->id();
-//                  p.prob = val;
-//                  }
-//            printf("Pattern found %d %f %d\n", pattern->id(), val, xx);
-//            }
-//      return p;
-//      }
+OmrPattern OmrPage::searchPattern(const std::vector<Pattern*>& pl, int y, int x1, int x2)
+      {
+      OmrPattern p;
+      p.sym  = SymId::noSym;
+      p.prob = 0.0;
+      for (Pattern* pattern : pl) {
+            double val = 0.0;
+            int xx = 0;
+            int hw = pattern->w();
+
+            for (int x = x1; x < (x2 - hw); ++x) {
+                  double val1 = pattern->match(&image(), x - pattern->base().x(), y - pattern->base().y());
+                  if (val1 > val) {
+                        val = val1;
+                        xx  = x;
+                        }
+                  }
+
+            if (val > p.prob) {
+                  p.setRect(xx, y, pattern->w(), pattern->h());
+                  p.sym  = pattern->id();
+                  p.prob = val;
+                  }
+            printf("Pattern found %d %f %d\n", pattern->id(), val, xx);
+            }
+      return p;
+      }
 
 //---------------------------------------------------------
 //   searchTimeSig
 //---------------------------------------------------------
 
-//OmrTimesig* OmrPage::searchTimeSig(OmrSystem* system)
-//      {
-//      Pattern pl[10];
-//      pl[0] = Pattern(zeroSym,  &symbols[0][zeroSym],  _spatium);
-//      pl[1] = Pattern(oneSym,   &symbols[0][oneSym],   _spatium);
-//      pl[2] = Pattern(twoSym,   &symbols[0][twoSym],   _spatium);
-//      pl[3] = Pattern(threeSym, &symbols[0][threeSym], _spatium);
-//      pl[4] = Pattern(fourSym,  &symbols[0][fourSym],  _spatium);
-//      pl[5] = Pattern(fiveSym,  &symbols[0][fiveSym],  _spatium);
-//      pl[6] = Pattern(sixSym,   &symbols[0][sixSym],   _spatium);
-//      pl[7] = Pattern(sevenSym, &symbols[0][sevenSym], _spatium);
-//      pl[8] = Pattern(eightSym, &symbols[0][eightSym], _spatium);
-//      pl[9] = Pattern(nineSym,  &symbols[0][nineSym],  _spatium);
-//
-//      int z = -1;
-//      int n = -1;
-//      double zval = 0;
-//      double nval = 0;
-//      QRect rz, rn;
-//
-//      int y         = system->staves().front().y();
-//      OmrMeasure* m = &system->measures().front();
-//      int x1        = m->x1();
-//
-//      for (int i = 0; i < 10; ++i) {
-//            Pattern* pattern = &pl[i];
-//            double val = 0.0;
-//            int hh     = pattern->h();
-//            int hw     = pattern->w();
-//            int x2     = m->x2() - hw;
-//            QRect r;
-//
-//            for (int x = x1; x < x2; ++x) {
-//                  double val1 = pattern->match(&image(), x, y);
-//                  if (val1 > val) {
-//                        val = val1;
-//                        r = QRect(x, y, hw, hh);
-//                        }
-//                  }
-//
-//            if (val > timesigTH && val > zval) {
-//                  z = i;
-//                  zval = val;
-//                  rz   = r;
-//                  }
-////            printf("   found %d %f\n", i, val);
-//            }
-//
-//      if (z < 0)
-//            return 0;
-//      y = system->staves().front().y() + lrint(_spatium * 2);
-//
-//      x1 = rz.x();
-//      int x2 = x1 + 1;
-//      OmrTimesig* ts = 0;
-//      for (int i = 0; i < 10; ++i) {
-//            Pattern* pattern = &pl[i];
-//            double val = 0.0;
-//            int hh     = pattern->h();
-//            int hw     = pattern->w();
-//            QRect r;
-//
-//            for (int x = x1; x < x2; ++x) {
-//                  double val1 = pattern->match(&image(), x, y);
-//                  if (val1 > val) {
-//                        val = val1;
-//                        r   = QRect(x, y, hw, hh);
-//                        }
-//                  }
-//
-//            if (val > timesigTH && val > nval) {
-//                  n = i;
-//                  nval = val;
-//                  rn   = r;
-//                  }
-////            printf("   found %d %f\n", i, val);
-//            }
-//      if (n > 0) {
-//            ts = new OmrTimesig(rz | rn);
-//            ts->timesig = Fraction(z, n);
-//            printf("timesig  %d/%d\n", z, n);
-//            }
-//      return ts;
-//      }
+OmrTimesig* OmrPage::searchTimeSig(OmrSystem* system)
+      {
+      
+
+      int z = -1;
+      int n = -1;
+      double zval = 0;
+      double nval = 0;
+      QRect rz, rn;
+
+      int y         = system->staves().front().y();
+      OmrMeasure* m = &system->measures().front();
+      int x1        = m->x1();
+
+      for (int i = 0; i < 10; ++i) {
+          Pattern* pattern = Omr::timesigPattern[i];
+            double val = 0.0;
+            int hh     = pattern->h();
+            int hw     = pattern->w();
+            int x2     = m->x2() - hw;
+            QRect r;
+
+            for (int x = x1; x < x2; ++x) {
+                  double val1 = pattern->match(&image(), x, y);
+                  if (val1 > val) {
+                        val = val1;
+                        r = QRect(x, y, hw, hh);
+                        }
+                  }
+
+            if (val > timesigTH && val > zval) {
+                  z = i;
+                  zval = val;
+                  rz   = r;
+                  }
+//            printf("   found %d %f\n", i, val);
+            }
+
+      if (z < 0)
+            return 0;
+      y = system->staves().front().y() + lrint(_spatium * 2);
+
+      x1 = rz.x();
+      int x2 = x1 + 1;
+      OmrTimesig* ts = 0;
+      for (int i = 0; i < 10; ++i) {
+            Pattern* pattern = Omr::timesigPattern[i];
+            double val = 0.0;
+            int hh     = pattern->h();
+            int hw     = pattern->w();
+            QRect r;
+
+            for (int x = x1; x < x2; ++x) {
+                  double val1 = pattern->match(&image(), x, y);
+                  if (val1 > val) {
+                        val = val1;
+                        r   = QRect(x, y, hw, hh);
+                        }
+                  }
+
+            if (val > timesigTH && val > nval) {
+                  n = i;
+                  nval = val;
+                  rn   = r;
+                  }
+//            printf("   found %d %f\n", i, val);
+            }
+      if (n > 0) {
+            ts = new OmrTimesig(rz | rn);
+            ts->timesig = Fraction(z, n);
+            printf("timesig  %d/%d\n", z, n);
+            }
+      return ts;
+      }
 
 //---------------------------------------------------------
 //   searchKeySig
 //---------------------------------------------------------
 
-//void OmrPage::searchKeySig(OmrSystem* system, OmrStaff* staff)
-//      {
-//      Pattern* pl[2];
-//      pl[0] = Omr::sharpPattern;
-//      pl[1] = Omr::flatPattern;
-//
-//      double zval = 0;
-//
-//      int y         = system->staves().front().y();
-//      OmrMeasure* m = &system->measures().front();
-//      int x1        = m->x1();
-//
-//      for (int i = 0; i < 2; ++i) {
-//            Pattern* pattern = pl[i];
-//            double val = 0.0;
-//            int hh     = pattern->h();
-//            int hw     = pattern->w();
-//            int x2     = m->x2() - hw;
-//            QRect r;
-//
-//            for (int x = x1; x < x2; ++x) {
-//                  double val1 = pattern->match(&image(), x, y - hh/2);
-//                  if (val1 > val) {
-//                        val = val1;
-//                        r = QRect(x, y, hw, hh);
-//                        }
-//                  }
-//
-//            if (val > keysigTH && val > zval) {
-//                  zval = val;
-//                  OmrKeySig key(r);
-//                  key.type = i == 0 ? 1 : -1;
-//                  staff->setKeySig(key);
-//                  }
-//            printf(" key found %d %f\n", i, val);
-//            }
-//      }
+void OmrPage::searchKeySig(OmrSystem* system, OmrStaff* staff)
+      {
+      Pattern* pl[2];
+      pl[0] = Omr::sharpPattern;
+      pl[1] = Omr::flatPattern;
+
+      double zval = 0;
+
+      int y         = system->staves().front().y();
+      OmrMeasure* m = &system->measures().front();
+      int x1        = m->x1();
+
+      for (int i = 0; i < 2; ++i) {
+            Pattern* pattern = pl[i];
+            double val = 0.0;
+            int hh     = pattern->h();
+            int hw     = pattern->w();
+            int x2     = m->x2() - hw;
+            QRect r;
+
+            for (int x = x1; x < x2; ++x) {
+                  double val1 = pattern->match(&image(), x, y - hh/2);
+                  if (val1 > val) {
+                        val = val1;
+                        r = QRect(x, y, hw, hh);
+                        }
+                  }
+
+            if (val > keysigTH && val > zval) {
+                  zval = val;
+                  OmrKeySig key(r);
+                  key.type = i == 0 ? 1 : -1;
+                  staff->setKeySig(key);
+                  }
+            printf(" key found %d %f\n", i, val);
+            }
+      }
 
 //---------------------------------------------------------
 //   maxP
@@ -419,6 +408,12 @@ int maxP(int* projection, int x1, int x2)
       return xx;
       }
 
+struct BAR_STATE{
+    int x;
+    int status;//0 represents white space, 1 represents bar
+    };
+    
+    
 //---------------------------------------------------------
 //   searchBarLines
 //---------------------------------------------------------
@@ -433,48 +428,143 @@ void OmrSystem::searchBarLines()
       int y1  = r1.y();
       int y2  = r2.y() + r2.height();
       int h   = y2 - y1 + 1;
-      int th  = h * 4 / 6;     // threshold
+      int th  = h / 2;     // threshold, data score for null model
 
       int vpw = x2-x1;
-      int vp[vpw];
-      memset(vp, 0, sizeof(int) * vpw);
+      float vp[vpw];
+      memset(vp, 0, sizeof(float) * vpw);
 
-      //
-      // compute vertical projections
-      //
-
-      for (int x = x1; x < x2; ++x) {
-            int dots = 0;
-            for (int y = y1; y < y2; ++y) {
+      
+          
+      //using note constraints
+          searchNotes();
+          
+          int note_constraints[x2-x1];
+          foreach(OmrNote* n, r1.notes()){
+              for(int x = n->x(); x <= n->x() + n->width(); ++x)
+                  note_constraints[x-x1] = 1;
+          }
+          foreach(OmrNote* n, r2.notes()){
+              for(int x = n->x(); x <= n->x() + n->width(); ++x)
+                  note_constraints[x-x1] = 1;
+          }
+          
+          //
+          // compute vertical projections
+          //
+          
+          for (int x = x1; x < x2; ++x) {
+              int dots = 0;
+              for (int y = y1; y < y2; ++y) {
                   if (_page->dot(x, y))
-                        ++dots;
+                      ++dots;
+              }
+              if(!note_constraints[x-x1])
+                  vp[x - x1] = dots - th;
+              else vp[x - x1] = -HUGE_VAL;
+          }
+          
+          float scores[x2-x1+1][2];
+          BAR_STATE pred[x2-x1+1][2];
+          BAR_STATE bs;
+          
+          //initialization
+          bs.x = -1; bs.status = -1;
+          for (int x = x1; x <= x2; ++x) {
+              int i = x - x1;
+              for(int status = 0; status <= 1; ++status){
+                  scores[i][status] = -HUGE_VAL;
+                  pred[i][status] = bs;
+              }
+          }
+          scores[0][0] = 0;
+          
+          //forward pass
+          
+          for (int x = x1; x < x2; ++x) {
+              int i = x - x1;
+              
+              for(int cur = 0; cur <= 1; ++cur){
+                  //current state
+                  if(scores[i][cur] < -1000) continue;
+                  
+                  if(cur){
+                      scores[i][cur] += vp[i];
+                      int next = 0;
+                      int step = 3*_page->spatium();//constraints between adjacent barlines
+                      if(step + i <= x2 - x1){
+                          if(scores[step + i][next] < scores[i][cur]){
+                              scores[step + i][next] = scores[i][cur];
+                              bs.x = x; bs.status = cur;
+                              pred[step + i][next] = bs;
+                          }
+                      }
+                      
                   }
-            vp[x - x1] = dots;
-            }
-
-      bool firstBarLine = true;
-      for (int x = 1; x < vpw; ++x) {
-            if (vp[x-1] < vp[x])
-                  continue;
-            if (vp[x] < th)
-                  continue;
-//            if (vp[x-1] > vp[x])
-                  {
-                  barLines.append(QLine(x + x1, y1, x + x1, y2));
-                  int xx = x + x1;
-                  if (firstBarLine) {
-                        firstBarLine = false;
-                        _staves[0].setX(xx);
-                        _staves[1].setX(xx);
-                        }
-                  else {
-                        _staves[0].setWidth(xx - _staves[0].x());
-                        _staves[1].setWidth(xx - _staves[1].x());
-                        }
+                  else{
+                      for(int next = 0; next <= 1; ++next){
+                          int step = 1;
+                          if(step + i <= x2 - x1){
+                              if(scores[step + i][next] < scores[i][cur]){
+                                  scores[step + i][next] = scores[i][cur];
+                                  bs.x = x; bs.status = cur;
+                                  pred[step + i][next] = bs;
+                              }
+                          }
+                      }
                   }
-            }
-
-      searchNotes();
+              }
+          }
+          
+        //trace back
+          int state = 0;
+          for (int x = x2; x > x1; ){
+              int i = x - x1;
+              bs = pred[i][state];
+              state = bs.status;
+              x = bs.x;
+              
+              if(state){
+                  barLines.append(QLine(x, y1, x, y2));
+              }
+          }
+          
+          
+//      for (int x = x1; x < x2; ++x) {
+//            int dots = 0;
+//            for (int y = y1; y < y2; ++y) {
+//                  if (_page->dot(x, y))
+//                        ++dots;
+//                  }
+//            vp[x - x1] = dots;
+//            }
+//          
+//      
+//      
+//
+//      bool firstBarLine = true;
+//      for (int x = 1; x < vpw; ++x) {
+//            if (vp[x-1] < vp[x])
+//                  continue;
+//            if (vp[x] < th)
+//                  continue;
+////            if (vp[x-1] > vp[x])
+//                  {
+//                  barLines.append(QLine(x + x1, y1, x + x1, y2));
+//                  int xx = x + x1;
+//                  if (firstBarLine) {
+//                        firstBarLine = false;
+//                        _staves[0].setX(xx);
+//                        _staves[1].setX(xx);
+//                        }
+//                  else {
+//                        _staves[0].setWidth(xx - _staves[0].x());
+//                        _staves[1].setWidth(xx - _staves[1].x());
+//                        }
+//                  }
+//            }
+//
+//      searchNotes();
 
       //
       // remove false positive barlines:
@@ -482,38 +572,39 @@ void OmrSystem::searchBarLines()
       //      are detected as two barlines
       //    - barlines which are really note stems
       //
-      QList<QLine> nbl;
-      double x = -10000.0;
-      double spatium = _page->spatium();
-      int nbar = 0;
-//      int i = 0;
-      int n = barLines.size();
-      for (int i = 0; i < n; ++i) {
-          
-          //if(nbar >= 2) break;//liang debug
-          
-            const QLine& l = barLines[i];
-            int nx = l.x1();
-            if ((nx - x) > spatium) {
-                  //
-                  // check for start repeat:
-                  //
-                  if ((nbar == 1)
-                     && ((nx-x)/spatium < 8.0)   // at begin of system?
-//                     && (i < (n-1))
-//                     && ((barLines[i+1].x1() - x) < spatium)    // double bar line?
-                                                 // missing: check for noteheads
-                                                 // up to here
-                     ) {
-                        x = nx;
-                        continue;
-                        }
-                  nbl.append(l);
-                  x = nx;
-                  ++nbar;
-                  }
-            }
-      barLines = nbl;
+
+//      QList<QLine> nbl;
+//      double x = -10000.0;
+//      double spatium = _page->spatium();
+//      int nbar = 0;
+////      int i = 0;
+//      int n = barLines.size();
+//      for (int i = 0; i < n; ++i) {
+//          
+//          //if(nbar >= 2) break;//liang debug
+//          
+//            const QLine& l = barLines[i];
+//            int nx = l.x1();
+//            if ((nx - x) > spatium) {
+//                  //
+//                  // check for start repeat:
+//                  //
+//                  if ((nbar == 1)
+//                     && ((nx-x)/spatium < 8.0)   // at begin of system?
+////                     && (i < (n-1))
+////                     && ((barLines[i+1].x1() - x) < spatium)    // double bar line?
+//                                                 // missing: check fo note heads
+//                                                 // up to here
+//                     ) {
+//                        x = nx;
+//                        continue;
+//                        }
+//                  nbl.append(l);
+//                  x = nx;
+//                  ++nbar;
+//                  }
+//            }
+//      barLines = nbl;
       }
 
 //---------------------------------------------------------

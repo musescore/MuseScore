@@ -43,6 +43,7 @@ Pattern* Omr::flatPattern;
 Pattern* Omr::naturalPattern;
 Pattern* Omr::trebleclefPattern;
 Pattern* Omr::bassclefPattern;
+Pattern* Omr::timesigPattern[10];
 
 //---------------------------------------------------------
 //   Omr
@@ -196,6 +197,16 @@ void Omr::process()
       naturalPattern    = new Pattern(_score, SymId::accidentalNatural,_spatium);
       trebleclefPattern = new Pattern(_score, SymId::gClef,_spatium);
       bassclefPattern   = new Pattern(_score, SymId::fClef,_spatium);
+          timesigPattern[0] = new Pattern(_score, SymId::timeSig0, _spatium);
+          timesigPattern[1] = new Pattern(_score, SymId::timeSig0, _spatium);
+          timesigPattern[2] = new Pattern(_score, SymId::timeSig0, _spatium);
+          timesigPattern[3] = new Pattern(_score, SymId::timeSig0, _spatium);
+          timesigPattern[4] = new Pattern(_score, SymId::timeSig0, _spatium);
+          timesigPattern[5] = new Pattern(_score, SymId::timeSig0, _spatium);
+          timesigPattern[6] = new Pattern(_score, SymId::timeSig0, _spatium);
+          timesigPattern[7] = new Pattern(_score, SymId::timeSig0, _spatium);
+          timesigPattern[8] = new Pattern(_score, SymId::timeSig0, _spatium);
+          timesigPattern[9] = new Pattern(_score, SymId::timeSig0, _spatium);
 
       for (int i = 0; i < n; ++i) {
             OmrPage* page = _pages[i];
