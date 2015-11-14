@@ -223,7 +223,7 @@ Score::FileError importPdf(Score* score, const QString& path)
       Omr* omr = new Omr(path, score);
       if (!omr->readPdf()) {
             delete omr;
-            return Score::FileError::FILE_BAD_FORMAT;
+            return Score::FileError::FILE_UNKNOWN_TYPE;
             }
 
       score->setOmr(omr);

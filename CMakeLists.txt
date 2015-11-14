@@ -78,6 +78,7 @@ SET(JACK_LONGNAME "jack (jack audio connection kit)")
 SET(JACK_MIN_VERSION "0.98.0")
 option(BUILD_JACK    "Build with support for ${JACK_LONGNAME}. jack >= ${JACK_MIN_VERSION} will be needed." ON)
 
+
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
       set (CMAKE_CXX_COMPILER_ID "Clang")

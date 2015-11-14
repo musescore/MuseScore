@@ -11,6 +11,8 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#include "config.h"
+
 #ifdef OMR
 
 #ifndef __OMRPANEL_H__
