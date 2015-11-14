@@ -196,8 +196,6 @@ void OmrPanel::processClicked()
             }
       }
 
-#include "omrpanel.moc"
-
 }
 
 
