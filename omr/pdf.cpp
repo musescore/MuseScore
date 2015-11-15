@@ -59,6 +59,7 @@ bool Pdf::open(const QString& path)
       {
       char* name = path.toLatin1().data();
       fz_try(ctx) {
+            fz_register_document_handlers(ctx);
             doc = fz_open_document(ctx, name);
             }
       fz_catch(ctx) {
