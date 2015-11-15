@@ -231,9 +231,9 @@ Score::FileError importPdf(Score* score, const QString& path)
       if (sp == 0.0)
             sp = 1.5;
       score->setSpatium(sp * MScore::DPMM);
-      //score->style()->set(ST_lastSystemFillLimit, 0.0);//liang
-      //score->style()->set(ST_staffLowerBorder, 0.0);//liang
-      //score->style()->set(ST_measureSpacing, 1.0);//liang
+          score->style()->set(StyleIdx::lastSystemFillLimit, 0.0);
+          score->style()->set(StyleIdx::staffLowerBorder, 0.0);
+          score->style()->set(StyleIdx::measureSpacing, 1.0);
 
       PageFormat pF;
       pF.copy(*score->pageFormat());
@@ -245,39 +245,39 @@ Score::FileError importPdf(Score* score, const QString& path)
       pF.setOddBottomMargin(0);
       score->setPageFormat(pF);
 
-      //score->style()->set(ST_minSystemDistance,   Spatium(omr->systemDistance()));
-      //score->style()->set(ST_maxSystemDistance,   Spatium(omr->systemDistance()));
-      //score->style()->set(ST_akkoladeDistance,    Spatium(omr->staffDistance()));
+          score->style()->set(StyleIdx::minSystemDistance,   Spatium(omr->systemDistance()));
+          score->style()->set(StyleIdx::maxSystemDistance,   Spatium(omr->systemDistance()));
+          score->style()->set(StyleIdx::akkoladeDistance,    Spatium(omr->staffDistance()));
 
-//      Part* part   = new Part(score);
-//      Staff* staff = new Staff(score);
-//      part->staves()->push_back(staff);
-//      score->staves().insert(0, staff);
-//      staff = new Staff(score);
-//      part->staves()->push_back(staff);
-//      score->staves().insert(1, staff);
-//      part->staves()->front()->setBarLineSpan(part->nstaves());
-//      score->insertPart(part, 0);
+      Part* part   = new Part(score);
+      Staff* staff = new Staff(score);
+      part->staves()->push_back(staff);
+      score->staves().insert(0, staff);
+      staff = new Staff(score);
+      part->staves()->push_back(staff);
+      score->staves().insert(1, staff);
+      part->staves()->front()->setBarLineSpan(part->nstaves());
+      score->insertPart(part, 0);
 
       //---set initial clefs
 
-//      OmrPage* omrPage = omr->pages().front();
-//      int staves = score->nstaves();
-//      for (int i = 0; i < staves; ++i) {
-//            Staff* staff = score->staff(i);
-//            const OmrStaff& omrStaff = omrPage->systems().front().staves()[i];
-//            staff->setInitialClef(omrStaff.clef().type);
-//            }
-//
-//      OmrState state;
-//      state.score = score;
-//      foreach(OmrPage* omrPage, omr->pages())
-//            //state.importPdfPage(omrPage);
+      OmrPage* omrPage = omr->pages().front();
+      int staves = score->nstaves();
+      for (int i = 0; i < staves; ++i) {
+            Staff* staff = score->staff(i);
+            const OmrStaff& omrStaff = omrPage->systems().front().staves()[i];
+            //staff->setInitialClef(omrStaff.clef().type);
+            }
+
+      OmrState state;
+      state.score = score;
+      foreach(OmrPage* omrPage, omr->pages())
+            state.importPdfPage(omrPage);
 
       //---create bracket
 
-      //score->staff(0)->setBracket(0, BRACKET_BRACE);
-      //score->staff(0)->setBracketSpan(0, 2);//liang
+      score->staff(0)->setBracket(0, BracketType::BRACE);
+      score->staff(0)->setBracketSpan(0, 2);
 
       score->setShowOmr(true);
       omr->page(0)->readHeader(score);

@@ -391,10 +391,16 @@ if (MINGW)
 
    if (OMR)
 <<<<<<< HEAD
+<<<<<<< HEAD
       target_link_libraries(mscore omr fitz jbig2dec jpeg openjpeg)
 =======
       target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg mujs openjpeg z)
 >>>>>>> compile omr module with mupdf
+=======
+	set(LIB_LIBZ /usr/local/lib/libz.a)
+	set(LIB_GLFW /usr/local/lib/libglfw.a)
+      target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg mujs openjpeg openjp2 ${LIB_LIBZ} curl ${LIB_GLFW} ssl crypto m)
+>>>>>>> activate pdf input and omr panel
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)
@@ -496,10 +502,16 @@ else (MINGW)
 
    if (OMR)
 <<<<<<< HEAD
+<<<<<<< HEAD
       target_link_libraries(mscore omr fitz fontconfig jbig2dec jpeg openjpeg)
 =======
       target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg mujs openjpeg z)
 >>>>>>> compile omr module with mupdf
+=======
+	set(LIB_LIBZ /usr/local/lib/libz.a)
+	set(LIB_GLFW /usr/local/lib/libglfw.a)
+      target_link_libraries(mscore omr mupdf freetype jbig2dec jpeg mujs openjpeg openjp2 ${LIB_LIBZ} curl ${LIB_GLFW} ssl crypto m)
+>>>>>>> activate pdf input and omr panel
       if (OCR)
             target_link_libraries(mscore tesseract_api)
       endif (OCR)
