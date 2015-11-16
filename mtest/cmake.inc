@@ -30,10 +30,7 @@ target_link_libraries(
       qzip
       z
       ${QT_LIBRARIES}
-      ${PROJECT_BINARY_DIR}/freetype/libfreetype.a
-      png
-      bz2
-      harfbuzz
+      mscore_freetype
       z
       )
 
